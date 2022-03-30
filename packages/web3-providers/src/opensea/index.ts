@@ -32,7 +32,7 @@ async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: strin
     try {
         const response = await fetch(urlcat(OPENSEA_API_URL, url), {
             method: 'GET',
-            headers: { 'x-api-key': apiKey ?? OPENSEA_API_KEY, Accept: 'application/json' },
+            headers: { 'X-API-KEY': apiKey ?? OPENSEA_API_KEY, Accept: 'application/json' },
             ...(!isProxyENV() && { mode: 'cors' }),
         })
         if (response.ok) {
