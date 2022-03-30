@@ -13,7 +13,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Button, List, Typography } from '@mui/material'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
 import { WalletItem } from './WalletItem'

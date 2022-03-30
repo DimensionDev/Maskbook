@@ -9,7 +9,6 @@ import {
     EthereumTokenType,
     NetworkType,
     Web3ProviderType,
-    isInjectedProvider,
 } from '@masknet/web3-shared-evm'
 import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
