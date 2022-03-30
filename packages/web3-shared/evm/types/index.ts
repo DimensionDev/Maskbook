@@ -28,14 +28,6 @@ export enum CurrencyType {
     USD = 'usd',
 }
 
-export interface PriceRecord {
-    [currency: string]: number
-}
-
-/** Base on response of coingecko's token price API */
-export interface CryptoPrice {
-    [token: string]: PriceRecord
-}
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 export type ChainIdRecord<T> = { [k in ChainId]: T }
 
@@ -92,41 +84,15 @@ export enum ChainId {
 
     // Optimistic
     Optimistic = 10,
-}
 
-export enum ProviderType {
-    MaskWallet = 'Maskbook',
-    MetaMask = 'MetaMask',
-    WalletConnect = 'WalletConnect',
-    Fortmatic = 'Fortmatic',
-    Coin98 = 'Coin98',
-    MathWallet = 'MathWallet',
-    WalletLink = 'WalletLink',
-    CustomNetwork = 'CustomNetwork',
+    // Conflux
+    Conflux = 1030,
 }
 
 export enum LockStatus {
     INIT = 0,
     UNLOCK = 1,
     LOCKED = 2,
-}
-
-// If you change this enum, please sync it to packages/public-api/src/web.ts
-// (it's a breaking change. Please notify the iOS and Android dev)
-export enum NetworkType {
-    Ethereum = 'Ethereum',
-    Binance = 'Binance',
-    Polygon = 'Polygon',
-    Arbitrum = 'Arbitrum',
-    xDai = 'xDai',
-    Celo = 'Celo',
-    Fantom = 'Fantom',
-    Aurora = 'Aurora',
-    Avalanche = 'Avalanche',
-    Boba = 'Boba',
-    Fuse = 'Fuse',
-    Metis = 'Metis',
-    Optimistic = 'Optimistic',
 }
 
 export interface Wallet {
@@ -226,6 +192,7 @@ export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
 
 export interface ERC721TokenCollectionInfo {
     name: string
+    chainId?: ChainId
     iconURL?: string
     slug: string
     address: string
@@ -597,18 +564,6 @@ export enum DomainProvider {
     UNS = 'UNS',
 }
 
-export enum FungibleAssetProvider {
-    ZERION = 'Zerion',
-    DEBANK = 'Debank',
-}
-
-export enum NonFungibleAssetProvider {
-    OPENSEA = 'OpenSea',
-    RARIBLE = 'Rarible',
-    NFTSCAN = 'NFTScan',
-    ZORA = 'Zora',
-}
-
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
     ? R
     : T extends PayableTransactionObject<infer S>
@@ -724,4 +679,56 @@ export interface EIP1193Provider {
     on(name: string, listener: (event: any) => void): EIP1193Provider
 
     removeListener(name: string, listener: (event: any) => void): EIP1193Provider
+}
+
+/**
+ * Keep updating to packages/public-api/src/web.ts
+ */
+export enum NetworkType {
+    Ethereum = 'Ethereum',
+    Binance = 'Binance',
+    Polygon = 'Polygon',
+    Arbitrum = 'Arbitrum',
+    xDai = 'xDai',
+    Celo = 'Celo',
+    Fantom = 'Fantom',
+    Aurora = 'Aurora',
+    Avalanche = 'Avalanche',
+    Boba = 'Boba',
+    Fuse = 'Fuse',
+    Metis = 'Metis',
+    Optimistic = 'Optimistic',
+    Conflux = 'Conflux',
+}
+
+export enum ProviderType {
+    MaskWallet = 'Maskbook',
+    MetaMask = 'MetaMask',
+    WalletConnect = 'WalletConnect',
+    Fortmatic = 'Fortmatic',
+    Coin98 = 'Coin98',
+    MathWallet = 'MathWallet',
+    WalletLink = 'WalletLink',
+    CustomNetwork = 'CustomNetwork',
+}
+
+export enum FungibleAssetProvider {
+    ZERION = 'Zerion',
+    DEBANK = 'Debank',
+}
+
+export enum NonFungibleAssetProvider {
+    OPENSEA = 'OpenSea',
+    RARIBLE = 'Rarible',
+    NFTSCAN = 'NFTScan',
+    ZORA = 'Zora',
+}
+
+export interface PriceRecord {
+    [currency: string]: number
+}
+
+/** Base on response of coingecko's token price API */
+export interface CryptoPrice {
+    [token: string]: PriceRecord
 }

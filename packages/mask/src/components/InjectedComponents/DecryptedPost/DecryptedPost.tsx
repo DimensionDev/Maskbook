@@ -10,11 +10,7 @@ import { or } from '@masknet/theme'
 
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
-import type {
-    DecryptionProgress,
-    FailureDecryption,
-    SuccessDecryption,
-} from '../../../extension/background-script/CryptoServices/decryptFrom'
+import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from './types'
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
 import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
 import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'

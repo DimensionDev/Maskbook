@@ -7,6 +7,7 @@ import { CopyableCode } from './components/Copyable'
 import type { FileInfo } from '../types'
 import { resolveGatewayAPI } from '../helpers'
 import urlcat from 'urlcat'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -64,7 +65,7 @@ export function Preview({ info }: { info: FileInfo }) {
     const onClick = (event: React.MouseEvent) => {
         event.preventDefault()
         event.stopPropagation()
-        open(info.key ? `${link}#${info.key}` : link)
+        openWindow(info.key ? `${link}#${info.key}` : link)
     }
     return (
         <Paper

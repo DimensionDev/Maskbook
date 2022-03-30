@@ -1,11 +1,20 @@
-import { fromHex, toBase64, NextIDBindings, NextIDPlatform, NextIDPayload, NextIDAction } from '@masknet/shared-base'
+import {
+    BindingProof,
+    fromHex,
+    NextIDAction,
+    NextIDBindings,
+    NextIDPayload,
+    NextIDPlatform,
+    toBase64,
+} from '@masknet/shared-base'
+import LRU from 'lru-cache'
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
         ? 'https://proof-service.next.id/'
-        : 'https://js43x8ol17.execute-api.ap-east-1.amazonaws.com/api/'
+        : 'https://proof-service.nextnext.id/'
 
 interface CreatePayloadBody {
     action: string
@@ -14,69 +23,129 @@ interface CreatePayloadBody {
     public_key: string
 }
 
+type PostContentLanguages = 'default' | 'zh_CN'
+
+interface CreatePayloadResponse {
+    post_content: { [key in PostContentLanguages]: string }
+    sign_payload: string
+    uuid: string
+    created_at: string
+}
+
+const fetchCache = new LRU<string, any>({
+    max: 100,
+    ttl: 20000,
+})
+
+export async function fetchJSON<T = unknown>(
+    url: string,
+    requestInit?: RequestInit,
+    enableCache?: boolean,
+): Promise<T> {
+    type FetchCache = LRU<string, Promise<Response> | T>
+
+    const cached = enableCache ? (fetchCache as FetchCache).get(url) : undefined
+    const isPending = cached instanceof Promise
+    if (cached && !isPending) {
+        return cached
+    }
+    let pendingResponse: Promise<Response>
+    if (isPending) {
+        pendingResponse = cached
+    } else {
+        pendingResponse = globalThis.fetch(url, { mode: 'cors', ...requestInit })
+        if (enableCache) {
+            fetchCache.set(url, pendingResponse)
+        }
+    }
+    const response = await pendingResponse
+
+    const result = await response.clone().json()
+
+    if (result.message || !response.ok) {
+        throw new Error(result.message)
+    }
+    fetchCache.set(url, result)
+    return result
+}
+
+// TODO: remove 'bind' in project for business context.
 export async function bindProof(
+    uuid: string,
     personaPublicKey: string,
     action: NextIDAction,
     platform: string,
     identity: string,
-    walletSignature?: string,
-    signature?: string,
-    proofLocation?: string,
+    createdAt: string,
+    options?: {
+        walletSignature?: string
+        signature?: string
+        proofLocation?: string
+    },
 ) {
     const requestBody = {
+        uuid,
         action,
         platform,
         identity,
         public_key: personaPublicKey,
-        ...(proofLocation ? { proof_location: proofLocation } : {}),
+        proof_location: options?.proofLocation,
         extra: {
-            ...(walletSignature ? { wallet_signature: toBase64(fromHex(walletSignature)) } : {}),
-            ...(signature ? { signature: toBase64(fromHex(signature)) } : {}),
+            wallet_signature: options?.walletSignature ? toBase64(fromHex(options.walletSignature)) : undefined,
+            signature: options?.signature ? toBase64(fromHex(options.signature)) : undefined,
         },
+        created_at: createdAt,
     }
 
-    const response = await fetch(urlcat(BASE_URL, '/v1/proof'), {
+    return fetchJSON(urlcat(BASE_URL, '/v1/proof'), {
         body: JSON.stringify(requestBody),
         method: 'POST',
-        mode: 'cors',
     })
-
-    const result = (await response.json()) as { message: string }
-
-    if (!response.ok) throw new Error(result.message)
-    return response
 }
 
-export async function queryExistedBindingByPersona(personaPublicKey: string) {
-    const response = await fetch(urlcat(BASE_URL, '/v1/proof', { platform: 'nextid', identity: personaPublicKey }), {
-        mode: 'cors',
-    })
-
-    const result = (await response.json()) as NextIDBindings
+export async function queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
+    const response = await fetchJSON<NextIDBindings>(
+        urlcat(BASE_URL, '/v1/proof', { platform: NextIDPlatform.NextId, identity: personaPublicKey }),
+        {},
+        enableCache,
+    )
     // Will have only one item when query by personaPublicKey
-    return first(result.ids)
+    return first(response.ids)
 }
 
-export async function queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string) {
+export async function queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
     if (!platform && !identity) return []
 
-    const response = await fetch(urlcat(BASE_URL, '/v1/proof', { platform: platform, identity: identity }), {
-        mode: 'cors',
-    })
+    const response = await fetchJSON<NextIDBindings>(
+        urlcat(BASE_URL, '/v1/proof', { platform: platform, identity: identity }),
+    )
 
-    const result = (await response.json()) as NextIDBindings
-    return result.ids
+    // TODO: merge Pagination into this
+    return response.ids
 }
 
-export async function queryExistedBinding(platform: NextIDPlatform, identity: string): Promise<NextIDBindings> {
-    throw new Error('To be implemented.')
-}
-
-export async function queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string) {
+export async function queryIsBound(
+    personaPublicKey: string,
+    platform: NextIDPlatform,
+    identity: string,
+    enableCache?: boolean,
+) {
     if (!platform && !identity) return false
 
-    const ids = await queryExistedBindingByPlatform(platform, identity)
-    return ids.some((x) => x.persona.toLowerCase() === personaPublicKey.toLowerCase())
+    try {
+        await fetchJSON<BindingProof>(
+            urlcat(BASE_URL, '/v1/proof/exists', {
+                platform: platform,
+                identity: identity,
+                public_key: personaPublicKey,
+            }),
+            {},
+            enableCache,
+        )
+        return true
+    } catch {
+        return false
+    }
 }
 
 export async function createPersonaPayload(
@@ -84,6 +153,7 @@ export async function createPersonaPayload(
     action: NextIDAction,
     identity: string,
     platform: NextIDPlatform,
+    language?: string,
 ): Promise<NextIDPayload | null> {
     const requestBody: CreatePayloadBody = {
         action,
@@ -92,15 +162,17 @@ export async function createPersonaPayload(
         public_key: personaPublicKey,
     }
 
-    const response = await fetch(urlcat(BASE_URL, '/v1/proof/payload'), {
+    const nextIDLanguageFormat = language?.replace('-', '_') as PostContentLanguages
+
+    const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/proof/payload'), {
         body: JSON.stringify(requestBody),
         method: 'POST',
-        mode: 'cors',
     })
 
-    const result = await response.json()
     return {
-        postContent: result.post_content,
-        signPayload: JSON.stringify(JSON.parse(result.sign_payload)),
+        postContent: response.post_content[nextIDLanguageFormat ?? 'default'] ?? response.post_content.default,
+        signPayload: JSON.stringify(JSON.parse(response.sign_payload)),
+        createdAt: response.created_at,
+        uuid: response.uuid,
     }
 }

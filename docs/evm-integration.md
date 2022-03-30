@@ -1,4 +1,4 @@
-# A new EVM-compatible chain to Mask Network
+# EVM Chain Integration
 
 It's easy to integrate an EVM-compatible chain into Mask Network. After you add a new `ChainId` and `NetworkType` in `packages/web3-shared/evm/types/index.ts`. You can follow the TypeScript compiler. By fixing these errors, the integration progress will keep moving forward. Here is a complete instruction list to ensure you wouldn't miss anything.
 
@@ -80,15 +80,14 @@ Congratulation! You have done the coding part.
 
 ## Testing Checklist
 
-Before we ship the chain to the user, we need to do basic ability checks.
+Here is the chain abilities checklist. If you are working on a bounty task, please do each task in list before inviting the team to review your pull request.
 
 - [ ] Check if the asset list and transaction history on the dashboard page work when you choose the chain as the network.
   - Setup the chain for DeBank API.
 - [ ] Check if the trending view is working. Try to hover a new chain token in any tweets.
+
   - Setup the chain for Coingecko API.
   - Setup the chain for CoinMarketCap API.
-
-![image](https://user-images.githubusercontent.com/52657989/144754788-460bad98-bf62-4e5e-8592-ea8580430e63.png)
 
 - [ ] Check if the gas estimate dialog is working.
 

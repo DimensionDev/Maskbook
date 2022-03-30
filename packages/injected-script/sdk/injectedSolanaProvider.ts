@@ -9,8 +9,8 @@ let isConnected = false
 
 /** Interact with the current solana provider */
 export const injectedSolanaProvider: InjectedSolanaProvider = {
-    connect() {
-        return createPromise((id) => sendEvent('solanaBridgeExecute', 'solana.connect', id))
+    connect(opts) {
+        return createPromise((id) => sendEvent('solanaBridgeExecute', 'solana.connect', id, opts))
     },
     request,
     on(event, callback) {
@@ -47,7 +47,7 @@ watchConnectStatus()
 
 export interface InjectedSolanaProvider {
     // _bn: result of serialization
-    connect(): Promise<{ publicKey: { _bn: string } }>
+    connect(opts?: { onlyIfTrusted: boolean }): Promise<{ publicKey: { _bn: string } }>
     /** Wait for window.solana object appears. */
     untilAvailable(): Promise<true>
     /** Send JSON RPC to the solana provider. */

@@ -5,6 +5,6 @@ export enum TipType {
 
 export interface TipTask {
     to?: string
-    snsID?: string
+    recipientSnsId?: string
     addresses: string[]
 }

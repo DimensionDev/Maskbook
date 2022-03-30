@@ -1,7 +1,7 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
 import { unreachable } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { isDashboardPage } from '@masknet/shared-base'
 import {
     getChainIdFromNetworkType,
@@ -47,7 +47,7 @@ export function ProviderIconClickBait({
 
             if (!isProviderAvailable) {
                 const downloadLink = resolveProviderDownloadLink(providerType)
-                if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')
+                openWindow(downloadLink)
                 return
             }
         }

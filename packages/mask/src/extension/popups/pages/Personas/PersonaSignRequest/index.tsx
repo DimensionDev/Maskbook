@@ -6,6 +6,10 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { ECKeyIdentifier, Identifier, PopupRoutes } from '@masknet/shared-base'
 import { useMyPersonas } from '../../../../../components/DataSource/useMyPersonas'
 import type { Persona } from '../../../../../database'
+import { PersonaContext } from '../hooks/usePersonaContext'
+import { MethodAfterPersonaSign } from '../../Wallet/type'
+import { useAsyncFn } from 'react-use'
+import Services from '../../../../service'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -85,7 +89,7 @@ const PersonaSignRequest = memo(() => {
     const [message, setMessage] = useState<string>()
     const [selected, setSelected] = useState<Persona>()
     const personas = useMyPersonas()
-
+    const { currentPersona } = PersonaContext.useContainer()
     useEffect(() => {
         if (!personas.length) return
         const url = new URLSearchParams(location.search)
@@ -103,22 +107,72 @@ const PersonaSignRequest = memo(() => {
         }
     }, [personas, location.search])
 
-    const onSign = () => {
+    const [, onSign] = useAsyncFn(async () => {
+        const url = new URLSearchParams(location.search)
         if (!requestID || !selected) return
+        const selectedPersona = Identifier.fromString<ECKeyIdentifier>(
+            selected.identifier.toText(),
+            ECKeyIdentifier,
+        ).unwrap()
         MaskMessages.events.personaSignRequest.sendToBackgroundPage({
             requestID,
-            selectedPersona: Identifier.fromString<ECKeyIdentifier>(
-                selected.identifier.toText(),
-                ECKeyIdentifier,
-            ).unwrap(),
+            selectedPersona,
         })
-        window.close()
-    }
 
-    const onCancel = () => {
+        const method = url.get('method') as MethodAfterPersonaSign | undefined
+
+        if (!method) {
+            window.close()
+            return
+        }
+
+        // sign request from popup
+        switch (method) {
+            case MethodAfterPersonaSign.DISCONNECT_NEXT_ID:
+                if (!message) break
+                const signatureResult = await Services.Identity.generateSignResult(selectedPersona, message)
+
+                const profileIdentifier = url.get('profileIdentifier')
+                const platform = url.get('platform')
+                const identity = url.get('identity')
+                const createdAt = url.get('createdAt')
+                const uuid = url.get('uuid')
+
+                if (
+                    !signatureResult ||
+                    !profileIdentifier ||
+                    !platform ||
+                    !identity ||
+                    !createdAt ||
+                    !uuid ||
+                    !currentPersona?.publicHexKey
+                )
+                    break
+                await Services.Identity.detachProfileWithNextID(
+                    uuid,
+                    currentPersona.publicHexKey,
+                    platform,
+                    identity,
+                    createdAt,
+                    {
+                        signature: signatureResult.signature.signature,
+                    },
+                )
+                const profile = currentPersona.linkedProfiles.find((x) => x.identifier.toText() === profileIdentifier)
+                if (!profile) break
+                await Services.Identity.detachProfile(profile.identifier)
+                break
+        }
+        navigate(-1)
+    }, [location, selected, requestID, message, currentPersona])
+
+    const onCancel = async () => {
         if (!requestID) return
+        const url = new URLSearchParams(location.search)
         MaskMessages.events.personaSignRequest.sendToBackgroundPage({ requestID })
-        window.close()
+        const method = url.get('method')
+        if (!method) window.close()
+        navigate(-1)
     }
 
     return (
@@ -135,7 +189,10 @@ const PersonaSignRequest = memo(() => {
             </Typography>
             <Typography className={classes.message}>{message}</Typography>
             <div className={classes.controller}>
-                <Button className={classes.button} onClick={onCancel}>
+                <Button
+                    className={classes.button}
+                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
+                    onClick={onCancel}>
                     {t('cancel')}
                 </Button>
                 <Button className={classes.button} onClick={onSign} variant="contained">

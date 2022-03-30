@@ -1,5 +1,6 @@
 import { AddressViewer } from '@masknet/shared'
-import { AddressName, AddressNameType, EMPTY_LIST } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { useI18N } from '../locales'
 import { useDonations, useFootprints } from './hooks'

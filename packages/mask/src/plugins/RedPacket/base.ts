@@ -13,7 +13,10 @@ export const base: Plugin.Shared.Definition = {
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
         architecture: { app: true, web: true },
-        networks: { type: 'opt-out', networks: {} },
+        networks: {
+            type: 'opt-out',
+            networks: {},
+        },
         target: 'stable',
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {
@@ -26,8 +29,11 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Fantom,
                     ChainId.Avalanche,
                     ChainId.Aurora,
+                    ChainId.Conflux,
                 ],
             },
+            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
+            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
     },
     contribution: {
