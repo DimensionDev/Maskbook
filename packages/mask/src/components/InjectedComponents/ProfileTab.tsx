@@ -19,8 +19,8 @@ export function ProfileTab(props: ProfileTabProps) {
     const isMobile = useMatchXS()
 
     const onClick = useCallback(() => {
-        // Change the url slightly to trigger `locationchange` event from e.g. 'hostname/medias# => hostname/medias'
-        location.assign('#')
+        // Change the url hashtag to trigger `locationchange` event from e.g. 'hostname/medias#web3 => hostname/medias'
+        location.assign('#web3')
         MaskMessages.events.profileTabUpdated.sendToLocal({ show: true })
         setActive(true)
         clear()
