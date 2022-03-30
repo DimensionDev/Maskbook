@@ -310,6 +310,7 @@ importers:
       '@masknet/plugin-cyberconnect': workspace:*
       '@masknet/plugin-dao': workspace:*
       '@masknet/plugin-debugger': workspace:*
+      '@masknet/plugin-ens': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-file-service': workspace:*
       '@masknet/plugin-flow': workspace:*
@@ -448,6 +449,7 @@ importers:
       '@masknet/plugin-cyberconnect': link:../plugins/CyberConnect
       '@masknet/plugin-dao': link:../plugins/DAO
       '@masknet/plugin-debugger': link:../plugins/Debugger
+      '@masknet/plugin-ens': link:../plugins/ENS
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-file-service': link:../plugins/FileService
       '@masknet/plugin-flow': link:../plugins/Flow
@@ -687,6 +689,24 @@ importers:
       date-fns: 2.28.0
       react-use: 17.3.2_581fa33d3647c30d8078674dcd1b240a
       urlcat: 2.0.4
+
+  packages/plugins/ENS:
+    specifiers:
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/web3-contracts': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      eth-ens-namehash: 2.0.8
+      react-use: ^17.3.2
+    dependencies:
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/web3-contracts': link:../../web3-contracts
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      eth-ens-namehash: 2.0.8
+      react-use: 17.3.2_581fa33d3647c30d8078674dcd1b240a
 
   packages/plugins/FileService:
     specifiers:
@@ -23431,7 +23451,7 @@ packages:
       safe-buffer: 5.2.1
       tough-cookie: 2.5.0
       tunnel-agent: 0.6.0
-      uuid: 3.3.2
+      uuid: 3.4.0
     dev: false
 
   /require-directory/2.1.1:

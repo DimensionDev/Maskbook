@@ -17,14 +17,14 @@ export function injectOpenTipButtonOnProfile(signal: AbortSignal) {
 }
 
 interface StyleProps {
-    minHeight: number
+    size: number
     fontSize: number
     marginBottom: number
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     button: {
-        height: 34,
-        width: 34,
+        height: props.size,
+        width: props.size,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -47,7 +47,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
 }))
 
 function OpenTipDialog() {
-    const [style, setStyle] = useState<StyleProps>({ minHeight: 32, fontSize: 14, marginBottom: 11 })
+    const [style, setStyle] = useState<StyleProps>({ size: 34, fontSize: 14, marginBottom: 11 })
     const visitingPersona = useCurrentVisitingIdentity()
 
     const setStyleFromEditProfileSelector = () => {
@@ -55,7 +55,7 @@ function OpenTipDialog() {
         if (!menuButton) return
         const css = window.getComputedStyle(menuButton)
         setStyle({
-            minHeight: Number.parseFloat(css.minHeight.replace('px', '')),
+            size: Number.parseFloat(css.height.replace('px', '')),
             fontSize: Number.parseFloat(css.fontSize.replace('px', '')),
             marginBottom: Number.parseFloat(css.marginBottom.replace('px', '')),
         })

@@ -4,7 +4,6 @@ declare namespace NodeJS {
     }
     interface ProcessEnv {
         readonly NODE_ENV: 'production' | 'development'
-        readonly architecture: 'app' | 'web'
     }
 }
 declare var process: NodeJS.Process
