@@ -7,9 +7,9 @@ import {
     NextIDPlatform,
     toBase64,
 } from '@masknet/shared-base'
-import LRU from 'lru-cache'
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
+import { fetchJSON } from './helper'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
@@ -30,43 +30,6 @@ interface CreatePayloadResponse {
     sign_payload: string
     uuid: string
     created_at: string
-}
-
-const fetchCache = new LRU<string, any>({
-    max: 100,
-    ttl: 20000,
-})
-
-export async function fetchJSON<T = unknown>(
-    url: string,
-    requestInit?: RequestInit,
-    enableCache?: boolean,
-): Promise<T> {
-    type FetchCache = LRU<string, Promise<Response> | T>
-
-    const cached = enableCache ? (fetchCache as FetchCache).get(url) : undefined
-    const isPending = cached instanceof Promise
-    if (cached && !isPending) {
-        return cached
-    }
-    let pendingResponse: Promise<Response>
-    if (isPending) {
-        pendingResponse = cached
-    } else {
-        pendingResponse = globalThis.fetch(url, { mode: 'cors', ...requestInit })
-        if (enableCache) {
-            fetchCache.set(url, pendingResponse)
-        }
-    }
-    const response = await pendingResponse
-
-    const result = await response.clone().json()
-
-    if (result.message || !response.ok) {
-        throw new Error(result.message)
-    }
-    fetchCache.set(url, result)
-    return result
 }
 
 // TODO: remove 'bind' in project for business context.
@@ -110,7 +73,7 @@ export async function queryExistedBindingByPersona(personaPublicKey: string, ena
         enableCache,
     )
     // Will have only one item when query by personaPublicKey
-    return first(response.ids)
+    return first(response.unwrap().ids)
 }
 
 export async function queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
@@ -121,7 +84,7 @@ export async function queryExistedBindingByPlatform(platform: NextIDPlatform, id
     )
 
     // TODO: merge Pagination into this
-    return response.ids
+    return response.unwrap().ids
 }
 
 export async function queryIsBound(
@@ -169,10 +132,16 @@ export async function createPersonaPayload(
         method: 'POST',
     })
 
+    const result = response.unwrap()
+
     return {
-        postContent: response.post_content[nextIDLanguageFormat ?? 'default'] ?? response.post_content.default,
-        signPayload: JSON.stringify(JSON.parse(response.sign_payload)),
-        createdAt: response.created_at,
-        uuid: response.uuid,
+        postContent: result.post_content[nextIDLanguageFormat ?? 'default'] ?? result.post_content.default,
+        signPayload: JSON.stringify(JSON.parse(result.sign_payload)),
+        createdAt: result.created_at,
+        uuid: result.uuid,
     }
 }
+
+// #region kv server
+export * from './kv'
+// #endregion

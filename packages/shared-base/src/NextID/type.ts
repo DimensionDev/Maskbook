@@ -48,3 +48,11 @@ export interface NextIDBindings {
     pagination: Pagination
     ids: NextIDPersonaBindings[]
 }
+
+// #region kv server
+export interface NextIDKVPayload {
+    uuid: string
+    signPayload: string
+    createdAt: string
+}
+// #endregion
