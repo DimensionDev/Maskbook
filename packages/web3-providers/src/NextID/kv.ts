@@ -16,14 +16,27 @@ interface CreatePayloadResponse {
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? '' : 'https://kv-service.nextnext.id'
 
+const MASK_STORAGE_KEY = 'com.mask.plugin'
+
+function formatPatchData(platform: NextIDPlatform, identity: string, data: unknown) {
+    return {
+        [MASK_STORAGE_KEY]: {
+            [`${platform}_${identity}`]: data,
+        },
+    }
+}
+
 export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
     /**
      * Get current KV of a persona
      * @param personaPublicKey
      *
      */
-    get<T extends {}>(personaPublicKey: string): Promise<Result<T, string>> {
-        return fetchJSON<T>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+    async get<T extends {}>(personaPublicKey: string): Promise<Result<T, string>> {
+        const full = await fetchJSON<{ [MASK_STORAGE_KEY]: T }>(
+            urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
+        )
+        return full.map((x) => x[MASK_STORAGE_KEY])
     }
 
     /**
@@ -45,7 +58,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             persona: personaPublicKey,
             platform,
             identity,
-            patch: patchData,
+            patch: formatPatchData(platform, identity, patchData),
         }
 
         const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/kv/payload'), {
@@ -87,7 +100,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             platform,
             identity,
             signature,
-            patch: patchData,
+            patch: formatPatchData(platform, identity, patchData),
             created_at: createdAt,
         }
 
