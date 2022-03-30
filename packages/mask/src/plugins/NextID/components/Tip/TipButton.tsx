@@ -2,7 +2,7 @@ import { TipCoin } from '@masknet/icons'
 import { usePostInfoDetails } from '@masknet/plugin-infra'
 import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { queryExistedBindingByPersona, queryIsBound } from '@masknet/web3-providers'
+import { NextIDProof } from '@masknet/web3-providers'
 import type { TooltipProps } from '@mui/material'
 import classnames from 'classnames'
 import { uniq } from 'lodash-unified'
@@ -73,7 +73,7 @@ export const TipButton: FC<Props> = ({
 
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(() => {
         if (!receiverPersona?.publicHexKey || !receiver?.userId) return Promise.resolve(false)
-        return queryIsBound(receiverPersona.publicHexKey, platform, receiver.userId, true)
+        return NextIDProof.queryIsBound(receiverPersona.publicHexKey, platform, receiver.userId, true)
     }, [receiverPersona?.publicHexKey, platform, receiver?.userId])
 
     const [walletsState, queryBindings] = useAsyncFn(async () => {
@@ -82,7 +82,7 @@ export const TipButton: FC<Props> = ({
         const persona = await Services.Identity.queryPersonaByProfile(receiver)
         if (!persona?.publicHexKey) return EMPTY_LIST
 
-        const bindings = await queryExistedBindingByPersona(persona.publicHexKey, true)
+        const bindings = await NextIDProof.queryExistedBindingByPersona(persona.publicHexKey, true)
         if (!bindings) return EMPTY_LIST
 
         const wallets = bindings.proofs.filter((p) => p.platform === NextIDPlatform.Ethereum).map((p) => p.identity)
