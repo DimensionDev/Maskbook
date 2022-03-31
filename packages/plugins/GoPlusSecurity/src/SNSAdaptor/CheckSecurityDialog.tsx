@@ -45,7 +45,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
 
     const [{ value, loading: searching, error }, onSearch] = useAsyncFn(async (chainId: ChainId, content: string) => {
         const values = await GoPlusLabs.getTokenSecurity(chainId, [content.trim()])
-        if (!Object.keys(values ?? {}).length) throw new Error()
+        if (!Object.keys(values ?? {}).length) throw new Error('Contract Not Found')
         return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0], chainId }))[0] as
             | TokenSecurity
             | undefined
