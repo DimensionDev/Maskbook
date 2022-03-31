@@ -29,6 +29,7 @@
     "@masknet/plugin-rss3": "workspace:*",
     "@masknet/plugin-solana": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
+    "@masknet/plugin-go-plus-security": "workspace:*",
     "@masknet/public-api": "workspace:*",
     "@masknet/sdk": "workspace:*",
     "@masknet/shared": "workspace:*",
