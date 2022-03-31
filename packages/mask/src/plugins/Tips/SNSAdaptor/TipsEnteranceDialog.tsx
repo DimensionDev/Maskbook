@@ -2,6 +2,8 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { DialogContent, Button } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
+import { VerifyAlertLine } from './components/VerifyAlertLine'
+import { useState } from 'react'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose?: () => void
@@ -23,6 +25,7 @@ const WalletButton = () => {
 export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const [showAlert, setShowAlert] = useState(true)
     return (
         <InjectedDialog
             open={open}
@@ -31,7 +34,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             }}
             title={t('plugin_tips_name')}
             badgeAction={WalletButton()}>
-            <DialogContent>2222</DialogContent>
+            <DialogContent>{showAlert && <VerifyAlertLine onClose={() => setShowAlert(false)} />}</DialogContent>
         </InjectedDialog>
     )
 }
