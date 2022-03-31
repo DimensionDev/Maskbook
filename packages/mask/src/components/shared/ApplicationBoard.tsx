@@ -20,6 +20,7 @@ import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-i
 import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { activatedSocialNetworkUI } from '../../social-network'
+import { NFTAvatarDialog } from '../../plugins/NFTAvatar/SNSAdaptor/NFTAvatarsDialog'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -214,6 +215,13 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     } = useControlledDialog()
     // #endregion
 
+    // #region NFT Avatars
+    const {
+        open: isNFTAvatarsDialogOpen,
+        onOpen: onNFTAvatarsDialogOpen,
+        onClose: onNFTAvatarsDialogClose,
+    } = useControlledDialog()
+
     function createEntry(
         title: string,
         img: string,
@@ -248,6 +256,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             'File Service',
             new URL('./assets/files.png', import.meta.url).toString(),
             () => openEncryptedMessage(PluginId.FileService),
+            undefined,
+            false,
+            false,
+        ),
+        createEntry(
+            'NFT Avatars',
+            new URL('./assets/nftavatar.png', import.meta.url).toString(),
+            onNFTAvatarsDialogOpen,
             undefined,
             false,
             false,
@@ -430,6 +446,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             {isSwapDialogOpen ? <TraderDialog open onClose={onSwapDialogClose} /> : null}
 
             {isSavingsDialogOpen ? <SavingsDialog open onClose={onSavingsDialogClose} /> : null}
+            {isNFTAvatarsDialogOpen ? <NFTAvatarDialog open onClose={onNFTAvatarsDialogClose} /> : null}
         </>
     )
 }

@@ -162,6 +162,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         <InjectedDialog
             title={`Connect to ${resolveProviderName(providerType)}`}
             open={open}
+            sx={{ height: 612 }}
             onClose={() => setConnectWalletDialog({ open: false, result: false })}>
             <DialogContent className={classes.content}>
                 <ConnectionProgress providerType={providerType} connection={connection} />
