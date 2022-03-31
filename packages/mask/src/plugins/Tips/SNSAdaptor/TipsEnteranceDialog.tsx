@@ -6,6 +6,7 @@ import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { useState } from 'react'
 import { TipsSupportedChains } from '../constants'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose?: () => void
@@ -16,6 +17,13 @@ const useStyles = makeStyles()((theme) => ({
     },
     alertBox: {
         marginBottom: '20px',
+    },
+    actions: {
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: theme.spacing(1.5),
     },
 }))
 
@@ -49,6 +57,12 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 {supportedNetworks.map((x, idx) => {
                     return <WalletsByNetwork key={idx} network={x} />
                 })}
+                <div className={classes.actions}>
+                    <ActionButton fullWidth color="secondary">
+                        Cancel
+                    </ActionButton>
+                    <ActionButton fullWidth>Confirm</ActionButton>
+                </div>
             </DialogContent>
         </InjectedDialog>
     )
