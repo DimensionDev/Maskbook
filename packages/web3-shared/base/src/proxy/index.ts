@@ -161,7 +161,8 @@ const SOCKET_POINT =
     // workaround, should create a stage env for QA testing
     process.env.NODE_ENV === 'production' && process.env.channel === 'stable'
         ? 'wss://hyper-proxy-production.mask-reverse-proxy.workers.dev'
-        : 'wss://e2yulvimc7.execute-api.ap-east-1.amazonaws.com/default'
+        : /* spell-checker: disable */
+          'wss://e2yulvimc7.execute-api.ap-east-1.amazonaws.com/default'
 
 enum SocketState {
     CONNECTING = 0,
