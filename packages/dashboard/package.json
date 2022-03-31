@@ -36,7 +36,6 @@
     "color": "^4.2.1",
     "date-fns": "2.28.0",
     "html-to-image": "^1.9.0",
-    "i18next-browser-languagedetector": "^6.1.4",
     "json-stable-stringify": "^1.0.1",
     "react-avatar-editor": "^12.0.0",
     "react-hook-form": "^7.28.1",
