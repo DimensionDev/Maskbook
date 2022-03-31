@@ -65,13 +65,10 @@ export function TrendingPopper(props: TrendingPopperProps) {
     )
 
     useEffect(() => {
-        let timeId: NodeJS.Timeout
         const onMouseLeave = () => {
-            timeId = setTimeout(() => setAnchorEl(null), TIMEOUT)
             setMouseIn(false)
         }
         const onMouseEnter = () => {
-            clearTimeout(timeId)
             setMouseIn(true)
         }
         popper.current?.addEventListener('mouseleave', onMouseLeave)
