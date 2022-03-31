@@ -1,7 +1,6 @@
 import { Suspense } from 'react'
-import { CustomSnackbarProvider } from '@masknet/theme'
 import { Web3Provider } from '@masknet/web3-shared-evm'
-import { CssBaseline, StyledEngineProvider, Theme, ThemeProvider } from '@mui/material'
+import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material'
 import { NetworkPluginID, PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra'
 import { I18NextProviderHMR } from '@masknet/shared'
 import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef } from '@masknet/shared-base-ui'
@@ -13,50 +12,20 @@ import { isFacebook } from './social-network-adaptor/facebook.com/base'
 import { pluginIDSettings } from './settings/settings'
 import { fixWeb3State } from './plugins/EVM/UI/Web3State'
 import { getBackgroundColor } from './utils'
-import { MaskIconPaletteContext } from '@masknet/icons'
 import { isTwitter } from './social-network-adaptor/twitter.com/base'
+import { MaskThemeProvider } from '@masknet/theme'
+
 const identity = (jsx: React.ReactNode) => jsx as JSX.Element
 function compose(init: React.ReactNode, ...f: ((children: React.ReactNode) => JSX.Element)[]) {
     return f.reduceRight((prev, curr) => curr(prev), <>{init}</>)
 }
 
-type MaskThemeProvider = React.PropsWithChildren<{
-    baseline: boolean
-    useTheme(): Theme
-}>
-function MaskThemeProvider({ children, baseline, useTheme }: MaskThemeProvider) {
-    const theme = useTheme()
-
+function useMaskIconPalette(theme: Theme) {
     const backgroundColor = getBackgroundColor(document.body)
     const isDark = theme.palette.mode === 'dark'
     const isDarker = backgroundColor === 'rgb(0,0,0)'
 
-    return compose(
-        children,
-        (jsx) => (
-            <MaskIconPaletteContext.Provider
-                value={isDark ? (!isDarker && isTwitter(activatedSocialNetworkUI) ? 'dim' : 'dark') : 'light'}>
-                {jsx}
-            </MaskIconPaletteContext.Provider>
-        ),
-        (jsx) => <ThemeProvider theme={theme} children={jsx} />,
-        (jsx) => (
-            <CustomSnackbarProvider
-                disableWindowBlurListener={false}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                children={jsx}
-                offsetY={isFacebook(activatedSocialNetworkUI) ? 80 : undefined}
-            />
-        ),
-        baseline
-            ? (jsx) => (
-                  <>
-                      <CssBaseline />
-                      {jsx}
-                  </>
-              )
-            : identity,
-    )
+    return isDark ? (!isDarker && isTwitter(activatedSocialNetworkUI) ? 'dim' : 'dark') : 'light'
 }
 export interface MaskUIRootProps extends React.PropsWithChildren<{}> {
     kind: 'page' | 'sns'
@@ -84,7 +53,11 @@ export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
         (jsx) => <I18NextProviderHMR i18n={i18nNextInstance} children={jsx} />,
         kind === 'page' ? (jsx) => <StyledEngineProvider injectFirst children={jsx} /> : identity,
         (jsx) => (
-            <MaskThemeProvider useTheme={useTheme} baseline={kind === 'page'}>
+            <MaskThemeProvider
+                useMaskIconPalette={useMaskIconPalette}
+                CustomSnackbarOffsetY={isFacebook(activatedSocialNetworkUI) ? 80 : undefined}
+                useTheme={useTheme}
+                baseline={kind === 'page'}>
                 <CssBaseline />
                 {jsx}
             </MaskThemeProvider>

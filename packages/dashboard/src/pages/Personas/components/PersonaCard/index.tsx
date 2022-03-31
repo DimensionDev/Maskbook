@@ -2,13 +2,13 @@ import { memo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
-import type {
-    NextIDPersonaBindings,
-    PersonaIdentifier,
-    ProfileIdentifier,
-    ProfileInformation,
+import {
+    type NextIDPersonaBindings,
+    type PersonaIdentifier,
+    type ProfileIdentifier,
+    type ProfileInformation,
+    formatPersonaFingerprint,
 } from '@masknet/shared-base'
-import { formatFingerprint } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import type { SocialNetwork } from '../../api'
 import classNames from 'classnames'
@@ -103,7 +103,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                         {nickname}
                     </Typography>
                     <Typography variant="caption" sx={{ cursor: 'pointer' }} onClick={onClick}>
-                        {formatFingerprint(identifier.compressedPoint, 4)}
+                        {formatPersonaFingerprint(identifier.compressedPoint, 4)}
                     </Typography>
                 </div>
                 <div className={classes.content}>

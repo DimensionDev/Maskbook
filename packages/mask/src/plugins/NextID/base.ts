@@ -31,12 +31,8 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Conflux,
                 ],
             },
-            [NetworkPluginID.PLUGIN_SOLANA]: {
-                supportedChainIds: [],
-            },
-            [NetworkPluginID.PLUGIN_FLOW]: {
-                supportedChainIds: [],
-            },
+            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
+            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
     },
     experimentalMark: true,
