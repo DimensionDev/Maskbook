@@ -9,7 +9,7 @@ import type {
 } from '@masknet/web3-shared-evm'
 import type { CurrencyType } from '@masknet/plugin-infra'
 import type { Result } from 'ts-results'
-import type { NextIDAction, NextIDKVPayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
+import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -327,7 +327,7 @@ export namespace NextIDBaseAPI {
             platform: NextIDPlatform,
             identity: string,
             patchData: unknown,
-        ): Promise<Result<NextIDKVPayload, string>>
+        ): Promise<Result<NextIDStoragePayload, string>>
     }
     export interface Proof {
         bindProof(

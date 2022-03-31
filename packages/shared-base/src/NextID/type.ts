@@ -50,7 +50,7 @@ export interface NextIDBindings {
 }
 
 // #region kv server
-export interface NextIDKVPayload {
+export interface NextIDStoragePayload {
     uuid: string
     signPayload: string
     createdAt: string
