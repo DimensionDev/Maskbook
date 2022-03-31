@@ -17,7 +17,8 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     },
     "MASK_ITO_CONTRACT_ADDRESS": {
         "Mainnet": "0x86812da3A623ab9606976078588b80C315E55FA3",
@@ -37,7 +38,8 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     },
     "ITO2_CONTRACT_ADDRESS": {
         "Mainnet": "0xc2CFbF22d6Dc87D0eE18d38d73733524c109Ff46",
@@ -99,7 +101,8 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     },
     "DEFAULT_QUALIFICATION2_ADDRESS": {
         "Mainnet": "0x4dC5f343Fe57E4fbDA1B454d125D396A3181272c",
@@ -140,6 +143,7 @@
         "Celo": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-celo",
         "Fantom": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-fantom",
         "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-aurora",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     }
 }
