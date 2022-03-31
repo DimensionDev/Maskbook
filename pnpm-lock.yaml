@@ -44,7 +44,6 @@ importers:
       eslint-plugin-unused-imports: ^2.0.0
       gulp: ^4.0.2
       husky: ^7.0.4
-      i18next: ^21.6.14
       jest: ^28.0.0-alpha.3
       lint-staged: ^12.3.7
       lodash: ^4.17.21
@@ -75,13 +74,12 @@ importers:
       '@types/react': 17.0.43
       '@types/react-dom': 17.0.14
       '@types/web': 0.0.60
-      i18next: 21.6.14
       lodash: 4.17.21
       lodash-es: 4.17.21
       lodash-unified: 1.0.2_da03a4540fbd16bbaafbb96724306afd
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
-      react-i18next: 11.16.2_67d9cd14f543534febc666d787b5936c
+      react-i18next: 11.16.2_react-dom@18.0.0+react@18.0.0
       ts-results: 3.3.0
       web3-core: 1.5.2
       web3-core-method: 1.5.2
@@ -164,7 +162,6 @@ importers:
       color: ^4.2.1
       date-fns: 2.28.0
       html-to-image: ^1.9.0
-      i18next-browser-languagedetector: ^6.1.4
       json-stable-stringify: ^1.0.1
       path-browserify: ^1.0.1
       react-avatar-editor: ^12.0.0
@@ -210,7 +207,6 @@ importers:
       color: 4.2.1
       date-fns: 2.28.0
       html-to-image: 1.9.0
-      i18next-browser-languagedetector: 6.1.4
       json-stable-stringify: 1.0.1
       react-avatar-editor: 12.0.0_572108936dbf4157100a77328045f809
       react-hook-form: 7.28.1_react@18.0.0
@@ -378,7 +374,6 @@ importers:
       graphql-request: ^3.4.0
       html-webpack-plugin: ^5.5.0
       https-browserify: ^1.0.0
-      i18next-browser-languagedetector: ^6.1.4
       idb: ^7.0.1
       iframe-resizer-react: ^1.1.0
       immer: ^9.0.12
@@ -509,7 +504,6 @@ importers:
       graphql: 15.5.3
       graphql-request: 3.5.0_graphql@15.5.3
       https-browserify: 1.0.0
-      i18next-browser-languagedetector: 6.1.4
       idb: 7.0.1
       iframe-resizer-react: 1.1.0_react-dom@18.0.0+react@18.0.0
       immer: 9.0.12
@@ -616,7 +610,7 @@ importers:
       unstated-next: 1.1.0
       use-subscription: 1.6.0_react@18.0.0
     devDependencies:
-      react-i18next: 11.16.2_67d9cd14f543534febc666d787b5936c
+      react-i18next: 11.16.2_react-dom@18.0.0+react@18.0.0
 
   packages/plugins/CyberConnect:
     specifiers:
@@ -1020,6 +1014,8 @@ importers:
       anchorme: ^2.1.2
       async-call-rpc: ^6.0.2
       bignumber.js: ^9.0.2
+      i18next: ^21.6.14
+      i18next-browser-languagedetector: ^6.1.4
       idb: ^7.0.1
       immer: ^9.0.12
       pvtsutils: ^1.2.2
@@ -1043,6 +1039,8 @@ importers:
       anchorme: 2.1.2
       async-call-rpc: 6.0.2
       bignumber.js: 9.0.2
+      i18next: 21.6.14
+      i18next-browser-languagedetector: 6.1.4
       idb: 7.0.1
       immer: 9.0.12
       pvtsutils: 1.2.2
@@ -17975,7 +17973,7 @@ packages:
   /i18next/21.6.14:
     resolution: {integrity: sha512-XL6WyD+xlwQwbieXRlXhKWoLb/rkch50/rA+vl6untHnJ+aYnkQ0YDZciTWE78PPhOpbi2gR0LTJCJpiAhA+uQ==}
     dependencies:
-      '@babel/runtime': 7.17.2
+      '@babel/runtime': 7.17.8
     dev: false
 
   /iconv-lite/0.4.24:
@@ -22873,7 +22871,7 @@ packages:
       react: 18.0.0
     dev: false
 
-  /react-i18next/11.16.2_67d9cd14f543534febc666d787b5936c:
+  /react-i18next/11.16.2_react-dom@18.0.0+react@18.0.0:
     resolution: {integrity: sha512-1iuZduvARUelL5ux663FvIoDZExwFO+9QtRAAt4uvs1/aun4cUZt8XBrVg7iiDgNls9cOSORAhE7Ri5KA9RMvg==}
     peerDependencies:
       i18next: '>= 19.0.0'
@@ -22889,7 +22887,6 @@ packages:
       '@babel/runtime': 7.17.8
       html-escaper: 2.0.2
       html-parse-stringify: 3.0.1
-      i18next: 21.6.14
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
 
