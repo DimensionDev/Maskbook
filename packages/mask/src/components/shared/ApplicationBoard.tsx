@@ -1,10 +1,13 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
+import { Typography, useTheme } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
 import type { Plugin } from '@masknet/plugin-infra'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
+import { useI18N } from '../../utils'
+import { ApplicationSettingDialog } from './ApplicationSettingDialog'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -24,18 +27,49 @@ const useStyles = makeStyles()((theme) => {
                 gridGap: theme.spacing(1),
             },
         },
+        subTitle: {
+            fontSize: 18,
+            lineHeight: '24px',
+            fontWeight: 600,
+            color: theme.palette.text.primary,
+        },
+        header: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 11.5,
+        },
+        settingIcon: {
+            height: 24,
+            width: 24,
+            cursor: 'pointer',
+        },
     }
 })
 
 export function ApplicationBoard() {
     const { classes } = useStyles()
+    const theme = useTheme()
+    const { t } = useI18N()
+    const [openSettings, setOpenSettings] = useState(true)
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId()
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
+    const SettingIconDarkModeUrl = new URL('./assets/settings_dark_mode.png', import.meta.url).toString()
+    const SettingIconLightModeUrl = new URL('./assets/settings_light_mode.png', import.meta.url).toString()
 
     return (
         <>
+            <div className={classes.header}>
+                <Typography className={classes.subTitle}>{t('applications')}</Typography>
+                <img
+                    src={theme.palette.mode === 'dark' ? SettingIconDarkModeUrl : SettingIconLightModeUrl}
+                    className={classes.settingIcon}
+                    onClick={() => setOpenSettings(true)}
+                />
+            </div>
+
             <section className={classes.applicationWrapper}>
                 {snsAdaptorPlugins
                     .reduce<{ entry: Plugin.SNSAdaptor.ApplicationEntry; enabled: boolean; pluginId: string }[]>(
@@ -73,6 +107,9 @@ export function ApplicationBoard() {
                         )
                     })}
             </section>
+            {openSettings ? (
+                <ApplicationSettingDialog open={openSettings} onClose={() => setOpenSettings(false)} />
+            ) : null}
         </>
     )
 }

@@ -63,12 +63,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
             <DialogContent className={classes.content}>
                 <Typography className={classes.subTitle}>{t('wallets')}</Typography>
                 <WalletStatusBox isDashboard={props.isDashboard} />
-                {!props.isDashboard && (
-                    <>
-                        <Typography className={classes.subTitle}>{t('applications')}</Typography>
-                        <ApplicationBoard />
-                    </>
-                )}
+                {!props.isDashboard && <ApplicationBoard />}
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>
