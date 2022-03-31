@@ -313,6 +313,7 @@ importers:
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-file-service': workspace:*
       '@masknet/plugin-flow': workspace:*
+      '@masknet/plugin-go-plus-security': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/plugin-rss3': workspace:*
       '@masknet/plugin-solana': workspace:*
@@ -451,6 +452,7 @@ importers:
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-file-service': link:../plugins/FileService
       '@masknet/plugin-flow': link:../plugins/Flow
+      '@masknet/plugin-go-plus-security': link:../plugins/GoPlusSecurity
       '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/plugin-rss3': link:../plugins/RSS3
       '@masknet/plugin-solana': link:../plugins/Solana
@@ -753,6 +755,34 @@ importers:
       '@masknet/web3-shared-flow': link:../../web3-shared/flow
       bignumber.js: 9.0.2
       react-use: 17.3.2_581fa33d3647c30d8078674dcd1b240a
+
+  packages/plugins/GoPlusSecurity:
+    specifiers:
+      '@masknet/icons': workspace:*
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/web3-providers': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      bignumber.js: ^9.0.2
+      react-feather: ^2.0.9
+      react-use: ^17.3.2
+      urlcat: ^2.0.4
+    dependencies:
+      '@masknet/icons': link:../../icons
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
+      '@masknet/theme': link:../../theme
+      '@masknet/web3-providers': link:../../web3-providers
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      bignumber.js: 9.0.2
+      react-feather: 2.0.9_react@18.0.0
+      react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
+      urlcat: 2.0.4
 
   packages/plugins/RSS3:
     specifiers:
