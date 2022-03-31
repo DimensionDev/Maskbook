@@ -10,6 +10,7 @@ import { Footer } from './components/Footer'
 import { Center, TokenSecurity } from './components/Common'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder'
 import { NotFound } from './components/NotFound'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -42,7 +43,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { open, onClose } = props
 
-    const [{ value, loading: searching, error }, onSearch] = useAsyncFn(async (chainId: string, content: string) => {
+    const [{ value, loading: searching, error }, onSearch] = useAsyncFn(async (chainId: ChainId, content: string) => {
         const values = await GoPlusLabs.getTokenSecurity(chainId, [content.trim()])
         if (!Object.keys(values ?? {}).length) throw new Error()
         return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0], chainId }))[0] as

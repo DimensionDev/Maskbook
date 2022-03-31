@@ -8,7 +8,6 @@ import { useI18N } from '../../locales'
 import type { SecurityAPI } from '@masknet/web3-providers'
 import { GoPlusLabs } from '@masknet/web3-providers'
 import { ChainId, getChainDetailed } from '@masknet/web3-shared-evm'
-import parseInt from 'lodash-es/parseInt'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -37,15 +36,15 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface SearchBoxProps {
-    onSearch(chainId: string, content: string): void
+    onSearch(chainId: ChainId, content: string): void
 }
 
-const DEFAULT_SEARCH_CHAIN = '1'
+const DEFAULT_SEARCH_CHAIN = ChainId.Mainnet
 
 function getChainName(chain?: SecurityAPI.SupportedChain) {
     if (!chain) return getChainDetailed(ChainId.Mainnet)?.chain
-    if (chain.id === ChainId.BSC.toString()) return getChainDetailed(ChainId.BSC)?.shortName.toUpperCase() ?? chain.name
-    return getChainDetailed(parseInt(chain.id))?.chain ?? chain.name
+    if (chain.id === ChainId.BSC) return getChainDetailed(ChainId.BSC)?.shortName.toUpperCase() ?? chain.name
+    return getChainDetailed(chain.id)?.chain ?? chain.name
 }
 
 export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {

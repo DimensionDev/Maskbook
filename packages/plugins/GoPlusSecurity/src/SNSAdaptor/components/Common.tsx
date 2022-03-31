@@ -3,10 +3,11 @@ import { InfoIcon, RiskIcon, SuccessIcon } from '@masknet/icons'
 import { memo, ReactNode } from 'react'
 import { Stack } from '@mui/material'
 import type { useI18N } from '../../locales'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export type TokenSecurity = SecurityAPI.ContractSecurity &
     SecurityAPI.TokenSecurity &
-    SecurityAPI.TradingSecurity & { contract: string; chainId: string }
+    SecurityAPI.TradingSecurity & { contract: string; chainId: ChainId }
 
 export enum SecurityMessageLevel {
     High = 'High',
