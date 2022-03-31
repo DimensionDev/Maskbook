@@ -7,12 +7,12 @@ import { DataProvider } from '@masknet/public-api'
 /**
  * The slippage tolerance of trader
  */
-export const currentSlippageSettings = createGlobalSettings<number>(`${PLUGIN_ID}+slippageTolerance`, SLIPPAGE_DEFAULT)
+export const currentSlippageSettings = createGlobalSettings(`${PLUGIN_ID}+slippageTolerance`, SLIPPAGE_DEFAULT)
 
 /**
  * Single Hop
  */
-export const currentSingleHopOnlySettings = createGlobalSettings<boolean>(`${PLUGIN_ID}+singleHopOnly`, false)
+export const currentSingleHopOnlySettings = createGlobalSettings(`${PLUGIN_ID}+singleHopOnly`, false)
 
 /**
  * The default data provider
@@ -28,15 +28,9 @@ export interface TradeProviderSettings {
 }
 
 // #region the user preferred coin id
-const coinGeckoPreferredCoinId = createInternalSettings<string>(`${PLUGIN_ID}+currentCoinGeckoPreferredCoinId`, '{}')
-const coinMarketCapPreferredCoinId = createInternalSettings<string>(
-    `${PLUGIN_ID}+currentCoinMarketCapPreferredCoinId`,
-    '{}',
-)
-const coinUniswapPreferredCoinId = createInternalSettings<string>(
-    `${PLUGIN_ID}+currentCoinUniswapPreferredCoinId`,
-    '{}',
-)
+const coinGeckoPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinGeckoPreferredCoinId`, '{}')
+const coinMarketCapPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinMarketCapPreferredCoinId`, '{}')
+const coinUniswapPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinUniswapPreferredCoinId`, '{}')
 
 export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
     switch (dataProvider) {
@@ -55,4 +49,4 @@ export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
 /**
  * The approved tokens from uniswap
  */
-export const approvedTokensFromUniswap = createInternalSettings<string>(`${PLUGIN_ID}+approvedTokens`, '[]')
+export const approvedTokensFromUniswap = createInternalSettings(`${PLUGIN_ID}+approvedTokens`, '[]')
