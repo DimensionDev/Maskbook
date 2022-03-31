@@ -18,7 +18,7 @@ import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../../../service'
 import { GrayMasks } from '@masknet/icons'
 import { DisconnectDialog } from '../DisconnectDialog'
-import { createPersonaPayload, queryExistedBindingByPersona } from '@masknet/web3-providers'
+import { NextIDProof } from '@masknet/web3-providers'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
@@ -151,7 +151,7 @@ export const ProfileList = memo(() => {
     const { value: mergedProfiles, retry: refreshProfileList } = useAsyncRetry(async () => {
         if (!currentPersona) return []
         if (!currentPersona.publicHexKey) return currentPersona.linkedProfiles
-        const response = await queryExistedBindingByPersona(currentPersona.publicHexKey)
+        const response = await NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey)
         if (!response) return currentPersona.linkedProfiles
 
         return currentPersona.linkedProfiles.map((profile) => {
@@ -177,7 +177,7 @@ export const ProfileList = memo(() => {
             const publicHexKey = currentPersona.publicHexKey
 
             if (!publicHexKey || !unbind || !unbind.identity || !unbind.platform) return
-            const result = await createPersonaPayload(
+            const result = await NextIDProof.createPersonaPayload(
                 publicHexKey,
                 NextIDAction.Delete,
                 unbind.identity,

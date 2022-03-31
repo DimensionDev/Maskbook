@@ -11,6 +11,7 @@ import { TokenListAPI } from './token-list'
 import { TokenPriceAPI } from './token-price'
 import { InstagramAPI } from './instagram'
 import { GoPlusLabsAPI } from './gopluslabs'
+import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
 
 export * from './types'
 export * from './hooks'
@@ -31,6 +32,8 @@ export const GoPlusLabs = new GoPlusLabsAPI()
 
 export const TokenList = new TokenListAPI()
 export const TokenPrice = new TokenPriceAPI()
+export const NextIDStorage = new NextIDStorageAPI()
+export const NextIDProof = new NextIDProofAPI()
 
 // Method for provider proxy
 export { getOpenSeaNFTList, getOpenSeaCollectionList } from './opensea'
