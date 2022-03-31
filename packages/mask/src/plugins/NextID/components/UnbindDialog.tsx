@@ -12,7 +12,7 @@ import { useBindPayload } from '../hooks/useBindPayload'
 import { delay } from '@dimensiondev/kit'
 import { UnbindPanelUI } from './UnbindPanelUI'
 import { UnbindConfirm } from './UnbindConfirm'
-import { bindProof } from '@masknet/web3-providers'
+import { NextIDProof } from '@masknet/web3-providers'
 
 interface VerifyWalletDialogProps {
     unbindAddress: string
@@ -40,7 +40,7 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
         if (!personaSignState.value && !walletSignState.value) return
         if (!message || !persona.publicHexKey) return
         try {
-            await bindProof(
+            await NextIDProof.bindProof(
                 message.uuid,
                 persona.publicHexKey,
                 NextIDAction.Delete,
