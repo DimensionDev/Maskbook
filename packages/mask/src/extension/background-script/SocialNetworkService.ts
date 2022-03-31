@@ -35,7 +35,11 @@ export async function connectSocialNetwork(
     home && browser.tabs.create({ active: true, url: home })
 }
 
-export async function openProfilePage(network: string, userId?: string) {
+export async function openProfilePage(profile: ProfileIdentifier): Promise<void>
+export async function openProfilePage(network: string, userId?: string): Promise<void>
+export async function openProfilePage(network: string | ProfileIdentifier, userId?: string): Promise<void> {
+    if (typeof network !== 'string') return openProfilePage(network.network, network.userId)
+
     const ui = await loadSocialNetworkUI(network)
     const profile = ui.utils.getProfilePage?.(userId)
     if (!Flags.no_web_extension_dynamic_permission_request) {

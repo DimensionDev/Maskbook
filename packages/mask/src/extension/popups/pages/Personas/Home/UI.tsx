@@ -1,8 +1,4 @@
-// ! We're going to SSR this UI, so DO NOT import anything new!
-
-// TODO: Migrate following files before we can SSR
-// ProfileList
-// useI18N
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
 import { memo, useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
@@ -16,7 +12,7 @@ import {
     ECKeyIdentifier,
 } from '@masknet/shared-base'
 import { ChevronDown, ChevronUp } from 'react-feather'
-import { ProfileList } from '../components/ProfileList'
+import { ProfileList, ProfileListProps } from '../components/ProfileList'
 import { EnterDashboard } from '../../../components/EnterDashboard'
 import { PersonaListUI } from '../components/PersonaList'
 import { useI18N } from '../../../../../utils/i18n-next-ui'
@@ -99,7 +95,7 @@ const useStyles = makeStyles()({
     },
 })
 
-export interface PersonaHomeUIProps {
+export interface PersonaHomeUIProps extends ProfileListProps {
     navigate: NavigateFunction
     currentPersona: PersonaInformation | undefined
     personas: PersonaInformation[] | undefined
@@ -153,7 +149,17 @@ export const PersonaHomeUI = memo((props: PersonaHomeUIProps) => {
                     </div>
                 </div>
                 {isExpand ? (
-                    <ProfileList />
+                    <ProfileList
+                        onConnectNextID={props.onConnectNextID}
+                        onConnectProfile={props.onConnectProfile}
+                        confirmLoading={props.confirmLoading}
+                        onConfirmDisconnect={props.onConfirmDisconnect}
+                        onDisconnectProfile={props.onDisconnectProfile}
+                        openProfilePage={props.openProfilePage}
+                        mergedProfiles={props.mergedProfiles}
+                        definedSocialNetworks={props.definedSocialNetworks}
+                        SOCIAL_MEDIA_ICON_MAPPING={props.SOCIAL_MEDIA_ICON_MAPPING}
+                    />
                 ) : (
                     <PersonaListUI
                         onLogout={onLogout}

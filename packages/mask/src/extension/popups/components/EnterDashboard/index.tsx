@@ -1,4 +1,4 @@
-// ! We're going to SSR this UI, so DO NOT import anything new!
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
 import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { useEnterDashboard } from '../../hook/useEnterDashboard'

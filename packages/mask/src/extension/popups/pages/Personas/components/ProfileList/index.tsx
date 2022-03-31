@@ -1,30 +1,16 @@
-import { memo, useCallback, useState } from 'react'
-import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
-import { definedSocialNetworkUIs } from '../../../../../../social-network'
-import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
-import {
-    ProfileIdentifier,
-    ProfileInformation,
-    EnhanceableSite,
-    NextIDAction,
-    NextIDPlatform,
-    PopupRoutes,
-} from '@masknet/shared-base'
-import { compact } from 'lodash-unified'
-import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../../../utils'
-import { PersonaContext } from '../../hooks/usePersonaContext'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
-import Services from '../../../../../service'
-import { GrayMasks } from '@masknet/icons'
-import { DisconnectDialog } from '../DisconnectDialog'
-import { NextIDProof } from '@masknet/web3-providers'
-import classNames from 'classnames'
-import { useNavigate } from 'react-router-dom'
-import urlcat from 'urlcat'
-import { MethodAfterPersonaSign } from '../../../Wallet/type'
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-const useStyles = makeStyles()((theme) => ({
+import React, { lazy, memo, Suspense, useCallback, useState } from 'react'
+import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
+import type { ProfileIdentifier, ProfileInformation, NextIDPlatform } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useI18N } from '../../../../../../utils/i18n-next-ui'
+import { GrayMasks } from '@masknet/icons'
+
+// This component is not used during SSR. We want to defer it.
+const DisconnectDialog = lazy(() => import('../DisconnectDialog').then((x) => ({ default: x.DisconnectDialog })))
+
+const useStyles = makeStyles()({
     list: {
         padding: '0 0 70px 0',
         height: 487,
@@ -93,45 +79,21 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
         marginLeft: 6,
     },
-}))
+})
 
-export interface ProfileListProps {}
+export interface ProfileListProps extends Omit<ProfileListUIProps, 'onDisconnect'> {
+    onConfirmDisconnect(unbind: UnbindStatus): void
+    onDisconnectProfile(identifier: ProfileIdentifier): void
+    confirmLoading: boolean
+}
 
-export const ProfileList = memo(() => {
-    const { currentPersona } = PersonaContext.useContainer()
-
-    const navigate = useNavigate()
-    const [unbind, setUnbind] = useState<{
-        identifier: ProfileIdentifier
-        identity?: string
-        platform?: NextIDPlatform
-    } | null>(null)
-
-    const definedSocialNetworks = compact(
-        [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {
-            if (networkIdentifier === EnhanceableSite.Localhost) return null
-            return networkIdentifier
-        }),
-    )
-
-    const [, onConnect] = useAsyncFn(
-        async (networkIdentifier: string, type?: 'local' | 'nextID', profile?: ProfileIdentifier) => {
-            if (currentPersona) {
-                await Services.SocialNetwork.connectSocialNetwork(
-                    currentPersona.identifier,
-                    networkIdentifier,
-                    type,
-                    profile,
-                )
-            }
-        },
-        [currentPersona],
-    )
-
-    const [, openProfilePage] = useAsyncFn(
-        async (network: string, userId: string) => Services.SocialNetwork.openProfilePage(network, userId),
-        [],
-    )
+export type UnbindStatus = {
+    identifier: ProfileIdentifier
+    identity?: string
+    platform?: NextIDPlatform
+}
+export const ProfileList = memo((props: ProfileListProps) => {
+    const [unbind, setUnbind] = useState<UnbindStatus | null>(null)
 
     const onDisconnect = useCallback(
         (identifier: ProfileIdentifier, is_valid?: boolean, platform?: NextIDPlatform, identity?: string) => {
@@ -143,81 +105,33 @@ export const ProfileList = memo(() => {
                 })
                 return
             }
-            Services.Identity.detachProfile(identifier)
+            props.onDisconnectProfile(identifier)
         },
-        [],
+        [props.onDisconnectProfile],
     )
-
-    const { value: mergedProfiles, retry: refreshProfileList } = useAsyncRetry(async () => {
-        if (!currentPersona) return []
-        if (!currentPersona.publicHexKey) return currentPersona.linkedProfiles
-        const response = await NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey)
-        if (!response) return currentPersona.linkedProfiles
-
-        return currentPersona.linkedProfiles.map((profile) => {
-            const target = response.proofs.find(
-                (x) =>
-                    profile.identifier.userId.toLowerCase() === x.identity.toLowerCase() &&
-                    profile.identifier.network.replace('.com', '') === x.platform,
-            )
-
-            return {
-                ...profile,
-                platform: target?.platform,
-                identity: target?.identity,
-                is_valid: target?.is_valid,
-            }
-        })
-    }, [currentPersona])
-
-    const [confirmState, onConfirmDisconnect] = useAsyncFn(async () => {
-        // fetch signature payload
-        try {
-            if (!currentPersona) return
-            const publicHexKey = currentPersona.publicHexKey
-
-            if (!publicHexKey || !unbind || !unbind.identity || !unbind.platform) return
-            const result = await NextIDProof.createPersonaPayload(
-                publicHexKey,
-                NextIDAction.Delete,
-                unbind.identity,
-                unbind.platform,
-            )
-            if (!result) return
-            navigate(
-                urlcat(PopupRoutes.PersonaSignRequest, {
-                    requestID: Math.random().toString().slice(3),
-                    message: result.signPayload,
-                    identifier: currentPersona.identifier.toText(),
-                    method: MethodAfterPersonaSign.DISCONNECT_NEXT_ID,
-                    profileIdentifier: unbind.identifier.toText(),
-                    platform: unbind.platform,
-                    identity: unbind.identity,
-                    createdAt: result.createdAt,
-                    uuid: result.uuid,
-                }),
-            )
-        } catch {
-            console.log('Disconnect failed')
-        }
-    }, [unbind, currentPersona?.identifier, refreshProfileList])
 
     return (
         <>
             <ProfileListUI
-                networks={definedSocialNetworks}
-                profiles={mergedProfiles ?? []}
-                onConnect={onConnect}
+                definedSocialNetworks={props.definedSocialNetworks}
+                mergedProfiles={props.mergedProfiles}
+                onConnectNextID={props.onConnectNextID}
+                onConnectProfile={props.onConnectProfile}
                 onDisconnect={onDisconnect}
-                openProfilePage={openProfilePage}
+                openProfilePage={props.openProfilePage}
+                SOCIAL_MEDIA_ICON_MAPPING={props.SOCIAL_MEDIA_ICON_MAPPING}
             />
-            <DisconnectDialog
-                unbundledIdentity={unbind?.identifier}
-                open={!!unbind}
-                onClose={() => setUnbind(null)}
-                onConfirmDisconnect={onConfirmDisconnect}
-                confirmLoading={confirmState.loading}
-            />
+            <Suspense fallback={null}>
+                {unbind && (
+                    <DisconnectDialog
+                        unbundledIdentity={unbind?.identifier}
+                        open={!!unbind}
+                        onClose={() => setUnbind(null)}
+                        onConfirmDisconnect={() => props.onConfirmDisconnect(unbind)}
+                        confirmLoading={props.confirmLoading}
+                    />
+                )}
+            </Suspense>
         </>
     )
 })
@@ -228,100 +142,104 @@ interface MergedProfileInformation extends ProfileInformation {
     platform?: NextIDPlatform
 }
 
-export interface ProfileListUIProps {
-    onConnect: (networkIdentifier: string, type?: 'local' | 'nextID', profile?: ProfileIdentifier) => void
-    onDisconnect: (
-        identifier: ProfileIdentifier,
-        is_valid?: boolean,
-        platform?: NextIDPlatform,
-        identity?: string,
-    ) => void
-    openProfilePage: (network: string, userId: string) => void
-    profiles: MergedProfileInformation[]
-    networks: string[]
+interface ProfileListUIProps {
+    onConnectProfile(network: string): void
+    onConnectNextID(profile: ProfileIdentifier): void
+    onDisconnect(identifier: ProfileIdentifier, is_valid?: boolean, platform?: NextIDPlatform, identity?: string): void
+    openProfilePage(profile: ProfileIdentifier): void
+    mergedProfiles: MergedProfileInformation[]
+    definedSocialNetworks: string[]
+    SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode>
 }
 
-export const ProfileListUI = memo<ProfileListUIProps>(
-    ({ networks, profiles, onConnect, onDisconnect, openProfilePage }) => {
-        const { t } = useI18N()
-        const { classes } = useStyles()
+const ProfileListUI = memo((props: ProfileListUIProps) => {
+    const {
+        definedSocialNetworks,
+        mergedProfiles: profiles,
+        onConnectProfile,
+        onConnectNextID,
+        onDisconnect,
+        openProfilePage,
+        SOCIAL_MEDIA_ICON_MAPPING,
+    } = props
+    const { t } = useI18N()
+    const { classes, cx } = useStyles()
 
-        return (
-            <List dense className={classes.list}>
-                {profiles.map(({ identifier, avatar, is_valid, platform, identity }) => {
-                    return (
-                        <ListItem
-                            className={classes.item}
-                            key={identifier.toText()}
-                            secondaryAction={
-                                <Link
-                                    className={classes.link}
-                                    underline="none"
-                                    onClick={() => onDisconnect(identifier, is_valid, platform, identity)}>
-                                    {t('popups_persona_disconnect')}
-                                </Link>
-                            }>
-                            <div className={classes.avatarContainer}>
-                                {avatar ? (
-                                    <Avatar
-                                        src={avatar}
-                                        className={classNames(
+    return (
+        <List dense className={classes.list}>
+            {profiles.map(({ identifier, avatar, is_valid, platform, identity }) => {
+                return (
+                    <ListItem
+                        className={classes.item}
+                        key={identifier.toText()}
+                        secondaryAction={
+                            <Link
+                                className={classes.link}
+                                underline="none"
+                                onClick={() => onDisconnect(identifier, is_valid, platform, identity)}>
+                                {t('popups_persona_disconnect')}
+                            </Link>
+                        }>
+                        <div className={classes.avatarContainer}>
+                            {avatar ? (
+                                <Avatar
+                                    src={avatar}
+                                    className={cx(
+                                        classes.avatar,
+                                        is_valid ? classes.verified_avatar : classes.unverified_avatar,
+                                    )}
+                                />
+                            ) : (
+                                <div className={classes.avatar}>
+                                    <GrayMasks
+                                        className={cx(
                                             classes.avatar,
                                             is_valid ? classes.verified_avatar : classes.unverified_avatar,
                                         )}
                                     />
-                                ) : (
-                                    <div className={classes.avatar}>
-                                        <GrayMasks
-                                            className={classNames(
-                                                classes.avatar,
-                                                is_valid ? classes.verified_avatar : classes.unverified_avatar,
-                                            )}
-                                        />
-                                    </div>
-                                )}
-                                <div className={classes.circle}>{SOCIAL_MEDIA_ICON_MAPPING[identifier.network]}</div>
-                            </div>
+                                </div>
+                            )}
+                            <div className={classes.circle}>{SOCIAL_MEDIA_ICON_MAPPING[identifier.network]}</div>
+                        </div>
 
-                            <ListItemText
-                                className={classes.text}
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => openProfilePage(identifier.network, identifier.userId)}>
-                                <Typography fontSize={12} fontWeight={600}>
-                                    @{identifier.userId}
-                                </Typography>
-                                {!is_valid && identifier.network === 'twitter.com' ? (
-                                    <Typography
-                                        className={classes.tag}
-                                        style={{ cursor: 'pointer' }}
-                                        onClick={(e) => {
-                                            onConnect(identifier.network, 'nextID', identifier)
-                                            e.stopPropagation()
-                                        }}>
-                                        {t('popups_persona_to_be_verified')}
-                                    </Typography>
-                                ) : null}
-                            </ListItemText>
-                        </ListItem>
-                    )
-                })}
-                {networks.map((networkIdentifier) => {
-                    return (
-                        <ListItem
-                            className={classes.item}
-                            key={networkIdentifier}
+                        <ListItemText
+                            className={classes.text}
                             style={{ cursor: 'pointer' }}
-                            onClick={() => onConnect(networkIdentifier)}>
-                            {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
-                            <ListItemText className={classes.text}>
-                                <Typography fontSize={12} fontWeight={600}>
-                                    {t('popups_persona_connect_to', { type: networkIdentifier })}
+                            onClick={() => openProfilePage(identifier)}>
+                            <Typography fontSize={12} fontWeight={600}>
+                                @{identifier.userId}
+                            </Typography>
+                            {!is_valid && identifier.network === 'twitter.com' ? (
+                                <Typography
+                                    className={classes.tag}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={(e) => {
+                                        onConnectNextID(identifier)
+                                        e.stopPropagation()
+                                    }}>
+                                    {t('popups_persona_to_be_verified')}
                                 </Typography>
-                            </ListItemText>
-                        </ListItem>
-                    )
-                })}
-            </List>
-        )
-    },
-)
+                            ) : null}
+                        </ListItemText>
+                    </ListItem>
+                )
+            })}
+            {definedSocialNetworks.map((networkIdentifier) => {
+                return (
+                    <ListItem
+                        className={classes.item}
+                        key={networkIdentifier}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => onConnectProfile(networkIdentifier)}>
+                        {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
+                        <ListItemText className={classes.text}>
+                            <Typography fontSize={12} fontWeight={600}>
+                                {t('popups_persona_connect_to', { type: networkIdentifier })}
+                            </Typography>
+                        </ListItemText>
+                    </ListItem>
+                )
+            })}
+        </List>
+    )
+})
