@@ -4,16 +4,10 @@ import { MaskDarkTheme, MaskLightTheme, applyMaskColorVars } from '../src/index'
 // Not compatible?
 // import { withMatrix } from 'storybook-addon-matrix'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
-import i18n from 'i18next'
+import { i18NextInstance } from '@masknet/shared-base'
 
-i18n.init({
-    keySeparator: false,
-    interpolation: { escapeValue: false },
-    // TODO: use fallbackLng from shared-base package
-    fallbackLng: 'en-US',
-    nonExplicitSupportedLngs: true,
-})
-i18n.use(initReactI18next)
+initReactI18next.init(i18NextInstance)
+
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
 }
@@ -32,7 +26,7 @@ export const decorators = [
                 </select>
                 <ThemeProvider theme={isDark ? MaskDarkTheme : MaskLightTheme}>
                     <Box sx={{ background: isDark ? 'black' : 'white' }}>
-                        <I18nextProvider i18n={i18n}>
+                        <I18nextProvider i18n={i18NextInstance}>
                             <Story />
                         </I18nextProvider>
                     </Box>

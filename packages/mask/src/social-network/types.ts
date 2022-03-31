@@ -9,7 +9,7 @@ import type {
     ProfileIdentifier,
     ReadonlyIdentifierMap,
 } from '@masknet/shared-base'
-import type { TypedMessage } from '@masknet/typed-message'
+import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import type { SharedComponentOverwrite } from '@masknet/shared'
 import type { PaletteMode, Theme } from '@mui/material'
@@ -40,6 +40,8 @@ export namespace SocialNetwork {
         textPayloadPostProcessor?: PayloadEncoding
         /** Given a text, return a URL that will allow user to share this text */
         getShareLinkURL?(text: string): URL
+        /** Handle share */
+        share?(text: string): void
         createPostContext: ReturnType<typeof createSNSAdaptorSpecializedPostContext>
     }
     export interface Shared {
@@ -147,6 +149,8 @@ export namespace SocialNetworkUI {
             /** @deprecated same reason as userAvatar */
             profileAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
+            profileTip?(signal: AbortSignal): void
+            /** @deprecated same reason as userAvatar */
             postAvatar?(signal: AbortSignal, current: PostInfo): void
             /** @deprecated same reason as userAvatar */
             openNFTAvatar?(signal: AbortSignal): void
@@ -191,12 +195,14 @@ export namespace SocialNetworkUI {
         export interface NativeCompositionAttachImageOptions {
             recover?: boolean
             relatedTextPayload?: string
+            reason?: 'timeline' | 'popup' | 'reply'
         }
         export interface NativeCompositionAttachTextOptions {
             recover?: boolean
+            reason?: 'timeline' | 'popup' | 'reply'
         }
         export interface MaskCompositionDialog {
-            open?(content: TypedMessage, options?: MaskCompositionDialogOpenOptions): void
+            open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
         }
         export interface MaskCompositionDialogOpenOptions {
             target?: 'E2E' | 'Everyone'

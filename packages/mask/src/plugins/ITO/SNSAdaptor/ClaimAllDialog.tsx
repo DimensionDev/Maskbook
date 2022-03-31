@@ -1,9 +1,9 @@
-import { usePluginIDContext, PluginId, useActivatedPlugin } from '@masknet/plugin-infra'
+import { useCurrentWeb3NetworkPluginID, PluginId, useActivatedPlugin } from '@masknet/plugin-infra'
 import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
 import { SnackbarProvider, makeStyles } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog, FormattedBalance } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
 import {
@@ -229,7 +229,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
     const ITO_Definition = useActivatedPlugin(PluginId.ITO, 'any')
-    const pluginId = usePluginIDContext()
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount()
@@ -300,7 +300,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         if (claimState.type === TransactionStateType.HASH) {
             const { hash } = claimState
             setTimeout(() => {
-                window.open(resolveTransactionLinkOnExplorer(chainId, hash), '_blank', 'noopener noreferrer')
+                openWindow(resolveTransactionLinkOnExplorer(chainId, hash))
             }, 2000)
             return
         }

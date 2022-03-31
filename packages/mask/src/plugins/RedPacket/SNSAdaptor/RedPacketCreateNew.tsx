@@ -83,7 +83,7 @@ export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly
                 ),
                 children: <RedPacketERC721Form onClose={onClose} />,
                 sx: { p: 0 },
-                disabled: ![ChainId.Mainnet, ChainId.Matic, ChainId.BSC].includes(chainId),
+                disabled: ![ChainId.Mainnet, ChainId.Matic, ChainId.BSC, ChainId.Conflux].includes(chainId),
             },
         ],
         state,

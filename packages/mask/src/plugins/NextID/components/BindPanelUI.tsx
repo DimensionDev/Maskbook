@@ -7,8 +7,9 @@ import DoneIcon from '@mui/icons-material/Done'
 import { useI18N } from '../locales'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Persona } from '../../../database'
-import { InjectedDialog, formatFingerprint, LoadingAnimation } from '@masknet/shared'
-import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
+import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
+import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
+import { formatPersonaFingerprint } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     persona: {
@@ -92,7 +93,7 @@ export const BindPanelUI = memo<BindPanelUIProps>(
     ({ onPersonaSign, onWalletSign, currentPersona, signature, isBound, title, onClose, open, isCurrentAccount }) => {
         const t = useI18N()
         const { classes } = useStyles()
-        const pluginId = usePluginIDContext()
+        const pluginId = useCurrentWeb3NetworkPluginID()
         const isSupported = SUPPORTED_PLUGINS.includes(pluginId)
 
         const isWalletSigned = !!signature.wallet.value
@@ -161,7 +162,7 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                             <div>
                                 <Typography className={classes.name}>{currentPersona?.nickname}</Typography>
                                 <Typography className={classes.identifier}>
-                                    {formatFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
+                                    {formatPersonaFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
                                 </Typography>
                             </div>
                         </Stack>

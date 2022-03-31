@@ -1,3 +1,4 @@
+import { decodeArrayBuffer } from '@dimensiondev/kit'
 import { Result, Ok, Err } from 'ts-results'
 import { EnhanceableSite } from '../Site/type'
 
@@ -175,6 +176,10 @@ export class PostIVIdentifier extends Identifier {
     }
     toText() {
         return `post_iv:${this.network}/${this.postIV.replace(/\//g, '|')}`
+    }
+    toIV() {
+        const x = this.postIV.replace(/\|/g, '/')
+        return new Uint8Array(decodeArrayBuffer(x))
     }
     static [$fromString](str: string) {
         const [network, iv] = str.split('/')

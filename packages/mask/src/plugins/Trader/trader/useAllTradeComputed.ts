@@ -1,4 +1,5 @@
-import { EMPTY_LIST, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
@@ -198,6 +199,13 @@ export function useAllTradeComputed(
         traderEstimateGas: wannaSwapEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.WANNASWAP, inputAmount_, inputToken, outputToken)
 
+    // Mdex
+    const {
+        trader_: mdex_,
+        trader: mdex,
+        traderEstimateGas: mdexEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.MDEX, inputAmount_, inputToken, outputToken)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -214,6 +222,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
+        { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
     ]
 
     return nativeToken_.value

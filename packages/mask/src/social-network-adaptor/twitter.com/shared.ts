@@ -1,4 +1,6 @@
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
+import urlcat from 'urlcat'
 import type { SocialNetwork } from '../../social-network/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
 import { deconstructPayload } from '../../utils'
@@ -25,8 +27,31 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
             },
         },
         getPostURL,
+        share(text) {
+            const url = this.getShareLinkURL!(text)
+            const width = 700
+            const height = 520
+            const openedWindow = openWindow(url, 'share', {
+                width,
+                height,
+                screenX: window.screenX + (window.innerWidth - width) / 2,
+                screenY: window.screenY + (window.innerHeight - height) / 2,
+                opener: true,
+                referrer: true,
+                behaviors: {
+                    toolbar: true,
+                    status: true,
+                    resizable: true,
+                    scrollbars: true,
+                },
+            })
+            if (openedWindow === null) {
+                location.assign(url)
+            }
+        },
         getShareLinkURL(message) {
-            return new URL(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`)
+            const url = urlcat('https://twitter.com/intent/tweet', { text: message })
+            return new URL(url)
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
             payloadParser: deconstructPayload,

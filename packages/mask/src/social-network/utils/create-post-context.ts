@@ -18,6 +18,7 @@ import {
     SubscriptionFromValueRef,
     SubscriptionDebug as debug,
     mapSubscription,
+    EMPTY_LIST,
 } from '@masknet/shared-base'
 import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
@@ -60,7 +61,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             }),
         )
         const linksSubscribe: Subscription<string[]> = debug({
-            getCurrentValue: () => [...links],
+            getCurrentValue: () => (links.size ? [...links] : EMPTY_LIST),
             subscribe: (sub) => links.event.on(ALL_EVENTS, sub),
         })
         // #endregion
@@ -138,7 +139,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             postMetadataImages:
                 opt.postImagesProvider ||
                 debug({
-                    getCurrentValue: () => [],
+                    getCurrentValue: () => EMPTY_LIST,
                     subscribe: () => () => {},
                 }),
 
@@ -181,11 +182,12 @@ export function createRefsForCreatePostContext() {
         snsID: SubscriptionFromValueRef(postID),
         rawMessage: SubscriptionFromValueRef(postMessage),
         postImagesProvider: debug({
-            getCurrentValue: () => [...postMetadataImages],
+            getCurrentValue: () => (postMetadataImages.size ? [...postMetadataImages] : EMPTY_LIST),
             subscribe: (sub) => postMetadataImages.event.on(ALL_EVENTS, sub),
         }),
         postMentionedLinksProvider: debug({
-            getCurrentValue: () => [...postMetadataMentionedLinks.values()],
+            getCurrentValue: () =>
+                postMetadataMentionedLinks.size ? [...postMetadataMentionedLinks.values()] : EMPTY_LIST,
             subscribe: (sub) => postMetadataMentionedLinks.event.on(ALL_EVENTS, sub),
         }),
     }

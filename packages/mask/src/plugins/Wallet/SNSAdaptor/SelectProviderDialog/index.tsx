@@ -51,7 +51,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const pluginID = useValueRef(pluginIDSettings) as NetworkPluginID
     const network = useNetworkDescriptor()
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
-    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
+    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID ?? NetworkPluginID.PLUGIN_EVM)
     const undeterminedNetwork = useNetworkDescriptor(undeterminedNetworkID, undeterminedPluginID)
 
     const networkType = useNetworkType(undeterminedPluginID)

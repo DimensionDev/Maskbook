@@ -4,6 +4,8 @@ import { getPostUrlAtFacebook, isValidFacebookUsername } from './utils/parse-use
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { deconstructPayload } from '../../utils'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
+import { openWindow } from '@masknet/shared-base-ui'
+import urlcat from 'urlcat'
 
 const getPostURL = (post: PostIdentifier): URL | null => {
     if (post.identifier instanceof ProfileIdentifier)
@@ -18,11 +20,15 @@ export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
         isValidUsername: (v) => !!isValidFacebookUsername(v),
         textPayloadPostProcessor: undefined,
         getPostURL,
+        share(message) {
+            openWindow(this.getShareLinkURL?.(message))
+        },
         getShareLinkURL(message) {
-            const url = new URL('https://www.facebook.com/sharer/sharer.php')
-            url.searchParams.set('quote', message)
-            url.searchParams.set('u', 'mask.io')
-            return url
+            const url = urlcat('https://www.facebook.com/sharer/sharer.php', {
+                quote: message,
+                u: 'mask.io',
+            })
+            return new URL(url)
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
             payloadParser: deconstructPayload,

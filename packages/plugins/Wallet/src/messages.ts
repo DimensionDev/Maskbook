@@ -1,5 +1,6 @@
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import type {
+    ChainId,
     ERC721ContractDetailed,
     GasOption,
     GasOptions,
@@ -16,7 +17,7 @@ export type TransactionDialogEvent =
     | {
           open: true
           state: TransactionState
-          shareLink?: string
+          shareText?: string
           summary?: string
           title?: string
       }
@@ -104,6 +105,7 @@ export type SelectNftContractDialogEvent = {
     open: boolean
     uuid: string
 
+    chainId?: ChainId
     /**
      * The selected detailed nft contract.
      */

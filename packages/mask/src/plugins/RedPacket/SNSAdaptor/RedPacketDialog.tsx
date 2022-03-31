@@ -75,7 +75,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { classes } = useStyles()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
     const { attachMetadata, dropMetadata } = useCompositionContext()
-
     const state = useState(DialogTabs.create)
 
     const networkType = useNetworkType()

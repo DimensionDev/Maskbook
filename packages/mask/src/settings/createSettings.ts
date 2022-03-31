@@ -3,10 +3,6 @@ import Services from '../extension/service'
 import { MaskMessages } from '../utils/messages'
 import { defer } from '@dimensiondev/kit'
 
-export interface SettingsTexts {
-    primary: () => string
-    secondary?: () => string
-}
 export type InternalSettings<T> = ValueRef<T> & {
     readonly key: string
     readonly ready: boolean
@@ -94,7 +90,6 @@ export function createInternalSettings<T extends browser.storage.StorageValue>(
 export function createGlobalSettings<T extends browser.storage.StorageValue>(
     key: string,
     value: T,
-    UITexts: SettingsTexts,
     comparer: ValueComparer<T> = defaultValueComparer,
 ) {
     const settings = createInternalSettings(`settings+${key}`, value, comparer)

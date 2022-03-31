@@ -240,10 +240,13 @@ export function ITO(props: ITO_Props) {
     const { token, total: payload_total, exchange_amounts, exchange_tokens, limit, message } = payload
 
     const { t } = useI18N()
-    const sellerName =
-        message.split(MSG_DELIMITER)[0] === message
-            ? formatEthereumAddress(payload.seller.address, 4)
-            : message.split(MSG_DELIMITER)[0]
+
+    const sellerName = payload.seller.name
+        ? payload.seller.name
+        : message.split(MSG_DELIMITER)[0] === message
+        ? formatEthereumAddress(payload.seller.address, 4)
+        : message.split(MSG_DELIMITER)[0]
+
     const title = message.split(MSG_DELIMITER)[1] ?? message
     const regions = message.split(MSG_DELIMITER)[2] ?? defaultRegions
     const { classes } = useStyles({
@@ -297,21 +300,17 @@ export function ITO(props: ITO_Props) {
     const isBuyer =
         chainId === payload.chain_id && (isGreaterThan(availability?.swapped ?? 0, 0) || Boolean(availability?.claimed))
 
-    const shareSuccessLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            t(
-                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                    ? 'plugin_ito_claim_success_share'
-                    : 'plugin_ito_claim_success_share_no_official_account',
-                {
-                    user: sellerName,
-                    link: postLink,
-                    symbol: token.symbol,
-                    account: isFacebook(activatedSocialNetworkUI) ? t('facebook_account') : t('twitter_account'),
-                },
-            ),
-        )
-        .toString()
+    const successShareText = t(
+        isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+            ? 'plugin_ito_claim_success_share'
+            : 'plugin_ito_claim_success_share_no_official_account',
+        {
+            user: sellerName,
+            link: postLink,
+            symbol: token.symbol,
+            account: isFacebook(activatedSocialNetworkUI) ? t('facebook_account') : t('twitter_account'),
+        },
+    )
     const canWithdraw = useMemo(
         () =>
             !availability?.destructed &&
@@ -330,8 +329,8 @@ export function ITO(props: ITO_Props) {
     const refundAllAmount = tradeInfo?.buyInfo && isZero(tradeInfo?.buyInfo.amount_sold)
 
     const onShareSuccess = useCallback(async () => {
-        window.open(shareSuccessLink, '_blank', 'noopener noreferrer')
-    }, [shareSuccessLink])
+        activatedSocialNetworkUI.utils.share?.(successShareText)
+    }, [successShareText])
     // #endregion
 
     const retryITOCard = useCallback(() => {
@@ -340,7 +339,7 @@ export function ITO(props: ITO_Props) {
     }, [retryPoolTradeInfo, retryAvailability])
 
     // #region claim
-    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback([pid], payload.contract_address)
+    const [claimState, claimCallback] = useClaimCallback([pid], payload.contract_address)
     const onClaimButtonClick = useCallback(() => {
         claimCallback()
     }, [claimCallback])
@@ -376,24 +375,20 @@ export function ITO(props: ITO_Props) {
 
     // #endregion
 
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            t(
-                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                    ? 'plugin_ito_claim_foreshow_share'
-                    : 'plugin_ito_claim_foreshow_share_no_official_account',
-                {
-                    link: postLink,
-                    name: token.name,
-                    symbol: token.symbol ?? 'token',
-                    account: isFacebook(activatedSocialNetworkUI) ? t('facebook_account') : t('twitter_account'),
-                },
-            ),
-        )
-        .toString()
+    const shareText = t(
+        isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+            ? 'plugin_ito_claim_foreshow_share'
+            : 'plugin_ito_claim_foreshow_share_no_official_account',
+        {
+            link: postLink,
+            name: token.name,
+            symbol: token.symbol ?? 'token',
+            account: isFacebook(activatedSocialNetworkUI) ? t('facebook_account') : t('twitter_account'),
+        },
+    )
     const onShare = useCallback(async () => {
-        window.open(shareLink, '_blank', 'noopener noreferrer')
-    }, [shareLink])
+        activatedSocialNetworkUI.utils.share?.(shareText)
+    }, [shareText])
     const onUnlock = useCallback(async () => {
         setClaimDialogStatus(SwapStatus.Unlock)
         setOpenClaimDialog(true)
@@ -751,7 +746,7 @@ export function ITO(props: ITO_Props) {
                                 {t('plugin_ito_unlock_in_advance')}
                             </ActionButton>
                         </Grid>
-                        {shareLink ? (
+                        {shareText ? (
                             <Grid item xs={6}>
                                 <ActionButton
                                     onClick={onShare}
@@ -791,7 +786,7 @@ export function ITO(props: ITO_Props) {
                 status={claimDialogStatus}
                 total_remaining={total_remaining}
                 payload={{ ...payload, qualification_address: qualificationAddress }}
-                shareSuccessLink={shareSuccessLink}
+                shareSuccessText={successShareText}
                 isBuyer={isBuyer}
                 exchangeTokens={exchange_tokens}
                 open={openClaimDialog}

@@ -12,6 +12,9 @@ export const openseaPathnameRegexMatcher = /^\/assets\/(0x[\dA-Fa-f]{40})\/(\d+)
 export const raribleHostnames = ['rarible.com', 'app.rarible.com', 'ropsten.rarible.com']
 export const rariblePathnameRegexMatcher = /^\/token\/(0x[\dA-Fa-f]{40}):(\d+)/
 
+export const zoraHostnames = ['zora.co']
+export const zoraPathnameRegexMatcher = /^\/collections\/(0x[\dA-Fa-f]{40})\/(\d+)$/
+
 export const OpenSeaAPI_Key = 'c38fe2446ee34f919436c32db480a2e3'
 export const OpenSeaBaseURL = 'https://api.opensea.io/api/v1/'
 export const OpenSeaRinkebyBaseURL = 'https://rinkeby-api.opensea.io/api/v1/'

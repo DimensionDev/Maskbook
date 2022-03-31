@@ -4,10 +4,19 @@ import type { api } from '@dimensiondev/mask-wallet-core/proto'
 export type Input = { id: number; data: api.IMWRequest }
 export type Output = { id: number; response: api.MWResponse }
 
+async function load() {
+    if (process.env.manifest === '3') {
+        return import('@dimensiondev/mask-wallet-core/bundle')
+    } else {
+        const { default: init, ...rest } = await import('@dimensiondev/mask-wallet-core/web')
+        // @ts-expect-error
+        await init()
+        return rest
+    }
+}
 const promise = (async () => {
-    const { request, default: init } = await import('@dimensiondev/mask-wallet-core/web')
+    const { request } = await load()
     const { api } = await import('@dimensiondev/mask-wallet-core/proto')
-    await init()
     return { request, api }
 })()
 

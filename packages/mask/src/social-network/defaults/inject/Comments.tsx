@@ -47,7 +47,7 @@ export function injectPostCommentsDefault<T extends string>(
                         commentRef.value = collectNodeText(commentNode)
                     },
                     onRemove() {
-                        root.destory()
+                        root.destroy()
                     },
                 }
             },

@@ -3,12 +3,12 @@ import { DialogActions, DialogContent, Typography } from '@mui/material'
 import ErrorIcon from '@mui/icons-material/Error'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useChainIdValid } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
-import { MaskMessages } from '../../../../utils/messages'
 import { ApplicationBoard } from '../../../../components/shared/ApplicationBoard'
 
 const useStyles = makeStyles()((theme) => ({
@@ -51,7 +51,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
 
     const closeDialog = useCallback(() => {
         _closeDialog()
-        MaskMessages.events.requestComposition.sendToLocal({
+        CrossIsolationMessages.events.requestComposition.sendToLocal({
             reason: 'timeline',
             open: false,
         })

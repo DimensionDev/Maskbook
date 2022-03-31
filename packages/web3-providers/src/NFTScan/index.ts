@@ -3,7 +3,7 @@ import {
     createERC721ContractDetailed,
     createERC721Token,
     ERC721TokenDetailed,
-    resolveResourceLink,
+    resolveIPFSLinkFromURL,
     ERC721ContractDetailed,
 } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
@@ -66,7 +66,9 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
         {
             name: payload?.name ?? asset.nft_name ?? asset.nft_platform_name ?? '',
             description: payload?.description ?? '',
-            mediaUrl: resolveResourceLink(asset.nft_cover ?? asset.nft_content_uri ?? payload.image ?? ''),
+            mediaUrl: resolveIPFSLinkFromURL(
+                JSON.parse(asset.nft_json ?? '{}').image ?? asset.nft_content_uri ?? payload.image ?? '',
+            ),
             owner: asset.nft_holder ?? '',
         },
         asset.token_id,
@@ -155,7 +157,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             info: {
                 name: t.nft_name,
                 description: t.nft_detail,
-                mediaUrl: resolveResourceLink(t.nft_cover ?? t.nft_content_uri ?? ''),
+                mediaUrl: resolveIPFSLinkFromURL(JSON.parse(t.nft_json ?? '{}').image ?? t.nft_content_uri ?? ''),
                 tokenURI: t.nft_token_uri,
             },
         }))

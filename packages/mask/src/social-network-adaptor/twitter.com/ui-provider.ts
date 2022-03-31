@@ -30,6 +30,7 @@ import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
+import { injectOpenTipButtonOnProfile } from './injection/Tip/index'
 import { injectProfileNFTAvatarInTwitter } from './injection/NFT/ProfileNFTAvatar'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
 import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
@@ -179,6 +180,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         userAvatar: injectUserNFTAvatarAtTwitter,
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInTwitter,
         profileAvatar: injectNFTAvatarInTwitter,
+        profileTip: injectOpenTipButtonOnProfile,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         postAndReplyNFTAvatar: injectUserNFTAvatarAtTweet,
         avatarClipNFT: injectNFTAvatarClipInTwitter,

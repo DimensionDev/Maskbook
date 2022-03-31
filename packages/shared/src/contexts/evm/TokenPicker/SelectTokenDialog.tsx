@@ -1,6 +1,7 @@
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { ERC20TokenList, useSharedI18N } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ChainId, EMPTY_LIST, FungibleTokenDetailed, useTokenConstants } from '@masknet/web3-shared-evm'
+import { ChainId, FungibleTokenDetailed, useTokenConstants } from '@masknet/web3-shared-evm'
 // see https://github.com/import-js/eslint-plugin-import/issues/2288
 // eslint-disable-next-line import/no-deprecated
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
@@ -45,6 +46,7 @@ export interface PickTokenOptions {
     disableSearchBar?: boolean
     keyword?: string
     whitelist?: string[]
+    title?: string
     blacklist?: string[]
     tokens?: FungibleTokenDetailed[]
     selectedTokens?: string[]
@@ -66,6 +68,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     selectedTokens = EMPTY_LIST,
     onSelect,
     onClose,
+    title,
 }) => {
     const t = useSharedI18N()
     const isDashboard = location.href.includes('dashboard.html')
@@ -83,7 +86,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
             onClose={onClose}
-            title={t.select_token()}>
+            title={title ?? t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
                 <ERC20TokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}

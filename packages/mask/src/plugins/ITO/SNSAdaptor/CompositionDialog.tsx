@@ -3,6 +3,7 @@ import Web3Utils from 'web3-utils'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
+import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog, InjectedDialogProps, MINDS_ID } from '@masknet/shared'
 import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
@@ -145,6 +146,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
     // #region tabs
     const state = useState<DialogTabs>(DialogTabs.create)
 
+    const currentIdentity = useCurrentIdentity()
+    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
@@ -174,6 +177,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                     'qualification_address',
                 ],
             )
+            payloadDetail.seller.name = senderName
             if (payload) attachMetadata(ITO_MetaKey_2, payloadDetail)
             else dropMetadata(ITO_MetaKey_2)
 

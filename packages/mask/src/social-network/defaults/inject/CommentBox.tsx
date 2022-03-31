@@ -10,6 +10,7 @@ import { noop } from 'lodash-unified'
 import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { decodeArrayBuffer } from '@dimensiondev/kit'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,
@@ -36,7 +37,11 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         const onCallback = useCallback(
             async (content) => {
                 const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
-                const encryptedComment = await Services.Crypto.encryptComment(iv!, decryptedText, content)
+                const encryptedComment = await Services.Crypto.encryptComment(
+                    new Uint8Array(decodeArrayBuffer(iv!)),
+                    decryptedText,
+                    content,
+                )
                 onPasteToCommentBox(encryptedComment, info!, dom).catch(console.error)
             },
             [postContent, info, dom, iv],
@@ -61,7 +66,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
                     <CommentBoxUI {...{ ...current, dom: meta.realCurrent }} />
                 </PostInfoProvider>,
             )
-            return root.destory
+            return root.destroy
         })
         startWatch(commentBoxWatcher, signal)
         return () => commentBoxWatcher.stopWatch()

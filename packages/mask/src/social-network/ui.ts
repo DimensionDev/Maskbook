@@ -2,7 +2,6 @@ import '../utils/debug/general'
 import '../utils/debug/ui'
 import Services from '../extension/service'
 import { Flags, InMemoryStorages, PersistentStorages } from '../../shared'
-import i18nNextInstance from '../../shared-ui/locales_legacy'
 import type { SocialNetworkUI } from './types'
 import { managedStateCreator } from './utils'
 import { currentSetupGuideStatus } from '../settings/settings'
@@ -13,6 +12,7 @@ import {
     createSubscriptionFromAsync,
     PersonaIdentifier,
     EnhanceableSite,
+    i18NextInstance,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
 import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
@@ -98,6 +98,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     ui.injection.userAvatar?.(signal)
     ui.injection.profileAvatar?.(signal)
+    ui.injection.profileTip?.(signal)
 
     ui.injection.enhancedProfileNFTAvatar?.(signal)
     ui.injection.openNFTAvatar?.(signal)
@@ -134,7 +135,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 const pair = i18n[namespace][i18nKey]
                 for (const language in pair) {
                     const value = pair[language]
-                    i18nNextInstance.addResource(language, namespace, i18nKey, value)
+                    i18NextInstance.addResource(language, namespace, i18nKey, value)
                 }
             }
         }

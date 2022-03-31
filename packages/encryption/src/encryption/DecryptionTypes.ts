@@ -125,7 +125,7 @@ export interface DecryptSuccess {
     content: TypedMessage
 }
 // TODO: rename as DecryptErrorReasons
-export enum ErrorReasons {
+export enum DecryptErrorReasons {
     PayloadBroken = '[@masknet/encryption] Payload is broken.',
     PayloadDecryptedButTypedMessageBroken = "[@masknet/encryption] Payload decrypted, but it's inner TypedMessage is broken.",
     CannotDecryptAsAuthor = '[@masknet/encryption] Failed decrypt as the author of this payload.',
@@ -139,9 +139,9 @@ export enum ErrorReasons {
     NoPayloadFound = '[@masknet/encryption] No payload found in this material.',
 }
 export class DecryptError extends Error {
-    static Reasons = ErrorReasons
+    static Reasons = DecryptErrorReasons
     readonly type = DecryptProgressKind.Error
-    constructor(public override message: ErrorReasons, cause: any, public recoverable = false) {
+    constructor(public override message: DecryptErrorReasons, cause: any, public recoverable = false) {
         super(message, { cause })
     }
 }

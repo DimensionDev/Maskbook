@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, forwardRef, useImperativeHandle } from 'react'
+import { useState, useRef, useCallback, forwardRef, useImperativeHandle, useMemo } from 'react'
 import type { InputBaseComponentProps } from '@mui/material'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useDebounce } from 'react-use'
@@ -80,11 +80,15 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
     }, [])
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
 
-    useImperativeHandle(ref, () => ({
-        focus: () => {
-            displayRef.current?.focus()
-        },
-    }))
+    const refItem = useMemo(
+        () => ({
+            focus: () => {
+                displayRef.current?.focus()
+            },
+        }),
+        [],
+    )
+    useImperativeHandle(ref, () => refItem, [refItem])
 
     const [filterText, setFilterText] = useState('')
     const [filteredRegions, setFilteredRegions] = useState(allRegions)

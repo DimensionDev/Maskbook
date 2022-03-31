@@ -17,7 +17,7 @@ export function createPostActionsInjector() {
                 signal,
             })
             root.render(jsx)
-            return root.destory
+            return root.destroy
         }
         return noop
     }

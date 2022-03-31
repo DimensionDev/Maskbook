@@ -1,4 +1,4 @@
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { usePickToken } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
@@ -218,7 +218,7 @@ export function SwapDialog(props: SwapDialogProps) {
         if (swapState.type === TransactionStateType.HASH) {
             const { hash } = swapState
             setTimeout(() => {
-                window.open(resolveTransactionLinkOnExplorer(chainId, hash), '_blank', 'noopener noreferrer')
+                openWindow(resolveTransactionLinkOnExplorer(chainId, hash))
             }, 2000)
             return
         }

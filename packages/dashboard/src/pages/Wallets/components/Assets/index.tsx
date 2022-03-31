@@ -1,5 +1,5 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
+import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab } from '@mui/material'
@@ -44,7 +44,7 @@ interface TokenAssetsProps {
 
 export const Assets = memo<TokenAssetsProps>(({ network }) => {
     const t = useDashboardI18N()
-    const pluginId = usePluginIDContext()
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const { classes } = useStyles()
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),
@@ -85,6 +85,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                                         // TODO handle result
                                         await pickToken({
                                             whitelist: [],
+                                            title: t.wallets_add_token(),
                                         })
                                     } else {
                                         setAddCollectibleOpen(true)

@@ -1,5 +1,6 @@
 import { defer, DeferTuple } from '@dimensiondev/kit'
-import { EMPTY_LIST, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { createContext, FC, useCallback, useContext, useMemo, useState } from 'react'
 import { PickTokenOptions, SelectTokenDialog } from './SelectTokenDialog'
 

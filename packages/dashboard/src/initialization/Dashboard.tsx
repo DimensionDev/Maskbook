@@ -18,7 +18,7 @@ import {
 } from '@masknet/plugin-infra'
 import { Web3Provider } from '@masknet/web3-shared-evm'
 
-import i18n from 'i18next'
+import { i18NextInstance } from '@masknet/shared-base'
 
 import '../utils/kv-storage'
 
@@ -55,7 +55,7 @@ export default function DashboardRoot() {
     return (
         <Web3Provider value={Web3Context}>
             <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State}>
-                <I18NextProviderHMR i18n={i18n}>
+                <I18NextProviderHMR i18n={i18NextInstance}>
                     <StyledEngineProvider injectFirst>
                         <ThemeProvider theme={theme}>
                             <PersonaContext.Provider>

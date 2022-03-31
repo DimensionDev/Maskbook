@@ -4,6 +4,8 @@ import {
     openseaPathnameRegexMatcher,
     raribleHostnames,
     rariblePathnameRegexMatcher,
+    zoraHostnames,
+    zoraPathnameRegexMatcher,
 } from './constants'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { WyvernSchemaName } from 'opensea-js/lib/types'
@@ -14,7 +16,8 @@ export function checkUrl(url: string): boolean {
 
     return (
         (openseaHostnames.includes(_url.hostname) && openseaPathnameRegexMatcher.test(_url.pathname)) ||
-        (raribleHostnames.includes(_url.hostname) && rariblePathnameRegexMatcher.test(_url.pathname))
+        (raribleHostnames.includes(_url.hostname) && rariblePathnameRegexMatcher.test(_url.pathname)) ||
+        (zoraHostnames.includes(_url.hostname) && zoraPathnameRegexMatcher.test(_url.pathname))
     )
 }
 
@@ -49,6 +52,17 @@ export function getAssetInfoFromURL(url?: string) {
                 : ChainId.Mainnet,
             address: raribleMatched[1],
             token_id: raribleMatched[2],
+        }
+    }
+    // #endregion
+
+    // #region zora
+    const zoraMatched = _url.pathname.match(zoraPathnameRegexMatcher)
+    if (zoraMatched) {
+        return {
+            chain_id: _url.host.includes('rinkeby') ? ChainId.Rinkeby : ChainId.Mainnet,
+            address: zoraMatched[1],
+            token_id: zoraMatched[2],
         }
     }
     // #endregion
