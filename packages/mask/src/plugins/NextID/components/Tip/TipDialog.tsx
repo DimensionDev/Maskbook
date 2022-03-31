@@ -1,5 +1,5 @@
 import { SuccessIcon } from '@masknet/icons'
-import { PluginId, useActivatedPlugin, usePluginIDContext } from '@masknet/plugin-infra'
+import { PluginId, useActivatedPlugin, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
@@ -78,7 +78,7 @@ interface TipDialogProps {
 }
 
 export function TipDialog({ open = false, onClose }: TipDialogProps) {
-    const pluginID = usePluginIDContext()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const tipDefinition = useActivatedPlugin(PluginId.NextID, 'any')
     const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
     const t = useI18N()
@@ -90,17 +90,20 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const isTokenTip = tipType === TipType.Token
     const shareLink = useMemo(() => {
+        const promote = t.tip_mask_promote()
         const message = isTokenTip
             ? t.tip_token_share_post({
                   amount,
                   symbol: token?.symbol || 'token',
                   recipientSnsId,
                   recipient,
+                  promote,
               })
             : t.tip_nft_share_post({
                   name: erc721Contract?.name || '',
                   recipientSnsId,
                   recipient,
+                  promote,
               })
         return activatedSocialNetworkUI.utils.getShareLinkURL?.(message)
     }, [amount, isTokenTip, erc721Contract?.name, token, recipient, recipientSnsId, t])
