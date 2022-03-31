@@ -17,7 +17,8 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V2": {
         "Mainnet": "0x8D8912E1237F9FF3EF661F32743CFB276E052F98",
@@ -37,7 +38,8 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V3": {
         "Mainnet": "",
@@ -57,7 +59,8 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4": {
         "Mainnet": "0xaBBe1101FD8fa5847c452A6D70C8655532B03C33",
@@ -119,6 +122,7 @@
         "Celo": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-celo",
         "Fantom": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-fantom",
         "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-aurora",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     }
 }
