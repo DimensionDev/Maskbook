@@ -9,13 +9,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent() {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
                         <ApplicationEntry
                             title="Check Security"
-                            disabled={disabled}
                             icon={new URL('../assets/security-icon.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}
                         />
