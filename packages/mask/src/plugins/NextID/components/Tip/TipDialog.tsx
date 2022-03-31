@@ -1,13 +1,13 @@
 import { SuccessIcon } from '@masknet/icons'
-import { PluginId, useActivatedPlugin, usePluginIDContext } from '@masknet/plugin-infra'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { PluginId, useActivatedPlugin, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
+import { InjectedDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { TransactionStateType, useChainId, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { DialogContent, Typography } from '@mui/material'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { TargetChainIdContext, useTip } from '../../contexts'
@@ -77,7 +77,7 @@ interface TipDialogProps {
 }
 
 export function TipDialog({ open = false, onClose }: TipDialogProps) {
-    const pluginID = usePluginIDContext()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const tipDefinition = useActivatedPlugin(PluginId.NextID, 'any')
     const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
     const t = useI18N()
@@ -89,17 +89,20 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const isTokenTip = tipType === TipType.Token
     const shareLink = useMemo(() => {
+        const promote = t.tip_mask_promote()
         const message = isTokenTip
             ? t.tip_token_share_post({
                   amount,
                   symbol: token?.symbol || 'token',
                   recipientSnsId,
                   recipient,
+                  promote,
               })
             : t.tip_nft_share_post({
                   name: erc721Contract?.name || '',
                   recipientSnsId,
                   recipient,
+                  promote,
               })
         return activatedSocialNetworkUI.utils.getShareLinkURL?.(message)
     }, [amount, isTokenTip, erc721Contract?.name, token, recipient, recipientSnsId, t])
@@ -140,7 +143,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     }, [sendState.type])
 
     const handleConfirm = useCallback(() => {
-        window.open(shareLink)
+        openWindow(shareLink)
         openConfirmModal(false)
         onClose?.()
     }, [shareLink, onClose])
