@@ -15,7 +15,7 @@ import {
     useWeb3State as useWeb3PluginState,
     Web3Plugin,
     useAccount,
-    usePluginIDContext,
+    useCurrentWeb3NetworkPluginID,
     NetworkPluginID,
 } from '@masknet/plugin-infra'
 import { useAsyncRetry } from 'react-use'
@@ -72,7 +72,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         setRenderData(render)
     }, [value.data, loadingSize, page])
 
-    const currentPluginId = usePluginIDContext()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const onSend = useCallback(
         (detail: Web3Plugin.NonFungibleToken) => {
             // Sending NFT is only available on EVM currently.

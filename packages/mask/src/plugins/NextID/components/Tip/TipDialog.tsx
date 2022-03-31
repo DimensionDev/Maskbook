@@ -1,5 +1,5 @@
 import { SuccessIcon } from '@masknet/icons'
-import { PluginId, useActivatedPlugin, usePluginIDContext } from '@masknet/plugin-infra'
+import { PluginId, useActivatedPlugin, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
@@ -77,7 +77,7 @@ interface TipDialogProps {
 }
 
 export function TipDialog({ open = false, onClose }: TipDialogProps) {
-    const pluginID = usePluginIDContext()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const tipDefinition = useActivatedPlugin(PluginId.NextID, 'any')
     const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
     const t = useI18N()
