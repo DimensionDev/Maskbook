@@ -99,7 +99,11 @@ export async function handlePromise(id: number, promise: () => any) {
         sendEvent('resolvePromise', id, data)
     } catch (error) {
         // TODO:
-        sendEvent('rejectPromise', id, { message: (error as Error | undefined)?.message })
+        let message: string | undefined
+        try {
+            message = (error as any).message
+        } catch {}
+        sendEvent('rejectPromise', id, { message })
     }
 }
 
