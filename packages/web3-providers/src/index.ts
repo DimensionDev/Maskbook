@@ -10,6 +10,7 @@ import { TwitterAPI } from './twitter'
 import { TokenListAPI } from './token-list'
 import { TokenPriceAPI } from './token-price'
 import { InstagramAPI } from './instagram'
+import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
 
 export * from './types'
 export * from './hooks'
@@ -28,6 +29,8 @@ export const Twitter = new TwitterAPI()
 export const Instagram = new InstagramAPI()
 export const TokenList = new TokenListAPI()
 export const TokenPrice = new TokenPriceAPI()
+export const NextIDStorage = new NextIDStorageAPI()
+export const NextIDProof = new NextIDProofAPI()
 
 // Method for provider proxy
 export { getOpenSeaNFTList, getOpenSeaCollectionList } from './opensea'

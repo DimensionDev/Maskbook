@@ -1,8 +1,15 @@
 import type { Transaction as Web3Transaction } from 'web3-core'
 import type RSS3 from 'rss3-next'
 import type { CurrencyType, Web3Plugin } from '@masknet/plugin-infra'
-import type { ChainId, ERC20TokenDetailed, NativeTokenDetailed } from '@masknet/web3-shared-evm'
-import type { ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import type {
+    ERC721ContractDetailed,
+    ERC721TokenDetailed,
+    ERC20TokenDetailed,
+    NativeTokenDetailed,
+} from '@masknet/web3-shared-base'
+import type { Result } from 'ts-results'
+import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -307,6 +314,61 @@ export namespace StorageAPI {
     export interface Provider {
         createJSON_Storage?(key: string): Storage
         createBinaryStorage?(key: string): Storage
+    }
+}
+
+export namespace NextIDBaseAPI {
+    export interface Storage {
+        set<T extends {}>(
+            uuid: string,
+            personaPublicKey: string,
+            signature: string,
+            platform: NextIDPlatform,
+            identity: string,
+            createdAt: string,
+            patchData: unknown,
+        ): Promise<Result<void, string>>
+        get<T>(key: string): Promise<Result<T, string>>
+        getPayload(
+            personaPublicKey: string,
+            platform: NextIDPlatform,
+            identity: string,
+            patchData: unknown,
+        ): Promise<Result<NextIDStoragePayload, string>>
+    }
+    export interface Proof {
+        bindProof(
+            uuid: string,
+            personaPublicKey: string,
+            action: NextIDAction,
+            platform: string,
+            identity: string,
+            createdAt: string,
+            options?: {
+                walletSignature?: string
+                signature?: string
+                proofLocation?: string
+            },
+        ): Promise<Result<unknown, string>>
+
+        queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean): Promise<any>
+
+        queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number): Promise<any>
+
+        queryIsBound(
+            personaPublicKey: string,
+            platform: NextIDPlatform,
+            identity: string,
+            enableCache?: boolean,
+        ): Promise<boolean>
+
+        createPersonaPayload(
+            personaPublicKey: string,
+            action: NextIDAction,
+            identity: string,
+            platform: NextIDPlatform,
+            language?: string,
+        ): Promise<NextIDPayload | null>
     }
 }
 
