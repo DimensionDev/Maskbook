@@ -35,6 +35,11 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         marginLeft: 6,
         verticalAlign: 'middle',
     },
+    dialogTitleBadgeAction: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row-reverse',
+    },
     dialogCloseButton: {
         color: theme.palette.text.primary,
     },
@@ -61,6 +66,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
+    badgeAction?: React.ReactChild
 }
 
 export function InjectedDialog(props: InjectedDialogProps) {
@@ -72,6 +78,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogContent,
         dialogTitle,
         dialogTitleTypography,
+        dialogTitleBadgeAction,
         dialogBackdropRoot,
         container,
         ...dialogClasses
@@ -82,8 +89,17 @@ export function InjectedDialog(props: InjectedDialogProps) {
     )
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
     const isDashboard = isDashboardPage()
-    const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, disableTitleBorder, ...rest } =
-        props
+    const {
+        children,
+        open,
+        disableBackdropClick,
+        titleBarIconStyle,
+        onClose,
+        title,
+        badgeAction,
+        disableTitleBorder,
+        ...rest
+    } = props
     const { t } = useI18N()
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
@@ -133,8 +149,14 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">
                                 {title}
                             </Typography>
+                            {badgeAction ? (
+                                <Typography className={dialogTitleBadgeAction} display="inline" variant="inherit">
+                                    {badgeAction}
+                                </Typography>
+                            ) : null}
                         </DialogTitle>
                     ) : null}
+
                     {/* There is a .MuiDialogTitle+.MuiDialogContent selector that provides paddingTop: 0 */}
                     {/* Add an empty span here to revert this effect. */}
                     <span />

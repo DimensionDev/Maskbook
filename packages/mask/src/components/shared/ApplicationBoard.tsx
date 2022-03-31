@@ -66,7 +66,6 @@ export function ApplicationBoard() {
                     )
                     .sort((a, b) => a.entry.defaultSortingPriority - b.entry.defaultSortingPriority)
                     .map((X, i) => {
-                        console.log(X, 'applications')
                         return (
                             <Fragment key={i + X.pluginId}>
                                 <X.entry.RenderEntryComponent disabled={!X.enabled} />
