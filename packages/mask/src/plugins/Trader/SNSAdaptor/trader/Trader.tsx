@@ -333,7 +333,7 @@ export function Trader(props: TraderProps) {
             shareText,
             state: tradeState,
         })
-    }, [tradeState /* update tx dialog only if state changed */])
+    }, [tradeState?.type /* update tx dialog only if state changed */])
     // #endregion
 
     // #region swap callback
