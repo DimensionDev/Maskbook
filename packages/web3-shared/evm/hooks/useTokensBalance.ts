@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
+import { numberToHex } from 'web3-utils'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { useBalanceCheckerContract } from '../contracts/useBalanceChecker'
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
 import type { ChainId } from '../types'
-import { EMPTY_LIST } from '../utils'
-import { numberToHex } from 'web3-utils'
 
 /**
  * Fetch balance of multiple tokens from chain

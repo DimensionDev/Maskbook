@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles'
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { useDashboardI18N } from '../../locales'
 import links from '../../components/FooterLine/links.json'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const Content = styled('div')(({ theme }) => ({
     padding: `${theme.spacing(1)} ${theme.spacing(4)}`,
@@ -71,9 +72,7 @@ export default function Welcome() {
         link?.addEventListener('click', handleLinkClick)
     }
 
-    const handleLinkClick = () => {
-        window.open(links.MASK_PRIVACY_POLICY)
-    }
+    const handleLinkClick = () => openWindow(links.MASK_PRIVACY_POLICY)
 
     return (
         <WelcomeUI

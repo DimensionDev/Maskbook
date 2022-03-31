@@ -22,6 +22,7 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -252,7 +253,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         retry: retryAvailability,
         error: availabilityError,
     } = useAvailabilityNftRedPacket(payload.id, account)
-
     const [claimState, claimCallback, resetCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
@@ -262,11 +262,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const isClaiming = claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING
 
     const openAddressLinkOnExplorer = useCallback(() => {
-        window.open(
-            resolveAddressLinkOnExplorer(payload.chainId, payload.contractAddress),
-            '_blank',
-            'noopener noreferrer',
-        )
+        openWindow(resolveAddressLinkOnExplorer(payload.chainId, payload.contractAddress))
     }, [payload])
 
     const [sourceType, setSourceType] = useState('')

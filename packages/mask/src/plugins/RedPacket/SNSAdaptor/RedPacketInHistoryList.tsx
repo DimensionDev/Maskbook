@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
+import { omit } from 'lodash-unified'
 import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } from '../types'
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -14,6 +15,7 @@ import {
     useAccount,
     isSameAddress,
     EthereumTokenType,
+    FungibleTokenDetailed,
     useFungibleTokenDetailed,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
@@ -236,7 +238,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) await refundCallback()
-        if (canSend) onSelect({ ...history, token: historyToken })
+        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken as FungibleTokenDetailed }))
     }, [onSelect, refundCallback, canRefund, canSend, history])
 
     // #region password lost tips
@@ -378,4 +380,11 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             </Box>
         </ListItem>
     )
+}
+
+function removeUselessSendParams(payload: RedPacketJSONPayload): RedPacketJSONPayload {
+    return {
+        ...omit(payload, ['block_number', 'claimers']),
+        token: omit(payload.token, ['logoURI']) as FungibleTokenDetailed,
+    }
 }

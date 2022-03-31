@@ -1,14 +1,16 @@
-import type { SerializableTypedMessages } from '@masknet/typed-message'
-import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
-import type { RelationFavor } from '../Persona/type'
-import type { Appearance, LanguageOptions, DataProvider } from '../../../public-api/src/web'
 import type {
+    Appearance,
+    LanguageOptions,
+    DataProvider,
     CryptoPrice,
     NetworkType,
     ProviderType,
     FungibleAssetProvider,
     NonFungibleAssetProvider,
-} from '../../../web3-shared/evm'
+} from '@masknet/public-api'
+import type { SerializableTypedMessages } from '@masknet/typed-message'
+import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
+import type { RelationFavor } from '../Persona/type'
 
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
@@ -59,6 +61,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     /** emit when the settings finished syncing with storage. */
     createInternalSettingsUpdated: SettingsUpdateEvent
     ownPersonaChanged: void
+    ownProofChanged: void
     restoreSuccess: void
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
     relationsChanged: RelationChangedEvent[]
@@ -79,7 +82,7 @@ export interface UpdateEvent<Data> {
 }
 
 export interface CompositionRequest {
-    readonly reason: 'timeline' | 'popup'
+    readonly reason: 'timeline' | 'popup' | 'reply'
     readonly open: boolean
     readonly content?: SerializableTypedMessages
     readonly options?: {

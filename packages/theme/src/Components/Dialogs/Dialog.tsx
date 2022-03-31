@@ -41,8 +41,8 @@ export const MaskDialog = memo((props: MaskDialogProps) => {
 })
 
 export function useMaskDialog(title: string, content: ReactNode, actions: ReactNode) {
-    const [isOpen, open] = useState(false)
-    const onClose = useCallback(() => open(false), [])
+    const [isOpen, setOpen] = useState(false)
+    const onClose = useCallback(() => setOpen(false), [])
     return (
         <MaskDialog onClose={onClose} open={isOpen} title={title}>
             <DialogContent>{content}</DialogContent>

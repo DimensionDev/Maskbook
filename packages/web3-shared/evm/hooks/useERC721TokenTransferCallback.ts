@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { TransactionStateType, GasConfig, TransactionEventType } from '../types'
@@ -69,12 +69,13 @@ export function useERC721TokenTransferCallback(address?: string) {
                 erc721Contract.methods
                     .transferFrom(account, recipient, tokenId)
                     .send(config as NonPayableTx)
-                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                    .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                         setTransferState({
-                            type: TransactionStateType.HASH,
-                            hash,
+                            type: TransactionStateType.CONFIRMED,
+                            no,
+                            receipt,
                         })
-                        resolve(hash)
+                        resolve(receipt.transactionHash)
                     })
                     .on(TransactionEventType.ERROR, (error) => {
                         setTransferState({
@@ -93,6 +94,11 @@ export function useERC721TokenTransferCallback(address?: string) {
             type: TransactionStateType.UNKNOWN,
         })
     }, [])
+
+    useEffect(() => {
+        if (transferState.type !== TransactionStateType.CONFIRMED) return
+        resetCallback()
+    }, [transferState.type])
 
     return [transferState, transferCallback, resetCallback] as const
 }
