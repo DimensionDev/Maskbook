@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import {
     ERC721TokenDetailed,
     ERC721ContractDetailed,
@@ -17,7 +17,6 @@ import { SearchIcon } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
 import { Trans } from 'react-i18next'
 import { useUpdate } from 'react-use'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { findLastIndex } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
