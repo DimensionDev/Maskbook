@@ -1,6 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { ApplicationEntry } from '@masknet/shared'
+import { useState } from 'react'
+import { TipsEntranceDialog } from './TipsEnteranceDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -8,13 +10,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             RenderEntryComponent({ disabled }) {
+                const [open, setOpen] = useState(false)
                 return (
-                    <ApplicationEntry
-                        title="Tips"
-                        disabled={disabled}
-                        icon={new URL('../assets/Tips.png', import.meta.url).toString()}
-                        onClick={() => console.log('tips')}
-                    />
+                    <>
+                        <ApplicationEntry
+                            title="Tips"
+                            disabled={disabled}
+                            icon={new URL('../assets/Tip.png', import.meta.url).toString()}
+                            onClick={() => setOpen(true)}
+                        />
+                        <TipsEntranceDialog open={open} onClose={() => setOpen(false)} />
+                    </>
                 )
             },
             defaultSortingPriority: 8,

@@ -1,13 +1,13 @@
 import { Plugin, NetworkPluginID } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { TipsEnterencePluginId } from './constants'
+import { TipsEnterancePluginId } from './constants'
 
 export const base: Plugin.Shared.Definition = {
-    ID: TipsEnterencePluginId,
+    ID: TipsEnterancePluginId,
     icon: '\u{1F4B0}',
     name: { fallback: 'Tips' },
     description: {
-        fallback: 'Tips Enterence',
+        fallback: 'Tips Enterance',
     },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
