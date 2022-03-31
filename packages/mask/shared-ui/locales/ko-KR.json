@@ -432,7 +432,7 @@
     "plugin_ito_error_qualification_start_time": "주의: 자격 인정 시작 시간이 ITO 종료 시간보다 빨아야 합니다.",
     "plugin_ito_error_invalid_qualification": "무효한 인증 주소입니다.",
     "plugin_ito_unlock_time_cert": "ITO Mask 언락 시간은 {{date}}.",
-    "plugin_ito_unlock_time": "언락 시간 {{zone}}",
+    "plugin_ito_unlock_time": "언락 시간",
     "plugin_ito_launch_campaign": "SocialFi Launch Campaign",
     "plugin_ito_total_claimable_count": "전체: ",
     "plugin_ito_qualification_label": "플러그인 컨트랙트",
