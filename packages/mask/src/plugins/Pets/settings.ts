@@ -1,4 +1,4 @@
 import { createGlobalSettings } from '../../settings/createSettings'
 import { PetsPluginID } from './constants'
 
-export const petShowSettings = createGlobalSettings<boolean>(`${PetsPluginID}+selectedClosePet`, true)
+export const petShowSettings = createGlobalSettings(`${PetsPluginID}+selectedClosePet`, true)

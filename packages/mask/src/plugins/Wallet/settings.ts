@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash-unified'
-import { createGlobalSettings } from '../../settings/createSettings'
+import { createComplexGlobalSettings, createGlobalSettings } from '../../settings/createSettings'
 import {
     ChainId,
     NonFungibleAssetProvider,
@@ -12,15 +12,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants'
 
-export const currentMaskWalletAccountSettings = createGlobalSettings<string>(
-    `${PLUGIN_ID}+selectedMaskWalletAddress`,
-    '',
-)
+export const currentMaskWalletAccountSettings = createGlobalSettings(`${PLUGIN_ID}+selectedMaskWalletAddress`, '')
 
-export const currentMaskWalletChainIdSettings = createGlobalSettings<number>(
-    `${PLUGIN_ID}+maskWalletChainId`,
-    ChainId.Mainnet,
-)
+export const currentMaskWalletChainIdSettings = createGlobalSettings(`${PLUGIN_ID}+maskWalletChainId`, ChainId.Mainnet)
 
 export const currentMaskWalletNetworkSettings = createGlobalSettings<NetworkType>(
     `${PLUGIN_ID}+selectedMaskWalletNetwork`,
@@ -32,7 +26,7 @@ export const currentMaskWalletLockStatusSettings = createGlobalSettings<LockStat
     LockStatus.INIT,
 )
 
-export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_ID}+selectedWalletAddress`, '')
+export const currentAccountSettings = createGlobalSettings(`${PLUGIN_ID}+selectedWalletAddress`, '')
 
 export const currentChainIdSettings = createGlobalSettings<ChainId>(`${PLUGIN_ID}+chainId`, ChainId.Mainnet)
 
@@ -56,10 +50,14 @@ export const currentNonFungibleAssetDataProviderSettings = createGlobalSettings<
     NonFungibleAssetProvider.OPENSEA,
 )
 
-export const currentGasOptionsSettings = createGlobalSettings<GasOptions | null>(
+export const currentGasOptionsSettings = createComplexGlobalSettings<GasOptions | null>(
     `${PLUGIN_ID}+gasOptions`,
     null,
     isEqual,
 )
 
-export const currentTokenPricesSettings = createGlobalSettings<CryptoPrice>(`${PLUGIN_ID}+tokenPrices`, {}, isEqual)
+export const currentTokenPricesSettings = createComplexGlobalSettings<CryptoPrice>(
+    `${PLUGIN_ID}+tokenPrices`,
+    {},
+    isEqual,
+)

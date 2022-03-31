@@ -1,4 +1,4 @@
-import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
+import { createGlobalSettings, createNetworkSettings, createComplexNetworkSettings } from './createSettings'
 import { LaunchPage } from './types'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
@@ -6,23 +6,23 @@ import { updateLanguage } from '@masknet/shared-base'
 import { PLUGIN_ID } from '../plugins/EVM/constants'
 import { isEqual } from 'lodash-unified'
 
-export const debugModeSetting = createGlobalSettings<boolean>('debugMode', false)
+export const debugModeSetting = createGlobalSettings('debugMode', false)
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)
-export const pluginIDSettings = createGlobalSettings<string>('pluginID', PLUGIN_ID)
+export const pluginIDSettings = createGlobalSettings('pluginID', PLUGIN_ID)
 
-export const currentSetupGuideStatus: NetworkSettings<string> = createNetworkSettings('currentSetupGuideStatus', '')
-export const userGuideStatus: NetworkSettings<string> = createNetworkSettings('userGuideStatus', '')
-export const sayHelloShowed: NetworkSettings<boolean> = createNetworkSettings('sayHelloShowed', false)
-export const userPinExtension = createGlobalSettings<boolean>('userPinExtension', false)
-export const dismissVerifyNextID: NetworkSettings<{ [key in string]: boolean }> = createNetworkSettings(
+export const currentSetupGuideStatus = createNetworkSettings('currentSetupGuideStatus', '')
+export const userGuideStatus = createNetworkSettings('userGuideStatus', '')
+export const sayHelloShowed = createNetworkSettings('sayHelloShowed', false)
+export const userPinExtension = createGlobalSettings('userPinExtension', false)
+export const dismissVerifyNextID = createComplexNetworkSettings(
     'dismissVerifyNextID',
-    {},
+    {} as Record<string, boolean>,
     isEqual,
 )
-export const bioDescription: NetworkSettings<string> = createNetworkSettings('bioDescription', '')
-export const personalHomepage: NetworkSettings<string> = createNetworkSettings('personalHomepage', '')
+export const bioDescription = createNetworkSettings('bioDescription', '')
+export const personalHomepage = createNetworkSettings('personalHomepage', '')
 // This is a misuse of concept "NetworkSettings" as "namespaced settings"
 // The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884
 /**
@@ -32,12 +32,9 @@ export const personalHomepage: NetworkSettings<string> = createNetworkSettings('
  * `useActivatedPluginsDashboard().find((x) => x.ID === PLUGIN_ID)` instead
  */
 // This was "currentPluginEnabled" before, but we used it to represent minimal mode now to make the settings be able to migrate.
-export const currentPluginMinimalModeNOTEnabled: NetworkSettings<boolean> = createNetworkSettings(
-    'pluginsEnabled',
-    true,
-)
+export const currentPluginMinimalModeNOTEnabled = createNetworkSettings('pluginsEnabled', true)
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard)
-export const currentPersonaIdentifier = createGlobalSettings<string>('currentPersonaIdentifier', '')
+export const currentPersonaIdentifier = createGlobalSettings('currentPersonaIdentifier', '')
 
 try {
     // Migrate language settings
