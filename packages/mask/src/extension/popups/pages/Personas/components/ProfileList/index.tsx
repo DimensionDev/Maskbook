@@ -1,14 +1,12 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import React, { lazy, memo, Suspense, useCallback, useState } from 'react'
+import React, { memo, Suspense, useCallback, useState } from 'react'
 import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
-import type { ProfileIdentifier, ProfileInformation, NextIDPlatform } from '@masknet/shared-base'
+import type { ProfileIdentifier, ProfileInformation, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../../utils/i18n-next-ui'
 import { GrayMasks } from '@masknet/icons'
-
-// This component is not used during SSR. We want to defer it.
-const DisconnectDialog = lazy(() => import('../DisconnectDialog').then((x) => ({ default: x.DisconnectDialog })))
+import { DisconnectDialog } from '../DisconnectDialog'
 
 const useStyles = makeStyles()({
     list: {
@@ -85,6 +83,7 @@ export interface ProfileListProps extends Omit<ProfileListUIProps, 'onDisconnect
     onConfirmDisconnect(unbind: UnbindStatus): void
     onDisconnectProfile(identifier: ProfileIdentifier): void
     confirmLoading: boolean
+    currentPersona: PersonaInformation | undefined
 }
 
 export type UnbindStatus = {
@@ -124,6 +123,7 @@ export const ProfileList = memo((props: ProfileListProps) => {
             <Suspense fallback={null}>
                 {unbind && (
                     <DisconnectDialog
+                        currentPersona={props.currentPersona}
                         unbundledIdentity={unbind?.identifier}
                         open={!!unbind}
                         onClose={() => setUnbind(null)}

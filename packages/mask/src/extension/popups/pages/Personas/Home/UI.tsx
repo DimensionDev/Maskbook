@@ -150,6 +150,7 @@ export const PersonaHomeUI = memo((props: PersonaHomeUIProps) => {
                 </div>
                 {isExpand ? (
                     <ProfileList
+                        currentPersona={currentPersona}
                         onConnectNextID={props.onConnectNextID}
                         onConnectProfile={props.onConnectProfile}
                         confirmLoading={props.confirmLoading}

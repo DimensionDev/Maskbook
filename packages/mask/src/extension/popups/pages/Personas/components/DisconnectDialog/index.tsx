@@ -1,9 +1,9 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
 import { memo } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, Typography, DialogProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
-import { formatPersonaFingerprint, type ProfileIdentifier } from '@masknet/shared-base'
-import { PersonaContext } from '../../hooks/usePersonaContext'
+import { formatPersonaFingerprint, PersonaInformation, type ProfileIdentifier } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { useI18N } from '../../../../../../utils'
 
@@ -53,13 +53,13 @@ interface DisconnectDialogProps extends DialogProps {
     onConfirmDisconnect: () => void
     confirmLoading: boolean
     onClose: () => void
+    currentPersona: PersonaInformation | undefined
 }
 
 export const DisconnectDialog = memo<DisconnectDialogProps>(
-    ({ open, onClose, unbundledIdentity, onConfirmDisconnect, confirmLoading }) => {
-        const { classes } = useStyles()
+    ({ open, onClose, unbundledIdentity, onConfirmDisconnect, confirmLoading, currentPersona }) => {
+        const { classes, cx } = useStyles()
         const { t } = useI18N()
-        const { currentPersona } = PersonaContext.useContainer()
         if (!unbundledIdentity) return null
 
         return (
@@ -79,11 +79,11 @@ export const DisconnectDialog = memo<DisconnectDialogProps>(
                 <DialogActions className={classes.actions}>
                     <LoadingButton
                         loading={confirmLoading}
-                        className={classNames(classes.button, classes.confirmButton)}
+                        className={cx(classes.button, classes.confirmButton)}
                         onClick={onConfirmDisconnect}>
                         {t('confirm')}
                     </LoadingButton>
-                    <Button className={classNames(classes.button, classes.cancelButton)} onClick={onClose}>
+                    <Button className={cx(classes.button, classes.cancelButton)} onClick={onClose}>
                         {t('cancel')}
                     </Button>
                 </DialogActions>
