@@ -3,7 +3,7 @@ import { CustomSnackbarProvider } from '@masknet/theme'
 import { Web3Provider } from '@masknet/web3-shared-evm'
 import { CssBaseline, StyledEngineProvider, Theme, ThemeProvider } from '@mui/material'
 import { NetworkPluginID, PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra'
-import { I18NextProviderHMR } from '@masknet/shared'
+import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef } from '@masknet/shared-base-ui'
 import i18nNextInstance from '../shared-ui/locales_legacy'
 import { Web3Context } from './web3/context'
@@ -89,5 +89,6 @@ export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
                 {jsx}
             </MaskThemeProvider>
         ),
+        (jsx) => <SharedContextProvider>{jsx}</SharedContextProvider>,
     )
 }

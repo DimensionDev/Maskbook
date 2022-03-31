@@ -7,7 +7,7 @@ import {
     MaskDarkTheme,
     useSystemPreferencePalette,
 } from '@masknet/theme'
-import { I18NextProviderHMR } from '@masknet/shared'
+import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import {
     createInjectHooksRenderer,
@@ -62,10 +62,12 @@ export default function DashboardRoot() {
                                 <ErrorBoundary>
                                     <CssBaseline />
                                     <CustomSnackbarProvider>
-                                        <HashRouter>
-                                            <Pages />
-                                        </HashRouter>
-                                        <PluginRender />
+                                        <SharedContextProvider>
+                                            <HashRouter>
+                                                <Pages />
+                                            </HashRouter>
+                                            <PluginRender />
+                                        </SharedContextProvider>
                                     </CustomSnackbarProvider>
                                 </ErrorBoundary>
                             </PersonaContext.Provider>
