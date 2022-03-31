@@ -4,6 +4,8 @@ import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { useState } from 'react'
+import { TipsSupportedChains } from '../constants'
+import { WalletsByNetwork } from './components/WalletsByNetwork'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose?: () => void
@@ -11,6 +13,9 @@ export interface TipsEntranceDialogProps {
 const useStyles = makeStyles()((theme) => ({
     walletBtn: {
         fontSize: '14px',
+    },
+    alertBox: {
+        marginBottom: '20px',
     },
 }))
 
@@ -26,6 +31,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [showAlert, setShowAlert] = useState(true)
+    const supportedNetworks = TipsSupportedChains
     return (
         <InjectedDialog
             open={open}
@@ -34,7 +40,16 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             }}
             title={t('plugin_tips_name')}
             badgeAction={WalletButton()}>
-            <DialogContent>{showAlert && <VerifyAlertLine onClose={() => setShowAlert(false)} />}</DialogContent>
+            <DialogContent>
+                {showAlert && (
+                    <div className={classes.alertBox}>
+                        <VerifyAlertLine onClose={() => setShowAlert(false)} />
+                    </div>
+                )}
+                {supportedNetworks.map((x, idx) => {
+                    return <WalletsByNetwork key={idx} network={x} />
+                })}
+            </DialogContent>
         </InjectedDialog>
     )
 }
