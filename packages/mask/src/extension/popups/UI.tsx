@@ -2,16 +2,17 @@ import { lazy } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useClassicMaskFullPageTheme } from '../../utils'
+import { useClassicMaskFullPageTheme } from '../../utils/useClassicMaskFullPageTheme'
 import '../../social-network-adaptor/browser-action'
 import { Web3Provider } from '@masknet/web3-shared-evm'
 import { PopupWeb3Context } from '../../web3/context'
 import { PopupFrame } from './components/PopupFrame'
 import { Appearance } from '@masknet/theme'
 import { MaskUIRoot } from '../../UIRoot'
+import { useThemeLanguage } from '../../utils'
 
 function useAlwaysLightTheme() {
-    return useClassicMaskFullPageTheme({ forcePalette: Appearance.light })
+    return useClassicMaskFullPageTheme(Appearance.light, useThemeLanguage())
 }
 const Wallet = lazy(() => import('./pages/Wallet'))
 const Personas = lazy(() => import('./pages/Personas'))

@@ -1,0 +1,5 @@
+globalThis.document = {
+    querySelectorAll() {
+        return []
+    },
+}

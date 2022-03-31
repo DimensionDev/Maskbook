@@ -5,7 +5,7 @@ import { Button, Dialog, DialogActions, DialogContent, Typography, DialogProps }
 import { makeStyles } from '@masknet/theme'
 import { formatPersonaFingerprint, PersonaInformation, type ProfileIdentifier } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
-import { useI18N } from '../../../../../../utils'
+import { useI18N } from '../../../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles()(() => ({
     title: {

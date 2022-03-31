@@ -17,6 +17,7 @@ importers:
       '@emotion/cache': ^11.7.1
       '@emotion/react': ^11.8.2
       '@emotion/serialize': ^1.0.2
+      '@emotion/server': ^11.4.0
       '@emotion/styled': ^11.8.1
       '@emotion/utils': ^1.1.0
       '@jest/globals': ^28.0.0-alpha.3
@@ -64,6 +65,7 @@ importers:
       '@emotion/cache': 11.7.1
       '@emotion/react': 11.8.2_00a11a054056e3746b551a83b9229751
       '@emotion/serialize': 1.0.2
+      '@emotion/server': 11.4.0
       '@emotion/styled': 11.8.1_99e6c630d8f9e4aaf14c79d0138a2fa8
       '@emotion/utils': 1.1.0
       '@mui/icons-material': 5.5.1_25c2be9db5642b081e6658d3ddfb5f23

@@ -4,11 +4,14 @@ import * as InjectContentScriptMV3 from './Cancellable/InjectContentScripts-mv3'
 import * as IsolatedDashboardBridge from './Cancellable/IsolatedDashboardBridge'
 import * as CleanupProfileDatabase from './Cancellable/CleanProfileAndAvatar'
 import * as NotificationsToMobile from './Cancellable/NotificationsToMobile'
+import * as PopupSSR from './Cancellable/PopupSSR'
+import * as PopupSSR_MV3 from './Cancellable/PopupSSR/index.mv3'
 
 type CancelableJob = { default: (signal: AbortSignal) => void }
 const CancelableJobs: CancelableJob[] = [
     NewInstalled,
     process.env.manifest === '2' ? InjectContentScript : InjectContentScriptMV3,
+    process.env.manifest === '2' ? PopupSSR : PopupSSR_MV3,
     IsolatedDashboardBridge,
     process.env.architecture === 'app' ? null! : CleanupProfileDatabase,
     NotificationsToMobile,

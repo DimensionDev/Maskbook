@@ -1,117 +1,20 @@
-import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { SubscriptionFromValueRef } from '@masknet/shared-base'
-import { Appearance, or, makeStyles, parseColor } from '@masknet/theme'
+import { Appearance, makeStyles, parseColor } from '@masknet/theme'
 import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
-import { PaletteMode, unstable_createMuiStrictModeTheme } from '@mui/material'
-import { blue, green, grey, orange, red } from '@mui/material/colors'
+import { unstable_createMuiStrictModeTheme } from '@mui/material'
+import { blue, green, red } from '@mui/material/colors'
 import { jaJP, koKR, zhTW, zhCN, enUS, Localization } from '@mui/material/locale/index'
 import type { Theme, ThemeOptions } from '@mui/material/styles/createTheme'
 import { cloneDeep, merge } from 'lodash-unified'
 import { useRef } from 'react'
-import { appearanceSettings, languageSettings } from '../settings/settings'
+import { languageSettings } from '../settings/settings'
 import { activatedSocialNetworkUI } from '../social-network'
 import './theme-global.d'
-import { Subscription, useSubscription } from 'use-subscription'
+import { useSubscription } from 'use-subscription'
 import produce, { setAutoFreeze } from 'immer'
 import twitterColorSchema from '../social-network-adaptor/twitter.com/customization/twitter-color-schema.json'
+import { staticSubscription, MaskDarkTheme, MaskLightTheme } from './MaskTheme'
 
-function getFontFamily(monospace?: boolean) {
-    // We want to look native.
-
-    // Windows has no CJK sans monospace. Accommodate that.
-    // We only use it for fingerprints anyway so CJK coverage ain't a problem... yet.
-    const monofont = navigator.platform.startsWith('Win') ? 'Consolas, monospace' : 'monospace'
-    // https://caniuse.com/font-family-system-ui
-    // Firefox does NOT support yet it in any form on Windows, but tests indicate that it agrees with Edge in using the UI font for sans-serif:
-    // Microsoft YaHei on zh-Hans-CN.
-    return !monospace ? '-apple-system, system-ui, sans-serif' : monofont
-}
-
-const base: ThemeOptions = {
-    palette: {
-        primary: { main: '#1c68f3' }, // blue,
-        secondary: orange,
-        text: { hint: 'rgba(0, 0, 0, 0.38)' },
-    },
-    typography: {
-        fontFamily: getFontFamily(),
-    },
-    breakpoints: {
-        values: {
-            xs: 0,
-            sm: 600,
-            md: 1112,
-            lg: 1280,
-            xl: 1920,
-        },
-    },
-    components: {
-        MuiLink: { defaultProps: { underline: 'hover' } },
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    textTransform: 'unset',
-                    minWidth: '100px',
-                },
-            },
-            defaultProps: {
-                size: 'small',
-                disableElevation: true,
-            },
-        },
-        MuiTab: {
-            styleOverrides: {
-                root: {
-                    textTransform: 'unset',
-                    padding: '0',
-                    // up-sm
-                    '@media screen and (min-width: 600px)': {
-                        minWidth: 160,
-                    },
-                },
-            },
-        },
-        MuiDialog: {
-            styleOverrides: {
-                paper: {
-                    borderRadius: '12px',
-                },
-            },
-        },
-    },
-}
-
-const lightThemePatch: Partial<ThemeOptions> = {
-    palette: {
-        mode: 'light',
-    },
-}
-
-const darkThemePatch: Partial<ThemeOptions> = {
-    palette: {
-        mode: 'dark',
-        background: {
-            paper: grey[900],
-        },
-    },
-    components: {
-        MuiPaper: {
-            // https://github.com/mui-org/material-ui/pull/25522
-            styleOverrides: { root: { backgroundImage: 'unset' } },
-        },
-    },
-}
-
-const baseTheme = (theme: 'dark' | 'light') => {
-    if (theme === 'light') return merge(cloneDeep(base), lightThemePatch)
-    return merge(cloneDeep(base), darkThemePatch)
-}
-
-// Theme
-const MaskLightTheme = unstable_createMuiStrictModeTheme(baseTheme('light'))
-const MaskDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))
-const staticSubscription: Subscription<PaletteMode> = SubscriptionFromValueRef(new ValueRef('light'))
 export function useClassicMaskSNSTheme() {
     const { current: provider } = useRef(
         activatedSocialNetworkUI.customization.paletteMode?.current || staticSubscription,
@@ -125,21 +28,6 @@ export function useClassicMaskSNSTheme() {
     const theme = unstable_createMuiStrictModeTheme(baseTheme, localization)
     return usePostTheme(theme)
 }
-/**
- * @deprecated
- * - Popups: migrate to \@masknet/theme package
- */
-export function useClassicMaskFullPageTheme(overwrite?: ClassicMaskFullPageThemeOptions) {
-    const userPreference = or(overwrite?.forcePalette, useValueRef(appearanceSettings))
-    const systemPreference: PaletteMode = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    const finalPalette: PaletteMode = userPreference === Appearance.default ? systemPreference : userPreference
-
-    const baseTheme = finalPalette === 'dark' ? MaskDarkTheme : MaskLightTheme
-    const [localization, isRTL] = useThemeLanguage()
-    // TODO: support RTL
-    return unstable_createMuiStrictModeTheme(baseTheme, localization)
-}
-
 /**
  * Only used in swap pages under popups, will replace it in the future
  */
@@ -349,7 +237,7 @@ export function usePopupsMaskFullPageTheme() {
     return unstable_createMuiStrictModeTheme(PopupTheme)
 }
 
-function useThemeLanguage(): [loc: Localization, RTL: boolean] {
+export function useThemeLanguage(): [loc: Localization, RTL: boolean] {
     let language = useValueRef(languageSettings)
     // TODO: support auto language
     if (language === LanguageOptions.__auto__) language = LanguageOptions.enUS
