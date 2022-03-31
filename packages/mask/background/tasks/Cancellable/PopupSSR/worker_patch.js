@@ -1,5 +1,1 @@
-globalThis.document = {
-    querySelectorAll() {
-        return []
-    },
-}
+//

@@ -4,8 +4,7 @@ import './worker_patch'
 // @ts-ignore
 import { PopupSSR } from './loader'
 import { renderToString } from 'react-dom/server'
-// @ts-ignore
-import createCache from '@emotion/cache/dist/emotion-cache.cjs.prod.js'
+import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/react'
 import createEmotionServer from '@emotion/server/create-instance'
 // TODO:
@@ -20,7 +19,6 @@ function serverCache(key: string) {
     return cache
 }
 function render() {
-    debugger
     const muiCache = serverCache('mui')
     const tssCache = serverCache('tss')
     const tssServer = createEmotionServer(tssCache)
