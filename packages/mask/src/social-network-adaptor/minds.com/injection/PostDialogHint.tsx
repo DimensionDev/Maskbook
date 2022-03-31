@@ -1,8 +1,8 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useCallback } from 'react'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
-import { MaskMessages } from '../../../utils/messages'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { startWatch } from '../../../utils/watcher'
 import { postEditorInPopupSelector, postEditorInTimelineSelector } from '../utils/selector'
@@ -45,7 +45,7 @@ function PostDialogHintAtMinds({ reason }: { reason: 'timeline' | 'popup' }) {
     const { classes } = useStyles({ reason })
 
     const onHintButtonClicked = useCallback(
-        () => MaskMessages.events.requestComposition.sendToLocal({ reason, open: true }),
+        () => CrossIsolationMessages.events.requestComposition.sendToLocal({ reason, open: true }),
         [reason],
     )
     return (

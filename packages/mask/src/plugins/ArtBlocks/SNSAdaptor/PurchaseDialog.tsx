@@ -12,7 +12,6 @@ import {
     Typography,
 } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import {
     ERC20TokenDetailed,
@@ -23,11 +22,11 @@ import {
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
-import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
-import { TokenAmountPanel } from '@masknet/shared'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { leftShift } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog, TokenAmountPanel } from '@masknet/shared'
+import { leftShift } from '@masknet/web3-shared-base'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
 import { WalletMessages } from '../../Wallet/messages'
 
 import type { Project } from '../types'

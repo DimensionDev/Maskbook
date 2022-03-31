@@ -60,6 +60,7 @@
     "tip_connect_wallet": "crwdns14778:0crwdne14778:0",
     "search": "crwdns14780:0crwdne14780:0",
     "tip_contracts": "crwdns14782:0crwdne14782:0",
-    "tip_token_share_post": "crwdns14784:0{{amount}}crwdnd14784:0{{symbol}}crwdnd14784:0{{recipientSnsId}}crwdnd14784:0{{recipient}}crwdne14784:0",
-    "tip_nft_share_post": "crwdns14786:0{{name}}crwdnd14786:0{{recipientSnsId}}crwdnd14786:0{{recipient}}crwdne14786:0"
+    "tip_mask_promote": "crwdns14806:0crwdne14806:0",
+    "tip_token_share_post": "crwdns14784:0{{amount}}crwdnd14784:0{{symbol}}crwdnd14784:0{{recipientSnsId}}crwdnd14784:0{{recipient}}crwdnd14784:0{{promote}}crwdne14784:0",
+    "tip_nft_share_post": "crwdns14786:0{{name}}crwdnd14786:0{{recipientSnsId}}crwdnd14786:0{{recipient}}crwdnd14786:0{{promote}}crwdne14786:0"
 }

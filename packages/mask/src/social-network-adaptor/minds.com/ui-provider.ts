@@ -125,10 +125,12 @@ const mindsUI: SocialNetworkUI.Definition = {
     },
     customization: {
         paletteMode: PaletteModeProviderMinds,
-        componentOverwrite: {
+        sharedComponentOverwrite: {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteMinds,
             },
+        },
+        componentOverwrite: {
             RenderFragments: MindsRenderFragments,
         },
         useTheme: useThemeMindsVariant,

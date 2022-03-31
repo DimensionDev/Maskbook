@@ -23,18 +23,3 @@ export const getCurrentIdentifier = () => {
         globalUIState.profiles.value[0]
     )
 }
-
-export const createCenterWindowConfig = (width: number, height: number) => {
-    const x = window.screenX + (window.innerWidth - width) / 2
-    const y = window.screenY + (window.innerHeight - height) / 2
-    return [
-        `screenX=${x}`,
-        `screenY=${y}`,
-        'toolbar=1',
-        'status=1',
-        'resizable=1',
-        'scrollbars=1',
-        `height=${height}`,
-        `width=${width}`,
-    ].join(',')
-}

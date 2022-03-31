@@ -59,7 +59,8 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     },
     "ENS_REVERSE_RECORDS_ADDRESS": {
         "Mainnet": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
@@ -79,6 +80,7 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     }
 }
