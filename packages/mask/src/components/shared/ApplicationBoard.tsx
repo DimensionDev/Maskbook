@@ -1,8 +1,7 @@
 import { Fragment } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { useActivatedPluginsSNSAdaptor, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
-import type { Plugin } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor, useCurrentWeb3NetworkPluginID, Plugin, useAccount } from '@masknet/plugin-infra'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 
@@ -32,6 +31,7 @@ export function ApplicationBoard() {
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId()
+    const account = useAccount()
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
 
     return (
@@ -46,7 +46,7 @@ export function ApplicationBoard() {
                                 currentWeb3NetworkSupportedChainIds === undefined ||
                                     currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
                             )
-
+                            const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
                             const currentSNSIsSupportedNetwork =
                                 cur.enableRequirement.networks.networks[currentSNSNetwork]
                             const isSNSEnabled =
@@ -56,7 +56,7 @@ export function ApplicationBoard() {
                                 cur.ApplicationEntries.map((x) => {
                                     return {
                                         entry: x,
-                                        enabled: isWeb3Enabled && isSNSEnabled,
+                                        enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
                                         pluginId: cur.ID,
                                     }
                                 }) ?? [],

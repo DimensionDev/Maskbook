@@ -3,7 +3,7 @@ import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Add, Remove } from '@mui/icons-material'
 import { useProviderDescriptor } from '@masknet/plugin-infra'
-import { FormattedAddress, FormattedBalance, ImageIcon } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance, ImageIcon, InjectedDialog } from '@masknet/shared'
 import { Box, Button, DialogContent, TextField, Typography } from '@mui/material'
 import {
     formatBalance,
@@ -12,7 +12,6 @@ import {
     useChainId,
     useMaskBoxConstants,
 } from '@masknet/web3-shared-evm'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'

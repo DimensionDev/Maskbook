@@ -12,10 +12,9 @@ import {
     formatNFT_TokenId,
 } from '@masknet/web3-shared-evm'
 import type { ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer, InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import classNames from 'classnames'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'

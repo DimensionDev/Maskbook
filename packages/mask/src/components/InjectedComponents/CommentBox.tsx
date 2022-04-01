@@ -1,8 +1,8 @@
+import { MINDS_ID } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { InputBase, Box } from '@mui/material'
-import { useI18N } from '../../utils'
+import { Box, InputBase } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
+import { useI18N } from '../../utils'
 
 interface StyleProps {
     snsId: string

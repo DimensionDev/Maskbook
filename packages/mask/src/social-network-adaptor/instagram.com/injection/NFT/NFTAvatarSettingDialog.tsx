@@ -4,7 +4,7 @@ import { useCurrentVisitingIdentity } from '../../../../components/DataSource/us
 import { toPNG } from '../../../../plugins/Avatar/utils'
 import { useMount } from 'react-use'
 import { getAvatarId } from '../../utils/user'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { DialogStackingProvider, makeStyles } from '@masknet/theme'

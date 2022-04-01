@@ -1,5 +1,8 @@
-import { Children, cloneElement } from 'react'
+import { EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
+import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
+import { makeStyles, mergeClasses, useDialogStackActor, usePortalShadowRoot, useStylesExtends } from '@masknet/theme'
 import {
+    Dialog,
     DialogActions,
     DialogClassKey,
     DialogContent,
@@ -8,22 +11,19 @@ import {
     DialogTitle,
     IconButton,
     Typography,
-    useTheme,
-    Dialog,
     useMediaQuery,
+    useTheme,
 } from '@mui/material'
-import { makeStyles, useDialogStackActor, useStylesExtends, mergeClasses } from '@masknet/theme'
-import { EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
-import { ErrorBoundary } from '@masknet/shared-base-ui'
-import { useI18N, usePortalShadowRoot } from '../../utils'
-import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { Children, cloneElement } from 'react'
+import { useSharedI18N } from '../../locales'
+import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base'
+import { DialogDismissIcon } from './DialogDismissIcon'
 
 interface StyleProps {
-    snsId: string
+    clean: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
         borderBottom: `1px solid ${theme.palette.divider}`,
@@ -38,11 +38,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     dialogCloseButton: {
         color: theme.palette.text.primary,
     },
-    paper: {
-        ...(snsId === EnhanceableSite.Minds || snsId === EnhanceableSite.Facebook
-            ? { width: 'auto', backgroundImage: 'none' }
-            : {}),
-    },
+    paper: clean ? { width: 'auto', backgroundImage: 'none' } : {},
 }))
 
 export type InjectedDialogClassKey =
@@ -64,8 +60,10 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
 }
 
 export function InjectedDialog(props: InjectedDialogProps) {
-    const overwrite = activatedSocialNetworkUI.customization.componentOverwrite || {}
+    const snsId = useValueRef(sharedUINetworkIdentifier)
+    const overwrite = useValueRef(sharedUIComponentOverwrite)
     props = overwrite.InjectedDialog?.props?.(props) ?? props
+    const clean = snsId === EnhanceableSite.Minds || snsId === EnhanceableSite.Facebook
     const {
         dialogActions,
         dialogCloseButton,
@@ -75,16 +73,13 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogBackdropRoot,
         container,
         ...dialogClasses
-    } = useStylesExtends(
-        useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }),
-        props,
-        overwrite.InjectedDialog?.classes,
-    )
+    } = useStylesExtends(useStyles({ clean }), props, overwrite.InjectedDialog?.classes)
+
+    const t = useSharedI18N()
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
     const isDashboard = isDashboardPage()
     const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, disableTitleBorder, ...rest } =
         props
-    const { t } = useI18N()
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
     const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
@@ -124,9 +119,9 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             <IconButton
                                 size="large"
                                 classes={{ root: dialogCloseButton }}
-                                aria-label={t('post_dialog__dismiss_aria')}
+                                aria-label={t.dialog_dismiss()}
                                 onClick={onClose}>
-                                <DialogDismissIconUI
+                                <DialogDismissIcon
                                     style={shouldReplaceExitWithBack && !isDashboard ? 'back' : titleBarIconStyle}
                                 />
                             </IconButton>
