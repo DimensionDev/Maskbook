@@ -1,16 +1,16 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
 
 import { useV2Trade as useUniswapV2Trade } from './useTrade'
 import { TradeStrategy } from '../../types'
 import { useTradeComputed as useUniswapTradeComputed } from './useTradeComputed'
 import { useTradeGasLimit as useUniswapTradeGasLimit } from './useTradeGasLimit'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 export function useUniswapV2Like(
     tradeProviders: TradeProvider[],
     traderProvider: TradeProvider,
     inputAmount_: string,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
+    inputToken?: Web3Plugin.FungibleToken,
+    outputToken?: Web3Plugin.FungibleToken,
 ) {
     const isTrader = tradeProviders.some((x) => x === traderProvider)
     const trader_ = useUniswapV2Trade(

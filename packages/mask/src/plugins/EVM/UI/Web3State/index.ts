@@ -25,11 +25,13 @@ import {
     isZeroAddress,
     createWeb3,
     createExternalProvider,
+    createNativeFungibleToken,
 } from '@masknet/web3-shared-evm'
 import { getStorage } from '../../storage'
 
 import { getFungibleAssetsFn, getNonFungibleTokenFn } from './getAssetsFn'
 import { createGetLatestBalance } from './createGetLatestBalance'
+import { createGetTokenBalance } from './createGetTokenBalance'
 const ZERO_X_ERROR_ADDRESS = '0x'
 
 export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities, context?: Web3ProviderType) {
@@ -122,8 +124,10 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             }))
             return web3.eth.getBlockNumber()
         },
+        getLatestTokenBalance: createGetTokenBalance(context),
 
         getChainDetailed,
+        getNativeToken: createNativeFungibleToken,
         isChainIdValid,
 
         formatAddress: formatEthereumAddress,

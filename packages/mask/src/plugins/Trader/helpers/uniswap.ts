@@ -3,16 +3,10 @@ import { memoize } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { Currency, Token, CurrencyAmount, TradeType, Percent, Price, Ether } from '@uniswap/sdk-core'
 import type { Trade } from '@uniswap/v2-sdk'
-import {
-    formatEthereumAddress,
-    ChainId,
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    isSameAddress,
-    WNATIVE,
-} from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, ChainId, isSameAddress, WNATIVE } from '@masknet/web3-shared-evm'
 import { pow10, isGreaterThan } from '@masknet/web3-shared-base'
 import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../constants'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 
 export function swapErrorToUserReadableMessage(error: any): string {
     let reason: string | undefined
@@ -58,29 +52,30 @@ export function toUniswapPercent(numerator: number, denominator: number) {
     return new Percent(JSBI.BigInt(numerator), JSBI.BigInt(denominator))
 }
 
-export function toUniswapCurrency(chainId: ChainId, token?: FungibleTokenDetailed): Currency | undefined {
+export function toUniswapCurrency(chainId: ChainId, token?: Web3Plugin.FungibleToken): Currency | undefined {
     try {
         if (!token) return
         const extendedEther = ExtendedEther.onChain(chainId)
         const weth = toUniswapToken(chainId, WNATIVE[chainId])
         if (weth && isSameAddress(token.address, weth.address)) return weth
-        return token.type === EthereumTokenType.Native ? extendedEther : toUniswapToken(chainId, token)
+        return token.isNativeToken ? extendedEther : toUniswapToken(chainId, token)
     } catch {
         return
     }
 }
 
-export function toUniswapToken(chainId: ChainId, token: FungibleTokenDetailed) {
+export function toUniswapToken(chainId: ChainId, token: Web3Plugin.FungibleToken) {
     return new Token(
         toUniswapChainId(chainId),
         formatEthereumAddress(token.address),
-        token.decimals,
+        // TODO: remove !
+        token.decimals!,
         token.symbol,
         token.name,
     )
 }
 
-export function toUniswapCurrencyAmount(chainId: ChainId, token?: FungibleTokenDetailed, amount?: string) {
+export function toUniswapCurrencyAmount(chainId: ChainId, token?: Web3Plugin.FungibleToken, amount?: string) {
     if (!token || !amount) return
     const currency = toUniswapCurrency(chainId, token)
     if (!currency) return
@@ -106,15 +101,13 @@ export function uniswapPriceTo(price: Price<Currency, Currency>) {
 
 export function uniswapTokenTo(token: Token) {
     return {
-        type: ['eth', 'matic', 'bnb'].includes(token.name?.toLowerCase() ?? '')
-            ? EthereumTokenType.Native
-            : EthereumTokenType.ERC20,
+        isNativeToken: ['eth', 'matic', 'bnb'].includes(token.name?.toLowerCase() ?? ''),
         name: token.name,
         symbol: token.symbol,
         decimals: token.decimals,
         address: formatEthereumAddress(token.address),
         chainId: uniswapChainIdTo(token.chainId),
-    } as FungibleTokenDetailed
+    } as Web3Plugin.FungibleToken
 }
 
 export function uniswapCurrencyAmountTo(currencyAmount: CurrencyAmount<Currency>) {

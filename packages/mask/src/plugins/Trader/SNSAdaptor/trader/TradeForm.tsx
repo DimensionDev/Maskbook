@@ -4,7 +4,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
+import type { Wallet } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
@@ -29,6 +29,7 @@ import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -175,8 +176,8 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
 export interface AllTradeFormProps {
     wallet?: Wallet
     inputAmount: string
-    inputToken?: FungibleTokenDetailed
-    outputToken?: FungibleTokenDetailed
+    inputToken?: Web3Plugin.FungibleToken
+    outputToken?: Web3Plugin.FungibleToken
     inputTokenBalance?: string
     outputTokenBalance?: string
     onInputAmountChange: (amount: string) => void

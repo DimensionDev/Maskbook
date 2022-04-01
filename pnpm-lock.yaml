@@ -1254,6 +1254,7 @@ importers:
   packages/web3-shared/evm:
     specifiers:
       '@ensdomains/address-encoder': ^0.2.6
+      '@masknet/plugin-infra': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-contracts': workspace:*
@@ -1277,6 +1278,7 @@ importers:
       web3-utils: 1.5.2
     dependencies:
       '@ensdomains/address-encoder': 0.2.6
+      '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared-base': link:../../shared-base
       '@masknet/web3-constants': link:../../web3-constants
       '@masknet/web3-contracts': link:../../web3-contracts

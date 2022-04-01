@@ -160,6 +160,7 @@ export declare namespace Web3Plugin {
         name: string
         symbol: string
         logoURI?: string | string[]
+        isNativeToken?: boolean
     }
 
     export interface NonFungibleContract {
@@ -296,9 +297,12 @@ export declare namespace Web3Plugin {
         export interface Others {
             getLatestBlockNumber?: (chainId: number) => Promise<number>
             getLatestBalance?: (chainId: number, account: string) => Promise<string>
+            getLatestTokenBalance?: (token: FungibleToken, account: string) => Promise<string | undefined>
 
             isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
             getChainDetailed?: (chainId: number) => ChainDetailed | undefined
+            getNativeToken?: (chainId: number) => FungibleToken | undefined
+            getToken?: (chainId: number) => FungibleToken | undefined
             getFungibleTokenMetadata?: (token: FungibleToken) => Promise<FungibleTokenMetadata>
             getNonFungibleTokenMetadata?: (token: NonFungibleToken) => Promise<NonFungibleTokenMetadata>
 

@@ -21,6 +21,7 @@ import { getChainDetailed, getChainIdFromName } from './chainDetailed'
 import { formatBalance } from './formatter'
 import { isSameAddress } from './address'
 import CHAINS from '../assets/chains.json'
+import { TokenType, Web3Plugin } from '@masknet/plugin-infra'
 
 export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     const chainDetailed = getChainDetailed(chainId)
@@ -30,6 +31,21 @@ export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     return {
         type: EthereumTokenType.Native,
         chainId,
+        address: NATIVE_TOKEN_ADDRESS,
+        ...chainDetailed.nativeCurrency,
+    }
+}
+
+export function createNativeFungibleToken(chainId: ChainId): Web3Plugin.FungibleToken {
+    const chainDetailed = getChainDetailed(chainId)
+    if (!chainDetailed) throw new Error('Unknown chain id.')
+    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(chainId)
+    if (!NATIVE_TOKEN_ADDRESS) throw new Error('Failed to create token.')
+    return {
+        id: `${chainId}_${NATIVE_TOKEN_ADDRESS}`,
+        chainId: chainId,
+        type: TokenType.Fungible,
+        isNativeToken: true,
         address: NATIVE_TOKEN_ADDRESS,
         ...chainDetailed.nativeCurrency,
     }
@@ -52,6 +68,27 @@ export function createERC20Token(
 ): ERC20TokenDetailed {
     return {
         type: EthereumTokenType.ERC20,
+        chainId,
+        address,
+        decimals,
+        name,
+        symbol,
+        logoURI,
+    }
+}
+
+export function createFungibleToken(
+    chainId: ChainId,
+    address: string,
+    decimals = 0,
+    name = 'Unknown Token',
+    symbol = 'UNKNOWN',
+    logoURI?: string[],
+): Web3Plugin.FungibleToken {
+    return {
+        id: `${chainId}_${address}`,
+        type: TokenType.Fungible,
+        isNativeToken: false,
         chainId,
         address,
         decimals,
@@ -131,6 +168,32 @@ export function createERC20Tokens(
 
         accumulator[chainId] = {
             type: EthereumTokenType.ERC20,
+            chainId,
+            address: getTokenConstants(chainId)[key] ?? '',
+            name: evaluator(name),
+            symbol: evaluator(symbol),
+            decimals: evaluator(decimals),
+        }
+        return accumulator
+    }, base)
+}
+
+export function createFungibleTokens(
+    key: keyof ReturnType<typeof getTokenConstants>,
+    name: string | ((chainId: ChainId) => string),
+    symbol: string | ((chainId: ChainId) => string),
+    decimals: number | ((chainId: ChainId) => number),
+) {
+    type Table = ChainIdRecord<Web3Plugin.FungibleToken>
+    const base = {} as Table
+    return getEnumAsArray(ChainId).reduce<Table>((accumulator, { value: chainId }) => {
+        const evaluator: <T>(f: T | ((chainId: ChainId) => T)) => T = (f) =>
+            typeof f === 'function' ? (f as any)(chainId) : f
+
+        accumulator[chainId] = {
+            id: `${chainId}_${getTokenConstants(chainId)[key] ?? ''}`,
+            type: TokenType.Fungible,
+            isNativeToken: false,
             chainId,
             address: getTokenConstants(chainId)[key] ?? '',
             name: evaluator(name),

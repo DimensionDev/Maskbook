@@ -2,17 +2,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     ChainId,
-    createERC20Token,
-    createNativeToken,
+    createFungibleToken,
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
     isSameAddress,
     TransactionStateType,
-    useChainId,
-    useChainIdValid,
-    useFungibleTokenBalance,
-    useTokenConstants,
     useWallet,
     UST,
 } from '@masknet/web3-shared-evm'
@@ -38,6 +33,14 @@ import { PluginTraderMessages } from '../../messages'
 import { SettingsDialog } from './SettingsDialog'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
+import {
+    useChainId,
+    useChainIdValid,
+    useWeb3State,
+    useTokenBalance,
+    Web3Plugin,
+    TokenType,
+} from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -62,10 +65,11 @@ export function Trader(props: TraderProps) {
     const currentChainId = useChainId()
     const chainId = targetChainId ?? currentChainId
     const chainIdValid = useChainIdValid()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
+    const { Utils } = useWeb3State() ?? {}
+    const nativeToken = Utils?.getNativeToken?.(chainId)
 
     // #region trade state
     const {
@@ -88,7 +92,10 @@ export function Trader(props: TraderProps) {
 
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-            token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST[ChainId.Mainnet] : createNativeToken(chainId),
+            token:
+                chainId === ChainId.Mainnet && coin?.is_mirrored
+                    ? UST[ChainId.Mainnet]
+                    : Utils?.getNativeToken?.(chainId),
         })
     }, [chainId, chainIdValid])
     // #endregion
@@ -101,7 +108,7 @@ export function Trader(props: TraderProps) {
             if (!coin?.contract_address) return
             dispatchTradeStore({
                 type,
-                token: createERC20Token(chainId, coin.contract_address, coin.decimals, coin.name, coin.symbol),
+                token: createFungibleToken(chainId, coin.contract_address, coin.decimals, coin.name, coin.symbol),
             })
         },
         [chainId],
@@ -119,8 +126,8 @@ export function Trader(props: TraderProps) {
 
         // if coin be native token and input token also be native token, reset it
         if (
-            isSameAddress(coin.contract_address, NATIVE_TOKEN_ADDRESS) &&
-            inputToken?.type === EthereumTokenType.Native &&
+            isSameAddress(coin.contract_address, nativeToken?.address) &&
+            inputToken?.isNativeToken &&
             coin.symbol === inputToken.symbol
         ) {
             dispatchTradeStore({
@@ -131,14 +138,14 @@ export function Trader(props: TraderProps) {
         if (!outputToken) {
             updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, coin)
         }
-    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, outputToken, currentChainId, targetChainId, updateTradingCoin])
+    }, [coin, nativeToken?.address, inputToken, outputToken, currentChainId, targetChainId, updateTradingCoin])
 
     useEffect(() => {
         if (!defaultInputCoin) return
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
             token: defaultInputCoin.contract_address
-                ? createERC20Token(
+                ? createFungibleToken(
                       chainId,
                       defaultInputCoin.contract_address,
                       defaultInputCoin.decimals,
@@ -157,26 +164,15 @@ export function Trader(props: TraderProps) {
     }, [])
 
     // #region update balance
-    const { value: inputTokenBalance_, loading: loadingInputTokenBalance } = useFungibleTokenBalance(
-        isSameAddress(inputToken?.address, NATIVE_TOKEN_ADDRESS)
-            ? EthereumTokenType.Native
-            : inputToken?.type ?? EthereumTokenType.Native,
-        inputToken?.address ?? '',
-        chainId,
-    )
+    const { value: inputTokenBalance_, loading: loadingInputTokenBalance } = useTokenBalance(inputToken)
 
-    const { value: outputTokenBalance_, loading: loadingOutputTokenBalance } = useFungibleTokenBalance(
-        isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS)
-            ? EthereumTokenType.Native
-            : outputToken?.type ?? EthereumTokenType.Native,
-        outputToken?.address ?? '',
-        chainId,
-    )
+    const { value: outputTokenBalance_, loading: loadingOutputTokenBalance } = useTokenBalance(outputToken)
 
     useEffect(() => {
         if (
             !inputToken ||
-            inputToken.type === EthereumTokenType.Native ||
+            // TODO: why
+            inputToken.isNativeToken ||
             !inputTokenBalance_ ||
             loadingInputTokenBalance
         ) {
@@ -191,7 +187,8 @@ export function Trader(props: TraderProps) {
     useEffect(() => {
         if (
             !outputToken ||
-            outputToken.type === EthereumTokenType.Native ||
+            // TODO: why
+            outputToken.isNativeToken ||
             !outputTokenBalance_ ||
             loadingOutputTokenBalance
         ) {
@@ -220,7 +217,13 @@ export function Trader(props: TraderProps) {
                         panelType === TokenPanelType.Input
                             ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
                             : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                    token: picked,
+                    // TODO: remove convert
+                    token: {
+                        id: `${picked.chainId}_${picked.address}`,
+                        isNativeToken: picked.type === EthereumTokenType.Native,
+                        ...picked,
+                        type: TokenType.Fungible,
+                    } as Web3Plugin.FungibleToken,
                 })
             }
         },
