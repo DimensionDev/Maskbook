@@ -7,6 +7,7 @@ import { PostInspector } from './PostInspector'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
+import { SnapshotIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -63,6 +64,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    ApplicationEntries: [
+        {
+            isInDappList: true,
+            description: 'Display and vote for proposals directly on social media.',
+            name: 'Snapshot',
+            icon: new URL('../assets/snapshot.png', import.meta.url),
+            AppIcon: <SnapshotIcon />,
+        },
+    ],
 }
 
 export default sns

@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
+import { GoogGhostingIcon } from '@masknet/icons'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { PreviewCard } from '../UI/PreviewCard'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -29,6 +30,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    ApplicationEntries: [
+        {
+            isInDappList: true,
+            description: 'Cultivate a weekly saving habit on Twitter.',
+            name: 'GoodGhosting',
+            AppIcon: <GoogGhostingIcon />,
+        },
+    ],
 }
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {

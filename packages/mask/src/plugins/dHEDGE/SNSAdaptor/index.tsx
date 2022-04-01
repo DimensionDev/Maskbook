@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
+import { DHEDGEIcon } from '@masknet/icons'
 import { base } from '../base'
 import { PoolView } from '../UI/PoolView'
 import { InvestDialog } from '../UI/InvestDialog'
@@ -43,6 +44,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection: function Component() {
         return <InvestDialog />
     },
+    ApplicationEntries: [
+        {
+            isInDappList: true,
+            description: 'Decentralized hedge funds on Ethereum and Polygon (Matic).',
+            name: 'dHEDGE',
+            AppIcon: <DHEDGEIcon />,
+        },
+    ],
 }
 
 export default sns

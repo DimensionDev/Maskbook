@@ -3,6 +3,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, Plugin, useChainId, usePluginWrapper } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
+import { GitcoinIcon } from '@masknet/icons'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { PreviewCard } from './PreviewCard'
 import { base } from '../base'
@@ -36,6 +37,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    ApplicationEntries: [
+        {
+            isInDappList: true,
+            description:
+                'Display specific information of Gitcoin projects, donate to a project directly on social media.',
+            name: 'Gitcoin',
+            icon: new URL('../assets/gitcoin.png', import.meta.url),
+            AppIcon: <GitcoinIcon />,
+        },
+    ],
 }
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {

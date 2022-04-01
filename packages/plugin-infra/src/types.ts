@@ -312,11 +312,23 @@ export namespace Plugin.SNSAdaptor {
         /**
          * Render entry component
          */
-        RenderEntryComponent: (props: { disabled: boolean }) => JSX.Element
+        RenderEntryComponent?: (props: { disabled: boolean; icon: URL; AppIcon: JSX.Element }) => JSX.Element
         /**
          * Used to order the applications on the board
          */
-        defaultSortingPriority: number
+        defaultSortingPriority?: number
+
+        AppIcon: JSX.Element
+
+        name: string
+
+        description?: string
+
+        tutorialLink?: string
+        /**
+         * Does the application listed in the DAPP list
+         */
+        isInDappList?: boolean
     }
 
     export interface ProfileIdentity {

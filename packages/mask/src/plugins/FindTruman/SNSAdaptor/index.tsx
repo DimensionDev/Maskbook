@@ -5,6 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
+import { FindTrumanIcon } from '@masknet/icons'
 import { PostInspector } from './PostInspector'
 import { ApplicationEntry } from '@masknet/shared'
 import { FindTrumanDialog } from './FindTrumanDialog'
@@ -88,14 +89,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent({ disabled, AppIcon }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
                         <ApplicationEntry
                             disabled={disabled}
                             title="FindTruman"
-                            icon={new URL('../assets/findtruman.png', import.meta.url).toString()}
+                            AppIcon={AppIcon}
                             onClick={() => setOpen(true)}
                         />
                         <FindTrumanDialog open={open} onClose={() => setOpen(false)} />
@@ -103,6 +104,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 )
             },
             defaultSortingPriority: 11,
+            AppIcon: <FindTrumanIcon />,
+            name: 'FindTruman',
         },
     ],
 }

@@ -8,6 +8,7 @@ import { PreviewCard } from './components/PreviewCard'
 import { Context } from '../hooks/useContext'
 import { ApplicationEntry } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
+import { CrossBridgeIcon, MaskBoxIcon } from '@masknet/icons'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
@@ -30,30 +31,36 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent({ disabled, AppIcon }) {
                 return (
                     <ApplicationEntry
-                        title="Mask Bridge"
+                        title="Cross-chain"
                         disabled={disabled}
-                        icon={new URL('../assets/bridge.png', import.meta.url).toString()}
+                        AppIcon={AppIcon}
                         onClick={() => openWindow('https://bridge.mask.io/#/')}
                     />
                 )
             },
             defaultSortingPriority: 5,
+            AppIcon: <CrossBridgeIcon />,
+            name: 'Cross-chain',
         },
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent({ disabled, AppIcon }) {
                 return (
                     <ApplicationEntry
                         title="MaskBox"
                         disabled={disabled}
-                        icon={new URL('../assets/mask_box.png', import.meta.url).toString()}
+                        AppIcon={AppIcon}
                         onClick={() => openWindow('https://box.mask.io/#/')}
                     />
                 )
             },
             defaultSortingPriority: 6,
+            AppIcon: <MaskBoxIcon />,
+            description: 'Professional multi-chain decentralized platform for launching NFT mystery boxes.',
+            isInDappList: true,
+            name: 'MaskBox',
         },
     ],
 }

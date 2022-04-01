@@ -5,6 +5,7 @@ import { PetDialog } from './PetDialog'
 import { PluginPetMessages } from '../messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationEntry } from '@masknet/shared'
+import { LootManIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -19,19 +20,23 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent({ disabled, AppIcon }) {
                 const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
 
                 return (
                     <ApplicationEntry
                         disabled={disabled}
                         title="Non-F Friends"
-                        icon={new URL('../assets/mintTeam.png', import.meta.url).toString()}
+                        AppIcon={AppIcon}
                         onClick={openDialog}
                     />
                 )
             },
             defaultSortingPriority: 10,
+            AppIcon: <LootManIcon />,
+            description: 'Explore the endless possibilities of NFTs.',
+            name: 'Non-F Friends',
+            isInDappList: true,
         },
     ],
 }

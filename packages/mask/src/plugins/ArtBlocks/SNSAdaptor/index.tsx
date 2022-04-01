@@ -7,6 +7,7 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Collectible } from './Collectible'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import ArtBlocksIcon from './ArtBlocksIcon'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -23,6 +24,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const asset = getAssetInfoFromURL(collectibleUrl)
         return asset ? <Renderer chainId={asset.chain_id} projectId={asset.project_id} /> : null
     },
+    ApplicationEntries: [
+        {
+            isInDappList: true,
+            description:
+                'Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account.',
+            name: 'Artblocks',
+            AppIcon: <ArtBlocksIcon />,
+        },
+    ],
 }
 
 function Renderer(props: React.PropsWithChildren<{ chainId: ChainId; projectId: string }>) {

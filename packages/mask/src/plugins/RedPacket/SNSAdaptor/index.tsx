@@ -94,12 +94,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent({ disabled, AppIcon }) {
                 return (
                     <ApplicationEntry
                         title="Lucky Drop"
                         disabled={disabled}
-                        icon={new URL('./assets/lucky_drop.png', import.meta.url).toString()}
+                        AppIcon={AppIcon}
                         onClick={() =>
                             CrossIsolationMessages.events.requestComposition.sendToLocal({
                                 reason: 'timeline',
@@ -113,6 +113,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 )
             },
             defaultSortingPriority: 1,
+            AppIcon: <RedPacketIcon />,
+            description: 'Gift crypto or NFTs to any users, first come, first served.',
+            name: 'Lucky Drop',
+            isInDappList: true,
         },
     ],
 }

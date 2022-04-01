@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { createMatchLink, DHEDGE_PLUGIN_ID } from './constants'
-import { DHEDGEIcon } from '../../resources/DHEDGEIcon'
+import { DHEDGEIcon } from '@masknet/icons'
 
 export const base: Plugin.Shared.Definition = {
     ID: DHEDGE_PLUGIN_ID,

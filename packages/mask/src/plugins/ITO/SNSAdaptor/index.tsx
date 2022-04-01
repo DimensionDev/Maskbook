@@ -16,7 +16,7 @@ import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-unified'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { MarketsIcon } from '@masknet/icons'
+import { MarketsIcon, MarketsClaimIcon } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ClaimAllDialog } from './ClaimAllDialog'
@@ -63,12 +63,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent({ disabled, AppIcon }) {
                 return (
                     <ApplicationEntry
                         disabled={disabled}
                         title="ITO"
-                        icon={new URL('../assets/token.png', import.meta.url).toString()}
+                        AppIcon={AppIcon}
                         onClick={() =>
                             CrossIsolationMessages.events.requestComposition.sendToLocal({
                                 reason: 'timeline',
@@ -82,16 +82,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 )
             },
             defaultSortingPriority: 3,
+            AppIcon: <MarketsIcon />,
+            description: 'Launch decentralized asset freely and participate in token launch directly on Twitter.',
+            isInDappList: true,
+            name: 'ITO',
         },
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent({ disabled, AppIcon }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
                         <ApplicationEntry
                             title="Claim"
+                            AppIcon={AppIcon}
                             disabled={disabled}
-                            icon={new URL('../assets/gift.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}
                         />
                         <ClaimAllDialog open={open} onClose={() => setOpen(false)} />
@@ -99,6 +103,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 )
             },
             defaultSortingPriority: 4,
+            AppIcon: <MarketsClaimIcon />,
+            name: 'Claim',
         },
     ],
 }

@@ -7,6 +7,7 @@ import { PLUGIN_ID } from '../constants'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { NFTPage } from './NFTPage'
 import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
+import { CollectiblesIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -63,6 +64,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     return !!addressNames?.length
                 },
             },
+        },
+    ],
+    ApplicationEntries: [
+        {
+            isInDappList: true,
+            description:
+                'Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media.',
+            name: 'Collectibles',
+            AppIcon: <CollectiblesIcon />,
         },
     ],
 }

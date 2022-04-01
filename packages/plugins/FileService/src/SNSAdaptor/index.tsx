@@ -36,12 +36,12 @@ const definition: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent({ disabled, AppIcon }) {
                 return (
                     <ApplicationEntry
                         title="File Service"
                         disabled={disabled}
-                        icon={new URL('./files.png', import.meta.url).toString()}
+                        AppIcon={AppIcon}
                         onClick={() =>
                             CrossIsolationMessages.events.requestComposition.sendToLocal({
                                 reason: 'timeline',
@@ -55,6 +55,11 @@ const definition: Plugin.SNSAdaptor.Definition = {
                 )
             },
             defaultSortingPriority: 2,
+            AppIcon: <FileServiceIcon />,
+            isInDappList: true,
+            description:
+                'Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network.',
+            name: 'File Service',
         },
     ],
 }

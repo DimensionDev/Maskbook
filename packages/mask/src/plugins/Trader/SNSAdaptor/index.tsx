@@ -6,6 +6,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TagInspector } from './trending/TagInspector'
 import { enhanceTag } from './cashTag'
 import { ApplicationEntry } from '@masknet/shared'
+import { SwapIcon } from '@masknet/icons'
 import { PluginTraderMessages } from '../messages'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -23,19 +24,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
     enhanceTag,
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent({ disabled, AppIcon }) {
                 const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
-                return (
-                    <ApplicationEntry
-                        disabled={disabled}
-                        title="Swap"
-                        icon={new URL('../assets/swap.png', import.meta.url).toString()}
-                        onClick={openDialog}
-                    />
-                )
+                return <ApplicationEntry disabled={disabled} title="Swap" AppIcon={AppIcon} onClick={openDialog} />
             },
             defaultSortingPriority: 8,
+            AppIcon: <SwapIcon />,
+            isInDappList: true,
+            name: 'Swap',
+            description:
+                'Pop-up trading widget that allows you to instantly view prices of the hottest Crypto/Stock and trade. Can also invest in the best performing managers.',
         },
     ],
 }

@@ -18,6 +18,7 @@ import {
     TransakIcon,
     ValuablesIcon,
     CyberConnectIcon,
+    DHEDGEIcon,
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
@@ -28,7 +29,6 @@ import { TUTORIAL_URLS_EN } from './constants'
 import { ContentContainer } from '../../components/ContentContainer'
 import { WalletStateBar } from '../Wallets/components/WalletStateBar'
 import { PoolTogetherURL } from '../../assets'
-import { DHEDGEIcon } from '../../../../mask/src/resources/DHEDGEIcon'
 import TutorialDialog from './components/TutorialDialog'
 import { PluginId } from '@masknet/plugin-infra'
 import ArtBlocksIcon from '../../../../mask/src/plugins/ArtBlocks/SNSAdaptor/ArtBlocksIcon'

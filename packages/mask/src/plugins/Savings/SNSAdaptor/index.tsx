@@ -1,5 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
+import { SavingsIcon } from '@masknet/icons'
 import { useState } from 'react'
 import { base } from '../base'
 import { SavingsDialog } from './SavingsDialog'
@@ -9,14 +10,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent({ disabled, AppIcon }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
                         <ApplicationEntry
                             disabled={disabled}
                             title="Savings"
-                            icon={new URL('./assets/savings.png', import.meta.url).toString()}
+                            AppIcon={AppIcon}
                             onClick={() => setOpen(true)}
                         />
                         <SavingsDialog open={open} onClose={() => setOpen(false)} />
@@ -24,6 +25,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 )
             },
             defaultSortingPriority: 7,
+            AppIcon: <SavingsIcon />,
+            name: 'Savings',
         },
     ],
 }

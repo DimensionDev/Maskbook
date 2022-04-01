@@ -4,6 +4,7 @@ import { BuyTokenDialog } from './BuyTokenDialog'
 import { PluginTransakMessages } from '../messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationEntry } from '@masknet/shared'
+import { TransakIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -13,19 +14,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent({ disabled, AppIcon }) {
                 const { openDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
                 return (
-                    <ApplicationEntry
-                        title="Fiat On-Ramp"
-                        disabled={disabled}
-                        icon={new URL('../assets/fiat_ramp.png', import.meta.url).toString()}
-                        onClick={openDialog}
-                    />
+                    <ApplicationEntry title="Fiat On-Ramp" AppIcon={AppIcon} disabled={disabled} onClick={openDialog} />
                 )
             },
             defaultSortingPriority: 9,
+            AppIcon: <TransakIcon />,
+            description: 'Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support.',
+            name: 'Fiat On-Ramp',
+            isInDappList: true,
         },
     ],
 }

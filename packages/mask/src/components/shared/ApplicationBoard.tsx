@@ -2,8 +2,7 @@ import { Fragment, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography, useTheme } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { useActivatedPluginsSNSAdaptor, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
-import type { Plugin } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor, useCurrentWeb3NetworkPluginID, Plugin, useAccount } from '@masknet/plugin-infra'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
@@ -51,10 +50,11 @@ export function ApplicationBoard() {
     const { classes } = useStyles()
     const theme = useTheme()
     const { t } = useI18N()
-    const [openSettings, setOpenSettings] = useState(true)
+    const [openSettings, setOpenSettings] = useState(false)
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId()
+    const account = useAccount()
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
     const SettingIconDarkModeUrl = new URL('./assets/settings_dark_mode.png', import.meta.url).toString()
     const SettingIconLightModeUrl = new URL('./assets/settings_light_mode.png', import.meta.url).toString()
@@ -81,6 +81,8 @@ export function ApplicationBoard() {
                                     currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
                             )
 
+                            const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
+
                             const currentSNSIsSupportedNetwork =
                                 cur.enableRequirement.networks.networks[currentSNSNetwork]
                             const isSNSEnabled =
@@ -90,7 +92,7 @@ export function ApplicationBoard() {
                                 cur.ApplicationEntries.map((x) => {
                                     return {
                                         entry: x,
-                                        enabled: isWeb3Enabled && isSNSEnabled,
+                                        enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
                                         pluginId: cur.ID,
                                     }
                                 }) ?? [],
@@ -98,11 +100,13 @@ export function ApplicationBoard() {
                         },
                         [],
                     )
-                    .sort((a, b) => a.entry.defaultSortingPriority - b.entry.defaultSortingPriority)
+                    .sort((a, b) => (a.entry.defaultSortingPriority ?? 0) - (b.entry.defaultSortingPriority ?? 0))
+                    .filter((x) => Boolean(x.entry.RenderEntryComponent))
                     .map((X, i) => {
+                        const RenderEntryComponent = X.entry.RenderEntryComponent!
                         return (
                             <Fragment key={i + X.pluginId}>
-                                <X.entry.RenderEntryComponent disabled={!X.enabled} />
+                                <RenderEntryComponent disabled={!X.enabled} AppIcon={X.entry.AppIcon} />
                             </Fragment>
                         )
                     })}
