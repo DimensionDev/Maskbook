@@ -1,3 +1,5 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
 import { memo } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -5,7 +7,7 @@ import { useEnterDashboard } from '../../hook/useEnterDashboard'
 import { useMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { MasksIcon, MaskWalletIcon } from '@masknet/icons'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles()({
     container: {

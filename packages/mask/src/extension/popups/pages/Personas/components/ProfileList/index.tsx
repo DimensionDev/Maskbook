@@ -11,7 +11,6 @@ import { DisconnectDialog } from '../DisconnectDialog'
 const useStyles = makeStyles()({
     list: {
         padding: '0 0 70px 0',
-        height: 487,
         overflow: 'auto',
     },
     item: {
@@ -136,7 +135,7 @@ export const ProfileList = memo((props: ProfileListProps) => {
     )
 })
 
-interface MergedProfileInformation extends ProfileInformation {
+export interface MergedProfileInformation extends ProfileInformation {
     is_valid?: boolean
     identity?: string
     platform?: NextIDPlatform

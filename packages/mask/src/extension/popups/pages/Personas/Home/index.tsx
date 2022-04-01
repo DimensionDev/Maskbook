@@ -126,7 +126,6 @@ const PersonaHome = memo(() => {
             SOCIAL_MEDIA_ICON_MAPPING={SOCIAL_MEDIA_ICON_MAPPING}
             definedSocialNetworks={definedSocialNetworks}
             currentPersona={currentPersona}
-            navigate={navigate}
             personas={personas}
             onDeletePersona={setDeletingPersona}
             onChangeCurrentPersona={onChangeCurrentPersona}

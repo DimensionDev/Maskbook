@@ -10,6 +10,7 @@ import { PopupFrame } from './components/PopupFrame'
 import { Appearance } from '@masknet/theme'
 import { MaskUIRoot } from '../../UIRoot'
 import { useThemeLanguage } from '../../utils'
+import { useMyPersonas } from '../../components/DataSource/useMyPersonas'
 
 function useAlwaysLightTheme() {
     return useClassicMaskFullPageTheme(Appearance.light, useThemeLanguage())
@@ -24,13 +25,14 @@ const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermis
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
 export default function Popups() {
+    const personaLength = useMyPersonas().length
     return (
         <MaskUIRoot useTheme={useAlwaysLightTheme} kind="page">
             <Web3Provider value={PopupWeb3Context}>
                 <HashRouter>
                     <Routes>
-                        <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />
-                        <Route path={PopupRoutes.Wallet + '/*'} element={frame(<Wallet />)} />
+                        <Route path={PopupRoutes.Personas + '/*'} element={frame(personaLength, <Personas />)} />
+                        <Route path={PopupRoutes.Wallet + '/*'} element={frame(personaLength, <Wallet />)} />
                         <Route path={PopupRoutes.Swap} element={<SwapPage />} />
                         <Route path={PopupRoutes.RequestPermission} element={<RequestPermissionPage />} />
                         <Route path={PopupRoutes.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
@@ -48,6 +50,6 @@ export default function Popups() {
     )
 }
 
-function frame(x: React.ReactNode) {
-    return <PopupFrame children={x} />
+function frame(personaLength: number, x: React.ReactNode) {
+    return <PopupFrame personaLength={personaLength} children={x} />
 }

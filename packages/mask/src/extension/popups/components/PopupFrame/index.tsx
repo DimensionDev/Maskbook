@@ -1,12 +1,13 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
 import { memo } from 'react'
 import { NavLink, useNavigate, useLocation, useMatch } from 'react-router-dom'
 import { Box, GlobalStyles, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { InitialPlaceholder } from '../InitialPlaceholder'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 
 function GlobalCss() {
     return (
@@ -68,14 +69,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PopupFrameProps extends React.PropsWithChildren<{}> {}
+export interface PopupFrameProps extends React.PropsWithChildren<{}> {
+    personaLength: number
+}
 
 export const PopupFrame = memo<PopupFrameProps>((props) => {
     const { t } = useI18N()
     const navigate = useNavigate()
     const { classes, cx } = useStyles()
     const location = useLocation()
-    const personas = useMyPersonas()
 
     const excludePath = [
         useMatch(PopupRoutes.Wallet),
@@ -129,7 +131,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                     </Box>
                 </Box>
                 <Box className={classes.container}>
-                    {personas.length === 0 && !matchRecovery ? <InitialPlaceholder /> : props.children}
+                    {props.personaLength === 0 && !matchRecovery ? <InitialPlaceholder /> : props.children}
                 </Box>
             </Paper>
         </>

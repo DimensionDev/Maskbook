@@ -17,7 +17,7 @@ import { EnterDashboard } from '../../../components/EnterDashboard'
 import { PersonaListUI } from '../components/PersonaList'
 import { useI18N } from '../../../../../utils/i18n-next-ui'
 import urlcat from 'urlcat'
-import type { NavigateFunction } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()({
     content: {
@@ -96,14 +96,14 @@ const useStyles = makeStyles()({
 })
 
 export interface PersonaHomeUIProps extends ProfileListProps {
-    navigate: NavigateFunction
     currentPersona: PersonaInformation | undefined
     personas: PersonaInformation[] | undefined
     onChangeCurrentPersona: (identifier: ECKeyIdentifier) => void
     onDeletePersona: (persona: PersonaInformation | undefined) => void
 }
 export const PersonaHomeUI = memo((props: PersonaHomeUIProps) => {
-    const { navigate, currentPersona, personas, onDeletePersona, onChangeCurrentPersona } = props
+    const navigate = useNavigate()
+    const { currentPersona, personas, onDeletePersona, onChangeCurrentPersona } = props
 
     const { t } = useI18N()
     const { classes, cx } = useStyles()
