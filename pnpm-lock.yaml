@@ -14174,6 +14174,20 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /crypto-ts/1.0.2:
+    resolution: {integrity: sha1-wq5HtC8aiv/PM73b4yg5gxUMigU=}
+    peerDependencies:
+      '@angular/common': '>= 5.0.0'
+      '@angular/core': '>= 5.0.0'
+    dependencies:
+      tslib: 1.14.1
+    dev: false
+
+  /crypto/1.0.1:
+    resolution: {integrity: sha512-VxBKmeNcqQdiUQUW2Tzq0t377b54N2bMtXO/qiLa+6eRRmmC4qT3D4OnTGoT/U6O9aklQ/jTwbOtRMTTY8G0Ig==}
+    deprecated: This package is no longer supported. It's now a built-in Node module. If you've depended on crypto, you should switch to the one that's built-in.
+    dev: false
+
   /cspell-gitignore/5.19.3:
     resolution: {integrity: sha512-Q67uHcf0qNgOoanRLhatapjWpLiftT+MuLIyAaSLe5eNVzQurQIc+UnXhtaslkVyOTqQt4NJFqLgtf5ZSGz1bg==}
     engines: {node: '>=12.13.0'}
