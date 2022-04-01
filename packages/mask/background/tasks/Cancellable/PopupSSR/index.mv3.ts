@@ -5,5 +5,10 @@ export default async function PopupSSR(signal: AbortSignal) {
 
 function f(message: any) {
     if (!(message.type === 'popups-ssr')) return
-    return import('./worker').then((x) => x.main())
+    return (async () => {
+        const x = import('./worker')
+        const y = import('./prepare-data').then((f) => f.prepareSSR())
+        const [{ main }, data] = await Promise.all([x, y])
+        return main(data)
+    })()
 }
