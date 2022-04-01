@@ -2,7 +2,7 @@ import type { Web3Plugin } from '@masknet/plugin-infra'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { formatNFT_TokenId, useChainId } from '@masknet/web3-shared-evm'
-import { Checkbox, List, ListItem, Radio, Tooltip } from '@mui/material'
+import { Checkbox, List, ListItem, Radio } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
@@ -10,7 +10,7 @@ import { FC, useCallback } from 'react'
 interface Props {
     selectedIds: string[]
     tokens: Web3Plugin.NonFungibleToken[]
-    onChange?: (ids: string[]) => void
+    onChange?: (id: string, contractAddress: string) => void
     limit?: number
     className: string
 }
@@ -44,16 +44,29 @@ const useStyles = makeStyles()((theme) => ({
         opacity: 0.5,
         cursor: 'not-allowed',
     },
+    selected: {
+        position: 'relative',
+        '&::after': {
+            position: 'absolute',
+            border: `2px solid ${theme.palette.primary.main}`,
+            content: '""',
+            left: 0,
+            top: 0,
+            pointerEvents: 'none',
+            boxSizing: 'border-box',
+            width: '100%',
+            height: '100%',
+            borderRadius: 8,
+        },
+    },
+    unselected: {
+        opacity: 0.5,
+    },
     loadingFailImage: {
         width: 64,
         height: 64,
     },
 }))
-
-function arrayRemove<T>(arr: T[], item: T): T[] {
-    const idx = arr.indexOf(item)
-    return arr.splice(idx, 1)
-}
 
 interface NFTItemProps {
     token: Web3Plugin.NonFungibleToken
@@ -82,16 +95,8 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, onChange, limit = 1, c
     const reachedLimit = selectedIds.length >= limit
 
     const toggleItem = useCallback(
-        (currentId: string) => {
-            if (!onChange) return
-            if (isRadio) return onChange([currentId])
-            let newIds = [...selectedIds]
-            if (selectedIds.includes(currentId)) {
-                arrayRemove(newIds, currentId)
-            } else if (!reachedLimit) {
-                newIds = [...selectedIds, currentId]
-            }
-            onChange(newIds)
+        (currentId: string, contractAddress: string) => {
+            onChange?.(currentId, contractAddress)
         },
         [selectedIds, onChange, isRadio, reachedLimit],
     )
@@ -105,17 +110,19 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, onChange, limit = 1, c
                 return (
                     <ShadowRootTooltip
                         key={token.tokenId}
-                        title={formatNFT_TokenId(token.tokenId, 2)}
+                        title={`${token.contract?.name} #${formatNFT_TokenId(token.tokenId, 2)}`}
                         placement="top"
                         arrow>
                         <ListItem
                             key={token.tokenId}
                             className={classnames(classes.nftItem, {
                                 [classes.disabled]: disabled,
+                                [classes.selected]: selectedIds.includes(token.tokenId),
+                                [classes.unselected]: selectedIds.length > 0 && !selectedIds.includes(token.tokenId),
                             })}
                             onClick={() => {
-                                if (disabled) return
-                                toggleItem(token.tokenId)
+                                if (disabled || !token.contract?.address) return
+                                toggleItem(token.tokenId, token.contract.address)
                             }}>
                             <NFTItem token={token} />
                             <SelectComponent
@@ -123,8 +130,8 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, onChange, limit = 1, c
                                 onChange={noop}
                                 disabled={disabled}
                                 onClick={() => {
-                                    if (disabled) return
-                                    toggleItem(token.tokenId)
+                                    if (disabled || !token.contract?.address) return
+                                    toggleItem(token.tokenId, token.contract.address)
                                 }}
                                 className={classes.checkbox}
                                 checked={selectedIds.includes(token.tokenId)}

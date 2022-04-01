@@ -3,10 +3,11 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { usePickToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { EthereumTokenType, useAccount, useChainId, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumTokenType, useAccount, useChainId, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import {
     Box,
     BoxProps,
+    Button,
     FormControl,
     FormControlLabel,
     MenuItem,
@@ -59,15 +60,25 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 24,
             height: 'auto',
         },
+        controls: {
+            marginTop: theme.spacing(1),
+            display: 'flex',
+            flexDirection: 'row',
+        },
+        addButton: {
+            marginLeft: 'auto',
+        },
         tokenField: {
             marginTop: theme.spacing(2),
         },
     }
 })
 
-interface Props extends BoxProps {}
+interface Props extends BoxProps {
+    onAddToken?(): void
+}
 
-export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
+export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
     const t = useI18N()
     const currentChainId = useChainId()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
@@ -113,6 +124,10 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
     // #endregion
 
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
+    const enabledNft =
+        !isSending &&
+        chainId === currentChainId &&
+        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].includes(currentChainId)
 
     return (
         <Box className={classnames(classes.root, className)} {...rest}>
@@ -145,7 +160,7 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                         ))}
                     </Select>
                 </FormControl>
-                <FormControl>
+                <FormControl className={classes.controls}>
                     <RadioGroup row value={tipType} onChange={(e) => setTipType(e.target.value as TipType)}>
                         <FormControlLabel
                             disabled={isSending}
@@ -154,12 +169,17 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                             label={t.tip_type_token()}
                         />
                         <FormControlLabel
-                            disabled={isSending || chainId !== currentChainId}
+                            disabled={!enabledNft}
                             value={TipType.NFT}
                             control={<Radio />}
                             label={t.tip_type_nft()}
                         />
                     </RadioGroup>
+                    {tipType === TipType.NFT ? (
+                        <Button variant="text" className={classes.addButton} onClick={onAddToken}>
+                            {t.tip_add_collectibles()}
+                        </Button>
+                    ) : null}
                 </FormControl>
                 {tipType === TipType.Token ? (
                     <FormControl className={classes.tokenField}>
