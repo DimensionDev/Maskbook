@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { Web3Provider } from '@masknet/web3-shared-evm'
-import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material'
+import { StyledEngineProvider, Theme } from '@mui/material'
 import { NetworkPluginID, PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef } from '@masknet/shared-base-ui'
@@ -57,10 +57,9 @@ export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
                 useMaskIconPalette={useMaskIconPalette}
                 CustomSnackbarOffsetY={isFacebook(activatedSocialNetworkUI) ? 80 : undefined}
                 useTheme={useTheme}
-                baseline={kind === 'page'}>
-                <CssBaseline />
-                {jsx}
-            </MaskThemeProvider>
+                baseline={kind === 'page'}
+                children={jsx}
+            />
         ),
         (jsx) => <SharedContextProvider>{jsx}</SharedContextProvider>,
     )

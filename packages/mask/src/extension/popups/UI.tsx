@@ -1,4 +1,4 @@
-import { lazy } from 'react'
+import { lazy, useEffect, useState } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -26,6 +26,9 @@ const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x)
 
 export default function Popups() {
     const personaLength = useMyPersonas().length
+    const [client, setClient] = useState(false)
+    useEffect(() => setClient(true), [])
+
     return (
         <MaskUIRoot useTheme={useAlwaysLightTheme} kind="page">
             <Web3Provider value={PopupWeb3Context}>
@@ -43,7 +46,7 @@ export default function Popups() {
                         <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
                     </Routes>
                     {/* TODO: Should only load plugins when the page is plugin-aware. */}
-                    <PluginRender />
+                    {client ? <PluginRender /> : null}
                 </HashRouter>
             </Web3Provider>
         </MaskUIRoot>

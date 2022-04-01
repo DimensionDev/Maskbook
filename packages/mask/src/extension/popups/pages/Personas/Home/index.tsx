@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { PersonaContext } from '../hooks/usePersonaContext'
+import { initData, PersonaContext } from '../hooks/usePersonaContext'
 import { useNavigate } from 'react-router-dom'
 import { PersonaHomeUI } from './UI'
 import {
@@ -57,7 +57,7 @@ const PersonaHome = memo(() => {
         [currentPersona],
     )
 
-    const { value: profilesWithNextID, retry: refreshProfileList } = useAsyncRetry(
+    const { value: profilesWithNextID = initData.profiles, retry: refreshProfileList } = useAsyncRetry(
         Services.Identity.queryOwnedProfileInformationWithNextID,
         [currentPersona],
     )

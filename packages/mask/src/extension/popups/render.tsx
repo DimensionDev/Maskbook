@@ -1,12 +1,39 @@
 import { startPluginDashboard } from '@masknet/plugin-infra'
-import { createNormalReactRoot } from '../../utils'
+import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils'
 import { createPluginHost } from '../../plugin-infra/host'
 import { Services } from '../service'
 import { status } from '../../setup.ui'
 import Popups from './UI'
 import { InMemoryStorages, PersistentStorages } from '../../../shared/kv-storage'
+import createCache from '@emotion/cache'
+import { CacheProvider } from '@emotion/react'
+import { TssCacheProvider } from '@masknet/theme'
+import { initData } from './pages/Personas/hooks/usePersonaContext'
 
-status.then(() => createNormalReactRoot(<Popups />))
+if (location.hash === '' || location.hash === '#/personas') {
+    async function hydrate() {
+        await Promise.all([
+            Services.Identity.queryCurrentPersona().then((x) => (initData.currentIdentifier = x?.toText())),
+            Services.Identity.queryOwnedPersonaInformation().then((x) => (initData.personas = x)),
+            Services.Identity.queryOwnedProfileInformationWithNextID().then((x) => (initData.profiles = x)),
+            status,
+        ])
+
+        const muiCache = createCache({ key: 'css' })
+        const tssCache = createCache({ key: 'tss' })
+        hydrateNormalReactRoot(
+            <CacheProvider value={muiCache}>
+                <TssCacheProvider value={tssCache}>
+                    <Popups />
+                </TssCacheProvider>
+            </CacheProvider>,
+        )
+        console.timeEnd('[SSR] Hydrate')
+    }
+    hydrate()
+} else {
+    status.then(() => createNormalReactRoot(<Popups />))
+}
 
 // TODO: Should only load plugins when the page is plugin-aware.
 startPluginDashboard(
