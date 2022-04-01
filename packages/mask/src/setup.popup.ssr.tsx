@@ -22,6 +22,7 @@ import {
 import type { PopupSSR_Props } from '../background/tasks/Cancellable/PopupSSR/type'
 
 export function render(props: PopupSSR_Props) {
+    console.log('render with props', props)
     const muiCache = createCache({ key: 'mui' })
     const tssCache = createCache({ key: 'tss' })
     const tssServer = createEmotionServer(tssCache)
@@ -61,15 +62,14 @@ function useAlwaysLightTheme() {
     return useClassicMaskFullPageTheme(Appearance.light, [enUS, false])
 }
 function PopupSSR(props: PopupSSR_Props) {
-    const currentPersona =
-        props.personas && props.currentPersonaIndex ? props.personas[props.currentPersonaIndex] : void 0
+    const currentPersona = props.personas?.find((x) => x.identifier.equals(props.currentPersona))
     return (
         <StaticRouter location={PopupRoutes.Personas}>
             <ThemeProvider theme={useAlwaysLightTheme}>
-                <PopupFrame personaLength={0}>
+                <PopupFrame personaLength={props.personas?.length || 0}>
                     <PersonaHomeUI
                         personas={props.personas}
-                        mergedProfiles={props.mergedProfiles}
+                        profilesWithNextID={props.profilesWithNextID}
                         currentPersona={currentPersona}
                         confirmLoading={false}
                         SOCIAL_MEDIA_ICON_MAPPING={SOCIAL_MEDIA_ICON_MAPPING}

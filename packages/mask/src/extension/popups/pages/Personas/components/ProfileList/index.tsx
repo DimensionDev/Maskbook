@@ -7,6 +7,7 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../../utils/i18n-next-ui'
 import { GrayMasks } from '@masknet/icons'
 import { DisconnectDialog } from '../DisconnectDialog'
+import type { ProfileInformationWithNextID } from '../../../../../background-script/IdentityService'
 
 const useStyles = makeStyles()({
     list: {
@@ -112,7 +113,7 @@ export const ProfileList = memo((props: ProfileListProps) => {
         <>
             <ProfileListUI
                 definedSocialNetworks={props.definedSocialNetworks}
-                mergedProfiles={props.mergedProfiles}
+                profilesWithNextID={props.profilesWithNextID}
                 onConnectNextID={props.onConnectNextID}
                 onConnectProfile={props.onConnectProfile}
                 onDisconnect={onDisconnect}
@@ -146,7 +147,7 @@ interface ProfileListUIProps {
     onConnectNextID(profile: ProfileIdentifier): void
     onDisconnect(identifier: ProfileIdentifier, is_valid?: boolean, platform?: NextIDPlatform, identity?: string): void
     openProfilePage(profile: ProfileIdentifier): void
-    mergedProfiles: MergedProfileInformation[]
+    profilesWithNextID: ProfileInformationWithNextID[]
     definedSocialNetworks: string[]
     SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode>
 }
@@ -154,7 +155,7 @@ interface ProfileListUIProps {
 const ProfileListUI = memo((props: ProfileListUIProps) => {
     const {
         definedSocialNetworks,
-        mergedProfiles: profiles,
+        profilesWithNextID: profiles,
         onConnectProfile,
         onConnectNextID,
         onDisconnect,

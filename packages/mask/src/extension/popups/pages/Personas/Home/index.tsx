@@ -57,27 +57,10 @@ const PersonaHome = memo(() => {
         [currentPersona],
     )
 
-    const { value: mergedProfiles, retry: refreshProfileList } = useAsyncRetry(async () => {
-        if (!currentPersona) return []
-        if (!currentPersona.publicHexKey) return currentPersona.linkedProfiles
-        const response = await NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey)
-        if (!response) return currentPersona.linkedProfiles
-
-        return currentPersona.linkedProfiles.map((profile) => {
-            const target = response.proofs.find(
-                (x) =>
-                    profile.identifier.userId.toLowerCase() === x.identity.toLowerCase() &&
-                    profile.identifier.network.replace('.com', '') === x.platform,
-            )
-
-            return {
-                ...profile,
-                platform: target?.platform,
-                identity: target?.identity,
-                is_valid: target?.is_valid,
-            }
-        })
-    }, [currentPersona])
+    const { value: profilesWithNextID, retry: refreshProfileList } = useAsyncRetry(
+        Services.Identity.queryOwnedProfileInformationWithNextID,
+        [currentPersona],
+    )
 
     const [{ loading: confirmLoading }, onConfirmDisconnect] = useAsyncFn(
         async (unbind: UnbindStatus) => {
@@ -121,7 +104,7 @@ const PersonaHome = memo(() => {
             onConnectNextID={onConnectNextID}
             onConnectProfile={onConnectProfile}
             onDisconnectProfile={Services.Identity.detachProfile}
-            mergedProfiles={mergedProfiles ?? EMPTY_LIST}
+            profilesWithNextID={profilesWithNextID ?? EMPTY_LIST}
             openProfilePage={Services.SocialNetwork.openProfilePage}
             SOCIAL_MEDIA_ICON_MAPPING={SOCIAL_MEDIA_ICON_MAPPING}
             definedSocialNetworks={definedSocialNetworks}

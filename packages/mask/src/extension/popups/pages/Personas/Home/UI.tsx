@@ -157,7 +157,7 @@ export const PersonaHomeUI = memo((props: PersonaHomeUIProps) => {
                         onConfirmDisconnect={props.onConfirmDisconnect}
                         onDisconnectProfile={props.onDisconnectProfile}
                         openProfilePage={props.openProfilePage}
-                        mergedProfiles={props.mergedProfiles}
+                        profilesWithNextID={props.profilesWithNextID}
                         definedSocialNetworks={props.definedSocialNetworks}
                         SOCIAL_MEDIA_ICON_MAPPING={props.SOCIAL_MEDIA_ICON_MAPPING}
                     />

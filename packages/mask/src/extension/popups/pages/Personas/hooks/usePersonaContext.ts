@@ -12,7 +12,7 @@ function usePersonaContext() {
     const [deletingPersona, setDeletingPersona] = useState<PersonaInformation>()
 
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
-    const { value: personas, retry } = useAsyncRetry(async () => Services.Identity.queryOwnedPersonaInformation())
+    const { value: personas, retry } = useAsyncRetry(Services.Identity.queryOwnedPersonaInformation)
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(retry)
     }, [retry])

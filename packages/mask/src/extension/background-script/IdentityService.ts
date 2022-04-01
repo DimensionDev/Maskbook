@@ -19,8 +19,6 @@ import {
     ProfileIdentifier,
     ECKeyIdentifierFromJsonWebKey,
     EC_JsonWebKey,
-    PersonaInformation,
-    ProfileInformation,
     PostIVIdentifier,
     RelationFavor,
     NextIDAction,
@@ -160,25 +158,6 @@ export async function queryLastPersonaCreated() {
     return first(orderBy(all, (x) => x.createdAt, 'desc'))
 }
 
-export async function queryOwnedPersonaInformation(): Promise<PersonaInformation[]> {
-    const personas = await queryPersonas(undefined, true)
-    const result: PersonaInformation[] = []
-    for (const persona of personas.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))) {
-        const map: ProfileInformation[] = []
-        result.push({
-            nickname: persona.nickname,
-            identifier: persona.identifier,
-            linkedProfiles: map,
-            publicHexKey: persona.publicHexKey,
-        })
-        for (const [profile] of persona.linkedProfiles) {
-            const linkedProfile = await queryProfile(profile)
-
-            map.push({ identifier: profile, nickname: linkedProfile.nickname, avatar: linkedProfile.avatar })
-        }
-    }
-    return result
-}
 export async function restoreFromObject(object: null | BackupJSONFileLatest): Promise<Persona | null> {
     if (!object) return null
     await restoreBackup(object)

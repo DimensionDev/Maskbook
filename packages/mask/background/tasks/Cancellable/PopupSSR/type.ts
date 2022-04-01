@@ -1,13 +1,8 @@
-import type { NextIDPlatform, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
+import type { PersonaIdentifier, PersonaInformation } from '@masknet/shared-base'
+import type { ProfileInformationWithNextID } from '../../../services/identity/profile/query'
 
 export interface PopupSSR_Props {
     personas: PersonaInformation[] | undefined
-    currentPersonaIndex: number | undefined
-    mergedProfiles: MergedProfileInformation[]
-}
-
-export interface MergedProfileInformation extends ProfileInformation {
-    is_valid?: boolean
-    identity?: string
-    platform?: NextIDPlatform
+    currentPersona: PersonaIdentifier | undefined
+    profilesWithNextID: ProfileInformationWithNextID[]
 }
