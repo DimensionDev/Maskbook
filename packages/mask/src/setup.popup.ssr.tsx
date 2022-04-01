@@ -1,5 +1,5 @@
 import { i18NextInstance, EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
-import { noop } from 'lodash-unified'
+import { noop, once } from 'lodash-unified'
 import { Appearance, TssCacheProvider } from '@masknet/theme'
 import { ThemeProvider, CacheProvider } from '@emotion/react'
 import { enUS } from '@mui/material/locale'
@@ -21,8 +21,14 @@ import {
 } from '@masknet/icons'
 import type { PopupSSR_Props } from '../background/tasks/Cancellable/PopupSSR/type'
 
-export function render(props: PopupSSR_Props) {
-    console.log('render with props', props)
+const init = once(() =>
+    i18NextInstance.init().then(() => {
+        addMaskI18N(i18NextInstance)
+        initReactI18next.init(i18NextInstance)
+    }),
+)
+export async function render(props: PopupSSR_Props) {
+    await init()
     const muiCache = createCache({ key: 'mui' })
     const tssCache = createCache({ key: 'tss' })
     const tssServer = createEmotionServer(tssCache)
@@ -39,9 +45,6 @@ export function render(props: PopupSSR_Props) {
     const tssCSS = tssServer.constructStyleTagsFromChunks(tssServer.extractCriticalToChunks(html))
     return { html, css: muiCSS + tssCSS }
 }
-
-initReactI18next.init(i18NextInstance)
-addMaskI18N(i18NextInstance)
 
 const SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode> = {
     [EnhanceableSite.Twitter]: <TwitterColoredIcon />,
