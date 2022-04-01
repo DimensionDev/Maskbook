@@ -1,6 +1,6 @@
 import { Box, Button, DialogContent, DialogActions, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { ERC20TokenDetailed, formatBalance, useERC20TokenBalance } from '@masknet/web3-shared-evm'
 import type { GoodGhostingInfo } from '../types'

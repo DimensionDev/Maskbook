@@ -1,6 +1,6 @@
 import { NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { queryExistedBindingByPersona, queryIsBound } from '@masknet/web3-providers'
+import { NextIDProof } from '@masknet/web3-providers'
 import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
@@ -84,7 +84,11 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
 
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
         if (!currentPersona?.publicHexKey) return
-        return queryIsBound(currentPersona.publicHexKey, platform, visitingPersonaIdentifier.identifier.userId)
+        return NextIDProof.queryIsBound(
+            currentPersona.publicHexKey,
+            platform,
+            visitingPersonaIdentifier.identifier.userId,
+        )
     }, [isOwn, currentPersona, visitingPersonaIdentifier, isVerified])
 
     const {
@@ -93,7 +97,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
         retry: retryQueryBinding,
     } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return queryExistedBindingByPersona(currentPersona.publicHexKey!)
+        return NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey!)
     }, [currentPersona, isOwn])
 
     const onVerify = async () => {
