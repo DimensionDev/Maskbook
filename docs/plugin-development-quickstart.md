@@ -29,27 +29,32 @@ We will inject our UI in three places of twitter to provide different services. 
 
 ### 3.1 Add UI in application board
 
-Add following config in `ApplicationBoard.tsx`：
+Add following config：
 
 ```JavaScript
-createEntry(
-            'ENS',  // plugin-ENS
-            new URL('./assets/files.png', import.meta.url).toString(),  // your icon image
-            () => openEncryptedMessage(PluginId.ENS),  // your button click event
-            undefined, // support chains
-            false,  // hidden or not
-            false, // require wallet or not
-        ),
-```
-
-The `openEncryptedMessage` will open our plugin composition, therefore, we need to add following config in
-`Plugin.SNSAdaptor.Definition`:
-
-```JavaScript
-CompositionDialogEntry: {
-        label: 'ENS',
-        dialog: ENSDialog, // the dialog component that will be opened when button clicked
-    },
+    ApplicationEntries: [
+        {
+            RenderEntryComponent({ disabled }) {
+                return (
+                    <ApplicationEntry
+                        title="ENS"
+                        disabled={disabled}
+                        icon={new URL('./assets/ens.png', import.meta.url).toString()}
+                        onClick={() =>
+                            CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                reason: 'timeline',
+                                open: true,
+                                options: {
+                                    startupPlugin: base.ID,
+                                },
+                            })
+                        }
+                    />
+                )
+            },
+            defaultSortingPriority: 1,
+        },
+    ],
 ```
 
 ### 3.2 Add UI in Timeline
