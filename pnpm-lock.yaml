@@ -327,6 +327,7 @@ importers:
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
+      '@masknet/web3-shared-solana': workspace:*
       '@metamask/eth-sig-util': ^4.0.0
       '@msgpack/msgpack': ^2.7.2
       '@nice-labs/emit-file-webpack-plugin': ^1.1.2
@@ -465,6 +466,7 @@ importers:
       '@masknet/web3-providers': link:../web3-providers
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
+      '@masknet/web3-shared-solana': link:../web3-shared/solana
       '@metamask/eth-sig-util': 4.0.0
       '@msgpack/msgpack': 2.7.2
       '@servie/events': 3.0.0

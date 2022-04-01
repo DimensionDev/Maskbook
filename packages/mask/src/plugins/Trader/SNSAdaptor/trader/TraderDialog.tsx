@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useCurrentWeb3NetworkPluginID, useActivatedPlugin, PluginId } from '@masknet/plugin-infra'
-import { ChainId, useChainId, useChainIdValid } from '@masknet/web3-shared-evm'
+import { useCurrentWeb3NetworkPluginID, useActivatedPlugin, PluginId, useChainId } from '@masknet/plugin-infra'
+import { ChainId, useChainIdValid } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
@@ -110,6 +110,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                         ) : null}
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab
+                                pluginId={pluginID}
                                 chainId={chainId}
                                 setChainId={setChainId}
                                 classes={classes}

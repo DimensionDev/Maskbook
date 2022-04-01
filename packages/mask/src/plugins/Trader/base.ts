@@ -1,5 +1,6 @@
 import { Plugin, NetworkPluginID } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId as SolanaChainID } from '@masknet/web3-shared-solana'
 import { PLUGIN_ID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
@@ -26,7 +27,8 @@ export const base: Plugin.Shared.Definition = {
                 ],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
-            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
+            // TODO use SOLANA plugin
+            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [SolanaChainID.Mainnet] },
         },
     },
 }

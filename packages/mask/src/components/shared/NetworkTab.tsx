@@ -1,7 +1,9 @@
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import AbstractTab, { AbstractTabProps } from './AbstractTab'
-import { ChainId, getChainDetailed } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'
+import { NetworkPluginID, useNetworkDescriptors } from '@masknet/plugin-infra'
+import { useMemo } from 'react'
 
 interface StyleProps {
     chainLength: number
@@ -44,6 +46,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
 }))
 
 interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
+    pluginId: NetworkPluginID
     chains: ChainId[]
     setChainId: (chainId: ChainId) => void
     chainId: ChainId
@@ -51,15 +54,25 @@ interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'ind
 export function NetworkTab(props: NetworkTabProps) {
     const isDashboard = isDashboardPage()
     const classes = useStylesExtends(useStyles({ chainLength: props.chains.length, isDashboard }), props)
-    const { chainId, setChainId, chains } = props
+    const { chainId, setChainId, chains, pluginId } = props
+    const networks = useNetworkDescriptors(pluginId)
     const createTabItem = (name: string, chainId: ChainId) => ({
         label: <span>{name}</span>,
         sx: { p: 0 },
         cb: () => setChainId(chainId),
     })
 
+    const tabs = useMemo(
+        () =>
+            chains.map((chainId) => {
+                const network = networks.find((x) => x.chainId === chainId)
+                return createTabItem(network?.name ?? 'Unknown', chainId)
+            }),
+        [networks.length, chainId, chains.join()],
+    )
+
     const tabProps: AbstractTabProps = {
-        tabs: chains.map((chainId) => createTabItem(getChainDetailed(chainId)?.chain ?? 'Unknown', chainId)),
+        tabs,
         index: chains.indexOf(chainId),
         classes,
         hasOnlyOneChild: true,
