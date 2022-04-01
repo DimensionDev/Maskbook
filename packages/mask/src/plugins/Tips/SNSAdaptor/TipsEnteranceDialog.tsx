@@ -9,7 +9,7 @@ import { WalletsByNetwork } from './components/WalletsByNetwork'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 export interface TipsEntranceDialogProps {
     open: boolean
-    onClose?: () => void
+    onClose: () => void
 }
 const useStyles = makeStyles()((theme) => ({
     walletBtn: {
