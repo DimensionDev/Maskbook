@@ -1016,6 +1016,8 @@
     "plugin_ideamarket_name": "Name",
     "plugin_ideamarket_sell": "Sell",
     "plugin_ideamarket_buy": "Buy",
+    "plugin_ideamarket_urls": "URLs",
+    "plugin_ideamarket_users": "Users",
     "web3_tab_hint": "No address found.",
     "plugin_artblocks_not_active": "This project is no more active",
     "plugin_artblocks_completed": "Completed",

@@ -4,14 +4,15 @@ import { Card, CardContent, Paper, Tab, Tabs } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { ListingsView } from './ListingsView'
 import { AccountView } from './AccountView'
+import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
             boxShadow: 'none',
-            border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
+            borderRadius: '0px',
         },
         content: {
             width: '100%',
@@ -29,16 +30,25 @@ const useStyles = makeStyles()((theme) => {
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
+            border: `solid 1px ${theme.palette.divider}`,
         },
         tabs: {
-            borderTop: `solid 1px ${theme.palette.divider}`,
             borderBottom: `solid 1px ${theme.palette.divider}`,
             width: '100%',
             minHeight: 'unset',
+            paddingBottom: '10px',
         },
         tab: {
             minHeight: 'unset',
-            minWidth: 'unset',
+            fontWeight: '400',
+        },
+        disabledTab: {
+            opacity: 0.5,
+        },
+        focusTab: {
+            backgroundColor: theme.palette.primary.main,
+            color: '#fff !important',
+            borderRadius: 'unset !important',
         },
     }
 })
@@ -54,8 +64,16 @@ export function IdeaMarketView() {
     const [tabIndex, setTabIndex] = useState(0)
 
     const tabs = [
-        <Tab className={classes.tab} key="listings" label={t('plugin_ideamarket_tab_listings')} />,
-        <Tab className={classes.tab} key="account" label={t('plugin_ideamarket_tab_account')} />,
+        <Tab
+            className={classNames(classes.tab, tabIndex === 0 ? classes.focusTab : '')}
+            key="listings"
+            label={t('plugin_ideamarket_tab_listings')}
+        />,
+        <Tab
+            className={classNames(classes.tab, tabIndex === 1 ? classes.focusTab : '')}
+            key="account"
+            label={t('plugin_ideamarket_tab_account')}
+        />,
     ]
 
     return (

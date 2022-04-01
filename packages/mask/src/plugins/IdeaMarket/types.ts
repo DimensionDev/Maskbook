@@ -11,6 +11,14 @@ export interface IdeaToken {
     holders: number
     daiInToken: BigNumber
     dayChange: number
+    twitter?: TwitterIdeaToken
+}
+
+export interface TwitterIdeaToken {
+    id: string
+    name: string
+    profile_image_url: string
+    username: string
 }
 
 export interface UserIdeaTokenBalance {

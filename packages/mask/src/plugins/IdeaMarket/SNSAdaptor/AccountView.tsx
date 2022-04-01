@@ -9,7 +9,7 @@ import { LoadingAnimation } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { leftShift } from '@masknet/web3-shared-base'
 import type { UserIdeaTokenBalance } from '../types'
-import { composeIdeaURL } from '../utils'
+import { BASE_URL } from '../constants'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -115,7 +115,7 @@ export function AccountView() {
                                         <Grid container alignContent="center" justifyContent="center">
                                             <Grid item>
                                                 <Button
-                                                    href={composeIdeaURL(balance.token.market.name, balance.token.name)}
+                                                    href={`${BASE_URL}/i/${balance.token.id}`}
                                                     target="_blank"
                                                     color="primary"
                                                     size="small"

@@ -1,10 +1,12 @@
 import { useAsync } from 'react-use'
-import { PluginIdeaMarketRPC } from '../messages'
+import { fetchAllTokens } from '../apis'
 
-export function useFetchIdeaTokensBySearch(searchText: string) {
+export function useFetchIdeaTokensBySearch(searchText: string, page: number, filters: string[]) {
     const { value, error, loading } = useAsync(async () => {
-        return PluginIdeaMarketRPC.fetchAllTokens(searchText)
-    }, [searchText])
+        return fetchAllTokens(searchText, page, filters)
+    }, [searchText, page])
 
-    return { tokens: value?.ideaTokens, error, loading }
+    console.log(value)
+
+    return { tokens: value, error, loading }
 }

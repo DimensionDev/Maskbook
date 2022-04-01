@@ -1,4 +1,4 @@
-import { SUBGRAPH_URL } from '../constants'
+import { SUBGRAPH_URL, TWITTER_BEARER_TOKEN } from '../constants'
 import { first } from 'lodash-unified'
 import type { IdeaToken } from '../types'
 
@@ -31,10 +31,10 @@ export async function fetchIdeaToken(marketName: string, tokenName: string) {
     return first(res) as IdeaToken
 }
 
-export async function fetchAllTokens(searchTerm: string) {
+export async function fetchAllTokens(searchTerm: string, page: number, filters: string[]) {
     const body = {
-        query: `query IdeaToken($searchTerm: String!) {
-            ideaTokens(first: 1000, orderBy: daiInToken, orderDirection: desc, where: { name_contains: $searchTerm }){
+        query: `query IdeaToken($searchTerm: String!, $rowsPerPage: Int!) {
+            ideaTokens(first: $rowsPerPage, skip: 20, orderBy: daiInToken, orderDirection: desc, where: { name_contains: $searchTerm }){
                 id
                 name
                 tokenID
@@ -51,7 +51,7 @@ export async function fetchAllTokens(searchTerm: string) {
                 dayChange
             }
         }`,
-        variables: { searchTerm: searchTerm },
+        variables: { searchTerm: searchTerm, rowsPerPage: 20 },
     }
     const response = await fetch(SUBGRAPH_URL, {
         body: JSON.stringify(body),
@@ -59,7 +59,19 @@ export async function fetchAllTokens(searchTerm: string) {
     })
 
     const res = (await response.json())?.data
-    return res
+
+    const requestTwitterData = res?.ideaTokens.map(async (token: IdeaToken) => {
+        if (token.market.name === 'Twitter') {
+            const twitterData = await fetchTwitterLookup(token)
+            return { ...token, twitter: twitterData }
+        }
+
+        return token
+    })
+
+    const tokensWithTwitterData = await Promise.all(requestTwitterData)
+
+    return tokensWithTwitterData
 }
 
 export async function fetchUserTokensBalances(holder: string) {
@@ -90,6 +102,20 @@ export async function fetchUserTokensBalances(holder: string) {
         method: 'POST',
     })
 
+    const res = (await response.json())?.data
+
+    return res
+}
+
+export async function fetchTwitterLookup(token: IdeaToken) {
+    const response = await fetch(
+        `https://api.twitter.com/2/users/by/username/${token.name.slice(1)}?user.fields=profile_image_url`,
+        {
+            headers: {
+                Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`,
+            },
+        },
+    )
     const res = (await response.json())?.data
     return res
 }
