@@ -9,6 +9,8 @@
     "@masknet/shared-base": "workspace:*",
     "react-use": "^17.3.2",
     "use-subscription": "^1.6.0",
-    "uuid": "^8.3.2"
+    "@types/use-subscription": "^1.0.0",
+    "uuid": "^8.3.2",
+    "@types/uuid": "^8.3.4"
   }
 }

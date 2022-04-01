@@ -12,7 +12,7 @@ importers:
       '@commitlint/cli': ^16.2.3
       '@commitlint/config-conventional': ^16.2.1
       '@dimensiondev/eslint-plugin': ^0.0.1-20220117062517-fd3cb01
-      '@dimensiondev/kit': 0.0.0-20220223101101-4e6f3b9
+      '@dimensiondev/kit': 0.0.0-20220228054820-f2378be
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
       '@emotion/react': ^11.8.2
@@ -44,7 +44,6 @@ importers:
       eslint-plugin-unused-imports: ^2.0.0
       gulp: ^4.0.2
       husky: ^7.0.4
-      i18next: ^21.6.14
       jest: ^28.0.0-alpha.3
       lint-staged: ^12.3.7
       lodash: ^4.17.21
@@ -61,7 +60,7 @@ importers:
       web3-core: 1.5.2
       web3-core-method: 1.5.2
     dependencies:
-      '@dimensiondev/kit': 0.0.0-20220223101101-4e6f3b9
+      '@dimensiondev/kit': 0.0.0-20220228054820-f2378be
       '@emotion/cache': 11.7.1
       '@emotion/react': 11.8.2_00a11a054056e3746b551a83b9229751
       '@emotion/serialize': 1.0.2
@@ -75,13 +74,12 @@ importers:
       '@types/react': 17.0.43
       '@types/react-dom': 17.0.14
       '@types/web': 0.0.60
-      i18next: 21.6.14
       lodash: 4.17.21
       lodash-es: 4.17.21
       lodash-unified: 1.0.2_da03a4540fbd16bbaafbb96724306afd
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
-      react-i18next: 11.16.2_67d9cd14f543534febc666d787b5936c
+      react-i18next: 11.16.2_react-dom@18.0.0+react@18.0.0
       ts-results: 3.3.0
       web3-core: 1.5.2
       web3-core-method: 1.5.2
@@ -136,6 +134,7 @@ importers:
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-flow': workspace:*
       '@masknet/plugin-infra': workspace:*
+      '@masknet/plugin-solana': workspace:*
       '@masknet/plugin-wallet': workspace:*
       '@masknet/public-api': workspace:*
       '@masknet/shared': workspace:*
@@ -164,7 +163,6 @@ importers:
       color: ^4.2.1
       date-fns: 2.28.0
       html-to-image: ^1.9.0
-      i18next-browser-languagedetector: ^6.1.4
       json-stable-stringify: ^1.0.1
       path-browserify: ^1.0.1
       react-avatar-editor: ^12.0.0
@@ -190,6 +188,7 @@ importers:
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-flow': link:../plugins/Flow
       '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/plugin-solana': link:../plugins/Solana
       '@masknet/plugin-wallet': link:../plugins/Wallet
       '@masknet/public-api': link:../public-api
       '@masknet/shared': link:../shared
@@ -210,7 +209,6 @@ importers:
       color: 4.2.1
       date-fns: 2.28.0
       html-to-image: 1.9.0
-      i18next-browser-languagedetector: 6.1.4
       json-stable-stringify: 1.0.1
       react-avatar-editor: 12.0.0_572108936dbf4157100a77328045f809
       react-hook-form: 7.28.1_react@18.0.0
@@ -314,6 +312,7 @@ importers:
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-file-service': workspace:*
       '@masknet/plugin-flow': workspace:*
+      '@masknet/plugin-go-plus-security': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/plugin-rss3': workspace:*
       '@masknet/plugin-solana': workspace:*
@@ -379,7 +378,6 @@ importers:
       graphql-request: ^3.4.0
       html-webpack-plugin: ^5.5.0
       https-browserify: ^1.0.0
-      i18next-browser-languagedetector: ^6.1.4
       idb: ^7.0.1
       iframe-resizer-react: ^1.1.0
       immer: ^9.0.12
@@ -453,6 +451,7 @@ importers:
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-file-service': link:../plugins/FileService
       '@masknet/plugin-flow': link:../plugins/Flow
+      '@masknet/plugin-go-plus-security': link:../plugins/GoPlusSecurity
       '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/plugin-rss3': link:../plugins/RSS3
       '@masknet/plugin-solana': link:../plugins/Solana
@@ -511,7 +510,6 @@ importers:
       graphql: 15.5.3
       graphql-request: 3.5.0_graphql@15.5.3
       https-browserify: 1.0.0
-      i18next-browser-languagedetector: 6.1.4
       idb: 7.0.1
       iframe-resizer-react: 1.1.0_react-dom@18.0.0+react@18.0.0
       immer: 9.0.12
@@ -618,7 +616,7 @@ importers:
       unstated-next: 1.1.0
       use-subscription: 1.6.0_react@18.0.0
     devDependencies:
-      react-i18next: 11.16.2_67d9cd14f543534febc666d787b5936c
+      react-i18next: 11.16.2_react-dom@18.0.0+react@18.0.0
 
   packages/plugins/CyberConnect:
     specifiers:
@@ -775,6 +773,34 @@ importers:
       '@masknet/web3-shared-flow': link:../../web3-shared/flow
       bignumber.js: 9.0.2
       react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
+
+  packages/plugins/GoPlusSecurity:
+    specifiers:
+      '@masknet/icons': workspace:*
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/web3-providers': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      bignumber.js: ^9.0.2
+      react-feather: ^2.0.9
+      react-use: ^17.3.2
+      urlcat: ^2.0.4
+    dependencies:
+      '@masknet/icons': link:../../icons
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
+      '@masknet/theme': link:../../theme
+      '@masknet/web3-providers': link:../../web3-providers
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      bignumber.js: 9.0.2
+      react-feather: 2.0.9_react@18.0.0
+      react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
+      urlcat: 2.0.4
 
   packages/plugins/RSS3:
     specifiers:
@@ -993,6 +1019,7 @@ importers:
       '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
@@ -1006,12 +1033,12 @@ importers:
       react-use: ^17.3.2
       urlcat: ^2.0.4
       use-subscription: ^1.6.0
-      uuid: ^8.3.2
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@masknet/icons': link:../icons
       '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/shared-base': link:../shared-base
+      '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/theme': link:../theme
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
@@ -1025,7 +1052,6 @@ importers:
       react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
       urlcat: 2.0.4
       use-subscription: 1.6.0_react@18.0.0
-      uuid: 8.3.2
 
   packages/shared-base:
     specifiers:
@@ -1042,6 +1068,8 @@ importers:
       anchorme: ^2.1.2
       async-call-rpc: ^6.0.2
       bignumber.js: ^9.0.2
+      i18next: ^21.6.14
+      i18next-browser-languagedetector: ^6.1.4
       idb: ^7.0.1
       immer: ^9.0.12
       pvtsutils: ^1.2.2
@@ -1065,6 +1093,8 @@ importers:
       anchorme: 2.1.2
       async-call-rpc: 6.0.2
       bignumber.js: 9.0.2
+      i18next: 21.6.14
+      i18next-browser-languagedetector: 6.1.4
       idb: 7.0.1
       immer: 9.0.12
       pvtsutils: 1.2.2
@@ -1079,12 +1109,16 @@ importers:
     specifiers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@masknet/shared-base': workspace:*
+      '@types/use-subscription': ^1.0.0
+      '@types/uuid': ^8.3.4
       react-use: ^17.3.2
       use-subscription: ^1.6.0
       uuid: ^8.3.2
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@masknet/shared-base': link:../shared-base
+      '@types/use-subscription': 1.0.0
+      '@types/uuid': 8.3.4
       react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
       use-subscription: 1.6.0_react@18.0.0
       uuid: 8.3.2
@@ -4385,13 +4419,6 @@ packages:
       source-map-support: 0.5.21
     dev: true
 
-  /@babel/runtime/7.15.4:
-    resolution: {integrity: sha512-99catp6bHCaxr4sJ/DbTGgHS4+Rs2RVd2g7iOap6SLGPDknRK9ztKNsE/Fg6QhSeh1FGE5f6gHGQmvvn3I3xhw==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      regenerator-runtime: 0.13.9
-    dev: false
-
   /@babel/runtime/7.16.3:
     resolution: {integrity: sha512-WBwekcqacdY2e9AF/Q7WLFUWmdJGJTkbjqTjoMDgXkVZ3ZRUvOPsLb5KdwISoQVsbP+DQzVZW4Zhci0DvpbNTQ==}
     engines: {node: '>=6.9.0'}
@@ -5187,8 +5214,8 @@ packages:
       webextension-polyfill: 0.9.0
     dev: false
 
-  /@dimensiondev/kit/0.0.0-20220223101101-4e6f3b9:
-    resolution: {integrity: sha512-xk9rACwU2Iu+81BfnL1ykGofG+HuR/aMmYo4GZ1zyv32vZwe73B21z1GNGLq6XbYVjqNGa3puWoHZwDizAP4SA==, tarball: download/@dimensiondev/kit/0.0.0-20220223101101-4e6f3b9/a1b996a27d8d62c75d54a4a9d6b6544b45fe464288c83df31fccbbd2685b3a54}
+  /@dimensiondev/kit/0.0.0-20220228054820-f2378be:
+    resolution: {integrity: sha512-B+5bj3+nTqwp4nigrwXxKK3iQeCn1tlFOuYeqzPCJY/wqMrM+GsAyYdw5BPjFwn5+9uiZ5xSZcnLhSF/6EgjhQ==, tarball: download/@dimensiondev/kit/0.0.0-20220228054820-f2378be/8352c3f70e1a38376b321dd05989ad48c80a260785561da3910520e28560b26b}
     dependencies:
       lodash-es: 4.17.21
     dev: false
@@ -17997,7 +18024,7 @@ packages:
   /i18next/21.6.14:
     resolution: {integrity: sha512-XL6WyD+xlwQwbieXRlXhKWoLb/rkch50/rA+vl6untHnJ+aYnkQ0YDZciTWE78PPhOpbi2gR0LTJCJpiAhA+uQ==}
     dependencies:
-      '@babel/runtime': 7.17.2
+      '@babel/runtime': 7.17.8
     dev: false
 
   /iconv-lite/0.4.24:
@@ -22895,7 +22922,7 @@ packages:
       react: 18.0.0
     dev: false
 
-  /react-i18next/11.16.2_67d9cd14f543534febc666d787b5936c:
+  /react-i18next/11.16.2_react-dom@18.0.0+react@18.0.0:
     resolution: {integrity: sha512-1iuZduvARUelL5ux663FvIoDZExwFO+9QtRAAt4uvs1/aun4cUZt8XBrVg7iiDgNls9cOSORAhE7Ri5KA9RMvg==}
     peerDependencies:
       i18next: '>= 19.0.0'
@@ -22911,7 +22938,6 @@ packages:
       '@babel/runtime': 7.17.8
       html-escaper: 2.0.2
       html-parse-stringify: 3.0.1
-      i18next: 21.6.14
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
 
@@ -23052,10 +23078,10 @@ packages:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
     dependencies:
-      '@babel/runtime': 7.15.4
+      '@babel/runtime': 7.17.2
       dom-helpers: 5.2.1
       loose-envify: 1.4.0
-      prop-types: 15.7.2
+      prop-types: 15.8.1
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
     dev: false

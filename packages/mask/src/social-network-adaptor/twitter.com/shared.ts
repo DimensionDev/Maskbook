@@ -36,7 +36,14 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
                 height,
                 screenX: window.screenX + (window.innerWidth - width) / 2,
                 screenY: window.screenY + (window.innerHeight - height) / 2,
-                behaviors: { toolbar: true, status: true, resizable: true, scrollbars: true },
+                opener: true,
+                referrer: true,
+                behaviors: {
+                    toolbar: true,
+                    status: true,
+                    resizable: true,
+                    scrollbars: true,
+                },
             })
             if (openedWindow === null) {
                 location.assign(url)

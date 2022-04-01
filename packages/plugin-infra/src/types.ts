@@ -689,6 +689,7 @@ export enum PluginId {
     FileService = 'com.maskbook.fileservice',
     CyberConnect = 'me.cyberconnect.app',
     ENS = 'io.mask.ens-plugin',
+    GoPlusSecurity = 'io.gopluslabs.security',
     // @masknet/scripts: insert-here
 }
 

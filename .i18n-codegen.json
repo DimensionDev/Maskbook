@@ -189,7 +189,19 @@
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
-                "namespace": "io.mask.test-plugin",
+                "namespace": "io.mask.ens-plugin",
+                "trans": "Translate",
+                "sourceMap": "inline"
+            }
+        },
+        {
+            "input": "./packages/plugins/GoPlusSecurity/src/locales/en-US.json",
+            "output": "./packages/plugins/GoPlusSecurity/src/locales/i18n_generated",
+            "parser": "i18next",
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "io.gopluslabs.security",
                 "trans": "Translate",
                 "sourceMap": "inline"
             }
