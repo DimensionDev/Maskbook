@@ -305,6 +305,7 @@ importers:
       '@masknet/gun-utils': workspace:*
       '@masknet/icons': workspace:*
       '@masknet/injected-script': workspace:*
+      '@masknet/plugin-cross-chain-bridge': workspace:*
       '@masknet/plugin-cyberconnect': workspace:*
       '@masknet/plugin-dao': workspace:*
       '@masknet/plugin-debugger': workspace:*
@@ -443,6 +444,7 @@ importers:
       '@masknet/gun-utils': link:../gun-utils
       '@masknet/icons': link:../icons
       '@masknet/injected-script': link:../injected-script
+      '@masknet/plugin-cross-chain-bridge': link:../plugins/CrossChainBridge
       '@masknet/plugin-cyberconnect': link:../plugins/CyberConnect
       '@masknet/plugin-dao': link:../plugins/DAO
       '@masknet/plugin-debugger': link:../plugins/Debugger
@@ -615,6 +617,18 @@ importers:
       use-subscription: 1.6.0_react@18.0.0
     devDependencies:
       react-i18next: 11.16.2_react-dom@18.0.0+react@18.0.0
+
+  packages/plugins/CrossChainBridge:
+    specifiers:
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      react-use: ^17.3.2
+    dependencies:
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
 
   packages/plugins/CyberConnect:
     specifiers:
@@ -17468,7 +17482,7 @@ packages:
     engines: {node: '>=0.4.7'}
     hasBin: true
     dependencies:
-      minimist: 1.2.5
+      minimist: 1.2.6
       neo-async: 2.6.2
       source-map: 0.6.1
       wordwrap: 1.0.0
@@ -20812,7 +20826,6 @@ packages:
 
   /minimist/1.2.6:
     resolution: {integrity: sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==}
-    dev: false
 
   /minipass-collect/1.0.2:
     resolution: {integrity: sha512-6T6lH0H8OG9kITm/Jm6tdooIbogG9e0tLgpY6mphXSm/A9u8Nq1ryBG+Qspiub9LjWlBPsPS3tWQ/Botq4FdxA==}
@@ -21105,7 +21118,7 @@ packages:
       react-dom: '*'
     dependencies:
       css-tree: 1.1.3
-      csstype: 3.0.10
+      csstype: 3.0.11
       fastest-stable-stringify: 2.0.2
       inline-style-prefixer: 6.0.1
       react: 18.0.0
@@ -23805,7 +23818,7 @@ packages:
   /rtl-css-js/1.15.0:
     resolution: {integrity: sha512-99Cu4wNNIhrI10xxUaABHsdDqzalrSRTie4GeCmbGVuehm4oj+fIy8fTzB+16pmKe8Bv9rl+hxIBez6KxExTew==}
     dependencies:
-      '@babel/runtime': 7.17.2
+      '@babel/runtime': 7.17.8
     dev: false
 
   /run-parallel/1.2.0:
