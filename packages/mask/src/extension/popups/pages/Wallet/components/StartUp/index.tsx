@@ -3,13 +3,13 @@ import { Alert, AlertTitle, Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Link, useLocation } from 'react-router-dom'
 import { MaskWalletIcon, ImportWalletIcon } from '@masknet/icons'
-import { EnterDashboard } from '../../../../components/EnterDashboard'
 import { NetworkSelector } from '../../../../components/NetworkSelector'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../../utils'
 import { useHasPassword } from '../../../../hook/useHasPassword'
 import Services from '../../../../../service'
 import urlcat from 'urlcat'
+import { Navigator } from '../../../../components/Navigator'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -112,7 +112,7 @@ export const WalletStartUp = memo(() => {
                     </Link>
                 ) : null}
             </Box>
-            <EnterDashboard />
+            <Navigator />
         </Box>
     )
 })

@@ -2,9 +2,7 @@ import { memo } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useEnterDashboard } from '../../hook/useEnterDashboard'
-import { useMatch } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
-import { MasksIcon, MaskWalletIcon } from '@masknet/icons'
+import { MaskNotSquareIcon } from '@masknet/icons'
 import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()({
@@ -12,15 +10,13 @@ const useStyles = makeStyles()({
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        padding: 16,
     },
     placeholder: {
-        flex: 1,
+        marginTop: 87,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '0 10px',
     },
     button: {
         fontWeight: 600,
@@ -29,33 +25,50 @@ const useStyles = makeStyles()({
         fontSize: 14,
         lineHeight: 1.5,
         borderRadius: 20,
+        marginTop: 85,
+        marginLeft: 16,
+        marginRight: 16,
+    },
+    header: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
+        height: 187,
+    },
+    title: {
+        fontWeight: 700,
+        fontSize: 24,
+        lineHeight: 1.2,
+        color: '#07101B',
+    },
+    description: {
+        fontSize: 14,
+        color: '#ACB4C1',
+        textAlign: 'center',
+        lineHeight: '18px',
+        fontWeight: 700,
+        marginTop: 12,
     },
 })
 
 export const InitialPlaceholder = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const matchWallet = useMatch(PopupRoutes.Wallet)
     const onEnter = useEnterDashboard()
 
     return (
         <Box className={classes.container}>
+            <Box className={classes.header}>
+                <MaskNotSquareIcon />
+            </Box>
             <Box className={classes.placeholder}>
-                <Box
-                    style={{
-                        width: 48,
-                        height: 48,
-                        borderRadius: 24,
-                        marginBottom: 10,
-                        backgroundColor: '#F7F9FA',
-                        fontSize: 48,
-                    }}>
-                    {matchWallet ? <MaskWalletIcon fontSize="inherit" /> : <MasksIcon fontSize="inherit" />}
-                </Box>
-                <Typography style={{ fontSize: 14 }}>
-                    {t('popups_initial_tips', {
-                        type: matchWallet ? 'wallet' : 'personas',
-                    })}
+                <Typography className={classes.title}>{t('welcome_to_mask')}</Typography>
+                <Typography className={classes.description}>
+                    {t('welcome_description_congrats')} <br />
+                    {t('welcome_description_content')} <br />
+                    {t('welcome_description_content_second')}
                 </Typography>
             </Box>
             <Button variant="contained" color="primary" className={classes.button} onClick={onEnter}>

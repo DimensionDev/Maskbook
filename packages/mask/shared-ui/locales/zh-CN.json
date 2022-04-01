@@ -111,7 +111,6 @@
     "personas": "身份",
     "browser_action_enter_dashboard": "进入控制面板",
     "pending": "待定中...",
-    "popups_initial_tips": "请登录或注册以使用 {{type}}。",
     "beta_sup": "<sup>(测试版)<sup>",
     "post_dialog_plugins_experimental": "插件 <sup>(体验版)</sup>",
     "post_dialog__button": "加密",

@@ -4,7 +4,6 @@ import { makeStyles } from '@masknet/theme'
 import { WalletHeader } from '../WalletHeader'
 import { WalletInfo } from '../WalletInfo'
 import { TabContext, TabPanel } from '@mui/lab'
-import { EnterDashboard } from '../../../../components/EnterDashboard'
 import { AssetsList } from '../AssetsList'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -13,6 +12,7 @@ import { useI18N } from '../../../../../../utils'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../../hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
+import { Navigator } from '../../../../components/Navigator'
 
 const useStyles = makeStyles()({
     content: {
@@ -120,7 +120,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
                     </TabPanel>
                 </TabContext>
             </div>
-            <EnterDashboard />
+            <Navigator />
         </>
     )
 })

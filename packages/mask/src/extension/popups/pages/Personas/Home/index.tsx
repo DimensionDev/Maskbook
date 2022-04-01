@@ -8,11 +8,11 @@ import { formatFingerprint, MAX_PERSONA_LIMIT } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import { ProfileList } from '../components/ProfileList'
-import { EnterDashboard } from '../../../components/EnterDashboard'
 import { PersonaList } from '../components/PersonaList'
 import { useI18N } from '../../../../../utils'
 import urlcat from 'urlcat'
 import classNames from 'classnames'
+import { Navigator } from '../../../components/Navigator'
 
 const useStyles = makeStyles()({
     content: {
@@ -136,7 +136,7 @@ const PersonaHome = memo(() => {
                 {isExpand ? <ProfileList /> : <PersonaList />}
             </div>
             {isExpand ? (
-                <EnterDashboard />
+                <Navigator />
             ) : (
                 <div className={classes.controller}>
                     <Button

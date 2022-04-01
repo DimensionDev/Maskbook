@@ -95,7 +95,6 @@
     "personas": "페르소나",
     "browser_action_enter_dashboard": "대시보드로 들어가기",
     "pending": "대기 중…",
-    "popups_initial_tips": "{{type}} 로 로그인하거나 가입하세요.",
     "beta_sup": "<sup>(beta)<sup>",
     "post_dialog_plugins_experimental": "Plugins <sup>(Experimental)</sup>",
     "post_dialog__button": "끝내기",

@@ -1,8 +1,7 @@
 import { memo } from 'react'
-import { NavLink, useNavigate, useLocation, useMatch } from 'react-router-dom'
+import { useNavigate, useLocation, useMatch } from 'react-router-dom'
 import { Box, GlobalStyles, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { InitialPlaceholder } from '../InitialPlaceholder'
@@ -101,33 +100,33 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
         <>
             <GlobalCss />
             <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto', minHeight: 600, borderRadius: 0 }}>
-                <Box className={classes.header}>
-                    <Box className={classes.left}>
-                        {excludePath || history.length === 1 ? (
-                            <MiniMaskIcon style={{ fontSize: 30 }} />
-                        ) : (
-                            <ArrowBackIcon
-                                onClick={() => navigate(-1)}
-                                style={{ fill: '#ffffff', cursor: 'pointer', fontSize: 30 }}
-                            />
-                        )}
-                    </Box>
-                    <Box className={classes.right}>
-                        {excludePersonaPath ? null : (
-                            <NavLink
-                                to={PopupRoutes.Personas}
-                                className={({ isActive }) => cx(classes.nav, isActive ? classes.active : null)}>
-                                {t('personas')}
-                            </NavLink>
-                        )}
-                        <NavLink
-                            style={{ marginRight: 5 }}
-                            to={!excludePersonaPath ? PopupRoutes.Wallet : location}
-                            className={({ isActive }) => cx(classes.nav, isActive ? classes.active : null)}>
-                            {t('wallets')}
-                        </NavLink>
-                    </Box>
-                </Box>
+                {/* <Box className={classes.header}>*/}
+                {/*    <Box className={classes.left}>*/}
+                {/*        {excludePath || history.length === 1 ? (*/}
+                {/*            <MiniMaskIcon style={{ fontSize: 30 }} />*/}
+                {/*        ) : (*/}
+                {/*            <ArrowBackIcon*/}
+                {/*                onClick={() => navigate(-1)}*/}
+                {/*                style={{ fill: '#ffffff', cursor: 'pointer', fontSize: 30 }}*/}
+                {/*            />*/}
+                {/*        )}*/}
+                {/*    </Box>*/}
+                {/*    <Box className={classes.right}>*/}
+                {/*        {excludePersonaPath ? null : (*/}
+                {/*            <NavLink*/}
+                {/*                to={PopupRoutes.Personas}*/}
+                {/*                className={({ isActive }) => cx(classes.nav, isActive ? classes.active : null)}>*/}
+                {/*                {t('personas')}*/}
+                {/*            </NavLink>*/}
+                {/*        )}*/}
+                {/*        <NavLink*/}
+                {/*            style={{ marginRight: 5 }}*/}
+                {/*            to={!excludePersonaPath ? PopupRoutes.Wallet : location}*/}
+                {/*            className={({ isActive }) => cx(classes.nav, isActive ? classes.active : null)}>*/}
+                {/*            {t('wallets')}*/}
+                {/*        </NavLink>*/}
+                {/*    </Box>*/}
+                {/* </Box>*/}
                 <Box className={classes.container}>
                     {personas.length === 0 && !matchRecovery ? <InitialPlaceholder /> : props.children}
                 </Box>

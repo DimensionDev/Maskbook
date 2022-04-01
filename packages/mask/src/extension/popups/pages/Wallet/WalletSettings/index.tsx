@@ -1,7 +1,6 @@
 import { WalletHeader } from '../components/WalletHeader'
 import { Box, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { EnterDashboard } from '../../../components/EnterDashboard'
 import { BackUpIcon, CloudLinkIcon, MaskWalletIcon, TrashIcon } from '@masknet/icons'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -12,6 +11,7 @@ import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugi
 import { FormattedAddress } from '@masknet/shared'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { WalletContext } from '../hooks/useWalletContext'
+import { Navigator } from '../../../components/Navigator'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -125,7 +125,7 @@ const WalletSettings = memo(() => {
                     </Link>
                 </List>
             </div>
-            <EnterDashboard />
+            <Navigator />
         </>
     )
 })
