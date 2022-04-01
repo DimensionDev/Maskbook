@@ -2,7 +2,6 @@
 
 // TODO: Migrate following files before we can SSR
 // ProfileList
-// EnterDashboard
 // useI18N
 
 import { memo, useCallback, useState } from 'react'

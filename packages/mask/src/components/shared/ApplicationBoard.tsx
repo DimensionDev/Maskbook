@@ -80,9 +80,7 @@ export function ApplicationBoard() {
                                 currentWeb3NetworkSupportedChainIds === undefined ||
                                     currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
                             )
-
                             const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
-
                             const currentSNSIsSupportedNetwork =
                                 cur.enableRequirement.networks.networks[currentSNSNetwork]
                             const isSNSEnabled =

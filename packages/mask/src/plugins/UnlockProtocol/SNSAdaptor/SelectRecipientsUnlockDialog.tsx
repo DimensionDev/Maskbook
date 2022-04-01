@@ -1,4 +1,4 @@
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 import Fuse from 'fuse.js'
 import {
     InputBase,

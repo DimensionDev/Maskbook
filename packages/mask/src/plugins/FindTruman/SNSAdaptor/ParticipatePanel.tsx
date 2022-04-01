@@ -6,7 +6,7 @@ import { Box, Button, Card, DialogActions, DialogContent, Typography } from '@mu
 import { TabContext, TabPanel } from '@mui/lab'
 import StageCard from './StageCard'
 import { useControlledDialog } from '../../../utils'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import OptionsCard from './OptionsCard'
 import ResultCard from './ResultCard'
