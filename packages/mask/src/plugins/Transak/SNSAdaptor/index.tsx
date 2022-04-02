@@ -22,6 +22,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 )
             },
             defaultSortingPriority: 9,
+            tutorialLink: 'https://transak.com/',
             AppIcon: <TransakIcon />,
             description: 'Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support.',
             name: 'Fiat On-Ramp',

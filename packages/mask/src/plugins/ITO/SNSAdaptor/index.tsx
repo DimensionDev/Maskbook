@@ -86,6 +86,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             description: 'Launch decentralized asset freely and participate in token launch directly on Twitter.',
             isInDappList: true,
             name: 'ITO',
+            tutorialLink:
+                'https://realmasknetwork.notion.site/Launch-an-ITO-Initial-Twitter-Offering-Support-ETH-BSC-Polygon-Arbitrum-d84c60903f974f4880d2085a13906d55',
         },
         {
             RenderEntryComponent({ disabled, AppIcon }) {

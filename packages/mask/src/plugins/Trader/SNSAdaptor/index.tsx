@@ -33,6 +33,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             AppIcon: <SwapIcon />,
             isInDappList: true,
             name: 'Swap',
+            tutorialLink:
+                'https://realmasknetwork.notion.site/Trade-cryptos-on-Twitter-via-Uniswap-Sushi-0x-Support-ETH-BSC-Polygon-Arbitrum-f2e7d081ee38487ca1db958393ac1edc',
             description:
                 'Pop-up trading widget that allows you to instantly view prices of the hottest Crypto/Stock and trade. Can also invest in the best performing managers.',
         },

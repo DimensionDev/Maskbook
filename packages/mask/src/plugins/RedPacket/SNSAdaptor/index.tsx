@@ -116,6 +116,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             AppIcon: <RedPacketIcon />,
             description: 'Gift crypto or NFTs to any users, first come, first served.',
             name: 'Lucky Drop',
+            tutorialLink:
+                'https://realmasknetwork.notion.site/Gift-token-NFTs-to-your-friends-Support-ETH-BSC-and-Polygon-0a71fd421aae4563bd07caa3e2129e5b',
             isInDappList: true,
         },
     ],

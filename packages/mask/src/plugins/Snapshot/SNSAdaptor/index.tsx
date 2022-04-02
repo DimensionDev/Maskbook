@@ -68,8 +68,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             isInDappList: true,
             description: 'Display and vote for proposals directly on social media.',
+            tutorialLink: 'https://realmasknetwork.notion.site/Cast-a-Snapshot-vote-10c08ed9629942dd852d9afbfab61208',
             name: 'Snapshot',
-            icon: new URL('../assets/snapshot.png', import.meta.url),
             AppIcon: <SnapshotIcon />,
         },
     ],

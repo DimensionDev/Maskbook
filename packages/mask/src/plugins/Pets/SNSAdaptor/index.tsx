@@ -36,6 +36,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             AppIcon: <LootManIcon />,
             description: 'Explore the endless possibilities of NFTs.',
             name: 'Non-F Friends',
+            tutorialLink: 'https://twitter.com/mintteamnft?s=21',
             isInDappList: true,
         },
     ],

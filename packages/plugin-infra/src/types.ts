@@ -312,7 +312,7 @@ export namespace Plugin.SNSAdaptor {
         /**
          * Render entry component
          */
-        RenderEntryComponent?: (props: { disabled: boolean; icon: URL; AppIcon: JSX.Element }) => JSX.Element
+        RenderEntryComponent?: (props: { disabled: boolean; AppIcon: JSX.Element }) => JSX.Element
         /**
          * Used to order the applications on the board
          */

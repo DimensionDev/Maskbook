@@ -58,6 +58,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             defaultSortingPriority: 6,
             AppIcon: <MaskBoxIcon />,
+            tutorialLink:
+                'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
             description: 'Professional multi-chain decentralized platform for launching NFT mystery boxes.',
             isInDappList: true,
             name: 'MaskBox',

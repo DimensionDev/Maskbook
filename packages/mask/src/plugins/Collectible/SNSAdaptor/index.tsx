@@ -73,6 +73,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 'Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media.',
             name: 'Collectibles',
             AppIcon: <CollectiblesIcon />,
+            tutorialLink:
+                'https://realmasknetwork.notion.site/Purchase-or-bid-for-NFTs-via-OpenSea-or-Rarible-on-Twitter-c388746f11774ecfa17914c900d3ed97',
         },
     ],
 }

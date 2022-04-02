@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import { InjectedDialog } from '../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 import AbstractTab, { AbstractTabProps } from '../../components/shared/AbstractTab'
 import { useI18N } from '../../utils'
 

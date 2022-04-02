@@ -50,6 +50,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             description: 'Decentralized hedge funds on Ethereum and Polygon (Matic).',
             name: 'dHEDGE',
             AppIcon: <DHEDGEIcon />,
+            tutorialLink:
+                'https://realmasknetwork.notion.site/Invest-in-your-favourite-fund-manager-via-dHEDGE-on-Twitter-ETH-and-Polygon-fb00ff2e626949279c83b59ed9207b9a',
         },
     ],
 }
