@@ -18,7 +18,7 @@ import {
     Web3Plugin,
     useAccount,
     NetworkPluginID,
-    usePluginIDContext,
+    useCurrentWeb3NetworkPluginID,
 } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
@@ -133,7 +133,7 @@ export interface TokenTableUIProps {
 export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isEmpty, dataSource }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const currentPluginId = usePluginIDContext()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const { Utils } = useWeb3PluginState()
 
     return (

@@ -1,12 +1,12 @@
 import { useWeb3State } from '@masknet/plugin-infra'
-import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { usePickToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { EthereumTokenType, useAccount, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import { Box, BoxProps, FormControl, MenuItem, Select, Typography } from '@mui/material'
 import classnames from 'classnames'
-import { FC, memo, useCallback, useRef, useState } from 'react'
-import { v4 as uuid } from 'uuid'
+import { FC, memo, useCallback, useRef } from 'react'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
@@ -73,32 +73,21 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
     const [isValid, validateMessage] = useTipValidate()
     const { Utils } = useWeb3State()
     const selectRef = useRef(null)
-    const [id] = useState(uuid)
     const account = useAccount()
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                setToken(ev.token)
-            },
-            [id],
-        ),
-    )
-    const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialog({
+    const pickToken = usePickToken()
+    const onSelectTokenChipClick = useCallback(async () => {
+        const picked = await pickToken({
             chainId,
-            open: true,
-            uuid: id,
             disableNativeToken: false,
-            FungibleTokenListProps: {
-                selectedTokens: token ? [token.address] : [],
-            },
+            selectedTokens: token ? [token.address] : [],
         })
-    }, [id, token?.address, chainId])
+        if (picked) {
+            setToken(picked)
+        }
+    }, [pickToken, token?.address, chainId])
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
