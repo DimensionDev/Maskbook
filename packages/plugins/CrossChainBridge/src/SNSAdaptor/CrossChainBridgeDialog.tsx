@@ -1,7 +1,7 @@
 import { DialogContent, Stack, Typography } from '@mui/material'
 import { makeStyles, MaskDialog, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../locales'
-import { CROSS_CHAIN_BRIDGE } from '../constants'
+import { getCrossChainBridge } from '../constants'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -65,6 +65,7 @@ export function CrossChainBridgeDialog(props: CrossChainBridgeDialogProps) {
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const { open, onClose } = props
+    const bridges = getCrossChainBridge(t)
 
     return (
         <MaskDialog
@@ -74,7 +75,7 @@ export function CrossChainBridgeDialog(props: CrossChainBridgeDialogProps) {
             onBack={onClose}>
             <DialogContent className={classes.content}>
                 <Stack height="100%" spacing={2}>
-                    {CROSS_CHAIN_BRIDGE?.map((bridge) => (
+                    {bridges?.map((bridge) => (
                         <div
                             className={classes.bridgeItem}
                             key={bridge?.name}
@@ -86,7 +87,7 @@ export function CrossChainBridgeDialog(props: CrossChainBridgeDialogProps) {
                                     {bridge?.isOfficial && <div className={classes.officialTag}>{t.official()}</div>}
                                 </div>
                                 {bridge?.intro && (
-                                    <Typography className={classes.bridgeIntro}>{bridge?.intro}</Typography>
+                                    <Typography className={classes.bridgeIntro}>{bridge.intro}</Typography>
                                 )}
                             </div>
                         </div>

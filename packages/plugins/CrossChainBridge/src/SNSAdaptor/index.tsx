@@ -19,7 +19,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             icon={new URL('./assets/cross-chain.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}
                         />
-                        {open && <CrossChainBridgeDialog open={open} onClose={() => setOpen(false)} />}
+                        <CrossChainBridgeDialog open={open} onClose={() => setOpen(false)} />
                     </>
                 )
             },
