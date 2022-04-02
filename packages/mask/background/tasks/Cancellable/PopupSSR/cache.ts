@@ -1,8 +1,10 @@
 import { throttle } from 'lodash-unified'
 import { MaskMessages } from '../../../../shared/messages'
 import { InternalStorageKeys } from '../../../services/settings/utils'
-import { prepareSSR } from './prepare-data'
 import type { PopupSSR_Props } from './type'
+import { queryOwnedPersonaInformation, queryCurrentPersona_internal } from '../../../services/identity'
+import { queryOwnedProfileInformationWithNextID_internal } from '../../../services/identity/profile/query'
+import { getLanguagePreference } from '../../../services/settings'
 
 export let cache: { html: string; css: string } = { html: '', css: '' }
 export function startListen(
@@ -11,7 +13,7 @@ export function startListen(
 ) {
     const task = throttle(
         async function task() {
-            cache = await prepareSSR().then(render)
+            cache = await prepareData().then(render)
         },
         2000,
         { leading: true },
@@ -26,4 +28,18 @@ export function startListen(
         },
         { signal },
     )
+}
+
+async function prepareData(): Promise<PopupSSR_Props> {
+    const language = getLanguagePreference()
+    const personas = await queryOwnedPersonaInformation()
+    const currentPersona = await queryCurrentPersona_internal(personas)
+    const profilesWithNextID = await queryOwnedProfileInformationWithNextID_internal(personas, currentPersona)
+
+    return {
+        profilesWithNextID,
+        currentPersona,
+        personas,
+        language: await language,
+    }
 }

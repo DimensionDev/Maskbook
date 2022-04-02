@@ -1,6 +1,6 @@
-import { i18NextInstance, updateLanguage } from '@masknet/shared-base'
-import { once } from 'lodash-unified'
-import { TssCacheProvider } from '@masknet/theme'
+import { i18NextInstance, updateLanguage, EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
+import { once, noop } from 'lodash-unified'
+import { TssCacheProvider, MaskThemeProvider } from '@masknet/theme'
 import { CacheProvider } from '@emotion/react'
 import { renderToString } from 'react-dom/server'
 import createCache from '@emotion/cache'
@@ -8,17 +8,28 @@ import createEmotionServer from '@emotion/server/create-instance'
 import { initReactI18next } from 'react-i18next'
 import { addMaskI18N } from '../shared-ui/locales/languages'
 import type { PopupSSR_Props } from '../background/tasks/Cancellable/PopupSSR/type'
-import { PopupSSR } from './PopupSSR_Root'
+import { StaticRouter } from 'react-router-dom/server'
+import { PopupFrame } from './extension/popups/components/PopupFrame'
+import { PersonaHomeUI } from './extension/popups/pages/Personas/Home/UI'
+import { usePopupFullPageTheme } from './utils/theme/useClassicMaskFullPageTheme'
+import {
+    FacebookColoredIcon,
+    InstagramColoredIcon,
+    MindsIcon,
+    TwitterColoredIcon,
+    OpenSeaColoredIcon,
+} from '@masknet/icons'
+import { Suspense } from 'react'
 
-const init = once((props: PopupSSR_Props) =>
+const init = once(() =>
     i18NextInstance.init().then(() => {
         addMaskI18N(i18NextInstance)
         initReactI18next.init(i18NextInstance)
     }),
 )
 export async function render(props: PopupSSR_Props) {
+    await init()
     updateLanguage(props.language)
-    await init(props)
     const muiCache = createCache({ key: 'css' })
     const tssCache = createCache({ key: 'tss' })
     const tssServer = createEmotionServer(tssCache)
@@ -34,4 +45,53 @@ export async function render(props: PopupSSR_Props) {
     const muiCSS = muiServer.constructStyleTagsFromChunks(muiServer.extractCriticalToChunks(html))
     const tssCSS = tssServer.constructStyleTagsFromChunks(tssServer.extractCriticalToChunks(html))
     return { html, css: muiCSS + tssCSS }
+}
+
+const SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode> = {
+    [EnhanceableSite.Facebook]: <FacebookColoredIcon />,
+    [EnhanceableSite.Twitter]: <TwitterColoredIcon />,
+    [EnhanceableSite.Instagram]: <InstagramColoredIcon />,
+    [EnhanceableSite.Minds]: <MindsIcon />,
+    [EnhanceableSite.OpenSea]: <OpenSeaColoredIcon />,
+}
+const DEFINED_SITES = [
+    EnhanceableSite.Facebook,
+    EnhanceableSite.Twitter,
+    EnhanceableSite.Instagram,
+    EnhanceableSite.Minds,
+    EnhanceableSite.OpenSea,
+]
+function PopupSSR(props: PopupSSR_Props) {
+    const currentPersona = props.personas?.find((x) => x.identifier.equals(props.currentPersona))
+    return (
+        <StaticRouter location={PopupRoutes.Personas}>
+            <MaskThemeProvider
+                useTheme={usePopupFullPageTheme}
+                baseline
+                CustomSnackbarOffsetY={0}
+                useMaskIconPalette={() => 'light'}>
+                <Suspense fallback={null}>
+                    <PopupFrame personaLength={props.personas?.length || 0}>
+                        <Suspense fallback={null}>
+                            <PersonaHomeUI
+                                personas={props.personas}
+                                profilesWithNextID={props.profilesWithNextID}
+                                currentPersona={currentPersona}
+                                confirmLoading={false}
+                                SOCIAL_MEDIA_ICON_MAPPING={SOCIAL_MEDIA_ICON_MAPPING}
+                                definedSocialNetworks={DEFINED_SITES}
+                                onChangeCurrentPersona={noop}
+                                onConnectNextID={noop}
+                                onConfirmDisconnect={noop}
+                                onDeletePersona={noop}
+                                onDisconnectProfile={noop}
+                                openProfilePage={noop}
+                                onConnectProfile={noop}
+                            />
+                        </Suspense>
+                    </PopupFrame>
+                </Suspense>
+            </MaskThemeProvider>
+        </StaticRouter>
+    )
 }
