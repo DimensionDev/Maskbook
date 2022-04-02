@@ -316,7 +316,12 @@ export namespace Plugin.SNSAdaptor {
         /**
          * Used to order the applications on the board
          */
-        defaultSortingPriority?: number
+        appBoardSortingDefaultPriority?: number
+
+        /**
+         * Used to order the applications on the market list
+         */
+        marketListSortingPriority?: number
 
         AppIcon: JSX.Element
 

@@ -21,7 +21,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     <ApplicationEntry title="Fiat On-Ramp" AppIcon={AppIcon} disabled={disabled} onClick={openDialog} />
                 )
             },
-            defaultSortingPriority: 9,
+            appBoardSortingDefaultPriority: 9,
+            marketListSortingPriority: 6,
             tutorialLink: 'https://transak.com/',
             AppIcon: <TransakIcon />,
             description: 'Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support.',

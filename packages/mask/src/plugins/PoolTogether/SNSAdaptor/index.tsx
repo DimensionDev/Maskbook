@@ -8,6 +8,7 @@ import { DepositDialog } from '../UI/DepositDialog'
 import { URL_PATTERN } from '../constants'
 import { PoolTogetherView } from '../UI/PoolTogetherView'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { PoolTogetherIcon } from '@masknet/icons'
 
 const isPoolTogetherUrl = (url: string) => URL_PATTERN.test(url)
 
@@ -33,6 +34,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection: function Component() {
         return <DepositDialog />
     },
+    ApplicationEntries: [
+        {
+            isInDappList: true,
+            description: 'Participate in lossless lottery on Twitter.',
+            name: 'PoolTogether',
+            marketListSortingPriority: 14,
+            tutorialLink:
+                'https://realmasknetwork.notion.site/Participate-in-lossless-lottery-via-PoolTogether-on-Twitter-ETH-and-Polygon-377597e14aff441ab645ecba5ea690f1',
+            AppIcon: <PoolTogetherIcon />,
+        },
+    ],
 }
 
 export default sns

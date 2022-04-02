@@ -103,7 +103,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     </>
                 )
             },
-            defaultSortingPriority: 11,
+            appBoardSortingDefaultPriority: 11,
             AppIcon: <FindTrumanIcon />,
             name: 'FindTruman',
         },

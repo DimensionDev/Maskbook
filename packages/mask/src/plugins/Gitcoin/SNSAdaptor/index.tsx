@@ -44,6 +44,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 'Display specific information of Gitcoin projects, donate to a project directly on social media.',
             name: 'Gitcoin',
             AppIcon: <GitcoinIcon />,
+            marketListSortingPriority: 9,
             tutorialLink:
                 'https://realmasknetwork.notion.site/Make-a-quick-Gitcoin-Grant-donation-98ed83784ed4446a8a13fa685c7bddfb',
         },

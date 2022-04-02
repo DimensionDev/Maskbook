@@ -70,6 +70,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             description: 'Display and vote for proposals directly on social media.',
             tutorialLink: 'https://realmasknetwork.notion.site/Cast-a-Snapshot-vote-10c08ed9629942dd852d9afbfab61208',
             name: 'Snapshot',
+            marketListSortingPriority: 8,
             AppIcon: <SnapshotIcon />,
         },
     ],

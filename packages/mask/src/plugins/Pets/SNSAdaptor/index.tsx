@@ -32,7 +32,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     />
                 )
             },
-            defaultSortingPriority: 10,
+            appBoardSortingDefaultPriority: 10,
+            marketListSortingPriority: 12,
             AppIcon: <LootManIcon />,
             description: 'Explore the endless possibilities of NFTs.',
             name: 'Non-F Friends',

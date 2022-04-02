@@ -98,7 +98,11 @@ export function ApplicationBoard() {
                         },
                         [],
                     )
-                    .sort((a, b) => (a.entry.defaultSortingPriority ?? 0) - (b.entry.defaultSortingPriority ?? 0))
+                    .sort(
+                        (a, b) =>
+                            (a.entry.appBoardSortingDefaultPriority ?? 0) -
+                            (b.entry.appBoardSortingDefaultPriority ?? 0),
+                    )
                     .filter((x) => Boolean(x.entry.RenderEntryComponent))
                     .map((X, i) => {
                         const RenderEntryComponent = X.entry.RenderEntryComponent!

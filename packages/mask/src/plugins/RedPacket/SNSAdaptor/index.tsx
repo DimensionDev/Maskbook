@@ -112,7 +112,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     />
                 )
             },
-            defaultSortingPriority: 1,
+            appBoardSortingDefaultPriority: 1,
+            marketListSortingPriority: 1,
             AppIcon: <RedPacketIcon />,
             description: 'Gift crypto or NFTs to any users, first come, first served.',
             name: 'Lucky Drop',

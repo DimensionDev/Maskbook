@@ -24,7 +24,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     </>
                 )
             },
-            defaultSortingPriority: 7,
+            appBoardSortingDefaultPriority: 7,
             AppIcon: <SavingsIcon />,
             name: 'Savings',
         },

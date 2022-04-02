@@ -81,7 +81,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     />
                 )
             },
-            defaultSortingPriority: 3,
+            appBoardSortingDefaultPriority: 3,
+            marketListSortingPriority: 3,
             AppIcon: <MarketsIcon />,
             description: 'Launch decentralized asset freely and participate in token launch directly on Twitter.',
             isInDappList: true,
@@ -104,7 +105,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     </>
                 )
             },
-            defaultSortingPriority: 4,
+            appBoardSortingDefaultPriority: 4,
             AppIcon: <MarketsClaimIcon />,
             name: 'Claim',
         },

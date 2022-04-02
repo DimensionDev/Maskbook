@@ -54,7 +54,8 @@ const definition: Plugin.SNSAdaptor.Definition = {
                     />
                 )
             },
-            defaultSortingPriority: 2,
+            appBoardSortingDefaultPriority: 2,
+            marketListSortingPriority: 2,
             AppIcon: <FileServiceIcon />,
             isInDappList: true,
             description:

@@ -41,7 +41,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     />
                 )
             },
-            defaultSortingPriority: 5,
+            appBoardSortingDefaultPriority: 5,
             AppIcon: <CrossBridgeIcon />,
             name: 'Cross-chain',
         },
@@ -56,7 +56,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     />
                 )
             },
-            defaultSortingPriority: 6,
+            appBoardSortingDefaultPriority: 6,
+            marketListSortingPriority: 4,
             AppIcon: <MaskBoxIcon />,
             tutorialLink:
                 'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
