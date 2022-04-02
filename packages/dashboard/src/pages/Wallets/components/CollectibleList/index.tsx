@@ -65,12 +65,16 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         [account, Asset?.getNonFungibleAssets, network, selectedNetwork],
     )
     useEffect(() => {
-        PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
-        PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
+        const unsubscribeTokens = PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
+        const unsubscribeSocket = PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
             if (!info.done) {
                 retry()
             }
         })
+        return () => {
+            unsubscribeTokens()
+            unsubscribeSocket()
+        }
     }, [retry])
 
     useEffect(() => {

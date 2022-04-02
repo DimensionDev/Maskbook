@@ -43,9 +43,7 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
     const { storedTokens, erc721TokenId, setErc721TokenId, setErc721Address } = useTip()
     const { classes } = useStyles()
     const account = useAccount()
-
     const selectedIds = useMemo(() => (erc721TokenId ? [erc721TokenId] : []), [erc721TokenId])
-
     const { Asset } = useWeb3PluginState()
 
     const networkDescriptor = useNetworkDescriptor()
@@ -56,12 +54,16 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
     )
 
     useEffect(() => {
-        WalletMessages.events.erc721TokensUpdated.on(retry)
-        WalletMessages.events.socketMessageUpdated.on((info) => {
+        const unsubscribeTokens = WalletMessages.events.erc721TokensUpdated.on(retry)
+        const unsubscribeSocket = WalletMessages.events.socketMessageUpdated.on((info) => {
             if (!info.done) {
                 retry()
             }
         })
+        return () => {
+            unsubscribeTokens()
+            unsubscribeSocket()
+        }
     }, [retry])
 
     const fetchedTokens = value?.data ?? EMPTY_LIST
