@@ -81,5 +81,5 @@ export const MarketsIcon: typeof SvgIcon = createIcon(
             </clipPath>
         </defs>
     </>,
-    '0 0 28 28',
+    '-1 -2 32 32',
 )

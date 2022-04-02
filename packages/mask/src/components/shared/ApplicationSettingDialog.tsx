@@ -4,6 +4,7 @@ import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import AbstractTab, { AbstractTabProps } from '../../components/shared/AbstractTab'
 import { useI18N } from '../../utils'
+import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch'
 
 interface Props {
     open: boolean
@@ -68,7 +69,11 @@ export function ApplicationSettingDialog(props: Props) {
             },
             {
                 label: t('application_settings_tab_plug_in_switch'),
-                children: <div className={classes.tabContent}>1234</div>,
+                children: (
+                    <div className={classes.tabContent}>
+                        <ApplicationSettingPluginSwitch />
+                    </div>
+                ),
                 sx: { p: 0 },
             },
         ],

@@ -2,7 +2,7 @@ import { SettingsIcon, TutorialIcon } from '@masknet/icons'
 import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Avatar, Box, ListItem, ListItemAvatar, ListItemText, styled, listItemTextClasses } from '@mui/material'
 import type { ReactNode } from 'react'
-import SettingSwitch from '../../Settings/components/SettingSwitch'
+import { SettingSwitch } from '@masknet/shared'
 import { Twitter, Facebook, Explore } from './Actions'
 
 const useStyles = makeStyles()((theme) => ({

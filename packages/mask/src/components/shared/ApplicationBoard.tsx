@@ -50,7 +50,7 @@ export function ApplicationBoard() {
     const { classes } = useStyles()
     const theme = useTheme()
     const { t } = useI18N()
-    const [openSettings, setOpenSettings] = useState(false)
+    const [openSettings, setOpenSettings] = useState(true)
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId()

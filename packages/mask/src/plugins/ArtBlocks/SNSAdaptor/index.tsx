@@ -7,7 +7,7 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Collectible } from './Collectible'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import ArtBlocksIcon from './ArtBlocksIcon'
+import { ArtBlocksIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

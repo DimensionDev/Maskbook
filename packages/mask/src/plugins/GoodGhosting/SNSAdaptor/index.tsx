@@ -33,6 +33,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             isInDappList: true,
+            marketListSortingPriority: 13,
             description: 'Cultivate a weekly saving habit on Twitter.',
             name: 'GoodGhosting',
             tutorialLink:

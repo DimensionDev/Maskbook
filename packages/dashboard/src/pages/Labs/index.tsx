@@ -19,6 +19,7 @@ import {
     ValuablesIcon,
     CyberConnectIcon,
     DHEDGEIcon,
+    ArtBlocksIcon,
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
@@ -31,7 +32,6 @@ import { WalletStateBar } from '../Wallets/components/WalletStateBar'
 import { PoolTogetherURL } from '../../assets'
 import TutorialDialog from './components/TutorialDialog'
 import { PluginId } from '@masknet/plugin-infra'
-import ArtBlocksIcon from '../../../../mask/src/plugins/ArtBlocks/SNSAdaptor/ArtBlocksIcon'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

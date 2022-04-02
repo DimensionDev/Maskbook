@@ -1,6 +1,6 @@
 import { Switch, styled, switchClasses } from '@mui/material'
 
-export default styled<typeof Switch>(Switch)(({ size }) => {
+export const SettingSwitch = styled<typeof Switch>(Switch)(({ size }) => {
     const isSmall = size === 'small'
     const base = isSmall ? 16 : 24
     return {

@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ARTBLOCKS_PLUGIN_ID, PLUGIN_NAME, URL_PATTERN } from './constants'
-import ArtBlocksIcon from './SNSAdaptor/ArtBlocksIcon'
+import { ArtBlocksIcon } from '@masknet/icons'
 
 export const base: Plugin.Shared.Definition = {
     ID: ARTBLOCKS_PLUGIN_ID,
