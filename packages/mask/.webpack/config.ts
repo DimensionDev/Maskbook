@@ -279,7 +279,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const plugins = baseConfig.plugins!
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
         dashboard: normalizeEntryDescription(join(__dirname, '../src/extension/dashboard/index.tsx')),
-        popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/SSR-render.ts')),
+        popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/SSR-client.ts')),
         contentScript: normalizeEntryDescription(join(__dirname, '../src/content-script.ts')),
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })

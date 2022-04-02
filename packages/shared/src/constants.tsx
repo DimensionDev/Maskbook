@@ -12,7 +12,7 @@ export const TWITTER_ID = 'twitter.com'
 export const INSTAGRAM_ID = 'instagram.com'
 export const OPENSEA_ID = 'opensea.io'
 
-// When you add a new icon, don't forget to add it in packages/mask/src/setup.popup.ssr.tsx
+// When you add a new icon, don't forget to add it in packages/mask/src/extension/popups/SSR-server.tsx
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode> = {
     [TWITTER_ID]: <TwitterColoredIcon />,
     [FACEBOOK_ID]: <FacebookColoredIcon />,

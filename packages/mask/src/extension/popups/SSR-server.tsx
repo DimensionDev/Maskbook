@@ -16,12 +16,12 @@ import { renderToString } from 'react-dom/server'
 import createCache from '@emotion/cache'
 import createEmotionServer from '@emotion/server/create-instance'
 import { initReactI18next } from 'react-i18next'
-import { addMaskI18N } from '../shared-ui/locales/languages'
-import type { PopupSSR_Props } from '../background/tasks/Cancellable/PopupSSR/type'
+import { addMaskI18N } from '../../../shared-ui/locales/languages'
+import type { PopupSSR_Props } from '../../../background/tasks/Cancellable/PopupSSR/type'
 import { StaticRouter } from 'react-router-dom/server'
-import { PopupFrame } from './extension/popups/components/PopupFrame'
-import { PersonaHomeUI } from './extension/popups/pages/Personas/Home/UI'
-import { usePopupFullPageTheme } from './utils/theme/useClassicMaskFullPageTheme'
+import { PopupFrame } from './components/PopupFrame'
+import { PersonaHomeUI } from './pages/Personas/Home/UI'
+import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme'
 
 const init = once(() =>
     i18NextInstance.init().then(() => {

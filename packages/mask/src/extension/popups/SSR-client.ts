@@ -31,10 +31,10 @@ if (location.hash === '#/personas') {
         console.time('[SSR] Hydrate')
     })
     setTimeout(() => {
-        import(/* webpackPreload: true */ './render')
+        import(/* webpackPreload: true */ './normal-client')
     }, 15)
 } else {
-    import(/* webpackPreload: true */ './render')
+    import(/* webpackPreload: true */ './normal-client')
 }
 
 // this function is never called, but it will hint webpack to preload modules we need
