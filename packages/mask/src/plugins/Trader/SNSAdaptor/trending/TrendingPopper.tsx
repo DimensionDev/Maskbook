@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
-import { useLocation, useWindowScroll } from 'react-use'
+import { useLocation } from 'react-use'
 import { PluginTraderMessages } from '../../messages'
 import { WalletMessages } from '../../../Wallet/messages'
 import type { TagType } from '../../types'
@@ -64,40 +64,9 @@ export function TrendingPopper(props: TrendingPopperProps) {
         [anchorEl],
     )
 
-    useEffect(() => {
-        const onMouseLeave = () => {
-            setMouseIn(false)
-        }
-        const onMouseEnter = () => {
-            setMouseIn(true)
-        }
-        popper.current?.addEventListener('mouseleave', onMouseLeave)
-        popper.current?.addEventListener('mouseenter', onMouseEnter)
-        anchorEl?.addEventListener('mouseleave', onMouseLeave)
-        return () => {
-            popper.current?.removeEventListener('mouseleave', onMouseLeave)
-            popper.current?.removeEventListener('mouseenter', onMouseEnter)
-            anchorEl?.removeEventListener('mouseleave', onMouseLeave)
-        }
-    }, [popper.current, anchorEl])
-
     // close popper if location was changed
     const location = useLocation()
     useEffect(() => setAnchorEl(null), [location.state?.key, location.href])
-
-    // close popper if scroll out of visual screen
-    const position = useWindowScroll()
-    useEffect(() => {
-        if (!anchorEl) return
-        const { top } = anchorEl.getBoundingClientRect()
-        if (
-            (top < 0 || // out off top bound
-                top > document.documentElement.clientHeight) && // out off bottom bound
-            !mouseIn
-        )
-            setTimeout(() => setAnchorEl(null), TIMEOUT)
-    }, [anchorEl, Math.floor(position.y / 50), mouseIn])
-    // #endregion
 
     if (locked) return null
     if (!anchorEl || !type) return null
