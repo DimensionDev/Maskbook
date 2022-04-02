@@ -10,8 +10,7 @@ import {
 export const PLUGIN_ID = PluginId.CrossChainBridge
 export const PLUGIN_DESCRIPTION = 'A cross-chain-bridge plugin'
 export const PLUGIN_NAME = 'CrossChainBridge'
-
-export function getCrossChainBridge(t) {
+export function getCrossChainBridge(t: Record<string, () => string>) {
     return [
         {
             name: 'CBridge',
