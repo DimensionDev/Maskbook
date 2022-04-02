@@ -47,7 +47,7 @@ export function computedBuildFlags(flags: ReturnType<typeof normalizeBuildFlags>
         sourceMapKind = 'inline-cheap-source-map'
         supportWebAssembly = false
     } else if (mode === 'development') {
-        sourceMapKind = false
+        sourceMapKind = 'eval-cheap-source-map'
     } else {
         sourceMapKind = false
     }

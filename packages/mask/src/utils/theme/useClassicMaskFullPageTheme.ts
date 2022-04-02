@@ -4,8 +4,7 @@ import type { Localization } from '@mui/material/locale'
 import { MaskDarkTheme, MaskLightTheme } from './MaskTheme'
 
 /**
- * @deprecated
- * - Popups: migrate to \@masknet/theme package
+ * @deprecated Should migrate to \@masknet/theme
  */
 export function useClassicMaskFullPageTheme(
     userPreference: Appearance,

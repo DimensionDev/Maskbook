@@ -5,7 +5,7 @@ import { enUS, jaJP, koKR, Localization, zhTW, zhCN } from '@mui/material/locale
 import { StaticRouter } from 'react-router-dom/server'
 import { PopupFrame } from './extension/popups/components/PopupFrame'
 import { PersonaHomeUI } from './extension/popups/pages/Personas/Home/UI'
-import { useClassicMaskFullPageTheme } from './utils/useClassicMaskFullPageTheme'
+import { useClassicMaskFullPageTheme } from './utils/theme/useClassicMaskFullPageTheme'
 import {
     FacebookColoredIcon,
     InstagramColoredIcon,

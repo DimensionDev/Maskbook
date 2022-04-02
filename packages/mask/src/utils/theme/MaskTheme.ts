@@ -1,9 +1,6 @@
-import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { SubscriptionFromValueRef } from '@masknet/shared-base'
-import { PaletteMode, unstable_createMuiStrictModeTheme, type ThemeOptions } from '@mui/material'
+import { unstable_createMuiStrictModeTheme, type ThemeOptions } from '@mui/material'
 import { grey, orange } from '@mui/material/colors'
 import { cloneDeep, merge } from 'lodash-unified'
-import type { Subscription } from 'use-subscription'
 
 function getFontFamily(monospace?: boolean) {
     // We want to look native.
@@ -91,7 +88,7 @@ const baseTheme = (theme: 'dark' | 'light') => {
     if (theme === 'light') return merge(cloneDeep(base), lightThemePatch)
     return merge(cloneDeep(base), darkThemePatch)
 }
-// Theme
+/** @deprecated Only use it from useClassicMaskSNSTheme  */
 export const MaskLightTheme = unstable_createMuiStrictModeTheme(baseTheme('light'))
+/** @deprecated Only use it from useClassicMaskSNSTheme  */
 export const MaskDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))
-export const staticSubscription: Subscription<PaletteMode> = SubscriptionFromValueRef(new ValueRef('light'))

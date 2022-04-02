@@ -1,37 +1,13 @@
-import { useValueRef } from '@masknet/shared-base-ui'
-import { Appearance, makeStyles, parseColor } from '@masknet/theme'
-import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
+import { parseColor } from '@masknet/theme'
 import { unstable_createMuiStrictModeTheme } from '@mui/material'
-import { blue, green, red } from '@mui/material/colors'
-import { jaJP, koKR, zhTW, zhCN, enUS, Localization } from '@mui/material/locale/index'
-import type { Theme, ThemeOptions } from '@mui/material/styles/createTheme'
-import { cloneDeep, merge } from 'lodash-unified'
-import { useRef } from 'react'
-import { languageSettings } from '../settings/settings'
-import { activatedSocialNetworkUI } from '../social-network'
-import './theme-global.d'
-import { useSubscription } from 'use-subscription'
 import produce, { setAutoFreeze } from 'immer'
-import twitterColorSchema from '../social-network-adaptor/twitter.com/customization/twitter-color-schema.json'
-import { staticSubscription, MaskDarkTheme, MaskLightTheme } from './MaskTheme'
+import twitterColorSchema from '../../social-network-adaptor/twitter.com/customization/twitter-color-schema.json'
+import { MaskLightTheme } from './MaskTheme'
 
-export function useClassicMaskSNSTheme() {
-    const { current: provider } = useRef(
-        activatedSocialNetworkUI.customization.paletteMode?.current || staticSubscription,
-    )
-    const { current: usePostTheme = (t: Theme) => t } = useRef(activatedSocialNetworkUI.customization.useTheme)
-    const palette = useSubscription(provider)
-    const baseTheme = palette === 'dark' ? MaskDarkTheme : MaskLightTheme
-
-    // TODO: support RTL?
-    const [localization, isRTL] = useThemeLanguage()
-    const theme = unstable_createMuiStrictModeTheme(baseTheme, localization)
-    return usePostTheme(theme)
-}
 /**
- * Only used in swap pages under popups, will replace it in the future
+ * @deprecated Should migrate to \@masknet/theme
  */
-export function usePopupsMaskFullPageTheme() {
+export function useSwapPageTheme() {
     const baseTheme = MaskLightTheme
 
     setAutoFreeze(false)
@@ -235,61 +211,4 @@ export function usePopupsMaskFullPageTheme() {
         }
     })
     return unstable_createMuiStrictModeTheme(PopupTheme)
-}
-
-export function useThemeLanguage(): [loc: Localization, RTL: boolean] {
-    let language = useValueRef(languageSettings)
-    // TODO: support auto language
-    if (language === LanguageOptions.__auto__) language = LanguageOptions.enUS
-
-    const displayLanguage = language as any as SupportedLanguages
-
-    const langs: Record<SupportedLanguages, Localization> = {
-        [SupportedLanguages.enUS]: enUS,
-        [SupportedLanguages.jaJP]: jaJP,
-        [SupportedLanguages.koKR]: koKR,
-        [SupportedLanguages.zhTW]: zhTW,
-        [SupportedLanguages.zhCN]: zhCN,
-    }
-    return [langs[displayLanguage] || enUS, false]
-}
-
-export interface ClassicMaskFullPageThemeOptions {
-    forcePalette?: Appearance
-}
-
-export const useColorStyles = makeStyles()((theme: typeof MaskDarkTheme) => {
-    const dark = theme.palette.mode === 'dark'
-    return {
-        error: {
-            color: dark ? red[500] : red[900],
-        },
-        success: {
-            color: dark ? green[500] : green[800],
-        },
-        info: {
-            color: dark ? blue[500] : blue[800],
-        },
-    }
-})
-export const useErrorStyles = makeStyles()((theme) => {
-    const dark = theme.palette.mode === 'dark'
-    return {
-        containedPrimary: {
-            backgroundColor: dark ? red[500] : red[900],
-            '&:hover': {
-                backgroundColor: dark ? red[900] : red[700],
-            },
-        },
-        outlinedPrimary: {
-            borderColor: dark ? red[500] : red[900],
-            color: dark ? red[500] : red[900],
-            '&:hover': {
-                borderColor: dark ? red[900] : red[700],
-            },
-        },
-    }
-})
-export function extendsTheme(extend: (theme: Theme) => ThemeOptions) {
-    return (theme: Theme) => merge(cloneDeep(theme), extend(theme))
 }

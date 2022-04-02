@@ -9,10 +9,11 @@ import { WalletStateBarUI } from '../../components/WalletStateBar'
 import { SwapBox } from './SwapBox'
 import { SwapWeb3Context } from '../../../../web3/context'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useI18N, usePopupsMaskFullPageTheme } from '../../../../utils'
+import { useI18N } from '../../../../utils'
 import { NetworkPluginID, useReverseAddress } from '@masknet/plugin-infra'
 import { TargetChainIdContext } from '../../../../plugins/Trader/trader/useTargetChainIdContext'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
+import { useSwapPageTheme } from '../../../../utils/theme/usePopupsMaskFullPageTheme'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -68,7 +69,7 @@ export default function SwapPage() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
-    const theme = usePopupsMaskFullPageTheme()
+    const theme = useSwapPageTheme()
     const { value: pendingTransactions = [] } = useRecentTransactions({
         status: TransactionStatusType.NOT_DEPEND,
     })

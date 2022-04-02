@@ -10,12 +10,13 @@ import {
     IconButtonProps,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ThemeProvider } from '@mui/material/styles'
+import { Theme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
 import CloseIcon from '@mui/icons-material/Close'
-import { extendsTheme, useMatchXS, useThemeLanguage } from '../../../utils'
+import { useMatchXS, useThemeLanguage } from '../../../utils'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { appearanceSettings } from '../../../settings/settings'
-import { useClassicMaskFullPageTheme } from '../../../utils/useClassicMaskFullPageTheme'
+import { cloneDeep, merge } from 'lodash-unified'
+import { useClassicMaskFullPageTheme } from '../../../utils/theme/useClassicMaskFullPageTheme'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -163,6 +164,9 @@ const useDashboardDialogWrapperStyles = makeStyles<DashboardDialogWrapperProps>(
     },
 }))
 
+function extendsTheme(extend: (theme: Theme) => ThemeOptions) {
+    return (theme: Theme) => merge(cloneDeep(theme), extend(theme))
+}
 const dialogTheme = extendsTheme((theme) => ({
     components: {
         MuiOutlinedInput: {
