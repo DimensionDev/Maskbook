@@ -97,7 +97,7 @@ export const TipButton: FC<Props> = ({
     useAsync(queryBindings, [queryBindings])
 
     useEffect(() => {
-        MaskMessages.events.ownProofChanged.on(() => {
+        return MaskMessages.events.ownProofChanged.on(() => {
             retryLoadVerifyInfo()
             queryBindings()
         })
