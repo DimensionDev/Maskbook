@@ -2,7 +2,7 @@
 
 import React, { memo, Suspense, useCallback, useState } from 'react'
 import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
-import type { ProfileIdentifier, ProfileInformation, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
+import type { ProfileIdentifier, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../../utils/i18n-next-ui'
 import { GrayMasks } from '@masknet/icons'
@@ -135,12 +135,6 @@ export const ProfileList = memo((props: ProfileListProps) => {
         </>
     )
 })
-
-export interface MergedProfileInformation extends ProfileInformation {
-    is_valid?: boolean
-    identity?: string
-    platform?: NextIDPlatform
-}
 
 interface ProfileListUIProps {
     onConnectProfile(network: string): void

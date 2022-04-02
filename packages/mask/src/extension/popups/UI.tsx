@@ -11,9 +11,11 @@ import { MaskUIRoot } from '../../UIRoot'
 import { useThemeLanguage } from '../../utils/theme'
 import { useClassicMaskFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme'
 import { useMyPersonas } from '../../components/DataSource/useMyPersonas'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { languageSettings } from '../../settings/settings'
 
 function useAlwaysLightTheme() {
-    return useClassicMaskFullPageTheme(Appearance.light, useThemeLanguage())
+    return useClassicMaskFullPageTheme(Appearance.light, useThemeLanguage(useValueRef(languageSettings)))
 }
 const Wallet = lazy(() => import('./pages/Wallet'))
 const Personas = lazy(() => import('./pages/Personas'))

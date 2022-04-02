@@ -14,7 +14,7 @@ import { Theme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
 import CloseIcon from '@mui/icons-material/Close'
 import { useMatchXS, useThemeLanguage } from '../../../utils'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { appearanceSettings } from '../../../settings/settings'
+import { appearanceSettings, languageSettings } from '../../../settings/settings'
 import { cloneDeep, merge } from 'lodash-unified'
 import { useClassicMaskFullPageTheme } from '../../../utils/theme/useClassicMaskFullPageTheme'
 
@@ -105,7 +105,10 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
         onClose,
     }
     // Restore old theme
-    const theme = useClassicMaskFullPageTheme(useValueRef(appearanceSettings), useThemeLanguage())
+    const theme = useClassicMaskFullPageTheme(
+        useValueRef(appearanceSettings),
+        useThemeLanguage(useValueRef(languageSettings)),
+    )
     const renderedComponent =
         state === DialogState.Destroyed ? null : (
             <ThemeProvider theme={theme}>

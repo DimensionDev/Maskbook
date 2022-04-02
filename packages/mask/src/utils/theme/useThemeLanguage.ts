@@ -1,7 +1,7 @@
-import { useValueRef } from '@masknet/shared-base-ui'
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
 import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
 import { jaJP, koKR, zhTW, zhCN, enUS, Localization } from '@mui/material/locale/index'
-import { languageSettings } from '../../settings/settings'
 import { i18NextInstance, updateLanguage } from '@masknet/shared-base'
 
 const langs: Record<SupportedLanguages, Localization> = {
@@ -11,9 +11,7 @@ const langs: Record<SupportedLanguages, Localization> = {
     [SupportedLanguages.zhTW]: zhTW,
     [SupportedLanguages.zhCN]: zhCN,
 }
-export function useThemeLanguage(): [loc: Localization, RTL: boolean] {
-    let language = useValueRef(languageSettings)
-
+export function useThemeLanguage(language: LanguageOptions): [loc: Localization, RTL: boolean] {
     if (language === LanguageOptions.__auto__) {
         updateLanguage(language)
         if (Object.values(SupportedLanguages).some((x) => x === i18NextInstance.language)) {

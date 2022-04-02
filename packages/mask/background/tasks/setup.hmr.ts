@@ -11,11 +11,17 @@ type CancelableJob = { default: (signal: AbortSignal) => void }
 const CancelableJobs: CancelableJob[] = [
     NewInstalled,
     process.env.manifest === '2' ? InjectContentScript : InjectContentScriptMV3,
-    process.env.manifest === '2' ? PopupSSR : PopupSSR_MV3,
     IsolatedDashboardBridge,
-    process.env.architecture === 'app' ? null! : CleanupProfileDatabase,
     NotificationsToMobile,
-].filter(Boolean)
+]
+
+if (process.env.architecture === 'web') {
+    CancelableJobs.push(
+        // Web only
+        process.env.manifest === '2' ? PopupSSR : PopupSSR_MV3,
+        CleanupProfileDatabase,
+    )
+}
 
 const abort = new AbortController()
 CancelableJobs.forEach((task) => task.default(abort.signal))

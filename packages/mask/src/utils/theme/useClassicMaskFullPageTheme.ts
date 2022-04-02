@@ -1,3 +1,6 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
+import type { LanguageOptions } from '@masknet/public-api'
 import { Appearance } from '@masknet/theme'
 import { PaletteMode, unstable_createMuiStrictModeTheme } from '@mui/material'
 import type { Localization } from '@mui/material/locale'
@@ -22,6 +25,6 @@ export function useClassicMaskFullPageTheme(
 /**
  * @deprecated Should migrate to \@masknet/theme
  */
-export function usePopupFullPageTheme() {
-    return useClassicMaskFullPageTheme(Appearance.light, useThemeLanguage())
+export function usePopupFullPageTheme(language: LanguageOptions) {
+    return useClassicMaskFullPageTheme(Appearance.light, useThemeLanguage(language))
 }

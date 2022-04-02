@@ -1,3 +1,13 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
+import { Suspense } from 'react'
+import {
+    FacebookColoredIcon,
+    InstagramColoredIcon,
+    MindsIcon,
+    TwitterColoredIcon,
+    OpenSeaColoredIcon,
+} from '@masknet/icons'
 import { i18NextInstance, updateLanguage, EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
 import { once, noop } from 'lodash-unified'
 import { TssCacheProvider, MaskThemeProvider } from '@masknet/theme'
@@ -12,14 +22,6 @@ import { StaticRouter } from 'react-router-dom/server'
 import { PopupFrame } from './extension/popups/components/PopupFrame'
 import { PersonaHomeUI } from './extension/popups/pages/Personas/Home/UI'
 import { usePopupFullPageTheme } from './utils/theme/useClassicMaskFullPageTheme'
-import {
-    FacebookColoredIcon,
-    InstagramColoredIcon,
-    MindsIcon,
-    TwitterColoredIcon,
-    OpenSeaColoredIcon,
-} from '@masknet/icons'
-import { Suspense } from 'react'
 
 const init = once(() =>
     i18NextInstance.init().then(() => {
@@ -63,10 +65,13 @@ const DEFINED_SITES = [
 ]
 function PopupSSR(props: PopupSSR_Props) {
     const currentPersona = props.personas?.find((x) => x.identifier.equals(props.currentPersona))
+    function useTheme() {
+        return usePopupFullPageTheme(props.language)
+    }
     return (
         <StaticRouter location={PopupRoutes.Personas}>
             <MaskThemeProvider
-                useTheme={usePopupFullPageTheme}
+                useTheme={useTheme}
                 baseline
                 CustomSnackbarOffsetY={0}
                 useMaskIconPalette={() => 'light'}>
