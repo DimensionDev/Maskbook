@@ -1,9 +1,8 @@
 import { useWeb3State } from '@masknet/plugin-infra'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { usePickToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, EthereumTokenType, useAccount, useChainId, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { ChainId, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import {
     Box,
     BoxProps,
@@ -17,14 +16,14 @@ import {
     Typography,
 } from '@mui/material'
 import classnames from 'classnames'
-import { FC, memo, useCallback, useRef } from 'react'
+import { FC, memo, useRef } from 'react'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
-import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { TargetChainIdContext, useTip, useTipValidate } from '../../contexts'
 import { useI18N } from '../../locales'
 import { TipType } from '../../types'
 import { NFTSection } from './NFTSection'
+import { TokenSection } from './TokenSection'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -87,10 +86,6 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
         recipient,
         recipients: recipientAddresses,
         setRecipient,
-        token,
-        setToken,
-        amount,
-        setAmount,
         isSending,
         sendTip,
         tipType,
@@ -103,25 +98,6 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    const pickToken = usePickToken()
-    const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await pickToken({
-            chainId,
-            disableNativeToken: false,
-            selectedTokens: token ? [token.address] : [],
-        })
-        if (picked) {
-            setToken(picked)
-        }
-    }, [pickToken, token?.address, chainId])
-
-    // balance
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        token?.type || EthereumTokenType.Native,
-        token?.address || '',
-        chainId,
-    )
-    // #endregion
 
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
     const enabledNft =
@@ -183,22 +159,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
                 </FormControl>
                 {tipType === TipType.Token ? (
                     <FormControl className={classes.tokenField}>
-                        <TokenAmountPanel
-                            label=""
-                            token={token}
-                            amount={amount}
-                            onAmountChange={setAmount}
-                            balance={tokenBalance}
-                            InputProps={{
-                                disabled: isSending,
-                            }}
-                            SelectTokenChip={{
-                                loading: loadingTokenBalance,
-                                ChipProps: {
-                                    onClick: onSelectTokenChipClick,
-                                },
-                            }}
-                        />
+                        <TokenSection />
                     </FormControl>
                 ) : (
                     <NFTSection />
