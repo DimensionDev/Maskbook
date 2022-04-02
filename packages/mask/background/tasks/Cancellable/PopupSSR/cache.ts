@@ -1,3 +1,4 @@
+import { throttle } from 'lodash-unified'
 import { MaskMessages } from '../../../../shared/messages'
 import { InternalStorageKeys } from '../../../services/settings/utils'
 import { prepareSSR } from './prepare-data'
@@ -8,13 +9,16 @@ export function startListen(
     render: (props: PopupSSR_Props) => Promise<{ html: string; css: string }>,
     signal: AbortSignal,
 ) {
-    async function task() {
-        cache = await prepareSSR().then(render)
-        console.trace('popup ssr ready.')
-    }
+    const task = throttle(
+        async function task() {
+            cache = await prepareSSR().then(render)
+        },
+        2000,
+        { leading: true },
+    )
 
-    MaskMessages.events.createInternalSettingsChanged.on(console.log, { signal })
-    MaskMessages.events.createInternalSettingsUpdated.on(console.log, { signal })
+    task()?.then(() => console.log('[Popup SSR] Page ready.'))
+    MaskMessages.events.ownPersonaChanged.on(task, { signal })
     MaskMessages.events.createInternalSettingsUpdated.on(
         (event) => {
             if (event.initial) return
@@ -22,5 +26,4 @@ export function startListen(
         },
         { signal },
     )
-    task()
 }
