@@ -1,4 +1,4 @@
-import { Edit2Icon, LinkOutIcon, SuccessIcon } from '@masknet/icons'
+import { Drop2Icon, LinkOutIcon, SuccessIcon } from '@masknet/icons'
 import {
     PluginId,
     useActivatedPlugin,
@@ -23,11 +23,11 @@ import { activatedSocialNetworkUI } from '../../../../social-network'
 import { WalletMessages } from '../../../Wallet/messages'
 import { TargetChainIdContext, useTip } from '../../contexts'
 import { useI18N } from '../../locales'
+import { storeToken } from '../../storage'
 import { TipType } from '../../types'
 import { ConfirmModal } from '../ConfirmModal'
 import { AddDialog } from './AddDialog'
 import { TipForm } from './TipForm'
-import { storeToken } from '../../storage'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -85,6 +85,7 @@ const useStyles = makeStyles()((theme) => ({
     walletChip: {
         marginLeft: 'auto',
         height: 40,
+        boxSizing: 'border-box',
         display: 'flex',
         alignItems: 'center',
         backgroundColor: theme.palette.background.default,
@@ -96,24 +97,28 @@ const useStyles = makeStyles()((theme) => ({
     },
     walletTitle: {
         marginLeft: theme.spacing(1),
+        lineHeight: '18px',
+        height: 18,
         fontSize: 14,
         fontWeight: 'bold',
     },
     walletAddress: {
-        fontSize: 10,
-        color: theme.palette.text.secondary,
-        cursor: 'pointer',
+        height: 12,
         display: 'flex',
         alignItems: 'center',
+        fontSize: 10,
+        color: theme.palette.text.secondary,
     },
     changeWalletButton: {
-        marginLeft: theme.spacing(1),
+        marginLeft: theme.spacing(0.5),
         display: 'flex',
         alignItems: 'center',
         cursor: 'pointer',
     },
     link: {
         cursor: 'pointer',
+        lineHeight: '10px',
+        marginTop: 2,
         '&:hover': {
             textDecoration: 'none',
         },
@@ -152,6 +157,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         erc721TokenId,
         setErc721Address,
         setErc721TokenId,
+        reset,
     } = useTip()
 
     const isTokenTip = tipType === TipType.Token
@@ -166,7 +172,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                   promote,
               })
             : t.tip_nft_share_post({
-                  name: erc721Contract?.name || '',
+                  name: erc721Contract?.name || 'NFT',
                   recipientSnsId,
                   recipient,
                   promote,
@@ -248,19 +254,19 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     {walletTitle}
                 </Typography>
 
-                <Link
-                    className={classes.link}
-                    href={Utils?.resolveAddressLink?.(chainId, account) ?? ''}
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    <Typography ml={1} className={classes.walletAddress}>
-                        {Utils?.formatAddress?.(account, 4)}
+                <Typography ml={1} className={classes.walletAddress}>
+                    {Utils?.formatAddress?.(account, 4)}
+                    <Link
+                        className={classes.link}
+                        href={Utils?.resolveAddressLink?.(chainId, account) ?? ''}
+                        target="_blank"
+                        rel="noopener noreferrer">
                         <LinkOutIcon className={classes.linkIcon} />
-                    </Typography>
-                </Link>
+                    </Link>
+                </Typography>
             </div>
             <div className={classes.changeWalletButton} role="button" onClick={openWallet}>
-                <Edit2Icon />
+                <Drop2Icon />
             </div>
         </div>
     )
@@ -285,6 +291,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 open={confirmModalIsOpen}
                 onClose={() => {
                     openConfirmModal(false)
+                    reset()
                     onClose?.()
                 }}
                 icon={isTokenTip ? <SuccessIcon style={{ height: 64, width: 64 }} /> : null}

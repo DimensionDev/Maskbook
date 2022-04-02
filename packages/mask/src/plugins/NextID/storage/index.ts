@@ -31,6 +31,7 @@ export function storeToken(token: Web3Plugin.NonFungibleToken) {
 }
 
 export function deleteToken(address: string, tokenId: string) {
-    const tokens = remove(getTokens(), (t) => t.tokenId === tokenId && t.contract?.address === address)
+    const tokens = getTokens()
+    remove(tokens, (t) => t.tokenId === tokenId && t.contract?.address === address)
     storage.storage.addedTokens.setValue(tokens)
 }

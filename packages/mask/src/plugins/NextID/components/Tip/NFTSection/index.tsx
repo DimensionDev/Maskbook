@@ -18,14 +18,12 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
     },
     selectSection: {
-        marginTop: theme.spacing(1.5),
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
     },
     list: {
         flexGrow: 1,
-        marginTop: theme.spacing(2),
         maxHeight: 400,
         overflow: 'auto',
         borderRadius: 4,

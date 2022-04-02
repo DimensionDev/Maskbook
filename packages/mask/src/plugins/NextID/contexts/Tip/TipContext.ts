@@ -29,6 +29,7 @@ export interface ContextOptions {
     isSending: boolean
     sendState: TransactionState
     storedTokens: Web3Plugin.NonFungibleToken[]
+    reset: () => void
 }
 
 export const TipContext = createContext<ContextOptions>({
@@ -51,4 +52,5 @@ export const TipContext = createContext<ContextOptions>({
     isSending: false,
     sendState: { type: TransactionStateType.UNKNOWN },
     storedTokens: [],
+    reset: noop,
 })

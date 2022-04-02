@@ -62,8 +62,7 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
             TransactionStateType.RECEIPT,
         ].includes(sendState.type)
 
-        const wrapSendTip = async () => {
-            await sendTip()
+        const reset = () => {
             setAmount('')
             setErc721TokenId(null)
             setErc721Address('')
@@ -85,10 +84,11 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
             erc721Contract: erc721Contract || null,
             erc721Address,
             setErc721Address,
-            sendTip: wrapSendTip,
+            sendTip,
             isSending,
             sendState,
             storedTokens: storedTokens.filter((t) => t.contract?.chainId === chainId),
+            reset,
         }
     }, [
         chainId,
