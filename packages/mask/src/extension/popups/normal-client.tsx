@@ -29,7 +29,6 @@ if (location.hash === '#/personas') {
             </CacheProvider>,
         )
         startPluginHost()
-        import('./pages/Wallet')
         console.timeEnd('[SSR] Hydrate')
     }
     hydrate()
