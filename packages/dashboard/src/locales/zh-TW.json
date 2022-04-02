@@ -36,6 +36,7 @@
     "setup_page_create_restore_title": "從身份或備份中恢復",
     "setup_page_create_restore_subtitle": "從身份和歷史備份中恢復",
     "setup_page_create_restore_button": "備份 或 登錄",
+    "create_account_private_key": "私鑰",
     "create_account_identity_title": "在Mask Network創建一個身份",
     "create_account_sign_in_button": "恢復",
     "create_account_preview_tip": "此二維碼將保存你的身份密碼，請妥善保存。可使用Mask手機端掃描二維碼來登錄。",
