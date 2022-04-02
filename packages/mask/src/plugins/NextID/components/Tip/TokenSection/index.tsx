@@ -1,7 +1,8 @@
-import { TokenAmountPanel, usePickToken } from '@masknet/shared'
+import { usePickToken } from '@masknet/shared'
 import { EthereumTokenType, isNativeTokenAddress, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FC, useCallback, useMemo } from 'react'
+import { TokenAmountPanel } from '../../../../../web3/UI/TokenAmountPanel'
 import { useGasConfig } from '../../../../Trader/SNSAdaptor/trader/hooks/useGasConfig'
 import { TargetChainIdContext, useTip } from '../../../contexts'
 

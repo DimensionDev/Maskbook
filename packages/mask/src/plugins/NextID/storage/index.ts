@@ -1,5 +1,6 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import type { ScopedStorage } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import { remove } from 'lodash-unified'
 
 interface StorageValue {
@@ -32,6 +33,6 @@ export function storeToken(token: Web3Plugin.NonFungibleToken) {
 
 export function deleteToken(address: string, tokenId: string) {
     const tokens = getTokens()
-    remove(tokens, (t) => t.tokenId === tokenId && t.contract?.address === address)
+    remove(tokens, (t) => t.tokenId === tokenId && isSameAddress(t.contract?.address, address))
     storage.storage.addedTokens.setValue(tokens)
 }

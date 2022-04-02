@@ -1,12 +1,13 @@
 import { useNetworkDescriptor, useWeb3State as useWeb3PluginState } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
 import { FC, HTMLProps, useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { TargetChainIdContext, useTip } from '../../../contexts'
+import { WalletMessages } from '../../../../Wallet/messages'
+import { useTip } from '../../../contexts'
 import { NFTList } from './NFTList'
 
 export * from './NFTList'
@@ -39,7 +40,6 @@ const useStyles = makeStyles()((theme) => ({
 interface Props extends HTMLProps<HTMLDivElement> {}
 
 export const NFTSection: FC<Props> = ({ className, ...rest }) => {
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { storedTokens, erc721TokenId, setErc721TokenId, setErc721Address } = useTip()
     const { classes } = useStyles()
     const account = useAccount()
@@ -50,18 +50,27 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
 
     const networkDescriptor = useNetworkDescriptor()
 
-    const { value = { data: EMPTY_LIST, hasNextPage: false }, retry } = useAsyncRetry(
-        async () => Asset?.getNonFungibleAssets?.(account, { page: 0, size: 1000 }, undefined, networkDescriptor),
+    const { value = { data: EMPTY_LIST }, retry } = useAsyncRetry(
+        async () => Asset?.getNonFungibleAssets?.(account, { page: 0 }, undefined, networkDescriptor),
         [account, Asset?.getNonFungibleAssets, networkDescriptor],
     )
 
-    useEffect(retry, [chainId])
+    useEffect(() => {
+        WalletMessages.events.erc721TokensUpdated.on(retry)
+        WalletMessages.events.socketMessageUpdated.on((info) => {
+            if (!info.done) {
+                retry()
+            }
+        })
+    }, [retry])
+
+    const fetchedTokens = value?.data ?? EMPTY_LIST
 
     const tokens = useMemo(() => {
-        return uniqWith([...storedTokens, ...value.data], (v1, v2) => {
-            return v1.contract?.address === v2.contract?.address && v1.tokenId === v2.tokenId
+        return uniqWith([...storedTokens, ...fetchedTokens], (v1, v2) => {
+            return isSameAddress(v1.contract?.address, v2.contract?.address) && v1.tokenId === v2.tokenId
         })
-    }, [storedTokens, value.data])
+    }, [storedTokens, fetchedTokens])
 
     return (
         <div className={classnames(classes.root, className)} {...rest}>

@@ -229,15 +229,15 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const walletTitle =
         Utils?.formatDomainName?.(domain) || Utils?.formatAddress?.(account, 4) || providerDescriptor?.name
 
-    // #region Wallet
-    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+    // #region change provider
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
     )
     // #endregion
     const openWallet = useCallback(() => {
         if (hasNativeAPI) return nativeAPI?.api.misc_openCreateWalletView()
-        return openWalletStatusDialog()
-    }, [openWalletStatusDialog, hasNativeAPI])
+        return openSelectProviderDialog()
+    }, [openSelectProviderDialog, hasNativeAPI])
 
     const handleAddToken = useCallback((token: Web3Plugin.NonFungibleToken) => {
         setErc721Address(token.contract?.address ?? '')

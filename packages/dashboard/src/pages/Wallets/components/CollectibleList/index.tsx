@@ -64,6 +64,14 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
             Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }, undefined, selectedNetwork || undefined),
         [account, Asset?.getNonFungibleAssets, network, selectedNetwork],
     )
+    useEffect(() => {
+        PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
+        PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
+            if (!info.done) {
+                retry()
+            }
+        })
+    }, [retry])
 
     useEffect(() => {
         if (!loadingSize) return
@@ -85,15 +93,6 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         },
         [currentPluginId],
     )
-
-    useEffect(() => {
-        PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
-        PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
-            if (!info.done) {
-                retry()
-            }
-        })
-    }, [retry])
 
     const hasNextPage = (page + 1) * loadingSize < value.data.length
     const isLoading = renderData.length === 0 && isQuerying
