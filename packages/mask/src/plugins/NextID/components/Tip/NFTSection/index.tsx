@@ -52,7 +52,7 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
 
     const networkDescriptor = useNetworkDescriptor()
 
-    // Can't not get the loading status of fetching via websocket
+    // Cannot get the loading status of fetching via websocket
     // loading status of `useAsyncRetry` is not the real status
     const [guessLoading, setGuessLoading] = useState(true)
     useTimeoutFn(() => {

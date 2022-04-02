@@ -58,10 +58,8 @@ export const AddDialog: FC<Props> = ({ onAdd, ...rest }) => {
     const network = useMemo(() => allNetworks.find((n) => n.chainId === chainId), [allNetworks, chainId])
     const contract = useERC721TokenContract(contractAddress)
     const { value: isMine, loading: isChecking } = useAsync(async () => {
-        console.log('contract', contract)
         if (!contract || !account) return false
         const ownerAddress = await contract.methods.ownerOf(tokenId).call()
-        console.log('ownerAddress', ownerAddress)
         return isSameAddress(ownerAddress, account)
     }, [contract, tokenId, account])
 
