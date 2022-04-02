@@ -15,7 +15,7 @@ import {
     BaseContract,
 } from './types'
 
-export interface EventOptions {
+interface EventOptions {
     filter?: object
     fromBlock?: BlockType
     topics?: string[]

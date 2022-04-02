@@ -65,7 +65,7 @@ export class BenQiProtocol implements SavingsProtocol {
             }
             const supplyRate = await contract.methods.supplyRatePerTimestamp().call()
             const supplyBase = new BigNumber(supplyRate).shiftedBy(-18).times(TIMESTAMPS_PER_DAY).plus(1)
-            const apy = supplyBase.pow(DAYS_PER_YEAR).minus(1).times(100)
+            const apy = supplyBase.times(DAYS_PER_YEAR).times(100)
             this._apr = apy.toFixed(2)
         } catch (error) {
             this._apr = BenQiProtocol.DEFAULT_APR
