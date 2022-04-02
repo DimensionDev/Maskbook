@@ -12,12 +12,12 @@ import { PopupSSR } from './PopupSSR_Root'
 
 const init = once((props: PopupSSR_Props) =>
     i18NextInstance.init().then(() => {
-        updateLanguage(props.language)
         addMaskI18N(i18NextInstance)
         initReactI18next.init(i18NextInstance)
     }),
 )
 export async function render(props: PopupSSR_Props) {
+    updateLanguage(props.language)
     await init(props)
     const muiCache = createCache({ key: 'css' })
     const tssCache = createCache({ key: 'tss' })

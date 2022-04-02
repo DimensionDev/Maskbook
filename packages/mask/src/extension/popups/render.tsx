@@ -12,6 +12,8 @@ import { initData } from './pages/Personas/hooks/usePersonaContext'
 
 if (location.hash === '' || location.hash === '#/personas') {
     async function hydrate() {
+        import('./pages/Personas')
+        import('./pages/Personas/Home')
         await Promise.all([
             Services.Identity.queryCurrentPersona().then((x) => (initData.currentIdentifier = x?.toText())),
             Services.Identity.queryOwnedPersonaInformation().then((x) => (initData.personas = x)),
@@ -28,6 +30,7 @@ if (location.hash === '' || location.hash === '#/personas') {
                 </TssCacheProvider>
             </CacheProvider>,
         )
+        import('./pages/Wallet')
         console.timeEnd('[SSR] Hydrate')
     }
     hydrate()
