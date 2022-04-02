@@ -1,7 +1,7 @@
-import { EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
+import { EnhanceableSite, i18NextInstance, PopupRoutes } from '@masknet/shared-base'
 import { noop } from 'lodash-unified'
 import { Appearance, MaskThemeProvider } from '@masknet/theme'
-import { enUS } from '@mui/material/locale'
+import { enUS, jaJP, koKR, Localization, zhTW, zhCN } from '@mui/material/locale'
 import { StaticRouter } from 'react-router-dom/server'
 import { PopupFrame } from './extension/popups/components/PopupFrame'
 import { PersonaHomeUI } from './extension/popups/pages/Personas/Home/UI'
@@ -15,6 +15,7 @@ import {
 } from '@masknet/icons'
 import type { PopupSSR_Props } from '../background/tasks/Cancellable/PopupSSR/type'
 import { Suspense } from 'react'
+import { SupportedLanguages } from '@masknet/public-api'
 
 const SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode> = {
     [EnhanceableSite.Facebook]: <FacebookColoredIcon />,
@@ -30,8 +31,15 @@ const DEFINED_SITES = [
     EnhanceableSite.Minds,
     EnhanceableSite.OpenSea,
 ]
+const LANGS: Record<SupportedLanguages, Localization> = {
+    [SupportedLanguages.enUS]: enUS,
+    [SupportedLanguages.jaJP]: jaJP,
+    [SupportedLanguages.koKR]: koKR,
+    [SupportedLanguages.zhCN]: zhCN,
+    [SupportedLanguages.zhTW]: zhTW,
+}
 function useAlwaysLightTheme() {
-    return useClassicMaskFullPageTheme(Appearance.light, [enUS, false])
+    return useClassicMaskFullPageTheme(Appearance.light, [Reflect.get(LANGS, i18NextInstance.language) || enUS, false])
 }
 export function PopupSSR(props: PopupSSR_Props) {
     const currentPersona = props.personas?.find((x) => x.identifier.equals(props.currentPersona))

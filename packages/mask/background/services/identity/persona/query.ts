@@ -1,6 +1,7 @@
 import { ECKeyIdentifier, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
 import { queryAvatarDataURL } from '../../../database/avatar-cache/avatar'
 import { queryPersonasDB, queryProfileDB } from '../../../database/persona/db'
+import { getBrowserStorageUnchecked, InternalStorageKeys } from '../../settings/utils'
 
 export async function queryOwnedPersonaInformation(): Promise<PersonaInformation[]> {
     const personas = await queryPersonasDB({ hasPrivateKey: true })
@@ -51,9 +52,6 @@ export async function queryCurrentPersona_internal(owned: PersonaInformation[]) 
 }
 
 async function queryCurrentPersonaIdentifierUnchecked(): Promise<ECKeyIdentifier | undefined> {
-    // TODO: This is a hack. We cannot access "settings" API in this TS project. This should be an temporally workaround.
-    const raw = 'settings+currentPersonaIdentifier'
-    const currentIdentifier = await browser.storage.local.get(raw)
-    if (!currentIdentifier[raw]) return
-    return ECKeyIdentifier.fromString(String(currentIdentifier[raw]), ECKeyIdentifier).unwrapOr(undefined)
+    const raw = String(await getBrowserStorageUnchecked(InternalStorageKeys.currentPersona))
+    return ECKeyIdentifier.fromString(raw, ECKeyIdentifier).unwrapOr(undefined)
 }
