@@ -12,6 +12,7 @@ import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSo
 import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { activatedSocialNetworkUI } from '../../social-network'
+import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 
 function getTabContent(tabId: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -51,6 +52,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         platform as NextIDPlatform,
         identity.identifier.userId,
     )
+
     const currentAccountNotConnectPersona =
         currentIdentity.identifier.userId === identity.identifier.userId &&
         personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.publicHexKey) === -1
@@ -100,9 +102,15 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [identity])
 
     const ContentComponent = useMemo(() => {
-        const tab = currentAccountNotConnectPersona
-            ? tabs?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
-            : selectedTabComputed?.ID
+        let tab
+        if (isTwitter(activatedSocialNetworkUI)) {
+            tab = currentAccountNotConnectPersona
+                ? tabs?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
+                : selectedTabComputed?.ID
+        } else {
+            tab = selectedTabComputed?.ID
+        }
+
         return getTabContent(tab ?? '')
     }, [selectedTabComputed, identity.identifier])
 
