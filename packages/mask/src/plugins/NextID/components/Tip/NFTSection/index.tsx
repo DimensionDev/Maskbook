@@ -2,10 +2,11 @@ import { useNetworkDescriptor, useWeb3State as useWeb3PluginState } from '@maskn
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
+import { CircularProgress } from '@mui/material'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
-import { FC, HTMLProps, useEffect, useMemo } from 'react'
-import { useAsyncRetry } from 'react-use'
+import { FC, HTMLProps, useEffect, useMemo, useState } from 'react'
+import { useAsyncRetry, useTimeout, useTimeoutFn } from 'react-use'
 import { WalletMessages } from '../../../../Wallet/messages'
 import { useTip } from '../../../contexts'
 import { NFTList } from './NFTList'
@@ -29,6 +30,9 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         borderRadius: 4,
     },
+    loadingOwnerList: {
+        margin: '24px auto 16px',
+    },
     errorMessage: {
         marginTop: theme.spacing(3),
         fontSize: 12,
@@ -48,14 +52,26 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
 
     const networkDescriptor = useNetworkDescriptor()
 
-    const { value = { data: EMPTY_LIST }, retry } = useAsyncRetry(
-        async () => Asset?.getNonFungibleAssets?.(account, { page: 0 }, undefined, networkDescriptor),
-        [account, Asset?.getNonFungibleAssets, networkDescriptor],
-    )
+    // Can't not get the loading status of fetching via websocket
+    // loading status of `useAsyncRetry` is not the real status
+    const [guessLoading, setGuessLoading] = useState(true)
+    useTimeoutFn(() => {
+        setGuessLoading(false)
+    }, 10000)
+
+    const {
+        value = { data: EMPTY_LIST },
+        loading,
+        retry,
+    } = useAsyncRetry(async () => {
+        const result = await Asset?.getNonFungibleAssets?.(account, { page: 0 }, undefined, networkDescriptor)
+        return result
+    }, [account, Asset?.getNonFungibleAssets, networkDescriptor])
 
     useEffect(() => {
         const unsubscribeTokens = WalletMessages.events.erc721TokensUpdated.on(retry)
         const unsubscribeSocket = WalletMessages.events.socketMessageUpdated.on((info) => {
+            setGuessLoading(info.done)
             if (!info.done) {
                 retry()
             }
@@ -74,18 +90,24 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
         })
     }, [storedTokens, fetchedTokens])
 
+    const showLoadingIndicator = tokens.length === 0 && (loading || guessLoading)
+
     return (
         <div className={classnames(classes.root, className)} {...rest}>
             <div className={classes.selectSection}>
-                <NFTList
-                    className={classes.list}
-                    selectedIds={selectedIds}
-                    tokens={tokens}
-                    onChange={(id, address) => {
-                        setErc721TokenId(id)
-                        setErc721Address(address)
-                    }}
-                />
+                {showLoadingIndicator ? (
+                    <CircularProgress size={24} className={classes.loadingOwnerList} />
+                ) : (
+                    <NFTList
+                        className={classes.list}
+                        selectedIds={selectedIds}
+                        tokens={tokens}
+                        onChange={(id, address) => {
+                            setErc721TokenId(id)
+                            setErc721Address(address)
+                        }}
+                    />
+                )}
             </div>
         </div>
     )
