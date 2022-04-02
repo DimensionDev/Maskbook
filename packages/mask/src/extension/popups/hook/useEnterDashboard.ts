@@ -3,6 +3,7 @@ import { useCallback } from 'react'
 
 export const useEnterDashboard = () => {
     return useCallback((event: React.MouseEvent) => {
+        event.preventDefault()
         if (event.shiftKey) {
             browser.tabs.create({
                 active: true,

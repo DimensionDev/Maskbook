@@ -43,7 +43,9 @@ export async function render(props: PopupSSR_Props) {
                 <PopupSSR {...props} />
             </TssCacheProvider>
         </CacheProvider>,
-    ).replaceAll('href="/', 'href="#/')
+    )
+        .replaceAll('href="/', 'href="#/')
+        .replaceAll('href="#/dashboard', 'href="/dashboard')
     const muiCSS = muiServer.constructStyleTagsFromChunks(muiServer.extractCriticalToChunks(html))
     const tssCSS = tssServer.constructStyleTagsFromChunks(tssServer.extractCriticalToChunks(html))
     return { html, css: muiCSS + tssCSS }
