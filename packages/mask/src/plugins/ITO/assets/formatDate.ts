@@ -1,7 +1,7 @@
-import i18nNextInstance from '../../../../shared-ui/locales_legacy'
+import { i18NextInstance } from '@masknet/shared-base'
 
 export const dateTimeFormat = (date: Date, includeTime = true) =>
-    new Intl.DateTimeFormat(i18nNextInstance.language, {
+    new Intl.DateTimeFormat(i18NextInstance.language, {
         year: 'numeric',
         month: 'numeric',
         day: 'numeric',

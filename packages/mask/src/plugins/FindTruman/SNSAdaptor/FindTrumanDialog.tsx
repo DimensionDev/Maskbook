@@ -1,6 +1,6 @@
 import { Box, DialogContent } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'

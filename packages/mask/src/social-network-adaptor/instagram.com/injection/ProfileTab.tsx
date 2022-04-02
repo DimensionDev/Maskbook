@@ -151,7 +151,7 @@ export function ProfileTabAtInstagram() {
             ele.style.display = ''
         }
     }
-    const clear = async () => {
+    const clear = () => {
         const style = getStyleProps({ activeColor, color })
         const activeTab = searchProfileActiveTabSelector().evaluate()
         if (activeTab?.style) {

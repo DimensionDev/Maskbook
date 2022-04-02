@@ -1,15 +1,12 @@
-import { memo, useCallback } from 'react'
+// ! We're going to SSR this UI, so DO NOT import anything new!
+
+import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { PersonaContext } from '../../hooks/usePersonaContext'
-import type { PersonaInformation, ECKeyIdentifier } from '@masknet/shared-base'
+import { formatPersonaFingerprint, type PersonaInformation, type ECKeyIdentifier } from '@masknet/shared-base'
 import { ListItemButton, List, Typography } from '@mui/material'
 import { DeleteIcon, MasksIcon } from '@masknet/icons'
-import { formatFingerprint } from '@masknet/shared'
-import { PopupRoutes } from '@masknet/shared-base'
-import { useNavigate } from 'react-router-dom'
-import Services from '../../../../../service'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     list: {
         padding: 0,
         height: 'calc(100vh - 185px)',
@@ -49,26 +46,6 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: 6,
         cursor: 'pointer',
     },
-}))
-
-export const PersonaList = memo(() => {
-    const { personas, setDeletingPersona } = PersonaContext.useContainer()
-    const navigate = useNavigate()
-
-    const onLogout = useCallback(
-        (persona: PersonaInformation) => {
-            setDeletingPersona(persona)
-            navigate(PopupRoutes.Logout)
-        },
-        [setDeletingPersona],
-    )
-
-    const onChangeCurrentPersonas = useCallback(
-        (identifier: ECKeyIdentifier) => Services.Settings.setCurrentPersonaIdentifier(identifier),
-        [],
-    )
-
-    return <PersonaListUI personas={personas} onLogout={onLogout} onChangeCurrentPersona={onChangeCurrentPersonas} />
 })
 
 export interface PersonaListUIProps {
@@ -95,7 +72,7 @@ export const PersonaListUI = memo<PersonaListUIProps>(({ personas, onLogout, onC
                         <div>
                             <Typography className={classes.name}>{nickname}</Typography>
                             <Typography className={classes.identifier}>
-                                {formatFingerprint(identifier.compressedPoint ?? '', 10)}
+                                {formatPersonaFingerprint(identifier.compressedPoint ?? '', 10)}
                                 <DeleteIcon
                                     className={classes.trashIcon}
                                     onClick={(e) => {

@@ -20,7 +20,7 @@ import {
     Typography,
 } from '@mui/material'
 import formatDateTime from 'date-fns/format'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 import { useContext, useMemo, useState } from 'react'
 import { LoadingButton } from '@mui/lab'
 import getUnixTime from 'date-fns/getUnixTime'

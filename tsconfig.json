@@ -99,6 +99,7 @@
       "@masknet/plugin-solana": ["./packages/plugins/Solana/src"],
       "@masknet/plugin-template": ["./packages/plugins/template/src"],
       "@masknet/plugin-cyberconnect": ["./packages/plugins/CyberConnect/src"],
+      "@masknet/plugin-go-plus-security": ["./packages/plugins/GoPlusSecurity/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     },
