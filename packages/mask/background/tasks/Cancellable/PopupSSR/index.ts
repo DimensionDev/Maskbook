@@ -2,7 +2,7 @@ import { serializer } from '@masknet/shared-base'
 import { OnDemandWorker } from '../../../../utils-pure/OnDemandWorker'
 import { cache, startListen } from './cache'
 
-const worker = new OnDemandWorker(new URL('./worker_init.ts', import.meta.url), { name: 'PopupSSR' })
+const worker = new OnDemandWorker(new URL('./worker_init.ts', import.meta.url), { name: 'PopupSSR-Worker' })
 export default async function PopupSSR(signal: AbortSignal) {
     browser.runtime.onMessage.addListener(f)
 

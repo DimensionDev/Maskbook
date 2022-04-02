@@ -10,10 +10,8 @@ import { CacheProvider } from '@emotion/react'
 import { TssCacheProvider } from '@masknet/theme'
 import { initData } from './pages/Personas/hooks/usePersonaContext'
 
-if (location.hash === '' || location.hash === '#/personas') {
+if (location.hash === '#/personas') {
     async function hydrate() {
-        import('./pages/Personas')
-        import('./pages/Personas/Home')
         await Promise.all([
             Services.Identity.queryCurrentPersona().then((x) => (initData.currentIdentifier = x?.toText())),
             Services.Identity.queryOwnedPersonaInformation().then((x) => (initData.personas = x)),

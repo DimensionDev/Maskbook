@@ -5,10 +5,10 @@ import { PersonaContext } from './hooks/usePersonaContext'
 import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { Route, Routes } from 'react-router-dom'
 
-const Home = lazy(() => import('./Home'))
-const Logout = lazy(() => import('./Logout'))
-const PersonaRename = lazy(() => import('./Rename'))
-const PersonaSignRequest = lazy(() => import('./PersonaSignRequest'))
+const Home = lazy(() => import(/* webpackPrefetch: true */ './Home'))
+const Logout = lazy(() => import(/* webpackPrefetch: true */ './Logout'))
+const PersonaRename = lazy(() => import(/* webpackPrefetch: true */ './Rename'))
+const PersonaSignRequest = lazy(() => import(/* webpackPrefetch: true */ './PersonaSignRequest'))
 
 const r = relativeRouteOf(PopupRoutes.Personas)
 const Persona = memo(() => {
