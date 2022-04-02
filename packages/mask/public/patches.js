@@ -91,7 +91,7 @@ globalThis.regeneratorRuntime = undefined
             },
         })
 
-        if (location.pathname !== '/popup-ssr.html') {
+        if (location.pathname !== '/popups.html') {
             trustedTypes.createPolicy('ssr', {})
         }
     }
