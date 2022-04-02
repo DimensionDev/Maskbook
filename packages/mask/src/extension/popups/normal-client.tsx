@@ -28,24 +28,28 @@ if (location.hash === '#/personas') {
                 </TssCacheProvider>
             </CacheProvider>,
         )
+        startPluginHost()
         import('./pages/Wallet')
         console.timeEnd('[SSR] Hydrate')
     }
     hydrate()
 } else {
-    status.then(() => createNormalReactRoot(<Popups />))
+    status.then(() => createNormalReactRoot(<Popups />)).then(startPluginHost)
 }
 
-// TODO: Should only load plugins when the page is plugin-aware.
-startPluginDashboard(
-    createPluginHost(undefined, (pluginID, signal) => {
-        return {
-            createKVStorage(type, defaultValues) {
-                if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
-                else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
-            },
-            personaSign: Services.Identity.signWithPersona,
-            walletSign: Services.Ethereum.personalSign,
-        }
-    }),
-)
+function startPluginHost() {
+    // TODO: Should only load plugins when the page is plugin-aware.
+    startPluginDashboard(
+        createPluginHost(undefined, (pluginID, signal) => {
+            return {
+                createKVStorage(type, defaultValues) {
+                    if (type === 'memory')
+                        return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+                    else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+                },
+                personaSign: Services.Identity.signWithPersona,
+                walletSign: Services.Ethereum.personalSign,
+            }
+        }),
+    )
+}
