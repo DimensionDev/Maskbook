@@ -2,7 +2,6 @@ import { memo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { Button, styled, Tab, tabClasses, Tabs, tabsClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { NetworkSelector } from '../../../components/NetworkSelector'
 import { TabContext, TabPanel } from '@mui/lab'
 import { File as FileIcon } from '@masknet/icons'
 import { useWallet } from '@masknet/web3-shared-evm'
@@ -11,6 +10,7 @@ import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import Services from '../../../../service'
 import { WalletContext } from '../hooks/useWalletContext'
+import { NormalHeader } from '../../../components/Header'
 
 const useStyles = makeStyles()({
     header: {
@@ -155,10 +155,7 @@ const BackupWallet = memo(() => {
 
     return (
         <>
-            <div className={classes.header}>
-                <Typography className={classes.title}>{t('popups_wallet_backup_wallet')}</Typography>
-                <NetworkSelector />
-            </div>
+            <NormalHeader title={t('popups_back_up_the_wallet')} />
             <div className={classes.content}>
                 <TabContext value={currentTab}>
                     <StyledTabs value={currentTab} onChange={(event, tab) => setCurrentTab(tab)}>

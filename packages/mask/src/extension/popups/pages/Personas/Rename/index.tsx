@@ -8,6 +8,7 @@ import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import Services from '../../../../service'
 import { PopupRoutes } from '@masknet/shared-base'
+import { NormalHeader } from '../../../components/Header'
 
 const useStyles = makeStyles()({
     header: {
@@ -65,23 +66,26 @@ const PersonaRename = memo(() => {
     }, [selectedPersona, name])
 
     return (
-        <div className={classes.content}>
-            <StyledInput
-                onChange={(e) => setName(e.target.value)}
-                defaultValue={selectedPersona?.nickname}
-                error={!!error}
-                helperText={error}
-            />
-            <LoadingButton
-                fullWidth
-                loading={loading}
-                variant="contained"
-                disabled={!name}
-                classes={{ root: classes.button, disabled: classes.disabled }}
-                onClick={renamePersona}>
-                {t('confirm')}
-            </LoadingButton>
-        </div>
+        <>
+            <NormalHeader title={t('popups_rename')} />
+            <div className={classes.content}>
+                <StyledInput
+                    onChange={(e) => setName(e.target.value)}
+                    defaultValue={selectedPersona?.nickname}
+                    error={!!error}
+                    helperText={error}
+                />
+                <LoadingButton
+                    fullWidth
+                    loading={loading}
+                    variant="contained"
+                    disabled={!name}
+                    classes={{ root: classes.button, disabled: classes.disabled }}
+                    onClick={renamePersona}>
+                    {t('confirm')}
+                </LoadingButton>
+            </div>
+        </>
     )
 })
 

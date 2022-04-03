@@ -10,6 +10,7 @@ import { LoadingButton } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes, formatPersonaFingerprint, type PersonaInformation } from '@masknet/shared-base'
 import { PasswordField } from '../../../components/PasswordField'
+import { NormalHeader } from '../../../components/Header'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -135,6 +136,7 @@ export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout
 
     return (
         <>
+            <NormalHeader title={t('popups_log_out')} />
             <div className={classes.content}>
                 <TipIcon className={classes.icon} />
                 <Typography className={classes.title}>{t('popups_persona_logout')}</Typography>

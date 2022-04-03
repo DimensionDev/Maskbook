@@ -2,7 +2,6 @@ import { memo, useCallback, useRef, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { TableContainer, TablePagination, tablePaginationClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { NetworkSelector } from '../../../components/NetworkSelector'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import { useAsync, useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
@@ -13,6 +12,7 @@ import { LoadingButton } from '@mui/lab'
 import { PopupRoutes } from '@masknet/shared-base'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { first } from 'lodash-unified'
+import { NormalHeader } from '../../../components/Header'
 
 const useStyles = makeStyles()({
     container: {
@@ -155,10 +155,7 @@ const AddDeriveWallet = memo(() => {
 
     return (
         <div className={classes.container}>
-            <div className={classes.header}>
-                <Typography className={classes.title}>{t('plugin_wallet_import_wallet')}</Typography>
-                <NetworkSelector />
-            </div>
+            <NormalHeader title={t('popups_add_derive')} />
             <Typography className={classes.path}>
                 {t('popups_wallet_derivation_path', {
                     path: HD_PATH_WITHOUT_INDEX_ETHEREUM,

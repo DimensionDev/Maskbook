@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { ArrowDropIcon, MaskNotSquareIcon, MasksIcon } from '@masknet/icons'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { formatPersonaFingerprint, PopupRoutes } from '@masknet/shared-base'
-import {CopyIconButton} from "../CopyIconButton";
+import { CopyIconButton } from '../CopyIconButton'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -14,7 +14,7 @@ const useStyles = makeStyles()(() => ({
         lineHeight: 0,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     logo: {
         width: 104,
@@ -59,9 +59,9 @@ const useStyles = makeStyles()(() => ({
 }))
 
 export interface PersonaHeaderUIProps {
-    avatar?: string
+    avatar?: string | null
     currentIdentifier: string
-    nickname: string
+    nickname?: string
 }
 
 export const PersonaHeader = memo<PersonaHeaderUIProps>(({ avatar, currentIdentifier, nickname }) => {

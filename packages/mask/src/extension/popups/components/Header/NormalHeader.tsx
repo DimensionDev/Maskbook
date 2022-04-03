@@ -33,12 +33,13 @@ const useStyles = makeStyles()(() => ({
 }))
 
 export interface TitleHeaderProps {
-    title: string
+    title?: string
 }
 
 export const NormalHeader = memo<TitleHeaderProps>(({ title }) => {
     const { classes } = useStyles()
     const navigate = useNavigate()
+
     return (
         <Box className={classes.container} style={{ justifyContent: history.length !== 1 ? 'center' : 'flex-start' }}>
             {history.length !== 1 ? (
@@ -46,7 +47,7 @@ export const NormalHeader = memo<TitleHeaderProps>(({ title }) => {
             ) : (
                 <MaskNotSquareIcon className={classes.logo} />
             )}
-            <Typography className={classes.title}>{title}</Typography>
+            {history.length !== 1 && title ? <Typography className={classes.title}>{title}</Typography> : null}
         </Box>
     )
 })

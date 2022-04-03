@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { StyledInput } from '../../../components/StyledInput'
 import { useWallet } from '@masknet/web3-shared-evm'
@@ -12,6 +11,7 @@ import type { z as zod } from 'zod'
 import { Controller } from 'react-hook-form'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
 import { WalletContext } from '../hooks/useWalletContext'
+import { NormalHeader } from '../../../components/Header'
 
 const useStyles = makeStyles()({
     header: {
@@ -70,9 +70,7 @@ const WalletRename = memo(() => {
 
     return (
         <>
-            <div className={classes.header}>
-                <Typography className={classes.title}>{t('rename')}</Typography>
-            </div>
+            <NormalHeader title={t('popups_rename')} />
             <div className={classes.content}>
                 <Controller
                     name="name"

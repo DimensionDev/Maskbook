@@ -12,7 +12,8 @@ import { WalletContext } from '../../hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { Navigator } from '../../../../components/Navigator'
 import { WalletHeader } from '../../../../components/Header'
-import { useChainId } from '@masknet/plugin-infra'
+import { ChainId, Wallet, useChainId, useWallet } from '@masknet/web3-shared-evm'
+import { useChainChange } from '../../../../hook/useChainChange'
 
 const useStyles = makeStyles()({
     content: {
@@ -76,16 +77,29 @@ enum WalletTabs {
 
 export const WalletAssets = memo(() => {
     const navigate = useNavigate()
-    return <WalletAssetsUI onAddTokenClick={() => navigate(PopupRoutes.AddToken)} />
+    const chainId = useChainId()
+    const onChainChange = useChainChange()
+    const wallet = useWallet()
+    return wallet ? (
+        <WalletAssetsUI
+            onAddTokenClick={() => navigate(PopupRoutes.AddToken)}
+            chainId={chainId}
+            wallet={wallet}
+            onChainChange={onChainChange}
+        />
+    ) : null
 })
 
 export interface WalletAssetsUIProps {
     onAddTokenClick: () => void
+    chainId: ChainId
+    onChainChange: (chainId: ChainId) => void
+    wallet: Wallet
 }
 
-export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) => {
+export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick, wallet, chainId, onChainChange }) => {
     const { t } = useI18N()
-    const chainId = useChainId()
+
     const { classes } = useStyles()
     const { assetsLoading } = useContainer(WalletContext)
     const [currentTab, setCurrentTab] = useState(WalletTabs.Assets)
@@ -94,7 +108,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
         <LoadingPlaceholder />
     ) : (
         <>
-            <WalletHeader chainId={chainId} />
+            <WalletHeader wallet={wallet} chainId={chainId} onChainChange={onChainChange} />
             <div className={classes.content}>
                 <TabContext value={currentTab}>
                     <StyledTabs value={currentTab} onChange={(event, tab) => setCurrentTab(tab)}>

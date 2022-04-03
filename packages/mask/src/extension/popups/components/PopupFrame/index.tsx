@@ -32,38 +32,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
     },
-    header: {
-        padding: '0 10px',
-        backgroundColor: theme.palette.primary.main,
-        height: 50,
-        display: 'flex',
-        justifyContent: 'space-between',
-    },
-    left: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    right: {
-        display: 'flex',
-        paddingTop: 6,
-    },
-    nav: {
-        width: 86,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'transparent',
-        fontSize: 16,
-        fontWeight: 500,
-        color: theme.palette.primary.contrastText,
-        textDecoration: 'none',
-        borderRadius: '4px 4px 0px 0px',
-    },
-    active: {
-        color: theme.palette.primary.main,
-        cursor: 'inherit',
-        backgroundColor: '#ffffff',
-    },
 }))
 
 export interface PopupFrameProps extends React.PropsWithChildren<{}> {}
@@ -72,10 +40,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     const { classes } = useStyles()
     const personas = useMyPersonas()
 
-    const matchRecovery = [
-        useMatch(PopupRoutes.WalletRecovered),
-        useMatch(PopupRoutes.Unlock),
-    ].some(Boolean)
+    const matchRecovery = [useMatch(PopupRoutes.WalletRecovered), useMatch(PopupRoutes.Unlock)].some(Boolean)
 
     return (
         <>

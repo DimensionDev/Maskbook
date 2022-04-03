@@ -2,13 +2,12 @@ import { makeStyles } from '@masknet/theme'
 import { memo, useMemo } from 'react'
 import { Box, Link, MenuItem, Typography } from '@mui/material'
 import type { ChainId, Wallet } from '@masknet/web3-shared-evm'
-import { getRegisteredWeb3Networks, NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
+import { getRegisteredWeb3Networks, NetworkPluginID } from '@masknet/plugin-infra'
 import { Flags } from '../../../../../shared'
-import { ChainIcon, FormattedAddress, useMenuConfig } from '@masknet/shared'
-import { WalletIcon } from '@masknet/shared'
+import { ChainIcon, FormattedAddress, useMenuConfig, WalletIcon } from '@masknet/shared'
 import { formatEthereumAddress, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../CopyIconButton'
-import {useMatch, useNavigate} from 'react-router-dom'
+import { useMatch, useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { ArrowDropIcon, MaskBlueIcon, PopupLinkIcon } from '@masknet/icons'
 
@@ -64,12 +63,27 @@ const useStyles = makeStyles()(() => ({
         fontSize: 20,
         transition: 'all 300ms',
     },
+    colorChainICon: {
+        borderRadius: '999px!important',
+        margin: '0px !important',
+    },
+    networkSelector: {
+        display: 'flex',
+        cursor: 'pointer',
+    },
+    chainName: {
+        fontSize: 14,
+        lineHeight: '18px',
+        color: '#15181B',
+        fontWeight: 700,
+        display: 'flex',
+        alignItems: 'center',
+    },
 }))
 
 export interface WalletHeaderProps {
-    wallet?: Wallet
+    wallet: Wallet
     chainId: ChainId
-    networks: Web3Plugin.NetworkDescriptor[]
     onChainChange: (chainId: ChainId) => void
 }
 
@@ -80,7 +94,7 @@ export const WalletHeader = memo<WalletHeaderProps>(({ chainId, onChainChange, w
     const navigate = useNavigate()
     const currentNetwork = useMemo(() => networks.find((x) => x.chainId === chainId) ?? networks[0], [networks])
 
-    const [menu, openMenu] = useMenuConfig(
+    const [menu, openMenu, , status] = useMenuConfig(
         networks
             ?.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
             .filter((x) => (Flags.support_testnet_switch ? true : x.isMainnet))
@@ -108,23 +122,35 @@ export const WalletHeader = memo<WalletHeaderProps>(({ chainId, onChainChange, w
 
     return (
         <Box className={classes.container}>
-            {currentNetwork.isMainnet ? (
-                <WalletIcon networkIcon={currentNetwork.icon} />
-            ) : (
-                <ChainIcon color={currentNetwork.iconColor} />
-            )}
+            <div className={classes.networkSelector} onClick={openMenu}>
+                {currentNetwork.isMainnet ? (
+                    <WalletIcon networkIcon={currentNetwork.icon} size={30} />
+                ) : (
+                    <ChainIcon color={currentNetwork.iconColor} size={30} classes={{ point: classes.colorChainICon }} />
+                )}
+                <div style={{ marginLeft: 4 }}>
+                    <Typography className={classes.chainName}>
+                        {currentNetwork.name}
+                        <ArrowDropIcon
+                            className={classes.arrow}
+                            style={{ transform: status ? 'rotate(-180deg)' : undefined }}
+                        />
+                    </Typography>
+                </div>
+            </div>
             <div
                 className={classes.action}
                 onClick={() => navigate(matchSwitchWallet ? PopupRoutes.Wallet : PopupRoutes.SwitchWallet)}>
                 <MaskBlueIcon className={classes.avatar} />
                 <div>
-                    <Typography className={classes.nickname}>{wallet?.name}</Typography>
+                    <Typography className={classes.nickname}>{wallet.name}</Typography>
                     <Typography className={classes.identifier}>
-                        <FormattedAddress address={wallet?.address} formatter={formatEthereumAddress} size={4} />
-                        <CopyIconButton text={wallet?.address ?? ''} className={classes.icon} />
+                        <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
+                        <CopyIconButton text={wallet.address ?? ''} className={classes.icon} />
                         <Link
+                            onClick={(event) => event.stopPropagation()}
                             style={{ width: 12, height: 12 }}
-                            href={resolveAddressLinkOnExplorer(chainId, wallet?.address ?? '')}
+                            href={resolveAddressLinkOnExplorer(chainId, wallet.address ?? '')}
                             target="_blank"
                             rel="noopener noreferrer">
                             <PopupLinkIcon className={classes.icon} />
@@ -136,6 +162,7 @@ export const WalletHeader = memo<WalletHeaderProps>(({ chainId, onChainChange, w
                     style={{ transform: matchSwitchWallet ? 'rotate(-180deg)' : undefined }}
                 />
             </div>
+            {menu}
         </Box>
     )
 })

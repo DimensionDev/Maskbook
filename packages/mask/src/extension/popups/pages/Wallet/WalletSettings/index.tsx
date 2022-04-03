@@ -11,6 +11,7 @@ import { FormattedAddress } from '@masknet/shared'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { WalletContext } from '../hooks/useWalletContext'
 import { Navigator } from '../../../components/Navigator'
+import { NormalHeader } from '../../../components/Header'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -83,6 +84,7 @@ const WalletSettings = memo(() => {
 
     return (
         <>
+            <NormalHeader title={t('popups_account_details')} />
             <div className={classes.header}>
                 <MaskWalletIcon style={{ marginRight: 4 }} />
                 <div>

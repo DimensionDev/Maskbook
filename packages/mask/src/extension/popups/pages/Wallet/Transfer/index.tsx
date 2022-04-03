@@ -7,6 +7,8 @@ import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
 import { Transfer1559 } from './Transfer1559'
 import { Prior1559Transfer } from './Prior1559Transfer'
+import { NormalHeader } from '../../../components/Header'
+import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles()({
     assetItem: {
@@ -24,6 +26,7 @@ const useStyles = makeStyles()({
 })
 
 const Transfer = memo(() => {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
     const wallets = useWallets(ProviderType.MaskWallet)
@@ -58,6 +61,7 @@ const Transfer = memo(() => {
 
     return (
         <>
+            <NormalHeader title={t('popups_send')} />
             {isEIP1559Supported(chainId) ? (
                 <Transfer1559 selectedAsset={selectedAsset} otherWallets={otherWallets} openAssetMenu={openAssetMenu} />
             ) : (

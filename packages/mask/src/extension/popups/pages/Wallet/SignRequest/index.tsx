@@ -10,6 +10,7 @@ import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
+import { NormalHeader } from '../../../components/Header'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -134,35 +135,42 @@ const SignRequest = memo(() => {
     }, [value, requestLoading])
 
     return (
-        <main className={classes.container}>
-            <div className={classes.info}>
-                <Typography className={classes.title}>{t('popups_wallet_signature_request')}</Typography>
-                <Typography className={classes.walletName}>{wallet?.name ?? ''}</Typography>
-                <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
-                    {address}
+        <>
+            <NormalHeader title={t('approve')} />
+            <main className={classes.container}>
+                <div className={classes.info}>
+                    <Typography className={classes.title}>{t('popups_wallet_signature_request')}</Typography>
+                    <Typography className={classes.walletName}>{wallet?.name ?? ''}</Typography>
+                    <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
+                        {address}
+                    </Typography>
+                </div>
+                <Typography className={classes.secondary} style={{ marginTop: 20 }}>
+                    {t('popups_wallet_signature_request_message')}:
                 </Typography>
-            </div>
-            <Typography className={classes.secondary} style={{ marginTop: 20 }}>
-                {t('popups_wallet_signature_request_message')}:
-            </Typography>
-            <Typography className={classes.message}>{data}</Typography>
-            {transferError ? (
-                <Typography className={classes.error}>{t('popups_wallet_transfer_error_tip')}</Typography>
-            ) : null}
-            <div className={classes.controller}>
-                <LoadingButton
-                    loading={rejectLoading}
-                    variant="contained"
-                    className={classes.button}
-                    style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
-                    onClick={handleReject}>
-                    {t('cancel')}
-                </LoadingButton>
-                <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
-                    {t('confirm')}
-                </LoadingButton>
-            </div>
-        </main>
+                <Typography className={classes.message}>{data}</Typography>
+                {transferError ? (
+                    <Typography className={classes.error}>{t('popups_wallet_transfer_error_tip')}</Typography>
+                ) : null}
+                <div className={classes.controller}>
+                    <LoadingButton
+                        loading={rejectLoading}
+                        variant="contained"
+                        className={classes.button}
+                        style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
+                        onClick={handleReject}>
+                        {t('cancel')}
+                    </LoadingButton>
+                    <LoadingButton
+                        loading={loading}
+                        variant="contained"
+                        className={classes.button}
+                        onClick={handleConfirm}>
+                        {t('confirm')}
+                    </LoadingButton>
+                </div>
+            </main>
+        </>
     )
 })
 

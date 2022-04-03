@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { usePasswordForm } from '../hooks/usePasswordForm'
+import { NormalHeader } from '../../../components/Header'
 
 const useStyles = makeStyles()({
     container: {
@@ -93,6 +94,7 @@ const SetPaymentPassword = memo(() => {
 
     return (
         <>
+            <NormalHeader title={t('popups_set_the_payment_password')} />
             <div className={classes.container}>
                 <div className={classes.header}>
                     <Typography className={classes.title}>{t('popups_wallet_set_payment_password')}</Typography>

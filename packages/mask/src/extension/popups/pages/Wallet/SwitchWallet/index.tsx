@@ -1,16 +1,24 @@
 import { memo, useCallback } from 'react'
 import { Button, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, ProviderType, useWallet, useWallets, useWalletPrimary } from '@masknet/web3-shared-evm'
+import {
+    isSameAddress,
+    ProviderType,
+    useWallet,
+    useWallets,
+    useWalletPrimary,
+    useChainId,
+} from '@masknet/web3-shared-evm'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { NetworkSelector } from '../../../components/NetworkSelector'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { WalletItem } from './WalletItem'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
 import classNames from 'classnames'
+import { WalletHeader } from '../../../components/Header'
+import { useChainChange } from '../../../hook/useChainChange'
 
 const useStyles = makeStyles()({
     header: {
@@ -84,6 +92,8 @@ const SwitchWallet = memo(() => {
     const walletPrimary = useWalletPrimary()
     const { classes } = useStyles()
     const navigate = useNavigate()
+    const chainId = useChainId()
+    const onChainChange = useChainChange()
     const wallet = useWallet()
     const wallets = useWallets(ProviderType.MaskWallet)
 
@@ -111,9 +121,7 @@ const SwitchWallet = memo(() => {
 
     return (
         <>
-            <div className={classes.header}>
-                <NetworkSelector />
-            </div>
+            {wallet ? <WalletHeader chainId={chainId} onChainChange={onChainChange} wallet={wallet} /> : null}
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     {wallets.map((item, index) => (

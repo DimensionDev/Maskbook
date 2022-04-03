@@ -11,6 +11,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
 import { Navigator } from '../../../components/Navigator'
+import { NormalHeader } from '../../../components/Header'
 
 const useStyles = makeStyles()((theme) => ({
     contain: {
@@ -75,6 +76,7 @@ const Unlock = memo(() => {
 
     return (
         <>
+            <NormalHeader />
             <main className={classes.contain}>
                 <div className={classes.header}>
                     <MaskWalletIcon style={{ fontSize: 48 }} />

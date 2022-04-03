@@ -19,6 +19,7 @@ import { PageHeader } from '../components/PageHeader'
 import { PasswordField } from '../../../components/PasswordField'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { ProviderType, useChainId } from '@masknet/web3-shared-evm'
+import { NormalHeader } from '../../../components/Header'
 
 const useStyles = makeStyles()({
     container: {
@@ -220,6 +221,7 @@ const ImportWallet = memo(() => {
 
     return (
         <>
+            <NormalHeader title={t('popups_import_the_wallet')} />
             <div className={classes.container}>
                 <PageHeader title={t('plugin_wallet_import_wallet')} />
                 <form className={classes.form} onSubmit={onSubmit}>
