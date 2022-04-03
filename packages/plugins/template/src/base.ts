@@ -4,7 +4,6 @@ import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
-    icon: '\u{1F9EA}',
     name: { fallback: PLUGIN_NAME },
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: '' }, link: '' },
