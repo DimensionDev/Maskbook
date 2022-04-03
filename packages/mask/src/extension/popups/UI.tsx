@@ -2,17 +2,18 @@ import { lazy, useState } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useClassicMaskFullPageTheme } from '../../utils'
+import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme'
 import '../../social-network-adaptor/browser-action'
 import { Web3Provider } from '@masknet/web3-shared-evm'
 import { PopupWeb3Context } from '../../web3/context'
 import { PopupFrame } from './components/PopupFrame'
-import { Appearance } from '@masknet/theme'
 import { MaskUIRoot } from '../../UIRoot'
 import { PageTitleContext } from './context'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { languageSettings } from '../../settings/settings'
 
-function useAlwaysLightTheme() {
-    return useClassicMaskFullPageTheme({ forcePalette: Appearance.light })
+function usePopupTheme() {
+    return usePopupFullPageTheme(useValueRef(languageSettings))
 }
 const Wallet = lazy(() => import('./pages/Wallet'))
 const Personas = lazy(() => import('./pages/Personas'))
@@ -26,7 +27,7 @@ const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x)
 export default function Popups() {
     const [title, setTitle] = useState('')
     return (
-        <MaskUIRoot useTheme={useAlwaysLightTheme} kind="page">
+        <MaskUIRoot useTheme={usePopupTheme} kind="page">
             <Web3Provider value={PopupWeb3Context}>
                 <PageTitleContext.Provider value={{ title, setTitle }}>
                     <HashRouter>

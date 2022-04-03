@@ -5,16 +5,14 @@ import { CustomSnackbarProvider } from './Components/Snackbar'
 function compose(init: React.ReactNode, ...f: ((children: React.ReactNode) => JSX.Element)[]) {
     return f.reduceRight((prev, curr) => curr(prev), <>{init}</>)
 }
-const identity = (jsx: React.ReactNode) => jsx as JSX.Element
 
 export interface MaskThemeProvider extends React.PropsWithChildren<{}> {
-    baseline: boolean
     useTheme(): Theme
     useMaskIconPalette(theme: Theme): MaskIconPalette
     CustomSnackbarOffsetY?: number
 }
 export function MaskThemeProvider(props: MaskThemeProvider) {
-    const { children, baseline, useTheme, useMaskIconPalette, CustomSnackbarOffsetY } = props
+    const { children, useTheme, useMaskIconPalette, CustomSnackbarOffsetY } = props
     const theme = useTheme()
     const MaskIconPalette = useMaskIconPalette(theme)
 
@@ -30,13 +28,11 @@ export function MaskThemeProvider(props: MaskThemeProvider) {
                 offsetY={CustomSnackbarOffsetY}
             />
         ),
-        baseline
-            ? (jsx) => (
-                  <>
-                      <CssBaseline />
-                      {jsx}
-                  </>
-              )
-            : identity,
+        (jsx) => (
+            <>
+                <CssBaseline />
+                {jsx}
+            </>
+        ),
     )
 }
