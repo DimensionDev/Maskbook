@@ -95,7 +95,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             width: '100%',
             alignItems: 'center',
             justifyContent: 'space-between',
-            '-webkit-font-smoothing': 'antialiased',
+            WebkitFontSmoothing: 'antialiased',
             fontSize: 14,
         },
         cardHeaderLocked: {

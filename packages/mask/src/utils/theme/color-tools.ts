@@ -1,3 +1,5 @@
+import { clamp } from 'lodash-unified'
+
 type RGB = [number, number, number]
 type RGBA = [number, number, number, number]
 
@@ -17,12 +19,6 @@ export function fromRGB(rgb: string): RGB | undefined {
         return [Number.parseInt(r, 10), Number.parseInt(g, 10), Number.parseInt(b, 10)]
     }
     return
-}
-
-export function clamp(num: number, min: number, max: number) {
-    if (num < min) return min
-    if (num > max) return max
-    return num
 }
 
 export function shade(channels: RGB, percentage: number): RGB {
