@@ -10,7 +10,7 @@ import { FC, useCallback } from 'react'
 interface Props {
     selectedIds: string[]
     tokens: Web3Plugin.NonFungibleToken[]
-    onChange?: (id: string, contractAddress: string) => void
+    onChange?: (id: string | null, contractAddress: string) => void
     limit?: number
     className: string
 }
@@ -112,7 +112,7 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, onChange, limit = 1, c
     const reachedLimit = selectedIds.length >= limit
 
     const toggleItem = useCallback(
-        (currentId: string, contractAddress: string) => {
+        (currentId: string | null, contractAddress: string) => {
             onChange?.(currentId, contractAddress)
         },
         [selectedIds, onChange, isRadio, reachedLimit],
@@ -156,7 +156,11 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, onChange, limit = 1, c
                                 disabled={disabled}
                                 onClick={() => {
                                     if (disabled || !token.contract?.address) return
-                                    toggleItem(token.tokenId, token.contract.address)
+                                    if (selectedIds.includes(token.tokenId)) {
+                                        toggleItem(null, '')
+                                    } else {
+                                        toggleItem(token.tokenId, token.contract.address)
+                                    }
                                 }}
                                 className={classes.checkbox}
                                 checked={selectedIds.includes(token.tokenId)}

@@ -2,16 +2,16 @@ import { useNetworkDescriptors, Web3Plugin } from '@masknet/plugin-infra'
 import { ImageIcon, InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
+    getERC721ContractDetailed,
+    getERC721TokenDetailed,
     isSameAddress,
     useAccount,
     useChainId,
-    useERC721ContractDetailed,
     useERC721TokenContract,
-    useERC721TokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, FormControl, TextField, Typography } from '@mui/material'
-import { FC, useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
+import { FC, useCallback, useMemo, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { createNonFungibleToken } from '../../../EVM/UI/Web3State/createNonFungibleToken'
 import { useI18N } from '../../locales'
 
@@ -56,34 +56,46 @@ export const AddDialog: FC<Props> = ({ onAdd, ...rest }) => {
     const t = useI18N()
     const allNetworks = useNetworkDescriptors()
     const network = useMemo(() => allNetworks.find((n) => n.chainId === chainId), [allNetworks, chainId])
-    const contract = useERC721TokenContract(contractAddress)
-    const { value: isMine, loading: isChecking } = useAsync(async () => {
-        if (!contract || !account) return false
-        const ownerAddress = await contract.methods.ownerOf(tokenId).call()
-        return isSameAddress(ownerAddress, account)
-    }, [contract, tokenId, account])
+    const erc721TokenContract = useERC721TokenContract(contractAddress)
 
-    const isStable = !isChecking && !!contractAddress && !!tokenId
-    const { value: detailedContract } = useERC721ContractDetailed(contractAddress)
-    const { tokenDetailed } = useERC721TokenDetailed(detailedContract, tokenId)
-    const nonFungibleToken = useMemo(
-        () => (tokenDetailed ? createNonFungibleToken(tokenDetailed) : null),
-        [tokenDetailed],
-    )
+    const [, checkOwner] = useAsyncFn(async () => {
+        if (!erc721TokenContract || !account) return false
+        const ownerAddress = await erc721TokenContract.methods.ownerOf(tokenId).call()
+        return isSameAddress(ownerAddress, account)
+    }, [erc721TokenContract, tokenId, account])
+
+    const [message, setMessage] = useState('')
+    const handleAdd = useCallback(async () => {
+        if (!erc721TokenContract) return
+        const hasOwnership = await checkOwner()
+        if (!hasOwnership) {
+            setMessage(t.tip_add_collectibles_error())
+            return
+        }
+        const erc721ContractDetailed = await getERC721ContractDetailed(erc721TokenContract, contractAddress, chainId)
+        const erc721TokenDetailed = await getERC721TokenDetailed(
+            erc721ContractDetailed,
+            erc721TokenContract,
+            tokenId,
+            chainId,
+        )
+
+        const nonFungibleToken = erc721TokenDetailed ? createNonFungibleToken(erc721TokenDetailed) : null
+        if (nonFungibleToken) {
+            onAdd?.(nonFungibleToken)
+            setMessage('')
+            setContractAddress('')
+            setTokenId('')
+        }
+    }, [onAdd, t, contractAddress, tokenId])
 
     const addButton = useMemo(() => {
         return (
-            <Button
-                disabled={!isMine}
-                className={classes.addButton}
-                onClick={() => {
-                    if (!nonFungibleToken) return
-                    onAdd?.(nonFungibleToken)
-                }}>
+            <Button disabled={!contractAddress || !tokenId} className={classes.addButton} onClick={handleAdd}>
                 {t.tip_add()}
             </Button>
         )
-    }, [t, isMine, nonFungibleToken])
+    }, [t, handleAdd])
 
     if (!network) return null
     return (
@@ -109,9 +121,9 @@ export const AddDialog: FC<Props> = ({ onAdd, ...rest }) => {
                         placeholder={t.tip_add_collectibles_token_id()}
                     />
                 </FormControl>
-                {isStable && !isMine ? (
+                {message ? (
                     <FormControl fullWidth className={classes.row}>
-                        <Typography className={classes.error}>{t.tip_add_collectibles_error()}</Typography>
+                        <Typography className={classes.error}>{message}</Typography>
                     </FormControl>
                 ) : null}
             </DialogContent>
