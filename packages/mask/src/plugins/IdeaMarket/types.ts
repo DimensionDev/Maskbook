@@ -42,6 +42,7 @@ export interface IdeaTokenPricePoint {
 
 export interface Market {
     name: MarketAvailable
+    marketID: number
 }
 
 export enum MarketAvailable {

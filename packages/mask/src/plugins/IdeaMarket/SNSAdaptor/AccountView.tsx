@@ -66,6 +66,14 @@ export function AccountView() {
         )
     }
 
+    if (value?.ideaTokenBalances.length === 0) {
+        return (
+            <Typography className={classes.empty} color="textPrimary">
+                {t('no_data')}
+            </Typography>
+        )
+    }
+
     return (
         <>
             <TableContainer component={Paper} sx={{ width: '100%' }}>

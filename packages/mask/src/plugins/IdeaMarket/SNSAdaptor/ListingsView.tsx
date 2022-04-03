@@ -7,6 +7,7 @@ import {
     Button,
     Grid,
     IconButton,
+    Link,
     Stack,
     TextField,
     ToggleButton,
@@ -14,7 +15,6 @@ import {
     Typography,
 } from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid'
-import type { IdeaToken } from '../types'
 import { formatterToUSD, truncate, urlWithoutProtocol } from '../utils'
 import { formatWeiToEther } from '@masknet/web3-shared-evm'
 import { SearchIcon } from '@masknet/icons'
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             height: 350,
-            width: '100%',
+            // width: '100%',
         },
         grid: {
             '& .MuiDataGrid-row:nth-child(odd)': {
@@ -46,10 +46,10 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         box: {
-            padding: 0.5,
-            paddingBottom: 0,
+            margin: theme.spacing(1, 1.8),
+            paddingBottom: theme.spacing(0),
             display: 'flex',
-            justifyContent: 'center',
+            justifyContent: 'space-between',
             alignItems: 'center',
         },
         market: {
@@ -64,12 +64,15 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(8, 0),
         },
         textField: {
-            margin: theme.spacing(1, 0.5, 1.5),
+            margin: theme.spacing(1, 0.5, 1),
             '& .MuiSvgIcon-root': {
                 marginRight: theme.spacing(0.5),
             },
+            '& .MuiInput-input': {
+                fontSize: 13.125,
+            },
             '& .MuiInput-underline:before': {
-                borderBottom: 1,
+                // borderBottom: 1,
                 borderColor: 'divider',
             },
         },
@@ -100,19 +103,35 @@ interface QuickSearchToolbarProps {
     clearSearch: () => void
     onChange: () => void
     filters: string[]
-    setFilters: (newFilters: string[]) => void
+    setFilters: (newFilters: number[]) => void
 }
 
 function QuickSearchToolbar(props: QuickSearchToolbarProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
 
-    const handleFilters = (event: React.MouseEvent<HTMLElement>, newFilters: string[]) => {
+    const handleFilters = (event: React.MouseEvent<HTMLElement>, newFilters: number[]) => {
+        console.log()
+
         props.setFilters(newFilters)
     }
 
     return (
         <Box className={classes.box}>
+            <ToggleButtonGroup
+                color="primary"
+                value={props.filters}
+                onChange={handleFilters}
+                aria-label="token filter by type">
+                <ToggleButton className={classes.toggleButton} size="small" value={6} aria-label="url">
+                    <UrlIcon className={classes.toolbarIcon} />
+                    <Typography variant="body2">{t('plugin_ideamarket_urls')}</Typography>
+                </ToggleButton>
+                <ToggleButton className={classes.toggleButton} size="small" value={1} aria-label="user">
+                    <TwitterIcon className={classes.toolbarIcon} />
+                    <Typography variant="body2">{t('plugin_ideamarket_users')}</Typography>
+                </ToggleButton>
+            </ToggleButtonGroup>
             <TextField
                 className={classes.textField}
                 variant="standard"
@@ -133,20 +152,6 @@ function QuickSearchToolbar(props: QuickSearchToolbarProps) {
                     ),
                 }}
             />
-            <ToggleButtonGroup
-                color="primary"
-                value={props.filters}
-                onChange={handleFilters}
-                aria-label="token filter by type">
-                <ToggleButton className={classes.toggleButton} size="small" value="url" aria-label="url">
-                    <UrlIcon className={classes.toolbarIcon} />
-                    <Typography variant="body2">{t('plugin_ideamarket_urls')}</Typography>
-                </ToggleButton>
-                <ToggleButton className={classes.toggleButton} size="small" value="user" aria-label="user">
-                    <TwitterIcon className={classes.toolbarIcon} />
-                    <Typography variant="body2">{t('plugin_ideamarket_users')}</Typography>
-                </ToggleButton>
-            </ToggleButtonGroup>
         </Box>
     )
 }
@@ -156,12 +161,11 @@ export function ListingsView() {
     const { t } = useI18N()
     const [searchText, setSearchText] = useState('')
     const [page, setPage] = useState(0)
-    const [filters, setFilters] = useState(() => ['url', 'user'])
+    const [filters, setFilters] = useState(() => [0x1, 0x6])
     const { tokens, loading } = useFetchIdeaTokensBySearch(searchText, page, filters)
+    console.log(tokens)
 
-    console.log(page)
-
-    const formattedData = tokens?.map((token: IdeaToken) => {
+    const tokensFormatted = tokens?.map((token) => {
         return {
             id: token.id,
             name: token.name,
@@ -174,10 +178,12 @@ export function ListingsView() {
         }
     })
 
+    console.log('tokensFormatted: ', tokensFormatted)
+
     const renderNameCell = (params: GridRenderCellParams<String>) => {
         return (
             <Grid container direction="row" flexWrap="nowrap" alignItems="center">
-                <Grid container item justifyContent="center">
+                <Grid item justifyContent="center">
                     {params.row.twitter ? (
                         <Avatar className={classes.avatar} src={params.row.twitter.profile_image_url} />
                     ) : (
@@ -190,15 +196,22 @@ export function ListingsView() {
                             {truncate(`${params.row.twitter.name} (${params.row.name})`, 25)}
                         </Typography>
                         <Typography title={params.row.twitter.username} className={classes.market}>
-                            {truncate(`https://twitter.com/${params.row.twitter.name}`, 25)}
+                            <Link target="_blank" href={`https://twitter.com/${params.row.twitter.name}`}>
+                                {truncate(`https://twitter.com/${params.row.twitter.name}`, 25)}
+                            </Link>
                         </Typography>
                     </Grid>
                 ) : (
-                    <Grid item>
+                    <Grid container item>
                         <Typography title={params.row.name}>
                             {truncate(urlWithoutProtocol(params.row.name), 25)}
                         </Typography>
-                        <Typography className={classes.market}>{params.row.name}</Typography>
+
+                        <Typography title={params.row.name} className={classes.market}>
+                            <Link target="_blank" href={params.row.name}>
+                                {params.row.name}
+                            </Link>
+                        </Typography>
                     </Grid>
                 )}
             </Grid>
@@ -217,7 +230,7 @@ export function ListingsView() {
             field: 'dayChange',
             headerName: t('plugin_ideamarket_24h'),
             type: 'number',
-            width: 58,
+            width: 60,
             headerAlign: 'right' as const,
             valueFormatter: (params: GridValueFormatterParams) => {
                 const value = Number(params.value) * 100
@@ -285,7 +298,7 @@ export function ListingsView() {
     function NoResultsCustomOverlay() {
         return (
             <Stack height="100%" alignItems="center" justifyContent="center">
-                {t('no_data')}
+                {t('plugin_ideamarket_smthg_wrong')}
             </Stack>
         )
     }
@@ -311,7 +324,7 @@ export function ListingsView() {
                     NoRowsOverlay: NoRowsCustomOverlay,
                 }}
                 rowHeight={60}
-                rows={formattedData ?? EMPTY_LIST}
+                rows={tokensFormatted ?? EMPTY_LIST}
                 rowCount={1000}
                 loading={loading}
                 columns={columns}

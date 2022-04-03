@@ -1,6 +1,6 @@
-import { SvgIcon } from '@mui/material'
+import { SvgIcon, SvgIconProps } from '@mui/material'
 
-export function TwitterIcon(props: any) {
+export function TwitterIcon(props: SvgIconProps) {
     return (
         <SvgIcon {...props}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56.93 43.09">

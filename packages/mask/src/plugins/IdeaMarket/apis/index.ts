@@ -31,14 +31,16 @@ export async function fetchIdeaToken(marketName: string, tokenName: string) {
     return first(res) as IdeaToken
 }
 
-export async function fetchAllTokens(searchTerm: string, page: number, filters: string[]) {
+export async function fetchAllTokens(searchTerm: string, page: number, filters: number[]) {
+    const rowsPerPage = 20
     const body = {
-        query: `query IdeaToken($searchTerm: String!, $rowsPerPage: Int!) {
-            ideaTokens(first: $rowsPerPage, skip: 20, orderBy: daiInToken, orderDirection: desc, where: { name_contains: $searchTerm }){
+        query: `query IdeaToken($searchTerm: String!, $rowsPerPage: Int!, $skip: Int!, $filters: [Int!]!) {
+            ideaTokens(first: $rowsPerPage, skip: $skip, orderBy: daiInToken, orderDirection: desc, where: { name_contains: $searchTerm, market_in: $filters }){
                 id
                 name
                 tokenID
                 market {
+                    marketID
                     name
                 }
                 rank
@@ -51,7 +53,12 @@ export async function fetchAllTokens(searchTerm: string, page: number, filters: 
                 dayChange
             }
         }`,
-        variables: { searchTerm: searchTerm, rowsPerPage: 20 },
+        variables: {
+            searchTerm: searchTerm,
+            rowsPerPage: rowsPerPage,
+            skip: page === 0 ? 0 : page * rowsPerPage,
+            filters,
+        },
     }
     const response = await fetch(SUBGRAPH_URL, {
         body: JSON.stringify(body),
