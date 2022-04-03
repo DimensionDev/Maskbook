@@ -83,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const Logout = memo(() => {
-    const { deletingPersona } = PersonaContext.useContainer()
+    const { selectedPersona } = PersonaContext.useContainer()
     const navigate = useNavigate()
     const backupPassword = useMemo(() => {
         try {
@@ -96,18 +96,18 @@ const Logout = memo(() => {
     }, [])
 
     const [{ loading }, onLogout] = useAsyncFn(async () => {
-        if (!deletingPersona) return
-        await Services.Identity.logoutPersona(deletingPersona.identifier)
+        if (!selectedPersona) return
+        await Services.Identity.logoutPersona(selectedPersona.identifier)
         const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
         if (!currentPersona) {
             const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
             if (lastCreatedPersona) await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona.identifier)
         }
         navigate(PopupRoutes.Personas, { replace: true })
-    }, [deletingPersona, history])
+    }, [selectedPersona, history])
     return (
         <LogoutUI
-            deletingPersona={deletingPersona}
+            selectedPersona={selectedPersona}
             backupPassword={backupPassword ?? ''}
             loading={loading}
             onLogout={onLogout}
@@ -117,14 +117,14 @@ const Logout = memo(() => {
 })
 
 export interface LogoutUIProps {
-    deletingPersona?: PersonaInformation
+    selectedPersona?: PersonaInformation
     backupPassword: string
     loading: boolean
     onCancel: () => void
     onLogout: () => void
 }
 
-export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout, onCancel, deletingPersona }) => {
+export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout, onCancel, selectedPersona }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
@@ -145,9 +145,9 @@ export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout
                         <MasksIcon />
                     </div>
                     <div>
-                        <Typography className={classes.name}>{deletingPersona?.nickname}</Typography>
+                        <Typography className={classes.name}>{selectedPersona?.nickname}</Typography>
                         <Typography className={classes.identifier}>
-                            {formatFingerprint(deletingPersona?.identifier.compressedPoint ?? '', 10)}
+                            {formatFingerprint(selectedPersona?.identifier.compressedPoint ?? '', 10)}
                         </Typography>
                     </div>
                 </div>

@@ -44,7 +44,7 @@ const useStyles = makeStyles()({
     },
     copy: {
         fontSize: 12,
-        stroke: '#1C68F3',
+        fill: '#1C68F3',
         marginLeft: 4,
         cursor: 'pointer',
     },

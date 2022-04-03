@@ -6,6 +6,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { InitialPlaceholder } from '../InitialPlaceholder'
 import { useI18N } from '../../../../utils'
+import { PopupHeader } from '../Header'
 
 function GlobalCss() {
     return (
@@ -127,6 +128,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                 {/*        </NavLink>*/}
                 {/*    </Box>*/}
                 {/* </Box>*/}
+                <PopupHeader />
                 <Box className={classes.container}>
                     {personas.length === 0 && !matchRecovery ? <InitialPlaceholder /> : props.children}
                 </Box>

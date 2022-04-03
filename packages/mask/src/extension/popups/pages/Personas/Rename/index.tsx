@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useState } from 'react'
-import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@mui/lab'
 import { useI18N } from '../../../../../utils'
@@ -46,48 +45,43 @@ const PersonaRename = memo(() => {
     const navigate = useNavigate()
     const [name, setName] = useState('')
     const [error, setError] = useState('')
-    const { currentPersona } = PersonaContext.useContainer()
+    const { selectedPersona } = PersonaContext.useContainer()
     const { classes } = useStyles()
 
     const [{ loading }, renamePersona] = useAsyncFn(async () => {
-        if (!name || !currentPersona) return
+        if (!name || !selectedPersona) return
         if (name.length >= PERSONA_NAME_MAX_LENGTH) {
             setError(t('popups_rename_error_tip', { length: PERSONA_NAME_MAX_LENGTH }))
             return
         }
 
         try {
-            await Services.Identity.renamePersona(currentPersona.identifier, name)
+            await Services.Identity.renamePersona(selectedPersona.identifier, name)
         } catch (error) {
             setError(t('popups_persona_persona_name_exists'))
             return
         }
         navigate(PopupRoutes.Personas, { replace: true })
-    }, [currentPersona, name])
+    }, [selectedPersona, name])
 
     return (
-        <>
-            <div className={classes.header}>
-                <Typography className={classes.title}>{t('rename')}</Typography>
-            </div>
-            <div className={classes.content}>
-                <StyledInput
-                    onChange={(e) => setName(e.target.value)}
-                    defaultValue={currentPersona?.nickname}
-                    error={!!error}
-                    helperText={error}
-                />
-                <LoadingButton
-                    fullWidth
-                    loading={loading}
-                    variant="contained"
-                    disabled={!name}
-                    classes={{ root: classes.button, disabled: classes.disabled }}
-                    onClick={renamePersona}>
-                    {t('confirm')}
-                </LoadingButton>
-            </div>
-        </>
+        <div className={classes.content}>
+            <StyledInput
+                onChange={(e) => setName(e.target.value)}
+                defaultValue={selectedPersona?.nickname}
+                error={!!error}
+                helperText={error}
+            />
+            <LoadingButton
+                fullWidth
+                loading={loading}
+                variant="contained"
+                disabled={!name}
+                classes={{ root: classes.button, disabled: classes.disabled }}
+                onClick={renamePersona}>
+                {t('confirm')}
+            </LoadingButton>
+        </div>
     )
 })
 

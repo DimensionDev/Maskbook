@@ -1,8 +1,6 @@
 import { memo, useState } from 'react'
 import { Button, Tab, Tabs, styled, tabClasses, tabsClasses } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { WalletHeader } from '../WalletHeader'
-import { WalletInfo } from '../WalletInfo'
 import { TabContext, TabPanel } from '@mui/lab'
 import { AssetsList } from '../AssetsList'
 import { useNavigate } from 'react-router-dom'
@@ -93,8 +91,6 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
         <LoadingPlaceholder />
     ) : (
         <>
-            <WalletHeader />
-            <WalletInfo />
             <div className={classes.content}>
                 <TabContext value={currentTab}>
                     <StyledTabs value={currentTab} onChange={(event, tab) => setCurrentTab(tab)}>
@@ -104,7 +100,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
                     <TabPanel
                         value={WalletTabs.Assets}
                         className={classes.tabPanel}
-                        style={{ height: currentTab === WalletTabs.Assets ? 362 : 0 }}>
+                        style={{ height: currentTab === WalletTabs.Assets ? 396 : 0 }}>
                         <AssetsList />
                         <div style={{ padding: 16 }}>
                             <Button className={classes.button} fullWidth onClick={onAddTokenClick}>
@@ -115,7 +111,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
                     <TabPanel
                         value={WalletTabs.Activity}
                         className={classes.tabPanel}
-                        style={{ height: currentTab === WalletTabs.Activity ? 362 : 0 }}>
+                        style={{ height: currentTab === WalletTabs.Activity ? 396 : 0 }}>
                         <ActivityList />
                     </TabPanel>
                 </TabContext>

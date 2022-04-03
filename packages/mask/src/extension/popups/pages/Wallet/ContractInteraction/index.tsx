@@ -133,7 +133,7 @@ const useStyles = makeStyles()(() => ({
     },
     copy: {
         fontSize: 12,
-        stroke: '#7B8192',
+        fill: '#7B8192',
         cursor: 'pointer',
     },
 }))

@@ -1,4 +1,3 @@
-import { WalletHeader } from '../components/WalletHeader'
 import { Box, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { BackUpIcon, CloudLinkIcon, MaskWalletIcon, TrashIcon } from '@masknet/icons'
@@ -61,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     copy: {
         fontSize: 12,
         cursor: 'pointer',
-        stroke: '#1C68F3',
+        fill: '#1C68F3',
         marginLeft: 4,
     },
 }))
@@ -84,7 +83,6 @@ const WalletSettings = memo(() => {
 
     return (
         <>
-            <WalletHeader />
             <div className={classes.header}>
                 <MaskWalletIcon style={{ marginRight: 4 }} />
                 <div>

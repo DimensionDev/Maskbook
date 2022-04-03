@@ -9,8 +9,7 @@ import { useEffect, useState } from 'react'
 import { MaskMessages } from '../../../../../utils'
 
 function usePersonaContext() {
-    const [deletingPersona, setDeletingPersona] = useState<PersonaInformation>()
-
+    const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { value: personas, retry } = useAsyncRetry(async () => Services.Identity.queryOwnedPersonaInformation())
     useEffect(() => {
@@ -23,13 +22,11 @@ function usePersonaContext() {
         ),
     )
 
-    const otherPersonas = personas?.filter((x) => !x.identifier.equals(currentPersona?.identifier))
-
     return {
-        deletingPersona,
-        setDeletingPersona,
-        personas: otherPersonas,
+        personas,
         currentPersona,
+        selectedPersona,
+        setSelectedPersona,
     }
 }
 
