@@ -1,18 +1,25 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
-import { first } from 'lodash-unified'
-import { NextIDPlatform, EMPTY_LIST } from '@masknet/shared-base'
-import { Box, CircularProgress } from '@mui/material'
+import {
+    createInjectHooksRenderer,
+    Plugin,
+    PluginId,
+    useActivatedPluginsSNSAdaptor,
+    useAvailablePlugins,
+} from '@masknet/plugin-infra'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useAddressNames } from '@masknet/web3-shared-evm'
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor, Plugin, PluginId } from '@masknet/plugin-infra'
-import { PageTab } from '../InjectedComponents/PageTab'
-import { MaskMessages, useI18N, useLocationChange } from '../../utils'
+import { Box, CircularProgress } from '@mui/material'
+import { first } from 'lodash-unified'
+import { useEffect, useMemo, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
+import { activatedSocialNetworkUI } from '../../social-network'
+import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
+import { MaskMessages } from '../../utils'
+import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
+import { PageTab } from '../InjectedComponents/PageTab'
 
 function getTabContent(tabId: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -37,7 +44,6 @@ const useStyles = makeStyles()((theme) => ({
 export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
 
 export function ProfileTabContent(props: ProfileTabContentProps) {
-    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const [hidden, setHidden] = useState(true)
@@ -57,7 +63,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         currentIdentity.identifier.userId === identity.identifier.userId &&
         personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.publicHexKey) === -1
 
-    const tabs = useActivatedPluginsSNSAdaptor('any')
+    const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
+    const tabs = useAvailablePlugins(activatedPlugins)
         .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
         .filter((z) => z.Utils?.shouldDisplay?.(identity, addressNames) ?? true)
         .sort((a, z) => {
