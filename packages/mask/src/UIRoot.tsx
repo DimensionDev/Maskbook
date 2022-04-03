@@ -57,7 +57,6 @@ export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
                 useMaskIconPalette={useMaskIconPalette}
                 CustomSnackbarOffsetY={isFacebook(activatedSocialNetworkUI) ? 80 : undefined}
                 useTheme={useTheme}
-                baseline={kind === 'page'}
                 children={jsx}
             />
         ),
