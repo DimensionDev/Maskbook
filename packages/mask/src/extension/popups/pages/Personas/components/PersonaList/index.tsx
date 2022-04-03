@@ -1,17 +1,16 @@
+// ! We're going to SSR this UI, so DO NOT import anything new!
 import { memo, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { PersonaContext } from '../../hooks/usePersonaContext'
-import type { PersonaInformation, ECKeyIdentifier } from '@masknet/shared-base'
+import { formatPersonaFingerprint, type PersonaInformation, type ECKeyIdentifier, PopupRoutes } from '@masknet/shared-base'
 import { ListItemButton, List, Typography } from '@mui/material'
 import { EditIcon, MasksIcon, SettingIcon, TickIcon } from '@masknet/icons'
-import { formatFingerprint } from '@masknet/shared'
-import { PopupRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
 import Services from '../../../../../service'
 import { useHover } from 'react-use'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
+import { PersonaContext } from '../../hooks/usePersonaContext'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     list: {
         padding: 0,
         height: 'calc(100vh - 185px)',
@@ -75,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
         stroke: '#1C68F3',
         marginLeft: 4,
     },
-}))
+})
 
 export const PersonaList = memo(() => {
     const { personas, setSelectedPersona, currentPersona } = PersonaContext.useContainer()
@@ -174,7 +173,7 @@ const PersonaListItem = memo<PersonaListItemProps>(
                         ) : null}
                     </Typography>
                     <Typography className={classes.identifier}>
-                        {formatFingerprint(identifier.compressedPoint ?? '', 10)}
+                        {formatPersonaFingerprint(identifier.compressedPoint ?? '', 10)}
                         <CopyIconButton className={classes.copy} text={identifier.toText()} />
                         <SettingIcon
                             className={classes.trashIcon}

@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
 import classNames from 'classnames'
 import { PersonaContext } from '../hooks/usePersonaContext'
-import { MAX_PERSONA_LIMIT } from '@masknet/shared'
+import { MAX_PERSONA_LIMIT } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { useI18N } from '../../../../../utils'
 

@@ -1,12 +1,10 @@
 import { memo } from 'react'
-import { useNavigate, useLocation, useMatch } from 'react-router-dom'
+import { useMatch } from 'react-router-dom'
 import { Box, GlobalStyles, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { InitialPlaceholder } from '../InitialPlaceholder'
-import { useI18N } from '../../../../utils'
-import { PopupHeader } from '../Header'
 
 function GlobalCss() {
     return (
@@ -71,28 +69,10 @@ const useStyles = makeStyles()((theme) => ({
 export interface PopupFrameProps extends React.PropsWithChildren<{}> {}
 
 export const PopupFrame = memo<PopupFrameProps>((props) => {
-    const { t } = useI18N()
-    const navigate = useNavigate()
-    const { classes, cx } = useStyles()
-    const location = useLocation()
+    const { classes } = useStyles()
     const personas = useMyPersonas()
 
-    const excludePath = [
-        useMatch(PopupRoutes.Wallet),
-        useMatch(PopupRoutes.Personas),
-        useMatch(PopupRoutes.ContractInteraction),
-        useMatch(PopupRoutes.Unlock),
-    ].some(Boolean)
-
-    const excludePersonaPath = [
-        useMatch(PopupRoutes.ContractInteraction),
-        useMatch(PopupRoutes.GasSetting),
-        useMatch(PopupRoutes.SelectWallet),
-        useMatch(PopupRoutes.WalletRecovered),
-    ].some(Boolean)
-
     const matchRecovery = [
-        //
         useMatch(PopupRoutes.WalletRecovered),
         useMatch(PopupRoutes.Unlock),
     ].some(Boolean)
@@ -101,34 +81,6 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
         <>
             <GlobalCss />
             <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto', minHeight: 600, borderRadius: 0 }}>
-                {/* <Box className={classes.header}>*/}
-                {/*    <Box className={classes.left}>*/}
-                {/*        {excludePath || history.length === 1 ? (*/}
-                {/*            <MiniMaskIcon style={{ fontSize: 30 }} />*/}
-                {/*        ) : (*/}
-                {/*            <ArrowBackIcon*/}
-                {/*                onClick={() => navigate(-1)}*/}
-                {/*                style={{ fill: '#ffffff', cursor: 'pointer', fontSize: 30 }}*/}
-                {/*            />*/}
-                {/*        )}*/}
-                {/*    </Box>*/}
-                {/*    <Box className={classes.right}>*/}
-                {/*        {excludePersonaPath ? null : (*/}
-                {/*            <NavLink*/}
-                {/*                to={PopupRoutes.Personas}*/}
-                {/*                className={({ isActive }) => cx(classes.nav, isActive ? classes.active : null)}>*/}
-                {/*                {t('personas')}*/}
-                {/*            </NavLink>*/}
-                {/*        )}*/}
-                {/*        <NavLink*/}
-                {/*            style={{ marginRight: 5 }}*/}
-                {/*            to={!excludePersonaPath ? PopupRoutes.Wallet : location}*/}
-                {/*            className={({ isActive }) => cx(classes.nav, isActive ? classes.active : null)}>*/}
-                {/*            {t('wallets')}*/}
-                {/*        </NavLink>*/}
-                {/*    </Box>*/}
-                {/* </Box>*/}
-                <PopupHeader />
                 <Box className={classes.container}>
                     {personas.length === 0 && !matchRecovery ? <InitialPlaceholder /> : props.children}
                 </Box>

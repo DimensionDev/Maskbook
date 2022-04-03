@@ -9,9 +9,9 @@
     "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
-    "graphql-request": "^3.4.0",
     "bignumber.js": "9.0.2",
     "date-fns": "^2.28.0",
+    "graphql-request": "^3.4.0",
     "json-stable-stringify": "^1.0.1",
     "lodash-unified": "1.0.2",
     "lru-cache": "^7.7.1",
@@ -23,6 +23,6 @@
     "wallet.ts": "^1.0.1"
   },
   "devDependencies": {
-    "@types/lru-cache": "^7.5.0"
+    "@types/lru-cache": "^7.6.1"
   }
 }

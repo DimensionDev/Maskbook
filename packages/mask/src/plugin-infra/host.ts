@@ -3,11 +3,9 @@ import './register'
 
 import type { Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
-// Do not export from '../utils/' to prevent initialization failure
-import { MaskMessages } from '../utils/messages'
-import i18nNextInstance from '../../shared-ui/locales_legacy'
+import { MaskMessages } from '../../shared/messages'
 import Services from '../extension/service'
-import { createI18NBundle } from '@masknet/shared-base'
+import { createI18NBundle, i18NextInstance } from '@masknet/shared-base'
 
 export function createPluginHost<Context>(
     signal: AbortSignal | undefined,
@@ -26,7 +24,7 @@ export function createPluginHost<Context>(
         signal,
         minimalMode,
         addI18NResource(plugin, resource) {
-            createI18NBundle(plugin, resource)(i18nNextInstance)
+            createI18NBundle(plugin, resource)(i18NextInstance)
         },
         createContext,
     }

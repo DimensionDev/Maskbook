@@ -11,6 +11,8 @@ import { useContainer } from 'unstated-next'
 import { WalletContext } from '../../hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { Navigator } from '../../../../components/Navigator'
+import { WalletHeader } from '../../../../components/Header'
+import { useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
     content: {
@@ -83,6 +85,7 @@ export interface WalletAssetsUIProps {
 
 export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) => {
     const { t } = useI18N()
+    const chainId = useChainId()
     const { classes } = useStyles()
     const { assetsLoading } = useContainer(WalletContext)
     const [currentTab, setCurrentTab] = useState(WalletTabs.Assets)
@@ -91,6 +94,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
         <LoadingPlaceholder />
     ) : (
         <>
+            <WalletHeader chainId={chainId} />
             <div className={classes.content}>
                 <TabContext value={currentTab}>
                     <StyledTabs value={currentTab} onChange={(event, tab) => setCurrentTab(tab)}>

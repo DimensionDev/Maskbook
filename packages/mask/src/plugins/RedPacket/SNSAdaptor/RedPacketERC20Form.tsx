@@ -1,28 +1,26 @@
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
     useAccount,
+    useChainId,
+    useFungibleTokenBalance,
     useNativeTokenDetailed,
     useRedPacketConstants,
-    useFungibleTokenBalance,
-    useChainId,
 } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
-import { omit } from 'lodash-unified'
 import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
-import { ChangeEvent, useCallback, useMemo, useState, useEffect } from 'react'
-import { v4 as uuid } from 'uuid'
+import { omit } from 'lodash-unified'
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { usePickToken } from '@masknet/shared'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 
@@ -96,27 +94,14 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     // #region select token
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     const [token = nativeTokenDetailed, setToken] = useState<FungibleTokenDetailed | undefined>(origin?.token)
-    const [id] = useState(uuid)
-    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                setToken(ev.token)
-            },
-            [id],
-        ),
-    )
-    const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialog({
-            open: true,
-            uuid: id,
+    const pickToken = usePickToken()
+    const onSelectTokenChipClick = useCallback(async () => {
+        const picked = await pickToken({
             disableNativeToken: false,
-            FungibleTokenListProps: {
-                selectedTokens: token ? [token.address] : [],
-            },
+            selectedTokens: token ? [token.address] : [],
         })
-    }, [id, token?.address])
+        if (picked) setToken(picked)
+    }, [pickToken, token?.address])
     // #endregion
 
     // #region packet settings
