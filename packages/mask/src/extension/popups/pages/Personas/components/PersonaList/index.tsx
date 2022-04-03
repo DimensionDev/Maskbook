@@ -1,7 +1,12 @@
 // ! We're going to SSR this UI, so DO NOT import anything new!
 import { memo, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { formatPersonaFingerprint, type PersonaInformation, type ECKeyIdentifier, PopupRoutes } from '@masknet/shared-base'
+import {
+    formatPersonaFingerprint,
+    type PersonaInformation,
+    type ECKeyIdentifier,
+    PopupRoutes,
+} from '@masknet/shared-base'
 import { ListItemButton, List, Typography } from '@mui/material'
 import { EditIcon, MasksIcon, SettingIcon, TickIcon } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
