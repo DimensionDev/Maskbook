@@ -2,13 +2,14 @@ import { useNetworkDescriptor, useWeb3State as useWeb3PluginState } from '@maskn
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
-import { CircularProgress } from '@mui/material'
+import { Button, CircularProgress, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import { WalletMessages } from '../../../../Wallet/messages'
 import { useTip } from '../../../contexts'
+import { useI18N } from '../../../locales'
 import { NFTList } from './NFTList'
 
 export * from './NFTList'
@@ -18,20 +19,28 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
+        height: 282,
     },
     selectSection: {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
     },
+    statusBox: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 282,
+    },
+    loadingText: {
+        marginTop: theme.spacing(1),
+    },
     list: {
         flexGrow: 1,
         maxHeight: 400,
         overflow: 'auto',
         borderRadius: 4,
-    },
-    loadingOwnerList: {
-        margin: '24px auto 16px',
     },
     errorMessage: {
         marginTop: theme.spacing(3),
@@ -41,11 +50,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props extends HTMLProps<HTMLDivElement> {}
+interface Props extends HTMLProps<HTMLDivElement> {
+    onAddToken?(): void
+    onEmpty?(empty: boolean): void
+}
 
-export const NFTSection: FC<Props> = ({ className, ...rest }) => {
+export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest }) => {
     const { storedTokens, erc721TokenId, setErc721TokenId, setErc721Address } = useTip()
     const { classes } = useStyles()
+    const t = useI18N()
     const account = useAccount()
     const selectedIds = useMemo(() => (erc721TokenId ? [erc721TokenId] : []), [erc721TokenId])
     const { Asset } = useWeb3PluginState()
@@ -90,24 +103,46 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
         })
     }, [storedTokens, fetchedTokens])
 
-    const showLoadingIndicator = tokens.length === 0 && (loading || guessLoading)
+    const showLoadingIndicator = tokens.length === 0 && !loading && !guessLoading
+
+    useEffect(() => {
+        onEmpty?.(showLoadingIndicator)
+    }, [onEmpty, showLoadingIndicator])
 
     return (
         <div className={classnames(classes.root, className)} {...rest}>
             <div className={classes.selectSection}>
-                {showLoadingIndicator ? (
-                    <CircularProgress size={24} className={classes.loadingOwnerList} />
-                ) : (
-                    <NFTList
-                        className={classes.list}
-                        selectedIds={selectedIds}
-                        tokens={tokens}
-                        onChange={(id, address) => {
-                            setErc721TokenId(id)
-                            setErc721Address(address)
-                        }}
-                    />
-                )}
+                {(() => {
+                    if (tokens.length) {
+                        return (
+                            <NFTList
+                                className={classes.list}
+                                selectedIds={selectedIds}
+                                tokens={tokens}
+                                onChange={(id, address) => {
+                                    setErc721TokenId(id)
+                                    setErc721Address(address)
+                                }}
+                            />
+                        )
+                    }
+                    if (loading || guessLoading) {
+                        return (
+                            <div className={classes.statusBox}>
+                                <CircularProgress size={24} />
+                                <Typography className={classes.loadingText}>{t.tip_loading()}</Typography>
+                            </div>
+                        )
+                    }
+                    return (
+                        <div className={classes.statusBox}>
+                            <Typography className={classes.loadingText}>{t.tip_empty_nft()}</Typography>
+                            <Button variant="text" onClick={onAddToken}>
+                                {t.tip_add_collectibles()}
+                            </Button>
+                        </div>
+                    )
+                })()}
             </div>
         </div>
     )

@@ -16,7 +16,7 @@ import {
     Typography,
 } from '@mui/material'
 import classnames from 'classnames'
-import { FC, memo, useRef } from 'react'
+import { FC, memo, useRef, useState } from 'react'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { TargetChainIdContext, useTip, useTipValidate } from '../../contexts'
@@ -36,6 +36,19 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             flexGrow: 1,
             overflow: 'auto',
+        },
+        receiverRow: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+        },
+        to: {
+            fontSize: 19,
+            fontWeight: 500,
+        },
+        address: {
+            flexGrow: 1,
+            marginLeft: theme.spacing(1),
         },
         actionButton: {
             marginTop: theme.spacing(1.5),
@@ -98,6 +111,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
+    const [empty, setEmpty] = useState(false)
 
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
     const enabledNft =
@@ -108,10 +122,10 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
     return (
         <Box className={classnames(classes.root, className)} {...rest}>
             <div className={classes.main}>
-                <Typography>{t.tip_to()}</Typography>
-
-                <FormControl fullWidth>
+                <FormControl fullWidth className={classes.receiverRow}>
+                    <Typography className={classes.to}>{t.tip_to()}</Typography>
                     <Select
+                        className={classes.address}
                         ref={selectRef}
                         value={recipient}
                         disabled={isSending}
@@ -151,7 +165,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
                             label={t.tip_type_nft()}
                         />
                     </RadioGroup>
-                    {tipType === TipType.NFT ? (
+                    {tipType === TipType.NFT && !empty ? (
                         <Button variant="text" className={classes.addButton} onClick={onAddToken}>
                             {t.tip_add_collectibles()}
                         </Button>
@@ -162,7 +176,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
                         <TokenSection />
                     </FormControl>
                 ) : (
-                    <NFTSection />
+                    <NFTSection onEmpty={setEmpty} onAddToken={onAddToken} />
                 )}
             </div>
             {account ? (

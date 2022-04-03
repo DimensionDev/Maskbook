@@ -1,8 +1,8 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import { useWeb3State, Web3Plugin } from '@masknet/plugin-infra'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { formatNFT_TokenId, useChainId } from '@masknet/web3-shared-evm'
-import { Checkbox, List, ListItem, Radio } from '@mui/material'
+import { Checkbox, Link, List, ListItem, Radio } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
@@ -29,12 +29,12 @@ const useStyles = makeStyles()((theme) => ({
     nftItem: {
         position: 'relative',
         cursor: 'pointer',
-        background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
+        background: theme.palette.mode === 'light' ? '#EDEFEF' : '#2F3336',
         display: 'flex',
         overflow: 'hidden',
         padding: 0,
         flexDirection: 'column',
-        borderRadius: 8,
+        borderRadius: 12,
         height: 100,
         userSelect: 'none',
         width: 100,
@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
             boxSizing: 'border-box',
             width: '100%',
             height: '100%',
-            borderRadius: 8,
+            borderRadius: 12,
         },
     },
     unselected: {
@@ -65,6 +65,18 @@ const useStyles = makeStyles()((theme) => ({
     loadingFailImage: {
         width: 64,
         height: 64,
+    },
+    assetPlayerIframe: {
+        height: 100,
+        width: 100,
+    },
+    imgWrapper: {
+        height: 100,
+        width: 100,
+        img: {
+            height: '100%',
+            width: '100%',
+        },
     },
 }))
 
@@ -79,10 +91,12 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
         <NFTCardStyledAssetPlayer
             chainId={chainId}
             contractAddress={token.contract?.address}
-            url={token.metadata?.assetURL}
+            url={token.info?.imageURL ?? token.metadata?.assetURL}
             tokenId={token.tokenId}
             classes={{
                 loadingFailImage: classes.loadingFailImage,
+                iframe: classes.assetPlayerIframe,
+                imgWrapper: classes.imgWrapper,
             }}
         />
     )
@@ -102,11 +116,20 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, onChange, limit = 1, c
     )
 
     const SelectComponent = isRadio ? Radio : Checkbox
+    const { Utils } = useWeb3State()
 
     return (
         <List className={classnames(classes.list, className)}>
             {tokens.map((token) => {
                 const disabled = !isRadio && reachedLimit && !selectedIds.includes(token.tokenId)
+                const link =
+                    Utils?.resolveNonFungibleTokenLink && token.contract
+                        ? Utils.resolveNonFungibleTokenLink(
+                              token.contract?.chainId,
+                              token.contract?.address,
+                              token.tokenId,
+                          )
+                        : undefined
                 return (
                     <ShadowRootTooltip
                         key={token.tokenId}
@@ -119,12 +142,10 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, onChange, limit = 1, c
                                 [classes.disabled]: disabled,
                                 [classes.selected]: selectedIds.includes(token.tokenId),
                                 [classes.unselected]: selectedIds.length > 0 && !selectedIds.includes(token.tokenId),
-                            })}
-                            onClick={() => {
-                                if (disabled || !token.contract?.address) return
-                                toggleItem(token.tokenId, token.contract.address)
-                            }}>
-                            <NFTItem token={token} />
+                            })}>
+                            <Link target={link ? '_blank' : 'self'} rel="noreferrer noopener" href={link}>
+                                <NFTItem token={token} />
+                            </Link>
                             <SelectComponent
                                 size="small"
                                 onChange={noop}

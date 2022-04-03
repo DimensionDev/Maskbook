@@ -30,6 +30,9 @@ import { AddDialog } from './AddDialog'
 import { TipForm } from './TipForm'
 
 const useStyles = makeStyles()((theme) => ({
+    dialog: {
+        width: 600,
+    },
     dialogTitle: {
         height: 60,
     },
@@ -279,7 +282,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             <InjectedDialog
                 open={open}
                 onClose={onClose}
-                classes={{ dialogTitle: classes.dialogTitle }}
+                classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialog }}
                 title={t.tips()}
                 titleTail={walletChip}>
                 <DialogContent className={classes.content}>
