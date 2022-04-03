@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material'
 import { PersonasIcon, WalletNavIcon, DashboardIcon } from '@masknet/icons'
 import { useMatch, useNavigate } from 'react-router-dom'
@@ -32,16 +32,15 @@ export const Navigator = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
     const { classes } = useStyle()
-    const matchPersona = useMatch(PopupRoutes.Personas)
-    const matchWallet = useMatch(PopupRoutes.Wallet)
-    const [value, setValue] = useState<NavRouter | null>(
-        matchPersona ? NavRouter.Personas : matchWallet ? NavRouter.Wallet : null,
-    )
+    const matchPersona = useMatch(`${PopupRoutes.Personas}/*`)
+    const matchWallet = useMatch(`${PopupRoutes.Wallet}/*`)
     const onEnter = useEnterDashboard()
 
     return (
         <Box className={classes.container}>
-            <BottomNavigation showLabels value={value} onChange={(event, newValue) => setValue(newValue)}>
+            <BottomNavigation
+                showLabels
+                value={matchPersona ? NavRouter.Personas : matchWallet ? NavRouter.Wallet : null}>
                 <BottomNavigationAction
                     label={t('personas')}
                     icon={<PersonasIcon />}

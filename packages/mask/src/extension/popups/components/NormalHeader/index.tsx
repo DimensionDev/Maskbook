@@ -38,14 +38,18 @@ export const NormalHeader = memo(() => {
     const navigate = useNavigate()
     const { title } = useContext(PageTitleContext)
 
+    const showTitle = history.length !== 1 && title
+
     return (
-        <Box className={classes.container} style={{ justifyContent: history.length !== 1 ? 'center' : 'flex-start' }}>
-            {history.length !== 1 ? (
-                <SquareBack className={classes.back} onClick={() => navigate(-1)} />
+        <Box className={classes.container} style={{ justifyContent: showTitle ? 'center' : 'flex-start' }}>
+            {showTitle ? (
+                <>
+                    <SquareBack className={classes.back} onClick={() => navigate(-1)} />
+                    <Typography className={classes.title}>{title}</Typography>
+                </>
             ) : (
                 <MaskNotSquareIcon className={classes.logo} />
             )}
-            {history.length !== 1 && title ? <Typography className={classes.title}>{title}</Typography> : null}
         </Box>
     )
 })
