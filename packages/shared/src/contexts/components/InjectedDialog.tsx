@@ -54,7 +54,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     classes?: Partial<Record<InjectedDialogClassKey, string>>
     onClose?(): void
     title?: React.ReactChild
-    titleTail?: React.ReactChild
+    titleTail?: React.ReactChild | null
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'

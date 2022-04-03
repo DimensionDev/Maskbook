@@ -47,6 +47,7 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 500,
         },
         address: {
+            height: 48,
             flexGrow: 1,
             marginLeft: theme.spacing(1),
         },

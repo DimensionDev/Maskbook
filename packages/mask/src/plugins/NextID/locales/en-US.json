@@ -64,10 +64,10 @@
     "tip_token_share_post": "I just tipped {{amount}} {{symbol}} to @{{recipientSnsId}}'s wallet address {{recipient}}\n\n{{promote}}",
     "tip_nft_share_post": "I just tipped a {{name}} to @{{recipientSnsId}}'s wallet address {{recipient}}\n\n{{promote}}",
     "tip_add": "Add",
-    "tip_add_collectibles": "Add collectibles",
+    "tip_add_collectibles": "Add Collectibles",
     "tip_add_collectibles_contract_address": "Input contract address",
     "tip_add_collectibles_token_id": "Token ID",
     "tip_add_collectibles_error": "The contract address is incorrect or the collection does not belong to you",
     "tip_loading": "Loading",
-    "tip_empty_nft": "Not loaded into the collection, please select after adding the collection."
+    "tip_empty_nft": "No any collectible is available to preview. Please add your collectible here."
 }

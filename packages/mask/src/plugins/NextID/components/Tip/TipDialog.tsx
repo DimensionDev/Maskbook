@@ -252,7 +252,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         openAddTokenDialog(false)
     }, [])
 
-    const walletChip = (
+    const walletChip = account ? (
         <div className={classes.walletChip}>
             <WalletIcon size={30} networkIcon={providerDescriptor?.icon} providerIcon={networkDescriptor?.icon} />
             <div className={classes.wallet}>
@@ -264,7 +264,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     {Utils?.formatAddress?.(account, 4)}
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(chainId, account) ?? ''}
+                        href={account ? Utils?.resolveAddressLink?.(chainId, account) ?? '' : ''}
                         target="_blank"
                         rel="noopener noreferrer">
                         <LinkOutIcon className={classes.linkIcon} />
@@ -275,7 +275,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 <Drop2Icon />
             </div>
         </div>
-    )
+    ) : null
 
     return (
         <>

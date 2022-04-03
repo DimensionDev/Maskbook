@@ -71,12 +71,15 @@ const useStyles = makeStyles()((theme) => ({
         width: 100,
     },
     imgWrapper: {
-        height: 100,
-        width: 100,
+        height: '100px !important',
+        width: '100px !important',
         img: {
             height: '100%',
             width: '100%',
         },
+    },
+    tooltip: {
+        marginBottom: `${theme.spacing(0.5)} !important`,
     },
 }))
 
@@ -132,6 +135,7 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, onChange, limit = 1, c
                         : undefined
                 return (
                     <ShadowRootTooltip
+                        classes={{ tooltip: classes.tooltip }}
                         key={token.tokenId}
                         title={`${token.contract?.name} ${formatNFT_TokenId(token.tokenId, 2)}`}
                         placement="top"
