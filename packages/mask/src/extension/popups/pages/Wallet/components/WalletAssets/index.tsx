@@ -11,9 +11,7 @@ import { useContainer } from 'unstated-next'
 import { WalletContext } from '../../hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { Navigator } from '../../../../components/Navigator'
-import { WalletHeader } from '../../../../components/Header'
-import { ChainId, Wallet, useChainId, useWallet } from '@masknet/web3-shared-evm'
-import { useChainChange } from '../../../../hook/useChainChange'
+import { useWallet } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     content: {
@@ -77,27 +75,15 @@ enum WalletTabs {
 
 export const WalletAssets = memo(() => {
     const navigate = useNavigate()
-    const chainId = useChainId()
-    const onChainChange = useChainChange()
     const wallet = useWallet()
-    return wallet ? (
-        <WalletAssetsUI
-            onAddTokenClick={() => navigate(PopupRoutes.AddToken)}
-            chainId={chainId}
-            wallet={wallet}
-            onChainChange={onChainChange}
-        />
-    ) : null
+    return wallet ? <WalletAssetsUI onAddTokenClick={() => navigate(PopupRoutes.AddToken)} /> : null
 })
 
 export interface WalletAssetsUIProps {
     onAddTokenClick: () => void
-    chainId: ChainId
-    onChainChange: (chainId: ChainId) => void
-    wallet: Wallet
 }
 
-export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick, wallet, chainId, onChainChange }) => {
+export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) => {
     const { t } = useI18N()
 
     const { classes } = useStyles()
@@ -108,7 +94,6 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick, wall
         <LoadingPlaceholder />
     ) : (
         <>
-            <WalletHeader wallet={wallet} chainId={chainId} onChainChange={onChainChange} />
             <div className={classes.content}>
                 <TabContext value={currentTab}>
                     <StyledTabs value={currentTab} onChange={(event, tab) => setCurrentTab(tab)}>

@@ -5,7 +5,7 @@ import { useWallet } from '@masknet/web3-shared-evm'
 import { ERC20TokenList } from '@masknet/shared'
 import { useI18N } from '../../../../../utils'
 import { useNavigate } from 'react-router-dom'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     header: {
@@ -46,9 +46,10 @@ const AddToken = memo(() => {
 
     const excludeTokens = Array.from(wallet?.erc20_token_whitelist ?? [])
 
+    useTitle(t('add_token'))
+
     return (
         <>
-            <NormalHeader title={t('add_token')} />
             <div className={classes.content}>
                 <Typography className={classes.label}>{t('popups_wallet_token')}</Typography>
                 <ERC20TokenList FixedSizeListProps={{ height: 340, itemSize: 54 }} blacklist={excludeTokens} />

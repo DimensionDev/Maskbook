@@ -12,7 +12,7 @@ import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { WalletContext } from '../hooks/useWalletContext'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     content: {
@@ -137,9 +137,10 @@ const DeleteWallet = memo(() => {
         }
     }, [wallet, password])
 
+    useTitle(t('popups_delete_wallet'))
+
     return (
         <>
-            <NormalHeader title={t('popups_delete_wallet')} />
             <div className={classes.content}>
                 <div className={classes.warning}>
                     <WarningIcon style={{ fontSize: 48 }} />

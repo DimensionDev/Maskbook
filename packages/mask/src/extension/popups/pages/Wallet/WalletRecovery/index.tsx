@@ -18,7 +18,7 @@ import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { LoadingButton } from '@mui/lab'
 import { currentPersonaIdentifier } from '../../../../../settings/settings'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     container: {
@@ -134,11 +134,12 @@ const WalletRecovery = memo(() => {
         }
     }, [onSubmit, hasPassword, currentPersona, backupId])
 
+    useTitle(t('popups_recovery_wallet'))
+
     return loading || getHasPasswordLoading ? (
         <LoadingPlaceholder />
     ) : (
         <>
-            <NormalHeader title={t('popups_recovery_wallet')} />
             <div className={classes.container}>
                 <PageHeader title={t('popups_wallet_recovered')} />
                 <div style={{ padding: 6 }}>

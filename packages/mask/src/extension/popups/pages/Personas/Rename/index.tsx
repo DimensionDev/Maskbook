@@ -8,7 +8,7 @@ import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import Services from '../../../../service'
 import { PopupRoutes } from '@masknet/shared-base'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     header: {
@@ -44,6 +44,7 @@ const PERSONA_NAME_MAX_LENGTH = 24
 const PersonaRename = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
+
     const [name, setName] = useState('')
     const [error, setError] = useState('')
     const { selectedPersona } = PersonaContext.useContainer()
@@ -65,9 +66,10 @@ const PersonaRename = memo(() => {
         navigate(PopupRoutes.Personas, { replace: true })
     }, [selectedPersona, name])
 
+    useTitle(t('popups_rename'))
+
     return (
         <>
-            <NormalHeader title={t('popups_rename')} />
             <div className={classes.content}>
                 <StyledInput
                     onChange={(e) => setName(e.target.value)}

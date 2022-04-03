@@ -7,7 +7,6 @@ import { PersonaContext } from '../hooks/usePersonaContext'
 import { MAX_PERSONA_LIMIT } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { useI18N } from '../../../../../utils'
-import { PersonaHeader } from '../../../components/Header'
 
 const useStyles = makeStyles()({
     content: {
@@ -50,16 +49,10 @@ const useStyles = makeStyles()({
 const SelectPersona = memo(() => {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const { personas, currentPersona, avatar } = PersonaContext.useContainer()
+    const { personas } = PersonaContext.useContainer()
+
     return (
         <>
-            {currentPersona ? (
-                <PersonaHeader
-                    currentIdentifier={currentPersona.identifier.toText()}
-                    nickname={currentPersona.nickname}
-                    avatar={avatar}
-                />
-            ) : null}
             <div className={classes.content}>
                 <PersonaList />
             </div>

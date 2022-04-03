@@ -11,7 +11,7 @@ import type { z as zod } from 'zod'
 import { Controller } from 'react-hook-form'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
 import { WalletContext } from '../hooks/useWalletContext'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     header: {
@@ -68,9 +68,10 @@ const WalletRename = memo(() => {
 
     const onSubmit = handleSubmit(renameWallet)
 
+    useTitle(t('popups_rename'))
+
     return (
         <>
-            <NormalHeader title={t('popups_rename')} />
             <div className={classes.content}>
                 <Controller
                     name="name"

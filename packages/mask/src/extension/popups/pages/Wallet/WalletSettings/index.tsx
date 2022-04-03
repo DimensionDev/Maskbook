@@ -11,7 +11,7 @@ import { FormattedAddress } from '@masknet/shared'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { WalletContext } from '../hooks/useWalletContext'
 import { Navigator } from '../../../components/Navigator'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -80,11 +80,12 @@ const WalletSettings = memo(() => {
     const { value: domain } = useReverseAddress(wallet?.address ?? '', NetworkPluginID.PLUGIN_EVM)
     const { Utils } = useWeb3State()
 
+    useTitle(t('popups_account_details'))
+
     if (!wallet) return null
 
     return (
         <>
-            <NormalHeader title={t('popups_account_details')} />
             <div className={classes.header}>
                 <MaskWalletIcon style={{ marginRight: 4 }} />
                 <div>

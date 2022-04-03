@@ -28,7 +28,7 @@ import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
 import Services from '../../../../service'
 import { isPositive, multipliedBy } from '@masknet/web3-shared-base'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     container: {
@@ -179,9 +179,10 @@ const ReplaceTransaction = memo(() => {
 
     const onSubmit = handleSubmit((data) => handleConfirm(data))
 
+    useTitle(type === ReplaceType.CANCEL ? t('cancel') : t('speed_up'))
+
     return (
         <>
-            <NormalHeader title={type === ReplaceType.CANCEL ? 'Cancel Transaction' : 'Speed up transaction'} />
             <Box component="main" p={2}>
                 <Typography fontSize={18} lineHeight="24px" fontWeight={500}>
                     {type === ReplaceType.CANCEL ? 'Cancel Transaction' : 'Speed up transaction'}

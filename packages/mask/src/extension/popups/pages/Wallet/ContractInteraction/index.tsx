@@ -31,7 +31,7 @@ import { toHex } from 'web3-utils'
 import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
 import { isGreaterThan, leftShift, pow10 } from '@masknet/web3-shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -316,13 +316,14 @@ const ContractInteraction = memo(() => {
         }
     }, [request, requestLoading])
 
+    useTitle(typeName ?? t('popups_wallet_contract_interaction'))
+
     const { value: domain } = useReverseAddress(to, NetworkPluginID.PLUGIN_EVM)
     const { Utils } = useWeb3State()
     return requestLoading ? (
         <LoadingPlaceholder />
     ) : (
         <>
-            <NormalHeader title={typeName} />
             <main className={classes.container}>
                 <div className={classes.info}>
                     <Typography className={classes.title}>{typeName}</Typography>

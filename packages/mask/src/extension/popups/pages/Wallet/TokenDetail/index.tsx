@@ -24,7 +24,7 @@ import { compact, intersectionWith } from 'lodash-unified'
 import urlcat from 'urlcat'
 import { ActivityList } from '../components/ActivityList'
 import { openWindow } from '@masknet/shared-base-ui'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     content: {
@@ -116,11 +116,12 @@ const TokenDetail = memo(() => {
         openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
     }, [currentToken, nativeToken])
 
+    useTitle(t('popups_assets'))
+
     if (!currentToken) return null
 
     return (
         <>
-            <NormalHeader title={t('popups_assets')} />
             <div className={classes.content}>
                 <TokenIcon
                     classes={{ icon: classes.tokenIcon }}

@@ -10,7 +10,7 @@ import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -134,9 +134,10 @@ const SignRequest = memo(() => {
         }
     }, [value, requestLoading])
 
+    useTitle(t('approve'))
+
     return (
         <>
-            <NormalHeader title={t('approve')} />
             <main className={classes.container}>
                 <div className={classes.info}>
                     <Typography className={classes.title}>{t('popups_wallet_signature_request')}</Typography>

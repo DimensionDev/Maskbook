@@ -10,7 +10,7 @@ import { PersonaContext } from '../hooks/usePersonaContext'
 import { MethodAfterPersonaSign } from '../../Wallet/type'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../service'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -176,9 +176,10 @@ const PersonaSignRequest = memo(() => {
         navigate(-1)
     }
 
+    useTitle('')
+
     return (
         <>
-            <NormalHeader />
             <main className={classes.container}>
                 <div className={classes.info}>
                     <Typography className={classes.title}>{t('popups_persona_sign_request_title')}</Typography>

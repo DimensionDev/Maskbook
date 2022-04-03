@@ -11,7 +11,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
 import { Navigator } from '../../../components/Navigator'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()((theme) => ({
     contain: {
@@ -74,9 +74,10 @@ const Unlock = memo(() => {
         navigate({ pathname: from ?? PopupRoutes.Wallet, search: location.search }, { replace: true })
     }, [isLocked, getLockStatusLoading, location.search])
 
+    useTitle('')
+
     return (
         <>
-            <NormalHeader />
             <main className={classes.contain}>
                 <div className={classes.header}>
                     <MaskWalletIcon style={{ fontSize: 48 }} />

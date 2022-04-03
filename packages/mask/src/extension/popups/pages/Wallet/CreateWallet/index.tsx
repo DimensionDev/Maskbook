@@ -9,7 +9,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     header: {
@@ -69,9 +69,10 @@ const CreateWallet = memo(() => {
 
     const onSubmit = handleSubmit(onCreate)
 
+    useTitle(t('popups_create_wallet'))
+
     return (
         <>
-            <NormalHeader title={t('popups_create_wallet')} />
             <div className={classes.content}>
                 <div>
                     <Typography className={classes.label}>{t('wallet_name')}</Typography>

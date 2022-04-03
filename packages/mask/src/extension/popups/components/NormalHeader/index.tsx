@@ -1,8 +1,9 @@
-import { memo } from 'react'
+import { memo, useContext } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { MaskNotSquareIcon, SquareBack } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
+import { PageTitleContext } from '../../context'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -32,13 +33,10 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-export interface TitleHeaderProps {
-    title?: string
-}
-
-export const NormalHeader = memo<TitleHeaderProps>(({ title }) => {
+export const NormalHeader = memo(() => {
     const { classes } = useStyles()
     const navigate = useNavigate()
+    const { title } = useContext(PageTitleContext)
 
     return (
         <Box className={classes.container} style={{ justifyContent: history.length !== 1 ? 'center' : 'flex-start' }}>

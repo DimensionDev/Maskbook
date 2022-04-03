@@ -10,7 +10,7 @@ import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import Services from '../../../../service'
 import { WalletContext } from '../hooks/useWalletContext'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     header: {
@@ -153,9 +153,10 @@ const BackupWallet = memo(() => {
         }
     }, [jsonFile])
 
+    useTitle(t('popups_back_up_the_wallet'))
+
     return (
         <>
-            <NormalHeader title={t('popups_back_up_the_wallet')} />
             <div className={classes.content}>
                 <TabContext value={currentTab}>
                     <StyledTabs value={currentTab} onChange={(event, tab) => setCurrentTab(tab)}>

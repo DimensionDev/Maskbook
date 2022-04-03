@@ -7,8 +7,8 @@ import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
 import { Transfer1559 } from './Transfer1559'
 import { Prior1559Transfer } from './Prior1559Transfer'
-import { NormalHeader } from '../../../components/Header'
 import { useI18N } from '../../../../../utils'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     assetItem: {
@@ -59,9 +59,10 @@ const Transfer = memo(() => {
         }),
     )
 
+    useTitle(t('popups_send'))
+
     return (
         <>
-            <NormalHeader title={t('popups_send')} />
             {isEIP1559Supported(chainId) ? (
                 <Transfer1559 selectedAsset={selectedAsset} otherWallets={otherWallets} openAssetMenu={openAssetMenu} />
             ) : (

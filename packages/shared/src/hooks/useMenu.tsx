@@ -24,7 +24,6 @@ export function useMenuConfig(
     menu: React.ReactElement,
     openDialog: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void,
     closeDialog: () => void,
-    status: boolean,
 ] {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [status, setOpen] = useState(false)
@@ -52,6 +51,5 @@ export function useMenuConfig(
         </Menu>,
         open,
         close,
-        status,
     ]
 }

@@ -12,7 +12,7 @@ import { LoadingButton } from '@mui/lab'
 import { PopupRoutes } from '@masknet/shared-base'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { first } from 'lodash-unified'
-import { NormalHeader } from '../../../components/Header'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     container: {
@@ -153,9 +153,10 @@ const AddDeriveWallet = memo(() => {
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [mnemonic, walletName, wallets.length])
 
+    useTitle(t('popups_add_derive'))
+
     return (
         <div className={classes.container}>
-            <NormalHeader title={t('popups_add_derive')} />
             <Typography className={classes.path}>
                 {t('popups_wallet_derivation_path', {
                     path: HD_PATH_WITHOUT_INDEX_ETHEREUM,

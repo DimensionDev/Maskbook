@@ -4,6 +4,7 @@ import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 import { PersonaContext } from './hooks/usePersonaContext'
 import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { Route, Routes } from 'react-router-dom'
+import { PersonaHeader } from './components/PersonaHeader'
 
 const Home = lazy(() => import('./Home'))
 const Logout = lazy(() => import('./Logout'))
@@ -16,6 +17,7 @@ const Persona = memo(() => {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <PersonaContext.Provider>
+                <PersonaHeader />
                 <Routes>
                     <Route path={r(PopupRoutes.Logout)} element={<Logout />} />
                     <Route path={r(PopupRoutes.PersonaRename)} element={<PersonaRename />} />
