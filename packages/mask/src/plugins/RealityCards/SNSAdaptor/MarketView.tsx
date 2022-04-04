@@ -167,15 +167,17 @@ function MarketDetails(props: MarketDetailsProps) {
     }, [market.state, t])
 
     const avgRental = useMemo(() => {
-        const utcTimestamp = getUnixTime(new Date())
-        const elapsedTime = utcTimestamp - Number.parseInt(market.openingTime, 10)
+        let endTimestamp = getUnixTime(new Date()) // use current time as default if market is open
+        if (market.state !== MarketState.Open) {
+            endTimestamp = Number.parseInt(market.lockingTime, 10)
+        }
+
+        const elapsedTime = endTimestamp - Number.parseInt(market.openingTime, 10)
+
         return formatBalance(
-            new BigNumber(market.totalCollected)
-                .minus(market.sponsorAmount)
-                .dividedBy(elapsedTime)
-                .multipliedBy(60 * 60),
+            new BigNumber(market.totalCollected).dividedBy(elapsedTime).multipliedBy(60 * 60),
             token.decimals,
-            1,
+            2,
         )
     }, [market.openingTime, market.totalCollected, market.sponsorAmount, token.decimals])
 
