@@ -38,6 +38,14 @@ export default [
         },
         plugins: plugins(),
     },
+    {
+        input: join(__dirname, './regenerator.js'),
+        output: {
+            file: 'regenerator.js',
+            format: 'iife',
+        },
+        plugins: plugins(),
+    },
 ]
 function plugins() {
     return [
