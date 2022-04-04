@@ -1,6 +1,6 @@
 /**
  # @harmony-js/crypto
-This package provides a collection of apis related to address management, kestore, encoding, and encrypt/decrypt.
+This package provides a collection of apis related to address management, keystore, encoding, and encrypt/decrypt.
 ## Installation
 ```
 npm install @harmony-js/crypto
@@ -117,7 +117,7 @@ export const UNEXPECTED_ARGUMENT = 'UNEXPECTED_ARGUMENT'
 /** @hidden */
 export const NUMERIC_FAULT = 'NUMERIC_FAULT'
 
-// Insufficien funds (< value + gasLimit * gasPrice)
+// Insufficient funds (< value + gasLimit * gasPrice)
 //   - transaction: the transaction attempted
 /** @hidden */
 export const INSUFFICIENT_FUNDS = 'INSUFFICIENT_FUNDS'
@@ -264,7 +264,7 @@ let LogLevel = LogLevels.default
 export function setLogLevel(logLevel: string): void {
     const level = LogLevels[logLevel]
     if (level === null) {
-        warn('invliad log level - ' + logLevel)
+        warn('invalid log level - ' + logLevel)
         return
     }
     LogLevel = level

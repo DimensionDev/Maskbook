@@ -2692,7 +2692,7 @@
         "features": [],
         "nativeCurrency": { "name": "ONE", "symbol": "ONE", "decimals": 18 },
         "infoURL": "https://www.harmony.one/",
-        "shortName": "hmy-s0",
+        "shortName": "hmy",
         "chainId": 1666600000,
         "networkId": 1666600000
     },

@@ -84,7 +84,7 @@ export function arrayify(value: Arrayish | Hexable): Uint8Array | null {
         const match = value.match(/^(0x)?[\dA-Fa-f]*$/)
 
         if (!match) {
-            errors.throwError('invalid hexidecimal string', errors.INVALID_ARGUMENT, {
+            errors.throwError('invalid hexadecimal  string', errors.INVALID_ARGUMENT, {
                 arg: 'value',
                 value,
             })
@@ -218,13 +218,14 @@ export function hexlify(value: Arrayish | Hexable | number): string {
         // We can about (value == MAX_INT) to as well, since that may indicate we underflowed already
         if (value >= 9007199254740991) {
             errors.throwError('out-of-range', errors.NUMERIC_FAULT, {
-                operartion: 'hexlify',
+                operation: 'hexlify',
                 fault: 'out-of-safe-range',
             })
         }
 
         let hex = ''
         while (value) {
+            // eslint-disable-next-line no-bitwise
             hex = HexCharacters[value & 0x0f] + hex
             value = Math.floor(value / 16)
         }
@@ -243,7 +244,7 @@ export function hexlify(value: Arrayish | Hexable | number): string {
         const match = value.match(/^(0x)?[\dA-Fa-f]*$/)
 
         if (!match) {
-            errors.throwError('invalid hexidecimal string', errors.INVALID_ARGUMENT, {
+            errors.throwError('invalid hexadecimal  string', errors.INVALID_ARGUMENT, {
                 arg: 'value',
                 value,
             })
