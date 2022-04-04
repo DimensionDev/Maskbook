@@ -136,6 +136,13 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                           type: 'javascript/auto',
                       }
                     : undefined!,
+                // Patch regenerator-runtime
+                lockdown
+                    ? {
+                          test: /\..?js$/,
+                          loader: require.resolve('./fix-regenerator-runtime.ts'),
+                      }
+                    : undefined!,
                 // TypeScript
                 {
                     test: /\.tsx?$/,
