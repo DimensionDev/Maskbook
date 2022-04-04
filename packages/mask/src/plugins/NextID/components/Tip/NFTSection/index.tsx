@@ -10,6 +10,7 @@ import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import { WalletMessages } from '../../../../Wallet/messages'
 import { useTip } from '../../../contexts'
 import { useI18N } from '../../../locales'
+import type { TipNFTKeyPair } from '../../../types'
 import { NFTList } from './NFTList'
 
 export * from './NFTList'
@@ -56,11 +57,14 @@ interface Props extends HTMLProps<HTMLDivElement> {
 }
 
 export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest }) => {
-    const { storedTokens, erc721TokenId, setErc721TokenId, setErc721Address } = useTip()
+    const { storedTokens, erc721Address, erc721TokenId, setErc721TokenId, setErc721Address } = useTip()
     const { classes } = useStyles()
     const t = useI18N()
     const account = useAccount()
-    const selectedIds = useMemo(() => (erc721TokenId ? [erc721TokenId] : []), [erc721TokenId])
+    const selectedPairs: TipNFTKeyPair[] = useMemo(
+        () => (erc721Address && erc721TokenId ? [[erc721Address, erc721TokenId]] : []),
+        [erc721TokenId, erc721TokenId],
+    )
     const { Asset } = useWeb3PluginState()
 
     const networkDescriptor = useNetworkDescriptor()
@@ -117,7 +121,7 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
                         return (
                             <NFTList
                                 className={classes.list}
-                                selectedIds={selectedIds}
+                                selectedPairs={selectedPairs}
                                 tokens={tokens}
                                 onChange={(id, address) => {
                                     setErc721TokenId(id)

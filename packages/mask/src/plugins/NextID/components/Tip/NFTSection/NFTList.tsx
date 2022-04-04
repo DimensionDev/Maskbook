@@ -1,14 +1,15 @@
 import { useWeb3State, Web3Plugin } from '@masknet/plugin-infra'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { formatNFT_TokenId, useChainId } from '@masknet/web3-shared-evm'
+import { formatNFT_TokenId, isSameAddress, useChainId } from '@masknet/web3-shared-evm'
 import { Checkbox, Link, List, ListItem, Radio } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
+import type { TipNFTKeyPair } from '../../../types'
 
 interface Props {
-    selectedIds: string[]
+    selectedPairs: TipNFTKeyPair[]
     tokens: Web3Plugin.NonFungibleToken[]
     onChange?: (id: string | null, contractAddress: string) => void
     limit?: number
@@ -105,17 +106,21 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     )
 }
 
-export const NFTList: FC<Props> = ({ selectedIds, tokens, onChange, limit = 1, className }) => {
+const includes = (pairs: TipNFTKeyPair[], pair: TipNFTKeyPair): boolean => {
+    return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
+}
+
+export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1, className }) => {
     const { classes } = useStyles()
 
     const isRadio = limit === 1
-    const reachedLimit = selectedIds.length >= limit
+    const reachedLimit = selectedPairs.length >= limit
 
     const toggleItem = useCallback(
         (currentId: string | null, contractAddress: string) => {
             onChange?.(currentId, contractAddress)
         },
-        [selectedIds, onChange, isRadio, reachedLimit],
+        [onChange, isRadio, reachedLimit],
     )
 
     const SelectComponent = isRadio ? Radio : Checkbox
@@ -124,7 +129,8 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, onChange, limit = 1, c
     return (
         <List className={classnames(classes.list, className)}>
             {tokens.map((token) => {
-                const disabled = !isRadio && reachedLimit && !selectedIds.includes(token.tokenId)
+                const selected = includes(selectedPairs, [token.contract?.address!, token.tokenId])
+                const disabled = !isRadio && reachedLimit && !selected
                 const link =
                     Utils?.resolveNonFungibleTokenLink && token.contract
                         ? Utils.resolveNonFungibleTokenLink(
@@ -144,8 +150,8 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, onChange, limit = 1, c
                             key={token.tokenId}
                             className={classnames(classes.nftItem, {
                                 [classes.disabled]: disabled,
-                                [classes.selected]: selectedIds.includes(token.tokenId),
-                                [classes.unselected]: selectedIds.length > 0 && !selectedIds.includes(token.tokenId),
+                                [classes.selected]: selected,
+                                [classes.unselected]: selectedPairs.length > 0 && !selected,
                             })}>
                             <Link target={link ? '_blank' : 'self'} rel="noreferrer noopener" href={link}>
                                 <NFTItem token={token} />
@@ -156,14 +162,14 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, onChange, limit = 1, c
                                 disabled={disabled}
                                 onClick={() => {
                                     if (disabled || !token.contract?.address) return
-                                    if (selectedIds.includes(token.tokenId)) {
+                                    if (selected) {
                                         toggleItem(null, '')
                                     } else {
                                         toggleItem(token.tokenId, token.contract.address)
                                     }
                                 }}
                                 className={classes.checkbox}
-                                checked={selectedIds.includes(token.tokenId)}
+                                checked={selected}
                             />
                         </ListItem>
                     </ShadowRootTooltip>

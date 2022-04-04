@@ -47,7 +47,7 @@ interface Props extends InjectedDialogProps {
     onAdd?(token: Web3Plugin.NonFungibleToken): void
 }
 
-export const AddDialog: FC<Props> = ({ onAdd, ...rest }) => {
+export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
     const { classes } = useStyles()
     const chainId = useChainId()
     const account = useAccount()
@@ -65,6 +65,11 @@ export const AddDialog: FC<Props> = ({ onAdd, ...rest }) => {
     }, [erc721TokenContract, tokenId, account])
 
     const [message, setMessage] = useState('')
+    const reset = useCallback(() => {
+        setMessage('')
+        setContractAddress('')
+        setTokenId('')
+    }, [])
     const handleAdd = useCallback(async () => {
         if (!erc721TokenContract) return
         const hasOwnership = await checkOwner()
@@ -83,11 +88,14 @@ export const AddDialog: FC<Props> = ({ onAdd, ...rest }) => {
         const nonFungibleToken = erc721TokenDetailed ? createNonFungibleToken(erc721TokenDetailed) : null
         if (nonFungibleToken) {
             onAdd?.(nonFungibleToken)
-            setMessage('')
-            setContractAddress('')
-            setTokenId('')
+            reset()
         }
     }, [onAdd, t, contractAddress, tokenId])
+
+    const handleClose = useCallback(() => {
+        onClose?.()
+        reset()
+    }, [onClose])
 
     const addButton = useMemo(() => {
         return (
@@ -99,7 +107,7 @@ export const AddDialog: FC<Props> = ({ onAdd, ...rest }) => {
 
     if (!network) return null
     return (
-        <InjectedDialog title={t.tip_add_collectibles()} titleTail={addButton} {...rest}>
+        <InjectedDialog title={t.tip_add_collectibles()} titleTail={addButton} onClose={handleClose} {...rest}>
             <DialogContent>
                 <div className={classes.chain}>
                     <ImageIcon size={24} icon={network.icon || ''} />
