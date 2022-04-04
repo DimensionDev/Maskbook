@@ -57,6 +57,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
         case NetworkType.Metis:
         case NetworkType.Optimistic:
         case NetworkType.KardiaChain:
+            return [TradeProvider.PANCAKESWAP]
         case NetworkType.Conflux:
             console.error('To be implement network: ', networkType)
             return []

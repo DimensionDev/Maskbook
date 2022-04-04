@@ -73,6 +73,9 @@ export enum ChainId {
 
     // Conflux
     Conflux = 1030,
+
+    // KardiaChain
+    KardiaChain = 24,
 }
 
 export enum LockStatus {
