@@ -13,6 +13,7 @@ import {
 import { Button, DialogContent, FormControl, TextField, Typography } from '@mui/material'
 import { FC, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
+import { EthereumAddress } from 'wallet.ts'
 import { WalletRPC } from '../../../Wallet/messages'
 import { useI18N } from '../../locales'
 
@@ -73,6 +74,11 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
     }, [])
     const handleAdd = useCallback(async () => {
         if (!erc721TokenContract) return
+        if (!EthereumAddress.isValid(contractAddress)) {
+            setMessage(t.tip_add_collectibles_error())
+            return
+        }
+
         const hasOwnership = await checkOwner()
         if (!hasOwnership) {
             setMessage(t.tip_add_collectibles_error())
