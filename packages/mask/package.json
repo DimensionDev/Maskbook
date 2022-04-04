@@ -140,7 +140,7 @@
     "react-refresh": "=0.11.0",
     "source-map-loader": "^3.0.1",
     "swc-loader": "^0.1.15",
-    "webpack": "^5.70.0",
+    "webpack": "^5.71.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4",
     "webpack-target-webextension": "^1.0.3"
