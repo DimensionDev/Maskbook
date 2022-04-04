@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages, Services } from '../../../API'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext'
@@ -64,7 +64,7 @@ export const FeaturePromotions = memo(() => {
         connectPersona(currentPersona.identifier, EnhanceableSite.Twitter)
     }
 
-    const openMaskNetwork = () => window.open('https://twitter.com/realMaskNetwork')
+    const openMaskNetwork = () => openWindow('https://twitter.com/realMaskNetwork')
 
     return (
         <div className={classes.container}>

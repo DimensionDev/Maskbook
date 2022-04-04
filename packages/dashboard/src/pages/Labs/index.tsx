@@ -23,7 +23,7 @@ import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { Messages, Services, PluginMessages } from '../../API'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TUTORIAL_URLS_EN } from './constants'
 import { ContentContainer } from '../../components/ContentContainer'
 import { WalletStateBar } from '../Wallets/components/WalletStateBar'
@@ -230,10 +230,7 @@ export default function Plugins() {
     }
 
     function onTutorial(id: string) {
-        const url = TUTORIAL_URLS_EN[id]
-        if (url) {
-            window.open(url, '_blank', 'noopener noreferrer')
-        }
+        openWindow(TUTORIAL_URLS_EN[id])
     }
 
     function onTutorialDialogClose(checked: boolean) {

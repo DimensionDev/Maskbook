@@ -70,6 +70,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/gun-utils': join(__dirname, '../../gun-utils/src/'),
                     '@masknet/shared': join(__dirname, '../../shared/src/'),
                     '@masknet/shared-base': join(__dirname, '../../shared-base/src/'),
+                    '@masknet/shared-base-ui': join(__dirname, '../../shared-base-ui/src/'),
                     '@masknet/theme': join(__dirname, '../../theme/src/'),
                     '@masknet/icons': join(__dirname, '../../icons/index.ts'),
                     '@masknet/web3-providers': join(__dirname, '../../web3-providers/src'),

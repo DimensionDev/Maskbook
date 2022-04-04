@@ -8,18 +8,21 @@ import {
     EnhanceableSite,
     NextIDAction,
     NextIDPlatform,
+    PopupRoutes,
 } from '@masknet/shared-base'
 import { compact } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
-import { useI18N, MaskMessages } from '../../../../../../utils'
+import { useI18N } from '../../../../../../utils'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../../../service'
 import { GrayMasks } from '@masknet/icons'
 import { DisconnectDialog } from '../DisconnectDialog'
-import { bindProof, createPersonaPayload, queryExistedBindingByPersona } from '@masknet/web3-providers'
-import { delay } from '@dimensiondev/kit'
+import { createPersonaPayload, queryExistedBindingByPersona } from '@masknet/web3-providers'
 import classNames from 'classnames'
+import { useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
+import { MethodAfterPersonaSign } from '../../../Wallet/type'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -97,6 +100,7 @@ export interface ProfileListProps {}
 export const ProfileList = memo(() => {
     const { currentPersona } = PersonaContext.useContainer()
 
+    const navigate = useNavigate()
     const [unbind, setUnbind] = useState<{
         identifier: ProfileIdentifier
         identity?: string
@@ -111,9 +115,14 @@ export const ProfileList = memo(() => {
     )
 
     const [, onConnect] = useAsyncFn(
-        async (networkIdentifier: string) => {
+        async (networkIdentifier: string, type?: 'local' | 'nextID', profile?: ProfileIdentifier) => {
             if (currentPersona) {
-                await Services.SocialNetwork.connectSocialNetwork(currentPersona.identifier, networkIdentifier)
+                await Services.SocialNetwork.connectSocialNetwork(
+                    currentPersona.identifier,
+                    networkIdentifier,
+                    type,
+                    profile,
+                )
             }
         },
         [currentPersona],
@@ -175,35 +184,21 @@ export const ProfileList = memo(() => {
                 unbind.platform,
             )
             if (!result) return
-            const signatureResult = await Services.Identity.signWithPersona({
-                method: 'eth',
-                message: result.signPayload,
-                identifier: currentPersona.identifier.toText(),
-            })
-
-            if (!signatureResult) return
-
-            await bindProof(
-                result.uuid,
-                publicHexKey,
-                NextIDAction.Delete,
-                unbind.platform,
-                unbind.identity,
-                result.createdAt,
-                {
-                    signature: signatureResult.signature.signature,
-                },
+            navigate(
+                urlcat(PopupRoutes.PersonaSignRequest, {
+                    requestID: Math.random().toString().slice(3),
+                    message: result.signPayload,
+                    identifier: currentPersona.identifier.toText(),
+                    method: MethodAfterPersonaSign.DISCONNECT_NEXT_ID,
+                    profileIdentifier: unbind.identifier.toText(),
+                    platform: unbind.platform,
+                    identity: unbind.identity,
+                    createdAt: result.createdAt,
+                    uuid: result.uuid,
+                }),
             )
-
-            await Services.Identity.detachProfile(unbind.identifier)
-
-            await delay(2000)
-            setUnbind(null)
-            refreshProfileList()
         } catch {
             console.log('Disconnect failed')
-        } finally {
-            MaskMessages.events.ownProofChanged.sendToAll(undefined)
         }
     }, [unbind, currentPersona?.identifier, refreshProfileList])
 
@@ -234,7 +229,7 @@ interface MergedProfileInformation extends ProfileInformation {
 }
 
 export interface ProfileListUIProps {
-    onConnect: (networkIdentifier: string) => void
+    onConnect: (networkIdentifier: string, type?: 'local' | 'nextID', profile?: ProfileIdentifier) => void
     onDisconnect: (
         identifier: ProfileIdentifier,
         is_valid?: boolean,
@@ -296,7 +291,13 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                                     @{identifier.userId}
                                 </Typography>
                                 {!is_valid && identifier.network === 'twitter.com' ? (
-                                    <Typography className={classes.tag}>
+                                    <Typography
+                                        className={classes.tag}
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={(e) => {
+                                            onConnect(identifier.network, 'nextID', identifier)
+                                            e.stopPropagation()
+                                        }}>
                                         {t('popups_persona_to_be_verified')}
                                     </Typography>
                                 ) : null}
