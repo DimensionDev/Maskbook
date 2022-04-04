@@ -239,6 +239,7 @@ export enum NetworkType {
     Metis = 'Metis',
     Optimistic = 'Optimistic',
     Conflux = 'Conflux',
+    KardiaChain = 'KardiaChain',
 }
 
 export enum ProviderType {
