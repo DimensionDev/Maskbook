@@ -18,7 +18,7 @@
         "Fantom": "fantom",
         "Aurora": "aurora",
         "Aurora_Testnet": "",
-        "KardiaChain": "KardiaChain"
+        "KardiaChain": "kardiachain"
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -39,6 +39,6 @@
         "Fantom": "fantom",
         "Aurora": "ethereum",
         "Aurora_Testnet": "",
-        "KardiaChain": "KardiaChain"
+        "KardiaChain": "kardiachain"
     }
 }
