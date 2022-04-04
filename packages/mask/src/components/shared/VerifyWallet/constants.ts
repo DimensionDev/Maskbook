@@ -5,6 +5,7 @@ const stepSuccessIcon = new URL('../assets/stepAssets/stepSuccess.png', import.m
 const dividerDisableIcon = new URL('../assets/stepAssets/dividerDisable.png', import.meta.url)
 const dividerActiveIcon = new URL('../assets/stepAssets/dividerActive.png', import.meta.url)
 const dividerSuccessIcon = new URL('../assets/stepAssets/dividerDone.png', import.meta.url)
+
 export {
     step1ActiveIcon,
     step2DisableIcon,
