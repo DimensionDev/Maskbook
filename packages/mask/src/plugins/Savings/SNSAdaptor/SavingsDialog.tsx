@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { Typography, DialogContent } from '@mui/material'
+import { Typography, DialogContent, CircularProgress } from '@mui/material'
 import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
 import { FolderTabPanel, FolderTabs } from '@masknet/theme'
 import { ChainId, getChainIdFromNetworkType, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
@@ -40,15 +40,22 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         return networks.map((network) => getChainIdFromNetworkType(network))
     }, [])
 
-    const { value: lazyProtocols } = useAsync(async () => {
-        const allResults = await Promise.all(LazyProtocolsResolvers.map((resolver) => resolver.resolve(chainId, web3)))
-        return flatten(allResults)
+    const { loading: lazyLoading, value: lazyProtocols } = useAsync(async () => {
+        const currentChainLazyResolvers = LazyProtocolsResolvers.filter((_) => _.supportChains.includes(chainId))
+        try {
+            const allResults = await Promise.all(
+                currentChainLazyResolvers.map((resolver) => resolver.resolve(chainId, web3)),
+            )
+            return flatten(allResults)
+        } catch (error) {
+            console.error('lazyProtocols: resolve error', error)
+        }
+        return []
     }, [web3, chainId])
 
-    const protocols = useMemo(
-        () => [...SavingsProtocols, ...(lazyProtocols ?? [])].filter((x) => x.bareToken.chainId === chainId),
-        [chainId, lazyProtocols],
-    )
+    const protocols = useMemo(() => {
+        return [...SavingsProtocols, ...(lazyProtocols ?? [])].filter((x) => x.bareToken.chainId === chainId)
+    }, [chainId, lazyProtocols])
 
     useUpdateEffect(() => {
         setChainId(currentChainId)
@@ -87,29 +94,41 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                     />
                                 </div>
                                 <div className={classes.tableTabWrapper}>
-                                    {protocols.length === 0 ? (
+                                    {protocols.length === 0 && !lazyLoading ? (
                                         <Typography variant="body2" textAlign="center">
                                             {t('plugin_no_protocol_available')}
                                         </Typography>
                                     ) : (
                                         <FolderTabs>
                                             <FolderTabPanel label="Deposit">
-                                                <SavingsTable
-                                                    chainId={chainId}
-                                                    tab={TabType.Deposit}
-                                                    protocols={protocols}
-                                                    setTab={setTab}
-                                                    setSelectedProtocol={setSelectedProtocol}
-                                                />
+                                                {lazyLoading ? (
+                                                    <div className={classes.loading}>
+                                                        <CircularProgress />
+                                                    </div>
+                                                ) : (
+                                                    <SavingsTable
+                                                        chainId={chainId}
+                                                        tab={TabType.Deposit}
+                                                        protocols={protocols}
+                                                        setTab={setTab}
+                                                        setSelectedProtocol={setSelectedProtocol}
+                                                    />
+                                                )}
                                             </FolderTabPanel>
                                             <FolderTabPanel label="Withdraw">
-                                                <SavingsTable
-                                                    chainId={chainId}
-                                                    tab={TabType.Withdraw}
-                                                    protocols={protocols.filter((x) => !x.balance.isZero())}
-                                                    setTab={setTab}
-                                                    setSelectedProtocol={setSelectedProtocol}
-                                                />
+                                                {lazyLoading ? (
+                                                    <div className={classes.loading}>
+                                                        <CircularProgress />
+                                                    </div>
+                                                ) : (
+                                                    <SavingsTable
+                                                        chainId={chainId}
+                                                        tab={TabType.Withdraw}
+                                                        protocols={protocols}
+                                                        setTab={setTab}
+                                                        setSelectedProtocol={setSelectedProtocol}
+                                                    />
+                                                )}
                                             </FolderTabPanel>
                                         </FolderTabs>
                                     )}

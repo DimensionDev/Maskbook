@@ -7,6 +7,7 @@ import { ChainId, formatBalance, isSameAddress, useAccount, useAssets, useWeb3 }
 import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
 import { SavingsProtocol, TabType } from '../types'
+import { useMemo } from 'react'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -55,6 +56,7 @@ const useStyles = makeStyles()((theme, props) => ({
         height: '16px',
         position: 'absolute',
         bottom: 0,
+        borderRadius: '16px',
         right: '-5px',
     },
     protocolLabel: {},
@@ -92,11 +94,16 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const { loading } = useAsync(async () => {
         await Promise.all(
             protocols.map(async (protocol) => {
-                protocol.updateApr(chainId, web3)
-                protocol.updateBalance(chainId, web3, account)
+                return tab === TabType.Deposit
+                    ? protocol.updateApr(chainId, web3)
+                    : protocol.updateBalance(chainId, web3, account)
             }),
         )
-    }, [chainId, web3, account, protocols])
+    }, [chainId, web3, account, protocols, tab])
+
+    const displayProtocols = useMemo(() => {
+        return tab === TabType.Deposit ? protocols : protocols.filter((x) => !x.balance.isZero())
+    }, [protocols, loading])
 
     return (
         <Box className={classes.containerWrap}>
@@ -123,13 +130,14 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                 </div>
             ) : (
                 <div className={classes.tableContainer}>
-                    {protocols.map((protocol, index) => (
+                    {displayProtocols.map((protocol, index) => (
                         <Grid container spacing={0} className={classes.tableRow} key={index}>
                             <Grid item xs={4} className={classes.tableCell}>
                                 <div className={classes.logoWrap}>
                                     <TokenIcon
                                         name={protocol.bareToken.name}
                                         address={protocol.bareToken.address}
+                                        logoURI={protocol.bareToken.logoURI}
                                         classes={{ icon: classes.logo }}
                                         chainId={chainId}
                                     />

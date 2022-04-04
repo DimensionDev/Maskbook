@@ -46,5 +46,6 @@ export interface SavingsProtocol {
 }
 
 export interface ProtocolPairsResolver {
+    supportChains: ChainId[]
     resolve(chainId: ChainId, web3: Web3): Promise<SavingsProtocol[]>
 }

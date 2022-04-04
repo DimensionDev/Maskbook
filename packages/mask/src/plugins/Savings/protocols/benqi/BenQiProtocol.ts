@@ -17,7 +17,7 @@ export class BenQiProtocol implements SavingsProtocol {
 
     private _apr = '0.00'
     private _balance = ZERO
-    private _nativeToken = 'qiAVAX'
+    static nativeToken = 'qiAVAX'
 
     constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
 
@@ -46,7 +46,7 @@ export class BenQiProtocol implements SavingsProtocol {
     }
 
     get isNativeToken() {
-        return this.stakeToken.symbol === this._nativeToken
+        return this.stakeToken.symbol === BenQiProtocol.nativeToken
     }
 
     public getPoolContract(web3: Web3) {
@@ -64,8 +64,8 @@ export class BenQiProtocol implements SavingsProtocol {
                 return
             }
             const supplyRate = await contract.methods.supplyRatePerTimestamp().call()
-            const supplyBase = new BigNumber(supplyRate).shiftedBy(-18).times(TIMESTAMPS_PER_DAY).plus(1)
-            const apy = supplyBase.times(DAYS_PER_YEAR).times(100)
+            const supplyBase = new BigNumber(supplyRate).times(TIMESTAMPS_PER_DAY)
+            const apy = supplyBase.times(DAYS_PER_YEAR).shiftedBy(-16)
             this._apr = apy.toFixed(2)
         } catch (error) {
             this._apr = BenQiProtocol.DEFAULT_APR

@@ -1,61 +1,17 @@
 import type { ProtocolPairsResolver, SavingsProtocol } from '../../types'
 import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
-import {
-    createContract,
-    ChainId,
-    FungibleTokenDetailed,
-    EthereumTokenType,
-    getERC20TokenDetailed,
-    ERC20TokenDetailed,
-    getAaveConstants,
-    FungibleToken,
-    ZERO_ADDRESS,
-} from '@masknet/web3-shared-evm'
+import { createContract, ChainId, EthereumTokenType, getAaveConstants, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider'
 import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
 import { flatten, compact } from 'lodash-unified'
 import { AAVEProtocol } from './AAVEProtocol'
-import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
-import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32'
-import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
-import ERC20Bytes32ABI from '@masknet/web3-contracts/abis/ERC20Bytes32.json'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
-
-function splitToPair(a: FungibleTokenDetailed[] | undefined) {
-    if (!a) {
-        return []
-    }
-    return a.reduce(function (result: any, value, index, array) {
-        if (index % 2 === 0) {
-            result.push(array.slice(index, index + 2))
-        }
-        return result
-    }, [])
-}
-
-async function getFungibleTokensDetailed(allTokens: Pick<FungibleToken, 'address'>[], web3: Web3, chainId: ChainId) {
-    return Promise.all(
-        allTokens.map(async (token, i) => {
-            const erc20TokenContract = createContract<ERC20>(web3, token.address, ERC20ABI as AbiItem[])
-            const erc20TokenBytes32Contract = createContract<ERC20Bytes32>(
-                web3,
-                token.address,
-                ERC20Bytes32ABI as AbiItem[],
-            )
-            return getERC20TokenDetailed(
-                token.address,
-                chainId,
-                erc20TokenContract,
-                erc20TokenBytes32Contract,
-                token as Partial<ERC20TokenDetailed>,
-            )
-        }),
-    )
-}
+import { getFungibleTokensDetailed, splitToPair } from '../common/tokens'
 
 export class AAVEResolver implements ProtocolPairsResolver {
+    public supportChains: ChainId[] = [ChainId.Mainnet]
     static getAaveLendingPoolAddressProviderContract(chainId: ChainId, web3: Web3) {
         const aaveLPoolAddress =
             getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
@@ -93,7 +49,7 @@ export class AAVEResolver implements ProtocolPairsResolver {
     }
 
     public async resolve(chainId: ChainId, web3: Web3): Promise<SavingsProtocol[]> {
-        if (chainId !== ChainId.Mainnet) {
+        if (!this.supportChains.includes(ChainId.Mainnet)) {
             return []
         }
         const [allTokens, poolAddress] = await Promise.all([

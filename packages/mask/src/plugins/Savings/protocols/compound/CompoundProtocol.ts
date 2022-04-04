@@ -17,7 +17,7 @@ export class CompoundProtocol implements SavingsProtocol {
 
     private _apr = '0.00'
     private _balance = ZERO
-    private _nativeToken = 'cETH'
+    static nativeToken = 'cETH'
 
     constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
 
@@ -42,7 +42,7 @@ export class CompoundProtocol implements SavingsProtocol {
     }
 
     get isNativeToken() {
-        return this.stakeToken.symbol === this._nativeToken
+        return this.stakeToken.symbol === CompoundProtocol.nativeToken
     }
 
     get approveAddress() {
@@ -64,8 +64,8 @@ export class CompoundProtocol implements SavingsProtocol {
                 return
             }
             const supplyRate = await contract.methods.supplyRatePerBlock().call()
-            const supplyBase = new BigNumber(supplyRate).shiftedBy(-18).times(BLOCKS_PER_DAY).plus(1)
-            const apy = supplyBase.times(DAYS_PER_YEAR).times(100)
+            const supplyBase = new BigNumber(supplyRate).times(BLOCKS_PER_DAY)
+            const apy = supplyBase.times(DAYS_PER_YEAR).shiftedBy(-16)
             this._apr = apy.toFixed(2)
         } catch (error) {
             this._apr = CompoundProtocol.DEFAULT_APR

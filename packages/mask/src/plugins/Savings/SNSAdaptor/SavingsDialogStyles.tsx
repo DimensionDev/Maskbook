@@ -48,4 +48,11 @@ export const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDash
         width: 535,
         margin: 'auto',
     },
+    loading: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: 300,
+        width: '100%',
+    },
 }))
