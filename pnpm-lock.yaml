@@ -35,7 +35,7 @@ importers:
       '@types/react-dom': 17.0.14
       '@types/web': ^0.0.60
       '@typescript-eslint/experimental-utils': ^5.17.0
-      '@uniswap/v3-sdk': ^3.3.2
+      '@uniswap/v3-sdk': 3.3.2
       cspell: ^5.19.3
       eslint: 8.12.0
       eslint-plugin-import: 2.25.4
@@ -28012,13 +28012,13 @@ packages:
     dev: false
 
   github.com/frozeman/bignumber.js-nolookahead/57692b3ecfc98bbdd6b3a516cb2353652ea49934:
-    resolution: {commit: 57692b3ecfc98bbdd6b3a516cb2353652ea49934, repo: git+ssh://git@github.com/frozeman/bignumber.js-nolookahead.git, type: git}
+    resolution: {tarball: https://codeload.github.com/frozeman/bignumber.js-nolookahead/tar.gz/57692b3ecfc98bbdd6b3a516cb2353652ea49934}
     name: bignumber.js
     version: 2.0.7
     dev: false
 
   github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
+    resolution: {commit: d463109433b2c49c74a081044f54b2a6a1ccad7c, repo: git+ssh://git@github.com/locize/html-parse-stringify2.git, type: git}
     name: html-parse-stringify2
     version: 2.0.1
     dependencies:

@@ -1,4 +1,6 @@
 /// <reference types="ses" />
+// https://github.com/endojs/endo/issues/1139
+Object.defineProperty(Array.prototype, 'at', { configurable: false, value: Array.prototype.at })
 
 lockdown({
     // In production, we have CSP enforced no eval
@@ -15,7 +17,7 @@ try {
         delete globalThis.regeneratorRuntime
         /**
          * @param {string} name The global name to be protected
-         * @param {'accept' | 'ignore'} policy The global policy
+         * @param {'accept' | 'ignore' | 'accept-then-ignore'} policy The global policy
          * @param {boolean} freeze If the value should be frozen
          * @param {boolean} warn If should log a warning when accessed
          * @param {boolean} why If should trigger the debugger on set
@@ -57,7 +59,10 @@ try {
                     if (why) debugger
                     if (policy === 'ignore') return
 
-                    if (hasBeenSet) throw new TypeError(`globalThis.${name} is not writable.`)
+                    if (hasBeenSet) {
+                        if (policy === 'accept-then-ignore') return true
+                        throw new TypeError(`globalThis.${name} is not writable.`)
+                    }
                     hasBeenSet = true
                     value = val
                     if (freeze) harden(val)
@@ -69,7 +74,7 @@ try {
         // accepted globals
         global('Buffer') // by webpack
         global('elliptic') // required by secp256k1 polyfill
-        global('regeneratorRuntime') // require by generator/async transpiled by babel
+        global('regeneratorRuntime', 'accept-then-ignore') // require by generator/async transpiled by babel
         global('__EMOTION_REACT_11__', 'ignore') // by @emotion/react to avoid duplicate loading
         global('_', 'ignore') // by lodash, as UMD
 
