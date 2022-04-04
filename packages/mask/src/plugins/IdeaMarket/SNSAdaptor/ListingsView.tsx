@@ -15,7 +15,7 @@ import {
     Typography,
 } from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid'
-import { formatterToUSD, truncate, urlWithoutProtocol } from '../utils'
+import { formatterToUSD, urlWithoutProtocol } from '../utils'
 import { formatWeiToEther } from '@masknet/web3-shared-evm'
 import { SearchIcon } from '@masknet/icons'
 import ClearIcon from '@mui/icons-material/Clear'
@@ -24,7 +24,8 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { UrlIcon } from '../icons/UrlIcon'
 import { TwitterIcon } from '../icons/TwitterIcon'
-import { BASE_URL } from '../constants'
+import { BASE_URL, TWITTER_BASE_URL } from '../constants'
+import type { IdeaToken } from '../types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -43,6 +44,11 @@ const useStyles = makeStyles()((theme) => {
                 '&:hover': {
                     backgroundColor: 'inherit',
                 },
+            },
+            '& .MuiDataGrid-cell p': {
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
             },
         },
         box: {
@@ -72,7 +78,6 @@ const useStyles = makeStyles()((theme) => {
                 fontSize: 13.125,
             },
             '& .MuiInput-underline:before': {
-                // borderBottom: 1,
                 borderColor: 'divider',
             },
         },
@@ -81,6 +86,9 @@ const useStyles = makeStyles()((theme) => {
             marginLeft: theme.spacing(0.1),
             width: 27,
             height: 27,
+        },
+        nameCellContainer: {
+            width: '100%',
         },
         url: {
             marginRight: theme.spacing(0.7),
@@ -95,6 +103,10 @@ const useStyles = makeStyles()((theme) => {
             textTransform: 'unset',
             padding: theme.spacing(0.7),
         },
+        pofileAvatar: {
+            float: 'left',
+            marginTop: theme.spacing(1.1),
+        },
     }
 })
 
@@ -103,16 +115,14 @@ interface QuickSearchToolbarProps {
     clearSearch: () => void
     onChange: () => void
     filters: string[]
-    setFilters: (newFilters: number[]) => void
+    setFilters: (newFilters: string[]) => void
 }
 
 function QuickSearchToolbar(props: QuickSearchToolbarProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
 
-    const handleFilters = (event: React.MouseEvent<HTMLElement>, newFilters: number[]) => {
-        console.log()
-
+    const handleFilters = (event: React.MouseEvent<HTMLElement>, newFilters: string[]) => {
         props.setFilters(newFilters)
     }
 
@@ -123,11 +133,11 @@ function QuickSearchToolbar(props: QuickSearchToolbarProps) {
                 value={props.filters}
                 onChange={handleFilters}
                 aria-label="token filter by type">
-                <ToggleButton className={classes.toggleButton} size="small" value={6} aria-label="url">
+                <ToggleButton className={classes.toggleButton} size="small" value="0x6" aria-label="url">
                     <UrlIcon className={classes.toolbarIcon} />
                     <Typography variant="body2">{t('plugin_ideamarket_urls')}</Typography>
                 </ToggleButton>
-                <ToggleButton className={classes.toggleButton} size="small" value={1} aria-label="user">
+                <ToggleButton className={classes.toggleButton} size="small" value="0x1" aria-label="user">
                     <TwitterIcon className={classes.toolbarIcon} />
                     <Typography variant="body2">{t('plugin_ideamarket_users')}</Typography>
                 </ToggleButton>
@@ -161,51 +171,57 @@ export function ListingsView() {
     const { t } = useI18N()
     const [searchText, setSearchText] = useState('')
     const [page, setPage] = useState(0)
-    const [filters, setFilters] = useState(() => [0x1, 0x6])
+    const [filters, setFilters] = useState(() => ['0x1', '0x6'])
     const { tokens, loading } = useFetchIdeaTokensBySearch(searchText, page, filters)
-    console.log(tokens)
 
-    const tokensFormatted = tokens?.map((token) => {
+    const tokensFormatted = tokens?.map((token: IdeaToken) => {
         return {
             id: token.id,
             name: token.name,
             dayChange: token.dayChange,
             market: token.market.name,
+            marketId: token.market.id,
             price: token.latestPricePoint.price,
             deposits: formatWeiToEther(token.daiInToken).toNumber(),
             button: '',
-            twitter: token.twitter,
+            twitter: token?.twitter,
         }
     })
 
-    console.log('tokensFormatted: ', tokensFormatted)
-
     const renderNameCell = (params: GridRenderCellParams<String>) => {
         return (
-            <Grid container direction="row" flexWrap="nowrap" alignItems="center">
-                <Grid item justifyContent="center">
+            <div className={classes.nameCellContainer}>
+                <Grid className={classes.pofileAvatar}>
                     {params.row.twitter ? (
                         <Avatar className={classes.avatar} src={params.row.twitter.profile_image_url} />
                     ) : (
                         <UrlIcon className={classes.url} />
                     )}
                 </Grid>
-                {params.row.twitter ? (
-                    <Grid item>
-                        <Typography title={params.row.name}>
-                            {truncate(`${params.row.twitter.name} (${params.row.name})`, 25)}
+                {params.row.marketId === '0x1' ? (
+                    <Grid>
+                        <Typography title={params.row.twitter ? params.row.twitter.name : params.row.name}>
+                            {params.row.twitter?.name} ({params.row.name})
                         </Typography>
-                        <Typography title={params.row.twitter.username} className={classes.market}>
-                            <Link target="_blank" href={`https://twitter.com/${params.row.twitter.name}`}>
-                                {truncate(`https://twitter.com/${params.row.twitter.name}`, 25)}
-                            </Link>
-                        </Typography>
+                        {params.row.twitter ? (
+                            <Typography
+                                title={`${TWITTER_BASE_URL}/${params.row.twitter.username}`}
+                                className={classes.market}>
+                                <Link target="_blank" href={`${TWITTER_BASE_URL}/${params.row.twitter.username}`}>
+                                    {TWITTER_BASE_URL}/{params.row.twitter.username}
+                                </Link>
+                            </Typography>
+                        ) : (
+                            <Typography title={params.row.name} className={classes.market}>
+                                <Link target="_blank" href={`${TWITTER_BASE_URL}/${params.row.name.slice(1)}`}>
+                                    {TWITTER_BASE_URL}/{params.row.name.slice(1)}
+                                </Link>
+                            </Typography>
+                        )}
                     </Grid>
                 ) : (
-                    <Grid container item>
-                        <Typography title={params.row.name}>
-                            {truncate(urlWithoutProtocol(params.row.name), 25)}
-                        </Typography>
+                    <Grid item>
+                        <Typography title={params.row.name}>{urlWithoutProtocol(params.row.name)}</Typography>
 
                         <Typography title={params.row.name} className={classes.market}>
                             <Link target="_blank" href={params.row.name}>
@@ -214,7 +230,7 @@ export function ListingsView() {
                         </Typography>
                     </Grid>
                 )}
-            </Grid>
+            </div>
         )
     }
 
@@ -260,8 +276,8 @@ export function ListingsView() {
             field: 'button',
             headerName: '',
             sortable: false,
-            width: 70,
-            align: 'right' as const,
+            width: 80,
+            align: 'center' as const,
             renderCell: (params: GridRenderCellParams) => (
                 <Grid container alignContent="center" justifyContent="center">
                     <Grid item>
@@ -298,7 +314,7 @@ export function ListingsView() {
     function NoResultsCustomOverlay() {
         return (
             <Stack height="100%" alignItems="center" justifyContent="center">
-                {t('plugin_ideamarket_smthg_wrong')}
+                {t('no_data')}
             </Stack>
         )
     }
@@ -331,10 +347,14 @@ export function ListingsView() {
                 componentsProps={{
                     toolbar: {
                         value: searchText,
-                        onChange: (event: React.ChangeEvent<HTMLInputElement>) => setSearchText(event.target.value),
+                        onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+                            setPage(0)
+                            setSearchText(event.target.value)
+                        },
                         clearSearch: () => setSearchText(''),
                         filters: filters,
                         setFilters: setFilters,
+                        setPage: setPage,
                     },
                 }}
                 disableSelectionOnClick

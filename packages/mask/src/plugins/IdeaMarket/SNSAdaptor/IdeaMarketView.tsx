@@ -33,7 +33,6 @@ const useStyles = makeStyles()((theme) => {
             border: `solid 1px ${theme.palette.divider}`,
         },
         tabs: {
-            borderBottom: `solid 1px ${theme.palette.divider}`,
             width: '100%',
             minHeight: 'unset',
             paddingBottom: '10px',

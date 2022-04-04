@@ -31,15 +31,18 @@ export async function fetchIdeaToken(marketName: string, tokenName: string) {
     return first(res) as IdeaToken
 }
 
-export async function fetchAllTokens(searchTerm: string, page: number, filters: number[]) {
+export async function fetchAllTokens(searchTerm: string, page: number, filters: string[]) {
     const rowsPerPage = 20
+    console.log(searchTerm)
+
     const body = {
-        query: `query IdeaToken($searchTerm: String!, $rowsPerPage: Int!, $skip: Int!, $filters: [Int!]!) {
+        query: `query IdeaToken($searchTerm: String!, $rowsPerPage: Int!, $skip: Int!, $filters: [String!]!) {
             ideaTokens(first: $rowsPerPage, skip: $skip, orderBy: daiInToken, orderDirection: desc, where: { name_contains: $searchTerm, market_in: $filters }){
                 id
                 name
                 tokenID
                 market {
+                    id
                     marketID
                     name
                 }
@@ -57,7 +60,7 @@ export async function fetchAllTokens(searchTerm: string, page: number, filters: 
             searchTerm: searchTerm,
             rowsPerPage: rowsPerPage,
             skip: page === 0 ? 0 : page * rowsPerPage,
-            filters,
+            filters: filters,
         },
     }
     const response = await fetch(SUBGRAPH_URL, {
@@ -65,20 +68,9 @@ export async function fetchAllTokens(searchTerm: string, page: number, filters: 
         method: 'POST',
     })
 
-    const res = (await response.json())?.data
+    const res: IdeaToken[] = (await response.json())?.data.ideaTokens
 
-    const requestTwitterData = res?.ideaTokens.map(async (token: IdeaToken) => {
-        if (token.market.name === 'Twitter') {
-            const twitterData = await fetchTwitterLookup(token)
-            return { ...token, twitter: twitterData }
-        }
-
-        return token
-    })
-
-    const tokensWithTwitterData = await Promise.all(requestTwitterData)
-
-    return tokensWithTwitterData
+    return res
 }
 
 export async function fetchUserTokensBalances(holder: string) {
@@ -124,5 +116,42 @@ export async function fetchTwitterLookup(token: IdeaToken) {
         },
     )
     const res = (await response.json())?.data
+    console.log('twitter lookup: ', res)
+
     return res
+}
+
+export async function fetchTwitterLookups(tokens: IdeaToken[]) {
+    const twitterHandles = tokens
+        .filter((token) => token.market.id === '0x1')
+        .map((token) => token.name.slice(1))
+        .join(',')
+    const response = await fetch(
+        `https://api.twitter.com/2/users/by?usernames=${twitterHandles}&user.fields=profile_image_url`,
+        {
+            headers: {
+                Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`,
+            },
+        },
+    )
+    const twitterLookups = (await response.json())?.data
+
+    // create a hashmap in order to optimize twitter username lookups
+    const twitterLookupsToDictionary = twitterLookups.reduce(
+        (result: { [x: string]: any }, lookup: { username: string }) => {
+            result[lookup.username.toLowerCase()] = lookup
+            return result
+        },
+        {},
+    )
+
+    const tokensWithTwitterLookups = tokens.map((token: IdeaToken) => {
+        if (token.market.id === '0x1') {
+            return { ...token, twitter: twitterLookupsToDictionary[token.name.slice(1).toLowerCase()] }
+        }
+
+        return token
+    })
+
+    return tokensWithTwitterLookups
 }

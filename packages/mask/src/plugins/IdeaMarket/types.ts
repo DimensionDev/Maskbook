@@ -11,10 +11,10 @@ export interface IdeaToken {
     holders: number
     daiInToken: BigNumber
     dayChange: number
-    twitter?: TwitterIdeaToken
+    twitter?: TwitterLookUp
 }
 
-export interface TwitterIdeaToken {
+export interface TwitterLookUp {
     id: string
     name: string
     profile_image_url: string
@@ -41,6 +41,7 @@ export interface IdeaTokenPricePoint {
 }
 
 export interface Market {
+    id: string
     name: MarketAvailable
     marketID: number
 }
