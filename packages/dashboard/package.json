@@ -15,6 +15,7 @@
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-example": "workspace:*",
     "@masknet/plugin-flow": "workspace:*",
+    "@masknet/plugin-solana": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
     "@masknet/public-api": "workspace:*",
@@ -36,7 +37,6 @@
     "color": "^4.2.1",
     "date-fns": "2.28.0",
     "html-to-image": "^1.9.0",
-    "i18next-browser-languagedetector": "^6.1.4",
     "json-stable-stringify": "^1.0.1",
     "react-avatar-editor": "^12.0.0",
     "react-hook-form": "^7.28.1",
@@ -46,12 +46,12 @@
     "react-use": "^17.3.2",
     "unstated-next": "^1.1.0",
     "urlcat": "^2.0.4",
-    "use-subscription": "^1.5.1",
+    "use-subscription": "^1.6.0",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
     "web3-core-helpers": "1.5.2",
     "web3-utils": "^1.5.3",
-    "zod": "^3.14.2"
+    "zod": "^3.14.3"
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",

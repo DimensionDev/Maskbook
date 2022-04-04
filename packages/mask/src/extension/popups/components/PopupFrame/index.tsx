@@ -17,7 +17,7 @@ function GlobalCss() {
                     overflowX: 'hidden',
                     margin: '0 auto !important',
                     maxWidth: '100%',
-                    '-webkit-font-smoothing': 'subpixel-antialiased',
+                    WebkitFontSmoothing: 'subpixel-antialiased',
                     '&::-webkit-scrollbar': {
                         display: 'none',
                     },

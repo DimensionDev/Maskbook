@@ -60,6 +60,7 @@
     "tip_connect_wallet": "Connect Wallet",
     "search": "Search",
     "tip_contracts": "Contracts",
-    "tip_token_share_post": "I just tipped {{amount}} {{symbol}} to @{{recipientSnsId}}'s wallet address {{recipient}}\n\nInstall https://mask.io/download-links to send my first tip.",
-    "tip_nft_share_post": "I just tipped a {{name}} to @{{recipientSnsId}}'s wallet address {{recipient}}\n\nInstall https://mask.io/download-links to send my first tip."
+    "tip_mask_promote": "Install https://mask.io/download-links to send your first tip.",
+    "tip_token_share_post": "I just tipped {{amount}} {{symbol}} to @{{recipientSnsId}}'s wallet address {{recipient}}\n\n{{promote}}",
+    "tip_nft_share_post": "I just tipped a {{name}} to @{{recipientSnsId}}'s wallet address {{recipient}}\n\n{{promote}}"
 }

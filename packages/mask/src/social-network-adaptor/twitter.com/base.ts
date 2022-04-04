@@ -1,10 +1,10 @@
+import { TWITTER_ID } from '@masknet/shared'
 import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
 
-const id = 'twitter.com'
 const origins = ['https://mobile.twitter.com/*', 'https://twitter.com/*']
 export const twitterBase: SocialNetwork.Base = {
-    networkIdentifier: id,
+    networkIdentifier: TWITTER_ID,
     encryptionNetwork: SocialNetworkEnum.Twitter,
     declarativePermissions: { origins },
     shouldActivate(location) {
@@ -13,7 +13,7 @@ export const twitterBase: SocialNetwork.Base = {
 }
 
 export function isTwitter(ui: SocialNetwork.Base) {
-    return ui.networkIdentifier === id
+    return ui.networkIdentifier === TWITTER_ID
 }
 
 export const twitterWorkerBase: SocialNetworkWorker.WorkerBase & SocialNetwork.Base = {

@@ -2,8 +2,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect } from 'react'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
-import { startWatch, createReactRootShadowed } from '../../../../utils'
-import { useLocationChange } from '../../../../utils/hooks/useLocationChange'
+import { startWatch, createReactRootShadowed, useLocationChange } from '../../../../utils'
 import { searchEditProfileSelector } from '../../utils/selector'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
