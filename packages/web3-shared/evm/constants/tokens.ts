@@ -72,4 +72,5 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.Fantom]: [WNATIVE[ChainId.Fantom]],
     [ChainId.Aurora]: [WNATIVE[ChainId.Aurora]],
     [ChainId.Aurora_Testnet]: [WNATIVE[ChainId.Aurora_Testnet]],
+    [ChainId.KardiaChain]: [WNATIVE[ChainId.KardiaChain]],
 }

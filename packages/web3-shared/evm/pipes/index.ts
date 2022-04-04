@@ -97,7 +97,7 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Fantom]: 'fantom',
         [NetworkType.Aurora]: 'Aurora',
         [NetworkType.Conflux]: 'conflux',
-        [NetworkType.KardiaChain]: 'Kardiachain',
+        [NetworkType.KardiaChain]: 'KardiaChain',
     },
     'ethereum',
 )
@@ -114,6 +114,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Fantom]: 'Fantom',
         [NetworkType.Aurora]: 'Aurora',
         [NetworkType.Conflux]: 'Conflux',
+        [NetworkType.KardiaChain]: 'KardiaChain',
     },
     'Unknown',
 )
