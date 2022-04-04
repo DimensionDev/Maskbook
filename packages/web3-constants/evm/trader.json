@@ -18,6 +18,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "UNISWAP_V2_FACTORY_ADDRESS": {
@@ -39,6 +40,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "UNISWAP_V2_THEGRAPH": {
@@ -60,6 +62,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "UNISWAP_V2_INIT_CODE_HASH": {
@@ -81,6 +84,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "UNISWAP_SWAP_ROUTER_ADDRESS": {
@@ -102,6 +106,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "UNISWAP_V3_FACTORY_ADDRESS": {
@@ -123,6 +128,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "UNISWAP_V3_QUOTER_ADDRESS": {
@@ -144,6 +150,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "UNISWAP_V3_THEGRAPH": {
@@ -165,6 +172,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "UNISWAP_V3_INIT_CODE_HASH": {
@@ -186,6 +194,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "SUSHISWAP_ROUTER_ADDRESS": {
@@ -207,6 +216,7 @@
         "Fantom": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
         "Aurora": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "SUSHISWAP_FACTORY_ADDRESS": {
@@ -228,6 +238,7 @@
         "Fantom": "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "SUSHISWAP_THEGRAPH": {
@@ -249,6 +260,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "SUSHISWAP_INIT_CODE_HASH": {
@@ -270,6 +282,7 @@
         "Fantom": "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "SASHIMISWAP_ROUTER_ADDRESS": {
@@ -291,6 +304,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "SASHIMISWAP_FACTORY_ADDRESS": {
@@ -312,6 +326,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "SASHIMISWAP_THEGRAPH": {
@@ -333,6 +348,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "SASHIMISWAP_INIT_CODE_HASH": {
@@ -354,6 +370,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "QUICKSWAP_ROUTER_ADDRESS": {
@@ -375,6 +392,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "QUICKSWAP_FACTORY_ADDRESS": {
@@ -396,6 +414,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "QUICKSWAP_THEGRAPH": {
@@ -417,6 +436,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "QUICKSWAP_INIT_CODE_HASH": {
@@ -438,6 +458,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "PANCAKESWAP_ROUTER_ADDRESS": {
@@ -459,6 +480,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "PANCAKESWAP_FACTORY_ADDRESS": {
@@ -480,6 +502,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "PANCAKESWAP_THEGRAPH": {
@@ -501,6 +524,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "PANCAKESWAP_INIT_CODE_HASH": {
@@ -522,6 +546,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "BALANCER_ETH_ADDRESS": {
@@ -543,6 +568,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "BALANCER_EXCHANGE_PROXY_ADDRESS": {
@@ -564,6 +590,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "BALANCER_POOLS_URL": {
@@ -585,6 +612,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "DODO_ETH_ADDRESS": {
@@ -606,6 +634,7 @@
         "Fantom": "",
         "Aurora": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "DODO_EXCHANGE_PROXY_ADDRESS": {
@@ -627,6 +656,7 @@
         "Fantom": "",
         "Aurora": "0x335aC99bb3E51BDbF22025f092Ebc1Cf2c5cC619",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "BANCOR_ETH_ADDRESS": {
@@ -648,6 +678,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "BANCOR_EXCHANGE_PROXY_ADDRESS": {
@@ -669,6 +700,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "TRADERJOE_ROUTER_ADDRESS": {
@@ -690,6 +722,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "TRADERJOE_FACTORY_ADDRESS": {
@@ -711,6 +744,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "TRADERJOE_THEGRAPH": {
@@ -732,6 +766,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "TRADERJOE_INIT_CODE_HASH": {
@@ -753,6 +788,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "OPENOCEAN_ETH_ADDRESS": {
@@ -774,6 +810,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "OPENOCEAN_EXCHANGE_PROXY_ADDRESS": {
@@ -795,6 +832,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "PANGOLIN_ROUTER_ADDRESS": {
@@ -816,6 +854,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "PANGOLIN_FACTORY_ADDRESS": {
@@ -837,6 +876,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "PANGOLIN_THEGRAPH": {
@@ -858,6 +898,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "PANGOLIN_INIT_CODE_HASH": {
@@ -879,6 +920,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "WANNASWAP_ROUTER_V2_ADDRESS": {
@@ -900,6 +942,7 @@
         "Fantom": "",
         "Aurora": "0xa3a1eF5Ae6561572023363862e238aFA84C72ef5",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "WANNASWAP_ROUTER_ADDRESS": {
@@ -921,6 +964,7 @@
         "Fantom": "",
         "Aurora": "0x8f1E0Cf0f9f269Bc977C38635E560aa5b0E63323",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "WANNASWAP_FACTORY_ADDRESS": {
@@ -942,6 +986,7 @@
         "Fantom": "",
         "Aurora": "0x7928D4FeA7b2c90C732c10aFF59cf403f0C38246",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "WANNASWAP_THEGRAPH": {
@@ -963,6 +1008,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "WANNASWAP_INIT_CODE_HASH": {
@@ -984,6 +1030,7 @@
         "Fantom": "",
         "Aurora": "0xa06b8b0642cf6a9298322d0c8ac3c68c291ca24dc66245cf23aa2abc33b57e21",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "TRISOLARIS_ROUTER_ADDRESS": {
@@ -1005,6 +1052,7 @@
         "Fantom": "",
         "Aurora": "0x2CB45Edb4517d5947aFdE3BEAbF95A582506858B",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "TRISOLARIS_FACTORY_ADDRESS": {
@@ -1026,6 +1074,7 @@
         "Fantom": "",
         "Aurora": "0xc66F594268041dB60507F00703b152492fb176E7",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "TRISOLARIS_THEGRAPH": {
@@ -1047,6 +1096,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "TRISOLARIS_INIT_CODE_HASH": {
@@ -1068,6 +1118,7 @@
         "Fantom": "",
         "Aurora": "0x754e1d90e536e4c1df81b7f030f47b4ca80c87120e145c294f098c83a6cb5ace",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "MDEX_ROUTER_ADDRESS": {
@@ -1089,6 +1140,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "MDEX_FACTORY_ADDRESS": {
@@ -1110,6 +1162,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "MDEX_THEGRAPH": {
@@ -1131,6 +1184,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "MDEX_INIT_CODE_HASH": {
@@ -1152,6 +1206,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     }
 }

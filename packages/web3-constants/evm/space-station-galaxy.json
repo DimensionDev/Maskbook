@@ -18,6 +18,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "SUBGRAPH_URL": {
@@ -39,6 +40,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     }
 }

@@ -18,6 +18,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
@@ -39,6 +40,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "GITCOIN_ETH_ADDRESS": {
@@ -60,6 +62,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
@@ -81,6 +84,7 @@
         "Fantom": 0,
         "Aurora": 0,
         "Aurora_Testnet": 0,
+        "Conflux": 0,
         "KardiaChain": 0
     }
 }

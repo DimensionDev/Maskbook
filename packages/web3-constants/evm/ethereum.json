@@ -18,6 +18,7 @@
         "Fantom": "0xc119574d5fb333f5ac018658d4d8b5035e16bf39",
         "Aurora": "0xC119574D5Fb333F5AC018658D4d8b5035E16bf39",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "MULTICALL_ADDRESS": {
@@ -39,6 +40,7 @@
         "Fantom": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
         "Aurora": "0x6cc1b1058F9153358278C35E0b2D382f1585854B",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "ENS_REGISTRAR_ADDRESS": {
@@ -60,6 +62,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "ENS_REVERSE_RECORDS_ADDRESS": {
@@ -81,6 +84,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     }
 }

@@ -18,6 +18,7 @@
         "Fantom": ["AST4WWPNEYDURUXG2GH32JZMYWEFDP999S"],
         "Aurora": [],
         "Aurora_Testnet": [],
+        "Conflux": [],
         "KardiaChain": []
     },
     "EXPLORER_API": {
@@ -39,6 +40,7 @@
         "Fantom": "https://api.ftmscan.com/api",
         "Aurora": "https://explorer.mainnet.aurora.dev/api",
         "Aurora_Testnet": "https://explorer.testnet.aurora.dev/api",
+        "Conflux": "",
         "KardiaChain": ""
     }
 }

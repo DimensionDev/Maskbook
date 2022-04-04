@@ -18,6 +18,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "MASK_ITO_CONTRACT_ADDRESS": {
@@ -39,6 +40,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "ITO2_CONTRACT_ADDRESS": {
@@ -60,6 +62,7 @@
         "Fantom": "0x981be454a930479d92C91a0092D204b64845A5D6",
         "Aurora": "0x2cf91AD8C175305EBe6970Bd8f81231585EFbd77",
         "Aurora_Testnet": "0xdcA6F476EebCDE8FE8b072e3fC80dBC28dC209b3",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "ITO2_CONTRACT_CREATION_BLOCK_HEIGHT": {
@@ -81,6 +84,7 @@
         "Fantom": 25071597,
         "Aurora": 57350598,
         "Aurora_Testnet": 77919102,
+        "Conflux": 0,
         "KardiaChain": 0
     },
     "DEFAULT_QUALIFICATION_ADDRESS": {
@@ -102,6 +106,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "DEFAULT_QUALIFICATION2_ADDRESS": {
@@ -123,6 +128,7 @@
         "Fantom": "0x83D6b366f21e413f214EB077D5378478e71a5eD2",
         "Aurora": "0x578a7Fee5f0D8CEc7d00578Bf37374C5b95C4b98",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "SUBGRAPH_URL": {
@@ -144,6 +150,7 @@
         "Fantom": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-fantom",
         "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-aurora",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     }
 }

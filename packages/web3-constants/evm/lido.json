@@ -18,6 +18,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "KardiaChain": ""
     },
     "LIDO_REFERRAL_ADDRESS": {
@@ -39,6 +40,7 @@
         "Fantom": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Aurora": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Aurora_Testnet": "0x934b510d4c9103e6a87aef13b816fb080286d649",
+        "Conflux": "",
         "KardiaChain": ""
     }
 }
