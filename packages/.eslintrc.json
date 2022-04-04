@@ -14,6 +14,14 @@
             "error",
             {
                 "paths": [
+                    {
+                        "name": "rpc-utils",
+                        "message": "This package is only installed for patch-package. Do not use it directly."
+                    },
+                    {
+                        "name": "key-did-provider-ed25519",
+                        "message": "This package is only installed for patch-package. Do not use it directly."
+                    },
                     { "name": "lodash", "message": "Please use lodash-unified instead." },
                     { "name": "lodash-es", "message": "Please use lodash-unified instead." },
                     { "name": "date-fns", "message": "Please use date-fns/{submodule} instead." },

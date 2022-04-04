@@ -99,6 +99,10 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     // @masknet/scripts: insert-here
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
+                if (lockdown) {
+                    // https://github.com/near/near-api-js/issues/833
+                    alias['error-polyfill'] = require.resolve('./package-overrides/null.js')
+                }
                 if (profiling) {
                     alias['scheduler/tracing'] = 'scheduler/tracing-profiling'
                 }

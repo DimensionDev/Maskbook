@@ -4,6 +4,7 @@ onlyBuiltDependencies: []
 
 overrides:
   '@types/node': ^17.0.23
+  rpc-utils: 0.4.0
 
 importers:
 
@@ -47,6 +48,7 @@ importers:
       husky: ^7.0.4
       immer: 9.0.12
       jest: ^28.0.0-alpha.3
+      key-did-provider-ed25519: 1.1.0
       lint-staged: ^12.3.7
       lodash: ^4.17.21
       lodash-es: ^4.17.21
@@ -55,7 +57,8 @@ importers:
       react: 18.0.0
       react-dom: 18.0.0
       react-i18next: ^11.16.2
-      ses: ^0.15.11
+      rpc-utils: 0.4.0
+      ses: 0.15.11
       ts-jest: ^27.1.4
       ts-node: ^10.7.0
       ts-results: 3.3.0
@@ -79,12 +82,14 @@ importers:
       '@types/web': 0.0.60
       '@uniswap/v3-sdk': 3.3.2
       immer: 9.0.12
+      key-did-provider-ed25519: 1.1.0
       lodash: 4.17.21
       lodash-es: 4.17.21
       lodash-unified: 1.0.2_da03a4540fbd16bbaafbb96724306afd
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       react-i18next: 11.16.2_react-dom@18.0.0+react@18.0.0
+      rpc-utils: 0.4.0
       ses: 0.15.11
       ts-results: 3.3.0
       web3-core: 1.7.1
@@ -1368,7 +1373,7 @@ packages:
       fast-json-stable-stringify: 2.1.0
       key-did-provider-ed25519: 1.1.0
       key-did-resolver: 1.4.4
-      rpc-utils: 0.3.4
+      rpc-utils: 0.4.0
       store: 2.0.12
       uint8arrays: 2.1.10
     dev: false
@@ -14707,7 +14712,7 @@ packages:
       did-jwt: 5.12.3
       did-resolver: 3.1.5
       query-string: 7.0.1
-      rpc-utils: 0.3.4
+      rpc-utils: 0.4.0
       uint8arrays: 2.1.10
     dev: false
 
@@ -19867,7 +19872,7 @@ packages:
       '@stablelib/ed25519': 1.0.2
       did-jwt: 5.12.3
       fast-json-stable-stringify: 2.1.0
-      rpc-utils: 0.3.4
+      rpc-utils: 0.4.0
       uint8arrays: 2.1.10
     dev: false
 
@@ -21110,7 +21115,6 @@ packages:
     resolution: {integrity: sha512-n6Vs/3KGyxPQd6uO0eH4Bv0ojGSUvuLlIHtC3Y0kEO23YRge8H9x1GCzLn28YX0H66pMkxuaeESFq4tKISKwdw==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
-    dev: true
 
   /nanomatch/1.2.13:
     resolution: {integrity: sha512-fpoe2T0RbHwBTBUOftAfBPaDEi06ufaUai0mE6Yn1kacc3SnTErfb/h+X94VXzI64rKFHYImXSvdwGGCmwOqCA==}
@@ -23715,18 +23719,11 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /rpc-utils/0.3.4:
-    resolution: {integrity: sha512-VmaweXLRpOO2U0FX3Prb88KS0xxkpJK+pJKupR+TagvBmmEetSmvEz+SGTuKwhR9tdSFmjrqt1QSK53Vltapww==}
-    engines: {node: '>=12'}
-    dependencies:
-      nanoid: 3.2.0
-    dev: false
-
   /rpc-utils/0.4.0:
     resolution: {integrity: sha512-XBvam3jhcD4d66kFRGjr0cAwJNf8v8eXeJNN187jDGvHuQO9Dugu01WCAghojAbSOcdimCBBz77WNVU1j2+Uig==}
     engines: {node: '>=12'}
     dependencies:
-      nanoid: 3.2.0
+      nanoid: 3.3.1
     dev: false
 
   /rpc-websockets/7.4.16:
@@ -28003,7 +28000,7 @@ packages:
     dev: false
 
   github.com/ethereumjs/ethereumjs-abi/ee3994657fa7a427238e6ba92a84d0b529bbcde0:
-    resolution: {tarball: https://codeload.github.com/ethereumjs/ethereumjs-abi/tar.gz/ee3994657fa7a427238e6ba92a84d0b529bbcde0}
+    resolution: {commit: ee3994657fa7a427238e6ba92a84d0b529bbcde0, repo: git+ssh://git@github.com/ethereumjs/ethereumjs-abi.git, type: git}
     name: ethereumjs-abi
     version: 0.6.8
     dependencies:
@@ -28012,7 +28009,7 @@ packages:
     dev: false
 
   github.com/frozeman/bignumber.js-nolookahead/57692b3ecfc98bbdd6b3a516cb2353652ea49934:
-    resolution: {tarball: https://codeload.github.com/frozeman/bignumber.js-nolookahead/tar.gz/57692b3ecfc98bbdd6b3a516cb2353652ea49934}
+    resolution: {commit: 57692b3ecfc98bbdd6b3a516cb2353652ea49934, repo: git+ssh://git@github.com/frozeman/bignumber.js-nolookahead.git, type: git}
     name: bignumber.js
     version: 2.0.7
     dev: false

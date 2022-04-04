@@ -43,12 +43,14 @@
     "@types/web": "^0.0.60",
     "@uniswap/v3-sdk": "3.3.2",
     "immer": "9.0.12",
+    "key-did-provider-ed25519": "1.1.0",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "lodash-unified": "1.0.2",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-i18next": "^11.16.2",
+    "rpc-utils": "0.4.0",
     "ses": "0.15.11",
     "ts-results": "3.3.0",
     "web3-core": "1.7.1",
@@ -85,7 +87,8 @@
   },
   "pnpm": {
     "overrides": {
-      "@types/node": "^17.0.23"
+      "@types/node": "^17.0.23",
+      "rpc-utils": "0.4.0"
     },
     "onlyBuiltDependencies": []
   }
