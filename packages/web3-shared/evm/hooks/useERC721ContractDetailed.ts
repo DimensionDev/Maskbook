@@ -6,6 +6,8 @@ import { useChainId } from './useChainId'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { createERC721ContractDetailed, safeNonPayableTransactionCall } from '../utils'
 import { useOpenseaAPIConstants } from '../constants'
+import { fromBech32 } from '../utils/bech32'
+import { isBech32Address } from '../utils/validators'
 
 export function useERC721ContractDetailed(address?: string) {
     const chainId = useChainId()
@@ -52,6 +54,11 @@ async function getERC721ContractDetailedFromChain(address: string, chainId: Chai
     const [name, symbol, baseURI] = results.map((result) =>
         result.status === 'fulfilled' ? result.value : '',
     ) as string[]
+
+    if (chainId === 1666600000) {
+        const addressONE = isBech32Address(address) ? fromBech32(address) : address
+        return createERC721ContractDetailed(chainId, addressONE, name, symbol, baseURI)
+    }
 
     return createERC721ContractDetailed(chainId, address, name, symbol, baseURI)
 }

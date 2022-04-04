@@ -2685,7 +2685,7 @@
     },
     {
         "name": "Harmony Mainnet Shard 0",
-        "chain": "Harmony",
+        "chain": "harmony",
         "network": "mainnet",
         "rpc": ["https://api.harmony.one"],
         "faucets": [],
@@ -2698,7 +2698,7 @@
     },
     {
         "name": "Harmony Mainnet Shard 1",
-        "chain": "Harmony",
+        "chain": "HarmonyShard1",
         "network": "mainnet",
         "rpc": ["https://s1.api.harmony.one"],
         "faucets": [],
