@@ -11,7 +11,7 @@ import {
     useERC721TokenContract,
 } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, FormControl, TextField, Typography } from '@mui/material'
-import { FC, useCallback, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { WalletRPC } from '../../../Wallet/messages'
@@ -72,9 +72,13 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
         setContractAddress('')
         setTokenId('')
     }, [])
+
+    useEffect(() => {
+        setMessage('')
+    }, [tokenId, contractAddress])
+
     const handleAdd = useCallback(async () => {
-        if (!erc721TokenContract) return
-        if (!EthereumAddress.isValid(contractAddress)) {
+        if (!erc721TokenContract || !EthereumAddress.isValid(contractAddress)) {
             setMessage(t.tip_add_collectibles_error())
             return
         }
@@ -92,11 +96,13 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
             chainId,
         )
 
-        if (erc721TokenDetailed) {
-            await WalletRPC.addToken(erc721TokenDetailed)
-            onAdd?.(erc721TokenDetailed)
-            reset()
+        if (!erc721TokenDetailed) {
+            setMessage(t.tip_add_collectibles_error())
+            return
         }
+        await WalletRPC.addToken(erc721TokenDetailed)
+        onAdd?.(erc721TokenDetailed)
+        reset()
     }, [onAdd, t, contractAddress, tokenId])
 
     const handleClose = useCallback(() => {
