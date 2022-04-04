@@ -50,8 +50,8 @@
     "react-i18next": "^11.16.2",
     "ses": "^0.15.11",
     "ts-results": "3.3.0",
-    "web3-core": "1.5.2",
-    "web3-core-method": "1.5.2"
+    "web3-core": "1.7.1",
+    "web3-core-method": "1.7.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
