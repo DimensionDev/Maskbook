@@ -1,28 +1,25 @@
-import { useAsyncRetry } from 'react-use'
-import { useRef } from 'react'
-import urlcat from 'urlcat'
-import { first, noop } from 'lodash-unified'
-import type { ERC721ContractDetailed, ERC721TokenInfo, ERC721TokenDetailed, ChainId } from '../types'
-import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
-import { safeNonPayableTransactionCall, createERC721Token, formatNFT_TokenId } from '../utils'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
-import { getOpenseaAPIConstants, useOpenseaAPIConstants } from '../constants'
+import { first, noop } from 'lodash-unified'
+import { useAsyncRetry } from 'react-use'
+import urlcat from 'urlcat'
+import { getOpenseaAPIConstants } from '../constants'
+import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
+import type { ChainId, ERC721ContractDetailed, ERC721TokenInfo } from '../types'
+import { createERC721Token, formatNFT_TokenId, safeNonPayableTransactionCall } from '../utils'
 import { useChainId } from './useChainId'
 
 export function useERC721TokenDetailed(
     contractDetailed: ERC721ContractDetailed | null | undefined,
     tokenId: string | null | undefined,
 ) {
-    const { GET_SINGLE_ASSET_URL } = useOpenseaAPIConstants()
     const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
-    const tokenDetailedRef = useRef<ERC721TokenDetailed | undefined>()
     const chainId = useChainId()
     const asyncRetry = useAsyncRetry(async () => {
         if (!erc721TokenContract || !contractDetailed || !tokenId || !contractDetailed.address) return
         return getERC721TokenDetailed(contractDetailed, erc721TokenContract, tokenId, chainId)
-    }, [tokenId, JSON.stringify(contractDetailed), erc721TokenContract, GET_SINGLE_ASSET_URL])
+    }, [tokenId, JSON.stringify(contractDetailed), erc721TokenContract])
 
-    return { asyncRetry, tokenDetailed: tokenDetailedRef.current }
+    return { asyncRetry, tokenDetailed: asyncRetry.value }
 }
 
 export async function getERC721TokenDetailedFromOpensea(

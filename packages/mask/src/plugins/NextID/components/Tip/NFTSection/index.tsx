@@ -6,7 +6,7 @@ import { Button, CircularProgress, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react'
-import { useAsyncRetry, useTimeoutFn } from 'react-use'
+import { useAsyncFn, useAsyncRetry, useTimeoutFn } from 'react-use'
 import { WalletMessages } from '../../../../Wallet/messages'
 import { useTip } from '../../../contexts'
 import { useI18N } from '../../../locales'
@@ -57,7 +57,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
 }
 
 export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest }) => {
-    const { storedTokens, erc721Address, erc721TokenId, setErc721TokenId, setErc721Address } = useTip()
+    const { erc721Address, erc721TokenId, setErc721TokenId, setErc721Address } = useTip()
     const { classes } = useStyles()
     const t = useI18N()
     const account = useAccount()
@@ -76,36 +76,36 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
         setGuessLoading(false)
     }, 10000)
 
-    const {
-        value = { data: EMPTY_LIST },
-        loading,
-        retry,
-    } = useAsyncRetry(async () => {
+    const [{ value = { data: EMPTY_LIST }, loading }, fetchTokens] = useAsyncFn(async () => {
         const result = await Asset?.getNonFungibleAssets?.(account, { page: 0 }, undefined, networkDescriptor)
         return result
     }, [account, Asset?.getNonFungibleAssets, networkDescriptor])
 
     useEffect(() => {
-        const unsubscribeTokens = WalletMessages.events.erc721TokensUpdated.on(retry)
+        fetchTokens()
+    }, [fetchTokens])
+
+    useEffect(() => {
+        const unsubscribeTokens = WalletMessages.events.erc721TokensUpdated.on(fetchTokens)
         const unsubscribeSocket = WalletMessages.events.socketMessageUpdated.on((info) => {
             setGuessLoading(info.done)
             if (!info.done) {
-                retry()
+                fetchTokens()
             }
         })
         return () => {
             unsubscribeTokens()
             unsubscribeSocket()
         }
-    }, [retry])
+    }, [fetchTokens])
 
     const fetchedTokens = value?.data ?? EMPTY_LIST
 
     const tokens = useMemo(() => {
-        return uniqWith([...storedTokens, ...fetchedTokens], (v1, v2) => {
+        return uniqWith(fetchedTokens, (v1, v2) => {
             return isSameAddress(v1.contract?.address, v2.contract?.address) && v1.tokenId === v2.tokenId
         })
-    }, [storedTokens, fetchedTokens])
+    }, [fetchedTokens])
 
     const showLoadingIndicator = tokens.length === 0 && !loading && !guessLoading
 

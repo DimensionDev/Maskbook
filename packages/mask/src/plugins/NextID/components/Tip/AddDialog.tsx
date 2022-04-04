@@ -1,7 +1,8 @@
-import { useNetworkDescriptors, Web3Plugin } from '@masknet/plugin-infra'
+import { useNetworkDescriptors } from '@masknet/plugin-infra'
 import { ImageIcon, InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
+    ERC721TokenDetailed,
     getERC721ContractDetailed,
     getERC721TokenDetailed,
     isSameAddress,
@@ -12,7 +13,7 @@ import {
 import { Button, DialogContent, FormControl, TextField, Typography } from '@mui/material'
 import { FC, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { createNonFungibleToken } from '../../../EVM/UI/Web3State/createNonFungibleToken'
+import { WalletRPC } from '../../../Wallet/messages'
 import { useI18N } from '../../locales'
 
 const useStyles = makeStyles()((theme) => ({
@@ -44,7 +45,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props extends InjectedDialogProps {
-    onAdd?(token: Web3Plugin.NonFungibleToken): void
+    onAdd?(token: ERC721TokenDetailed): void
 }
 
 export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
@@ -85,9 +86,9 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
             chainId,
         )
 
-        const nonFungibleToken = erc721TokenDetailed ? createNonFungibleToken(erc721TokenDetailed) : null
-        if (nonFungibleToken) {
-            onAdd?.(nonFungibleToken)
+        if (erc721TokenDetailed) {
+            await WalletRPC.addToken(erc721TokenDetailed)
+            onAdd?.(erc721TokenDetailed)
             reset()
         }
     }, [onAdd, t, contractAddress, tokenId])

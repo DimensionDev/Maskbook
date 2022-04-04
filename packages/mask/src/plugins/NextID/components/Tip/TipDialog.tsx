@@ -7,13 +7,18 @@ import {
     useProviderDescriptor,
     useReverseAddress,
     useWeb3State,
-    Web3Plugin,
 } from '@masknet/plugin-infra'
 import { InjectedDialog, NFTCardStyledAssetPlayer, WalletIcon } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { TransactionStateType, useAccount, useChainId, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import {
+    ERC721TokenDetailed,
+    TransactionStateType,
+    useAccount,
+    useChainId,
+    useERC721TokenDetailed,
+} from '@masknet/web3-shared-evm'
 import { DialogContent, Link, Typography } from '@mui/material'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useBoolean } from 'react-use'
@@ -23,7 +28,6 @@ import { activatedSocialNetworkUI } from '../../../../social-network'
 import { WalletMessages } from '../../../Wallet/messages'
 import { TargetChainIdContext, useTip } from '../../contexts'
 import { useI18N } from '../../locales'
-import { storeToken } from '../../storage'
 import { TipType } from '../../types'
 import { ConfirmModal } from '../ConfirmModal'
 import { AddDialog } from './AddDialog'
@@ -245,10 +249,9 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         return openSelectProviderDialog()
     }, [openSelectProviderDialog, hasNativeAPI])
 
-    const handleAddToken = useCallback((token: Web3Plugin.NonFungibleToken) => {
-        setErc721Address(token.contract?.address ?? '')
+    const handleAddToken = useCallback((token: ERC721TokenDetailed) => {
+        setErc721Address(token.contractDetailed.address ?? '')
         setErc721TokenId(token.tokenId)
-        storeToken(token)
         openAddTokenDialog(false)
     }, [])
 
