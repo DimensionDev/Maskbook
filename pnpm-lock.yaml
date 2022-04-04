@@ -35,6 +35,7 @@ importers:
       '@types/react-dom': 17.0.14
       '@types/web': ^0.0.60
       '@typescript-eslint/experimental-utils': ^5.17.0
+      '@uniswap/v3-sdk': ^3.3.2
       cspell: ^5.19.3
       eslint: 8.12.0
       eslint-plugin-import: 2.25.4
@@ -76,6 +77,7 @@ importers:
       '@types/react': 17.0.43
       '@types/react-dom': 17.0.14
       '@types/web': 0.0.60
+      '@uniswap/v3-sdk': 3.3.2
       immer: 9.0.12
       lodash: 4.17.21
       lodash-es: 4.17.21
@@ -5564,11 +5566,11 @@ packages:
     dependencies:
       '@ethersproject/address': 5.4.0
       '@ethersproject/bignumber': 5.4.1
-      '@ethersproject/bytes': 5.4.0
+      '@ethersproject/bytes': 5.5.0
       '@ethersproject/constants': 5.4.0
       '@ethersproject/hash': 5.4.0
       '@ethersproject/keccak256': 5.4.0
-      '@ethersproject/logger': 5.4.0
+      '@ethersproject/logger': 5.5.0
       '@ethersproject/properties': 5.4.0
       '@ethersproject/strings': 5.4.0
     dev: false
@@ -5578,7 +5580,7 @@ packages:
     dependencies:
       '@ethersproject/bignumber': 5.4.1
       '@ethersproject/bytes': 5.5.0
-      '@ethersproject/logger': 5.4.0
+      '@ethersproject/logger': 5.5.0
       '@ethersproject/networks': 5.4.2
       '@ethersproject/properties': 5.4.0
       '@ethersproject/transactions': 5.4.0
@@ -5615,7 +5617,7 @@ packages:
   /@ethersproject/base64/5.4.0:
     resolution: {integrity: sha512-CjQw6E17QDSSC5jiM9YpF7N1aSCHmYGMt9bWD8PWv6YPMxjsys2/Q8xLrROKI3IWJ7sFfZ8B3flKDTM5wlWuZQ==}
     dependencies:
-      '@ethersproject/bytes': 5.4.0
+      '@ethersproject/bytes': 5.5.0
 
   /@ethersproject/basex/5.4.0:
     resolution: {integrity: sha512-J07+QCVJ7np2bcpxydFVf/CuYo9mZ7T73Pe7KQY4c1lRlrixMeblauMxHXD0MPwFmUHZIILDNViVkykFBZylbg==}
@@ -5917,9 +5919,9 @@ packages:
     resolution: {integrity: sha512-XFQTZ7wFSHOhHcV1DpcWj7VXECEiSrBuv7JErJvB9Uo+KfCdc3QtUZV+Vjh/AAaYgezUEKbCtE6Khjm44seevQ==}
     dependencies:
       '@ethersproject/bignumber': 5.4.1
-      '@ethersproject/bytes': 5.4.0
+      '@ethersproject/bytes': 5.5.0
       '@ethersproject/keccak256': 5.4.0
-      '@ethersproject/sha2': 5.4.0
+      '@ethersproject/sha2': 5.5.0
       '@ethersproject/strings': 5.4.0
     dev: false
 
@@ -5976,7 +5978,7 @@ packages:
     dependencies:
       '@ethersproject/base64': 5.4.0
       '@ethersproject/bytes': 5.5.0
-      '@ethersproject/logger': 5.4.0
+      '@ethersproject/logger': 5.5.0
       '@ethersproject/properties': 5.4.0
       '@ethersproject/strings': 5.4.0
 
