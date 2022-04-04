@@ -1,6 +1,4 @@
 /// <reference types="ses" />
-// https://github.com/endojs/endo/issues/1139
-Object.defineProperty(Array.prototype, 'at', { configurable: false, value: Array.prototype.at })
 
 lockdown({
     // In production, we have CSP enforced no eval
