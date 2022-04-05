@@ -49,15 +49,21 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 'bold',
         cursor: 'pointer',
     },
+    delIcon: {
+        width: 20,
+        cursor: 'pointer',
+    },
 }))
 
 interface WalletComProps {
     name?: string
     address: string
     isDefault?: boolean
+    canDelete?: boolean
+    onDelete?: any
 }
 
-export function WalletCom({ name, address, isDefault }: WalletComProps) {
+export function WalletCom({ name, address, isDefault, canDelete }: WalletComProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
@@ -73,6 +79,12 @@ export function WalletCom({ name, address, isDefault }: WalletComProps) {
         undefined,
         t('copy_success_of_wallet_addr'),
     )
+    const getActionRender = () => {
+        if (isDefault) return <Typography className={classes.defaultBtn}>Set as default</Typography>
+        if (canDelete)
+            return <img className={classes.delIcon} src={new URL('../../assets/del.png', import.meta.url).toString()} />
+        return null
+    }
     return (
         <div className={classes.currentAccount}>
             <div className={classes.accountInfo}>
@@ -101,7 +113,7 @@ export function WalletCom({ name, address, isDefault }: WalletComProps) {
                     </Link>
                 </div>
             </div>
-            {isDefault ? null : <Typography className={classes.defaultBtn}>Set as default</Typography>}
+            {getActionRender()}
         </div>
     )
 }

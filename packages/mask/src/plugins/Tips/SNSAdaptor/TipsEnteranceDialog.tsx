@@ -22,11 +22,18 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: '20px',
     },
     actions: {
+        position: 'sticky',
+        bottom: 0,
         width: '100%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: theme.spacing(1.5),
+    },
+    dContent: {
+        minHeight: 600,
+        position: 'relative',
+        boxSizing: 'border-box',
     },
 }))
 
@@ -77,7 +84,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             }}
             title={bodyView}
             badgeAction={WalletButton()}>
-            <DialogContent>
+            <DialogContent className={classes.dContent}>
                 {showAlert && bodyView === BodyViewSteps.main && (
                     <div className={classes.alertBox}>
                         <VerifyAlertLine onClose={() => setShowAlert(false)} />
@@ -100,12 +107,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 {bodyView === BodyViewSteps.wallets && <WalletsView />}
                 {bodyView === BodyViewSteps.addWallet && <AddWalletView />}
 
-                <div className={classes.actions}>
-                    <ActionButton fullWidth color="secondary">
-                        Cancel
-                    </ActionButton>
-                    <ActionButton fullWidth>Confirm</ActionButton>
-                </div>
+                {![BodyViewSteps.addWallet, BodyViewSteps.wallets].includes(bodyView) && (
+                    <div className={classes.actions}>
+                        <ActionButton fullWidth color="secondary">
+                            Cancel
+                        </ActionButton>
+                        <ActionButton fullWidth>Confirm</ActionButton>
+                    </div>
+                )}
             </DialogContent>
         </InjectedDialog>
     )
