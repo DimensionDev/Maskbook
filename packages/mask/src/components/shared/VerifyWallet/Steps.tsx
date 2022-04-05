@@ -13,6 +13,7 @@ import {
 import { ImageIcon } from '@masknet/shared'
 import { Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -59,29 +60,60 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
+    roundBtn: {
+        borderRadius: 99,
+    },
 }))
+
+enum SignSteps {
+    Ready = 0,
+    Step1Done = 1,
+    Step2Done = 2,
+}
 
 export function Steps() {
     const { classes } = useStyles()
     const [step, setStep] = useState(0)
-
+    const navigate = useNavigate()
     const stepIconMap: any = {
-        0: {
+        [SignSteps.Ready]: {
             step1: step1ActiveIcon,
             divider: dividerDisableIcon,
             step2: step2DisableIcon,
         },
-        1: {
+        [SignSteps.Step1Done]: {
             step1: stepSuccessIcon,
             divider: dividerActiveIcon,
             step2: step2ActiveIcon,
         },
-        2: {
+        [SignSteps.Step2Done]: {
             step1: stepSuccessIcon,
             divider: dividerSuccessIcon,
             step2: stepSuccessIcon,
         },
     }
+
+    const onConfirm = () => {
+        if (step === SignSteps.Ready) {
+            personaSlientSign()
+        } else if (step === SignSteps.Step1Done) {
+            walletSign()
+        } else {
+            navigate(-1)
+        }
+    }
+    const personaSlientSign = async () => {
+        console.log('p sign')
+        setStep(1)
+    }
+    const walletSign = async () => {
+        console.log('wallet sign')
+        setStep(2)
+    }
+    const onCancel = () => {
+        navigate(-1)
+    }
+
     return (
         <div className={classes.container}>
             <CurrentWalletBox />
@@ -108,10 +140,21 @@ export function Steps() {
                 </div>
             </div>
             <div className={classes.actionBox}>
-                <ActionButton variant="outlined" size="large" fullWidth color="primary">
+                <ActionButton
+                    className={classes.roundBtn}
+                    variant="outlined"
+                    size="large"
+                    fullWidth
+                    color="primary"
+                    onClick={onCancel}>
                     Cancel
                 </ActionButton>
-                <ActionButton variant="contained" size="large" fullWidth>
+                <ActionButton
+                    className={classes.roundBtn}
+                    variant="contained"
+                    size="large"
+                    fullWidth
+                    onClick={onConfirm}>
                     {step === 2 ? 'Done' : 'Confirm'}
                 </ActionButton>
             </div>
