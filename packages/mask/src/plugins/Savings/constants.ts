@@ -136,3 +136,10 @@ export const AAVE_PAIRS: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
         createERC20Tokens('aFEI_ADDRESS', 'aFEI', 'aFEI', 18)[ChainId.Mainnet],
     ],
 ]
+
+export const YearnChains =  {
+    1: "ethereum",
+    250: "fantom",
+    1337: "ethereum",
+    42161: "arbitrum"
+};

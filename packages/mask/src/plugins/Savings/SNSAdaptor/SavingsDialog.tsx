@@ -28,11 +28,14 @@ import { SavingsTable } from './SavingsTable'
 import { SavingsForm } from './SavingsForm'
 import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider'
 import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
+import { YearnProtocol } from '../protocols/YearnProtocol'
+import type { AbiItem } from 'web3-utils'
+import { flatten, compact, orderBy, sortedUniqBy } from 'lodash-unified'
+import { VaultInterface, Yearn } from '@yfi/sdk'
+import { LDO_PAIRS, YearnChains } from '../constants'
 import { LidoProtocol } from '../protocols/LDOProtocol'
 import { AAVEProtocol } from '../protocols/AAVEProtocol'
-import { LDO_PAIRS } from '../constants'
-import type { AbiItem } from 'web3-utils'
-import { flatten, compact } from 'lodash-unified'
+
 
 function splitToPair(a: FungibleTokenDetailed[] | undefined) {
     if (!a) {
@@ -44,6 +47,15 @@ function splitToPair(a: FungibleTokenDetailed[] | undefined) {
         }
         return result
     }, [])
+}
+
+
+
+
+function isValidYearnChain<YearnChains>(
+    chainId: string | number | symbol
+  ): chainId is keyof YearnChains {
+    return chainId in YearnChains;
 }
 
 export interface SavingsDialogProps {
@@ -97,12 +109,47 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         chainId,
     )
 
+
+    const { value: yfiTokens } = useAsync(async () => {
+        if (!isValidYearnChain(chainId)) {
+            return []
+        }
+        
+        const yearn = new Yearn(chainId, {
+            // @ts-ignore
+            provider: web3.currentProvider
+        });
+        await yearn.ready;
+
+        // @ts-ignore
+        const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
+
+        const allvaults =  await vaultInterface.get()
+        const currentVaults = sortedUniqBy( orderBy(allvaults, ['metadata.defaultDisplayToken', 'version'], ['asc', 'desc']) , m=>m.metadata.defaultDisplayToken);
+				
+        return currentVaults.map((v) =>{
+            return [v.metadata.defaultDisplayToken, v.address];
+        })
+    }, [web3, chainId])
+
+    
+
+    const { value: detailedYFITokens } = useFungibleTokensDetailed(
+        compact(flatten(yfiTokens ?? [])).map((m: string) => {
+            return { address: m, type: EthereumTokenType.ERC20 }
+        }) ?? [],
+        chainId
+    )
+
+
+
     const protocols = useMemo(
         () => [
             ...LDO_PAIRS.filter((x) => x[0].chainId === chainId).map((pair) => new LidoProtocol(pair)),
             ...splitToPair(detailedAaveTokens).map((pair: any) => new AAVEProtocol(pair)),
+            ...splitToPair(detailedYFITokens).map((pair: any) => new YearnProtocol(pair)),
         ],
-        [chainId, detailedAaveTokens],
+        [chainId, detailedAaveTokens, detailedYFITokens],
     )
 
     useUpdateEffect(() => {
