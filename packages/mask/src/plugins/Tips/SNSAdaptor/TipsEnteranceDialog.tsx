@@ -30,18 +30,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const WalletButton = (setBodyView: any) => {
-    const { classes } = useStyles()
-    return (
-        <Button
-            onClick={() => setBodyView(BodyViewSteps.wallets)}
-            className={classes.walletBtn}
-            variant="contained"
-            size="small">
-            Wallets
-        </Button>
-    )
-}
 enum BodyViewSteps {
     main = 'Tips',
     setting = 'Settings',
@@ -61,6 +49,26 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             setBodyView(BodyViewSteps.main)
         }
     }
+    const WalletButton = () => {
+        const { classes } = useStyles()
+        return (
+            (bodyView !== BodyViewSteps.addWallet && (
+                <Button
+                    onClick={() => {
+                        if (bodyView === BodyViewSteps.wallets) {
+                            setBodyView(BodyViewSteps.addWallet)
+                        } else {
+                            setBodyView(BodyViewSteps.wallets)
+                        }
+                    }}
+                    className={classes.walletBtn}
+                    variant="contained"
+                    size="small">
+                    {bodyView === BodyViewSteps.wallets ? BodyViewSteps.addWallet : BodyViewSteps.wallets}
+                </Button>
+            )) || <></>
+        )
+    }
     return (
         <InjectedDialog
             open={open}
@@ -68,7 +76,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 clickBack()
             }}
             title={bodyView}
-            badgeAction={WalletButton(setBodyView)}>
+            badgeAction={WalletButton()}>
             <DialogContent>
                 {showAlert && bodyView === BodyViewSteps.main && (
                     <div className={classes.alertBox}>

@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface VerifyAlertLineProps {
-    onClose?: () => void
+    onClose: () => void
 }
 
 export function VerifyAlertLine({ onClose }: VerifyAlertLineProps) {
