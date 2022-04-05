@@ -4,13 +4,13 @@ export const TipsEnterancePluginId = PluginId.Tip
 const networks = getRegisteredWeb3Networks()
 
 const getNetworkIcon = (id: string) => {
-    const icon = networks.find((x) => x.ID === id).icon
-    console.log(icon, 'ggg')
-    return icon
+    const item = networks.find((x) => x.ID === id)
+    if (!item) return null
+    return item.icon
 }
 
 export const TipsSupportedChains = [
-    { name: 'EVM Chain', icon: getNetworkIcon(`${NetworkPluginID.PLUGIN_EVM}_ethereum`) },
+    { name: 'EVM Chain', icon: new URL('./assets/evmChains.png', import.meta.url) },
     { name: 'Flow Chain', icon: getNetworkIcon(`${NetworkPluginID.PLUGIN_FLOW}_flow`) },
     { name: 'Solana Chain', icon: getNetworkIcon(`${NetworkPluginID.PLUGIN_SOLANA}_solana`) },
 ]

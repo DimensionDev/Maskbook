@@ -41,14 +41,15 @@ const useStyles = makeStyles()((theme) => ({
 
 interface WalletsByNetworkProps {
     network: any
+    toSetting: any
 }
 
-export function WalletsByNetwork({ network }: WalletsByNetworkProps) {
+export function WalletsByNetwork({ network, toSetting }: WalletsByNetworkProps) {
     const { classes } = useStyles()
     const wallets = [
-        // { name: '0xbilly', address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isDefault: true },
-        // { name: '0xbilly', address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isDefault: false },
-        // { name: '0xbilly', address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isDefault: false },
+        { name: '0xbilly', address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isDefault: true },
+        { name: '0xbilly', address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isDefault: false },
+        { name: '0xbilly', address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isDefault: false },
     ]
     return (
         <div className={classes.container}>
@@ -57,7 +58,7 @@ export function WalletsByNetwork({ network }: WalletsByNetworkProps) {
                     <WalletIcon networkIcon={network.icon} size={24} />
                     {network.name}
                 </Typography>
-                <SettingsIcon className={classes.settingIcon} />
+                <SettingsIcon onClick={toSetting} className={classes.settingIcon} />
             </div>
             <div className={classes.content}>
                 {(wallets.length &&

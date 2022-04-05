@@ -7,6 +7,9 @@ import { useState } from 'react'
 import { TipsSupportedChains } from '../constants'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import SettingView from './bodyViews/Setting'
+import WalletsView from './bodyViews/Wallets'
+import AddWalletView from './bodyViews/AddWallet'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -27,36 +30,68 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const WalletButton = () => {
+const WalletButton = (setBodyView: any) => {
     const { classes } = useStyles()
     return (
-        <Button className={classes.walletBtn} variant="contained" size="small">
+        <Button
+            onClick={() => setBodyView(BodyViewSteps.wallets)}
+            className={classes.walletBtn}
+            variant="contained"
+            size="small">
             Wallets
         </Button>
     )
+}
+enum BodyViewSteps {
+    main = 'Tips',
+    setting = 'Settings',
+    wallets = 'Wallets',
+    addWallet = 'Add wallet',
 }
 export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [showAlert, setShowAlert] = useState(true)
     const supportedNetworks = TipsSupportedChains
+    const [bodyView, setBodyView] = useState(BodyViewSteps.main)
+    const clickBack = () => {
+        if (bodyView === BodyViewSteps.main) {
+            onClose()
+        } else {
+            setBodyView(BodyViewSteps.main)
+        }
+    }
     return (
         <InjectedDialog
             open={open}
             onClose={() => {
-                onClose()
+                clickBack()
             }}
-            title={t('plugin_tips_name')}
-            badgeAction={WalletButton()}>
+            title={bodyView}
+            badgeAction={WalletButton(setBodyView)}>
             <DialogContent>
-                {showAlert && (
+                {showAlert && bodyView === BodyViewSteps.main && (
                     <div className={classes.alertBox}>
                         <VerifyAlertLine onClose={() => setShowAlert(false)} />
                     </div>
                 )}
-                {supportedNetworks.map((x, idx) => {
-                    return <WalletsByNetwork key={idx} network={x} />
-                })}
+                {bodyView === BodyViewSteps.main && (
+                    <div>
+                        {supportedNetworks.map((x, idx) => {
+                            return (
+                                <WalletsByNetwork
+                                    toSetting={() => setBodyView(BodyViewSteps.setting)}
+                                    key={idx}
+                                    network={x}
+                                />
+                            )
+                        })}
+                    </div>
+                )}
+                {bodyView === BodyViewSteps.setting && <SettingView />}
+                {bodyView === BodyViewSteps.wallets && <WalletsView />}
+                {bodyView === BodyViewSteps.addWallet && <AddWalletView />}
+
                 <div className={classes.actions}>
                     <ActionButton fullWidth color="secondary">
                         Cancel
