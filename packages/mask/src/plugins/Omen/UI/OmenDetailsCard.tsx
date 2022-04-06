@@ -54,9 +54,9 @@ export function OmenDetailsCard(props: OmenDetailsCardProps) {
         const nextVal = new BigNumber(liquidityObj.sharesAmount)
         sharesAmount = tempSum.plus(nextVal)
     }
-    const liquidityAmount = new BigNumber(sharesAmount).shiftedBy(collateralDecimals).toNumber().toPrecision(4)
-    const totalVolume = new BigNumber(collateralVolume).shiftedBy(collateralDecimals).toNumber().toPrecision(4)
-    const dailyVolume = Number(usdRunningDailyVolume).toPrecision(3)
+    const liquidityAmount = Number(new BigNumber(sharesAmount).shiftedBy(-collateralDecimals).toFixed(4))
+    const totalVolume = Number(new BigNumber(collateralVolume).shiftedBy(-collateralDecimals).toFixed(4))
+    const dailyVolume = Number(usdRunningDailyVolume).toFixed(3)
 
     return (
         <Box className={classes.root}>

@@ -64,7 +64,7 @@ export function OmenView(props: OmenViewProps) {
     let marketData = null,
         historyData = null,
         liquidityData = null
-    const marketId = ''
+    const marketId = props.id
 
     if (marketDataRes.loading || historyRes.loading || liquidityRes.loading) {
         return <Typography align="center">{t('loading')}</Typography>
@@ -123,7 +123,7 @@ export function OmenView(props: OmenViewProps) {
                             <OmenSwapView
                                 marketId={marketId}
                                 marketOutcomes={marketData.outcomes}
-                                marketOutcomePrices={marketData.outcomeTokenMarginalPrices}
+                                marketOutcomePrices={marketData.outcomeTokenMarginalPrices || []}
                                 tokenId={marketData.collateralToken}
                             />
                         ) : null}
@@ -131,7 +131,7 @@ export function OmenView(props: OmenViewProps) {
                             <OmenPoolView
                                 marketId={marketId}
                                 marketOutcomes={marketData.outcomes}
-                                marketOutcomePrices={marketData.outcomeTokenMarginalPrices}
+                                marketOutcomePrices={marketData.outcomeTokenMarginalPrices || []}
                                 marketFee={marketData.fee}
                                 tokenId={marketData.collateralToken}
                             />

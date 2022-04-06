@@ -89,7 +89,7 @@ export function OmenSwapView(props: OmenSwapViewProps) {
     const outcomePricesFormatted: number[] = []
     for (const outcomeObj of marketOutcomePrices) {
         const tempOutputPrice = new BigNumber(outcomeObj)
-        const outcomePrice = tempOutputPrice.precision(3).toNumber()
+        const outcomePrice = Number(tempOutputPrice.toFixed(3))
         outcomePricesFormatted.push(outcomePrice)
         outcomeValSum += tempOutputPrice.toNumber()
     }

@@ -201,7 +201,7 @@ export function OmenHistoryView(props: OmenHistoryViewProps) {
         buyChartRef,
         buyData.map(([creationTimestamp, tokenAmount]) => ({
             date: new Date(creationTimestamp),
-            value: new BigNumber(tokenAmount).shiftedBy(collateralDecimals).toNumber(),
+            value: new BigNumber(tokenAmount).shiftedBy(-collateralDecimals).toNumber(),
         })),
         dimension,
         'x-omen-buy-history-area-chart',
@@ -285,18 +285,20 @@ export function OmenHistoryView(props: OmenHistoryViewProps) {
                                         </TableCell>
                                         <TableCell>
                                             <Typography className={classes.tCellCenter}>
-                                                {new BigNumber(row.sharesOrPoolTokenAmount)
-                                                    .shiftedBy(collateralDecimals)
-                                                    .toNumber()
-                                                    .toPrecision(2)}
+                                                {Number(
+                                                    new BigNumber(row.sharesOrPoolTokenAmount)
+                                                        .shiftedBy(-collateralDecimals)
+                                                        .toFixed(2),
+                                                )}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
                                             <Typography className={classes.tCellRight}>
-                                                {new BigNumber(row.collateralTokenAmount)
-                                                    .shiftedBy(collateralDecimals)
-                                                    .toNumber()
-                                                    .toPrecision(2)}{' '}
+                                                {Number(
+                                                    new BigNumber(row.collateralTokenAmount)
+                                                        .shiftedBy(-collateralDecimals)
+                                                        .toFixed(2),
+                                                )}{' '}
                                                 {tokenSymbol}
                                             </Typography>
                                         </TableCell>

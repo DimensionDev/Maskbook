@@ -145,7 +145,7 @@ export function OmenPoolView(props: OmenPoolViewProps) {
     const outcomePricesFormatted: number[] = []
     for (const outcomeObj of marketOutcomePrices) {
         const tempOutputPrice = new BigNumber(outcomeObj)
-        const outcomePrice = tempOutputPrice.precision(4).toNumber()
+        const outcomePrice = Number(tempOutputPrice.toFixed(4))
         outcomePricesFormatted.push(outcomePrice)
         outcomeValSum += tempOutputPrice.toNumber()
     }
@@ -194,14 +194,14 @@ export function OmenPoolView(props: OmenPoolViewProps) {
                             <TableCell align="center">
                                 <Typography className={classes.tCellCenter}>
                                     {outcomeValSum > 0
-                                        ? (outcomePricesFormatted[index] / outcomeValSum).toPrecision(2)
-                                        : 0}
+                                        ? (outcomePricesFormatted[index] / outcomeValSum).toFixed()
+                                        : '0'}
                                     %
                                 </Typography>
                             </TableCell>
                             <TableCell align="right">
                                 <Typography className={classes.tCellRight}>
-                                    {outcomePricesFormatted[index]} {tokenSymbol}
+                                    {outcomePricesFormatted[index].toFixed()} {tokenSymbol}
                                 </Typography>
                             </TableCell>
                         </TableRow>
@@ -252,7 +252,7 @@ export function OmenPoolView(props: OmenPoolViewProps) {
                                     </Grid>
                                     <Grid item textAlign="right">
                                         <Typography className={classes.outputCellValue}>
-                                            {earnTradingFee.precision(4)}%
+                                            {Number(earnTradingFee.toFixed(4))}%
                                         </Typography>
                                     </Grid>
                                 </Grid>
