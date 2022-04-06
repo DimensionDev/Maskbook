@@ -20,7 +20,6 @@ import { v4 as uuid } from 'uuid'
 import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
 import formatDateTime from 'date-fns/format'
 import { WalletRPC } from '../../plugins/Wallet/messages'
-import Services from '../service'
 
 export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
 export * from './WelcomeServices/restoreBackup'
@@ -144,12 +143,10 @@ export async function checkPermissionAndOpenWalletRecovery(id: string) {
         if (!hasPassword) {
             await openPopupWindow(PopupRoutes.WalletRecovered, { backupId: id })
         } else {
-            await Services.Welcome.restoreBackup(json)
+            await restoreBackup(json)
 
-            // Set default wallet
             if (json.wallets) await WalletRPC.setDefaultWallet()
 
-            // Send event after successful recovery
             MaskMessages.events.restoreSuccess.sendToAll(undefined)
         }
     }
