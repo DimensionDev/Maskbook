@@ -1,6 +1,3 @@
-interface IconProps {
-    size: string
-}
 export function ArbitrumOneBridgeIcon({ size = 36 }) {
     return (
         <img

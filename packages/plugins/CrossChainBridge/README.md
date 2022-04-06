@@ -1,7 +1,5 @@
-# Example plugin
+# Cross-chain bridge plugin
 
 ## TODOs
 
-## Referenced resources
-
-## Known issues / Caveats
+add more cross-chain bridge website
