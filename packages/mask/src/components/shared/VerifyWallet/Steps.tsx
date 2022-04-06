@@ -16,7 +16,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useNavigate } from 'react-router-dom'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../settings/settings'
-import { ECKeyIdentifier, Identifier, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
+import { ECKeyIdentifier, Identifier, NextIDAction, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -79,19 +79,19 @@ enum SignSteps {
 
 export function Steps() {
     const { classes } = useStyles()
-    const [step, setStep] = useState(0)
+    const [step, setStep] = useState(SignSteps.Ready)
     const navigate = useNavigate()
     const currentIdentifier = Identifier.fromString(useValueRef(currentPersonaIdentifier), ECKeyIdentifier)
     const { value: persona_ } = useAsync(async () => {
         return Services.Identity.queryPersona(currentIdentifier.unwrap())
     }, [])
-    const [payload, setPayload] = useState<any>()
-    const [signature, setSignature] = useState<any>()
+    const [payload, setPayload] = useState<NextIDPayload>()
+    const [signature, setSignature] = useState<string>()
     const wallet = useWallet()
 
     if (!persona_ || !persona_.publicHexKey || !wallet) return null
 
-    const stepIconMap: any = {
+    const stepIconMap = {
         [SignSteps.Ready]: {
             step1: step1ActiveIcon,
             divider: dividerDisableIcon,
@@ -131,22 +131,21 @@ export function Steps() {
             if (!payload) throw new Error('Failed to create persona payload.')
             setPayload(payload)
             const signResult = await Services.Identity.generateSignResult(
-                currentIdentifier.val as any,
+                currentIdentifier.val as ECKeyIdentifier,
                 payload.signPayload,
             )
             setSignature(signResult.signature.signature)
             if (!signResult) throw new Error('Failed to sign persona.')
-            setStep(1)
+            setStep(SignSteps.Step1Done)
         } catch (error) {
             console.error(error)
         }
     }
     const walletSign = async () => {
+        if (!payload) throw new Error('paylod error')
         try {
             const walletSig = await Services.Ethereum.personalSign(payload.signPayload, wallet.address)
-            console.log(walletSig, 'ggg')
             if (!walletSig) throw new Error('Wallet sign failed')
-            console.log(payload, 'paylod')
             await NextIDProof.bindProof(
                 payload.uuid,
                 persona_.publicHexKey as string,
@@ -159,10 +158,10 @@ export function Steps() {
                     signature: signature,
                 },
             )
+            setStep(SignSteps.Step2Done)
         } catch (error) {
             console.error(error)
         }
-        setStep(2)
     }
     const onCancel = () => {
         navigate(-1)
@@ -174,7 +173,7 @@ export function Steps() {
             <div className={classes.stepBox}>
                 <div className={classes.stepLine}>
                     <ImageIcon size={24} icon={stepIconMap[step].step1} />
-                    <img className={classes.divider} src={stepIconMap[step].divider} />
+                    <img className={classes.divider} src={stepIconMap[step].divider.toString()} />
                     <ImageIcon size={24} icon={stepIconMap[step].step2} />
                 </div>
                 <div className={classes.stepRowBox}>
