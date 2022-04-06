@@ -30,5 +30,6 @@ export enum PopupRoutes {
     ThirdPartyRequestPermission = '/3rd-request-permission',
     SignRequest = '/sign-request',
     Swap = '/swap',
+    ConnectWallet = '/wallet/connect',
     VerifyWallet = '/wallet/verify',
 }
