@@ -86,6 +86,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
             return a.priority - z.priority
         })
+
     const selectedTabComputed = selectedTab ?? first(tabs)
 
     useLocationChange(() => {
@@ -114,7 +115,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 ? tabs?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
                 : selectedTabComputed?.ID
         return getTabContent(tab ?? '')
-    }, [selectedTabComputed, identity.identifier])
+    }, [selectedTabComputed?.ID, identity.identifier.userId])
 
     if (hidden) return null
 
