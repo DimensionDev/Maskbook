@@ -4,6 +4,7 @@ import { TutorialIcon } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra'
 import { SettingSwitch } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { Services } from '../../extension/service'
 interface Props {}
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -57,6 +58,12 @@ const useStyles = makeStyles()((theme) => ({
 export function ApplicationSettingPluginSwitch(props: Props) {
     const { classes } = useStyles()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
+    const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
+
+    async function onSwitch(id: string, checked: boolean) {
+        await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
+    }
+
     return (
         <List>
             {snsAdaptorPlugins
@@ -92,7 +99,11 @@ export function ApplicationSettingPluginSwitch(props: Props) {
                             </div>
                         </section>
                         <div>
-                            <SettingSwitch size="small" checked onChange={() => {}} />
+                            <SettingSwitch
+                                size="small"
+                                checked={!snsAdaptorMinimalPlugins.map((x) => x.ID).includes(x.pluginId)}
+                                onChange={(event) => onSwitch(x.pluginId, event.target.checked)}
+                            />
                         </div>
                     </ListItem>
                 ))}
