@@ -14,6 +14,12 @@ import { ImageIcon } from '@masknet/shared'
 import { Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useNavigate } from 'react-router-dom'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { currentPersonaIdentifier } from '../../../settings/settings'
+import { ECKeyIdentifier, Identifier, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
+import { useAsync } from 'react-use'
+import Services from '../../../extension/service'
+import { NextIDProof } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -74,6 +80,13 @@ export function Steps() {
     const { classes } = useStyles()
     const [step, setStep] = useState(0)
     const navigate = useNavigate()
+    const currentIdentifier = Identifier.fromString(useValueRef(currentPersonaIdentifier), ECKeyIdentifier)
+    const { value: persona_ } = useAsync(async () => {
+        return Services.Identity.queryPersona(currentIdentifier.unwrap())
+    }, [])
+
+    if (!persona_ || !persona_.publicHexKey) return null
+
     const stepIconMap: any = {
         [SignSteps.Ready]: {
             step1: step1ActiveIcon,
@@ -103,8 +116,24 @@ export function Steps() {
     }
 
     const personaSlientSign = async () => {
-        console.log('p sign')
-        setStep(1)
+        try {
+            const payload = await NextIDProof.createPersonaPayload(
+                persona_.publicHexKey as string,
+                NextIDAction.Create,
+                persona_.nickname as string,
+                NextIDPlatform.Ethereum,
+                'default',
+            )
+            if (!payload) throw new Error('Failed to create persona payload.')
+            const signResult = await Services.Identity.generateSignResult(
+                currentIdentifier.val as any,
+                payload.signPayload,
+            )
+            if (!signResult) throw new Error('Failed to sign persona.')
+            setStep(1)
+        } catch (error) {
+            console.error(error)
+        }
     }
     const walletSign = async () => {
         console.log('wallet sign')

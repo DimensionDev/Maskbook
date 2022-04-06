@@ -13,6 +13,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 const VerifyWallet = memo(() => {
     const { classes } = useStyles()
+
     return (
         <div className={classes.container}>
             <Steps />
