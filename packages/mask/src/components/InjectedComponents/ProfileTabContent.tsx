@@ -13,6 +13,7 @@ import { first } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { activatedSocialNetworkUI } from '../../social-network'
+import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { MaskMessages } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
@@ -57,6 +58,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         platform as NextIDPlatform,
         identity.identifier.userId,
     )
+
     const currentAccountNotConnectPersona =
         currentIdentity.identifier.userId === identity.identifier.userId &&
         personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.publicHexKey) === -1
@@ -84,6 +86,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
             return a.priority - z.priority
         })
+
     const selectedTabComputed = selectedTab ?? first(tabs)
 
     useLocationChange(() => {
@@ -107,11 +110,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [identity])
 
     const ContentComponent = useMemo(() => {
-        const tab = currentAccountNotConnectPersona
-            ? tabs?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
-            : selectedTabComputed?.ID
+        const tab =
+            isTwitter(activatedSocialNetworkUI) && currentAccountNotConnectPersona
+                ? tabs?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
+                : selectedTabComputed?.ID
         return getTabContent(tab ?? '')
-    }, [selectedTabComputed, identity.identifier])
+    }, [selectedTabComputed?.ID, identity.identifier.userId])
 
     if (hidden) return null
 
