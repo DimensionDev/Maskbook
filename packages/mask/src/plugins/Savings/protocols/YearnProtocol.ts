@@ -2,11 +2,7 @@ import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { ZERO } from '@masknet/web3-shared-base'
-import {
-    ChainId,    
-    createContract,
-    FungibleTokenDetailed,
-} from '@masknet/web3-shared-evm'
+import { ChainId, createContract, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 
 import { ProtocolType, SavingsProtocol } from '../types'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
@@ -45,20 +41,20 @@ export class YearnProtocol implements SavingsProtocol {
         try {
             // @ts-ignore
             const yearn = new Yearn(chainId, {
-                provider: web3.currentProvider
-            });
+                provider: web3.currentProvider,
+            })
 
             // @ts-ignore
             const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
 
-            const vaults: Vault[] = await vaultInterface.get([this.stakeToken.address]);
+            const vaults: Vault[] = await vaultInterface.get([this.stakeToken.address])
             this._apr = YearnProtocol.DEFAULT_APR
-            
+
             // @ts-ignore
             if (vaults && vaults.length > 0) {
                 // APY and APR are returned here as decimals, multiply by 100 to get the percents
                 // @ts-ignore
-                this._apr = (100 * ( vaults[0].metadata.apy?.gross_apr??0)).toFixed(2)
+                this._apr = (100 * (vaults[0].metadata.apy?.gross_apr ?? 0)).toFixed(2)
                 return
             }
         } catch (error) {
@@ -69,7 +65,6 @@ export class YearnProtocol implements SavingsProtocol {
 
     public async updateBalance(chainId: ChainId, web3: Web3, account: string) {
         try {
-            
             const contract = createContract<ERC20>(web3, this.stakeToken.address, ERC20ABI as AbiItem[])
             this._balance = new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')
         } catch (error) {
@@ -80,7 +75,6 @@ export class YearnProtocol implements SavingsProtocol {
 
     public async depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
-            
             const gasEstimate = ZERO
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
@@ -89,22 +83,25 @@ export class YearnProtocol implements SavingsProtocol {
         }
     }
 
-
-
     public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
             const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
 
             // @ts-ignore
             const yearn = new Yearn(chainId, {
-                provider: web3.currentProvider
-            });
+                provider: web3.currentProvider,
+            })
 
             // @ts-ignore
             const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
 
-            const tResponse = await vaultInterface.deposit(this.stakeToken.address, this.bareToken.address, value.toString(), account);
-            
+            const tResponse = await vaultInterface.deposit(
+                this.stakeToken.address,
+                this.bareToken.address,
+                value.toString(),
+                account,
+            )
+
             return true
         } catch (error) {
             console.error('YFI deposit ERROR: ', error)
@@ -114,7 +111,6 @@ export class YearnProtocol implements SavingsProtocol {
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
-            
             const gasEstimate = ZERO
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
@@ -128,14 +124,19 @@ export class YearnProtocol implements SavingsProtocol {
 
             // @ts-ignore
             const yearn = new Yearn(chainId, {
-                provider: web3.currentProvider
-            });
+                provider: web3.currentProvider,
+            })
 
             // @ts-ignore
             const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
 
-            const tResponse = await vaultInterface.withdraw(this.stakeToken.address, this.bareToken.address, value.toString(), account);
-            
+            const tResponse = await vaultInterface.withdraw(
+                this.stakeToken.address,
+                this.bareToken.address,
+                value.toString(),
+                account,
+            )
+
             return true
         } catch (error) {
             console.error('YFI Withdraw ERROR: ', error)

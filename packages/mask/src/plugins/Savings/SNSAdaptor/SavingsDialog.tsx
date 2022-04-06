@@ -36,7 +36,6 @@ import { LDO_PAIRS, YearnChains } from '../constants'
 import { LidoProtocol } from '../protocols/LDOProtocol'
 import { AAVEProtocol } from '../protocols/AAVEProtocol'
 
-
 function splitToPair(a: FungibleTokenDetailed[] | undefined) {
     if (!a) {
         return []
@@ -49,13 +48,8 @@ function splitToPair(a: FungibleTokenDetailed[] | undefined) {
     }, [])
 }
 
-
-
-
-function isValidYearnChain<YearnChains>(
-    chainId: ChainId
-  ): chainId is keyof YearnChains {
-    return chainId in YearnChains;
+function isValidYearnChain(chainId: ChainId) {
+    return chainId in YearnChains
 }
 
 export interface SavingsDialogProps {
@@ -109,39 +103,38 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         chainId,
     )
 
-
     const { value: yfiTokens } = useAsync(async () => {
         if (!isValidYearnChain(chainId)) {
             return []
         }
-        
+
+        // @ts-ignore
         const yearn = new Yearn(chainId, {
             // @ts-ignore
-            provider: web3.currentProvider
-        });
-        await yearn.ready;
+            provider: web3.currentProvider,
+        })
+        await yearn.ready
 
         // @ts-ignore
         const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
 
-        const allvaults =  await vaultInterface.get()
-        const currentVaults = sortedUniqBy( orderBy(allvaults, ['metadata.defaultDisplayToken', 'version'], ['asc', 'desc']) , m=>m.metadata.defaultDisplayToken);
-				
-        return currentVaults.map((v) =>{
-            return [v.metadata.defaultDisplayToken, v.address];
+        const allvaults = await vaultInterface.get()
+        const currentVaults = sortedUniqBy(
+            orderBy(allvaults, ['metadata.defaultDisplayToken', 'version'], ['asc', 'desc']),
+            (m) => m.metadata.defaultDisplayToken,
+        )
+
+        return currentVaults.map((v) => {
+            return [v.metadata.defaultDisplayToken, v.address]
         })
     }, [web3, chainId])
-
-    
 
     const { value: detailedYFITokens } = useFungibleTokensDetailed(
         compact(flatten(yfiTokens ?? [])).map((address: string) => {
             return { address, type: EthereumTokenType.ERC20 }
         }) ?? [],
-        chainId
+        chainId,
     )
-
-
 
     const protocols = useMemo(
         () => [
