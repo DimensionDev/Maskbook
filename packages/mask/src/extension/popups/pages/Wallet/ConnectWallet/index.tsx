@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         height: '4rem',
     },
 }))
-const ConenctWalletPage = memo(() => {
+const ConnectWalletPage = memo(() => {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const clickItem = () => {
@@ -57,4 +57,4 @@ const ConenctWalletPage = memo(() => {
     )
 })
 
-export default ConenctWalletPage
+export default ConnectWalletPage

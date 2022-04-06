@@ -111,7 +111,7 @@ export function Steps() {
 
     const onConfirm = () => {
         if (step === SignSteps.Ready) {
-            personaSlientSign()
+            personaSilentSign()
         } else if (step === SignSteps.Step1Done) {
             walletSign()
         } else {
@@ -119,7 +119,7 @@ export function Steps() {
         }
     }
 
-    const personaSlientSign = async () => {
+    const personaSilentSign = async () => {
         try {
             const payload = await NextIDProof.createPersonaPayload(
                 persona_.publicHexKey as string,
@@ -142,7 +142,7 @@ export function Steps() {
         }
     }
     const walletSign = async () => {
-        if (!payload) throw new Error('paylod error')
+        if (!payload) throw new Error('payload error')
         try {
             const walletSig = await Services.Ethereum.personalSign(payload.signPayload, wallet.address)
             if (!walletSig) throw new Error('Wallet sign failed')
