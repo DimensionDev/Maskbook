@@ -7,7 +7,7 @@ import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGen
 import type { PersonaIdentifier, ProfileIdentifier, AESJsonWebKey } from '@masknet/shared-base'
 import { BackupOptions, generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 import { requestExtensionPermission, openPopupWindow } from './../../../background/services/helper'
-import { saveFileFromBuffer } from '../../../shared'
+import { MaskMessages, saveFileFromBuffer } from '../../../shared'
 import {
     BackupJSONFileLatest,
     getBackupPreviewInfo,
@@ -19,6 +19,8 @@ import { convertBackupFileToObject, extraPermissions, fixBackupFilePermission } 
 import { v4 as uuid } from 'uuid'
 import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
 import formatDateTime from 'date-fns/format'
+import { WalletRPC } from '../../plugins/Wallet/messages'
+import Services from '../service'
 
 export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
 export * from './WelcomeServices/restoreBackup'
@@ -131,6 +133,7 @@ export async function checkPermissionsAndRestore(id: string) {
 
 export async function checkPermissionAndOpenWalletRecovery(id: string) {
     const json = await getUnconfirmedBackup(id)
+    const hasPassword = await WalletRPC.hasPassword()
     if (json) {
         const permissions = await extraPermissions(json.grantedHostPermissions)
         if (permissions.length) {
@@ -138,7 +141,17 @@ export async function checkPermissionAndOpenWalletRecovery(id: string) {
             if (!granted) return
         }
 
-        await openPopupWindow(PopupRoutes.WalletRecovered, { backupId: id })
+        if (!hasPassword) {
+            await openPopupWindow(PopupRoutes.WalletRecovered, { backupId: id })
+        } else {
+            await Services.Welcome.restoreBackup(json)
+
+            // Set default wallet
+            if (json.wallets) await WalletRPC.setDefaultWallet()
+
+            // Send event after successful recovery
+            MaskMessages.events.restoreSuccess.sendToAll(undefined)
+        }
     }
 }
 
