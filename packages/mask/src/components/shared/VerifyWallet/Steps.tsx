@@ -20,6 +20,7 @@ import { ECKeyIdentifier, Identifier, NextIDAction, NextIDPlatform } from '@mask
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
 import { NextIDProof } from '@masknet/web3-providers'
+import { useWallet } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -84,8 +85,11 @@ export function Steps() {
     const { value: persona_ } = useAsync(async () => {
         return Services.Identity.queryPersona(currentIdentifier.unwrap())
     }, [])
+    const [payload, setPayload] = useState<any>()
+    const [signature, setSignature] = useState<any>()
+    const wallet = useWallet()
 
-    if (!persona_ || !persona_.publicHexKey) return null
+    if (!persona_ || !persona_.publicHexKey || !wallet) return null
 
     const stepIconMap: any = {
         [SignSteps.Ready]: {
@@ -120,15 +124,17 @@ export function Steps() {
             const payload = await NextIDProof.createPersonaPayload(
                 persona_.publicHexKey as string,
                 NextIDAction.Create,
-                persona_.nickname as string,
+                wallet.address,
                 NextIDPlatform.Ethereum,
                 'default',
             )
             if (!payload) throw new Error('Failed to create persona payload.')
+            setPayload(payload)
             const signResult = await Services.Identity.generateSignResult(
                 currentIdentifier.val as any,
                 payload.signPayload,
             )
+            setSignature(signResult.signature.signature)
             if (!signResult) throw new Error('Failed to sign persona.')
             setStep(1)
         } catch (error) {
@@ -136,7 +142,26 @@ export function Steps() {
         }
     }
     const walletSign = async () => {
-        console.log('wallet sign')
+        try {
+            const walletSig = await Services.Ethereum.personalSign(payload.signPayload, wallet.address)
+            console.log(walletSig, 'ggg')
+            if (!walletSig) throw new Error('Wallet sign failed')
+            console.log(payload, 'paylod')
+            await NextIDProof.bindProof(
+                payload.uuid,
+                persona_.publicHexKey as string,
+                NextIDAction.Create,
+                NextIDPlatform.Ethereum,
+                wallet.address,
+                payload.createdAt,
+                {
+                    walletSignature: walletSig,
+                    signature: signature,
+                },
+            )
+        } catch (error) {
+            console.error(error)
+        }
         setStep(2)
     }
     const onCancel = () => {

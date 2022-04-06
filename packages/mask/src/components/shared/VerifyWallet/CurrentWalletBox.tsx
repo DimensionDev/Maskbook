@@ -47,13 +47,14 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     actionButton: {
-        fontSize: 12,
+        fontSize: 14,
         marginLeft: theme.spacing(1),
         padding: '8px 12px',
         fontWeight: 'bold',
         background: 'rgba(15, 20, 25, 1)',
         color: '#fff',
-        width: 'fit-content',
+        minWidth: 70,
+        borderRadius: '6px',
     },
     address: {
         fontSize: 12,
