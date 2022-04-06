@@ -53,7 +53,7 @@ function splitToPair(a: FungibleTokenDetailed[] | undefined) {
 
 
 function isValidYearnChain<YearnChains>(
-    chainId: string | number | symbol
+    chainId: ChainId
   ): chainId is keyof YearnChains {
     return chainId in YearnChains;
 }
