@@ -6,7 +6,6 @@ import { updateLanguage } from '@masknet/shared-base'
 import { PLUGIN_ID } from '../plugins/EVM/constants'
 import { isEqual } from 'lodash-unified'
 
-export const debugModeSetting = createGlobalSettings('debugMode', false)
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)

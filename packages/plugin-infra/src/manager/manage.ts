@@ -99,14 +99,6 @@ export function createManager<
             (enabled) => (enabled ? minimalModePluginIDs.add(id) : minimalModePluginIDs.delete(id)),
             noop,
         )
-        {
-            const icon = definition.icon
-            if (typeof icon === 'string' && (icon.codePointAt(0) || 0) < 256) {
-                console.warn(
-                    `[@masknet/plugin-infra] Plugin ${id} has a wrong icon, expected an emoji, actual ${icon}.`,
-                )
-            }
-        }
         if (definition.enableRequirement.target !== 'stable' && !definition.experimentalMark) {
             console.warn(
                 `[@masknet/plugin-infra] Plugin ${id} is not enabled in stable release, expected it's "experimentalMark" to be true.`,

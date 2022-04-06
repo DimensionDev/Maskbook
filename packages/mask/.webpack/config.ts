@@ -37,7 +37,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         name: 'mask',
         mode,
         devtool: sourceMapKind,
-        target: ['web', 'es2019'],
+        target: ['web', 'es2021'],
         entry: {},
         experiments: { backCompat: false, asyncWebAssembly: supportWebAssembly },
         cache: {
@@ -146,20 +146,21 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                                 syntax: 'typescript',
                                 dynamicImport: true,
                                 tsx: true,
-                                importAssertions: true,
                             },
-                            target: 'es2019',
+                            target: 'es2021',
                             externalHelpers: true,
                             transform: {
                                 react: {
                                     runtime: 'automatic',
-                                    useBuiltins: true,
                                     refresh: reactRefresh && {
                                         refreshReg: '$RefreshReg$',
                                         refreshSig: '$RefreshSig$',
                                         emitFullSignatures: true,
                                     },
                                 },
+                            },
+                            experimental: {
+                                keepImportAssertions: true,
                             },
                         },
                     },
@@ -242,12 +243,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         },
         output: {
             environment: {
-                arrowFunction: true,
-                const: true,
-                destructuring: true,
-                forOf: true,
                 module: false,
-                bigIntLiteral: true,
                 // Our iOS App doesn't support dynamic import (it requires a heavy post-build time transform).
                 dynamicImport: !(runtime.architecture === 'app' && runtime.engine === 'safari'),
             },

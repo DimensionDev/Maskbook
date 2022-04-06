@@ -1,10 +1,4 @@
-import {
-    appearanceSettings,
-    pluginIDSettings,
-    languageSettings,
-    debugModeSetting,
-    currentPersonaIdentifier,
-} from './settings'
+import { appearanceSettings, pluginIDSettings, languageSettings, currentPersonaIdentifier } from './settings'
 import type { MaskSettingsEvents } from '@masknet/shared-base'
 import {
     currentAccountSettings,
@@ -24,7 +18,6 @@ export function ToBeListened(): ToBeListedSettings {
         appearanceSettings,
         pluginIDSettings,
         languageSettings,
-        debugModeSetting,
         currentChainIdSettings,
         currentTokenPricesSettings,
         currentDataProviderSettings,

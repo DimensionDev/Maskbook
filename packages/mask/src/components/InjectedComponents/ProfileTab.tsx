@@ -2,6 +2,8 @@ import { ReactElement, useCallback, useState } from 'react'
 import classnames from 'classnames'
 import { Typography } from '@mui/material'
 import { MaskMessages, useMatchXS, useLocationChange } from '../../utils'
+import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
+import { activatedSocialNetworkUI } from '../../social-network'
 
 export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {
     clear(): void
@@ -20,7 +22,7 @@ export function ProfileTab(props: ProfileTabProps) {
 
     const onClick = useCallback(() => {
         // Change the url hashtag to trigger `locationchange` event from e.g. 'hostname/medias#web3 => hostname/medias'
-        location.assign('#web3')
+        isTwitter(activatedSocialNetworkUI) && location.assign('#web3')
         MaskMessages.events.profileTabUpdated.sendToLocal({ show: true })
         setActive(true)
         clear()

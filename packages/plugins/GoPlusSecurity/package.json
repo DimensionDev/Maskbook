@@ -14,7 +14,6 @@
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "react-use": "^17.3.2",
-    "bignumber.js": "^9.0.2",
     "urlcat": "^2.0.4"
   }
 }
