@@ -1,13 +1,10 @@
 import { useState } from 'react'
-import { EthereumTokenType } from '../types'
+import { EthereumTokenType, EthereumTokenDetailedType } from '../types'
 import { useFungibleTokenBalance } from './useFungibleTokenBalance'
 import { useFungibleTokenDetailed } from './useFungibleTokenDetailed'
 import { useNativeTokenDetailed } from './useNativeTokenDetailed'
-
-export function useFungibleTokenWatched(initialToken?: {
-    type: EthereumTokenType.ERC20 | EthereumTokenType.Native
-    address: string
-}) {
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+export function useFungibleTokenWatched(initialToken?: FungibleTokenInitial): FungibleTokenWatched {
     const nativeToken = useNativeTokenDetailed()
     const [token = nativeToken.value, setToken] = useState(initialToken)
 
@@ -24,4 +21,14 @@ export function useFungibleTokenWatched(initialToken?: {
     }
 }
 
-export type FungibleTokenWatched = ReturnType<typeof useFungibleTokenWatched>
+export interface FungibleTokenWatched {
+    amount: string
+    token: AsyncStateRetry<EthereumTokenDetailedType<EthereumTokenType.Native | EthereumTokenType.ERC20> | undefined>
+    balance: AsyncStateRetry<string | undefined>
+    setAmount: (x: string) => void
+    setToken: (x: FungibleTokenInitial) => void
+}
+export interface FungibleTokenInitial {
+    type: EthereumTokenType.ERC20 | EthereumTokenType.Native
+    address: string
+}

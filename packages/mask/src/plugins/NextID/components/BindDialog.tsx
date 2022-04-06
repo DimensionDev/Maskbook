@@ -12,7 +12,8 @@ import { delay } from '@dimensiondev/kit'
 import { useBindPayload } from '../hooks/useBindPayload'
 import { usePersonaSign } from '../hooks/usePersonaSign'
 import { useWalletSign } from '../hooks/useWalletSign'
-import { bindProof } from '@masknet/web3-providers'
+import { NextIDProof } from '@masknet/web3-providers'
+import { MaskMessages } from '../../../../shared'
 
 interface BindDialogProps {
     open: boolean
@@ -36,7 +37,7 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBou
     useAsyncRetry(async () => {
         if (!personaSignState.value || !walletSignState.value || isBound || !message || !persona.publicHexKey) return
         try {
-            await bindProof(
+            await NextIDProof.bindProof(
                 message.uuid,
                 persona.publicHexKey,
                 NextIDAction.Create,
@@ -52,6 +53,9 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBou
                 variant: 'success',
                 message: t.notify_wallet_sign_request_success(),
             })
+
+            MaskMessages.events.ownProofChanged.sendToAll()
+
             await delay(2000)
             onBound()
             onClose()
