@@ -33,7 +33,7 @@ function useCheckERC1155(address: string) {
     return useERC165(erc1155Contract, address, ERC1155_ENUMERABLE_INTERFACE_ID)
 }
 
-export function useAddressCheck(address: string): EthereumTokenType {
+export function useAddressCheck(address: string): EthereumTokenType | undefined {
     const { value: isContract, loading: loadingContract } = useCheckContract(address)
     const { value: isERC721, loading: loadingERC721 } = useCheckERC721(address)
     const { value: isERC1155, loading: loadingERC1155 } = useCheckERC1155(address)
@@ -45,5 +45,5 @@ export function useAddressCheck(address: string): EthereumTokenType {
         ? EthereumTokenType.ERC721
         : isContract
         ? EthereumTokenType.ERC20
-        : EthereumTokenType.Native
+        : undefined
 }
