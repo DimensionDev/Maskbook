@@ -69,4 +69,4 @@ export * from './useTrustedERC20Tokens'
 export * from './useTrustERC20TokenCallback'
 export * from './useAddERC20TokenCallback'
 
-export * from './useAddressCheck'
+export * from './useEthereumTokenType'
