@@ -15,7 +15,7 @@ export function useERC20TokenDetailed(address?: string, token?: Partial<ERC20Tok
     const chainId = targetChainId ?? currentChainId
     const erc20TokenContract = useERC20TokenContract(address, chainId)
     const erc20TokenBytes32Contract = useERC20TokenBytes32Contract(address, chainId)
-    const tokenType = useEthereumTokenType(address ?? '')
+    const tokenType = useEthereumTokenType(address)
 
     return useAsyncRetry(async () => {
         if (!address) return
