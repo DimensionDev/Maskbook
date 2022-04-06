@@ -135,8 +135,8 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     
 
     const { value: detailedYFITokens } = useFungibleTokensDetailed(
-        compact(flatten(yfiTokens ?? [])).map((m: string) => {
-            return { address: m, type: EthereumTokenType.ERC20 }
+        compact(flatten(yfiTokens ?? [])).map((address: string) => {
+            return { address, type: EthereumTokenType.ERC20 }
         }) ?? [],
         chainId
     )
