@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
-import { useLocation } from 'react-use'
+import { useLocation, useWindowScroll } from 'react-use'
 import { PluginTraderMessages } from '../../messages'
 import { WalletMessages } from '../../../Wallet/messages'
 import type { TagType } from '../../types'
@@ -66,6 +66,17 @@ export function TrendingPopper(props: TrendingPopperProps) {
     // close popper if location was changed
     const location = useLocation()
     useEffect(() => setAnchorEl(null), [location.state?.key, location.href])
+
+    // close popper if scroll out of visual screen
+    const position = useWindowScroll()
+    useEffect(() => {
+        if (!popper.current) return
+        const { top, height } = popper.current?.getBoundingClientRect()
+        if ((top < 0 && -1 * top > height) || top > document.documentElement.clientHeight)
+            // out off bottom bound
+            setAnchorEl(null)
+    }, [popper, Math.floor(position.y / 50)])
+    // #endregion
 
     if (locked) return null
     if (!anchorEl || !type) return null
