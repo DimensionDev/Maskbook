@@ -778,8 +778,8 @@ importers:
       '@masknet/theme': link:../../theme
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
-      react-feather: 2.0.9_react@18.0.0
-      react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
+      react-feather: 2.0.9_react@18.0.0-rc.3
+      react-use: 17.3.2_581fa33d3647c30d8078674dcd1b240a
       urlcat: 2.0.4
 
   packages/plugins/RSS3:
