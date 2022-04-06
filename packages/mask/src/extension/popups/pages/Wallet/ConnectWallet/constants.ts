@@ -3,7 +3,7 @@ import { MaskWalletIcon, WalletConnectIcon, MetaMaskIcon, BloctoIcon } from '@ma
 const supportedWallets = [
     { title: 'MetaMask', icon: MetaMaskIcon },
     { title: 'Mask', icon: MaskWalletIcon },
-    { title: 'WalletConnetc', icon: WalletConnectIcon },
+    { title: 'WalletConnect', icon: WalletConnectIcon },
     { title: 'Blocto', icon: BloctoIcon },
 ]
 
