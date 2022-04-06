@@ -6,8 +6,7 @@ import { useChainId } from './useChainId'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { createERC721ContractDetailed, safeNonPayableTransactionCall } from '../utils'
 import { useOpenseaAPIConstants } from '../constants'
-import { fromBech32 } from '../utils/bech32'
-import { isBech32Address } from '../utils/validators'
+import { fromBech32, isBech32Address } from '@codingsh/harmony-crypto'
 
 export function useERC721ContractDetailed(address?: string) {
     const chainId = useChainId()

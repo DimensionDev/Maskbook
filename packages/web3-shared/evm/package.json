@@ -5,7 +5,9 @@
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "dependencies": {
+    "@codingsh/harmony-crypto": "0.1.57",
     "@ensdomains/address-encoder": "^0.2.6",
+    "@harmony-js/utils": "^0.1.56",
     "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
@@ -25,8 +27,7 @@
     "wallet.ts": "^1.0.1",
     "web3": "1.5.2",
     "web3-core-helpers": "1.5.2",
-    "web3-utils": "1.5.2",
-    "js-sha3": "0.8.0"
+    "web3-utils": "1.5.2"
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.0"
