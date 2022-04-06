@@ -22,7 +22,7 @@ export function useERC20TokenDetailed(address?: string, token?: Partial<ERC20Tok
         if (!EthereumAddress.isValid(address)) return
         if (tokenType !== EthereumTokenType.ERC20) return
         return getERC20TokenDetailed(address, chainId, erc20TokenContract, erc20TokenBytes32Contract, token)
-    }, [chainId, token, erc20TokenContract, erc20TokenBytes32Contract, address])
+    }, [chainId, token, erc20TokenContract, erc20TokenBytes32Contract, address, tokenType])
 }
 
 export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'address' | 'type'>[], _chainId?: ChainId) {
