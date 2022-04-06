@@ -13,7 +13,7 @@ function useCheckContract(address: string) {
     return useAsyncRetry(async () => {
         const result = await web3.eth.getCode(address)
         return result !== '0x'
-    }, [address])
+    }, [address, web3])
 }
 
 function useCheckERC721(address: string) {
