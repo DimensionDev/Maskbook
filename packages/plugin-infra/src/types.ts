@@ -82,11 +82,6 @@ export namespace Plugin.Shared {
          */
         name: I18NStringField
         /**
-         * Emoji icon of this plugin, used to display the plugin with a fancy shape.
-         * @example "🎶"
-         */
-        icon?: string | React.ReactNode
-        /**
          * A brief description of this plugin.
          * @example { i18nKey: "description", fallback: "This plugin is going to replace every link in the page to https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
          */

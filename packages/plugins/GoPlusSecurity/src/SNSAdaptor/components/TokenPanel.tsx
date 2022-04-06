@@ -1,14 +1,13 @@
 import { Link, Stack, Tooltip, Typography } from '@mui/material'
 import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
-import parseInt from 'lodash-es/parseInt'
 import { useI18N } from '../../locales'
 import React from 'react'
 import { useTheme } from '@mui/system'
 import { ExternalLink } from 'react-feather'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
 import {
     ERC20Token,
+    formatCurrency,
     formatEthereumAddress,
     resolveAddressLinkOnExplorer,
     resolveTokenLinkOnExplorer,
@@ -41,7 +40,7 @@ const DEFAULT_PLACEHOLDER = '--'
 
 function formatTotalSupply(total?: number) {
     if (!total) return DEFAULT_PLACEHOLDER
-    return new BigNumber(total).toFormat(3)
+    return formatCurrency(total)
 }
 
 interface TokenPanelProps {
@@ -103,11 +102,10 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
                             <Link
                                 lineHeight="14px"
                                 href={resolveTokenLinkOnExplorer({
-                                    chainId: parseInt(tokenSecurity.chainId),
+                                    chainId: tokenSecurity.chainId,
                                     address: tokenSecurity.contract,
                                 } as ERC20Token)}
                                 target="_blank"
-                                title={t.token_info_token_contract_address()}
                                 rel="noopener noreferrer">
                                 <ExternalLink color={theme.palette.text.strong} size={14} />
                             </Link>
@@ -125,11 +123,10 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
                                 <Link
                                     lineHeight="14px"
                                     href={resolveAddressLinkOnExplorer(
-                                        parseInt(tokenSecurity.chainId),
+                                        tokenSecurity.chainId,
                                         tokenSecurity.creator_address,
                                     )}
                                     target="_blank"
-                                    title={t.token_info_contract_creator()}
                                     rel="noopener noreferrer">
                                     <ExternalLink color={theme.palette.text.strong} size={14} />
                                 </Link>
@@ -148,11 +145,10 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
                                 <Link
                                     lineHeight="14px"
                                     href={resolveAddressLinkOnExplorer(
-                                        parseInt(tokenSecurity.chainId),
+                                        tokenSecurity.chainId,
                                         tokenSecurity.owner_address,
                                     )}
                                     target="_blank"
-                                    title={t.token_info_contract_owner()}
                                     rel="noopener noreferrer">
                                     <ExternalLink color={theme.palette.text.strong} size={14} />
                                 </Link>

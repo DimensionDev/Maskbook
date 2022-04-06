@@ -4,7 +4,6 @@ import { SAVINGS_PLUGIN_ID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: SAVINGS_PLUGIN_ID,
-    icon: '\u{1F4B0}',
     name: { fallback: 'Savings' },
     description: {
         fallback: 'A plugin for Savings',

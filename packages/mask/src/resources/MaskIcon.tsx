@@ -108,6 +108,23 @@ export function MaskSharpIcon(props: SvgIconPropsWithSize) {
     )
 }
 
+export function MaskIconInMinds(props: SvgIconPropsWithSize) {
+    const { size = 18, color } = props
+    return (
+        <SvgIcon style={{ width: size, height: size }} color={color} viewBox="0 0 52 52">
+            <svg width="52" height="52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M26 52c14.36 0 26-11.64 26-26S40.36 0 26 0 0 11.64 0 26s11.64 26 26 26Z" fill="#72727C" />
+                <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M41.693 19.609v8.634H14.242c1.199 5.24 5.955 9.153 11.64 9.153 4.7 0 8.765-2.675 10.71-6.562h5.1v7.252c0 1.717-1.413 3.109-3.157 3.109H13.269c-1.744 0-3.158-1.392-3.158-3.109V19.61h31.582Zm-8.13 11.225a9.33 9.33 0 0 1-7.681 3.991 9.33 9.33 0 0 1-7.681-3.991h15.362ZM19.147 21.68c-2.475 0-4.523 1.801-4.863 4.145h2.692a2.279 2.279 0 0 1 2.17-1.555c1.016 0 1.876.653 2.172 1.555h2.692c-.34-2.344-2.388-4.145-4.863-4.145Zm13.51 0c-2.475 0-4.523 1.801-4.863 4.145h2.692a2.279 2.279 0 0 1 2.17-1.555c1.016 0 1.876.653 2.172 1.555h2.692c-.34-2.344-2.388-4.145-4.863-4.145Zm5.878-11.57c1.744 0 3.158 1.392 3.158 3.108v3.8H10.11v-3.8c0-1.716 1.414-3.108 3.158-3.108h25.266Z"
+                    fill="#fff"
+                />
+            </svg>
+        </SvgIcon>
+    )
+}
+
 export function MaskSharpIconOfSize(props: SvgIconPropsWithSize) {
     return (
         <SvgIcon {...props}>

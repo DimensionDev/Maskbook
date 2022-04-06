@@ -3,7 +3,6 @@ import { SNAPSHOT_PLUGIN_ID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: SNAPSHOT_PLUGIN_ID,
-    icon: '\u{1F4F7}',
     name: { fallback: 'Snapshot' },
     description: {
         fallback: 'A plugin for https://snapshot.org/',

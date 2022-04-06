@@ -5,7 +5,7 @@ import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/mate
 import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
 import type { SocialNetworkUI } from '../../../social-network'
-import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme-tools'
+import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme'
 import { isMobileTwitter } from '../utils/isMobile'
 import { composeAnchorSelector, composeAnchorTextSelector, headingTextSelector } from '../utils/selector'
 import twitterColorSchema from './twitter-color-schema.json'
