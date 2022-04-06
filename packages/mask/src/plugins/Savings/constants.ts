@@ -138,8 +138,8 @@ export const AAVE_PAIRS: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
 ]
 
 export const YearnChains =  {
-    1: "ethereum",
-    250: "fantom",
-    1337: "ethereum",
-    42161: "arbitrum"
+    [ChainId.Mainnet]: "ethereum",
+    [ChainId.Fantom]: "fantom",
+    // [ChainId.]: "ethereum",
+    [ChainId.Arbitrum]: "arbitrum"
 };
