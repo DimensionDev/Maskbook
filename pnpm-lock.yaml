@@ -766,7 +766,6 @@ importers:
       '@masknet/theme': workspace:*
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-evm': workspace:*
-      bignumber.js: ^9.0.2
       react-feather: ^2.0.9
       react-use: ^17.3.2
       urlcat: ^2.0.4
@@ -779,7 +778,6 @@ importers:
       '@masknet/theme': link:../../theme
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
-      bignumber.js: 9.0.2
       react-feather: 2.0.9_react@18.0.0
       react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
       urlcat: 2.0.4
