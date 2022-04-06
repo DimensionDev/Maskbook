@@ -109,15 +109,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [identity])
 
     const ContentComponent = useMemo(() => {
-        let tab
-        if (isTwitter(activatedSocialNetworkUI)) {
-            tab = currentAccountNotConnectPersona
+        const tab =
+            isTwitter(activatedSocialNetworkUI) && currentAccountNotConnectPersona
                 ? tabs?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
                 : selectedTabComputed?.ID
-        } else {
-            tab = selectedTabComputed?.ID
-        }
-
         return getTabContent(tab ?? '')
     }, [selectedTabComputed, identity.identifier])
 
