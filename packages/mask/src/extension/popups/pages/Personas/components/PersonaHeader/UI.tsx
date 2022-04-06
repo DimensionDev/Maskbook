@@ -60,13 +60,13 @@ const useStyles = makeStyles()(() => ({
 interface PersonaHeaderUIProps {
     avatar?: string | null
     onActionClick: () => void
-    currentIdentifier: string
+    fingerprint: string
     nickname?: string
     isSelectPersonaPage: boolean
 }
 
 export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(
-    ({ avatar, onActionClick, currentIdentifier, nickname, isSelectPersonaPage }) => {
+    ({ avatar, onActionClick, fingerprint, nickname, isSelectPersonaPage }) => {
         const { classes } = useStyles()
         return (
             <Box className={classes.container}>
@@ -80,8 +80,8 @@ export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(
                     <div>
                         <Typography className={classes.nickname}>{nickname}</Typography>
                         <Typography className={classes.identifier}>
-                            {formatPersonaFingerprint(currentIdentifier ?? '', 4)}
-                            <CopyIconButton text={currentIdentifier} className={classes.icon} />
+                            {formatPersonaFingerprint(fingerprint ?? '', 4)}
+                            <CopyIconButton text={fingerprint} className={classes.icon} />
                         </Typography>
                     </div>
                     <ArrowDropIcon
