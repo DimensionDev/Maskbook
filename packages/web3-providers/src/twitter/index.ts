@@ -32,6 +32,22 @@ async function getScriptContent(url: string) {
     return response.text()
 }
 
+async function getTokens() {
+    const swContent = await getScriptContent('https://twitter.com/sw.js')
+    const mainContent = await getScriptContent(getScriptURL(swContent ?? '', 'main'))
+    const nftContent = await getScriptContent(getScriptURL(swContent ?? '', 'bundle.UserNft'))
+
+    const bearerToken = getScriptContentMatched(mainContent ?? '', /s="(\w+%3D\w+)"/)
+    const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
+    const csrfToken = getCSRFToken()
+
+    return {
+        bearerToken,
+        queryToken,
+        csrfToken,
+    }
+}
+
 async function getUserNftContainer(
     screenName: string,
     queryToken: string,
@@ -69,26 +85,38 @@ async function getUserNftContainer(
     return response.json()
 }
 
-async function getTokens() {
-    const swContent = await getScriptContent('https://twitter.com/sw.js')
-    const mainContent = await getScriptContent(getScriptURL(swContent ?? '', 'main'))
-    const nftContent = await getScriptContent(getScriptURL(swContent ?? '', 'bundle.UserNft'))
-
-    const bearerToken = getScriptContentMatched(mainContent ?? '', /s="(\w+%3D\w+)"/)
-    const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
-    const csrfToken = getCSRFToken()
-
-    return {
-        bearerToken,
-        queryToken,
-        csrfToken,
-    }
+async function getSettings(bearerToken: string, csrfToken: string): Promise<TwitterBaseAPI.Settings> {
+    const response = await fetch(
+        urlcat('https://twitter.com/i/api/1.1/account/settings.json', {
+            include_mention_filter: false,
+            include_nsfw_user_flag: false,
+            include_nsfw_admin_flag: false,
+            include_ranked_timeline: false,
+            include_alt_text_compose: false,
+            include_country_code: false,
+            include_ext_dm_nsfw_media_filter: false,
+        }),
+        {
+            headers: {
+                authorization: `Bearer ${bearerToken}`,
+                'x-csrf-token': csrfToken,
+                'content-type': 'application/json',
+                'x-twitter-auth-type': 'OAuth2Session',
+                'x-twitter-active-user': 'yes',
+                referer: 'https://twitter.com/home',
+            },
+        },
+    )
+    return response.json()
 }
 
 export class TwitterAPI implements TwitterBaseAPI.Provider {
-    async getUserNftContainer(
-        screenName: string,
-    ): Promise<{ address: string; token_id: string; type_name: string } | undefined> {
+    async getSettings() {
+        const { bearerToken, queryToken, csrfToken } = await getTokens()
+        if (!bearerToken || !csrfToken) return
+        return getSettings(bearerToken, csrfToken)
+    }
+    async getUserNftContainer(screenName: string) {
         const { bearerToken, queryToken, csrfToken } = await getTokens()
         if (!bearerToken || !queryToken || !csrfToken) return
         const result = await getUserNftContainer(screenName, queryToken, bearerToken, csrfToken)
