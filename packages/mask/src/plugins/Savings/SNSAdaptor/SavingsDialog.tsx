@@ -118,9 +118,9 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         // @ts-ignore
         const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
 
-        const allvaults = await vaultInterface.get()
+        const allVaults = await vaultInterface.get()
         const currentVaults = sortedUniqBy(
-            orderBy(allvaults, ['metadata.defaultDisplayToken', 'version'], ['asc', 'desc']),
+            orderBy(allVaults, ['metadata.defaultDisplayToken', 'version'], ['asc', 'desc']),
             (m) => m.metadata.defaultDisplayToken,
         )
 
