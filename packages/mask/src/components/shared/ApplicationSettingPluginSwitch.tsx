@@ -16,6 +16,9 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             background: theme.palette.background.default,
         },
+        '&:hover .MuiAvatar-root': {
+            background: theme.palette.background.paper,
+        },
     },
     listContent: {
         display: 'flex',
