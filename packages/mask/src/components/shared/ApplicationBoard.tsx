@@ -13,6 +13,8 @@ const useStyles = makeStyles()((theme) => {
     return {
         applicationWrapper: {
             marginTop: theme.spacing(0.5),
+            paddingRight: 16,
+            overflowY: 'scroll',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             gridTemplateRows: '100px',
@@ -34,6 +36,7 @@ const useStyles = makeStyles()((theme) => {
         },
         header: {
             display: 'flex',
+            paddingRight: 16,
             justifyContent: 'space-between',
             alignItems: 'center',
             marginBottom: 11.5,
@@ -50,7 +53,7 @@ export function ApplicationBoard() {
     const { classes } = useStyles()
     const theme = useTheme()
     const { t } = useI18N()
-    const [openSettings, setOpenSettings] = useState(true)
+    const [openSettings, setOpenSettings] = useState(false)
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId()
