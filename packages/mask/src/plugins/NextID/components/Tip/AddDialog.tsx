@@ -77,7 +77,7 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
         setMessage('')
     }, [tokenId, contractAddress])
 
-    const handleAdd = useCallback(async () => {
+    const [state, handleAdd] = useAsyncFn(async () => {
         if (!erc721TokenContract || !EthereumAddress.isValid(contractAddress)) {
             setMessage(t.tip_add_collectibles_error())
             return
@@ -112,11 +112,14 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
 
     const addButton = useMemo(() => {
         return (
-            <Button disabled={!contractAddress || !tokenId} className={classes.addButton} onClick={handleAdd}>
-                {t.tip_add()}
+            <Button
+                disabled={!contractAddress || !tokenId || state.loading}
+                className={classes.addButton}
+                onClick={handleAdd}>
+                {state.loading ? t.tip_adding() : t.tip_add()}
             </Button>
         )
-    }, [t, handleAdd])
+    }, [t, handleAdd, state.loading])
 
     if (!network) return null
     return (

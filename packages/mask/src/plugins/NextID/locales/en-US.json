@@ -64,6 +64,7 @@
     "tip_token_share_post": "I just tipped {{amount}} {{symbol}} to @{{recipientSnsId}}'s wallet address {{recipient}}\n\n{{promote}}",
     "tip_nft_share_post": "I just tipped a {{name}} to @{{recipientSnsId}}'s wallet address {{recipient}}\n\n{{promote}}",
     "tip_add": "Add",
+    "tip_adding": "Adding",
     "tip_add_collectibles": "Add Collectibles",
     "tip_add_collectibles_contract_address": "Input contract address",
     "tip_add_collectibles_token_id": "Token ID",
