@@ -82,7 +82,7 @@
         "Fantom": [0, 0, 0, 0, 0],
         "Aurora": [0, 0, 0, 0, 0],
         "Aurora_Testnet": [0, 0, 0, 0, 0],
-        "Conflux": [],
+        "Conflux": [0, 0, 0, 0, 0],
         "KardiaChain": [0, 0, 0, 0, 0]
     }
 }
