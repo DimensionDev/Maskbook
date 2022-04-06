@@ -16,8 +16,6 @@ import {
 import { useI18N } from '../../../utils'
 import { bigNumberToString } from '../utils'
 import { useFetchToken } from '../hooks/useToken'
-// import { PluginOmenMessages } from '../messages'
-// import { useRemoteControlledDialog } from '@masknet/shared'
 import { STANDARD_DECIMALS, OMEN_BASE_URL } from '../constants'
 import type { tokenData } from '../types'
 
@@ -134,13 +132,6 @@ export function OmenPoolView(props: OmenPoolViewProps) {
     const tokenSymbol = collateralToken ? collateralToken.symbol : ''
     const earnTradingFee = bigNumberToString(marketFee.multipliedBy(Math.pow(10, 2)), STANDARD_DECIMALS)
 
-    // const totalPoolShares = marketLiquidity.sharesAmount
-    // const poolTokens = calcPoolTokens(
-    //   inputAmount || new BigNumber(0),
-    //   balances.map(b => b.holdings),
-    //   totalPoolShares,
-    // )
-
     let outcomeValSum = 0
     const outcomePricesFormatted: number[] = []
     for (const outcomeObj of marketOutcomePrices) {
@@ -222,7 +213,6 @@ export function OmenPoolView(props: OmenPoolViewProps) {
                                         color="primary"
                                         href={`${OMEN_BASE_URL}${marketId}/pool`}
                                         target="_blank"
-                                        /* onClick={() => onPoolRequest('deposit')} */
                                     >
                                         {t('plugin_omen_deposit')}
                                     </Button>
@@ -235,7 +225,6 @@ export function OmenPoolView(props: OmenPoolViewProps) {
                                         color="primary"
                                         href={`${OMEN_BASE_URL}${marketId}/pool`}
                                         target="_blank"
-                                        /* onClick={() => onPoolRequest('withdraw')} */
                                     >
                                         {t('plugin_omen_withdraw')}
                                     </Button>

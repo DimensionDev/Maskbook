@@ -13,8 +13,6 @@ import {
     LinearProgress,
 } from '@mui/material'
 import { useI18N } from '../../../utils'
-// import { PluginOmenMessages } from '../messages'
-// import { useRemoteControlledDialog } from '@masknet/shared'
 import { OMEN_BASE_URL } from '../constants'
 import { formatToShortNumber } from '../utils'
 import { useFetchToken } from '../hooks/useToken'
@@ -179,7 +177,6 @@ export function OmenSwapView(props: OmenSwapViewProps) {
                         color="primary"
                         href={`${OMEN_BASE_URL}${marketId}/buy`}
                         target="_blank"
-                        /* onClick={() => onSwapRequest('buy')} */
                     >
                         {t('plugin_omen_buy')}
                     </Button>
@@ -192,7 +189,6 @@ export function OmenSwapView(props: OmenSwapViewProps) {
                         color="primary"
                         href={`${OMEN_BASE_URL}${marketId}/sell`}
                         target="_blank"
-                        /* onClick={() => onSwapRequest('sell')} */
                     >
                         {t('plugin_omen_sell')}
                     </Button>

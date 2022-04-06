@@ -8,7 +8,7 @@ import { OmenView } from '../UI/OmenView'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const regexLinkPattern = /^https:\/\/omen.eth.link\/#\/(0x\w+)/
-const isOmenURL = (link: string): boolean => regexLinkPattern.test(link)
+const isOmenURL = (link: string) => regexLinkPattern.test(link)
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

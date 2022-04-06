@@ -51,7 +51,6 @@ export function formatToShortNumber(number: number, decimals = 2) {
     return `${Number.parseFloat(rNumber.toFixed(decimals))}${units[unitIndex]}`
 }
 
-export function bigNumberToNumber(num: BigNumber | string, decimal = 8, fix = 8) {}
 
 export function bigNumberToString(amount: BigNumber, decimals: number) {
     const decimalsPerToken = new BigNumber(10).pow(decimals)

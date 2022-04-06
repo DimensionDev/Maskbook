@@ -1,7 +1,7 @@
 # Plugin: Omen
 
 Plugin that integrates the decentralized prediction market platform Omen.
-Developed by @Dxdao\_ and powered by the Gnosis conditional tokens framework.
+Developed by `@Dxdao_` and powered by the Gnosis conditional tokens framework.
 
 ## Feature Set
 
@@ -11,7 +11,7 @@ Developed by @Dxdao\_ and powered by the Gnosis conditional tokens framework.
 
 ## Related Projects
 
-- <https://omen.eth.link/#/>
+- <https://omen.eth.link>
 
 ## Related Discussion
 
@@ -19,4 +19,4 @@ Developed by @Dxdao\_ and powered by the Gnosis conditional tokens framework.
 
 ## Pull Requests
 
-- <>
+- <https://github.com/DimensionDev/Maskbook/pull/5844>
