@@ -38,7 +38,6 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
         minHeight: 200,
     },
     stepRow: {
@@ -102,6 +101,7 @@ export function Steps() {
             navigate(-1)
         }
     }
+
     const personaSlientSign = async () => {
         console.log('p sign')
         setStep(1)

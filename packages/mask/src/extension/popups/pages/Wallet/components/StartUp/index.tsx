@@ -103,8 +103,7 @@ export const WalletStartUp = memo(() => {
                 </Box>
                 {!loading ? (
                     <Link
-                        // to={!hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ImportWallet}
-                        to={PopupRoutes.VerifyWallet}
+                        to={!hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ImportWallet}
                         style={{ textDecoration: 'none' }}>
                         <Box className={classes.item}>
                             <ImportWalletIcon sx={{ fontSize: 24 }} />
