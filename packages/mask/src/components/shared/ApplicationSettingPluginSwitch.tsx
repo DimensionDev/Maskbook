@@ -101,13 +101,12 @@ export function ApplicationSettingPluginSwitch(props: Props) {
                                 <Typography className={classes.desc}>{x.entry.description}</Typography>
                             </div>
                         </section>
-                        <div>
-                            <SettingSwitch
-                                size="small"
-                                checked={!snsAdaptorMinimalPlugins.map((x) => x.ID).includes(x.pluginId)}
-                                onChange={(event) => onSwitch(x.pluginId, event.target.checked)}
-                            />
-                        </div>
+
+                        <SettingSwitch
+                            size="small"
+                            checked={!snsAdaptorMinimalPlugins.map((x) => x.ID).includes(x.pluginId)}
+                            onChange={(event) => onSwitch(x.pluginId, event.target.checked)}
+                        />
                     </ListItem>
                 ))}
         </List>

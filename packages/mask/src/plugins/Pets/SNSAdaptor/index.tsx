@@ -32,7 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     />
                 )
             },
-            appBoardSortingDefaultPriority: 10,
+            appBoardSortingDefaultPriority: 11,
             marketListSortingPriority: 12,
             AppIcon: <LootManIcon />,
             description: 'Explore the endless possibilities of NFTs.',

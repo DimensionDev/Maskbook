@@ -30,7 +30,7 @@ import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './inject
 import { injectProfileNFTAvatarInFaceBook } from './injection/NFT/ProfileNFTAvatar'
 import { injectNFTAvatarInFacebook } from './injection/NFT/NFTAvatarInFacebook'
 import { injectUserNFTAvatarAtFacebook } from './injection/NFT/NFTAvatarInTimeline'
-import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
+import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from './injection/NFT/NFTAvatarEditProfile'
 import { injectProfileTabAtFacebook } from './injection/ProfileTab'
 import { injectPostReplacerAtFacebook } from './injection/PostReplacer'
 import { injectProfileTabContentAtFacebook } from './injection/ProfileContent'
@@ -197,6 +197,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInFaceBook,
         profileAvatar: injectNFTAvatarInFacebook,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
+        openNFTAvatarSettingDialog,
         enhancedPostRenderer: injectPostReplacerAtFacebook,
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),

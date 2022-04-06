@@ -29,7 +29,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
                 return <ApplicationEntry disabled={disabled} title="Swap" AppIcon={AppIcon} onClick={openDialog} />
             },
-            appBoardSortingDefaultPriority: 8,
+            appBoardSortingDefaultPriority: 9,
             marketListSortingPriority: 5,
             AppIcon: <SwapIcon />,
             isInDappList: true,

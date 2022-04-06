@@ -21,7 +21,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     <ApplicationEntry title="Fiat On-Ramp" AppIcon={AppIcon} disabled={disabled} onClick={openDialog} />
                 )
             },
-            appBoardSortingDefaultPriority: 9,
+            appBoardSortingDefaultPriority: 10,
             marketListSortingPriority: 6,
             tutorialLink: 'https://transak.com/',
             AppIcon: <TransakIcon />,

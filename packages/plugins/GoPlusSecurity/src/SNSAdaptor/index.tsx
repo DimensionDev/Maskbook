@@ -27,7 +27,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             name: 'Check Security',
             description: '',
             AppIcon: <SecurityCheckerIcon />,
-            appBoardSortingDefaultPriority: 12,
+            appBoardSortingDefaultPriority: 13,
             marketListSortingPriority: 16,
         },
     ],
