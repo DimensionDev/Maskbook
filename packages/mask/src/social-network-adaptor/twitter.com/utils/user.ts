@@ -1,7 +1,7 @@
 import { isNull } from 'lodash-unified'
 import type { SocialNetwork } from '../../../social-network'
 import {
-    bioDescriptionSelector,
+    profileBioSelector,
     searchAvatarSelector,
     searchNickNameSelector,
     personalHomepageSelector,
@@ -23,7 +23,7 @@ export const usernameValidator: NonNullable<SocialNetwork.Utils['isValidUsername
 }
 
 export const getNickname = () => {
-    const node = searchNickNameSelector().evaluate()?.querySelector<HTMLSpanElement>('span span')
+    const node = searchNickNameSelector().evaluate()
     if (!node) return ''
 
     return collectNodeText(node)
@@ -42,8 +42,8 @@ export const getTwitterId = () => {
     return ''
 }
 
-export const getBioDescription = () => {
-    const node = bioDescriptionSelector().evaluate()
+export const getBio = () => {
+    const node = profileBioSelector().evaluate()
     return node ? collectNodeText(node) : ''
 }
 
