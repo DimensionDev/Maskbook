@@ -1,4 +1,4 @@
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Link, Typography } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
 import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
@@ -53,6 +53,15 @@ const useStyles = makeStyles()((theme) => ({
         width: 20,
         cursor: 'pointer',
     },
+    defaultBadge: {
+        padding: '2px 4px',
+        borderRadius: 4,
+        fontSize: 14,
+        backgroundColor: 'rgba(28, 104, 243, 0.1)',
+        color: getMaskColor(theme).primary,
+        fontWeight: 700,
+        marginLeft: 4,
+    },
 }))
 
 interface WalletComProps {
@@ -90,6 +99,7 @@ export function WalletCom({ name, address, isDefault, canDelete }: WalletComProp
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
                     <Typography className={classes.accountName}>{name}</Typography>
+                    {isDefault && <div className={classes.defaultBadge}>Default</div>}
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={address}>
