@@ -32,7 +32,7 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal: Ab
                     () => {
                         const root = createReactRootShadowed(meta.afterShadow, { signal })
                         root.render(<Icon size={size} />)
-                        remover = root.destory
+                        remover = root.destroy
                     },
                     remove,
                 )
@@ -73,7 +73,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         proxy.realCurrent = node
         const root = createReactRootShadowed(proxy.afterShadow, { signal })
         root.render(<Icon size={24} />)
-        remover = root.destory
+        remover = root.destroy
     }
     function remove() {
         remover()

@@ -4,7 +4,6 @@ import { PLUGIN_ID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
-    icon: '\u{1F4B1}',
     name: { fallback: 'Trader' },
     description: { fallback: 'View trending of cryptocurrencies, swap ERC20 tokens in various DEX markets.' },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
@@ -25,6 +24,8 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Fantom,
                 ],
             },
+            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
+            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
     },
 }

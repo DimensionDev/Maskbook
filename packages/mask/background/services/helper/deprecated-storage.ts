@@ -29,7 +29,7 @@ class MutexStorage<T extends browser.storage.StorageValue> {
                 try {
                     this.lock()
                     const stored = await timeout(browser.storage.local.get(key), 3000, `Get ${key} timeout.`)
-                    callback(null, (stored ?? {})[key] as T)
+                    callback(null, stored?.[key] as T)
                 } catch (error) {
                     callback(error)
                 }

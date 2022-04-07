@@ -1,6 +1,6 @@
-import { getEnumAsArray } from '@dimensiondev/kit'
-import { compact, castArray, uniq } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
+import { compact, castArray, uniq } from 'lodash-unified'
+import { getEnumAsArray } from '@dimensiondev/kit'
 import { getRedPacketConstants, getTokenConstants, ZERO_ADDRESS } from '../constants'
 import { ChainId } from '../types'
 

@@ -15,6 +15,6 @@ export function createTaskStartSetupGuideDefault() {
             .attachShadow({ mode: Flags.using_ShadowDOM_attach_mode })
 
         const root = createReactRootShadowed(shadowRoot, { signal, key: 'setup-guide' })
-        root.render(<UI persona={for_} unmount={() => root.destory()} />)
+        root.render(<UI persona={for_} unmount={() => root.destroy()} />)
     }
 }

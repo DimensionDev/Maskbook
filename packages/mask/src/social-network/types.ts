@@ -11,13 +11,12 @@ import type {
 } from '@masknet/shared-base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
+import type { SharedComponentOverwrite } from '@masknet/shared'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { Subscription } from 'use-subscription'
-import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
 
-type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Don't define values in namespaces
 export namespace SocialNetwork {
     export interface PayloadEncoding {
@@ -41,6 +40,8 @@ export namespace SocialNetwork {
         textPayloadPostProcessor?: PayloadEncoding
         /** Given a text, return a URL that will allow user to share this text */
         getShareLinkURL?(text: string): URL
+        /** Handle share */
+        share?(text: string): void
         createPostContext: ReturnType<typeof createSNSAdaptorSpecializedPostContext>
     }
     export interface Shared {
@@ -148,6 +149,8 @@ export namespace SocialNetworkUI {
             /** @deprecated same reason as userAvatar */
             profileAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
+            profileTip?(signal: AbortSignal): void
+            /** @deprecated same reason as userAvatar */
             postAvatar?(signal: AbortSignal, current: PostInfo): void
             /** @deprecated same reason as userAvatar */
             openNFTAvatar?(signal: AbortSignal): void
@@ -192,9 +195,11 @@ export namespace SocialNetworkUI {
         export interface NativeCompositionAttachImageOptions {
             recover?: boolean
             relatedTextPayload?: string
+            reason?: 'timeline' | 'popup' | 'reply'
         }
         export interface NativeCompositionAttachTextOptions {
             recover?: boolean
+            reason?: 'timeline' | 'popup' | 'reply'
         }
         export interface MaskCompositionDialog {
             open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
@@ -264,6 +269,7 @@ export namespace SocialNetworkUI {
             /** Provide the ability to detect the current color scheme (light or dark) in the current SNS */
             paletteMode?: PaletteModeProvider
             i18nOverwrite?: I18NOverwrite
+            sharedComponentOverwrite?: SharedComponentOverwrite
             componentOverwrite?: ComponentOverwrite
         }
         export interface PaletteModeProvider {
@@ -271,12 +277,7 @@ export namespace SocialNetworkUI {
             start(signal: AbortSignal): void
         }
         export interface ComponentOverwrite {
-            InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps, InjectedDialogClassKey>
             RenderFragments?: RenderFragmentsContextType
-        }
-        export interface ComponentOverwriteConfig<Props extends { classes?: any }, Classes extends string> {
-            classes?: () => { classes: Partial<ClassNameMap<Classes>> }
-            props?: (props: Props) => Props
         }
         export interface I18NOverwrite {
             [namespace: string]: I18NOverwriteNamespace

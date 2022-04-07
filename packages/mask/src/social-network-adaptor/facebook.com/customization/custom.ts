@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { SubscriptionFromValueRef } from '@masknet/shared-base'
 import type { SocialNetworkUI } from '../../../social-network'
-import { fromRGB, isDark, shade, toRGB } from '../../../utils/theme-tools'
+import { fromRGB, isDark, shade, toRGB } from '../../../utils/theme'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))
