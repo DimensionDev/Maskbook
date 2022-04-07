@@ -21,6 +21,7 @@ export interface SecurityMessage {
 }
 
 const percentageToNumber = (value?: string) => parseInt((value ?? '').replace('%', '')) * 100
+const isUnset = (name: keyof TokenSecurity) => (info: TokenSecurity) => info[name] === undefined
 
 export const SecurityMessages: SecurityMessage[] = [
     // open source
@@ -30,7 +31,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_open_source === '1',
         titleKey: 'risk_contract_source_code_verified_title',
         messageKey: 'risk_contract_source_code_verified_body',
-        shouldHide: (info: TokenSecurity) => info.is_open_source === undefined,
+        shouldHide: isUnset('is_open_source'),
     },
     {
         type: SecurityType.Contract,
@@ -38,7 +39,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_open_source === '0',
         titleKey: 'risk_contract_source_code_not_verified_title',
         messageKey: 'risk_contract_source_code_not_verified_body',
-        shouldHide: (info: TokenSecurity) => info.is_open_source === undefined,
+        shouldHide: isUnset('is_open_source'),
     },
     // proxy
     {
@@ -47,7 +48,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_proxy === '1',
         titleKey: 'risk_proxy_contract_title',
         messageKey: 'risk_proxy_contract_body',
-        shouldHide: (info: TokenSecurity) => info.is_proxy === undefined,
+        shouldHide: isUnset('is_proxy'),
     },
     {
         type: SecurityType.Contract,
@@ -55,7 +56,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_proxy === '0',
         titleKey: 'risk_no_proxy_title',
         messageKey: 'risk_no_proxy_body',
-        shouldHide: (info: TokenSecurity) => info.is_proxy === undefined,
+        shouldHide: isUnset('is_proxy'),
     },
     // mint
     {
@@ -64,7 +65,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_mintable === '0',
         titleKey: 'risk_no_mint_function_title',
         messageKey: 'risk_no_mint_function_body',
-        shouldHide: (info: TokenSecurity) => info.is_mintable === undefined,
+        shouldHide: isUnset('is_mintable'),
     },
     {
         type: SecurityType.Contract,
@@ -72,7 +73,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_mintable === '1',
         titleKey: 'risk_mint_function_title',
         messageKey: 'risk_mint_function_body',
-        shouldHide: (info: TokenSecurity) => info.is_mintable === undefined,
+        shouldHide: isUnset('is_mintable'),
     },
     // owner change balance
     {
@@ -81,7 +82,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.owner_change_balance === '0',
         titleKey: 'risk_owner_can_not_change_balance_title',
         messageKey: 'risk_owner_can_not_change_balance_body',
-        shouldHide: (info: TokenSecurity) => info.owner_change_balance === undefined,
+        shouldHide: isUnset('owner_change_balance'),
     },
     {
         type: SecurityType.Contract,
@@ -89,7 +90,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.owner_change_balance === '1',
         titleKey: 'risk_owner_change_balance_title',
         messageKey: 'risk_owner_change_balance_body',
-        shouldHide: (info: TokenSecurity) => info.owner_change_balance === undefined,
+        shouldHide: isUnset('owner_change_balance'),
     },
     // can take back ownership
     {
@@ -98,7 +99,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.can_take_back_ownership === '0',
         titleKey: 'risk_no_can_take_back_ownership_title',
         messageKey: 'risk_no_can_take_back_ownership_body',
-        shouldHide: (info: TokenSecurity) => info.can_take_back_ownership === undefined,
+        shouldHide: isUnset('can_take_back_ownership'),
     },
     {
         type: SecurityType.Contract,
@@ -106,7 +107,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.can_take_back_ownership === '1',
         titleKey: 'risk_can_take_back_ownership_title',
         messageKey: 'risk_can_take_back_ownership_body',
-        shouldHide: (info: TokenSecurity) => info.can_take_back_ownership === undefined,
+        shouldHide: isUnset('can_take_back_ownership'),
     },
     // buy tax
     {
@@ -119,7 +120,7 @@ export const SecurityMessages: SecurityMessage[] = [
             rate: `${percentageToNumber(info.buy_tax)}%`,
             quantity: '',
         }),
-        shouldHide: (info: TokenSecurity) => info.buy_tax === undefined,
+        shouldHide: isUnset('buy_tax'),
     },
     {
         type: SecurityType.Transaction,
@@ -132,7 +133,7 @@ export const SecurityMessages: SecurityMessage[] = [
             rate: `${percentageToNumber(info.buy_tax)}%`,
             quantity: '',
         }),
-        shouldHide: (info: TokenSecurity) => info.buy_tax === undefined,
+        shouldHide: isUnset('buy_tax'),
     },
     {
         type: SecurityType.Transaction,
@@ -144,7 +145,7 @@ export const SecurityMessages: SecurityMessage[] = [
             rate: `${percentageToNumber(info.buy_tax)}%`,
             quantity: '',
         }),
-        shouldHide: (info: TokenSecurity) => info.buy_tax === undefined,
+        shouldHide: isUnset('buy_tax'),
     },
     // sell tax
     {
@@ -157,7 +158,7 @@ export const SecurityMessages: SecurityMessage[] = [
             rate: `${percentageToNumber(info.sell_tax)}%`,
             quantity: '',
         }),
-        shouldHide: (info: TokenSecurity) => info.sell_tax === undefined,
+        shouldHide: isUnset('sell_tax'),
     },
     {
         type: SecurityType.Transaction,
@@ -170,7 +171,7 @@ export const SecurityMessages: SecurityMessage[] = [
             rate: `${percentageToNumber(info.sell_tax)}%`,
             quantity: '',
         }),
-        shouldHide: (info: TokenSecurity) => info.sell_tax === undefined,
+        shouldHide: isUnset('sell_tax'),
     },
     {
         type: SecurityType.Transaction,
@@ -182,7 +183,7 @@ export const SecurityMessages: SecurityMessage[] = [
             rate: `${percentageToNumber(info.sell_tax)}%`,
             quantity: '',
         }),
-        shouldHide: (info: TokenSecurity) => info.sell_tax === undefined,
+        shouldHide: isUnset('sell_tax'),
     },
     // honeypot
     {
@@ -191,7 +192,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_honeypot === '0',
         titleKey: 'risk_is_not_honeypot_title',
         messageKey: 'risk_is_not_honeypot_body',
-        shouldHide: (info: TokenSecurity) => info.is_honeypot === undefined,
+        shouldHide: isUnset('is_honeypot'),
     },
     {
         type: SecurityType.Transaction,
@@ -199,7 +200,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_honeypot === '1',
         titleKey: 'risk_is_honeypot_title',
         messageKey: 'risk_is_honeypot_body',
-        shouldHide: (info: TokenSecurity) => info.is_honeypot === undefined,
+        shouldHide: isUnset('is_honeypot'),
     },
     // transfer_pausable
     {
@@ -208,7 +209,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.transfer_pausable === '0',
         titleKey: 'risk_no_code_transfer_pausable_title',
         messageKey: 'risk_no_code_transfer_pausable_title',
-        shouldHide: (info: TokenSecurity) => info.transfer_pausable === undefined,
+        shouldHide: isUnset('transfer_pausable'),
     },
     {
         type: SecurityType.Transaction,
@@ -216,7 +217,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.transfer_pausable === '1',
         titleKey: 'risk_transfer_pausable_title',
         messageKey: 'risk_transfer_pausable_body',
-        shouldHide: (info: TokenSecurity) => info.transfer_pausable === undefined,
+        shouldHide: isUnset('transfer_pausable'),
     },
     // anti whale
     {
@@ -225,7 +226,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_anti_whale === '0',
         titleKey: 'risk_is_no_anti_whale_title',
         messageKey: 'risk_is_no_anti_whale_body',
-        shouldHide: (info: TokenSecurity) => info.is_anti_whale === undefined,
+        shouldHide: isUnset('is_anti_whale'),
     },
     {
         type: SecurityType.Transaction,
@@ -233,7 +234,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_anti_whale === '1',
         titleKey: 'risk_is_anti_whale_title',
         messageKey: 'risk_is_anti_whale_body',
-        shouldHide: (info: TokenSecurity) => info.is_anti_whale === undefined,
+        shouldHide: isUnset('is_anti_whale'),
     },
     // slippage modifiable
     {
@@ -242,7 +243,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.slippage_modifiable === '0',
         titleKey: 'risk_not_slippage_modifiable_title',
         messageKey: 'risk_not_slippage_modifiable_body',
-        shouldHide: (info: TokenSecurity) => info.slippage_modifiable === undefined,
+        shouldHide: isUnset('slippage_modifiable'),
     },
     {
         type: SecurityType.Transaction,
@@ -250,7 +251,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.slippage_modifiable === '1',
         titleKey: 'risk_slippage_modifiable_title',
         messageKey: 'risk_slippage_modifiable_body',
-        shouldHide: (info: TokenSecurity) => info.slippage_modifiable === undefined,
+        shouldHide: isUnset('slippage_modifiable'),
     },
     // black list
     {
@@ -259,7 +260,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_blacklisted === '0',
         titleKey: 'risk_not_is_blacklisted_title',
         messageKey: 'risk_not_is_blacklisted_body',
-        shouldHide: (info: TokenSecurity) => info.is_blacklisted === undefined,
+        shouldHide: isUnset('is_blacklisted'),
     },
     {
         type: SecurityType.Transaction,
@@ -267,7 +268,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_blacklisted === '1',
         titleKey: 'risk_is_blacklisted_title',
         messageKey: 'risk_is_blacklisted_body',
-        shouldHide: (info: TokenSecurity) => info.is_blacklisted === undefined,
+        shouldHide: isUnset('is_blacklisted'),
     },
     // white list
     {
@@ -276,7 +277,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_whitelisted === '0',
         titleKey: 'risk_not_is_whitelisted_title',
         messageKey: 'risk_not_is_whitelisted_body',
-        shouldHide: (info: TokenSecurity) => info.is_whitelisted === undefined,
+        shouldHide: isUnset('is_whitelisted'),
     },
     {
         type: SecurityType.Transaction,
@@ -284,7 +285,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_whitelisted === '1',
         titleKey: 'risk_is_whitelisted_title',
         messageKey: 'risk_is_whitelisted_body',
-        shouldHide: (info: TokenSecurity) => info.is_whitelisted === undefined,
+        shouldHide: isUnset('is_whitelisted'),
     },
     // true token
     {
@@ -293,7 +294,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_true_token === '1',
         titleKey: 'risk_is_true_token_title',
         messageKey: 'risk_is_true_token_body',
-        shouldHide: (info: TokenSecurity) => info.is_true_token === undefined,
+        shouldHide: isUnset('is_true_token'),
     },
     {
         type: SecurityType.Info,
@@ -301,7 +302,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_true_token === '0',
         titleKey: 'risk_not_is_true_token_title',
         messageKey: 'risk_not_is_true_token_body',
-        shouldHide: (info: TokenSecurity) => info.is_true_token === undefined,
+        shouldHide: isUnset('is_true_token'),
     },
     // Airdrop scam
     {
@@ -310,7 +311,7 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_airdrop_scam === '0',
         titleKey: 'risk_is_airdrop_scam_title',
         messageKey: 'risk_is_airdrop_scam_body',
-        shouldHide: (info: TokenSecurity) => info.is_airdrop_scam === undefined,
+        shouldHide: isUnset('is_airdrop_scam'),
     },
     {
         type: SecurityType.Info,
@@ -318,6 +319,6 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => info.is_airdrop_scam === '1',
         titleKey: 'risk_not_is_airdrop_scam_title',
         messageKey: 'risk_not_is_airdrop_scam_body',
-        shouldHide: (info: TokenSecurity) => info.is_airdrop_scam === undefined,
+        shouldHide: isUnset('is_airdrop_scam'),
     },
 ]
