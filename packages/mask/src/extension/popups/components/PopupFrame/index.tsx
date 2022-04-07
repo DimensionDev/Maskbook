@@ -27,7 +27,7 @@ function GlobalCss() {
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        minHeight: 550,
+        minHeight: 560,
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
@@ -45,7 +45,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     return (
         <>
             <GlobalCss />
-            <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto', minHeight: 600, borderRadius: 0 }}>
+            <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto', minHeight: 560, borderRadius: 0 }}>
                 <Box className={classes.container}>
                     {personas.length === 0 && !matchRecovery ? <InitialPlaceholder /> : props.children}
                 </Box>
