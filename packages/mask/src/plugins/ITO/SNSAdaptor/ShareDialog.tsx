@@ -6,7 +6,8 @@ import type { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { getAssetAsBlobURL, useI18N } from '../../../utils'
+import { useI18N } from '../../../utils'
+import { usePoolBackground } from './hooks/usePoolBackground'
 
 const useStyles = makeStyles()((theme) => ({
     shareWrapper: {
@@ -62,7 +63,7 @@ export interface ShareDialogProps extends withClasses<'root'> {
 }
 
 export function ShareDialog(props: ShareDialogProps) {
-    const ShareBackground = getAssetAsBlobURL(new URL('../assets/share-background.jpg', import.meta.url))
+    const { value: ShareBackground } = usePoolBackground()
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const { token, actualSwapAmount, shareSuccessText, onClose } = props
