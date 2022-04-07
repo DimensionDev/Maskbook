@@ -10,7 +10,7 @@ const getNetworkIcon = (id: string) => {
 }
 
 export const TipsSupportedChains = [
-    { name: 'EVM Chain', icon: new URL('./assets/evmChains.png', import.meta.url) },
+    { name: 'EVM Chain', icon: new URL('./assets/evmChains.png', import.meta.url), isEvm: true },
     { name: 'Flow Chain', icon: getNetworkIcon(`${NetworkPluginID.PLUGIN_FLOW}_flow`) },
     { name: 'Solana Chain', icon: getNetworkIcon(`${NetworkPluginID.PLUGIN_SOLANA}_solana`) },
 ]

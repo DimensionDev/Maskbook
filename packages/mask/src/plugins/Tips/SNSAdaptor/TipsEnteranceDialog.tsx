@@ -22,9 +22,9 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: '20px',
     },
     actions: {
-        position: 'sticky',
-        bottom: 0,
-        width: '100%',
+        position: 'absolute',
+        bottom: 16,
+        width: 'calc( 100% - 32px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -77,13 +77,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         )
     }
     return (
-        <InjectedDialog
-            open={open}
-            onClose={() => {
-                clickBack()
-            }}
-            title={bodyView}
-            badgeAction={WalletButton()}>
+        <InjectedDialog open={open} onClose={clickBack} title={bodyView} badgeAction={WalletButton()}>
             <DialogContent className={classes.dContent}>
                 {showAlert && bodyView === BodyViewSteps.main && (
                     <div className={classes.alertBox}>

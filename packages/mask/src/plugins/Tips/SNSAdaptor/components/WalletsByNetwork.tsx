@@ -1,6 +1,5 @@
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { SettingsIcon } from '@masknet/icons'
-import { WalletIcon } from '@masknet/shared'
 import { Typography } from '@mui/material'
 import { WalletCom } from './WalletCom'
 
@@ -55,17 +54,19 @@ export function WalletsByNetwork({ network, toSetting }: WalletsByNetworkProps) 
         <div className={classes.container}>
             <div className={classes.topbar}>
                 <Typography className={classes.commonFlexBox} sx={{ fontWeight: 'bold' }}>
-                    <WalletIcon networkIcon={network.icon} size={24} />
+                    <img style={{ height: 18 }} src={network.icon.toString()} />
                     {network.name}
                 </Typography>
                 <SettingsIcon onClick={toSetting} className={classes.settingIcon} />
             </div>
-            <div className={classes.content}>
-                {(wallets.length &&
-                    wallets.map((x, idx) => {
-                        return <WalletCom key={idx} name={x.name} address={x.address} isDefault={x.isDefault} />
-                    })) || <Typography className={classes.empty}>No connected or verified wallets.</Typography>}
-            </div>
+            {network.isEvm && (
+                <div className={classes.content}>
+                    {(wallets.length &&
+                        wallets.map((x, idx) => {
+                            return <WalletCom key={idx} name={x.name} address={x.address} isDefault={x.isDefault} />
+                        })) || <Typography className={classes.empty}>No connected or verified wallets.</Typography>}
+                </div>
+            )}
         </div>
     )
 }
