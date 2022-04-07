@@ -4,7 +4,7 @@ import { useStylesExtends, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
 import type { BannerProps } from '../Welcomes/Banner'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
-import { MaskSharpIcon } from '../../resources/MaskIcon'
+import { MaskSharpIcon, MaskIconInMinds } from '../../resources/MaskIcon'
 import classNames from 'classnames'
 import GuideStep from '../GuideStep'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
@@ -18,6 +18,7 @@ export interface PostDialogHintUIProps extends withClasses<'buttonTransform' | '
     disableGuideTip?: boolean
     size?: number
     tooltip?: TooltipConfigProps
+    iconType?: string
     onHintButtonClicked: () => void
 }
 
@@ -43,6 +44,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const ICON_MAP: Record<string, JSX.Element> = {
+    minds: <MaskIconInMinds />,
+    default: <MaskSharpIcon color="primary" />,
+}
+
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const { t } = useI18N()
     const { size, tooltip, disableGuideTip } = props
@@ -61,7 +67,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
                 size="large"
                 className={classNames(classes.button, classes.iconButton)}
                 onClick={props.onHintButtonClicked}>
-                <MaskSharpIcon size={size} color="primary" />
+                {ICON_MAP?.[props?.iconType ?? 'default']}
             </IconButton>
         </Tooltip>
     )
@@ -96,6 +102,7 @@ export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
     NotSetupYetPromptProps?: Partial<BannerProps>
     size?: number
     disableGuideTip?: boolean
+    iconType?: string
 }
 export function PostDialogHint(props: PostDialogHintProps) {
     const personaConnectStatus = usePersonaConnectStatus()

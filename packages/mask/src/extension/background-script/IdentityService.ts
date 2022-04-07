@@ -58,7 +58,7 @@ import { getCurrentPersonaIdentifier } from './SettingsService'
 import { MaskMessages } from '../../utils'
 import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
-import { bindProof } from '@masknet/web3-providers'
+import { NextIDProof } from '@masknet/web3-providers'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -406,7 +406,7 @@ export async function detachProfileWithNextID(
         proofLocation?: string
     },
 ) {
-    await bindProof(uuid, personaPublicKey, NextIDAction.Delete, platform, identity, createdAt, {
+    await NextIDProof.bindProof(uuid, personaPublicKey, NextIDAction.Delete, platform, identity, createdAt, {
         signature: options?.signature,
     })
     MaskMessages.events.ownProofChanged.sendToAll(undefined)

@@ -163,10 +163,7 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                         setIframe()
                     }}
                     className={
-                        ![
-                            AssetPlayerState.NORMAL,
-                            ...(props.showIframeFromInit ? [AssetPlayerState.INIT] : []),
-                        ].includes(playerState)
+                        ![AssetPlayerState.NORMAL, AssetPlayerState.INIT].includes(playerState)
                             ? classes.hidden
                             : classes.iframe
                     }

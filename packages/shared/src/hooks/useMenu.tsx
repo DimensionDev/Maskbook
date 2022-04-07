@@ -4,6 +4,7 @@ import { useUpdate } from 'react-use'
 
 /** Provide ShadowRootMenu for useMenu in content script. */
 export const useMenuContext = createContext<React.ComponentType<MenuProps>>(Menu)
+
 /**
  * A util hooks for easier to use `<Menu>`s.
  *
@@ -15,6 +16,7 @@ export function useMenu(...elements: Array<JSX.Element | null>) {
 }
 
 export interface useMenuConfig extends Partial<MenuProps> {}
+
 export function useMenuConfig(
     elements: Array<JSX.Element | null>,
     config: useMenuConfig,

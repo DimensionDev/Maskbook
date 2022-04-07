@@ -37,7 +37,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         name: 'mask',
         mode,
         devtool: sourceMapKind,
-        target: ['web', 'es2019'],
+        target: ['web', 'es2021'],
         entry: {},
         experiments: { backCompat: false, asyncWebAssembly: supportWebAssembly },
         cache: {
@@ -88,6 +88,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/plugin-wallet': join(__dirname, '../../plugins/Wallet/src/'),
                     '@masknet/plugin-file-service': join(__dirname, '../../plugins/FileService/src/'),
                     '@masknet/plugin-cyberconnect': join(__dirname, '../../plugins/CyberConnect/src/'),
+                    '@masknet/plugin-go-plus-security': join(__dirname, '../../plugins/GoPlusSecurity/src/'),
                     '@masknet/external-plugin-previewer': join(__dirname, '../../external-plugin-previewer/src/'),
                     '@masknet/public-api': join(__dirname, '../../public-api/src/'),
                     '@masknet/sdk': join(__dirname, '../../mask-sdk/server/'),
@@ -95,6 +96,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/encryption': join(__dirname, '../../encryption/src'),
                     '@masknet/typed-message/dom$': require.resolve('../../typed-message/dom/index.ts'),
                     '@masknet/typed-message$': require.resolve('../../typed-message/base/index.ts'),
+                    '@masknet/plugin-cross-chain-bridge': join(__dirname, '../../plugins/CrossChainBridge/src'),
                     // @masknet/scripts: insert-here
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
@@ -145,20 +147,21 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                                 syntax: 'typescript',
                                 dynamicImport: true,
                                 tsx: true,
-                                importAssertions: true,
                             },
-                            target: 'es2019',
+                            target: 'es2021',
                             externalHelpers: true,
                             transform: {
                                 react: {
                                     runtime: 'automatic',
-                                    useBuiltins: true,
                                     refresh: reactRefresh && {
                                         refreshReg: '$RefreshReg$',
                                         refreshSig: '$RefreshSig$',
                                         emitFullSignatures: true,
                                     },
                                 },
+                            },
+                            experimental: {
+                                keepImportAssertions: true,
                             },
                         },
                     },
@@ -241,12 +244,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         },
         output: {
             environment: {
-                arrowFunction: true,
-                const: true,
-                destructuring: true,
-                forOf: true,
                 module: false,
-                bigIntLiteral: true,
                 // Our iOS App doesn't support dynamic import (it requires a heavy post-build time transform).
                 dynamicImport: !(runtime.architecture === 'app' && runtime.engine === 'safari'),
             },
