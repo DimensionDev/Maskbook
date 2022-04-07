@@ -6,10 +6,13 @@ import { NextIdPage } from '../components/NextIdPage'
 import { PostTipButton, TipTaskManager } from '../components/Tip'
 import { PLUGIN_ID } from '../constants'
 import { RootContext } from '../contexts'
+import { setupStorage, storageDefaultValue } from '../storage'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init() {},
+    init(signal, context) {
+        setupStorage(context.createKVStorage('memory', storageDefaultValue))
+    },
     ProfileTabs: [
         {
             ID: `${PLUGIN_ID}_tabContent`,

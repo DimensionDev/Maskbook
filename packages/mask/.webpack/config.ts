@@ -96,6 +96,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/encryption': join(__dirname, '../../encryption/src'),
                     '@masknet/typed-message/dom$': require.resolve('../../typed-message/dom/index.ts'),
                     '@masknet/typed-message$': require.resolve('../../typed-message/base/index.ts'),
+                    '@masknet/plugin-cross-chain-bridge': join(__dirname, '../../plugins/CrossChainBridge/src'),
                     // @masknet/scripts: insert-here
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
