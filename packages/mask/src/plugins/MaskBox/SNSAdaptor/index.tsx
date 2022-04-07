@@ -33,19 +33,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RenderEntryComponent({ disabled }) {
                 return (
                     <ApplicationEntry
-                        title="Mask Bridge"
-                        disabled={disabled}
-                        icon={new URL('../assets/bridge.png', import.meta.url).toString()}
-                        onClick={() => openWindow('https://bridge.mask.io/#/')}
-                    />
-                )
-            },
-            defaultSortingPriority: 5,
-        },
-        {
-            RenderEntryComponent({ disabled }) {
-                return (
-                    <ApplicationEntry
                         title="MaskBox"
                         disabled={disabled}
                         icon={new URL('../assets/mask_box.png', import.meta.url).toString()}
