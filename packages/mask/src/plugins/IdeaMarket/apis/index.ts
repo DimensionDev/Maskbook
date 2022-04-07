@@ -33,7 +33,6 @@ export async function fetchIdeaToken(marketName: string, tokenName: string) {
 
 export async function fetchAllTokens(searchTerm: string, page: number, filters: string[]) {
     const rowsPerPage = 20
-    console.log(searchTerm)
 
     const body = {
         query: `query IdeaToken($searchTerm: String!, $rowsPerPage: Int!, $skip: Int!, $filters: [String!]!) {
@@ -81,6 +80,7 @@ export async function fetchUserTokensBalances(holder: string) {
                     id
                     name
                     market {
+                        id
                         name
                     }
                     latestPricePoint {
@@ -101,7 +101,7 @@ export async function fetchUserTokensBalances(holder: string) {
         method: 'POST',
     })
 
-    const res = (await response.json())?.data
+    const res = (await response.json())?.data.ideaTokenBalances
 
     return res
 }
@@ -116,7 +116,6 @@ export async function fetchTwitterLookup(token: IdeaToken) {
         },
     )
     const res = (await response.json())?.data
-    console.log('twitter lookup: ', res)
 
     return res
 }

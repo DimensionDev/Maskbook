@@ -2,14 +2,16 @@ import Table from '@mui/material/Table'
 import TableContainer from '@mui/material/TableContainer'
 import Paper from '@mui/material/Paper'
 import { makeStyles } from '@masknet/theme'
-import { Button, Grid, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { Avatar, Button, Grid, Link, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { useFetchUserTokens } from '../hooks/useFetchUserTokens'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { LoadingAnimation } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { leftShift } from '@masknet/web3-shared-base'
 import type { UserIdeaTokenBalance } from '../types'
-import { BASE_URL } from '../constants'
+import { BASE_URL, TWITTER_BASE_URL } from '../constants'
+import { UrlIcon } from '../icons/UrlIcon'
+import { urlWithoutProtocol } from '../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -22,14 +24,21 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(8, 0),
         },
         actionButtons: {
-            width: 96,
+            // width: 96,
         },
         name: {
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
+            maxWidth: '100%',
+            whiteSpace: 'nowrap',
+            '& p': {
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+            },
         },
         nameHeader: {
             width: 200,
+        },
+        sellHeader: {
+            width: 70,
         },
         market: {
             color: 'rgba(8,87,224,1)',
@@ -40,6 +49,24 @@ const useStyles = makeStyles()((theme) => {
                 backgroundColor: theme.palette.background.default,
             },
         },
+        pofileAvatar: {
+            float: 'left',
+            marginTop: theme.spacing(1.1),
+        },
+        avatar: {
+            marginRight: theme.spacing(0.8),
+            marginLeft: theme.spacing(0.1),
+            width: 27,
+            height: 27,
+        },
+        url: {
+            marginRight: theme.spacing(0.7),
+            width: 30,
+            height: 30,
+        },
+        nameCellContainer: {
+            width: '100%',
+        },
     }
 })
 
@@ -47,8 +74,7 @@ export function AccountView() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const account = useAccount()
-    const { value, error, loading } = useFetchUserTokens(account)
-    const userTokenBalances = value?.ideaTokenBalances
+    const { value: userTokenBalances, error, loading } = useFetchUserTokens(account)
 
     if (loading) {
         return (
@@ -58,7 +84,7 @@ export function AccountView() {
         )
     }
 
-    if (error || !value) {
+    if (error) {
         return (
             <Typography className={classes.empty} color="textPrimary">
                 {t('plugin_ideamarket_smthg_wrong')}
@@ -66,7 +92,7 @@ export function AccountView() {
         )
     }
 
-    if (value?.ideaTokenBalances.length === 0) {
+    if (userTokenBalances?.length === 0) {
         return (
             <Typography className={classes.empty} color="textPrimary">
                 {t('no_data')}
@@ -80,16 +106,18 @@ export function AccountView() {
                 <Table sx={{ tableLayout: 'fixed', width: '100%' }} size="small" aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.nameHeader} key="name">
-                                Idea
+                            <TableCell key="name" className={classes.nameHeader}>
+                                Name
                             </TableCell>
                             <TableCell key="price">Price</TableCell>
                             <TableCell key="balance">Balance</TableCell>
                             <TableCell key="value">Value</TableCell>
+                            <TableCell key="sell" className={classes.sellHeader} />
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {userTokenBalances.map((balance: UserIdeaTokenBalance) => {
+                        {userTokenBalances?.map((balance: UserIdeaTokenBalance) => {
+                            const token = balance.token
                             const name =
                                 balance.token.name.length > 30
                                     ? balance.token.name.slice(0, 30).concat('...')
@@ -108,29 +136,71 @@ export function AccountView() {
 
                             return (
                                 <TableRow className={classes.row} key={balance.id}>
-                                    <TableCell className={classes.name}>
-                                        <Grid container direction="column">
-                                            <Typography title={balance.token.name}>{name}</Typography>
-                                            <Typography className={classes.market}>
-                                                {balance.token.market.name}
-                                            </Typography>
-                                        </Grid>
+                                    <TableCell>
+                                        <div className={classes.name}>
+                                            <div className={classes.pofileAvatar}>
+                                                {token.twitter ? (
+                                                    <Avatar
+                                                        className={classes.avatar}
+                                                        src={token?.twitter.profile_image_url}
+                                                    />
+                                                ) : (
+                                                    <UrlIcon className={classes.url} />
+                                                )}
+                                            </div>
+                                            {balance.token.market.id === '0x1' ? (
+                                                <Grid>
+                                                    <Typography title={token.twitter ? token.twitter.name : token.name}>
+                                                        {token.twitter?.name} ({token.name})
+                                                    </Typography>
+                                                    {token.twitter ? (
+                                                        <Typography
+                                                            title={`${TWITTER_BASE_URL}/${token.twitter.username}`}
+                                                            className={classes.market}>
+                                                            <Link
+                                                                target="_blank"
+                                                                href={`${TWITTER_BASE_URL}/${token.twitter.username}`}>
+                                                                {TWITTER_BASE_URL}/{token.twitter.username}
+                                                            </Link>
+                                                        </Typography>
+                                                    ) : (
+                                                        <Typography title={token.name} className={classes.market}>
+                                                            <Link
+                                                                target="_blank"
+                                                                href={`${TWITTER_BASE_URL}/${token.name.slice(1)}`}>
+                                                                {TWITTER_BASE_URL}/{token.name.slice(1)}
+                                                            </Link>
+                                                        </Typography>
+                                                    )}
+                                                </Grid>
+                                            ) : (
+                                                <Grid item>
+                                                    <Typography title={token.name}>
+                                                        {urlWithoutProtocol(token.name)}
+                                                    </Typography>
+
+                                                    <Typography title={token.name} className={classes.market}>
+                                                        <Link target="_blank" href={token.name}>
+                                                            {token.name}
+                                                        </Link>
+                                                    </Typography>
+                                                </Grid>
+                                            )}
+                                        </div>
                                     </TableCell>
                                     <TableCell>&#36;{tokenPrice}</TableCell>
                                     <TableCell>{userTokenBalance}</TableCell>
                                     <TableCell>&#36;{totalBalance}</TableCell>
                                     <TableCell className={classes.actionButtons}>
                                         <Grid container alignContent="center" justifyContent="center">
-                                            <Grid item>
-                                                <Button
-                                                    href={`${BASE_URL}/i/${balance.token.id}`}
-                                                    target="_blank"
-                                                    color="primary"
-                                                    size="small"
-                                                    variant="contained">
-                                                    {t('plugin_ideamarket_sell')}
-                                                </Button>
-                                            </Grid>
+                                            <Button
+                                                href={`${BASE_URL}/i/${balance.token.id}`}
+                                                target="_blank"
+                                                color="primary"
+                                                size="small"
+                                                variant="contained">
+                                                {t('plugin_ideamarket_sell')}
+                                            </Button>
                                         </Grid>
                                     </TableCell>
                                 </TableRow>

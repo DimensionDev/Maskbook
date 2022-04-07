@@ -12,7 +12,7 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
             boxShadow: 'none',
             padding: 0,
-            borderRadius: '0px',
+            borderRadius: 0,
         },
         content: {
             width: '100%',
@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             overflow: 'auto',
             maxHeight: 350,
-            borderRadius: 0,
+            borderRadius: 5,
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
@@ -40,6 +40,12 @@ const useStyles = makeStyles()((theme) => {
         tab: {
             minHeight: 'unset',
             fontWeight: '400',
+            '&:nth-child(1)': {
+                borderRadius: '4px 0 0 4px',
+            },
+            '&:nth-child(2)': {
+                borderRadius: ' 0 4px 4px 0',
+            },
         },
         disabledTab: {
             opacity: 0.5,
@@ -47,7 +53,6 @@ const useStyles = makeStyles()((theme) => {
         focusTab: {
             backgroundColor: theme.palette.primary.main,
             color: '#fff !important',
-            borderRadius: 'unset !important',
         },
     }
 })
