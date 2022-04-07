@@ -29,7 +29,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
+import { getTextUILength, useI18N } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants'
 import { sortTokens } from './helpers'
@@ -39,6 +39,7 @@ import { useDestructCallback } from './hooks/useDestructCallback'
 import { useIfQualified } from './hooks/useIfQualified'
 import { usePoolTradeInfo } from './hooks/usePoolTradeInfo'
 import { checkRegionRestrict, decodeRegionCode, useIPRegion } from './hooks/useRegion'
+import { usePoolBackground } from './hooks/usePoolBackground'
 import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
@@ -233,7 +234,7 @@ export function ITO(props: ITO_Props) {
     const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)
 
     // assets
-    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-background.jpg', import.meta.url))
+    const { value: PoolBackground } = usePoolBackground()
 
     const { pid, payload } = props
     const { regions: defaultRegions = '-' } = props.payload
@@ -853,7 +854,7 @@ export function ITO(props: ITO_Props) {
 
 export function ITO_Loading() {
     const { t } = useI18N()
-    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
+    const { value: PoolBackground } = usePoolBackground()
     const { classes } = useStyles({})
     return (
         <div>
@@ -872,7 +873,7 @@ export function ITO_Loading() {
 export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }) {
     const { t } = useI18N()
     const { classes } = useStyles({})
-    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
+    const { value: PoolBackground } = usePoolBackground()
     return (
         <Card
             className={classNames(classes.root, classes.loadingWrap)}
