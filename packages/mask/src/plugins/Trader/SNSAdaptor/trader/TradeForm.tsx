@@ -98,9 +98,8 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         },
         button: {
             fontSize: 18,
-            lineHeight: '22px',
+            lineHeight: 1,
             fontWeight: 600,
-            padding: '13px 0',
             borderRadius: isDashboard ? 8 : 24,
             height: 'auto',
             marginTop: '0px !important',
