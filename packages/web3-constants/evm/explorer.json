@@ -41,6 +41,6 @@
         "Aurora": "https://explorer.mainnet.aurora.dev/api",
         "Aurora_Testnet": "https://explorer.testnet.aurora.dev/api",
         "Conflux": "",
-        "Moonbeam": "https://api-moonbeam.moonscan.io/api?"
+        "Moonbeam": "https://api-moonbeam.moonscan.io/api"
     }
 }
