@@ -100,7 +100,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         }
     }
 
-    async uploadUserAvatar(image: File | Blob) {
+    async uploadUserAvatar(screenName: string, image: File | Blob) {
         // INIT
         const initURL = `${UPLOAD_AVATAR_URL}?command=INIT&total_bytes=${image.size}&media_type=${encodeURIComponent(
             image.type,
@@ -137,7 +137,40 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             credentials: 'include',
         })
 
-        return data
+        const { bearerToken, queryToken, csrfToken } = await getTokens()
+        if (!bearerToken || !queryToken || !csrfToken) return
+        const updateProfileImageURL = 'https://twitter.com/i/api/1.1/account/update_profile_image.json'
+        const response = await fetch(
+            urlcat(updateProfileImageURL, {
+                media_id: data.media_id_string,
+                image: '',
+                include_profile_interstitial_type: 1,
+                include_blocking: 1,
+                include_blocked_by: 1,
+                include_followed_by: 1,
+                include_want_retweets: 1,
+                include_mute_edge: 1,
+                include_can_dm: 1,
+                include_can_media_tag: 1,
+                include_ext_has_nft_avatar: 1,
+                skip_status: 1,
+                return_user: true,
+            }),
+            {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    authorization: `Bearer ${bearerToken}`,
+                    'x-csrf-token': csrfToken,
+                    'content-type': 'application/json',
+                    'x-twitter-auth-type': 'OAuth2Session',
+                    'x-twitter-active-user': 'yes',
+                    referer: `https://twitter.com/${screenName}`,
+                },
+            },
+        )
+
+        return response.json()
     }
 }
 

@@ -471,6 +471,7 @@ export namespace TwitterBaseAPI {
               }
             | undefined
         >
+        uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<any>
     }
 }
 

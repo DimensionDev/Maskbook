@@ -1,21 +1,20 @@
-import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
+import { useAccount, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { ImageIcon, ReversedAddress } from '@masknet/shared'
 import { NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, ShadowRootMenu, useStylesExtends } from '@masknet/theme'
-import { queryExistedBindingByPersona } from '@masknet/web3-providers'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, isSameAddress } from '@masknet/web3-shared-evm'
 import { Button, CircularProgress, Divider, Link, ListItemIcon, MenuItem, Stack, Typography } from '@mui/material'
 import { first } from 'lodash-unified'
 import { useCallback, useState } from 'react'
 import { ExternalLink } from 'react-feather'
-import { useAsyncRetry } from 'react-use'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
-import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
-import Services from '../../../extension/service'
 import { CopyIconButton } from '../../NextID/components/CopyIconButton'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { CheckedIcon, UncheckIcon } from '../assets/checked'
 import { WalletSettingIcon } from '../assets/setting'
+import { usePersonas } from '../hooks/usePersonas'
+import { CheckedIcon, UncheckIcon } from '../assets/checked'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { WalletMessages } from '@masknet/plugin-wallet'
+
 const useStyles = makeStyles()(() => ({
     root: {},
     wrapper: {
@@ -39,41 +38,29 @@ export function AddressNames(props: AddressNamesProps) {
     const { onChange } = props
     const { Utils } = useWeb3State() ?? {}
     const classes = useStylesExtends(useStyles(), props)
-    const currentIdentity = useCurrentVisitingIdentity()
-    const personaIdentity = useLastRecognizedIdentity()
-    const currentConnectedPersona = usePersonaConnectStatus()
-    const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
-        if (!currentIdentity) return
-        return Services.Identity.queryPersonaByProfile(currentIdentity.identifier)
-    }, [currentIdentity, currentConnectedPersona.hasPersona])
+    const account = useAccount()
+    const { binds, isOwner, loading } = usePersonas()
 
-    const isOwn = personaIdentity.identifier.toText() === currentIdentity.identifier.toText()
-    const {
-        value: bindings,
-        loading,
-        retry: retryQueryBinding,
-    } = useAsyncRetry(async () => {
-        if (!currentPersona) return
-        return queryExistedBindingByPersona(currentPersona.publicHexKey!)
-    }, [currentPersona, isOwn])
-
-    const wallets = bindings?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
+    const wallets = binds?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
     const wallet = first(wallets)
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const onClose = () => setAnchorEl(null)
-    const onOpen = (event: React.MouseEvent<HTMLDivElement>) => setAnchorEl(event.currentTarget)
+    const onOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
 
-    const [selectedWallet, setSelectedWallet] = useState(wallet?.identity)
+    const [selectedWallet, setSelectedWallet] = useState(account)
     const onClick = useCallback((address: string) => {
+        console.log(address)
         onChange(address)
         setSelectedWallet(address)
         onClose()
     }, [])
 
-    // useEffect(() => setSelectedWallet(wallet?.identity), [wallet])
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
 
-    if (loading || loadingPersona) {
+    if (loading) {
         return (
             <div className={classes.root}>
                 <CircularProgress size="small" />
@@ -81,26 +68,51 @@ export function AddressNames(props: AddressNamesProps) {
         )
     }
 
-    console.log(selectedWallet)
-    if (!wallets?.length || !wallet) return null
+    if (!account && (!wallets?.length || !wallet)) return null
 
     return (
-        <Stack className={classes.root} onClick={onOpen}>
-            <Stack direction="row" alignItems="center" justifyContent="center" className={classes.wrapper}>
-                <WalletUI address={wallet.identity} />
+        <Stack className={classes.root}>
+            <Stack
+                onClick={onOpen}
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+                className={classes.wrapper}>
+                <WalletUI address={selectedWallet} />
                 <ArrowDropDownIcon />
             </Stack>
-            <ShadowRootMenu open={!!anchorEl} anchorEl={anchorEl} onClose={() => setAnchorEl(null)}>
-                {wallets?.map((x) => (
-                    <MenuItem key={x.identity} value={x.identity} onClick={() => onClick(x.identity)}>
-                        <ListItemIcon>
-                            {selectedWallet ? <CheckedIcon style={{ width: 38, height: 38 }} /> : <UncheckIcon />}
-                        </ListItemIcon>
-                        <WalletUI address={x.identity} />
-                        {x.platform === NextIDPlatform.Ethereum && <Button style={{ marginLeft: 16 }}>Change</Button>}
-                    </MenuItem>
-                ))}
+            <ShadowRootMenu open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={onClose} disableRestoreFocus>
+                <MenuItem key={account} value={account} onClick={() => onClick(account)}>
+                    <ListItemIcon>
+                        {selectedWallet === account ? (
+                            <CheckedIcon style={{ width: 38, height: 38 }} />
+                        ) : (
+                            <UncheckIcon />
+                        )}
+                    </ListItemIcon>
+                    <WalletUI address={account} />
+                    {account && (
+                        <Button style={{ marginLeft: 16 }} onClick={openSelectProviderDialog}>
+                            Change
+                        </Button>
+                    )}
+                </MenuItem>
+                {wallets
+                    ?.filter((x) => !isSameAddress(x.identity, account))
+                    .map((x) => (
+                        <MenuItem key={x.identity} value={x.identity} onClick={() => onClick(x.identity)}>
+                            <ListItemIcon>
+                                {selectedWallet === x.identity ? (
+                                    <CheckedIcon style={{ width: 38, height: 38 }} />
+                                ) : (
+                                    <UncheckIcon />
+                                )}
+                            </ListItemIcon>
+                            <WalletUI address={x.identity} />
+                        </MenuItem>
+                    ))}
                 <Divider />
+
                 <MenuItem key="settings">
                     <ListItemIcon>
                         <WalletSettingIcon />
