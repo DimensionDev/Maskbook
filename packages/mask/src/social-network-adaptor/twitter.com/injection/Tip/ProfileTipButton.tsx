@@ -3,8 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useEffect, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { TipButton } from '../../../../plugins/NextID/components/Tip/TipButton'
-import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { useLocationChange } from '../../../../utils/hooks/useLocationChange'
+import { createReactRootShadowed, startWatch, useLocationChange } from '../../../../utils'
 import {
     profileFollowButtonSelector as selector,
     profileMenuButtonSelector as menuButtonSelector,

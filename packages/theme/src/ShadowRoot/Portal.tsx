@@ -54,16 +54,24 @@ export function usePortalShadowRoot(renderer: (container: HTMLElement | undefine
         sheets.map((x) => x.addContainer(shadow))
 
         // This is proved to be important to the correct portal orders...
-        container.appendChild = (child) => {
-            if (!root.parentElement) portal.appendChild(root)
-            Node.prototype.appendChild.call(container, child)
-            return child
-        }
-        container.removeChild = (child) => {
-            Node.prototype.removeChild.call(container, child)
-            if (container.childElementCount === 0) portal.removeChild(root)
-            return child
-        }
+        Object.defineProperty(container, 'appendChild', {
+            configurable: true,
+            writable: true,
+            value: (child: Node) => {
+                if (!root.parentElement) portal.appendChild(root)
+                Node.prototype.appendChild.call(container, child)
+                return child
+            },
+        })
+        Object.defineProperty(container, 'removeChild', {
+            configurable: true,
+            writable: true,
+            value: (child: Node) => {
+                Node.prototype.removeChild.call(container, child)
+                if (container.childElementCount === 0) portal.removeChild(root)
+                return child
+            },
+        })
 
         return { container }
     })

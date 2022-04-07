@@ -17,7 +17,8 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     },
     "MASK_POOL_ADDRESS": {
         "Mainnet": "",
@@ -37,6 +38,7 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     }
 }

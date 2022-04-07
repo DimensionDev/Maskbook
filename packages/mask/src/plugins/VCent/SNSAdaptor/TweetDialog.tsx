@@ -1,7 +1,7 @@
 import { first } from 'lodash-unified'
 import { Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { isDarkTheme } from '../../../utils/theme-tools'
+import { isDarkTheme } from '../../../utils/theme'
 import { ETHIcon } from '../icons/ETH'
 import { VCentIconLight, VCentIconDark } from '../icons/VCent'
 import { VALUABLES_VCENT_URL } from '../constants'
