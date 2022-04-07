@@ -23,7 +23,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     </>
                 )
             },
-            defaultSortingPriority: 2,
+            defaultSortingPriority: 4,
         },
     ],
 }
