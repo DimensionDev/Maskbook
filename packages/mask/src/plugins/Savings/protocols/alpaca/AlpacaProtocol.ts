@@ -6,6 +6,7 @@ import { ChainId, createContract, FungibleTokenDetailed } from '@masknet/web3-sh
 import { ProtocolType, SavingsProtocol } from '../../types'
 import type { AlpacaVault } from '@masknet/web3-contracts/types/AlpacaVault'
 import AlpacaVaultABI from '@masknet/web3-contracts/abis/AlpacaVault.json'
+import { SUMMARY_API } from './pairs'
 
 function createAlpacaContract(address: string, web3: Web3) {
     return createContract<AlpacaVault>(web3, address, AlpacaVaultABI as AbiItem[])
@@ -54,7 +55,7 @@ export class AlpacaProtocol implements SavingsProtocol {
 
     public async updateApr(chainId: ChainId, web3: Web3) {
         try {
-            const req = await fetch('https://alpaca-static-api.alpacafinance.org/bsc/v1/landing/summary.json')
+            const req = await fetch(SUMMARY_API)
             const response = await req.json()
             const { lendingPools } = response.data
             const summary = lendingPools.filter((_: any) => _.baseToken.address === this.bareToken.address)
