@@ -22,7 +22,7 @@ export const PhoneField = memo(({ toStep }: StepCommonProps) => {
 
     const handleClick = useCallback(() => {
         if (!phoneRegexp.test(account)) return
-        toStep(ValidationCodeStep.AccountValidation, { account: account, type: AccountType.phone })
+        toStep(ValidationCodeStep.AccountValidation, { account, type: AccountType.phone })
     }, [account])
 
     return (

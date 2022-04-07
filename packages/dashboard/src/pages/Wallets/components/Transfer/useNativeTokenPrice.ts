@@ -19,9 +19,7 @@ export function useNativeTokenPrice() {
 
     const trackPrice = useCallback(() => {
         if (!coinId) return
-        getNativeTokenPrice(coinId, USD).then((result) => {
-            setPrice(result[coinId][USD])
-        })
+        getNativeTokenPrice(coinId, USD).then((result) => setPrice(result[coinId][USD]))
     }, [coinId])
 
     useEffect(trackPrice, [trackPrice])
