@@ -297,10 +297,12 @@
         "cryptoartai",
         "csrftoken",
         "cusd",
+        "dczs",
         "defi",
         "deletable",
         "devnet",
         "drawed",
+        "eaaaaa",
         "energi",
         "enjin",
         "ethjs",
@@ -322,6 +324,7 @@
         "horiz",
         "huobi",
         "husd",
+        "iakaw",
         "ideamarket",
         "idiv",
         "ifadmin",
@@ -396,7 +399,8 @@
         "wnative",
         "xdescribe",
         "xsushi",
-        "xtest"
+        "xtest",
+        "zycy"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

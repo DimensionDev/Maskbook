@@ -23,8 +23,12 @@ const useStyles = makeStyles()((theme) => {
             height: '100%',
             padding: theme.spacing(8, 0),
         },
-        actionButtons: {
-            // width: 96,
+        tableContainer: {
+            width: '100%',
+        },
+        table: {
+            tableLayout: 'fixed',
+            width: '100%',
         },
         name: {
             maxWidth: '100%',
@@ -49,7 +53,7 @@ const useStyles = makeStyles()((theme) => {
                 backgroundColor: theme.palette.background.default,
             },
         },
-        pofileAvatar: {
+        profileAvatar: {
             float: 'left',
             marginTop: theme.spacing(1.1),
         },
@@ -102,16 +106,16 @@ export function AccountView() {
 
     return (
         <>
-            <TableContainer component={Paper} sx={{ width: '100%' }}>
-                <Table sx={{ tableLayout: 'fixed', width: '100%' }} size="small" aria-label="simple table">
+            <TableContainer component={Paper} className={classes.tableContainer}>
+                <Table className={classes.table} size="small" aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell key="name" className={classes.nameHeader}>
-                                Name
+                                {t('plugin_ideamarket_name')}
                             </TableCell>
-                            <TableCell key="price">Price</TableCell>
-                            <TableCell key="balance">Balance</TableCell>
-                            <TableCell key="value">Value</TableCell>
+                            <TableCell key="price">{t('plugin_ideamarket_price')}</TableCell>
+                            <TableCell key="balance">{t('plugin_ideamarket_balance')}</TableCell>
+                            <TableCell key="value">{t('plugin_ideamarket_value')}</TableCell>
                             <TableCell key="sell" className={classes.sellHeader} />
                         </TableRow>
                     </TableHead>
@@ -138,7 +142,7 @@ export function AccountView() {
                                 <TableRow className={classes.row} key={balance.id}>
                                     <TableCell>
                                         <div className={classes.name}>
-                                            <div className={classes.pofileAvatar}>
+                                            <div className={classes.profileAvatar}>
                                                 {token.twitter ? (
                                                     <Avatar
                                                         className={classes.avatar}
@@ -191,7 +195,7 @@ export function AccountView() {
                                     <TableCell>&#36;{tokenPrice}</TableCell>
                                     <TableCell>{userTokenBalance}</TableCell>
                                     <TableCell>&#36;{totalBalance}</TableCell>
-                                    <TableCell className={classes.actionButtons}>
+                                    <TableCell>
                                         <Grid container alignContent="center" justifyContent="center">
                                             <Button
                                                 href={`${BASE_URL}/i/${balance.token.id}`}
