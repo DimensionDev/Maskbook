@@ -103,7 +103,7 @@ const useStyles = makeStyles()((theme) => {
             textTransform: 'unset',
             padding: theme.spacing(0.7),
         },
-        pofileAvatar: {
+        profileAvatar: {
             float: 'left',
             marginTop: theme.spacing(1.1),
         },
@@ -191,7 +191,7 @@ export function ListingsView() {
     const renderNameCell = (params: GridRenderCellParams<String>) => {
         return (
             <div className={classes.nameCellContainer}>
-                <Grid className={classes.pofileAvatar}>
+                <Grid className={classes.profileAvatar}>
                     {params.row.twitter ? (
                         <Avatar className={classes.avatar} src={params.row.twitter.profile_image_url} />
                     ) : (
