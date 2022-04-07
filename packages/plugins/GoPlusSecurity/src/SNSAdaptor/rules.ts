@@ -5,7 +5,7 @@ import parseInt from 'lodash-es/parseInt'
 export type I18nOptions = 'rate' | 'quantity'
 
 export interface SecurityMessage {
-    type: 'contract-security' | 'transaction-security'
+    type: 'contract-security' | 'transaction-security' | 'info-security'
     level: SecurityMessageLevel
     condition(info: TokenSecurity): boolean
     titleKey: keyof ReturnType<typeof useI18N>
@@ -279,5 +279,39 @@ export const SecurityMessages: SecurityMessage[] = [
         titleKey: 'risk_is_whitelisted_title',
         messageKey: 'risk_is_whitelisted_body',
         shouldHide: (info: TokenSecurity) => info.is_whitelisted === undefined,
+    },
+    // true token
+    {
+        type: 'info-security',
+        level: SecurityMessageLevel.Safe,
+        condition: (info: TokenSecurity) => info.is_true_token === '1',
+        titleKey: 'risk_is_true_token_title',
+        messageKey: 'risk_is_true_token_body',
+        shouldHide: (info: TokenSecurity) => info.is_true_token === undefined,
+    },
+    {
+        type: 'info-security',
+        level: SecurityMessageLevel.High,
+        condition: (info: TokenSecurity) => info.is_true_token === '0',
+        titleKey: 'risk_not_is_true_token_title',
+        messageKey: 'risk_not_is_true_token_body',
+        shouldHide: (info: TokenSecurity) => info.is_true_token === undefined,
+    },
+    // Airdrop scam
+    {
+        type: 'info-security',
+        level: SecurityMessageLevel.Safe,
+        condition: (info: TokenSecurity) => info.is_airdrop_scam === '0',
+        titleKey: 'risk_is_airdrop_scam_title',
+        messageKey: 'risk_is_airdrop_scam_body',
+        shouldHide: (info: TokenSecurity) => info.is_airdrop_scam === undefined,
+    },
+    {
+        type: 'info-security',
+        level: SecurityMessageLevel.High,
+        condition: (info: TokenSecurity) => info.is_airdrop_scam === '1',
+        titleKey: 'risk_not_is_airdrop_scam_title',
+        messageKey: 'risk_not_is_airdrop_scam_body',
+        shouldHide: (info: TokenSecurity) => info.is_airdrop_scam === undefined,
     },
 ]
