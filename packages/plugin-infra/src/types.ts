@@ -727,6 +727,8 @@ export enum PluginId {
     FileService = 'com.maskbook.fileservice',
     CyberConnect = 'me.cyberconnect.app',
     IdeaMarket = 'io.ideamarket',
+    GoPlusSecurity = 'io.gopluslabs.security',
+    CrossChainBridge = 'io.mask.cross-chain-bridge',
     // @masknet/scripts: insert-here
 }
 
