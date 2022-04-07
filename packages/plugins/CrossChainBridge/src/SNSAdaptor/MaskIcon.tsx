@@ -8,6 +8,7 @@ export function ArbitrumOneBridgeIcon({ size = 36 }) {
         />
     )
 }
+
 export function BobaBridgeIcon({ size = 36 }) {
     return (
         <img
@@ -18,6 +19,7 @@ export function BobaBridgeIcon({ size = 36 }) {
         />
     )
 }
+
 export function CBridgeIcon({ size = 36 }) {
     return (
         <img
@@ -28,6 +30,7 @@ export function CBridgeIcon({ size = 36 }) {
         />
     )
 }
+
 export function PolygonBridgeIcon({ size = 36 }) {
     return (
         <img
@@ -38,6 +41,7 @@ export function PolygonBridgeIcon({ size = 36 }) {
         />
     )
 }
+
 export function RainbowBridgeIcon({ size = 36 }) {
     return (
         <img
