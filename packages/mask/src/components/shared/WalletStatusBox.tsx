@@ -150,10 +150,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
         }
     }, [chainId, providerType, setWalletConnectDialog])
 
-    const onChange = useCallback(() => {
-        openSelectProviderDialog()
-    }, [openSelectProviderDialog])
-
     return account ? (
         <section className={classNames(classes.currentAccount, props.isDashboard ? classes.dashboardBackground : '')}>
             <WalletIcon
@@ -224,7 +220,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                         className={classNames(classes.actionButton)}
                         variant="contained"
                         size="small"
-                        onClick={onChange}>
+                        onClick={openSelectProviderDialog}>
                         {t('wallet_status_button_change')}
                     </Button>
                 </section>
@@ -237,7 +233,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 color="primary"
                 variant="contained"
                 size="small"
-                onClick={onChange}>
+                onClick={openSelectProviderDialog}>
                 {t('plugin_wallet_on_connect')}
             </Button>
         </section>

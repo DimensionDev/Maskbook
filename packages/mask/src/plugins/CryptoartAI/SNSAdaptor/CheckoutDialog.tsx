@@ -91,16 +91,12 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const selectedPaymentToken = first(paymentTokens)
     const { token, balance } = useFungibleTokenWatched(selectedPaymentToken)
 
-    const [purchaseState, purchaseCallback, resetCallback] = usePurchaseCallback(
+    const [purchaseState, onCheckout, resetCallback] = usePurchaseCallback(
         asset?.value?.editionNumber ?? '0',
         asset?.value?.priceInWei > 0
             ? asset?.value?.priceInWei
             : new BigNumber(0.01).shiftedBy(selectedPaymentToken?.decimals ?? 18).toNumber(),
     )
-
-    const onCheckout = useCallback(() => {
-        purchaseCallback()
-    }, [purchaseCallback])
 
     const assetLink = resolveAssetLinkOnCryptoartAI(asset?.value?.creator?.username, asset?.value?.token_id, chainId)
     const shareText = token
