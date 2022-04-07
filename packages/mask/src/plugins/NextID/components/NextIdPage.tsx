@@ -1,6 +1,6 @@
 import { NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { queryExistedBindingByPersona, queryIsBound } from '@masknet/web3-providers'
+import { NextIDProof } from '@masknet/web3-providers'
 import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
@@ -58,12 +58,13 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
-    const { reset, isVerified, action } = useNextIDConnectStatus()
+    const { reset, isVerified } = useNextIDConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const isOwn = currentProfileIdentifier.identifier.toText() === visitingPersonaIdentifier.identifier.toText()
+    const tipable = !isOwn
 
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
@@ -83,7 +84,11 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
 
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
         if (!currentPersona?.publicHexKey) return
-        return queryIsBound(currentPersona.publicHexKey, platform, visitingPersonaIdentifier.identifier.userId)
+        return NextIDProof.queryIsBound(
+            currentPersona.publicHexKey,
+            platform,
+            visitingPersonaIdentifier.identifier.userId,
+        )
     }, [isOwn, currentPersona, visitingPersonaIdentifier, isVerified])
 
     const {
@@ -92,7 +97,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
         retry: retryQueryBinding,
     } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return queryExistedBindingByPersona(currentPersona.publicHexKey!)
+        return NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey!)
     }, [currentPersona, isOwn])
 
     const onVerify = async () => {
@@ -149,7 +154,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
                         {bindings.proofs.map((x) => (
                             <BindingItem
                                 deletable={isOwn}
-                                tipable={!isOwn}
+                                tipable={tipable}
                                 key={x.identity}
                                 platform={x.platform}
                                 identity={x.identity}

@@ -5,7 +5,7 @@ import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useAct
 import Services from '../../extension/service'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { MaskSharpIcon } from '../../resources/MaskIcon'
+import { MaskIconInMinds, MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
@@ -21,6 +21,12 @@ interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'acti
               defaultValue: string
               onChange(nextValue: string): void
           }
+    iconType?: string
+}
+
+const ICON_MAP: Record<string, JSX.Element> = {
+    minds: <MaskIconInMinds />,
+    default: <MaskSharpIcon color="primary" />,
 }
 const useStyles = makeStyles()({
     buttonText: {
@@ -38,7 +44,7 @@ export function BannerUI(props: BannerUIProps) {
 
     return props.nextStep === 'hidden' ? null : (
         <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
-            <MaskSharpIcon color="primary" />
+            {ICON_MAP?.[props?.iconType ?? 'default']}
         </IconButton>
     )
 }

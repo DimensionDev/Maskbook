@@ -1,5 +1,5 @@
 import {
-    usePluginIDContext,
+    useCurrentWeb3NetworkPluginID,
     useActivatedPluginSNSAdaptor_Web3Supported,
     useActivatedPluginsSNSAdaptor,
     Plugin,
@@ -28,7 +28,7 @@ export const PluginEntryRender = memo(
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
         const pluginField = usePluginI18NField()
         const chainId = useChainId()
-        const pluginID = usePluginIDContext()
+        const pluginID = useCurrentWeb3NetworkPluginID()
         const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_Web3Supported(chainId, pluginID)
         const result = [...useActivatedPluginsSNSAdaptor('any')]
             .sort((plugin) => {
