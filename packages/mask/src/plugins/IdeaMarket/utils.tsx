@@ -1,5 +1,4 @@
-import { BASE_URL, ideaMarketPathnameRegexMatcher } from './constants'
-import { MarketAvailable } from './types'
+import { ideaMarketPathnameRegexMatcher } from './constants'
 
 export function checkUrl(url: string): boolean {
     return url.includes('ideamarket.io')
@@ -46,15 +45,6 @@ export function getMarketFromLink(name: string) {
 
 export function urlWithoutProtocol(url: string) {
     return (url = url.replace(/^(http|https)?:\/\//, ''))
-}
-
-export function composeIdeaURL(marketName: string, ideaName: string) {
-    if (marketName === MarketAvailable.Url)
-        return `${BASE_URL}/i/${marketName.toLowerCase()}/${urlWithoutProtocol(ideaName)}`
-    if (marketName === MarketAvailable.Twitter)
-        return `${BASE_URL}/i/${marketName.toLowerCase()}/${ideaName.substring(1)}`
-
-    return `${BASE_URL}/i/${marketName.toLowerCase()}/${ideaName}`
 }
 
 export function formatWithOperator(value: string | number): string {
