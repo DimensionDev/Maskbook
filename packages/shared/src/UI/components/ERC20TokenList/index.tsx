@@ -19,6 +19,7 @@ import {
     useNativeTokenDetailed,
     useTrustedERC20Tokens,
 } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
@@ -64,7 +65,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     } = props
 
     const { ERC20 } = useTokenListConstants(chainId)
-    const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
+    const { value: erc20TokensDetailed = EMPTY_LIST, loading: erc20TokensDetailedLoading } =
         useERC20TokensDetailedFromTokenLists(
             ERC20,
             keyword,
