@@ -12,7 +12,11 @@ export const Container = memo(function Container(props) {
 })
 
 export const Link = memo(function Anchor(props: RenderFragmentsContextType.LinkProps) {
-    return <MaterialLink href={props.href} children={props.children} />
+    let text = props.children
+    if (text.startsWith('https://mask.io')) {
+        text = 'Mask.io'
+    }
+    return <MaterialLink href={props.href} children={text} />
 })
 
 export function useTagEnhancer(kind: 'hash' | 'cash', content: string) {

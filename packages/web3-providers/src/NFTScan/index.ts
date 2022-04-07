@@ -1,4 +1,11 @@
-import { ChainId, createERC721ContractDetailed, createERC721Token, resolveResourceLink } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    createERC721ContractDetailed,
+    createERC721Token,
+    ERC721TokenDetailed,
+    resolveIPFSLinkFromURL,
+    ERC721ContractDetailed,
+} from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import isBefore from 'date-fns/isBefore'
 import urlcat from 'urlcat'
@@ -52,14 +59,16 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
         name?: string
         description?: string
         image?: string
-    } = JSON.parse(asset.nft_json)
+    } = JSON.parse(asset.nft_json ?? '{}')
     const detailed = createERC721ContractDetailedFromAssetContract(asset)
     return createERC721Token(
         detailed,
         {
             name: payload?.name ?? asset.nft_name ?? asset.nft_platform_name ?? '',
             description: payload?.description ?? '',
-            mediaUrl: resolveResourceLink(asset.nft_cover ?? asset.nft_content_uri ?? payload.image ?? ''),
+            mediaUrl: resolveIPFSLinkFromURL(
+                JSON.parse(asset.nft_json ?? '{}').image ?? asset.nft_content_uri ?? payload.image ?? '',
+            ),
             owner: asset.nft_holder ?? '',
         },
         asset.token_id,
@@ -89,7 +98,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             .sort((a, b) => a.balance - b.balance)
     }
 
-    async getToken(address: string, tokenId: string, chainId: ChainId) {
+    async getToken(address: string, tokenId: string) {
         const response = await fetchAsset<NFTScanAsset>('getSingleNft', {
             nft_address: address,
             token_id: tokenId,
@@ -121,6 +130,37 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
         const data =
             response.data.content.map(createERC721TokenAsset).map((x) => ({ ...x, provideBy: 'NFTScan' })) ?? []
         const total = response.data.total
+        return {
+            data,
+            hasNextPage: total - (page + 1) * size > 0,
+        }
+    }
+
+    async getTokenDetailedOwnerList(owner: string, contractDetailed: ERC721ContractDetailed, size = 100, page = 0) {
+        const response = await fetchAsset<{
+            content: NFTScanAsset[]
+            page_index: number
+            page_size: number
+            total: number
+        }>('getNftByContractAndUserAddress', {
+            page_size: size,
+            page_index: page + 1,
+            user_address: owner,
+            nft_address: contractDetailed.address,
+        })
+
+        if (!response?.data) return { data: [] as ERC721TokenDetailed[], hasNextPage: false }
+        const total = response.data.total
+        const data: ERC721TokenDetailed[] = response.data.content.map((t) => ({
+            tokenId: t.token_id,
+            contractDetailed,
+            info: {
+                name: t.nft_name,
+                description: t.nft_detail,
+                mediaUrl: resolveIPFSLinkFromURL(JSON.parse(t.nft_json ?? '{}').image ?? t.nft_content_uri ?? ''),
+                tokenURI: t.nft_token_uri,
+            },
+        }))
         return {
             data,
             hasNextPage: total - (page + 1) * size > 0,

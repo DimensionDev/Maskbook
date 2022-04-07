@@ -7,7 +7,7 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
 import { useWeb3State } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginMessages } from '../../../../API'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
@@ -18,7 +18,7 @@ import {
     Web3Plugin,
     useAccount,
     NetworkPluginID,
-    usePluginIDContext,
+    useCurrentWeb3NetworkPluginID,
 } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
@@ -133,7 +133,7 @@ export interface TokenTableUIProps {
 export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isEmpty, dataSource }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const currentPluginId = usePluginIDContext()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const { Utils } = useWeb3PluginState()
 
     return (

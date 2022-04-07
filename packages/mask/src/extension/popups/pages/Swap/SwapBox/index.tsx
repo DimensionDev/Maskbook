@@ -1,6 +1,6 @@
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'
 import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader'
 import type { Coin } from '../../../../../plugins/Trader/types'
@@ -8,7 +8,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 
 export function SwapBox() {
     const location = useLocation()
-    const history = useHistory()
+    const navigate = useNavigate()
     const chainId = useChainId()
 
     const coin = useMemo(() => {
@@ -24,7 +24,7 @@ export function SwapBox() {
     }, [location])
 
     useUpdateEffect(() => {
-        history.replace(PopupRoutes.Swap)
+        navigate(PopupRoutes.Swap, { replace: true })
     }, [chainId])
 
     return <Trader coin={coin} chainId={chainId} />

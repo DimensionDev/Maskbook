@@ -4,14 +4,14 @@ import {
     useAccount,
     useChainId,
     useNetworkDescriptor,
-    usePluginIDContext,
+    useCurrentWeb3NetworkPluginID,
     useWallet,
     useWallets,
     useWeb3State as useWeb3PluginState,
     Web3Plugin,
 } from '@masknet/plugin-infra'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useEffect, useMemo, useState } from 'react'
@@ -30,6 +30,7 @@ import { useIsMatched } from './hooks'
 import { StartUp } from './StartUp'
 import { getTokenUSDValue } from './utils/getTokenUSDValue'
 
+const r = relativeRouteOf(DashboardRoutes.Wallets)
 function Wallets() {
     const wallet = useWallet()
     const wallets = useWallets()
@@ -50,7 +51,7 @@ function Wallets() {
 
     const networks = getRegisteredWeb3Networks()
     const networkDescriptor = useNetworkDescriptor()
-    const pluginId = usePluginIDContext()
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const [selectedNetwork, setSelectedNetwork] = useState<Web3Plugin.NetworkDescriptor | null>(
         networkDescriptor ?? null,
     )
@@ -122,10 +123,10 @@ function Wallets() {
                         showOperations={pluginId === NetworkPluginID.PLUGIN_EVM}
                     />
                     <Routes>
-                        <Route path="/" element={<Assets network={selectedNetwork} />} />
-                        <Route path="transfer" element={<Transfer />} />
+                        <Route path="*" element={<Assets network={selectedNetwork} />} />
+                        <Route path={r(DashboardRoutes.WalletsTransfer)} element={<Transfer />} />
                         <Route
-                            path="history"
+                            path={r(DashboardRoutes.WalletsHistory)}
                             element={<History selectedChainId={selectedNetwork?.chainId ?? currentChainId} />}
                         />
                     </Routes>

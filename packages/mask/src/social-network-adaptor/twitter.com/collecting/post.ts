@@ -1,25 +1,28 @@
-import { postsContentSelector, postsImageSelector } from '../utils/selector'
+import { postsContentSelector, postsImageSelector, timelinePostContentSelector } from '../utils/selector'
 import { IntervalWatcher, DOMProxy, DOMProxyEvents } from '@dimensiondev/holoflows-kit'
 import type { EventListener } from '@servie/events'
-import { creator, SocialNetworkUI as Next } from '../../../social-network'
+import { creator, globalUIState, SocialNetworkUI as Next } from '../../../social-network'
 import type { PostInfo } from '../../../social-network/PostInfo'
-import { postIdParser, postParser, postImagesParser } from '../utils/fetch'
+import { postIdParser, postParser, postImagesParser, postContentMessageParser } from '../utils/fetch'
 import { memoize, noop } from 'lodash-unified'
 import Services from '../../../extension/service'
 import { injectMaskIconToPostTwitter } from '../injection/MaskIcon'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import {
     makeTypedMessageImage,
     makeTypedMessageTupleFromList,
     makeTypedMessageEmpty,
     makeTypedMessagePromise,
     makeTypedMessageTuple,
+    isTypedMessageText,
+    isTypedMessageAnchor,
 } from '@masknet/typed-message'
 import { untilElementAvailable } from '../../../utils/dom'
 import { twitterBase } from '../base'
 import { twitterShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
 import { getCurrentIdentifier } from '../../utils'
+import { IdentityProviderTwitter } from './identity'
 
 function getPostActionsNode(postNode: HTMLElement | null) {
     if (!postNode) return null
@@ -142,6 +145,34 @@ export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
     start(cancel) {
         registerPostCollectorInner(this.posts, cancel)
     },
+}
+
+export function collectVerificationPost(keyword: string) {
+    const userId = IdentityProviderTwitter.recognized.value.identifier || globalUIState.profiles.value[0].identifier
+    const postNodes = timelinePostContentSelector().evaluate()
+
+    for (const postNode of postNodes) {
+        const postId = postIdParser(postNode)
+        const postContent = postContentMessageParser(postNode)
+        const content = postContent
+            .map((x) => {
+                if (isTypedMessageText(x)) return x.content ?? ''
+                if (isTypedMessageAnchor(x) && x.category === 'user') return x.content ?? ''
+                if (isTypedMessageAnchor(x) && x.category === 'normal')
+                    return (x.content ?? '').replace(/http(.*)\/\//g, '')
+                return ''
+            })
+            .join('')
+        const isVerified =
+            postId &&
+            content.toLowerCase().replace(/\r\n|\n|\r/gm, '') === keyword.toLowerCase().replace(/\r\n|\n|\r/gm, '')
+
+        if (isVerified && userId) {
+            return new PostIdentifier(userId, postId)
+        }
+    }
+
+    return null
 }
 
 function collectPostInfo(

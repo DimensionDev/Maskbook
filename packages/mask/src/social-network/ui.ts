@@ -2,12 +2,18 @@ import '../utils/debug/general'
 import '../utils/debug/ui'
 import Services from '../extension/service'
 import { Flags, InMemoryStorages, PersistentStorages } from '../../shared'
-import i18nNextInstance from '../../shared-ui/locales_legacy'
 import type { SocialNetworkUI } from './types'
 import { managedStateCreator } from './utils'
 import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
-import { ECKeyIdentifier, Identifier, createSubscriptionFromAsync, PersonaIdentifier } from '@masknet/shared-base'
+import {
+    ECKeyIdentifier,
+    Identifier,
+    createSubscriptionFromAsync,
+    PersonaIdentifier,
+    EnhanceableSite,
+    i18NextInstance,
+} from '@masknet/shared-base'
 import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
 import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
@@ -15,6 +21,8 @@ import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
+import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
+import { SocialNetworkEnum } from '@masknet/encryption'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -30,8 +38,8 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
         throw new Error()
     },
     injection: {},
-    networkIdentifier: 'localhost',
-    name: '',
+    encryptionNetwork: SocialNetworkEnum.Unknown,
+    networkIdentifier: EnhanceableSite.Localhost,
     shouldActivate: () => false,
     utils: { createPostContext: null! },
     notReadyForProduction: true,
@@ -44,6 +52,12 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
     const ui = (activatedSocialNetworkUI = await loadSocialNetworkUI(ui_deferred.networkIdentifier))
+
+    sharedUINetworkIdentifier.value = ui_deferred.networkIdentifier
+    if (ui.customization.sharedComponentOverwrite) {
+        sharedUIComponentOverwrite.value = ui.customization.sharedComponentOverwrite
+    }
+
     console.log('Provider activated. You can access it by globalThis.ui', ui)
     Object.assign(globalThis, { ui })
 
@@ -84,11 +98,11 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     ui.injection.userAvatar?.(signal)
     ui.injection.profileAvatar?.(signal)
+    ui.injection.profileTip?.(signal)
 
     ui.injection.enhancedProfileNFTAvatar?.(signal)
     ui.injection.openNFTAvatar?.(signal)
     ui.injection.postAndReplyNFTAvatar?.(signal)
-    ui.injection.collectionAvatar?.(signal)
     ui.injection.avatarClipNFT?.(signal)
 
     startPluginSNSAdaptor(
@@ -121,7 +135,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 const pair = i18n[namespace][i18nKey]
                 for (const language in pair) {
                     const value = pair[language]
-                    i18nNextInstance.addResource(language, namespace, i18nKey, value)
+                    i18NextInstance.addResource(language, namespace, i18nKey, value)
                 }
             }
         }
@@ -129,8 +143,18 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     function $unknownIdentityResolution() {
         const provider = ui.collecting.identityProvider
-        provider?.start(signal)
-        if (provider?.hasDeprecatedPlaceholderName) {
+        if (!provider) return
+        provider.start(signal)
+        provider.recognized.addListener((newValue, oldValue) => {
+            if (document.visibilityState === 'hidden') return
+            if (newValue.identifier.equals(oldValue.identifier)) return
+            if (newValue.identifier.isUnknown) return
+
+            MaskMessages.events.Native_visibleSNS_currentDetectedProfileUpdated.sendToBackgroundPage(
+                newValue.identifier.toText(),
+            )
+        })
+        if (provider.hasDeprecatedPlaceholderName) {
             provider.recognized.addListener((id) => {
                 if (signal.aborted) return
                 if (id.identifier.isUnknown) return

@@ -1,11 +1,11 @@
-import { useState, useMemo } from 'react'
-import Fuse from 'fuse.js'
-import { List, ListItem, ListItemText, Button, InputBase, DialogContent, DialogActions } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { InjectedDialog } from '@masknet/shared'
+import { Button, DialogActions, DialogContent, InputBase, List, ListItem, ListItemText } from '@mui/material'
+import Fuse from 'fuse.js'
+import { useMemo, useState } from 'react'
+import type { Profile } from '../../../database'
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
-import type { Profile } from '../../../database'
-import { InjectedDialog } from '../InjectedDialog'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

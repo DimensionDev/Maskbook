@@ -20,7 +20,7 @@ import './clean-hmr'
 
 export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const normalizedFlags = normalizeBuildFlags(rawFlags)
-    const { sourceMapKind } = computedBuildFlags(normalizedFlags)
+    const { sourceMapKind, supportWebAssembly } = computedBuildFlags(normalizedFlags)
     const { hmr, mode, profiling, reactRefresh, readonlyCache, reproducibleBuild, runtime, outputPath } =
         normalizedFlags
 
@@ -37,9 +37,9 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         name: 'mask',
         mode,
         devtool: sourceMapKind,
-        target: ['web', 'es2019'],
+        target: ['web', 'es2021'],
         entry: {},
-        experiments: { backCompat: false, asyncWebAssembly: true },
+        experiments: { backCompat: false, asyncWebAssembly: supportWebAssembly },
         cache: {
             type: 'filesystem',
             buildDependencies: { config: [__filename] },
@@ -70,9 +70,9 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/gun-utils': join(__dirname, '../../gun-utils/src/'),
                     '@masknet/shared': join(__dirname, '../../shared/src/'),
                     '@masknet/shared-base': join(__dirname, '../../shared-base/src/'),
+                    '@masknet/shared-base-ui': join(__dirname, '../../shared-base-ui/src/'),
                     '@masknet/theme': join(__dirname, '../../theme/src/'),
                     '@masknet/icons': join(__dirname, '../../icons/index.ts'),
-                    '@masknet/web3-kit': join(__dirname, '../../web3-kit/src/'),
                     '@masknet/web3-providers': join(__dirname, '../../web3-providers/src'),
                     '@masknet/web3-shared-base': join(__dirname, '../../web3-shared/base/src'),
                     '@masknet/web3-shared-evm': join(__dirname, '../../web3-shared/evm/'),
@@ -88,6 +88,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/plugin-wallet': join(__dirname, '../../plugins/Wallet/src/'),
                     '@masknet/plugin-file-service': join(__dirname, '../../plugins/FileService/src/'),
                     '@masknet/plugin-cyberconnect': join(__dirname, '../../plugins/CyberConnect/src/'),
+                    '@masknet/plugin-go-plus-security': join(__dirname, '../../plugins/GoPlusSecurity/src/'),
                     '@masknet/external-plugin-previewer': join(__dirname, '../../external-plugin-previewer/src/'),
                     '@masknet/public-api': join(__dirname, '../../public-api/src/'),
                     '@masknet/sdk': join(__dirname, '../../mask-sdk/server/'),
@@ -95,11 +96,11 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/encryption': join(__dirname, '../../encryption/src'),
                     '@masknet/typed-message/dom$': require.resolve('../../typed-message/dom/index.ts'),
                     '@masknet/typed-message$': require.resolve('../../typed-message/base/index.ts'),
+                    '@masknet/plugin-cross-chain-bridge': join(__dirname, '../../plugins/CrossChainBridge/src'),
                     // @masknet/scripts: insert-here
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
                 if (profiling) {
-                    alias['react-dom$'] = 'react-dom/profiling'
                     alias['scheduler/tracing'] = 'scheduler/tracing-profiling'
                 }
                 return alias
@@ -119,13 +120,19 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 javascript: {
                     // Treat as missing export as error
                     strictExportPresence: true,
-                    // gun and @unstoppabledomains/resolution
-                    exprContextCritical: false,
                 },
             },
             rules: [
                 // Opt in source map
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
+                // Manifest v3 does not support
+                !supportWebAssembly
+                    ? {
+                          test: /\.wasm?$/,
+                          loader: require.resolve('./wasm-to-asm.ts'),
+                          type: 'javascript/auto',
+                      }
+                    : undefined!,
                 // TypeScript
                 {
                     test: /\.tsx?$/,
@@ -140,20 +147,21 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                                 syntax: 'typescript',
                                 dynamicImport: true,
                                 tsx: true,
-                                importAssertions: true,
                             },
-                            target: 'es2019',
+                            target: 'es2021',
                             externalHelpers: true,
                             transform: {
                                 react: {
                                     runtime: 'automatic',
-                                    useBuiltins: true,
                                     refresh: reactRefresh && {
                                         refreshReg: '$RefreshReg$',
                                         refreshSig: '$RefreshSig$',
                                         emitFullSignatures: true,
                                     },
                                 },
+                            },
+                            experimental: {
+                                keepImportAssertions: true,
                             },
                         },
                     },
@@ -197,6 +205,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 patterns: [
                     { from: join(__dirname, '../public/'), to: distFolder },
                     { from: join(__dirname, '../../injected-script/dist/injected-script.js'), to: distFolder },
+                    { from: join(__dirname, '../../gun-utils/gun.js'), to: distFolder },
                     { from: join(__dirname, '../../mask-sdk/dist/mask-sdk.js'), to: distFolder },
                     {
                         context: join(__dirname, '../../polyfills/dist/'),
@@ -235,12 +244,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         },
         output: {
             environment: {
-                arrowFunction: true,
-                const: true,
-                destructuring: true,
-                forOf: true,
                 module: false,
-                bigIntLiteral: false,
                 // Our iOS App doesn't support dynamic import (it requires a heavy post-build time transform).
                 dynamicImport: !(runtime.architecture === 'app' && runtime.engine === 'safari'),
             },
@@ -267,6 +271,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         } as DevServerConfiguration,
         stats: process.env.CI ? 'errors-warnings' : undefined,
     }
+    baseConfig.module!.rules = baseConfig.module!.rules!.filter(Boolean)
 
     const plugins = baseConfig.plugins!
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
@@ -300,6 +305,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 chunks: ['background'],
                 filename: 'background.html',
                 secp256k1: true,
+                gun: true,
                 sourceMap: !!sourceMapKind,
             }),
         )
@@ -324,13 +330,22 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
     }
 }
-function addHTMLEntry(options: HTMLPlugin.Options & { secp256k1?: boolean; sourceMap: boolean }) {
+function addHTMLEntry(
+    options: HTMLPlugin.Options & {
+        secp256k1?: boolean
+        sourceMap: boolean
+        gun?: boolean
+    },
+) {
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
     if (options.secp256k1) {
         templateContent = templateContent.replace(
             `<!-- secp256k1 -->`,
             '<script src="/polyfill/secp256k1.js"></script>',
         )
+    }
+    if (options.gun) {
+        templateContent = templateContent.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
     }
     if (options.sourceMap) {
         templateContent = templateContent.replace(

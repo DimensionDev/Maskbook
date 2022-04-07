@@ -1,11 +1,12 @@
 import classNames from 'classnames'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import {
     ERC721TokenDetailed,
     ERC721ContractDetailed,
     useERC721TokenDetailedCallback,
     useAccount,
     isSameAddress,
+    formatNFT_TokenId,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@mui/material'
@@ -16,8 +17,7 @@ import { SearchIcon } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
 import { Trans } from 'react-i18next'
 import { useUpdate } from 'react-use'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { findLastIndex, uniqBy } from 'lodash-unified'
+import { findLastIndex } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
 interface StyleProps {
@@ -29,7 +29,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         minHeight: 380,
     },
     dialogContentFixedHeight: {
-        height: 600,
+        height: 610,
     },
     tokenBox: {
         background: theme.palette.background.default,
@@ -293,6 +293,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    assetImgWrapper: {
+        maxHeight: 155,
+    },
 }))
 
 export type OrderedERC721Token = ERC721TokenDetailed & { index: number }
@@ -328,28 +331,15 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const [tokenIdListInput, setTokenIdListInput] = useState<string>('')
     const [tokenIdFilterList, setTokenIdFilterList] = useState<string[]>([])
     const [nonExistedTokenIdList, setNonExistedTokenIdList] = useState<string[]>([])
-    const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length)
     const isSelectSharesExceed =
         (tokenDetailedOwnerList.length === 0 ? NFT_RED_PACKET_MAX_SHARES - 1 : NFT_RED_PACKET_MAX_SHARES) <
         tokenDetailedSelectedList.length
     const { classes } = useStyles({ isSelectSharesExceed })
-    const selectAll = maxSelectShares === tokenDetailedSelectedList.length
+    const [selectAll, setSelectAll] = useState(false)
     const selectAllHandler = useCallback(() => {
-        setTokenDetailedSelectedList(
-            tokenIdFilterList.length === 0
-                ? []
-                : selectAll
-                ? tokenDetailedSelectedList.filter((t) => !tokenIdFilterList.includes(t.tokenId))
-                : tokenDetailedSelectedList,
-        )
-
-        if (!selectAll) {
-            const newlyAdded = tokenDetailedOwnerList
-                .filter((t) => tokenIdFilterList.length === 0 || tokenIdFilterList.includes(t.tokenId))
-                .slice(0, maxSelectShares)
-            setTokenDetailedSelectedList(uniqBy(newlyAdded.concat(tokenDetailedSelectedList), 'tokenId'))
-        }
-    }, [selectAll, maxSelectShares, tokenIdFilterList, tokenDetailedSelectedList])
+        setTokenDetailedSelectedList(selectAll ? [] : tokenDetailedOwnerList)
+        setSelectAll(!selectAll)
+    }, [selectAll, tokenDetailedOwnerList])
 
     useEffect(() => {
         setTokenDetailed(undefined)
@@ -509,6 +499,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                     classes={{
                                         loadingFailImage: classes.loadingFailImage,
                                         iframe: classes.iframe,
+                                        imgWrapper: classes.assetImgWrapper,
                                     }}
                                 />
                                 <div className={classes.selectWrapperNftNameWrapper}>
@@ -529,9 +520,13 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             <ShadowRootTooltip
                                 title={
                                     <Typography className={classes.tooltipText}>
-                                        {t('plugin_red_packet_nft_max_shares', {
-                                            amount: NFT_RED_PACKET_MAX_SHARES,
-                                        })}
+                                        {tokenDetailedSelectedList.length > NFT_RED_PACKET_MAX_SHARES
+                                            ? t('plugin_red_packet_nft_max_shares_tip', {
+                                                  amount: NFT_RED_PACKET_MAX_SHARES,
+                                              })
+                                            : t('plugin_red_packet_nft_max_shares', {
+                                                  amount: NFT_RED_PACKET_MAX_SHARES,
+                                              })}
                                     </Typography>
                                 }
                                 placement="top-end"
@@ -641,7 +636,8 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                                 (t) => t.tokenId === token.tokenId,
                                             )
 
-                                            return (
+                                            return tokenIdFilterList.length > 0 &&
+                                                !tokenIdFilterList.includes(token.tokenId) ? null : (
                                                 <div key={i}>
                                                     <NFTCard
                                                         findToken={findToken}
@@ -684,9 +680,13 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             <ShadowRootTooltip
                                 title={
                                     <Typography className={classes.tooltipText}>
-                                        {t('plugin_red_packet_nft_max_shares', {
-                                            amount: NFT_RED_PACKET_MAX_SHARES,
-                                        })}
+                                        {tokenDetailedSelectedList.length > NFT_RED_PACKET_MAX_SHARES
+                                            ? t('plugin_red_packet_nft_max_shares_tip', {
+                                                  amount: NFT_RED_PACKET_MAX_SHARES,
+                                              })
+                                            : t('plugin_red_packet_nft_max_shares', {
+                                                  amount: NFT_RED_PACKET_MAX_SHARES,
+                                              })}
                                     </Typography>
                                 }
                                 placement="top-end"
@@ -742,14 +742,10 @@ interface NFTCardProps {
 function NFTCard(props: NFTCardProps) {
     const { findToken, token, tokenIdFilterList, isSelectSharesExceed, renderOrder, selectToken } = props
     const { classes } = useStyles({ isSelectSharesExceed })
-    const [name, setName] = useState('#' + token.tokenId)
     return (
-        <ListItem
-            className={classNames(
-                classes.selectWrapper,
-                tokenIdFilterList.length > 0 && !tokenIdFilterList.includes(token.tokenId) ? classes.hide : '',
-            )}>
+        <ListItem className={classes.selectWrapper}>
             <NFTCardStyledAssetPlayer
+                url={token.info.mediaUrl}
                 contractAddress={token.contractDetailed.address}
                 tokenId={token.tokenId}
                 renderOrder={renderOrder}
@@ -757,12 +753,12 @@ function NFTCard(props: NFTCardProps) {
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
                     iframe: classes.iframe,
+                    imgWrapper: classes.assetImgWrapper,
                 }}
-                setERC721TokenName={setName}
             />
             <div className={classes.selectWrapperNftNameWrapper}>
                 <Typography className={classes.selectWrapperNftName} color="textSecondary">
-                    {name}
+                    {formatNFT_TokenId(token.tokenId, 2)}
                 </Typography>
             </div>
 

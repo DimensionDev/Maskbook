@@ -38,7 +38,6 @@
     "setup_page_create_restore_button": "復元またはサインイン",
     "create_account_identity_title": "Mask Networkのアイデンティティを作成",
     "create_account_sign_in_button": "復元またはサインイン",
-    "create_account_identity_warning": "アイデンティティコードを忘れないでください。お客様のIDコードは、お客様のユーザーIDを証明する唯一のものであり、お客様がソーシャルアクティビティを暗号化または復号化するための唯一の根拠となります。\n",
     "create_account_mnemonic_confirm_failed": "IDコードが間違っています",
     "create_account_connect_social_media_button": "作成",
     "create_account_connect_social_media": "{{type}} に接続",

@@ -1,7 +1,7 @@
 /* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
-import type { TypedMessage, TypedMessageTuple } from '@masknet/typed-message'
+import type { TypedMessage } from '@masknet/typed-message'
 import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
@@ -82,11 +82,6 @@ export namespace Plugin.Shared {
          */
         name: I18NStringField
         /**
-         * Emoji icon of this plugin, used to display the plugin with a fancy shape.
-         * @example "🎶"
-         */
-        icon?: string | React.ReactNode
-        /**
          * A brief description of this plugin.
          * @example { i18nKey: "description", fallback: "This plugin is going to replace every link in the page to https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
          */
@@ -141,7 +136,6 @@ export namespace Plugin.Shared {
         init(signal: AbortSignal, context: Context): void | Promise<void>
     }
     export interface Utilities {}
-    export type TypedMessageTransformer = (message: TypedMessageTuple) => TypedMessageTuple
     /** The publisher of the plugin */
     export interface Publisher {
         /** The name of the publisher */
@@ -243,10 +237,8 @@ export namespace Plugin.SNSAdaptor {
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
-        /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
-        ToolbarEntry?: ToolbarEntry
         /** This UI will be rendered as an entry in the wallet status dialog */
-        ApplicationEntry?: ApplicationEntry
+        ApplicationEntries?: ApplicationEntry[]
         /** This UI will be rendered as sliders on the profile page */
         ProfileSliders?: ProfileSlider[]
         /** This UI will be rendered as tabs on the profile page */
@@ -311,51 +303,15 @@ export namespace Plugin.SNSAdaptor {
     }
     // #endregion
 
-    // #region Toolbar entry
-    export interface ToolbarEntry {
-        image: string
-        // TODO: remove string
-        label: I18NStringField | string
-        /**
-         * Used to order the toolbars
-         *
-         * TODO: can we make them unordered?
-         */
-        priority: number
-        /**
-         * This is a React hook. If it returns false, this entry will not be displayed.
-         */
-        useShouldDisplay?(): boolean
-        /**
-         * What to do if the entry is clicked.
-         */
-        // TODO: add support for DialogEntry.
-        // TODO: add support for onClick event.
-        onClick: 'openCompositionEntry'
-    }
-    // #endregion
-
     export interface ApplicationEntry {
         /**
-         * The icon image URL
+         * Render entry component
          */
-        icon: URL
-        /**
-         * The name of the application
-         */
-        label: I18NStringField | string
-        /**
-         * Also an entrance in a sub-folder
-         */
-        categoryID?: string
+        RenderEntryComponent: (props: { disabled: boolean }) => JSX.Element
         /**
          * Used to order the applications on the board
          */
-        priority: number
-        /**
-         * What to do if the application icon is clicked.
-         */
-        onClick(): void
+        defaultSortingPriority: number
     }
 
     export interface ProfileIdentity {
@@ -405,7 +361,11 @@ export namespace Plugin.SNSAdaptor {
             /**
              * The injected tab content
              */
-            TabContent: InjectUI<{ identity?: ProfileIdentity; addressNames?: ProfileAddress[] }>
+            TabContent: InjectUI<{
+                identity?: ProfileIdentity
+                addressNames?: ProfileAddress[]
+                personaList?: string[]
+            }>
         }
         Utils?: {
             /**
@@ -714,6 +674,7 @@ export enum PluginId {
     Flow = 'com.mask.flow',
     RSS3 = 'bio.rss3',
     RedPacket = 'com.maskbook.red_packet',
+    RedPacketNFT = 'com.maskbook.red_packet_nft',
     Pets = 'com.maskbook.pets',
     Snapshot = 'org.snapshot',
     ITO = 'com.maskbook.ito',
@@ -723,6 +684,8 @@ export enum PluginId {
     FileService = 'com.maskbook.fileservice',
     CyberConnect = 'me.cyberconnect.app',
     Omen = 'link.eth.omen',
+    GoPlusSecurity = 'io.gopluslabs.security',
+    CrossChainBridge = 'io.mask.cross-chain-bridge',
     // @masknet/scripts: insert-here
 }
 

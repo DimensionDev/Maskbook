@@ -1,7 +1,9 @@
 import { openDB, wrap } from 'idb/with-async-ittr'
+import { __DEBUG__ONLY__enableCryptoKeySerialization, serializer } from '@masknet/shared-base'
 import type { BackupFormat, Instance, ObjectStore } from './types'
-import typeson from './typeson'
 import { useI18N } from '../../utils'
+
+__DEBUG__ONLY__enableCryptoKeySerialization()
 
 export const DatabaseOps: React.FC = () => {
     const { t } = useI18N()
@@ -28,7 +30,8 @@ export const DatabaseOps: React.FC = () => {
         if (file === undefined) {
             return
         }
-        const parsed: BackupFormat = await typeson.parse(await file.text())
+        // cspell:disable-next-line
+        const parsed = (await serializer.deserialization(await file.text())) as BackupFormat
         await restoreAll(parsed)
     }
     const onClear = async () => {
@@ -167,5 +170,5 @@ async function backupAll() {
         },
         instances,
     }
-    return typeson.stringify(payload, undefined, 2)
+    return JSON.stringify(serializer.serialization(payload), undefined, 2)
 }

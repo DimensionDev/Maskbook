@@ -5,13 +5,15 @@ import { PluginTraderMessages } from '../../messages'
 import { WalletMessages } from '../../../Wallet/messages'
 import type { TagType } from '../../types'
 import type { DataProvider } from '@masknet/public-api'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginTransakMessages } from '../../../Transak/messages'
 
 export interface TrendingPopperProps {
     children?: (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
+
+const TIMEOUT = 1500
 
 export function TrendingPopper(props: TrendingPopperProps) {
     const popperRef = useRef<{ update(): void } | null>(null)
@@ -21,13 +23,14 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [type, setType] = useState<TagType | undefined>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [availableDataProviders, setAvailableDataProviders] = useState<DataProvider[]>([])
+    const popper = useRef<HTMLDivElement | null>(null)
+    const [mouseIn, setMouseIn] = useState(false)
 
     // #region select token and provider dialog could be open by trending view
     const onFreezed = useCallback((ev) => setFreezed(ev.open), [])
     useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, onFreezed)
-    useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.walletConnectQRCodeDialogUpdated, onFreezed)
     useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated, onFreezed)
@@ -67,14 +70,12 @@ export function TrendingPopper(props: TrendingPopperProps) {
     // close popper if scroll out of visual screen
     const position = useWindowScroll()
     useEffect(() => {
-        if (!anchorEl) return
-        const { top } = anchorEl.getBoundingClientRect()
-        if (
-            top < 0 || // out off top bound
-            top > document.documentElement.clientHeight // out off bottom bound
-        )
+        if (!popper.current) return
+        const { top, height } = popper.current?.getBoundingClientRect()
+        if ((top < 0 && -1 * top > height) || top > document.documentElement.clientHeight)
+            // out off bottom bound
             setAnchorEl(null)
-    }, [anchorEl, Math.floor(position.y / 50)])
+    }, [popper, Math.floor(position.y / 50)])
     // #endregion
 
     if (locked) return null
@@ -85,6 +86,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 if (!freezed) setAnchorEl(null)
             }}>
             <Popper
+                ref={popper}
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
                 disablePortal

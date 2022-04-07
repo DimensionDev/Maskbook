@@ -81,7 +81,7 @@ export function dispatchEventRaw<T extends Event>(
     overwrites: Partial<T> = {},
 ) {
     let currentTarget: null | Node | Document = target
-    const event = getMockedEvent(eventBase, () => currentTarget!, overwrites)
+    const event = getMockedEvent(eventBase, () => (isTwitter() ? target! : currentTarget!), overwrites)
     // Note: in firefox, "event" is "Opaque". Displayed as an empty object.
     const type = eventBase.type
     if (!CapturingEvents.has(type)) return warn("[@masknet/injected-script] Trying to send event didn't captured.")
@@ -146,6 +146,7 @@ export function dispatchEventRaw<T extends Event>(
 }
 
 const { includes } = String.prototype
-function isTwitter(): Boolean {
+
+function isTwitter() {
     return apply(includes, window.location.href, ['twitter.com'])
 }

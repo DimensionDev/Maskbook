@@ -1,8 +1,7 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
 import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import type { TypedMessage } from '@masknet/typed-message'
-import { useValueRef } from '@masknet/shared'
+import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { makeStyles } from '@masknet/theme'
 import { ImagePayloadIcon } from '@masknet/icons'
 import { Send } from '@mui/icons-material'
@@ -10,14 +9,15 @@ import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
 import { CharLimitIndicator } from './CharLimitIndicator'
 import { useI18N } from '../../utils'
-import { Flags } from '../../../shared'
-import { debugModeSetting } from '../../settings/settings'
+import { Flags, PersistentStorages } from '../../../shared'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
 import type { Profile } from '../../database'
 import { CompositionContext } from '@masknet/plugin-infra'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { Trans } from 'react-i18next'
+import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
+import { useSubscription } from 'use-subscription'
 
 const useStyles = makeStyles()({
     root: {
@@ -57,12 +57,12 @@ export interface CompositionProps {
     onQueryClipboardPermission?(): void
 }
 export interface SubmitComposition {
-    target: 'Everyone' | Profile[]
-    content: TypedMessage
+    target: EncryptTargetPublic | EncryptTargetE2E
+    content: SerializableTypedMessages
     encode: 'text' | 'image'
 }
 export interface CompositionRef {
-    setMessage(message: TypedMessage): void
+    setMessage(message: SerializableTypedMessages): void
     setEncryptionKind(kind: 'E2E' | 'Everyone'): void
     startPlugin(id: string): void
     reset(): void
@@ -105,8 +105,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         })
     }, [])
 
-    useImperativeHandle(
-        ref,
+    const refItem = useMemo(
         (): CompositionRef => ({
             setMessage: (msg) => {
                 if (Editor.current) Editor.current.value = msg
@@ -117,6 +116,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         }),
         [reset],
     )
+
+    useImperativeHandle(ref, () => refItem, [refItem])
 
     const context = useMemo(
         (): CompositionContext => ({
@@ -154,7 +155,10 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
             .onSubmit({
                 content: Editor.current.value,
                 encode: encodingKind,
-                target: encryptionKind === 'E2E' ? recipients : 'Everyone',
+                target:
+                    encryptionKind === 'E2E'
+                        ? { type: 'E2E', target: recipients.map((x) => x.identifier) }
+                        : { type: 'public' },
             })
             .finally(reset)
     }, [encodingKind, encryptionKind, recipients, props.onSubmit])
@@ -284,7 +288,7 @@ function useEncryptionEncode(props: Pick<CompositionProps, 'supportImageEncoding
 }
 
 function useMetadataDebugger(context: CompositionContext, Editor: TypedMessageEditorRef | null) {
-    const isDebug = useValueRef(debugModeSetting)
+    const isDebug = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
     const [__MetadataDebuggerMeta, __configureMetadataDebugger] = useState<TypedMessage['meta'] | null>(null)
 
     const __syncMetadataDebugger = () => {

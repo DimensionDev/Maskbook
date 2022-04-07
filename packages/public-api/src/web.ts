@@ -6,8 +6,8 @@ import type { PersonaRecord, ProfileRecord, RelationFavor, RelationRecord } from
  * Methods starts with "SNSAdaptor_" can only be called in SNS Adaptor.
  * Other methods can only be called in the background page.
  */
-type ProfileIdentifier_string = string
-type PersonaIdentifier_string = string
+export type ProfileIdentifier_string = string
+export type PersonaIdentifier_string = string
 export interface MaskNetworkAPIs {
     app_suspended(): Promise<void>
     app_resume(): Promise<void>
@@ -79,7 +79,6 @@ export interface MaskNetworkAPIs {
     wallet_updateEthereumAccount(params: { account: string }): Promise<void>
     wallet_updateEthereumChainId(params: { chainId: number }): Promise<void>
     wallet_getLegacyWalletInfo(): Promise<WalletInfo[]>
-    SNSAdaptor_getCurrentDetectedProfile(): Promise<ProfileIdentifier_string | undefined>
     get_all_indexedDB_records(): Promise<{
         personas: PersonaRecord[]
         profiles: ProfileRecord[]
@@ -178,23 +177,6 @@ export enum LaunchPage {
     dashboard = 'dashboard',
 }
 
-// This type MUST be sync with NetworkType in packages/web3-shared/src/types/index.ts
-export enum NetworkType {
-    Ethereum = 'Ethereum',
-    Binance = 'Binance',
-    Polygon = 'Polygon',
-    Arbitrum = 'Arbitrum',
-    xDai = 'xDai',
-    Celo = 'Celo',
-    Fantom = 'Fantom',
-    Aurora = 'Aurora',
-    Avalanche = 'Avalanche',
-    Boba = 'Boba',
-    Fuse = 'Fuse',
-    Metis = 'Metis',
-    Optimistic = 'Optimistic',
-}
-
 export enum DataProvider {
     COIN_GECKO = 0,
     COIN_MARKET_CAP = 1,
@@ -217,7 +199,9 @@ export enum TradeProvider {
     TRISOLARIS = 12,
     TRADERJOE = 13,
     PANGOLIN = 14,
+    MDEX = 15,
 }
+
 /** Supported language settings */
 export enum LanguageOptions {
     __auto__ = 'auto',
@@ -235,4 +219,56 @@ export enum SupportedLanguages {
     zhTW = 'zh-TW',
     koKR = 'ko-KR',
     jaJP = 'ja-JP',
+}
+
+/**
+ * Keep updating to packages/web3-shared/evm/types/index.ts
+ */
+export enum NetworkType {
+    Ethereum = 'Ethereum',
+    Binance = 'Binance',
+    Polygon = 'Polygon',
+    Arbitrum = 'Arbitrum',
+    xDai = 'xDai',
+    Celo = 'Celo',
+    Fantom = 'Fantom',
+    Aurora = 'Aurora',
+    Avalanche = 'Avalanche',
+    Boba = 'Boba',
+    Fuse = 'Fuse',
+    Metis = 'Metis',
+    Optimistic = 'Optimistic',
+    Conflux = 'Conflux',
+}
+
+export enum ProviderType {
+    MaskWallet = 'Maskbook',
+    MetaMask = 'MetaMask',
+    WalletConnect = 'WalletConnect',
+    Fortmatic = 'Fortmatic',
+    Coin98 = 'Coin98',
+    MathWallet = 'MathWallet',
+    WalletLink = 'WalletLink',
+    CustomNetwork = 'CustomNetwork',
+}
+
+export enum FungibleAssetProvider {
+    ZERION = 'Zerion',
+    DEBANK = 'Debank',
+}
+
+export enum NonFungibleAssetProvider {
+    OPENSEA = 'OpenSea',
+    RARIBLE = 'Rarible',
+    NFTSCAN = 'NFTScan',
+    ZORA = 'Zora',
+}
+
+export interface PriceRecord {
+    [currency: string]: number
+}
+
+/** Base on response of coingecko's token price API */
+export interface CryptoPrice {
+    [token: string]: PriceRecord
 }

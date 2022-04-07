@@ -1,13 +1,12 @@
 import { useCallback, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { useHistory } from 'react-router-dom'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { Box } from '@mui/system'
 import { makeStyles } from '@masknet/theme'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, Typography } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { useI18N } from '../../../../utils'
 
@@ -22,12 +21,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface RestoreLegacyWalletDialogProps {}
-
-export function RestoreLegacyWalletDialog(props: RestoreLegacyWalletDialogProps) {
+export function RestoreLegacyWalletDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const history = useHistory()
+    // const navigate = useNavigate()
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.restoreLegacyWalletDialogUpdated)
 
     const onClose = useCallback(() => {
@@ -50,7 +47,8 @@ export function RestoreLegacyWalletDialog(props: RestoreLegacyWalletDialogProps)
     }, [legacyWallets.map((x) => x.address).join()])
 
     const onRestore = useCallback(async () => {
-        history.push(PopupRoutes.LegacyWalletRecovered)
+        // !!! invalid navigation !!!
+        // navigate(PopupRoutes.LegacyWalletRecovered)
         onClose()
     }, [onClose, history])
 

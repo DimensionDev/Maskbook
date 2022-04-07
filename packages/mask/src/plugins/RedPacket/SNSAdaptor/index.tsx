@@ -19,12 +19,23 @@ import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types'
 import RedPacketDialog from './RedPacketDialog'
 import { RedPacketInPost } from './RedPacketInPost'
 import { RedPacketNftInPost } from './RedPacketNftInPost'
-import { RedPacketIcon } from '@masknet/icons'
+import { RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
+import { CrossIsolationMessages } from '@masknet/shared-base'
+import { ApplicationEntry } from '@masknet/shared'
 
 function Render(props: React.PropsWithChildren<{ name: string }>) {
     usePluginWrapper(true, { name: props.name })
     return <>{props.children}</>
 }
+const containerStyle = {
+    display: 'flex',
+    alignItems: 'center',
+}
+const badgeSvgIconSize = {
+    width: 16,
+    height: 16,
+}
+
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
@@ -59,7 +70,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RedPacketNftMetaKey,
             (_payload) => {
                 const payload = _payload as RedPacketNftJSONPayload
-                return { text: <>&#x1F9E7; {payload.message ? payload.message : 'An NFT Lucky Drop'}</> }
+                return {
+                    text: (
+                        <div style={containerStyle}>
+                            <NFTRedPacketIcon style={badgeSvgIconSize} />
+                            {payload.message ? payload.message : 'An NFT Lucky Drop'}
+                        </div>
+                    ),
+                }
             },
         ],
     ]),
@@ -68,12 +86,35 @@ const sns: Plugin.SNSAdaptor.Definition = {
         label: {
             fallback: (
                 <>
-                    <RedPacketIcon style={{ width: 16, height: 16 }} />
+                    <RedPacketIcon style={badgeSvgIconSize} />
                     Luck drop
                 </>
             ),
         },
     },
+    ApplicationEntries: [
+        {
+            RenderEntryComponent({ disabled }) {
+                return (
+                    <ApplicationEntry
+                        title="Lucky Drop"
+                        disabled={disabled}
+                        icon={new URL('./assets/lucky_drop.png', import.meta.url).toString()}
+                        onClick={() =>
+                            CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                reason: 'timeline',
+                                open: true,
+                                options: {
+                                    startupPlugin: base.ID,
+                                },
+                            })
+                        }
+                    />
+                )
+            },
+            defaultSortingPriority: 1,
+        },
+    ],
 }
 interface ERC20RedpacketBadgeProps {
     payload: RedPacketJSONPayload
@@ -87,10 +128,11 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const tokenDetailed =
         payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token ?? fetchedToken
     return (
-        <>
-            &#x1F9E7; A Lucky Drop with {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
+        <div style={containerStyle}>
+            <RedPacketIcon style={badgeSvgIconSize} /> A Lucky Drop with{' '}
+            {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
             {tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'} from {payload.sender.name}
-        </>
+        </div>
     )
 }
 

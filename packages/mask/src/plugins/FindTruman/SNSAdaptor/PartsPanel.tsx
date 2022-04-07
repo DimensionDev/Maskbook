@@ -1,4 +1,4 @@
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount, formatNFT_TokenId } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useControlledDialog } from '../../../utils'
 import { useAsyncRetry } from 'react-use'
@@ -20,7 +20,7 @@ import {
     Typography,
 } from '@mui/material'
 import formatDateTime from 'date-fns/format'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 import { useContext, useMemo, useState } from 'react'
 import { LoadingButton } from '@mui/lab'
 import getUnixTime from 'date-fns/getUnixTime'
@@ -338,7 +338,7 @@ function QuestDialog(props: QuestDialogProps) {
     const { t, const: consts } = useContext(FindTrumanContext)
 
     const poapIds = useMemo(() => {
-        return quest.poaps.map((e) => `#${e.tokenId}`).join(', ')
+        return quest.poaps.map((e) => formatNFT_TokenId(e.tokenId.toString(), 2)).join(', ')
     }, [quest])
 
     const availablePoap = useMemo(() => {

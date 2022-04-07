@@ -7,10 +7,8 @@ import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import Services from '../../../../service'
 import { LoadingButton } from '@mui/lab'
-import { useHistory } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
-import type { PersonaInformation } from '@masknet/shared-base'
-import { formatFingerprint } from '@masknet/shared'
+import { useNavigate } from 'react-router-dom'
+import { PopupRoutes, formatPersonaFingerprint, type PersonaInformation } from '@masknet/shared-base'
 import { PasswordField } from '../../../components/PasswordField'
 
 const useStyles = makeStyles()((theme) => ({
@@ -84,7 +82,7 @@ const useStyles = makeStyles()((theme) => ({
 
 const Logout = memo(() => {
     const { deletingPersona } = PersonaContext.useContainer()
-    const history = useHistory()
+    const navigate = useNavigate()
     const backupPassword = useMemo(() => {
         try {
             const password = localStorage.getItem('backupPassword')
@@ -103,7 +101,7 @@ const Logout = memo(() => {
             const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
             if (lastCreatedPersona) await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona.identifier)
         }
-        history.replace(PopupRoutes.Personas)
+        navigate(PopupRoutes.Personas, { replace: true })
     }, [deletingPersona, history])
     return (
         <LogoutUI
@@ -111,7 +109,7 @@ const Logout = memo(() => {
             backupPassword={backupPassword ?? ''}
             loading={loading}
             onLogout={onLogout}
-            onCancel={() => history.goBack()}
+            onCancel={() => navigate(-1)}
         />
     )
 })
@@ -147,7 +145,7 @@ export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout
                     <div>
                         <Typography className={classes.name}>{deletingPersona?.nickname}</Typography>
                         <Typography className={classes.identifier}>
-                            {formatFingerprint(deletingPersona?.identifier.compressedPoint ?? '', 10)}
+                            {formatPersonaFingerprint(deletingPersona?.identifier.compressedPoint ?? '', 10)}
                         </Typography>
                     </div>
                 </div>

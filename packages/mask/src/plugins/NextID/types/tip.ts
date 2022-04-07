@@ -5,6 +5,8 @@ export enum TipType {
 
 export interface TipTask {
     to?: string
-    snsID?: string
+    recipientSnsId?: string
     addresses: string[]
 }
+
+export type TipNFTKeyPair = [address: string, tokenId: string]

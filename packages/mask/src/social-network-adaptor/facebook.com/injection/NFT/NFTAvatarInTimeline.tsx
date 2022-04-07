@@ -6,14 +6,53 @@ import { Flags } from '../../../../../shared'
 import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
 import { isMobileFacebook } from '../../utils/isMobile'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
+import { memo } from 'react'
+import { makeStyles } from '@masknet/theme'
+
+const useStyles = makeStyles()(() => ({
+    root: {
+        transform: 'scale(1)!important',
+    },
+}))
+
+const TimelineRainbow = memo(
+    ({ userId, avatarId, width, height }: { userId: string; avatarId: string; width: number; height: number }) => {
+        const { classes } = useStyles()
+        return (
+            <div
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    zIndex: 2,
+                }}>
+                <NFTBadgeTimeline
+                    userId={userId}
+                    avatarId={avatarId}
+                    width={width}
+                    height={height}
+                    classes={classes}
+                    snsKey={RSS3_KEY_SNS.FACEBOOK}
+                />
+            </div>
+        )
+    },
+)
 
 function getFacebookId(element: HTMLElement | SVGElement) {
     const node = (isMobileFacebook ? element.firstChild : element.parentNode?.parentNode) as HTMLLinkElement
     if (!node) return ''
     const url = new URL(node.href)
 
-    if (url.pathname === '/profile.php' && url.searchParams.get('id'))
+    if (url.pathname === '/profile.php' && url.searchParams.get('id')) {
         return url.searchParams.get(isMobileFacebook ? 'lst' : 'id')
+    }
+
+    if (url.pathname.includes('/groups')) {
+        const match = url.pathname.match(/\/user\/(\w+)\//)
+        if (!match) return ''
+        return match[1]
+    }
 
     return url.pathname.replace('/', '')
 }
@@ -45,17 +84,16 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal
                             top: 0,
                             zIndex: 2,
                         }}>
-                        <NFTBadgeTimeline
+                        <TimelineRainbow
                             userId={facebookId}
                             avatarId={info.avatarId}
                             width={info.width - 4}
                             height={info.height - 4}
-                            snsKey={RSS3_KEY_SNS.FACEBOOK}
                         />
                     </div>,
                 )
 
-                remove = root.destory
+                remove = root.destroy
             }
 
             run()

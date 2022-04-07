@@ -41,11 +41,6 @@ function modify(manifest: Manifest, flags: NormalizedFlags) {
         stableDevelopmentExtensionID(manifest)
     }
 
-    // Mask 2.0
-    if (flags.mode === 'development' || flags.channel === 'beta' || flags.channel === 'insider') {
-        manifest.browser_action = { default_popup: 'popups.html' }
-    }
-
     if (flags.hmr) {
         manifest.web_accessible_resources.push('*.json', '*.js')
     }
@@ -53,7 +48,7 @@ function modify(manifest: Manifest, flags: NormalizedFlags) {
         // https://developer.chrome.com/docs/extensions/mv3/intro/mv3-migration/
         manifest.manifest_version = 3
 
-        manifest.permissions = manifest.permissions.filter((x) => !x.startsWith('http'))
+        manifest.permissions = manifest.permissions.filter((x) => !x.startsWith('http')).concat('scripting')
         manifest.optional_permissions = manifest.optional_permissions.filter((x) => x !== '<all_urls>')
         manifest.host_permissions = ['<all_urls>']
 
