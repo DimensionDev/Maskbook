@@ -3,7 +3,7 @@ import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme, useCustomSnackbar
 import { Box, Button, DialogContent, ThemeProvider, Typography } from '@mui/material'
 import { MnemonicReveal } from '../../../components/Mnemonic'
 import { MiniMaskIcon, InfoIcon, CopyIcon } from '@masknet/icons'
-import { ForwardedRef, forwardRef, useEffect, useRef } from 'react'
+import { ForwardedRef, forwardRef, useEffect, useMemo, useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
 import { WatermarkURL } from '../../../assets'
@@ -107,6 +107,11 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
     const [state, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
 
+    const qrValue = useMemo(() => {
+        const main = words?.length ? `mnemonic/${btoa(words.join(' '))}` : `privatekey/${privateKey}`
+        return `mask://persona/${main}?nickname=${personaName}`
+    }, [words?.join(), privateKey, personaName])
+
     useEffect(() => {
         if (state.value) {
             showSnackbar(t.personas_export_persona_copy_success(), { variant: 'success' })
@@ -157,13 +162,7 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                             </Typography>
                         </Box>
                     </Box>
-                    <QRCode
-                        value={`mask://persona/privatekey/${privateKey}`}
-                        ecLevel="L"
-                        size={120}
-                        quietZone={6}
-                        qrStyle="dots"
-                    />
+                    <QRCode value={qrValue} ecLevel="L" size={120} quietZone={6} qrStyle="dots" />
                 </Box>
                 {words?.length ? (
                     <>
