@@ -29,6 +29,10 @@ const useStyles = makeStyles()((theme) => {
         table: {
             tableLayout: 'fixed',
             width: '100%',
+            '& td': {
+                height: 60,
+                padding: '0 10px',
+            },
         },
         name: {
             maxWidth: '100%',
@@ -39,10 +43,10 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         nameHeader: {
-            width: 182,
+            width: 210,
         },
         sellHeader: {
-            width: 70,
+            width: 55,
         },
         market: {
             color: 'rgba(8,87,224,1)',
@@ -70,6 +74,9 @@ const useStyles = makeStyles()((theme) => {
         },
         nameCellContainer: {
             width: '100%',
+        },
+        sellButton: {
+            padding: theme.spacing(0, 10),
         },
     }
 })
@@ -113,9 +120,15 @@ export function AccountView() {
                             <TableCell key="name" className={classes.nameHeader}>
                                 {t('plugin_ideamarket_name')}
                             </TableCell>
-                            <TableCell key="price">{t('plugin_ideamarket_price')}</TableCell>
-                            <TableCell key="balance">{t('plugin_ideamarket_balance')}</TableCell>
-                            <TableCell key="value">{t('plugin_ideamarket_value')}</TableCell>
+                            <TableCell align="center" key="price">
+                                {t('plugin_ideamarket_price')}
+                            </TableCell>
+                            <TableCell align="center" key="balance">
+                                {t('plugin_ideamarket_balance')}
+                            </TableCell>
+                            <TableCell align="center" key="value">
+                                {t('plugin_ideamarket_value')}
+                            </TableCell>
                             <TableCell key="sell" className={classes.sellHeader} />
                         </TableRow>
                     </TableHead>
@@ -192,9 +205,9 @@ export function AccountView() {
                                             )}
                                         </div>
                                     </TableCell>
-                                    <TableCell>&#36;{tokenPrice}</TableCell>
-                                    <TableCell>{userTokenBalance}</TableCell>
-                                    <TableCell>&#36;{totalBalance}</TableCell>
+                                    <TableCell align="center">&#36;{tokenPrice}</TableCell>
+                                    <TableCell align="center">{userTokenBalance}</TableCell>
+                                    <TableCell align="center">&#36;{totalBalance}</TableCell>
                                     <TableCell>
                                         <Grid container alignContent="center" justifyContent="center">
                                             <Button
