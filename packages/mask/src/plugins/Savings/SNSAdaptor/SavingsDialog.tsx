@@ -51,67 +51,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         return networks.map((network) => getChainIdFromNetworkType(network))
     }, [])
 
-    // const { value: aaveTokens } = useAsync(async () => {
-    //     if (chainId !== ChainId.Mainnet) {
-    //         return []
-    //     }
-
-    //     const address = getAaveConstants(chainId).AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
-
-    //     const protocolDataContract = createContract<AaveProtocolDataProvider>(
-    //         web3,
-    //         address,
-    //         AaveProtocolDataProviderABI as AbiItem[],
-    //     )
-
-    //     const tokens = await protocolDataContract?.methods.getAllReservesTokens().call()
-
-    //     const aTokens = await protocolDataContract?.methods.getAllATokens().call()
-
-    //     return tokens?.map((token) => {
-    //         return [token[1], aTokens?.filter((f) => f[0].toUpperCase() === `a${token[0]}`.toUpperCase())[0][1]]
-    //     })
-    // }, [web3, chainId])
-
-    // const { value: detailedAaveTokens } = useFungibleTokensDetailed(
-    //     compact(flatten(aaveTokens ?? [])).map((m) => {
-    //         return { address: m, type: EthereumTokenType.ERC20 }
-    //     }) ?? [],
-    //     chainId,
-    // )
-
-    // const { value: yfiTokens } = useAsync(async () => {
-    //     if (!isValidYearnChain(chainId)) {
-    //         return []
-    //     }
-
-    //     // @ts-ignore
-    //     const yearn = new Yearn(chainId, {
-    //         // @ts-ignore
-    //         provider: web3.currentProvider,
-    //     })
-    //     await yearn.ready
-
-    //     // @ts-ignore
-    //     const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
-
-    //     const allVaults = await vaultInterface.get()
-    //     const currentVaults = sortedUniqBy(
-    //         orderBy(allVaults, ['metadata.defaultDisplayToken', 'version'], ['asc', 'desc']),
-    //         (m) => m.metadata.defaultDisplayToken,
-    //     )
-
-    //     return currentVaults.map((v) => {
-    //         return [v.metadata.defaultDisplayToken, v.address]
-    //     })
-    // }, [web3, chainId])
-
-    // const { value: detailedYFITokens } = useFungibleTokensDetailed(
-    //     compact(flatten(yfiTokens ?? [])).map((address: string) => {
-    //         return { address, type: EthereumTokenType.ERC20 }
-    //     }) ?? [],
-    //     chainId,
-    // )
+    
     const {tokenPairs: aaveTokenPairs} = useAaveTokens(chainId, web3)
     const {tokenPairs: yfiTokenPairs} = useYearnTokens(chainId, web3)
 
