@@ -96,7 +96,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
-        if (!platform && !identity) return []
+        if (!platform || !identity) return []
 
         const response = await fetchJSON<NextIDBindings>(
             urlcat(BASE_URL, '/v1/proof', { platform: platform, identity: identity }),
@@ -107,7 +107,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, enableCache?: boolean) {
-        if (!platform && !identity) return false
+        if (!platform || !identity) return false
 
         const url = geyExistedBindingQueryURL(platform, identity, personaPublicKey)
         const result = await fetchJSON<BindingProof>(url, {}, enableCache)

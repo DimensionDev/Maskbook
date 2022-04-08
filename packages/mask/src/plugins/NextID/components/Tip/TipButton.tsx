@@ -82,7 +82,7 @@ export const TipButton: FC<Props> = ({
     }, [receiverPersona?.publicHexKey, platform, receiver?.userId])
 
     const [walletsState, queryBindings] = useAsyncFn(async () => {
-        if (!receiver) return EMPTY_LIST
+        if (!receiver || !receiver?.userId) return EMPTY_LIST
 
         const persona = await Services.Identity.queryPersonaByProfile(receiver)
         if (!persona?.publicHexKey) return EMPTY_LIST
