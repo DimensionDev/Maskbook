@@ -115,7 +115,9 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         <TokenTableUI
             isLoading={detailedTokensLoading}
             isEmpty={!detailedTokensLoading && (!!detailedTokensError || !detailedTokens?.length)}
-            dataSource={(detailedTokens ?? []).filter((x) => !selectedChainId || x.chainId === selectedChainId)}
+            dataSource={(detailedTokens ?? []).filter(
+                (x) => (!selectedChainId || x.chainId === selectedChainId) && x.token.address.toLowerCase() !== 'boba',
+            )}
             onSwap={onSwap}
             onSend={onSend}
         />
