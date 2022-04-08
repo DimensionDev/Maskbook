@@ -13,8 +13,8 @@ import { parseAuthor } from './shared'
 
 const decode = decodeMessagePackF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
 const InvalidPayload = (msg?: string) => new CheckedError(PayloadException.InvalidPayload, msg).toErr()
-const importSpki = CheckedError.withErr(importEC_Key, CryptoException.InvalidCryptoKey)
 const importAES256 = CheckedError.withErr(importAES, CryptoException.InvalidCryptoKey)
+const importEC = CheckedError.withErr(importEC_Key, CryptoException.InvalidCryptoKey)
 export async function parse37(input: Uint8Array): PayloadParserResult {
     const signatureContainer = parseSignatureContainer(input)
     if (signatureContainer.err) return signatureContainer
@@ -94,7 +94,7 @@ function importAsymmetryKey(algr: unknown, key: unknown, name: string) {
     return andThenAsync(assertUint8Array(key, name, CryptoException.InvalidCryptoKey), async (pubKey): T => {
         if (typeof algr === 'number') {
             if (algr in EC_KeyCurveEnum) {
-                const key = await importSpki(pubKey, algr)
+                const key = await importEC(pubKey, algr)
                 if (key.err) return key
                 return Ok<EC_Key>({ algr, key: key.val })
             }

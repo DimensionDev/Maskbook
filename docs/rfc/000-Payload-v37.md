@@ -123,9 +123,7 @@ The implementation MUST NOT fail if the algorithm is not supported.
 
 This field represents the public key of the author.
 
-The value is in the DER encoding of the SubjectPublicKeyInfo (`spki`) structure from [RFC 5280][rfc5280].
-
-[rfc5280]: https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.7
+The value is in the raw format of the EC key.
 
 When it is `null`, it represents no this information is available (due to software defeat or user choice to opt-out).
 
@@ -182,7 +180,7 @@ This field represents the iv used to encrypt the message.
 
 ###### `authorEphemeralPublicKey` field
 
-This field is a Map of the DER encoding of the SubjectPublicKeyInfo (`spki`) structure from [RFC5280].
+This field is a Map of the raw format of the EC key.
 
 The key indicates its format.
 
@@ -199,24 +197,7 @@ The implementation MUST fail when the decryption result is NOT a valid TypedMess
 
 ### `secp256k1`
 
-When `spki` is mentioned in this spec, the implementation MUST be able to recognize the SubjectPublicKeyInfo of the curve [`secp256k1`][secp256k1]. This curve is widely used in the Mask Network.
-
 [secp256k1]: https://en.bitcoin.it/wiki/Secp256k1
-
-Here is an example of the `secp256k1` public key in Binary.
-
-```plaintext
-[
-   48,  86,  48,  16,   6,   7,  42, 134,  72, 206,  61,   2,
-    1,   6,   5,  43, 129,   4,   0,  10,   3,  66,   0,   4,
-  236,  81,   1, 232, 133,  60, 235, 215, 107, 253, 124,  90,
-   12,  21,  14, 139, 178, 143, 232,  52, 240, 119, 105,  91,
-  196, 232,  84,  33, 238,  69,  42, 104, 223, 226,  96, 216,
-  191, 166,  10,  63, 179, 111, 125,  99, 161, 131, 168, 172,
-  181, 245, 168, 182, 150,  19, 182, 240, 202,  62, 202, 219,
-   21, 175, 144, 205
-]
-```
 
 ## FAQ
 

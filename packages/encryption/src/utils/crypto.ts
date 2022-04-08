@@ -20,9 +20,6 @@ export function importAES(key: JsonWebKey | Uint8Array): Promise<Result<AESCrypt
 export function exportCryptoKeyToJWK(key: CryptoKey) {
     return Result.wrapAsync(() => crypto.subtle.exportKey('jwk', key))
 }
-export function exportCryptoKeyToSPKI(key: CryptoKey) {
-    return Result.wrapAsync(() => crypto.subtle.exportKey('spki', key).then((x) => new Uint8Array(x)))
-}
 export function exportCryptoKeyToRaw(key: CryptoKey) {
     return Result.wrapAsync(() => crypto.subtle.exportKey('raw', key).then((x) => new Uint8Array(x)))
 }
@@ -39,7 +36,7 @@ export function importEC_Key(key: JsonWebKey | Uint8Array, kind: EC_KeyCurveEnum
         }
         const args = [ImportParamsMap[kind], true, DeriveKeyUsage] as const
         if (key instanceof Uint8Array) {
-            return crypto.subtle.importKey('spki', key, ...args) as Promise<EC_CryptoKey>
+            return crypto.subtle.importKey('raw', key, ...args) as Promise<EC_CryptoKey>
         } else {
             return crypto.subtle.importKey('jwk', key, ...args) as Promise<EC_CryptoKey>
         }
