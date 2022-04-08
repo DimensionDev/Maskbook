@@ -143,7 +143,13 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 fullWidth
                 onClick={approveCallback}
                 {...props.ActionButtonProps}>
-                {t('plugin_wallet_approve_all_nft', { symbol: contractDetailed?.symbol })}
+                {t('plugin_wallet_approve_all_nft', {
+                    symbol: contractDetailed?.symbol
+                        ? contractDetailed.symbol.toLowerCase() === 'unknown'
+                            ? 'All'
+                            : contractDetailed.symbol
+                        : 'All',
+                })}
             </ActionButton>
         )
     } else if (value === undefined) {
