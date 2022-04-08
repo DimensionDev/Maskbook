@@ -1,11 +1,9 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Plugin, NetworkPluginID } from '@masknet/plugin-infra'
-import { OmenIcon } from '../../resources/OmenIcon'
 import { PLUGIN_ID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
-    icon: <OmenIcon />,
     name: { fallback: 'Omen' },
     description: {
         fallback: 'Omen is a multichain prediction market developed and governed by @Dxdao_.',
