@@ -4,7 +4,7 @@ import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
-import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { RemindDialog } from './RemindDialog'
 import { ShareDialog } from './ShareDialog'
@@ -32,7 +32,7 @@ interface SwapGuideProps
     extends Pick<SwapDialogProps, 'exchangeTokens' | 'payload'>,
         Omit<InjectedDialogProps, 'onClose'> {
     status: SwapStatus
-    shareSuccessLink: string | undefined
+    shareSuccessText: string | undefined
     total_remaining: BigNumber
     isBuyer: boolean
     retryPayload: () => void
@@ -49,7 +49,7 @@ export function SwapGuide(props: SwapGuideProps) {
         isBuyer,
         open,
         retryPayload,
-        shareSuccessLink,
+        shareSuccessText,
         total_remaining,
         onUpdate,
         onClose,
@@ -127,7 +127,7 @@ export function SwapGuide(props: SwapGuideProps) {
                         case SwapStatus.Share:
                             return (
                                 <ShareDialog
-                                    shareSuccessLink={shareSuccessLink}
+                                    shareSuccessText={shareSuccessText}
                                     poolName={payload.message}
                                     token={payload.token}
                                     actualSwapAmount={actualSwapAmount}

@@ -75,7 +75,7 @@ export const TransferERC721 = memo(() => {
     } | null>(null)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const [contract, setContract] = useState<ERC721ContractDetailed>()
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
     const [gasLimit_, setGasLimit_] = useState(0)
     const network = useNetworkDescriptor()
     const { Utils } = useWeb3State()

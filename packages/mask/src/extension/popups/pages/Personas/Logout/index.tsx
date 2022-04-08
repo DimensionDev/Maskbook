@@ -8,9 +8,7 @@ import { PersonaContext } from '../hooks/usePersonaContext'
 import Services from '../../../../service'
 import { LoadingButton } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
-import type { PersonaInformation } from '@masknet/shared-base'
-import { formatFingerprint } from '@masknet/shared'
+import { PopupRoutes, formatPersonaFingerprint, type PersonaInformation } from '@masknet/shared-base'
 import { PasswordField } from '../../../components/PasswordField'
 
 const useStyles = makeStyles()((theme) => ({
@@ -147,7 +145,7 @@ export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout
                     <div>
                         <Typography className={classes.name}>{deletingPersona?.nickname}</Typography>
                         <Typography className={classes.identifier}>
-                            {formatFingerprint(deletingPersona?.identifier.compressedPoint ?? '', 10)}
+                            {formatPersonaFingerprint(deletingPersona?.identifier.compressedPoint ?? '', 10)}
                         </Typography>
                     </div>
                 </div>

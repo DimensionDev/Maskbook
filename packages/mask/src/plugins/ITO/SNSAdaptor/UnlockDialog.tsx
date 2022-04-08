@@ -1,12 +1,7 @@
-import { Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { isGreaterThan, rightShift } from '@masknet/web3-shared-base'
 import { useCallback, useState } from 'react'
-import { v4 as uuid } from 'uuid'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useI18N } from '../../../utils'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
-    useITOConstants,
     ERC20TokenDetailed,
     EthereumTokenType,
     formatBalance,
@@ -14,13 +9,16 @@ import {
     resolveAddressLinkOnExplorer,
     useChainId,
     useFungibleTokenBalance,
+    useITOConstants,
 } from '@masknet/web3-shared-evm'
-import { isGreaterThan, rightShift } from '@masknet/web3-shared-base'
+import { Link, Typography } from '@mui/material'
+import { Trans } from 'react-i18next'
+import { usePickToken } from '@masknet/shared'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { Trans } from 'react-i18next'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
     return isGreaterThan(allowance, `100000000000e${decimals}`) // 100 billion
@@ -51,30 +49,16 @@ export function UnlockDialog(props: UnlockDialogProps) {
 
     // #region select token
     const [token, setToken] = useState<ERC20TokenDetailed>(tokens[0])
-    const [id] = useState(uuid())
-    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                if (ev.token.type !== EthereumTokenType.ERC20) return
-                setToken(ev.token)
-            },
-            [id],
-        ),
-    )
-    const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialog({
-            open: true,
-            uuid: id,
+    const pickToken = usePickToken()
+    const onSelectTokenChipClick = useCallback(async () => {
+        const picked = await pickToken({
             disableNativeToken: true,
             disableSearchBar: true,
-            FungibleTokenListProps: {
-                selectedTokens: token ? [token.address] : [],
-                whitelist: tokens.map((x) => x.address),
-            },
+            selectedTokens: token?.address ? [token.address] : [],
+            whitelist: tokens.map((x) => x.address),
         })
-    }, [id, token?.address])
+        if (picked) setToken(picked as ERC20TokenDetailed)
+    }, [tokens, token?.address])
     // #endregion
     // #region amount
     const [rawAmount, setRawAmount] = useState('')

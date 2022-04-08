@@ -29,18 +29,11 @@ interface PetSetDialogProps {
 export function PetShareDialog({ onClose }: PetSetDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const shareLink = activatedSocialNetworkUI.utils.getShareLinkURL?.('')
 
     const onShareClick = useCallback(() => {
-        if (shareLink) {
-            const search = '?text=' + Share_Twitter_TXT
-            shareLink.search = search
-            shareLink.href = shareLink.origin + shareLink.pathname + shareLink.search
-            const share = shareLink.toString()
-            window.open(share, '_blank', 'noopener noreferrer')
-        }
+        activatedSocialNetworkUI.utils.share?.(Share_Twitter_TXT)
         onClose()
-    }, [shareLink])
+    }, [onClose])
 
     return (
         <Box className={classes.root}>

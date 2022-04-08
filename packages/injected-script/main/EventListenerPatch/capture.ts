@@ -6,10 +6,12 @@ const CapturingEvents: Set<string> = new Set(['keyup', 'input', 'paste', 'change
 type EventListenerDescriptor = { once: boolean; passive: boolean; capture: boolean }
 const CapturedListeners = new WeakMap<Node | Document, Map<string, Map<EventListener, EventListenerDescriptor>>>()
 // saving intrinsic of WeakMap, covert it from prototype method to own property.
-CapturedListeners.get = CapturedListeners.get
-CapturedListeners.set = CapturedListeners.set
-CapturedListeners.delete = CapturedListeners.delete
-CapturedListeners.has = CapturedListeners.has
+Object.defineProperties(CapturedListeners, {
+    get: { value: WeakMap.prototype.get },
+    set: { value: WeakMap.prototype.set },
+    delete: { value: WeakMap.prototype.delete },
+    has: { value: WeakMap.prototype.has },
+})
 
 redefineEventTargetPrototype(
     'addEventListener',
@@ -81,7 +83,7 @@ export function dispatchEventRaw<T extends Event>(
     overwrites: Partial<T> = {},
 ) {
     let currentTarget: null | Node | Document = target
-    const event = getMockedEvent(eventBase, () => currentTarget!, overwrites)
+    const event = getMockedEvent(eventBase, () => (isTwitter() ? target! : currentTarget!), overwrites)
     // Note: in firefox, "event" is "Opaque". Displayed as an empty object.
     const type = eventBase.type
     if (!CapturingEvents.has(type)) return warn("[@masknet/injected-script] Trying to send event didn't captured.")

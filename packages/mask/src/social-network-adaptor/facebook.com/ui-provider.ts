@@ -14,6 +14,8 @@ import { injectPostCommentsDefault } from '../../social-network/defaults/inject/
 import { pasteToCommentBoxFacebook } from './automation/pasteToCommentBoxFacebook'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/inject/CommentBox'
 import { injectPostInspectorFacebook } from './injection/PostInspector'
+import getSearchedKeywordAtFacebook from './collecting/getSearchedKeyword'
+import { injectSearchResultBoxAtFacebook } from './injection/SearchResultBox'
 import { PostProviderFacebook } from './collecting/posts'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
@@ -30,8 +32,10 @@ import { injectNFTAvatarInFacebook } from './injection/NFT/NFTAvatarInFacebook'
 import { injectUserNFTAvatarAtFacebook } from './injection/NFT/NFTAvatarInTimeline'
 import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
 import { injectProfileTabAtFacebook } from './injection/ProfileTab'
+import { injectPostReplacerAtFacebook } from './injection/PostReplacer'
 import { injectProfileTabContentAtFacebook } from './injection/ProfileContent'
 import { FacebookRenderFragments } from './customization/render-fragments'
+import { enableFbStyleTextPayloadReplace } from '../../../shared-ui/TypedMessageRender/transformer'
 
 const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -138,13 +142,16 @@ const facebookUI: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderFacebook,
         currentVisitingIdentityProvider: CurrentVisitingIdentityProviderFacebook,
         postsProvider: PostProviderFacebook,
+        getSearchedKeyword: getSearchedKeywordAtFacebook,
     },
     customization: {
         paletteMode: PaletteModeProviderFacebook,
-        componentOverwrite: {
+        sharedComponentOverwrite: {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteFacebook,
             },
+        },
+        componentOverwrite: {
             RenderFragments: FacebookRenderFragments,
         },
         useTheme: useThemeFacebookVariant,
@@ -154,6 +161,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         const profiles = stateCreator.profiles()
         InitAutonomousStateFriends(signal, friends, facebookShared.networkIdentifier)
         InitAutonomousStateProfiles(signal, profiles, facebookShared.networkIdentifier)
+        enableFbStyleTextPayloadReplace()
         return { friends, profiles }
     },
     injection: {
@@ -168,10 +176,8 @@ const facebookUI: SocialNetworkUI.Definition = {
                 image: true,
             },
         },
-        // Not supported yet
-        enhancedPostRenderer: undefined,
         userBadge: undefined,
-        searchResult: undefined,
+        searchResult: injectSearchResultBoxAtFacebook,
         setupPrompt: injectSetupPromptFacebook,
         commentComposition: {
             compositionBox: injectPostCommentsDefault(),
@@ -191,6 +197,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInFaceBook,
         profileAvatar: injectNFTAvatarInFacebook,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
+        enhancedPostRenderer: injectPostReplacerAtFacebook,
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),
         setupWizard: createTaskStartSetupGuideDefault(),

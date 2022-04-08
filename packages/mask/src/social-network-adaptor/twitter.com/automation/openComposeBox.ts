@@ -1,8 +1,11 @@
-import { MaskMessages, CompositionRequest } from '../../../utils/messages'
-import { makeTypedMessageText, TypedMessage } from '@masknet/typed-message'
+import { CrossIsolationMessages, CompositionRequest } from '@masknet/shared-base'
+import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
 
-export function openComposeBoxTwitter(content: string | TypedMessage, options?: CompositionRequest['options']) {
-    MaskMessages.events.requestComposition.sendToLocal({
+export function openComposeBoxTwitter(
+    content: string | SerializableTypedMessages,
+    options?: CompositionRequest['options'],
+) {
+    CrossIsolationMessages.events.requestComposition.sendToLocal({
         reason: 'timeline',
         open: true,
         content: typeof content === 'string' ? makeTypedMessageText(content) : content,

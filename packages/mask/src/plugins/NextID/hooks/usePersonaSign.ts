@@ -2,7 +2,7 @@ import { useAsyncFn } from 'react-use'
 import Services from '../../../extension/service'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn'
-import type { SignRequestResult } from '../../../extension/background-script/IdentityService'
+import type { SignRequestResult } from '../../../../background/services/identity'
 
 export function usePersonaSign(
     message?: string,

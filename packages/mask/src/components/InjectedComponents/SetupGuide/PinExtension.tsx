@@ -1,12 +1,10 @@
 import { useWizardDialogStyles, WizardDialog } from './WizardDialog'
 import { useI18N } from '../../../utils'
-import { useState } from 'react'
 import { SetupGuideStep } from './types'
-import { Box, Button, Checkbox, FormControlLabel, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import ExtensionIcon from '@mui/icons-material/Extension'
 import { PinIcon } from '@masknet/icons'
-import { dismissPinExtensionTip } from '../../../settings/settings'
 
 interface PinExtensionProps {
     onDone?: () => void
@@ -16,7 +14,6 @@ export function PinExtension({ onDone }: PinExtensionProps) {
     const pinImg = new URL('../../../resources/extensionPinned.png', import.meta.url).toString()
     const { classes } = useWizardDialogStyles()
     const { t } = useI18N()
-    const [checked, setChecked] = useState(true)
 
     return (
         <WizardDialog
@@ -61,21 +58,6 @@ export function PinExtension({ onDone }: PinExtensionProps) {
                 <Button className={classes.button} variant="contained" onClick={onDone}>
                     {t('start')}
                 </Button>
-            }
-            dismiss={
-                <FormControlLabel
-                    classes={{ label: classes.label }}
-                    control={
-                        <Checkbox
-                            checked={checked}
-                            onChange={(e) => {
-                                setChecked(e.target.checked)
-                                dismissPinExtensionTip.value = e.target.checked
-                            }}
-                        />
-                    }
-                    label={t('setup_guide_pin_dismiss')}
-                />
             }
             onClose={onDone}
         />

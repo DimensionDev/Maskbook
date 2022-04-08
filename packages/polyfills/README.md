@@ -20,7 +20,7 @@ Extra:
 
 ## Targeting ES Syntax and APIs
 
-- Syntax: ES2020
+- Syntax: ES2021
 - Library: ES2022 (with [core-js](https://github.com/zloirock/core-js)).
 
 ### Caution

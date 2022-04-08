@@ -9,10 +9,11 @@ import {
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
+import { useI18N } from '../../../utils'
 import { WalletMessages } from '../messages'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -49,24 +50,24 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
 
     // #region remote controlled dialog
     const [state, setState] = useState<TransactionState | null>(null)
-    const [shareLink, setShareLink] = useState('')
+    const [shareText, setShareText] = useState('')
     const [summary, setSummary] = useState('')
     const [title, setTitle] = useState(t('plugin_wallet_transaction'))
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, (ev) => {
         if (ev.open) {
             setState(ev.state)
             setSummary(ev.summary ?? '')
-            setShareLink(ev.shareLink ?? '')
+            setShareText(ev.shareText ?? '')
             setTitle(ev.title ?? t('plugin_wallet_transaction'))
         } else {
             setSummary('')
-            setShareLink('')
+            setShareText('')
         }
     })
     const onShare = useCallback(() => {
-        if (shareLink) window.open(shareLink, '_blank', 'noopener noreferrer')
+        if (shareText) activatedSocialNetworkUI.utils.share?.(shareText)
         closeDialog()
-    }, [shareLink, closeDialog])
+    }, [shareText, closeDialog])
     // #endregion
 
     if (!state) return null
@@ -140,8 +141,8 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         size="large"
                         variant="contained"
                         fullWidth
-                        onClick={state.type === TransactionStateType.FAILED || !shareLink ? closeDialog : onShare}>
-                        {state.type === TransactionStateType.FAILED || !shareLink ? t('dismiss') : t('share')}
+                        onClick={state.type === TransactionStateType.FAILED || !shareText ? closeDialog : onShare}>
+                        {state.type === TransactionStateType.FAILED || !shareText ? t('dismiss') : t('share')}
                     </Button>
                 </DialogActions>
             ) : null}

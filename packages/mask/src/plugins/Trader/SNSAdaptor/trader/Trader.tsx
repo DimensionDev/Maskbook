@@ -17,6 +17,7 @@ import {
     UST,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { usePickToken } from '@masknet/shared'
 import { delay } from '@dimensiondev/kit'
 import { useGasConfig } from './hooks/useGasConfig'
 import type { Coin } from '../../types'
@@ -24,7 +25,7 @@ import { TokenPanelType, TradeInfo } from '../../types'
 import { useI18N } from '../../../../utils'
 import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -204,43 +205,24 @@ export function Trader(props: TraderProps) {
 
     // #region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
-    const [focusedTokenPanelType, setFocusedTokenPanelType] = useState(TokenPanelType.Input)
 
-    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== String(focusedTokenPanelType)) return
+    const pickToken = usePickToken()
+    const onTokenChipClick = useCallback(
+        async (panelType: TokenPanelType) => {
+            const picked = await pickToken({
+                chainId,
+                disableNativeToken: false,
+                selectedTokens: excludeTokens,
+            })
+            if (picked) {
                 dispatchTradeStore({
                     type:
-                        focusedTokenPanelType === TokenPanelType.Input
+                        panelType === TokenPanelType.Input
                             ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
                             : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                    token: ev.token,
+                    token: picked,
                 })
-                if (focusedTokenPanelType === TokenPanelType.Input) {
-                    dispatchTradeStore({
-                        type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
-                        amount: '',
-                    })
-                }
-            },
-            [dispatchTradeStore, focusedTokenPanelType],
-        ),
-    )
-
-    const onTokenChipClick = useCallback(
-        (type: TokenPanelType) => {
-            setFocusedTokenPanelType(type)
-            setSelectTokenDialog({
-                chainId,
-                open: true,
-                uuid: String(type),
-                disableNativeToken: false,
-                FungibleTokenListProps: {
-                    selectedTokens: excludeTokens,
-                },
-            })
+            }
         },
         [excludeTokens.join(), chainId],
     )
@@ -287,32 +269,26 @@ export function Trader(props: TraderProps) {
 
     // #region remote controlled transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            focusedTrade?.value && inputToken && outputToken
-                ? [
-                      `I just swapped ${formatBalance(
-                          focusedTrade.value.inputAmount,
-                          inputToken.decimals,
-                          6,
-                      )} ${cashTag}${inputToken.symbol} for ${formatBalance(
-                          focusedTrade.value.outputAmount,
-                          outputToken.decimals,
-                          6,
-                      )} ${cashTag}${outputToken.symbol}.${
-                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                              ? `Follow @${
-                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                                } (mask.io) to swap cryptocurrencies on ${
-                                    isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
-                                }.`
-                              : ''
-                      }`,
-                      '#mask_io',
-                  ].join('\n')
-                : '',
-        )
-        .toString()
+    const shareText =
+        focusedTrade?.value && inputToken && outputToken
+            ? [
+                  `I just swapped ${formatBalance(focusedTrade.value.inputAmount, inputToken.decimals, 6)} ${cashTag}${
+                      inputToken.symbol
+                  } for ${formatBalance(focusedTrade.value.outputAmount, outputToken.decimals, 6)} ${cashTag}${
+                      outputToken.symbol
+                  }.${
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                          ? `Follow @${
+                                isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                            } (mask.io) to swap cryptocurrencies on ${
+                                isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
+                            }.`
+                          : ''
+                  }`,
+                  '#mask_io',
+              ].join('\n')
+            : ''
+
     // #endregion
 
     // #region close the transaction dialog
@@ -336,7 +312,7 @@ export function Trader(props: TraderProps) {
         if (tradeState?.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareText,
             state: tradeState,
         })
     }, [tradeState /* update tx dialog only if state changed */])

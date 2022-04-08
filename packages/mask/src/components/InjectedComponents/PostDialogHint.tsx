@@ -3,14 +3,11 @@ import { IconButton, Tooltip } from '@mui/material'
 import { useStylesExtends, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
 import type { BannerProps } from '../Welcomes/Banner'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
-import { MaskSharpIcon } from '../../resources/MaskIcon'
-import { useMyIdentities } from '../DataSource/useActivatedUI'
-import { currentSetupGuideStatus } from '../../settings/settings'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { MaskSharpIcon, MaskIconInMinds } from '../../resources/MaskIcon'
 import classNames from 'classnames'
 import GuideStep from '../GuideStep'
+import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 
 interface TooltipConfigProps {
     placement?: 'bottom' | 'top'
@@ -18,15 +15,17 @@ interface TooltipConfigProps {
 }
 
 export interface PostDialogHintUIProps extends withClasses<'buttonTransform' | 'iconButton' | 'tooltip'> {
+    disableGuideTip?: boolean
     size?: number
     tooltip?: TooltipConfigProps
+    iconType?: string
     onHintButtonClicked: () => void
 }
 
 const useStyles = makeStyles()((theme) => ({
     button: {
         // TODO: is it correct? (what about twitter?)
-        padding: isMobileFacebook ? 0 : '8px',
+        padding: isMobileFacebook ? 0 : '7px',
     },
     text: {
         fontSize: 14,
@@ -40,30 +39,44 @@ const useStyles = makeStyles()((theme) => ({
         padding: '8px 10px',
         borderBottom: '1px solid #dadde1',
     },
+    tooltip: {
+        color: 'white',
+    },
 }))
+
+const ICON_MAP: Record<string, JSX.Element> = {
+    minds: <MaskIconInMinds />,
+    default: <MaskSharpIcon color="primary" />,
+}
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const { t } = useI18N()
-    const { size, tooltip } = props
+    const { size, tooltip, disableGuideTip } = props
     const classes = useStylesExtends(useStyles(), props)
 
-    return (
+    const getEntry = () => (
+        <Tooltip
+            title="Mask Network"
+            classes={{ tooltip: classes.tooltip }}
+            placement={tooltip?.placement}
+            disableHoverListener={tooltip?.disabled}
+            PopperProps={{
+                disablePortal: true,
+            }}>
+            <IconButton
+                size="large"
+                className={classNames(classes.button, classes.iconButton)}
+                onClick={props.onHintButtonClicked}>
+                {ICON_MAP?.[props?.iconType ?? 'default']}
+            </IconButton>
+        </Tooltip>
+    )
+
+    return disableGuideTip ? (
+        getEntry()
+    ) : (
         <GuideStep step={3} total={3} tip={t('user_guide_tip_3')} onComplete={props.onHintButtonClicked}>
-            <Tooltip
-                title="Mask Network"
-                classes={{ tooltip: classes.tooltip }}
-                placement={tooltip?.placement}
-                disableHoverListener={tooltip?.disabled}
-                PopperProps={{
-                    disablePortal: true,
-                }}>
-                <IconButton
-                    size="large"
-                    className={classNames(classes.button, classes.iconButton)}
-                    onClick={props.onHintButtonClicked}>
-                    <MaskSharpIcon size={size} color="primary" />
-                </IconButton>
-            </Tooltip>
+            {getEntry()}
         </GuideStep>
     )
 })
@@ -88,11 +101,11 @@ export const PostDialogHintUI = memo(function PostDialogHintUI(props: PostDialog
 export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
     NotSetupYetPromptProps?: Partial<BannerProps>
     size?: number
+    disableGuideTip?: boolean
+    iconType?: string
 }
 export function PostDialogHint(props: PostDialogHintProps) {
-    const identities = useMyIdentities()
-    const connecting = useValueRef(currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier])
-
-    if (connecting || identities.length === 0) return null
+    const personaConnectStatus = usePersonaConnectStatus()
+    if (personaConnectStatus.action) return null
     return <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
 }
