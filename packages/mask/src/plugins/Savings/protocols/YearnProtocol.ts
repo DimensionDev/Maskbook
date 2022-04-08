@@ -50,9 +50,8 @@ export class YearnProtocol implements SavingsProtocol {
             const vaults: Vault[] = await vaultInterface.get([this.stakeToken.address])
             this._apr = YearnProtocol.DEFAULT_APR
 
-            
             if (vaults && vaults.length > 0) {
-                // APY and APR are returned here as decimals, multiply by 100 to get the percents                
+                // APY and APR are returned here as decimals, multiply by 100 to get the percents
                 this._apr = (100 * (vaults[0].metadata.apy?.gross_apr ?? 0)).toFixed(2)
                 return
             }

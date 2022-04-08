@@ -18,7 +18,6 @@ export function useYearnTokens(chainId: ChainId, web3: Web3) {
 
         // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
         const yearn = new Yearn(chainId, {
-            
             provider: web3.currentProvider,
         })
         await yearn.ready
