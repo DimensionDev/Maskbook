@@ -2,11 +2,13 @@ import { Fragment, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography, useTheme } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { useActivatedPluginsSNSAdaptor, useCurrentWeb3NetworkPluginID, Plugin, useAccount } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor, useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
 import { ApplicationSettingDialog } from './ApplicationSettingDialog'
+import { DraggerDemo } from './DraggerDemo'
+import { Application, useUnListedApplicationList } from './ApplicationSettingPluginDragger'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -61,6 +63,32 @@ export function ApplicationBoard() {
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
     const SettingIconDarkModeUrl = new URL('./assets/settings_dark_mode.png', import.meta.url).toString()
     const SettingIconLightModeUrl = new URL('./assets/settings_light_mode.png', import.meta.url).toString()
+    const applicationList = snsAdaptorPlugins
+        .reduce<Application[]>((acc, cur) => {
+            if (!cur.ApplicationEntries) return acc
+            const currentWeb3NetworkSupportedChainIds = cur.enableRequirement.web3?.[currentWeb3Network]
+            const isWeb3Enabled = Boolean(
+                currentWeb3NetworkSupportedChainIds === undefined ||
+                    currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
+            )
+            const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
+            const currentSNSIsSupportedNetwork = cur.enableRequirement.networks.networks[currentSNSNetwork]
+            const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
+
+            return acc.concat(
+                cur.ApplicationEntries.map((x) => {
+                    return {
+                        entry: x,
+                        enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
+                        pluginId: cur.ID,
+                    }
+                }) ?? [],
+            )
+        }, [])
+        .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
+        .filter((x) => Boolean(x.entry.RenderEntryComponent))
+
+    const { value, retry } = useUnListedApplicationList(applicationList)
 
     return (
         <>
@@ -74,51 +102,25 @@ export function ApplicationBoard() {
             </div>
 
             <section className={classes.applicationWrapper}>
-                {snsAdaptorPlugins
-                    .reduce<{ entry: Plugin.SNSAdaptor.ApplicationEntry; enabled: boolean; pluginId: string }[]>(
-                        (acc, cur) => {
-                            if (!cur.ApplicationEntries) return acc
-                            const currentWeb3NetworkSupportedChainIds = cur.enableRequirement.web3?.[currentWeb3Network]
-                            const isWeb3Enabled = Boolean(
-                                currentWeb3NetworkSupportedChainIds === undefined ||
-                                    currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
-                            )
-                            const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
-                            const currentSNSIsSupportedNetwork =
-                                cur.enableRequirement.networks.networks[currentSNSNetwork]
-                            const isSNSEnabled =
-                                currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
-
-                            return acc.concat(
-                                cur.ApplicationEntries.map((x) => {
-                                    return {
-                                        entry: x,
-                                        enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
-                                        pluginId: cur.ID,
-                                    }
-                                }) ?? [],
-                            )
-                        },
-                        [],
+                {(value?.listedAppList ?? applicationList).map((X, i) => {
+                    const RenderEntryComponent = X.entry.RenderEntryComponent!
+                    return (
+                        <Fragment key={i + X.pluginId}>
+                            <RenderEntryComponent disabled={!X.enabled} AppIcon={X.entry.AppIcon} />
+                        </Fragment>
                     )
-                    .sort(
-                        (a, b) =>
-                            (a.entry.appBoardSortingDefaultPriority ?? 0) -
-                            (b.entry.appBoardSortingDefaultPriority ?? 0),
-                    )
-                    .filter((x) => Boolean(x.entry.RenderEntryComponent))
-                    .map((X, i) => {
-                        const RenderEntryComponent = X.entry.RenderEntryComponent!
-                        return (
-                            <Fragment key={i + X.pluginId}>
-                                <RenderEntryComponent disabled={!X.enabled} AppIcon={X.entry.AppIcon} />
-                            </Fragment>
-                        )
-                    })}
+                })}
             </section>
             {openSettings ? (
-                <ApplicationSettingDialog open={openSettings} onClose={() => setOpenSettings(false)} />
+                <ApplicationSettingDialog
+                    open={openSettings}
+                    onClose={() => {
+                        setOpenSettings(false)
+                        retry()
+                    }}
+                />
             ) : null}
+            <DraggerDemo />
         </>
     )
 }

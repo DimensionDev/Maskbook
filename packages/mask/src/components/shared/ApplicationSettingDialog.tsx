@@ -5,6 +5,7 @@ import { InjectedDialog } from '@masknet/shared'
 import AbstractTab, { AbstractTabProps } from '../../components/shared/AbstractTab'
 import { useI18N } from '../../utils'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch'
+import { ApplicationSettingPluginDragger } from './ApplicationSettingPluginDragger'
 
 interface Props {
     open: boolean
@@ -58,13 +59,17 @@ export function ApplicationSettingDialog(props: Props) {
     const { open, onClose } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const tabState = useState(DialogTabs.pluginSwitch)
+    const tabState = useState(DialogTabs.appList)
 
     const tabProps: AbstractTabProps = {
         tabs: [
             {
                 label: t('application_settings_tab_app_list'),
-                children: <div className={classes.tabContent}>123</div>,
+                children: (
+                    <div className={classes.tabContent}>
+                        <ApplicationSettingPluginDragger />
+                    </div>
+                ),
                 sx: { p: 0 },
             },
             {
