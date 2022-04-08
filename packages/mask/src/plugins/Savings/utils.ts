@@ -7,13 +7,7 @@ export function splitToPair(
     if (!details) {
         return []
     }
-    return details.reduce(function (result: [FungibleTokenDetailed, FungibleTokenDetailed][], value, index, array) {
-        if (index % 2 === 0) {
-            const slice = array.slice(index, index + 2)
-            result.push([slice[0], slice[1]])
-        }
-        return result
-    }, [])
+    return chunk(details, 2) as [FungibleTokenDetailed, FungibleTokenDetailed][]
 }
 
 export function isValidYearnChain(chainId: ChainId) {
