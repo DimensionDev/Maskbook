@@ -1,7 +1,7 @@
 import type { PayloadParserResult } from '.'
 import type { PayloadParseResult } from '../payload'
 import { CryptoException, PayloadException, assertArray, assertUint8Array } from '../types'
-import { andThenAsync, CheckedError, OptionalResult } from '@masknet/shared-base'
+import { andThenAsync, CheckedError, decompressSecp256k1KeyRaw, OptionalResult } from '@masknet/shared-base'
 import { Ok, Result } from 'ts-results'
 import { EC_Key, EC_KeyCurveEnum } from '../payload/types'
 import { decodeMessagePackF, assertIVLengthEq16, importAES, importEC_Key } from '../utils'
@@ -94,6 +94,9 @@ function importAsymmetryKey(algr: unknown, key: unknown, name: string) {
     return andThenAsync(assertUint8Array(key, name, CryptoException.InvalidCryptoKey), async (pubKey): T => {
         if (typeof algr === 'number') {
             if (algr in EC_KeyCurveEnum) {
+                if (algr === EC_KeyCurveEnum.secp256k1) {
+                    pubKey = decompressSecp256k1KeyRaw(pubKey)
+                }
                 const key = await importEC(pubKey, algr)
                 if (key.err) return key
                 return Ok<EC_Key>({ algr, key: key.val })

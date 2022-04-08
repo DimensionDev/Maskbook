@@ -123,7 +123,7 @@ The implementation MUST NOT fail if the algorithm is not supported.
 
 This field represents the public key of the author.
 
-The value is in the raw format of the EC key.
+The value is in the compressed format of the EC key.
 
 When it is `null`, it represents no this information is available (due to software defeat or user choice to opt-out).
 
@@ -180,7 +180,7 @@ This field represents the iv used to encrypt the message.
 
 ###### `authorEphemeralPublicKey` field
 
-This field is a Map of the raw format of the EC key.
+This field is a Map of the compressed format of the EC key.
 
 The key indicates its format.
 
@@ -204,9 +204,3 @@ The implementation MUST fail when the decryption result is NOT a valid TypedMess
 ### Why the version number is negative?
 
 The pre 1.0 version of the Mask Network extension uses `-42` as its initial payload version. The number `42` comes from the book _The Hitchhiker's Guide to the Galaxy_ and the minus sign indicates this is an early version. When a new payload format is drafted, it's a natural idea that the version number should add by 1, therefore it should be `-41`. At the time of this RFC written, the latest payload is version `-38`, therefore this RFC follows the convention to mark the version as `-37`.
-
-### Why not uses the `raw` format defined in the Web Crypto specification for AES key?
-
-According to [the Web Crypto specification][webcrypto], `raw` format is NOT standardized therefore it might have a co-operational problem.
-
-[webcrypto]: https://w3c.github.io/webcrypto/#dfn-CryptoKey-slot-handle
