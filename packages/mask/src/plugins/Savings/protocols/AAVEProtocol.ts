@@ -25,6 +25,9 @@ export class AAVEProtocol implements SavingsProtocol {
 
     constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
 
+    static fromTokenPair(pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {
+        return new AAVEProtocol(pair)
+    }
     get type() {
         return ProtocolType.AAVE
     }

@@ -50,8 +50,8 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const protocols = useMemo(
         () => [
             ...LDO_PAIRS.filter((x) => x[0].chainId === chainId).map((pair) => new LidoProtocol(pair)),
-            ...aaveTokenPairs.map((pair) => new AAVEProtocol(pair)),
-            ...yfiTokenPairs.map((pair) => new YearnProtocol(pair)),
+            ...aaveTokenPairs.map(AAVEProtocol.fromTokenPair),
+            ...yfiTokenPairs.map(YearnProtocol.fromTokenPair),
         ],
         [chainId, aaveTokenPairs, yfiTokenPairs],
     )

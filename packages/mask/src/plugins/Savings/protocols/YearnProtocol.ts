@@ -17,6 +17,10 @@ export class YearnProtocol implements SavingsProtocol {
 
     constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
 
+    static fromTokenPair(pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {
+        return new YearnProtocol(pair)
+    }
+
     get type() {
         return ProtocolType.YEARN
     }
