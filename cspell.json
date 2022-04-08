@@ -394,7 +394,12 @@
         "wnative",
         "xdescribe",
         "xsushi",
-        "xtest"
+        "xtest",
+        "fpmm",
+        "Dxdao",
+        "funder",
+        "multichain",
+        "Cript"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
