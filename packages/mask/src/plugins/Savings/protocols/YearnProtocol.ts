@@ -39,21 +39,20 @@ export class YearnProtocol implements SavingsProtocol {
 
     public async updateApr(chainId: ChainId, web3: Web3) {
         try {
-            // @ts-ignore
+            // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
             const yearn = new Yearn(chainId, {
                 provider: web3.currentProvider,
             })
 
-            // @ts-ignore
+            // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
             const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
 
             const vaults: Vault[] = await vaultInterface.get([this.stakeToken.address])
             this._apr = YearnProtocol.DEFAULT_APR
 
-            // @ts-ignore
+            
             if (vaults && vaults.length > 0) {
-                // APY and APR are returned here as decimals, multiply by 100 to get the percents
-                // @ts-ignore
+                // APY and APR are returned here as decimals, multiply by 100 to get the percents                
                 this._apr = (100 * (vaults[0].metadata.apy?.gross_apr ?? 0)).toFixed(2)
                 return
             }
@@ -87,12 +86,12 @@ export class YearnProtocol implements SavingsProtocol {
         try {
             const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
 
-            // @ts-ignore
+            // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
             const yearn = new Yearn(chainId, {
                 provider: web3.currentProvider,
             })
 
-            // @ts-ignore
+            // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
             const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
 
             const tResponse = await vaultInterface.deposit(
@@ -122,12 +121,12 @@ export class YearnProtocol implements SavingsProtocol {
         try {
             const gasEstimate = await this.withdrawEstimate(account, chainId, web3, value)
 
-            // @ts-ignore
+            // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
             const yearn = new Yearn(chainId, {
                 provider: web3.currentProvider,
             })
 
-            // @ts-ignore
+            // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
             const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
 
             const tResponse = await vaultInterface.withdraw(

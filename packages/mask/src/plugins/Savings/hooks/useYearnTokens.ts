@@ -16,14 +16,14 @@ export function useYearnTokens(chainId: ChainId, web3: Web3) {
             return []
         }
 
-        // @ts-ignore
+        // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
         const yearn = new Yearn(chainId, {
-            // @ts-ignore
+            
             provider: web3.currentProvider,
         })
         await yearn.ready
 
-        // @ts-ignore
+        // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
         const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
 
         const allVaults = await vaultInterface.get()
