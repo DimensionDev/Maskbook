@@ -1,9 +1,5 @@
-import {  YearnChains } from './constants'
-import type {
-    ChainId,
-    FungibleTokenDetailed
-} from '@masknet/web3-shared-evm'
-
+import { YearnChains } from './constants'
+import type { ChainId, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 
 export function splitToPair(a: FungibleTokenDetailed[] | undefined): [FungibleTokenDetailed, FungibleTokenDetailed][] {
     if (!a) {

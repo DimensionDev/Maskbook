@@ -3,12 +3,7 @@ import { useAsync, useUpdateEffect } from 'react-use'
 import { Typography, DialogContent } from '@mui/material'
 import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
 import { FolderTabPanel, FolderTabs } from '@masknet/theme'
-import {
-    ChainId,
-    getChainIdFromNetworkType,
-    useChainId,
-    useWeb3,
-} from '@masknet/web3-shared-evm'
+import { ChainId, getChainIdFromNetworkType, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
@@ -26,8 +21,6 @@ import { LidoProtocol } from '../protocols/LDOProtocol'
 import { AAVEProtocol } from '../protocols/AAVEProtocol'
 import { useYearnTokens } from '../hooks/useYearnTokens'
 import { useAaveTokens } from '../hooks/useAaveTokens'
-
-
 
 export interface SavingsDialogProps {
     open: boolean
@@ -51,9 +44,8 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         return networks.map((network) => getChainIdFromNetworkType(network))
     }, [])
 
-    
-    const {tokenPairs: aaveTokenPairs} = useAaveTokens(chainId, web3)
-    const {tokenPairs: yfiTokenPairs} = useYearnTokens(chainId, web3)
+    const { tokenPairs: aaveTokenPairs } = useAaveTokens(chainId, web3)
+    const { tokenPairs: yfiTokenPairs } = useYearnTokens(chainId, web3)
 
     const protocols = useMemo(
         () => [

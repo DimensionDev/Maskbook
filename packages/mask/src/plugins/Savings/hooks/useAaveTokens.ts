@@ -1,4 +1,4 @@
-import { useAsync} from 'react-use'
+import { useAsync } from 'react-use'
 
 import {
     ChainId,
@@ -7,22 +7,20 @@ import {
     FungibleTokenDetailed,
     getAaveConstants,
     useFungibleTokensDetailed,
-    ZERO_ADDRESS
+    ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import type { AbiItem } from 'web3-utils'
-import {  splitToPair } from '../utils'
+import { splitToPair } from '../utils'
 import { flatten, compact } from 'lodash-unified'
 import type Web3 from 'web3'
 import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider'
 import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
 
+export function useAaveTokens(chainId: ChainId, web3: Web3) {
+    const [tokenPairs, setTokenPairs] = useState<[FungibleTokenDetailed, FungibleTokenDetailed][]>([])
 
-export function useAaveTokens( chainId: ChainId, web3: Web3) {
-
-    const [tokenPairs, setTokenPairs] = useState<[FungibleTokenDetailed, FungibleTokenDetailed][]>([]);
-
-	const { value: aaveTokens, loading } = useAsync(async () => {
+    const { value: aaveTokens, loading } = useAsync(async () => {
         if (chainId !== ChainId.Mainnet) {
             return []
         }
@@ -48,17 +46,13 @@ export function useAaveTokens( chainId: ChainId, web3: Web3) {
         compact(flatten(aaveTokens ?? [])).map((address: string) => {
             return { address, type: EthereumTokenType.ERC20 }
         }) ?? [],
-        chainId
+        chainId,
     )
 
-    setTokenPairs( splitToPair(detailedAaveTokens))
+    setTokenPairs(splitToPair(detailedAaveTokens))
 
     return {
         tokenPairs: tokenPairs,
         loading: loading || loadingTokenDetails,
-
     }
 }
-
-
-

@@ -10,7 +10,6 @@ export const LDO_PAIRS: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
     ],
 ]
 
-
 export const YearnChains = {
     [ChainId.Mainnet]: 'ethereum',
     [ChainId.Fantom]: 'fantom',
