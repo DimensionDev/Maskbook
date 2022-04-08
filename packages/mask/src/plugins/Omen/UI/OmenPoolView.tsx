@@ -212,8 +212,7 @@ export function OmenPoolView(props: OmenPoolViewProps) {
                                         fullWidth
                                         color="primary"
                                         href={`${OMEN_BASE_URL}${marketId}/pool`}
-                                        target="_blank"
-                                    >
+                                        target="_blank">
                                         {t('plugin_omen_deposit')}
                                     </Button>
                                 </Grid>
@@ -224,8 +223,7 @@ export function OmenPoolView(props: OmenPoolViewProps) {
                                         fullWidth
                                         color="primary"
                                         href={`${OMEN_BASE_URL}${marketId}/pool`}
-                                        target="_blank"
-                                    >
+                                        target="_blank">
                                         {t('plugin_omen_withdraw')}
                                     </Button>
                                 </Grid>

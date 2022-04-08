@@ -47,9 +47,7 @@ export function OmenDetailsCard(props: OmenDetailsCardProps) {
     const tokenObj: tokenData | null | undefined = tokenDataRes ? tokenDataRes.value : undefined
     const collateralToken = tokenObj?.registeredToken
     const collateralDecimals = collateralToken ? collateralToken.decimals : 0
-    let sharesAmount = new BigNumber(0)
     const sharesAmount = BigNumber.sum(...Object.values(liquidityData).map((item) => item.sharesAmount))
-    }
     const liquidityAmount = Number(new BigNumber(sharesAmount).shiftedBy(-collateralDecimals).toFixed(4))
     const totalVolume = Number(new BigNumber(collateralVolume).shiftedBy(-collateralDecimals).toFixed(4))
     const dailyVolume = Number(usdRunningDailyVolume).toFixed(3)

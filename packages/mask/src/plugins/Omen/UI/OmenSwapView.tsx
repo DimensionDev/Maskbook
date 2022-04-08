@@ -176,8 +176,7 @@ export function OmenSwapView(props: OmenSwapViewProps) {
                         fullWidth
                         color="primary"
                         href={`${OMEN_BASE_URL}${marketId}/buy`}
-                        target="_blank"
-                    >
+                        target="_blank">
                         {t('plugin_omen_buy')}
                     </Button>
                 </Grid>
@@ -188,8 +187,7 @@ export function OmenSwapView(props: OmenSwapViewProps) {
                         fullWidth
                         color="primary"
                         href={`${OMEN_BASE_URL}${marketId}/sell`}
-                        target="_blank"
-                    >
+                        target="_blank">
                         {t('plugin_omen_sell')}
                     </Button>
                 </Grid>
