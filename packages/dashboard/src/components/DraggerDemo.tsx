@@ -52,15 +52,15 @@ function AppList() {
 
         if (dragItem) {
             setItems((prevState) => {
-                const coppiedStateArray = [...prevState]
+                const copyStateArray = [...prevState]
 
                 // remove item by "hoverIndex" and put "dragItem" instead
-                const prevItem = coppiedStateArray.splice(hoverIndex, 1, dragItem)
+                const prevItem = copyStateArray.splice(hoverIndex, 1, dragItem)
 
                 // remove item by "dragIndex" and put "prevItem" instead
-                coppiedStateArray.splice(dragIndex, 1, prevItem[0])
+                copyStateArray.splice(dragIndex, 1, prevItem[0])
 
-                return coppiedStateArray
+                return copyStateArray
             })
         }
     }
