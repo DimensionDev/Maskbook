@@ -601,9 +601,14 @@ export function ITO(props: ITO_Props) {
 
     const FooterBuyerButton = useMemo(
         () => (
-            <Grid container spacing={2}>
+            <div>
                 {(() => {
-                    if (hasLockTime) return FooterBuyerWithLockTimeButton
+                    if (hasLockTime)
+                        return (
+                            <Grid container spacing={2}>
+                                {FooterBuyerWithLockTimeButton}
+                            </Grid>
+                        )
                     if (canWithdraw) {
                         return (
                             <ActionButton
@@ -617,7 +622,7 @@ export function ITO(props: ITO_Props) {
                     }
                     return null
                 })()}
-            </Grid>
+            </div>
         ),
         [hasLockTime, canWithdraw],
     )
