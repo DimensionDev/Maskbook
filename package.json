@@ -82,7 +82,8 @@
   },
   "pnpm": {
     "overrides": {
-      "@types/node": "^17.0.23"
+      "@types/node": "^17.0.23",
+      "@types/react@18": "^17"
     },
     "onlyBuiltDependencies": []
   }
