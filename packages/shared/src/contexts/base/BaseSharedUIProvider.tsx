@@ -1,5 +1,5 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { createContext, FC, useContext, useMemo } from 'react'
+import { createContext, FC, PropsWithChildren, useContext, useMemo } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { SharedComponentOverwrite } from './types'
 
@@ -16,7 +16,7 @@ const BaseUIContext = createContext<ContextOptions>({
     componentOverwrite: sharedUIComponentOverwrite.value,
 })
 
-export const BaseSharedUIProvider: FC = ({ children }) => {
+export const BaseSharedUIProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     const snsId = useValueRef(sharedUINetworkIdentifier)
     const overwrite = useValueRef(sharedUIComponentOverwrite)
 

@@ -1,7 +1,7 @@
 import { defer, DeferTuple } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { createContext, FC, useCallback, useContext, useMemo, useState } from 'react'
+import { createContext, FC, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react'
 import { PickTokenOptions, SelectTokenDialog } from './SelectTokenDialog'
 
 interface ContextOptions {
@@ -20,7 +20,7 @@ interface Task {
 }
 
 let id = 0
-export const TokenPickerProvider: FC = ({ children }) => {
+export const TokenPickerProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     const [tasks, setTasks] = useState<Task[]>(EMPTY_LIST)
 
     const removeTask = useCallback((task: Task) => {

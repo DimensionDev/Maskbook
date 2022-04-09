@@ -148,7 +148,7 @@ export function DepositDialog() {
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
         PluginTraderMessages.swapDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     retryLoadTokenBalance()
                 }
@@ -194,7 +194,7 @@ export function DepositDialog() {
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     retryLoadTokenBalance()
                     if (depositState.type === TransactionStateType.HASH) onClose()

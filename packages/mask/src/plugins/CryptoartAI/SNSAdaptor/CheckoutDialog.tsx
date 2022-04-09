@@ -117,7 +117,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     if (purchaseState.type === TransactionStateType.HASH) onClose()
                 }

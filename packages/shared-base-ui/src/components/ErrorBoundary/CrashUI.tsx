@@ -6,7 +6,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore'
 import { ErrorBoundaryBuildInfoContext, ErrorBoundaryError } from './context'
 import { useSharedBaseI18N } from '../../locales'
 
-export type CrashUIProps = ErrorBoundaryError & {
+export interface CrashUIProps extends React.PropsWithChildren<ErrorBoundaryError> {
     /** Type of the Error */
     type: string
     /** The Error message */
