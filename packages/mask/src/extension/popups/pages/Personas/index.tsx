@@ -11,6 +11,9 @@ const Logout = lazy(() => import('./Logout'))
 const PersonaRename = lazy(() => import('./Rename'))
 const PersonaSignRequest = lazy(() => import('./PersonaSignRequest'))
 const SelectPersona = lazy(() => import('./SelectPersona'))
+const Accounts = lazy(() => import('./Accounts'))
+const AccountDetail = lazy(() => import('./AccountDetail'))
+const ConnectedWallets = lazy(() => import('./ConnectedWallets'))
 
 const r = relativeRouteOf(PopupRoutes.Personas)
 const Persona = memo(() => {
@@ -23,6 +26,9 @@ const Persona = memo(() => {
                     <Route path={r(PopupRoutes.PersonaRename)} element={<PersonaRename />} />
                     <Route path={r(PopupRoutes.PersonaSignRequest)} element={<PersonaSignRequest />} />
                     <Route path={r(PopupRoutes.SelectPersona)} element={<SelectPersona />} />
+                    <Route path={r(PopupRoutes.SocialAccounts)} element={<Accounts />} />
+                    <Route path={r(PopupRoutes.AccountDetail)} element={<AccountDetail />} />
+                    <Route path={r(PopupRoutes.ConnectedWallets)} element={<ConnectedWallets />} />
                     <Route path="*" element={<Home />} />
                 </Routes>
             </PersonaContext.Provider>

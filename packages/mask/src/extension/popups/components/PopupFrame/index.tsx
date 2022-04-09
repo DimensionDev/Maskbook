@@ -31,6 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
+        backgroundColor: '#F7F9FA',
     },
 }))
 

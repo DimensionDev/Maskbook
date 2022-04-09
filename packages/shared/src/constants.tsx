@@ -21,6 +21,16 @@ export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, ReactNode> = {
     [OPENSEA_ID]: <OpenSeaColoredIcon />,
 }
 
+export const SOCIAL_MEDIA_NAME: Record<string, string> = {
+    [TWITTER_ID]: 'Twitter',
+    [FACEBOOK_ID]: 'Facebook',
+    [MINDS_ID]: 'Mind',
+    [INSTAGRAM_ID]: 'Instagram',
+    [OPENSEA_ID]: 'OpenSea',
+}
+
+export const SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID = [TWITTER_ID]
+
 export const mediaViewerUrl = 'https://media-viewer.r2d2.to/index.html'
 
 export const MAX_WALLET_LIMIT = 100
