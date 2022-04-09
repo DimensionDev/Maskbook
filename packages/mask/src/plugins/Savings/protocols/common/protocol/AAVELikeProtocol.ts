@@ -52,6 +52,9 @@ export default class AAVELikeProtocol implements SavingsProtocol {
     public async updateApr(chainId: ChainId, web3: Web3) {
         try {
             const contract = AAVELikeFetcher.getProtocolDataContract(this.dataProviderAddr, chainId, web3)
+            if (contract === null) {
+                return
+            }
             const reserveData = await contract?.methods.getReserveData(this.bareToken.address).call()
             const liquidityRate = reserveData.liquidityRate
             const RAY = pow10(27) // 10 to the power 27
@@ -66,6 +69,9 @@ export default class AAVELikeProtocol implements SavingsProtocol {
     public async updateBalance(chainId: ChainId, web3: Web3, account: string) {
         try {
             const contract = AAVELikeFetcher.getProtocolDataContract(this.dataProviderAddr, chainId, web3)
+            if (contract === null) {
+                return
+            }
             const userReserveData = await contract?.methods.getUserReserveData(this.bareToken.address, account).call()
             this._balance = new BigNumber(userReserveData.currentATokenBalance)
         } catch (error) {

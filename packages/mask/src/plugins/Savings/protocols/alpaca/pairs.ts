@@ -8,8 +8,8 @@ import { getFungibleTokensDetailed, splitToPair } from '../common/tokens'
 // https://docs.geist.finance/useful-info/deployments-addresses
 export const SUMMARY_API = 'https://alpaca-static-api.alpacafinance.org/bsc/v1/landing/summary.json'
 
-export class GiestPairResolver implements ProtocolPairsResolver {
-    public supportChains: ChainId[] = [ChainId.Fantom]
+export class PairResolver implements ProtocolPairsResolver {
+    public supportChains: ChainId[] = [ChainId.BSC]
     public async resolve(chainId: ChainId, web3: Web3): Promise<SavingsProtocol[]> {
         if (!this.supportChains.includes(chainId)) {
             return []
@@ -48,7 +48,7 @@ export class GiestPairResolver implements ProtocolPairsResolver {
     }
 }
 
-export const compoundLazyResolver = new GiestPairResolver()
+export const alpacaLazyResolver = new PairResolver()
 
 // export const PAIRS_LIST: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
 //     // BNB-ibBNB

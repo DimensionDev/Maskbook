@@ -1,15 +1,25 @@
 import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
+// import BN from 'bn.js'
 import { ZERO } from '@masknet/web3-shared-base'
 import { ChainId, createContract, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { ProtocolType, SavingsProtocol } from '../../types'
 import type { AlpacaVault } from '@masknet/web3-contracts/types/AlpacaVault'
 import AlpacaVaultABI from '@masknet/web3-contracts/abis/AlpacaVault.json'
+import type { AlpacaVaultConfig } from '@masknet/web3-contracts/types/AlpacaVaultConfig'
+import AlpacaVaultConfigABI from '@masknet/web3-contracts/abis/AlpacaVaultConfig.json'
 import { SUMMARY_API } from './pairs'
 
-function createAlpacaContract(address: string, web3: Web3) {
+export const TIMESTAMPS_PER_DAY = 60 * 60 * 24
+export const DAYS_PER_YEAR = 365
+
+export function createAlpacaContract(address: string, web3: Web3) {
     return createContract<AlpacaVault>(web3, address, AlpacaVaultABI as AbiItem[])
+}
+
+export function createAlpacaConfigContract(address: string, web3: Web3) {
+    return createContract<AlpacaVaultConfig>(web3, address, AlpacaVaultConfigABI as AbiItem[])
 }
 
 export class AlpacaProtocol implements SavingsProtocol {
@@ -55,12 +65,47 @@ export class AlpacaProtocol implements SavingsProtocol {
 
     public async updateApr(chainId: ChainId, web3: Web3) {
         try {
+            // const contract = this.getPoolContract(web3)
+            // if (contract === null) {
+            //     console.log('contract')
+            //     return
+            // }
+            // const [configAddr, vaultDebtVal, reservePool, totalToken] = await Promise.all([
+            //     contract.methods.config().call(),
+            //     contract.methods.vaultDebtVal().call(),
+            //     contract.methods.reservePool().call(),
+            //     contract.methods.totalToken().call(),
+            // ])
+            // console.log({
+            //     configAddr,
+            //     vaultDebtVal,
+            //     reservePool,
+            //     totalToken,
+            // })
+            // const config = createAlpacaConfigContract(configAddr, web3)
+            // if (config === null) {
+            //     console.log('config', config)
+            //     return
+            // }
+            // const balance = new BigNumber(totalToken)
+            //     .minus(new BigNumber(vaultDebtVal))
+            //     .plus(new BigNumber(reservePool))
+            // console.log('getInterestRate', {
+            //     vaultDebtVal,
+            //     balance: balance.toFixed(),
+            // })
+            // const ratePerSec = await config.methods.getInterestRate(vaultDebtVal, balance.toFixed()).call()
+            // console.log('ratePerSec', ratePerSec)
+            // const supplyBase = new BigNumber(ratePerSec).times(TIMESTAMPS_PER_DAY)
+            // const apy = supplyBase.times(DAYS_PER_YEAR).shiftedBy(-16)
+            // this._apr = apy.toFixed(2)
             const req = await fetch(SUMMARY_API)
             const response = await req.json()
             const { lendingPools } = response.data
-            const summary = lendingPools.filter((_: any) => _.baseToken.address === this.bareToken.address)
-            this._apr = summary.totalApy
+            const summary = lendingPools.find((_: any) => _.baseToken.address === this.bareToken.address)
+            this._apr = new BigNumber(summary.lendingApr).toFixed(2)
         } catch (error) {
+            console.log('error', error)
             this._apr = AlpacaProtocol.DEFAULT_APR
         }
     }

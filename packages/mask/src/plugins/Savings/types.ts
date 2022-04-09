@@ -12,6 +12,10 @@ export enum ProtocolType {
     BENQI = 2,
     Compound = 3,
     AAVE = 1,
+    Giest = 4,
+    Moola = 5,
+    Alpaca = 6,
+    Aurigami = 7,
 }
 
 export interface SavingsProtocol {
