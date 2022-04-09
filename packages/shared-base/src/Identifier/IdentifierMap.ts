@@ -8,7 +8,6 @@ import { immerable } from 'immer'
  * please use this class instead of Map<Identifier, T>.
  */
 export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<IdentifierType, T> {
-    [immerable] = true
     /**
      *
      * @param __raw_map__ The origin data.
@@ -94,12 +93,14 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     *values() {
         for (const [k, v] of this.entries()) yield v
     }
-    public [Symbol.toStringTag]: string;
     [Symbol.iterator](): Generator<[IdentifierType, T], void, unknown> {
         return this.entries()
     }
+    public [Symbol.toStringTag]!: string
 }
 IdentifierMap.prototype[Symbol.toStringTag] = 'IdentifierMap'
+// @ts-ignore
+IdentifierMap.prototype[immerable] = true
 
 export type ReadonlyIdentifierMap<IdentifierType extends Identifier, T> = ReadonlyMap<IdentifierType, T> & {
     readonly __raw_map__: ReadonlyMap<string, T>
