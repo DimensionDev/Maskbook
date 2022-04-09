@@ -72,7 +72,7 @@ export function SearchableList<T>({
                 shouldSort: true,
                 threshold: 0.45,
                 minMatchCharLength: 1,
-                keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : [] as any),
+                keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : ([] as any)),
             }),
         [data, searchKey],
     )
