@@ -8,7 +8,6 @@ import { immerable } from 'immer'
  * please use this class instead of Map<Identifier, T>.
  */
 export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<IdentifierType, T> {
-    [immerable] = true
     /**
      *
      * @param __raw_map__ The origin data.
@@ -94,13 +93,17 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     *values() {
         for (const [k, v] of this.entries()) yield v
     }
-    public [Symbol.toStringTag]: string;
     [Symbol.iterator](): Generator<[IdentifierType, T], void, unknown> {
         return this.entries()
     }
+    [Symbol.toStringTag] = 'IdentifierMap'
 }
-IdentifierMap.prototype[Symbol.toStringTag] = 'IdentifierMap'
-
+// we cannot use declare [Symbol.toStringTag] to declare it because storybook will fail.
+// See: https://github.com/storybookjs/storybook/issues/12479
+Object.defineProperties(IdentifierMap.prototype, {
+    [immerable]: { value: true, configurable: true, writable: true },
+    [Symbol.toStringTag]: { value: 'IdentifierMap', configurable: true, writable: true },
+})
 export type ReadonlyIdentifierMap<IdentifierType extends Identifier, T> = ReadonlyMap<IdentifierType, T> & {
     readonly __raw_map__: ReadonlyMap<string, T>
 }

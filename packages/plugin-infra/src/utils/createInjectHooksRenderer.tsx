@@ -9,7 +9,7 @@ type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
 
 const PropsContext = createContext<unknown>(null)
-export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType>(
+export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType extends object>(
     usePlugins: () => PluginDefinition[],
     pickInjectorHook: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
     PluginWrapperComponent?: PluginWrapperComponent<PluginDefinition>,

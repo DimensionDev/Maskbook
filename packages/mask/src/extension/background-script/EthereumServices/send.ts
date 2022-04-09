@@ -500,7 +500,12 @@ export async function INTERNAL_nativeSend(
             const jsonResponse = await nativeAPI?.api.sendJsonString(JSON.stringify(payload))
             response = JSON.parse(jsonResponse)
         } else {
-            response = await nativeAPI?.api.send(payload)
+            const _ = await nativeAPI?.api.send(payload)
+            if (_) {
+                const { error, ...rest } = _
+                response = { ...rest }
+                if (error) response.error = { message: error }
+            }
         }
         callback(null, response)
         if (payload.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
