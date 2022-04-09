@@ -52,14 +52,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
         dialog({ open, onClose }) {
             return <CompositionDialog open={open} onConfirm={onClose} onClose={onClose} />
         },
-        label: {
-            fallback: (
-                <>
-                    <MarketsIcon style={{ width: 16, height: 16 }} />
-                    ITO
-                </>
-            ),
-        },
+        label: (
+            <>
+                <MarketsIcon style={{ width: 16, height: 16 }} />
+                ITO
+            </>
+        ),
     },
     ApplicationEntries: [
         {

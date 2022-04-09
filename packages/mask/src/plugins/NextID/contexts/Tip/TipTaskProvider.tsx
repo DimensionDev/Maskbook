@@ -17,7 +17,7 @@ interface Props {
     task: TipTask
 }
 
-export const TipTaskProvider: FC<Props> = ({ children, task }) => {
+export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, task }) => {
     const [recipient, setRecipient] = useState('')
     const [tipType, setTipType] = useState<TipType>(TipType.Token)
     const [amount, setAmount] = useState('')

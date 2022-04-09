@@ -33,7 +33,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
         ]
     }
     return useCallback(
-        (...args) =>
+        (...args: any[]) =>
             executor(...args).then(
                 (res) => {
                     showSnackbar(successText ?? t.snackbar_done(), {
