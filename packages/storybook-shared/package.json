@@ -5,7 +5,11 @@
   "main": "./dist/index.js",
   "devDependencies": {
     "@storybook/addons": "^6.4.21",
-    "@storybook/react": "^6.4.21"
+    "@storybook/react": "^6.4.21",
+    "@swc/core": "^1.2.165",
+    "stream-browserify": "3",
+    "swc-loader": "^0.1.15",
+    "webpack": "^5.72.0"
   },
   "peerDependencies": {
     "@storybook/addons": "^6",
