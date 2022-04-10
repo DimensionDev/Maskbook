@@ -2,8 +2,13 @@
   "name": "@masknet/dashboard",
   "private": true,
   "description": "New dashboard of Mask Network",
-  "main": "./dist/src/entry.js",
   "types": "./dist/src/entry.d.ts",
+  "exports": {
+    ".": {
+      "webpack": "./src/entry.tsx",
+      "default": "./dist/src/entry.js"
+    }
+  },
   "scripts": {
     "storybook": "dev -- start-storybook -p 6006",
     "build-storybook": "build -- build-storybook"
@@ -61,9 +66,6 @@
     "@storybook/builder-webpack5": "^6.4.21",
     "@storybook/manager-webpack5": "^6.4.21",
     "@storybook/react": "^6.4.21",
-    "babel-loader": "^8.2.4",
-    "buffer": "^6.0.3",
-    "path-browserify": "^1.0.1",
-    "stream-browserify": "^3.0.0"
+    "babel-loader": "^8.2.4"
   }
 }

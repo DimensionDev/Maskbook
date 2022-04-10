@@ -18,7 +18,6 @@ IdentifierMap {
   "constructorName": Array [
     "ProfileIdentifier",
   ],
-  Symbol(Symbol.toStringTag): "IdentifierMap",
 }
 `;
 
@@ -101,7 +100,6 @@ Object {
     "constructorName": Array [
       "ProfileIdentifier",
     ],
-    Symbol(Symbol.toStringTag): "IdentifierMap",
   },
   "identifier": PostIVIdentifier {
     "network": "localhost",
@@ -291,7 +289,6 @@ IdentifierMap {
   "constructorName": Array [
     "ProfileIdentifier",
   ],
-  Symbol(Symbol.toStringTag): "IdentifierMap",
 }
 `;
 
@@ -371,7 +368,6 @@ Object {
     "constructorName": Array [
       "ProfileIdentifier",
     ],
-    Symbol(Symbol.toStringTag): "IdentifierMap",
   },
   "identifier": PostIVIdentifier {
     "network": "localhost",

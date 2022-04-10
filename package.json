@@ -61,7 +61,7 @@
     "@masknet/cli": "workspace:*",
     "@masknet/serializer": "workspace:^0.0.0",
     "@nice-labs/git-rev": "^3.5.0",
-    "@swc/core": "^1.2.148",
+    "@swc/core": "^1.2.165",
     "@types/lodash-es": "^4.17.6",
     "@typescript-eslint/experimental-utils": "^5.18.0",
     "cspell": "^5.19.6",

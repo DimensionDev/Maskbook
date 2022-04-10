@@ -2,7 +2,12 @@
   "name": "@masknet/external-plugin-previewer",
   "version": "0.0.0",
   "private": true,
-  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "webpack": "./src/index.tsx",
+      "default": "./dist/index.js"
+    }
+  },
   "types": "./dist",
   "scripts": {},
   "dependencies": {
