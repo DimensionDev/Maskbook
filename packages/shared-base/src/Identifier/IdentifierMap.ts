@@ -96,10 +96,8 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     [Symbol.iterator](): Generator<[IdentifierType, T], void, unknown> {
         return this.entries()
     }
-    [Symbol.toStringTag] = 'IdentifierMap'
+    declare [Symbol.toStringTag]: string
 }
-// we cannot use declare [Symbol.toStringTag] to declare it because storybook will fail.
-// See: https://github.com/storybookjs/storybook/issues/12479
 Object.defineProperties(IdentifierMap.prototype, {
     [immerable]: { value: true, configurable: true, writable: true },
     [Symbol.toStringTag]: { value: 'IdentifierMap', configurable: true, writable: true },
