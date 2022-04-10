@@ -590,6 +590,7 @@ importers:
     specifiers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@masknet/encryption': workspace:*
+      '@masknet/shared-base': workspace:*
       '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/typed-message': workspace:*
@@ -605,6 +606,7 @@ importers:
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@masknet/encryption': link:../encryption
+      '@masknet/shared-base': link:../shared-base
       '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/theme': link:../theme
       '@masknet/typed-message': link:../typed-message
@@ -624,11 +626,15 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
+      '@masknet/theme': workspace:*
       react-use: ^17.3.2
     dependencies:
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
+      '@masknet/theme': link:../../theme
       react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
 
   packages/plugins/CyberConnect:
@@ -637,6 +643,7 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/typed-message': workspace:*
       '@masknet/web3-shared-evm': workspace:*
       boring-avatars: ^1.5.8
       react-use: ^17.3.2
@@ -645,6 +652,7 @@ importers:
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared-base': link:../../shared-base
       '@masknet/theme': link:../../theme
+      '@masknet/typed-message': link:../../typed-message
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
       boring-avatars: 1.6.1
       react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
@@ -713,6 +721,7 @@ importers:
       '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/typed-message': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       '@msgpack/msgpack': ^2.7.2
       arweave: ^1.10.3
       date-fns: ^2.28.0
@@ -732,6 +741,7 @@ importers:
       '@masknet/shared-base-ui': link:../../shared-base-ui
       '@masknet/theme': link:../../theme
       '@masknet/typed-message': link:../../typed-message
+      '@masknet/web3-shared-base': link:../../web3-shared/base
       '@msgpack/msgpack': 2.7.2
       arweave: 1.10.13
       date-fns: 2.28.0
@@ -1213,6 +1223,7 @@ importers:
   packages/web3-providers:
     specifiers:
       '@masknet/plugin-infra': workspace:*
+      '@masknet/shared-base': workspace:*
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-contracts': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -1232,6 +1243,7 @@ importers:
       wallet.ts: ^1.0.1
     dependencies:
       '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/shared-base': link:../shared-base
       '@masknet/web3-constants': link:../web3-constants
       '@masknet/web3-contracts': link:../web3-contracts
       '@masknet/web3-shared-base': link:../web3-shared/base
@@ -22711,7 +22723,7 @@ packages:
       safe-buffer: 5.2.1
       tough-cookie: 2.5.0
       tunnel-agent: 0.6.0
-      uuid: 3.3.2
+      uuid: 3.4.0
     dev: false
 
   /require-directory/2.1.1:

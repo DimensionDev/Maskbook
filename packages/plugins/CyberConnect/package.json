@@ -13,6 +13,7 @@
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "@masknet/shared-base": "workspace:*",
+    "@masknet/typed-message": "workspace:*",
     "@cyberlab/cyberconnect": "^4.2.2",
     "boring-avatars": "^1.5.8",
     "react-use": "^17.3.2"

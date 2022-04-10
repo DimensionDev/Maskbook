@@ -60,6 +60,8 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
                     // It's a Node impl for xhr which is unnecessary
                     'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.js'),
+                    // fake esm
+                    '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
                 if (profiling) {
                     alias['scheduler/tracing'] = 'scheduler/tracing-profiling'

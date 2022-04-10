@@ -4,8 +4,8 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "webpack": "./src/index.ts",
-      "default": "./dist/index.js"
+      "webpack": "./index.ts",
+      "default": "../dist/evm/index.js"
     }
   },
   "sideEffects": false,
