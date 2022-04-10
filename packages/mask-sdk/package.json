@@ -2,7 +2,12 @@
   "name": "@masknet/sdk",
   "version": "0.0.0",
   "private": true,
-  "main": "./dist/server/index.js",
+  "exports": {
+    ".": {
+      "webpack": "./server/index.ts",
+      "default": "./dist/server/index.js"
+    }
+  },
   "types": "./dist/server/index.d.ts",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.1.3",

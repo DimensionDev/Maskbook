@@ -4,8 +4,14 @@
   "description": "@mui/material theme of design system of Mask Network",
   "type": "module",
   "exports": {
-    ".": "./dist/src/index.js",
-    "./constants": "./dist/src/constants.js"
+    ".": {
+      "webpack": "./src/index.ts",
+      "default": "./dist/src/index.js"
+    },
+    "./constants": {
+      "webpack": "./src/constants.ts",
+      "default": "./dist/src/constants.js"
+    }
   },
   "typesVersions": {
     "*": {
@@ -14,7 +20,6 @@
       ]
     }
   },
-  "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "scripts": {
     "build-storybook": "build -- build-storybook",

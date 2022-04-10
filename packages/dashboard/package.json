@@ -2,8 +2,13 @@
   "name": "@masknet/dashboard",
   "private": true,
   "description": "New dashboard of Mask Network",
-  "main": "./dist/src/entry.js",
   "types": "./dist/src/entry.d.ts",
+  "exports": {
+    ".": {
+      "webpack": "./src/entry.tsx",
+      "default": "./dist/src/entry.js"
+    }
+  },
   "scripts": {
     "storybook": "dev -- start-storybook -p 6006",
     "build-storybook": "build -- build-storybook"
