@@ -1,5 +1,5 @@
 import { createContext, memo } from 'react'
-import type { MetadataRenderProps } from '../MetadataRender'
+import type { MetadataRenderProps } from '../MetadataRender.js'
 
 export const DefaultRenderFragments = {
     Text: memo((props: RenderFragmentsContextType.TextProps) => <>{props.children}</>),

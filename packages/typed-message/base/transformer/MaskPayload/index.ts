@@ -1,9 +1,9 @@
-import { FlattenTypedMessage } from '../Flatten'
-import type { TypedMessage } from '../../base'
-import { isTypedMessageImage, isTypedMessageText, isTypedMessageTuple, TypedMessageImage } from '../../core'
-import { isTypedMessageAnchor, isTypedMessageMaskPayload } from '../../extension'
-import { visitEachTypedMessageChild } from '../../visitor'
-import type { TransformationContext } from '../context'
+import { FlattenTypedMessage } from '../Flatten.js'
+import type { TypedMessage } from '../../base.js'
+import { isTypedMessageImage, isTypedMessageText, isTypedMessageTuple, TypedMessageImage } from '../../core/index.js'
+import { isTypedMessageAnchor, isTypedMessageMaskPayload } from '../../extension/index.js'
+import { visitEachTypedMessageChild } from '../../visitor/index.js'
+import type { TransformationContext } from '../context.js'
 
 export interface MaskPayloadTransformOptions {
     /**
