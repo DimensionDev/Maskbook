@@ -1,6 +1,5 @@
 import { memo, useEffect } from 'react'
 import { ContentContainer } from '../../../../components/ContentContainer'
-import { DraggerDemo } from '../../../../components/DraggerDemo'
 import { Box, Tab } from '@mui/material'
 import { useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
@@ -51,7 +50,6 @@ export const Transfer = memo(() => {
                     <TabPanel value={TransferTab.Collectibles}>
                         <TransferERC721 />
                     </TabPanel>
-                    <DraggerDemo />
                 </TabContext>
             </Box>
         </ContentContainer>

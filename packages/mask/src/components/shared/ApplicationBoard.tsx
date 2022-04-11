@@ -8,7 +8,6 @@ import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
 import { ApplicationSettingDialog } from './ApplicationSettingDialog'
-import { DraggerDemo } from './DraggerDemo'
 import { Application, useUnListedApplicationList } from './ApplicationSettingPluginDragger'
 
 const useStyles = makeStyles()((theme) => {
@@ -121,7 +120,6 @@ export function ApplicationBoard() {
                     }}
                 />
             ) : null}
-            <DraggerDemo />
         </>
     )
 }
