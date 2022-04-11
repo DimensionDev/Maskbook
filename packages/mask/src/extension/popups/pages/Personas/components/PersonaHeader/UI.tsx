@@ -4,6 +4,7 @@ import { Avatar, Box, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
 import { ArrowDropIcon, MaskNotSquareIcon, MasksIcon } from '@masknet/icons'
 import { formatPersonaFingerprint } from '@masknet/shared-base'
+import { formatPersonaName } from '../../../../utils'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -78,7 +79,7 @@ export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(
                         <MasksIcon className={classes.avatar} />
                     )}
                     <div>
-                        <Typography className={classes.nickname}>{nickname}</Typography>
+                        <Typography className={classes.nickname}>{formatPersonaName(nickname)}</Typography>
                         <Typography className={classes.identifier}>
                             {formatPersonaFingerprint(fingerprint ?? '', 4)}
                             <CopyIconButton text={fingerprint} className={classes.icon} />

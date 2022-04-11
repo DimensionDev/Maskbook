@@ -12,6 +12,7 @@ import { ArrowRightIosIcon, MasksIcon } from '@masknet/icons'
 import { formatPersonaFingerprint } from '@masknet/shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useI18N } from '../../../../../utils'
+import { formatPersonaName } from '../../../utils'
 
 const useStyles = makeStyles()({
     container: {
@@ -95,7 +96,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                     <div className={classes.item}>
                         <Typography>{t('popups_name')}</Typography>
                         <Typography className={classes.content} onClick={onEdit}>
-                            {nickname}
+                            {formatPersonaName(nickname)}
                             <ArrowRightIosIcon className={classes.arrow} />
                         </Typography>
                     </div>
