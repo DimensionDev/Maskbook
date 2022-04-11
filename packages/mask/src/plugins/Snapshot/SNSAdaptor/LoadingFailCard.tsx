@@ -1,8 +1,10 @@
-import { Component } from 'react'
+import { Component, PropsWithChildren } from 'react'
 import { SnapshotCard } from './SnapshotCard'
 import { Typography, Button } from '@mui/material'
 
-export class LoadingFailCard extends Component<{ title: string; retry: () => void; isFullPluginDown?: boolean }> {
+export class LoadingFailCard extends Component<
+    PropsWithChildren<{ title: string; retry: () => void; isFullPluginDown?: boolean }>
+> {
     static getDerivedStateFromError(error: unknown) {
         return { error }
     }

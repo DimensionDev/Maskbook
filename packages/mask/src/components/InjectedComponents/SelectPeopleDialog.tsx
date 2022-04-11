@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Button, CircularProgress, DialogActions, DialogContent } from '@mui/material'
+import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../utils'
 import { SelectProfileUI } from '../shared/SelectProfileUI'
 import type { Profile } from '../../database'
-import { InjectedDialog } from '../shared/InjectedDialog'
 
 export interface SelectProfileDialogProps extends withClasses<never> {
     open: boolean
@@ -49,7 +49,9 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
             </DialogContent>
             {rejection && (
                 <DialogContent className={classes.content}>
-                    Error: {rejection.message} {console.error(rejection)}
+                    <>
+                        Error: {rejection.message} {console.error(rejection)}
+                    </>
                 </DialogContent>
             )}
             <DialogActions>
@@ -73,9 +75,9 @@ export function useShareMenu(
     alreadySelectedPreviously: Profile[],
     SelectPeopleDialogProps?: Partial<SelectProfileDialogProps>,
 ) {
-    const [show, setShow] = useState(false)
-    const showShare = useCallback(() => setShow(true), [])
-    const hideShare = useCallback(() => setShow(false), [])
+    const [visible, setVisible] = useState(false)
+    const showShare = useCallback(() => setVisible(true), [])
+    const hideShare = useCallback(() => setVisible(false), [])
 
     return {
         showShare,
@@ -83,7 +85,7 @@ export function useShareMenu(
             <SelectProfileDialog
                 alreadySelectedPreviously={alreadySelectedPreviously}
                 profiles={people}
-                open={show}
+                open={visible}
                 onClose={hideShare}
                 onSelect={onSelect}
                 {...SelectPeopleDialogProps}

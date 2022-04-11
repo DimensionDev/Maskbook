@@ -12,7 +12,8 @@ import { useBindPayload } from '../hooks/useBindPayload'
 import { delay } from '@dimensiondev/kit'
 import { UnbindPanelUI } from './UnbindPanelUI'
 import { UnbindConfirm } from './UnbindConfirm'
-import { bindProof } from '@masknet/web3-providers'
+import { NextIDProof } from '@masknet/web3-providers'
+import { MaskMessages } from '../../../../shared'
 
 interface VerifyWalletDialogProps {
     unbindAddress: string
@@ -40,7 +41,7 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
         if (!personaSignState.value && !walletSignState.value) return
         if (!message || !persona.publicHexKey) return
         try {
-            await bindProof(
+            await NextIDProof.bindProof(
                 message.uuid,
                 persona.publicHexKey,
                 NextIDAction.Delete,
@@ -56,6 +57,9 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
                 variant: 'success',
                 message: t.notify_wallet_sign_request_success(),
             })
+
+            MaskMessages.events.ownProofChanged.sendToAll()
+
             await delay(2000)
             onUnBound()
             onClose()

@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import type { FC, ReactNode } from 'react'
-import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     confirmDialog: {

@@ -4,7 +4,7 @@ import { DialogContent } from '@mui/material'
 import { useEffect } from 'react'
 import { MaskMessages, useI18N } from '../../../utils'
 import { PluginLoader } from './PluginLoader'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 
 export function ThirdPartyPluginCompositionEntry(props: Plugin.SNSAdaptor.CompositionDialogEntry_DialogProps) {
     const { t } = useI18N()

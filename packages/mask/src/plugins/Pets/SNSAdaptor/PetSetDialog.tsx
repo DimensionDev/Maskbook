@@ -109,29 +109,29 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const nfts = useNFTs(user, configNFTs)
     const extraData = useNFTsExtra(configNFTs)
     const [collection, setCollection] = useState<FilterContract>(initCollection)
-    const [isCollectionsError, setIsCollectionsError] = useState(false)
+    const [isCollectionsError, setCollectionsError] = useState(false)
 
     const [metaData, setMetaData] = useState<PetMetaDB>(initMeta)
-    const [isImageError, setIsImageError] = useState(false)
-    const [isTipShow, setIsTipShow] = useState(false)
+    const [isImageError, setImageError] = useState(false)
+    const [isTipVisible, setTipVisible] = useState(false)
     const [holderChange, setHolderChange] = useState(true)
     const [tokenInfoSelect, setTokenInfoSelect] = useState<OwnerERC721TokenInfo | null>(null)
     const [inputTokenName, setInputTokenName] = useState('')
 
     const closeDialogHandle = () => {
-        setIsTipShow(true)
+        setTipVisible(true)
         onClose()
-        isReady() ? setIsTipShow(false) : cancel()
+        isReady() ? setTipVisible(false) : cancel()
         PluginPetMessages.events.setResult.sendToAll(Math.random())
     }
 
     const saveHandle = async () => {
         if (!collection.name) {
-            setIsCollectionsError(true)
+            setCollectionsError(true)
             return
         }
         if (!metaData.image) {
-            setIsImageError(true)
+            setImageError(true)
             return
         }
         setLoading(true)
@@ -166,7 +166,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 image: '',
             })
         }
-        setIsCollectionsError(false)
+        setCollectionsError(false)
     }
 
     const onImageChange = (v: OwnerERC721TokenInfo | null) => {
@@ -179,7 +179,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             image: v?.mediaUrl ?? '',
             type: v?.glbSupport ? ImageType.GLB : ImageType.NORMAL,
         })
-        setIsImageError(false)
+        setImageError(false)
     }
 
     const setMsgValueCheck = (v: string) => {
@@ -319,7 +319,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             </Box>
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={isTipShow}
+                open={isTipVisible}
                 message={t('plugin_pets_dialog_success')}
             />
         </>

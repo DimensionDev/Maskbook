@@ -37,7 +37,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         name: 'mask',
         mode,
         devtool: sourceMapKind,
-        target: ['web', 'es2019'],
+        target: ['web', 'es2021'],
         entry: {},
         experiments: { backCompat: false, asyncWebAssembly: supportWebAssembly },
         cache: {
@@ -60,42 +60,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
                     // It's a Node impl for xhr which is unnecessary
                     'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.js'),
-                    // Monorepo building speed optimization
-                    // Those packages are also installed as dependencies so they appears in node_modules
-                    // By aliasing them to the original position,
-                    // we can speed up the compile because there is no need to wait tsc build them to the dist folder.
-                    '@masknet/configuration': join(__dirname, '../../configuration/src/'),
-                    '@masknet/dashboard$': require.resolve('../../dashboard/src/entry.tsx'),
-                    '@masknet/injected-script': join(__dirname, '../../injected-script/sdk'),
-                    '@masknet/gun-utils': join(__dirname, '../../gun-utils/src/'),
-                    '@masknet/shared': join(__dirname, '../../shared/src/'),
-                    '@masknet/shared-base': join(__dirname, '../../shared-base/src/'),
-                    '@masknet/shared-base-ui': join(__dirname, '../../shared-base-ui/src/'),
-                    '@masknet/theme': join(__dirname, '../../theme/src/'),
-                    '@masknet/icons': join(__dirname, '../../icons/index.ts'),
-                    '@masknet/web3-providers': join(__dirname, '../../web3-providers/src'),
-                    '@masknet/web3-shared-base': join(__dirname, '../../web3-shared/base/src'),
-                    '@masknet/web3-shared-evm': join(__dirname, '../../web3-shared/evm/'),
-                    '@masknet/web3-shared-flow': join(__dirname, '../../web3-shared/flow/'),
-                    '@masknet/web3-shared-solana': join(__dirname, '../../web3-shared/solana/'),
-                    '@masknet/plugin-infra': join(__dirname, '../../plugin-infra/src/'),
-                    '@masknet/plugin-example': join(__dirname, '../../plugins/example/src/'),
-                    '@masknet/plugin-debugger': join(__dirname, '../../plugins/Debugger/src/'),
-                    '@masknet/plugin-flow': join(__dirname, '../../plugins/Flow/src/'),
-                    '@masknet/plugin-rss3': join(__dirname, '../../plugins/RSS3/src/'),
-                    '@masknet/plugin-dao': join(__dirname, '../../plugins/DAO/src/'),
-                    '@masknet/plugin-solana': join(__dirname, '../../plugins/Solana/src/'),
-                    '@masknet/plugin-wallet': join(__dirname, '../../plugins/Wallet/src/'),
-                    '@masknet/plugin-file-service': join(__dirname, '../../plugins/FileService/src/'),
-                    '@masknet/plugin-cyberconnect': join(__dirname, '../../plugins/CyberConnect/src/'),
-                    '@masknet/external-plugin-previewer': join(__dirname, '../../external-plugin-previewer/src/'),
-                    '@masknet/public-api': join(__dirname, '../../public-api/src/'),
-                    '@masknet/sdk': join(__dirname, '../../mask-sdk/server/'),
-                    '@masknet/backup-format': join(__dirname, '../../backup-format/src/'),
-                    '@masknet/encryption': join(__dirname, '../../encryption/src'),
-                    '@masknet/typed-message/dom$': require.resolve('../../typed-message/dom/index.ts'),
-                    '@masknet/typed-message$': require.resolve('../../typed-message/base/index.ts'),
-                    // @masknet/scripts: insert-here
+                    // fake esm
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
                 if (profiling) {
@@ -145,20 +110,21 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                                 syntax: 'typescript',
                                 dynamicImport: true,
                                 tsx: true,
-                                importAssertions: true,
                             },
-                            target: 'es2019',
+                            target: 'es2021',
                             externalHelpers: true,
                             transform: {
                                 react: {
                                     runtime: 'automatic',
-                                    useBuiltins: true,
                                     refresh: reactRefresh && {
                                         refreshReg: '$RefreshReg$',
                                         refreshSig: '$RefreshSig$',
                                         emitFullSignatures: true,
                                     },
                                 },
+                            },
+                            experimental: {
+                                keepImportAssertions: true,
                             },
                         },
                     },
@@ -241,12 +207,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         },
         output: {
             environment: {
-                arrowFunction: true,
-                const: true,
-                destructuring: true,
-                forOf: true,
                 module: false,
-                bigIntLiteral: true,
                 // Our iOS App doesn't support dynamic import (it requires a heavy post-build time transform).
                 dynamicImport: !(runtime.architecture === 'app' && runtime.engine === 'safari'),
             },

@@ -8,6 +8,8 @@ import type { FileInfo } from '../types'
 import FileServiceDialog from './MainDialog'
 import { Preview } from './Preview'
 import { FileServiceIcon } from '@masknet/icons'
+import { CrossIsolationMessages } from '@masknet/shared-base'
+import { ApplicationEntry } from '@masknet/shared'
 
 const definition: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -22,16 +24,37 @@ const definition: Plugin.SNSAdaptor.Definition = {
         [META_KEY_2, onAttachedFile],
     ]),
     CompositionDialogEntry: {
-        label: {
-            fallback: (
-                <>
-                    <FileServiceIcon style={{ width: 16, height: 16 }} />
-                    File Service
-                </>
-            ),
-        },
+        label: (
+            <>
+                <FileServiceIcon style={{ width: 16, height: 16 }} />
+                File Service
+            </>
+        ),
         dialog: FileServiceDialog,
     },
+    ApplicationEntries: [
+        {
+            RenderEntryComponent({ disabled }) {
+                return (
+                    <ApplicationEntry
+                        title="File Service"
+                        disabled={disabled}
+                        icon={new URL('./files.png', import.meta.url).toString()}
+                        onClick={() =>
+                            CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                reason: 'timeline',
+                                open: true,
+                                options: {
+                                    startupPlugin: base.ID,
+                                },
+                            })
+                        }
+                    />
+                )
+            },
+            defaultSortingPriority: 2,
+        },
+    ],
 }
 
 export default definition

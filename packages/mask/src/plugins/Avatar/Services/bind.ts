@@ -86,11 +86,11 @@ export async function setUserAddress(
     chainId?: number,
 ) {
     try {
-        await NFTAvatarDBStorage(network).set<Record<string, string>>(userId, {
+        await NFTAvatarDBStorage(network).set(userId, {
             [getKey(networkPluginId, chainId)]: address,
         })
 
-        await NFTAvatarDB(network).set<{ networkPluginId: string; chainId: number; address: string }>(userId, {
+        await NFTAvatarDB(network).set(userId, {
             networkPluginId: networkPluginId ?? NetworkPluginID.PLUGIN_EVM,
             chainId: chainId ?? ChainId.Mainnet,
             address,
