@@ -2,7 +2,7 @@ import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/con
 import { useAsyncRetry } from 'react-use'
 import { useLayoutEffect, useState } from 'react'
 import { List, ListItem, Typography, CircularProgress } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, getMaskColor } from '@masknet/theme'
 import { KeyValue } from '@masknet/web3-providers'
 import { useI18N } from '../../utils'
 
@@ -80,6 +80,15 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         fontWeight: 600,
     },
+    placeholderWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 238,
+    },
+    placeholder: {
+        color: getMaskColor(theme).textLight,
+    },
 }))
 
 export function ApplicationSettingPluginDragger() {
@@ -111,47 +120,56 @@ export function ApplicationSettingPluginDragger() {
             <CircularProgress size={24} color="primary" sx={{ marginRight: 1 }} />
         </div>
     ) : (
-        <>
-            <List className={classes.list}>
-                {(value?.listedAppList ?? applicationList).map((x, i) => (
-                    <ListItem
-                        key={i + x.pluginId}
-                        className={classes.listItem}
-                        onClick={async () => {
-                            await setAppUnlisted(x, true)
-                            retry()
-                        }}>
-                        <ApplicationItem application={x} />
-                    </ListItem>
-                ))}
-            </List>
+        <div>
+            {value ? (
+                <AppList appList={value.listedAppList} retry={retry} setAppUnlisted={setAppUnlisted} isListed />
+            ) : null}
             <Typography className={classes.unlisted}>{t('application_settings_tab_plug_app-list-unlisted')}</Typography>
-            <List className={classes.list}>
-                {value
-                    ? value.unlistedAppList.map((x, i) => (
-                          <ListItem
-                              key={i + x.pluginId}
-                              className={classes.listItem}
-                              onClick={async () => {
-                                  await setAppUnlisted(x, false)
-                                  retry()
-                              }}>
-                              <ApplicationItem application={x} />
-                          </ListItem>
-                      ))
-                    : null}
-            </List>
-        </>
+            {value ? (
+                <AppList
+                    appList={value.unlistedAppList}
+                    retry={retry}
+                    setAppUnlisted={setAppUnlisted}
+                    isListed={false}
+                />
+            ) : null}
+        </div>
     )
 }
 
-interface ApplicationItemProps {
-    application: Application
+interface AppListProps {
+    appList: Application[]
+    retry: () => void
+    setAppUnlisted: (app: Application, unlisted: boolean) => Promise<void>
+    isListed: boolean
 }
 
-function ApplicationItem(props: ApplicationItemProps) {
+function AppList(props: AppListProps) {
+    const { appList, retry, setAppUnlisted, isListed } = props
     const { classes } = useStyles()
-    const { application } = props
+    const { t } = useI18N()
 
-    return <div className={classes.iconWrapper}>{application.entry.AppIcon}</div>
+    return appList.length > 0 ? (
+        <List className={classes.list}>
+            {appList.map((x, i) => (
+                <ListItem
+                    key={i + x.pluginId}
+                    className={classes.listItem}
+                    onClick={async () => {
+                        await setAppUnlisted(x, isListed)
+                        retry()
+                    }}>
+                    <div className={classes.iconWrapper}>{x.entry.AppIcon}</div>
+                </ListItem>
+            ))}
+        </List>
+    ) : (
+        <div className={classes.placeholderWrapper}>
+            <Typography className={classes.placeholder}>
+                {isListed
+                    ? t('application_settings_tab_plug_app-unlisted-placeholder')
+                    : t('application_settings_tab_plug_app-listed-placeholder')}
+            </Typography>
+        </div>
+    )
 }

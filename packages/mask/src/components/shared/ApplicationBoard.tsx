@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography, useTheme, CircularProgress } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -54,6 +54,16 @@ const useStyles = makeStyles()((theme) => {
             width: 24,
             cursor: 'pointer',
         },
+        placeholderWrapper: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingRight: 24,
+            height: 324,
+        },
+        placeholder: {
+            color: getMaskColor(theme).textLight,
+        },
     }
 })
 
@@ -95,7 +105,7 @@ export function ApplicationBoard() {
         .filter((x) => Boolean(x.entry.RenderEntryComponent))
 
     const { value, retry, loading } = useUnListedApplicationList(applicationList)
-
+    const listedAppList = value?.listedAppList ?? applicationList
     return (
         <>
             <div className={classes.header}>
@@ -111,9 +121,9 @@ export function ApplicationBoard() {
                 <div className={classes.loadingWrapper}>
                     <CircularProgress size={24} color="primary" sx={{ marginRight: 1 }} />
                 </div>
-            ) : (
+            ) : listedAppList.length > 0 ? (
                 <section className={classes.applicationWrapper}>
-                    {(value?.listedAppList ?? applicationList).map((X, i) => {
+                    {listedAppList.map((X, i) => {
                         const RenderEntryComponent = X.entry.RenderEntryComponent!
                         return (
                             <Fragment key={i + X.pluginId}>
@@ -122,6 +132,12 @@ export function ApplicationBoard() {
                         )
                     })}
                 </section>
+            ) : (
+                <div className={classes.placeholderWrapper}>
+                    <Typography className={classes.placeholder}>
+                        {t('application_settings_tab_plug_app-unlisted-placeholder')}
+                    </Typography>
+                </div>
             )}
             {openSettings ? (
                 <ApplicationSettingDialog
