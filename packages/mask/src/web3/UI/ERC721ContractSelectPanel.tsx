@@ -23,52 +23,50 @@ interface StyleProps {
     hasIcon: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, props) => {
-    return {
-        root: {
-            height: 52,
-            border: `1px solid ${theme.palette.mode === 'light' ? '#EBEEF0' : '#2F3336'}`,
-            borderRadius: 12,
-            padding: theme.spacing(0.8, 1.2, 1),
-            display: 'flex',
-            justifyContent: 'space-between',
-            flexDirection: 'column',
-        },
-        balance: {},
-        title: {},
-        wrapper: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: '100%',
-        },
-        icon: {
-            height: 24,
-            width: 24,
-            borderRadius: 500,
-        },
-        tokenWrapper: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        nftName: {
-            marginLeft: theme.spacing(props.hasIcon ? 1 : 0),
-            fontWeight: 300,
-            pointerEvents: 'none',
-            fontSize: 16,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-        },
-        expandIcon: {
-            color: theme.palette.text.primary,
-        },
-        pointer: {
-            cursor: 'pointer',
-        },
-    }
-})
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
+    root: {
+        height: 52,
+        border: `1px solid ${theme.palette.mode === 'light' ? '#EBEEF0' : '#2F3336'}`,
+        borderRadius: 12,
+        padding: theme.spacing(0.8, 1.2, 1),
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexDirection: 'column',
+    },
+    balance: {},
+    title: {},
+    wrapper: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+    },
+    icon: {
+        height: 24,
+        width: 24,
+        borderRadius: 500,
+    },
+    tokenWrapper: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    nftName: {
+        marginLeft: theme.spacing(props.hasIcon ? 1 : 0),
+        fontWeight: 300,
+        pointerEvents: 'none',
+        fontSize: 16,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
+    expandIcon: {
+        color: theme.palette.text.primary,
+    },
+    pointer: {
+        cursor: 'pointer',
+    },
+}))
 
 export interface ERC721TokenSelectPanelProps {
     label?: string

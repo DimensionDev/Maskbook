@@ -21,25 +21,28 @@ export function useV3SwapPools(
 
     const allCurrencyCombinationsWithAllFees: [Token, Token, FeeAmount][] = useMemo(
         () =>
-            allCurrencyCombinations.reduce<[Token, Token, FeeAmount][]>((list, [tokenA, tokenB]) => {
-                return list.concat([
-                    [tokenA, tokenB, FeeAmount.LOW],
-                    [tokenA, tokenB, FeeAmount.MEDIUM],
-                    [tokenA, tokenB, FeeAmount.HIGH],
-                ])
-            }, []),
+            allCurrencyCombinations.reduce<[Token, Token, FeeAmount][]>(
+                (list, [tokenA, tokenB]) =>
+                    list.concat([
+                        [tokenA, tokenB, FeeAmount.LOW],
+                        [tokenA, tokenB, FeeAmount.MEDIUM],
+                        [tokenA, tokenB, FeeAmount.HIGH],
+                    ]),
+                [],
+            ),
         [allCurrencyCombinations],
     )
     const pools = usePools(TradeProvider.UNISWAP_V3, allCurrencyCombinationsWithAllFees)
 
-    return useMemo(() => {
-        return {
+    return useMemo(
+        () => ({
             pools: pools
-                .filter((tuple): tuple is [PoolState.EXISTS, Pool] => {
-                    return tuple[0] === PoolState.EXISTS && tuple[1] !== null
-                })
+                .filter(
+                    (tuple): tuple is [PoolState.EXISTS, Pool] => tuple[0] === PoolState.EXISTS && tuple[1] !== null,
+                )
                 .map(([, pool]) => pool),
             loading: pools.some(([state]) => state === PoolState.LOADING),
-        }
-    }, [pools])
+        }),
+        [pools],
+    )
 }

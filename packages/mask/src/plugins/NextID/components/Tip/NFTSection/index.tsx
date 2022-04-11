@@ -101,11 +101,14 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
 
     const fetchedTokens = value?.data ?? EMPTY_LIST
 
-    const tokens = useMemo(() => {
-        return uniqWith(fetchedTokens, (v1, v2) => {
-            return isSameAddress(v1.contract?.address, v2.contract?.address) && v1.tokenId === v2.tokenId
-        })
-    }, [fetchedTokens])
+    const tokens = useMemo(
+        () =>
+            uniqWith(
+                fetchedTokens,
+                (v1, v2) => isSameAddress(v1.contract?.address, v2.contract?.address) && v1.tokenId === v2.tokenId,
+            ),
+        [fetchedTokens],
+    )
 
     const showLoadingIndicator = tokens.length === 0 && !loading && !guessLoading
 

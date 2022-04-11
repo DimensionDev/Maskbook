@@ -8,16 +8,14 @@ import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        skeleton: {
-            margin: theme.spacing(2),
-            '&:first-child': {
-                marginTop: theme.spacing(3),
-            },
+const useStyles = makeStyles()((theme) => ({
+    skeleton: {
+        margin: theme.spacing(2),
+        '&:first-child': {
+            marginTop: theme.spacing(3),
         },
-    }
-})
+    },
+}))
 
 const isSnapshotURL = (x: string): boolean =>
     /^https:\/\/(?:www.)?snapshot.(org|page)\/#\/(.*?)\/proposal\/[\dA-Za-z]+$/.test(x)

@@ -19,87 +19,85 @@ import StageCard from './StageCard'
 import EncryptionCard from './EncryptionCard'
 import CompletionCard from './CompletionCard'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            '--contentHeight': '400px',
-            '--tabHeight': '35px',
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        '--contentHeight': '400px',
+        '--tabHeight': '35px',
 
-            width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
-            padding: 0,
-            position: 'relative',
+        width: '100%',
+        border: `solid 1px ${theme.palette.divider}`,
+        padding: 0,
+        position: 'relative',
+    },
+    content: {
+        width: '100%',
+        minHeight: 'var(--contentHeight)',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '0 !important',
+    },
+    body: {
+        flex: 1,
+        maxHeight: 'calc(var(--contentHeight) - var(--tabHeight))',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        content: {
-            width: '100%',
-            minHeight: 'var(--contentHeight)',
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '0 !important',
+    },
+    tabs: {
+        height: 'var(--tabHeight)',
+        width: '100%',
+        minHeight: 'unset',
+        borderTop: `solid 1px ${theme.palette.divider}`,
+        borderBottom: `solid 1px ${theme.palette.divider}`,
+    },
+    tab: {
+        height: 'var(--tabHeight)',
+        minHeight: 'unset',
+        minWidth: 'unset',
+    },
+    subtitle: {
+        fontSize: 12,
+        marginRight: theme.spacing(0.5),
+    },
+    title: {
+        fontSize: '1.25rem',
+    },
+    subheader: {
+        fontSize: '0.875rem',
+    },
+    tip: {
+        padding: theme.spacing(1),
+        backgroundColor: '#fff',
+    },
+    tipArrow: {
+        color: '#fff',
+    },
+    critical: {
+        color: 'rgba(255,255,255,.9)',
+        fontWeight: 500,
+        fontSize: 14,
+        width: 24,
+        height: 24,
+        backgroundImage: 'linear-gradient( 135deg, #FDD819 10%, #E80505 100%)',
+        cursor: 'pointer',
+    },
+    nonCritical: {
+        color: 'rgba(255,255,255,.9)',
+        fontWeight: 500,
+        fontSize: 14,
+        width: 24,
+        height: 24,
+        backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+        cursor: 'pointer',
+    },
+    chip: {
+        '&:hover': {
+            backgroundColor: theme.palette.primary.main,
         },
-        body: {
-            flex: 1,
-            maxHeight: 'calc(var(--contentHeight) - var(--tabHeight))',
-            overflow: 'auto',
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        tabs: {
-            height: 'var(--tabHeight)',
-            width: '100%',
-            minHeight: 'unset',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            borderBottom: `solid 1px ${theme.palette.divider}`,
-        },
-        tab: {
-            height: 'var(--tabHeight)',
-            minHeight: 'unset',
-            minWidth: 'unset',
-        },
-        subtitle: {
-            fontSize: 12,
-            marginRight: theme.spacing(0.5),
-        },
-        title: {
-            fontSize: '1.25rem',
-        },
-        subheader: {
-            fontSize: '0.875rem',
-        },
-        tip: {
-            padding: theme.spacing(1),
-            backgroundColor: '#fff',
-        },
-        tipArrow: {
-            color: '#fff',
-        },
-        critical: {
-            color: 'rgba(255,255,255,.9)',
-            fontWeight: 500,
-            fontSize: 14,
-            width: 24,
-            height: 24,
-            backgroundImage: 'linear-gradient( 135deg, #FDD819 10%, #E80505 100%)',
-            cursor: 'pointer',
-        },
-        nonCritical: {
-            color: 'rgba(255,255,255,.9)',
-            fontWeight: 500,
-            fontSize: 14,
-            width: 24,
-            height: 24,
-            backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
-            cursor: 'pointer',
-        },
-        chip: {
-            '&:hover': {
-                backgroundColor: theme.palette.primary.main,
-            },
-        },
-    }
-})
+    },
+}))
 
 interface FindTrumanProps {
     postType: PostType

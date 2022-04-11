@@ -28,14 +28,12 @@ export const BorderLinearProgress: any = styled(LinearProgress)(({ theme }) => (
     },
 }))
 
-const useResultStyles = makeStyles()((theme) => {
-    return {
-        answerChip: {
-            backgroundColor: theme.palette.mode === 'light' ? '#2e7d32' : '#66bb6a',
-            color: theme.palette.mode === 'light' ? '#fff' : '#EFF3F4',
-        },
-    }
-})
+const useResultStyles = makeStyles()((theme) => ({
+    answerChip: {
+        backgroundColor: theme.palette.mode === 'light' ? '#2e7d32' : '#66bb6a',
+        color: theme.palette.mode === 'light' ? '#fff' : '#EFF3F4',
+    },
+}))
 
 interface ResultViewProps {
     type: PostType
@@ -51,9 +49,7 @@ export default function ResultCard(props: ResultViewProps) {
 
     const total =
         result?.count && result.count.length > 0
-            ? result.count.reduce((total, e) => {
-                  return { choice: -1, value: total.value + e.value }
-              }).value
+            ? result.count.reduce((total, e) => ({ choice: -1, value: total.value + e.value })).value
             : 1
 
     const answer = result

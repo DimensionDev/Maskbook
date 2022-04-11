@@ -18,33 +18,31 @@ const DEFAULT_DIMENSION: Dimension = {
     height: 200,
 }
 
-const useStyles = makeStyles<PriceChartProps>()((theme, { stats, coin }) => {
-    return {
-        root: {
-            position: 'relative',
-            cursor: stats.length && coin?.platform_url ? 'pointer' : 'default',
-        },
-        svg: {
-            display: 'block',
-        },
-        progress: {
-            bottom: theme.spacing(1),
-            right: theme.spacing(1),
-            position: 'absolute',
-        },
-        refresh: {
-            bottom: theme.spacing(1),
-            right: theme.spacing(1),
-            position: 'absolute',
-            fontSize: 15,
-        },
-        placeholder: {
-            paddingTop: theme.spacing(10),
-            paddingBottom: theme.spacing(10),
-            borderStyle: 'none',
-        },
-    }
-})
+const useStyles = makeStyles<PriceChartProps>()((theme, { stats, coin }) => ({
+    root: {
+        position: 'relative',
+        cursor: stats.length && coin?.platform_url ? 'pointer' : 'default',
+    },
+    svg: {
+        display: 'block',
+    },
+    progress: {
+        bottom: theme.spacing(1),
+        right: theme.spacing(1),
+        position: 'absolute',
+    },
+    refresh: {
+        bottom: theme.spacing(1),
+        right: theme.spacing(1),
+        position: 'absolute',
+        fontSize: 15,
+    },
+    placeholder: {
+        paddingTop: theme.spacing(10),
+        paddingBottom: theme.spacing(10),
+        borderStyle: 'none',
+    },
+}))
 
 export interface PriceChartProps extends withClasses<'root'> {
     coin?: Coin

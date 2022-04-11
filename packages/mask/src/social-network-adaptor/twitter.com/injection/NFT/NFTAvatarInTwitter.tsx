@@ -131,9 +131,7 @@ function NFTAvatarInTwitter() {
         setAvatar(_avatar)
     }, [_avatar])
 
-    useEffect(() => {
-        return MaskMessages.events.NFTAvatarUpdated.on((data) => onUpdate(data))
-    }, [onUpdate])
+    useEffect(() => MaskMessages.events.NFTAvatarUpdated.on((data) => onUpdate(data)), [onUpdate])
 
     useEffect(() => {
         if (!showAvatar) return

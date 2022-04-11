@@ -18,14 +18,16 @@ export function useCollections(address: string, chainId: ChainId | null, dependR
     }
     const collections = useSocket<ERC721TokenCollectionInfo>(message)
     // TODO Pass chainId to websocket, and filter from data side.
-    const filtered = useMemo(() => {
-        return chainId
-            ? {
-                  ...collections,
-                  data: collections.data.filter((x) => x.chainId === chainId),
-              }
-            : collections
-    }, [collections, chainId])
+    const filtered = useMemo(
+        () =>
+            chainId
+                ? {
+                      ...collections,
+                      data: collections.data.filter((x) => x.chainId === chainId),
+                  }
+                : collections,
+        [collections, chainId],
+    )
     return filtered
 }
 

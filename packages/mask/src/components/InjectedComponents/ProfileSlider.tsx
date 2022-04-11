@@ -1,10 +1,8 @@
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
-const PluginRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
-    return () => {
-        return <div>Profile Slider</div>
-    }
-})
+const PluginRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => () => (
+    <div>Profile Slider</div>
+))
 
 export interface ProfileSliderProps {}
 

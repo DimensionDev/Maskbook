@@ -105,7 +105,7 @@ export interface DeriveWalletTableRowProps {
 export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, added, onCheck, selected }) => {
     const { classes } = useStyles()
     const web3 = useWeb3()
-    const { loading, value: balance } = useAsync(async () => web3.eth.getBalance(address), [web3, address])
+    const { loading, value: balance } = useAsync(() => web3.eth.getBalance(address), [web3, address])
 
     return (
         <TableRow key={address}>

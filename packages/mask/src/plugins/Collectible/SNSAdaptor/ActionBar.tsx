@@ -8,18 +8,16 @@ import { MakeOfferDialog } from './MakeOfferDialog'
 import { PostListingDialog } from './PostListingDialog'
 import { CheckoutDialog } from './CheckoutDialog'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            marginLeft: theme.spacing(-0.5),
-            marginRight: theme.spacing(-0.5),
-        },
-        button: {
-            flex: 1,
-            margin: `0 ${theme.spacing(0.5)}`,
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        marginLeft: theme.spacing(-0.5),
+        marginRight: theme.spacing(-0.5),
+    },
+    button: {
+        flex: 1,
+        margin: `0 ${theme.spacing(0.5)}`,
+    },
+}))
 
 export interface ActionBarProps {}
 

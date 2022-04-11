@@ -30,147 +30,145 @@ import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 
-const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
-    return {
-        root: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-        },
-        reverseIcon: {
-            cursor: 'pointer',
-            color: isDashboard ? `${theme.palette.text.primary}!important` : theme.palette.text.strong,
-        },
-        card: {
-            backgroundColor: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.background.default,
-            border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.divider}`,
-            borderRadius: 12,
-            padding: 12,
-        },
-        balance: {
-            fontSize: 14,
-            lineHeight: '20px',
-            color: theme.palette.text.primary,
-        },
-        amount: {
-            marginLeft: 10,
-        },
+const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    reverseIcon: {
+        cursor: 'pointer',
+        color: isDashboard ? `${theme.palette.text.primary}!important` : theme.palette.text.strong,
+    },
+    card: {
+        backgroundColor: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.background.default,
+        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.divider}`,
+        borderRadius: 12,
+        padding: 12,
+    },
+    balance: {
+        fontSize: 14,
+        lineHeight: '20px',
+        color: theme.palette.text.primary,
+    },
+    amount: {
+        marginLeft: 10,
+    },
 
-        reverse: {
-            backgroundColor: isDashboard ? MaskColorVar.lightBackground : theme.palette.background.default,
-            width: 32,
-            height: 32,
-            borderRadius: 16,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            margin: '20px 0 16px 0',
+    reverse: {
+        backgroundColor: isDashboard ? MaskColorVar.lightBackground : theme.palette.background.default,
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: '20px 0 16px 0',
+    },
+    chevron: {
+        fill: 'none',
+        stroke: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
+        transition: 'all 300ms',
+        cursor: 'pointer',
+        color: theme.palette.text.primary,
+    },
+    reverseChevron: {
+        transform: 'rotate(-180deg)',
+        transition: 'all 300ms',
+    },
+    status: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+    },
+    label: {
+        flex: 1,
+        textAlign: 'left',
+    },
+    icon: {
+        marginLeft: theme.spacing(0.5),
+    },
+    section: {
+        width: '100%',
+    },
+    chainBoundary: {
+        width: '100%',
+    },
+    button: {
+        fontSize: 18,
+        lineHeight: '22px',
+        fontWeight: 600,
+        padding: '13px 0',
+        borderRadius: isDashboard ? 8 : 24,
+        height: 'auto',
+        marginTop: '0px !important',
+    },
+    disabledButton: {
+        fontSize: 18,
+        lineHeight: '22px',
+        fontWeight: 600,
+        padding: '13px 0',
+        borderRadius: isDashboard ? 8 : 24,
+        height: 'auto',
+    },
+    selectedTokenChip: {
+        borderRadius: '22px!important',
+        height: 'auto',
+        backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.background.input,
+        [`& .${chipClasses.label}`]: {
+            paddingTop: 10,
+            paddingBottom: 10,
+            fontSize: 13,
+            lineHeight: '18px',
+            marginRight: 8,
         },
-        chevron: {
-            fill: 'none',
-            stroke: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
-            transition: 'all 300ms',
-            cursor: 'pointer',
-            color: theme.palette.text.primary,
+    },
+    chipTokenIcon: {
+        width: '28px!important',
+        height: '28px!important',
+    },
+    controller: {
+        width: '100%',
+        paddingBottom: 16,
+        // Just for design
+        backgroundColor: isDashboard ? MaskColorVar.mainBackground : theme.palette.background.paper,
+        position: 'sticky',
+        bottom: isPopup ? -12 : -20,
+    },
+    noToken: {
+        borderRadius: '18px !important',
+        backgroundColor: theme.palette.primary.main,
+        [`& .${chipClasses.label}`]: {
+            paddingTop: 9,
+            paddingBottom: 9,
+            fontSize: 10,
+            lineHeight: '18px',
+            color: theme.palette.primary.contrastText,
+            marginRight: 0,
         },
-        reverseChevron: {
-            transform: 'rotate(-180deg)',
-            transition: 'all 300ms',
-        },
-        status: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 20,
-        },
-        label: {
-            flex: 1,
-            textAlign: 'left',
-        },
-        icon: {
-            marginLeft: theme.spacing(0.5),
-        },
-        section: {
-            width: '100%',
-        },
-        chainBoundary: {
-            width: '100%',
-        },
-        button: {
-            fontSize: 18,
-            lineHeight: '22px',
-            fontWeight: 600,
-            padding: '13px 0',
-            borderRadius: isDashboard ? 8 : 24,
-            height: 'auto',
-            marginTop: '0px !important',
-        },
-        disabledButton: {
-            fontSize: 18,
-            lineHeight: '22px',
-            fontWeight: 600,
-            padding: '13px 0',
-            borderRadius: isDashboard ? 8 : 24,
-            height: 'auto',
-        },
-        selectedTokenChip: {
-            borderRadius: '22px!important',
-            height: 'auto',
-            backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.background.input,
-            [`& .${chipClasses.label}`]: {
-                paddingTop: 10,
-                paddingBottom: 10,
-                fontSize: 13,
-                lineHeight: '18px',
-                marginRight: 8,
-            },
-        },
-        chipTokenIcon: {
-            width: '28px!important',
-            height: '28px!important',
-        },
-        controller: {
-            width: '100%',
-            paddingBottom: 16,
-            // Just for design
-            backgroundColor: isDashboard ? MaskColorVar.mainBackground : theme.palette.background.paper,
-            position: 'sticky',
-            bottom: isPopup ? -12 : -20,
-        },
-        noToken: {
-            borderRadius: '18px !important',
-            backgroundColor: theme.palette.primary.main,
-            [`& .${chipClasses.label}`]: {
-                paddingTop: 9,
-                paddingBottom: 9,
-                fontSize: 10,
-                lineHeight: '18px',
-                color: theme.palette.primary.contrastText,
-                marginRight: 0,
-            },
-        },
-        tooltip: {
-            padding: 16,
-            textAlign: 'left',
-            fontSize: 16,
-            lineHeight: '22px',
-            fontWeight: 500,
-        },
-        dropIcon: {
-            width: 20,
-            height: 24,
-            fill: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
-        },
-        connectWallet: {
-            marginTop: 0,
-        },
-        slippageValue: {
-            fontSize: 12,
-            lineHeight: '16px',
-            color: theme.palette.text.secondary,
-        },
-    }
-})
+    },
+    tooltip: {
+        padding: 16,
+        textAlign: 'left',
+        fontSize: 16,
+        lineHeight: '22px',
+        fontWeight: 500,
+    },
+    dropIcon: {
+        width: 20,
+        height: 24,
+        fill: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
+    },
+    connectWallet: {
+        marginTop: 0,
+    },
+    slippageValue: {
+        fontSize: 12,
+        lineHeight: '16px',
+        color: theme.palette.text.secondary,
+    },
+}))
 
 export interface AllTradeFormProps {
     wallet?: Wallet

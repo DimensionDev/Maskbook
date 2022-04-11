@@ -28,40 +28,46 @@ export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
         })
     }, [chainId, providerType])
 
-    useEffect(() => {
-        return EVM_Messages.events.INJECTED_PROVIDER_RPC_REQUEST.on(async ({ payload }) => {
-            try {
-                const result = await bridgedProvider.request({
-                    method: payload.method,
-                    params: payload.params,
-                })
-                EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
-                    payload,
-                    result,
-                    error: null,
-                })
-            } catch (error) {
-                EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
-                    payload,
-                    error: error instanceof Error ? error : new Error(),
-                })
-            }
-        })
-    }, [bridgedProvider])
+    useEffect(
+        () =>
+            EVM_Messages.events.INJECTED_PROVIDER_RPC_REQUEST.on(async ({ payload }) => {
+                try {
+                    const result = await bridgedProvider.request({
+                        method: payload.method,
+                        params: payload.params,
+                    })
+                    EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
+                        payload,
+                        result,
+                        error: null,
+                    })
+                } catch (error) {
+                    EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
+                        payload,
+                        error: error instanceof Error ? error : new Error(),
+                    })
+                }
+            }),
+        [bridgedProvider],
+    )
 
-    useEffect(() => {
-        return bridgedProvider.on('accountsChanged', async (event) => {
-            if (!isInjectedProvider(providerType)) return
-            Services.Ethereum.notifyInjectedEvent('accountsChanged', event, providerType)
-        })
-    }, [providerType, bridgedProvider])
+    useEffect(
+        () =>
+            bridgedProvider.on('accountsChanged', async (event) => {
+                if (!isInjectedProvider(providerType)) return
+                Services.Ethereum.notifyInjectedEvent('accountsChanged', event, providerType)
+            }),
+        [providerType, bridgedProvider],
+    )
 
-    useEffect(() => {
-        return bridgedProvider.on('chainChanged', (event) => {
-            if (!isInjectedProvider(providerType)) return
-            Services.Ethereum.notifyInjectedEvent('chainChanged', event, providerType)
-        })
-    }, [providerType, bridgedProvider])
+    useEffect(
+        () =>
+            bridgedProvider.on('chainChanged', (event) => {
+                if (!isInjectedProvider(providerType)) return
+                Services.Ethereum.notifyInjectedEvent('chainChanged', event, providerType)
+            }),
+        [providerType, bridgedProvider],
+    )
 
     useMount(onMounted)
 

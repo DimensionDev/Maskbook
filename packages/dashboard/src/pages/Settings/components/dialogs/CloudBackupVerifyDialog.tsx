@@ -27,15 +27,16 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
     const [code, setCode] = useState('')
     const [invalidCode, setInvalidCode] = useState(false)
 
-    const params = useMemo(() => {
-        return {
+    const params = useMemo(
+        () => ({
             account: mode,
             type: mode.includes('@') ? AccountType.email : AccountType.phone,
             scenario: Scenario.backup,
             locale: language.includes('zh') ? Locale.zh : Locale.en,
             code,
-        }
-    }, [mode, code])
+        }),
+        [mode, code],
+    )
 
     const sendVerifyCode = async () => {
         const res = await sendCode(params).catch((error) => showSnackbar(error.message, { variant: 'error' }))

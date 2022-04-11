@@ -27,8 +27,8 @@ export const TokenPickerProvider: FC<PropsWithChildren<{}>> = ({ children }) => 
         setTasks((list) => list.filter((t) => t !== task))
     }, [])
 
-    const contextValue = useMemo(() => {
-        return {
+    const contextValue = useMemo(
+        () => ({
             pickToken: (options: PickTokenOptions) => {
                 const [promise, resolve, reject] = defer<FungibleTokenDetailed | null>()
                 id += 1
@@ -36,8 +36,9 @@ export const TokenPickerProvider: FC<PropsWithChildren<{}>> = ({ children }) => 
                 setTasks((list) => [...list, newTask])
                 return promise
             },
-        }
-    }, [])
+        }),
+        [],
+    )
 
     return (
         <TokenPickerContext.Provider value={contextValue}>
@@ -61,6 +62,4 @@ export const TokenPickerProvider: FC<PropsWithChildren<{}>> = ({ children }) => 
     )
 }
 
-export const usePickToken = () => {
-    return useContext(TokenPickerContext).pickToken
-}
+export const usePickToken = () => useContext(TokenPickerContext).pickToken

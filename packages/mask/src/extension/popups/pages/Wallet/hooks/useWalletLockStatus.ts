@@ -4,18 +4,9 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { useEffect } from 'react'
 
 export function useWalletLockStatus() {
-    const {
-        value: isLocked,
-        loading,
-        error,
-        retry,
-    } = useAsyncRetry(async () => {
-        return WalletRPC.isLocked()
-    }, [])
+    const { value: isLocked, loading, error, retry } = useAsyncRetry(() => WalletRPC.isLocked(), [])
 
-    useEffect(() => {
-        return WalletMessages.events.walletLockStatusUpdated.on(retry)
-    }, [retry])
+    useEffect(() => WalletMessages.events.walletLockStatusUpdated.on(retry), [retry])
 
     return {
         error,

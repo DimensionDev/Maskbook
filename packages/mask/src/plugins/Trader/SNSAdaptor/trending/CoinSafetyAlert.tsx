@@ -5,22 +5,20 @@ import type { Coin } from '../../types'
 import { useApprovedTokens } from '../../trending/useApprovedTokens'
 import { resolveTokenLinkOnExplorer, ChainId, EthereumTokenType } from '@masknet/web3-shared-evm'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            padding: theme.spacing(0, 2, 2, 2),
-        },
-        approve: {
-            marginLeft: theme.spacing(1),
-            whiteSpace: 'nowrap',
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        padding: theme.spacing(0, 2, 2, 2),
+    },
+    approve: {
+        marginLeft: theme.spacing(1),
+        whiteSpace: 'nowrap',
+        backgroundColor: theme.palette.error.main,
+        color: theme.palette.error.contrastText,
+        '&:hover': {
             backgroundColor: theme.palette.error.main,
-            color: theme.palette.error.contrastText,
-            '&:hover': {
-                backgroundColor: theme.palette.error.main,
-            },
         },
-    }
-})
+    },
+}))
 
 export interface CoinSafetyAlertProps {
     coin: Coin

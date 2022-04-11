@@ -1,10 +1,8 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        icon: {},
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    icon: {},
+}))
 
 export interface ImageIconProps extends withClasses<'icon'> {
     size?: number

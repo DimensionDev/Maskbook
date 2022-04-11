@@ -3,24 +3,22 @@ import { makeStyles } from '@masknet/theme'
 import { useContext } from 'react'
 import { FindTrumanContext } from '../context'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        footer: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '16px',
-            minHeight: '48px',
-            flexWrap: 'wrap',
-            rowGap: '8px',
+const useStyles = makeStyles()((theme) => ({
+    footer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '16px',
+        minHeight: '48px',
+        flexWrap: 'wrap',
+        rowGap: '8px',
+    },
+    chip: {
+        ':not(:last-child)': {
+            marginRight: '8px',
         },
-        chip: {
-            ':not(:last-child)': {
-                marginRight: '8px',
-            },
-        },
-    }
-})
+    },
+}))
 
 export default function Footer() {
     const { const: consts } = useContext(FindTrumanContext)

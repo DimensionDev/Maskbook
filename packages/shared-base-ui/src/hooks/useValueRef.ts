@@ -18,11 +18,10 @@ export function useValueRefDelayed<T>(ref: ValueRef<T>, latency = 500) {
     const subscription = useMemo<Subscription<T>>(
         () => ({
             getCurrentValue: () => ref.value,
-            subscribe: (callback: (newVal: T, oldVal: T) => void) => {
-                return ref.addListener((newVal, oldVal) => {
+            subscribe: (callback: (newVal: T, oldVal: T) => void) =>
+                ref.addListener((newVal, oldVal) => {
                     setTimeout(() => callback(newVal, oldVal), latency)
-                })
-            },
+                }),
         }),
         [ref, latency],
     )

@@ -7,9 +7,7 @@ const querySelector = <T extends E, SingleMode extends boolean = true>(selector:
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
 
-const querySelectorAll = <T extends E>(selector: string) => {
-    return new LiveSelector().querySelectorAll<T>(selector)
-}
+const querySelectorAll = <T extends E>(selector: string) => new LiveSelector().querySelectorAll<T>(selector)
 
 export const searchUserIdOnMobileSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
     querySelector<HTMLAnchorElement>('div[data-sigil$="profile"] a')

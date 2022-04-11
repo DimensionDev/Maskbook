@@ -25,51 +25,49 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        content: {
-            padding: 0,
+const useStyles = makeStyles()((theme) => ({
+    content: {
+        padding: 0,
+    },
+    details: {
+        color: '#999',
+        fontSize: '14px',
+        margin: '0px',
+    },
+    footer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        padding: theme.spacing(0, 2, 2),
+    },
+    panel: {
+        marginTop: theme.spacing(2),
+        '&:first-child': {
+            marginTop: 0,
         },
-        details: {
-            color: '#999',
-            fontSize: '14px',
-            margin: '0px',
-        },
-        footer: {
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: theme.spacing(0, 2, 2),
-        },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
-        },
-        label: {},
-        buttons: {
-            width: '100%',
-            margin: `0 ${theme.spacing(-0.5)}`,
-        },
-        button: {
-            flex: 1,
-            margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
-        },
-        markdown: {
-            margin: theme.spacing(1, 0),
-        },
-        mediaContent: {
-            display: 'flex',
-            justifyContent: 'center',
-            height: '200px',
-        },
-        player: {
-            maxWidth: '100%',
-            maxHeight: '100%',
-            border: 'none',
-        },
-    }
-})
+    },
+    label: {},
+    buttons: {
+        width: '100%',
+        margin: `0 ${theme.spacing(-0.5)}`,
+    },
+    button: {
+        flex: 1,
+        margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
+    },
+    markdown: {
+        margin: theme.spacing(1, 0),
+    },
+    mediaContent: {
+        display: 'flex',
+        justifyContent: 'center',
+        height: '200px',
+    },
+    player: {
+        maxWidth: '100%',
+        maxHeight: '100%',
+        border: 'none',
+    },
+}))
 
 export interface MakeOfferDialogProps {
     asset?: ReturnType<typeof useAsset>

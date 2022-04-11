@@ -96,16 +96,14 @@ export function useSwapParameters(
                         tradeProvider,
                     ),
                 )
-            return parameters.map(({ methodName, args, value }) => {
-                return {
-                    address: routerV2Contract.options.address,
-                    calldata: routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](
-                        // @ts-ignore
-                        ...args,
-                    ).encodeABI(),
-                    value,
-                }
-            })
+            return parameters.map(({ methodName, args, value }) => ({
+                address: routerV2Contract.options.address,
+                calldata: routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](
+                    // @ts-ignore
+                    ...args,
+                ).encodeABI(),
+                value,
+            }))
         } else {
             if (!swapRouterContract) return []
             const { value, calldata } = SwapRouter.swapCallParameters(trade_, {

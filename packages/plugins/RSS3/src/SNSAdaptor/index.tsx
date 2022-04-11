@@ -26,9 +26,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Donations',
             priority: 1,
             UI: {
-                TabContent: ({ addressNames = [] }) => {
-                    return <TabCard addressNames={addressNames as AddressName[]} type={TabCardType.Donation} />
-                },
+                TabContent: ({ addressNames = [] }) => (
+                    <TabCard addressNames={addressNames as AddressName[]} type={TabCardType.Donation} />
+                ),
             },
             Utils: {
                 addressNameSorter,
@@ -40,9 +40,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Footprints',
             priority: 2,
             UI: {
-                TabContent: ({ addressNames = [] }) => {
-                    return <TabCard addressNames={addressNames as AddressName[]} type={TabCardType.Footprint} />
-                },
+                TabContent: ({ addressNames = [] }) => (
+                    <TabCard addressNames={addressNames as AddressName[]} type={TabCardType.Footprint} />
+                ),
             },
             Utils: {
                 addressNameSorter,

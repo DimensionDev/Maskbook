@@ -10,18 +10,16 @@ import { PluginId } from '@masknet/plugin-infra'
 
 const MSG_DELIMITER = '2c1aca02'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        hover: {
-            '&:hover': {
-                backgroundColor: theme.palette.background.default,
-            },
-            alignItems: 'center',
-            padding: `${theme.spacing(2)} ${theme.spacing(3)}`,
-            borderRadius: '8px',
+const useStyles = makeStyles()((theme) => ({
+    hover: {
+        '&:hover': {
+            backgroundColor: theme.palette.background.default,
         },
-    }
-})
+        alignItems: 'center',
+        padding: `${theme.spacing(2)} ${theme.spacing(3)}`,
+        borderRadius: '8px',
+    },
+}))
 
 const parseFileServiceMessage = (body: any) => {
     const link = `https://arweave.net/${body.landingTxID}/#${body.key}`

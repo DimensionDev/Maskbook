@@ -49,37 +49,35 @@ const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) 
     )
 }
 
-const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
-    return {
-        [`&.${listItemClasses.root}`]: {
-            color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
-            paddingLeft: theme.spacing(2),
-            cursor: 'pointer',
-            '&:hover': {
-                background: theme.palette.background.default,
-            },
+const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => ({
+    [`&.${listItemClasses.root}`]: {
+        color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
+        paddingLeft: theme.spacing(2),
+        cursor: 'pointer',
+        '&:hover': {
+            background: theme.palette.background.default,
         },
-        [`&.${listItemClasses.selected}`]: {
+    },
+    [`&.${listItemClasses.selected}`]: {
+        color: MaskColorVar.textLink,
+        backgroundColor: theme.palette.background.default,
+        position: 'relative',
+        [listItemIconClasses.root]: {
             color: MaskColorVar.textLink,
-            backgroundColor: theme.palette.background.default,
-            position: 'relative',
-            [listItemIconClasses.root]: {
-                color: MaskColorVar.textLink,
-            },
-            '&:after': {
-                content: '""',
-                display: 'inline-block',
-                width: 5,
-                height: 40,
-                boxShadow: '-2px 0px 10px 2px rgba(0, 56, 255, 0.15)',
-                borderRadius: 50,
-                background: MaskColorVar.textLink,
-                position: 'absolute',
-                right: 0,
-            },
         },
-    }
-})
+        '&:after': {
+            content: '""',
+            display: 'inline-block',
+            width: 5,
+            height: 40,
+            boxShadow: '-2px 0px 10px 2px rgba(0, 56, 255, 0.15)',
+            borderRadius: 50,
+            background: MaskColorVar.textLink,
+            position: 'absolute',
+            right: 0,
+        },
+    },
+}))
 
 const LogoItem = styled(MuiListItem)(({ theme }) => ({
     [`&.${listItemClasses.root}`]: {

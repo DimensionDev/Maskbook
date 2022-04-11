@@ -76,9 +76,7 @@ export default function FtgPanel(props: FtgPanelProps) {
         return []
     }, [account, ftgContract])
 
-    const { value: fusion } = useAsync(async () => {
-        return account ? fetchExchangeStatus(account) : undefined
-    }, [account])
+    const { value: fusion } = useAsync(async () => (account ? fetchExchangeStatus(account) : undefined), [account])
 
     return (
         <div>

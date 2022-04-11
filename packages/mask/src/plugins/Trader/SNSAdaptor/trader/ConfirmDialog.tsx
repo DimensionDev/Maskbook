@@ -152,9 +152,10 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const nativeToken = createNativeToken(chainId)
     const tokenPrice = useNativeTokenPrice(chainId)
 
-    const gasFee = useMemo(() => {
-        return gas && gasPrice ? multipliedBy(gasPrice, gas).integerValue().toFixed() : '0'
-    }, [gas, gasPrice])
+    const gasFee = useMemo(
+        () => (gas && gasPrice ? multipliedBy(gasPrice, gas).integerValue().toFixed() : '0'),
+        [gas, gasPrice],
+    )
 
     const feeValueUSD = useMemo(
         () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2)) : '0'),

@@ -60,48 +60,42 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
     }, [chain, address])
     if (content) {
         const jsx = message
-            ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
-                  return (
-                      <Render>
-                          <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
-                              <Typography color="textPrimary">{content}</Typography>
-                          </EthereumChainBoundary>
-                      </Render>
-                  )
-              })
+            ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => (
+                  <Render>
+                      <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
+                          <Typography color="textPrimary">{content}</Typography>
+                      </EthereumChainBoundary>
+                  </Render>
+              ))
             : null
 
         return <>{jsx}</>
     } else if (redirectUrl) {
         const jsx = message
-            ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
-                  return (
-                      <Render>
-                          <Typography color="textPrimary">"{t('plugin_unlockprotocol_no_access')}"</Typography>
-                          <br />
-                          <Typography color="textPrimary">"{t('plugin_unlockprotocol_buy_lock_alert')}"</Typography>
-                          <br />
-                          <Button target="_blank" href={redirectUrl}>
-                              {t('plugin_unlockprotocol_buy_lock')}
-                          </Button>
-                      </Render>
-                  )
-              })
+            ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => (
+                  <Render>
+                      <Typography color="textPrimary">"{t('plugin_unlockprotocol_no_access')}"</Typography>
+                      <br />
+                      <Typography color="textPrimary">"{t('plugin_unlockprotocol_buy_lock_alert')}"</Typography>
+                      <br />
+                      <Button target="_blank" href={redirectUrl}>
+                          {t('plugin_unlockprotocol_buy_lock')}
+                      </Button>
+                  </Render>
+              ))
             : null
 
         return <>{jsx}</>
     } else {
         const jsx = message
-            ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
-                  return (
-                      <Render>
-                          <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
-                              <Typography color="textPrimary">"{t('loading')}"</Typography>
-                              <br />
-                          </EthereumChainBoundary>
-                      </Render>
-                  )
-              })
+            ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => (
+                  <Render>
+                      <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
+                          <Typography color="textPrimary">"{t('loading')}"</Typography>
+                          <br />
+                      </EthereumChainBoundary>
+                  </Render>
+              ))
             : null
 
         return <>{jsx}</>

@@ -11,42 +11,40 @@ import { FormattedBalance } from '../../../wallet'
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {},
-        input: {
-            '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
-                margin: 0,
-            },
-            '-moz-appearance': 'textfield',
+const useStyles = makeStyles()((theme) => ({
+    root: {},
+    input: {
+        '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+            '-webkit-appearance': 'none',
+            margin: 0,
         },
-        max: {
-            marginRight: theme.spacing(0.2),
-            borderRadius: 8,
-            fontSize: 12,
-            height: 18,
-        },
-        token: {
-            whiteSpace: 'pre',
-            maxWidth: 300,
-            paddingLeft: theme.spacing(1),
-            fontSize: 12,
-        },
-        balance: {
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            maxWidth: '80%',
-            fontSize: 12,
-            top: theme.spacing(0.5),
-            position: 'absolute',
-        },
-        inputShrinkLabel: {
-            transform: 'translate(17px, -3px) scale(0.75) !important',
-        },
-    }
-})
+        '-moz-appearance': 'textfield',
+    },
+    max: {
+        marginRight: theme.spacing(0.2),
+        borderRadius: 8,
+        fontSize: 12,
+        height: 18,
+    },
+    token: {
+        whiteSpace: 'pre',
+        maxWidth: 300,
+        paddingLeft: theme.spacing(1),
+        fontSize: 12,
+    },
+    balance: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        maxWidth: '80%',
+        fontSize: 12,
+        top: theme.spacing(0.5),
+        position: 'absolute',
+    },
+    inputShrinkLabel: {
+        transform: 'translate(17px, -3px) scale(0.75) !important',
+    },
+}))
 
 export interface TokenAmountPanelProps extends withClasses<'root'> {
     amount: string

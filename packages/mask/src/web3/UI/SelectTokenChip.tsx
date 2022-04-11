@@ -8,26 +8,24 @@ import { TokenIcon } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../utils'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        chip: {
-            border: 'none',
-            borderRadius: 8,
-            paddingLeft: theme.spacing(0.5),
-        },
-        loadingChip: {
-            marginRight: theme.spacing(-0.5),
-        },
-        icon: {
-            color: theme.palette.text.primary,
-            pointerEvents: 'none',
-        },
-        tokenIcon: {
-            width: 16,
-            height: 16,
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    chip: {
+        border: 'none',
+        borderRadius: 8,
+        paddingLeft: theme.spacing(0.5),
+    },
+    loadingChip: {
+        marginRight: theme.spacing(-0.5),
+    },
+    icon: {
+        color: theme.palette.text.primary,
+        pointerEvents: 'none',
+    },
+    tokenIcon: {
+        width: 16,
+        height: 16,
+    },
+}))
 
 export interface SelectTokenChipProps {
     token?: FungibleTokenDetailed | null

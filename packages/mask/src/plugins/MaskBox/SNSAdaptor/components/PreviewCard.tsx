@@ -82,12 +82,13 @@ export function PreviewCard(props: PreviewCardProps) {
         retryMaskBoxPurchasedTokens,
     } = useContainer(Context)
 
-    const txConfig = useMemo(() => {
-        return {
+    const txConfig = useMemo(
+        () => ({
             ...openBoxTransaction?.config,
             gas: openBoxTransactionOverrides?.gas ?? openBoxTransactionGasLimit,
-        }
-    }, [openBoxTransaction?.config, openBoxTransactionOverrides, openBoxTransactionGasLimit])
+        }),
+        [openBoxTransaction?.config, openBoxTransactionOverrides, openBoxTransactionGasLimit],
+    )
 
     // #region open box
     const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useTransactionCallback(
@@ -198,8 +199,8 @@ export function PreviewCard(props: PreviewCardProps) {
                     variant="contained"
                     disabled={boxState !== BoxState.READY}
                     onClick={() => setOpenDrawDialog(true)}>
-                    {(() => {
-                        return boxState === BoxState.READY && paymentTokenAddress ? (
+                    {(() =>
+                        boxState === BoxState.READY && paymentTokenAddress ? (
                             <>
                                 {boxStateMessage} (
                                 {formatBalance(paymentTokenPrice, paymentTokenDetailed?.decimals ?? 0)}{' '}
@@ -207,8 +208,7 @@ export function PreviewCard(props: PreviewCardProps) {
                             </>
                         ) : (
                             boxStateMessage
-                        )
-                    })()}
+                        ))()}
                 </ActionButton>
             </EthereumWalletConnectedBoundary>
             <DrawDialog

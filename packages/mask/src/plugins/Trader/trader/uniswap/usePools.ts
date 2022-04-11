@@ -24,17 +24,19 @@ export function usePools(
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const context = useGetTradeContext(tradeProvider)
 
-    const transformed: ([Token, Token, FeeAmount] | null)[] = useMemo(() => {
-        return poolKeys.map(([currencyA, currencyB, feeAmount]) => {
-            if (!chainId || !currencyA || !currencyB || !feeAmount) return null
+    const transformed: ([Token, Token, FeeAmount] | null)[] = useMemo(
+        () =>
+            poolKeys.map(([currencyA, currencyB, feeAmount]) => {
+                if (!chainId || !currencyA || !currencyB || !feeAmount) return null
 
-            const tokenA = currencyA?.wrapped
-            const tokenB = currencyB?.wrapped
-            if (!tokenA || !tokenB || tokenA.equals(tokenB)) return null
-            const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
-            return [token0, token1, feeAmount]
-        })
-    }, [chainId, poolKeys])
+                const tokenA = currencyA?.wrapped
+                const tokenB = currencyB?.wrapped
+                if (!tokenA || !tokenB || tokenA.equals(tokenB)) return null
+                const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
+                return [token0, token1, feeAmount]
+            }),
+        [chainId, poolKeys],
+    )
 
     const poolAddresses = useMemo(() => {
         try {
@@ -75,34 +77,43 @@ export function usePools(
     useAsyncRetry(() => slot0sCallback(slot0sCalls), [slot0sCallback, slot0sCalls])
     useAsyncRetry(() => liquiditiesCallback(liquiditiesCalls), [liquiditiesCallback, liquiditiesCalls])
 
-    return useMemo(() => {
-        return poolKeys.map((_key, index) => {
-            const [token0, token1, fee] = transformed[index] ?? []
-            if (!token0 || !token1 || !fee) return [PoolState.INVALID, null]
+    return useMemo(
+        () =>
+            poolKeys.map((_key, index) => {
+                const [token0, token1, fee] = transformed[index] ?? []
+                if (!token0 || !token1 || !fee) return [PoolState.INVALID, null]
 
-            const { value: slot0, error: slot0Error } = slot0s[index] ?? {}
-            const { value: liquidity, error: liquidityError } = liquidities[index] ?? {}
-            const slot0Loading = slot0sState.type === MulticallStateType.PENDING
-            const liquiditiesLoading = liquiditiesState.type === MulticallStateType.PENDING
+                const { value: slot0, error: slot0Error } = slot0s[index] ?? {}
+                const { value: liquidity, error: liquidityError } = liquidities[index] ?? {}
+                const slot0Loading = slot0sState.type === MulticallStateType.PENDING
+                const liquiditiesLoading = liquiditiesState.type === MulticallStateType.PENDING
 
-            if (slot0Error || liquidityError) return [PoolState.INVALID, null]
-            if (slot0Loading || liquiditiesLoading) return [PoolState.LOADING, null]
+                if (slot0Error || liquidityError) return [PoolState.INVALID, null]
+                if (slot0Loading || liquiditiesLoading) return [PoolState.LOADING, null]
 
-            if (!slot0 || !liquidity) return [PoolState.NOT_EXISTS, null]
+                if (!slot0 || !liquidity) return [PoolState.NOT_EXISTS, null]
 
-            if (isZero(slot0.sqrtPriceX96 ?? 0)) return [PoolState.NOT_EXISTS, null]
+                if (isZero(slot0.sqrtPriceX96 ?? 0)) return [PoolState.NOT_EXISTS, null]
 
-            try {
-                return [
-                    PoolState.EXISTS,
-                    new Pool(token0, token1, fee, slot0.sqrtPriceX96, liquidity[0], Number.parseInt(slot0.tick, 10)),
-                ]
-            } catch (error) {
-                console.error('Error when constructing the pool', error)
-                return [PoolState.NOT_EXISTS, null]
-            }
-        })
-    }, [slot0s, liquidities, slot0sState.type, liquiditiesState.type, poolKeys, transformed])
+                try {
+                    return [
+                        PoolState.EXISTS,
+                        new Pool(
+                            token0,
+                            token1,
+                            fee,
+                            slot0.sqrtPriceX96,
+                            liquidity[0],
+                            Number.parseInt(slot0.tick, 10),
+                        ),
+                    ]
+                } catch (error) {
+                    console.error('Error when constructing the pool', error)
+                    return [PoolState.NOT_EXISTS, null]
+                }
+            }),
+        [slot0s, liquidities, slot0sState.type, liquiditiesState.type, poolKeys, transformed],
+    )
 }
 
 export function usePool(

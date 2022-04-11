@@ -1,17 +1,15 @@
 import { Card, CardContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            width: '100%',
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-        },
-        content: {
-            padding: `${theme.spacing(2)} !important`,
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        width: '100%',
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
+    },
+    content: {
+        padding: `${theme.spacing(2)} !important`,
+    },
+}))
 
 export interface SnapshotTabProps {
     children: React.ReactNode

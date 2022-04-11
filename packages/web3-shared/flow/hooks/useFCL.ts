@@ -3,7 +3,5 @@ import type { ChainId } from '..'
 import * as SDK from '../sdk'
 
 export function useFCL(chainId: ChainId) {
-    return useMemo(() => {
-        return SDK.createClient(chainId)
-    }, [chainId])
+    return useMemo(() => SDK.createClient(chainId), [chainId])
 }

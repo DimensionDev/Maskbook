@@ -103,10 +103,11 @@ export async function getSwaps(
                         if (isSameAddress(a.address, tokenOut) || isSameAddress(b.address, tokenIn)) return 1
                         return a.share - b.share
                     })
-                    .filter((token, index, tokens) => {
-                        // Show first 2 and last 2 tokens
-                        return index < 2 || index > tokens.length - 3
-                    }),
+                    .filter(
+                        (token, index, tokens) =>
+                            // Show first 2 and last 2 tokens
+                            index < 2 || index > tokens.length - 3,
+                    ),
             }
             return {
                 pool,

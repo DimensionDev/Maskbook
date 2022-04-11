@@ -22,9 +22,7 @@ interface StepProps {
     children: (toNext: (stepName: string, callbackParams?: any) => void, params: any) => ReactNode
 }
 
-export const Step = ({ children, toStep, params }: StepProps) => {
-    return <>{children(toStep!, params)}</>
-}
+export const Step = ({ children, toStep, params }: StepProps) => <>{children(toStep!, params)}</>
 
 interface StepperProps {
     defaultStep: string

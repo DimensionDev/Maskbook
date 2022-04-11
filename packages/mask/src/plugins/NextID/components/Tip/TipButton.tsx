@@ -96,16 +96,19 @@ export const TipButton: FC<Props> = ({
 
     useAsync(queryBindings, [queryBindings])
 
-    useEffect(() => {
-        return MaskMessages.events.ownProofChanged.on(() => {
-            retryLoadVerifyInfo()
-            queryBindings()
-        })
-    }, [])
+    useEffect(
+        () =>
+            MaskMessages.events.ownProofChanged.on(() => {
+                retryLoadVerifyInfo()
+                queryBindings()
+            }),
+        [],
+    )
 
-    const allAddresses = useMemo(() => {
-        return uniq([...(walletsState.value || []), ...addresses])
-    }, [walletsState.value, addresses])
+    const allAddresses = useMemo(
+        () => uniq([...(walletsState.value || []), ...addresses]),
+        [walletsState.value, addresses],
+    )
 
     const disabled = loadingPersona || loadingVerifyInfo || !isAccountVerified || allAddresses.length === 0
 

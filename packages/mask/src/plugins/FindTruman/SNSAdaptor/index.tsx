@@ -9,16 +9,14 @@ import { PostInspector } from './PostInspector'
 import { ApplicationEntry } from '@masknet/shared'
 import { FindTrumanDialog } from './FindTrumanDialog'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        skeleton: {
-            margin: theme.spacing(2),
-            '&:first-child': {
-                marginTop: theme.spacing(3),
-            },
+const useStyles = makeStyles()((theme) => ({
+    skeleton: {
+        margin: theme.spacing(2),
+        '&:first-child': {
+            marginTop: theme.spacing(3),
         },
-    }
-})
+    },
+}))
 
 /**
  * https://findtruman.io/#/encryption?clueId={clueId}

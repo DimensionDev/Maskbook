@@ -27,33 +27,31 @@ import type { useAssetOrder } from '../hooks/useAssetOrder'
 import type { Coin } from '../../Trader/types'
 import { isGreaterThan } from '@masknet/web3-shared-base'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        content: {
-            padding: 0,
+const useStyles = makeStyles()((theme) => ({
+    content: {
+        padding: 0,
+    },
+    footer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        padding: theme.spacing(0, 2, 2),
+    },
+    panel: {
+        marginTop: theme.spacing(2),
+        '&:first-child': {
+            marginTop: 0,
         },
-        footer: {
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: theme.spacing(0, 2, 2),
-        },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
-        },
-        label: {},
-        buttons: {
-            width: '100%',
-            margin: `0 ${theme.spacing(-0.5)}`,
-        },
-        button: {
-            flex: 1,
-            margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
-        },
-    }
-})
+    },
+    label: {},
+    buttons: {
+        width: '100%',
+        margin: `0 ${theme.spacing(-0.5)}`,
+    },
+    button: {
+        flex: 1,
+        margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
+    },
+}))
 
 export interface CheckoutDialogProps {
     asset?: ReturnType<typeof useAsset>

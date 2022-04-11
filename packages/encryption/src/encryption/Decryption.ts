@@ -255,11 +255,12 @@ function importAESKeyFromJWKFromTextEncoder(aes_raw: Uint8Array) {
 }
 
 function importAESKeyFromRaw(aes_raw: Uint8Array) {
-    return Result.wrapAsync(async () => {
-        return crypto.subtle.importKey('raw', aes_raw, { name: 'AES-GCM', length: 256 }, false, [
-            'decrypt',
-        ]) as Promise<AESCryptoKey>
-    })
+    return Result.wrapAsync(
+        () =>
+            crypto.subtle.importKey('raw', aes_raw, { name: 'AES-GCM', length: 256 }, false, [
+                'decrypt',
+            ]) as Promise<AESCryptoKey>,
+    )
 }
 
 function progress(kind: DecryptProgressKind.Success, rest: Omit<DecryptSuccess, 'type'>): DecryptSuccess

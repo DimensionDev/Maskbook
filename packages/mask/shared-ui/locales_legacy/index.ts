@@ -3,9 +3,7 @@ import type en from '../locales/en-US.json'
 
 // Deprecates. Prefer useMaskI18n()
 export const i18n = {
-    t: ((key, options) => {
-        return i18NextInstance.t(key, options)
-    }) as I18NFunction,
+    t: ((key, options) => i18NextInstance.t(key, options)) as I18NFunction,
 }
 
 export type I18NFunction = <TKeys extends keyof typeof en>(

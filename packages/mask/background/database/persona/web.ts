@@ -55,8 +55,8 @@ import { convertPersonaHexPublicKey } from './util'
 const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
     1,
     4,
-    (currentOpenVersion, knowledge) => {
-        return openDB<PersonaDB>('maskbook-persona', currentOpenVersion, {
+    (currentOpenVersion, knowledge) =>
+        openDB<PersonaDB>('maskbook-persona', currentOpenVersion, {
             upgrade(db, oldVersion, newVersion, transaction) {
                 function v0_v1() {
                     db.createObjectStore('personas', { keyPath: 'identifier' })
@@ -120,8 +120,7 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                 if (oldVersion < 3) v2_v3()
                 if (oldVersion < 4) v3_v4()
             },
-        })
-    },
+        }),
     async (db) => {
         if (db.version === 1) {
             const map: V1To2 = { version: 2, data: new Map() }

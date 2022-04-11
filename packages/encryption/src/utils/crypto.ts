@@ -48,17 +48,13 @@ export function encryptWithAES(kind: AESAlgorithmEnum, key: CryptoKey, iv: Uint8
     const param = {
         [AESAlgorithmEnum.A256GCM]: { name: 'AES-GCM', iv } as AesGcmParams,
     } as const
-    return Result.wrapAsync(() => {
-        return crypto.subtle.encrypt(param[kind], key, message).then((x) => new Uint8Array(x))
-    })
+    return Result.wrapAsync(() => crypto.subtle.encrypt(param[kind], key, message).then((x) => new Uint8Array(x)))
 }
 export function decryptWithAES(kind: AESAlgorithmEnum, key: CryptoKey, iv: Uint8Array, message: Uint8Array) {
     const param = {
         [AESAlgorithmEnum.A256GCM]: { name: 'AES-GCM', iv } as AesGcmParams,
     } as const
-    return Result.wrapAsync(async () => {
-        return new Uint8Array(await crypto.subtle.decrypt(param[kind], key, message))
-    })
+    return Result.wrapAsync(async () => new Uint8Array(await crypto.subtle.decrypt(param[kind], key, message)))
 }
 export function assertIVLengthEq16(arrayBuffer: Uint8Array) {
     if (arrayBuffer.byteLength === 16) return Ok(arrayBuffer)

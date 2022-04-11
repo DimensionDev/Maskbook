@@ -53,20 +53,18 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
     const { classes } = useStyles()
     const theme = useTheme()
 
-    const totalSupply = usePortalShadowRoot((container) => {
-        return (
-            <Tooltip
-                PopperProps={{ container }}
-                arrow
-                title={
-                    <Typography color={(theme) => theme.palette.text.buttonText} className={classes.tooltip}>
-                        {tokenSecurity.total_supply}
-                    </Typography>
-                }>
-                <Typography className={classes.cardValue}>{formatTotalSupply(tokenSecurity.total_supply)}</Typography>
-            </Tooltip>
-        )
-    })
+    const totalSupply = usePortalShadowRoot((container) => (
+        <Tooltip
+            PopperProps={{ container }}
+            arrow
+            title={
+                <Typography color={(theme) => theme.palette.text.buttonText} className={classes.tooltip}>
+                    {tokenSecurity.total_supply}
+                </Typography>
+            }>
+            <Typography className={classes.cardValue}>{formatTotalSupply(tokenSecurity.total_supply)}</Typography>
+        </Tooltip>
+    ))
 
     return (
         <Stack>

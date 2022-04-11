@@ -31,9 +31,7 @@ export function usePasswordForm(refine = true): UseFormReturn<
 > & { schema: ReturnType<typeof defineSchema> } {
     const { t } = useI18N()
 
-    const schema = useMemo(() => {
-        return defineSchema(refine, t)
-    }, [refine, t])
+    const schema = useMemo(() => defineSchema(refine, t), [refine, t])
 
     const formValue = useForm<zod.infer<typeof schema>>({
         mode: 'onBlur',

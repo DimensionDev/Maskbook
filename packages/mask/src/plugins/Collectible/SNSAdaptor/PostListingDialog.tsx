@@ -9,21 +9,19 @@ import { useFungibleTokenWatched } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-unified'
 import type { useAsset } from '../../EVM/hooks/useAsset'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        content: {
-            padding: 0,
-        },
-        footer: {
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: theme.spacing(0, 2, 2),
-        },
-        button: {
-            marginTop: theme.spacing(1.5),
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    content: {
+        padding: 0,
+    },
+    footer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        padding: theme.spacing(0, 2, 2),
+    },
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
+}))
 
 export interface PostListingDialogProps {
     asset?: ReturnType<typeof useAsset>

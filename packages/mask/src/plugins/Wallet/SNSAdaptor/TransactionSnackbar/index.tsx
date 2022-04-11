@@ -77,15 +77,16 @@ export function TransactionSnackbar() {
         [showSnackbar, closeSnackbar],
     )
 
-    const getTitle = useCallback((state: TransactionState, payload: any, hash?: string) => {
-        return (
+    const getTitle = useCallback(
+        (state: TransactionState, payload: any, hash?: string) => (
             <RecentTransactionDescription
                 hash={hash ?? ''}
                 computedPayload={payload}
                 receipt={(state as { receipt: TransactionReceipt }).receipt}
             />
-        )
-    }, [])
+        ),
+        [],
+    )
 
     const getFullMessage = useCallback(
         (message: ReactNode, hash?: string) => {
@@ -100,45 +101,47 @@ export function TransactionSnackbar() {
         [chainId],
     )
 
-    useEffect(() => {
-        return WalletMessages.events.transactionProgressUpdated.on(async (progress) => {
-            if (location.href.includes('popups.html')) return
-            if (progress.state.type === TransactionStateType.UNKNOWN) return
+    useEffect(
+        () =>
+            WalletMessages.events.transactionProgressUpdated.on(async (progress) => {
+                if (location.href.includes('popups.html')) return
+                if (progress.state.type === TransactionStateType.UNKNOWN) return
 
-            const payload = await Services.Ethereum.getSendTransactionComputedPayload(progress.payload)
-            const config = resolveSnackbarConfig(progress.state.type)
-            const hash =
-                (progress.state as { hash?: string }).hash ??
-                (progress.state as { receipt?: TransactionReceipt }).receipt?.transactionHash
+                const payload = await Services.Ethereum.getSendTransactionComputedPayload(progress.payload)
+                const config = resolveSnackbarConfig(progress.state.type)
+                const hash =
+                    (progress.state as { hash?: string }).hash ??
+                    (progress.state as { receipt?: TransactionReceipt }).receipt?.transactionHash
 
-            if (
-                ['swapExactETHForTokens', 'swapExactTokensForETH', 'swapExactTokensForTokens'].includes(
-                    payload?.name ?? '',
-                )
-            ) {
-                if (progress.state.type === TransactionStateType.CONFIRMED) {
-                    showSingletonSnackbar(t('plugin_wallet_snackbar_swap_successful'), {
-                        ...config,
-                        ...{ message: getFullMessage(getTitle(progress.state, payload, hash), hash) },
-                    })
-                    return
+                if (
+                    ['swapExactETHForTokens', 'swapExactTokensForETH', 'swapExactTokensForTokens'].includes(
+                        payload?.name ?? '',
+                    )
+                ) {
+                    if (progress.state.type === TransactionStateType.CONFIRMED) {
+                        showSingletonSnackbar(t('plugin_wallet_snackbar_swap_successful'), {
+                            ...config,
+                            ...{ message: getFullMessage(getTitle(progress.state, payload, hash), hash) },
+                        })
+                        return
+                    }
+
+                    if (progress.state.type === TransactionStateType.FAILED) {
+                        showSingletonSnackbar(t('plugin_wallet_snackbar_swap_token'), {
+                            ...config,
+                            ...{ message: getFullMessage('Transaction failed', hash) },
+                        })
+                        return
+                    }
                 }
 
-                if (progress.state.type === TransactionStateType.FAILED) {
-                    showSingletonSnackbar(t('plugin_wallet_snackbar_swap_token'), {
-                        ...config,
-                        ...{ message: getFullMessage('Transaction failed', hash) },
-                    })
-                    return
-                }
-            }
-
-            showSingletonSnackbar(getTitle(progress.state, payload, hash), {
-                ...config,
-                ...{ message: getFullMessage(config.message, hash) },
-            } as ShowSnackbarOptions)
-        })
-    }, [getTitle, getFullMessage])
+                showSingletonSnackbar(getTitle(progress.state, payload, hash), {
+                    ...config,
+                    ...{ message: getFullMessage(config.message, hash) },
+                } as ShowSnackbarOptions)
+            }),
+        [getTitle, getFullMessage],
+    )
 
     return null
 }

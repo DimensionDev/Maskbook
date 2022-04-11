@@ -72,12 +72,14 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
         onReset()
     }, [contact, currentPersona, onReset])
 
-    const [{ loading }, handleClickInvite] = useAsyncFn(async () => {
-        return Services.SocialNetwork.openShareLink(
-            network,
-            t.personas_invite_post({ identifier: contact.identifier.userId }),
-        )
-    }, [])
+    const [{ loading }, handleClickInvite] = useAsyncFn(
+        () =>
+            Services.SocialNetwork.openShareLink(
+                network,
+                t.personas_invite_post({ identifier: contact.identifier.userId }),
+            ),
+        [],
+    )
 
     return (
         <ContactTableRowUI

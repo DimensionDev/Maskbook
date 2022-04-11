@@ -68,13 +68,11 @@ export function NFTPage(props: NFTPageProps) {
                 onClose={onClose}
                 anchorEl={anchorEl}
                 PaperProps={{ style: { maxHeight: 192 } }}>
-                {uniqBy(addressNames ?? [], (x) => x.resolvedAddress.toLowerCase()).map((x) => {
-                    return (
-                        <MenuItem key={x.resolvedAddress} value={x.resolvedAddress} onClick={() => onSelect(x)}>
-                            <ReversedAddress address={x.resolvedAddress} />
-                        </MenuItem>
-                    )
-                })}
+                {uniqBy(addressNames ?? [], (x) => x.resolvedAddress.toLowerCase()).map((x) => (
+                    <MenuItem key={x.resolvedAddress} value={x.resolvedAddress} onClick={() => onSelect(x)}>
+                        <ReversedAddress address={x.resolvedAddress} />
+                    </MenuItem>
+                ))}
             </ShadowRootMenu>
             <CollectionList addressName={selectedAddress ?? undefined} onSelectAddress={onOpen} />
         </div>

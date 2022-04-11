@@ -61,9 +61,7 @@ const Unlock = memo(() => {
 
     const navigate = useNavigate()
 
-    const [{ value: verified, loading }, handleUnlock] = useAsyncFn(async () => {
-        return WalletRPC.unlockWallet(password)
-    }, [password])
+    const [{ value: verified, loading }, handleUnlock] = useAsyncFn(() => WalletRPC.unlockWallet(password), [password])
 
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 

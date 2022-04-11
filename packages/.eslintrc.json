@@ -40,6 +40,7 @@
         "no-unmodified-loop-condition": "error",
         "no-unneeded-ternary": "error",
         "no-useless-concat": "error",
+        "arrow-body-style": "error",
         "no-loss-of-precision": "error",
         "prefer-regex-literals": "error",
         "react/jsx-boolean-value": "error",

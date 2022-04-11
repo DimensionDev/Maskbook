@@ -82,11 +82,13 @@ export default function Wallet() {
         navigate(urlcat(PopupRoutes.Unlock, { from: location.pathname }), { replace: true })
     }, [isLocked, location.pathname, getLockStatusLoading])
 
-    useEffect(() => {
-        return WalletMessages.events.requestsUpdated.on(({ hasRequest }) => {
-            if (hasRequest) retry()
-        })
-    }, [retry])
+    useEffect(
+        () =>
+            WalletMessages.events.requestsUpdated.on(({ hasRequest }) => {
+                if (hasRequest) retry()
+            }),
+        [retry],
+    )
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>

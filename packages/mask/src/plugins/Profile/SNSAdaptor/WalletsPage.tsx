@@ -65,8 +65,8 @@ export function WalletsPage() {
     })
     // #endregion
 
-    const walletsList = useMemo(() => {
-        return (
+    const walletsList = useMemo(
+        () => (
             <List>
                 {wallets.map((wallet, i) => (
                     <ListItem key={i}>
@@ -102,8 +102,9 @@ export function WalletsPage() {
                     </ListItem>
                 ))}
             </List>
-        )
-    }, [wallets])
+        ),
+        [wallets],
+    )
 
     return (
         <>

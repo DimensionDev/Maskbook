@@ -56,8 +56,8 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[], skipCo
 
     const data = await Promise.all(
         chunkTimestamps.map(async (chunk) => {
-            const queries = chunk.map((x) => {
-                return `
+            const queries = chunk.map(
+                (x) => `
                     t${x}: blocks(
                         first: 1,
                         orderBy: timestamp,
@@ -69,8 +69,8 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[], skipCo
                     ) {
                         number
                     }
-                `
-            })
+                `,
+            )
 
             return fetchFromEthereumBlocksSubgraph<Record<string, Block[]>>(`
                 query blocks {
@@ -97,8 +97,8 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[], skipCo
  * @param timestamps
  */
 export async function fetchBlockNumbersObjectByTimestamps(timestamps: number[]) {
-    const queries = timestamps.map((x) => {
-        return `
+    const queries = timestamps.map(
+        (x) => `
             t${x}: blocks(
                 first: 1,
                 orderBy: timestamp,
@@ -109,8 +109,8 @@ export async function fetchBlockNumbersObjectByTimestamps(timestamps: number[]) 
             ) {
                 number
             }
-        `
-    })
+        `,
+    )
 
     const data = await fetchFromEthereumBlocksSubgraph<Record<string, Block[]>>(`
         query blocks {

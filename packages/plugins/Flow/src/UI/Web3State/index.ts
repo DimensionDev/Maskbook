@@ -24,9 +24,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
     return {
         Shared: {
             allowTestnet: createConstantSubscription(false),
-            account: createSubscriptionFromUser((user) => {
-                return user?.addr ?? ''
-            }),
+            account: createSubscriptionFromUser((user) => user?.addr ?? ''),
             wallets: createSubscriptionFromUser((user): Web3Plugin.Wallet[] => {
                 if (!user?.addr) return []
                 return [
@@ -40,9 +38,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             }),
             chainId: createSubscriptionFromChainId((x) => x as unknown as number),
             networkType: createConstantSubscription(NetworkType.Flow),
-            providerType: createSubscriptionFromUser((user) => {
-                return user?.addr ? ProviderType.Blocto : undefined
-            }),
+            providerType: createSubscriptionFromUser((user) => (user?.addr ? ProviderType.Blocto : undefined)),
         },
         Asset: {
             getFungibleAssets,

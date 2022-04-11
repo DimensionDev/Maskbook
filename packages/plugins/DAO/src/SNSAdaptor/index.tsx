@@ -30,9 +30,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'DAO',
             priority: 1,
             UI: {
-                TabContent: ({ identity }) => {
-                    return <DAOPage identifier={identity?.identifier} />
-                },
+                TabContent: ({ identity }) => <DAOPage identifier={identity?.identifier} />,
             },
             Utils: {
                 shouldDisplay: (identity, _addressNames) => {

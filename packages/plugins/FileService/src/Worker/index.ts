@@ -16,14 +16,13 @@ const worker: Plugin.Worker.Definition = {
 
             return result
         },
-        onRestore: async (files: FileInfo[]) => {
-            return Result.wrap(() => {
+        onRestore: async (files: FileInfo[]) =>
+            Result.wrap(() => {
                 files.map(async (file) => {
                     file.createdAt = new Date(file.createdAt)
                     await setFileInfo(file)
                 })
-            })
-        },
+            }),
     },
 }
 

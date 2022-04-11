@@ -28,12 +28,12 @@ function sort_EVM_ahead(a: Plugin.DeferredDefinition, b: Plugin.DeferredDefiniti
     if (b.ID.includes('evm')) return 1
     return 0
 }
-const getRegisteredWeb3Networks_memo = memoize(() => {
-    return getRegisteredPluginsSort_EVM_Ahead().flatMap((x) => x.declareWeb3Networks || [])
-})
-const getRegisteredWeb3Providers_memo = memoize(() => {
-    return getRegisteredPluginsSort_EVM_Ahead().flatMap((x) => x.declareWeb3Providers || [])
-})
+const getRegisteredWeb3Networks_memo = memoize(() =>
+    getRegisteredPluginsSort_EVM_Ahead().flatMap((x) => x.declareWeb3Networks || []),
+)
+const getRegisteredWeb3Providers_memo = memoize(() =>
+    getRegisteredPluginsSort_EVM_Ahead().flatMap((x) => x.declareWeb3Providers || []),
+)
 export function getRegisteredWeb3Networks() {
     return getRegisteredWeb3Networks_memo()
 }

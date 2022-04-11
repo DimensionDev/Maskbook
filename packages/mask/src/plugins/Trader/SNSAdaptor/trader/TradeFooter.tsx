@@ -8,27 +8,25 @@ import { resolveDataProviderName } from '../../pipes'
 import { DataProviderIcon } from './DataProviderIcon'
 import { FootnoteMenu, FootnoteMenuOption } from './FootnoteMenu'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        footer: {
-            justifyContent: 'space-between',
-        },
-        footnote: {
-            color: theme.palette.text.secondary,
-            fontSize: 10,
-            marginRight: theme.spacing(0.5),
-        },
-        footMenu: {
-            color: theme.palette.text.secondary,
-            fontSize: 10,
-            display: 'flex',
-            alignItems: 'center',
-        },
-        footName: {
-            marginLeft: theme.spacing(0.5),
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    footer: {
+        justifyContent: 'space-between',
+    },
+    footnote: {
+        color: theme.palette.text.secondary,
+        fontSize: 10,
+        marginRight: theme.spacing(0.5),
+    },
+    footMenu: {
+        color: theme.palette.text.secondary,
+        fontSize: 10,
+        display: 'flex',
+        alignItems: 'center',
+    },
+    footName: {
+        marginLeft: theme.spacing(0.5),
+    },
+}))
 
 export interface TradeFooterProps extends withClasses<'footer'> {
     showDataProviderIcon?: boolean

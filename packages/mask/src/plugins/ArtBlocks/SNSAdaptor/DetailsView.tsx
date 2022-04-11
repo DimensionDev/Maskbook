@@ -14,43 +14,41 @@ import { useI18N } from '../../../utils'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
 import type { Project } from '../types'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            padding: theme.spacing(2),
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+    },
+    content: {
+        paddingTop: theme.spacing(0),
+        paddingBottom: `${theme.spacing(0)} !important`,
+    },
+    container: {
+        padding: theme.spacing(1),
+    },
+    nameRedirectionIcon: {
+        verticalAlign: 'text-bottom',
+    },
+    nameRedirectionLink: {
+        marginLeft: theme.spacing(0.5),
+    },
+    bold: {
+        fontWeight: 'bold',
+    },
+    description: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+        fontSize: 14,
+        whiteSpace: 'pre-line',
+    },
+    meta_row: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginBottom: theme.spacing(0.5),
+        '&:last-child': {
+            marginBottom: theme.spacing(0),
         },
-        content: {
-            paddingTop: theme.spacing(0),
-            paddingBottom: `${theme.spacing(0)} !important`,
-        },
-        container: {
-            padding: theme.spacing(1),
-        },
-        nameRedirectionIcon: {
-            verticalAlign: 'text-bottom',
-        },
-        nameRedirectionLink: {
-            marginLeft: theme.spacing(0.5),
-        },
-        bold: {
-            fontWeight: 'bold',
-        },
-        description: {
-            marginTop: theme.spacing(1),
-            marginBottom: theme.spacing(1),
-            fontSize: 14,
-            whiteSpace: 'pre-line',
-        },
-        meta_row: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: theme.spacing(0.5),
-            '&:last-child': {
-                marginBottom: theme.spacing(0),
-            },
-        },
-    }
-})
+    },
+}))
 
 interface DetailsViewProps {
     project: Project

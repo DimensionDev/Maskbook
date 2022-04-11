@@ -62,9 +62,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     CompositionDialogMetadataBadgeRender: new Map([
         [
             RedPacketMetaKey,
-            (_payload) => {
-                return { text: <ERC20RedpacketBadge payload={_payload as RedPacketJSONPayload} /> }
-            },
+            (_payload) => ({ text: <ERC20RedpacketBadge payload={_payload as RedPacketJSONPayload} /> }),
         ],
         [
             RedPacketNftMetaKey,

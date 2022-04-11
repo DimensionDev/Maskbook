@@ -135,8 +135,8 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
         },
         {
             getPostKeyCache: getPostKeyCache.bind(null, id),
-            setPostKeyCache: (key) => {
-                return savePostKeyToDB(id, key, {
+            setPostKeyCache: (key) =>
+                savePostKeyToDB(id, key, {
                     // public post will not call this function.
                     // and recipients only will be set when posting/appending recipients.
                     recipients: new IdentifierMap(new Map()),
@@ -145,8 +145,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                         parse.safeUnwrap().author.unwrapOr(null)?.unwrapOr(null) ||
                         ProfileIdentifier.unknown,
                     url: postURL,
-                })
-            },
+                }),
             hasLocalKeyOf: hasLocalKeyOf,
             decryptByLocalKey: decryptByLocalKey,
             async deriveAESKey(pub) {

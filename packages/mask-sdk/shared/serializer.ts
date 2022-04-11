@@ -40,9 +40,7 @@ function createClassSerializer<T, Q>(
     decode: (a: Q) => T,
 ) {
     return [
-        (v: T) => {
-            return { $type: clz.name, value: encode(v) }
-        },
+        (v: T) => ({ $type: clz.name, value: encode(v) }),
         (v: { $type: string; value: Q }) => {
             if (v.$type === clz.name) return decode(v.value)
             return undefined

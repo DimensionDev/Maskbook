@@ -11,9 +11,8 @@ import { calculateMinimumReturn } from './calculateMinimumReturn'
 import { toChecksumAddress } from 'web3-utils'
 import { TradeStrategy } from '../../types'
 
-const roundDecimal = (value: number | string | undefined, decimals: number) => {
-    return Math.round(Number(value || 0) * Math.pow(10, decimals)) / Math.pow(10, decimals)
-}
+const roundDecimal = (value: number | string | undefined, decimals: number) =>
+    Math.round(Number(value || 0) * Math.pow(10, decimals)) / Math.pow(10, decimals)
 
 const getTargetAmount = async (
     request: SwapBancorRequest,

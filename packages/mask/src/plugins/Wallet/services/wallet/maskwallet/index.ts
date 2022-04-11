@@ -42,8 +42,8 @@ const ErrorMessage = {
 }
 
 function send<I extends keyof Request, O extends keyof Response>(input: I, output: O) {
-    return (value: Request[I]) => {
-        return new Promise<Response[O]>((resolve, reject) => {
+    return (value: Request[I]) =>
+        new Promise<Response[O]>((resolve, reject) => {
             const req: Input = { id: Math.random(), data: { [input]: value } }
             Worker.postMessage(req)
             Worker.addEventListener('message', function f(message) {
@@ -58,7 +58,6 @@ function send<I extends keyof Request, O extends keyof Response>(input: I, outpu
                 resolve(data.response[output])
             })
         })
-    }
 }
 
 export const Coin = api.Coin

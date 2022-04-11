@@ -63,9 +63,10 @@ function Wallets() {
         async () => Asset?.getFungibleAssets?.(account, portfolioProvider, network!),
         [account, Asset, portfolioProvider, network],
     )
-    const renderNetworks = useMemo(() => {
-        return networks.filter((x) => pluginId === x.networkSupporterPluginID && x.isMainnet)
-    }, [networks, pluginId])
+    const renderNetworks = useMemo(
+        () => networks.filter((x) => pluginId === x.networkSupporterPluginID && x.isMainnet),
+        [networks, pluginId],
+    )
 
     // If show one network only, set it as default network
     const defaultNetwork = useMemo(() => {

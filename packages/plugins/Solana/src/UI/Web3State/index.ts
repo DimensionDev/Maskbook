@@ -23,9 +23,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
     return {
         Shared: {
             allowTestnet: createConstantSubscription(false),
-            account: createSubscriptionFromPublicKey((publicKey) => {
-                return publicKey ?? ''
-            }),
+            account: createSubscriptionFromPublicKey((publicKey) => publicKey ?? ''),
             wallets: createSubscriptionFromPublicKey((publicKey): Web3Plugin.Wallet[] => {
                 if (!publicKey) return []
                 return [
@@ -39,9 +37,9 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             }),
             chainId: createConstantSubscription(chainId),
             networkType: createConstantSubscription(NetworkType.Solana),
-            providerType: createSubscriptionFromPublicKey((publicKey) => {
-                return publicKey ? ProviderType.Phantom : undefined
-            }),
+            providerType: createSubscriptionFromPublicKey((publicKey) =>
+                publicKey ? ProviderType.Phantom : undefined,
+            ),
         },
         Asset: {
             getFungibleAssets,

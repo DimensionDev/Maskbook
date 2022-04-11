@@ -43,11 +43,10 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
             value: toFixed(token.type === EthereumTokenType.Native ? amount : 0),
         }
 
-        const deposit = () => {
-            return pool?.poolType === PoolType.v1
+        const deposit = () =>
+            pool?.poolType === PoolType.v1
                 ? poolV1Contract.methods.deposit(amount)
                 : poolV2Contract.methods.deposit(token.address, amount)
-        }
 
         const estimatedGas = await deposit()
             .estimateGas(config)

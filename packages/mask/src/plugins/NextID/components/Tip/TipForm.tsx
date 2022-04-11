@@ -25,67 +25,65 @@ import { TipType } from '../../types'
 import { NFTSection } from './NFTSection'
 import { TokenSection } from './TokenSection'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        main: {
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-            overflow: 'auto',
-        },
-        receiverRow: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-        },
-        to: {
-            fontSize: 19,
-            fontWeight: 500,
-        },
-        address: {
-            height: 48,
-            flexGrow: 1,
-            marginLeft: theme.spacing(1),
-        },
-        actionButton: {
-            marginTop: theme.spacing(1.5),
-            fontSize: 16,
-        },
-        button: {
-            width: '100%',
-            fontSize: 16,
-            lineHeight: '22px',
-            fontWeight: 600,
-            padding: '10px 0',
-            borderRadius: 24,
-            height: 'auto',
-            marginTop: theme.spacing(1.5),
-        },
-        disabledButton: {
-            fontSize: 16,
-            lineHeight: '22px',
-            fontWeight: 600,
-            padding: '10px 0',
-            borderRadius: 24,
-            height: 'auto',
-        },
-        controls: {
-            marginTop: theme.spacing(1),
-            display: 'flex',
-            flexDirection: 'row',
-        },
-        addButton: {
-            marginLeft: 'auto',
-        },
-        tokenField: {
-            marginTop: theme.spacing(2),
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    main: {
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1,
+        overflow: 'auto',
+    },
+    receiverRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    to: {
+        fontSize: 19,
+        fontWeight: 500,
+    },
+    address: {
+        height: 48,
+        flexGrow: 1,
+        marginLeft: theme.spacing(1),
+    },
+    actionButton: {
+        marginTop: theme.spacing(1.5),
+        fontSize: 16,
+    },
+    button: {
+        width: '100%',
+        fontSize: 16,
+        lineHeight: '22px',
+        fontWeight: 600,
+        padding: '10px 0',
+        borderRadius: 24,
+        height: 'auto',
+        marginTop: theme.spacing(1.5),
+    },
+    disabledButton: {
+        fontSize: 16,
+        lineHeight: '22px',
+        fontWeight: 600,
+        padding: '10px 0',
+        borderRadius: 24,
+        height: 'auto',
+    },
+    controls: {
+        marginTop: theme.spacing(1),
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    addButton: {
+        marginLeft: 'auto',
+    },
+    tokenField: {
+        marginTop: theme.spacing(2),
+    },
+}))
 
 interface Props extends BoxProps {
     onAddToken?(): void

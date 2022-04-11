@@ -16,10 +16,8 @@ const ButtonContainerUI = styled(Stack)(({ theme }) => ({
 
 interface ButtonGroupProps extends PropsWithChildren<{}> {}
 
-export const ButtonContainer = ({ children }: ButtonGroupProps) => {
-    return (
-        <ButtonContainerUI my={7} direction="row" spacing={2} justifyContent="center" alignItems="center">
-            {children}
-        </ButtonContainerUI>
-    )
-}
+export const ButtonContainer = ({ children }: ButtonGroupProps) => (
+    <ButtonContainerUI my={7} direction="row" spacing={2} justifyContent="center" alignItems="center">
+        {children}
+    </ButtonContainerUI>
+)

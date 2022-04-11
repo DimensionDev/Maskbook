@@ -24,30 +24,28 @@ export interface InfoFieldProps {
     children: React.ReactNode
 }
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        field: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            margin: `${theme.spacing(1)} auto`,
-        },
-        link: {
-            display: 'flex',
-            color: 'inherit',
-            alignItems: 'center',
-            marginLeft: theme.spacing(1),
-            textDecoration: 'none !important',
-        },
-        avatar: {
-            width: 16,
-            height: 16,
-        },
-        avatarWrapper: {
-            marginRight: 8,
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    field: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        margin: `${theme.spacing(1)} auto`,
+    },
+    link: {
+        display: 'flex',
+        color: 'inherit',
+        alignItems: 'center',
+        marginLeft: theme.spacing(1),
+        textDecoration: 'none !important',
+    },
+    avatar: {
+        width: 16,
+        height: 16,
+    },
+    avatarWrapper: {
+        marginRight: 8,
+    },
+}))
 
 export function InfoField(props: InfoFieldProps) {
     const { classes } = useStyles()

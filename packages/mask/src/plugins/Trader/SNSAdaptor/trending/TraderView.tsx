@@ -28,72 +28,70 @@ import {
     isNativeTokenSymbol,
 } from '@masknet/web3-shared-evm'
 
-const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
-    return {
-        root: props.isPopper
-            ? {
-                  width: 450,
-                  boxShadow:
-                      theme.palette.mode === 'dark'
-                          ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
-                          : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px',
-              }
-            : {
-                  width: '100%',
-                  boxShadow: 'none',
-                  borderRadius: 0,
-                  marginBottom: theme.spacing(2),
-              },
-        body: props.isPopper
-            ? {
-                  minHeight: 303,
-                  overflow: 'hidden',
-                  border: `solid 1px ${theme.palette.divider}`,
-                  display: 'flex',
-                  flexDirection: 'column',
-              }
-            : {},
-        footer: props.isPopper
-            ? {}
-            : {
-                  borderTop: `solid 1px ${theme.palette.divider}`,
-                  borderBottom: `solid 1px ${theme.palette.divider}`,
-              },
-        footerSkeleton: props.isPopper
-            ? {}
-            : {
-                  borderBottom: `solid 1px ${theme.palette.divider}`,
-              },
-        tabs: {
-            height: props.isPopper ? 35 : 'auto',
-            width: '100%',
-            minHeight: 'unset',
-            borderTop: props.isPopper ? 'unset' : `solid 1px ${theme.palette.divider}`,
-            borderBottom: props.isPopper ? 'unset' : `solid 1px ${theme.palette.divider}`,
-        },
-        content: props.isPopper
-            ? {}
-            : {
-                  padding: 0,
-                  border: 'none',
-              },
-        tab: {
-            height: props.isPopper ? 35 : 'auto',
-            minHeight: 'unset',
-            minWidth: 'unset',
-        },
-        tradeViewRoot: props.isPopper
-            ? {
-                  maxWidth: 380,
-              }
-            : {},
-        priceChartRoot: props.isPopper
-            ? {
-                  flex: 1,
-              }
-            : {},
-    }
-})
+const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => ({
+    root: props.isPopper
+        ? {
+              width: 450,
+              boxShadow:
+                  theme.palette.mode === 'dark'
+                      ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
+                      : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px',
+          }
+        : {
+              width: '100%',
+              boxShadow: 'none',
+              borderRadius: 0,
+              marginBottom: theme.spacing(2),
+          },
+    body: props.isPopper
+        ? {
+              minHeight: 303,
+              overflow: 'hidden',
+              border: `solid 1px ${theme.palette.divider}`,
+              display: 'flex',
+              flexDirection: 'column',
+          }
+        : {},
+    footer: props.isPopper
+        ? {}
+        : {
+              borderTop: `solid 1px ${theme.palette.divider}`,
+              borderBottom: `solid 1px ${theme.palette.divider}`,
+          },
+    footerSkeleton: props.isPopper
+        ? {}
+        : {
+              borderBottom: `solid 1px ${theme.palette.divider}`,
+          },
+    tabs: {
+        height: props.isPopper ? 35 : 'auto',
+        width: '100%',
+        minHeight: 'unset',
+        borderTop: props.isPopper ? 'unset' : `solid 1px ${theme.palette.divider}`,
+        borderBottom: props.isPopper ? 'unset' : `solid 1px ${theme.palette.divider}`,
+    },
+    content: props.isPopper
+        ? {}
+        : {
+              padding: 0,
+              border: 'none',
+          },
+    tab: {
+        height: props.isPopper ? 35 : 'auto',
+        minHeight: 'unset',
+        minWidth: 'unset',
+    },
+    tradeViewRoot: props.isPopper
+        ? {
+              maxWidth: 380,
+          }
+        : {},
+    priceChartRoot: props.isPopper
+        ? {
+              flex: 1,
+          }
+        : {},
+}))
 
 export interface TraderViewProps {
     name: string

@@ -74,28 +74,30 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
     }, [results, contracts])
 
     // compose pairs from list of reserves
-    const pairs = useMemo(() => {
-        return listOfPairAddress.map((address, i) => {
-            try {
-                const tokenA = tokenPairs[i][0]
-                const tokenB = tokenPairs[i][1]
-                if (!tokenA || !tokenB || tokenA.equals(tokenB)) return [PairState.INVALID, null]
-                const { reserve0, reserve1 } =
-                    listOfReserves.find((x) => x.id.toLowerCase() === address?.toLowerCase()) ?? {}
-                if (!reserve0 || !reserve1) return [PairState.NOT_EXISTS, null]
-                const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
-                return [
-                    PairState.EXISTS,
-                    new Pair(
-                        CurrencyAmount.fromRawAmount(token0, reserve0),
-                        CurrencyAmount.fromRawAmount(token1, reserve1),
-                    ),
-                ] as const
-            } catch {
-                return []
-            }
-        })
-    }, [listOfPairAddress, listOfReserves, tokenPairs])
+    const pairs = useMemo(
+        () =>
+            listOfPairAddress.map((address, i) => {
+                try {
+                    const tokenA = tokenPairs[i][0]
+                    const tokenB = tokenPairs[i][1]
+                    if (!tokenA || !tokenB || tokenA.equals(tokenB)) return [PairState.INVALID, null]
+                    const { reserve0, reserve1 } =
+                        listOfReserves.find((x) => x.id.toLowerCase() === address?.toLowerCase()) ?? {}
+                    if (!reserve0 || !reserve1) return [PairState.NOT_EXISTS, null]
+                    const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
+                    return [
+                        PairState.EXISTS,
+                        new Pair(
+                            CurrencyAmount.fromRawAmount(token0, reserve0),
+                            CurrencyAmount.fromRawAmount(token1, reserve1),
+                        ),
+                    ] as const
+                } catch {
+                    return []
+                }
+            }),
+        [listOfPairAddress, listOfReserves, tokenPairs],
+    )
 
     return {
         ...asyncResults,

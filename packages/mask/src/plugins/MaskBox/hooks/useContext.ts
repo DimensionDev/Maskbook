@@ -77,12 +77,10 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const { value: maskBoxCreationSuccessEvent = null, retry: retryMaskBoxCreationSuccessEvent } =
         useMaskBoxCreationSuccessEvent(maskBoxInfo?.creator ?? '', maskBoxInfo?.nft_address ?? '', boxId)
     const { value: paymentTokens = [] } = useFungibleTokensDetailed(
-        maskBoxStatus?.payment?.map(([address]) => {
-            return {
-                type: isNativeTokenAddress(address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
-                address,
-            }
-        }) ?? [],
+        maskBoxStatus?.payment?.map(([address]) => ({
+            type: isNativeTokenAddress(address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+            address,
+        })) ?? [],
         chainId,
     )
     const { value: allTokens = [], retry: retryMaskBoxTokensForSale } = useMaskBoxTokensForSale(boxId)
@@ -123,13 +121,11 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
             canceled: maskBoxStatus.canceled,
             tokenIds: allTokens,
             tokenIdsPurchased: purchasedTokens,
-            payments: paymentTokens.map((token, i) => {
-                return {
-                    token: token,
-                    price: maskBoxStatus.payment[i][1],
-                    receivableAmount: maskBoxStatus.payment[i][2],
-                }
-            }),
+            payments: paymentTokens.map((token, i) => ({
+                token: token,
+                price: maskBoxStatus.payment[i][1],
+                receivableAmount: maskBoxStatus.payment[i][2],
+            })),
             tokenAddress: maskBoxInfo.nft_address,
             heroImageURL: '',
             qualificationAddress: maskBoxInfo.qualification,

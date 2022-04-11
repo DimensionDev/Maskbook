@@ -87,9 +87,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
         setIncorrectBackupPassword(false)
     }, [backupPassword])
 
-    useEffect(() => {
-        return Messages.events.restoreSuccess.on(restoreCallback)
-    }, [restoreCallback])
+    useEffect(() => Messages.events.restoreSuccess.on(restoreCallback), [restoreCallback])
 
     return (
         <MaskDialog maxWidth="xs" title={t.settings_cloud_backup()} open={open} onClose={onClose}>

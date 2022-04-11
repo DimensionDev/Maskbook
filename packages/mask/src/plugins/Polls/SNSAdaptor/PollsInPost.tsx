@@ -40,9 +40,7 @@ export default function PollsInPost(props: PollsInPostProps) {
         }
     }, [props.message.meta])
 
-    return renderWithPollMetadata(props.message.meta, (r) => {
-        return <C poll={updatedPoll ?? r} vote={vote} status={status} />
-    })
+    return renderWithPollMetadata(props.message.meta, (r) => <C poll={updatedPoll ?? r} vote={vote} status={status} />)
 }
 const C: typeof PollCardUI = (props) => {
     usePluginWrapper(true, { width: 400 })

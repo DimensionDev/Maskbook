@@ -42,43 +42,41 @@ function getStyleProps(activeColor: { activeColor: string; color: string }) {
     }
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, props) => {
-    return {
-        root: {
-            '&:hover': {
-                cursor: 'pointer',
-            },
-            display: '-webkit-box',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginRight: 60,
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
+    root: {
+        '&:hover': {
+            cursor: 'pointer',
         },
-        button: {
-            color: props.color,
-            font: props.font,
+        display: '-webkit-box',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 60,
+    },
+    button: {
+        color: props.color,
+        font: props.font,
+        fontSize: props.fontSize,
+        height: props.height,
+        justifyContent: 'center',
+        alignItems: 'center',
+        display: 'flex',
+        borderTop: '1px solid transparent',
+    },
+    selected: {
+        borderTop: `1px solid ${props.hover}`,
+        color: props.hover,
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            borderTop: 'unset',
+        },
+    },
+    line: {},
+    icon: {
+        [`@media (min-width: ${theme.breakpoints.values.sm}px)`]: {
             fontSize: props.fontSize,
-            height: props.height,
-            justifyContent: 'center',
-            alignItems: 'center',
-            display: 'flex',
-            borderTop: '1px solid transparent',
+            paddingRight: 4,
         },
-        selected: {
-            borderTop: `1px solid ${props.hover}`,
-            color: props.hover,
-            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-                borderTop: 'unset',
-            },
-        },
-        line: {},
-        icon: {
-            [`@media (min-width: ${theme.breakpoints.values.sm}px)`]: {
-                fontSize: props.fontSize,
-                paddingRight: 4,
-            },
-        },
-    }
-})
+    },
+}))
 
 interface StyleProps {
     color: string

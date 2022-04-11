@@ -8,7 +8,5 @@ export function useBlockNumber(expectedChainId?: number, pluginID?: NetworkPlugi
 
     const chainId = expectedChainId ?? defaultChainId
 
-    return useAsyncRetry(async () => {
-        return Utils?.getLatestBlockNumber?.(chainId)
-    }, [Utils, chainId])
+    return useAsyncRetry(async () => Utils?.getLatestBlockNumber?.(chainId), [Utils, chainId])
 }

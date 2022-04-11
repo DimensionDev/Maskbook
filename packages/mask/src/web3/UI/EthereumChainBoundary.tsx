@@ -148,18 +148,16 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         }
     }, [account, isAllowed, isChainMatched, isPluginMatched, providerType, expectedChainId])
 
-    const renderBox = (children?: React.ReactNode) => {
-        return (
-            <Box
-                className={props.className}
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                sx={!props.disablePadding ? { paddingTop: 1, paddingBottom: 1 } : null}>
-                {children}
-            </Box>
-        )
-    }
+    const renderBox = (children?: React.ReactNode) => (
+        <Box
+            className={props.className}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            sx={!props.disablePadding ? { paddingTop: 1, paddingBottom: 1 } : null}>
+            {children}
+        </Box>
+    )
 
     if (!account)
         return renderBox(

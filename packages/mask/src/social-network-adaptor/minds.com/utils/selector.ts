@@ -28,9 +28,8 @@ export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('.m-sidebarNavigation__list li:nth-child(7)')
 
-export const postEditorDraftContentSelector = () => {
-    return querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea.m-composerTextarea__message')
-}
+export const postEditorDraftContentSelector = () =>
+    querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea.m-composerTextarea__message')
 
 export const handleSelector = () => querySelector<HTMLScriptElement, true>('.m-user-menu ul li a:first-child')
 

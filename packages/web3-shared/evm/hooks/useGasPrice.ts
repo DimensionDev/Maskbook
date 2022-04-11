@@ -6,7 +6,5 @@ export function useGasPrice() {
     const chainId = useChainId()
     const web3 = useWeb3({ chainId })
 
-    return useAsyncRetry(async () => {
-        return web3.eth.getGasPrice()
-    }, [web3, chainId])
+    return useAsyncRetry(() => web3.eth.getGasPrice(), [web3, chainId])
 }

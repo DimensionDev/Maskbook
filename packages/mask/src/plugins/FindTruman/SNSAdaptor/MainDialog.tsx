@@ -14,33 +14,31 @@ interface Props extends InjectedDialogProps {
     onClose: () => void
 }
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        actions: {
-            alignSelf: 'center',
-        },
-        button: {
-            borderRadius: 26,
-            marginTop: 24,
-            fontSize: 16,
-            lineHeight: 2.5,
-            paddingLeft: 35,
-            paddingRight: 35,
-        },
-        card: {
-            borderRadius: '6px',
-            marginBottom: '16px',
-            padding: '16px',
-        },
-        media: {
-            borderRadius: '8px',
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            boxShadow: '0 1px 2px -2px #00000029, 0 3px 6px #0000001f, 0 5px 12px 4px #00000017',
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    actions: {
+        alignSelf: 'center',
+    },
+    button: {
+        borderRadius: 26,
+        marginTop: 24,
+        fontSize: 16,
+        lineHeight: 2.5,
+        paddingLeft: 35,
+        paddingRight: 35,
+    },
+    card: {
+        borderRadius: '6px',
+        marginBottom: '16px',
+        padding: '16px',
+    },
+    media: {
+        borderRadius: '8px',
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        boxShadow: '0 1px 2px -2px #00000029, 0 3px 6px #0000001f, 0 5px 12px 4px #00000017',
+    },
+}))
 const FindTrumanDialog: React.FC<Props> = (props) => {
     const { i18n } = useI18N()
     const { t } = useContext(FindTrumanContext)
@@ -60,24 +58,22 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
         fetchUserParticipatedStoryStatus(account).then(setStatuses)
     }, [account])
 
-    const renderProgress = (total: number, success: number, color: 'primary' | 'secondary' | 'success') => {
-        return (
-            <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '4px' }}>
-                <Box sx={{ width: '100%', mr: 1 }}>
-                    <BorderLinearProgress
-                        color={color}
-                        value={total > 0 ? (success * 100) / total : 0}
-                        variant="determinate"
-                    />
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Typography variant="body2" color="text.secondary">
-                        {success}/{total}
-                    </Typography>
-                </Box>
+    const renderProgress = (total: number, success: number, color: 'primary' | 'secondary' | 'success') => (
+        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '4px' }}>
+            <Box sx={{ width: '100%', mr: 1 }}>
+                <BorderLinearProgress
+                    color={color}
+                    value={total > 0 ? (success * 100) / total : 0}
+                    variant="determinate"
+                />
             </Box>
-        )
-    }
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Typography variant="body2" color="text.secondary">
+                    {success}/{total}
+                </Typography>
+            </Box>
+        </Box>
+    )
 
     const renderStatus = (params: UserStoryStatus) => {
         const { name, img, puzzles, polls } = params

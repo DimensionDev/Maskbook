@@ -15,55 +15,53 @@ import { NetworkPluginID, useReverseAddress } from '@masknet/plugin-infra'
 import { TargetChainIdContext } from '../../../../plugins/Trader/trader/useTargetChainIdContext'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        walletStateBar: {
-            color: theme.palette.grey['900'],
+const useStyles = makeStyles()((theme) => ({
+    walletStateBar: {
+        color: theme.palette.grey['900'],
+    },
+    page: {
+        minHeight: '100vh',
+        maxWidth: '100vw',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#F7F9FA',
+    },
+    container: {
+        width: 800,
+        backgroundColor: theme.palette.background.paper,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        minHeight: 720,
+        maxHeight: '90vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 16,
+        padding: '32px 0',
+    },
+    header: {
+        width: 520,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        padding: '22px 0',
+    },
+    title: {
+        fontSize: 32,
+        marginTop: 16,
+        fontWeight: 'bold',
+        color: theme.palette.grey['900'],
+    },
+    main: {
+        width: 520,
+        overflowY: 'scroll',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        page: {
-            minHeight: '100vh',
-            maxWidth: '100vw',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#F7F9FA',
-        },
-        container: {
-            width: 800,
-            backgroundColor: theme.palette.background.paper,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            minHeight: 720,
-            maxHeight: '90vh',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 16,
-            padding: '32px 0',
-        },
-        header: {
-            width: 520,
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            padding: '22px 0',
-        },
-        title: {
-            fontSize: 32,
-            marginTop: 16,
-            fontWeight: 'bold',
-            color: theme.palette.grey['900'],
-        },
-        main: {
-            width: 520,
-            overflowY: 'scroll',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-    }
-})
+    },
+}))
 
 export default function SwapPage() {
     const { t } = useI18N()

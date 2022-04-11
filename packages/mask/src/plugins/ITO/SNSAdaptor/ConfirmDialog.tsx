@@ -178,28 +178,26 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </Paper>
                 </Grid>
 
-                {poolSettings?.exchangeTokens.filter(Boolean).map((item, index) => {
-                    return (
-                        <Fragment key={index}>
-                            {index === 0 ? (
-                                <Grid item xs={1}>
-                                    <Paper className={classes.label}>
-                                        <Typography variant="body1" color="textSecondary">
-                                            {t('plugin_ito_sell_price')}
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                            ) : null}
-                            <Grid item xs={index === 0 ? 11 : 12}>
-                                <SwapItem
-                                    token={poolSettings.token}
-                                    swap={item}
-                                    swapAmount={poolSettings?.exchangeAmounts[index]}
-                                />
+                {poolSettings?.exchangeTokens.filter(Boolean).map((item, index) => (
+                    <Fragment key={index}>
+                        {index === 0 ? (
+                            <Grid item xs={1}>
+                                <Paper className={classes.label}>
+                                    <Typography variant="body1" color="textSecondary">
+                                        {t('plugin_ito_sell_price')}
+                                    </Typography>
+                                </Paper>
                             </Grid>
-                        </Fragment>
-                    )
-                })}
+                        ) : null}
+                        <Grid item xs={index === 0 ? 11 : 12}>
+                            <SwapItem
+                                token={poolSettings.token}
+                                swap={item}
+                                swapAmount={poolSettings?.exchangeAmounts[index]}
+                            />
+                        </Grid>
+                    </Fragment>
+                ))}
 
                 <Grid item xs={6}>
                     <Paper className={classes.label}>

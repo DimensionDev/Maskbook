@@ -191,7 +191,6 @@ export function createTransaction<DBType extends DBSchema, Mode extends 'readonl
     mode: Mode,
 ) {
     // It must be a high order function to infer the type of UsedStoreName correctly.
-    return <UsedStoreName extends StoreNames<DBType>[] = []>(...storeNames: UsedStoreName) => {
-        return db.transaction(storeNames, mode) as IDBPSafeTransaction<DBType, UsedStoreName, Mode>
-    }
+    return <UsedStoreName extends StoreNames<DBType>[] = []>(...storeNames: UsedStoreName) =>
+        db.transaction(storeNames, mode) as IDBPSafeTransaction<DBType, UsedStoreName, Mode>
 }

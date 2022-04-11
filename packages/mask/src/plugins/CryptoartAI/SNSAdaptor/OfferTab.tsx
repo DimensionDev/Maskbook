@@ -8,47 +8,45 @@ import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
 import { LoadingTable } from './LoadingTable'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            overflow: 'auto',
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        overflow: 'auto',
+    },
+    content: {
+        padding: '0 !important',
+    },
+    container: {
+        padding: theme.spacing(2),
+    },
+    latest_bid: {
+        maxWidth: 112,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+    },
+    chain_row: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginBottom: theme.spacing(0.5),
+        '&:last-child': {
+            marginBottom: 0,
         },
-        content: {
-            padding: '0 !important',
-        },
-        container: {
-            padding: theme.spacing(2),
-        },
-        latest_bid: {
-            maxWidth: 112,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-        },
-        chain_row: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: theme.spacing(0.5),
-            '&:last-child': {
-                marginBottom: 0,
-            },
-        },
-        empty: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            padding: theme.spacing(8, 0),
-        },
-        emptyCell: {
-            borderStyle: 'none',
-        },
-        button: {
-            marginLeft: theme.spacing(1),
-        },
-    }
-})
+    },
+    empty: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        padding: theme.spacing(8, 0),
+    },
+    emptyCell: {
+        borderStyle: 'none',
+    },
+    button: {
+        marginLeft: theme.spacing(1),
+    },
+}))
 
 export function OfferTab() {
     const { t } = useI18N()

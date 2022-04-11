@@ -14,21 +14,19 @@ export enum ValidationCodeStep {
     ConfirmBackupInfo = 'ConfirmBackupInfo',
 }
 
-export const Label = memo(({ mode, onModeChange }: LabelProps) => {
-    return (
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography variant="body2" sx={{ fontWeight: 'bolder', fontSize: 12 }} color="textPrimary">
-                {mode === 'email' ? 'Email' : 'Phone Number'}
-            </Typography>
-            {mode === 'email' ? (
-                <Button size="small" variant="text" onClick={() => onModeChange(AccountType.phone)}>
-                    Recovery with Mobile
-                </Button>
-            ) : (
-                <Button size="small" variant="text" onClick={() => onModeChange(AccountType.email)}>
-                    Recovery with Email
-                </Button>
-            )}
-        </Stack>
-    )
-})
+export const Label = memo(({ mode, onModeChange }: LabelProps) => (
+    <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Typography variant="body2" sx={{ fontWeight: 'bolder', fontSize: 12 }} color="textPrimary">
+            {mode === 'email' ? 'Email' : 'Phone Number'}
+        </Typography>
+        {mode === 'email' ? (
+            <Button size="small" variant="text" onClick={() => onModeChange(AccountType.phone)}>
+                Recovery with Mobile
+            </Button>
+        ) : (
+            <Button size="small" variant="text" onClick={() => onModeChange(AccountType.email)}>
+                Recovery with Email
+            </Button>
+        )}
+    </Stack>
+))

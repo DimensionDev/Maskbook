@@ -79,28 +79,22 @@ export const CountdownView = (props: CountdownProps) => {
         digit: number | string
     }
 
-    const Digit = (props: DigitProps) => {
-        return (
-            <Typography variant="body1" fontWeight="fontWeightBold">
-                {props.digit}
-            </Typography>
-        )
-    }
-    const LeftDigit = (props: DigitProps) => {
-        return (
-            <Box py={0.2} mr={0.1} ml={0.3} className={classes.digit}>
-                <Digit digit={props.digit} />
-            </Box>
-        )
-    }
+    const Digit = (props: DigitProps) => (
+        <Typography variant="body1" fontWeight="fontWeightBold">
+            {props.digit}
+        </Typography>
+    )
+    const LeftDigit = (props: DigitProps) => (
+        <Box py={0.2} mr={0.1} ml={0.3} className={classes.digit}>
+            <Digit digit={props.digit} />
+        </Box>
+    )
 
-    const RightDigit = (props: DigitProps) => {
-        return (
-            <Box py={0.2} mr={0.3} ml={0.1} className={classes.digit}>
-                <Digit digit={props.digit} />
-            </Box>
-        )
-    }
+    const RightDigit = (props: DigitProps) => (
+        <Box py={0.2} mr={0.3} ml={0.1} className={classes.digit}>
+            <Digit digit={props.digit} />
+        </Box>
+    )
 
     interface DoubleDigitsProps {
         leftDigit: number | string
@@ -126,17 +120,15 @@ export const CountdownView = (props: CountdownProps) => {
         )
     }
 
-    const Separator = () => {
-        return (
-            <Grid container item direction="column" className={classes.separator}>
-                <Box py={0.2}>
-                    <Typography variant="body2" fontWeight="fontWeightBold">
-                        :
-                    </Typography>
-                </Box>
-            </Grid>
-        )
-    }
+    const Separator = () => (
+        <Grid container item direction="column" className={classes.separator}>
+            <Box py={0.2}>
+                <Typography variant="body2" fontWeight="fontWeightBold">
+                    :
+                </Typography>
+            </Box>
+        </Grid>
+    )
 
     return (
         <Grid container direction="row" className={classes.root}>

@@ -248,79 +248,75 @@ export const ProfileListUI = memo<ProfileListUIProps>(
 
         return (
             <List dense className={classes.list}>
-                {profiles.map(({ identifier, avatar, is_valid, platform, identity }) => {
-                    return (
-                        <ListItem
-                            className={classes.item}
-                            key={identifier.toText()}
-                            secondaryAction={
-                                <Link
-                                    className={classes.link}
-                                    underline="none"
-                                    onClick={() => onDisconnect(identifier, is_valid, platform, identity)}>
-                                    {t('popups_persona_disconnect')}
-                                </Link>
-                            }>
-                            <div className={classes.avatarContainer}>
-                                {avatar ? (
-                                    <Avatar
-                                        src={avatar}
+                {profiles.map(({ identifier, avatar, is_valid, platform, identity }) => (
+                    <ListItem
+                        className={classes.item}
+                        key={identifier.toText()}
+                        secondaryAction={
+                            <Link
+                                className={classes.link}
+                                underline="none"
+                                onClick={() => onDisconnect(identifier, is_valid, platform, identity)}>
+                                {t('popups_persona_disconnect')}
+                            </Link>
+                        }>
+                        <div className={classes.avatarContainer}>
+                            {avatar ? (
+                                <Avatar
+                                    src={avatar}
+                                    className={classNames(
+                                        classes.avatar,
+                                        is_valid ? classes.verified_avatar : classes.unverified_avatar,
+                                    )}
+                                />
+                            ) : (
+                                <div className={classes.avatar}>
+                                    <GrayMasks
                                         className={classNames(
                                             classes.avatar,
                                             is_valid ? classes.verified_avatar : classes.unverified_avatar,
                                         )}
                                     />
-                                ) : (
-                                    <div className={classes.avatar}>
-                                        <GrayMasks
-                                            className={classNames(
-                                                classes.avatar,
-                                                is_valid ? classes.verified_avatar : classes.unverified_avatar,
-                                            )}
-                                        />
-                                    </div>
-                                )}
-                                <div className={classes.circle}>{SOCIAL_MEDIA_ICON_MAPPING[identifier.network]}</div>
-                            </div>
+                                </div>
+                            )}
+                            <div className={classes.circle}>{SOCIAL_MEDIA_ICON_MAPPING[identifier.network]}</div>
+                        </div>
 
-                            <ListItemText
-                                className={classes.text}
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => openProfilePage(identifier.network, identifier.userId)}>
-                                <Typography fontSize={12} fontWeight={600}>
-                                    @{identifier.userId}
-                                </Typography>
-                                {!is_valid && identifier.network === 'twitter.com' ? (
-                                    <Typography
-                                        className={classes.tag}
-                                        style={{ cursor: 'pointer' }}
-                                        onClick={(e) => {
-                                            onConnect(identifier.network, 'nextID', identifier)
-                                            e.stopPropagation()
-                                        }}>
-                                        {t('popups_persona_to_be_verified')}
-                                    </Typography>
-                                ) : null}
-                            </ListItemText>
-                        </ListItem>
-                    )
-                })}
-                {networks.map((networkIdentifier) => {
-                    return (
-                        <ListItem
-                            className={classes.item}
-                            key={networkIdentifier}
+                        <ListItemText
+                            className={classes.text}
                             style={{ cursor: 'pointer' }}
-                            onClick={() => onConnect(networkIdentifier)}>
-                            {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
-                            <ListItemText className={classes.text}>
-                                <Typography fontSize={12} fontWeight={600}>
-                                    {t('popups_persona_connect_to', { type: networkIdentifier })}
+                            onClick={() => openProfilePage(identifier.network, identifier.userId)}>
+                            <Typography fontSize={12} fontWeight={600}>
+                                @{identifier.userId}
+                            </Typography>
+                            {!is_valid && identifier.network === 'twitter.com' ? (
+                                <Typography
+                                    className={classes.tag}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={(e) => {
+                                        onConnect(identifier.network, 'nextID', identifier)
+                                        e.stopPropagation()
+                                    }}>
+                                    {t('popups_persona_to_be_verified')}
                                 </Typography>
-                            </ListItemText>
-                        </ListItem>
-                    )
-                })}
+                            ) : null}
+                        </ListItemText>
+                    </ListItem>
+                ))}
+                {networks.map((networkIdentifier) => (
+                    <ListItem
+                        className={classes.item}
+                        key={networkIdentifier}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => onConnect(networkIdentifier)}>
+                        {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
+                        <ListItemText className={classes.text}>
+                            <Typography fontSize={12} fontWeight={600}>
+                                {t('popups_persona_connect_to', { type: networkIdentifier })}
+                            </Typography>
+                        </ListItemText>
+                    </ListItem>
+                ))}
             </List>
         )
     },

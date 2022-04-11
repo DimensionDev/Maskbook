@@ -81,8 +81,8 @@ export const TypedMessageEditor = memo(
             },
             [setMessage],
         )
-        const refItem = useMemo((): TypedMessageEditorRef => {
-            return {
+        const refItem = useMemo(
+            (): TypedMessageEditorRef => ({
                 get estimatedLength() {
                     // TODO: we should count metadata into the estimated size
                     if (isTypedMessageText(currentValue.current)) return currentValue.current.content.length
@@ -99,8 +99,9 @@ export const TypedMessageEditor = memo(
                     setMessage(editTypedMessageMeta(currentValue.current, (map) => map.set(meta, data)))
                 },
                 dropMetadata: deleteMetaID,
-            }
-        }, [setMessage, deleteMetaID])
+            }),
+            [setMessage, deleteMetaID],
+        )
         useImperativeHandle(ref, () => refItem, [refItem])
 
         if (!isTypedMessageText(value)) {

@@ -10,7 +10,5 @@ export function useBalance(expectedChainId?: number, expectedAccount?: string, p
     const chainId = expectedChainId ?? defaultChainId
     const account = expectedAccount ?? defaultAccount
 
-    return useAsyncRetry(async () => {
-        return Utils?.getLatestBalance?.(chainId, account) ?? '0'
-    }, [account, chainId, Utils])
+    return useAsyncRetry(async () => Utils?.getLatestBalance?.(chainId, account) ?? '0', [account, chainId, Utils])
 }

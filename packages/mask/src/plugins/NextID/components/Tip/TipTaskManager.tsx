@@ -17,12 +17,14 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
         setTasks((list) => list.filter((t) => t !== task))
     }, [])
 
-    useEffect(() => {
-        return PluginNextIdMessages.tipTask.on((task) => {
-            id += 1
-            setTasks((list) => [...list, { id, ...task }])
-        })
-    }, [])
+    useEffect(
+        () =>
+            PluginNextIdMessages.tipTask.on((task) => {
+                id += 1
+                setTasks((list) => [...list, { id, ...task }])
+            }),
+        [],
+    )
 
     return (
         <>

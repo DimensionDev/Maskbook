@@ -201,8 +201,8 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
 
     const paperComponent = (children: ReactNode | undefined) => <Box className={classes.boxPaper}>{children}</Box>
 
-    const nftsRender = useMemo(() => {
-        return (
+    const nftsRender = useMemo(
+        () => (
             <Autocomplete
                 disablePortal
                 id="collection-box"
@@ -234,11 +234,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     />
                 )}
             />
-        )
-    }, [nfts, extraData])
+        ),
+        [nfts, extraData],
+    )
 
-    const tokensRender = useMemo(() => {
-        return (
+    const tokensRender = useMemo(
+        () => (
             <Autocomplete
                 disablePortal
                 id="token-box"
@@ -266,8 +267,9 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     />
                 )}
             />
-        )
-    }, [collection.tokens, tokenInfoSelect])
+        ),
+        [collection.tokens, tokenInfoSelect],
+    )
 
     return (
         <>

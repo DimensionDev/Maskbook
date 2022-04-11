@@ -3,35 +3,33 @@ import { Box, InputBase, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            height: 52,
-            border: `1px solid ${theme.palette.mode === 'light' ? '#EBEEF0' : '#2F3336'}`,
-            borderRadius: 12,
-            padding: theme.spacing(0.8, 1.2, 1),
-            display: 'flex',
-            justifyContent: 'space-between',
-            flexDirection: 'column',
-            width: '100%',
-        },
-        title: {},
-        wrapper: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: '100%',
-        },
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        height: 52,
+        border: `1px solid ${theme.palette.mode === 'light' ? '#EBEEF0' : '#2F3336'}`,
+        borderRadius: 12,
+        padding: theme.spacing(0.8, 1.2, 1),
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexDirection: 'column',
+        width: '100%',
+    },
+    title: {},
+    wrapper: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+    },
 
-        input: {
-            flex: 1,
-            padding: theme.spacing(0.5),
-        },
-        inputShrinkLabel: {
-            transform: 'translate(17px, -3px) scale(0.75) !important',
-        },
-    }
-})
+    input: {
+        flex: 1,
+        padding: theme.spacing(0.5),
+    },
+    inputShrinkLabel: {
+        transform: 'translate(17px, -3px) scale(0.75) !important',
+    },
+}))
 
 export interface RedpacketMessagePanelProps {
     message: string

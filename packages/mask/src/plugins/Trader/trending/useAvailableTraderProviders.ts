@@ -12,7 +12,5 @@ export function useAvailableTraderProviders(
 ): AsyncState<TradeProvider[]> {
     const currentChainId = useChainId()
     const chainId = targetChainId ?? currentChainId
-    return useAsync(async () => {
-        return PluginTraderRPC.getAvailableTraderProviders(chainId)
-    }, [chainId, type, keyword])
+    return useAsync(() => PluginTraderRPC.getAvailableTraderProviders(chainId), [chainId, type, keyword])
 }

@@ -19,62 +19,60 @@ import { LoadingCard } from './LoadingCard'
 import { LoadingFailCard } from './LoadingFailCard'
 import { SnapshotCard } from './SnapshotCard'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        list: {
-            display: 'flex',
-            flexDirection: 'column',
-            maxHeight: 'var(--contentHeight)',
-            overflow: 'auto',
-            paddingTop: 0,
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
+const useStyles = makeStyles()((theme) => ({
+    list: {
+        display: 'flex',
+        flexDirection: 'column',
+        maxHeight: 'var(--contentHeight)',
+        overflow: 'auto',
+        paddingTop: 0,
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        listItem: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            borderBottom: `1px solid ${theme.palette.divider}`,
-        },
-        badge: {
-            transform: 'translateX(40px) translateY(2.5px)',
-        },
-        avatarWrapper: {
-            marginRight: 8,
-        },
-        choice: {
-            flexGrow: 1,
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-            maxWidth: 180,
-        },
-        ellipsisText: {
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-        },
-        avatar: {
-            width: 16,
-            height: 16,
-        },
-        link: {
-            display: 'flex',
-            minWidth: 130,
-            color: 'inherit',
-            alignItems: 'center',
-            textDecoration: 'none !important',
-            marginRight: 16,
-        },
-        power: {
-            minWidth: 90,
-        },
-        shadowRootTooltip: {
-            color: 'white',
-        },
-    }
-})
+    },
+    listItem: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        borderBottom: `1px solid ${theme.palette.divider}`,
+    },
+    badge: {
+        transform: 'translateX(40px) translateY(2.5px)',
+    },
+    avatarWrapper: {
+        marginRight: 8,
+    },
+    choice: {
+        flexGrow: 1,
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        maxWidth: 180,
+    },
+    ellipsisText: {
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+    },
+    avatar: {
+        width: 16,
+        height: 16,
+    },
+    link: {
+        display: 'flex',
+        minWidth: 130,
+        color: 'inherit',
+        alignItems: 'center',
+        textDecoration: 'none !important',
+        marginRight: 16,
+    },
+    power: {
+        minWidth: 90,
+    },
+    shadowRootTooltip: {
+        color: 'white',
+    },
+}))
 
 function Content() {
     const chainId = useChainId()
@@ -95,14 +93,14 @@ function Content() {
                     const isAverageWeight = v.choices?.every((c) => c.weight === 1)
                     const fullChoiceText =
                         v.totalWeight && v.choices
-                            ? v.choices.reduce((acc, choice, i) => {
-                                  return (
+                            ? v.choices.reduce(
+                                  (acc, choice, i) =>
                                       acc +
                                       (i === 0 ? '' : ', ') +
                                       (!isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '') +
-                                      choice.name
-                                  )
-                              }, '')
+                                      choice.name,
+                                  '',
+                              )
                             : null
                     return (
                         <ListItem className={classes.listItem} key={v.address}>

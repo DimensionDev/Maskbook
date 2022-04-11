@@ -36,24 +36,22 @@ const Transfer = memo(() => {
     )
 
     const [assetsMenu, openAssetMenu] = useMenu(
-        ...assets.map((asset, index) => {
-            return (
-                <MenuItem key={index} className={classes.assetItem} onClick={() => setSelectedAsset(asset)}>
-                    <div className={classes.assetSymbol}>
-                        <TokenIcon address={asset.token.address} />
-                        <Typography>{asset.token.symbol}</Typography>
-                    </div>
-                    <Typography>
-                        <FormattedBalance
-                            value={asset.balance}
-                            decimals={asset.token.decimals}
-                            significant={4}
-                            formatter={formatBalance}
-                        />
-                    </Typography>
-                </MenuItem>
-            )
-        }),
+        ...assets.map((asset, index) => (
+            <MenuItem key={index} className={classes.assetItem} onClick={() => setSelectedAsset(asset)}>
+                <div className={classes.assetSymbol}>
+                    <TokenIcon address={asset.token.address} />
+                    <Typography>{asset.token.symbol}</Typography>
+                </div>
+                <Typography>
+                    <FormattedBalance
+                        value={asset.balance}
+                        decimals={asset.token.decimals}
+                        significant={4}
+                        formatter={formatBalance}
+                    />
+                </Typography>
+            </MenuItem>
+        )),
     )
 
     return (

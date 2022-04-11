@@ -171,18 +171,20 @@ export const Prior1559GasSetting = memo(() => {
         return 0
     }, [value, web3])
 
-    const schema = useMemo(() => {
-        return zod.object({
-            gasLimit: zod
-                .string()
-                .min(1, t('wallet_transfer_error_gas_limit_absence'))
-                .refine(
-                    (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit ?? 0),
-                    t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
-                ),
-            gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
-        })
-    }, [minGasLimit])
+    const schema = useMemo(
+        () =>
+            zod.object({
+                gasLimit: zod
+                    .string()
+                    .min(1, t('wallet_transfer_error_gas_limit_absence'))
+                    .refine(
+                        (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit ?? 0),
+                        t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
+                    ),
+                gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
+            }),
+        [minGasLimit],
+    )
 
     const {
         control,
@@ -287,22 +289,20 @@ export const Prior1559GasSetting = memo(() => {
                 <Typography className={classes.label}>{t('popups_wallet_gas_fee_settings_gas_limit')}</Typography>
                 <Controller
                     control={control}
-                    render={({ field }) => {
-                        return (
-                            <StyledInput
-                                {...field}
-                                onChange={(e) => {
-                                    setOption(null)
-                                    field.onChange(e)
-                                }}
-                                error={!!errors.gasLimit?.message}
-                                helperText={errors.gasLimit?.message}
-                                inputProps={{
-                                    pattern: '^[0-9]*[.,]?[0-9]*$',
-                                }}
-                            />
-                        )
-                    }}
+                    render={({ field }) => (
+                        <StyledInput
+                            {...field}
+                            onChange={(e) => {
+                                setOption(null)
+                                field.onChange(e)
+                            }}
+                            error={!!errors.gasLimit?.message}
+                            helperText={errors.gasLimit?.message}
+                            inputProps={{
+                                pattern: '^[0-9]*[.,]?[0-9]*$',
+                            }}
+                        />
+                    )}
                     name="gasLimit"
                 />
                 <Typography className={classes.label}>{t('popups_wallet_gas_price')}</Typography>

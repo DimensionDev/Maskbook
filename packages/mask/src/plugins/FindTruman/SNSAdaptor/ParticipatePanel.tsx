@@ -79,9 +79,10 @@ export default function ParticipatePanel(props: ParticipatePanelProps) {
 
     const { open: isDialogOpen, onOpen: onDialogOpen, onClose: onDialogClose } = useControlledDialog()
 
-    const { value: userStoryStatus, retry: onUpdate } = useAsyncRetry(async () => {
-        return account && storyId ? fetchUserStoryStatus(storyId, account) : undefined
-    }, [account, storyId])
+    const { value: userStoryStatus, retry: onUpdate } = useAsyncRetry(
+        async () => (account && storyId ? fetchUserStoryStatus(storyId, account) : undefined),
+        [account, storyId],
+    )
 
     return (
         <div className={classes.panel}>
@@ -133,15 +134,9 @@ function ParticipateDialog(props: ParticipateDialogProps) {
     const updateQuestions = useCallback(async () => {
         if (!account) return
         const questions = await fetchQuestions(account)
-        questions.fills = questions.fills.map((f) => {
-            return { ...f, type: PostType.Completion }
-        })
-        questions.polls = questions.polls.map((f) => {
-            return { ...f, type: PostType.Poll }
-        })
-        questions.puzzles = questions.puzzles.map((f) => {
-            return { ...f, type: PostType.Puzzle }
-        })
+        questions.fills = questions.fills.map((f) => ({ ...f, type: PostType.Completion }))
+        questions.polls = questions.polls.map((f) => ({ ...f, type: PostType.Poll }))
+        questions.puzzles = questions.puzzles.map((f) => ({ ...f, type: PostType.Puzzle }))
         setQuestions(questions)
     }, [account, open])
 
@@ -189,9 +184,7 @@ function ParticipateDialog(props: ParticipateDialogProps) {
                 <Card key={`${poll.type}_${poll.id}`} variant="outlined" className={classes.wrapper}>
                     <OptionsCard
                         userStatus={poll}
-                        onSubmit={async (choice) => {
-                            return handleSubmitPoll(poll.type, poll.id, choice)
-                        }}
+                        onSubmit={async (choice) => handleSubmitPoll(poll.type, poll.id, choice)}
                     />
                 </Card>
             ) : (

@@ -98,9 +98,10 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
         })
     }
 
-    const backupDisabled = useMemo(() => {
-        return !backupPassword || (showPassword.wallet && !paymentPassword) || loading
-    }, [backupPassword, paymentPassword, loading])
+    const backupDisabled = useMemo(
+        () => !backupPassword || (showPassword.wallet && !paymentPassword) || loading,
+        [backupPassword, paymentPassword, loading],
+    )
 
     useEffect(() => {
         setIncorrectBackupPassword(false)

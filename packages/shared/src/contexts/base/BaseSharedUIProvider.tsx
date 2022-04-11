@@ -31,6 +31,4 @@ export const BaseSharedUIProvider: FC<PropsWithChildren<{}>> = ({ children }) =>
     return <BaseUIContext.Provider value={contextValue}>{children}</BaseUIContext.Provider>
 }
 
-export const useBaseUIRuntime = () => {
-    return useContext(BaseUIContext)
-}
+export const useBaseUIRuntime = () => useContext(BaseUIContext)

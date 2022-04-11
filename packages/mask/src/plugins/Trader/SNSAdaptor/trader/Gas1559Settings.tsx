@@ -156,9 +156,10 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
 
         const [selected, setOption] = useState<number | null>(1)
 
-        const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
-            return WalletRPC.getEstimateGasFees(chainId)
-        }, [chainId])
+        const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(
+            () => WalletRPC.getEstimateGasFees(chainId),
+            [chainId],
+        )
 
         // #region Gas Options
         const options = useMemo(

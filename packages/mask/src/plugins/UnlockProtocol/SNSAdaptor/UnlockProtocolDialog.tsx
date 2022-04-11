@@ -60,9 +60,10 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
             PluginUnlockProtocolRPC.encryptUnlockData(currentUnlockPost).then((encryption) => {
                 const uploadData = {
                     identifier: encryption.iv,
-                    unlockLocks: currentUnlockTarget.map((x) => {
-                        return { unlocklock: x.lock.address, chainid: x.lock.chain }
-                    }),
+                    unlockLocks: currentUnlockTarget.map((x) => ({
+                        unlocklock: x.lock.address,
+                        chainid: x.lock.chain,
+                    })),
                     unlockKey: encryption.key,
                 }
                 PluginUnlockProtocolRPC.postUnlockData(uploadData).then((res) => {

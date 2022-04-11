@@ -39,13 +39,11 @@ import { SettingsDialog } from './SettingsDialog'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
 
-const useStyles = makeStyles()(() => {
-    return {
-        root: {
-            margin: 'auto',
-        },
-    }
-})
+const useStyles = makeStyles()(() => ({
+    root: {
+        margin: 'auto',
+    },
+}))
 
 export interface TraderProps extends withClasses<'root'> {
     coin?: Coin
@@ -357,12 +355,14 @@ export function Trader(props: TraderProps) {
     }, [targetChainId])
     // #endregion
 
-    useEffect(() => {
-        return PluginTraderMessages.swapSettingsUpdated.on((event) => {
-            if (event.open) return
-            if (event.gasConfig) setGasConfig(event.gasConfig)
-        })
-    }, [])
+    useEffect(
+        () =>
+            PluginTraderMessages.swapSettingsUpdated.on((event) => {
+                if (event.open) return
+                if (event.gasConfig) setGasConfig(event.gasConfig)
+            }),
+        [],
+    )
 
     useUnmount(() => {
         dispatchTradeStore({

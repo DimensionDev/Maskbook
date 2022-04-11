@@ -117,11 +117,13 @@ const ImportWallet = memo(() => {
     const [keyStorePassword, setKeyStorePassword] = useState('')
     const [privateKey, setPrivateKey] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
-    const schema = useMemo(() => {
-        return zod.object({
-            name: zod.string().min(1).max(12),
-        })
-    }, [])
+    const schema = useMemo(
+        () =>
+            zod.object({
+                name: zod.string().min(1).max(12),
+            }),
+        [],
+    )
 
     const {
         control,

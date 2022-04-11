@@ -15,9 +15,7 @@ export const useUnconfirmedRequest = () => {
         }
     }, [])
 
-    useEffect(() => {
-        return WalletMessages.events.requestsUpdated.on(result.retry)
-    }, [result.retry])
+    useEffect(() => WalletMessages.events.requestsUpdated.on(result.retry), [result.retry])
 
     return result
 }

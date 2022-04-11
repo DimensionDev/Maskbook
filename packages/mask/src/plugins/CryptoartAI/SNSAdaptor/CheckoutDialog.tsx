@@ -17,54 +17,52 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        content: {
-            padding: 0,
+const useStyles = makeStyles()((theme) => ({
+    content: {
+        padding: 0,
+    },
+    footer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        padding: theme.spacing(0, 2, 2),
+    },
+    panel: {
+        marginTop: theme.spacing(2),
+        '&:first-child': {
+            marginTop: 0,
         },
-        footer: {
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: theme.spacing(0, 2, 2),
+    },
+    label: {},
+    buttons: {
+        width: '100%',
+        margin: `0 ${theme.spacing(-0.5)}`,
+    },
+    button: {
+        flex: 1,
+        margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
+    },
+    container: {
+        padding: theme.spacing(1),
+    },
+    chain_row: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginBottom: theme.spacing(0.5),
+        '&:last-child': {
+            marginBottom: 0,
         },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
-        },
-        label: {},
-        buttons: {
-            width: '100%',
-            margin: `0 ${theme.spacing(-0.5)}`,
-        },
-        button: {
-            flex: 1,
-            margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
-        },
-        container: {
-            padding: theme.spacing(1),
-        },
-        chain_row: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: theme.spacing(0.5),
-            '&:last-child': {
-                marginBottom: 0,
-            },
-        },
-        mediaContent: {
-            display: 'flex',
-            justifyContent: 'center',
-            height: '200px',
-        },
-        player: {
-            maxWidth: '100%',
-            maxHeight: '100%',
-            border: 'none',
-        },
-    }
-})
+    },
+    mediaContent: {
+        display: 'flex',
+        justifyContent: 'center',
+        height: '200px',
+    },
+    player: {
+        maxWidth: '100%',
+        maxHeight: '100%',
+        border: 'none',
+    },
+}))
 
 export interface CheckoutDialogProps {
     asset?: ReturnType<typeof useAsset>

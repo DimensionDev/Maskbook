@@ -1,16 +1,14 @@
 import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        skeleton: {
-            margin: theme.spacing(2),
-            '&:first-child': {
-                marginTop: theme.spacing(3),
-            },
+const useStyles = makeStyles()((theme) => ({
+    skeleton: {
+        margin: theme.spacing(2),
+        '&:first-child': {
+            marginTop: theme.spacing(3),
         },
-    }
-})
+    },
+}))
 
 export function PluginSkeleton() {
     const { classes } = useStyles()

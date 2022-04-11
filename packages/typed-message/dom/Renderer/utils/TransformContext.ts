@@ -8,7 +8,5 @@ export function useTransformedValue(message: undefined | TypedMessage): TypedMes
 export function useTransformedValue(message: undefined | TypedMessage): TypedMessage | undefined {
     const transformer = useContext(TransformerProvider)
     const context = useContext(TransformationContextProvider)
-    return useMemo(() => {
-        return message ? transformer(message, context) : undefined
-    }, [message, transformer, context])
+    return useMemo(() => (message ? transformer(message, context) : undefined), [message, transformer, context])
 }

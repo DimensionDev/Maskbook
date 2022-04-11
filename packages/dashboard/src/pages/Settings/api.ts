@@ -53,8 +53,8 @@ const fetchBaseInstance = (baseURL: string) => (input: RequestInfo, init?: Reque
 
 const fetchBackupInstance = fetchBaseInstance(BASE_RUL)
 
-export const sendCode = ({ account, type, scenario, locale }: SendCodeRequest) => {
-    return fetchBackupInstance('v1/backup/send_code', {
+export const sendCode = ({ account, type, scenario, locale }: SendCodeRequest) =>
+    fetchBackupInstance('v1/backup/send_code', {
         method: 'POST',
         body: JSON.stringify({
             account: account.replace(' ', ''),
@@ -63,10 +63,9 @@ export const sendCode = ({ account, type, scenario, locale }: SendCodeRequest) =
             locale,
         }),
     })
-}
 
-export const fetchUploadLink = ({ code, account, abstract, type }: UploadLinkRequest) => {
-    return fetchBackupInstance('v1/backup/upload', {
+export const fetchUploadLink = ({ code, account, abstract, type }: UploadLinkRequest) =>
+    fetchBackupInstance('v1/backup/upload', {
         method: 'POST',
         body: JSON.stringify({
             code,
@@ -75,28 +74,24 @@ export const fetchUploadLink = ({ code, account, abstract, type }: UploadLinkReq
             abstract,
         }),
     }).then<string>((res) => res.upload_url)
-}
 
-export const fetchDownloadLink = ({ account, code, type }: VerifyCodeRequest) => {
-    return fetchBackupInstance('v1/backup/download', {
+export const fetchDownloadLink = ({ account, code, type }: VerifyCodeRequest) =>
+    fetchBackupInstance('v1/backup/download', {
         method: 'POST',
         body: JSON.stringify({
             code,
             account_type: type,
             account: account.replace(' ', ''),
         }),
-    }).then<BackupFileInfo>(({ abstract, download_url, size, uploaded_at }) => {
-        return {
-            downloadURL: download_url,
-            size: size,
-            uploadedAt: uploaded_at,
-            abstract: abstract,
-        }
-    })
-}
+    }).then<BackupFileInfo>(({ abstract, download_url, size, uploaded_at }) => ({
+        downloadURL: download_url,
+        size: size,
+        uploadedAt: uploaded_at,
+        abstract: abstract,
+    }))
 
-export const verifyCode = ({ account, type, code }: VerifyCodeRequest) => {
-    return fetchBackupInstance('v1/backup/validate_code', {
+export const verifyCode = ({ account, type, code }: VerifyCodeRequest) =>
+    fetchBackupInstance('v1/backup/validate_code', {
         method: 'POST',
         body: JSON.stringify({
             account: account.replace(' ', ''),
@@ -104,17 +99,14 @@ export const verifyCode = ({ account, type, code }: VerifyCodeRequest) => {
             code,
         }),
     })
-}
 
-export const fetchBackupValue = (downloadLink: string) => {
-    return fetchBase<ArrayBuffer>(downloadLink, { method: 'GET' }, (res) => res.arrayBuffer())
-}
+export const fetchBackupValue = (downloadLink: string) =>
+    fetchBase<ArrayBuffer>(downloadLink, { method: 'GET' }, (res) => res.arrayBuffer())
 
-export const uploadBackupValue = (uploadLink: string, content: ArrayBuffer) => {
-    return fetch(uploadLink, {
+export const uploadBackupValue = (uploadLink: string, content: ArrayBuffer) =>
+    fetch(uploadLink, {
         method: 'PUT',
         // mode: 'no-cors',
         headers: new Headers({ 'content-type': 'application/octet-stream' }),
         body: content,
     })
-}

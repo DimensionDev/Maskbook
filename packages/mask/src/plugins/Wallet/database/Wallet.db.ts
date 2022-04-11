@@ -13,8 +13,8 @@ function path<T>(x: T) {
     return x
 }
 
-export const createWalletDBAccess = createDBAccess(() => {
-    return openDB<WalletDB>('maskbook-plugin-wallet', 9, {
+export const createWalletDBAccess = createDBAccess(() =>
+    openDB<WalletDB>('maskbook-plugin-wallet', 9, {
         async upgrade(db, oldVersion, newVersion, tx) {
             function v0_v1() {
                 db.createObjectStore('ERC20Token', { keyPath: path<keyof ERC20TokenRecordInDatabase>('address') })
@@ -42,8 +42,8 @@ export const createWalletDBAccess = createDBAccess(() => {
             if (oldVersion < 8) v7_v8()
             if (oldVersion < 9) v8_v9()
         },
-    })
-})
+    }),
+)
 
 export interface WalletDB extends DBSchema {
     Wallet: {

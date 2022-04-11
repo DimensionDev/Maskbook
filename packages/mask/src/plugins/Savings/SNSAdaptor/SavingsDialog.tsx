@@ -85,15 +85,14 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
 
         const aTokens = await protocolDataContract?.methods.getAllATokens().call()
 
-        return tokens?.map((token) => {
-            return [token[1], aTokens?.filter((f) => f[0].toUpperCase() === `a${token[0]}`.toUpperCase())[0][1]]
-        })
+        return tokens?.map((token) => [
+            token[1],
+            aTokens?.filter((f) => f[0].toUpperCase() === `a${token[0]}`.toUpperCase())[0][1],
+        ])
     }, [web3, chainId])
 
     const { value: detailedAaveTokens } = useFungibleTokensDetailed(
-        compact(flatten(aaveTokens ?? [])).map((m) => {
-            return { address: m, type: EthereumTokenType.ERC20 }
-        }) ?? [],
+        compact(flatten(aaveTokens ?? [])).map((m) => ({ address: m, type: EthereumTokenType.ERC20 })) ?? [],
         chainId,
     )
 

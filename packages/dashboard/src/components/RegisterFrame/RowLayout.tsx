@@ -41,15 +41,13 @@ const RightContent = styled('div')(
 
 interface RowLayoutProps extends React.PropsWithChildren<{}> {}
 
-export const RowLayout = memo(({ children }: RowLayoutProps) => {
-    return (
-        <LayoutContainer>
-            <LeftSide>
-                <MaskBannerIcon />
-            </LeftSide>
-            <RightContent>
-                <Container maxWidth="md">{children}</Container>
-            </RightContent>
-        </LayoutContainer>
-    )
-})
+export const RowLayout = memo(({ children }: RowLayoutProps) => (
+    <LayoutContainer>
+        <LeftSide>
+            <MaskBannerIcon />
+        </LeftSide>
+        <RightContent>
+            <Container maxWidth="md">{children}</Container>
+        </RightContent>
+    </LayoutContainer>
+))

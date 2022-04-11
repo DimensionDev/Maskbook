@@ -29,9 +29,9 @@ export function CheckoutOrder() {
     const price = (order as Order).currentPrice ?? asset.value.current_price
     const getPrice = () => {
         if (!price) return 'error'
-        const decimal = asset.value?.response_.collection.payment_tokens.find((item: ERC20TokenDetailed) => {
-            return item.symbol === asset.value?.current_symbol
-        })?.decimals
+        const decimal = asset.value?.response_.collection.payment_tokens.find(
+            (item: ERC20TokenDetailed) => item.symbol === asset.value?.current_symbol,
+        )?.decimals
         if (!decimal) return 'error'
         return formatBalance(price, decimal) ?? 'error'
     }

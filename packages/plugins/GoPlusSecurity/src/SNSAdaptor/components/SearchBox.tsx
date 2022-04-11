@@ -63,18 +63,16 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
         if (!supportedChains.length) return
         setSelectedChain(supportedChains[0])
         return (
-            supportedChains.map((chain) => {
-                return (
-                    <MenuItem
-                        key={chain.id}
-                        onClick={() => {
-                            setSelectedChain(chain)
-                            onClose()
-                        }}>
-                        <Typography sx={{ marginLeft: 1 }}>{getChainName(chain)}</Typography>
-                    </MenuItem>
-                )
-            }) ?? []
+            supportedChains.map((chain) => (
+                <MenuItem
+                    key={chain.id}
+                    onClick={() => {
+                        setSelectedChain(chain)
+                        onClose()
+                    }}>
+                    <Typography sx={{ marginLeft: 1 }}>{getChainName(chain)}</Typography>
+                </MenuItem>
+            )) ?? []
         )
     }, [supportedChains.length])
 

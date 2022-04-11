@@ -9,9 +9,7 @@ export const querySelector = <T extends E, SingleMode extends boolean = true>(se
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
-const querySelectorAll = <T extends E>(selector: string) => {
-    return new LiveSelector().querySelectorAll<T>(selector)
-}
+const querySelectorAll = <T extends E>(selector: string) => new LiveSelector().querySelectorAll<T>(selector)
 
 // #region "Enhanced Profile"
 export const searchProfileSelector: () => LiveSelector<E, true> = () =>
@@ -225,9 +223,7 @@ const avatar = /"profile_image_url_https":"(.*?)"/
  * first matched element can be extracted by index zero, followings are all capture groups, if no 'g' specified.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
  */
-const p = (regex: RegExp, index: number) => {
-    return base.clone().map((x) => regexMatch(x.innerText, regex, index))
-}
+const p = (regex: RegExp, index: number) => base.clone().map((x) => regexMatch(x.innerText, regex, index))
 export const selfInfoSelectors = () => ({
     handle: p(handle, 1),
     name: p(name, 1),
@@ -236,9 +232,7 @@ export const selfInfoSelectors = () => ({
 })
 
 // #region twitter nft avatar
-export const searchProfileAvatarSelector = () => {
-    return querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
-}
+export const searchProfileAvatarSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
 
 export const searchProfileAvatarParentSelector = () =>
     querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]').at(1).closest<HTMLDivElement>(2).evaluate()[0]

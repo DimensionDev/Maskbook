@@ -104,9 +104,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }, [username])
     // #endregion
 
-    const { value: persona_ } = useAsync(async () => {
-        return Services.Identity.queryPersona(Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap())
-    }, [persona])
+    const { value: persona_ } = useAsync(
+        () => Services.Identity.queryPersona(Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap()),
+        [persona],
+    )
 
     const onConnect = async () => {
         // attach persona with SNS profile

@@ -14,26 +14,24 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { VoteConfirmDialog } from './VoteConfirmDialog'
 import { useRetry } from './hooks/useRetry'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        button: {
-            width: '80%',
-            minHeight: 39,
-            margin: `${theme.spacing(1)} auto`,
+const useStyles = makeStyles()((theme) => ({
+    button: {
+        width: '80%',
+        minHeight: 39,
+        margin: `${theme.spacing(1)} auto`,
+    },
+    choiceButton: {
+        transitionDuration: '0s !important',
+        '&:hover': {
+            border: '2px solid rgb(29, 161, 242) !important',
+            backgroundColor: 'transparent !important',
         },
-        choiceButton: {
-            transitionDuration: '0s !important',
-            '&:hover': {
-                border: '2px solid rgb(29, 161, 242) !important',
-                backgroundColor: 'transparent !important',
-            },
-        },
-        buttonActive: {
-            border: '2px solid rgb(29, 161, 242)',
-            backgroundColor: 'transparent',
-        },
-    }
-})
+    },
+    buttonActive: {
+        border: '2px solid rgb(29, 161, 242)',
+        backgroundColor: 'transparent',
+    },
+}))
 
 export function VotingCard() {
     const { t } = useI18N()

@@ -223,13 +223,13 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
                 </Typography>
             </div>
             <div className={classes.claimParent}>
-                {campaignInfos.map((v, i) => {
-                    return v.claimableInfo.claimable ? (
+                {campaignInfos.map((v, i) =>
+                    v.claimableInfo.claimable ? (
                         <div key={i}>
                             <ClaimItem campaignInfo={v.campaignInfo} claimed={v.claimableInfo.claimed} retry={retry} />
                         </div>
-                    ) : null
-                })}
+                    ) : null,
+                )}
             </div>
             <Typography className={classes.text}>
                 {t('plugin_ito_total_claimable_count')}
@@ -247,7 +247,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
                 />
                 <Button
                     disabled={spaceStationAccountClaimableLoading || checkAddress === ''}
-                    onClick={async () => spaceStationAccountClaimableCallback(checkAddress)}
+                    onClick={() => spaceStationAccountClaimableCallback(checkAddress)}
                     classes={{ disabled: classes.disabledButton }}
                     className={classNames(classes.actionButton, classes.actionCheckButton)}>
                     {spaceStationAccountClaimableLoading ? (

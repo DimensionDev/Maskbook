@@ -33,49 +33,53 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
         })
     }, [chainId, providerType])
 
-    useEffect(() => {
-        return EVM_Messages.events.FORTMATIC_PROVIDER_RPC_REQUEST.on(async ({ payload }) => {
-            const handleResponse = (error: unknown, result?: any) => {
-                if (error) {
+    useEffect(
+        () =>
+            EVM_Messages.events.FORTMATIC_PROVIDER_RPC_REQUEST.on(async ({ payload }) => {
+                const handleResponse = (error: unknown, result?: any) => {
+                    if (error) {
+                        EVM_Messages.events.FORTMATIC_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
+                            payload,
+                            error: error instanceof Error ? error : new Error(),
+                        })
+                        return
+                    }
                     EVM_Messages.events.FORTMATIC_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
                         payload,
-                        error: error instanceof Error ? error : new Error(),
+                        result,
+                        error: null,
                     })
-                    return
                 }
-                EVM_Messages.events.FORTMATIC_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
-                    payload,
-                    result,
-                    error: null,
-                })
-            }
 
-            const chainIdFinally = (
-                payload.method === EthereumMethodType.MASK_LOGIN_FORTMATIC ? first<ChainId>(payload.params) : chainId
-            ) as Fortmatic.ChainIdFortmatic
-            if (!chainIdFinally || !isFortmaticSupported(chainIdFinally)) throw new Error('Not supported.')
+                const chainIdFinally = (
+                    payload.method === EthereumMethodType.MASK_LOGIN_FORTMATIC
+                        ? first<ChainId>(payload.params)
+                        : chainId
+                ) as Fortmatic.ChainIdFortmatic
+                if (!chainIdFinally || !isFortmaticSupported(chainIdFinally)) throw new Error('Not supported.')
 
-            try {
-                switch (payload.method) {
-                    case EthereumMethodType.MASK_LOGIN_FORTMATIC:
-                        handleResponse(null, {
-                            chainId: chainIdFinally,
-                            accounts: await Fortmatic.login(chainIdFinally),
-                        })
-                        break
-                    case EthereumMethodType.MASK_LOGOUT_FORTMATIC:
-                        handleResponse(null, await Fortmatic.logout(chainIdFinally))
-                        break
-                    default:
-                        const provider = Fortmatic.createProvider(chainIdFinally)
-                        handleResponse(null, await provider.send(payload.method, payload.params))
-                        break
+                try {
+                    switch (payload.method) {
+                        case EthereumMethodType.MASK_LOGIN_FORTMATIC:
+                            handleResponse(null, {
+                                chainId: chainIdFinally,
+                                accounts: await Fortmatic.login(chainIdFinally),
+                            })
+                            break
+                        case EthereumMethodType.MASK_LOGOUT_FORTMATIC:
+                            handleResponse(null, await Fortmatic.logout(chainIdFinally))
+                            break
+                        default:
+                            const provider = Fortmatic.createProvider(chainIdFinally)
+                            handleResponse(null, await provider.send(payload.method, payload.params))
+                            break
+                    }
+                } catch (error) {
+                    handleResponse(error)
                 }
-            } catch (error) {
-                handleResponse(error)
-            }
-        })
-    }, [chainId])
+            }),
+        [chainId],
+    )
 
     useMount(onMounted)
 

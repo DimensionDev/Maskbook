@@ -33,9 +33,7 @@ async function _getNFTAvatarFromRSS(
     address: string,
     snsKey: RSS3_KEY_SNS,
 ): Promise<NFTRSSNode | undefined> {
-    const rss = RSS3.createRSS3(address, async (message: string) => {
-        return personalSign(message, address)
-    })
+    const rss = RSS3.createRSS3(address, async (message: string) => personalSign(message, address))
 
     const nfts = await RSS3.getFileData<Record<string, NFTRSSNode>>(rss, address, snsKey)
     if (nfts) {
@@ -45,9 +43,7 @@ async function _getNFTAvatarFromRSS(
 }
 
 export async function saveNFTAvatarToRSS(address: string, nft: AvatarMetaDB, signature: string, snsKey: RSS3_KEY_SNS) {
-    const rss = RSS3.createRSS3(address, async (message: string) => {
-        return personalSign(message, address)
-    })
+    const rss = RSS3.createRSS3(address, async (message: string) => personalSign(message, address))
 
     let _nfts = await RSS3.getFileData<Record<string, NFTRSSNode>>(rss, address, snsKey)
     if (!_nfts) {

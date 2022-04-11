@@ -8,38 +8,36 @@ import FlipCard from './FlipCard'
 import type { ClueCondition } from '../types'
 import { ClueConditionType } from '../types'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            color: 'inherit',
-            fontSize: 'inherit',
-            fontFamily: 'sans-serif',
-            '& p': {
-                margin: 0,
-            },
-            '& p + p': {
-                marginTop: theme.spacing(0.5),
-            },
-            '& h1, & h2, & h3, & h4, & h5, & h6': {
-                fontSize: 14,
-            },
-            '& img': {
-                maxWidth: '100%',
-            },
-            '& a': {
-                color: theme.palette.text.primary,
-            },
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        color: 'inherit',
+        fontSize: 'inherit',
+        fontFamily: 'sans-serif',
+        '& p': {
+            margin: 0,
         },
-        card: {
-            borderRadius: '6px',
-            ':not(:last-child)': {
-                marginBottom: '8px',
-            },
-            display: 'flex',
-            flexDirection: 'column',
+        '& p + p': {
+            marginTop: theme.spacing(0.5),
         },
-    }
-})
+        '& h1, & h2, & h3, & h4, & h5, & h6': {
+            fontSize: 14,
+        },
+        '& img': {
+            maxWidth: '100%',
+        },
+        '& a': {
+            color: theme.palette.text.primary,
+        },
+    },
+    card: {
+        borderRadius: '6px',
+        ':not(:last-child)': {
+            marginBottom: '8px',
+        },
+        display: 'flex',
+        flexDirection: 'column',
+    },
+}))
 
 interface EncryptionCardProps {
     clueId: string
@@ -52,11 +50,13 @@ export default function EncryptionCard(props: EncryptionCardProps) {
     const [flipped, setFlipped] = useState(false)
     const [backImgHeight, setBackImgHeight] = useState(0)
 
-    const { value: clue, error } = useAsync(async () => {
-        return clueId
-            ? fetchClue(clueId, address)
-            : { decrypted: false, conditions: undefined, frontImg: '', backImg: '' }
-    }, [clueId, address])
+    const { value: clue, error } = useAsync(
+        async () =>
+            clueId
+                ? fetchClue(clueId, address)
+                : { decrypted: false, conditions: undefined, frontImg: '', backImg: '' },
+        [clueId, address],
+    )
 
     return (
         <CardContent>

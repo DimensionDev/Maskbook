@@ -32,15 +32,13 @@ setPluginServices(rpc)
 // @ts-ignore
 setPluginMessages(msg)
 startPluginDashboard(
-    createPluginHost(undefined, (pluginID, signal) => {
-        return {
-            createKVStorage(type, defaultValues) {
-                if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
-                else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
-            },
-            personaSign: Services.Identity.signWithPersona,
-            walletSign: Services.Ethereum.personalSign,
-        }
-    }),
+    createPluginHost(undefined, (pluginID, signal) => ({
+        createKVStorage(type, defaultValues) {
+            if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+            else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+        },
+        personaSign: Services.Identity.signWithPersona,
+        walletSign: Services.Ethereum.personalSign,
+    })),
 )
 status.then(() => createNormalReactRoot(<IntegratedDashboard />))

@@ -106,9 +106,8 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     )
 }
 
-const includes = (pairs: TipNFTKeyPair[], pair: TipNFTKeyPair): boolean => {
-    return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
-}
+const includes = (pairs: TipNFTKeyPair[], pair: TipNFTKeyPair): boolean =>
+    !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
 
 export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1, className }) => {
     const { classes } = useStyles()

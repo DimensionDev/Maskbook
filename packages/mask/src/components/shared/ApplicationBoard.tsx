@@ -53,25 +53,21 @@ export function ApplicationBoard() {
                                 currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
 
                             return acc.concat(
-                                cur.ApplicationEntries.map((x) => {
-                                    return {
-                                        entry: x,
-                                        enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
-                                        pluginId: cur.ID,
-                                    }
-                                }) ?? [],
+                                cur.ApplicationEntries.map((x) => ({
+                                    entry: x,
+                                    enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
+                                    pluginId: cur.ID,
+                                })) ?? [],
                             )
                         },
                         [],
                     )
                     .sort((a, b) => a.entry.defaultSortingPriority - b.entry.defaultSortingPriority)
-                    .map((X, i) => {
-                        return (
-                            <Fragment key={i + X.pluginId}>
-                                <X.entry.RenderEntryComponent disabled={!X.enabled} />
-                            </Fragment>
-                        )
-                    })}
+                    .map((X, i) => (
+                        <Fragment key={i + X.pluginId}>
+                            <X.entry.RenderEntryComponent disabled={!X.enabled} />
+                        </Fragment>
+                    ))}
             </section>
         </>
     )

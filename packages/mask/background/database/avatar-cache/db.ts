@@ -26,15 +26,15 @@ export interface AvatarDBSchema extends DBSchema {
     }
 }
 // #endregion
-export const createAvatarDBAccess = createDBAccess(() => {
-    return openDB<AvatarDBSchema>('maskbook-avatar-cache', 1, {
+export const createAvatarDBAccess = createDBAccess(() =>
+    openDB<AvatarDBSchema>('maskbook-avatar-cache', 1, {
         upgrade(db, oldVersion, newVersion, transaction) {
             // Out line keys
             db.createObjectStore('avatars')
             db.createObjectStore('metadata', { keyPath: 'identifier' })
         },
-    })
-})
+    }),
+)
 /**
  * Store avatar into database
  */

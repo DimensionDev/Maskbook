@@ -10,31 +10,29 @@ import { isOne, isZero } from '@masknet/web3-shared-base'
 import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { LoadingAnimation } from '@masknet/shared'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            overflow: 'auto',
-        },
-        content: {
-            padding: '0 !important',
-        },
-        empty: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            padding: theme.spacing(8, 0),
-        },
-        emptyCell: {
-            borderStyle: 'none',
-            textAlign: 'center',
-        },
-        button: {
-            marginLeft: theme.spacing(1),
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        overflow: 'auto',
+    },
+    content: {
+        padding: '0 !important',
+    },
+    empty: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        padding: theme.spacing(8, 0),
+    },
+    emptyCell: {
+        borderStyle: 'none',
+        textAlign: 'center',
+    },
+    button: {
+        marginLeft: theme.spacing(1),
+    },
+}))
 
 export function OfferTab() {
     const { t } = useI18N()

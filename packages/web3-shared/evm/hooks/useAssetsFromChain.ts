@@ -19,8 +19,8 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: Ch
 
     const { value: listOfBalance = EMPTY_LIST, loading, error, retry } = useTokensBalance(erc20TokenAddresses, chainId)
 
-    const assets = useMemo(() => {
-        return [
+    const assets = useMemo(
+        () => [
             ...(nativeToken
                 ? [
                       {
@@ -41,8 +41,9 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: Ch
                       }),
                   )
                 : []),
-        ]
-    }, [nativeToken, chain, balance, listOfBalance, erc20Tokens])
+        ],
+        [nativeToken, chain, balance, listOfBalance, erc20Tokens],
+    )
 
     return {
         value: assets,

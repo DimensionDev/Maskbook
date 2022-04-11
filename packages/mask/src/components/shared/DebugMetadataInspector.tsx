@@ -104,47 +104,45 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
         <InjectedDialog open title="Debug: Metadata Inspector" onClose={onExit}>
             <DialogContent>
                 {editor}
-                {[...meta].map(([key, content]) => {
-                    return (
-                        <Accordion key={key}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                <Typography style={{ alignSelf: 'center' }}>{key}</Typography>
-                                <Box sx={{ flex: 1 }} />
-                                <Typography onClick={(e) => e.stopPropagation()}>
-                                    {onNewMeta ? (
-                                        <Button
-                                            variant="contained"
-                                            size="small"
-                                            color="secondary"
-                                            onClick={() => {
-                                                setField(key)
-                                                setContent(JSON.stringify(content, undefined, 4))
-                                            }}>
-                                            {t('edit')}
-                                        </Button>
-                                    ) : null}
+                {[...meta].map(([key, content]) => (
+                    <Accordion key={key}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography style={{ alignSelf: 'center' }}>{key}</Typography>
+                            <Box sx={{ flex: 1 }} />
+                            <Typography onClick={(e) => e.stopPropagation()}>
+                                {onNewMeta ? (
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        color="secondary"
+                                        onClick={() => {
+                                            setField(key)
+                                            setContent(JSON.stringify(content, undefined, 4))
+                                        }}>
+                                        {t('edit')}
+                                    </Button>
+                                ) : null}
 
-                                    {onDeleteMeta ? (
-                                        <Button
-                                            variant="text"
-                                            size="small"
-                                            color="secondary"
-                                            onClick={() => onDeleteMeta(key)}>
-                                            {t('delete')}
-                                        </Button>
-                                    ) : null}
-                                </Typography>
-                            </AccordionSummary>
-                            <AccordionDetails style={{ display: 'flex' }}>
-                                <Typography
-                                    component="code"
-                                    children={JSON.stringify(content, undefined, 4)}
-                                    style={{ whiteSpace: 'pre-wrap' }}
-                                />
-                            </AccordionDetails>
-                        </Accordion>
-                    )
-                })}
+                                {onDeleteMeta ? (
+                                    <Button
+                                        variant="text"
+                                        size="small"
+                                        color="secondary"
+                                        onClick={() => onDeleteMeta(key)}>
+                                        {t('delete')}
+                                    </Button>
+                                ) : null}
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails style={{ display: 'flex' }}>
+                            <Typography
+                                component="code"
+                                children={JSON.stringify(content, undefined, 4)}
+                                style={{ whiteSpace: 'pre-wrap' }}
+                            />
+                        </AccordionDetails>
+                    </Accordion>
+                ))}
             </DialogContent>
         </InjectedDialog>
     )

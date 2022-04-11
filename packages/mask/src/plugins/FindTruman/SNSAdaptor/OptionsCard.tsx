@@ -8,62 +8,60 @@ import { FindTrumanContext } from '../context'
 import { BorderLinearProgress } from './ResultCard'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 
-const useOptionsStyles = makeStyles()((theme) => {
-    return {
-        progressOption: {
-            transition: 'all .5s',
-            padding: '12px 18px',
+const useOptionsStyles = makeStyles()((theme) => ({
+    progressOption: {
+        transition: 'all .5s',
+        padding: '12px 18px',
+        borderRadius: '16px',
+        '&:hover': {
+            background: `rgba(28, 23, 26, ${theme.palette.mode === 'dark' ? '.75' : '.05'})`,
+        },
+        '&:active': {
+            background: `rgba(28, 23, 26, ${theme.palette.mode === 'dark' ? '.15' : '.15'})`,
+        },
+        ':not(:last-child)': {
+            marginBottom: '8px',
+        },
+    },
+    blockChip: {
+        width: '100%',
+        marginBottom: 8,
+        justifyContent: 'space-between',
+        minHeight: '39px',
+        height: 'fit-content',
+        fontSize: '13px',
+        padding: '8px',
+        transition: 'all .3s',
+    },
+    blockChipSelected: {
+        '&:hover': {
+            backgroundColor: theme.palette.primary.main,
+        },
+    },
+    checkIcon: {},
+    horizontalScrollBar: {
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            height: '8px',
+        },
+        '::-webkit-scrollbar-thumb:horizontal': {
+            backgroundColor: theme.palette.divider,
             borderRadius: '16px',
-            '&:hover': {
-                background: `rgba(28, 23, 26, ${theme.palette.mode === 'dark' ? '.75' : '.05'})`,
-            },
-            '&:active': {
-                background: `rgba(28, 23, 26, ${theme.palette.mode === 'dark' ? '.15' : '.15'})`,
-            },
-            ':not(:last-child)': {
-                marginBottom: '8px',
-            },
+            border: `6px solid ${theme.palette.divider}`,
         },
-        blockChip: {
-            width: '100%',
-            marginBottom: 8,
-            justifyContent: 'space-between',
-            minHeight: '39px',
-            height: 'fit-content',
-            fontSize: '13px',
-            padding: '8px',
-            transition: 'all .3s',
+    },
+    verticalScrollBar: {
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: '6px',
         },
-        blockChipSelected: {
-            '&:hover': {
-                backgroundColor: theme.palette.primary.main,
-            },
+        '::-webkit-scrollbar-thumb:vertical': {
+            backgroundColor: theme.palette.divider,
+            borderRadius: '16px',
+            border: `6px solid ${theme.palette.divider}`,
         },
-        checkIcon: {},
-        horizontalScrollBar: {
-            '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                height: '8px',
-            },
-            '::-webkit-scrollbar-thumb:horizontal': {
-                backgroundColor: theme.palette.divider,
-                borderRadius: '16px',
-                border: `6px solid ${theme.palette.divider}`,
-            },
-        },
-        verticalScrollBar: {
-            '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                width: '6px',
-            },
-            '::-webkit-scrollbar-thumb:vertical': {
-                backgroundColor: theme.palette.divider,
-                borderRadius: '16px',
-                border: `6px solid ${theme.palette.divider}`,
-            },
-        },
-    }
-})
+    },
+}))
 interface OptionsViewProps {
     userStatus?: UserPollStatus
     onSubmit(choice: number): Promise<void>
@@ -93,9 +91,7 @@ export default function OptionsCard(props: OptionsViewProps) {
     const renderOptions = (userStatus: UserPollStatus) => {
         const showCount = !!userStatus.count
         const total = userStatus.count
-            ? userStatus.count.reduce((total, e) => {
-                  return { choice: -1, value: total.value + e.value }
-              }).value
+            ? userStatus.count.reduce((total, e) => ({ choice: -1, value: total.value + e.value })).value
             : 0
         return userStatus.options.map((option, index) => {
             const count = userStatus.count ? userStatus.count.find((e) => e.choice === index)?.value || 0 : 0

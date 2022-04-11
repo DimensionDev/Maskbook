@@ -7,7 +7,6 @@ import { EmptyContactPlaceholder } from '../EmptyContactPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { sortBy } from 'lodash-unified'
 import { useDashboardI18N } from '../../../../locales'
-import { Messages } from '../../../../API'
 import { useContainer } from 'unstated-next'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useUpdateEffect } from 'react-use'
@@ -76,9 +75,7 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
         setPage(0)
     }, [network])
 
-    useEffect(() => {
-        return Messages.events.relationsChanged.on(retry)
-    }, [retry])
+    useEffect(() => Messages.events.relationsChanged.on(retry), [retry])
 
     useUpdateEffect(() => {
         setPage(0)

@@ -140,20 +140,18 @@ const WalletRecovery = memo(() => {
             <div className={classes.container}>
                 <PageHeader title={t('popups_wallet_recovered')} />
                 <div style={{ padding: 6 }}>
-                    {value?.wallets.map((wallet) => {
-                        return (
-                            <div className={classes.wallet} key={wallet.address}>
-                                <Typography className={classes.label}>{wallet.name}</Typography>
-                                <Typography className={classes.address}>
-                                    <FormattedAddress
-                                        address={wallet.address}
-                                        size={16}
-                                        formatter={formatEthereumAddress}
-                                    />
-                                </Typography>
-                            </div>
-                        )
-                    })}
+                    {value?.wallets.map((wallet) => (
+                        <div className={classes.wallet} key={wallet.address}>
+                            <Typography className={classes.label}>{wallet.name}</Typography>
+                            <Typography className={classes.address}>
+                                <FormattedAddress
+                                    address={wallet.address}
+                                    size={16}
+                                    formatter={formatEthereumAddress}
+                                />
+                            </Typography>
+                        </div>
+                    ))}
 
                     {!hasPassword ? (
                         <form className={classes.form}>

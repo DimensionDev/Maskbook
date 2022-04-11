@@ -22,14 +22,12 @@ export interface DecryptPostSuccessProps extends withClasses<never> {
     postedBy?: ProfileIdentifier
 }
 
-const useSuccessStyles = makeStyles()((theme) => {
-    return {
-        header: { display: 'flex', alignItems: 'center' },
-        addRecipientsLink: { cursor: 'pointer', marginLeft: theme.spacing(1) },
-        signatureVerifyPassed: { display: 'flex' },
-        signatureVerifyFailed: { display: 'flex' },
-    }
-})
+const useSuccessStyles = makeStyles()((theme) => ({
+    header: { display: 'flex', alignItems: 'center' },
+    addRecipientsLink: { cursor: 'pointer', marginLeft: theme.spacing(1) },
+    signatureVerifyPassed: { display: 'flex' },
+    signatureVerifyFailed: { display: 'flex' },
+}))
 
 export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
     const {

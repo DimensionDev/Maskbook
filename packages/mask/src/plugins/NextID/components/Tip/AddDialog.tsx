@@ -110,16 +110,17 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
         reset()
     }, [onClose])
 
-    const addButton = useMemo(() => {
-        return (
+    const addButton = useMemo(
+        () => (
             <Button
                 disabled={!contractAddress || !tokenId || state.loading}
                 className={classes.addButton}
                 onClick={handleAdd}>
                 {state.loading ? t.tip_adding() : t.tip_add()}
             </Button>
-        )
-    }, [t, handleAdd, state.loading])
+        ),
+        [t, handleAdd, state.loading],
+    )
 
     if (!network) return null
     return (

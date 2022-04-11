@@ -16,44 +16,42 @@ import { LoadingCard } from './LoadingCard'
 
 const choiceMaxWidth = 240
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        list: {
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        listItem: {
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        listItemHeader: {
-            display: 'flex',
-            width: '100%',
-        },
-        power: {
-            marginLeft: theme.spacing(2),
-        },
-        ratio: {
-            marginLeft: 'auto',
-        },
-        choice: {
-            maxWidth: choiceMaxWidth,
-        },
-        linearProgressWrap: {
-            width: '100%',
-            marginTop: theme.spacing(1),
-        },
-        ellipsisText: {
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-        },
-        resultButton: {
-            width: 200,
-            margin: '0 auto',
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    list: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    listItem: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    listItemHeader: {
+        display: 'flex',
+        width: '100%',
+    },
+    power: {
+        marginLeft: theme.spacing(2),
+    },
+    ratio: {
+        marginLeft: 'auto',
+    },
+    choice: {
+        maxWidth: choiceMaxWidth,
+    },
+    linearProgressWrap: {
+        width: '100%',
+        marginTop: theme.spacing(1),
+    },
+    ellipsisText: {
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+    },
+    resultButton: {
+        width: 200,
+        margin: '0 auto',
+    },
+}))
 
 const StyledLinearProgress = styled(LinearProgress)`
     &.${linearProgressClasses.root} {

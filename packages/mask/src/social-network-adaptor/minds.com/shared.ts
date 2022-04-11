@@ -7,9 +7,7 @@ import { deconstructPayload } from '../../utils'
 import { mindsBase } from './base'
 import { usernameValidator } from './utils/user'
 
-const getPostURL = (post: PostIdentifier): URL => {
-    return new URL(`https://minds.com/newsfeed/${post.postId}`)
-}
+const getPostURL = (post: PostIdentifier): URL => new URL(`https://minds.com/newsfeed/${post.postId}`)
 export const mindsShared: SocialNetwork.Shared & SocialNetwork.Base = {
     ...mindsBase,
     utils: {

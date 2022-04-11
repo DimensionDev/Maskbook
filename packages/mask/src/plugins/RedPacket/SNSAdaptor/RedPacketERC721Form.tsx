@@ -26,177 +26,175 @@ import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { NFTSelectOption } from '../types'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            display: 'flex',
-            alignItems: 'stretch',
-            flexDirection: 'column',
-        },
-        line: {
-            display: 'flex',
-            margin: theme.spacing(1, 0, 2, 0),
-        },
-        nftNameWrapper: {
-            width: '100%',
-            background: theme.palette.background.paper,
-            borderBottomRightRadius: 8,
-            borderBottomLeftRadius: 8,
-            paddingTop: 2,
-            paddingBottom: 1,
-        },
-        nftName: {
-            minHeight: 30,
-            marginLeft: 8,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-        },
-        inputShrinkLabel: {
-            transform: 'translate(17px, -3px) scale(0.75) !important',
-        },
-        input: {
-            flex: 1,
-            padding: theme.spacing(0.5),
-        },
-        tip: {
-            fontSize: 17,
-            marginBottom: theme.spacing(2),
-        },
-        nftImg: {
-            maxWidth: '100%',
-        },
-        tokenSelector: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: 16,
-            width: '100%',
-            height: 200,
-            overflowY: 'auto',
-            background: theme.palette.background.default,
-            borderRadius: 12,
-            padding: theme.spacing(1.5, 1.5, 1, 1),
-            boxSizing: 'border-box',
-        },
-        tokenSelectorWrapper: {
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            borderRadius: 8,
-            padding: 0,
-            marginBottom: theme.spacing(2.5),
-            background: theme.palette.background.paper,
-            width: 120,
-            height: 180,
-            overflow: 'hidden',
-        },
-        tokenSelectorParent: {
-            background: theme.palette.background.default,
-            borderRadius: 12,
-            paddingBottom: 5,
-            marginTop: theme.spacing(1.5),
-            marginBottom: theme.spacing(1.5),
-        },
-        addWrapper: {
-            cursor: 'pointer',
-            alignItems: 'center',
-            background: `${theme.palette.background.default} !important`,
-            justifyContent: 'center',
-            border: `1px solid ${theme.palette.divider}`,
-        },
-        addIcon: {
-            color: '#AFC3E1',
-        },
-        closeIconWrapperBack: {
-            position: 'absolute',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            top: 5,
-            right: 5,
-            width: 18,
-            height: 18,
-            background: 'rgba(255, 255, 255, 0.8)',
-            borderRadius: 500,
-            overflow: 'hidden',
-        },
-        closeIconWrapper: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: 18,
-            height: 18,
-            background: 'rgba(255, 95, 95, 0.3)',
-        },
-        closeIcon: {
-            width: 14,
-            height: 14,
-            cursor: 'pointer',
-            color: 'rgba(255, 95, 95, 1)',
-        },
-        loadingFailImage: {
-            minHeight: '0px !important',
-            maxWidth: 'none',
-            transform: 'translateY(10px)',
-            width: 64,
-            height: 64,
-        },
-        selectWrapper: {
-            display: 'flex',
-            alignItems: 'center',
-            margin: '16px 0 8px 0',
-        },
-        option: {
-            display: 'flex',
-            alignItems: 'center',
-            cursor: 'pointer',
-        },
-        optionLeft: {
-            marginRight: '16px',
-        },
-        checkIcon: {
-            width: 15,
-            height: 15,
-            color: '#fff',
-        },
-        checkIconWrapper: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            cursor: 'pointer',
-            width: 17,
-            height: 17,
-            borderRadius: 999,
-            marginRight: 5,
-            border: '1px solid #6E748E',
-            backgroundColor: 'white',
-        },
-        checked: {
-            borderColor: '#1D9BF0 !important',
-            background: '#1D9BF0 !important',
-        },
-        approveAllTip: {
-            color: '#FF5F5F',
-            margin: '16px 4px 24px 4px',
-        },
-        unapprovedTip: {
-            color: theme.palette.grey[500],
-        },
-        disabledSelector: {
-            opacity: 0.5,
-            pointerEvents: 'none',
-        },
-        loadingOwnerList: {
-            margin: '24px auto 16px',
-        },
-        iframe: {
-            minHeight: 147,
-        },
-        assetImgWrapper: {
-            maxHeight: 155,
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        display: 'flex',
+        alignItems: 'stretch',
+        flexDirection: 'column',
+    },
+    line: {
+        display: 'flex',
+        margin: theme.spacing(1, 0, 2, 0),
+    },
+    nftNameWrapper: {
+        width: '100%',
+        background: theme.palette.background.paper,
+        borderBottomRightRadius: 8,
+        borderBottomLeftRadius: 8,
+        paddingTop: 2,
+        paddingBottom: 1,
+    },
+    nftName: {
+        minHeight: 30,
+        marginLeft: 8,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
+    inputShrinkLabel: {
+        transform: 'translate(17px, -3px) scale(0.75) !important',
+    },
+    input: {
+        flex: 1,
+        padding: theme.spacing(0.5),
+    },
+    tip: {
+        fontSize: 17,
+        marginBottom: theme.spacing(2),
+    },
+    nftImg: {
+        maxWidth: '100%',
+    },
+    tokenSelector: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: 16,
+        width: '100%',
+        height: 200,
+        overflowY: 'auto',
+        background: theme.palette.background.default,
+        borderRadius: 12,
+        padding: theme.spacing(1.5, 1.5, 1, 1),
+        boxSizing: 'border-box',
+    },
+    tokenSelectorWrapper: {
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 8,
+        padding: 0,
+        marginBottom: theme.spacing(2.5),
+        background: theme.palette.background.paper,
+        width: 120,
+        height: 180,
+        overflow: 'hidden',
+    },
+    tokenSelectorParent: {
+        background: theme.palette.background.default,
+        borderRadius: 12,
+        paddingBottom: 5,
+        marginTop: theme.spacing(1.5),
+        marginBottom: theme.spacing(1.5),
+    },
+    addWrapper: {
+        cursor: 'pointer',
+        alignItems: 'center',
+        background: `${theme.palette.background.default} !important`,
+        justifyContent: 'center',
+        border: `1px solid ${theme.palette.divider}`,
+    },
+    addIcon: {
+        color: '#AFC3E1',
+    },
+    closeIconWrapperBack: {
+        position: 'absolute',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        top: 5,
+        right: 5,
+        width: 18,
+        height: 18,
+        background: 'rgba(255, 255, 255, 0.8)',
+        borderRadius: 500,
+        overflow: 'hidden',
+    },
+    closeIconWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 18,
+        height: 18,
+        background: 'rgba(255, 95, 95, 0.3)',
+    },
+    closeIcon: {
+        width: 14,
+        height: 14,
+        cursor: 'pointer',
+        color: 'rgba(255, 95, 95, 1)',
+    },
+    loadingFailImage: {
+        minHeight: '0px !important',
+        maxWidth: 'none',
+        transform: 'translateY(10px)',
+        width: 64,
+        height: 64,
+    },
+    selectWrapper: {
+        display: 'flex',
+        alignItems: 'center',
+        margin: '16px 0 8px 0',
+    },
+    option: {
+        display: 'flex',
+        alignItems: 'center',
+        cursor: 'pointer',
+    },
+    optionLeft: {
+        marginRight: '16px',
+    },
+    checkIcon: {
+        width: 15,
+        height: 15,
+        color: '#fff',
+    },
+    checkIconWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        cursor: 'pointer',
+        width: 17,
+        height: 17,
+        borderRadius: 999,
+        marginRight: 5,
+        border: '1px solid #6E748E',
+        backgroundColor: 'white',
+    },
+    checked: {
+        borderColor: '#1D9BF0 !important',
+        background: '#1D9BF0 !important',
+    },
+    approveAllTip: {
+        color: '#FF5F5F',
+        margin: '16px 4px 24px 4px',
+    },
+    unapprovedTip: {
+        color: theme.palette.grey[500],
+    },
+    disabledSelector: {
+        opacity: 0.5,
+        pointerEvents: 'none',
+    },
+    loadingOwnerList: {
+        margin: '24px auto 16px',
+    },
+    iframe: {
+        minHeight: 147,
+    },
+    assetImgWrapper: {
+        maxHeight: 155,
+    },
+}))
 interface RedPacketERC721FormProps {
     onClose: () => void
 }

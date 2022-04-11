@@ -24,51 +24,49 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     publisherLink?: string
 }
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        card: {
-            margin: theme.spacing(2, 0),
-            width: '100%',
-            boxSizing: 'border-box',
-            border: `1px solid ${theme.palette.secondaryDivider}`,
-            cursor: 'default',
-            ...(isTwitter(activatedSocialNetworkUI)
-                ? {
-                      borderRadius: 15,
-                      overflow: 'hidden',
-                  }
-                : null),
+const useStyles = makeStyles()((theme) => ({
+    card: {
+        margin: theme.spacing(2, 0),
+        width: '100%',
+        boxSizing: 'border-box',
+        border: `1px solid ${theme.palette.secondaryDivider}`,
+        cursor: 'default',
+        ...(isTwitter(activatedSocialNetworkUI)
+            ? {
+                  borderRadius: 15,
+                  overflow: 'hidden',
+              }
+            : null),
+    },
+    header: {
+        backgroundColor: 'transparent',
+        color: theme.palette.text.primary,
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(2),
+    },
+    title: {
+        display: 'flex',
+        flexDirection: 'column',
+        paddingLeft: theme.spacing(1.5),
+    },
+    action: {
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+    },
+    body: {
+        borderTop: `1px solid ${theme.palette.secondaryDivider}`,
+        padding: theme.spacing(2),
+    },
+    button: {
+        color: MaskColorVar.twitterButtonText,
+        '&,&:hover': {
+            background: MaskColorVar.twitterButton,
         },
-        header: {
-            backgroundColor: 'transparent',
-            color: theme.palette.text.primary,
-            display: 'flex',
-            alignItems: 'center',
-            padding: theme.spacing(2),
-        },
-        title: {
-            display: 'flex',
-            flexDirection: 'column',
-            paddingLeft: theme.spacing(1.5),
-        },
-        action: {
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-        },
-        body: {
-            borderTop: `1px solid ${theme.palette.secondaryDivider}`,
-            padding: theme.spacing(2),
-        },
-        button: {
-            color: MaskColorVar.twitterButtonText,
-            '&,&:hover': {
-                background: MaskColorVar.twitterButton,
-            },
-        },
-    }
-})
+    },
+}))
 
 export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const { classes } = useStyles()
@@ -147,13 +145,14 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
         const [open, setOpen] = useState<boolean>(false)
         const [title, setTitle] = useState<string | undefined>(undefined)
 
-        const refItem = useMemo((): PluginWrapperMethods => {
-            return {
+        const refItem = useMemo(
+            (): PluginWrapperMethods => ({
                 setWidth,
                 setWrap: setOpen,
                 setWrapperName: setTitle,
-            }
-        }, [])
+            }),
+            [],
+        )
 
         useImperativeHandle(ref, () => refItem, [refItem])
 

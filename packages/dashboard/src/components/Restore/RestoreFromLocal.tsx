@@ -117,9 +117,7 @@ export const RestoreFromLocal = memo(() => {
         }
     }, [backupId, json])
 
-    useEffect(() => {
-        return Messages.events.restoreSuccess.on(restoreCallback)
-    }, [restoreCallback])
+    useEffect(() => Messages.events.restoreSuccess.on(restoreCallback), [restoreCallback])
 
     return (
         <>

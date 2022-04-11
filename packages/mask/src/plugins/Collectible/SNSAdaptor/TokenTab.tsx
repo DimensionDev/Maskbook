@@ -15,51 +15,49 @@ import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea, resolveUserUrlOnCurrentProvider } from '../pipes'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        content: {
-            paddingTop: 0,
-            paddingBottom: '0 !important',
+const useStyles = makeStyles()((theme) => ({
+    content: {
+        paddingTop: 0,
+        paddingBottom: '0 !important',
+    },
+    container: {
+        padding: theme.spacing(1),
+    },
+    markdown: {
+        margin: theme.spacing(1, 0),
+    },
+    description: {
+        fontSize: 14,
+        wordBreak: 'break-all',
+    },
+    trait_content: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2,1fr)',
+        gap: theme.spacing(2),
+    },
+    trait: {
+        padding: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        fontSize: 14,
+        fontWeight: 600,
+    },
+    chain_row: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginBottom: theme.spacing(0.5),
+        '&:last-child': {
+            marginBottom: 0,
         },
-        container: {
-            padding: theme.spacing(1),
-        },
-        markdown: {
-            margin: theme.spacing(1, 0),
-        },
-        description: {
-            fontSize: 14,
-            wordBreak: 'break-all',
-        },
-        trait_content: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2,1fr)',
-            gap: theme.spacing(2),
-        },
-        trait: {
-            padding: theme.spacing(2),
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            fontSize: 14,
-            fontWeight: 600,
-        },
-        chain_row: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: theme.spacing(0.5),
-            '&:last-child': {
-                marginBottom: 0,
-            },
-        },
-        tokenId: {
-            maxWidth: 112,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-        },
-    }
-})
+    },
+    tokenId: {
+        maxWidth: 112,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+    },
+}))
 
 export interface TokenTabProps {}
 
@@ -123,27 +121,25 @@ export function TokenTab(props: TokenTabProps) {
                     </Typography>
 
                     <Box className={classes.trait_content}>
-                        {asset.value.traits.map(({ trait_type, value }) => {
-                            return (
-                                <Link
-                                    underline="none"
-                                    key={trait_type + value}
-                                    href={
-                                        asset.value?.slug
-                                            ? resolveTraitLinkOnOpenSea(chainId, asset.value.slug, trait_type, value)
-                                            : ''
-                                    }
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <Paper className={classes.trait} variant="outlined">
-                                        <Typography variant="body2" color="primary">
-                                            {trait_type}
-                                        </Typography>
-                                        <Typography variant="body2">{value}</Typography>
-                                    </Paper>
-                                </Link>
-                            )
-                        })}
+                        {asset.value.traits.map(({ trait_type, value }) => (
+                            <Link
+                                underline="none"
+                                key={trait_type + value}
+                                href={
+                                    asset.value?.slug
+                                        ? resolveTraitLinkOnOpenSea(chainId, asset.value.slug, trait_type, value)
+                                        : ''
+                                }
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                <Paper className={classes.trait} variant="outlined">
+                                    <Typography variant="body2" color="primary">
+                                        {trait_type}
+                                    </Typography>
+                                    <Typography variant="body2">{value}</Typography>
+                                </Paper>
+                            </Link>
+                        ))}
                     </Box>
                 </Box>
             ) : null}

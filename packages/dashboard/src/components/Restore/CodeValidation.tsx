@@ -16,9 +16,7 @@ interface CodeValidationProps {
 
 export const CodeValidation = memo(({ onValidated }: CodeValidationProps) => {
     const [{ loading: fetchingBackupInfo }, fetchDownloadLinkFn] = useAsyncFn(
-        async (account: string, type: AccountType, code: string) => {
-            return fetchDownloadLink({ code, account, type })
-        },
+        async (account: string, type: AccountType, code: string) => fetchDownloadLink({ code, account, type }),
         [],
     )
 

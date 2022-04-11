@@ -60,9 +60,7 @@ export default function BackupModeSelectDialog({ open, onClose, onSelect }: Back
     const { classes } = useStyles()
     const { user } = useContext(UserContext)
 
-    const cloudDisabled = useMemo(() => {
-        return !user.email && !user.phone
-    }, [user.email, user.phone])
+    const cloudDisabled = useMemo(() => !user.email && !user.phone, [user.email, user.phone])
 
     return (
         <MaskDialog title={t.settings_button_backup()} open={open} onClose={onClose}>

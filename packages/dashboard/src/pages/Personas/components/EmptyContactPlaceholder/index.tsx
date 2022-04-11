@@ -47,7 +47,7 @@ const downloadUrl = 'https://mask.io/download-links/'
 export const EmptyContactPlaceholder = memo(() => {
     const [, copyToClipboard] = useCopyToClipboard()
     const copyDownloadLink = useSnackbarCallback({
-        executor: async () => copyToClipboard(downloadUrl),
+        executor: () => copyToClipboard(downloadUrl),
         deps: [],
     })
     return <EmptyContactPlaceholderUI onCopy={copyDownloadLink} />

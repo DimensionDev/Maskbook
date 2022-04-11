@@ -24,9 +24,8 @@ export function useConst() {
     }, [])
 
     const t = useCallback(
-        (id: string, options: Record<string, string | number> = {}) => {
-            return renderString(consts?.locales?.[id] ?? '', options)
-        },
+        (id: string, options: Record<string, string | number> = {}) =>
+            renderString(consts?.locales?.[id] ?? '', options),
         [consts],
     )
 

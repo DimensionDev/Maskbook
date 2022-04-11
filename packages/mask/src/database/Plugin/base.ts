@@ -19,8 +19,8 @@ export interface PluginDatabase extends DBSchema {
 }
 // #endregion
 
-const db = createDBAccess(() => {
-    return openDB<PluginDatabase>('maskbook-plugin-data', 2, {
+const db = createDBAccess(() =>
+    openDB<PluginDatabase>('maskbook-plugin-data', 2, {
         async upgrade(db, oldVersion, newVersion, transaction) {
             if (oldVersion < 1) db.createObjectStore('PluginStore')
             if (oldVersion < 2) {
@@ -39,8 +39,8 @@ const db = createDBAccess(() => {
                 }
             }
         },
-    })
-})
+    }),
+)
 // cause key path error in "add" will cause transaction fail, we need to check them first
 export function pluginDataHasValidKeyPath(value: unknown): value is InStore {
     try {

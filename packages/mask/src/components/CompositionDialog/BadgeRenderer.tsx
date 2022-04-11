@@ -22,8 +22,8 @@ export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererPro
     const { t } = useI18N()
     if (!meta) return null
 
-    const result = [...meta.entries()].flatMap(([metaKey, metaValue]) => {
-        return plugins.map((plugin) => {
+    const result = [...meta.entries()].flatMap(([metaKey, metaValue]) =>
+        plugins.map((plugin) => {
             const render = plugin.CompositionDialogMetadataBadgeRender
             if (!render) return null
 
@@ -57,8 +57,8 @@ export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererPro
                     </MetaBadge>
                 )
             }
-        })
-    })
+        }),
+    )
     return <>{result}</>
 }
 interface MetaBadgeProps {

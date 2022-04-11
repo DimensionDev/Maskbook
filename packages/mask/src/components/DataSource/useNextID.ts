@@ -13,11 +13,8 @@ import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../extension/service'
 import { MaskMessages } from '../../utils'
 
-export const usePersonaBoundPlatform = (personaPublicKey: string) => {
-    return useAsyncRetry(() => {
-        return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
-    }, [personaPublicKey])
-}
+export const usePersonaBoundPlatform = (personaPublicKey: string) =>
+    useAsyncRetry(() => NextIDProof.queryExistedBindingByPersona(personaPublicKey), [personaPublicKey])
 
 let isOpenedVerifyDialog = false
 let isOpenedFromButton = false
@@ -32,9 +29,7 @@ const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string)
 }
 
 export const useNextIDBoundByPlatform = (platform: NextIDPlatform, identity: string) => {
-    const res = useAsyncRetry(() => {
-        return NextIDProof.queryExistedBindingByPlatform(platform, identity)
-    }, [platform, identity])
+    const res = useAsyncRetry(() => NextIDProof.queryExistedBindingByPlatform(platform, identity), [platform, identity])
     useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
     return res
 }

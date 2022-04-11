@@ -490,13 +490,14 @@ export function ITO(props: ITO_Props) {
         tradeInfo?.buyInfo?.token.symbol,
     ])
 
-    const FooterStartTime = useMemo(() => {
-        return (
+    const FooterStartTime = useMemo(
+        () => (
             <Typography variant="body1" className={classes.footerInfo}>
                 {t('plugin_ito_list_start_date', { date: formatDateTime(startTime, 'yyyy-MM-dd HH:mm') })}
             </Typography>
-        )
-    }, [startTime])
+        ),
+        [startTime],
+    )
 
     const FooterEndTime = useMemo(
         () => (

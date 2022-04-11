@@ -10,46 +10,44 @@ import { ActionBar } from './ActionBar'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
 import { ArtBlocksLogoUrl } from '../constants'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
-            padding: 0,
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        width: '100%',
+        border: `solid 1px ${theme.palette.divider}`,
+        padding: 0,
+    },
+    tab: {
+        height: 'var(--tabHeight)',
+        minHeight: 0,
+        borderTop: `solid 1px ${theme.palette.divider}`,
+        borderBottom: `solid 1px ${theme.palette.divider}`,
+    },
+    content: {
+        padding: '0 !important',
+    },
+    footer: {
+        marginTop: -1, // merge duplicate borders
+        zIndex: 1,
+        position: 'relative',
+        borderTop: `solid 1px ${theme.palette.divider}`,
+        justifyContent: 'space-between',
+    },
+    footnote: {
+        fontSize: 10,
+        marginRight: theme.spacing(1),
+    },
+    footLink: {
+        cursor: 'pointer',
+        marginRight: theme.spacing(0.5),
+        '&:last-child': {
+            marginRight: 0,
         },
-        tab: {
-            height: 'var(--tabHeight)',
-            minHeight: 0,
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            borderBottom: `solid 1px ${theme.palette.divider}`,
-        },
-        content: {
-            padding: '0 !important',
-        },
-        footer: {
-            marginTop: -1, // merge duplicate borders
-            zIndex: 1,
-            position: 'relative',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            justifyContent: 'space-between',
-        },
-        footnote: {
-            fontSize: 10,
-            marginRight: theme.spacing(1),
-        },
-        footLink: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(0.5),
-            '&:last-child': {
-                marginRight: 0,
-            },
-        },
-        mask: {
-            width: 40,
-            height: 10,
-        },
-    }
-})
+    },
+    mask: {
+        width: 40,
+        height: 10,
+    },
+}))
 
 interface CollectibleProps {
     projectId: string

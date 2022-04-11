@@ -34,21 +34,19 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            marginLeft: theme.spacing(-0.5),
-            marginRight: theme.spacing(-0.5),
-        },
-        content: {
-            padding: theme.spacing(0),
-        },
-        button: {
-            flex: 1,
-            margin: `${theme.spacing(0)} ${theme.spacing(0.5)}`,
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        marginLeft: theme.spacing(-0.5),
+        marginRight: theme.spacing(-0.5),
+    },
+    content: {
+        padding: theme.spacing(0),
+    },
+    button: {
+        flex: 1,
+        margin: `${theme.spacing(0)} ${theme.spacing(0.5)}`,
+    },
+}))
 
 export interface ActionBarProps {
     project: Project

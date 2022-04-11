@@ -62,9 +62,8 @@ export async function getAddressNames(identity: {
         PluginNFTAvatarRPC.getAddress(identifier.userId ?? '', identifier.network),
     ])
 
-    const getSettledAddress = (result: PromiseSettledResult<string>) => {
-        return result.status === 'fulfilled' ? result.value : ''
-    }
+    const getSettledAddress = (result: PromiseSettledResult<string>) =>
+        result.status === 'fulfilled' ? result.value : ''
 
     const addressENS = getSettledAddress(allSettled[0])
     const addressRSS3 = getSettledAddress(allSettled[1])

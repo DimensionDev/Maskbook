@@ -269,29 +269,29 @@ export function CollectionList({
         if (selectedCollection === 'all') return collectibles
         if (!selectedCollection) return collectibles.filter((x) => !x.collection)
 
-        return (collectibles ?? []).filter((x) => {
-            return isSameAddress(selectedCollection.address, x.contractDetailed.address)
-        })
+        return (collectibles ?? []).filter((x) => isSameAddress(selectedCollection.address, x.contractDetailed.address))
     }, [selectedCollection, collectibles.length])
 
-    const collections = useMemo(() => {
-        return uniqBy(
-            collectibles.map((x) => x.contractDetailed),
-            (x) => x.address.toLowerCase(),
-        ).map((x) => {
-            const item = collectionsFormRemote.find((c) => isSameAddress(c.address, x.address))
-            if (item) {
-                return {
-                    name: item.name,
-                    symbol: item.name,
-                    baseURI: item.iconURL,
-                    iconURL: item.iconURL,
-                    address: item.address,
-                } as ERC721ContractDetailed
-            }
-            return x
-        })
-    }, [collectibles.length, collectionsFormRemote.length])
+    const collections = useMemo(
+        () =>
+            uniqBy(
+                collectibles.map((x) => x.contractDetailed),
+                (x) => x.address.toLowerCase(),
+            ).map((x) => {
+                const item = collectionsFormRemote.find((c) => isSameAddress(c.address, x.address))
+                if (item) {
+                    return {
+                        name: item.name,
+                        symbol: item.name,
+                        baseURI: item.iconURL,
+                        iconURL: item.iconURL,
+                        address: item.address,
+                    } as ERC721ContractDetailed
+                }
+                return x
+            }),
+        [collectibles.length, collectionsFormRemote.length],
+    )
 
     if (!isLoading && !collectibles.length)
         return (
@@ -379,24 +379,22 @@ export function CollectionList({
                     </Box>
                 </Box>
                 <Box>
-                    {collections.map((x, i) => {
-                        return (
-                            <Box
-                                display="flex"
-                                key={i}
-                                alignItems="center"
-                                justifyContent="center"
-                                sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
-                                <CollectionIcon
-                                    selectedCollection={
-                                        selectedCollection === 'all' ? undefined : selectedCollection?.address
-                                    }
-                                    collection={x}
-                                    onClick={() => setSelectedCollection(x)}
-                                />
-                            </Box>
-                        )
-                    })}
+                    {collections.map((x, i) => (
+                        <Box
+                            display="flex"
+                            key={i}
+                            alignItems="center"
+                            justifyContent="center"
+                            sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
+                            <CollectionIcon
+                                selectedCollection={
+                                    selectedCollection === 'all' ? undefined : selectedCollection?.address
+                                }
+                                collection={x}
+                                onClick={() => setSelectedCollection(x)}
+                            />
+                        </Box>
+                    ))}
                     {!!renderWithRarible.length && (
                         <Box
                             key="other"

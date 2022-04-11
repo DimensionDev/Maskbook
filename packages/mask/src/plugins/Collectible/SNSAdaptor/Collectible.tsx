@@ -27,98 +27,96 @@ import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader
 import { LoadingAnimation } from '@masknet/shared'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
-            padding: 0,
-            marginBottom: 12,
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        width: '100%',
+        border: `solid 1px ${theme.palette.divider}`,
+        padding: 0,
+        marginBottom: 12,
+    },
+    content: {
+        width: '100%',
+        height: 'var(--contentHeight)',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '0 !important',
+    },
+    body: {
+        flex: 1,
+        overflow: 'auto',
+        maxHeight: 350,
+        borderRadius: 0,
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        content: {
-            width: '100%',
-            height: 'var(--contentHeight)',
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '0 !important',
+    },
+    footer: {
+        marginTop: -1, // merge duplicate borders
+        zIndex: 1,
+        position: 'relative',
+        borderTop: `solid 1px ${theme.palette.divider}`,
+        justifyContent: 'space-between',
+    },
+    tabs: {
+        height: 'var(--tabHeight)',
+        width: '100%',
+        minHeight: 'unset',
+        borderTop: `solid 1px ${theme.palette.divider}`,
+        borderBottom: `solid 1px ${theme.palette.divider}`,
+    },
+    tab: {
+        height: 'var(--tabHeight)',
+        minHeight: 'unset',
+        minWidth: 'unset',
+        whiteSpace: 'nowrap',
+    },
+    subtitle: {
+        fontSize: 12,
+        marginRight: theme.spacing(0.5),
+        maxHeight: '3.5rem',
+        overflow: 'hidden',
+        wordBreak: 'break-word',
+    },
+    description: {
+        fontSize: 12,
+        '& > strong': {
+            color: theme.palette.text.primary,
+            fontWeight: 300,
         },
-        body: {
-            flex: 1,
-            overflow: 'auto',
-            maxHeight: 350,
-            borderRadius: 0,
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        footer: {
-            marginTop: -1, // merge duplicate borders
-            zIndex: 1,
-            position: 'relative',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            justifyContent: 'space-between',
-        },
-        tabs: {
-            height: 'var(--tabHeight)',
-            width: '100%',
-            minHeight: 'unset',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            borderBottom: `solid 1px ${theme.palette.divider}`,
-        },
-        tab: {
-            height: 'var(--tabHeight)',
-            minHeight: 'unset',
-            minWidth: 'unset',
-            whiteSpace: 'nowrap',
-        },
-        subtitle: {
-            fontSize: 12,
-            marginRight: theme.spacing(0.5),
-            maxHeight: '3.5rem',
-            overflow: 'hidden',
-            wordBreak: 'break-word',
-        },
-        description: {
-            fontSize: 12,
-            '& > strong': {
-                color: theme.palette.text.primary,
-                fontWeight: 300,
-            },
-        },
-        footMenu: {
-            color: theme.palette.text.secondary,
-            fontSize: 10,
-            display: 'flex',
-            alignItems: 'center',
-        },
-        footName: {
-            marginLeft: theme.spacing(0.5),
-        },
-        countdown: {
-            fontSize: 12,
-            borderRadius: 8,
-            display: 'block',
-            white: '100%',
-            color: theme.palette.common.white,
-            backgroundColor: '#eb5757',
-            padding: theme.spacing(0.5, 2),
-        },
-        loading: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            padding: theme.spacing(8, 0),
-        },
-        markdown: {
-            textOverflow: 'ellipsis',
-            display: '-webkit-box',
-            webkitBoxOrient: 'vertical',
-            webkitLineClamp: '3',
-        },
-    }
-})
+    },
+    footMenu: {
+        color: theme.palette.text.secondary,
+        fontSize: 10,
+        display: 'flex',
+        alignItems: 'center',
+    },
+    footName: {
+        marginLeft: theme.spacing(0.5),
+    },
+    countdown: {
+        fontSize: 12,
+        borderRadius: 8,
+        display: 'block',
+        white: '100%',
+        color: theme.palette.common.white,
+        backgroundColor: '#eb5757',
+        padding: theme.spacing(0.5, 2),
+    },
+    loading: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        padding: theme.spacing(8, 0),
+    },
+    markdown: {
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        webkitBoxOrient: 'vertical',
+        webkitLineClamp: '3',
+    },
+}))
 
 export interface CollectibleProps {}
 

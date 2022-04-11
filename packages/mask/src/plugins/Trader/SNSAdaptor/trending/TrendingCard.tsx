@@ -1,16 +1,14 @@
 import { Card } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            overflow: 'auto',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        overflow: 'auto',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-    }
-})
+    },
+}))
 
 export interface TrendingCardProps extends withClasses<'root'> {
     children?: React.ReactNode

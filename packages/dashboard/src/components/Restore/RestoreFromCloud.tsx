@@ -146,9 +146,7 @@ export const RestoreFromCloud = memo(() => {
         navigate(DashboardRoutes.Personas, { replace: true })
     }
 
-    useEffect(() => {
-        return Messages.events.restoreSuccess.on(restoreCallback)
-    }, [restoreCallback])
+    useEffect(() => Messages.events.restoreSuccess.on(restoreCallback), [restoreCallback])
 
     return (
         <>

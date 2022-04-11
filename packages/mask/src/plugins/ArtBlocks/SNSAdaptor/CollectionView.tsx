@@ -9,67 +9,65 @@ import { resolveImageLinkOnArtBlocks, resolveTokenLinkOnArtBlocks } from '../pip
 import { buildTokenId } from '../utils'
 import type { Project } from '../types'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            borderRadius: 0,
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        title: {
-            marginLeft: theme.spacing(2),
-            marginRight: theme.spacing(0.5),
-        },
-        paper: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            bgcolor: 'background.default',
-            paddingRight: theme.spacing(1),
-            paddingLeft: theme.spacing(1),
-        },
-        skeletonImage: { height: 304 },
-        skeletonTitle: { height: 20, width: '30%', marginLeft: theme.spacing(2) },
-        hidden: {
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        borderRadius: 0,
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
             display: 'none',
         },
-        active: {
-            display: 'block',
-        },
-        buttonPrev: {
-            marginRight: theme.spacing(0.5),
-        },
-        buttonNext: {
-            marginLeft: theme.spacing(0.5),
-        },
-        tokenTitle: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        tokenLinks: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: 65,
-        },
-        tokenIdRedirectionIcon: {
-            verticalAlign: 'text-bottom',
-            marginLeft: theme.spacing(0.5),
-        },
-        stepper: {
-            backgroundColor: 'inherit',
-        },
-        imageContainer: {
-            textAlign: 'center',
-        },
-        image: {
-            maxHeight: 300,
-        },
-    }
-})
+    },
+    title: {
+        marginLeft: theme.spacing(2),
+        marginRight: theme.spacing(0.5),
+    },
+    paper: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        bgcolor: 'background.default',
+        paddingRight: theme.spacing(1),
+        paddingLeft: theme.spacing(1),
+    },
+    skeletonImage: { height: 304 },
+    skeletonTitle: { height: 20, width: '30%', marginLeft: theme.spacing(2) },
+    hidden: {
+        display: 'none',
+    },
+    active: {
+        display: 'block',
+    },
+    buttonPrev: {
+        marginRight: theme.spacing(0.5),
+    },
+    buttonNext: {
+        marginLeft: theme.spacing(0.5),
+    },
+    tokenTitle: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    tokenLinks: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: 65,
+    },
+    tokenIdRedirectionIcon: {
+        verticalAlign: 'text-bottom',
+        marginLeft: theme.spacing(0.5),
+    },
+    stepper: {
+        backgroundColor: 'inherit',
+    },
+    imageContainer: {
+        textAlign: 'center',
+    },
+    image: {
+        maxHeight: 300,
+    },
+}))
 
 export interface CollectionProps {
     key: string

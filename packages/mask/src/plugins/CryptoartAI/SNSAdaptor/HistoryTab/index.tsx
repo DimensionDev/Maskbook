@@ -7,30 +7,28 @@ import { CollectibleState } from '../../hooks/useCollectibleState'
 import { Row } from './Row'
 import { LoadingTable } from '../LoadingTable'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            overflow: 'auto',
-        },
-        content: {
-            padding: '0 !important',
-        },
-        spacer: {
-            flex: 0,
-        },
-        empty: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            padding: theme.spacing(8, 0),
-        },
-        emptyCell: {
-            borderStyle: 'none',
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        overflow: 'auto',
+    },
+    content: {
+        padding: '0 !important',
+    },
+    spacer: {
+        flex: 0,
+    },
+    empty: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        padding: theme.spacing(8, 0),
+    },
+    emptyCell: {
+        borderStyle: 'none',
+    },
+}))
 
 export interface HistoryTabProps {}
 

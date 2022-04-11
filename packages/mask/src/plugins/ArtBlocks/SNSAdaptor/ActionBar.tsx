@@ -5,22 +5,20 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { PurchaseDialog } from './PurchaseDialog'
 import type { Project } from '../types'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            marginLeft: theme.spacing(-0.5),
-            marginRight: theme.spacing(-0.5),
-            marginTop: theme.spacing(1),
-        },
-        content: {
-            padding: theme.spacing(0),
-        },
-        button: {
-            flex: 1,
-            margin: `${theme.spacing(0)} ${theme.spacing(0.5)}`,
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        marginLeft: theme.spacing(-0.5),
+        marginRight: theme.spacing(-0.5),
+        marginTop: theme.spacing(1),
+    },
+    content: {
+        padding: theme.spacing(0),
+    },
+    button: {
+        flex: 1,
+        margin: `${theme.spacing(0)} ${theme.spacing(0.5)}`,
+    },
+}))
 
 export interface ActionBarProps {
     project: Project

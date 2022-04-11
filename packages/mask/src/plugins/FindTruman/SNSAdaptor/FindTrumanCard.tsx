@@ -1,35 +1,33 @@
 import { Card, CardContent, CardHeader, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            minHeight: 120,
-            padding: 0,
-            border: `solid 1px ${theme.palette.divider}`,
-            margin: `${theme.spacing(2)} auto`,
-            marginBottom: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
-            '&:last-child': {
-                marginBottom: 0,
-            },
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        minHeight: 120,
+        padding: 0,
+        border: `solid 1px ${theme.palette.divider}`,
+        margin: `${theme.spacing(2)} auto`,
+        marginBottom: theme.spacing(2),
+        '&:first-child': {
+            marginTop: 0,
         },
-        header: {
-            borderBottom: `1px solid ${theme.palette.divider}`,
+        '&:last-child': {
+            marginBottom: 0,
         },
-        content: {
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            boxSizing: 'border-box',
-        },
-        title: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-    }
-})
+    },
+    header: {
+        borderBottom: `1px solid ${theme.palette.divider}`,
+    },
+    content: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        boxSizing: 'border-box',
+    },
+    title: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+}))
 
 export interface FindTrumanCardProps {
     title: (JSX.Element & React.ReactNode) | string

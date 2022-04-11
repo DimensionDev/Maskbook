@@ -14,8 +14,8 @@ export function useTradeApproveComputed(
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const context = useGetTradeContext(provider)
 
-    return useMemo(() => {
-        return {
+    return useMemo(
+        () => ({
             approveToken:
                 token?.type === EthereumTokenType.ERC20
                     ? createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
@@ -28,6 +28,7 @@ export function useTradeApproveComputed(
                     return trade?.trade_ ? (trade?.trade_ as SwapQuoteResponse).to : ''
                 return context?.ROUTER_CONTRACT_ADDRESS ?? ''
             })(),
-        }
-    }, [chainId, trade, token, context])
+        }),
+        [chainId, trade, token, context],
+    )
 }

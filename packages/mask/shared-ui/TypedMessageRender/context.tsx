@@ -22,9 +22,15 @@ export interface TypedMessageRenderContextProps extends React.PropsWithChildren<
 export function TypedMessageRenderContext(props: TypedMessageRenderContextProps) {
     const registry = useSubscription(TypedMessageRenderRegistry.subscription)
     const transformerFunction = useSubscription(TypedMessageTransformers.subscription)
-    const Provider = useMemo((): RenderFragmentsContextType => {
-        return { Container, Link, Metadata: props.metadataRender, ...props.renderFragments }
-    }, [props.metadataRender, props.renderFragments])
+    const Provider = useMemo(
+        (): RenderFragmentsContextType => ({
+            Container,
+            Link,
+            Metadata: props.metadataRender,
+            ...props.renderFragments,
+        }),
+        [props.metadataRender, props.renderFragments],
+    )
 
     return (
         // basic render fragments provider: Text, Link, Image and Metadata

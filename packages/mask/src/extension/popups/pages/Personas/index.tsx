@@ -11,19 +11,17 @@ const PersonaRename = lazy(() => import('./Rename'))
 const PersonaSignRequest = lazy(() => import('./PersonaSignRequest'))
 
 const r = relativeRouteOf(PopupRoutes.Personas)
-const Persona = memo(() => {
-    return (
-        <Suspense fallback={<LoadingPlaceholder />}>
-            <PersonaContext.Provider>
-                <Routes>
-                    <Route path={r(PopupRoutes.Logout)} element={<Logout />} />
-                    <Route path={r(PopupRoutes.PersonaRename)} element={<PersonaRename />} />
-                    <Route path={r(PopupRoutes.PersonaSignRequest)} element={<PersonaSignRequest />} />
-                    <Route path="*" element={<Home />} />
-                </Routes>
-            </PersonaContext.Provider>
-        </Suspense>
-    )
-})
+const Persona = memo(() => (
+    <Suspense fallback={<LoadingPlaceholder />}>
+        <PersonaContext.Provider>
+            <Routes>
+                <Route path={r(PopupRoutes.Logout)} element={<Logout />} />
+                <Route path={r(PopupRoutes.PersonaRename)} element={<PersonaRename />} />
+                <Route path={r(PopupRoutes.PersonaSignRequest)} element={<PersonaSignRequest />} />
+                <Route path="*" element={<Home />} />
+            </Routes>
+        </PersonaContext.Provider>
+    </Suspense>
+))
 
 export default Persona

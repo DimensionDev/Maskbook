@@ -94,9 +94,7 @@ export function NFTAvatarSettingDialog() {
 
     const onClose = useCallback(() => setOpen(false), [])
 
-    useMount(() => {
-        return MaskMessages.events.nftAvatarSettingDialogUpdated.on((data) => setOpen(data.open))
-    })
+    useMount(() => MaskMessages.events.nftAvatarSettingDialogUpdated.on((data) => setOpen(data.open)))
 
     return (
         <DialogStackingProvider>

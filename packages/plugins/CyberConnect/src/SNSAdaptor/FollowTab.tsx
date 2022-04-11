@@ -39,23 +39,21 @@ export default function FollowTab({
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setTab(newValue)
     }
-    const FollowRow = ({ identity }: { identity: IFollowIdentity }) => {
-        return (
-            <div className={classes.followRow}>
-                <div className={classes.avatarWrapper}>
-                    <Avatar square={false} name={identity.ens || identity.address} size={40} />
-                </div>
-                <div className={classes.user}>
-                    <Typography className={classes.userName} component="div">
-                        {identity.ens || formatEthereumAddress(identity.address, 16)}
-                    </Typography>
-                    <Typography className={classes.namespace} component="div">
-                        From {identity.namespace}
-                    </Typography>
-                </div>
+    const FollowRow = ({ identity }: { identity: IFollowIdentity }) => (
+        <div className={classes.followRow}>
+            <div className={classes.avatarWrapper}>
+                <Avatar square={false} name={identity.ens || identity.address} size={40} />
             </div>
-        )
-    }
+            <div className={classes.user}>
+                <Typography className={classes.userName} component="div">
+                    {identity.ens || formatEthereumAddress(identity.address, 16)}
+                </Typography>
+                <Typography className={classes.namespace} component="div">
+                    From {identity.namespace}
+                </Typography>
+            </div>
+        </div>
+    )
     return (
         <TabContext value={tab}>
             <Box sx={{ width: '100%', marginTop: '40px' }}>
@@ -90,9 +88,9 @@ export default function FollowTab({
                     color: MaskColorVar.cyberconnectPrimary,
                     width: '100%',
                 }}>
-                {followingList.map((f: IFollowIdentity) => {
-                    return <FollowRow key={f.address} identity={f} />
-                })}
+                {followingList.map((f: IFollowIdentity) => (
+                    <FollowRow key={f.address} identity={f} />
+                ))}
             </TabPanel>
             <TabPanel
                 className={classes.tabPanel}
@@ -101,9 +99,9 @@ export default function FollowTab({
                     color: MaskColorVar.cyberconnectPrimary,
                     width: '100%',
                 }}>
-                {followerList.map((f: IFollowIdentity) => {
-                    return <FollowRow key={f.address} identity={f} />
-                })}
+                {followerList.map((f: IFollowIdentity) => (
+                    <FollowRow key={f.address} identity={f} />
+                ))}
             </TabPanel>
         </TabContext>
     )

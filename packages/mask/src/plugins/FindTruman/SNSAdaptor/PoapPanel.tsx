@@ -39,9 +39,7 @@ export default function PoapPanel(props: PoapPanelProps) {
     const { t, const: consts } = useContext(FindTrumanContext)
     const account = useAccount()
 
-    const { value: poaps, loading } = useAsync(async () => {
-        return account ? fetchUserPoap(account) : undefined
-    }, [account])
+    const { value: poaps, loading } = useAsync(async () => (account ? fetchUserPoap(account) : undefined), [account])
 
     return (
         <div>

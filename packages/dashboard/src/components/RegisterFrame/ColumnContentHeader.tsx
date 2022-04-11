@@ -54,16 +54,14 @@ export interface HeaderProps {
     }
 }
 
-export const Header = memo(({ title, subtitle, action }: HeaderProps) => {
-    return (
-        <HeaderContainer>
-            <TitleContainer>
-                <Typography variant="h3">{title}</Typography>
-                <Action variant="text" onClick={() => action.callback()}>
-                    {action.name}
-                </Action>
-            </TitleContainer>
-            {subtitle && <Subtitle variant="h5">{subtitle}</Subtitle>}
-        </HeaderContainer>
-    )
-})
+export const Header = memo(({ title, subtitle, action }: HeaderProps) => (
+    <HeaderContainer>
+        <TitleContainer>
+            <Typography variant="h3">{title}</Typography>
+            <Action variant="text" onClick={() => action.callback()}>
+                {action.name}
+            </Action>
+        </TitleContainer>
+        {subtitle && <Subtitle variant="h5">{subtitle}</Subtitle>}
+    </HeaderContainer>
+))

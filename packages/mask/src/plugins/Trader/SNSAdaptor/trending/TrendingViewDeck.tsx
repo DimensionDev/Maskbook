@@ -23,69 +23,67 @@ import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowa
 import { CoinSafetyAlert } from './CoinSafetyAlert'
 import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            width: '100%',
-            boxShadow: 'none',
-            borderRadius: 0,
-            marginBottom: theme.spacing(2),
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        width: '100%',
+        boxShadow: 'none',
+        borderRadius: 0,
+        marginBottom: theme.spacing(2),
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        content: {
-            paddingTop: 0,
-            paddingBottom: 0,
-        },
-        header: {
-            display: 'flex',
-            position: 'relative',
-        },
-        headline: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            position: 'relative',
-        },
-        title: {
-            display: 'flex',
-            alignItems: 'center',
-            whiteSpace: 'nowrap',
-        },
-        name: {
-            maxWidth: 200,
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-        },
-        symbol: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-            marginLeft: theme.spacing(0.5),
-            marginRight: theme.spacing(0.5),
-        },
-        buy: {
-            right: 0,
-            position: 'absolute',
-        },
-        arrowIcon: {
-            color: theme.palette.text.primary,
-        },
-        rank: {
-            color: theme.palette.text.secondary,
-            fontWeight: 300,
-            marginRight: theme.spacing(1),
-        },
-        avatar: {
-            backgroundColor: theme.palette.common.white,
-        },
-        avatarFallback: {
-            width: 40,
-            height: 40,
-        },
-    }
-})
+    },
+    content: {
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
+    header: {
+        display: 'flex',
+        position: 'relative',
+    },
+    headline: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        position: 'relative',
+    },
+    title: {
+        display: 'flex',
+        alignItems: 'center',
+        whiteSpace: 'nowrap',
+    },
+    name: {
+        maxWidth: 200,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+    },
+    symbol: {
+        fontSize: 12,
+        color: theme.palette.text.secondary,
+        marginLeft: theme.spacing(0.5),
+        marginRight: theme.spacing(0.5),
+    },
+    buy: {
+        right: 0,
+        position: 'absolute',
+    },
+    arrowIcon: {
+        color: theme.palette.text.primary,
+    },
+    rank: {
+        color: theme.palette.text.secondary,
+        fontWeight: 300,
+        marginRight: theme.spacing(1),
+    },
+    avatar: {
+        backgroundColor: theme.palette.common.white,
+    },
+    avatarFallback: {
+        width: 40,
+        height: 40,
+    },
+}))
 
 export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content'> {
     stats: Stat[]

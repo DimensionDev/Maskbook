@@ -16,9 +16,7 @@ import { Services, Messages, PluginServices, PluginMessages } from '../API'
 import { TokenList } from '@masknet/web3-providers'
 
 export const Web3Context: Web3ProviderType = {
-    allowTestnet: createSubscriptionFromAsync(Services.Settings.getWalletAllowTestChain, false, () => {
-        return () => {}
-    }),
+    allowTestnet: createSubscriptionFromAsync(Services.Settings.getWalletAllowTestChain, false, () => () => {}),
     account: createSubscriptionFromAsync(
         async () => {
             const providerType = await Services.Settings.getCurrentSelectedWalletProvider()

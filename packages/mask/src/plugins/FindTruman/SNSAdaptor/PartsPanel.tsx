@@ -109,9 +109,7 @@ export default function PartsPanel(props: PartsPanelProps) {
         value: partsInfo,
         loading,
         retry,
-    } = useAsyncRetry(async () => {
-        return account ? fetchUserPartsInfo(account) : undefined
-    }, [account])
+    } = useAsyncRetry(async () => (account ? fetchUserPartsInfo(account) : undefined), [account])
 
     return (
         <Box>
@@ -230,9 +228,7 @@ function QuestItem(props: { quest: Quest }) {
 
     const { open: isQuestDialogOpen, onOpen: onQuestDialogOpen, onClose: onQuestDialogClose } = useControlledDialog()
 
-    const meetPoap = useMemo(() => {
-        return !quest.needPoap || !!quest.poaps.find((e) => !e.used)
-    }, [quest])
+    const meetPoap = useMemo(() => !quest.needPoap || !!quest.poaps.find((e) => !e.used), [quest])
 
     return (
         <div>
@@ -337,13 +333,12 @@ function QuestDialog(props: QuestDialogProps) {
     const { classes } = useStyles()
     const { t, const: consts } = useContext(FindTrumanContext)
 
-    const poapIds = useMemo(() => {
-        return quest.poaps.map((e) => formatNFT_TokenId(e.tokenId.toString(), 2)).join(', ')
-    }, [quest])
+    const poapIds = useMemo(
+        () => quest.poaps.map((e) => formatNFT_TokenId(e.tokenId.toString(), 2)).join(', '),
+        [quest],
+    )
 
-    const availablePoap = useMemo(() => {
-        return quest.poaps.find((e) => !e.used)
-    }, [quest])
+    const availablePoap = useMemo(() => quest.poaps.find((e) => !e.used), [quest])
 
     return (
         <InjectedDialog title={t('plugin_find_truman_dialog_get_box_title')} open={open} onClose={onClose}>

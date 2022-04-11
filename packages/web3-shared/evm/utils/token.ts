@@ -235,25 +235,23 @@ export const makeSortAssertFn = (chainId: ChainId, options: { isMaskBoost?: bool
     }
 }
 
-export const makeSortAssertWithoutChainFn = () => {
-    return (a: Asset, b: Asset) => {
-        // Token with high usd value estimation has priority
-        const valueDifference = getTokenUSDValue(b) - getTokenUSDValue(a)
-        if (valueDifference !== 0) return valueDifference
+export const makeSortAssertWithoutChainFn = () => (a: Asset, b: Asset) => {
+    // Token with high usd value estimation has priority
+    const valueDifference = getTokenUSDValue(b) - getTokenUSDValue(a)
+    if (valueDifference !== 0) return valueDifference
 
-        // native token sort
-        const chainValueDifference = getTokenChainIdValue(b) - getTokenChainIdValue(a)
-        if (chainValueDifference !== 0) return chainValueDifference
+    // native token sort
+    const chainValueDifference = getTokenChainIdValue(b) - getTokenChainIdValue(a)
+    if (chainValueDifference !== 0) return chainValueDifference
 
-        // Token with big balance has priority
-        if (getBalanceValue(a) > getBalanceValue(b)) return -1
-        if (getBalanceValue(a) < getBalanceValue(b)) return 1
+    // Token with big balance has priority
+    if (getBalanceValue(a) > getBalanceValue(b)) return -1
+    if (getBalanceValue(a) < getBalanceValue(b)) return 1
 
-        // Sorted by alphabet
-        if ((a.token.name ?? '') > (b.token.name ?? '')) return 1
-        if ((a.token.name ?? '') < (b.token.name ?? '')) return -1
+    // Sorted by alphabet
+    if ((a.token.name ?? '') > (b.token.name ?? '')) return 1
+    if ((a.token.name ?? '') < (b.token.name ?? '')) return -1
 
-        return 0
-    }
+    return 0
 }
 // #endregion

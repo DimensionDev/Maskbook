@@ -113,16 +113,14 @@ function fromZerion(data: ZerionTransactionItem[]) {
                 toAddress: transaction.address_to ?? '',
                 failed: transaction.status === ZerionTransactionStatus.FAILED,
                 pairs:
-                    transaction.changes?.map(({ asset, direction, value }) => {
-                        return {
-                            name: asset.name,
-                            symbol: asset.symbol,
-                            address: asset.asset_code,
-                            direction,
-                            amount: leftShift(value, asset.decimals).toNumber(),
-                            logoURI: asset.icon_url,
-                        }
-                    }) ?? [],
+                    transaction.changes?.map(({ asset, direction, value }) => ({
+                        name: asset.name,
+                        symbol: asset.symbol,
+                        address: asset.asset_code,
+                        direction,
+                        amount: leftShift(value, asset.decimals).toNumber(),
+                        logoURI: asset.icon_url,
+                    })) ?? [],
                 gasFee: {
                     eth: Number(ethGasFee),
                     usd: Number(usdGasFee),

@@ -264,19 +264,17 @@ export function useCustomSnackbar() {
             const { processing, message, variant, ...rest } = options
             return enqueueSnackbar(text, {
                 variant: options.variant,
-                content: (key, title) => {
-                    return (
-                        <CustomSnackbarContent
-                            variant={variant ?? 'default'}
-                            id={key}
-                            title={title}
-                            message={message}
-                            processing={processing}
-                            action={rest.action}
-                            classes={rest.classes}
-                        />
-                    )
-                },
+                content: (key, title) => (
+                    <CustomSnackbarContent
+                        variant={variant ?? 'default'}
+                        id={key}
+                        title={title}
+                        message={message}
+                        processing={processing}
+                        action={rest.action}
+                        classes={rest.classes}
+                    />
+                ),
                 ...rest,
             })
         },

@@ -13,8 +13,8 @@ export const getTokenChainIdValue = (asset: Web3Plugin.Asset) => {
     return isSameAddress(asset.token.id, NATIVE_TOKEN_ADDRESS) ? 1 / asset.token.chainId : 0
 }
 
-export const makeSortAssertWithoutChainFn = () => {
-    return (a: Web3Plugin.Asset<Web3Plugin.FungibleToken>, b: Web3Plugin.Asset<Web3Plugin.FungibleToken>) => {
+export const makeSortAssertWithoutChainFn =
+    () => (a: Web3Plugin.Asset<Web3Plugin.FungibleToken>, b: Web3Plugin.Asset<Web3Plugin.FungibleToken>) => {
         // Token with high usd value estimation has priority
         const valueDifference = getTokenUSDValue(b) - getTokenUSDValue(a)
         if (valueDifference !== 0) return valueDifference
@@ -33,4 +33,3 @@ export const makeSortAssertWithoutChainFn = () => {
 
         return 0
     }
-}

@@ -60,31 +60,29 @@ export const AssetsListUI = memo<AssetsListUIProps>(({ dataSource, onItemClick }
     const { classes } = useStyles()
     return (
         <List dense className={classes.list}>
-            {dataSource.map((asset, index) => {
-                return (
-                    <ListItem key={index} className={classes.item} onClick={() => onItemClick(asset)}>
-                        <TokenIcon
-                            classes={{ icon: classes.tokenIcon }}
-                            address={asset.token.address}
-                            name={asset.token.name}
-                            chainId={asset.token.chainId}
-                            logoURI={asset.token.logoURI}
-                            AvatarProps={{ sx: { width: 20, height: 20 } }}
+            {dataSource.map((asset, index) => (
+                <ListItem key={index} className={classes.item} onClick={() => onItemClick(asset)}>
+                    <TokenIcon
+                        classes={{ icon: classes.tokenIcon }}
+                        address={asset.token.address}
+                        name={asset.token.name}
+                        chainId={asset.token.chainId}
+                        logoURI={asset.token.logoURI}
+                        AvatarProps={{ sx: { width: 20, height: 20 } }}
+                    />
+                    <ListItemText className={classes.text}>
+                        <FormattedBalance
+                            classes={{ symbol: classes.symbol, balance: classes.balance }}
+                            value={isNaN(asset.balance) ? 0 : asset.balance}
+                            decimals={isNaN(asset.token.decimals) ? 0 : asset.token.decimals}
+                            symbol={asset.token.symbol}
+                            significant={6}
+                            formatter={formatBalance}
                         />
-                        <ListItemText className={classes.text}>
-                            <FormattedBalance
-                                classes={{ symbol: classes.symbol, balance: classes.balance }}
-                                value={isNaN(asset.balance) ? 0 : asset.balance}
-                                decimals={isNaN(asset.token.decimals) ? 0 : asset.token.decimals}
-                                symbol={asset.token.symbol}
-                                significant={6}
-                                formatter={formatBalance}
-                            />
-                        </ListItemText>
-                        <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />
-                    </ListItem>
-                )
-            })}
+                    </ListItemText>
+                    <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />
+                </ListItem>
+            ))}
         </List>
     )
 })

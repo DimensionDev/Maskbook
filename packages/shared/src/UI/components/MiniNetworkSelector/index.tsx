@@ -85,36 +85,34 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
                 )}
                 {networks
                     .filter((x) => x.isMainnet)
-                    .map((network) => {
-                        return (
-                            <Box
-                                key={network.ID}
-                                position="relative"
-                                mr={1}
-                                height={size}
-                                onClick={() => !disabledNonCurrentNetwork && onSelect(network)}
-                                sx={{
-                                    cursor: 'pointer',
-                                    opacity: '0.6',
-                                    ':hover': { opacity: 1 },
-                                    userSelect: 'none',
-                                    lineHeight: `${size}px`,
-                                }}
-                                className={
-                                    selectedNetwork?.ID === network.ID
-                                        ? classes.networkSelected
-                                        : disabledNonCurrentNetwork
-                                        ? classes.networkDisabled
-                                        : ''
-                                }>
-                                {network.isMainnet ? (
-                                    <WalletIcon networkIcon={network.icon} size={size} />
-                                ) : (
-                                    <ChainIcon color={network.iconColor} size={size} />
-                                )}
-                            </Box>
-                        )
-                    })}
+                    .map((network) => (
+                        <Box
+                            key={network.ID}
+                            position="relative"
+                            mr={1}
+                            height={size}
+                            onClick={() => !disabledNonCurrentNetwork && onSelect(network)}
+                            sx={{
+                                cursor: 'pointer',
+                                opacity: '0.6',
+                                ':hover': { opacity: 1 },
+                                userSelect: 'none',
+                                lineHeight: `${size}px`,
+                            }}
+                            className={
+                                selectedNetwork?.ID === network.ID
+                                    ? classes.networkSelected
+                                    : disabledNonCurrentNetwork
+                                    ? classes.networkDisabled
+                                    : ''
+                            }>
+                            {network.isMainnet ? (
+                                <WalletIcon networkIcon={network.icon} size={size} />
+                            ) : (
+                                <ChainIcon color={network.iconColor} size={size} />
+                            )}
+                        </Box>
+                    ))}
             </Stack>
         )
     },

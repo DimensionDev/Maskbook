@@ -75,8 +75,8 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, r
         [selectedTokenId, token.tokenId],
     )
 
-    const NFTNameBar = useMemo(() => {
-        return (
+    const NFTNameBar = useMemo(
+        () => (
             <ImageListItemBar
                 sx={{
                     px: 1,
@@ -89,8 +89,9 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, r
                 subtitle={<span>{name}</span>}
                 position="below"
             />
-        )
-    }, [name])
+        ),
+        [name],
+    )
 
     return (
         <ImageListItem

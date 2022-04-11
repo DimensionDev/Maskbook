@@ -139,11 +139,13 @@ function resetTwitterActivatedContent() {
 export function ProfileTabAtTwitter() {
     const { classes } = useStyles()
     const [hidden, setHidden] = useState(false)
-    useEffect(() => {
-        return MaskMessages.events.profileTabHidden.on((data) => {
-            setHidden(data.hidden)
-        })
-    }, [])
+    useEffect(
+        () =>
+            MaskMessages.events.profileTabHidden.on((data) => {
+                setHidden(data.hidden)
+            }),
+        [],
+    )
 
     return hidden ? null : (
         <ProfileTab

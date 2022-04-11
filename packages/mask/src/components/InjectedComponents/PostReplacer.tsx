@@ -34,13 +34,14 @@ export function PostReplacer(props: PostReplacerProps) {
     const currentProfile = useCurrentIdentity()?.identifier
     const url = usePostInfoDetails.url()
 
-    const initialTransformationContext = useMemo((): TransformationContext => {
-        return {
+    const initialTransformationContext = useMemo(
+        (): TransformationContext => ({
             authorHint: author,
             currentProfile,
             postURL: url?.toString(),
-        }
-    }, [author, currentProfile, url])
+        }),
+        [author, currentProfile, url],
+    )
 
     return (
         <span className={classes.root}>

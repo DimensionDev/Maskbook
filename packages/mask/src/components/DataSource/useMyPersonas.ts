@@ -13,8 +13,8 @@ const independentRef = {
 }
 
 {
-    const query = () => {
-        return Services.Identity.queryMyPersonas().then((p) => {
+    const query = () =>
+        Services.Identity.queryMyPersonas().then((p) => {
             independentRef.myPersonasRef.value = p.filter((x) => !x.uninitialized)
             isLoading = null
             Services.Helper.__deprecated__setStorage<boolean>(
@@ -22,7 +22,6 @@ const independentRef = {
                 independentRef.myPersonasRef.value.length > 0,
             )
         })
-    }
 
     const debounceQuery = debounce(query, 500, { trailing: true })
 

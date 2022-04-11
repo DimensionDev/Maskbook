@@ -113,32 +113,34 @@ export const getERC20TokenListItem =
             onSelect(data)
         }
 
-        const action = useMemo(() => {
-            return !isNotAdded || isAdded || (info.inList && info.from === 'search') ? (
-                data.balance === null ? null : (
-                    <span>
-                        {loadingAsset ? (
-                            <LoadingAnimation />
-                        ) : (
-                            Number.parseFloat(
-                                new BigNumber(formatBalance(data.balance ?? 0, token.decimals, 6)).toFixed(6),
-                            )
-                        )}
-                    </span>
-                )
-            ) : (
-                <MaskLoadingButton
-                    variant="contained"
-                    color="primary"
-                    onClick={onImport}
-                    size="small"
-                    className={classes.importButton}
-                    soloLoading
-                    loadingIndicator={<LoadingIcon sx={{ fontSize: 14 }} />}>
-                    {t.import()}
-                </MaskLoadingButton>
-            )
-        }, [info, isNotAdded, isAdded, data.balance])
+        const action = useMemo(
+            () =>
+                !isNotAdded || isAdded || (info.inList && info.from === 'search') ? (
+                    data.balance === null ? null : (
+                        <span>
+                            {loadingAsset ? (
+                                <LoadingAnimation />
+                            ) : (
+                                Number.parseFloat(
+                                    new BigNumber(formatBalance(data.balance ?? 0, token.decimals, 6)).toFixed(6),
+                                )
+                            )}
+                        </span>
+                    )
+                ) : (
+                    <MaskLoadingButton
+                        variant="contained"
+                        color="primary"
+                        onClick={onImport}
+                        size="small"
+                        className={classes.importButton}
+                        soloLoading
+                        loadingIndicator={<LoadingIcon sx={{ fontSize: 14 }} />}>
+                        {t.import()}
+                    </MaskLoadingButton>
+                ),
+            [info, isNotAdded, isAdded, data.balance],
+        )
 
         return (
             <ListItem

@@ -23,9 +23,8 @@ export const postIdParser = (node: HTMLElement) => {
     return idNode ? idNode.getAttribute('href')?.split('/')[2] ?? undefined : undefined
 }
 
-export const postNameParser = (node: HTMLElement) => {
-    return parseNameArea(assertNonNull(node.querySelector<HTMLAnchorElement>('.m-activityOwnerBlock__displayName')))
-}
+export const postNameParser = (node: HTMLElement) =>
+    parseNameArea(assertNonNull(node.querySelector<HTMLAnchorElement>('.m-activityOwnerBlock__displayName')))
 
 export const postAvatarParser = (node: HTMLElement) => {
     const avatarElement = node.querySelector<HTMLImageElement>('.m-activityOwnerBlock__avatar img')
@@ -72,12 +71,10 @@ export const postContentMessageParser = (node: HTMLElement) => {
     return content ? Array.from(content.childNodes).flatMap(make) : []
 }
 
-export const postParser = (node: HTMLElement) => {
-    return {
-        ...postNameParser(node),
-        avatar: postAvatarParser(node),
-        pid: postIdParser(node),
+export const postParser = (node: HTMLElement) => ({
+    ...postNameParser(node),
+    avatar: postAvatarParser(node),
+    pid: postIdParser(node),
 
-        messages: postContentMessageParser(node).filter((x) => !isTypedMessageEmpty(x)),
-    }
-}
+    messages: postContentMessageParser(node).filter((x) => !isTypedMessageEmpty(x)),
+})

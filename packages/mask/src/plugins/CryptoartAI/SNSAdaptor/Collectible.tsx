@@ -17,59 +17,57 @@ import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
 import { useChainId } from '@masknet/web3-shared-evm'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
-            padding: 0,
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        width: '100%',
+        border: `solid 1px ${theme.palette.divider}`,
+        padding: 0,
+    },
+    content: {
+        width: '100%',
+        height: 'var(--contentHeight)',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '0 !important',
+    },
+    body: {
+        flex: 1,
+        overflow: 'auto',
+        maxHeight: 350,
+        borderRadius: 0,
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        content: {
-            width: '100%',
-            height: 'var(--contentHeight)',
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '0 !important',
+    },
+    tabs: {
+        height: 'var(--tabHeight)',
+        width: '100%',
+        minHeight: 'unset',
+        borderTop: `solid 1px ${theme.palette.divider}`,
+        borderBottom: `solid 1px ${theme.palette.divider}`,
+    },
+    tab: {
+        height: 'var(--tabHeight)',
+        minHeight: 'unset',
+        minWidth: 'unset',
+        whiteSpace: 'nowrap',
+    },
+    subtitle: {
+        fontSize: 12,
+        marginRight: theme.spacing(0.5),
+        maxHeight: '3.5rem',
+        overflow: 'hidden',
+        wordBreak: 'break-word',
+    },
+    description: {
+        fontSize: 12,
+        '& > strong': {
+            color: theme.palette.text.primary,
+            fontWeight: 300,
         },
-        body: {
-            flex: 1,
-            overflow: 'auto',
-            maxHeight: 350,
-            borderRadius: 0,
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        tabs: {
-            height: 'var(--tabHeight)',
-            width: '100%',
-            minHeight: 'unset',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            borderBottom: `solid 1px ${theme.palette.divider}`,
-        },
-        tab: {
-            height: 'var(--tabHeight)',
-            minHeight: 'unset',
-            minWidth: 'unset',
-            whiteSpace: 'nowrap',
-        },
-        subtitle: {
-            fontSize: 12,
-            marginRight: theme.spacing(0.5),
-            maxHeight: '3.5rem',
-            overflow: 'hidden',
-            wordBreak: 'break-word',
-        },
-        description: {
-            fontSize: 12,
-            '& > strong': {
-                color: theme.palette.text.primary,
-                fontWeight: 300,
-            },
-        },
-    }
-})
+    },
+}))
 
 export interface CollectibleProps {}
 

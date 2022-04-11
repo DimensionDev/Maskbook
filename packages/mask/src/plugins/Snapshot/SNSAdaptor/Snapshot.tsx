@@ -6,50 +6,48 @@ import { useProposal } from './hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            '--contentHeight': '400px',
-            '--tabHeight': '35px',
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        '--contentHeight': '400px',
+        '--tabHeight': '35px',
 
-            width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
-            padding: 0,
+        width: '100%',
+        border: `solid 1px ${theme.palette.divider}`,
+        padding: 0,
+    },
+    content: {
+        width: '100%',
+        minHeight: 'var(--contentHeight)',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '0 !important',
+    },
+    body: {
+        flex: 1,
+        maxHeight: 'calc(var(--contentHeight) - var(--tabHeight))',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        content: {
-            width: '100%',
-            minHeight: 'var(--contentHeight)',
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '0 !important',
-        },
-        body: {
-            flex: 1,
-            maxHeight: 'calc(var(--contentHeight) - var(--tabHeight))',
-            overflow: 'auto',
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        tabs: {
-            height: 'var(--tabHeight)',
-            width: '100%',
-            minHeight: 'unset',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            borderBottom: `solid 1px ${theme.palette.divider}`,
-        },
-        tab: {
-            height: 'var(--tabHeight)',
-            minHeight: 'unset',
-            minWidth: 'unset',
-        },
-        subtitle: {
-            fontSize: 12,
-            marginRight: theme.spacing(0.5),
-        },
-    }
-})
+    },
+    tabs: {
+        height: 'var(--tabHeight)',
+        width: '100%',
+        minHeight: 'unset',
+        borderTop: `solid 1px ${theme.palette.divider}`,
+        borderBottom: `solid 1px ${theme.palette.divider}`,
+    },
+    tab: {
+        height: 'var(--tabHeight)',
+        minHeight: 'unset',
+        minWidth: 'unset',
+    },
+    subtitle: {
+        fontSize: 12,
+        marginRight: theme.spacing(0.5),
+    },
+}))
 
 export function Snapshot() {
     const { classes } = useStyles()

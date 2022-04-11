@@ -17,8 +17,8 @@ export function useMaskBoxCreationSuccessEvent(creatorAddress: string, tokenAddr
         if (!blockNumber) return null
         if (!maskBoxContract) return null
 
-        const getPastEvents = (fromBlock: number, toBlock: number) => {
-            return maskBoxContract.getPastEvents('CreationSuccess', {
+        const getPastEvents = (fromBlock: number, toBlock: number) =>
+            maskBoxContract.getPastEvents('CreationSuccess', {
                 filter: {
                     creator: creatorAddress,
                     nft_address: tokenAddress,
@@ -27,7 +27,6 @@ export function useMaskBoxCreationSuccessEvent(creatorAddress: string, tokenAddr
                 fromBlock,
                 toBlock,
             })
-        }
 
         const range = blockNumber - MASK_BOX_CONTRACT_FROM_BLOCK
         const size = Math.min(MAX_PAGE_SIZE, Math.ceil(range / FRAGMENT_SIZE))

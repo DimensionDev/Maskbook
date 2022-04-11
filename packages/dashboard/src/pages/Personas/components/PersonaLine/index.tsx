@@ -116,9 +116,9 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         }
 
         const handleDisconnect = (profile: ProfileIdentifier) => {
-            const isProved = proof.value?.proofs.find((x) => {
-                return x.platform === NextIDPlatform.Twitter && x.identity === profile.userId.toLowerCase()
-            })
+            const isProved = proof.value?.proofs.find(
+                (x) => x.platform === NextIDPlatform.Twitter && x.identity === profile.userId.toLowerCase(),
+            )
             if (isProved && onDeleteBound) {
                 onDeleteBound(profile)
                 return
@@ -126,9 +126,9 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             onDisconnect(profile)
         }
         const userIdBox = (profile: ProfileIdentifier) => {
-            const isProved = proof.value?.proofs.find((x) => {
-                return x.platform === NextIDPlatform.Twitter && x.identity === profile.userId.toLowerCase()
-            })
+            const isProved = proof.value?.proofs.find(
+                (x) => x.platform === NextIDPlatform.Twitter && x.identity === profile.userId.toLowerCase(),
+            )
 
             return (
                 <Typography className={classes.userIdBox}>

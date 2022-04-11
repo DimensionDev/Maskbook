@@ -9,7 +9,5 @@ export function useBlockNumber(expectedChainId?: ChainId) {
     const defaultChainId = useChainId()
     const web3 = useWeb3({ chainId: expectedChainId ?? defaultChainId })
 
-    return useAsyncRetry(async () => {
-        return web3.eth.getBlockNumber()
-    }, [web3])
+    return useAsyncRetry(() => web3.eth.getBlockNumber(), [web3])
 }

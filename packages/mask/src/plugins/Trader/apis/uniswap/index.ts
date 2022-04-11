@@ -280,24 +280,20 @@ export async function getCoinInfo(id: string) {
             total_volume: new BigNumber(oneDayVolumeUSD ? oneDayVolumeUSD : oneDayVolumeUT).toNumber(),
         },
         tickersInfo: Object.entries(pairsData)
-            .sort(([, a], [, z]) => {
-                return z.oneDayVolumeUSD - a.oneDayVolumeUSD
-            })
-            .map(([pairAddress, pairData]) => {
-                return {
-                    logo_url:
-                        'https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum/assets/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/logo.png',
-                    trade_url: `https://info.uniswap.org/pair/${pairAddress}`,
-                    market_name: 'Uniswap (V2)',
-                    base_name: pairData.token0.symbol,
-                    target_name: pairData.token1.symbol,
-                    volume:
-                        pairData.oneDayVolumeUSD === 0 && pairData.oneDayVolumeUntracked
-                            ? pairData.oneDayVolumeUntracked
-                            : pairData.oneDayVolumeUSD,
-                    updated: new Date(),
-                }
-            })
+            .sort(([, a], [, z]) => z.oneDayVolumeUSD - a.oneDayVolumeUSD)
+            .map(([pairAddress, pairData]) => ({
+                logo_url:
+                    'https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum/assets/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/logo.png',
+                trade_url: `https://info.uniswap.org/pair/${pairAddress}`,
+                market_name: 'Uniswap (V2)',
+                base_name: pairData.token0.symbol,
+                target_name: pairData.token1.symbol,
+                volume:
+                    pairData.oneDayVolumeUSD === 0 && pairData.oneDayVolumeUntracked
+                        ? pairData.oneDayVolumeUntracked
+                        : pairData.oneDayVolumeUSD,
+                updated: new Date(),
+            }))
             .slice(0, 30),
     }
 }
@@ -380,7 +376,8 @@ export async function getPriceStats(
 
     const prices = await fetchPricesByBlocks(id, blocks)
 
-    return prices.map(({ timestamp, derivedETH, ethPrice }) => {
-        return [timestamp, new BigNumber(ethPrice ?? 0).multipliedBy(derivedETH ?? 0).toNumber()] as Stat
-    })
+    return prices.map(
+        ({ timestamp, derivedETH, ethPrice }) =>
+            [timestamp, new BigNumber(ethPrice ?? 0).multipliedBy(derivedETH ?? 0).toNumber()] as Stat,
+    )
 }

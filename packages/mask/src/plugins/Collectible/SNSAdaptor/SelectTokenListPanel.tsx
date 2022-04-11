@@ -61,28 +61,21 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
     }, [tokens])
 
     const [menu, openMenu] = useMenu(
-        tokens.map((x, i) => {
-            return (
-                <MenuItem
-                    key={i}
-                    onClick={() => {
-                        onTokenChange(x)
-                    }}>
-                    <ListItemIcon>
-                        <TokenIcon
-                            classes={{ icon: classes.icon }}
-                            address={x.address}
-                            name={x.name}
-                            logoURI={x.logoURI}
-                        />
-                    </ListItemIcon>
-                    <Typography variant="inherit">{x.symbol}</Typography>
-                    <ListItemIcon className={classes.check}>
-                        {isSameAddress(x.address, token?.address) ? <Check /> : null}
-                    </ListItemIcon>
-                </MenuItem>
-            )
-        }) ?? [],
+        tokens.map((x, i) => (
+            <MenuItem
+                key={i}
+                onClick={() => {
+                    onTokenChange(x)
+                }}>
+                <ListItemIcon>
+                    <TokenIcon classes={{ icon: classes.icon }} address={x.address} name={x.name} logoURI={x.logoURI} />
+                </ListItemIcon>
+                <Typography variant="inherit">{x.symbol}</Typography>
+                <ListItemIcon className={classes.check}>
+                    {isSameAddress(x.address, token?.address) ? <Check /> : null}
+                </ListItemIcon>
+            </MenuItem>
+        )) ?? [],
         false,
         {
             anchorOrigin: {

@@ -103,13 +103,15 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
     const providerDescriptor = useProviderDescriptor()
     const personaConnectStatus = usePersonaConnectStatus()
 
-    const title = useMemo(() => {
-        return !personaConnectStatus.hasPersona
-            ? t('create_persona')
-            : !personaConnectStatus.connected
-            ? t('connect_persona')
-            : walletTitle
-    }, [personaConnectStatus, walletTitle, t])
+    const title = useMemo(
+        () =>
+            !personaConnectStatus.hasPersona
+                ? t('create_persona')
+                : !personaConnectStatus.connected
+                ? t('connect_persona')
+                : walletTitle,
+        [personaConnectStatus, walletTitle, t],
+    )
 
     useEffect(() => {
         if (personaConnectStatus.action) return

@@ -13,45 +13,43 @@ import { GasPrior1559Settings } from './GasPrior1559Settings'
 import { GasOptionConfig, isEIP1559Supported, useChainId } from '@masknet/web3-shared-evm'
 import { InfoIcon } from '@masknet/icons'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        footer: {
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: theme.spacing(0, 2),
-        },
-        heading: {
-            flex: 1,
-            fontWeight: 500,
-            fontSize: 16,
-            lineHeight: '22px',
-        },
-        summary: {
-            padding: 0,
-        },
-        accordion: {
-            backgroundColor: 'inherit',
-        },
-        slippage: {
-            display: 'flex',
-            paddingLeft: 10,
-            paddingRight: 10,
-        },
-        alert: {
-            backgroundColor: MaskColorVar.twitterInfoBackground.alpha(0.1),
-            color: MaskColorVar.redMain,
-            marginTop: 12,
-            fontSize: 12,
-            lineHeight: '16px',
-            padding: '12px 20px',
-            display: 'flex',
-            alignItems: 'center',
-        },
-        warningIcon: {
-            color: MaskColorVar.redMain,
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    footer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        padding: theme.spacing(0, 2),
+    },
+    heading: {
+        flex: 1,
+        fontWeight: 500,
+        fontSize: 16,
+        lineHeight: '22px',
+    },
+    summary: {
+        padding: 0,
+    },
+    accordion: {
+        backgroundColor: 'inherit',
+    },
+    slippage: {
+        display: 'flex',
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+    alert: {
+        backgroundColor: MaskColorVar.twitterInfoBackground.alpha(0.1),
+        color: MaskColorVar.redMain,
+        marginTop: 12,
+        fontSize: 12,
+        lineHeight: '16px',
+        padding: '12px 20px',
+        display: 'flex',
+        alignItems: 'center',
+    },
+    warningIcon: {
+        color: MaskColorVar.redMain,
+    },
+}))
 
 const WARNING_SLIPPAGE = 1000
 

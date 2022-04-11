@@ -99,9 +99,9 @@ export interface PostContext extends PostContextAuthor {
 export type PostInfo = PostContext
 
 const Context = createContext<PostContext | null>(null)
-export const PostInfoProvider = memo((props: React.PropsWithChildren<{ post: PostInfo }>) => {
-    return createElement(Context.Provider, { value: props.post, children: props.children })
-})
+export const PostInfoProvider = memo((props: React.PropsWithChildren<{ post: PostInfo }>) =>
+    createElement(Context.Provider, { value: props.post, children: props.children }),
+)
 export function usePostInfo(): PostContext | null {
     return useContext(Context)
 }

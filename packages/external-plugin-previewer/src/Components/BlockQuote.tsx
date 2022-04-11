@@ -9,12 +9,10 @@ const BlockQuote = styled('blockquote')`
     padding-bottom: 0.5em;
     opacity: 0.9;
 `
-export const MaskBlockQuote: Component<MaskCodeBlockProps> = (props) => {
-    return (
-        <BlockQuote>
-            <slot />
-        </BlockQuote>
-    )
-}
+export const MaskBlockQuote: Component<MaskCodeBlockProps> = (props) => (
+    <BlockQuote>
+        <slot />
+    </BlockQuote>
+)
 MaskBlockQuote.displayName = 'blockquote'
 export interface MaskCodeBlockProps {}

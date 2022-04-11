@@ -81,28 +81,30 @@ const ReplaceTransaction = memo(() => {
     const networkType = useNetworkType()
     const is1559 = isEIP1559Supported(getChainIdFromNetworkType(networkType))
 
-    const schema = useMemo(() => {
-        return zod.object({
-            gas: zod
-                .string()
-                .refine(
-                    (gas) => new BigNumber(gas).gte(hexToNumber(defaultGas) ?? 0),
-                    t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: hexToNumber(defaultGas) }),
-                ),
-            gasPrice: is1559
-                ? zod.string().optional()
-                : zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
-            maxPriorityFeePerGas: is1559
-                ? zod
-                      .string()
-                      .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
-                      .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
-                : zod.string().optional(),
-            maxFeePerGas: is1559
-                ? zod.string().min(1, t('wallet_transfer_error_max_fee_absence'))
-                : zod.string().optional(),
-        })
-    }, [defaultGas, is1559])
+    const schema = useMemo(
+        () =>
+            zod.object({
+                gas: zod
+                    .string()
+                    .refine(
+                        (gas) => new BigNumber(gas).gte(hexToNumber(defaultGas) ?? 0),
+                        t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: hexToNumber(defaultGas) }),
+                    ),
+                gasPrice: is1559
+                    ? zod.string().optional()
+                    : zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
+                maxPriorityFeePerGas: is1559
+                    ? zod
+                          .string()
+                          .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
+                          .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
+                    : zod.string().optional(),
+                maxFeePerGas: is1559
+                    ? zod.string().min(1, t('wallet_transfer_error_max_fee_absence'))
+                    : zod.string().optional(),
+            }),
+        [defaultGas, is1559],
+    )
 
     const {
         control,

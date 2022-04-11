@@ -155,32 +155,34 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     const [addressTip, setAddressTip] = useState<{ type: TransferAddressError; message: string } | null>()
 
-    const schema = useMemo(() => {
-        return zod.object({
-            address: zod
-                .string()
-                .min(1, t('wallet_transfer_error_address_absence'))
-                .refine(EthereumAddress.isValid, t('wallet_transfer_error_invalid_address')),
-            amount: zod
-                .string()
-                .refine((amount) => {
-                    const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
-                    return !!transferAmount || !isZero(transferAmount)
-                }, t('wallet_transfer_error_amount_absence'))
-                .refine((amount) => {
-                    const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
-                    return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
-                }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
-            gasLimit: zod
-                .string()
-                .min(1, t('wallet_transfer_error_gas_limit_absence'))
-                .refine(
-                    (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimitContext),
-                    t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
-                ),
-            gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
-        })
-    }, [selectedAsset, minGasLimitContext])
+    const schema = useMemo(
+        () =>
+            zod.object({
+                address: zod
+                    .string()
+                    .min(1, t('wallet_transfer_error_address_absence'))
+                    .refine(EthereumAddress.isValid, t('wallet_transfer_error_invalid_address')),
+                amount: zod
+                    .string()
+                    .refine((amount) => {
+                        const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
+                        return !!transferAmount || !isZero(transferAmount)
+                    }, t('wallet_transfer_error_amount_absence'))
+                    .refine((amount) => {
+                        const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
+                        return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
+                    }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
+                gasLimit: zod
+                    .string()
+                    .min(1, t('wallet_transfer_error_gas_limit_absence'))
+                    .refine(
+                        (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimitContext),
+                        t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
+                    ),
+                gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
+            }),
+        [selectedAsset, minGasLimitContext],
+    )
 
     const methods = useForm<zod.infer<typeof schema>>({
         shouldUnregister: false,
@@ -455,70 +457,68 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                         </Typography>
                     </Typography>
                     <Controller
-                        render={({ field }) => {
-                            return (
-                                <StyledInput
-                                    {...field}
-                                    type="text"
-                                    onChange={(ev) => {
-                                        const amount_ = ev.currentTarget.value.replace(/,/g, '.')
-                                        if (RE_MATCH_FRACTION_AMOUNT.test(amount_)) {
-                                            ev.currentTarget.value = `0${amount_}`
-                                            field.onChange(ev)
-                                        } else if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) {
-                                            ev.currentTarget.value = amount_
-                                            field.onChange(ev)
-                                        }
-                                    }}
-                                    error={!!errors.amount?.message}
-                                    helperText={errors.amount?.message}
-                                    InputProps={{
-                                        autoComplete: 'off',
-                                        autoCorrect: 'off',
-                                        title: 'Token Amount',
-                                        inputMode: 'decimal',
-                                        spellCheck: false,
-                                        endAdornment: (
-                                            <Box display="flex" alignItems="center">
-                                                <Chip
-                                                    size="small"
-                                                    label="MAX"
-                                                    clickable
-                                                    color="primary"
-                                                    classes={{ root: classes.max, label: classes.maxLabel }}
-                                                    onClick={handleMaxClick}
-                                                />
-                                                <Chip
-                                                    className={classes.chip}
-                                                    onClick={openAssetMenu}
-                                                    icon={
-                                                        <TokenIcon
-                                                            classes={{ icon: classes.icon }}
-                                                            address={selectedAsset?.token.address ?? ''}
-                                                            name={selectedAsset?.token.name}
-                                                            logoURI={selectedAsset?.token.logoURI}
-                                                        />
-                                                    }
-                                                    deleteIcon={<ChevronDown className={classes.icon} />}
-                                                    color="default"
-                                                    size="small"
-                                                    variant="outlined"
-                                                    clickable
-                                                    label={selectedAsset?.token.symbol}
-                                                    onDelete={noop}
-                                                />
-                                            </Box>
-                                        ),
-                                    }}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
-                                        min: 0,
-                                        minLength: 1,
-                                        maxLength: 79,
-                                    }}
-                                />
-                            )
-                        }}
+                        render={({ field }) => (
+                            <StyledInput
+                                {...field}
+                                type="text"
+                                onChange={(ev) => {
+                                    const amount_ = ev.currentTarget.value.replace(/,/g, '.')
+                                    if (RE_MATCH_FRACTION_AMOUNT.test(amount_)) {
+                                        ev.currentTarget.value = `0${amount_}`
+                                        field.onChange(ev)
+                                    } else if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) {
+                                        ev.currentTarget.value = amount_
+                                        field.onChange(ev)
+                                    }
+                                }}
+                                error={!!errors.amount?.message}
+                                helperText={errors.amount?.message}
+                                InputProps={{
+                                    autoComplete: 'off',
+                                    autoCorrect: 'off',
+                                    title: 'Token Amount',
+                                    inputMode: 'decimal',
+                                    spellCheck: false,
+                                    endAdornment: (
+                                        <Box display="flex" alignItems="center">
+                                            <Chip
+                                                size="small"
+                                                label="MAX"
+                                                clickable
+                                                color="primary"
+                                                classes={{ root: classes.max, label: classes.maxLabel }}
+                                                onClick={handleMaxClick}
+                                            />
+                                            <Chip
+                                                className={classes.chip}
+                                                onClick={openAssetMenu}
+                                                icon={
+                                                    <TokenIcon
+                                                        classes={{ icon: classes.icon }}
+                                                        address={selectedAsset?.token.address ?? ''}
+                                                        name={selectedAsset?.token.name}
+                                                        logoURI={selectedAsset?.token.logoURI}
+                                                    />
+                                                }
+                                                deleteIcon={<ChevronDown className={classes.icon} />}
+                                                color="default"
+                                                size="small"
+                                                variant="outlined"
+                                                clickable
+                                                label={selectedAsset?.token.symbol}
+                                                onDelete={noop}
+                                            />
+                                        </Box>
+                                    ),
+                                }}
+                                inputProps={{
+                                    pattern: '^[0-9]*[.,]?[0-9]*$',
+                                    min: 0,
+                                    minLength: 1,
+                                    maxLength: 79,
+                                }}
+                            />
+                        )}
                         name="amount"
                     />
 

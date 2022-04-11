@@ -45,12 +45,11 @@ export class ProviderProxy {
         this._globalNotify = notifyFn
     }
 
-    waitingOpen = () => {
-        return new Promise<void>((resolve, reject) => {
+    waitingOpen = () =>
+        new Promise<void>((resolve, reject) => {
             this._socket.addEventListener('open', () => resolve())
             this._socket.addEventListener('error', () => reject())
         })
-    }
 
     onMessage = (event: MessageEvent<string>) => {
         const { id, results, error } = JSON.parse(event.data) as PayloadMessage
@@ -199,12 +198,11 @@ export const getProxyWebsocketInstance = getProxyWebsocketInstanceWrapper()
  */
 export const getWebSocketInstance = async (endPoint?: string) => {
     const socket = new WebSocket(endPoint ?? SOCKET_POINT)
-    const waitingOpen = () => {
-        return new Promise<void>((resolve, reject) => {
+    const waitingOpen = () =>
+        new Promise<void>((resolve, reject) => {
             socket.addEventListener('open', () => resolve())
             socket.addEventListener('error', () => reject())
         })
-    }
     await waitingOpen()
     return socket
 }

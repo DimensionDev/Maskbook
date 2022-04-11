@@ -53,31 +53,35 @@ export function GasSettingBar(props: GasSettingBarProps) {
     }, [chainId, gasLimit, gasPrice, maxFee, priorityFee, gasOption])
 
     // set initial options
-    useEffect(() => {
-        return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
-            if (evt.open) return
-            if (evt.gasOption) setGasOption(evt.gasOption)
-            onChange(
-                (isEIP1559Supported(chainId)
-                    ? {
-                          gas: evt.gasLimit,
-                          maxFeePerGas: evt.maxFee,
-                          maxPriorityFeePerGas: evt.priorityFee,
-                      }
-                    : {
-                          gas: evt.gasLimit,
-                          gasPrice: evt.gasPrice,
-                      }) as NonPayableTx,
-            )
-        })
-    }, [])
+    useEffect(
+        () =>
+            WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
+                if (evt.open) return
+                if (evt.gasOption) setGasOption(evt.gasOption)
+                onChange(
+                    (isEIP1559Supported(chainId)
+                        ? {
+                              gas: evt.gasLimit,
+                              maxFeePerGas: evt.maxFee,
+                              maxPriorityFeePerGas: evt.priorityFee,
+                          }
+                        : {
+                              gas: evt.gasLimit,
+                              gasPrice: evt.gasPrice,
+                          }) as NonPayableTx,
+                )
+            }),
+        [],
+    )
 
-    const gasFee = useMemo(() => {
-        return multipliedBy(
-            gasLimit,
-            isEIP1559Supported(chainId) && maxFee ? new BigNumber(maxFee) : gasPrice ?? gasPriceDefault,
-        )
-    }, [chainId, gasLimit, gasPrice, maxFee, gasPriceDefault])
+    const gasFee = useMemo(
+        () =>
+            multipliedBy(
+                gasLimit,
+                isEIP1559Supported(chainId) && maxFee ? new BigNumber(maxFee) : gasPrice ?? gasPriceDefault,
+            ),
+        [chainId, gasLimit, gasPrice, maxFee, gasPriceDefault],
+    )
 
     return (
         <Box display="flex" flexDirection="row" alignItems="center">

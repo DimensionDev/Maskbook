@@ -93,9 +93,7 @@ const CreateWalletForm = memo(() => {
     const [searchParams] = useSearchParams()
     const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
-    useEffect(() => {
-        return WalletMessages.events.walletLockStatusUpdated.on(retry)
-    }, [retry])
+    useEffect(() => WalletMessages.events.walletLockStatusUpdated.on(retry), [retry])
 
     const schema = useMemo(() => {
         const passwordRule = zod

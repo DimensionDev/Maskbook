@@ -6,9 +6,7 @@ export function useObservableValues<T>(map: ObservableMap<any, T> | ObservableSe
     const subscription = useMemo<Subscription<T[]>>(
         () => ({
             getCurrentValue: () => [...map.values()],
-            subscribe: (callback) => {
-                return (map.event.on as any)(ALL_EVENTS, callback)
-            },
+            subscribe: (callback) => (map.event.on as any)(ALL_EVENTS, callback),
         }),
         [map],
     )

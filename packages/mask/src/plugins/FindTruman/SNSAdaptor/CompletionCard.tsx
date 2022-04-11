@@ -70,14 +70,14 @@ export default function CompletionCard(props: CompletionCardProps) {
         }
     }, [questions.map((e) => e.answer).join(',')])
 
-    const enabled = useMemo(() => {
-        return (
+    const enabled = useMemo(
+        () =>
             completionStatus &&
             !completionStatus.answersPublished &&
             !submitting &&
-            completionStatus.notMeetConditions.length === 0
-        )
-    }, [completionStatus, submitting])
+            completionStatus.notMeetConditions.length === 0,
+        [completionStatus, submitting],
+    )
 
     const isClosed = useMemo(() => !!completionStatus?.answersPublished, [completionStatus])
 

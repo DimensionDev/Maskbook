@@ -69,9 +69,7 @@ export function useDialogStackActor(open: boolean): useDialogStackActorReturn {
         LatestOnHideChange.current(open)
     }, [featureEnabled, open])
 
-    useEffect(() => {
-        return () => LatestOnHideChange.current(false)
-    }, [])
+    useEffect(() => () => LatestOnHideChange.current(false), [])
 
     const returnVal: useDialogStackActorReturn = {
         shouldReplaceExitWithBack: upperLevel !== -1,

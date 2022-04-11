@@ -1,8 +1,8 @@
 import { TwitterDecoder, __TwitterEncoder } from '@masknet/encryption'
 import { isNull } from 'lodash-unified'
 const ICAO9303Checksum = {
-    encode: (input: string) => {
-        return `${input}${(
+    encode: (input: string) =>
+        `${input}${(
             input
                 .toUpperCase()
                 .replace(/[+/=]/g, '0')
@@ -11,8 +11,7 @@ const ICAO9303Checksum = {
                 .reduce((l, r) => l + r, 0) % 19
         )
             .toString(19)
-            .toUpperCase()}`
-    },
+            .toUpperCase()}`,
     decode: (input: string) => {
         const content = input.slice(0, input.length - 1)
         const checksum = input.slice(input.length - 1)
@@ -45,11 +44,10 @@ export const twitterEncoding = {
         return []
     },
     payloadEncoder: __TwitterEncoder,
-    payloadDecoder: (text: string): string[] => {
-        return TwitterDecoder(text)
+    payloadDecoder: (text: string): string[] =>
+        TwitterDecoder(text)
             .map((x) => [x])
-            .unwrapOr([])
-    },
+            .unwrapOr([]),
 }
 
 function regexMatchAll(str: string, regexp: RegExp, index = 1) {

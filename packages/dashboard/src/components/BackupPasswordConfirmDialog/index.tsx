@@ -29,9 +29,10 @@ export const BackupPasswordConfirmDialog = memo<DialogProps>(({ onConfirmed, onC
         }
     }
 
-    const title = useMemo(() => {
-        return (user.backupPassword ? option?.confirmTitle : option?.tipTitle) ?? t.confirm_password()
-    }, [option?.tipTitle, option?.confirmTitle])
+    const title = useMemo(
+        () => (user.backupPassword ? option?.confirmTitle : option?.tipTitle) ?? t.confirm_password(),
+        [option?.tipTitle, option?.confirmTitle],
+    )
 
     return (
         <MaskDialog open={open} title={title} onClose={onClose} maxWidth="xs">

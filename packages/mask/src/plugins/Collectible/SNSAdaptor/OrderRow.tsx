@@ -16,43 +16,41 @@ import { getOrderUnitPrice, NonFungibleTokenAPI } from '@masknet/web3-providers'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import urlcat from 'urlcat'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        account: {
-            display: 'flex',
-            alignItems: 'center',
-            lineHeight: 1,
-        },
-        avatar: {
-            width: 18,
-            height: 18,
-        },
-        accountName: {
-            marginLeft: theme.spacing(0.5),
-            fontSize: 14,
-            lineHeight: 1,
-        },
-        relativeTime: {
-            whiteSpace: 'nowrap',
-        },
-        token: {
-            objectFit: 'contain',
-            width: 18,
-            height: 18,
-            marginRight: theme.spacing(0.5),
-        },
-        tokenLink: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        content: {
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: 14,
-            lineHeight: 1,
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    account: {
+        display: 'flex',
+        alignItems: 'center',
+        lineHeight: 1,
+    },
+    avatar: {
+        width: 18,
+        height: 18,
+    },
+    accountName: {
+        marginLeft: theme.spacing(0.5),
+        fontSize: 14,
+        lineHeight: 1,
+    },
+    relativeTime: {
+        whiteSpace: 'nowrap',
+    },
+    token: {
+        objectFit: 'contain',
+        width: 18,
+        height: 18,
+        marginRight: theme.spacing(0.5),
+    },
+    tokenLink: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    content: {
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: 14,
+        lineHeight: 1,
+    },
+}))
 
 interface IRowProps {
     order: NonFungibleTokenAPI.AssetOrder
@@ -65,11 +63,13 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
     const { provider } = CollectibleState.useContainer()
     const address = order.maker_account?.user?.username || order.maker_account?.address || ''
 
-    const link = useMemo(() => {
-        return provider === NonFungibleAssetProvider.OPENSEA
-            ? urlcat('https://opensea.io/accounts/:address', { address })
-            : order.maker_account?.link
-    }, [order, provider, address])
+    const link = useMemo(
+        () =>
+            provider === NonFungibleAssetProvider.OPENSEA
+                ? urlcat('https://opensea.io/accounts/:address', { address })
+                : order.maker_account?.link,
+        [order, provider, address],
+    )
 
     return (
         <TableRow>

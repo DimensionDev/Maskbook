@@ -22,31 +22,29 @@ import getUnixTime from 'date-fns/getUnixTime'
 import type { useAsset } from '../../EVM/hooks'
 import { isWyvernSchemaName } from '../utils'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        content: {},
-        footer: {
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: theme.spacing(0, 2, 2),
+const useStyles = makeStyles()((theme) => ({
+    content: {},
+    footer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        padding: theme.spacing(0, 2, 2),
+    },
+    panel: {
+        marginTop: theme.spacing(2),
+        '&:first-child': {
+            marginTop: 0,
         },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
-        },
-        label: {
-            marginTop: theme.spacing(1.5),
-        },
-        caption: {
-            fontSize: 11,
-        },
-        button: {
-            marginTop: theme.spacing(1.5),
-        },
-    }
-})
+    },
+    label: {
+        marginTop: theme.spacing(1.5),
+    },
+    caption: {
+        fontSize: 11,
+    },
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
+}))
 
 export interface ListingByPriceCardProps {
     open: boolean

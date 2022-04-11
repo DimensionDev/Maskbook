@@ -42,9 +42,10 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
         const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
         // #region Get suggest gas options data from meta swap api
-        const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
-            return WalletRPC.getEstimateGasFees(chainId)
-        }, [chainId])
+        const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(
+            () => WalletRPC.getEstimateGasFees(chainId),
+            [chainId],
+        )
         // #endregion
 
         // #region Gas options
@@ -72,27 +73,29 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
         const currentGasOption = options.find((opt) => opt.gasOption === selectedGasOption)
 
         // #region Form field define schema
-        const schema = useMemo(() => {
-            return zod
-                .object({
-                    gasLimit: zod
-                        .string()
-                        .min(1, t('wallet_transfer_error_gas_limit_absence'))
-                        .refine(
-                            (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimit),
-                            t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
-                        ),
-                    maxPriorityFeePerGas: zod
-                        .string()
-                        .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
-                        .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive')),
-                    maxFeePerGas: zod.string().min(1, t('wallet_transfer_error_max_fee_absence')),
-                })
-                .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
-                    message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
-                    path: ['maxFeePerGas'],
-                })
-        }, [minGasLimit, gasOptions])
+        const schema = useMemo(
+            () =>
+                zod
+                    .object({
+                        gasLimit: zod
+                            .string()
+                            .min(1, t('wallet_transfer_error_gas_limit_absence'))
+                            .refine(
+                                (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimit),
+                                t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
+                            ),
+                        maxPriorityFeePerGas: zod
+                            .string()
+                            .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
+                            .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive')),
+                        maxFeePerGas: zod.string().min(1, t('wallet_transfer_error_max_fee_absence')),
+                    })
+                    .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
+                        message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
+                        path: ['maxFeePerGas'],
+                    }),
+            [minGasLimit, gasOptions],
+        )
         // #endregion
 
         const {
@@ -215,22 +218,20 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                     <Typography className={classes.label}>{t('popups_wallet_gas_fee_settings_gas_limit')}</Typography>
                     <Controller
                         control={control}
-                        render={({ field }) => {
-                            return (
-                                <StyledInput
-                                    {...field}
-                                    onChange={(e) => {
-                                        setGasOption(null)
-                                        field.onChange(e)
-                                    }}
-                                    error={!!errors.gasLimit?.message}
-                                    helperText={errors.gasLimit?.message}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
-                                    }}
-                                />
-                            )
-                        }}
+                        render={({ field }) => (
+                            <StyledInput
+                                {...field}
+                                onChange={(e) => {
+                                    setGasOption(null)
+                                    field.onChange(e)
+                                }}
+                                error={!!errors.gasLimit?.message}
+                                helperText={errors.gasLimit?.message}
+                                inputProps={{
+                                    pattern: '^[0-9]*[.,]?[0-9]*$',
+                                }}
+                            />
+                        )}
                         name="gasLimit"
                     />
                     <Typography className={classes.label}>

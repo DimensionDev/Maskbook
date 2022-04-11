@@ -4,11 +4,13 @@ import { useMyPersonas } from './useMyPersonas'
 
 export function useMyProfiles() {
     const myPersonas = useMyPersonas()
-    return useMemo(() => {
-        return myPersonas.map((persona) => {
-            return [...persona.linkedProfiles].filter(
-                ([key, value]) => key.network === activatedSocialNetworkUI.networkIdentifier,
-            )
-        })
-    }, [myPersonas])
+    return useMemo(
+        () =>
+            myPersonas.map((persona) =>
+                [...persona.linkedProfiles].filter(
+                    ([key, value]) => key.network === activatedSocialNetworkUI.networkIdentifier,
+                ),
+            ),
+        [myPersonas],
+    )
 }

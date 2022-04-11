@@ -107,22 +107,19 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),
-        createPluginHost(signal, (pluginID, signal) => {
-            return {
-                createKVStorage(type, defaultValues) {
-                    if (type === 'memory')
-                        return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
-                    else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
-                },
-                personaSign: Services.Identity.signWithPersona,
-                walletSign: Services.Ethereum.personalSign,
-                currentPersona: createSubscriptionFromAsync(
-                    Services.Settings.getCurrentPersonaIdentifier,
-                    undefined as PersonaIdentifier | undefined,
-                    MaskMessages.events.currentPersonaIdentifier.on,
-                ),
-            }
-        }),
+        createPluginHost(signal, (pluginID, signal) => ({
+            createKVStorage(type, defaultValues) {
+                if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+                else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+            },
+            personaSign: Services.Identity.signWithPersona,
+            walletSign: Services.Ethereum.personalSign,
+            currentPersona: createSubscriptionFromAsync(
+                Services.Settings.getCurrentPersonaIdentifier,
+                undefined as PersonaIdentifier | undefined,
+                MaskMessages.events.currentPersonaIdentifier.on,
+            ),
+        })),
     )
 
     setupShadowRootPortal()

@@ -198,36 +198,34 @@ export function PoolInList(props: PoolInListProps) {
     const base = new BigNumber(pool.total).minus(pool.total_remaining).dividedBy(pool.total).toNumber()
     const progress = 100 * base
 
-    const StatusButton = () => {
-        return (
-            <>
-                {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
-                    <ActionButton fullWidth size="small" variant="contained" onClick={() => destructCallback(pool.pid)}>
-                        {t('plugin_ito_withdraw')}
-                    </ActionButton>
-                ) : canSend ? (
-                    <ActionButton
-                        fullWidth
-                        size="small"
-                        variant="contained"
-                        onClick={() =>
-                            onSend?.(
-                                omit({ ...pool, token: poolToken, exchange_tokens: exchangeTokens }, [
-                                    'token_addresses',
-                                    'exchange_token_addresses',
-                                ]) as JSON_PayloadInMask,
-                            )
-                        }>
-                        {t('plugin_ito_list_button_send')}
-                    </ActionButton>
-                ) : isWithdrawn ? (
-                    <ActionButton fullWidth size="small" variant="contained" disabled>
-                        {t('plugin_ito_withdrawn')}
-                    </ActionButton>
-                ) : null}
-            </>
-        )
-    }
+    const StatusButton = () => (
+        <>
+            {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
+                <ActionButton fullWidth size="small" variant="contained" onClick={() => destructCallback(pool.pid)}>
+                    {t('plugin_ito_withdraw')}
+                </ActionButton>
+            ) : canSend ? (
+                <ActionButton
+                    fullWidth
+                    size="small"
+                    variant="contained"
+                    onClick={() =>
+                        onSend?.(
+                            omit({ ...pool, token: poolToken, exchange_tokens: exchangeTokens }, [
+                                'token_addresses',
+                                'exchange_token_addresses',
+                            ]) as JSON_PayloadInMask,
+                        )
+                    }>
+                    {t('plugin_ito_list_button_send')}
+                </ActionButton>
+            ) : isWithdrawn ? (
+                <ActionButton fullWidth size="small" variant="contained" disabled>
+                    {t('plugin_ito_withdrawn')}
+                </ActionButton>
+            ) : null}
+        </>
+    )
 
     return poolToken && exchangeTokens ? (
         <div className={classes.top}>

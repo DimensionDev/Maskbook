@@ -22,20 +22,22 @@ export function useAccountBalance(pools: Pool[]) {
     )
     const asyncResults = useAsyncRetry(() => callback(calls), [calls])
 
-    const values = useMemo(() => {
-        return results.length !== 0
-            ? pools.map(
-                  (pool, i) =>
-                      ({
-                          pool: pool,
-                          account: {
-                              ticketBalance: results[i].value,
-                              userAddress: account,
-                          },
-                      } as AccountPool),
-              )
-            : undefined
-    }, [account, ticketContracts, asyncResults, results])
+    const values = useMemo(
+        () =>
+            results.length !== 0
+                ? pools.map(
+                      (pool, i) =>
+                          ({
+                              pool: pool,
+                              account: {
+                                  ticketBalance: results[i].value,
+                                  userAddress: account,
+                              },
+                          } as AccountPool),
+                  )
+                : undefined,
+        [account, ticketContracts, asyncResults, results],
+    )
 
     return {
         ...asyncResults,

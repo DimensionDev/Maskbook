@@ -29,6 +29,6 @@ export interface WalletQRCodeProps extends React.PropsWithChildren<{}> {
     }
 }
 
-export const WalletQRCodeContainer = memo((props: WalletQRCodeProps) => {
-    return <QRCodeContainer {...props}>{props.children}</QRCodeContainer>
-})
+export const WalletQRCodeContainer = memo((props: WalletQRCodeProps) => (
+    <QRCodeContainer {...props}>{props.children}</QRCodeContainer>
+))

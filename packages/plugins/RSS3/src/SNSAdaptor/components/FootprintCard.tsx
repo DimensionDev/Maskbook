@@ -5,9 +5,7 @@ import fromUnixTime from 'date-fns/fromUnixTime'
 import { ImageHolder } from './ImageHolder'
 import { useI18N } from '../../locales'
 
-const formatDate = (ts: string): string => {
-    return fromUnixTime(Number.parseInt(ts, 16)).toLocaleDateString('en-US')
-}
+const formatDate = (ts: string): string => fromUnixTime(Number.parseInt(ts, 16)).toLocaleDateString('en-US')
 export interface FootprintProps {
     imageUrl: string
     startDate: string | undefined

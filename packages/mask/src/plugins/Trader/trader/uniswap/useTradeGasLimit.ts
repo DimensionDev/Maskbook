@@ -49,28 +49,22 @@ export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvid
 
                 return web3.eth
                     .estimateGas(config)
-                    .then((gasEstimate) => {
-                        return {
-                            call: x,
-                            gasEstimate: new BigNumber(gasEstimate),
-                        }
-                    })
-                    .catch((error) => {
-                        return web3.eth
+                    .then((gasEstimate) => ({
+                        call: x,
+                        gasEstimate: new BigNumber(gasEstimate),
+                    }))
+                    .catch((error) =>
+                        web3.eth
                             .call(config)
-                            .then(() => {
-                                return {
-                                    call: x,
-                                    error: new Error('Gas estimate failed.'),
-                                }
-                            })
-                            .catch((error) => {
-                                return {
-                                    call: x,
-                                    error: new Error(swapErrorToUserReadableMessage(error)),
-                                }
-                            })
-                    })
+                            .then(() => ({
+                                call: x,
+                                error: new Error('Gas estimate failed.'),
+                            }))
+                            .catch((error) => ({
+                                call: x,
+                                error: new Error(swapErrorToUserReadableMessage(error)),
+                            })),
+                    )
             }),
         )
 

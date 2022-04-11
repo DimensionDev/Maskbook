@@ -19,11 +19,9 @@ const Actions = () => {
     }
 }
 
-export const SignUpRoutes = () => {
-    return (
-        <Routes>
-            <Route path=":action" element={<Actions />} />
-            <Route path="*" element={<PersonaCreate />} />
-        </Routes>
-    )
-}
+export const SignUpRoutes = () => (
+    <Routes>
+        <Route path=":action" element={<Actions />} />
+        <Route path="*" element={<PersonaCreate />} />
+    </Routes>
+)

@@ -30,8 +30,8 @@ export function useGasOptions() {
 
     const gasOptions = is1559Supported ? gasFromMetaMask : gasFromDebank
 
-    const options = useMemo(() => {
-        return [
+    const options = useMemo(
+        () => [
             {
                 title: t.wallet_gas_fee_settings_low(),
                 gasOption: GasOption.Low,
@@ -47,8 +47,9 @@ export function useGasOptions() {
                 gasOption: GasOption.High,
                 gasPrice: gasOptions?.high ?? 0,
             },
-        ]
-    }, [is1559Supported, gasOptions])
+        ],
+        [is1559Supported, gasOptions],
+    )
 
     return {
         value: options,

@@ -193,79 +193,83 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const etherPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-    const { value: estimateGasFees } = useAsync(async () => WalletRPC.getEstimateGasFees(chainId), [chainId])
+    const { value: estimateGasFees } = useAsync(() => WalletRPC.getEstimateGasFees(chainId), [chainId])
 
     const { Utils } = useWeb3State()
 
-    const schema = useMemo(() => {
-        return zod
-            .object({
-                address: zod
-                    .string()
-                    .min(1, t('wallet_transfer_error_address_absence'))
-                    .refine(
-                        (address) => EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address),
-                        t('wallet_transfer_error_invalid_address'),
-                    ),
-                amount: zod
-                    .string()
-                    .refine((amount) => {
-                        const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
-                        return !!transferAmount || !isZero(transferAmount)
-                    }, t('wallet_transfer_error_amount_absence'))
-                    .refine((amount) => {
-                        const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
-                        return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
-                    }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
-                gasLimit: zod
-                    .string()
-                    .min(1, t('wallet_transfer_error_gas_limit_absence'))
-                    .refine(
-                        (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimitContext),
-                        t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
-                    ),
-                maxPriorityFeePerGas: zod
-                    .string()
-                    .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
-                    .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
-                    .refine((value) => {
-                        return isGreaterThanOrEqualTo(value, estimateGasFees?.low?.suggestedMaxPriorityFeePerGas ?? 0)
-                    }, t('wallet_transfer_error_max_priority_gas_fee_too_low'))
-                    .refine(
-                        (value) =>
-                            isLessThan(
-                                value,
-                                multipliedBy(
-                                    estimateGasFees?.high?.suggestedMaxPriorityFeePerGas ?? 0,
-                                    HIGH_FEE_WARNING_MULTIPLIER,
+    const schema = useMemo(
+        () =>
+            zod
+                .object({
+                    address: zod
+                        .string()
+                        .min(1, t('wallet_transfer_error_address_absence'))
+                        .refine(
+                            (address) => EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address),
+                            t('wallet_transfer_error_invalid_address'),
+                        ),
+                    amount: zod
+                        .string()
+                        .refine((amount) => {
+                            const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
+                            return !!transferAmount || !isZero(transferAmount)
+                        }, t('wallet_transfer_error_amount_absence'))
+                        .refine((amount) => {
+                            const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
+                            return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
+                        }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
+                    gasLimit: zod
+                        .string()
+                        .min(1, t('wallet_transfer_error_gas_limit_absence'))
+                        .refine(
+                            (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimitContext),
+                            t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
+                        ),
+                    maxPriorityFeePerGas: zod
+                        .string()
+                        .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
+                        .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
+                        .refine(
+                            (value) =>
+                                isGreaterThanOrEqualTo(value, estimateGasFees?.low?.suggestedMaxPriorityFeePerGas ?? 0),
+                            t('wallet_transfer_error_max_priority_gas_fee_too_low'),
+                        )
+                        .refine(
+                            (value) =>
+                                isLessThan(
+                                    value,
+                                    multipliedBy(
+                                        estimateGasFees?.high?.suggestedMaxPriorityFeePerGas ?? 0,
+                                        HIGH_FEE_WARNING_MULTIPLIER,
+                                    ),
                                 ),
-                            ),
-                        t('wallet_transfer_error_max_priority_gas_fee_too_high'),
-                    ),
-                maxFeePerGas: zod
-                    .string()
-                    .min(1, t('wallet_transfer_error_max_fee_absence'))
-                    .refine(
-                        (value) => isGreaterThanOrEqualTo(value, estimateGasFees?.low?.suggestedMaxFeePerGas ?? 0),
-                        t('wallet_transfer_error_max_fee_too_low'),
-                    )
-                    .refine(
-                        (value) =>
-                            isLessThan(
-                                value,
-                                multipliedBy(
-                                    estimateGasFees?.high?.suggestedMaxFeePerGas ?? 0,
-                                    HIGH_FEE_WARNING_MULTIPLIER,
+                            t('wallet_transfer_error_max_priority_gas_fee_too_high'),
+                        ),
+                    maxFeePerGas: zod
+                        .string()
+                        .min(1, t('wallet_transfer_error_max_fee_absence'))
+                        .refine(
+                            (value) => isGreaterThanOrEqualTo(value, estimateGasFees?.low?.suggestedMaxFeePerGas ?? 0),
+                            t('wallet_transfer_error_max_fee_too_low'),
+                        )
+                        .refine(
+                            (value) =>
+                                isLessThan(
+                                    value,
+                                    multipliedBy(
+                                        estimateGasFees?.high?.suggestedMaxFeePerGas ?? 0,
+                                        HIGH_FEE_WARNING_MULTIPLIER,
+                                    ),
                                 ),
-                            ),
-                        t('wallet_transfer_error_max_fee_too_high'),
-                    ),
-            })
-            .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
-                message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
-                path: ['maxFeePerGas'],
-            })
-    }, [wallet, selectedAsset, minGasLimitContext, estimateGasFees, Utils])
+                            t('wallet_transfer_error_max_fee_too_high'),
+                        ),
+                })
+                .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
+                    message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
+                    path: ['maxFeePerGas'],
+                }),
+        [wallet, selectedAsset, minGasLimitContext, estimateGasFees, Utils],
+    )
 
     const methods = useForm<zod.infer<typeof schema>>({
         shouldUnregister: false,
@@ -622,70 +626,68 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         </Typography>
                     </Typography>
                     <Controller
-                        render={({ field }) => {
-                            return (
-                                <StyledInput
-                                    {...field}
-                                    type="text"
-                                    onChange={(ev) => {
-                                        const amount_ = ev.currentTarget.value.replace(/,/g, '.')
-                                        if (RE_MATCH_FRACTION_AMOUNT.test(amount_)) {
-                                            ev.currentTarget.value = `0${amount_}`
-                                            field.onChange(ev)
-                                        } else if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) {
-                                            ev.currentTarget.value = amount_
-                                            field.onChange(ev)
-                                        }
-                                    }}
-                                    error={!!errors.amount?.message}
-                                    helperText={errors.amount?.message}
-                                    InputProps={{
-                                        autoComplete: 'off',
-                                        autoCorrect: 'off',
-                                        title: 'Token Amount',
-                                        inputMode: 'decimal',
-                                        spellCheck: false,
-                                        endAdornment: (
-                                            <Box display="flex" alignItems="center">
-                                                <Chip
-                                                    size="small"
-                                                    label="MAX"
-                                                    clickable
-                                                    color="primary"
-                                                    classes={{ root: classes.max, label: classes.maxLabel }}
-                                                    onClick={handleMaxClick}
-                                                />
-                                                <Chip
-                                                    className={classes.chip}
-                                                    onClick={openAssetMenu}
-                                                    icon={
-                                                        <TokenIcon
-                                                            classes={{ icon: classes.icon }}
-                                                            address={selectedAsset?.token.address ?? ''}
-                                                            name={selectedAsset?.token.name}
-                                                            logoURI={selectedAsset?.token.logoURI}
-                                                        />
-                                                    }
-                                                    deleteIcon={<ChevronDown className={classes.icon} />}
-                                                    color="default"
-                                                    size="small"
-                                                    variant="outlined"
-                                                    clickable
-                                                    label={selectedAsset?.token.symbol}
-                                                    onDelete={noop}
-                                                />
-                                            </Box>
-                                        ),
-                                    }}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
-                                        min: 0,
-                                        minLength: 1,
-                                        maxLength: 79,
-                                    }}
-                                />
-                            )
-                        }}
+                        render={({ field }) => (
+                            <StyledInput
+                                {...field}
+                                type="text"
+                                onChange={(ev) => {
+                                    const amount_ = ev.currentTarget.value.replace(/,/g, '.')
+                                    if (RE_MATCH_FRACTION_AMOUNT.test(amount_)) {
+                                        ev.currentTarget.value = `0${amount_}`
+                                        field.onChange(ev)
+                                    } else if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) {
+                                        ev.currentTarget.value = amount_
+                                        field.onChange(ev)
+                                    }
+                                }}
+                                error={!!errors.amount?.message}
+                                helperText={errors.amount?.message}
+                                InputProps={{
+                                    autoComplete: 'off',
+                                    autoCorrect: 'off',
+                                    title: 'Token Amount',
+                                    inputMode: 'decimal',
+                                    spellCheck: false,
+                                    endAdornment: (
+                                        <Box display="flex" alignItems="center">
+                                            <Chip
+                                                size="small"
+                                                label="MAX"
+                                                clickable
+                                                color="primary"
+                                                classes={{ root: classes.max, label: classes.maxLabel }}
+                                                onClick={handleMaxClick}
+                                            />
+                                            <Chip
+                                                className={classes.chip}
+                                                onClick={openAssetMenu}
+                                                icon={
+                                                    <TokenIcon
+                                                        classes={{ icon: classes.icon }}
+                                                        address={selectedAsset?.token.address ?? ''}
+                                                        name={selectedAsset?.token.name}
+                                                        logoURI={selectedAsset?.token.logoURI}
+                                                    />
+                                                }
+                                                deleteIcon={<ChevronDown className={classes.icon} />}
+                                                color="default"
+                                                size="small"
+                                                variant="outlined"
+                                                clickable
+                                                label={selectedAsset?.token.symbol}
+                                                onDelete={noop}
+                                            />
+                                        </Box>
+                                    ),
+                                }}
+                                inputProps={{
+                                    pattern: '^[0-9]*[.,]?[0-9]*$',
+                                    min: 0,
+                                    minLength: 1,
+                                    maxLength: 79,
+                                }}
+                            />
+                        )}
                         name="amount"
                     />
                     <Typography className={classes.label}>{t('gas_limit')}</Typography>

@@ -6,53 +6,51 @@ import { useI18N } from '../../../utils'
 import { resolveWebLinkOnCryptoartAI } from '../pipes'
 import { truncate } from 'lodash-unified'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        account: {
-            display: 'flex',
-            alignItems: 'center',
-            lineHeight: 1,
-        },
-        avatar: {
-            width: 18,
-            height: 18,
-        },
-        accountName: {
-            marginLeft: theme.spacing(0.5),
-            fontSize: 14,
-            lineHeight: 1,
-        },
-        relativeTime: {
-            whiteSpace: 'nowrap',
-        },
-        token: {
-            objectFit: 'contain',
-            width: 18,
-            height: 18,
-            marginRight: theme.spacing(0.5),
-        },
-        tokenLink: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        content: {
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: 14,
-            lineHeight: 1,
-        },
-        ethPrice: {
-            display: 'flex',
-            alignItems: 'center',
-            fontWeight: 700,
-        },
-        usdcPrice: {
-            display: 'flex',
-            alignItems: 'center',
-            color: 'grey',
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    account: {
+        display: 'flex',
+        alignItems: 'center',
+        lineHeight: 1,
+    },
+    avatar: {
+        width: 18,
+        height: 18,
+    },
+    accountName: {
+        marginLeft: theme.spacing(0.5),
+        fontSize: 14,
+        lineHeight: 1,
+    },
+    relativeTime: {
+        whiteSpace: 'nowrap',
+    },
+    token: {
+        objectFit: 'contain',
+        width: 18,
+        height: 18,
+        marginRight: theme.spacing(0.5),
+    },
+    tokenLink: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    content: {
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: 14,
+        lineHeight: 1,
+    },
+    ethPrice: {
+        display: 'flex',
+        alignItems: 'center',
+        fontWeight: 700,
+    },
+    usdcPrice: {
+        display: 'flex',
+        alignItems: 'center',
+        color: 'grey',
+    },
+}))
 
 interface IRowProps {
     event: any

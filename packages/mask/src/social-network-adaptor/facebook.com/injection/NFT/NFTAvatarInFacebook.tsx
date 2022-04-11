@@ -90,14 +90,16 @@ function NFTAvatarInFacebook() {
         return 0
     }, [windowSize, isMobileFacebook, avatar])
 
-    useEffect(() => {
-        return MaskMessages.events.NFTAvatarUpdated.on((data) =>
-            setNFTEvent((prev) => {
-                if (!prev) return data
-                return { ...prev, ...pickBy<NFTAvatarEvent>(data, (item) => !!item) }
-            }),
-        )
-    }, [])
+    useEffect(
+        () =>
+            MaskMessages.events.NFTAvatarUpdated.on((data) =>
+                setNFTEvent((prev) => {
+                    if (!prev) return data
+                    return { ...prev, ...pickBy<NFTAvatarEvent>(data, (item) => !!item) }
+                }),
+            ),
+        [],
+    )
 
     // Because of the mobile upload step, need to use memory storage to store NFTEven
     useAsync(async () => {

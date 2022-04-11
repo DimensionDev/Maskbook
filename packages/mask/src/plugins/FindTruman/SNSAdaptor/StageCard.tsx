@@ -11,24 +11,22 @@ export default function StageCard(props: StageCardProps) {
     const { userStoryStatus } = props
     const { t } = useContext(FindTrumanContext)
 
-    const renderProgress = (total: number, success: number, color: 'primary' | 'secondary' | 'success') => {
-        return (
-            <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                <Box sx={{ width: '100%', mr: 1 }}>
-                    <BorderLinearProgress
-                        color={color}
-                        value={total > 0 ? (success * 100) / total : 0}
-                        variant="determinate"
-                    />
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Typography variant="body2" color="text.secondary">
-                        {success}/{total}
-                    </Typography>
-                </Box>
+    const renderProgress = (total: number, success: number, color: 'primary' | 'secondary' | 'success') => (
+        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+            <Box sx={{ width: '100%', mr: 1 }}>
+                <BorderLinearProgress
+                    color={color}
+                    value={total > 0 ? (success * 100) / total : 0}
+                    variant="determinate"
+                />
             </Box>
-        )
-    }
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Typography variant="body2" color="text.secondary">
+                    {success}/{total}
+                </Typography>
+            </Box>
+        </Box>
+    )
 
     return (
         <CardContent>

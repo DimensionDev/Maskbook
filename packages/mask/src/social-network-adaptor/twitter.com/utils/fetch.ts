@@ -12,9 +12,7 @@ import {
 } from '@masknet/typed-message'
 import { collectNodeText, collectTwitterEmoji } from '../../../utils'
 
-const parseId = (t: string) => {
-    return regexMatch(t, /status\/(\d+)/, 1)!
-}
+const parseId = (t: string) => regexMatch(t, /status\/(\d+)/, 1)!
 
 export const postIdParser = (node: HTMLElement) => {
     const idNode = defaultTo(
@@ -118,15 +116,13 @@ export const postImagesParser = async (node: HTMLElement): Promise<string[]> => 
     return imgUrls
 }
 
-export const postParser = (node: HTMLElement) => {
-    return {
-        ...postNameParser(node),
-        avatar: postAvatarParser(node),
+export const postParser = (node: HTMLElement) => ({
+    ...postNameParser(node),
+    avatar: postAvatarParser(node),
 
-        // FIXME:
-        // we get wrong pid for nested tweet
-        pid: postIdParser(node),
+    // FIXME:
+    // we get wrong pid for nested tweet
+    pid: postIdParser(node),
 
-        messages: postContentMessageParser(node).filter((x) => !isTypedMessageEmpty(x)),
-    }
-}
+    messages: postContentMessageParser(node).filter((x) => !isTypedMessageEmpty(x)),
+})

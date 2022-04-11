@@ -10,55 +10,53 @@ import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { Account } from './Account'
 import { resolveWebLinkOnCryptoartAI } from '../pipes'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        content: {
-            paddingTop: 0,
-            paddingBottom: '0 !important',
+const useStyles = makeStyles()((theme) => ({
+    content: {
+        paddingTop: 0,
+        paddingBottom: '0 !important',
+    },
+    container: {
+        padding: theme.spacing(1),
+    },
+    markdown: {
+        margin: theme.spacing(1, 0),
+    },
+    description: {
+        fontSize: 14,
+        wordBreak: 'break-all',
+    },
+    trait_content: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2,1fr)',
+        gap: theme.spacing(2),
+    },
+    trait: {
+        padding: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        fontSize: 14,
+        fontWeight: 600,
+    },
+    chain_row: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginBottom: theme.spacing(0.5),
+        '&:last-child': {
+            marginBottom: 0,
         },
-        container: {
-            padding: theme.spacing(1),
-        },
-        markdown: {
-            margin: theme.spacing(1, 0),
-        },
-        description: {
-            fontSize: 14,
-            wordBreak: 'break-all',
-        },
-        trait_content: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2,1fr)',
-            gap: theme.spacing(2),
-        },
-        trait: {
-            padding: theme.spacing(2),
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            fontSize: 14,
-            fontWeight: 600,
-        },
-        chain_row: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: theme.spacing(0.5),
-            '&:last-child': {
-                marginBottom: 0,
-            },
-        },
-        edition_row: {
-            display: 'flex',
-            marginBottom: theme.spacing(0.5),
-        },
-        tokenId: {
-            maxWidth: 112,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-        },
-    }
-})
+    },
+    edition_row: {
+        display: 'flex',
+        marginBottom: theme.spacing(0.5),
+    },
+    tokenId: {
+        maxWidth: 112,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+    },
+}))
 
 export interface TokenTabProps {}
 

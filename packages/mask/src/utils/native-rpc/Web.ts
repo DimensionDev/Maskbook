@@ -39,40 +39,34 @@ const personaFormatter = (p: Persona) => {
     }
 }
 
-const profileFormatter = (p: Profile) => {
-    return {
-        identifier: p.identifier.toText(),
-        nickname: p.nickname,
-        linkedPersona: !!p.linkedPersona,
-        createdAt: p.createdAt.getTime(),
-        updatedAt: p.updatedAt.getTime(),
-    }
-}
+const profileFormatter = (p: Profile) => ({
+    identifier: p.identifier.toText(),
+    nickname: p.nickname,
+    linkedPersona: !!p.linkedPersona,
+    createdAt: p.createdAt.getTime(),
+    updatedAt: p.updatedAt.getTime(),
+})
 
 const profileRelationFormatter = (
     p: Profile,
     personaIdentifier: string | undefined,
     favor: RelationFavor | undefined,
-) => {
-    return {
-        identifier: p.identifier.toText(),
-        nickname: p.nickname,
-        linkedPersona: !!p.linkedPersona,
-        createdAt: p.createdAt.getTime(),
-        updatedAt: p.updatedAt.getTime(),
-        personaIdentifier: personaIdentifier,
-        favor: favor,
-    }
-}
+) => ({
+    identifier: p.identifier.toText(),
+    nickname: p.nickname,
+    linkedPersona: !!p.linkedPersona,
+    createdAt: p.createdAt.getTime(),
+    updatedAt: p.updatedAt.getTime(),
+    personaIdentifier: personaIdentifier,
+    favor: favor,
+})
 
 const personaInformationFormatter = (p: PersonaInformation) => {
-    const profiles = p.linkedProfiles.map((profileInformation) => {
-        return {
-            nickname: profileInformation.nickname,
-            identifier: profileInformation.identifier.toText(),
-            avatar: profileInformation.avatar,
-        }
-    })
+    const profiles = p.linkedProfiles.map((profileInformation) => ({
+        nickname: profileInformation.nickname,
+        identifier: profileInformation.identifier.toText(),
+        avatar: profileInformation.avatar,
+    }))
 
     return {
         identifier: p.identifier.toText(),

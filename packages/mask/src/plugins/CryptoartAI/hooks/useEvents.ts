@@ -17,21 +17,19 @@ export function useEvents(token?: Token) {
         const assetEvents = await getEvents(token.tokenId, chainId)
 
         return {
-            data: assetEvents.map((event: any) => {
-                return {
-                    avatorPath: event.avatorPath,
-                    award: event.award,
-                    createTime: event.createTime,
-                    operatorAddress: event.operatorAddress,
-                    operatorName: event.operatorName,
-                    operatorNikeName: event.operatorNikeName,
-                    priceInEth: event.priceInEth,
-                    priceInUsd: event.priceInUsd,
-                    transactionType: event.transactionType,
-                    transactionTypeName: event.transactionTypeName,
-                    transactionUrl: event.transactionUrl,
-                }
-            }),
+            data: assetEvents.map((event: any) => ({
+                avatorPath: event.avatorPath,
+                award: event.award,
+                createTime: event.createTime,
+                operatorAddress: event.operatorAddress,
+                operatorName: event.operatorName,
+                operatorNikeName: event.operatorNikeName,
+                priceInEth: event.priceInEth,
+                priceInUsd: event.priceInUsd,
+                transactionType: event.transactionType,
+                transactionTypeName: event.transactionTypeName,
+                transactionUrl: event.transactionUrl,
+            })),
         }
     }, [chainId, toTokenIdentifier(token)])
 }

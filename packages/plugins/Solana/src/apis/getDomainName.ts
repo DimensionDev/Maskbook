@@ -11,9 +11,7 @@ const getKey = async (name: string) => {
     return { domainKey, hashedName }
 }
 
-const connection = (chainId: ChainId) => {
-    return new Connection(NETWORK_ENDPOINTS[chainId])
-}
+const connection = (chainId: ChainId) => new Connection(NETWORK_ENDPOINTS[chainId])
 
 export async function lookup(name: string, chainId: ChainId) {
     const { domainKey } = await getKey(name)

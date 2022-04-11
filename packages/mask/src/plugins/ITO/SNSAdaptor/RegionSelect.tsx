@@ -195,25 +195,20 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
                     </FormControl>
                     <List className={classes.options}>
                         {/* TODO  resolve options performance problem */}
-                        {filteredRegions.map((region) => {
-                            return (
-                                <ListItem
-                                    key={region.code}
-                                    className={classes.item}
-                                    onClick={handleToggle(region.code)}>
-                                    <Checkbox
-                                        edge="start"
-                                        color="primary"
-                                        checked={valueMap.has(region.code)}
-                                        disableRipple
-                                    />
-                                    <ListItemText>
-                                        <span>{countryToFlag(region.code)}</span>
-                                        <span className={classes.span}>{region.name}</span>
-                                    </ListItemText>
-                                </ListItem>
-                            )
-                        })}
+                        {filteredRegions.map((region) => (
+                            <ListItem key={region.code} className={classes.item} onClick={handleToggle(region.code)}>
+                                <Checkbox
+                                    edge="start"
+                                    color="primary"
+                                    checked={valueMap.has(region.code)}
+                                    disableRipple
+                                />
+                                <ListItemText>
+                                    <span>{countryToFlag(region.code)}</span>
+                                    <span className={classes.span}>{region.name}</span>
+                                </ListItemText>
+                            </ListItem>
+                        ))}
                     </List>
                 </Popover>
             ))}

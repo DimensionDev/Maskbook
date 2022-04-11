@@ -9,11 +9,9 @@ import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { delay } from '@dimensiondev/kit'
 
 export async function getDefinedSocialNetworkUIs() {
-    return [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {
-        return {
-            networkIdentifier,
-        }
-    })
+    return [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => ({
+        networkIdentifier,
+    }))
 }
 export async function connectSocialNetwork(
     identifier: PersonaIdentifier,

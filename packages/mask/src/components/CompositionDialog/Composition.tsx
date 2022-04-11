@@ -41,25 +41,28 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { onQueryClipboardPermission, hasClipboardPermission, onRequestClipboardPermission } =
         useCompositionClipboardRequest(requireClipboardPermission || false)
 
-    useEffect(() => {
-        return MaskMessages.events.requestExtensionPermission.on(() => onQueryClipboardPermission?.())
-    }, [onQueryClipboardPermission])
+    useEffect(
+        () => MaskMessages.events.requestExtensionPermission.on(() => onQueryClipboardPermission?.()),
+        [onQueryClipboardPermission],
+    )
 
-    useEffect(() => {
-        return CrossIsolationMessages.events.requestComposition.on(({ reason, open, content, options }) => {
-            if (
-                (reason !== 'reply' && reason !== type) ||
-                (reason === 'reply' && type === 'popup') ||
-                globalUIState.profiles.value.length <= 0
-            )
-                return
-            setOpen(open)
-            setReason(reason)
-            if (content) UI.current?.setMessage(content)
-            if (options?.target) UI.current?.setEncryptionKind(options.target)
-            if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin)
-        })
-    }, [type])
+    useEffect(
+        () =>
+            CrossIsolationMessages.events.requestComposition.on(({ reason, open, content, options }) => {
+                if (
+                    (reason !== 'reply' && reason !== type) ||
+                    (reason === 'reply' && type === 'popup') ||
+                    globalUIState.profiles.value.length <= 0
+                )
+                    return
+                setOpen(open)
+                setReason(reason)
+                if (content) UI.current?.setMessage(content)
+                if (options?.target) UI.current?.setEncryptionKind(options.target)
+                if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin)
+            }),
+        [type],
+    )
     useEffect(() => {
         if (!open) return
         return MaskMessages.events.replaceComposition.on((message) => {

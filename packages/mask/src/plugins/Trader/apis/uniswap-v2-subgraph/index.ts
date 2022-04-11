@@ -125,13 +125,13 @@ export async function fetchEtherPriceByBlockNumber(blockNumber?: string) {
  * @param blockNumbers
  */
 export async function fetchEtherPricesByBlockNumbers(blockNumbers: Array<string | undefined>) {
-    const queries = blockNumbers.map((x) => {
-        return `
+    const queries = blockNumbers.map(
+        (x) => `
             b${x}: bundle(id: "1", ${x ? `block: { number: ${x} }` : ''}) {
                 ethPrice
             }
-        `
-    })
+        `,
+    )
     const data = await fetchFromUniswapV2Subgraph<Record<string, Bundle>>(`
         query bundles {
             ${queries.join('\n')}

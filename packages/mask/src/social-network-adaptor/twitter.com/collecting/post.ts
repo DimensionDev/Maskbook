@@ -29,9 +29,7 @@ function getPostActionsNode(postNode: HTMLElement | null) {
     return postNode.closest('[data-testid="tweet"]')?.querySelector<HTMLElement>('[role="group"] > div:last-child')
 }
 
-const getParentTweetNode = (node: HTMLElement) => {
-    return node.closest<HTMLElement>('[data-testid="tweet"]')
-}
+const getParentTweetNode = (node: HTMLElement) => node.closest<HTMLElement>('[data-testid="tweet"]')
 
 function isQuotedTweet(tweetNode: HTMLElement | null) {
     return tweetNode?.getAttribute('role') === 'link'

@@ -41,9 +41,7 @@ const FlipCard: React.FC<ReactFlipCardProps> = (props) => {
         setRotation((c) => c + FlipCardRotateDegree.frontRotate)
     }, [props.isFlipped])
 
-    const getComponent = (key: FlipCardChildType) => {
-        return props.children[key]
-    }
+    const getComponent = (key: FlipCardChildType) => props.children[key]
 
     const frontRotateY = `rotateY(${
         infinite ? rotation : isFlipped ? FlipCardRotateDegree.frontRotate : FlipCardRotateDegree.noFlipped

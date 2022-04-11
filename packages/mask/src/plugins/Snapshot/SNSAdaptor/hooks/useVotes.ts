@@ -50,9 +50,7 @@ async function Suspender(identifier: ProposalIdentifier) {
                 totalWeight: choices
                     ? Array.isArray(v.choice)
                         ? v.choice.length
-                        : choices.reduce((acc, choice) => {
-                              return acc + choice.weight
-                          }, 0)
+                        : choices.reduce((acc, choice) => acc + choice.weight, 0)
                     : undefined,
                 address: v.voter,
                 authorIpfsHash: v.id,

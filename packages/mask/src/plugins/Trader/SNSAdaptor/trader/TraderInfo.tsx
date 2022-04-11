@@ -102,9 +102,10 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     const nativeToken = createNativeToken(targetChainId)
     const tokenPrice = useNativeTokenPrice(targetChainId)
 
-    const gasFee = useMemo(() => {
-        return trade.gas.value && gasPrice ? multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed() : 0
-    }, [trade.gas?.value, gasPrice])
+    const gasFee = useMemo(
+        () => (trade.gas.value && gasPrice ? multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed() : 0),
+        [trade.gas?.value, gasPrice],
+    )
 
     const feeValueUSD = useMemo(
         () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2)) : '0'),

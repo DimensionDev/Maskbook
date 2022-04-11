@@ -9,33 +9,31 @@ import { TableListPagination } from '../Pagination'
 import { LoadingAnimation } from '@masknet/shared'
 import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 
-const useStyles = makeStyles()((theme) => {
-    return {
-        root: {
-            overflow: 'auto',
-        },
-        head: {
-            wordBreak: 'keep-all',
-        },
-        content: {
-            padding: '0 !important',
-        },
-        spacer: {
-            flex: 0,
-        },
-        empty: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            padding: theme.spacing(8, 0),
-        },
-        emptyCell: {
-            borderStyle: 'none',
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        overflow: 'auto',
+    },
+    head: {
+        wordBreak: 'keep-all',
+    },
+    content: {
+        padding: '0 !important',
+    },
+    spacer: {
+        flex: 0,
+    },
+    empty: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        padding: theme.spacing(8, 0),
+    },
+    emptyCell: {
+        borderStyle: 'none',
+    },
+}))
 
 export interface HistoryTabProps {}
 

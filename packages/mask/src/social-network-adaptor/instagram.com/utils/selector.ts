@@ -6,9 +6,7 @@ const querySelector = <T extends E, SingleMode extends boolean = true>(selector:
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
-const querySelectorAll = <T extends E>(selector: string) => {
-    return new LiveSelector().querySelectorAll<T>(selector)
-}
+const querySelectorAll = <T extends E>(selector: string) => new LiveSelector().querySelectorAll<T>(selector)
 
 export const searchProfileTabListLastChildSelector = () =>
     querySelector<E>('[id="react-root"] section main  div[role="tablist"] > :last-child')
