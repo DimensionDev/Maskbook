@@ -5,5 +5,5 @@ import type { ChainId } from '../types'
 
 export function useNativeTokenDetailed(chainId?: ChainId) {
     const currentChainId = useChainId()
-    return useAsyncRetry(() => createNativeToken(chainId ?? currentChainId), [currentChainId, chainId])
+    return useAsyncRetry(async () => createNativeToken(chainId ?? currentChainId), [currentChainId, chainId])
 }
