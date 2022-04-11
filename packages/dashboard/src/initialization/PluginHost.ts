@@ -1,7 +1,7 @@
 import './plugins'
 
 import { Emitter } from '@servie/events'
-import { startPluginDashboard, Plugin } from '@masknet/plugin-infra'
+import { startPluginDashboard, Plugin } from '@masknet/plugin-infra/dashboard'
 import { Services, Messages } from '../API'
 import { createI18NBundle, i18NextInstance } from '@masknet/shared-base'
 import { InMemoryStorages, PersistentStorages } from '../utils/kv-storage'

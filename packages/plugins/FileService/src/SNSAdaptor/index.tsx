@@ -24,14 +24,12 @@ const definition: Plugin.SNSAdaptor.Definition = {
         [META_KEY_2, onAttachedFile],
     ]),
     CompositionDialogEntry: {
-        label: {
-            fallback: (
-                <>
-                    <FileServiceIcon style={{ width: 16, height: 16 }} />
-                    File Service
-                </>
-            ),
-        },
+        label: (
+            <>
+                <FileServiceIcon style={{ width: 16, height: 16 }} />
+                File Service
+            </>
+        ),
         dialog: FileServiceDialog,
     },
     ApplicationEntries: [

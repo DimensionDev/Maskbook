@@ -1,4 +1,4 @@
-import { useNetworkDescriptors } from '@masknet/plugin-infra'
+import { useNetworkDescriptors } from '@masknet/plugin-infra/web3'
 import { ImageIcon, InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {

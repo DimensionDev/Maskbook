@@ -1,5 +1,6 @@
-import { useCurrentWeb3NetworkPluginID, PluginId, useActivatedPlugin } from '@masknet/plugin-infra'
-import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
 import { SnackbarProvider, makeStyles } from '@masknet/theme'
@@ -269,10 +270,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         setTimeout(() => setInitLoading(false), 1000)
     }, [])
 
-    const onClaimButtonClick = useCallback(() => {
-        claimCallback()
-    }, [claimCallback, chainId])
-
     const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
@@ -392,7 +389,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                                     ].includes(claimState.type)
                                                 }
                                                 size="small"
-                                                onClick={onClaimButtonClick}>
+                                                onClick={claimCallback}>
                                                 {t('plugin_ito_claim_all')}
                                             </ActionButton>
                                         </EthereumWalletConnectedBoundary>

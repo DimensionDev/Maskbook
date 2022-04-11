@@ -1,6 +1,6 @@
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { isMobileFacebook } from '../utils/isMobile'
-import type { PostInfo } from '../../../social-network/PostInfo'
+import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector'
 import { Flags } from '../../../../shared'
 

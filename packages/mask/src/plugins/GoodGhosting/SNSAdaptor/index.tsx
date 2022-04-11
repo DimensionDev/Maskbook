@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
+import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 import { GoogGhostingIcon } from '@masknet/icons'
-import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
+
 import { PreviewCard } from '../UI/PreviewCard'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base'

@@ -701,20 +701,8 @@ export enum PluginId {
     FileService = 'com.maskbook.fileservice',
     CyberConnect = 'me.cyberconnect.app',
     GoPlusSecurity = 'io.gopluslabs.security',
+    CrossChainBridge = 'io.mask.cross-chain-bridge',
     // @masknet/scripts: insert-here
-}
-
-export interface Pagination {
-    /** The item size of each page. */
-    size?: number
-    /** The page index. */
-    page?: number
-}
-
-export interface Pageable<T> {
-    currentPage: number
-    hasNextPage: boolean
-    data: T[]
 }
 /**
  * This namespace is not related to the plugin authors

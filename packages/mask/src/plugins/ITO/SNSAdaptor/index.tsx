@@ -1,4 +1,4 @@
-import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
+import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { useState } from 'react'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon'
 import { makeStyles } from '@masknet/theme'
@@ -52,14 +52,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
         dialog({ open, onClose }) {
             return <CompositionDialog open={open} onConfirm={onClose} onClose={onClose} />
         },
-        label: {
-            fallback: (
-                <>
-                    <MarketsIcon style={{ width: 16, height: 16 }} />
-                    ITO
-                </>
-            ),
-        },
+        label: (
+            <>
+                <MarketsIcon style={{ width: 16, height: 16 }} />
+                ITO
+            </>
+        ),
     },
     ApplicationEntries: [
         {

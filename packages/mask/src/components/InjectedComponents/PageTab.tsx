@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface PageTabProps {
-    tabs: Plugin.SNSAdaptor.ProfileTab[]
+    tabs: ({ pluginID: string } & Plugin.SNSAdaptor.ProfileTab)[]
     selectedTab?: Plugin.SNSAdaptor.ProfileTab
     onChange?: (tag: Plugin.SNSAdaptor.ProfileTab) => void
 }
@@ -34,6 +34,7 @@ export function PageTab(props: PageTabProps) {
         <div className={classes.root}>
             {tabs.map((x) => (
                 <PageTabItem
+                    pluginID={x.pluginID}
                     key={x.ID}
                     tab={x}
                     selected={selectedTab?.ID === x.ID}

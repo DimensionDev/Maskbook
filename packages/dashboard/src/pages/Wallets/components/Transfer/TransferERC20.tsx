@@ -6,7 +6,7 @@ import {
     useNetworkDescriptor,
     useWeb3State,
     Web3Plugin,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/web3'
 import { NetworkType } from '@masknet/public-api'
 import { FormattedAddress, TokenAmountPanel, usePickToken } from '@masknet/shared'
 import { MaskColorVar, MaskTextField } from '@masknet/theme'

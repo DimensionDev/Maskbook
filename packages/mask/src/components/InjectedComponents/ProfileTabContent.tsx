@@ -3,8 +3,8 @@ import {
     Plugin,
     PluginId,
     useActivatedPluginsSNSAdaptor,
-    useAvailablePlugins,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/content-script'
+import { useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useAddressNames } from '@masknet/web3-shared-evm'
