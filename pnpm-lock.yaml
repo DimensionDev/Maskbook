@@ -625,6 +625,7 @@ importers:
 
   packages/plugins/CrossChainBridge:
     specifiers:
+      '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
@@ -632,6 +633,7 @@ importers:
       '@masknet/theme': workspace:*
       react-use: ^17.3.2
     dependencies:
+      '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
@@ -642,6 +644,7 @@ importers:
   packages/plugins/CyberConnect:
     specifiers:
       '@cyberlab/cyberconnect': ^4.2.2
+      '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
@@ -651,6 +654,7 @@ importers:
       react-use: ^17.3.2
     dependencies:
       '@cyberlab/cyberconnect': 4.2.2
+      '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared-base': link:../../shared-base
       '@masknet/theme': link:../../theme

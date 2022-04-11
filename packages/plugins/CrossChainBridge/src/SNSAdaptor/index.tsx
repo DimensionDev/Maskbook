@@ -1,5 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
+import { CrossBridgeIcon } from '@masknet/icons'
 import { base } from '../base'
 import { useState } from 'react'
 import { CrossChainBridgeDialog } from './CrossChainBridgeDialog'
@@ -9,21 +10,23 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal, context) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent({ disabled, AppIcon }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
                         <ApplicationEntry
                             title="Cross-chain"
                             disabled={disabled}
-                            icon={new URL('./assets/cross-chain.png', import.meta.url).toString()}
+                            AppIcon={AppIcon}
                             onClick={() => setOpen(true)}
                         />
                         <CrossChainBridgeDialog open={open} onClose={() => setOpen(false)} />
                     </>
                 )
             },
-            defaultSortingPriority: 2,
+            appBoardSortingDefaultPriority: 5,
+            name: 'Cross-chain',
+            AppIcon: <CrossBridgeIcon />,
         },
     ],
 }

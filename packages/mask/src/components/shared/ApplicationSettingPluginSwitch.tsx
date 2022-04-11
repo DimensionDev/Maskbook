@@ -1,7 +1,7 @@
 import { List, ListItem, ListItemAvatar, Avatar, Typography, Box } from '@mui/material'
 import { openWindow } from '@masknet/shared-base-ui'
 import { TutorialIcon } from '@masknet/icons'
-import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
 import { SettingSwitch } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Services } from '../../extension/service'

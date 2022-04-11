@@ -1,4 +1,4 @@
-import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
 import { useAsyncRetry } from 'react-use'
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'

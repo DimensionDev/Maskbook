@@ -8,7 +8,7 @@ import { PreviewCard } from './components/PreviewCard'
 import { Context } from '../hooks/useContext'
 import { ApplicationEntry } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { CrossBridgeIcon, MaskBoxIcon } from '@masknet/icons'
+import { MaskBoxIcon } from '@masknet/icons'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
@@ -30,21 +30,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     ApplicationEntries: [
-        {
-            RenderEntryComponent({ disabled, AppIcon }) {
-                return (
-                    <ApplicationEntry
-                        title="Cross-chain"
-                        disabled={disabled}
-                        AppIcon={AppIcon}
-                        onClick={() => openWindow('https://bridge.mask.io/#/')}
-                    />
-                )
-            },
-            appBoardSortingDefaultPriority: 5,
-            AppIcon: <CrossBridgeIcon />,
-            name: 'Cross-chain',
-        },
         {
             RenderEntryComponent({ disabled, AppIcon }) {
                 return (

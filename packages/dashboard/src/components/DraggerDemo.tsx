@@ -1,4 +1,4 @@
-import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { makeStyles } from '@masknet/theme'
