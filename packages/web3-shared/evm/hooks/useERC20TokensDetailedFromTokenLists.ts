@@ -46,7 +46,7 @@ export function useERC20TokensDetailedFromTokenLists(
         if (!keyword) return allToken
 
         return [
-            ...(EthereumAddress.isValid(keyword) ? allToken.filter(currySameAddress(keyword)) : EMPTY_LIST),
+            ...(EthereumAddress.isValid(keyword) ? allToken.filter(currySameAddress(keyword)) : []),
             ...fuse.search(keyword).map((x) => x.item),
         ]
     }, [keyword, fuse, tokensFromList, additionalTokens.map((x) => x.address).join()])

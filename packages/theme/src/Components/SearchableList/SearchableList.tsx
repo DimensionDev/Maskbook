@@ -7,7 +7,6 @@ import { makeStyles } from '../../makeStyles'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
 import { SearchIcon } from '@masknet/icons'
-import { EMPTY_LIST } from '@masknet/shared-base'
 
 export interface MaskSearchableListProps<T> {
     /** The list data should be render */
@@ -73,7 +72,7 @@ export function SearchableList<T extends {}>({
                 shouldSort: true,
                 threshold: 0.45,
                 minMatchCharLength: 1,
-                keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : EMPTY_LIST),
+                keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : []),
             }),
         [data, searchKey],
     )
