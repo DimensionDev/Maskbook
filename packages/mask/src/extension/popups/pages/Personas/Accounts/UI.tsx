@@ -13,6 +13,7 @@ const useStyles = makeStyles()(() => ({
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
+        backgroundColor: '#F7F9FA',
     },
     connect: {
         backgroundColor: '#ffffff',

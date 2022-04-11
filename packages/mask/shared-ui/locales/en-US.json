@@ -891,7 +891,7 @@
     "plugin_pets_dialog_fail": "Setting failed, please try later",
     "plugin_pets_dialog_check_title": "Show NFT friends on the profile page.",
     "popups_profile_photo": "Profile Photo",
-    "popups_next_id": "Next.Id",
+    "popups_public_key": "Public Key",
     "popups_name": "Name",
     "popups_social_account": "Social Accounts",
     "popups_connected_wallets": "Connected Wallets",

@@ -12,6 +12,7 @@ const useStyles = makeStyles()(() => ({
         fontSize: 16,
         lineHeight: '22px',
         color: '#0F1419',
+        textAlign: 'center',
     },
     content: {
         marginTop: 24,

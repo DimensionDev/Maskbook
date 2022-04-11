@@ -8,12 +8,13 @@ import {
     PopupRoutes,
 } from '@masknet/shared-base'
 import { ListItemButton, List, Typography } from '@mui/material'
-import { EditIcon, MasksIcon, SettingIcon, TickIcon } from '@masknet/icons'
+import { EditIcon, MasksIcon, TickIcon } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import Services from '../../../../../service'
 import { useHover } from 'react-use'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
 import { PersonaContext } from '../../hooks/usePersonaContext'
+import { Trash2 } from 'react-feather'
 
 const useStyles = makeStyles()({
     list: {
@@ -51,9 +52,10 @@ const useStyles = makeStyles()({
     },
     trashIcon: {
         fontSize: 12,
-        stroke: '#1C68F3',
         marginLeft: 6,
         cursor: 'pointer',
+        width: 12,
+        height: 12,
     },
     tick: {
         fill: 'none',
@@ -93,10 +95,9 @@ export const PersonaList = memo(() => {
         [setSelectedPersona],
     )
 
-    const onChangeCurrentPersonas = useCallback(
-        (identifier: ECKeyIdentifier) => Services.Settings.setCurrentPersonaIdentifier(identifier),
-        [],
-    )
+    const onChangeCurrentPersonas = useCallback((identifier: ECKeyIdentifier) => {
+        Services.Settings.setCurrentPersonaIdentifier(identifier).then(() => navigate(PopupRoutes.Personas))
+    }, [])
 
     const onEdit = useCallback((persona: PersonaInformation) => {
         setSelectedPersona(persona)
@@ -180,7 +181,7 @@ const PersonaListItem = memo<PersonaListItemProps>(
                     <Typography className={classes.identifier}>
                         {formatPersonaFingerprint(identifier.compressedPoint ?? '', 10)}
                         <CopyIconButton className={classes.copy} text={identifier.toText()} />
-                        <SettingIcon
+                        <Trash2
                             className={classes.trashIcon}
                             onClick={(e) => {
                                 e.stopPropagation()

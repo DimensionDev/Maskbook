@@ -14,6 +14,8 @@ const useStyles = makeStyles()(() => ({
         flexDirection: 'column',
         alignItems: 'center',
         rowGap: 12,
+        backgroundColor: '#F7F9FA',
+        flex: 1,
     },
     name: {
         fontSize: 14,

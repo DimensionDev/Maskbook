@@ -85,7 +85,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                         )}
                     </div>
                     <div className={classes.item}>
-                        <Typography>{t('popups_next_id')}</Typography>
+                        <Typography>{t('popups_public_key')}</Typography>
                         {fingerprint ? (
                             <Typography className={classes.content}>
                                 {formatPersonaFingerprint(fingerprint, 4)}

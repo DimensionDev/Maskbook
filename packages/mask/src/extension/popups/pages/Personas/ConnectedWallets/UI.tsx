@@ -17,6 +17,7 @@ const useStyles = makeStyles()(() => ({
         flexDirection: 'column',
         rowGap: 12,
         flex: 1,
+        backgroundColor: '#F7F9FA',
     },
     item: {
         padding: '12px 16px',
