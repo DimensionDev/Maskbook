@@ -35,7 +35,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         const iv = usePostInfoDetails.iv()
         const props = additionPropsToCommentBox(classes)
         const onCallback = useCallback(
-            async (content) => {
+            async (content: string) => {
                 const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
                 const encryptedComment = await Services.Crypto.encryptComment(
                     new Uint8Array(decodeArrayBuffer(iv!)),

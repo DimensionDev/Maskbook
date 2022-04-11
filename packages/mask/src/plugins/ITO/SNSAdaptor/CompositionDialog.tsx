@@ -76,9 +76,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     // #region blocking
     const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings)
-    const onDone = useCallback(() => {
-        fillCallback()
-    }, [fillCallback])
     // #endregion
 
     const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
@@ -249,7 +246,12 @@ export function CompositionDialog(props: CompositionDialogProps) {
                     <AbstractTab classes={{ tabs: classes.tabs }} height={540} {...tabProps} />
                 ) : null}
                 {step === ITOCreateFormPageStep.ConfirmItoPage ? (
-                    <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={onDone} onClose={onClose} />
+                    <ConfirmDialog
+                        poolSettings={poolSettings}
+                        onBack={onBack}
+                        onDone={fillCallback}
+                        onClose={onClose}
+                    />
                 ) : null}
             </DialogContent>
         </InjectedDialog>

@@ -1,3 +1,5 @@
+const patchWebpackConfig = require('@masknet/storybook-shared/patch-webpack')
+
 module.exports = {
     stories: ['../stories/**/*.stories.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx)'],
     addons: [
@@ -14,17 +16,7 @@ module.exports = {
     reactOptions: {
         fastRefresh: true,
     },
-    webpackFinal: async (config) => {
-        config.experiments = { asyncWebAssembly: true, topLevelAwait: true }
-        config.module.rules.push({
-            test: /\.m?js$/,
-            type: 'javascript/auto',
-            resolve: {
-                fullySpecified: false,
-            },
-        })
-        return config
-    },
+    webpackFinal: patchWebpackConfig,
     core: {
         builder: 'webpack5',
     },

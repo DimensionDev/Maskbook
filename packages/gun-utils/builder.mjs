@@ -28,6 +28,7 @@ function init() {
         assign: globalThis.Object.assign,
     }
     const console = { log() {} }
+    const JSON = { parse: globalThis.JSON.parse, stringify: globalThis.JSON.stringify }
     function String() {
         return globalThis.String.apply(this, arguments)
     }
@@ -63,9 +64,10 @@ const patchedSource = files
     // patch instanceof Object to instanceof globalThis.Object
     .replace(/instanceof\s+Object/g, 'instanceof globalThis.Object')
 
-const result = `
+const result = `(() => {
 ${init.toString().replace('// Source Code Here', patchedSource)};
 globalThis.Gun = ${init.name}().Gun;
+})();
 undefined;
 `
 writeFile(new URL('./gun.js', import.meta.url), result)
