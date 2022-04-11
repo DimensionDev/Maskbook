@@ -1,6 +1,7 @@
 import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
 import { useAsyncRetry } from 'react-use'
-import { useLayoutEffect, useState } from 'react'
+import classNames from 'classnames'
+import { useLayoutEffect, useState, Fragment, useEffect } from 'react'
 import { List, ListItem, Typography, CircularProgress } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { KeyValue } from '@masknet/web3-providers'
@@ -63,6 +64,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         cursor: 'pointer',
         borderRadius: 8,
+        position: 'relative',
     },
     iconWrapper: {
         '> *': {
@@ -88,6 +90,15 @@ const useStyles = makeStyles()((theme) => ({
     },
     placeholder: {
         color: getMaskColor(theme).textLight,
+    },
+    loadingItem: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translateX(-50%) translateY(-50%)',
+    },
+    loadingListItem: {
+        opacity: 0.6,
     },
 }))
 
@@ -122,7 +133,13 @@ export function ApplicationSettingPluginDragger() {
     ) : (
         <div>
             {value ? (
-                <AppList appList={value.listedAppList} retry={retry} setAppUnlisted={setAppUnlisted} isListed />
+                <AppList
+                    appList={value.listedAppList}
+                    retry={retry}
+                    setAppUnlisted={setAppUnlisted}
+                    isListed
+                    loading={loading}
+                />
             ) : null}
             <Typography className={classes.unlisted}>{t('application_settings_tab_plug_app-list-unlisted')}</Typography>
             {value ? (
@@ -131,6 +148,7 @@ export function ApplicationSettingPluginDragger() {
                     retry={retry}
                     setAppUnlisted={setAppUnlisted}
                     isListed={false}
+                    loading={loading}
                 />
             ) : null}
         </div>
@@ -142,6 +160,7 @@ interface AppListProps {
     retry: () => void
     setAppUnlisted: (app: Application, unlisted: boolean) => Promise<void>
     isListed: boolean
+    loading: boolean
 }
 
 function AppList(props: AppListProps) {
@@ -152,15 +171,9 @@ function AppList(props: AppListProps) {
     return appList.length > 0 ? (
         <List className={classes.list}>
             {appList.map((x, i) => (
-                <ListItem
-                    key={i + x.pluginId}
-                    className={classes.listItem}
-                    onClick={async () => {
-                        await setAppUnlisted(x, isListed)
-                        retry()
-                    }}>
-                    <div className={classes.iconWrapper}>{x.entry.AppIcon}</div>
-                </ListItem>
+                <Fragment key={i + x.pluginId}>
+                    <AppListItem application={x} retry={retry} setAppUnlisted={setAppUnlisted} isListed={isListed} />
+                </Fragment>
             ))}
         </List>
     ) : (
@@ -171,5 +184,39 @@ function AppList(props: AppListProps) {
                     : t('application_settings_tab_plug_app-listed-placeholder')}
             </Typography>
         </div>
+    )
+}
+
+interface AppListItemProps {
+    application: Application
+    retry: () => void
+    setAppUnlisted: (app: Application, unlisted: boolean) => Promise<void>
+    isListed: boolean
+}
+
+function AppListItem(props: AppListItemProps) {
+    const { application, retry, setAppUnlisted, isListed } = props
+    const [isRequesting, setRequesting] = useState(false)
+    const { classes } = useStyles()
+
+    useEffect(() => {
+        setRequesting(false)
+    }, [isListed])
+
+    return (
+        <ListItem
+            className={classNames(classes.listItem, isRequesting ? classes.loadingListItem : '')}
+            onClick={async () => {
+                setRequesting(true)
+                await setAppUnlisted(application, isListed)
+                retry()
+            }}>
+            <div className={classes.iconWrapper}>{application.entry.AppIcon}</div>
+            {isRequesting ? (
+                <div className={classes.loadingItem}>
+                    <CircularProgress size={18} color="primary" />
+                </div>
+            ) : null}
+        </ListItem>
     )
 }
