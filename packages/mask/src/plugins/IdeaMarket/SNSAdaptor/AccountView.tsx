@@ -31,7 +31,10 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
             '& td': {
                 height: 60,
-                padding: '0 10px',
+                padding: '0px 0px',
+            },
+            '& .MuiTableCell-head': {
+                padding: -1,
             },
         },
         name: {
