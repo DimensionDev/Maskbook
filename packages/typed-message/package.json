@@ -11,7 +11,13 @@
     "z-schema": "^5.0.2"
   },
   "exports": {
-    ".": "./dist/base/index.js",
-    "./dom": "./dist/dom/index.js"
+    ".": {
+      "webpack": "./base/index.ts",
+      "default": "./dist/base/index.js"
+    },
+    "./dom": {
+      "webpack": "./dom/index.ts",
+      "default": "./dist/dom/index.js"
+    }
   }
 }

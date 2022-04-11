@@ -13,5 +13,5 @@ export function useBeat(delay = 1000) {
 
 export function useBeatRetry<T>(fn: () => Promise<T>, delay = 1000, deps: DependencyList = []): AsyncStateRetry<T> {
     const beat = useBeat(delay)
-    return useAsyncRetry(fn, [beat].concat(deps))
+    return useAsyncRetry(fn, deps.concat(beat))
 }

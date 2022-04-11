@@ -2,7 +2,7 @@ interface Props {
     className?: string
 }
 
-export const CopyableCode: React.FC<Props> = ({ children, className }) => {
+export const CopyableCode: React.FC<React.PropsWithChildren<Props>> = ({ children, className }) => {
     const onSelect = (event: React.MouseEvent<Node>) => {
         const selection = globalThis.getSelection()
         if (selection === null) {
