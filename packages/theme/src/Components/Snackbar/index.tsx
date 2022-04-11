@@ -188,7 +188,7 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
     const snackbar = useSnackbar()
     const loadingIcon = <LoadingIcon color="inherit" className={classes.spinning} />
     const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
-    let renderedAction = (
+    let renderedAction: React.ReactNode = (
         <IconButton className={classes.closeButton} onClick={() => snackbar.closeSnackbar(props.id)}>
             <CloseIcon />
         </IconButton>

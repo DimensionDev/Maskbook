@@ -1,8 +1,18 @@
 {
   "name": "@masknet/web3-shared-flow",
   "private": true,
-  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "webpack": "./index.ts",
+      "default": "../dist/flow/index.js"
+    },
+    "./types": {
+      "types": "../dist/flow/types.d.ts",
+      "webpack": "./types.ts",
+      "default": "../dist/flow/types.js"
+    }
+  },
   "dependencies": {
     "@blocto/fcl": "^0.0.78-alpha.8",
     "@masknet/web3-constants": "workspace:*",

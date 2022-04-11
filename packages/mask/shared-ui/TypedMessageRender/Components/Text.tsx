@@ -1,9 +1,9 @@
-import { memo, useCallback } from 'react'
+import { memo, PropsWithChildren, useCallback } from 'react'
 import { Typography, Link as MaterialLink } from '@mui/material'
 import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
-export const Container = memo(function Container(props) {
+export const Container = memo(function Container(props: PropsWithChildren<{}>) {
     return (
         <Typography color="textPrimary" fontSize="inherit">
             {props.children}

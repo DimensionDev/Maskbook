@@ -90,14 +90,6 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
         })
     }
 
-    // Add to webpack alias
-    await changeFile.typescript(resolve(ROOT_PATH, 'packages/mask/.webpack/config.ts'), (content) =>
-        content.replace(
-            INSERT_HERE,
-            `'${npmName}': join(__dirname, '../../${path.replace('packages/', '')}/src'),\n${INSERT_HERE}`,
-        ),
-    )
-
     // Fix package name
     await changeFile.JSON(resolve(packagePath, 'package.json'), (content) => {
         content.name = npmName
