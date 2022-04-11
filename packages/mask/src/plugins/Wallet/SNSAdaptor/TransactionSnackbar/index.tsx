@@ -111,9 +111,10 @@ export function TransactionSnackbar() {
                 (progress.state as { hash?: string }).hash ??
                 (progress.state as { receipt?: TransactionReceipt }).receipt?.transactionHash
 
+            const transactionComputedPayloadName = (payload && 'name' in payload && payload.name) || ''
             if (
                 ['swapExactETHForTokens', 'swapExactTokensForETH', 'swapExactTokensForTokens'].includes(
-                    payload?.name ?? '',
+                    transactionComputedPayloadName,
                 )
             ) {
                 if (progress.state.type === TransactionStateType.CONFIRMED) {

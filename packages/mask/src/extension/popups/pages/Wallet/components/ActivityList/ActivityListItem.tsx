@@ -73,19 +73,21 @@ export const ActivityListItem = memo<ActivityListItemProps>(
         const { Utils } = useWeb3State()
         const { value: domain } = useReverseAddress(toAddress, NetworkPluginID.PLUGIN_EVM)
 
+        const transactionComputedPayloadName =
+            transaction.computedPayload && 'name' in transaction.computedPayload && transaction.computedPayload.name
         const transactionIcon = useMemo(() => {
             switch (transaction.status) {
                 case TransactionStatusType.NOT_DEPEND:
                     return <LoaderIcon className={classes.loader} />
                 case TransactionStatusType.CANCELLED:
                 case TransactionStatusType.SUCCEED:
-                    if (transaction.computedPayload?.name === 'transfer') return <UploadIcon className={classes.send} />
+                    if (transactionComputedPayloadName === 'transfer') return <UploadIcon className={classes.send} />
                     return <InteractionCircleIcon className={classes.interaction} />
                 case TransactionStatusType.FAILED:
                 default:
                     return <CircleCloseIcon style={{ fill: 'none' }} />
             }
-        }, [transaction.status, transaction.computedPayload?.name])
+        }, [transaction.status, transactionComputedPayloadName])
         return (
             <ListItem className={classes.item}>
                 {transactionIcon}
