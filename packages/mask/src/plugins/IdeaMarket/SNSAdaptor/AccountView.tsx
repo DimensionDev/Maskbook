@@ -33,9 +33,6 @@ const useStyles = makeStyles()((theme) => {
                 height: 60,
                 padding: '0px 0px',
             },
-            '& .MuiTableCell-head': {
-                padding: -1,
-            },
         },
         name: {
             maxWidth: '100%',
@@ -44,6 +41,9 @@ const useStyles = makeStyles()((theme) => {
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
             },
+        },
+        header: {
+            padding: 0,
         },
         nameHeader: {
             width: 210,
@@ -123,13 +123,13 @@ export function AccountView() {
                             <TableCell key="name" className={classes.nameHeader}>
                                 {t('plugin_ideamarket_name')}
                             </TableCell>
-                            <TableCell align="center" key="price">
+                            <TableCell align="center" key="price" className={classes.header}>
                                 {t('plugin_ideamarket_price')}
                             </TableCell>
-                            <TableCell align="center" key="balance">
+                            <TableCell align="center" key="balance" className={classes.header}>
                                 {t('plugin_ideamarket_balance')}
                             </TableCell>
-                            <TableCell align="center" key="value">
+                            <TableCell align="center" key="value" className={classes.header}>
                                 {t('plugin_ideamarket_value')}
                             </TableCell>
                             <TableCell key="sell" className={classes.sellHeader} />
