@@ -5,22 +5,24 @@
   "type": "module",
   "exports": {
     ".": {
-      "webpack": "./src/index.ts",
-      "default": "./dist/src/index.js"
+      "types": "./dist/src/entry.d.ts",
+      "webpack": "./src/entry.ts",
+      "default": "./dist/src/entry.d.ts"
     },
-    "./constants": {
-      "webpack": "./src/constants.ts",
-      "default": "./dist/src/constants.js"
+    "./base": {
+      "types": "./dist/src/entry-base.d.ts",
+      "webpack": "./src/entry-base.ts",
+      "default": "./dist/src/entry-base.js"
     }
   },
   "typesVersions": {
     "*": {
-      "constants": [
-        "./dist/src/constants.d.ts"
+      "base": [
+        "./dist/src/entry-base.d.ts"
       ]
     }
   },
-  "types": "./dist/src/index.d.ts",
+  "types": "./dist/src/entry.d.ts",
   "scripts": {
     "build-storybook": "build -- build-storybook",
     "start": "dev -- start-storybook -p 6006"

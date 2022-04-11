@@ -10,6 +10,5 @@ export {
     createShadowRootForwardedComponent,
     createShadowRootForwardedPopperComponent,
 } from './Portal'
-export { ShadowRootMenu, ShadowRootPopper, ShadowRootTooltip } from './Wrapped'
 export { ShadowRootIsolation } from './ShadowRootIsolation'
 export { DisableShadowRootContext } from './Contexts'

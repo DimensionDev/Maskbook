@@ -1,14 +1,9 @@
-/// <reference path="./extended.d.ts" />
-// see https://github.com/import-js/eslint-plugin-import/issues/2288
-import { createTheme, PaletteMode, ThemeOptions, useMediaQuery } from '@mui/material'
+import { createTheme, PaletteMode, ThemeOptions } from '@mui/material'
 import * as Changes from './changes'
 import * as Components from './component-changes'
 import { merge } from 'lodash-unified'
 import type { PaletteOptions } from '@mui/material/styles/createPalette'
-import { DarkColor, LightColor, Color } from './constants'
-import tinyColor from 'tinycolor2'
-
-export const parseColor = tinyColor
+import { DarkColor, LightColor, Color } from '../CSSVariables'
 
 const color = (mode: PaletteMode, color: Color): PaletteOptions => ({
     mode,
@@ -37,29 +32,3 @@ function MaskTheme(mode: PaletteMode) {
 }
 export const MaskLightTheme = MaskTheme('light')
 export const MaskDarkTheme = MaskTheme('dark')
-export * from './ThemeProvider'
-export * from './makeStyles'
-export * from './Components'
-export * from './hooks'
-export * from './customization'
-export * from './ShadowRoot'
-export * from './UIHelper/custom-ui-helper'
-export * from './CSSVariableInjector'
-export { getMaskColor, useMaskColor, MaskColorVar, applyMaskColorVars } from './constants'
-export type { MaskCSSVariableColor } from './constants'
-export { TssCacheProvider } from 'tss-react'
-
-const query = '(prefers-color-scheme: dark)'
-export function useSystemPreferencePalette(): PaletteMode {
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    return useMediaQuery(query) ? 'dark' : 'light'
-}
-export function currentSystemPreferencePalette(): PaletteMode {
-    return matchMedia(query).matches ? 'dark' : 'light'
-}
-
-export enum Appearance {
-    default = 'default',
-    light = 'light',
-    dark = 'dark',
-}
