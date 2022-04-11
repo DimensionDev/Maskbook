@@ -20,7 +20,7 @@ lockdown({
             // react is doing this...
             'console',
         )
-        const skipUnconfigurable = ['Buffer', 'elliptic', 'regeneratorRuntime', 'assert', 'harden', 'lockdown'].concat(
+        const skipNotConfigurable = ['Buffer', 'elliptic', 'regeneratorRuntime', 'assert', 'harden', 'lockdown'].concat(
             // hmm... code example for this: appear at least 2 times
             //     this.fetch = false;
             //     this.DOMException = global.DOMException;
@@ -43,7 +43,7 @@ lockdown({
         const desc = Object.getOwnPropertyDescriptors(self)
         Object.entries(desc).forEach(([key, desc]) => {
             if (key.includes('Array') || key.includes('Error')) return
-            if (skipUnconfigurable.includes(key)) return
+            if (skipNotConfigurable.includes(key)) return
             if (desc.writable) desc.writable = false
             if (desc.configurable) desc.configurable = false
 
