@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Typography, useTheme } from '@mui/material'
+import { Typography, useTheme, CircularProgress } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
@@ -35,6 +35,12 @@ const useStyles = makeStyles()((theme) => {
             lineHeight: '24px',
             fontWeight: 600,
             color: theme.palette.text.primary,
+        },
+        loadingWrapper: {
+            display: 'flex',
+            height: 324,
+            justifyContent: 'center',
+            alignItems: 'center',
         },
         header: {
             display: 'flex',
@@ -88,7 +94,7 @@ export function ApplicationBoard() {
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
         .filter((x) => Boolean(x.entry.RenderEntryComponent))
 
-    const { value, retry } = useUnListedApplicationList(applicationList)
+    const { value, retry, loading } = useUnListedApplicationList(applicationList)
 
     return (
         <>
@@ -101,16 +107,22 @@ export function ApplicationBoard() {
                 />
             </div>
 
-            <section className={classes.applicationWrapper}>
-                {(value?.listedAppList ?? applicationList).map((X, i) => {
-                    const RenderEntryComponent = X.entry.RenderEntryComponent!
-                    return (
-                        <Fragment key={i + X.pluginId}>
-                            <RenderEntryComponent disabled={!X.enabled} AppIcon={X.entry.AppIcon} />
-                        </Fragment>
-                    )
-                })}
-            </section>
+            {loading ? (
+                <div className={classes.loadingWrapper}>
+                    <CircularProgress size={24} color="primary" sx={{ marginRight: 1 }} />
+                </div>
+            ) : (
+                <section className={classes.applicationWrapper}>
+                    {(value?.listedAppList ?? applicationList).map((X, i) => {
+                        const RenderEntryComponent = X.entry.RenderEntryComponent!
+                        return (
+                            <Fragment key={i + X.pluginId}>
+                                <RenderEntryComponent disabled={!X.enabled} AppIcon={X.entry.AppIcon} />
+                            </Fragment>
+                        )
+                    })}
+                </section>
+            )}
             {openSettings ? (
                 <ApplicationSettingDialog
                     open={openSettings}

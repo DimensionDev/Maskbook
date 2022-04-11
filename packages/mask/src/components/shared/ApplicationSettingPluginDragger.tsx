@@ -1,6 +1,7 @@
 import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
 import { useAsyncRetry } from 'react-use'
-import { List, ListItem, Typography } from '@mui/material'
+import { useLayoutEffect, useState } from 'react'
+import { List, ListItem, Typography, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { KeyValue } from '@masknet/web3-providers'
 import { useI18N } from '../../utils'
@@ -69,6 +70,12 @@ const useStyles = makeStyles()((theme) => ({
             height: 36,
         },
     },
+    loadingWrapper: {
+        display: 'flex',
+        height: 400,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     unlisted: {
         fontSize: 18,
         fontWeight: 600,
@@ -79,6 +86,7 @@ export function ApplicationSettingPluginDragger() {
     const { classes } = useStyles()
     const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
+    const [hasInit, setInit] = useState(false)
     const applicationList = snsAdaptorPlugins
         .reduce<Application[]>((acc, cur) => {
             if (!cur.ApplicationEntries) return acc
@@ -92,8 +100,17 @@ export function ApplicationSettingPluginDragger() {
             )
         }, [])
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
-    const { value, retry } = useUnListedApplicationList(applicationList)
-    return (
+    const { value, retry, loading } = useUnListedApplicationList(applicationList)
+
+    useLayoutEffect(() => {
+        if (!loading) setInit(true)
+    }, [loading])
+
+    return loading && !hasInit ? (
+        <div className={classes.loadingWrapper}>
+            <CircularProgress size={24} color="primary" sx={{ marginRight: 1 }} />
+        </div>
+    ) : (
         <>
             <List className={classes.list}>
                 {(value?.listedAppList ?? applicationList).map((x, i) => (
