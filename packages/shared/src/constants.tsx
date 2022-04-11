@@ -5,6 +5,10 @@ import {
     MindsIcon,
     TwitterColoredIcon,
     OpenSeaColoredIcon,
+    FacebookRoundIcon,
+    TwitterRoundIcon,
+    InstagramRoundIcon,
+    MindsRoundIcon,
 } from '@masknet/icons'
 
 export const MINDS_ID = 'minds.com'
@@ -18,6 +22,14 @@ export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, ReactNode> = {
     [FACEBOOK_ID]: <FacebookColoredIcon />,
     [MINDS_ID]: <MindsIcon />,
     [INSTAGRAM_ID]: <InstagramColoredIcon />,
+    [OPENSEA_ID]: <OpenSeaColoredIcon />,
+}
+
+export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<string, ReactNode> = {
+    [TWITTER_ID]: <TwitterRoundIcon />,
+    [FACEBOOK_ID]: <FacebookRoundIcon />,
+    [MINDS_ID]: <MindsRoundIcon />,
+    [INSTAGRAM_ID]: <InstagramRoundIcon />,
     [OPENSEA_ID]: <OpenSeaColoredIcon />,
 }
 

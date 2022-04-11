@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
 import { useI18N } from '../../../../../../utils'
 import { Close } from '@mui/icons-material'
-import { SOCIAL_MEDIA_ICON_MAPPING, SOCIAL_MEDIA_NAME } from '@masknet/shared'
+import { SOCIAL_MEDIA_ROUND_ICON_MAPPING, SOCIAL_MEDIA_NAME } from '@masknet/shared'
 
 const useStyles = makeStyles()(() => ({
     dialog: {
@@ -77,7 +77,7 @@ export const ConnectDialog = memo<ConnectDialogProps>(({ open, onClose, networks
             <DialogContent className={classes.content}>
                 {networks.map((networkIdentifier) => (
                     <div className={classes.item} key={networkIdentifier} onClick={() => onConnect(networkIdentifier)}>
-                        <div className={classes.networkIcon}>{SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}</div>
+                        <div className={classes.networkIcon}>{SOCIAL_MEDIA_ROUND_ICON_MAPPING[networkIdentifier]}</div>
                         <Typography className={classes.network}>{SOCIAL_MEDIA_NAME[networkIdentifier]}</Typography>
                     </div>
                 ))}
