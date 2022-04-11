@@ -46,6 +46,13 @@ For general introductions, see [Mask.io](https://mask.io).
 
 Please check out [docs](docs)
 
+## Security Report
+
+<!-- https://tools.ietf.org/html/draft-foudil-securitytxt-12 -->
+
+Contact: <security@mask.io>
+Canonical: <https://mask.io/.well-known/security.txt>
+
 ## Work for Mask Network
 
 Please submit your **resume** to `jobs (at) mask.io`
