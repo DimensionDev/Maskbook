@@ -83,14 +83,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ]),
     CompositionDialogEntry: {
         dialog: RedPacketDialog,
-        label: {
-            fallback: (
-                <>
-                    <RedPacketIcon style={badgeSvgIconSize} />
-                    Luck drop
-                </>
-            ),
-        },
+        label: (
+            <>
+                <RedPacketIcon style={badgeSvgIconSize} />
+                Luck drop
+            </>
+        ),
     },
     ApplicationEntries: [
         {

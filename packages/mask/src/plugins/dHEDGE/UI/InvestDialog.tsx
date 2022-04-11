@@ -98,7 +98,7 @@ export function InvestDialog() {
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
         PluginTraderMessages.swapDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     retryLoadTokenBalance()
                 }
@@ -142,7 +142,7 @@ export function InvestDialog() {
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     retryLoadTokenBalance()
                     if (investState.type === TransactionStateType.HASH) onClose()

@@ -115,9 +115,7 @@ export default function ConnectButton({
     }, [web3, myAddress])
 
     const handleClick = useCallback(() => {
-        if (!cc) {
-            return
-        }
+        if (!cc) return
         setLoading(true)
         if (!isFollowing) {
             cc.connect(address)

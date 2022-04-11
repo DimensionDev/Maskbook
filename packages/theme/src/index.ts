@@ -47,6 +47,7 @@ export * from './UIHelper/custom-ui-helper'
 export * from './CSSVariableInjector'
 export { getMaskColor, useMaskColor, MaskColorVar, applyMaskColorVars } from './constants'
 export type { MaskCSSVariableColor } from './constants'
+export { TssCacheProvider } from 'tss-react'
 
 const query = '(prefers-color-scheme: dark)'
 export function useSystemPreferencePalette(): PaletteMode {

@@ -30,6 +30,18 @@ export type Color =
     | `#${string}${string}${string}`
     | `hsl(${number}, ${number}%, ${number}%)`
 
+// Borrow from @masknet/web3-shared-evm
+interface ERC721TokenInfo {
+    name?: string
+    description?: string
+    tokenURI?: string
+    mediaUrl?: string
+    imageURL?: string
+    owner?: string
+    // loading tokenURI
+    hasTokenDetailed?: boolean
+}
+
 export declare namespace Web3Plugin {
     /**
      * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
@@ -159,14 +171,6 @@ export declare namespace Web3Plugin {
         name: string
         symbol: string
         logoURI?: string | string[]
-    }
-
-    export interface NonFungibleContract {
-        chainId: number
-        name: string
-        symbol: string
-        address: string
-        iconURL?: string
     }
 
     export interface TokenList {

@@ -306,7 +306,7 @@ export namespace NonFungibleTokenAPI {
 
 export namespace StorageAPI {
     export interface Storage {
-        set<T extends {}>(key: string, value: T): Promise<void>
+        set(key: string, value: any): Promise<void>
         get<T>(key: string): Promise<T | undefined>
         delete?(key: string): Promise<void>
     }
@@ -319,7 +319,7 @@ export namespace StorageAPI {
 
 export namespace NextIDBaseAPI {
     export interface Storage {
-        set<T extends {}>(
+        set<T>(
             uuid: string,
             personaPublicKey: string,
             signature: string,
@@ -327,7 +327,7 @@ export namespace NextIDBaseAPI {
             identity: string,
             createdAt: string,
             patchData: unknown,
-        ): Promise<Result<void, string>>
+        ): Promise<Result<T, string>>
         get<T>(key: string): Promise<Result<T, string>>
         getPayload(
             personaPublicKey: string,

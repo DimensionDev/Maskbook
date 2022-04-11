@@ -1,28 +1,27 @@
-import Web3 from 'web3'
+import { getRegisteredWeb3Networks, NetworkPluginID, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
+import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
+import { TokenPrice } from '@masknet/web3-providers'
 import {
+    ChainId,
     createContract,
+    createExternalProvider,
     createNativeToken,
+    CurrencyType,
     formatEthereumAddress,
+    FungibleAssetProvider,
+    getCoinGeckoCoinId,
     getEthereumConstants,
     isSameAddress,
-    Web3ProviderType,
-    FungibleAssetProvider,
-    createExternalProvider,
-    getCoinGeckoCoinId,
-    CurrencyType,
     PriceRecord,
-    ChainId,
+    Web3ProviderType,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
-import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
-import type { AbiItem } from 'web3-utils'
 import { uniqBy } from 'lodash-unified'
-import { PLUGIN_NETWORKS } from '../../constants'
+import Web3 from 'web3'
+import type { AbiItem } from 'web3-utils'
 import { makeSortAssertWithoutChainFn } from '../../utils/token'
 import { getProxyWebsocketInstance, pow10 } from '@masknet/web3-shared-base'
 import { createGetLatestBalance } from './createGetLatestBalance'
-import { TokenPrice } from '@masknet/web3-providers'
 
 // tokens unavailable neither from api or balance checker.
 // https://forum.conflux.fun/t/how-to-upvote-debank-proposal-for-conflux-espace-integration/13935
@@ -34,7 +33,10 @@ export const getFungibleAssetsFn =
         const socket = await getProxyWebsocketInstance()
         const chainId = context.chainId.getCurrentValue()
         const wallet = context.wallets.getCurrentValue().find((x) => isSameAddress(x.address, address))
-        const networks = PLUGIN_NETWORKS
+        const networks = getRegisteredWeb3Networks().filter(
+            (x) => NetworkPluginID.PLUGIN_EVM === x.networkSupporterPluginID && x.isMainnet,
+        )
+        const supportedNetworkIds = networks.map((x) => x.chainId)
         const trustedTokens = uniqBy(
             context.erc20Tokens
                 .getCurrentValue()
@@ -47,22 +49,24 @@ export const getFungibleAssetsFn =
         )
         const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
         const dataFromProvider = await context.getAssetsList(address, FungibleAssetProvider.DEBANK)
-        const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x) => ({
-            id: x.token.address,
-            chainId: x.token.chainId,
-            balance: x.balance,
-            price: x.price,
-            value: x.value,
-            logoURI: x.logoURI,
-            token: {
-                ...x.token,
-                type: TokenType.Fungible,
-                name: x.token.name ?? 'Unknown Token',
-                symbol: x.token.symbol ?? 'Unknown',
+        const assetsFromProvider = dataFromProvider
+            .map<Web3Plugin.Asset<Web3Plugin.FungibleToken>>((x) => ({
                 id: x.token.address,
                 chainId: x.token.chainId,
-            },
-        }))
+                balance: x.balance,
+                price: x.price,
+                value: x.value,
+                logoURI: x.logoURI,
+                token: {
+                    ...x.token,
+                    name: x.token.name ?? 'Unknown Token',
+                    symbol: x.token.symbol ?? 'Unknown',
+                    id: x.token.address,
+                    chainId: x.token.chainId,
+                    type: TokenType.Fungible,
+                },
+            }))
+            .filter((x) => supportedNetworkIds.includes(x.chainId))
 
         const balanceCheckerContract = createContract(
             web3,

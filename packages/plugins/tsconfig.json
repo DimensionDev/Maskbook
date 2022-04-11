@@ -9,6 +9,7 @@
     { "path": "./FileService/" },
     { "path": "./RSS3/" },
     { "path": "./DAO/" },
-    { "path": "./CyberConnect/" }
+    { "path": "./CyberConnect/" },
+    { "path": "./CrossChainBridge/" }
   ]
 }

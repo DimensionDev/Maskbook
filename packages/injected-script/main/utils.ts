@@ -93,13 +93,21 @@ export function constructXrayUnwrappedFilesFromUintLike(
     })
     return file
 }
+
+function getError(message: any) {
+    try {
+        return { message: message.message }
+    } catch {
+        return { message: 'unknown error' }
+    }
+}
 export async function handlePromise(id: number, promise: () => any) {
     try {
         const data = await promise()
         sendEvent('resolvePromise', id, data)
     } catch (error) {
         // TODO:
-        sendEvent('rejectPromise', id, {})
+        sendEvent('rejectPromise', id, getError(error))
     }
 }
 

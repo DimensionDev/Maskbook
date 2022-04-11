@@ -27,7 +27,6 @@ import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { debugModeSetting } from '../../../settings/settings'
 import { useI18N } from '../../../utils'
 import { MSG_DELIMITER } from '../constants'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
@@ -36,6 +35,8 @@ import { ITO_Status, JSON_PayloadFromChain, JSON_PayloadInMask, PoolFromNetwork 
 import { useDestructCallback } from './hooks/useDestructCallback'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { omit } from 'lodash-unified'
+import { useSubscription } from 'use-subscription'
+import { PersistentStorages } from '../../../../shared'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -138,6 +139,7 @@ export function PoolInList(props: PoolInListProps) {
     const { classes } = useStyles()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
+    const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
     // #region Fetch tokens detailed
     const { value: _tokenDetailed } = useFungibleTokenDetailed(
         Web3TokenType.ERC20,
@@ -251,7 +253,7 @@ export function PoolInList(props: PoolInListProps) {
                                     date: formatDateTime(pool.end_time, 'yyyy-MM-dd HH:mm:ss'),
                                 })}
                             </Typography>
-                            {debugModeSetting.value ? (
+                            {isDebugging ? (
                                 <Typography className={classes.date} variant="body2" color="textSecondary">
                                     {t('plugin_ito_password', {
                                         password: pool.password === '' ? 'no password' : pool.password,

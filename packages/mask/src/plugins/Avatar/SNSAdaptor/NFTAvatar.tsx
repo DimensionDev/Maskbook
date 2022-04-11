@@ -108,7 +108,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         setSelectedToken(undefined)
     }, [onChange, selectedToken])
 
-    const onAddClick = useCallback((token) => {
+    const onAddClick = useCallback((token: ERC721TokenDetailed) => {
         setSelectedToken(token)
         setCollectibles_((tokens) => uniqBy([token, ...tokens], (x) => x.contractDetailed.address && x.tokenId))
     }, [])

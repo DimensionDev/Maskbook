@@ -2,12 +2,18 @@
   "name": "@masknet/plugin-infra",
   "private": true,
   "license": "AGPL-3.0-or-later",
-  "main": "./dist/index.js",
-  "types": "./dist/",
+  "exports": {
+    ".": {
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
   "scripts": {},
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@masknet/encryption": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
     "@masknet/shared-base-ui": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",

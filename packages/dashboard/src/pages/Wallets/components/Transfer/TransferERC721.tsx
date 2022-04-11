@@ -213,7 +213,7 @@ export const TransferERC721 = memo(() => {
     }, [transferState])
 
     const onTransfer = useCallback(
-        async (data) => {
+        async (data: FormInputs) => {
             if (EthereumAddress.isValid(data.recipient)) {
                 await transferCallback(data.tokenId, data.recipient, gasConfig)
                 return
