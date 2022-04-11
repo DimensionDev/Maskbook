@@ -15,7 +15,7 @@ import {
     i18NextInstance,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
-import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
+import { startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'

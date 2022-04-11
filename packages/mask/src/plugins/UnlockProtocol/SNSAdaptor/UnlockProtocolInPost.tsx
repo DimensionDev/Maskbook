@@ -7,7 +7,7 @@ import { renderWithUnlockProtocolMetadata, UnlockProtocolMetadataReader } from '
 import { useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { PluginUnlockProtocolRPC } from '../messages'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { usePluginWrapper } from '@masknet/plugin-infra'
+import { usePluginWrapper } from '@masknet/plugin-infra/dom'
 
 interface UnlockProtocolInPostProps {
     message: TypedMessage

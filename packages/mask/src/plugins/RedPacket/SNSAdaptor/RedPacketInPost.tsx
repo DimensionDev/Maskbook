@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
-import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
+import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { RedPacket } from './RedPacket'
 import { RedPacketRPC } from '../messages'
 import { activatedSocialNetworkUI } from '../../../social-network'

@@ -1,4 +1,4 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import type { ScopedStorage } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { remove } from 'lodash-unified'

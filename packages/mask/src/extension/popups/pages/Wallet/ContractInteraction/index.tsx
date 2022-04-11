@@ -28,7 +28,7 @@ import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { toHex } from 'web3-utils'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 import { isGreaterThan, leftShift, pow10 } from '@masknet/web3-shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 

@@ -2,7 +2,7 @@ import { MenuItem, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SuccessIcon } from '@masknet/icons'
 import { WalletIcon, useMenu } from '@masknet/shared'
-import { useChainId, useNetworkDescriptors, useProviderDescriptor, useWeb3UI } from '@masknet/plugin-infra'
+import { useChainId, useNetworkDescriptors, useProviderDescriptor, useWeb3UI } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     item: {

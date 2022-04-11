@@ -14,12 +14,12 @@ import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from '.
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
 import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
 import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
-import { usePostClaimedAuthor, usePostInfoDetails, usePostInfo } from '../../DataSource/usePostInfo'
+import { usePostClaimedAuthor } from '../../DataSource/usePostInfo'
 import { delay, encodeArrayBuffer, safeUnreachable } from '@dimensiondev/kit'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { DecryptionContext, SocialNetworkEncodedPayload } from '../../../../background/services/crypto/decryption'
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
-import type { PostContext } from '@masknet/plugin-infra'
+import { type PostContext, usePostInfoDetails, usePostInfo } from '@masknet/plugin-infra/content-script'
 import { Some } from 'ts-results'
 
 function progressReducer(

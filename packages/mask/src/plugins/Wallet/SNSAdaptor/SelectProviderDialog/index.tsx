@@ -10,7 +10,7 @@ import {
     useNetworkDescriptor,
     useNetworkType,
     useWeb3UI,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/web3'
 import { isDashboardPage } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { WalletMessages } from '../../messages'
