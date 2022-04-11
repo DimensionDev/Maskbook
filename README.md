@@ -51,6 +51,7 @@ Please check out [docs](docs)
 <!-- https://tools.ietf.org/html/draft-foudil-securitytxt-12 -->
 
 Contact: <security@mask.io>
+
 Canonical: <https://mask.io/.well-known/security.txt>
 
 ## Work for Mask Network
