@@ -7,7 +7,7 @@ import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon, Upl
 import { RecentTransactionDescription } from '../../../../../../plugins/Wallet/SNSAdaptor/WalletStatusDialog/TransactionDescription'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../../../../utils'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     item: {

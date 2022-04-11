@@ -2,7 +2,7 @@ import { selectElementContents } from '../../../utils/utils'
 import { delay } from '@dimensiondev/kit'
 import { isMobileFacebook } from '../utils/isMobile'
 import { MaskMessages } from '../../../utils/messages'
-import type { PostInfo } from '../../../social-network/PostInfo'
+import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { inputText, pasteText } from '@masknet/injected-script'
 
 export async function pasteToCommentBoxFacebook(encryptedComment: string, current: PostInfo, dom: HTMLElement | null) {

@@ -1,4 +1,5 @@
-import { None, Plugin, Result, Some } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import { None, Result, Some } from 'ts-results'
 import { base } from '../base'
 import type { FileInfo } from '../types'
 import { getAllFiles, setFileInfo, setupDatabase } from './database'

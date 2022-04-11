@@ -8,7 +8,7 @@ import { useNavigate, useLocation, useMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { formatEthereumAddress, useWallet } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     container: {
