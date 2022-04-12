@@ -7,6 +7,7 @@ import { PLUGIN_ID } from '../constants'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { NFTPage } from './NFTPage'
 import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
+import { Trans } from 'react-i18next'
 import { CollectiblesIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -69,11 +70,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             category: 'dapp',
-            description: {
-                i18nKey: 'collectibles_description',
-                fallback: '',
-            },
-            name: { i18nKey: 'collectibles_name', fallback: 'Collectibles' },
+            description: <Trans i18nKey="collectibles_description" />,
+            name: <Trans i18nKey="collectibles_name" />,
             AppIcon: <CollectiblesIcon />,
             marketListSortingPriority: 7,
             tutorialLink:

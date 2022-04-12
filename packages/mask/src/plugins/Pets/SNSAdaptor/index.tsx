@@ -3,6 +3,7 @@ import { base } from '../base'
 import AnimatePic from './Animate'
 import { PetDialog } from './PetDialog'
 import { PluginPetMessages } from '../messages'
+import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationEntry } from '@masknet/shared'
 import { LootManIcon } from '@masknet/icons'
@@ -28,8 +29,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             appBoardSortingDefaultPriority: 11,
             marketListSortingPriority: 12,
             AppIcon: <LootManIcon />,
-            description: { i18nKey: 'plugin_pets_description', fallback: '' },
-            name: { i18nKey: 'plugin_pets_name', fallback: 'Non-F Friends' },
+            description: <Trans i18nKey="plugin_pets_description" />,
+            name: <Trans i18nKey="plugin_pets_name" />,
             tutorialLink: 'https://twitter.com/mintteamnft?s=21',
             category: 'dapp',
         },

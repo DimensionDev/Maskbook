@@ -2,6 +2,7 @@ import { formatFileSize } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { truncate } from 'lodash-unified'
 import { base } from '../base'
+import { Trans } from 'react-i18next'
 import { META_KEY_1, META_KEY_2 } from '../constants'
 import { FileInfoMetadataReader } from '../helpers'
 import type { FileInfo } from '../types'
@@ -56,8 +57,8 @@ const definition: Plugin.SNSAdaptor.Definition = {
             marketListSortingPriority: 2,
             AppIcon: <FileServiceIcon />,
             category: 'dapp',
-            description: { i18nKey: 'plugin_file_service_description', fallback: '' },
-            name: { i18nKey: 'plugin_file_service_name', fallback: 'File Service' },
+            description: <Trans i18nKey="plugin_file_service_description" />,
+            name: <Trans i18nKey="plugin_file_service_name" />,
             tutorialLink:
                 'https://realmasknetwork.notion.site/Use-File-Service-via-Arweave-IPFS-SIA-Swarm-soon-8c8fe1efce5a48b49739a38f4ea8c60f',
         },

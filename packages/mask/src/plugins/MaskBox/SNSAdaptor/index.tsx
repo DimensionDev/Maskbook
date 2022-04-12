@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { base } from '../base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { Trans } from 'react-i18next'
 import { parseURL } from '@masknet/shared-base'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { PreviewCard } from './components/PreviewCard'
@@ -46,9 +47,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             AppIcon: <MaskBoxIcon />,
             tutorialLink:
                 'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
-            description: { i18nKey: 'plugin_mask_box_description', fallback: '' },
+            description: <Trans i18nKey="plugin_mask_box_description" />,
             category: 'dapp',
-            name: { i18nKey: 'plugin_mask_box_name', fallback: 'MaskBox' },
+            name: <Trans i18nKey="plugin_mask_box_name" />,
         },
     ],
 }

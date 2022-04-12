@@ -3,6 +3,7 @@ import { base } from '../base'
 import { TraderDialog } from './trader/TraderDialog'
 import { SearchResultInspector } from './trending/SearchResultInspector'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { Trans } from 'react-i18next'
 import { TagInspector } from './trending/TagInspector'
 import { enhanceTag } from './cashTag'
 import { ApplicationEntry } from '@masknet/shared'
@@ -33,10 +34,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
             marketListSortingPriority: 5,
             AppIcon: <SwapIcon />,
             category: 'dapp',
-            name: { i18nKey: 'plugin_trader_swap', fallback: 'Swap' },
+            name: <Trans i18nKey="plugin_trader_swap" />,
             tutorialLink:
                 'https://realmasknetwork.notion.site/Trade-cryptos-on-Twitter-via-Uniswap-Sushi-0x-Support-ETH-BSC-Polygon-Arbitrum-f2e7d081ee38487ca1db958393ac1edc',
-            description: { i18nKey: 'plugin_trader_swap_description', fallback: '' },
+            description: <Trans i18nKey="plugin_trader_swap_description" />,
         },
     ],
 }

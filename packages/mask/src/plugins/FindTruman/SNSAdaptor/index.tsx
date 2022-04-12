@@ -5,6 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
+import { Trans } from 'react-i18next'
 import { FindTrumanIcon } from '@masknet/icons'
 import { PostInspector } from './PostInspector'
 import { ApplicationEntry } from '@masknet/shared'
@@ -105,7 +106,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             appBoardSortingDefaultPriority: 11,
             AppIcon: <FindTrumanIcon />,
-            name: { i18nKey: 'plugin_find_truman_name', fallback: 'FindTruman' },
+            name: <Trans i18nKey="plugin_find_truman_name" />,
         },
     ],
 }

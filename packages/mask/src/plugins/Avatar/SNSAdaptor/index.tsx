@@ -1,6 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { useAsync } from 'react-use'
 import { ApplicationEntry } from '@masknet/shared'
+import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { base } from '../base'
@@ -37,7 +38,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             appBoardSortingDefaultPriority: 8,
             AppIcon: <CollectiblesIcon />,
-            name: { i18nKey: 'nft_avatar', fallback: 'NFT Avatar' },
+            name: <Trans i18nKey="nft_avatar" />,
         },
     ],
 }

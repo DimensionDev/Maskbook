@@ -1,5 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
+import { Trans } from 'react-i18next'
 import { CrossBridgeIcon } from '@masknet/icons'
 import { base } from '../base'
 import { useState } from 'react'
@@ -25,7 +26,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 )
             },
             appBoardSortingDefaultPriority: 5,
-            name: { i18nKey: 'plugin_cross_bridge_name', fallback: 'Cross-chain' },
+            name: <Trans i18nKey="plugin_cross_bridge_name" />,
             AppIcon: <CrossBridgeIcon />,
         },
     ],

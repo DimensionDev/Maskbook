@@ -5,6 +5,7 @@ import { parseURL } from '@masknet/shared-base'
 import { DHEDGEIcon } from '@masknet/icons'
 import { base } from '../base'
 import { PoolView } from '../UI/PoolView'
+import { Trans } from 'react-i18next'
 import { InvestDialog } from '../UI/InvestDialog'
 import { createMatchLink } from '../constants'
 
@@ -47,8 +48,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             category: 'dapp',
-            description: { i18nKey: 'plugin_dhedge_description', fallback: '' },
-            name: { i18nKey: 'plugin_dhedge_name', fallback: 'dHEDGE' },
+            description: <Trans i18nKey="plugin_dhedge_description" />,
+            name: <Trans i18nKey="plugin_dhedge_name" />,
             AppIcon: <DHEDGEIcon />,
             marketListSortingPriority: 11,
             tutorialLink:

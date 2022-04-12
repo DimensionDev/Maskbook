@@ -6,6 +6,7 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 import { GitcoinIcon } from '@masknet/icons'
 import { PreviewCard } from './PreviewCard'
+import { Trans } from 'react-i18next'
 import { base } from '../base'
 import { PLUGIN_NAME, PLUGIN_META_KEY } from '../constants'
 import { DonateDialog } from './DonateDialog'
@@ -40,8 +41,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             category: 'dapp',
-            description: { i18nKey: 'plugin_gitcoin_description', fallback: '' },
-            name: { i18nKey: 'plugin_gitcoin_name', fallback: 'Gitcoin' },
+            description: <Trans i18nKey="plugin_gitcoin_description" />,
+            name: <Trans i18nKey="plugin_gitcoin_name" />,
             AppIcon: <GitcoinIcon />,
             marketListSortingPriority: 9,
             tutorialLink:

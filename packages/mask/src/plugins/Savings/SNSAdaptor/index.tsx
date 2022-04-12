@@ -1,6 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { SavingsIcon } from '@masknet/icons'
+import { Trans } from 'react-i18next'
 import { useState } from 'react'
 import { base } from '../base'
 import { SavingsDialog } from './SavingsDialog'
@@ -26,7 +27,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             appBoardSortingDefaultPriority: 7,
             AppIcon: <SavingsIcon />,
-            name: { i18nKey: 'plugin_savings', fallback: 'Savings' },
+            name: <Trans i18nKey="plugin_savings" />,
         },
     ],
 }

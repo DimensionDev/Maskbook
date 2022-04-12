@@ -1,5 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
+import { Trans } from 'react-i18next'
 import { BuyTokenDialog } from './BuyTokenDialog'
 import { PluginTransakMessages } from '../messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -23,8 +24,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             marketListSortingPriority: 6,
             tutorialLink: 'https://transak.com/',
             AppIcon: <TransakIcon />,
-            description: { i18nKey: 'plugin_transak_description', fallback: '' },
-            name: { i18nKey: 'plugin_transak_name', fallback: 'Fiat On-Ramp' },
+            description: <Trans i18nKey="plugin_transak_description" />,
+            name: <Trans i18nKey="plugin_transak_name" />,
             category: 'dapp',
         },
     ],

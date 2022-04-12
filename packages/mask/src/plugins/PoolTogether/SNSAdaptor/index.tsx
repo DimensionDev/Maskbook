@@ -5,6 +5,7 @@ import { parseURL } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { DepositDialog } from '../UI/DepositDialog'
+import { Trans } from 'react-i18next'
 import { URL_PATTERN } from '../constants'
 import { PoolTogetherView } from '../UI/PoolTogetherView'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -37,8 +38,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             category: 'dapp',
-            description: { i18nKey: 'plugin_pooltogether_description', fallback: '' },
-            name: { i18nKey: 'plugin_pooltogether_name', fallback: 'PoolTogether' },
+            description: <Trans i18nKey="plugin_pooltogether_description" />,
+            name: <Trans i18nKey="plugin_pooltogether_name" />,
             marketListSortingPriority: 14,
             tutorialLink:
                 'https://realmasknetwork.notion.site/Participate-in-lossless-lottery-via-PoolTogether-on-Twitter-ETH-and-Polygon-377597e14aff441ab645ecba5ea690f1',

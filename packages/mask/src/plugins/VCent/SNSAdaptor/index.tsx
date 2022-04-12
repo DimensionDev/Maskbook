@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { Trans } from 'react-i18next'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import VCentDialog from './TweetDialog'
 import { base } from '../base'
@@ -11,8 +12,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             category: 'dapp',
-            description: { i18nKey: 'plugin_valuables_description', fallback: '' },
-            name: { i18nKey: 'plugin_valuables_name', fallback: 'Valuables' },
+            description: <Trans i18nKey="plugin_valuables_description" />,
+            name: <Trans i18nKey="plugin_valuables_name" />,
             marketListSortingPriority: 10,
             tutorialLink:
                 'https://realmasknetwork.notion.site/See-the-latest-offer-of-a-Tweet-NFT-by-Valuables-Plugin-27424923ee454a4a9b0ed16fc5cb93d0',

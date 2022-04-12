@@ -307,7 +307,11 @@ export namespace Plugin.SNSAdaptor {
         /**
          * Render entry component
          */
-        RenderEntryComponent?: (props: { disabled: boolean; AppIcon: JSX.Element; title: string }) => JSX.Element | null
+        RenderEntryComponent?: (props: {
+            disabled: boolean
+            AppIcon: JSX.Element
+            title: JSX.Element
+        }) => JSX.Element | null
         /**
          * Used to order the applications on the board
          */
@@ -320,9 +324,9 @@ export namespace Plugin.SNSAdaptor {
 
         AppIcon: JSX.Element
 
-        name: I18NStringField
+        name: JSX.Element
 
-        description?: I18NStringField
+        description?: JSX.Element
 
         tutorialLink?: string
         /**

@@ -8,6 +8,7 @@ import {
     useFungibleTokenDetailed,
     EthereumTokenType,
 } from '@masknet/web3-shared-evm'
+import { Trans } from 'react-i18next'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
@@ -82,9 +83,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             appBoardSortingDefaultPriority: 3,
             marketListSortingPriority: 3,
             AppIcon: <MarketsIcon />,
-            description: { i18nKey: 'plugin_ito_description', fallback: '' },
+            description: <Trans i18nKey="plugin_ito_description" />,
             category: 'dapp',
-            name: { i18nKey: 'plugin_ito_name', fallback: 'ITO' },
+            name: <Trans i18nKey="plugin_ito_name" />,
             tutorialLink:
                 'https://realmasknetwork.notion.site/Launch-an-ITO-Initial-Twitter-Offering-Support-ETH-BSC-Polygon-Arbitrum-d84c60903f974f4880d2085a13906d55',
         },
@@ -105,7 +106,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             appBoardSortingDefaultPriority: 4,
             AppIcon: <MarketsClaimIcon />,
-            name: { i18nKey: 'plugin_ito_claim', fallback: 'Claim' },
+            name: <Trans i18nKey="plugin_ito_claim" />,
         },
     ],
 }

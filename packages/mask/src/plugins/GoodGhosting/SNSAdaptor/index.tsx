@@ -3,7 +3,7 @@ import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plug
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 import { GoogGhostingIcon } from '@masknet/icons'
-
+import { Trans } from 'react-i18next'
 import { PreviewCard } from '../UI/PreviewCard'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base'
@@ -34,8 +34,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             category: 'dapp',
             marketListSortingPriority: 13,
-            description: { i18nKey: 'plugin_good_ghosting_description', fallback: '' },
-            name: { i18nKey: 'plugin_good_ghosting_name', fallback: 'GoodGhosting' },
+            description: <Trans i18nKey="plugin_good_ghosting_description" />,
+            name: <Trans i18nKey="plugin_good_ghosting_name" />,
             tutorialLink:
                 'https://realmasknetwork.notion.site/Cultivate-a-weekly-saving-habit-via-GoodGhosting-on-Twitter-Polygon-only-f94aa38b01404b9c99c7a03935840962',
             AppIcon: <GoogGhostingIcon />,

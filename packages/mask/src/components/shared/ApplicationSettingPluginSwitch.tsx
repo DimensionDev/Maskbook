@@ -93,22 +93,14 @@ export function ApplicationSettingPluginSwitch(props: Props) {
                             </ListItemAvatar>
                             <div className={classes.info}>
                                 <div className={classes.headerWrapper}>
-                                    <Typography className={classes.name}>
-                                        {x.entry.name.i18nKey
-                                            ? t(x.entry.name.i18nKey as unknown as Parameters<typeof t>[0])
-                                            : x.entry.name.fallback}
-                                    </Typography>
+                                    <Typography className={classes.name}>{x.entry.name}</Typography>
                                     {x.entry.tutorialLink ? (
                                         <Box className={classes.settings}>
                                             <TutorialIcon onClick={() => openWindow(x.entry.tutorialLink)} />
                                         </Box>
                                     ) : null}
                                 </div>
-                                <Typography className={classes.desc}>
-                                    {x.entry.description?.i18nKey
-                                        ? t(x.entry.description.i18nKey as unknown as Parameters<typeof t>[0])
-                                        : x.entry.description?.fallback}
-                                </Typography>
+                                <Typography className={classes.desc}>{x.entry.description}</Typography>
                             </div>
                         </section>
 

@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface Props {
     AppIcon: JSX.Element
-    title: string
+    title: JSX.Element
     disabled?: boolean
     onClick: () => void
 }

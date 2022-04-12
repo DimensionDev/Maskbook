@@ -1,5 +1,6 @@
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { uniq } from 'lodash-unified'
+import { Trans } from 'react-i18next'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 
 import { base } from '../base'
@@ -28,8 +29,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             category: 'dapp',
             marketListSortingPriority: 15,
-            description: { i18nKey: 'plugin_artblocks_description', fallback: '' },
-            name: { i18nKey: 'plugin_artblocks_name', fallback: 'Artblocks' },
+            description: <Trans i18nKey="plugin_artblocks_description" />,
+            name: <Trans i18nKey="plugin_artblocks_name" />,
             AppIcon: <ArtBlocksIcon />,
         },
     ],
