@@ -5,7 +5,7 @@ import { resolve, relative } from 'path'
 import { PKG_PATH, ROOT_PATH, walk } from '../utils'
 import { getUsedKeys } from './ast'
 
-export const LOCALE_PATH = resolve(PKG_PATH, '../shared-ui/locales')
+export const LOCALE_PATH = resolve(PKG_PATH, './mask/shared-ui/locales')
 export const LOCALE_NAMES = readdirSync(LOCALE_PATH)
     .filter((name) => name.endsWith('.json'))
     .map((x) => x.slice(0, -5))
