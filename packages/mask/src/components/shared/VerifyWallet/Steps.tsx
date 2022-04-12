@@ -1,5 +1,4 @@
 import { makeStyles } from '@masknet/theme'
-import { useState } from 'react'
 import { CurrentWalletBox } from './CurrentWalletBox'
 import {
     step1ActiveIcon,
@@ -14,13 +13,6 @@ import { ImageIcon } from '@masknet/shared'
 import { Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useNavigate } from 'react-router-dom'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { currentPersonaIdentifier } from '../../../settings/settings'
-import { ECKeyIdentifier, Identifier, NextIDAction, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
-import { useAsync } from 'react-use'
-import Services from '../../../extension/service'
-import { NextIDProof } from '@masknet/web3-providers'
-import { useWallet } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -71,25 +63,22 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-enum SignSteps {
+export enum SignSteps {
     Ready = 0,
-    Step1Done = 1,
-    Step2Done = 2,
+    FirstStepDone = 1,
+    SecondStepDone = 2,
 }
 
-export function Steps() {
-    const { classes } = useStyles()
-    const [step, setStep] = useState(SignSteps.Ready)
-    const navigate = useNavigate()
-    const currentIdentifier = Identifier.fromString(useValueRef(currentPersonaIdentifier), ECKeyIdentifier)
-    const { value: persona_ } = useAsync(async () => {
-        return Services.Identity.queryPersona(currentIdentifier.unwrap())
-    }, [currentIdentifier])
-    const [payload, setPayload] = useState<NextIDPayload>()
-    const [signature, setSignature] = useState<string>()
-    const wallet = useWallet()
+interface StepsProps {
+    step: SignSteps
+    personaSign: () => void
+    walletSign: () => void
+}
 
-    if (!persona_ || !persona_.publicHexKey || !wallet) return null
+export function Steps(props: StepsProps) {
+    const { classes } = useStyles()
+    const navigate = useNavigate()
+    const { step, personaSign, walletSign } = props
 
     const stepIconMap = {
         [SignSteps.Ready]: {
@@ -97,12 +86,12 @@ export function Steps() {
             divider: dividerDisableIcon,
             step2: step2DisableIcon,
         },
-        [SignSteps.Step1Done]: {
+        [SignSteps.FirstStepDone]: {
             step1: stepSuccessIcon,
             divider: dividerActiveIcon,
             step2: step2ActiveIcon,
         },
-        [SignSteps.Step2Done]: {
+        [SignSteps.SecondStepDone]: {
             step1: stepSuccessIcon,
             divider: dividerSuccessIcon,
             step2: stepSuccessIcon,
@@ -111,58 +100,14 @@ export function Steps() {
 
     const onConfirm = () => {
         if (step === SignSteps.Ready) {
-            personaSilentSign()
-        } else if (step === SignSteps.Step1Done) {
+            personaSign()
+        } else if (step === SignSteps.FirstStepDone) {
             walletSign()
         } else {
             navigate(-1)
         }
     }
 
-    const personaSilentSign = async () => {
-        try {
-            const payload = await NextIDProof.createPersonaPayload(
-                persona_.publicHexKey as string,
-                NextIDAction.Create,
-                wallet.address,
-                NextIDPlatform.Ethereum,
-                'default',
-            )
-            if (!payload) throw new Error('Failed to create persona payload.')
-            setPayload(payload)
-            const signResult = await Services.Identity.generateSignResult(
-                currentIdentifier.val as ECKeyIdentifier,
-                payload.signPayload,
-            )
-            setSignature(signResult.signature.signature)
-            if (!signResult) throw new Error('Failed to sign persona.')
-            setStep(SignSteps.Step1Done)
-        } catch (error) {
-            console.error(error)
-        }
-    }
-    const walletSign = async () => {
-        if (!payload) throw new Error('payload error')
-        try {
-            const walletSig = await Services.Ethereum.personalSign(payload.signPayload, wallet.address)
-            if (!walletSig) throw new Error('Wallet sign failed')
-            await NextIDProof.bindProof(
-                payload.uuid,
-                persona_.publicHexKey as string,
-                NextIDAction.Create,
-                NextIDPlatform.Ethereum,
-                wallet.address,
-                payload.createdAt,
-                {
-                    walletSignature: walletSig,
-                    signature: signature,
-                },
-            )
-            setStep(SignSteps.Step2Done)
-        } catch (error) {
-            console.error(error)
-        }
-    }
     const onCancel = () => {
         navigate(-1)
     }

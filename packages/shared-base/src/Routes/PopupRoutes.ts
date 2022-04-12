@@ -31,5 +31,5 @@ export enum PopupRoutes {
     SignRequest = '/sign-request',
     Swap = '/swap',
     ConnectWallet = '/wallet/connect',
-    VerifyWallet = '/wallet/verify',
+    VerifyWallet = '/personas/verify',
 }

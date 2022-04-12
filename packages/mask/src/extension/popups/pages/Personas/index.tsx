@@ -4,12 +4,12 @@ import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 import { PersonaContext } from './hooks/usePersonaContext'
 import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { Route, Routes } from 'react-router-dom'
-import VerifyWallet from '../Wallet/VerifyWallet'
 
 const Home = lazy(() => import('./Home'))
 const Logout = lazy(() => import('./Logout'))
 const PersonaRename = lazy(() => import('./Rename'))
 const PersonaSignRequest = lazy(() => import('./PersonaSignRequest'))
+const VerifyWallet = lazy(() => import('../Wallet/VerifyWallet'))
 
 const r = relativeRouteOf(PopupRoutes.Personas)
 const Persona = memo(() => {
