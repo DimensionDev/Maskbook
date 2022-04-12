@@ -88,27 +88,29 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                 <>
                     <TableCell>
                         <Typography className={classes.content}>
-                            {provider === NonFungibleAssetProvider.OPENSEA ? (
-                                <Link
-                                    href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.payment_token!)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={classes.tokenLink}>
-                                    {order.payment_token_contract?.image_url && (
-                                        <img
-                                            src={order.payment_token_contract.image_url}
-                                            className={classes.token}
-                                            alt={order.payment_token_contract?.symbol}
-                                        />
-                                    )}
-                                </Link>
-                            ) : null}
-                            {getOrderUnitPrice(
-                                order.current_price,
-                                order.payment_token_contract?.decimals,
-                                order.quantity,
-                            )}{' '}
-                            {order.payment_token_contract?.symbol}
+                            <>
+                                {provider === NonFungibleAssetProvider.OPENSEA ? (
+                                    <Link
+                                        href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.payment_token!)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={classes.tokenLink}>
+                                        {order.payment_token_contract?.image_url && (
+                                            <img
+                                                src={order.payment_token_contract.image_url}
+                                                className={classes.token}
+                                                alt={order.payment_token_contract?.symbol}
+                                            />
+                                        )}
+                                    </Link>
+                                ) : null}
+                                {getOrderUnitPrice(
+                                    order.current_price,
+                                    order.payment_token_contract?.decimals,
+                                    order.quantity,
+                                )}{' '}
+                                {order.payment_token_contract?.symbol}
+                            </>
                         </Typography>
                     </TableCell>
                     <TableCell>

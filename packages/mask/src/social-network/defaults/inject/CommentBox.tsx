@@ -1,11 +1,10 @@
 import { memo, useCallback } from 'react'
-import type { PostInfo } from '../../PostInfo'
+import { type PostInfo, usePostInfoDetails, usePostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CommentBox, CommentBoxProps } from '../../../components/InjectedComponents/CommentBox'
 import Services from '../../../extension/service'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { makeStyles } from '@masknet/theme'
-import { usePostInfoDetails, usePostInfo, PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-unified'
 import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
@@ -35,7 +34,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         const iv = usePostInfoDetails.iv()
         const props = additionPropsToCommentBox(classes)
         const onCallback = useCallback(
-            async (content) => {
+            async (content: string) => {
                 const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
                 const encryptedComment = await Services.Crypto.encryptComment(
                     new Uint8Array(decodeArrayBuffer(iv!)),

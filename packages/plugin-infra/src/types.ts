@@ -82,11 +82,6 @@ export namespace Plugin.Shared {
          */
         name: I18NStringField
         /**
-         * Emoji icon of this plugin, used to display the plugin with a fancy shape.
-         * @example "🎶"
-         */
-        icon?: string | React.ReactNode
-        /**
          * A brief description of this plugin.
          * @example { i18nKey: "description", fallback: "This plugin is going to replace every link in the page to https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
          */
@@ -688,20 +683,9 @@ export enum PluginId {
     UnlockProtocol = 'com.maskbook.unlockprotocol',
     FileService = 'com.maskbook.fileservice',
     CyberConnect = 'me.cyberconnect.app',
+    GoPlusSecurity = 'io.gopluslabs.security',
+    CrossChainBridge = 'io.mask.cross-chain-bridge',
     // @masknet/scripts: insert-here
-}
-
-export interface Pagination {
-    /** The item size of each page. */
-    size?: number
-    /** The page index. */
-    page?: number
-}
-
-export interface Pageable<T> {
-    currentPage: number
-    hasNextPage: boolean
-    data: T[]
 }
 /**
  * This namespace is not related to the plugin authors

@@ -1,14 +1,17 @@
+import { useNetworkDescriptor, useWeb3State as useWeb3PluginState } from '@masknet/plugin-infra/web3'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, useAccount, useERC721TokenDetailedCallback } from '@masknet/web3-shared-evm'
-import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
-import { Button, FormControl, Typography } from '@mui/material'
+import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
+import { Button, CircularProgress, Typography } from '@mui/material'
 import classnames from 'classnames'
-import { FC, HTMLProps, useCallback, useMemo, useState } from 'react'
-import { SearchInput } from '../../../../../extension/options-page/DashboardComponents/SearchInput'
-import { ERC721ContractSelectPanel } from '../../../../../web3/UI/ERC721ContractSelectPanel'
-import { TargetChainIdContext, useTip } from '../../../contexts'
-import { NFTList } from './NFTList'
+import { uniqWith } from 'lodash-unified'
+import { FC, HTMLProps, useEffect, useMemo, useState } from 'react'
+import { useAsyncFn, useTimeoutFn } from 'react-use'
+import { WalletMessages } from '../../../../Wallet/messages'
+import { useTip } from '../../../contexts'
 import { useI18N } from '../../../locales'
+import type { TipNFTKeyPair } from '../../../types'
+import { NFTList } from './NFTList'
 
 export * from './NFTList'
 
@@ -17,36 +20,28 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
+        height: 282,
     },
     selectSection: {
-        marginTop: theme.spacing(1.5),
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
     },
+    statusBox: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 282,
+    },
+    loadingText: {
+        marginTop: theme.spacing(1),
+    },
     list: {
         flexGrow: 1,
-        marginTop: theme.spacing(2),
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
         maxHeight: 400,
         overflow: 'auto',
-        gridGap: 18,
-        backgroundColor: theme.palette.background.default,
         borderRadius: 4,
-        padding: theme.spacing(1),
-    },
-    keyword: {
-        borderRadius: 8,
-        marginRight: theme.spacing(1.5),
-    },
-    searchButton: {
-        borderRadius: 8,
-        width: 100,
-    },
-    row: {
-        display: 'flex',
-        flexDirection: 'row',
     },
     errorMessage: {
         marginTop: theme.spacing(3),
@@ -56,74 +51,103 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props extends HTMLProps<HTMLDivElement> {}
+interface Props extends HTMLProps<HTMLDivElement> {
+    onAddToken?(): void
+    onEmpty?(empty: boolean): void
+}
 
-export const NFTSection: FC<Props> = ({ className, ...rest }) => {
-    const t = useI18N()
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const { erc721Contract, setErc721Contract, erc721TokenId, setErc721TokenId, isSending } = useTip()
-    const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(erc721Contract)
+export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest }) => {
+    const { erc721Address, erc721TokenId, setErc721TokenId, setErc721Address } = useTip()
     const { classes } = useStyles()
+    const t = useI18N()
     const account = useAccount()
-    const { tokenDetailedOwnerList: myTokens = [] } = useERC721TokenDetailedOwnerList(erc721Contract, account)
+    const selectedPairs: TipNFTKeyPair[] = useMemo(
+        () => (erc721Address && erc721TokenId ? [[erc721Address, erc721TokenId]] : []),
+        [erc721TokenId, erc721TokenId],
+    )
+    const { Asset } = useWeb3PluginState()
 
-    const selectedIds = useMemo(() => (erc721TokenId ? [erc721TokenId] : []), [erc721TokenId])
+    const networkDescriptor = useNetworkDescriptor()
 
-    const [searchedToken, setSearchedToken] = useState<ERC721TokenDetailed | null>(null)
-    const onSearch = useCallback(async () => {
-        const token = await erc721TokenDetailedCallback()
-        setSearchedToken(token?.info.owner ? token : null)
-    }, [erc721TokenDetailedCallback])
+    // Cannot get the loading status of fetching via websocket
+    // loading status of `useAsyncRetry` is not the real status
+    const [guessLoading, setGuessLoading] = useState(true)
+    useTimeoutFn(() => {
+        setGuessLoading(false)
+    }, 10000)
 
-    const tokens = useMemo(() => (searchedToken ? [searchedToken] : myTokens), [searchedToken, myTokens])
-    const enableTokenIds = useMemo(() => myTokens.map((t) => t.tokenId), [myTokens])
+    const [{ value = { data: EMPTY_LIST }, loading }, fetchTokens] = useAsyncFn(async () => {
+        const result = await Asset?.getNonFungibleAssets?.(account, { page: 0 }, undefined, networkDescriptor)
+        return result
+    }, [account, Asset?.getNonFungibleAssets, networkDescriptor])
+
+    useEffect(() => {
+        fetchTokens()
+    }, [fetchTokens])
+
+    useEffect(() => {
+        const unsubscribeTokens = WalletMessages.events.erc721TokensUpdated.on(fetchTokens)
+        const unsubscribeSocket = WalletMessages.events.socketMessageUpdated.on((info) => {
+            setGuessLoading(info.done)
+            if (!info.done) {
+                fetchTokens()
+            }
+        })
+        return () => {
+            unsubscribeTokens()
+            unsubscribeSocket()
+        }
+    }, [fetchTokens])
+
+    const fetchedTokens = value?.data ?? EMPTY_LIST
+
+    const tokens = useMemo(() => {
+        return uniqWith(fetchedTokens, (v1, v2) => {
+            return isSameAddress(v1.contract?.address, v2.contract?.address) && v1.tokenId === v2.tokenId
+        })
+    }, [fetchedTokens])
+
+    const showLoadingIndicator = tokens.length === 0 && !loading && !guessLoading
+
+    useEffect(() => {
+        onEmpty?.(showLoadingIndicator)
+    }, [onEmpty, showLoadingIndicator])
 
     return (
         <div className={classnames(classes.root, className)} {...rest}>
-            <FormControl>
-                <ERC721ContractSelectPanel
-                    chainId={chainId}
-                    label={t.tip_contracts()}
-                    contract={erc721Contract}
-                    onContractChange={setErc721Contract}
-                />
-            </FormControl>
-            {erc721Contract ? (
-                <div className={classes.selectSection}>
-                    <FormControl className={classes.row}>
-                        <SearchInput
-                            classes={{ root: classes.keyword }}
-                            value={tokenId}
-                            onChange={(id) => setTokenId(id)}
-                            inputBaseProps={{
-                                disabled: isSending,
-                            }}
-                            label=""
-                        />
-                        <Button
-                            className={classes.searchButton}
-                            variant="contained"
-                            disabled={isSending}
-                            onClick={onSearch}>
-                            {t.search()}
-                        </Button>
-                    </FormControl>
-                    <NFTList
-                        className={classes.list}
-                        selectedIds={selectedIds}
-                        tokens={tokens}
-                        enableTokenIds={enableTokenIds}
-                        onChange={(ids) => {
-                            setErc721TokenId(ids.length ? ids[0] : null)
-                        }}
-                    />
-                </div>
-            ) : null}
-            {tokens.length === 1 && !enableTokenIds.includes(tokens[0].tokenId) ? (
-                <Typography variant="body1" className={classes.errorMessage}>
-                    {t.nft_not_belong_to_you()}
-                </Typography>
-            ) : null}
+            <div className={classes.selectSection}>
+                {(() => {
+                    if (tokens.length) {
+                        return (
+                            <NFTList
+                                className={classes.list}
+                                selectedPairs={selectedPairs}
+                                tokens={tokens}
+                                onChange={(id, address) => {
+                                    setErc721TokenId(id)
+                                    setErc721Address(address)
+                                }}
+                            />
+                        )
+                    }
+                    if (loading || guessLoading) {
+                        return (
+                            <div className={classes.statusBox}>
+                                <CircularProgress size={24} />
+                                <Typography className={classes.loadingText}>{t.tip_loading()}</Typography>
+                            </div>
+                        )
+                    }
+                    return (
+                        <div className={classes.statusBox}>
+                            <Typography className={classes.loadingText}>{t.tip_empty_nft()}</Typography>
+                            <Button variant="text" onClick={onAddToken}>
+                                {t.tip_add_collectibles()}
+                            </Button>
+                        </div>
+                    )
+                })()}
+            </div>
         </div>
     )
 }

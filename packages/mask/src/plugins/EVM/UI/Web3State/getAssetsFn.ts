@@ -1,33 +1,40 @@
-import Web3 from 'web3'
 import {
-    createContract,
-    createNativeToken,
-    ERC721TokenDetailed,
-    formatEthereumAddress,
-    getERC721TokenDetailedFromChain,
-    getERC721TokenAssetFromChain,
-    getEthereumConstants,
-    isSameAddress,
-    Web3ProviderType,
-    FungibleAssetProvider,
-    createExternalProvider,
-    getCoinGeckoCoinId,
-    CurrencyType,
-    PriceRecord,
-    ChainId,
-} from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
-import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
+    getRegisteredWeb3Networks,
+    NetworkPluginID,
+    Pageable,
+    Pagination,
+    TokenType,
+    Web3Plugin,
+} from '@masknet/plugin-infra/web3'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
-import type { AbiItem } from 'web3-utils'
+import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
+import { TokenPrice } from '@masknet/web3-providers'
+import { pow10 } from '@masknet/web3-shared-base'
+import {
+    ChainId,
+    createContract,
+    createExternalProvider,
+    createNativeToken,
+    CurrencyType,
+    ERC721TokenDetailed,
+    formatEthereumAddress,
+    FungibleAssetProvider,
+    getCoinGeckoCoinId,
+    getERC721TokenAssetFromChain,
+    getERC721TokenDetailedFromChain,
+    getEthereumConstants,
+    isSameAddress,
+    PriceRecord,
+    Web3ProviderType,
+} from '@masknet/web3-shared-evm'
+import BigNumber from 'bignumber.js'
 import { uniqBy } from 'lodash-unified'
-import { PLUGIN_NETWORKS } from '../../constants'
+import Web3 from 'web3'
+import type { AbiItem } from 'web3-utils'
 import { makeSortAssertWithoutChainFn } from '../../utils/token'
 import { createGetLatestBalance } from './createGetLatestBalance'
-import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
-import { pow10 } from '@masknet/web3-shared-base'
-import { TokenPrice } from '@masknet/web3-providers'
+import { createNonFungibleToken } from './createNonFungibleToken'
 
 // tokens unavailable neither from api or balance checker.
 // https://forum.conflux.fun/t/how-to-upvote-debank-proposal-for-conflux-espace-integration/13935
@@ -38,7 +45,10 @@ export const getFungibleAssetsFn =
     async (address: string, providerType: string, network: Web3Plugin.NetworkDescriptor, pagination?: Pagination) => {
         const chainId = context.chainId.getCurrentValue()
         const wallet = context.wallets.getCurrentValue().find((x) => isSameAddress(x.address, address))
-        const networks = PLUGIN_NETWORKS
+        const networks = getRegisteredWeb3Networks().filter(
+            (x) => NetworkPluginID.PLUGIN_EVM === x.networkSupporterPluginID && x.isMainnet,
+        )
+        const supportedNetworkIds = networks.map((x) => x.chainId)
         const trustedTokens = uniqBy(
             context.erc20Tokens
                 .getCurrentValue()
@@ -51,22 +61,24 @@ export const getFungibleAssetsFn =
         )
         const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
         const dataFromProvider = await context.getAssetsList(address, FungibleAssetProvider.DEBANK)
-        const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x) => ({
-            id: x.token.address,
-            chainId: x.token.chainId,
-            balance: x.balance,
-            price: x.price,
-            value: x.value,
-            logoURI: x.logoURI,
-            token: {
-                ...x.token,
-                type: TokenType.Fungible,
-                name: x.token.name ?? 'Unknown Token',
-                symbol: x.token.symbol ?? 'Unknown',
+        const assetsFromProvider = dataFromProvider
+            .map<Web3Plugin.Asset<Web3Plugin.FungibleToken>>((x) => ({
                 id: x.token.address,
                 chainId: x.token.chainId,
-            },
-        }))
+                balance: x.balance,
+                price: x.price,
+                value: x.value,
+                logoURI: x.logoURI,
+                token: {
+                    ...x.token,
+                    name: x.token.name ?? 'Unknown Token',
+                    symbol: x.token.symbol ?? 'Unknown',
+                    id: x.token.address,
+                    chainId: x.token.chainId,
+                    type: TokenType.Fungible,
+                },
+            }))
+            .filter((x) => supportedNetworkIds.includes(x.chainId))
 
         const balanceCheckerContract = createContract(
             web3,
@@ -215,31 +227,7 @@ export const getNonFungibleTokenFn =
 
         const tokenFromProvider = socket.getResult<ERC721TokenDetailed>(socketId)
         const allData: Web3Plugin.NonFungibleToken[] = [...tokenInDb, ...tokenFromProvider]
-            .map(
-                (x) =>
-                    ({
-                        ...x,
-                        id: `${x.contractDetailed.address}_${x.tokenId}`,
-                        tokenId: x.tokenId,
-                        chainId: x.contractDetailed.chainId,
-                        type: TokenType.NonFungible,
-                        name: x.info.name ?? `${x.contractDetailed.name} ${x.tokenId}`,
-                        description: x.info.description ?? '',
-                        owner: x.info.owner,
-                        contract: {
-                            ...x.contractDetailed,
-                            type: TokenType.NonFungible,
-                            id: x.contractDetailed.address,
-                        },
-                        metadata: {
-                            name: x.info.name ?? `${x.contractDetailed.name} ${x.tokenId}`,
-                            description: x.info.description ?? '',
-                            mediaType: 'Unknown',
-                            iconURL: x.contractDetailed.iconURL,
-                            assetURL: x.info.mediaUrl,
-                        },
-                    } as Web3Plugin.NonFungibleToken),
-            )
+            .map(createNonFungibleToken)
             .filter((x) => isSameAddress(x.owner, address))
             .filter((x) => !network || x.chainId === network.chainId)
 

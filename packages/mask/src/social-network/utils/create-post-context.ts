@@ -1,5 +1,10 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import type { PostContext, PostContextAuthor, PostContextCreation, PostContextSNSActions } from '@masknet/plugin-infra'
+import type {
+    PostContext,
+    PostContextAuthor,
+    PostContextCreation,
+    PostContextSNSActions,
+} from '@masknet/plugin-infra/content-script'
 import {
     extractTextFromTypedMessage,
     isTypedMessageEqual,
@@ -22,7 +27,7 @@ import {
 } from '@masknet/shared-base'
 import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
-import { activatedSocialNetworkUI } from '../'
+import { activatedSocialNetworkUI } from '../ui'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
 

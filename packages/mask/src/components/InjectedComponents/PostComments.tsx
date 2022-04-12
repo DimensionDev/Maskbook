@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { usePostInfoDetails } from '../DataSource/usePostInfo'
+import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { decodeArrayBuffer } from '@dimensiondev/kit'
 
 const useStyle = makeStyles()({

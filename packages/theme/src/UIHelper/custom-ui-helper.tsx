@@ -1,5 +1,5 @@
 /// <reference path="./custom-ui.d.ts" />
-type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
+export type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Priority: classes from props > configHooks > defaultStyles
 export function useStylesExtends<InternalKeys extends string, OverwrittenKeys extends string>(
     defaultStyles: { classes?: ClassNameMap<InternalKeys> },
@@ -24,11 +24,4 @@ export function mergeClasses(...args: (Partial<ClassNameMap<string>> | undefined
         }
     }
     return result
-}
-
-/**
- * In case of y is a react hooks call, we should always call the hooks. So we can't use x ?? y directly.
- */
-export function or<T>(x: T | undefined, y: T) {
-    return x ?? y
 }

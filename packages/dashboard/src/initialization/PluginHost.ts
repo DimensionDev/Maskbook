@@ -1,10 +1,9 @@
 import './plugins'
 
 import { Emitter } from '@servie/events'
-import { startPluginDashboard, Plugin } from '@masknet/plugin-infra'
+import { startPluginDashboard, Plugin } from '@masknet/plugin-infra/dashboard'
 import { Services, Messages } from '../API'
-import { createI18NBundle } from '@masknet/shared-base'
-import i18n from 'i18next'
+import { createI18NBundle, i18NextInstance } from '@masknet/shared-base'
 import { InMemoryStorages, PersistentStorages } from '../utils/kv-storage'
 
 const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
@@ -15,7 +14,7 @@ const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
         },
     },
     addI18NResource(plugin, resource) {
-        createI18NBundle(plugin, resource)(i18n)
+        createI18NBundle(plugin, resource)(i18NextInstance)
     },
     createContext: (pluginID, signal) => {
         return {

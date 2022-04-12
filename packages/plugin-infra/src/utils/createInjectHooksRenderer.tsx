@@ -1,15 +1,15 @@
-import { useEffect, useState, useRef, memo, createContext, useContext } from 'react'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ShadowRootIsolation } from '@masknet/theme'
-import type { Plugin } from '../types'
-import { usePluginI18NField, PluginWrapperComponent, PluginWrapperMethods } from '../hooks'
+import { createContext, memo, useContext, useEffect, useRef, useState } from 'react'
+import { PluginWrapperComponent, PluginWrapperMethods, useAvailablePlugins, usePluginI18NField } from '../hooks'
 import { PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
+import type { Plugin } from '../types'
 
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
 
 const PropsContext = createContext<unknown>(null)
-export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType>(
+export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType extends object>(
     usePlugins: () => PluginDefinition[],
     pickInjectorHook: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
     PluginWrapperComponent?: PluginWrapperComponent<PluginDefinition>,
@@ -18,7 +18,11 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         const [ref, setRef] = useState<PluginWrapperMethods | null>(null)
         if (PluginWrapperComponent) {
             return (
-                <PluginWrapperComponent definition={plugin} ref={setRef}>
+                <PluginWrapperComponent
+                    definition={plugin}
+                    ref={(methods) => {
+                        if (methods) setRef(methods)
+                    }}>
                     {ref ? (
                         <PluginWrapperMethodsContext.Provider value={ref}>
                             {element}
@@ -43,15 +47,15 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         )
     }
     function PluginsInjectionHookRender(props: PropsType) {
-        const all = usePlugins()
-            .filter(pickInjectorHook)
-            .map((plugin) => (
-                <PropsContext.Provider key={plugin.ID} value={props}>
-                    <ShadowRootIsolation data-plugin={plugin.ID}>
-                        <SinglePluginWithinErrorBoundary plugin={plugin} />
-                    </ShadowRootIsolation>
-                </PropsContext.Provider>
-            ))
+        const allPlugins = usePlugins()
+        const availablePlugins = useAvailablePlugins(allPlugins) as PluginDefinition[]
+        const all = availablePlugins.filter(pickInjectorHook).map((plugin) => (
+            <PropsContext.Provider key={plugin.ID} value={props}>
+                <ShadowRootIsolation data-plugin={plugin.ID}>
+                    <SinglePluginWithinErrorBoundary plugin={plugin} />
+                </ShadowRootIsolation>
+            </PropsContext.Provider>
+        ))
         return <>{all}</>
     }
     return memo(function PluginsInjectionHookRenderErrorBoundary(props: PropsType) {

@@ -1,3 +1,7 @@
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { usePickToken, InjectedDialog } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { isZero, rightShift } from '@masknet/web3-shared-base'
 import {
     EthereumTokenType,
     formatBalance,
@@ -6,24 +10,20 @@ import {
     useAccount,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { isZero, rightShift } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { useInvestCallback } from '../hooks/useInvestCallback'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
 export function InvestDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
     const [pool, setPool] = useState<Pool>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const [allowedTokens, setAllowedTokens] = useState<string[]>()
@@ -77,26 +77,14 @@ export function InvestDialog() {
     // #endregion
 
     // #region select token
-    const { setDialog: setSelectTokenDialogOpen } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                setToken(ev.token)
-            },
-            [id],
-        ),
-    )
-    const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialogOpen({
-            open: true,
-            uuid: id,
+    const pickToken = usePickToken()
+    const onSelectTokenChipClick = useCallback(async () => {
+        const picked = await pickToken({
             disableNativeToken: true,
-            FungibleTokenListProps: {
-                whitelist: allowedTokens,
-            },
+            whitelist: allowedTokens,
         })
-    }, [id, token?.address, allowedTokens])
+        if (picked) setToken(picked)
+    }, [pickToken, token?.address, allowedTokens])
     // #endregion
 
     // #region amount
@@ -117,7 +105,7 @@ export function InvestDialog() {
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
         PluginTraderMessages.swapDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     retryLoadTokenBalance()
                 }
@@ -161,7 +149,7 @@ export function InvestDialog() {
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     retryLoadTokenBalance()
                     if (investState.type === TransactionStateType.HASH) onClose()

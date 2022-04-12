@@ -36,7 +36,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useGasConfig } from '../../hooks/useGasConfig'
 import { unionBy } from 'lodash-unified'
 import { TransferTab } from './types'
-import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkType } from '@masknet/public-api'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { multipliedBy } from '@masknet/web3-shared-base'
@@ -75,7 +75,7 @@ export const TransferERC721 = memo(() => {
     } | null>(null)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const [contract, setContract] = useState<ERC721ContractDetailed>()
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
     const [gasLimit_, setGasLimit_] = useState(0)
     const network = useNetworkDescriptor()
     const { Utils } = useWeb3State()
@@ -211,7 +211,7 @@ export const TransferERC721 = memo(() => {
     }, [transferState])
 
     const onTransfer = useCallback(
-        async (data) => {
+        async (data: FormInputs) => {
             if (EthereumAddress.isValid(data.recipient)) {
                 await transferCallback(data.tokenId, data.recipient, gasConfig)
                 return

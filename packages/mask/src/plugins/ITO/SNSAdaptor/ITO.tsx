@@ -340,9 +340,6 @@ export function ITO(props: ITO_Props) {
 
     // #region claim
     const [claimState, claimCallback] = useClaimCallback([pid], payload.contract_address)
-    const onClaimButtonClick = useCallback(() => {
-        claimCallback()
-    }, [claimCallback])
 
     const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
@@ -493,7 +490,7 @@ export function ITO(props: ITO_Props) {
         tradeInfo?.buyInfo?.token.symbol,
     ])
 
-    const footerStartTime = useMemo(() => {
+    const FooterStartTime = useMemo(() => {
         return (
             <Typography variant="body1" className={classes.footerInfo}>
                 {t('plugin_ito_list_start_date', { date: formatDateTime(startTime, 'yyyy-MM-dd HH:mm') })}
@@ -501,7 +498,7 @@ export function ITO(props: ITO_Props) {
         )
     }, [startTime])
 
-    const footerEndTime = useMemo(
+    const FooterEndTime = useMemo(
         () => (
             <Typography variant="body1" className={classes.footerInfo}>
                 {t('plugin_ito_swap_end_date', { date: formatDateTime(endTime, 'yyyy-MM-dd HH:mm') })}
@@ -510,13 +507,13 @@ export function ITO(props: ITO_Props) {
         [endTime, t],
     )
 
-    const footerSwapInfo = useMemo(
+    const FooterSwapInfo = useMemo(
         () => (
             <>
                 <Typography variant="body1" className={classes.footerInfo}>
                     {swapResultText}
                 </Typography>
-                {footerEndTime}
+                {FooterEndTime}
                 {hasLockTime &&
                 !isUnlocked &&
                 unlockTime > Date.now() &&
@@ -529,10 +526,10 @@ export function ITO(props: ITO_Props) {
                 ) : null}
             </>
         ),
-        [footerEndTime, swapResultText],
+        [FooterEndTime, swapResultText],
     )
 
-    const footerNormal = useMemo(
+    const FooterNormal = useMemo(
         () => (
             <>
                 <Typography variant="body1" className={classes.footerInfo}>
@@ -543,13 +540,87 @@ export function ITO(props: ITO_Props) {
                 </Typography>
 
                 {listOfStatus.includes(ITO_Status.waited)
-                    ? footerStartTime
+                    ? FooterStartTime
                     : listOfStatus.includes(ITO_Status.started)
-                    ? footerEndTime
+                    ? FooterEndTime
                     : null}
             </>
         ),
-        [footerEndTime, footerStartTime, limit, listOfStatus, token.decimals, token.symbol],
+        [FooterEndTime, FooterStartTime, limit, listOfStatus, token.decimals, token.symbol],
+    )
+
+    const FooterBuyerLockedButton = useMemo(() => {
+        if (!availability?.claimed) {
+            return (
+                <ActionButton
+                    onClick={claimCallback}
+                    variant="contained"
+                    size="large"
+                    disabled={claimState.type === TransactionStateType.HASH}
+                    className={classes.actionButton}>
+                    {claimState.type === TransactionStateType.HASH ? t('plugin_ito_claiming') : t('plugin_ito_claim')}
+                </ActionButton>
+            )
+        }
+
+        if (canWithdraw) {
+            return (
+                <ActionButton onClick={onWithdraw} variant="contained" size="large" className={classes.actionButton}>
+                    {t('plugin_ito_withdraw')}
+                </ActionButton>
+            )
+        }
+        return null
+    }, [availability?.claimed, canWithdraw, claimState])
+
+    const FooterBuyerWithLockTimeButton = useMemo(
+        () => (
+            <Grid item xs={noRemain || listOfStatus.includes(ITO_Status.expired) ? 12 : 6}>
+                {(() => {
+                    if (isUnlocked) return FooterBuyerLockedButton
+
+                    return (
+                        <ActionButton
+                            onClick={() => undefined}
+                            variant="contained"
+                            disabled
+                            size="large"
+                            className={classNames(classes.actionButton, classes.textInOneLine)}>
+                            {t('plugin_ito_claim')}
+                        </ActionButton>
+                    )
+                })()}
+            </Grid>
+        ),
+        [noRemain, listOfStatus, isUnlocked],
+    )
+
+    const FooterBuyerButton = useMemo(
+        () => (
+            <div>
+                {(() => {
+                    if (hasLockTime)
+                        return (
+                            <Grid container spacing={2}>
+                                {FooterBuyerWithLockTimeButton}
+                            </Grid>
+                        )
+                    if (canWithdraw) {
+                        return (
+                            <ActionButton
+                                onClick={onWithdraw}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {t('plugin_ito_withdraw')}
+                            </ActionButton>
+                        )
+                    }
+                    return null
+                })()}
+            </div>
+        ),
+        [hasLockTime, canWithdraw],
     )
 
     return (
@@ -611,10 +682,10 @@ export function ITO(props: ITO_Props) {
                 <Box className={classes.footer}>
                     <div className={classes.footerInfo}>
                         {isBuyer
-                            ? footerSwapInfo
+                            ? FooterSwapInfo
                             : listOfStatus.includes(ITO_Status.expired)
-                            ? footerEndTime
-                            : footerNormal}
+                            ? FooterEndTime
+                            : FooterNormal}
                     </div>
                     <Typography variant="body1" className={classes.fromText}>
                         From: @{sellerName}
@@ -623,163 +694,147 @@ export function ITO(props: ITO_Props) {
             </Card>
 
             <Box className={classes.actionFooter}>
-                {loadingRegion && isRegionRestrict ? null : !isRegionAllow ? (
-                    <ActionButton
-                        disabled
-                        onClick={() => undefined}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_region_ban')}
-                    </ActionButton>
-                ) : (noRemain || listOfStatus.includes(ITO_Status.expired)) &&
-                  !canWithdraw &&
-                  ((availability?.claimed && hasLockTime) || !hasLockTime) ? null : loadingTradeInfo ||
-                  loadingAvailability ? (
-                    <ActionButton
-                        disabled
-                        onClick={() => undefined}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_loading')}
-                    </ActionButton>
-                ) : !account || !chainIdValid ? (
-                    <ActionButton
-                        onClick={openSelectProviderDialog}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_wallet_connect_a_wallet')}
-                    </ActionButton>
-                ) : isBuyer ? (
-                    <Grid container spacing={2}>
-                        {hasLockTime ? (
-                            <Grid item xs={noRemain || listOfStatus.includes(ITO_Status.expired) ? 12 : 6}>
-                                {isUnlocked ? (
-                                    !availability?.claimed ? (
-                                        <ActionButton
-                                            onClick={onClaimButtonClick}
-                                            variant="contained"
-                                            size="large"
-                                            disabled={claimState.type === TransactionStateType.HASH}
-                                            className={classes.actionButton}>
-                                            {claimState.type === TransactionStateType.HASH
-                                                ? t('plugin_ito_claiming')
-                                                : t('plugin_ito_claim')}
-                                        </ActionButton>
-                                    ) : canWithdraw ? (
-                                        <ActionButton
-                                            onClick={onWithdraw}
-                                            variant="contained"
-                                            size="large"
-                                            className={classes.actionButton}>
-                                            {t('plugin_ito_withdraw')}
-                                        </ActionButton>
-                                    ) : null
-                                ) : (
+                {(() => {
+                    if (loadingRegion && isRegionRestrict) return null
+
+                    if (!isRegionAllow) {
+                        return (
+                            <ActionButton
+                                disabled
+                                onClick={() => undefined}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {t('plugin_ito_region_ban')}
+                            </ActionButton>
+                        )
+                    }
+
+                    if (
+                        (noRemain || listOfStatus.includes(ITO_Status.expired)) &&
+                        !canWithdraw &&
+                        ((availability?.claimed && hasLockTime) || !hasLockTime)
+                    ) {
+                        return null
+                    }
+
+                    if (loadingTradeInfo || loadingAvailability) {
+                        return (
+                            <ActionButton
+                                disabled
+                                onClick={() => undefined}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {t('plugin_ito_loading')}
+                            </ActionButton>
+                        )
+                    }
+
+                    if (!account || !chainIdValid) {
+                        return (
+                            <ActionButton
+                                onClick={openSelectProviderDialog}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {t('plugin_wallet_connect_a_wallet')}
+                            </ActionButton>
+                        )
+                    }
+
+                    if (isBuyer) return FooterBuyerButton
+
+                    if (canWithdraw) {
+                        return (
+                            <ActionButton
+                                onClick={onWithdraw}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {t('plugin_ito_withdraw')}
+                            </ActionButton>
+                        )
+                    }
+
+                    if (
+                        (!ifQualified || !(ifQualified as Qual_V2).qualified) &&
+                        !isNativeTokenAddress(qualificationAddress)
+                    ) {
+                        return (
+                            <ActionButton
+                                onClick={retryIfQualified}
+                                loading={loadingIfQualified}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {loadingIfQualified
+                                    ? t('plugin_ito_qualification_loading')
+                                    : !ifQualified
+                                    ? t('plugin_ito_qualification_failed')
+                                    : !(ifQualified as Qual_V2).qualified
+                                    ? startCase((ifQualified as Qual_V2).errorMsg)
+                                    : null}
+                            </ActionButton>
+                        )
+                    }
+
+                    if (listOfStatus.includes(ITO_Status.expired)) return null
+
+                    if (listOfStatus.includes(ITO_Status.waited)) {
+                        return (
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
                                     <ActionButton
-                                        onClick={() => undefined}
+                                        onClick={onUnlock}
                                         variant="contained"
-                                        disabled
                                         size="large"
-                                        className={classNames(classes.actionButton, classes.textInOneLine)}>
-                                        {t('plugin_ito_claim')}
+                                        className={classes.actionButton}>
+                                        {t('plugin_ito_unlock_in_advance')}
                                     </ActionButton>
-                                )}
+                                </Grid>
+                                {shareText ? (
+                                    <Grid item xs={6}>
+                                        <ActionButton
+                                            onClick={onShare}
+                                            variant="contained"
+                                            size="large"
+                                            className={classes.actionButton}>
+                                            {t('plugin_ito_share')}
+                                        </ActionButton>
+                                    </Grid>
+                                ) : undefined}
                             </Grid>
-                        ) : canWithdraw ? (
-                            <Grid item xs={12}>
-                                <ActionButton
-                                    onClick={onWithdraw}
-                                    variant="contained"
-                                    size="large"
-                                    className={classes.actionButton}>
-                                    {t('plugin_ito_withdraw')}
-                                </ActionButton>
+                        )
+                    }
+
+                    if (listOfStatus.includes(ITO_Status.started)) {
+                        return (
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <ActionButton
+                                        onClick={onClaim}
+                                        variant="contained"
+                                        size="large"
+                                        className={classes.actionButton}>
+                                        {t('plugin_ito_enter')}
+                                    </ActionButton>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <ActionButton
+                                        onClick={onShareSuccess}
+                                        variant="contained"
+                                        size="large"
+                                        className={classes.actionButton}>
+                                        {t('plugin_ito_share')}
+                                    </ActionButton>
+                                </Grid>
                             </Grid>
-                        ) : null}
-                        {noRemain || listOfStatus.includes(ITO_Status.expired) ? null : (
-                            <Grid item xs={hasLockTime ? 6 : 12}>
-                                <ActionButton
-                                    onClick={onShareSuccess}
-                                    variant="contained"
-                                    size="large"
-                                    className={classes.actionButton}>
-                                    {t('plugin_ito_share')}
-                                </ActionButton>
-                            </Grid>
-                        )}
-                    </Grid>
-                ) : canWithdraw ? (
-                    <ActionButton
-                        onClick={onWithdraw}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_withdraw')}
-                    </ActionButton>
-                ) : (!ifQualified || !(ifQualified as Qual_V2).qualified) &&
-                  !isNativeTokenAddress(qualificationAddress) ? (
-                    <ActionButton
-                        onClick={retryIfQualified}
-                        loading={loadingIfQualified}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {loadingIfQualified
-                            ? t('plugin_ito_qualification_loading')
-                            : !ifQualified
-                            ? t('plugin_ito_qualification_failed')
-                            : !(ifQualified as Qual_V2).qualified
-                            ? startCase((ifQualified as Qual_V2).errorMsg)
-                            : null}
-                    </ActionButton>
-                ) : listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(ITO_Status.waited) ? (
-                    <Grid container spacing={2}>
-                        <Grid item xs={6}>
-                            <ActionButton
-                                onClick={onUnlock}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_unlock_in_advance')}
-                            </ActionButton>
-                        </Grid>
-                        {shareText ? (
-                            <Grid item xs={6}>
-                                <ActionButton
-                                    onClick={onShare}
-                                    variant="contained"
-                                    size="large"
-                                    className={classes.actionButton}>
-                                    {t('plugin_ito_share')}
-                                </ActionButton>
-                            </Grid>
-                        ) : undefined}
-                    </Grid>
-                ) : listOfStatus.includes(ITO_Status.started) ? (
-                    <Grid container spacing={2}>
-                        <Grid item xs={6}>
-                            <ActionButton
-                                onClick={onClaim}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_enter')}
-                            </ActionButton>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <ActionButton
-                                onClick={onShareSuccess}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_share')}
-                            </ActionButton>
-                        </Grid>
-                    </Grid>
-                ) : null}
+                        )
+                    }
+
+                    return null
+                })()}
             </Box>
 
             <SwapGuide
