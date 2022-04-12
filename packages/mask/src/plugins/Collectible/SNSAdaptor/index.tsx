@@ -70,8 +70,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             category: 'dapp',
-            description: <Trans i18nKey="collectibles_description" />,
-            name: <Trans i18nKey="collectibles_name" />,
+            description: <Trans i18nKey="plugin_collectibles_description" />,
+            name: <Trans i18nKey="plugin_collectibles_name" />,
             AppIcon: <CollectiblesIcon />,
             marketListSortingPriority: 7,
             tutorialLink:
