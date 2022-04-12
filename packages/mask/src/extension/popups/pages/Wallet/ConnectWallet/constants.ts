@@ -1,10 +1,8 @@
-import { MaskWalletIcon, WalletConnectIcon, MetaMaskIcon, BloctoIcon } from '@masknet/icons'
-
 const supportedWallets = [
-    { title: 'MetaMask', icon: MetaMaskIcon },
-    { title: 'Mask', icon: MaskWalletIcon },
-    { title: 'WalletConnect', icon: WalletConnectIcon },
-    { title: 'Blocto', icon: BloctoIcon },
+    { title: 'MetaMask', icon: new URL('../../../assets/metamask.svg', import.meta.url).toString() },
+    { title: 'Mask', icon: new URL('../../../assets/mask.svg', import.meta.url).toString() },
+    { title: 'WalletConnect', icon: new URL('../../../assets/walletconnect.svg', import.meta.url).toString() },
+    { title: 'Blocto', icon: new URL('../../../assets/blocto.svg', import.meta.url).toString() },
 ]
 
 export { supportedWallets }

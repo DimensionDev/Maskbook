@@ -33,8 +33,8 @@ const useStyles = makeStyles()((theme) => ({
         height: 'fit-content',
     },
     walletIcon: {
-        width: '4rem',
-        height: '4rem',
+        width: '5rem',
+        height: '5rem',
     },
 }))
 const ConnectWalletPage = memo(() => {
@@ -48,7 +48,7 @@ const ConnectWalletPage = memo(() => {
             {supportedWallets.map((item, idx) => {
                 return (
                     <div key={idx} className={classes.walletItem} onClick={clickItem}>
-                        <item.icon className={classes.walletIcon} />
+                        <img src={item.icon} className={classes.walletIcon} />
                         <Typography>{item.title}</Typography>
                     </div>
                 )
