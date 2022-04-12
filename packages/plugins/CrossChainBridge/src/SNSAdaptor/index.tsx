@@ -25,7 +25,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 )
             },
             appBoardSortingDefaultPriority: 5,
-            name: { i18nKey: 'plugin_valuables_name', fallback: 'Cross-chain' },
+            name: { i18nKey: 'plugin_cross_bridge_name', fallback: 'Cross-chain' },
             AppIcon: <CrossBridgeIcon />,
         },
     ],

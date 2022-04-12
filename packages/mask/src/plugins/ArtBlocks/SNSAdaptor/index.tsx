@@ -29,7 +29,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             category: 'dapp',
             marketListSortingPriority: 15,
             description: { i18nKey: 'plugin_artblocks_description', fallback: '' },
-            name: { i18nKey: 'name', fallback: 'Artblocks' },
+            name: { i18nKey: 'plugin_artblocks_name', fallback: 'Artblocks' },
             AppIcon: <ArtBlocksIcon />,
         },
     ],

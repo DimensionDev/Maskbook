@@ -35,7 +35,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             category: 'dapp',
             marketListSortingPriority: 17,
             description: { i18nKey: 'plugin_cyber_connect_description', fallback: '' },
-            name: { i18nKey: 'plugin_valuables_name', fallback: 'CyberConnect' },
+            name: { i18nKey: 'plugin_cyber_connect_name', fallback: 'CyberConnect' },
             AppIcon: <CyberConnectIcon />,
             tutorialLink: 'https://cyberconnect.me/',
         },

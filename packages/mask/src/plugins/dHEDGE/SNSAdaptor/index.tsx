@@ -47,8 +47,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             category: 'dapp',
-            description: { i18nKey: 'dhedge_description', fallback: '' },
-            name: { i18nKey: 'collectibles_name', fallback: 'dHEDGE' },
+            description: { i18nKey: 'plugin_dhedge_description', fallback: '' },
+            name: { i18nKey: 'plugin_dhedge_name', fallback: 'dHEDGE' },
             AppIcon: <DHEDGEIcon />,
             marketListSortingPriority: 11,
             tutorialLink:
