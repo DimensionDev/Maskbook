@@ -32,7 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            isInDappList: true,
+            category: 'dapp',
             marketListSortingPriority: 13,
             description: { i18nKey: 'good_ghosting_description', fallback: '' },
             name: { i18nKey: 'good_ghosting_name', fallback: 'GoodGhosting' },

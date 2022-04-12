@@ -25,7 +25,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             AppIcon: <TransakIcon />,
             description: { i18nKey: 'plugin_transak_description', fallback: '' },
             name: { i18nKey: 'plugin_transak_name', fallback: 'Fiat On-Ramp' },
-            isInDappList: true,
+            category: 'dapp',
         },
     ],
 }

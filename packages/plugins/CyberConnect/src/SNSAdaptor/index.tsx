@@ -32,7 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            isInDappList: true,
+            category: 'dapp',
             marketListSortingPriority: 17,
             description: { i18nKey: 'plugin_cyber_connect_description', fallback: '' },
             name: { i18nKey: 'plugin_valuables_name', fallback: 'CyberConnect' },

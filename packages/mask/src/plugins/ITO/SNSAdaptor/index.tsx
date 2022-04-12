@@ -83,7 +83,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             marketListSortingPriority: 3,
             AppIcon: <MarketsIcon />,
             description: { i18nKey: 'plugin_ito_description', fallback: '' },
-            isInDappList: true,
+            category: 'dapp',
             name: { i18nKey: 'plugin_ito_name', fallback: 'ITO' },
             tutorialLink:
                 'https://realmasknetwork.notion.site/Launch-an-ITO-Initial-Twitter-Offering-Support-ETH-BSC-Polygon-Arbitrum-d84c60903f974f4880d2085a13906d55',

@@ -328,7 +328,7 @@ export namespace Plugin.SNSAdaptor {
         /**
          * Does the application listed in the DAPP list
          */
-        isInDappList?: boolean
+        category?: 'dapp' | 'other'
     }
 
     export interface ProfileIdentity {

@@ -55,7 +55,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
             appBoardSortingDefaultPriority: 2,
             marketListSortingPriority: 2,
             AppIcon: <FileServiceIcon />,
-            isInDappList: true,
+            category: 'dapp',
             description: { i18nKey: 'plugin_file_service_description', fallback: '' },
             name: { i18nKey: 'plugin_file_service_name', fallback: 'File Service' },
             tutorialLink:

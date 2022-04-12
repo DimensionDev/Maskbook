@@ -39,7 +39,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            isInDappList: true,
+            category: 'dapp',
             description: { i18nKey: 'plugin_gitcoin_description', fallback: '' },
             name: { i18nKey: 'plugin_gitcoin_name', fallback: 'Gitcoin' },
             AppIcon: <GitcoinIcon />,

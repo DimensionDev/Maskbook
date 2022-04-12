@@ -47,7 +47,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             tutorialLink:
                 'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
             description: { i18nKey: 'plugin_mask_box_description', fallback: '' },
-            isInDappList: true,
+            category: 'dapp',
             name: { i18nKey: 'plugin_mask_box_name', fallback: 'MaskBox' },
         },
     ],

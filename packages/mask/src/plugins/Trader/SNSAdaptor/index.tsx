@@ -32,7 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             appBoardSortingDefaultPriority: 9,
             marketListSortingPriority: 5,
             AppIcon: <SwapIcon />,
-            isInDappList: true,
+            category: 'dapp',
             name: { i18nKey: 'plugin_trader_swap', fallback: 'Swap' },
             tutorialLink:
                 'https://realmasknetwork.notion.site/Trade-cryptos-on-Twitter-via-Uniswap-Sushi-0x-Support-ETH-BSC-Polygon-Arbitrum-f2e7d081ee38487ca1db958393ac1edc',

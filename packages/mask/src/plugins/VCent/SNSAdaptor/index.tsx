@@ -10,7 +10,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     PostInspector: Component,
     ApplicationEntries: [
         {
-            isInDappList: true,
+            category: 'dapp',
             description: { i18nKey: 'plugin_valuables_description', fallback: '' },
             name: { i18nKey: 'plugin_valuables_name', fallback: 'Valuables' },
             marketListSortingPriority: 10,

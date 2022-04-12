@@ -31,7 +31,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             description: { i18nKey: 'plugin_pets_description', fallback: '' },
             name: { i18nKey: 'plugin_pets_name', fallback: 'Non-F Friends' },
             tutorialLink: 'https://twitter.com/mintteamnft?s=21',
-            isInDappList: true,
+            category: 'dapp',
         },
     ],
 }

@@ -65,7 +65,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            isInDappList: true,
+            category: 'dapp',
             description: { i18nKey: 'plugin_snapshot_description', fallback: '' },
             tutorialLink: 'https://realmasknetwork.notion.site/Cast-a-Snapshot-vote-10c08ed9629942dd852d9afbfab61208',
             name: { i18nKey: 'plugin_snapshot_info_snapshot', fallback: 'Snapshot' },

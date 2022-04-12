@@ -83,7 +83,7 @@ export function ApplicationSettingPluginSwitch(props: Props) {
                         }) ?? [],
                     )
                 }, [])
-                .filter((x) => x.entry.isInDappList)
+                .filter((x) => x.entry.category === 'dapp')
                 .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
                 .map((x, i) => (
                     <ListItem key={x.pluginId + i} className={classes.listItem}>

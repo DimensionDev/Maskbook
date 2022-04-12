@@ -26,7 +26,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            isInDappList: true,
+            category: 'dapp',
             marketListSortingPriority: 15,
             description: { i18nKey: 'plugin_artblocks_description', fallback: '' },
             name: { i18nKey: 'name', fallback: 'Artblocks' },
