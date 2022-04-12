@@ -4,6 +4,7 @@ import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import type { BackupFileInfo } from '../../pages/Settings/type'
 import Tooltip from '@mui/material/Tooltip'
+import { formatFileSize } from '@dimensiondev/kit'
 
 interface BackupInfoProps {
     info: BackupFileInfo
@@ -30,7 +31,7 @@ export const BackupInfoCard = memo(({ info }: BackupInfoProps) => {
                 <Grid item xs={2}>
                     <Box>
                         <Typography align="right" variant="body2">
-                            {Math.ceil(info.size / 1024)}K
+                            {formatFileSize(info.size, false)}
                         </Typography>
                     </Box>
                 </Grid>
