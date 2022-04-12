@@ -500,7 +500,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                                 arrow
                                                 disableFocusListener
                                                 disableTouchListener>
-                                                <HelpOutline style={{ marginLeft: 10 }} />
+                                                <HelpOutline style={{ marginLeft: 10, height: 22 }} />
                                             </Tooltip>
                                         </Box>
                                     }
