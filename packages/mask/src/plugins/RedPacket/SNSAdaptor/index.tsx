@@ -92,10 +92,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon }) {
+            RenderEntryComponent({ disabled, AppIcon, title }) {
                 return (
                     <ApplicationEntry
-                        title="Lucky Drop"
+                        title={title}
                         disabled={disabled}
                         AppIcon={AppIcon}
                         onClick={() =>
@@ -113,8 +113,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             appBoardSortingDefaultPriority: 1,
             marketListSortingPriority: 1,
             AppIcon: <RedPacketIcon />,
-            description: 'Gift crypto or NFTs to any users, first come, first served.',
-            name: 'Lucky Drop',
+            description: { i18nKey: 'plugin_red_packet_description', fallback: '' },
+            name: { i18nKey: 'plugin_red_packet_name', fallback: 'Lucky Drop' },
             tutorialLink:
                 'https://realmasknetwork.notion.site/Gift-token-NFTs-to-your-friends-Support-ETH-BSC-and-Polygon-0a71fd421aae4563bd07caa3e2129e5b',
             isInDappList: true,

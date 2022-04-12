@@ -20,23 +20,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon }) {
+            RenderEntryComponent({ disabled, AppIcon, title }) {
                 const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
 
-                return (
-                    <ApplicationEntry
-                        disabled={disabled}
-                        title="Non-F Friends"
-                        AppIcon={AppIcon}
-                        onClick={openDialog}
-                    />
-                )
+                return <ApplicationEntry disabled={disabled} title={title} AppIcon={AppIcon} onClick={openDialog} />
             },
             appBoardSortingDefaultPriority: 11,
             marketListSortingPriority: 12,
             AppIcon: <LootManIcon />,
-            description: 'Explore the endless possibilities of NFTs.',
-            name: 'Non-F Friends',
+            description: { i18nKey: 'plugin_pets_description', fallback: '' },
+            name: { i18nKey: 'plugin_pets_name', fallback: 'Non-F Friends' },
             tutorialLink: 'https://twitter.com/mintteamnft?s=21',
             isInDappList: true,
         },

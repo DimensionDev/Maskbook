@@ -34,10 +34,10 @@ const definition: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon }) {
+            RenderEntryComponent({ disabled, AppIcon, title }) {
                 return (
                     <ApplicationEntry
-                        title="File Service"
+                        title={title}
                         disabled={disabled}
                         AppIcon={AppIcon}
                         onClick={() =>
@@ -56,9 +56,8 @@ const definition: Plugin.SNSAdaptor.Definition = {
             marketListSortingPriority: 2,
             AppIcon: <FileServiceIcon />,
             isInDappList: true,
-            description:
-                'Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network.',
-            name: 'File Service',
+            description: { i18nKey: 'plugin_file_service_description', fallback: '' },
+            name: { i18nKey: 'plugin_file_service_name', fallback: 'File Service' },
             tutorialLink:
                 'https://realmasknetwork.notion.site/Use-File-Service-via-Arweave-IPFS-SIA-Swarm-soon-8c8fe1efce5a48b49739a38f4ea8c60f',
         },

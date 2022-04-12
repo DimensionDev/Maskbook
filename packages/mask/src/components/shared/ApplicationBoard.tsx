@@ -127,7 +127,7 @@ export function ApplicationBoard() {
                         const RenderEntryComponent = X.entry.RenderEntryComponent!
                         return (
                             <Fragment key={i + X.pluginId}>
-                                <RenderEntryComponent disabled={!X.enabled} AppIcon={X.entry.AppIcon} />
+                                <RenderEntryComponentWrapper application={X} />
                             </Fragment>
                         )
                     })}
@@ -149,5 +149,25 @@ export function ApplicationBoard() {
                 />
             ) : null}
         </>
+    )
+}
+
+interface RenderEntryComponentWrapperProps {
+    application: Application
+}
+
+function RenderEntryComponentWrapper({ application }: RenderEntryComponentWrapperProps) {
+    const RenderEntryComponent = application.entry.RenderEntryComponent!
+    const { t } = useI18N()
+    return (
+        <RenderEntryComponent
+            disabled={!application.enabled}
+            AppIcon={application.entry.AppIcon}
+            title={
+                application.entry.name.i18nKey
+                    ? t(application.entry.name.i18nKey as unknown as Parameters<typeof t>[0])
+                    : application.entry.name.fallback
+            }
+        />
     )
 }

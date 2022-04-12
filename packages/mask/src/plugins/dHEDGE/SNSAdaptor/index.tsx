@@ -47,8 +47,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             isInDappList: true,
-            description: 'Decentralized hedge funds on Ethereum and Polygon (Matic).',
-            name: 'dHEDGE',
+            description: { i18nKey: 'dhedge_description', fallback: '' },
+            name: { i18nKey: 'collectibles_name', fallback: 'dHEDGE' },
             AppIcon: <DHEDGEIcon />,
             marketListSortingPriority: 11,
             tutorialLink:

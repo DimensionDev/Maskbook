@@ -58,7 +58,7 @@
     "create": "crwdns4047:0crwdne4047:0",
     "copied": "crwdns9361:0crwdne9361:0",
     "daily": "crwdns4057:0crwdne4057:0",
-    "dashboard_tab_collectibles": "crwdns4063:0crwdne4063:0",
+    "collectibles_name": "crwdns4063:0crwdne4063:0",
     "dashboard_no_collectible_found": "crwdns4105:0crwdne4105:0",
     "dashboard_collectible_menu_all": "crwdns14532:0{{count}}crwdne14532:0",
     "days": "crwdns4107:0{{days}}crwdne4107:0",

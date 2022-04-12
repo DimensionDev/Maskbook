@@ -5,6 +5,7 @@ import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/con
 import { SettingSwitch } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Services } from '../../extension/service'
+import { useI18N } from '../../utils'
 interface Props {}
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -60,6 +61,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 export function ApplicationSettingPluginSwitch(props: Props) {
     const { classes } = useStyles()
+    const { t, i18n } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
 
@@ -91,14 +93,22 @@ export function ApplicationSettingPluginSwitch(props: Props) {
                             </ListItemAvatar>
                             <div className={classes.info}>
                                 <div className={classes.headerWrapper}>
-                                    <Typography className={classes.name}>{x.entry.name}</Typography>
+                                    <Typography className={classes.name}>
+                                        {x.entry.name.i18nKey
+                                            ? t(x.entry.name.i18nKey as unknown as Parameters<typeof t>[0])
+                                            : x.entry.name.fallback}
+                                    </Typography>
                                     {x.entry.tutorialLink ? (
                                         <Box className={classes.settings}>
                                             <TutorialIcon onClick={() => openWindow(x.entry.tutorialLink)} />
                                         </Box>
                                     ) : null}
                                 </div>
-                                <Typography className={classes.desc}>{x.entry.description}</Typography>
+                                <Typography className={classes.desc}>
+                                    {x.entry.description?.i18nKey
+                                        ? t(x.entry.description.i18nKey as unknown as Parameters<typeof t>[0])
+                                        : x.entry.description?.fallback}
+                                </Typography>
                             </div>
                         </section>
 

@@ -89,13 +89,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon }) {
+            RenderEntryComponent({ disabled, AppIcon, title }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
                         <ApplicationEntry
                             disabled={disabled}
-                            title="FindTruman"
+                            title={title}
                             AppIcon={AppIcon}
                             onClick={() => setOpen(true)}
                         />
@@ -105,7 +105,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             appBoardSortingDefaultPriority: 11,
             AppIcon: <FindTrumanIcon />,
-            name: 'FindTruman',
+            name: { i18nKey: 'plugin_find_truman_name', fallback: 'FindTruman' },
         },
     ],
 }

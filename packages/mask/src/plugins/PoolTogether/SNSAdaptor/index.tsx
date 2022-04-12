@@ -37,8 +37,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             isInDappList: true,
-            description: 'Participate in lossless lottery on Twitter.',
-            name: 'PoolTogether',
+            description: { i18nKey: 'plugin_pooltogether_description', fallback: '' },
+            name: { i18nKey: 'plugin_pooltogether_name', fallback: 'PoolTogether' },
             marketListSortingPriority: 14,
             tutorialLink:
                 'https://realmasknetwork.notion.site/Participate-in-lossless-lottery-via-PoolTogether-on-Twitter-ETH-and-Polygon-377597e14aff441ab645ecba5ea690f1',

@@ -10,12 +10,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon }) {
+            RenderEntryComponent({ disabled, AppIcon, title }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
                         <ApplicationEntry
-                            title="Check Security"
+                            title={title}
                             disabled={disabled}
                             AppIcon={AppIcon}
                             onClick={() => setOpen(true)}
@@ -24,8 +24,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     </>
                 )
             },
-            name: 'Check Security',
-            description: '',
+            name: { i18nKey: 'plugin_go_plus_security_name', fallback: 'Check Security' },
             AppIcon: <SecurityCheckerIcon />,
             appBoardSortingDefaultPriority: 13,
             marketListSortingPriority: 16,

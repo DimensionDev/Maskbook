@@ -24,20 +24,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
     enhanceTag,
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon }) {
+            RenderEntryComponent({ disabled, AppIcon, title }) {
                 const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
-                return <ApplicationEntry disabled={disabled} title="Swap" AppIcon={AppIcon} onClick={openDialog} />
+                return <ApplicationEntry disabled={disabled} title={title} AppIcon={AppIcon} onClick={openDialog} />
             },
             appBoardSortingDefaultPriority: 9,
             marketListSortingPriority: 5,
             AppIcon: <SwapIcon />,
             isInDappList: true,
-            name: 'Swap',
+            name: { i18nKey: 'plugin_trader_swap', fallback: 'Swap' },
             tutorialLink:
                 'https://realmasknetwork.notion.site/Trade-cryptos-on-Twitter-via-Uniswap-Sushi-0x-Support-ETH-BSC-Polygon-Arbitrum-f2e7d081ee38487ca1db958393ac1edc',
-            description:
-                'Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade, also invest in the best performing managers.',
+            description: { i18nKey: 'plugin_trader_swap_description', fallback: '' },
         },
     ],
 }

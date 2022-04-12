@@ -40,9 +40,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             isInDappList: true,
-            description:
-                'Display specific information of Gitcoin projects, donate to a project directly on social media.',
-            name: 'Gitcoin',
+            description: { i18nKey: 'plugin_gitcoin_description', fallback: '' },
+            name: { i18nKey: 'plugin_gitcoin_name', fallback: 'Gitcoin' },
             AppIcon: <GitcoinIcon />,
             marketListSortingPriority: 9,
             tutorialLink:

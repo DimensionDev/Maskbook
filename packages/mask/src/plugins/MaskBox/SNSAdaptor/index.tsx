@@ -31,10 +31,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon }) {
+            RenderEntryComponent({ disabled, AppIcon, title }) {
                 return (
                     <ApplicationEntry
-                        title="MaskBox"
+                        title={title}
                         disabled={disabled}
                         AppIcon={AppIcon}
                         onClick={() => openWindow('https://box.mask.io/#/')}
@@ -46,9 +46,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             AppIcon: <MaskBoxIcon />,
             tutorialLink:
                 'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
-            description: 'Professional multi-chain decentralized platform for launching NFT mystery boxes.',
+            description: { i18nKey: 'plugin_mask_box_description', fallback: '' },
             isInDappList: true,
-            name: 'MaskBox',
+            name: { i18nKey: 'plugin_mask_box_name', fallback: 'MaskBox' },
         },
     ],
 }

@@ -10,12 +10,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal, context) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon }) {
+            RenderEntryComponent({ disabled, AppIcon, title }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
                         <ApplicationEntry
-                            title="Cross-chain"
+                            title={title}
                             disabled={disabled}
                             AppIcon={AppIcon}
                             onClick={() => setOpen(true)}
@@ -25,7 +25,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 )
             },
             appBoardSortingDefaultPriority: 5,
-            name: 'Cross-chain',
+            name: { i18nKey: 'plugin_valuables_name', fallback: 'Cross-chain' },
             AppIcon: <CrossBridgeIcon />,
         },
     ],

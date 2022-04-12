@@ -69,9 +69,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             isInDappList: true,
-            description:
-                'Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media.',
-            name: 'Collectibles',
+            description: {
+                i18nKey: 'collectibles_description',
+                fallback: '',
+            },
+            name: { i18nKey: 'collectibles_name', fallback: 'Collectibles' },
             AppIcon: <CollectiblesIcon />,
             marketListSortingPriority: 7,
             tutorialLink:

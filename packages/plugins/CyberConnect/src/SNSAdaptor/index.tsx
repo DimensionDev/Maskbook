@@ -34,8 +34,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             isInDappList: true,
             marketListSortingPriority: 17,
-            description: 'Decentralized social graph protocol for user-centric Web3.',
-            name: 'CyberConnect',
+            description: { i18nKey: 'plugin_cyber_connect_description', fallback: '' },
+            name: { i18nKey: 'plugin_valuables_name', fallback: 'CyberConnect' },
             AppIcon: <CyberConnectIcon />,
             tutorialLink: 'https://cyberconnect.me/',
         },

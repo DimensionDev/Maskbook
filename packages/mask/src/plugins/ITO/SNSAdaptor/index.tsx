@@ -61,11 +61,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon }) {
+            RenderEntryComponent({ disabled, AppIcon, title }) {
                 return (
                     <ApplicationEntry
                         disabled={disabled}
-                        title="ITO"
+                        title={title}
                         AppIcon={AppIcon}
                         onClick={() =>
                             CrossIsolationMessages.events.requestComposition.sendToLocal({
@@ -82,19 +82,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
             appBoardSortingDefaultPriority: 3,
             marketListSortingPriority: 3,
             AppIcon: <MarketsIcon />,
-            description: 'Launch decentralized asset freely and participate in token launch directly on Twitter.',
+            description: { i18nKey: 'plugin_ito_description', fallback: '' },
             isInDappList: true,
-            name: 'ITO',
+            name: { i18nKey: 'plugin_ito_name', fallback: 'ITO' },
             tutorialLink:
                 'https://realmasknetwork.notion.site/Launch-an-ITO-Initial-Twitter-Offering-Support-ETH-BSC-Polygon-Arbitrum-d84c60903f974f4880d2085a13906d55',
         },
         {
-            RenderEntryComponent({ disabled, AppIcon }) {
+            RenderEntryComponent({ disabled, AppIcon, title }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
                         <ApplicationEntry
-                            title="Claim"
+                            title={title}
                             AppIcon={AppIcon}
                             disabled={disabled}
                             onClick={() => setOpen(true)}
@@ -105,7 +105,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             appBoardSortingDefaultPriority: 4,
             AppIcon: <MarketsClaimIcon />,
-            name: 'Claim',
+            name: { i18nKey: 'plugin_ito_claim', fallback: 'Claim' },
         },
     ],
 }

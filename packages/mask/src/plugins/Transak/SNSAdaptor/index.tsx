@@ -14,19 +14,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon }) {
+            RenderEntryComponent({ disabled, AppIcon, title }) {
                 const { openDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
-                return (
-                    <ApplicationEntry title="Fiat On-Ramp" AppIcon={AppIcon} disabled={disabled} onClick={openDialog} />
-                )
+                return <ApplicationEntry title={title} AppIcon={AppIcon} disabled={disabled} onClick={openDialog} />
             },
             appBoardSortingDefaultPriority: 10,
             marketListSortingPriority: 6,
             tutorialLink: 'https://transak.com/',
             AppIcon: <TransakIcon />,
-            description: 'Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support.',
-            name: 'Fiat On-Ramp',
+            description: { i18nKey: 'plugin_transak_description', fallback: '' },
+            name: { i18nKey: 'plugin_transak_name', fallback: 'Fiat On-Ramp' },
             isInDappList: true,
         },
     ],

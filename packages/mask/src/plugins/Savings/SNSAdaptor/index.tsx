@@ -10,13 +10,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon }) {
+            RenderEntryComponent({ disabled, AppIcon, title }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
                         <ApplicationEntry
                             disabled={disabled}
-                            title="Savings"
+                            title={title}
                             AppIcon={AppIcon}
                             onClick={() => setOpen(true)}
                         />
@@ -26,7 +26,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             appBoardSortingDefaultPriority: 7,
             AppIcon: <SavingsIcon />,
-            name: 'Savings',
+            name: { i18nKey: 'plugin_savings', fallback: 'Savings' },
         },
     ],
 }
