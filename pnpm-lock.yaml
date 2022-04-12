@@ -55,7 +55,7 @@ importers:
       react: 18.0.0
       react-dom: 18.0.0
       react-i18next: ^11.16.2
-      ses: 0.15.11
+      ses: 0.15.12
       ts-jest: ^27.1.4
       ts-node: ^10.7.0
       ts-results: 3.3.0
@@ -84,7 +84,7 @@ importers:
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       react-i18next: 11.16.2_react-dom@18.0.0+react@18.0.0
-      ses: 0.15.11
+      ses: 0.15.12
       ts-results: 3.3.0
       web3-core: 1.7.3
       web3-core-method: 1.7.3
@@ -23332,8 +23332,8 @@ packages:
       xhr: 2.6.0
     dev: false
 
-  /ses/0.15.11:
-    resolution: {integrity: sha512-lQg6q8/PVf+n18EjP+5Uv1tN9oVQ3br5QxJzPXoAVQleSYnlf20JY9coe7n1B9A6CtIKIHyr6m/TfskcRCufgA==}
+  /ses/0.15.12:
+    resolution: {integrity: sha512-bni8g6GYb58bW+TtesiBHGU+QI+gHVaVWHg3ZCKNeD8d+QMFarLh2pcP5HpRFAPcrh2L0LVgnMMSzFJHb1VzyA==}
     dev: false
 
   /set-blocking/2.0.0:
