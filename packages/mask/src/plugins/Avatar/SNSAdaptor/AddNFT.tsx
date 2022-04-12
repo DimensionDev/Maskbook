@@ -6,6 +6,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { InputBox } from '../../../extension/options-page/DashboardComponents/InputBox'
 import { useI18N } from '../../../utils'
 import { createNFT } from '../utils'
+import { WalletRPC } from '../../Wallet/messages'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -28,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 export interface AddNFTProps {
     onClose: () => void
-    onAddClick: (token: ERC721TokenDetailed) => void
+    onAddClick?: (token: ERC721TokenDetailed) => void
     open: boolean
 }
 export function AddNFT(props: AddNFTProps) {
@@ -51,13 +52,13 @@ export function AddNFT(props: AddNFTProps) {
         }
 
         createNFT(address, tokenId)
-            .then((token) => {
+            .then(async (token) => {
                 if (!token || !isSameAddress(token?.info.owner, account)) {
                     setMessage(t('nft_owner_hint'))
                     return
                 }
-
-                onAddClick(token)
+                await WalletRPC.addToken(token)
+                onAddClick?.(token)
                 handleClose()
             })
             .catch((error) => setMessage(t('nft_owner_hint')))

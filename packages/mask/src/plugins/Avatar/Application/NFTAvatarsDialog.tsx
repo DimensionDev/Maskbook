@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { Box, CircularProgress, DialogContent, Typography } from '@mui/material'
+import { Box, CircularProgress, DialogContent, Stack, Typography } from '@mui/material'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { PersonaItem } from './PersonaItem'
 import { CloseIcon } from '../assets/close'
@@ -43,12 +43,20 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
         if (action) action()
     }, [netxtIDConnectStatus])
 
+    const _onClose = () => {
+        setOpen(false)
+        props.onClose()
+    }
+
+    console.log(binds)
     return (
         <>
-            <InjectedDialog title="NFT PFP" open={props.open} onClose={props.onClose}>
+            <InjectedDialog title="NFT PFP" open={props.open} onClose={_onClose}>
                 <DialogContent sx={{ height: 612 }}>
                     {loading ? (
-                        <CircularProgress />
+                        <Stack justifyContent="center" alignItems="center">
+                            <CircularProgress />
+                        </Stack>
                     ) : (
                         <>
                             {visible ? (
@@ -60,31 +68,22 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                                     <CloseIcon onClick={() => setVisible(false)} />
                                 </Box>
                             ) : null}
-                            <PersonaItem
-                                key={currentIdentity.identifier.userId}
-                                disabled={!isOwner}
-                                avatar={currentIdentity.avatar}
-                                userId={currentIdentity.identifier.userId}
-                                nickname={currentIdentity.nickname}
-                                onClick={() => setOpen(true)}
-                            />
                             {binds?.proofs
                                 .filter((proof) => proof.platform !== NextIDPlatform.Ethereum)
-                                .filter(
-                                    (proof) =>
-                                        proof?.identity.toLowerCase() !==
-                                        currentIdentity.identifier.userId.toLowerCase(),
-                                )
-                                .map((x, i) => (
-                                    <PersonaItem
-                                        key={i}
-                                        disabled={!isOwner}
-                                        avatar=""
-                                        userId={x.identity}
-                                        nickname=""
-                                        onClick={() => setOpen(true)}
-                                    />
-                                ))}
+                                .map((x, i) =>
+                                    x.identity.toLowerCase() === currentIdentity.identifier.userId.toLowerCase() ? (
+                                        <PersonaItem
+                                            key={i}
+                                            owner
+                                            avatar={currentIdentity.avatar}
+                                            userId={currentIdentity.identifier.userId}
+                                            nickname={currentIdentity.nickname}
+                                            onClick={() => setOpen(true)}
+                                        />
+                                    ) : (
+                                        <PersonaItem key={i} owner={false} avatar="" userId={x.identity} nickname="" />
+                                    ),
+                                )}
                         </>
                     )}
                 </DialogContent>

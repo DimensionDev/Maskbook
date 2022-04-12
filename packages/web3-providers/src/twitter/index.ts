@@ -138,6 +138,14 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         })
 
         const { bearerToken, queryToken, csrfToken } = await getTokens()
+        const headers = {
+            authorization: `Bearer ${bearerToken}`,
+            'x-csrf-token': csrfToken,
+            'content-type': 'application/json',
+            'x-twitter-auth-type': 'OAuth2Session',
+            'x-twitter-active-user': 'yes',
+            referer: `https://twitter.com/${screenName}`,
+        }
         if (!bearerToken || !queryToken || !csrfToken) return
         const updateProfileImageURL = 'https://twitter.com/i/api/1.1/account/update_profile_image.json'
         const response = await fetch(
@@ -149,18 +157,19 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             {
                 method: 'POST',
                 credentials: 'include',
-                headers: {
-                    authorization: `Bearer ${bearerToken}`,
-                    'x-csrf-token': csrfToken,
-                    'content-type': 'application/json',
-                    'x-twitter-auth-type': 'OAuth2Session',
-                    'x-twitter-active-user': 'yes',
-                    referer: `https://twitter.com/${screenName}`,
-                },
+                headers,
             },
         )
 
         const updateInfo = await response.json()
+        const avatarContentUrl = 'https://twitter.com/i/api/fleets/v1/avatar_content'
+        const avatarContent = await fetch(
+            urlcat(avatarContentUrl, {
+                user_ids: updateInfo.id_str,
+                only_spaces: true,
+            }),
+            { method: 'GET', headers },
+        )
         return {
             imageUrl: updateInfo.profile_image_url_https,
             mediaId: updateInfo.id_str,

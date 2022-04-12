@@ -4,6 +4,7 @@ export interface AvatarMetaDB {
     address: string
     avatarId: string
     updateFlag?: boolean
+    account?: string
 }
 
 export interface NFT {

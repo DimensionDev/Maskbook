@@ -11,15 +11,20 @@ const useStyles = makeStyles()(() => ({
 }))
 interface NFTInfoProps extends withClasses<'root'> {
     nft?: { name: string; address: string; tokenId: string; symbol: string }
+    owner: boolean
 }
 
 export function NFTInfo(props: NFTInfoProps) {
-    const { nft } = props
+    const { nft, owner } = props
     const classes = useStylesExtends(useStyles(), props)
 
     return (
         <Box className={classes.root}>
-            {nft ? (
+            {!owner ? (
+                <Typography variant="body1" color="#FFB915">
+                    NFT PFP verification failed
+                </Typography>
+            ) : nft ? (
                 <Box className={classes.nft}>
                     <ApplicationIcon />
                     <Box sx={{ marginLeft: 0.5 }}>

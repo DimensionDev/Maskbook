@@ -20,6 +20,8 @@ export function NFTList(props: NFTListProps) {
 
     const [currentTab, onChange, tabs] = useTabs('ETH', 'Polygon')
 
+    console.log('-----')
+    console.log(address)
     if (!address) return null
     return (
         <TabContext value={currentTab}>

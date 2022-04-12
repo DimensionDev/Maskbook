@@ -9,6 +9,7 @@ import { downloadUrl } from '../../../utils'
 import { NFTList } from './NFTList'
 import { usePersonas } from '../hooks/usePersonas'
 import { NextIDPlatform } from '@masknet/shared-base'
+import { AddNFT } from '../SNSAdaptor/AddNFT'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -44,10 +45,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const { binds, isOwner, loading } = usePersonas()
     const wallets = binds?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
     const account = useAccount()
-
-    const [selectedAccount, setSelectedAccount] = useState('')
+    const [open_, setOpen_] = useState(false)
+    const [selectedAccount, setSelectedAccount] = useState(account || wallets?.[0]?.identity || '')
     const [openEditProfile, setOpenEditProfile] = useState(false)
-    const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>()
+    const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed>()
     const [image, setImage] = useState('')
     const onChange = (address: string) => {
         console.log(address)
@@ -56,6 +57,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const onSelect = (token: ERC721TokenDetailed) => {
         setSelectedToken(token)
     }
+
     const onSave = useCallback(async () => {
         if (!selectedToken || !selectedToken.info.imageURL) return
         const image = await downloadUrl(selectedToken.info.imageURL)
@@ -63,11 +65,26 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setImage(URL.createObjectURL(image))
     }, [selectedToken])
 
+    const onClick = useCallback(() => {
+        setOpen_(true)
+    }, [])
+
     return (
         <>
-            <InjectedDialog title="NFT PFP" open={open} onClose={onClose}>
+            <InjectedDialog
+                title="NFT PFP"
+                open={open}
+                onClose={() => {
+                    setOpen_(false)
+                    onClose()
+                }}>
                 <DialogContent sx={{ height: 612 }}>
-                    <AddressNames classes={{ root: classes.AddressNames }} onChange={onChange} />
+                    <AddressNames
+                        account={account}
+                        wallets={wallets ?? []}
+                        classes={{ root: classes.AddressNames }}
+                        onChange={onChange}
+                    />
                     {(account || wallets?.length) && <NFTList address={selectedAccount} onSelect={onSelect} />}
                 </DialogContent>
                 <DialogActions>
@@ -75,7 +92,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         <Typography variant="body1" color="textPrimary">
                             Can' find it.
                         </Typography>
-                        <Typography variant="body1" color="#1D9BF0">
+                        <Typography variant="body1" color="#1D9BF0" sx={{ cursor: 'pointer' }} onClick={onClick}>
                             Add collectibles
                         </Typography>
                     </Stack>
@@ -85,13 +102,16 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     </Button>
                 </DialogActions>
             </InjectedDialog>
-            <UploadAvatarDialog
-                token={selectedToken}
-                account={selectedAccount}
-                open={openEditProfile}
-                onClose={() => setOpenEditProfile(false)}
-                image={image}
-            />
+            {selectedToken && (
+                <UploadAvatarDialog
+                    token={selectedToken}
+                    account={selectedAccount}
+                    open={openEditProfile}
+                    onClose={() => setOpenEditProfile(false)}
+                    image={image}
+                />
+            )}
+            <AddNFT open={open_} onClose={() => setOpen_(false)} />
         </>
     )
 }

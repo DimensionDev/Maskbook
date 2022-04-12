@@ -1,20 +1,19 @@
-import { useAccount, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
+import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { ImageIcon, ReversedAddress } from '@masknet/shared'
-import { NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, ShadowRootMenu, useStylesExtends } from '@masknet/theme'
-import { formatEthereumAddress, isSameAddress } from '@masknet/web3-shared-evm'
-import { Button, CircularProgress, Divider, Link, ListItemIcon, MenuItem, Stack, Typography } from '@mui/material'
-import { first } from 'lodash-unified'
-import { useCallback, useState } from 'react'
+import { formatEthereumAddress, isSameAddress, useChainId } from '@masknet/web3-shared-evm'
+import { Button, Divider, Link, ListItemIcon, MenuItem, Stack, Typography } from '@mui/material'
+import { useCallback, useEffect, useState } from 'react'
 import { ExternalLink } from 'react-feather'
 import { CopyIconButton } from '../../NextID/components/CopyIconButton'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { WalletSettingIcon } from '../assets/setting'
-import { usePersonas } from '../hooks/usePersonas'
 import { CheckedIcon, UncheckIcon } from '../assets/checked'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { NFTWalletConnect } from './WalletConnect'
+import { BindingProof, PopupRoutes } from '@masknet/shared-base'
+import Services from '../../../extension/service'
 
 const useStyles = makeStyles()(() => ({
     root: {},
@@ -33,43 +32,46 @@ const useStyles = makeStyles()(() => ({
 
 interface AddressNamesProps extends withClasses<'root'> {
     onChange: (address: string) => void
+    account: string
+    wallets: BindingProof[]
 }
 
 export function AddressNames(props: AddressNamesProps) {
-    const { onChange } = props
-    const { Utils } = useWeb3State() ?? {}
+    const { onChange, account, wallets } = props
     const classes = useStylesExtends(useStyles(), props)
-    const account = useAccount()
-    const { binds, isOwner, loading } = usePersonas()
-
-    const wallets = binds?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
-    const wallet = first(wallets)
-
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const onClose = () => setAnchorEl(null)
     const onOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
 
-    const [selectedWallet, setSelectedWallet] = useState(account)
+    const [selectedWallet, setSelectedWallet] = useState(account || wallets?.[0]?.identity || '')
     const onClick = useCallback((address: string) => {
-        console.log(address)
         onChange(address)
         setSelectedWallet(address)
         onClose()
     }, [])
 
+    useEffect(() => {
+        if (!account && !wallets?.[0]?.identity) return
+        setSelectedWallet(account || wallets?.[0]?.identity)
+    }, [account, wallets?.[0]?.identity])
+
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
+    const chainId = useChainId()
+    const openPopupsWindow = useCallback(() => {
+        Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, {
+            chainId,
+            internal: true,
+        })
+    }, [chainId])
 
-    if (loading) {
-        return (
-            <div className={classes.root}>
-                <CircularProgress size="small" />
-            </div>
-        )
-    }
+    const onConnectWallet = useCallback(() => {
+        openSelectProviderDialog()
+        onClose()
+    }, [])
 
-    if (!account || !wallets?.length || !wallet) return <NFTWalletConnect />
+    if (!account && !wallets.length) return <NFTWalletConnect />
 
     return (
         <Stack className={classes.root}>
@@ -83,21 +85,29 @@ export function AddressNames(props: AddressNamesProps) {
                 <ArrowDropDownIcon />
             </Stack>
             <ShadowRootMenu open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={onClose} disableRestoreFocus>
-                <MenuItem key={account} value={account} onClick={() => onClick(account)}>
-                    <ListItemIcon>
-                        {selectedWallet === account ? (
-                            <CheckedIcon style={{ width: 38, height: 38 }} />
-                        ) : (
-                            <UncheckIcon />
+                {account ? (
+                    <MenuItem key={account} value={account} onClick={() => onClick(account)}>
+                        <ListItemIcon>
+                            {selectedWallet === account ? (
+                                <CheckedIcon style={{ width: 38, height: 38 }} />
+                            ) : (
+                                <UncheckIcon />
+                            )}
+                        </ListItemIcon>
+                        <WalletUI address={account} />
+                        {account && (
+                            <Button style={{ marginLeft: 16 }} onClick={onConnectWallet}>
+                                Change
+                            </Button>
                         )}
-                    </ListItemIcon>
-                    <WalletUI address={account} />
-                    {account && (
-                        <Button style={{ marginLeft: 16 }} onClick={openSelectProviderDialog}>
-                            Change
+                    </MenuItem>
+                ) : (
+                    <MenuItem key="Connect">
+                        <Button fullWidth onClick={onConnectWallet}>
+                            Connect your wallet
                         </Button>
-                    )}
-                </MenuItem>
+                    </MenuItem>
+                )}
                 {wallets
                     ?.filter((x) => !isSameAddress(x.identity, account))
                     .map((x) => (
@@ -114,7 +124,12 @@ export function AddressNames(props: AddressNamesProps) {
                     ))}
                 <Divider />
 
-                <MenuItem key="settings">
+                <MenuItem
+                    key="settings"
+                    onClick={() => {
+                        openPopupsWindow()
+                        onClose()
+                    }}>
                     <ListItemIcon>
                         <WalletSettingIcon />
                     </ListItemIcon>
