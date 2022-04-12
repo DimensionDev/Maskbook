@@ -19,6 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        padding: '13px 0',
     },
     buttonLabel: {
         display: 'block',
