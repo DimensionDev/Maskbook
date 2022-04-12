@@ -1,5 +1,6 @@
 import { Fragment, useState } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
+import { useMemo } from 'react-use'
 import { Typography, useTheme, CircularProgress } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -82,30 +83,37 @@ export function ApplicationBoard() {
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
     const SettingIconDarkModeUrl = new URL('./assets/settings_dark_mode.png', import.meta.url).toString()
     const SettingIconLightModeUrl = new URL('./assets/settings_light_mode.png', import.meta.url).toString()
-    const applicationList = snsAdaptorPlugins
-        .reduce<Application[]>((acc, cur) => {
-            if (!cur.ApplicationEntries) return acc
-            const currentWeb3NetworkSupportedChainIds = cur.enableRequirement.web3?.[currentWeb3Network]
-            const isWeb3Enabled = Boolean(
-                currentWeb3NetworkSupportedChainIds === undefined ||
-                    currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
-            )
-            const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
-            const currentSNSIsSupportedNetwork = cur.enableRequirement.networks.networks[currentSNSNetwork]
-            const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
+    const applicationList = useMemo(
+        () =>
+            snsAdaptorPlugins
+                .reduce<Application[]>((acc, cur) => {
+                    if (!cur.ApplicationEntries) return acc
+                    const currentWeb3NetworkSupportedChainIds = cur.enableRequirement.web3?.[currentWeb3Network]
+                    const isWeb3Enabled = Boolean(
+                        currentWeb3NetworkSupportedChainIds === undefined ||
+                            currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
+                    )
+                    const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
+                    const currentSNSIsSupportedNetwork = cur.enableRequirement.networks.networks[currentSNSNetwork]
+                    const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
 
-            return acc.concat(
-                cur.ApplicationEntries.map((x) => {
-                    return {
-                        entry: x,
-                        enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
-                        pluginId: cur.ID,
-                    }
-                }) ?? [],
-            )
-        }, [])
-        .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
-        .filter((x) => Boolean(x.entry.RenderEntryComponent))
+                    return acc.concat(
+                        cur.ApplicationEntries.map((x) => {
+                            return {
+                                entry: x,
+                                enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
+                                pluginId: cur.ID,
+                            }
+                        }) ?? [],
+                    )
+                }, [])
+                .sort(
+                    (a, b) =>
+                        (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0),
+                )
+                .filter((x) => Boolean(x.entry.RenderEntryComponent)),
+        [snsAdaptorPlugins],
+    )
 
     const { value, retry, loading } = useUnListedApplicationList(applicationList, currentIdentifier)
     const listedAppList = value?.listedAppList ?? applicationList
