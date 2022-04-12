@@ -126,10 +126,10 @@ export function ApplicationBoard() {
                 </div>
             ) : listedAppList.length > 0 ? (
                 <section className={classes.applicationWrapper}>
-                    {listedAppList.map((X, i) => {
+                    {listedAppList.map((application) => {
                         return (
-                            <Fragment key={X.pluginId}>
-                                <RenderEntryComponentWrapper application={X} />
+                            <Fragment key={application.pluginId}>
+                                <RenderEntryComponentWrapper application={application} />
                             </Fragment>
                         )
                     })}
