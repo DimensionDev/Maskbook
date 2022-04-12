@@ -12,6 +12,7 @@ import type { DashboardPluginMessages, DashboardPluginServices } from '@masknet/
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot'
 import { InMemoryStorages, PersistentStorages } from '../../../shared/kv-storage'
 import { status } from '../../setup.ui'
+import { createSubscriptionFromAsync } from '@masknet/shared-base'
 
 const msg: DashboardPluginMessages = {
     Wallet: WalletMessages,
@@ -33,6 +34,12 @@ setPluginServices(rpc)
 setPluginMessages(msg)
 startPluginDashboard(
     createPluginHost(undefined, (pluginID, signal) => {
+        const currentPersonaSub = createSubscriptionFromAsync(
+            Services.Settings.getCurrentPersonaIdentifier,
+            undefined,
+            MaskMessages.events.currentPersonaIdentifier.on,
+            signal,
+        )
         return {
             createKVStorage(type, defaultValues) {
                 if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
@@ -40,6 +47,7 @@ startPluginDashboard(
             },
             personaSign: Services.Identity.signWithPersona,
             walletSign: Services.Ethereum.personalSign,
+            currentPersona: currentPersonaSub,
         }
     }),
 )

@@ -3,9 +3,9 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { EMPTY_LIST, ProfileIdentifier } from '@masknet/shared-base'
 import type { Profile } from '../../database'
-import type { SocialNetworkUI } from '../../social-network'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { Subscription, useSubscription } from 'use-subscription'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 
 export function useFriendsList() {
     const ref = useValueRef(globalUIState.friends)
@@ -14,12 +14,10 @@ export function useFriendsList() {
 
 const default_ = new ValueRef({ identifier: ProfileIdentifier.unknown })
 export function useLastRecognizedIdentity() {
-    return useValueRef<SocialNetworkUI.CollectingCapabilities.IdentityResolved>(
-        activatedSocialNetworkUI.collecting.identityProvider?.recognized || default_,
-    )
+    return useValueRef<IdentityResolved>(activatedSocialNetworkUI.collecting.identityProvider?.recognized || default_)
 }
 export function useCurrentVisitingIdentity() {
-    return useValueRef<SocialNetworkUI.CollectingCapabilities.IdentityResolved>(
+    return useValueRef<IdentityResolved>(
         activatedSocialNetworkUI.collecting.currentVisitingIdentityProvider?.recognized || default_,
     )
 }
