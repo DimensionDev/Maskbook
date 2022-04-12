@@ -11,7 +11,7 @@ import {
     useWeb3State,
     Web3Plugin,
     useReverseAddress,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginMessages } from '../../../../API'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'

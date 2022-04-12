@@ -1,5 +1,10 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import type { PostContext, PostContextAuthor, PostContextCreation, PostContextSNSActions } from '@masknet/plugin-infra'
+import type {
+    PostContext,
+    PostContextAuthor,
+    PostContextCreation,
+    PostContextSNSActions,
+} from '@masknet/plugin-infra/content-script'
 import {
     extractTextFromTypedMessage,
     isTypedMessageEqual,

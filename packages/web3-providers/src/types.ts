@@ -7,7 +7,7 @@ import type {
     ERC721TokenDetailed,
     NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
-import type { CurrencyType } from '@masknet/plugin-infra'
+import type { CurrencyType } from '@masknet/plugin-infra/web3'
 import type { Result } from 'ts-results'
 import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
 

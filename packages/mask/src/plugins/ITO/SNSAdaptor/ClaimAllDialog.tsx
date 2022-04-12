@@ -1,4 +1,5 @@
-import { useCurrentWeb3NetworkPluginID, PluginId, useActivatedPlugin } from '@masknet/plugin-infra'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'

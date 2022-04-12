@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react'
 import { useMount } from 'react-use'
 import { ProviderType, isInjectedProvider, ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
+import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra/web3'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { EVM_Messages } from '../../messages'
 import Services from '../../../../extension/service'

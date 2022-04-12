@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
-import { Plugin, usePluginI18NField } from '@masknet/plugin-infra'
+import { type Plugin, usePluginI18NField } from '@masknet/plugin-infra/content-script'
 
 const borderShadows = {
     dark: '0px 0px 16px 0px #FFFFFF33',
