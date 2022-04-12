@@ -3,7 +3,7 @@ import { ChainId, FungibleTokenDetailed, createNativeToken } from '@masknet/web3
 import type { SavingsProtocol, ProtocolPairsResolver } from '../../types'
 // import { AURIGAMI_COMPTROLLER } from '../../constants'
 import CompoundLikeFetcher from '../common/CompoundLikeFetcher'
-import { AurigamiProtocol } from './AurigamiProtocol'
+import AurigamiProtocol from './AurigamiProtocol'
 
 export const AURIGAMI_COMPTROLLER = '0x817af6cfAF35BdC1A634d6cC94eE9e4c68369Aeb'
 const excludePairs = ['DAI']

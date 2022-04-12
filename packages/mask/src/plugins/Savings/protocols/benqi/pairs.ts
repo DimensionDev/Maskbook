@@ -3,7 +3,7 @@ import { ChainId, FungibleTokenDetailed, createNativeToken } from '@masknet/web3
 import type { SavingsProtocol, ProtocolPairsResolver } from '../../types'
 import { BENQI_COMPTROLLER } from '../../constants'
 import CompoundLikeFetcher from '../common/CompoundLikeFetcher'
-import { BenQiProtocol } from './BenQiProtocol'
+import BenQiProtocol from './BenQiProtocol'
 
 export class BenQiPairResolver implements ProtocolPairsResolver {
     public supportChains: ChainId[] = [ChainId.Avalanche]

@@ -27,7 +27,7 @@ export class AlpacaProtocol implements SavingsProtocol {
 
     private _apr = '0.00'
     private _balance = ZERO
-    private _nativeToken = 'ibBNB'
+    static nativeToken = 'ibBNB'
 
     constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
 
@@ -56,7 +56,7 @@ export class AlpacaProtocol implements SavingsProtocol {
     }
 
     get isNativeToken() {
-        return this.stakeToken.symbol === this._nativeToken
+        return this.stakeToken.symbol === AlpacaProtocol.nativeToken
     }
 
     public getPoolContract(web3: Web3) {
@@ -102,7 +102,7 @@ export class AlpacaProtocol implements SavingsProtocol {
             const req = await fetch(SUMMARY_API)
             const response = await req.json()
             const { lendingPools } = response.data
-            const summary = lendingPools.find((_: any) => _.baseToken.address === this.bareToken.address)
+            const summary = lendingPools.find((_: any) => _.ibToken.address === this.stakeToken.address)
             this._apr = new BigNumber(summary.lendingApr).toFixed(2)
         } catch (error) {
             console.log('error', error)
@@ -117,13 +117,13 @@ export class AlpacaProtocol implements SavingsProtocol {
                 this._balance = ZERO
                 return
             }
-            const [shares, totalToken, totalSupply] = await Promise.all([
+            const [shares, sharePrice] = await Promise.all([
                 contract.methods.balanceOf(account).call(),
-                contract.methods.totalToken().call(),
-                contract.methods.totalSupply().call(),
+                this.getSharePrice(web3),
             ])
-            const sharePrice = new BigNumber(totalToken).shiftedBy(18).dividedBy(new BigNumber(totalSupply))
-            this._balance = new BigNumber(shares).multipliedBy(sharePrice).shiftedBy(-18)
+            console.log('shares', shares)
+            // balance = shares * sharePrice
+            this._balance = new BigNumber(shares).multipliedBy(new BigNumber(sharePrice)).shiftedBy(-18)
         } catch (error) {
             this._balance = ZERO
         }
@@ -139,6 +139,11 @@ export class AlpacaProtocol implements SavingsProtocol {
                 contract.methods.totalToken().call(),
                 contract.methods.totalSupply().call(),
             ])
+            console.log('getSharePrice', {
+                totalToken,
+                totalSupply,
+            })
+            // sharePrice = totalToken / totalSupply
             return new BigNumber(totalToken).shiftedBy(18).dividedBy(new BigNumber(totalSupply))
         } catch (error) {
             return ZERO
@@ -147,18 +152,27 @@ export class AlpacaProtocol implements SavingsProtocol {
 
     private async amountToShares(web3: Web3, value: BigNumber.Value) {
         const sharePrice = await this.getSharePrice(web3)
+        // shares = amount / sharePrice
         const shares = new BigNumber(value).shiftedBy(18).div(new BigNumber(sharePrice))
-        return shares
+        return shares.toFixed(0)
     }
 
     public async depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
             const operation = await this.createDepositTokenOperation(web3, value)
-            const gasEstimate = await operation?.estimateGas({
-                from: account,
-            })
+            const gasEstimate = await operation?.estimateGas(
+                this.isNativeToken
+                    ? {
+                          value: value.toString(),
+                          from: account,
+                      }
+                    : {
+                          from: account,
+                      },
+            )
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
+            console.log('depositEstimate.error', error)
             return ZERO
         }
     }
@@ -173,21 +187,23 @@ export class AlpacaProtocol implements SavingsProtocol {
             const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
             const operation = await this.createDepositTokenOperation(web3, value)
             if (operation) {
-                await operation.send(
-                    this.isNativeToken
-                        ? {
-                              value: value.toString(),
-                              from: account,
-                          }
-                        : {
-                              from: account,
-                              gas: gasEstimate.toNumber(),
-                          },
-                )
+                const args = this.isNativeToken
+                    ? {
+                          value: value.toString(),
+                          from: account,
+                          gas: gasEstimate.toNumber(),
+                      }
+                    : {
+                          from: account,
+                          gas: gasEstimate.toNumber(),
+                      }
+                console.log('deposit', args)
+                await operation.send(args)
                 return true
             }
             return false
         } catch (error) {
+            console.log('error', error)
             return false
         }
     }
@@ -195,7 +211,8 @@ export class AlpacaProtocol implements SavingsProtocol {
     private async createWithdrawTokenOperation(web3: Web3, value: BigNumber.Value) {
         const contract = this.getPoolContract(web3)
         const sharesToWithdraw = await this.amountToShares(web3, value)
-        return contract?.methods.withdraw(sharesToWithdraw.toString())
+        console.log('sharesToWithdraw', sharesToWithdraw)
+        return contract?.methods.withdraw(sharesToWithdraw)
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
@@ -206,6 +223,7 @@ export class AlpacaProtocol implements SavingsProtocol {
             })
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
+            console.log('withdrawEstimate', error)
             return ZERO
         }
     }
@@ -223,6 +241,7 @@ export class AlpacaProtocol implements SavingsProtocol {
             }
             return false
         } catch (error) {
+            console.error('AlpacaProtocol.withdraw error', error)
             return false
         }
     }

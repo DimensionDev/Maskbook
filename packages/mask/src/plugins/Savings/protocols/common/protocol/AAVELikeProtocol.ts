@@ -61,7 +61,7 @@ export default class AAVELikeProtocol implements SavingsProtocol {
             // // APY and APR are returned here as decimals, multiply by 100 to get the percents
             this._apr = new BigNumber(liquidityRate).times(100).div(RAY).toFixed(2)
         } catch (error) {
-            console.error('AAVE: Apr Error:', error)
+            console.error('AAVELikeProtocol: Apr Error:', error)
             this._apr = AAVELikeProtocol.DEFAULT_APR
         }
     }
@@ -75,7 +75,7 @@ export default class AAVELikeProtocol implements SavingsProtocol {
             const userReserveData = await contract?.methods.getUserReserveData(this.bareToken.address, account).call()
             this._balance = new BigNumber(userReserveData.currentATokenBalance)
         } catch (error) {
-            console.error('AAVE BALANCE ERROR: ', error)
+            console.error('AAVELikeProtocol BALANCE ERROR: ', error)
             this._balance = ZERO
         }
     }
@@ -89,7 +89,7 @@ export default class AAVELikeProtocol implements SavingsProtocol {
 
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
-            console.error('AAVE deposit estimate ERROR: ', error)
+            console.error('AAVELikeProtocol deposit estimate ERROR: ', error)
             return ZERO
         }
     }

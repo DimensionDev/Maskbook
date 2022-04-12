@@ -1,4 +1,4 @@
-import { FungibleTokenDetailed, ChainId, EthereumTokenType } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, createNativeToken, ChainId, EthereumTokenType } from '@masknet/web3-shared-evm'
 import { AlpacaProtocol } from './AlpacaProtocol'
 import type Web3 from 'web3'
 import type { SavingsProtocol, ProtocolPairsResolver } from '../../types'
@@ -39,10 +39,10 @@ export class PairResolver implements ProtocolPairsResolver {
 
         const detailedTokens = await getFungibleTokensDetailed(allTokens, web3, chainId)
         return splitToPair(detailedTokens).map((pair: [FungibleTokenDetailed, FungibleTokenDetailed]) => {
-            // const [bareToken, stakeToken] = pair
-            // if (stakeToken.symbol === GiestProtocol.nativeToken) {
-            //     pair[0] = createNativeToken(ChainId.Mainnet)
-            // }
+            const [bareToken, stakeToken] = pair
+            if (stakeToken.symbol === AlpacaProtocol.nativeToken) {
+                pair[0] = createNativeToken(ChainId.BSC)
+            }
             return new AlpacaProtocol(pair)
         })
     }

@@ -3,7 +3,7 @@ import { ChainId, FungibleTokenDetailed, createNativeToken } from '@masknet/web3
 import type { SavingsProtocol, ProtocolPairsResolver } from '../../types'
 import { COMPOUND_COMPTROLLER } from '../../constants'
 import CompoundLikeFetcher from '../common/CompoundLikeFetcher'
-import { CompoundProtocol } from './CompoundProtocol'
+import CompoundProtocol from './CompoundProtocol'
 
 export class CompoundPairResolver implements ProtocolPairsResolver {
     public supportChains: ChainId[] = [ChainId.Mainnet]

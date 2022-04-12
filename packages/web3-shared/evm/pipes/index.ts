@@ -113,6 +113,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Fantom]: 'Fantom',
         [NetworkType.Aurora]: 'Aurora',
         [NetworkType.Conflux]: 'Conflux',
+        [NetworkType.Harmony]: 'Harmony',
     },
     'Unknown',
 )
