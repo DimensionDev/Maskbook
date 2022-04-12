@@ -143,16 +143,6 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         const response = await fetch(
             urlcat(updateProfileImageURL, {
                 media_id: data.media_id_string,
-                image: '',
-                include_profile_interstitial_type: 1,
-                include_blocking: 1,
-                include_blocked_by: 1,
-                include_followed_by: 1,
-                include_want_retweets: 1,
-                include_mute_edge: 1,
-                include_can_dm: 1,
-                include_can_media_tag: 1,
-                include_ext_has_nft_avatar: 1,
                 skip_status: 1,
                 return_user: true,
             }),
@@ -170,7 +160,13 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             },
         )
 
-        return response.json()
+        const updateInfo = await response.json()
+        return {
+            imageUrl: updateInfo.profile_image_url_https,
+            mediaId: updateInfo.id_str,
+            nickname: updateInfo.description,
+            userId: updateInfo.screen_name,
+        } as TwitterBaseAPI.AvatarInfo
     }
 }
 

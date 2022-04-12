@@ -107,7 +107,7 @@ export function NFTListPage(props: NFTListPageProps) {
 
 interface NFTImageCollectibleAvatarProps {
     token: ERC721TokenDetailed
-    onChange: (token: ERC721TokenDetailed | undefined) => void
+    onChange: (token: ERC721TokenDetailed) => void
     selectedToken?: ERC721TokenDetailed
 }
 

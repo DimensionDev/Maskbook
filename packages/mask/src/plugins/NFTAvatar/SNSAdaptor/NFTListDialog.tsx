@@ -1,13 +1,14 @@
 import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, useWallets } from '@masknet/web3-shared-evm'
+import { ERC721TokenDetailed, useAccount } from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { AddressNames } from './WalletList'
-import { NFTWalletConnect } from './WalletConnect'
 import { useCallback, useState } from 'react'
 import { UploadAvatarDialog } from './UploadAvatarDialog'
 import { InjectedDialog } from '@masknet/shared'
 import { downloadUrl } from '../../../utils'
 import { NFTList } from './NFTList'
+import { usePersonas } from '../hooks/usePersonas'
+import { NextIDPlatform } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -37,10 +38,14 @@ interface NFTListDialogProps {
 }
 
 export function NFTListDialog(props: NFTListDialogProps) {
-    const account = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
     const { open, onClose } = props
     const { classes } = useStyles()
-    const [selectedAccount, setSelectedAccount] = useState(account)
+
+    const { binds, isOwner, loading } = usePersonas()
+    const wallets = binds?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
+    const account = useAccount()
+
+    const [selectedAccount, setSelectedAccount] = useState('')
     const [openEditProfile, setOpenEditProfile] = useState(false)
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>()
     const [image, setImage] = useState('')
@@ -57,20 +62,13 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setOpenEditProfile(true)
         setImage(URL.createObjectURL(image))
     }, [selectedToken])
-    const wallets = useWallets()
-    console.log(wallets)
+
     return (
         <>
             <InjectedDialog title="NFT PFP" open={open} onClose={onClose}>
                 <DialogContent sx={{ height: 612 }}>
-                    {!account ? (
-                        <NFTWalletConnect />
-                    ) : (
-                        <>
-                            <AddressNames classes={{ root: classes.AddressNames }} onChange={onChange} />
-                            <NFTList address={selectedAccount} onSelect={onSelect} />
-                        </>
-                    )}
+                    <AddressNames classes={{ root: classes.AddressNames }} onChange={onChange} />
+                    {(account || wallets?.length) && <NFTList address={selectedAccount} onSelect={onSelect} />}
                 </DialogContent>
                 <DialogActions>
                     <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
@@ -87,7 +85,13 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     </Button>
                 </DialogActions>
             </InjectedDialog>
-            <UploadAvatarDialog open={openEditProfile} onClose={() => setOpenEditProfile(false)} image={image} />
+            <UploadAvatarDialog
+                token={selectedToken}
+                account={selectedAccount}
+                open={openEditProfile}
+                onClose={() => setOpenEditProfile(false)}
+                image={image}
+            />
         </>
     )
 }

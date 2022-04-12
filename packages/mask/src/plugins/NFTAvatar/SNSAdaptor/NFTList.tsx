@@ -19,6 +19,8 @@ export function NFTList(props: NFTListProps) {
     const { t } = useI18N()
 
     const [currentTab, onChange, tabs] = useTabs('ETH', 'Polygon')
+
+    if (!address) return null
     return (
         <TabContext value={currentTab}>
             <Tabs value={currentTab} variant="fullWidth" onChange={onChange}>

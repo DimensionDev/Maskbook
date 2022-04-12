@@ -462,6 +462,12 @@ export namespace TwitterBaseAPI {
             }[]
         }
     }
+    export interface AvatarInfo {
+        nickname: string
+        userId: string
+        imageUrl: string
+        mediaId: string
+    }
     export interface Provider {
         getUserNftContainer: (screenName: string) => Promise<
             | {
@@ -471,7 +477,7 @@ export namespace TwitterBaseAPI {
               }
             | undefined
         >
-        uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<any>
+        uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<AvatarInfo | undefined>
     }
 }
 

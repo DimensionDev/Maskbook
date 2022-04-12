@@ -14,6 +14,7 @@ import { usePersonas } from '../hooks/usePersonas'
 import { CheckedIcon, UncheckIcon } from '../assets/checked'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { NFTWalletConnect } from './WalletConnect'
 
 const useStyles = makeStyles()(() => ({
     root: {},
@@ -68,7 +69,7 @@ export function AddressNames(props: AddressNamesProps) {
         )
     }
 
-    if (!account && (!wallets?.length || !wallet)) return null
+    if (!account || !wallets?.length || !wallet) return <NFTWalletConnect />
 
     return (
         <Stack className={classes.root}>

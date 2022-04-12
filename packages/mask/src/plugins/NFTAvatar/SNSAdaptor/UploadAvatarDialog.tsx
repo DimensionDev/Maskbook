@@ -4,20 +4,28 @@ import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { Twitter } from '@masknet/web3-providers'
+import { getAvatarId } from '../../../social-network-adaptor/facebook.com/utils/user'
+import { PluginNFTAvatarRPC } from '../../Avatar/messages'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
+import { RSS3_KEY_SNS } from '../../Avatar/constants'
+import { MaskMessages } from '../../../utils'
 
 const useStyles = makeStyles()(() => ({
     root: {},
 }))
 
 interface UploadAvatarDialogProps {
+    account: string
     open: boolean
     onClose: () => void
     image: string | File
+    token: ERC721TokenDetailed
 }
 
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
-    const { image, open, onClose } = props
+    const { image, open, onClose, account, token } = props
     const { classes } = useStyles()
+    const identity = useCurrentVisitingIdentity()
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
     const [scale, setScale] = useState(1)
     const onSave = useCallback(() => {
@@ -25,9 +33,30 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
         console.log(editor.getImage())
         editor.getImage().toBlob(async (blob) => {
             if (!blob) return
-            const data = await Twitter.uploadUserAvatar('WeipingZhu2', blob)
+            const data: Twitter.AvatarInfo = await Twitter.uploadUserAvatar('WeipingZhu2', blob)
+            const avatarId = getAvatarId(data.imageURL)
             console.log('----------------------------------')
             console.log(data)
+
+            const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
+                account,
+                {
+                    userId: data.userId,
+                    address: token.addrss,
+                    tokenId: token.tokenId,
+                    avatarId,
+                },
+                identity.identifier.network,
+                RSS3_KEY_SNS.TWITTER,
+            ).catch((error) => {
+                window.alert(error.message)
+                return
+            })
+            if (!avatar) {
+                window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+                return
+            }
+            MaskMessages.events.requestComposition.sendToLocal({ reason: 'timeline', open: false })
         })
         onClose()
     }, [editor])
