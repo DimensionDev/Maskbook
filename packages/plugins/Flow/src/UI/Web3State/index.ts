@@ -1,4 +1,4 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import {
     NetworkType,
     ProviderType,

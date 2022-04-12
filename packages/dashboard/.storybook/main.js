@@ -1,4 +1,5 @@
-const { ProvidePlugin } = require('webpack')
+const patchWebpackConfig = require('@masknet/storybook-shared/patch-webpack')
+
 module.exports = {
     stories: ['../stories/**/*.mdx', '../stories/**/*.@(js|jsx|ts|tsx)'],
     addons: [
@@ -15,40 +16,7 @@ module.exports = {
     reactOptions: {
         fastRefresh: true,
     },
-    webpackFinal: async (config) => {
-        config.experiments = { asyncWebAssembly: true, topLevelAwait: true }
-        config.resolve.fallback = {
-            crypto: false,
-            stream: 'stream-browserify',
-            os: false,
-            http: false,
-            https: false,
-            buffer: 'buffer',
-            path: 'path-browserify',
-        }
-        config.module.rules.push({
-            test: /\.m?js$/,
-            type: 'javascript/auto',
-            resolve: {
-                fullySpecified: false,
-            },
-        })
-
-        config.plugins = config.plugins.map((plugin) => {
-            if (plugin.constructor.name === 'DefinePlugin') {
-                plugin.definitions['process.env.NODE_DEBUG'] = 'false'
-            }
-
-            return plugin
-        })
-        config.plugins.push(
-            new ProvidePlugin({
-                // Polyfill for Node global "Buffer" variable
-                Buffer: ['buffer', 'Buffer'],
-            }),
-        )
-        return config
-    },
+    webpackFinal: patchWebpackConfig,
     core: {
         builder: 'webpack5',
     },

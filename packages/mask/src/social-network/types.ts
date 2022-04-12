@@ -1,6 +1,6 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
-import type { PostInfo } from '@masknet/plugin-infra'
+import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
     Identifier,
     ObservableWeakMap,

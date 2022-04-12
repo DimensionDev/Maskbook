@@ -1,4 +1,4 @@
-import { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 
 export const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM

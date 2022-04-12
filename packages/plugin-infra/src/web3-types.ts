@@ -1,7 +1,19 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
-import type { Pagination, Plugin, Pageable } from './types'
+import type { Plugin } from './types'
 
+export interface Pagination {
+    /** The item size of each page. */
+    size?: number
+    /** The page index. */
+    page?: number
+}
+
+export interface Pageable<T> {
+    currentPage: number
+    hasNextPage: boolean
+    data: T[]
+}
 /**
  * A network plugin defines the way to connect to a single chain.
  */
@@ -28,6 +40,18 @@ export type Color =
     | `#${string}${string}${string}${string}${string}${string}`
     | `#${string}${string}${string}`
     | `hsl(${number}, ${number}%, ${number}%)`
+
+// Borrow from @masknet/web3-shared-evm
+interface ERC721TokenInfo {
+    name?: string
+    description?: string
+    tokenURI?: string
+    mediaUrl?: string
+    imageURL?: string
+    owner?: string
+    // loading tokenURI
+    hasTokenDetailed?: boolean
+}
 
 export declare namespace Web3Plugin {
     /**
@@ -197,6 +221,7 @@ export declare namespace Web3Plugin {
         description?: string
         owner?: string
         metadata?: NonFungibleTokenMetadata
+        info?: ERC721TokenInfo
         contract?: NonFungibleContract
     }
 

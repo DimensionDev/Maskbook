@@ -16,7 +16,7 @@ import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 import { NFTImage } from './NFTImage'
-import { useAccount, useWeb3State } from '@masknet/plugin-infra'
+import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
 import { ReversedAddress } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -110,7 +110,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         setSelectedToken(undefined)
     }, [onChange, selectedToken])
 
-    const onAddClick = useCallback((token) => {
+    const onAddClick = useCallback((token: ERC721TokenDetailed) => {
         setSelectedToken(token)
         setCollectibles_((tokens) => uniqBy([token, ...tokens], (x) => x.contractDetailed.address && x.tokenId))
     }, [])

@@ -89,14 +89,14 @@ export function DepositDialog() {
     const account = useAccount()
 
     // #region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(PluginPoolTogetherMessages.DepositDialogUpdated, (ev) => {
-        if (!ev.open) return
-        setPool(ev.pool)
-        setToken(ev.token)
-    })
-    const onClose = useCallback(() => {
-        closeDialog()
-    }, [closeDialog])
+    const { open, closeDialog: onClose } = useRemoteControlledDialog(
+        PluginPoolTogetherMessages.DepositDialogUpdated,
+        (ev) => {
+            if (!ev.open) return
+            setPool(ev.pool)
+            setToken(ev.token)
+        },
+    )
     // #endregion
 
     // #region select token
@@ -148,7 +148,7 @@ export function DepositDialog() {
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
         PluginTraderMessages.swapDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     retryLoadTokenBalance()
                 }
@@ -194,7 +194,7 @@ export function DepositDialog() {
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     retryLoadTokenBalance()
                     if (depositState.type === TransactionStateType.HASH) onClose()

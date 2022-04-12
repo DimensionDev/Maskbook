@@ -1,7 +1,12 @@
 {
   "name": "@masknet/plugin-go-plus-security",
   "private": true,
-  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "types": "./dist/index.d.ts",
   "dependencies": {
     "react-feather": "^2.0.9",
@@ -14,7 +19,6 @@
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "react-use": "^17.3.2",
-    "bignumber.js": "^9.0.2",
     "urlcat": "^2.0.4"
   }
 }

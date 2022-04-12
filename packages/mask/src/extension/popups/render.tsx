@@ -1,4 +1,4 @@
-import { startPluginDashboard } from '@masknet/plugin-infra'
+import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
 import { createNormalReactRoot } from '../../utils'
 import { createPluginHost } from '../../plugin-infra/host'
 import { Services } from '../service'

@@ -1,4 +1,4 @@
-import { fetchJSON } from './helper'
+import { deleteCache, fetchJSON } from './helper'
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
 import {
@@ -32,9 +32,22 @@ interface CreatePayloadResponse {
     created_at: string
 }
 
+const getPersonaQueryURL = (platform: string, identity: string) =>
+    urlcat(BASE_URL, '/v1/proof', {
+        platform,
+        identity,
+    })
+
+const geyExistedBindingQueryURL = (platform: string, identity: string, personaPublicKey: string) =>
+    urlcat(BASE_URL, '/v1/proof/exists', {
+        platform,
+        identity,
+        public_key: personaPublicKey,
+    })
+
 export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     // TODO: remove 'bind' in project for business context.
-    bindProof(
+    async bindProof(
         uuid: string,
         personaPublicKey: string,
         action: NextIDAction,
@@ -61,18 +74,23 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             created_at: createdAt,
         }
 
-        return fetchJSON(urlcat(BASE_URL, '/v1/proof'), {
+        const result = await fetchJSON(urlcat(BASE_URL, '/v1/proof'), {
             body: JSON.stringify(requestBody),
             method: 'POST',
         })
+
+        // Should delete cache when proof status changed
+        const cacheKeyOfQueryPersona = getPersonaQueryURL(NextIDPlatform.NextId, personaPublicKey)
+        const cacheKeyOfExistedBinding = geyExistedBindingQueryURL(platform, identity, personaPublicKey)
+        deleteCache(cacheKeyOfQueryPersona)
+        deleteCache(cacheKeyOfExistedBinding)
+
+        return result
     }
 
     async queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
-        const response = await fetchJSON<NextIDBindings>(
-            urlcat(BASE_URL, '/v1/proof', { platform: NextIDPlatform.NextId, identity: personaPublicKey }),
-            {},
-            enableCache,
-        )
+        const url = getPersonaQueryURL(NextIDPlatform.NextId, personaPublicKey)
+        const response = await fetchJSON<NextIDBindings>(url, {}, enableCache)
         // Will have only one item when query by personaPublicKey
         return first(response.unwrap().ids)
     }
@@ -91,15 +109,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, enableCache?: boolean) {
         if (!platform && !identity) return false
 
-        const result = await fetchJSON<BindingProof>(
-            urlcat(BASE_URL, '/v1/proof/exists', {
-                platform: platform,
-                identity: identity,
-                public_key: personaPublicKey,
-            }),
-            {},
-            enableCache,
-        )
+        const url = geyExistedBindingQueryURL(platform, identity, personaPublicKey)
+        const result = await fetchJSON<BindingProof>(url, {}, enableCache)
 
         return result.map(() => true).unwrapOr(false)
     }
