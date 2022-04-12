@@ -505,7 +505,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         </Box>
                                     }
                                     render={(disable: boolean) =>
-                                        !isGreatThanSlippageSetting ? (
+                                        isGreatThanSlippageSetting ? (
                                             <ActionButton
                                                 fullWidth
                                                 variant="contained"
