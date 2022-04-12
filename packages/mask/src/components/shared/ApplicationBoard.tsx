@@ -9,6 +9,8 @@ import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
 import { ApplicationSettingDialog } from './ApplicationSettingDialog'
 import { Application, useUnListedApplicationList } from './ApplicationSettingPluginDragger'
+import { currentPersonaIdentifier } from '../../settings/settings'
+import { useValueRef } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -71,6 +73,7 @@ export function ApplicationBoard() {
     const { classes } = useStyles()
     const theme = useTheme()
     const { t } = useI18N()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const [openSettings, setOpenSettings] = useState(false)
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
@@ -104,7 +107,7 @@ export function ApplicationBoard() {
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
         .filter((x) => Boolean(x.entry.RenderEntryComponent))
 
-    const { value, retry, loading } = useUnListedApplicationList(applicationList)
+    const { value, retry, loading } = useUnListedApplicationList(applicationList, currentIdentifier)
     const listedAppList = value?.listedAppList ?? applicationList
     return (
         <>

@@ -6,6 +6,8 @@ import { List, ListItem, Typography, CircularProgress } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { KeyValue } from '@masknet/web3-providers'
 import { useI18N } from '../../utils'
+import { currentPersonaIdentifier } from '../../settings/settings'
+import { useValueRef } from '@masknet/shared-base-ui'
 
 export interface Application {
     entry: Plugin.SNSAdaptor.ApplicationEntry
@@ -17,19 +19,19 @@ export interface Application {
 export const APPLICATION_ENTRY_SETTING_KEY = 'application_entry_setting'
 const storage = KeyValue.createJSON_Storage(APPLICATION_ENTRY_SETTING_KEY)
 
-async function setAppUnlisted(app: Application, unlisted: boolean) {
-    await storage.set(app.pluginId + '_' + app.entry.name, { unlisted })
+async function setAppUnlisted(app: Application, unlisted: boolean, identifier: string) {
+    await storage.set(app.pluginId + '_' + app.entry.name + '_' + identifier, { unlisted })
 }
 
-export async function getAppUnlisted(app: Application) {
-    return storage.get<{ unlisted: boolean }>(app.pluginId + '_' + app.entry.name)
+export async function getAppUnlisted(app: Application, identifier: string) {
+    return storage.get<{ unlisted: boolean }>(app.pluginId + '_' + app.entry.name + '_' + identifier)
 }
 
-export function useUnListedApplicationList(list: Application[]) {
+export function useUnListedApplicationList(list: Application[], identifier: string) {
     return useAsyncRetry(async () => {
         const calls = list.map(async (x) => {
             try {
-                const result = await getAppUnlisted(x)
+                const result = await getAppUnlisted(x, identifier)
                 if (result?.unlisted) return { value: x, unlisted: true }
                 return { value: x, unlisted: false }
             } catch {
@@ -105,6 +107,7 @@ const useStyles = makeStyles()((theme) => ({
 export function ApplicationSettingPluginDragger() {
     const { classes } = useStyles()
     const { t } = useI18N()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const [hasInit, setInit] = useState(false)
     const applicationList = snsAdaptorPlugins
@@ -120,7 +123,7 @@ export function ApplicationSettingPluginDragger() {
             )
         }, [])
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
-    const { value, retry, loading } = useUnListedApplicationList(applicationList)
+    const { value, retry, loading } = useUnListedApplicationList(applicationList, currentIdentifier)
 
     useLayoutEffect(() => {
         if (!loading) setInit(true)
@@ -158,7 +161,7 @@ export function ApplicationSettingPluginDragger() {
 interface AppListProps {
     appList: Application[]
     retry: () => void
-    setAppUnlisted: (app: Application, unlisted: boolean) => Promise<void>
+    setAppUnlisted: (app: Application, unlisted: boolean, identifier: string) => Promise<void>
     isListed: boolean
     loading: boolean
 }
@@ -190,13 +193,14 @@ function AppList(props: AppListProps) {
 interface AppListItemProps {
     application: Application
     retry: () => void
-    setAppUnlisted: (app: Application, unlisted: boolean) => Promise<void>
+    setAppUnlisted: (app: Application, unlisted: boolean, identifier: string) => Promise<void>
     isListed: boolean
 }
 
 function AppListItem(props: AppListItemProps) {
     const { application, retry, setAppUnlisted, isListed } = props
     const [isRequesting, setRequesting] = useState(false)
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { classes } = useStyles()
 
     useEffect(() => {
@@ -208,7 +212,7 @@ function AppListItem(props: AppListItemProps) {
             className={classNames(classes.listItem, isRequesting ? classes.loadingListItem : '')}
             onClick={async () => {
                 setRequesting(true)
-                await setAppUnlisted(application, isListed)
+                await setAppUnlisted(application, isListed, currentIdentifier)
                 retry()
             }}>
             <div className={classes.iconWrapper}>{application.entry.AppIcon}</div>
