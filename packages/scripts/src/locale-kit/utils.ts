@@ -2,10 +2,10 @@
 import { promises as fs, readdirSync } from 'fs'
 import { difference, keys, uniq } from 'lodash-unified'
 import { resolve, relative } from 'path'
-import { EXTENSION_SOURCE, ROOT_PATH, walk } from '../utils'
+import { PKG_PATH, ROOT_PATH, walk } from '../utils'
 import { getUsedKeys } from './ast'
 
-export const LOCALE_PATH = resolve(EXTENSION_SOURCE, '../shared-ui/locales')
+export const LOCALE_PATH = resolve(PKG_PATH, '../shared-ui/locales')
 export const LOCALE_NAMES = readdirSync(LOCALE_PATH)
     .filter((name) => name.endsWith('.json'))
     .map((x) => x.slice(0, -5))
@@ -28,7 +28,7 @@ export async function writeMessages(name: string, messages: unknown) {
 
 export async function findAllUsedKeys() {
     const usedKeys: string[] = []
-    for await (const file of walk(EXTENSION_SOURCE, /\.(tsx?)$/)) {
+    for await (const file of walk(PKG_PATH, /\.(tsx?)$/)) {
         usedKeys.push(...getUsedKeys(await fs.readFile(file, 'utf-8')))
     }
     return uniq(usedKeys)
