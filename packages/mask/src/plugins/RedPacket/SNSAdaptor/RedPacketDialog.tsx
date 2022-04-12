@@ -26,7 +26,7 @@ import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
-import { useCompositionContext } from '@masknet/plugin-infra'
+import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

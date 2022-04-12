@@ -1,7 +1,19 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
-import type { Pagination, Plugin, Pageable } from './types'
+import type { Plugin } from './types'
 
+export interface Pagination {
+    /** The item size of each page. */
+    size?: number
+    /** The page index. */
+    page?: number
+}
+
+export interface Pageable<T> {
+    currentPage: number
+    hasNextPage: boolean
+    data: T[]
+}
 /**
  * A network plugin defines the way to connect to a single chain.
  */

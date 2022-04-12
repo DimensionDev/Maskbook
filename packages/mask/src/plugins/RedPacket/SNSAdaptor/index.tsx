@@ -1,4 +1,4 @@
-import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
+import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import {
     ChainId,
     EthereumTokenType,

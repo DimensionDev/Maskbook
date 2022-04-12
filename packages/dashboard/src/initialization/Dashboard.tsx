@@ -9,13 +9,8 @@ import {
 } from '@masknet/theme'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
-import {
-    createInjectHooksRenderer,
-    NetworkPluginID,
-    PluginsWeb3ContextProvider,
-    useActivatedPluginsDashboard,
-    useAllPluginsWeb3State,
-} from '@masknet/plugin-infra'
+import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
+import { NetworkPluginID, PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra/web3'
 import { Web3Provider } from '@masknet/web3-shared-evm'
 
 import { i18NextInstance } from '@masknet/shared-base'

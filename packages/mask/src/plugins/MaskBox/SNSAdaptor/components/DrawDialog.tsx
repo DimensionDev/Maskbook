@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Add, Remove } from '@mui/icons-material'
-import { useProviderDescriptor } from '@masknet/plugin-infra'
+import { useProviderDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, FormattedBalance, ImageIcon, InjectedDialog } from '@masknet/shared'
 import { Box, Button, DialogContent, TextField, Typography } from '@mui/material'
 import {

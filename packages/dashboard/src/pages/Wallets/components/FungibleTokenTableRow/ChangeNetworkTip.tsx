@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Link, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales'
 import { MaskColorVar } from '@masknet/theme'
-import { useNetworkDescriptors, useProviderDescriptor, useWeb3UI } from '@masknet/plugin-infra'
+import { useNetworkDescriptors, useProviderDescriptor, useWeb3UI } from '@masknet/plugin-infra/web3'
 
 interface ChangeNetworkTipProps {
     chainId?: number

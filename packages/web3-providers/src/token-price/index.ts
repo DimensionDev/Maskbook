@@ -1,4 +1,4 @@
-import type { CurrencyType } from '@masknet/plugin-infra'
+import type { CurrencyType } from '@masknet/plugin-infra/web3'
 import type { TokenPriceBaseAPI } from '../types'
 
 const URL_BASE = 'https://api.coingecko.com/api/v3'
