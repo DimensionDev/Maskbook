@@ -267,7 +267,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             addHTMLEntry({
                 chunks: ['background'],
                 filename: 'background.html',
-                secp256k1: true,
                 gun: true,
                 sourceMap: !!sourceMapKind,
             }),
@@ -295,18 +294,11 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
 }
 function addHTMLEntry(
     options: HTMLPlugin.Options & {
-        secp256k1?: boolean
         sourceMap: boolean
         gun?: boolean
     },
 ) {
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
-    if (options.secp256k1) {
-        templateContent = templateContent.replace(
-            `<!-- secp256k1 -->`,
-            '<script src="/polyfill/secp256k1.js"></script>',
-        )
-    }
     if (options.gun) {
         templateContent = templateContent.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
     }
