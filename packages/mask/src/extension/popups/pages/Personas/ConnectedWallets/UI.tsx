@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, formatEthereumAddress, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, useNetworkDescriptor } from '@masknet/plugin-infra'
+import { NetworkPluginID, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, ImageIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../components/CopyIconButton'

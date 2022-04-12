@@ -100,7 +100,7 @@ const SwitchWallet = memo(() => {
         }
     }, [walletPrimary])
 
-    const handleSelect = useCallback(async (address) => {
+    const handleSelect = useCallback(async (address: string) => {
         await WalletRPC.updateMaskAccount({
             account: address,
         })
