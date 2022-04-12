@@ -1,6 +1,5 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useMemo } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { useMemo } from 'react-use'
 import { Typography, useTheme, CircularProgress } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
