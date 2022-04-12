@@ -11,22 +11,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon, title }) {
+            RenderEntryComponent({ disabled, icon, title }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
-                        <ApplicationEntry
-                            title={title}
-                            disabled={disabled}
-                            AppIcon={AppIcon}
-                            onClick={() => setOpen(true)}
-                        />
+                        <ApplicationEntry title={title} disabled={disabled} icon={icon} onClick={() => setOpen(true)} />
                         {open && <CheckSecurityDialog open={open} onClose={() => setOpen(false)} />}
                     </>
                 )
             },
             name: <Trans i18nKey="plugin_go_plus_security_name" />,
-            AppIcon: <SecurityCheckerIcon />,
+            icon: <SecurityCheckerIcon />,
             appBoardSortingDefaultPriority: 13,
             marketListSortingPriority: 16,
         },

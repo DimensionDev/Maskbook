@@ -11,22 +11,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon, title }) {
+            RenderEntryComponent({ disabled, icon, title }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
-                        <ApplicationEntry
-                            disabled={disabled}
-                            title={title}
-                            AppIcon={AppIcon}
-                            onClick={() => setOpen(true)}
-                        />
+                        <ApplicationEntry disabled={disabled} title={title} icon={icon} onClick={() => setOpen(true)} />
                         <SavingsDialog open={open} onClose={() => setOpen(false)} />
                     </>
                 )
             },
             appBoardSortingDefaultPriority: 7,
-            AppIcon: <SavingsIcon />,
+            icon: <SavingsIcon />,
             name: <Trans i18nKey="plugin_savings" />,
         },
     ],

@@ -35,12 +35,12 @@ const definition: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon, title }) {
+            RenderEntryComponent({ disabled, icon, title }) {
                 return (
                     <ApplicationEntry
                         title={title}
                         disabled={disabled}
-                        AppIcon={AppIcon}
+                        icon={icon}
                         onClick={() =>
                             CrossIsolationMessages.events.requestComposition.sendToLocal({
                                 reason: 'timeline',
@@ -55,7 +55,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
             },
             appBoardSortingDefaultPriority: 2,
             marketListSortingPriority: 2,
-            AppIcon: <FileServiceIcon />,
+            icon: <FileServiceIcon />,
             category: 'dapp',
             description: <Trans i18nKey="plugin_file_service_description" />,
             name: <Trans i18nKey="plugin_file_service_name" />,

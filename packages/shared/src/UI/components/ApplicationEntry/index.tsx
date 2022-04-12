@@ -42,20 +42,20 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props {
-    AppIcon: JSX.Element
+    icon: JSX.Element
     title: JSX.Element
     disabled?: boolean
     onClick: () => void
 }
 
 export function ApplicationEntry(props: Props) {
-    const { title, onClick, disabled = false, AppIcon } = props
+    const { title, onClick, disabled = false, icon } = props
     const { classes } = useStyles()
     return (
         <div
             className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
             onClick={disabled ? () => {} : onClick}>
-            <div className={classes.iconWrapper}>{AppIcon}</div>
+            <div className={classes.iconWrapper}>{icon}</div>
             <Typography className={classes.title} color="textPrimary">
                 {title}
             </Typography>

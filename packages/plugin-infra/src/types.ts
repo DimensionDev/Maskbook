@@ -309,7 +309,7 @@ export namespace Plugin.SNSAdaptor {
          */
         RenderEntryComponent?: (props: {
             disabled: boolean
-            AppIcon: JSX.Element
+            icon: JSX.Element
             title: JSX.Element
         }) => JSX.Element | null
         /**
@@ -322,7 +322,7 @@ export namespace Plugin.SNSAdaptor {
          */
         marketListSortingPriority?: number
 
-        AppIcon: JSX.Element
+        icon: JSX.Element
 
         name: JSX.Element
 

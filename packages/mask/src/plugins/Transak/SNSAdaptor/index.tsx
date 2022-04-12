@@ -15,15 +15,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon, title }) {
+            RenderEntryComponent({ disabled, icon, title }) {
                 const { openDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
-                return <ApplicationEntry title={title} AppIcon={AppIcon} disabled={disabled} onClick={openDialog} />
+                return <ApplicationEntry title={title} icon={icon} disabled={disabled} onClick={openDialog} />
             },
             appBoardSortingDefaultPriority: 10,
             marketListSortingPriority: 6,
             tutorialLink: 'https://transak.com/',
-            AppIcon: <TransakIcon />,
+            icon: <TransakIcon />,
             description: <Trans i18nKey="plugin_transak_description" />,
             name: <Trans i18nKey="plugin_transak_name" />,
             category: 'dapp',

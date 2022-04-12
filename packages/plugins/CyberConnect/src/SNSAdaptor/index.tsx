@@ -37,7 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             marketListSortingPriority: 17,
             description: <Trans i18nKey="plugin_cyber_connect_description" />,
             name: <Trans i18nKey="plugin_cyber_connect_name" />,
-            AppIcon: <CyberConnectIcon />,
+            icon: <CyberConnectIcon />,
             tutorialLink: 'https://cyberconnect.me/',
         },
     ],

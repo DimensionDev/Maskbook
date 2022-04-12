@@ -17,7 +17,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             marketListSortingPriority: 10,
             tutorialLink:
                 'https://realmasknetwork.notion.site/See-the-latest-offer-of-a-Tweet-NFT-by-Valuables-Plugin-27424923ee454a4a9b0ed16fc5cb93d0',
-            AppIcon: <ValuablesIcon />,
+            icon: <ValuablesIcon />,
         },
     ],
 }

@@ -93,12 +93,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon, title }) {
+            RenderEntryComponent({ disabled, icon, title }) {
                 return (
                     <ApplicationEntry
                         title={title}
                         disabled={disabled}
-                        AppIcon={AppIcon}
+                        icon={icon}
                         onClick={() =>
                             CrossIsolationMessages.events.requestComposition.sendToLocal({
                                 reason: 'timeline',
@@ -113,7 +113,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             appBoardSortingDefaultPriority: 1,
             marketListSortingPriority: 1,
-            AppIcon: <RedPacketIcon />,
+            icon: <RedPacketIcon />,
             description: <Trans i18nKey="plugin_red_packet_description" />,
             name: <Trans i18nKey="plugin_red_packet_name" />,
             tutorialLink:

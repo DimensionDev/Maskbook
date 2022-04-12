@@ -14,7 +14,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon, title }) {
+            RenderEntryComponent({ disabled, icon, title }) {
                 const { value: ui } = useAsync(async () => {
                     return loadSocialNetworkUI(activatedSocialNetworkUI.networkIdentifier)
                 }, [activatedSocialNetworkUI])
@@ -28,7 +28,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     <ApplicationEntry
                         disabled={disabled}
                         title={title}
-                        AppIcon={AppIcon}
+                        icon={icon}
                         onClick={() => {
                             closeWalletStatusDialog()
                             ui.injection.openNFTAvatarSettingDialog!()
@@ -37,7 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 ) : null
             },
             appBoardSortingDefaultPriority: 8,
-            AppIcon: <CollectiblesIcon />,
+            icon: <CollectiblesIcon />,
             name: <Trans i18nKey="nft_avatar" />,
         },
     ],

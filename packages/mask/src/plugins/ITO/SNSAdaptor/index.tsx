@@ -62,12 +62,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon, title }) {
+            RenderEntryComponent({ disabled, icon, title }) {
                 return (
                     <ApplicationEntry
                         disabled={disabled}
                         title={title}
-                        AppIcon={AppIcon}
+                        icon={icon}
                         onClick={() =>
                             CrossIsolationMessages.events.requestComposition.sendToLocal({
                                 reason: 'timeline',
@@ -82,7 +82,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             appBoardSortingDefaultPriority: 3,
             marketListSortingPriority: 3,
-            AppIcon: <MarketsIcon />,
+            icon: <MarketsIcon />,
             description: <Trans i18nKey="plugin_ito_description" />,
             category: 'dapp',
             name: <Trans i18nKey="plugin_ito_name" />,
@@ -90,22 +90,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 'https://realmasknetwork.notion.site/Launch-an-ITO-Initial-Twitter-Offering-Support-ETH-BSC-Polygon-Arbitrum-d84c60903f974f4880d2085a13906d55',
         },
         {
-            RenderEntryComponent({ disabled, AppIcon, title }) {
+            RenderEntryComponent({ disabled, icon, title }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
-                        <ApplicationEntry
-                            title={title}
-                            AppIcon={AppIcon}
-                            disabled={disabled}
-                            onClick={() => setOpen(true)}
-                        />
+                        <ApplicationEntry title={title} icon={icon} disabled={disabled} onClick={() => setOpen(true)} />
                         <ClaimAllDialog open={open} onClose={() => setOpen(false)} />
                     </>
                 )
             },
             appBoardSortingDefaultPriority: 4,
-            AppIcon: <MarketsClaimIcon />,
+            icon: <MarketsClaimIcon />,
             name: <Trans i18nKey="plugin_ito_claim" />,
         },
     ],

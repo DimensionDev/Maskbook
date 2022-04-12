@@ -32,19 +32,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon, title }) {
+            RenderEntryComponent({ disabled, icon, title }) {
                 return (
                     <ApplicationEntry
                         title={title}
                         disabled={disabled}
-                        AppIcon={AppIcon}
+                        icon={icon}
                         onClick={() => openWindow('https://box.mask.io/#/')}
                     />
                 )
             },
             appBoardSortingDefaultPriority: 6,
             marketListSortingPriority: 4,
-            AppIcon: <MaskBoxIcon />,
+            icon: <MaskBoxIcon />,
             tutorialLink:
                 'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
             description: <Trans i18nKey="plugin_mask_box_description" />,

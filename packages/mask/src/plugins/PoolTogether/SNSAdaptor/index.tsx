@@ -43,7 +43,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             marketListSortingPriority: 14,
             tutorialLink:
                 'https://realmasknetwork.notion.site/Participate-in-lossless-lottery-via-PoolTogether-on-Twitter-ETH-and-Polygon-377597e14aff441ab645ecba5ea690f1',
-            AppIcon: <PoolTogetherIcon />,
+            icon: <PoolTogetherIcon />,
         },
     ],
 }

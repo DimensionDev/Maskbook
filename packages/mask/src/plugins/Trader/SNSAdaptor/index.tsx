@@ -25,14 +25,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
     enhanceTag,
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon, title }) {
+            RenderEntryComponent({ disabled, icon, title }) {
                 const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
-                return <ApplicationEntry disabled={disabled} title={title} AppIcon={AppIcon} onClick={openDialog} />
+                return <ApplicationEntry disabled={disabled} title={title} icon={icon} onClick={openDialog} />
             },
             appBoardSortingDefaultPriority: 9,
             marketListSortingPriority: 5,
-            AppIcon: <SwapIcon />,
+            icon: <SwapIcon />,
             category: 'dapp',
             name: <Trans i18nKey="plugin_trader_swap" />,
             tutorialLink:

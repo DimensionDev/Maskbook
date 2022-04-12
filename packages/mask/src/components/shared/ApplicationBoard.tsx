@@ -163,7 +163,7 @@ function RenderEntryComponentWrapper({ application }: RenderEntryComponentWrappe
     return (
         <RenderEntryComponent
             disabled={!application.enabled}
-            AppIcon={application.entry.AppIcon}
+            icon={application.entry.icon}
             title={application.entry.name}
         />
     )

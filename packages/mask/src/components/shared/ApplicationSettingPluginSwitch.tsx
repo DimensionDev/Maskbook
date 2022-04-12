@@ -89,7 +89,7 @@ export function ApplicationSettingPluginSwitch(props: Props) {
                     <ListItem key={x.pluginId + i} className={classes.listItem}>
                         <section className={classes.listContent}>
                             <ListItemAvatar>
-                                <Avatar className={classes.avatar}>{x.entry.AppIcon}</Avatar>
+                                <Avatar className={classes.avatar}>{x.entry.icon}</Avatar>
                             </ListItemAvatar>
                             <div className={classes.info}>
                                 <div className={classes.headerWrapper}>

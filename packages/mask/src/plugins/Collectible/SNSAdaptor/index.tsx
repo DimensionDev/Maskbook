@@ -72,7 +72,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             category: 'dapp',
             description: <Trans i18nKey="plugin_collectibles_description" />,
             name: <Trans i18nKey="plugin_collectibles_name" />,
-            AppIcon: <CollectiblesIcon />,
+            icon: <CollectiblesIcon />,
             marketListSortingPriority: 7,
             tutorialLink:
                 'https://realmasknetwork.notion.site/Purchase-or-bid-for-NFTs-via-OpenSea-or-Rarible-on-Twitter-c388746f11774ecfa17914c900d3ed97',

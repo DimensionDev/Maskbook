@@ -11,23 +11,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal, context) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon, title }) {
+            RenderEntryComponent({ disabled, icon, title }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
-                        <ApplicationEntry
-                            title={title}
-                            disabled={disabled}
-                            AppIcon={AppIcon}
-                            onClick={() => setOpen(true)}
-                        />
+                        <ApplicationEntry title={title} disabled={disabled} icon={icon} onClick={() => setOpen(true)} />
                         <CrossChainBridgeDialog open={open} onClose={() => setOpen(false)} />
                     </>
                 )
             },
             appBoardSortingDefaultPriority: 5,
             name: <Trans i18nKey="plugin_cross_bridge_name" />,
-            AppIcon: <CrossBridgeIcon />,
+            icon: <CrossBridgeIcon />,
         },
     ],
 }

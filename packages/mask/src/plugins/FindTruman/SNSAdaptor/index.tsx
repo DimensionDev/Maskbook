@@ -90,22 +90,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon, title }) {
+            RenderEntryComponent({ disabled, icon, title }) {
                 const [open, setOpen] = useState(false)
                 return (
                     <>
-                        <ApplicationEntry
-                            disabled={disabled}
-                            title={title}
-                            AppIcon={AppIcon}
-                            onClick={() => setOpen(true)}
-                        />
+                        <ApplicationEntry disabled={disabled} title={title} icon={icon} onClick={() => setOpen(true)} />
                         <FindTrumanDialog open={open} onClose={() => setOpen(false)} />
                     </>
                 )
             },
             appBoardSortingDefaultPriority: 11,
-            AppIcon: <FindTrumanIcon />,
+            icon: <FindTrumanIcon />,
             name: <Trans i18nKey="plugin_find_truman_name" />,
         },
     ],

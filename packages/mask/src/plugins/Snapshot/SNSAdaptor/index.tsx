@@ -71,7 +71,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             tutorialLink: 'https://realmasknetwork.notion.site/Cast-a-Snapshot-vote-10c08ed9629942dd852d9afbfab61208',
             name: <Trans i18nKey="plugin_snapshot_info_snapshot" />,
             marketListSortingPriority: 8,
-            AppIcon: <SnapshotIcon />,
+            icon: <SnapshotIcon />,
         },
     ],
 }

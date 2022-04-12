@@ -43,7 +43,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             category: 'dapp',
             description: <Trans i18nKey="plugin_gitcoin_description" />,
             name: <Trans i18nKey="plugin_gitcoin_name" />,
-            AppIcon: <GitcoinIcon />,
+            icon: <GitcoinIcon />,
             marketListSortingPriority: 9,
             tutorialLink:
                 'https://realmasknetwork.notion.site/Make-a-quick-Gitcoin-Grant-donation-98ed83784ed4446a8a13fa685c7bddfb',

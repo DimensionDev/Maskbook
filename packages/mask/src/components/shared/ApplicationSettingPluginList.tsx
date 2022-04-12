@@ -1,5 +1,5 @@
 import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
-import { useAsyncRetry } from 'react-use'
+import { useAsyncRetry, useMemo } from 'react-use'
 import classNames from 'classnames'
 import { useLayoutEffect, useState, Fragment, useEffect } from 'react'
 import { List, ListItem, Typography, CircularProgress } from '@mui/material'
@@ -110,19 +110,26 @@ export function ApplicationSettingPluginList() {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const [hasInit, setInit] = useState(false)
-    const applicationList = snsAdaptorPlugins
-        .reduce<Application[]>((acc, cur) => {
-            if (!cur.ApplicationEntries) return acc
-            return acc.concat(
-                cur.ApplicationEntries.filter((x) => x.appBoardSortingDefaultPriority).map((x) => {
-                    return {
-                        entry: x,
-                        pluginId: cur.ID,
-                    }
-                }) ?? [],
-            )
-        }, [])
-        .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
+    const applicationList = useMemo(
+        () =>
+            snsAdaptorPlugins
+                .reduce<Application[]>((acc, cur) => {
+                    if (!cur.ApplicationEntries) return acc
+                    return acc.concat(
+                        cur.ApplicationEntries.filter((x) => x.appBoardSortingDefaultPriority).map((x) => {
+                            return {
+                                entry: x,
+                                pluginId: cur.ID,
+                            }
+                        }) ?? [],
+                    )
+                }, [])
+                .sort(
+                    (a, b) =>
+                        (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0),
+                ),
+        [snsAdaptorPlugins],
+    )
     const { value, retry, loading } = useUnListedApplicationList(applicationList, currentIdentifier)
 
     useLayoutEffect(() => {
@@ -215,7 +222,7 @@ function AppListItem(props: AppListItemProps) {
                 await setAppUnlisted(application, isListed, currentIdentifier)
                 retry()
             }}>
-            <div className={classes.iconWrapper}>{application.entry.AppIcon}</div>
+            <div className={classes.iconWrapper}>{application.entry.icon}</div>
             {isRequesting ? (
                 <div className={classes.loadingItem}>
                     <CircularProgress size={18} color="primary" />

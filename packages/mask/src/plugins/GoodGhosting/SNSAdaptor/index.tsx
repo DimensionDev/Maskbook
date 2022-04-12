@@ -38,7 +38,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             name: <Trans i18nKey="plugin_good_ghosting_name" />,
             tutorialLink:
                 'https://realmasknetwork.notion.site/Cultivate-a-weekly-saving-habit-via-GoodGhosting-on-Twitter-Polygon-only-f94aa38b01404b9c99c7a03935840962',
-            AppIcon: <GoogGhostingIcon />,
+            icon: <GoogGhostingIcon />,
         },
     ],
 }

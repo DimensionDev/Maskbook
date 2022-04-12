@@ -21,14 +21,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled, AppIcon, title }) {
+            RenderEntryComponent({ disabled, icon, title }) {
                 const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
 
-                return <ApplicationEntry disabled={disabled} title={title} AppIcon={AppIcon} onClick={openDialog} />
+                return <ApplicationEntry disabled={disabled} title={title} icon={icon} onClick={openDialog} />
             },
             appBoardSortingDefaultPriority: 11,
             marketListSortingPriority: 12,
-            AppIcon: <LootManIcon />,
+            icon: <LootManIcon />,
             description: <Trans i18nKey="plugin_pets_description" />,
             name: <Trans i18nKey="plugin_pets_name" />,
             tutorialLink: 'https://twitter.com/mintteamnft?s=21',
