@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { Steps } from '../../../../../components/shared/VerifyWallet/Steps'
+import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -13,6 +14,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 const VerifyWallet = memo(() => {
     const { classes } = useStyles()
+    const { currentPersona } = PersonaContext.useContainer()
+    console.log(currentPersona, 'ggg')
 
     return (
         <div className={classes.container}>

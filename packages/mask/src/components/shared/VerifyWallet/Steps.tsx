@@ -84,7 +84,7 @@ export function Steps() {
     const currentIdentifier = Identifier.fromString(useValueRef(currentPersonaIdentifier), ECKeyIdentifier)
     const { value: persona_ } = useAsync(async () => {
         return Services.Identity.queryPersona(currentIdentifier.unwrap())
-    }, [])
+    }, [currentIdentifier])
     const [payload, setPayload] = useState<NextIDPayload>()
     const [signature, setSignature] = useState<string>()
     const wallet = useWallet()
