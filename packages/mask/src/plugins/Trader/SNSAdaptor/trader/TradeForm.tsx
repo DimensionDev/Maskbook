@@ -98,10 +98,11 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         },
         button: {
             fontSize: 18,
-            lineHeight: 1,
+            lineHeight: '22px',
             fontWeight: 600,
             borderRadius: isDashboard ? 8 : 24,
             height: 'auto',
+            padding: '13px 0',
             marginTop: '0px !important',
         },
         disabledButton: {
@@ -504,7 +505,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         </Box>
                                     }
                                     render={(disable: boolean) =>
-                                        isGreatThanSlippageSetting ? (
+                                        !isGreatThanSlippageSetting ? (
                                             <ActionButton
                                                 fullWidth
                                                 variant="contained"
