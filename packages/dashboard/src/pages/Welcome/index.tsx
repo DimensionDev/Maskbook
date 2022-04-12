@@ -78,7 +78,7 @@ export default function Welcome() {
             iframeRef={iframeRef}
             privacyPolicyURL={agreementContentPageURL}
             iframeLoadHandler={handleIFrameLoad}
-            agreeHandler={setupSocialNetwork}
+            agreeHandler={() => setupSocialNetwork('twitter.com')}
             cancelHandler={() => window.close()}
         />
     )

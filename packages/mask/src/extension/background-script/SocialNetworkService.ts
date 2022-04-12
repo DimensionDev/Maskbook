@@ -30,8 +30,8 @@ function requestSNSAdaptorPermission(ui: SocialNetworkUI.Definition) {
 }
 
 
-export async function setupSocialNetwork() {
-    const ui = await loadSocialNetworkUI('twitter.com')
+export async function setupSocialNetwork(defaultNetwork: string) {
+    const ui = await loadSocialNetworkUI(defaultNetwork)
     const home = ui.utils.getHomePage?.()
 
     const uis = await loadSocialNetworkUIs()
