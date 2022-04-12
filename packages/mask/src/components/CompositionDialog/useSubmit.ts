@@ -19,6 +19,7 @@ export function useSubmit(onClose: () => void) {
     return useCallback(
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
+            console.log('content=', content)
 
             const network = activatedSocialNetworkUI.networkIdentifier
             const currentProfile = new ProfileIdentifier(

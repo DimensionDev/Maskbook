@@ -1,0 +1,157 @@
+{
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+        "assetsInfo": {
+            "type": "object",
+            "title": "assetsInfo",
+            "properties": {
+                "nfts": {
+                    "type": "array",
+                    "title": "nfts",
+                    "properties": {
+                        "tokenAddress": {
+                            "type": "string",
+                            "title": "tokenAddress"
+                        },
+                        "tokenId": {
+                            "type": "string",
+                            "title": "type"
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "type"
+                        }
+                    }
+                },
+                "receiving_token": {
+                    "type": "object",
+                    "title": "receiving_token",
+                    "properties": {
+                        "tokenAddress": {
+                            "type": "string",
+                            "title": "tokenAddress"
+                        },
+                        "type": {
+                            "type": "string",
+                            "title": "type"
+                        },
+                        "amount": {
+                            "type": "string",
+                            "title": "amount"
+                        }
+                    }
+                },
+                "preview_info": {
+                    "type": "object",
+                    "title": "preview_info",
+                    "properties": {
+                        "nftMediaUrls": {
+                            "type": "array",
+                            "title": "nftMediaUrls",
+                            "properties": {
+                                "image_preview_url": {
+                                    "type": "string",
+                                    "title": "image_preview_url"
+                                },
+                                "image_thumbnail_url": {
+                                    "type": "string",
+                                    "title": "image_thumbnail_url"
+                                },
+                                "nft_name": {
+                                    "type": "string",
+                                    "title": "nft_name"
+                                },
+                                "nft_id": {
+                                    "type": "number",
+                                    "title": "nft_id"
+                                }
+                            }
+                        },
+                        "receivingSymbol": {
+                            "type": "object",
+                            "title": "receivingSymbol",
+                            "properties": {
+                                "symbol": {
+                                    "type": "string",
+                                    "title": "symbol"
+                                },
+                                "amount": {
+                                    "type": "string",
+                                    "title": "amount"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "signedOrder": {
+            "type": "object",
+            "title": "signedOrder",
+            "properties": {
+                "makerAddress": {
+                    "type": "string",
+                    "title": "makerAddress"
+                },
+                "makerAssetAmount": {
+                    "type": "string",
+                    "title": "makerAssetAmount"
+                },
+                "makerAssetData": {
+                    "type": "string",
+                    "title": "makerAssetData"
+                },
+                "takerAddress": {
+                    "type": "string",
+                    "title": "takerAddress"
+                },
+                "takerAssetAmount": {
+                    "type": "string",
+                    "title": "takerAssetAmount"
+                },
+                "takerAssetData": {
+                    "type": "string",
+                    "title": "takerAssetData"
+                },
+                "expirationTimeSeconds": {
+                    "type": "string",
+                    "title": "expirationTimeSeconds"
+                },
+                "senderAddress": {
+                    "type": "string",
+                    "title": "senderAddress"
+                },
+                "feeRecipientAddress": {
+                    "type": "string",
+                    "title": "feeRecipientAddress"
+                },
+                "salt": {
+                    "type": "string",
+                    "title": "salt"
+                },
+                "makerFeeAssetData": {
+                    "type": "string",
+                    "title": "makerFeeAssetData"
+                },
+                "takerFeeAssetData": {
+                    "type": "string",
+                    "title": "takerFeeAssetData"
+                },
+                "makerFee": {
+                    "type": "string",
+                    "title": "makerFee"
+                },
+                "takerFee": {
+                    "type": "string",
+                    "title": "takerFee"
+                },
+                "signature": {
+                    "type": "string",
+                    "title": "signature"
+                }
+            }
+        }
+    },
+    "required": ["signedOrder", "assetsInfo"]
+}

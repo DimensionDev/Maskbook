@@ -127,6 +127,9 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
             [amount, tokenPrice],
         )
 
+        console.log('ip-tokenPrice=', tokenPrice)
+        console.log('ip-tokenValueUSD=', tokenValueUSD)
+
         return (
             <TextField
                 fullWidth

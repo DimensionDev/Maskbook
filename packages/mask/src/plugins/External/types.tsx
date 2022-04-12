@@ -7,7 +7,7 @@ export interface ExternalPluginLoadDetails {
     meta: unknown
 }
 export interface Manifest {
-    manifest_version: 0
+    manifest_version: 3
     name: string
     description?: string
     publisher: string

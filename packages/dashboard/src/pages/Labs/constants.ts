@@ -26,7 +26,7 @@ export const TUTORIAL_URLS_EN: TUTORIAL_URLS_OPT = {
     [PLUGIN_IDS.GITCOIN]:
         'https://realmasknetwork.notion.site/Make-a-quick-Gitcoin-Grant-donation-98ed83784ed4446a8a13fa685c7bddfb',
     [PLUGIN_IDS.DHEDGE]:
-        'https://realmasknetwork.notion.site/Invest-in-your-favourite-fund-manager-via-dHEDGE-on-Twitter-ETH-and-Polygon-fb00ff2e626949279c83b59ed9207b9a',
+        'https://realmasknetwork.notion.site/Inves  t-in-your-favourite-fund-manager-via-dHEDGE-on-Twitter-ETH-and-Polygon-fb00ff2e626949279c83b59ed9207b9a',
     [PLUGIN_IDS.RED_PACKET]:
         'https://realmasknetwork.notion.site/Gift-token-NFTs-to-your-friends-Support-ETH-BSC-and-Polygon-0a71fd421aae4563bd07caa3e2129e5b',
     [PLUGIN_IDS.TRANSAK]: 'https://transak.com/',
@@ -55,7 +55,7 @@ export const TUTORIAL_URLS_CN: TUTORIAL_URLS_OPT = {
         'https://realmaskbook.notion.site/Mask-Twitter-Gitcoin-Grant-a6a8510ce7d8427399b97b95ed01eebe',
     [PLUGIN_IDS.DHEDGE]: 'https://realmaskbook.notion.site/dHEDGE-ETH-Polygon-a7640833342c4d3e85da105c3eab5338',
     [PLUGIN_IDS.RED_PACKET]:
-        'https://realmaskbook.notion.site/Red-Packet-ETH-BSC-Polygon-23dfa6535c344fbdb31002d54704889d',
+        'https://realmasknetwork.notion.site/Red-Packet-ETH-BSC-Polygon-23dfa6535c344fbdb31002d54704889d',
     [PLUGIN_IDS.TRANSAK]: 'https://transak.com/',
     [PLUGIN_IDS.COLLECTIBLES]:
         'https://realmaskbook.notion.site/Opensea-Rarible-NFT-NFT-8d824aaa7e3642ecb03b3371034ca780',

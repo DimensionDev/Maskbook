@@ -143,9 +143,6 @@ export async function getAssetsList(
         {
             method: 'GET',
             mode: 'cors',
-            headers: {
-                'x-api-key': OPENSEA_API_KEY,
-            },
         },
     )
     return (await response.json()) as AssetsListResponse
@@ -157,6 +154,7 @@ export async function getCollections(owner: string, opts: { chainId?: ChainId; p
     params.append('asset_owner', owner.toLowerCase())
     params.append('limit', String(size))
     params.append('offset', String(size * page))
+    params.append('format', 'json')
 
     if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId))
         return {

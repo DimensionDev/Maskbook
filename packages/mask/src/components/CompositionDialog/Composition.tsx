@@ -31,7 +31,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         Services.SocialNetwork.getDesignatedAutoStartPluginID().then((plugin) => {
             if (!plugin) return
 
-            setOpen(true)
+            setOpen(false)
             UI.current?.startPlugin(plugin)
         })
     }, [])

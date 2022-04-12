@@ -14,6 +14,7 @@ import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
+import { TraderxyzDialog } from '../../plugins/Traderxyz/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
@@ -131,6 +132,10 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
 
     //#region Swap
     const { open: isSwapDialogOpen, onOpen: onSwapDialogOpen, onClose: onSwapDialogClose } = useControlledDialog()
+    //#endregion
+
+    //#region Swap
+    const { open: isTraderDialogOpen, onOpen: onTraderDialogOpen, onClose: onTraderDialogClose } = useControlledDialog()
     //#endregion
 
     //#region Fiat on/off ramp
@@ -257,6 +262,21 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                             false,
                             false,
                         ),
+                        // createEntry(
+                        //     'Trader Xyz',
+                        //     new URL('./assets/traderxyz.png', import.meta.url).toString(),
+                        //     onTraderDialogOpen,
+                        //     undefined,
+                        //     false,
+                        //     true,
+                        // ),
+                        createEntry(
+                            'Trader Xyz',
+                            new URL('./assets/traderxyz.png', import.meta.url).toString(),
+                            () => openEncryptedMessage('io.mask.example'),
+                            undefined,
+                            false,
+                        ),
                         createEntry(
                             'Valuables',
                             new URL('./assets/valuables.png', import.meta.url).toString(),
@@ -343,6 +363,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                 <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
             ) : null}
             {isSwapDialogOpen ? <TraderDialog open={isSwapDialogOpen} onClose={onSwapDialogClose} /> : null}
+            {isTraderDialogOpen ? <TraderxyzDialog open={isTraderDialogOpen} onClose={onTraderDialogClose} /> : null}
             {isSecondLevelEntryDialogOpen ? (
                 <EntrySecondLevelDialog
                     title={secondLevelEntryDialogTitle}

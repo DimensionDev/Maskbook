@@ -28,6 +28,7 @@ import { OPENSEA_ACCOUNT_URL, OPENSEA_API_KEY, OPENSEA_API_URL } from './constan
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId) {
     if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId)) return
     try {
+        alert(urlcat(OPENSEA_API_URL, url))
         const response = await fetch(urlcat(OPENSEA_API_URL, url), {
             method: 'GET',
             mode: 'cors',

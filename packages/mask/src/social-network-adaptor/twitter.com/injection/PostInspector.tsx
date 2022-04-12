@@ -6,12 +6,14 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
     return injectPostInspectorDefault({
         zipPost(node) {
             const contentContainer = node.current.parentElement
+            console.log('contentContainer=', contentContainer)
             if (!contentContainer) return
 
             const content = contentContainer.querySelector<HTMLDivElement>('[lang]')
             if (!content) return
 
             for (const a of content.querySelectorAll('a')) {
+                console.log('querySelectorAll=', a, twitterEncoding.payloadDecoder(a.title).length)
                 if (twitterEncoding.payloadDecoder(a.title).length) hideDOM(a)
 
                 if (/^https?:\/\/mask(\.io|book\.com)$/i.test(a.title)) hideDOM(a)

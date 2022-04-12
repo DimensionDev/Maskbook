@@ -10,7 +10,6 @@ import { Trader, TraderProps } from './Trader'
 import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
-import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../Wallet/messages'
 import { isDashboardPage } from '@masknet/shared-base'
@@ -116,12 +115,12 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                             </div>
                         ) : null}
                         <div className={classes.abstractTabWrapper}>
-                            <NetworkTab
+                            {/* <NetworkTab
                                 chainId={chainId}
                                 setChainId={setChainId}
                                 classes={classes}
                                 chains={chains ?? []}
-                            />
+                            /> */}
                         </div>
                         <Trader {...traderProps} chainId={chainId} classes={{ root: classes.tradeRoot }} />
                     </DialogContent>

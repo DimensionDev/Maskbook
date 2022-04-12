@@ -1002,5 +1002,6 @@
     "plugin_profile_rss3_inactive_project": "Inactive Project",
     "plugin_profile_rss3_no_activity_time": "No activity time",
     "plugin_profile_rss3_attended": "Attended",
-    "plugin_vcent_last_offer_at": "LATEST OFFER at"
+    "plugin_vcent_last_offer_at": "LATEST OFFER at",
+    "plugin_traderxyz_title": "Trader Xyz"
 }

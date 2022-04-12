@@ -1,0 +1,149 @@
+{
+    /* <div className={classes.wrapper}>
+                        <ul className={classes.wrapper_ul}>
+                            <li>
+                                <input
+                                    type="checkbox"
+                                    id="list-item-1"
+                                    className={classes.wrapper_input_type__checkbox___main}
+                                />
+                                <label htmlFor="list-item-1">
+                                    <div className={classes.icon}>Icon</div>
+                                    <div className={classes.label}>label</div>
+                                    <div className={classes.wrapper__nftpreview}>
+                                        <div className={classes.wrapper__div1}>
+                                            <img
+                                                className={classes.wrapper__nftpreview_div_img}
+                                                src="https://lh3.googleusercontent.com/EkUOxyNqiZNyneAu6gph-R9cEIbLROq55e6NCTCfn1kygnUqoIuqJ4lIptu7-BWunKa0jK4cVyyem42gLRmwLBt3rH_xaCoHXsyz"
+                                            />
+                                        </div>
+                                        <div className={classes.wrapper__div2}>
+                                            <img
+                                                className={classes.wrapper__nftpreview_div_img}
+                                                src="https://trader.xyz/images/missing-img-lg.png"
+                                            />
+                                        </div>
+                                        <div className={classes.wrapper__div3}>
+                                            <img
+                                                className={classes.wrapper__nftpreview_div_img}
+                                                src="https://trader.xyz/images/missing-img-lg.png"
+                                            />
+                                        </div>
+                                    </div>
+                                </label>
+                                <ul>
+                                    <li>
+                                        <input type="checkbox" id="list-item-1-1" />1
+                                        <ul className={classes.wrapper_ul_li_ul_nftCollections_li_ul_nftItems_li}>
+                                            <li>1.1</li>
+                                            <li>1.2</li>
+                                            <li>1.3</li>
+                                        </ul>
+                                    </li>
+                                    <li className={classes.wrapper_ul_li_ul_nftCollections_li_ul_nftItems_li}>
+                                        <input type="checkbox" id="list-item-1-2" />2{' '}
+                                        <ul className={classes.wrapper_ul_li_ul_nftCollections_li_ul_nftItems_li}>
+                                            <li>2.1</li>
+                                            <li>2.2</li>
+                                            <li>2.3</li>
+                                        </ul>
+                                    </li>
+                                    <li className={classes.wrapper_ul_li_ul_nftCollections_li_ul_nftItems_li}>
+                                        {' '}
+                                        <input type="checkbox" id="list-item-1-3" />3{' '}
+                                        <ul className={classes.wrapper_ul_li_ul_nftCollections_li_ul_nftItems_li}>
+                                            <li>3.1</li>
+                                            <li>3.2</li>
+                                            <li>3.3</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <input
+                                    type="checkbox"
+                                    id="list-item-2"
+                                    className={classes.wrapper_input_type__checkbox___main}
+                                />
+                                <label htmlFor="list-item-2">Sans Serif</label>
+                                <ul>
+                                    <li>Open Sans</li>
+                                    <li>Roboto</li>
+                                    <li>Lato</li>
+                                    <li>Stabo</li>
+                                    <li>Oswald</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <input
+                                    type="checkbox"
+                                    id="list-item-3"
+                                    className={classes.wrapper_input_type__checkbox___main}
+                                />
+                                <label htmlFor="list-item-3">Monospace</label>
+                                <ul>
+                                    <li>Inconsolata</li>
+                                    <li>Source Code Pro</li>
+                                    <li>Droid Sans Mono</li>
+                                    <li>Ubuntu Mono</li>
+                                    <li>Cousine</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div> */
+}
+
+;<Grid container spacing={0}>
+    //Section for the asset that user want to receive in exachange of NFT
+    <Grid item xs={12}>
+        Receiving
+        <TextField
+            fullWidth
+            type="text"
+            variant="filled"
+            value={inputAmount}
+            onChange={(a: any) => {
+                console.log(a)
+                setinputAmount(a.target.value)
+            }}
+            InputProps={{
+                className: classes.filledInput,
+                disableUnderline: true,
+                startAdornment: (
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start',
+                        }}>
+                        <SelectTokenChip
+                            classes={{
+                                chip: classes.selectedTokenChip,
+                                tokenIcon: classes.chipTokenIcon,
+                                noToken: classes.noToken,
+                            }}
+                            token={token}
+                            ChipProps={{
+                                onClick: () => onTokenChipClick1(TokenPanelType.Output),
+                                deleteIcon: (
+                                    <DropIcon
+                                        className={classes.dropIcon}
+                                        style={{ fill: !outputToken ? '#ffffff' : undefined }}
+                                    />
+                                ),
+                                onDelete: noop,
+                            }}
+                        />
+                    </Box>
+                ),
+                endAdornment: (
+                    <Typography className={classes.price}>
+                        ≈ <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
+                    </Typography>
+                ),
+            }}
+            inputProps={{ className: classes.input }}
+        />
+    </Grid>
+</Grid>

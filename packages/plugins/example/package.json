@@ -4,6 +4,17 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@masknet/plugin-infra": "workspace:*"
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/plugin-wallet": "workspace:*",
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@ethersproject/contracts":"5.5.0",
+    "@masknet/theme": "workspace:*",
+    "@masknet/icons": "workspace:*",
+    "@traderxyz/nft-swap-sdk": "^0.7.0",
+    "@ethersproject/providers": "5.5.1",
+    "bignumber.js": "^9.0.2",
+    "react-use": "^17.3.1"
   }
 }
