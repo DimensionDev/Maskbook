@@ -24,7 +24,7 @@ import { PollCardUI } from './Polls'
 import type { PollMetaData } from '../types'
 import { PLUGIN_META_KEY } from '../constants'
 import { PluginPollRPC } from '../messages'
-import { useCompositionContext } from '@masknet/plugin-infra'
+import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 
 const useNewPollStyles = makeStyles()((theme) => ({
     menuPaper: {

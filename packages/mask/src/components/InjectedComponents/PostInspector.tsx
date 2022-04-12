@@ -6,8 +6,11 @@ import { PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { TypedMessageTuple } from '@masknet/typed-message'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
-import { usePostInfoDetails } from '../DataSource/usePostInfo'
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import {
+    usePostInfoDetails,
+    createInjectHooksRenderer,
+    useActivatedPluginsSNSAdaptor,
+} from '@masknet/plugin-infra/content-script'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
 import { MaskPostExtraPluginWrapper } from '../../plugins/MaskPluginWrapper'
 import { useSubscription } from 'use-subscription'

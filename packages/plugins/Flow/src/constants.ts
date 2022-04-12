@@ -1,4 +1,5 @@
-import { PluginId, Web3Plugin } from '@masknet/plugin-infra'
+import { PluginId } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-flow/types'
 
 export const PLUGIN_ID = PluginId.Flow

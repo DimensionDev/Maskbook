@@ -3,7 +3,7 @@ import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
 import { Box, InputAdornment } from '@mui/material'
-import { makeStyles } from '../../makeStyles'
+import { makeStyles } from '../../UIHelper/makeStyles'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
 import { SearchIcon } from '@masknet/icons'
@@ -48,7 +48,7 @@ export interface MaskSearchableListProps<T> {
  *      />
  * )
  */
-export function SearchableList<T>({
+export function SearchableList<T extends {}>({
     itemKey,
     data,
     placeholder,
@@ -72,7 +72,7 @@ export function SearchableList<T>({
                 shouldSort: true,
                 threshold: 0.45,
                 minMatchCharLength: 1,
-                keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : ([] as any)),
+                keys: searchKey ?? data.length > 0 ? Object.keys(data[0]) : [],
             }),
         [data, searchKey],
     )

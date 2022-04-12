@@ -1,17 +1,21 @@
 import { getITOConstants, isSameAddress, useERC20TokenDetailed, formatBalance } from '@masknet/web3-shared-evm'
+import type { ComputedPayload } from '../../../../../extension/background-script/EthereumServices/rpc'
 import { useI18N } from '../../../../../utils'
-import type { ContractMethodInfo, ComputedPayload } from '../type'
+import type { ContractMethodInfo } from '../type'
 
 export function getITO_Description({ name, address, chainId }: ContractMethodInfo, computedPayload: ComputedPayload) {
     const { ITO2_CONTRACT_ADDRESS } = getITOConstants(chainId)
     if (!isSameAddress(address, ITO2_CONTRACT_ADDRESS)) return undefined
 
+    const transactionComputedPayloadParams =
+        (computedPayload && 'parameters' in computedPayload && computedPayload.parameters) || undefined
+
     switch (name) {
         case 'fill_pool':
             return (
                 <FillPoolDescription
-                    tokenAddress={computedPayload?.parameters?._token_addr ?? ''}
-                    tokenAmount={computedPayload?.parameters?._total_tokens}
+                    tokenAddress={transactionComputedPayloadParams?._token_addr ?? ''}
+                    tokenAmount={transactionComputedPayloadParams?._total_tokens!}
                 />
             )
         default:

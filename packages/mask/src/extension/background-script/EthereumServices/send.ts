@@ -36,7 +36,7 @@ import {
 import { Flags } from '../../../../shared'
 import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
-import { getSendTransactionComputedPayload } from './rpc'
+import { getSendTransactionComputedPayload, ComputedPayload } from './rpc'
 import { getError, hasError } from './error'
 import { signTypedData, SignTypedDataVersion } from '@metamask/eth-sig-util'
 
@@ -67,7 +67,7 @@ function isSignableMethod(payload: JsonRpcPayload) {
     ].includes(payload.method as EthereumMethodType)
 }
 
-function getTo(computedPayload: UnboxPromise<ReturnType<typeof getSendTransactionComputedPayload>>) {
+function getTo(computedPayload: ComputedPayload) {
     if (!computedPayload) return ''
     switch (computedPayload.type) {
         case EthereumRpcType.SEND_ETHER:

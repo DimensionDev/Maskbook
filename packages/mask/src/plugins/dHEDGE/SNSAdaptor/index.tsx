@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra'
+import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 import { base } from '../base'

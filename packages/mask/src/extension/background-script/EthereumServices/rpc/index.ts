@@ -105,7 +105,24 @@ export async function getComputedPayload(payload: JsonRpcPayload): Promise<Ether
     }
 }
 
-export async function getSendTransactionComputedPayload(payload: JsonRpcPayload) {
+export type ComputedPayload =
+    | undefined
+    | {
+          type: EthereumRpcType.CONTRACT_INTERACTION
+          name?: string
+          parameters?: Record<string, string | undefined>
+          _tx: any
+      }
+    | {
+          type: EthereumRpcType.CONTRACT_DEPLOYMENT
+          code: string
+          _tx: any
+      }
+    | {
+          type: EthereumRpcType.SEND_ETHER | EthereumRpcType.CANCEL
+          _tx: any
+      }
+export async function getSendTransactionComputedPayload(payload: JsonRpcPayload): Promise<ComputedPayload | undefined> {
     const config =
         payload.method === EthereumMethodType.MASK_REPLACE_TRANSACTION ? payload.params![1] : payload.params![0]
     const from = (config.from as string | undefined) ?? ''

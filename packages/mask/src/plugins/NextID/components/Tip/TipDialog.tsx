@@ -1,13 +1,12 @@
 import { Drop2Icon, LinkOutIcon, SuccessIcon } from '@masknet/icons'
+import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
-    PluginId,
-    useActivatedPlugin,
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
     useProviderDescriptor,
     useReverseAddress,
     useWeb3State,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/web3'
 import { InjectedDialog, NFTCardStyledAssetPlayer, WalletIcon } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
