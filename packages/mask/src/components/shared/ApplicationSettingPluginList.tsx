@@ -104,7 +104,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function ApplicationSettingPluginDragger() {
+export function ApplicationSettingPluginList() {
     const { classes } = useStyles()
     const { t } = useI18N()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)

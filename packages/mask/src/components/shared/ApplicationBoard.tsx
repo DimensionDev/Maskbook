@@ -8,7 +8,7 @@ import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
 import { ApplicationSettingDialog } from './ApplicationSettingDialog'
-import { Application, useUnListedApplicationList } from './ApplicationSettingPluginDragger'
+import { Application, useUnListedApplicationList } from './ApplicationSettingPluginList'
 import { currentPersonaIdentifier } from '../../settings/settings'
 import { useValueRef } from '@masknet/shared-base-ui'
 

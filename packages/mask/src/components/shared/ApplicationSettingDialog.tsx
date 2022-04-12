@@ -5,7 +5,7 @@ import { InjectedDialog } from '@masknet/shared'
 import AbstractTab, { AbstractTabProps } from '../../components/shared/AbstractTab'
 import { useI18N } from '../../utils'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch'
-import { ApplicationSettingPluginDragger } from './ApplicationSettingPluginDragger'
+import { ApplicationSettingPluginList } from './ApplicationSettingPluginList'
 
 interface Props {
     open: boolean
@@ -67,7 +67,7 @@ export function ApplicationSettingDialog(props: Props) {
                 label: t('application_settings_tab_app_list'),
                 children: (
                     <div className={classes.tabContent}>
-                        <ApplicationSettingPluginDragger />
+                        <ApplicationSettingPluginList />
                     </div>
                 ),
                 sx: { p: 0 },
