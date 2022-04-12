@@ -80,7 +80,7 @@ const WalletSettings = memo(() => {
     const { value: domain } = useReverseAddress(wallet?.address ?? '', NetworkPluginID.PLUGIN_EVM)
     const { Utils } = useWeb3State()
 
-    useTitle(t('popups_account_details'))
+    useTitle(t('popups_wallet_setting'))
 
     if (!wallet) return null
 

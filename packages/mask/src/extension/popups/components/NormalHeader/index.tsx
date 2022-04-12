@@ -35,12 +35,23 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-export const NormalHeader = memo(() => {
+interface NormalHeaderProps {
+    onlyTitle?: boolean
+}
+
+export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle }) => {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const { title } = useContext(PageTitleContext)
 
     const showTitle = history.length !== 1 && title
+
+    if (onlyTitle)
+        return (
+            <Box className={classes.container} style={{ justifyContent: 'center' }}>
+                <Typography className={classes.title}>{title}</Typography>
+            </Box>
+        )
 
     return (
         <Box className={classes.container} style={{ justifyContent: showTitle ? 'center' : 'flex-start' }}>

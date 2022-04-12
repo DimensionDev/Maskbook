@@ -37,6 +37,8 @@ export const WalletHeader = memo(() => {
 
     const matchWallet = useMatch(PopupRoutes.Wallet)
     const matchSwitchWallet = useMatch(PopupRoutes.SwitchWallet)
+    const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
+    const matchWalletRecovered = useMatch(PopupRoutes.WalletRecovered)
 
     const onChainChange = useCallback(
         async (chainId: ChainId) => {
@@ -79,9 +81,26 @@ export const WalletHeader = memo(() => {
         },
     )
 
-    if (!wallet) return null
+    if (!wallet) return <NormalHeader onlyTitle={!!matchWalletRecovered} />
 
-    return matchSwitchWallet || matchWallet ? (
+    if (matchContractInteraction && wallet) {
+        return (
+            <>
+                <WalletHeaderUI
+                    currentNetwork={currentNetwork}
+                    chainId={chainId}
+                    onOpenNetworkSelector={openMenu}
+                    onActionClick={() => navigate(matchSwitchWallet ? PopupRoutes.Wallet : PopupRoutes.SwitchWallet)}
+                    wallet={wallet}
+                    isSwitchWallet={!!matchSwitchWallet}
+                    disabled
+                />
+                {menu}
+            </>
+        )
+    }
+
+    return (matchSwitchWallet || matchWallet) && wallet ? (
         <>
             <WalletHeaderUI
                 currentNetwork={currentNetwork}

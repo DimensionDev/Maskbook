@@ -10,6 +10,7 @@ import { useHasPassword } from '../../../../hook/useHasPassword'
 import Services from '../../../../../service'
 import urlcat from 'urlcat'
 import { Navigator } from '../../../../components/Navigator'
+import { useTitle } from '../../../../hook/useTitle'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -85,6 +86,8 @@ export const WalletStartUp = memo(() => {
     }, [location.search])
 
     const { hasPassword, loading } = useHasPassword()
+
+    useTitle('')
 
     return (
         <Box className={classes.container}>

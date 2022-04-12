@@ -45,14 +45,14 @@ export const Navigator = memo(() => {
                     label={t('personas')}
                     icon={<PersonasIcon />}
                     value={NavRouter.Personas}
-                    onClick={() => navigate(PopupRoutes.Personas)}
+                    onClick={() => navigate(PopupRoutes.Personas, { replace: true })}
                     classes={{ label: classes.label, selected: classes.selected }}
                 />
                 <BottomNavigationAction
                     label={t('wallet')}
                     icon={<WalletNavIcon />}
                     value={NavRouter.Wallet}
-                    onClick={() => navigate(PopupRoutes.Wallet)}
+                    onClick={() => navigate(PopupRoutes.Wallet, { replace: true })}
                     classes={{ label: classes.label, selected: classes.selected }}
                 />
                 <BottomNavigationAction

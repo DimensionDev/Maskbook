@@ -83,15 +83,20 @@ interface WalletHeaderUIProps {
     onActionClick: () => void
     wallet: Wallet
     isSwitchWallet: boolean
+    disabled?: boolean
 }
 
 export const WalletHeaderUI = memo<WalletHeaderUIProps>(
-    ({ currentNetwork, chainId, onOpenNetworkSelector, onActionClick, wallet, isSwitchWallet }) => {
+    ({ currentNetwork, chainId, onOpenNetworkSelector, onActionClick, wallet, isSwitchWallet, disabled }) => {
         const { classes } = useStyles()
 
         return (
             <Box className={classes.container}>
-                <div className={classes.networkSelector} onClick={onOpenNetworkSelector}>
+                <div
+                    className={classes.networkSelector}
+                    onClick={(event) => {
+                        if (!disabled) onOpenNetworkSelector(event)
+                    }}>
                     {currentNetwork.isMainnet ? (
                         <WalletIcon networkIcon={currentNetwork.icon} size={30} />
                     ) : (
@@ -101,17 +106,24 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                             classes={{ point: classes.colorChainICon }}
                         />
                     )}
+
                     <div style={{ marginLeft: 4 }}>
                         <Typography className={classes.chainName}>
                             {currentNetwork.name}
-                            <ArrowDropIcon
-                                className={classes.arrow}
-                                style={{ transform: status ? 'rotate(-180deg)' : undefined }}
-                            />
+                            {!disabled ? (
+                                <ArrowDropIcon
+                                    className={classes.arrow}
+                                    style={{ transform: status ? 'rotate(-180deg)' : undefined }}
+                                />
+                            ) : null}
                         </Typography>
                     </div>
                 </div>
-                <div className={classes.action} onClick={onActionClick}>
+                <div
+                    className={classes.action}
+                    onClick={() => {
+                        if (!disabled) onActionClick()
+                    }}>
                     <MaskBlueIcon className={classes.avatar} />
                     <div>
                         <Typography className={classes.nickname}>{wallet.name}</Typography>
@@ -128,10 +140,12 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                             </Link>
                         </Typography>
                     </div>
-                    <ArrowDropIcon
-                        className={classes.arrow}
-                        style={{ transform: isSwitchWallet ? 'rotate(-180deg)' : undefined }}
-                    />
+                    {!disabled ? (
+                        <ArrowDropIcon
+                            className={classes.arrow}
+                            style={{ transform: isSwitchWallet ? 'rotate(-180deg)' : undefined }}
+                        />
+                    ) : null}
                 </div>
             </Box>
         )
