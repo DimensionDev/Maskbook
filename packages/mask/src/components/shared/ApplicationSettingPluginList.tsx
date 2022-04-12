@@ -174,7 +174,7 @@ function AppList(props: AppListProps) {
     return appList.length > 0 ? (
         <List className={classes.list}>
             {appList.map((x, i) => (
-                <Fragment key={i + x.pluginId}>
+                <Fragment key={x.pluginId}>
                     <AppListItem application={x} retry={retry} setAppUnlisted={setAppUnlisted} isListed={isListed} />
                 </Fragment>
             ))}

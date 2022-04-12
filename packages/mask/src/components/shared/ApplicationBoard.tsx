@@ -127,9 +127,8 @@ export function ApplicationBoard() {
             ) : listedAppList.length > 0 ? (
                 <section className={classes.applicationWrapper}>
                     {listedAppList.map((X, i) => {
-                        const RenderEntryComponent = X.entry.RenderEntryComponent!
                         return (
-                            <Fragment key={i + X.pluginId}>
+                            <Fragment key={X.pluginId}>
                                 <RenderEntryComponentWrapper application={X} />
                             </Fragment>
                         )
