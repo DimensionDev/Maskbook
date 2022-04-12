@@ -56,6 +56,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         lineHeight: '22px',
     },
+    optionsContent: {
+        fontSize: 11,
+    },
     gasPrice: {
         fontSize: 12,
         lineHeight: '16px',
@@ -347,9 +350,11 @@ export const GasSetting1559 = memo(() => {
                         onClick={() => setOption(index)}
                         className={selected === index ? classes.selected : undefined}>
                         <Typography className={classes.optionsTitle}>{title}</Typography>
-                        <Typography component="div">
+                        <Typography component="div" className={classes.optionsContent}>
                             {toFixed(content?.suggestedMaxFeePerGas, 2)}
-                            <Typography variant="inherit">{t('wallet_transfer_gwei')}</Typography>
+                            <Typography variant="inherit" component="span">
+                                {t('wallet_transfer_gwei')}
+                            </Typography>
                         </Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {

@@ -54,7 +54,7 @@ import { TransferAddressError } from '../type'
 
 const useStyles = makeStyles()({
     container: {
-        padding: 16,
+        padding: '16px 16px 0px 16px',
         flex: 1,
     },
     label: {
@@ -132,7 +132,7 @@ const useStyles = makeStyles()({
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
         gap: 20,
-        padding: 16,
+        padding: '10px 16px',
     },
     button: {
         fontWeight: 600,
@@ -572,7 +572,9 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
         return (
             <>
                 <div className={classes.container}>
-                    <Typography className={classes.label}>{t('wallet_transfer_account')}</Typography>
+                    <Typography className={classes.label} style={{ marginTop: 0 }}>
+                        {t('wallet_transfer_account')}
+                    </Typography>
                     <Typography className={classes.accountName}>{accountName}</Typography>
                     <Typography className={classes.label}>{t('wallet_transfer_receiving_account')}</Typography>
                     <Controller

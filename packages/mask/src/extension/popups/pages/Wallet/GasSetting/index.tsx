@@ -34,7 +34,9 @@ const GasSetting = memo(() => {
     return (
         <>
             <main className={classes.container}>
-                <Typography className={classes.title}>{t('popups_wallet_gas_fee_settings')}</Typography>
+                <Typography className={classes.title} style={{ marginTop: 0 }}>
+                    {t('popups_wallet_gas_fee_settings')}
+                </Typography>
                 <Typography className={classes.description}>
                     {t('popups_wallet_gas_fee_settings_description')}
                 </Typography>

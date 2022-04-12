@@ -10,14 +10,14 @@ const useStyles = makeStyles()(() => ({
     container: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
-        padding: 16,
+        padding: '16px 11px',
         lineHeight: 0,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
     },
     logo: {
-        width: 104,
+        width: 96,
         height: 30,
     },
     action: {

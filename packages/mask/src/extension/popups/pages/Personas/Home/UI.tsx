@@ -8,7 +8,7 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Navigator } from '../../../components/Navigator'
 import { Avatar, Typography } from '@mui/material'
-import { ArrowRightIosIcon, MasksIcon } from '@masknet/icons'
+import { ArrowRightIosIcon, MenuPersonasActiveIcon } from '@masknet/icons'
 import { formatPersonaFingerprint } from '@masknet/shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useI18N } from '../../../../../utils'
@@ -81,7 +81,10 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                         {avatar ? (
                             <Avatar src={avatar} className={classes.avatar} />
                         ) : (
-                            <MasksIcon className={classes.avatar} />
+                            <MenuPersonasActiveIcon
+                                className={classes.avatar}
+                                style={{ fill: '#f9fafa', backgroundColor: '#F9FAFA', borderRadius: 99 }}
+                            />
                         )}
                     </div>
                     <div className={classes.item}>

@@ -75,6 +75,9 @@ const useStyles = makeStyles()({
     secondaryButton: {
         backgroundColor: '#F7F9FA',
         color: '#1C68F3',
+        '&: hover': {
+            backgroundColor: '#dee0e1',
+        },
     },
 })
 

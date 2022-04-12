@@ -20,16 +20,17 @@ const useStyles = makeStyles()(() => ({
         position: 'absolute',
         left: 16,
         top: 16,
+        fontSize: 30,
         cursor: 'pointer',
     },
     title: {
         fontSize: 14,
-        lineHeight: '18px',
+        lineHeight: '30px',
         color: '#15181B',
         fontWeight: 700,
     },
     logo: {
-        width: 104,
+        width: 96,
         height: 30,
     },
 }))
