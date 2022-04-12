@@ -6,13 +6,11 @@ export function useRemoveRecentTransaction() {
     const account = useAccount()
     const chainId = useChainId()
 
-    const remove = useCallback(
+    return useCallback(
         async (hash: string) => {
             if (!account || !hash) return
             return WalletRPC.removeRecentTransaction(chainId, account, hash)
         },
         [chainId, account],
     )
-
-    return remove
 }

@@ -67,7 +67,7 @@ const domainAddressMap: Record<string, string[]> = {
 }
 
 // Not very common usage, no need to create a map of address-to-domain
-export function getContractOwner(address?: string) {
+export function getContractOwnerDomain(address?: string) {
     if (!address) return address
     const addr = address.toLowerCase()
     const pair = Object.entries(domainAddressMap).find(([, addresses]) => {

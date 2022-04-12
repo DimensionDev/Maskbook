@@ -1,13 +1,12 @@
 import { LinkOutIcon } from '@masknet/icons'
-import { useWeb3State } from '@masknet/plugin-infra'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
-    getContractOwner,
+    getContractOwnerDomain,
     TransactionStateType,
     TransactionStatusType,
-    TransactionType,
     useChainId,
     useWeb3,
 } from '@masknet/web3-shared-evm'
@@ -72,11 +71,11 @@ const statusTextMap: Record<TransactionStatusType, string> = {
     [TransactionStatusType.CANCELLED]: 'Cancelled',
 }
 
-const getContractFunctionName = async (data: string) => {
+const getContractFunctionName = async (data: string | undefined) => {
     if (!data) return null
     const sig = data.slice(0, 10)
     const name = await Services.Ethereum.getContractFunctionName(sig)
-    return name
+    return name ? name.replace(/_/g, ' ') : 'Contract Interaction'
 }
 
 interface TransactionProps extends GridProps {
@@ -90,25 +89,23 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
     const { classes, theme } = useStyles()
 
     const web3 = useWeb3()
-    const { value: contractAddress } = useAsync(async () => {
+    const { value: targetAddress } = useAsync(async () => {
         if (tx.receipt?.contractAddress) return tx.receipt.contractAddress
         if (tx.payload?.params?.[0].to) return tx.payload.params[0].to as string
         const transaction = await web3.eth.getTransaction(tx.hash)
         return transaction.to
     }, [web3, tx])
-    const address = (contractAddress || '').toLowerCase()
-    const txData = tx.payload?.params?.[0].data as string
+    const address = (targetAddress || '').toLowerCase()
+    const txData = tx.payload?.params?.[0].data as string | undefined
     const { value: functionName } = useAsync(async () => {
-        const name = await getContractFunctionName(txData)
-        if (name === TransactionType.CREATE_RED_PACKET) return 'Create Lucky Drop'
-        return name ? name.replace(/_/g, ' ') : 'Contract Interaction'
+        return getContractFunctionName(txData)
     }, [txData])
 
     const handleClear = useCallback(() => {
         onClear(tx)
     }, [onClear, tx])
 
-    const domain = useMemo(() => getContractOwner(address), [address])
+    const domain = useMemo(() => getContractOwnerDomain(address), [address])
 
     const [txStatus, setTxStatus] = useState(tx.status)
 

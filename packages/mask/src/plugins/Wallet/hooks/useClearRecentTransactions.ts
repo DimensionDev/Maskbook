@@ -6,10 +6,8 @@ export function useClearRecentTransactions() {
     const account = useAccount()
     const chainId = useChainId()
 
-    const clear = useCallback(async () => {
+    return useCallback(async () => {
         if (!account) return
         await WalletRPC.clearRecentTransactions(chainId, account)
     }, [chainId, account])
-
-    return clear
 }
