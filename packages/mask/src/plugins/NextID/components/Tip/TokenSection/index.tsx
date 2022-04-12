@@ -41,6 +41,7 @@ export const TokenSection: FC = () => {
             token={token}
             amount={amount}
             maxAmount={maxAmount}
+            maxAmountSignificant={6}
             onAmountChange={setAmount}
             balance={tokenBalance}
             InputProps={{

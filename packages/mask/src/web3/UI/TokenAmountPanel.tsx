@@ -50,6 +50,7 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     amount: string
     maxAmount?: string
     maxAmountShares?: number
+    maxAmountSignificant?: number
     balance: string
     disableToken?: boolean
     disableBalance?: boolean
@@ -67,10 +68,11 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const {
         amount,
         maxAmount,
+        maxAmountShares = 1,
+        maxAmountSignificant,
         balance,
         token,
         onAmountChange,
-        maxAmountShares = 1,
         label,
         disableToken = false,
         disableBalance = false,
@@ -165,13 +167,11 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     color="primary"
                                     variant="outlined"
                                     onClick={() => {
+                                        const amount = new BigNumber(maxAmount ?? balance)
+                                            .dividedBy(maxAmountShares)
+                                            .decimalPlaces(0, 1)
                                         onAmountChange(
-                                            Utils?.formatBalance?.(
-                                                new BigNumber(maxAmount ?? balance)
-                                                    .dividedBy(maxAmountShares)
-                                                    .decimalPlaces(0, 1),
-                                                token.decimals,
-                                            ) ?? '0',
+                                            Utils?.formatBalance?.(amount, token.decimals, maxAmountSignificant) ?? '0',
                                         )
                                     }}
                                     {...MaxChipProps}
