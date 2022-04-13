@@ -10,6 +10,7 @@
     }
   },
   "dependencies": {
+    "@dimensiondev/secp256k1-webcrypto": "1.0.0-20220412114204-be816df",
     "@dimensiondev/stego-js": "0.11.1-20201027083223-8ab41be",
     "@masknet/shared-base": "workspace:*",
     "@masknet/typed-message": "workspace:*",

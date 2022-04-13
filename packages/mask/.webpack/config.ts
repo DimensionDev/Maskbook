@@ -15,6 +15,7 @@ import { isAbsolute, join } from 'path'
 import { readFileSync } from 'fs'
 import { nonNullable, EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils'
 import { BuildFlags, normalizeBuildFlags, computedBuildFlags } from './flags'
+import ResolveTypeScriptPlugin from 'resolve-typescript-plugin'
 
 import './clean-hmr'
 
@@ -52,6 +53,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             })(),
         },
         resolve: {
+            plugins: [new ResolveTypeScriptPlugin()],
             extensions: ['.js', '.ts', '.tsx'],
             alias: (() => {
                 const alias = {
@@ -286,7 +288,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             addHTMLEntry({
                 chunks: ['background'],
                 filename: 'background.html',
-                secp256k1: true,
                 gun: true,
                 sourceMap: !!sourceMapKind,
                 lockdown,
@@ -313,20 +314,14 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
     }
 }
-interface HTMLOptions extends HTMLPlugin.Options {
-    secp256k1?: boolean
-    sourceMap: boolean
-    gun?: boolean
-    lockdown: boolean
-}
-function addHTMLEntry(options: HTMLOptions) {
+function addHTMLEntry(
+    options: HTMLPlugin.Options & {
+        sourceMap: boolean
+        gun?: boolean
+        lockdown: boolean
+    },
+) {
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
-    if (options.secp256k1) {
-        templateContent = templateContent.replace(
-            `<!-- secp256k1 -->`,
-            '<script src="/polyfill/secp256k1.js"></script>',
-        )
-    }
     if (options.gun) {
         templateContent = templateContent.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
     }
@@ -340,7 +335,7 @@ function addHTMLEntry(options: HTMLOptions) {
         templateContent = templateContent.replace(
             `<!-- lockdown -->`,
             `<script src="/polyfill/lockdown.js"></script>
-            <script src="/lockdown.js"></script>`,
+        <script src="/lockdown.js"></script>`,
         )
     }
     return new HTMLPlugin({

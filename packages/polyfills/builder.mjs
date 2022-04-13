@@ -54,16 +54,6 @@ for (const optionsObj of options) {
 }
 
 {
-    const elliptic = await readFile(fileURLToPath(new URL('./dist/internal_elliptic.js', import.meta.url)), 'utf-8')
-    const liner = await readFile(require.resolve('webcrypto-liner/build/webcrypto-liner.shim.min.mjs'), 'utf-8')
-    await writeFile(
-        fileURLToPath(new URL('./dist/secp256k1.js', import.meta.url)),
-        `${elliptic};
-    ${liner};`,
-    )
-}
-
-{
     const polyfill = fileURLToPath(new URL('./dist/ecmascript.js', import.meta.url))
     const ecmascript = await readFile(polyfill, 'utf-8')
     const regenerator = await readFile(fileURLToPath(new URL('./dist/regenerator.js', import.meta.url)), 'utf-8')
@@ -74,7 +64,6 @@ for (const optionsObj of options) {
 await normalize(new URL('./dist/dom.js', import.meta.url))
 await normalize(new URL('./dist/ecmascript.js', import.meta.url))
 await normalize(new URL('./dist/intl.js', import.meta.url))
-await normalize(new URL('./dist/secp256k1.js', import.meta.url))
 await normalize(new URL('./dist/worker.js', import.meta.url))
 
 await writeFile(versionFilePath, polyfillVersion)

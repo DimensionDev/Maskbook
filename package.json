@@ -38,7 +38,7 @@
     "@mui/material": "5.6.1",
     "@mui/system": "5.6.1",
     "@types/masknet__global-types": "workspace:*",
-    "@types/react": "18.0.1",
+    "@types/react": "18.0.2",
     "@types/react-dom": "^18.0.0",
     "@types/web": "^0.0.61",
     "immer": "9.0.12",
@@ -85,7 +85,7 @@
   "pnpm": {
     "overrides": {
       "@types/node": "^17.0.23",
-      "@types/react": "18.0.1"
+      "@types/react": "18.0.2"
     },
     "onlyBuiltDependencies": []
   }

@@ -1,6 +1,6 @@
 import { useContext } from 'react'
-import { RenderFragmentsContext } from './utils/RenderFragments'
-import type { TypedMessage } from '../../base'
+import { RenderFragmentsContext } from './utils/RenderFragments.js'
+import type { TypedMessage } from '../../base/index.js'
 
 export interface MetadataRenderProps {
     metadata: TypedMessage['meta']
