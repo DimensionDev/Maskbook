@@ -1,7 +1,7 @@
 import { ListItem, ListItemText, Checkbox } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { ChangeEvent, useCallback } from 'react'
+import { MouseEvent, useCallback } from 'react'
 import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
 import type { CheckboxProps } from '@mui/material/Checkbox'
 import type { ListItemTypeMap } from '@mui/material/ListItem'
@@ -28,7 +28,7 @@ export interface LockInListProps {
     search?: string
     checked?: boolean
     disabled?: boolean
-    onChange: (ev: ChangeEvent<HTMLInputElement>, checked: boolean) => void
+    onChange: (ev: MouseEvent<HTMLDivElement>, checked: boolean) => void
     CheckboxProps?: Partial<CheckboxProps>
     ListItemProps?: Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>>
 }
@@ -38,7 +38,7 @@ export function LockInList(props: LockInListProps) {
     const lock = props.item
     const name = lock.lock.name
     const secondary = lock.lock.address
-    const onClick = useCallback((ev) => props.onChange(ev, !props.checked), [props])
+    const onClick = useCallback((ev: MouseEvent<HTMLDivElement>) => props.onChange(ev, !props.checked), [props])
 
     return (
         <ListItem

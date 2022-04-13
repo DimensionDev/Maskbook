@@ -6,12 +6,13 @@ import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages, PluginTraderRPC } from '../../plugins/Trader/messages'
 import { PluginPetMessages } from '../../plugins/Pets/messages'
 import { MaskMessages } from '../../utils/messages'
-import { startPluginDashboard } from '@masknet/plugin-infra'
+import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
 import { createPluginHost } from '../../plugin-infra/host'
 import type { DashboardPluginMessages, DashboardPluginServices } from '@masknet/shared'
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot'
 import { InMemoryStorages, PersistentStorages } from '../../../shared/kv-storage'
 import { status } from '../../setup.ui'
+import { createSubscriptionFromAsync } from '@masknet/shared-base'
 
 const msg: DashboardPluginMessages = {
     Wallet: WalletMessages,
@@ -33,6 +34,12 @@ setPluginServices(rpc)
 setPluginMessages(msg)
 startPluginDashboard(
     createPluginHost(undefined, (pluginID, signal) => {
+        const currentPersonaSub = createSubscriptionFromAsync(
+            Services.Settings.getCurrentPersonaIdentifier,
+            undefined,
+            MaskMessages.events.currentPersonaIdentifier.on,
+            signal,
+        )
         return {
             createKVStorage(type, defaultValues) {
                 if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
@@ -40,6 +47,7 @@ startPluginDashboard(
             },
             personaSign: Services.Identity.signWithPersona,
             walletSign: Services.Ethereum.personalSign,
+            currentPersona: currentPersonaSub,
         }
     }),
 )

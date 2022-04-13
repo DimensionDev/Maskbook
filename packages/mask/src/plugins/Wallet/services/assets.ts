@@ -143,6 +143,7 @@ export async function getAssetsList(
 
 function formatAssetsFromDebank(data: WalletTokenRecord[], network?: NetworkType) {
     return data
+        .filter((x) => getChainIdFromName(x.chain))
         .filter((x) => !network || getChainIdFromName(x.chain) === getChainIdFromNetworkType(network))
         .filter((x) => x.is_verified)
         .map((y): Asset => {

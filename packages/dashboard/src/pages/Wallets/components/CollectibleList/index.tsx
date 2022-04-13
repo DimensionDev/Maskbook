@@ -16,7 +16,7 @@ import {
     useAccount,
     useCurrentWeb3NetworkPluginID,
     NetworkPluginID,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/web3'
 import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()({

@@ -1,4 +1,4 @@
-import { NetworkPluginID, useNetworkDescriptor } from '@masknet/plugin-infra'
+import { NetworkPluginID, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { ChainId, getChainDetailed } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'

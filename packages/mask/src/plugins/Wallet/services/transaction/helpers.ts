@@ -10,22 +10,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 
-export function toReceipt(status: true | string, transaction: Transaction): TransactionReceipt {
-    return {
-        status: ['1', '0x1', true].includes(status),
-        transactionHash: transaction.hash,
-        transactionIndex: transaction.transactionIndex ?? 0,
-        blockHash: transaction.blockHash ?? '',
-        blockNumber: transaction.blockNumber ?? 0,
-        from: transaction.from,
-        to: transaction.to ?? '',
-        cumulativeGasUsed: 0,
-        gasUsed: 0,
-        logs: [],
-        logsBloom: '',
-    }
-}
-
 export function toPayload(transaction: Transaction): JsonRpcPayload {
     return {
         jsonrpc: '2.0',
@@ -56,11 +40,6 @@ export function getPayloadFrom(payload: JsonRpcPayload) {
     return config?.from as string | undefined
 }
 
-export function getPayloadTo(payload: JsonRpcPayload) {
-    const config = getPayloadConfig(payload)
-    return config?.to as string | undefined
-}
-
 export function getPayloadId(payload: JsonRpcPayload) {
     const config = getPayloadConfig(payload)
     if (!config) return ''
@@ -84,22 +63,6 @@ export function getReceiptStatus(receipt: TransactionReceipt | null) {
         return TransactionStatusType.SUCCEED
     }
     return TransactionStatusType.NOT_DEPEND
-}
-
-export function getTransactionHash(state?: TransactionState) {
-    if (!state) return ''
-    switch (state?.type) {
-        case TransactionStateType.HASH:
-            return state.hash
-        case TransactionStateType.RECEIPT:
-            return state.receipt.transactionHash
-        case TransactionStateType.CONFIRMED:
-            return state.receipt.transactionHash
-        case TransactionStateType.FAILED:
-            return state.receipt?.transactionHash ?? ''
-        default:
-            return ''
-    }
 }
 
 export function getTransactionState(receipt: TransactionReceipt): TransactionState {

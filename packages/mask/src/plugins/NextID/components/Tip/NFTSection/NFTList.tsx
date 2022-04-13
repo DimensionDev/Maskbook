@@ -1,4 +1,4 @@
-import { useWeb3State, Web3Plugin } from '@masknet/plugin-infra'
+import { useWeb3State, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { formatNFT_TokenId, isSameAddress, useChainId } from '@masknet/web3-shared-evm'

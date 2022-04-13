@@ -1,8 +1,8 @@
 import { decode } from '@msgpack/msgpack'
 import { Result } from 'ts-results'
-import type { TypedMessage } from '../base'
-import { makeTypedMessageText, makeTypedMessageTuple, makeTypedMessageUnknown } from '../core'
-import { TypedMessageBinaryEncodingTypeEnum } from './type'
+import type { TypedMessage } from '../base.js'
+import { makeTypedMessageText, makeTypedMessageTuple, makeTypedMessageUnknown } from '../core/index.js'
+import { TypedMessageBinaryEncodingTypeEnum } from './type.js'
 
 const HEAD = '[@masknet/typed-message] '
 export function decodeTypedMessageFromDocument(bin: Uint8Array) {

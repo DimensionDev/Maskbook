@@ -1,7 +1,7 @@
 import { memo, Suspense, useEffect, useState } from 'react'
-import type { TypedMessagePromise } from '../../../base'
-import { TypedMessageRenderInline } from '../Entry'
-import { useTransformedValue } from '../utils/TransformContext'
+import type { TypedMessagePromise } from '../../../base/index.js'
+import { TypedMessageRenderInline } from '../Entry.js'
+import { useTransformedValue } from '../utils/TransformContext.js'
 export const TypedMessagePromiseRenderer = memo(function TypedMessagePromiseRenderer(props: TypedMessagePromise) {
     const { promise, alt } = props
     const _ = useState(0)[1]

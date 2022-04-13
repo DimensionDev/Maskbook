@@ -1,6 +1,6 @@
-import type { NonSerializableWithAltTypedMessage } from '../base'
-import { createIsType } from '../utils/internal'
-import { makeTypedMessageText, TypedMessageText } from '../core'
+import type { NonSerializableWithAltTypedMessage } from '../base.js'
+import { createIsType } from '../utils/internal.js'
+import { makeTypedMessageText, TypedMessageText } from '../core/index.js'
 
 /** It represents a single link */
 export interface TypedMessageAnchor extends NonSerializableWithAltTypedMessage {

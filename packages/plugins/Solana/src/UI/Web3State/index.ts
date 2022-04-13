@@ -1,4 +1,4 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { createConstantSubscription, mapSubscription } from '@masknet/shared-base'
 import { toFixed } from '@masknet/web3-shared-base'
 import {

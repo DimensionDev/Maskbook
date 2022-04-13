@@ -13,7 +13,7 @@ import {
     PluginWrapperComponent,
     Plugin,
     PluginWrapperMethods,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/content-script'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     open?: boolean

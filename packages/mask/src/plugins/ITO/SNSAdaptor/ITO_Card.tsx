@@ -1,7 +1,7 @@
 import { ERC20TokenDetailed, formatBalance, TransactionStateType } from '@masknet/web3-shared-evm'
 import { Alert, Box, Skeleton, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -63,9 +63,6 @@ export function ITO_Card(props: ITO_CardProps) {
 
     // #region claim
     const [claimState, claimCallback, resetClaimCallback] = useMaskClaimCallback()
-    const onClaimButtonClick = useCallback(() => {
-        claimCallback()
-    }, [claimCallback])
     // #endregion
 
     // #region transaction dialog
@@ -164,7 +161,7 @@ export function ITO_Card(props: ITO_CardProps) {
                                 Number.parseInt(packet.unlockTime, 10) > Math.round(Date.now() / 1000) ||
                                 packet.claimable === '0'
                             }
-                            onClick={onClaimButtonClick}>
+                            onClick={claimCallback}>
                             {t('plugin_ito_claim')}
                         </ActionButton>
                     </Box>

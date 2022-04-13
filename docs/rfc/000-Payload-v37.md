@@ -123,9 +123,7 @@ The implementation MUST NOT fail if the algorithm is not supported.
 
 This field represents the public key of the author.
 
-The value is in the DER encoding of the SubjectPublicKeyInfo (`spki`) structure from [RFC 5280][rfc5280].
-
-[rfc5280]: https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.7
+The value is in the compressed format of the EC key.
 
 When it is `null`, it represents no this information is available (due to software defeat or user choice to opt-out).
 
@@ -155,7 +153,7 @@ type PublicEncrypted = [kind: EncryptionKind.Public, AES_KEY: AES_KEY, iv: Binar
 
 ###### `AES_KEY`
 
-This field represents the AES key of this payload.
+This field represents the raw AES-256-GCM key (binary) of this payload.
 
 ###### `iv` field
 
@@ -182,7 +180,7 @@ This field represents the iv used to encrypt the message.
 
 ###### `authorEphemeralPublicKey` field
 
-This field is a Map of the DER encoding of the SubjectPublicKeyInfo (`spki`) structure from [RFC5280].
+This field is a Map of the compressed format of the EC key.
 
 The key indicates its format.
 
@@ -199,68 +197,10 @@ The implementation MUST fail when the decryption result is NOT a valid TypedMess
 
 ### `secp256k1`
 
-When `spki` is mentioned in this spec, the implementation MUST be able to recognize the SubjectPublicKeyInfo of the curve [`secp256k1`][secp256k1]. This curve is widely used in the Mask Network.
-
 [secp256k1]: https://en.bitcoin.it/wiki/Secp256k1
-
-Here is an example of the `secp256k1` public key in Binary.
-
-```plaintext
-[
-   48,  86,  48,  16,   6,   7,  42, 134,  72, 206,  61,   2,
-    1,   6,   5,  43, 129,   4,   0,  10,   3,  66,   0,   4,
-  236,  81,   1, 232, 133,  60, 235, 215, 107, 253, 124,  90,
-   12,  21,  14, 139, 178, 143, 232,  52, 240, 119, 105,  91,
-  196, 232,  84,  33, 238,  69,  42, 104, 223, 226,  96, 216,
-  191, 166,  10,  63, 179, 111, 125,  99, 161, 131, 168, 172,
-  181, 245, 168, 182, 150,  19, 182, 240, 202,  62, 202, 219,
-   21, 175, 144, 205
-]
-```
-
-### `AES_KEY`
-
-```typescript
-type AES_KEY = [alg: String, k: String]
-```
-
-This type is used in this specification to represent section 6.4 of a [JsonWebKey][rfc7518] of [AES family key][rfc7518-aes-family-key].
-
-[rfc7518]: https://datatracker.ietf.org/doc/html/rfc7518
-[rfc7518-aes-family-key]: https://datatracker.ietf.org/doc/html/rfc7518#section-6.4
-
-The implementation MUST fail when the `alg` is not recognized as a known algorithm.
-The implementation MUST fail when the `k` is not valid for the given `alg`.
-
-When encrypting with AES key, the implementation MUST NOT use `additionalData`, the `tagLength` MUST be 128.
-
-#### Encoding from JsonWebKey `jwk`
-
-```js
-function fromJsonWebKey(jwk) {
-  return [jwk.alg, jwk.k]
-}
-```
-
-#### Decoding from `key`
-
-```js
-function toJsonWebKey(key) {
-  const k = { ext: true, key_ops: ['encrypt', 'decrypt'], kty: 'oct' }
-  k.alg = key[0]
-  k.k = key[1]
-  return k
-}
-```
 
 ## FAQ
 
 ### Why the version number is negative?
 
 The pre 1.0 version of the Mask Network extension uses `-42` as its initial payload version. The number `42` comes from the book _The Hitchhiker's Guide to the Galaxy_ and the minus sign indicates this is an early version. When a new payload format is drafted, it's a natural idea that the version number should add by 1, therefore it should be `-41`. At the time of this RFC written, the latest payload is version `-38`, therefore this RFC follows the convention to mark the version as `-37`.
-
-### Why not uses the `raw` format defined in the Web Crypto specification for AES key?
-
-According to [the Web Crypto specification][webcrypto], `raw` format is NOT standardized therefore it might have a co-operational problem.
-
-[webcrypto]: https://w3c.github.io/webcrypto/#dfn-CryptoKey-slot-handle
