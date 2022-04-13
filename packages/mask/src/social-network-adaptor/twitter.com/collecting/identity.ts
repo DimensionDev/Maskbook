@@ -57,6 +57,7 @@ function resolveLastRecognizedIdentityMobileInner(
         }
     }
 
+    onLocationChange()
     window.addEventListener('locationchange', onLocationChange)
     cancel.addEventListener('abort', () => window.removeEventListener('locationchange', onLocationChange))
 }
