@@ -5,7 +5,7 @@ import { renderWithPollMetadata, PollMetadataReader } from '../helpers'
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
 import { PollMetaData, PollStatus } from '../types'
-import { usePluginWrapper } from '@masknet/plugin-infra'
+import { usePluginWrapper } from '@masknet/plugin-infra/dom'
 
 interface PollsInPostProps {
     message: TypedMessage

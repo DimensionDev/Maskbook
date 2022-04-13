@@ -1,7 +1,8 @@
 import { Fragment } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { useActivatedPluginsSNSAdaptor, useCurrentWeb3NetworkPluginID, Plugin, useAccount } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
+import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 

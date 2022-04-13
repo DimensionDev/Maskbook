@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useCurrentWeb3NetworkPluginID, useActivatedPlugin, PluginId } from '@masknet/plugin-infra'
+import { PluginId } from '@masknet/plugin-infra'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ChainId, useChainId, useChainIdValid } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

@@ -9,10 +9,16 @@
     "@mui/material": "link:..\\empty",
     "anchorme": "^2.1.2",
     "immer": "^9.0.12",
-    "z-schema": "^5.0.2"
+    "z-schema": "^5.0.3"
   },
   "exports": {
-    ".": "./dist/base/index.js",
-    "./dom": "./dist/dom/index.js"
+    ".": {
+      "webpack": "./base/index.ts",
+      "default": "./dist/base/index.js"
+    },
+    "./dom": {
+      "webpack": "./dom/index.ts",
+      "default": "./dist/dom/index.js"
+    }
   }
 }

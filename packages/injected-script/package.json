@@ -2,8 +2,13 @@
   "name": "@masknet/injected-script",
   "version": "0.0.0",
   "private": true,
-  "main": "./dist/sdk/index.js",
   "types": "./dist/sdk/index.d.ts",
+  "exports": {
+    ".": {
+      "webpack": "./sdk/index.ts",
+      "default": "./dist/sdk/index.js"
+    }
+  },
   "devDependencies": {
     "@rollup/plugin-sucrase": "^4.0.2",
     "rollup": "^2.70.1",
@@ -14,6 +19,6 @@
     "build": "rollup -c"
   },
   "dependencies": {
-    "web3-core-helpers": "1.7.1"
+    "web3-core-helpers": "1.7.3"
   }
 }

@@ -31,7 +31,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
      * @param personaPublicKey
      *
      */
-    async get<T extends {}>(personaPublicKey: string): Promise<Result<T, string>> {
+    async get<T>(personaPublicKey: string): Promise<Result<T, string>> {
         const full = await fetchJSON<{ [MASK_STORAGE_KEY]: T }>(
             urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
         )
@@ -84,7 +84,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
      *
      * We choose [RFC 7396](https://www.rfc-editor.org/rfc/rfc7396) standard for KV modifying.
      */
-    set<T extends {}>(
+    set<T>(
         uuid: string,
         personaPublicKey: string,
         signature: string,
@@ -92,7 +92,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         identity: string,
         createdAt: string,
         patchData: unknown,
-    ): Promise<Result<void, string>> {
+    ): Promise<Result<T, string>> {
         const requestBody = {
             uuid,
             persona: personaPublicKey,

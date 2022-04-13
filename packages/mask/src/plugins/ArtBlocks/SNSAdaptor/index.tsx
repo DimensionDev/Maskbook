@@ -1,4 +1,4 @@
-import { Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra'
+import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { uniq } from 'lodash-unified'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 
