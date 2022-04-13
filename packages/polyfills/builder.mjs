@@ -39,6 +39,7 @@ await builder({
         comment: { size: false, modules: true },
     },
     filename: fileURLToPath(new URL('./dist/ecmascript.js', import.meta.url)),
+    blacklist: undefined,
 })
 
 process.chdir(fileURLToPath(new URL('./dist/', import.meta.url)))
@@ -50,6 +51,14 @@ warnings.flush()
 for (const optionsObj of options) {
     const bundle = await rollup(optionsObj)
     await Promise.all(optionsObj.output.map(bundle.write))
+}
+
+{
+    const polyfill = fileURLToPath(new URL('./dist/ecmascript.js', import.meta.url))
+    const ecmascript = await readFile(polyfill, 'utf-8')
+    const regenerator = await readFile(fileURLToPath(new URL('./dist/regenerator.js', import.meta.url)), 'utf-8')
+
+    await writeFile(polyfill, `${ecmascript};${regenerator};`)
 }
 
 await normalize(new URL('./dist/dom.js', import.meta.url))
@@ -67,7 +76,7 @@ await writeFile(versionFilePath, polyfillVersion)
  * By adding a ";null;" in the end to fix this problem.
  *
  * This function also wraps the polyfill in an IIFE to avoid variable leaking
- * @param {string} fileName
+ * @param {string | URL} fileName
  */
 async function normalize(fileName) {
     const file = await readFile(fileName, 'utf-8')
