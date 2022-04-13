@@ -200,7 +200,7 @@ export function CardDialog(props: CardDialogProps) {
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     tokenBalanceRetry()
                     if (rentState.type === TransactionStateType.HASH || exitState.type === TransactionStateType.HASH)
