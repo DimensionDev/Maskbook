@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { ERC721TokenDetailed, useAccount } from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { AddressNames } from './WalletList'
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { UploadAvatarDialog } from './UploadAvatarDialog'
 import { InjectedDialog } from '@masknet/shared'
 import { downloadUrl } from '../../../utils'
@@ -46,14 +46,14 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const wallets = binds?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
     const account = useAccount()
     const [open_, setOpen_] = useState(false)
-    const [selectedAccount, setSelectedAccount] = useState(account || wallets?.[0]?.identity || '')
+    const [selectedAccount, setSelectedAccount] = useState('')
     const [openEditProfile, setOpenEditProfile] = useState(false)
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed>()
     const [image, setImage] = useState('')
-    const onChange = (address: string) => {
-        console.log(address)
+    const onChange = useCallback((address: string) => {
         setSelectedAccount(address)
-    }
+    }, [])
+
     const onSelect = (token: ERC721TokenDetailed) => {
         setSelectedToken(token)
     }
@@ -69,6 +69,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setOpen_(true)
     }, [])
 
+    useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
     return (
         <>
             <InjectedDialog

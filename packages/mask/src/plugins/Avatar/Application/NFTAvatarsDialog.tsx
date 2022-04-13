@@ -33,7 +33,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
     const [visible, setVisible] = useState(true)
     const [open, setOpen] = useState(false)
 
-    const { loading, isOwner, personaConnectStatus, binds } = usePersonas()
+    const { loading, personaConnectStatus, binds } = usePersonas()
 
     const nextIDConnectStatus = useNextIDConnectStatus()
     useEffect(() => {
