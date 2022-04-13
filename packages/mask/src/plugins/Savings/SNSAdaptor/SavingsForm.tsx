@@ -211,7 +211,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     }, [tab, protocol, account, chainId, web3, tokenAmount])
 
     useEffect(() => {
-        if (tradeState?.type === TransactionStateType.UNKNOWN) return
+        if (tradeState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
             state: tradeState,
@@ -228,18 +228,6 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
         })
     }, [tradeState])
 
-    console.log(
-        [
-            `I just deposit ${inputAmount} ${protocol.bareToken.symbol} with ${ProtocolName[protocol.type]}. ${
-                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                    ? `Follow @${
-                          isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                      } (mask.io) to deposit it.`
-                    : ''
-            }`,
-            '#mask_io',
-        ].join('\n'),
-    )
     const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
 
     const buttonDom = useMemo(() => {
