@@ -50,7 +50,6 @@ function resolveCurrentVisitingIdentityInner(
         const bio = getBioDescription()
         const handle = getFacebookId()
         const homepage = getPersonalHomepage()
-
         const avatar = getAvatar()
 
         ref.value = {

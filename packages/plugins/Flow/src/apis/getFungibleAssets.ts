@@ -1,4 +1,4 @@
-import { Pagination, Web3Plugin, CurrencyType } from '@masknet/plugin-infra'
+import { Pagination, Web3Plugin, CurrencyType } from '@masknet/plugin-infra/web3'
 import { ChainId, createClient, getTokenConstants } from '@masknet/web3-shared-flow'
 import { CoinGecko } from '@masknet/web3-providers'
 import { createFungibleAsset, createFungibleToken } from '../helpers'

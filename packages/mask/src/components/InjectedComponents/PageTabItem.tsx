@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
-import type { Plugin } from '@masknet/plugin-infra'
+import { type Plugin, usePluginI18NField } from '@masknet/plugin-infra/content-script'
 
 const borderShadows = {
     dark: '0px 0px 16px 0px #FFFFFF33',
@@ -35,6 +35,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface PageTabItemProps {
+    pluginID: string
     tab: Plugin.SNSAdaptor.ProfileTab
     selected?: boolean
     onClick?: (tab: Plugin.SNSAdaptor.ProfileTab) => void
@@ -43,6 +44,7 @@ export interface PageTabItemProps {
 export function PageTabItem(props: PageTabItemProps) {
     const { tab, selected, onClick } = props
     const { classes } = useStyles()
+    const translate = usePluginI18NField()
 
     return (
         <Button
@@ -50,7 +52,7 @@ export function PageTabItem(props: PageTabItemProps) {
             variant="outlined"
             size="medium"
             onClick={() => onClick?.(tab)}>
-            {tab.label}
+            {typeof tab.label === 'string' ? tab.label : translate(props.pluginID, tab.label)}
         </Button>
     )
 }

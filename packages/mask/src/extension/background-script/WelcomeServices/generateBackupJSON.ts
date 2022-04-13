@@ -15,7 +15,7 @@ import {
     LegacyWalletRecordToJSONFormat,
     WalletRecordToJSONFormat,
 } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
-import { activatedPluginsWorker } from '@masknet/plugin-infra'
+import { activatedPluginsWorker } from '@masknet/plugin-infra/background-worker'
 import { RelationRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
 import { timeout } from '@dimensiondev/kit'
 

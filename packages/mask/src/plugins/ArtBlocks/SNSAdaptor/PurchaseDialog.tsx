@@ -98,7 +98,7 @@ export function PurchaseDialog(props: ActionBarProps) {
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     const allowedTypes = [TransactionStateType.HASH, TransactionStateType.CONFIRMED]
                     if (!allowedTypes.includes(purchaseState.type)) return

@@ -19,7 +19,7 @@ import {
     recoverWalletFromMnemonic,
     recoverWalletFromPrivateKey,
 } from '../../../plugins/Wallet/services'
-import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra'
+import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra/background-worker'
 import { Result } from 'ts-results'
 import { addWallet } from '../../../plugins/Wallet/services/wallet/database'
 import { patchCreateNewRelation, patchCreateOrUpdateRelation } from '../IdentityService'

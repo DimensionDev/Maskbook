@@ -16,10 +16,10 @@ import {
 import { PopupRoutes } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext'
 import type { RecentTransaction } from '../../../../../../plugins/Wallet/services'
-import type Services from '../../../../../service'
 import { useI18N } from '../../../../../../utils'
 import { ReplaceType } from '../../type'
 import { ActivityListItem } from './ActivityListItem'
+import type { ComputedPayload } from '../../../../../background-script/EthereumService'
 
 const useStyles = makeStyles()({
     list: {
@@ -186,10 +186,7 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
     )
 })
 
-function getToAddress(
-    receipt?: TransactionReceipt | null,
-    computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null,
-) {
+function getToAddress(receipt?: TransactionReceipt | null, computedPayload?: ComputedPayload | null) {
     if (!computedPayload) return undefined
     const type = computedPayload.type
     switch (type) {
@@ -207,7 +204,6 @@ function getToAddress(
         case EthereumRpcType.CONTRACT_DEPLOYMENT:
             return receipt?.to
         case EthereumRpcType.CANCEL:
-        case EthereumRpcType.RETRY:
         default:
             return undefined
     }

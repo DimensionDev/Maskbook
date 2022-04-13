@@ -12,7 +12,7 @@ import type {
 import { values } from 'lodash-unified'
 import { getChainIdFromNetworkType, getZerionConstants, NetworkType } from '@masknet/web3-shared-evm'
 import { formatAssets } from './format'
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 
 const ZERION_API = 'wss://api-v4.zerion.io'
 // cspell:disable-next-line

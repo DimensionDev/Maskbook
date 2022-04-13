@@ -97,7 +97,7 @@ async function requestSend(
                         results.low.suggestedMaxPriorityFeePerGas,
                     ))
             ) {
-                payload_.params[0] = {
+                payload_.params![0] = {
                     ...config,
                     maxFeePerGas: toHex(formatGweiToWei(results.medium.suggestedMaxFeePerGas).toFixed(0)),
                     maxPriorityFeePerGas: toHex(
@@ -108,7 +108,7 @@ async function requestSend(
         } else {
             const results = await WalletRPC.getGasPriceDictFromDeBank(chainId)
             if (results?.data.slow.price && isLessThan((config?.gasPrice as string) ?? 0, results.data.slow.price)) {
-                payload_.params[0] = {
+                payload_.params![0] = {
                     ...config,
                     gasPrice: toHex(results.data.normal.price),
                 }

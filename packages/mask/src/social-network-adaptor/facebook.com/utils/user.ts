@@ -8,6 +8,7 @@ import {
     searchIntroSectionSelector,
     searchNickNameSelector,
     searchNickNameSelectorOnMobile,
+    searchNickNameSelectorOnMobileBig,
     searchUserIdSelector,
     searchUserIdSelectorOnMobile,
 } from './selector'
@@ -16,7 +17,9 @@ import { isMobileFacebook } from './isMobile'
 import { bioDescription, personalHomepage } from '../../../settings/settings'
 
 export const getNickName = () => {
-    const node = isMobileFacebook ? searchNickNameSelectorOnMobile().evaluate() : searchNickNameSelector().evaluate()
+    const node = isMobileFacebook
+        ? searchNickNameSelectorOnMobile().evaluate() || searchNickNameSelectorOnMobileBig().evaluate()
+        : searchNickNameSelector().evaluate()
     if (!node) return ''
 
     return collectNodeText(node)
@@ -28,31 +31,29 @@ export const getAvatar = () => {
         : searchAvatarSelector().evaluate()
     if (!node) return
 
-    const imageURL =
-        (isMobileFacebook
-            ? node.style.background.match(/\(["']?(.*?)["']?\)/)?.[1]
-            : node.getAttribute('xlink:href')) ?? ''
+    const imageURL = (isMobileFacebook ? node.getAttribute('src') : node.getAttribute('xlink:href')) ?? ''
 
     return imageURL.trim()
 }
 
 export const getBioDescription = () => {
-    const intro = searchIntroSectionSelector().evaluate()
     const node = isMobileFacebook ? bioDescriptionSelectorOnMobile().evaluate() : searchBioSelector().evaluate()
-
-    if (intro && node) {
+    if (node) {
         const text = collectNodeText(node)
         bioDescription[EnhanceableSite.Facebook].value = text
-    } else if (intro) {
-        bioDescription[EnhanceableSite.Facebook].value = ''
+    } else {
+        const intro = searchIntroSectionSelector().evaluate()
+        if (!isMobileFacebook && !intro) {
+            bioDescription[EnhanceableSite.Facebook].value = ''
+        }
     }
 
     return bioDescription[EnhanceableSite.Facebook].value
 }
 
 export const getFacebookId = () => {
-    const node = isMobileFacebook ? searchUserIdSelectorOnMobile().evaluate() : searchUserIdSelector().evaluate()
-
+    if (isMobileFacebook) return searchUserIdSelectorOnMobile()
+    const node = searchUserIdSelector().evaluate()
     if (!node) return ''
     const url = new URL(node.href)
 

@@ -1,4 +1,5 @@
-import { Plugin, useBalance, useBlockNumber } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import { useBalance, useBlockNumber } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, ListItemText, Typography } from '@mui/material'
 

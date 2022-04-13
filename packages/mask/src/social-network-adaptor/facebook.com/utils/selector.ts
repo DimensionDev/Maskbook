@@ -22,18 +22,24 @@ export const searchAvatarSelector: () => LiveSelector<HTMLImageElement, true> = 
 export const searchNickNameSelector: () => LiveSelector<HTMLHeadingElement, true> = () =>
     querySelector<HTMLHeadingElement>('span[dir="auto"] div h1')
 
-export const searchNickNameSelectorOnMobile: () => LiveSelector<E, true> = () => querySelector<E>('#cover-name-root h3')
-
+// export const searchNickNameSelectorOnMobile: () => LiveSelector<E, true> = () => querySelector<E>('#cover-name-root h3')
+export const searchNickNameSelectorOnMobile: () => LiveSelector<E, true> = () => querySelector<E>('#screen-root h1')
+export const searchNickNameSelectorOnMobileBig: () => LiveSelector<E, true> = () =>
+    querySelector<E>('#rootcontainer h3')
 export const bioDescriptionSelector = () =>
     querySelector('span[dir="auto"] div h1').closest(7).querySelector<HTMLSpanElement>('span[dir="auto"] > span')
 
-export const bioDescriptionSelectorOnMobile: () => LiveSelector<HTMLDivElement, true> = () => querySelector('#bio div')
+// export const bioDescriptionSelectorOnMobile: () => LiveSelector<HTMLDivElement, true> = () => querySelector('#bio div')
+export const bioDescriptionSelectorOnMobile: () => LiveSelector<HTMLDivElement, true> = () =>
+    querySelector('#screen-root > div > :nth-child(2) > :nth-child(3) > :nth-child(3) > :nth-child(2) div[dir="auto"]')
 
 export const searchUserIdSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
     querySelector<HTMLAnchorElement>('div[data-pagelet="ProfileTabs"] a[role="tab"]')
 
-export const searchUserIdSelectorOnMobile: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('#tlFeed div[data-sigil="scroll-area"] a:last-child')
+export const searchUserIdSelectorOnMobile = () => {
+    const matched = location.pathname.match(/\d+/)
+    return matched?.[0] ?? ''
+}
 
 // #endregion facebook nft avatar
 
@@ -47,9 +53,11 @@ export const searchFacebookAvatarMobileListSelector = () => querySelector('#nuxC
 export const searchFacebookAvatarSelector = () =>
     querySelector('[role="main"] [role="button"] svg[role="img"],[role="main"] [role="link"] svg[role="img"]')
 
-export const searchFacebookAvatarOnMobileSelector = () =>
-    querySelector('[data-sigil="timeline-cover"] i[aria-label$="picture"]')
+// export const searchFacebookAvatarOnMobileSelector = () =>
+//    querySelector('[data-sigil="timeline-cover"] i[aria-label$="picture"]')
 
+export const searchFacebookAvatarOnMobileSelector = () =>
+    querySelector('#screen-root > div > :nth-child(2) > :nth-child(3) > :nth-child(8) > :nth-child(2) img')
 export const searchFaceBookPostAvatarSelector = () =>
     new LiveSelector<SVGElement, false>().querySelectorAll<SVGElement>(
         '[type="nested/pressable"] > a > div > svg, ul div[role="article"] a > div > svg[role="none"]',
@@ -115,7 +123,7 @@ export const profileSectionSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-pagelet="ProfileAppSection_0"], [data-pagelet="ProfileTimeline"]').querySelector('[style]')
 
 export const searchIntroSectionSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileTilesFeed_0"]')
+    querySelector<E>('[data-pagelet="ProfileAppSection_0"]')
 
 export const searchBioSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
     querySelector<HTMLSpanElement>(
@@ -125,4 +133,4 @@ export const searchBioSelector: () => LiveSelector<HTMLSpanElement, true> = () =
 export const searchResultHeadingSelector = () => querySelector('[role="article"]')
 
 export const searchHomepageSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
-    querySelector<HTMLSpanElement>('[data-pagelet="ProfileTilesFeed_0"] ul a span[dir="auto"]')
+    querySelector<HTMLSpanElement>('[data-pagelet="ProfileAppSection_0"] ul a')

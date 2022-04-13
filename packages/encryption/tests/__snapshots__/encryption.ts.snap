@@ -18,8 +18,6 @@ IdentifierMap {
   "constructorName": Array [
     "ProfileIdentifier",
   ],
-  Symbol(immer-draftable): true,
-  Symbol(Symbol.toStringTag): undefined,
 }
 `;
 
@@ -102,8 +100,6 @@ Object {
     "constructorName": Array [
       "ProfileIdentifier",
     ],
-    Symbol(immer-draftable): true,
-    Symbol(Symbol.toStringTag): undefined,
   },
   "identifier": PostIVIdentifier {
     "network": "localhost",
@@ -293,8 +289,6 @@ IdentifierMap {
   "constructorName": Array [
     "ProfileIdentifier",
   ],
-  Symbol(immer-draftable): true,
-  Symbol(Symbol.toStringTag): undefined,
 }
 `;
 
@@ -374,8 +368,6 @@ Object {
     "constructorName": Array [
       "ProfileIdentifier",
     ],
-    Symbol(immer-draftable): true,
-    Symbol(Symbol.toStringTag): undefined,
   },
   "identifier": PostIVIdentifier {
     "network": "localhost",
