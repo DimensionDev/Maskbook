@@ -10,6 +10,7 @@ const Home = lazy(() => import('./Home'))
 const Logout = lazy(() => import('./Logout'))
 const PersonaRename = lazy(() => import('./Rename'))
 const PersonaSignRequest = lazy(() => import('./PersonaSignRequest'))
+const VerifyWallet = lazy(() => import('../Wallet/VerifyWallet'))
 const SelectPersona = lazy(() => import('./SelectPersona'))
 const Accounts = lazy(() => import('./Accounts'))
 const AccountDetail = lazy(() => import('./AccountDetail'))
@@ -29,6 +30,7 @@ const Persona = memo(() => {
                     <Route path={r(PopupRoutes.SocialAccounts)} element={<Accounts />} />
                     <Route path={r(PopupRoutes.AccountDetail)} element={<AccountDetail />} />
                     <Route path={r(PopupRoutes.ConnectedWallets)} element={<ConnectedWallets />} />
+                    <Route path={r(PopupRoutes.VerifyWallet)} element={<VerifyWallet />} />
                     <Route path="*" element={<Home />} />
                 </Routes>
             </PersonaContext.Provider>

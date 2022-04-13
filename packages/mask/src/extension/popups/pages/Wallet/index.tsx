@@ -33,6 +33,8 @@ const SetPaymentPassword = lazy(() => import('./SetPaymentPassword'))
 const WalletRecovery = lazy(() => import('./WalletRecovery'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction'))
+const VerifyWallet = lazy(() => import('./VerifyWallet'))
+const ConnectWallet = lazy(() => import('./ConnectWallet'))
 
 const r = relativeRouteOf(PopupRoutes.Wallet)
 export default function Wallet() {
@@ -118,6 +120,7 @@ export default function Wallet() {
                         <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
                         <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
                         <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
+                        <Route path={r(PopupRoutes.ConnectWallet)} element={<ConnectWallet />} />
                     </Routes>
                 )}
             </WalletContext.Provider>
