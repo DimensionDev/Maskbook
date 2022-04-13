@@ -16,8 +16,8 @@ export function ThirdPartyRequestPermission(props: ThirdPartyRequestPermissionPr
                 values={{ pluginName: props.pluginName, pluginURL: props.pluginURL }}
             />
             <ul>
-                {props.permissions.map((x, key) => (
-                    <li key={key}>{ThirdPartyPluginPermission[x]}</li>
+                {props.permissions.map((permission, key) => (
+                    <li key={key}>{ThirdPartyPluginPermission[permission]}</li>
                 ))}
             </ul>
             <button onClick={() => window.close()}>{t('cancel')}</button>
