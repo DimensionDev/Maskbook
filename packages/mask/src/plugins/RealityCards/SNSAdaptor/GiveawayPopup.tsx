@@ -1,8 +1,8 @@
 import { makeStyles } from '@masknet/theme'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { DialogContent, Typography } from '@mui/material'
 import type { Market } from '../types'
+import { InjectedDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

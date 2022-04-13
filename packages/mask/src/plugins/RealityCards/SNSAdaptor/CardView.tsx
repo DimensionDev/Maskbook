@@ -2,7 +2,7 @@ import { Box, Card, CardContent, CardMedia, CardActionArea, Typography, Grid, To
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { useState } from 'react'
+import { useState , useMemo } from 'react'
 import { Card as RCCard, Market, MarketState } from '../types'
 import { CardDialog } from './CardDialog'
 import { formatBalance, formatEthereumAddress, formatPercentage, isSameAddress } from '@masknet/web3-shared-evm'
@@ -57,7 +57,14 @@ export function CardView(props: CardViewProps) {
     const [cardDialogOpen, setCardDialogOpen] = useState(false)
     const isWinner = isSameAddress(card.id, market.winningOutcome?.id ?? '')
     const token = useBaseToken()
-    const priceHourly = new BigNumber(card.price).dividedBy(24).toFixed(SIGNIFICANT_DIGITS)
+
+    const priceHourly = useMemo(() => {
+        if (market.state === MarketState.Open) {
+            return new BigNumber(card.price).dividedBy(24).toFixed(SIGNIFICANT_DIGITS)
+        }
+        return
+    }, [market.state, card.price])
+
     const share = new BigNumber(card.price).dividedBy(market.sumOfAllPrices).toFixed(SIGNIFICANT_DIGITS)
     const ownerAddress = market.state === MarketState.Open ? card.originalNft.owner.id : card.longestOwner.id
 

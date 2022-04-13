@@ -9,7 +9,6 @@ import { isZero } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -23,6 +22,7 @@ import { DialogContent, Typography } from '@mui/material'
 import { useDepositCallback } from '../hooks/useDepositCallback'
 import { useBaseToken } from '../hooks/useBaseToken'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     form: {
