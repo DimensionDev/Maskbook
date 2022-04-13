@@ -1,5 +1,4 @@
-import { ChainId, EthereumTokenType, useAccount } from '@masknet/web3-shared-evm'
-import { useNativeTokenWrapperContract } from '@masknet/web3-shared-evm/contracts/useWrappedEtherContract'
+import { ChainId, EthereumTokenType, useAccount, useNativeTokenWrapperContract } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
 import type { TradeComputed } from '../types'
 import type { NativeTokenWrapper } from './native/useTradeComputed'

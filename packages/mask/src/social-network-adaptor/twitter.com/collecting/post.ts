@@ -2,7 +2,7 @@ import { postsContentSelector, postsImageSelector, timelinePostContentSelector }
 import { IntervalWatcher, DOMProxy, DOMProxyEvents } from '@dimensiondev/holoflows-kit'
 import type { EventListener } from '@servie/events'
 import { creator, globalUIState, SocialNetworkUI as Next } from '../../../social-network'
-import type { PostInfo } from '../../../social-network/PostInfo'
+import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { postIdParser, postParser, postImagesParser, postContentMessageParser } from '../utils/fetch'
 import { memoize, noop } from 'lodash-unified'
 import Services from '../../../extension/service'

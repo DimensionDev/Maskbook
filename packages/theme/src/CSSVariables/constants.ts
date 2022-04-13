@@ -1,6 +1,3 @@
-import { PaletteMode, Theme, useTheme } from '@mui/material'
-import { kebabCase } from 'lodash-unified'
-import parseColor from 'tinycolor2'
 export const LightColor = {
     primary: '#1c68f3',
     primaryContrastText: '#ffffff',
@@ -149,81 +146,4 @@ export const DarkColor: typeof LightColor = {
     warningBackground: 'rgba(255, 185, 21, 0.1)',
     cyberconnectPrimary: '#ffffff',
 }
-
 export type Color = typeof LightColor
-
-export function getMaskColor(theme: Theme) {
-    if (theme.palette.mode === 'dark') return DarkColor
-    return LightColor
-}
-export function useMaskColor() {
-    return getMaskColor(useTheme())
-}
-
-export function CSSVariableInjectorCSS(scheme: PaletteMode) {
-    const ns: Record<string, string> = scheme === 'light' ? LightColor : DarkColor
-    const result: Record<string, string> = {}
-    for (const key in ns) {
-        // --mask-name: val;
-        result[`--mask-${kebabCase(key)}`] = ns[key]
-        result[`--mask-${kebabCase(key)}-fragment`] = getRGBFragment(ns, key)
-    }
-    return { ':root, :host': result }
-}
-export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
-    const ns: Record<string, string> = scheme === 'light' ? LightColor : DarkColor
-    if (node === document.body) {
-        const id = '#mask-style-var'
-        if (!document.getElementById(id)) {
-            const style = document.createElement('style')
-            style.id = id
-            document.head.appendChild(style)
-        }
-        applyMaskColorVars(document.getElementById(id)!, scheme)
-        return
-    } else if (node instanceof HTMLStyleElement) {
-        let rule = ':root, :host {\n'
-        for (const key in ns) {
-            // --mask-name: val;
-            rule += `    --mask-${kebabCase(key)}: ${ns[key]};\n`
-            rule += `    --mask-${kebabCase(key)}-fragment: ${getRGBFragment(ns, key)};\n`
-        }
-        node.textContent = rule + '}'
-    } else {
-        for (const key in ns) {
-            node.style.setProperty('--mask-' + kebabCase(key), ns[key])
-            node.style.setProperty('--mask-' + kebabCase(key) + '-fragment', getRGBFragment(ns, key))
-        }
-    }
-}
-// Fragment are in the form of "1, 2, 3"
-// which is used for rgba(var(--x), alpha)
-function getRGBFragment(x: Record<string, string>, key: string) {
-    const { r, g, b } = parseColor(x[key]).toRgb()
-    return [r, g, b].join(', ')
-}
-
-export type MaskCSSVariableColor = string & {
-    /** Append alpha channel to the original color */
-    alpha(alpha: number): string
-} & ((defaultValue?: string) => string)
-
-export const MaskColorVar: Record<keyof typeof LightColor, MaskCSSVariableColor> = new Proxy(
-    { __proto__: null } as any,
-    {
-        get(target, key) {
-            if (target[key]) return target[key]
-            if (typeof key !== 'string') throw new TypeError()
-            const cssVar = kebabCase(key)
-            target[key] = (defaultValue?: string) => {
-                // it might be an object when used in styled components.
-                if (typeof defaultValue !== 'string') defaultValue = undefined
-                const x = `var(--mask-${cssVar}${defaultValue ? ', ' + defaultValue : ''})`
-                return x
-            }
-            target[key][Symbol.toPrimitive] = () => `var(--mask-${cssVar})`
-            target[key].alpha = (alpha: number) => `rgba(var(--mask-${cssVar}-fragment), ${alpha})`
-            return target[key]
-        },
-    },
-)

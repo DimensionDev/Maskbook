@@ -5,7 +5,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@mui/material'
 import { FormattedBalance } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { useWeb3State } from '@masknet/plugin-infra'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { useI18N } from '../../utils'
 

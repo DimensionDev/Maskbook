@@ -9,10 +9,6 @@ jobs:
       packages: write
       contents: read
     steps:
-      - name: Get cache date
-        id: get-date
-        run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
-        shell: bash
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -21,12 +17,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           cache: pnpm
-      - name: Restore cache
-        uses: actions/cache@v2
-        with:
-          path: packages/mask/node_modules/.cache/
-          key: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
-          restore-keys: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}
       - uses: DimensionDev/github-token-action@latest
         with:
           registry: true

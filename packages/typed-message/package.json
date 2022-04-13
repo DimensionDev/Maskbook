@@ -1,18 +1,23 @@
 {
   "name": "@masknet/typed-message",
-  "version": "0.0.0",
   "private": true,
   "type": "module",
-  "scripts": {},
+  "exports": {
+    ".": {
+      "types": "./dist/base/index.d.ts",
+      "webpack": "./base/index.ts",
+      "default": "./dist/base/index.js"
+    },
+    "./dom": {
+      "types": "./dist/dom/index.d.ts",
+      "webpack": "./dom/index.ts",
+      "default": "./dist/dom/index.js"
+    }
+  },
   "dependencies": {
     "@msgpack/msgpack": "^2.7.2",
     "@mui/material": "link:..\\empty",
     "anchorme": "^2.1.2",
-    "immer": "^9.0.12",
-    "z-schema": "^5.0.2"
-  },
-  "exports": {
-    ".": "./dist/base/index.js",
-    "./dom": "./dist/dom/index.js"
+    "z-schema": "^5.0.3"
   }
 }

@@ -1,12 +1,12 @@
-export * from './metadata'
-export * from './extract'
+export * from './metadata.js'
+export * from './extract.js'
 
 import type {
     TypedMessage,
     SerializableTypedMessages,
     SerializableTypedMessage,
     NonSerializableWithAltTypedMessage,
-} from '../base'
+} from '../base.js'
 import { isEqual } from 'lodash-unified'
 
 export function isNonSerializableTypedMessageWithAlt(x: TypedMessage): x is NonSerializableWithAltTypedMessage {

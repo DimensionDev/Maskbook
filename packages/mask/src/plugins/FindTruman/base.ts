@@ -1,4 +1,5 @@
-import { Plugin, NetworkPluginID } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { FIND_TRUMAN_PLUGIN_ID, FIND_TRUMAN_PLUGIN_NAME } from './constants'
 

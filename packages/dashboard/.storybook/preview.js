@@ -6,6 +6,7 @@ import { addSharedI18N, I18NextProviderHMR } from '@masknet/shared'
 // import { withMatrix } from 'storybook-addon-matrix'
 import { addDashboardI18N } from '../src/locales/languages'
 import { i18NextInstance } from '@masknet/shared-base'
+import { DisableShadowRootContext } from '@masknet/theme'
 
 addDashboardI18N(i18NextInstance)
 addSharedI18N(i18NextInstance)
@@ -21,7 +22,9 @@ export const decorators = [
                 <ThemeProvider theme={MaskDarkTheme}>
                     <I18NextProviderHMR i18n={i18NextInstance}>
                         <CustomSnackbarProvider>
-                            <Story />
+                            <DisableShadowRootContext.Provider value>
+                                <Story />
+                            </DisableShadowRootContext.Provider>
                         </CustomSnackbarProvider>
                     </I18NextProviderHMR>
                 </ThemeProvider>

@@ -1,4 +1,4 @@
-import type { PostInfo } from '../../../social-network/PostInfo'
+import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { MaskMessages } from '../../../utils/messages'
 import { delay } from '@dimensiondev/kit'
 import { selectElementContents } from '../../../utils/utils'

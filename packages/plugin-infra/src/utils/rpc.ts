@@ -2,11 +2,7 @@ import { Environment, isEnvironment, MessageTarget, UnboundedRegistry } from '@d
 import { AsyncCall, AsyncCallLogLevel, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { serializer, getLocalImplementation, getLocalImplementationExotic } from '@masknet/shared-base'
 const log: AsyncCallLogLevel = {
-    beCalled: true,
-    localError: true,
-    remoteError: true,
     requestReplay: true,
-    sendLocalStack: true,
     type: 'pretty',
 }
 export function createPluginRPC<T extends Record<string, (...args: any) => Promise<any>>>(
