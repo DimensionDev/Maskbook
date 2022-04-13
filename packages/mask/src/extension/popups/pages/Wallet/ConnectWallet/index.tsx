@@ -4,6 +4,8 @@ import { memo } from 'react'
 import { supportedWallets } from './constants'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
+import { useTitle } from '../../../hook/useTitle'
+import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -38,11 +40,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 const ConnectWalletPage = memo(() => {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const clickItem = () => {
         navigate(PopupRoutes.VerifyWallet)
     }
+
+    useTitle(t('plugin_wallet_on_connect'))
+
     return (
         <div className={classes.container}>
             {supportedWallets.map((item, idx) => {

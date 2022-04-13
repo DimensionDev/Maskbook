@@ -890,6 +890,7 @@
     "plugin_pets_dialog_success": "Your Non-Fungible Friend has been set up successfully",
     "plugin_pets_dialog_fail": "Setting failed, please try later",
     "plugin_pets_dialog_check_title": "Show NFT friends on the profile page.",
+    "popups_add_wallet": "Add Wallet",
     "popups_profile_photo": "Profile Photo",
     "popups_public_key": "Public Key",
     "popups_name": "Name",

@@ -6,6 +6,8 @@ import { memo, useState } from 'react'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps'
 import Services from '../../../../service'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
+import { useTitle } from '../../../hook/useTitle'
+import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -17,6 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 const VerifyWallet = memo(() => {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const { currentPersona } = PersonaContext.useContainer()
     const wallet = useWallet()
@@ -24,6 +27,9 @@ const VerifyWallet = memo(() => {
     const [step, setStep] = useState(SignSteps.Ready)
     const [signature, setSignature] = useState<string>()
     const [payload, setPayload] = useState<NextIDPayload>()
+
+    useTitle(t('popups_add_wallet'))
+
     if (!currentPersona || !wallet) return null
     const personaSilentSign = async () => {
         try {

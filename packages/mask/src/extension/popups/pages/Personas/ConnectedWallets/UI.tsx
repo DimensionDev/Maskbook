@@ -78,12 +78,13 @@ interface ConnectedWalletsUIProps {
     wallets: ConnectedWalletInfo[]
     chainId: ChainId
     onRelease: (wallet?: ConnectedWalletInfo) => Promise<void>
+    onAddVerifyWallet: () => void
     releaseLoading: boolean
     personaName?: string
 }
 
 export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
-    ({ wallets, chainId, onRelease, releaseLoading, personaName }) => {
+    ({ wallets, chainId, onRelease, releaseLoading, personaName, onAddVerifyWallet }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
         const [open, setOpen] = useState(false)
@@ -138,7 +139,9 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                     open={open}
                 />
 
-                <Button className={classes.button}>{t('popups_add_and_verify_wallet')}</Button>
+                <Button className={classes.button} onClick={onAddVerifyWallet}>
+                    {t('popups_add_and_verify_wallet')}
+                </Button>
             </div>
         )
     },
