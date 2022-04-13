@@ -1,6 +1,6 @@
-import type { TypedMessage } from '../base'
-import type { TransformationContext } from './context'
-import type { Transformer } from './index'
+import type { TypedMessage } from '../base.js'
+import type { TransformationContext } from './context.js'
+import type { Transformer } from './index.js'
 export interface ComposedTransformers {
     subscription: {
         getCurrentValue: () => Transformer
