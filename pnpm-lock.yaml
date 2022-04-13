@@ -465,7 +465,7 @@ importers:
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       '@metamask/eth-sig-util': 4.0.0
       '@msgpack/msgpack': 2.7.2
-      '@mui/x-data-grid': 5.5.1_47208d6dd666ae0aad8d3b61cac01cb1
+      '@mui/x-data-grid': 5.5.1_abb7793718a9f4c92a8bcd741316e15b
       '@servie/events': 3.0.0
       '@sinonjs/text-encoding': 0.7.1
       '@snapshot-labs/snapshot.js': 0.3.31
@@ -5752,8 +5752,7 @@ packages:
       react-is: 17.0.2
     dev: false
 
-<<<<<<< HEAD
-  /@mui/x-data-grid/5.5.1_47208d6dd666ae0aad8d3b61cac01cb1:
+  /@mui/x-data-grid/5.5.1_abb7793718a9f4c92a8bcd741316e15b:
     resolution: {integrity: sha512-0Lf7P2wr1IoK//4KLsIIps++G6XGMdlxhGxNprM4DhQZRfccX97E3o+t15W4f4YP8IdTKmdD2TjM31xcGF+HxQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -5761,14 +5760,15 @@ packages:
       '@mui/system': ^5.2.8
       react: ^17.0.2
     dependencies:
-      '@mui/material': 5.5.3_f7ae1fdbce363e42a9da79146a74d3ad
-      '@mui/system': 5.5.3_b000a94f0ef273a9b328edd628110a5b
-      '@mui/utils': 5.5.3_react@18.0.0
+      '@mui/material': 5.6.1_b73e98d62f0f3dc6d8f6fd5b5b22b4f0
+      '@mui/system': 5.6.1_a8e4c1d5d6504c83bcced91ba3634c66
+      '@mui/utils': 5.6.1_react@18.0.0
       clsx: 1.1.1
       prop-types: 15.8.1
       react: 18.0.0
       reselect: 4.1.5
-=======
+    dev: false
+
   /@mui/x-date-pickers/5.0.0-alpha.0_e844a6e16fd7d7a28f33fa21f9f2d7df:
     resolution: {integrity: sha512-JTzTaNSWbxNi8KDUJjHCH6im0YlIEv88gPoKhGm7s6xCGT1q6FtMp/oQ40nhfwrJ73nkM5G1JXRIzI/yfsHXQQ==}
     engines: {node: '>=12.0.0'}
@@ -5804,7 +5804,6 @@ packages:
       rifm: 0.12.1_react@18.0.0
     transitivePeerDependencies:
       - react-dom
->>>>>>> b651a4c23496e14e29895f39dccd16e5ea1dc62b
     dev: false
 
   /@multiformats/base-x/4.0.1:
