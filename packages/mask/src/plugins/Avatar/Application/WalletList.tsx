@@ -1,4 +1,3 @@
-import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { ImageIcon, ReversedAddress } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu, useStylesExtends } from '@masknet/theme'
 import { formatEthereumAddress, isSameAddress, useChainId } from '@masknet/web3-shared-evm'
@@ -14,6 +13,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { NFTWalletConnect } from './WalletConnect'
 import { BindingProof, PopupRoutes } from '@masknet/shared-base'
 import Services from '../../../extension/service'
+import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()(() => ({
     root: {},

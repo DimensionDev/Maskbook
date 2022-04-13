@@ -33,11 +33,8 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
         if (!editor) return
         editor.getImage().toBlob(async (blob) => {
             if (!blob) return
-            const data = await Twitter.uploadUserAvatar('WeipingZhu2', blob)
+            const data = await Twitter.uploadUserAvatar(identity.identifier.userId, blob)
             const avatarId = getAvatarId(data?.imageUrl ?? '')
-            console.log('----------------------------------')
-            console.log(data)
-            console.log(avatarId)
 
             const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
                 account,
@@ -60,7 +57,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             CrossIsolationMessages.events.requestComposition.sendToLocal({ open: false, reason: 'timeline' })
         })
         onClose()
-    }, [editor])
+    }, [editor, identity])
     return (
         <InjectedDialog open={open} title="Edit Profile" onClose={onClose}>
             <DialogContent>
