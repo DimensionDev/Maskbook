@@ -1,16 +1,16 @@
+import type { BindingProof } from '@masknet/shared-base'
 import { memo } from 'react'
 import { WalletCom } from '../components/WalletCom'
 
-const WalletsPage = memo(() => {
-    const boundWalletsMap = [
-        { name: '0xbilly', address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isDefault: false },
-        { name: '0xbilly', address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isDefault: false },
-        { name: '0xbilly', address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isDefault: false },
-    ]
+interface WalletsPageProp {
+    wallets: BindingProof[]
+}
+
+const WalletsPage = memo(({ wallets }: WalletsPageProp) => {
     return (
         <>
-            {boundWalletsMap.map((x, idx) => {
-                return <WalletCom canDelete key={idx} name={x.name} address={x.address} isDefault={x.isDefault} />
+            {wallets.map((x, idx) => {
+                return <WalletCom canDelete key={idx} name="sssss" address={x.identity} isDefault />
             })}
         </>
     )

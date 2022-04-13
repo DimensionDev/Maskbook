@@ -10,9 +10,9 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import SettingView from './bodyViews/Setting'
 import WalletsView from './bodyViews/Wallets'
 import AddWalletView from './bodyViews/AddWallet'
-import Empty from './components/empty'
 import { useProvedWallets } from '../hooks/useProvedWallets'
 import { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
+import Empty from './components/empty'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -93,11 +93,12 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     </div>
                 )}
 
-                {(bodyView === BodyViewSteps.main && walletsList.length && (
+                {bodyView === BodyViewSteps.main && walletsList.length > 0 ? (
                     <div>
                         {supportedNetworks.map((x, idx) => {
                             return (
                                 <WalletsByNetwork
+                                    wallets={walletsList}
                                     toSetting={() => setBodyView(BodyViewSteps.setting)}
                                     key={idx}
                                     network={x}
@@ -105,9 +106,12 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                             )
                         })}
                     </div>
-                )) || <Empty />}
-                {bodyView === BodyViewSteps.setting && <SettingView />}
-                {bodyView === BodyViewSteps.wallets && <WalletsView />}
+                ) : bodyView === BodyViewSteps.main && walletsList.length === 0 ? (
+                    <Empty />
+                ) : null}
+
+                {bodyView === BodyViewSteps.setting && <SettingView wallets={walletsList} />}
+                {bodyView === BodyViewSteps.wallets && <WalletsView wallets={walletsList} />}
                 {bodyView === BodyViewSteps.addWallet && <AddWalletView />}
 
                 {![BodyViewSteps.addWallet, BodyViewSteps.wallets].includes(bodyView) && walletsList.length > 0 && (

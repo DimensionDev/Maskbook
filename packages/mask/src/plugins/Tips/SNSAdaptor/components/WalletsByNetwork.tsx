@@ -2,6 +2,7 @@ import { getMaskColor, makeStyles } from '@masknet/theme'
 import { SettingsIcon } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { WalletCom } from './WalletCom'
+import type { BindingProof } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -41,15 +42,12 @@ const useStyles = makeStyles()((theme) => ({
 interface WalletsByNetworkProps {
     network: any
     toSetting: any
+    wallets: BindingProof[]
 }
 
-export function WalletsByNetwork({ network, toSetting }: WalletsByNetworkProps) {
+export function WalletsByNetwork({ wallets, network, toSetting }: WalletsByNetworkProps) {
     const { classes } = useStyles()
-    const wallets = [
-        { name: '0xbilly', address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isDefault: true },
-        { name: '0xbilly', address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isDefault: false },
-        { name: '0xbilly', address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isDefault: false },
-    ]
+
     return (
         <div className={classes.container}>
             <div className={classes.topbar}>
@@ -63,7 +61,7 @@ export function WalletsByNetwork({ network, toSetting }: WalletsByNetworkProps) 
                 <div className={classes.content}>
                     {(wallets.length &&
                         wallets.map((x, idx) => {
-                            return <WalletCom key={idx} name={x.name} address={x.address} isDefault={x.isDefault} />
+                            return <WalletCom key={idx} name="wallet" address={x.identity} isDefault />
                         })) || <Typography className={classes.empty}>No connected or verified wallets.</Typography>}
                 </div>
             )}

@@ -1,3 +1,4 @@
+import type { BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo } from 'react'
@@ -23,13 +24,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const SettingPage = memo(() => {
+interface SettingPageProp {
+    wallets: BindingProof[]
+}
+
+const SettingPage = memo(({ wallets }: SettingPageProp) => {
     const { classes } = useStyles()
-    const mapList = [
-        { type: 0, address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isOpen: true },
-        { type: 0, address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isOpen: false },
-        { type: 0, address: '0x2EC8EBB0a8eAa40e4Ce620CF9f84A96dF68D4669', isOpen: false },
-    ]
+
     return (
         <div className={classes.container}>
             <div className={classes.titleBox}>
@@ -37,10 +38,10 @@ const SettingPage = memo(() => {
                 <Typography>(0/4)</Typography>
             </div>
             <div className={classes.walletSwitchBox}>
-                {mapList.map((x, idx) => {
+                {wallets.map((x, idx) => {
                     return (
                         <div key={idx} className={classes.swtichContainer}>
-                            <WalletSwitch type={x.type} address={x.address} />
+                            <WalletSwitch type={0} address={x.identity} />
                         </div>
                     )
                 })}

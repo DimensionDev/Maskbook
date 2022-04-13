@@ -89,7 +89,7 @@ export function WalletCom({ name, address, isDefault, canDelete }: WalletComProp
         t('copy_success_of_wallet_addr'),
     )
     const getActionRender = () => {
-        if (!isDefault) return <Typography className={classes.defaultBtn}>Set as default</Typography>
+        if (!canDelete && !isDefault) return <Typography className={classes.defaultBtn}>Set as default</Typography>
         if (canDelete)
             return <img className={classes.delIcon} src={new URL('../../assets/del.png', import.meta.url).toString()} />
         return null
