@@ -10,6 +10,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import SettingView from './bodyViews/Setting'
 import WalletsView from './bodyViews/Wallets'
 import AddWalletView from './bodyViews/AddWallet'
+import Empty from './components/empty'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -56,6 +57,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             setBodyView(BodyViewSteps.main)
         }
     }
+    const walletsList = []
     const WalletButton = () => {
         const { classes } = useStyles()
         return (
@@ -84,7 +86,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         <VerifyAlertLine onClose={() => setShowAlert(false)} />
                     </div>
                 )}
-                {bodyView === BodyViewSteps.main && (
+
+                {(bodyView === BodyViewSteps.main && walletsList.length && (
                     <div>
                         {supportedNetworks.map((x, idx) => {
                             return (
@@ -96,7 +99,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                             )
                         })}
                     </div>
-                )}
+                )) || <Empty />}
                 {bodyView === BodyViewSteps.setting && <SettingView />}
                 {bodyView === BodyViewSteps.wallets && <WalletsView />}
                 {bodyView === BodyViewSteps.addWallet && <AddWalletView />}
