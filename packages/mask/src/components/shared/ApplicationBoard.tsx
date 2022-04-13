@@ -66,13 +66,11 @@ export function ApplicationBoard() {
                         [],
                     )
                     .sort((a, b) => a.entry.defaultSortingPriority - b.entry.defaultSortingPriority)
-                    .map((X, i) => {
-                        return (
-                            <Fragment key={i + X.pluginId}>
-                                <X.entry.RenderEntryComponent disabled={!X.enabled} />
-                            </Fragment>
-                        )
-                    })}
+                    .map(({ entry, enabled }, index) => (
+                        <Fragment key={index}>
+                            <entry.RenderEntryComponent disabled={!enabled} />
+                        </Fragment>
+                    ))}
             </section>
         </>
     )
