@@ -397,6 +397,7 @@ importers:
       react-virtualized-auto-sizer: ^1.0.6
       react-window: ^1.8.6
       remarkable: ^2.0.1
+      resolve-typescript-plugin: ^1.1.6
       rss3-next: ^0.6.17
       safari-14-idb-fix: ^3.0.0
       scrypt-js: ^3.0.1
@@ -558,6 +559,7 @@ importers:
       html-webpack-plugin: 5.5.0_webpack@5.72.0
       react-devtools-core: 4.24.4
       react-refresh: 0.12.0
+      resolve-typescript-plugin: 1.1.6_webpack@5.72.0
       source-map-loader: 3.0.1_webpack@5.72.0
       swc-loader: 0.1.15_@swc+core@1.2.165+webpack@5.72.0
       webpack: 5.72.0_d159b08e00e92b5d1326c67bfa14033d
@@ -22799,6 +22801,16 @@ packages:
       value-or-function: 3.0.0
     dev: true
 
+  /resolve-typescript-plugin/1.1.6_webpack@5.72.0:
+    resolution: {integrity: sha512-9zoYKgKFB1StPRpK7l60T+c8i2OTqxPioaWqYdoXJJI7dswiMP7HkMY6pbppwqmTxieZSmLA7+t1ca7lbDI51Q==}
+    engines: {node: ^12 || ^14 || >=16}
+    peerDependencies:
+      webpack: ^5.0.0
+    dependencies:
+      tslib: 2.3.1
+      webpack: 5.72.0_d159b08e00e92b5d1326c67bfa14033d
+    dev: true
+
   /resolve-url/0.2.1:
     resolution: {integrity: sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=}
     deprecated: https://github.com/lydell/resolve-url#deprecated
@@ -24277,7 +24289,7 @@ packages:
     dependencies:
       '@swc/core': 1.2.165
       loader-utils: 2.0.2
-      webpack: 5.72.0_@swc+core@1.2.165
+      webpack: 5.72.0_d159b08e00e92b5d1326c67bfa14033d
     dev: true
 
   /symbol-tree/3.2.4:
@@ -24446,7 +24458,7 @@ packages:
       serialize-javascript: 6.0.0
       source-map: 0.6.1
       terser: 5.12.1
-      webpack: 5.72.0_@swc+core@1.2.165
+      webpack: 5.72.0_d159b08e00e92b5d1326c67bfa14033d
     dev: true
 
   /terser/4.8.0:
