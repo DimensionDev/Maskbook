@@ -84,7 +84,7 @@ export function editMetadata(
     metadata: TypedMessage['meta'],
     edit: (meta: NonNullable<Draft<TypedMessage['meta']>>) => void,
 ): NonNullable<TypedMessage['meta']> {
-    return draft.default(metadata || new Map(), (e) => void edit(e))
+    return (draft as any as typeof draft.default)(metadata || new Map(), (e) => void edit(e))
 }
 export function editTypedMessageMeta<T extends TypedMessage>(
     typedMessage: T,
