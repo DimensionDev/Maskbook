@@ -1,6 +1,8 @@
+import { compressSecp256k1KeyRaw } from '@masknet/shared-base'
 import { Ok } from 'ts-results'
 import type { PayloadWellFormed } from '..'
-import { encodeMessagePack, exportCryptoKeyToSPKI } from '../utils'
+import { EC_KeyCurveEnum } from '../payload/types'
+import { encodeMessagePack, exportCryptoKeyToRaw } from '../utils'
 
 const enum Index {
     version = 0,
@@ -22,12 +24,14 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
     if (payload.authorPublicKey.some) {
         const { algr, key } = payload.authorPublicKey.val
         payload_arr[Index.authorPublicKeyAlgorithm] = algr
-        const spki = await exportCryptoKeyToSPKI(key)
-        if (spki.ok) {
-            payload_arr[Index.authorPublicKey] = spki.val
+        const raw = await exportCryptoKeyToRaw(key)
+        if (raw.ok) {
+            if (algr === EC_KeyCurveEnum.secp256k1)
+                payload_arr[Index.authorPublicKey] = compressSecp256k1KeyRaw(raw.val)
+            else payload_arr[Index.authorPublicKey] = raw.val
         } else {
             payload_arr[Index.authorPublicKey] = null
-            warn(key, spki.err)
+            warn(key, raw.err)
         }
     }
     if (payload.encryption.type === 'E2E') {
@@ -35,24 +39,22 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
         const keyMaterials: any = {}
         const subArr: any[] = [1, ownersAESKeyEncrypted, iv, keyMaterials]
         for (const [alg, key] of ephemeralPublicKey.entries()) {
-            const k = await exportCryptoKeyToSPKI(key)
+            const k = await exportCryptoKeyToRaw(key)
             if (k.err) warn(key, k.err)
-            else keyMaterials[alg] = k.val
+            else {
+                if (alg === EC_KeyCurveEnum.secp256k1) keyMaterials[alg] = compressSecp256k1KeyRaw(k.val)
+                else keyMaterials[alg] = k.val
+            }
         }
         payload_arr[Index.encryption] = subArr
     } else {
         const { AESKey, iv } = payload.encryption
-        const subArr = [0, [AESKey.algr, (await crypto.subtle.exportKey('jwk', AESKey.key)).k], iv]
+        const subArr = [0, new Uint8Array(await crypto.subtle.exportKey('raw', AESKey)), iv]
         payload_arr[Index.encryption] = subArr
     }
     payload_arr[Index.data] = payload.encrypted
     return Ok(encodeMessagePack(payload_arr))
 }
 function warn(key: CryptoKey, err: any) {
-    console.warn(
-        '[@masknet/encryption] Failed to encode a public key object into spki format. key is',
-        key,
-        'and the error is',
-        err,
-    )
+    console.warn('[@masknet/encryption] Failed to export public key. key is', key, 'and the error is', err)
 }
