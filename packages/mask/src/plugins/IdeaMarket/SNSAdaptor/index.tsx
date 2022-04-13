@@ -1,4 +1,4 @@
-import { Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra'
+import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
