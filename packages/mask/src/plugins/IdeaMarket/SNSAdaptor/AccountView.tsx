@@ -41,6 +41,7 @@ const useStyles = makeStyles()((theme) => {
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
             },
+            marginLeft: theme.spacing(1.25),
         },
         header: {
             padding: 0,
