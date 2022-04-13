@@ -48,7 +48,6 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
         props.onClose()
     }
 
-    console.log(binds)
     return (
         <>
             <InjectedDialog title="NFT PFP" open={props.open} onClose={_onClose}>

@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Typography, CircularProgress } from '@mui/material'
 import { NFTAvatar } from './NFTAvatar'
 import { NFTInfo } from './NFTInfo'
 import { MoreIcon } from '../assets/more'
@@ -44,19 +44,19 @@ export function PersonaItem(props: PersonaItemProps) {
         <div
             className={classes.root}
             onClick={() => onClick?.({ address: _avatar?.address, tokenId: _avatar?.tokenId })}>
-            {loading || loadingToken || loadingCheckOwner ? (
-                <CircularProgress />
-            ) : (
-                <>
-                    <NFTAvatar avatar={avatar} hasBorder />
-                    <Box className={classes.userInfo}>
-                        <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
-                            {nickname}
-                        </Typography>
-                        <Typography variant="body1" color="textSecondary" fontSize={12}>
-                            @{userId}
-                        </Typography>
-                    </Box>
+            <>
+                <NFTAvatar avatar={avatar} hasBorder />
+                <Box className={classes.userInfo}>
+                    <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
+                        {nickname}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary" fontSize={12}>
+                        @{userId}
+                    </Typography>
+                </Box>
+                {loading || loadingToken || loadingCheckOwner ? (
+                    <CircularProgress size="small" />
+                ) : (
                     <NFTInfo
                         owner={isOwner}
                         nft={
@@ -70,9 +70,9 @@ export function PersonaItem(props: PersonaItemProps) {
                                 : undefined
                         }
                     />
-                    <MoreIcon />
-                </>
-            )}
+                )}
+                <MoreIcon />
+            </>
         </div>
     )
 }

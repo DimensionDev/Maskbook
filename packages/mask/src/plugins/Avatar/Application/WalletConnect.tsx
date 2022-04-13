@@ -67,9 +67,7 @@ export function NFTWalletConnect(props: NFTWalletConnectProps) {
                     <LaunchIcon fontSize="small" />
                 </Link>
             </Box>
-
             <Rectangle classes={{ root: classes.rectangle }} />
-
             <Box className={classes.button}>
                 <Button
                     onClick={openSelectProviderDialog}
