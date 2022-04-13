@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => {
             padding: 0,
         },
         nameHeader: {
-            width: 210,
+            width: 190,
         },
         sellHeader: {
             width: 55,
