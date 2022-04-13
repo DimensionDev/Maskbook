@@ -135,7 +135,7 @@ export function RedPacket(props: RedPacketProps) {
 
     const onClaimOrRefundOnNative = useCallback(async () => {
         if (!availability) return
-        await nativeAPI?.api.claimOrRefundRedpacket({
+        const success = await nativeAPI?.api.claimOrRefundRedpacket({
             redpacketPayload: payload,
             availability: {
                 token_address: availability.token_address,
@@ -147,6 +147,9 @@ export function RedPacket(props: RedPacketProps) {
             },
             postLink: postLink.toString(),
         })
+        if (success) {
+            revalidateAvailability()
+        }
     }, [availability, JSON.stringify(payload), postLink])
 
     const myStatus = useMemo(() => {
