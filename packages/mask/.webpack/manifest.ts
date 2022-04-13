@@ -2,6 +2,7 @@
 import emitFile from '@nice-labs/emit-file-webpack-plugin'
 import { cloneDeep } from 'lodash-unified'
 import { NormalizedFlags } from './flags'
+import { buildCSP } from './ContentSecurityPolicyBuilder'
 
 type Manifest = typeof import('../src/manifest.json') & Record<string, any>
 export function emitManifestFile(flags: NormalizedFlags) {
@@ -15,6 +16,8 @@ export function emitManifestFile(flags: NormalizedFlags) {
     })
 }
 function modify(manifest: Manifest, flags: NormalizedFlags) {
+    const CSP = buildCSP()
+
     if (flags.runtime.engine === 'firefox') {
         // TODO: To make `browser.tabs.executeScript` run on Firefox, we need an extra permission "tabs".
         // Switch to browser.userScripts (Firefox only) API can resolve the problem.
@@ -35,10 +38,13 @@ function modify(manifest: Manifest, flags: NormalizedFlags) {
     }
     if (flags.mode === 'development') {
         manifest.name += ' (dev)'
-        // for eval-source-map
-        manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; object-src 'self';`
+        // No csp_report_only support in manifest.json ,see https://github.com/w3c/webextensions/issues/197
+        manifest.content_security_policy = CSP.development.csp
+
         acceptExternalConnect(manifest)
         stableDevelopmentExtensionID(manifest)
+    } else {
+        manifest.content_security_policy = CSP.production.csp
     }
 
     if (flags.hmr) {

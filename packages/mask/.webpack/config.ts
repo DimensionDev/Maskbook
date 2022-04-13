@@ -18,6 +18,7 @@ import { BuildFlags, normalizeBuildFlags, computedBuildFlags } from './flags'
 import ResolveTypeScriptPlugin from 'resolve-typescript-plugin'
 
 import './clean-hmr'
+import { buildCSP } from './ContentSecurityPolicyBuilder'
 
 export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const normalizedFlags = normalizeBuildFlags(rawFlags)
@@ -264,15 +265,16 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })
     baseConfig.plugins!.push(
-        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', sourceMap: !!sourceMapKind, lockdown }),
-        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', sourceMap: !!sourceMapKind, lockdown }),
+        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', sourceMap: !!sourceMapKind, lockdown, mode }),
+        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', sourceMap: !!sourceMapKind, lockdown, mode }),
         addHTMLEntry({
             chunks: ['contentScript'],
             filename: 'generated__content__script.html',
             sourceMap: !!sourceMapKind,
             lockdown,
+            mode,
         }),
-        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', sourceMap: !!sourceMapKind, lockdown }),
+        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', sourceMap: !!sourceMapKind, lockdown, mode }),
     )
     // background
     if (runtime.manifest === 3) {
@@ -291,6 +293,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 gun: true,
                 sourceMap: !!sourceMapKind,
                 lockdown,
+                mode,
             }),
         )
     }
@@ -317,6 +320,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
 function addHTMLEntry(
     options: HTMLPlugin.Options & {
         sourceMap: boolean
+        mode: 'production' | 'development'
         gun?: boolean
         lockdown: boolean
     },
@@ -338,6 +342,13 @@ function addHTMLEntry(
         <script src="/lockdown.js"></script>`,
         )
     }
+
+    const { csp, csp_report_only } = buildCSP()[options.mode]
+    templateContent = templateContent.replace(
+        `<!-- CSP -->`,
+        `<meta http-equiv="Content-Security-Policy" content="${csp}">
+        <meta http-equiv="Content-Security-Policy-Report-Only" content="${csp_report_only}">`,
+    )
     return new HTMLPlugin({
         templateContent,
         inject: 'body',
