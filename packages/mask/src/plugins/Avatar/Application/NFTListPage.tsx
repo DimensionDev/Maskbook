@@ -4,7 +4,6 @@ import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { uniqBy } from 'lodash-unified'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'
-import { NFTImage } from './NFTImage'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
