@@ -1,5 +1,6 @@
 import { startPluginWorker, Plugin } from '@masknet/plugin-infra/background-worker'
-import { InMemoryStorages, PersistentStorages } from '../../../../shared'
+import { createSubscriptionFromAsync } from '@masknet/shared-base'
+import { InMemoryStorages, MaskMessages, PersistentStorages } from '../../../../shared'
 import { createPluginDatabase } from '../../../database/Plugin'
 import { createPluginHost } from '../../../plugin-infra/host'
 import { Services } from '../../service'
@@ -9,6 +10,13 @@ export default function (signal: AbortSignal) {
 
 function createWorkerContext(pluginID: string, signal: AbortSignal): Plugin.Worker.WorkerContext {
     let storage: Plugin.Worker.DatabaseStorage<any> = undefined!
+
+    const currentPersonaSub = createSubscriptionFromAsync(
+        Services.Settings.getCurrentPersonaIdentifier,
+        undefined,
+        MaskMessages.events.currentPersonaIdentifier.on,
+        signal,
+    )
     return {
         getDatabaseStorage() {
             return storage || (storage = createPluginDatabase(pluginID, signal))
@@ -19,5 +27,6 @@ function createWorkerContext(pluginID: string, signal: AbortSignal): Plugin.Work
         },
         personaSign: Services.Identity.signWithPersona,
         walletSign: Services.Ethereum.personalSign,
+        currentPersona: currentPersonaSub,
     }
 }
