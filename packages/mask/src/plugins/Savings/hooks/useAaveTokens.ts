@@ -1,4 +1,4 @@
-import { useAsync } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 
 import {
     ChainId,
@@ -17,8 +17,12 @@ import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtoc
 import { splitToPair } from '../utils'
 
 export function useAaveTokens(chainId: ChainId, web3: Web3) {
-    
-    const { value: aaveTokens, loading } = useAsync(async () => {
+    const {
+        value: aaveTokens,
+        loading,
+        error,
+        retry,
+    } = useAsyncRetry(async () => {
         if (chainId !== ChainId.Mainnet) {
             return []
         }
@@ -34,7 +38,7 @@ export function useAaveTokens(chainId: ChainId, web3: Web3) {
         const tokens = await protocolDataContract?.methods.getAllReservesTokens().call()
 
         const aTokens = await protocolDataContract?.methods.getAllATokens().call()
-            
+
         return tokens?.map((token) => {
             return [token[1], aTokens?.filter((f) => f[0].toUpperCase() === `a${token[0]}`.toUpperCase())[0][1]]
         })
@@ -47,13 +51,12 @@ export function useAaveTokens(chainId: ChainId, web3: Web3) {
         chainId,
     )
 
-    return useMemo(
-        () => {
-            return {
-                tokenPairs: splitToPair(detailedAaveTokens),
-                loading: loading || loadingTokenDetails
-            }
-        },
-        [chainId, detailedAaveTokens, loadingTokenDetails],
-    )
+    return useMemo(() => {
+        return {
+            tokenPairs: splitToPair(detailedAaveTokens),
+            loading: loading || loadingTokenDetails,
+            error,
+            retry,
+        }
+    }, [chainId, detailedAaveTokens, loadingTokenDetails])
 }

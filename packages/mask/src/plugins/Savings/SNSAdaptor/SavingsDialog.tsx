@@ -53,7 +53,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
             ...aaveTokenPairs.map(AAVEProtocol.fromTokenPair),
             ...yfiTokenPairs.map(YearnProtocol.fromTokenPair),
         ],
-        [chainId  , aaveTokenPairs, yfiTokenPairs ],
+        [chainId, aaveTokenPairs, yfiTokenPairs],
     )
 
     useUpdateEffect(() => {

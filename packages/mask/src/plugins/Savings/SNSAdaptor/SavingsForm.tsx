@@ -130,24 +130,35 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
 
     const { value: approvalData } = useAsync(async () => {
         const token = protocol.bareToken
-        const aavePoolAddress =
-            getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
+        if (protocol.type === ProtocolType.AAVE) {
+            const aavePoolAddress =
+                getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
 
-        const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
-            web3,
-            aavePoolAddress,
-            AaveLendingPoolAddressProviderABI as AbiItem[],
-        )
+            const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
+                web3,
+                aavePoolAddress,
+                AaveLendingPoolAddressProviderABI as AbiItem[],
+            )
 
-        const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
+            const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
 
-        return {
-            approveToken:
-                token.type === EthereumTokenType.ERC20
-                    ? createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
-                    : undefined,
-            approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
-            approveAddress: poolAddress,
+            return {
+                approveToken:
+                    token.type === EthereumTokenType.ERC20
+                        ? createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
+                        : undefined,
+                approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
+                approveAddress: poolAddress,
+            }
+        } else {
+            return {
+                approveToken:
+                    token.type === EthereumTokenType.ERC20
+                        ? createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
+                        : undefined,
+                approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
+                approveAddress: protocol.stakeToken.address,
+            }
         }
     }, [protocol.bareToken, inputAmount, chainId])
 

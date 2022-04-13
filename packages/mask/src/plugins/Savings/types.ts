@@ -13,7 +13,7 @@ export enum ProtocolType {
     YEARN = 2,
 }
 
-export type ChainIdYearn = ChainId.Mainnet | ChainId.Fantom | ChainId.Arbitrum 
+export type ChainIdYearn = ChainId.Mainnet | ChainId.Fantom | ChainId.Arbitrum
 
 export interface SavingsProtocol {
     readonly type: ProtocolType

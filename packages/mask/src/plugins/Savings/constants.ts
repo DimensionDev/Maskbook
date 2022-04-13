@@ -15,5 +15,3 @@ export const YearnChains = {
     [ChainId.Fantom]: 'fantom',
     [ChainId.Arbitrum]: 'arbitrum',
 }
-
-

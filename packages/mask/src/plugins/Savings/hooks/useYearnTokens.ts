@@ -1,4 +1,4 @@
-import { useAsync } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 
 import { ChainId, EthereumTokenType, useFungibleTokensDetailed } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
@@ -9,9 +9,12 @@ import { flatten, compact, orderBy, sortedUniqBy } from 'lodash-unified'
 import type Web3 from 'web3'
 
 export function useYearnTokens(chainId: ChainId, web3: Web3) {
-    
-    const { value: yfiTokens, loading } = useAsync(async () => {
-        
+    const {
+        value: yfiTokens,
+        loading,
+        error,
+        retry,
+    } = useAsyncRetry(async () => {
         if (!isValidYearnChain(chainId)) {
             return []
         }
@@ -21,7 +24,7 @@ export function useYearnTokens(chainId: ChainId, web3: Web3) {
             provider: web3.currentProvider,
         })
         await yearn.ready
-        
+
         // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
         const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
 
@@ -30,7 +33,6 @@ export function useYearnTokens(chainId: ChainId, web3: Web3) {
             orderBy(allVaults, ['metadata.defaultDisplayToken', 'version'], ['asc', 'desc']),
             (m) => m.metadata.defaultDisplayToken,
         )
-        
 
         return currentVaults.map((v) => {
             return [v.metadata.defaultDisplayToken, v.address]
@@ -44,13 +46,12 @@ export function useYearnTokens(chainId: ChainId, web3: Web3) {
         chainId,
     )
 
-    return useMemo(
-        () => {
-            return {
-                tokenPairs: splitToPair(detailedYFITokens),
-                loading: loading || loadingTokenDetails
-            }
-        },
-        [chainId, detailedYFITokens, loadingTokenDetails],
-    )
+    return useMemo(() => {
+        return {
+            tokenPairs: splitToPair(detailedYFITokens),
+            loading: loading || loadingTokenDetails,
+            error,
+            retry,
+        }
+    }, [chainId, detailedYFITokens, loadingTokenDetails])
 }

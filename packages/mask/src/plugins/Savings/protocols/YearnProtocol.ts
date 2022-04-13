@@ -44,13 +44,12 @@ export class YearnProtocol implements SavingsProtocol {
 
     public async updateApr(chainId: ChainIdYearn, web3: Web3) {
         try {
-            
             const web3Provider = new Web3Provider(web3.currentProvider as any)
-            
+
             const yearn = new Yearn(chainId, {
                 provider: web3Provider, // web3.currentProvider,
             })
-            
+
             const vaultInterface = new VaultInterface(yearn, chainId, yearn.context)
 
             const vaults: Vault[] = await vaultInterface.get([this.stakeToken.address])
@@ -65,7 +64,7 @@ export class YearnProtocol implements SavingsProtocol {
             console.error('YFI APR ERROR: ', error)
             this._apr = YearnProtocol.DEFAULT_APR
         }
-    } 
+    }
 
     public async updateBalance(chainId: ChainIdYearn, web3: Web3, account: string) {
         try {
@@ -87,15 +86,15 @@ export class YearnProtocol implements SavingsProtocol {
         }
     }
 
-    public async deposit(account: string, chainId: ChainIdYearn , web3: Web3, value: BigNumber.Value) {
+    public async deposit(account: string, chainId: ChainIdYearn, web3: Web3, value: BigNumber.Value) {
         try {
             const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
 
-            const web3Provider = new Web3Provider(web3.currentProvider as any)            
+            const web3Provider = new Web3Provider(web3.currentProvider as any)
             const yearn = new Yearn(chainId, {
                 provider: web3Provider,
             })
-            
+
             const vaultInterface = new VaultInterface(yearn, chainId, yearn.context)
 
             const tResponse = await vaultInterface.deposit(
@@ -103,6 +102,10 @@ export class YearnProtocol implements SavingsProtocol {
                 this.bareToken.address,
                 value.toString(),
                 account,
+                {},
+                {
+                    gasLimit: gasEstimate.toNumber(),
+                },
             )
 
             return true
