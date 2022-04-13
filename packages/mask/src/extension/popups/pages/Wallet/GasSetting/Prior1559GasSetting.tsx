@@ -51,6 +51,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         lineHeight: '22px',
     },
+    optionsContent: {
+        fontSize: 11,
+    },
     gasPrice: {
         fontSize: 12,
         lineHeight: '16px',
@@ -233,7 +236,7 @@ export const Prior1559GasSetting = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (!value) return
-            const config = value.payload.params.map((param) => ({
+            const config = value.payload.params!.map((param) => ({
                 ...param,
                 gas: toHex(new BigNumber(data.gasLimit).toString()),
                 gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
@@ -270,7 +273,9 @@ export const Prior1559GasSetting = memo(() => {
                             onClick={() => setOption(index)}
                             className={selected === index ? classes.selected : undefined}>
                             <Typography className={classes.optionsTitle}>{title}</Typography>
-                            <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
+                            <Typography className={classes.optionsContent}>
+                                {formatWeiToGwei(gasPrice ?? 0).toString()} Gwei
+                            </Typography>
                             <Typography className={classes.gasUSD}>
                                 {t('popups_wallet_gas_fee_settings_usd', {
                                     usd: formatWeiToEther(gasPrice)

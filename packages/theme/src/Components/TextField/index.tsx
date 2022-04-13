@@ -1,7 +1,7 @@
 import { ForwardedRef, forwardRef } from 'react'
 import { Box, formHelperTextClasses, TextField, StandardTextFieldProps, InputProps, Typography } from '@mui/material'
-import { makeStyles } from '../../makeStyles'
-import { getMaskColor, MaskColorVar } from '../../constants'
+import { makeStyles } from '../../UIHelper/makeStyles'
+import { getMaskColor, MaskColorVar } from '../../CSSVariables/vars'
 
 const useStyles = makeStyles()((theme) => ({
     label: {

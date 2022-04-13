@@ -12,6 +12,7 @@ import Services from '../../../service'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
 import urlcat from 'urlcat'
+import { WalletHeader } from './components/WalletHeader'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -93,6 +94,7 @@ export default function Wallet() {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletContext.Provider>
+                <WalletHeader />
                 {loading ? (
                     <LoadingPlaceholder />
                 ) : (

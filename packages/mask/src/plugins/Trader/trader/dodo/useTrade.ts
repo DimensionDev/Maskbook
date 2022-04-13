@@ -11,7 +11,7 @@ import type { SwapRouteData, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { first } from 'lodash-unified'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
-import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export function useTrade(

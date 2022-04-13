@@ -1,4 +1,4 @@
-import { useWallet } from '@masknet/plugin-infra'
+import { useWallet } from '@masknet/web3-shared-evm'
 import { NextIDAction, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'

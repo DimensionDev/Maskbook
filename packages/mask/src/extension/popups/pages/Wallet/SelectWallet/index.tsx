@@ -58,7 +58,7 @@ const useStyles = makeStyles()({
         marginRight: 10,
     },
     list: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#F7F9FA',
         padding: 0,
         height: 'calc(100vh - 168px)',
         overflow: 'auto',

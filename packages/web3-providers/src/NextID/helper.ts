@@ -6,6 +6,10 @@ const fetchCache = new LRU<string, any>({
     ttl: 20000,
 })
 
+export function deleteCache(key: string) {
+    fetchCache.delete(key)
+}
+
 export async function fetchJSON<T = unknown>(
     url: string,
     requestInit?: RequestInit,

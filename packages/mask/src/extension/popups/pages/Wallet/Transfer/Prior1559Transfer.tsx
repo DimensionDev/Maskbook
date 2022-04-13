@@ -406,7 +406,9 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         return (
             <>
                 <form className={classes.container} onSubmit={handleConfirm}>
-                    <Typography className={classes.label}>{t('wallet_transfer_account')}</Typography>
+                    <Typography className={classes.label} style={{ marginTop: 0 }}>
+                        {t('wallet_transfer_account')}
+                    </Typography>
                     <Typography className={classes.accountName}>{accountName}</Typography>
                     <Typography className={classes.label}>{t('wallet_transfer_receiving_account')}</Typography>
                     <Controller

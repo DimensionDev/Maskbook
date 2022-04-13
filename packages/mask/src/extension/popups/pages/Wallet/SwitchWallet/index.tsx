@@ -6,8 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useCopyToClipboard } from 'react-use'
-import { NetworkSelector } from '../../../components/NetworkSelector'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { WalletItem } from './WalletItem'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
@@ -27,7 +25,7 @@ const useStyles = makeStyles()({
         flexDirection: 'column',
     },
     list: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#F7F9FA',
         padding: 0,
         height: 'calc(100vh - 168px)',
         overflow: 'auto',
@@ -45,7 +43,7 @@ const useStyles = makeStyles()({
     },
     copy: {
         fontSize: 12,
-        stroke: '#1C68F3',
+        fill: '#1C68F3',
         marginLeft: 4,
         cursor: 'pointer',
     },
@@ -77,6 +75,9 @@ const useStyles = makeStyles()({
     secondaryButton: {
         backgroundColor: '#F7F9FA',
         color: '#1C68F3',
+        '&: hover': {
+            backgroundColor: '#dee0e1',
+        },
     },
 })
 
@@ -84,12 +85,9 @@ const SwitchWallet = memo(() => {
     const { t } = useI18N()
     const walletPrimary = useWalletPrimary()
     const { classes } = useStyles()
-
     const navigate = useNavigate()
     const wallet = useWallet()
     const wallets = useWallets(ProviderType.MaskWallet)
-
-    const [, copyToClipboard] = useCopyToClipboard()
 
     const handleClickCreate = useCallback(() => {
         if (!walletPrimary) {
@@ -100,34 +98,21 @@ const SwitchWallet = memo(() => {
         } else {
             navigate(PopupRoutes.CreateWallet)
         }
-    }, [walletPrimary, history])
+    }, [walletPrimary])
 
-    const handleSelect = useCallback(
-        async (address) => {
-            await WalletRPC.updateMaskAccount({
-                account: address,
-            })
+    const handleSelect = useCallback(async (address: string) => {
+        await WalletRPC.updateMaskAccount({
+            account: address,
+        })
 
-            if (currentProviderSettings.value === ProviderType.MaskWallet)
-                await WalletRPC.updateAccount({ account: address, providerType: ProviderType.MaskWallet })
+        if (currentProviderSettings.value === ProviderType.MaskWallet)
+            await WalletRPC.updateAccount({ account: address, providerType: ProviderType.MaskWallet })
 
-            navigate(PopupRoutes.Wallet, { replace: true })
-        },
-        [history],
-    )
-
-    const onCopy = useCallback(
-        (address: string) => {
-            copyToClipboard(address)
-        },
-        [copyToClipboard],
-    )
+        navigate(PopupRoutes.Wallet, { replace: true })
+    }, [])
 
     return (
         <>
-            <div className={classes.header}>
-                <NetworkSelector />
-            </div>
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     {wallets.map((item, index) => (

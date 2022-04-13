@@ -14,7 +14,7 @@ import {
     useProviderType,
     useReverseAddress,
     useWallet,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/web3'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { useI18N } from '../../../utils'

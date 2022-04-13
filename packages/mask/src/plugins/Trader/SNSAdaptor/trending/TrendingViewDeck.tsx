@@ -21,7 +21,8 @@ import { currentDataProviderSettings, getCurrentPreferredCoinIdSettings } from '
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
-import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { PluginId } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => {
     return {

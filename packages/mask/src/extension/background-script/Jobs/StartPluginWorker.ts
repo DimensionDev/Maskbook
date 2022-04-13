@@ -1,4 +1,4 @@
-import { startPluginWorker, Plugin } from '@masknet/plugin-infra'
+import { startPluginWorker, Plugin } from '@masknet/plugin-infra/background-worker'
 import { InMemoryStorages, PersistentStorages } from '../../../../shared'
 import { createPluginDatabase } from '../../../database/Plugin'
 import { createPluginHost } from '../../../plugin-infra/host'

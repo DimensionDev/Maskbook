@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom'
 import { useDashboardI18N } from '../../../../locales'
 import { TransferERC721 } from './TransferERC721'
 import { TransferTab } from './types'
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 const assetTabs = [TransferTab.Token, TransferTab.Collectibles] as const
 
 export * from './types'
