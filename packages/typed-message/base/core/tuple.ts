@@ -1,6 +1,6 @@
-import type { SerializableTypedMessage, SerializableTypedMessages, TypedMessage, Meta } from '../base'
-import { isSerializableTypedMessage } from '../utils'
-import { composeEvery } from '../utils/internal'
+import type { SerializableTypedMessage, SerializableTypedMessages, TypedMessage, Meta } from '../base.js'
+import { isSerializableTypedMessage } from '../utils/index.js'
+import { composeEvery } from '../utils/internal.js'
 
 /** Multiple TypedMessages (ordered) */
 export interface TypedMessageTuple<T extends readonly TypedMessage[] = readonly TypedMessage[]> extends TypedMessage {
