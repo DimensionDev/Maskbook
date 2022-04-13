@@ -11,6 +11,8 @@ import SettingView from './bodyViews/Setting'
 import WalletsView from './bodyViews/Wallets'
 import AddWalletView from './bodyViews/AddWallet'
 import Empty from './components/empty'
+import { useProvedWallets } from '../hooks/useProvedWallets'
+import { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -57,7 +59,11 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             setBodyView(BodyViewSteps.main)
         }
     }
-    const walletsList = []
+
+    const proofRes = useProvedWallets()
+    const walletsList = proofRes.value
+        ? (proofRes.value as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
+        : []
     const WalletButton = () => {
         const { classes } = useStyles()
         return (
@@ -104,7 +110,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 {bodyView === BodyViewSteps.wallets && <WalletsView />}
                 {bodyView === BodyViewSteps.addWallet && <AddWalletView />}
 
-                {![BodyViewSteps.addWallet, BodyViewSteps.wallets].includes(bodyView) && (
+                {![BodyViewSteps.addWallet, BodyViewSteps.wallets].includes(bodyView) && walletsList.length > 0 && (
                     <div className={classes.actions}>
                         <ActionButton fullWidth color="secondary">
                             Cancel
