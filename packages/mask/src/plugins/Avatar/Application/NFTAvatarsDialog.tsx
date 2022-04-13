@@ -35,13 +35,13 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
 
     const { loading, isOwner, personaConnectStatus, binds } = usePersonas()
 
-    const netxtIDConnectStatus = useNextIDConnectStatus()
+    const nextIDConnectStatus = useNextIDConnectStatus()
     useEffect(() => {
         if (!personaConnectStatus.action) return
-        const { status, action, isVerified } = netxtIDConnectStatus
+        const { status, action, isVerified } = nextIDConnectStatus
         if (isVerified || status === NextIDVerificationStatus.WaitingLocalConnect) return
         if (action) action()
-    }, [netxtIDConnectStatus])
+    }, [nextIDConnectStatus])
 
     const _onClose = () => {
         setOpen(false)
