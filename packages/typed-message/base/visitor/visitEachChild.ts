@@ -4,11 +4,11 @@ import {
     makeTypedMessagePromise,
     makeTypedMessageTuple,
     makeTypedMessageTupleSerializable,
-} from '../core'
-import { isNonSerializableTypedMessageWithAlt, isSerializableTypedMessage } from '../utils'
-import type { TypedMessage } from '../base'
-import { isTypedMessageMaskPayload, makeTypedMessageMaskPayload } from '../extension'
-import type { TransformationContext, Transformer } from '../transformer'
+} from '../core/index.js'
+import { isNonSerializableTypedMessageWithAlt, isSerializableTypedMessage } from '../utils/index.js'
+import type { TypedMessage } from '../base.js'
+import { isTypedMessageMaskPayload, makeTypedMessageMaskPayload } from '../extension/index.js'
+import type { TransformationContext, Transformer } from '../transformer/index.js'
 
 export function visitEachTypedMessageChild(
     node: TypedMessage,

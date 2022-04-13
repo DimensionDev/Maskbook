@@ -46,7 +46,7 @@ For general introductions, see [Mask.io](https://mask.io).
 
 Please check out [docs](docs)
 
-## Security Report
+## Reporting a Vulnerability
 
 <!-- https://tools.ietf.org/html/draft-foudil-securitytxt-12 -->
 
