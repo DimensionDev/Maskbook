@@ -110,7 +110,7 @@ export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () 
         '[aria-labelledby="modal-header"] > div:first-child > div:first-child > div:first-child > div:nth-child(3)',
     )
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[aria-labelledby="modal-header"]  div[data-testid="toolBar"] div[data-testid="geoButton"]')
+    querySelector<E>('div[data-testid="toolBar"] div[data-testid="geoButton"]')
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] > div')
 export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
