@@ -1,5 +1,4 @@
-import { useChainId } from '@masknet/web3-shared-evm/hooks'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm/types'
+import { FungibleTokenDetailed, useChainId } from '@masknet/web3-shared-evm'
 import { USDC } from '../constants'
 
 export function useBaseToken(): FungibleTokenDetailed {

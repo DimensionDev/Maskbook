@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra'
+import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { base } from '../base'
 import { escapeRegExp } from 'lodash-unified'
 import { BASE_URL } from '../constants'

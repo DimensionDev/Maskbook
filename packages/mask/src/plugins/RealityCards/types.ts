@@ -59,6 +59,8 @@ export interface Factory {
 export interface Card extends Factory {
     image: string
     price: string
+    totalTimeHeld: string
+    totalCollected: string
     outcomeName: string
     marketCardIndex: string
     originalNft: OriginalNft

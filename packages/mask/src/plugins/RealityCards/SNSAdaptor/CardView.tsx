@@ -2,10 +2,10 @@ import { Box, Card, CardContent, CardMedia, CardActionArea, Typography, Grid, To
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { useState , useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { Card as RCCard, Market, MarketState } from '../types'
 import { CardDialog } from './CardDialog'
-import { formatBalance, formatEthereumAddress, formatPercentage, isSameAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, formatPercentage, isSameAddress } from '@masknet/web3-shared-evm'
 import { useBaseToken } from '../hooks/useBaseToken'
 import BigNumber from 'bignumber.js'
 import { FormattedAddress } from '@masknet/shared'
@@ -59,11 +59,14 @@ export function CardView(props: CardViewProps) {
     const token = useBaseToken()
 
     const priceHourly = useMemo(() => {
+        let cardPrice: BigNumber
         if (market.state === MarketState.Open) {
-            return new BigNumber(card.price).dividedBy(24).toFixed(SIGNIFICANT_DIGITS)
+            cardPrice = new BigNumber(card.price).dividedBy(24)
+        } else {
+            cardPrice = new BigNumber(card.totalCollected).dividedBy(card.totalTimeHeld).times(3600)
         }
-        return
-    }, [market.state, card.price])
+        return cardPrice.shiftedBy(-token.decimals)
+    }, [market.state, card.price, card.totalCollected, card.totalTimeHeld])
 
     const share = new BigNumber(card.price).dividedBy(market.sumOfAllPrices).toFixed(SIGNIFICANT_DIGITS)
     const ownerAddress = market.state === MarketState.Open ? card.originalNft.owner.id : card.longestOwner.id
@@ -81,7 +84,7 @@ export function CardView(props: CardViewProps) {
                     <Box>
                         <Typography variant="h6">{card.outcomeName}</Typography>
                         <Typography variant="body1" component="strong" sx={{ fontSize: '1.2rem' }} gutterBottom>
-                            {formatBalance(priceHourly, token.decimals, SIGNIFICANT_DIGITS)}
+                            {priceHourly.toFixed(SIGNIFICANT_DIGITS, BigNumber.ROUND_DOWN)}
                         </Typography>
                         <Typography variant="caption" component="span" gutterBottom>
                             {' '}

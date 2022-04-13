@@ -27,6 +27,8 @@ export async function fetchMarketBySlug(graph_url: string | undefined, slug: str
               image
               outcomeName
               price
+              totalCollected
+              totalTimeHeld
               owner {
                 id
                 __typename

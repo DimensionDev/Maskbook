@@ -118,9 +118,6 @@ export const useArtBlocksConstants = hookTransform(getArtBlocksConstants)
 export const getNftRedPacketConstants = transform(NftRedPacket)
 export const useNftRedPacketConstants = hookTransform(getNftRedPacketConstants)
 
-export const getSavingsConstants = transform(Savings)
-export const useSavingsConstants = hookTransform(getSavingsConstants)
-
 export const getRealityCardsConstants = transform(RealityCards)
 export const useRealityCardsConstants = hookTransform(getRealityCardsConstants)
 
