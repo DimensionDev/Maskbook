@@ -6,7 +6,7 @@ version: 2.1
 executors:
   mask_node:
     docker:
-      - image: cimg/node:17.8
+      - image: cimg/node:17.5
     working_directory: ~/repo
 commands:
   restore_workspace:
