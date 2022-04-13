@@ -1,7 +1,7 @@
 import { useAsync } from 'react-use'
 
-import { ChainId, EthereumTokenType, FungibleTokenDetailed, useFungibleTokensDetailed } from '@masknet/web3-shared-evm'
-import { useState } from 'react'
+import { ChainId, EthereumTokenType, useFungibleTokensDetailed } from '@masknet/web3-shared-evm'
+import { useMemo } from 'react'
 import { VaultInterface, Yearn } from '@yfi/sdk'
 
 import { isValidYearnChain, splitToPair } from '../utils'
@@ -9,9 +9,9 @@ import { flatten, compact, orderBy, sortedUniqBy } from 'lodash-unified'
 import type Web3 from 'web3'
 
 export function useYearnTokens(chainId: ChainId, web3: Web3) {
-    const [tokenPairs, setTokenPairs] = useState<[FungibleTokenDetailed, FungibleTokenDetailed][]>([])
-
+    
     const { value: yfiTokens, loading } = useAsync(async () => {
+        
         if (!isValidYearnChain(chainId)) {
             return []
         }
@@ -21,7 +21,7 @@ export function useYearnTokens(chainId: ChainId, web3: Web3) {
             provider: web3.currentProvider,
         })
         await yearn.ready
-
+        
         // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
         const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
 
@@ -30,6 +30,7 @@ export function useYearnTokens(chainId: ChainId, web3: Web3) {
             orderBy(allVaults, ['metadata.defaultDisplayToken', 'version'], ['asc', 'desc']),
             (m) => m.metadata.defaultDisplayToken,
         )
+        
 
         return currentVaults.map((v) => {
             return [v.metadata.defaultDisplayToken, v.address]
@@ -43,10 +44,13 @@ export function useYearnTokens(chainId: ChainId, web3: Web3) {
         chainId,
     )
 
-    setTokenPairs(splitToPair(detailedYFITokens))
-
-    return {
-        tokenPairs: tokenPairs,
-        loading: loading || loadingTokenDetails,
-    }
+    return useMemo(
+        () => {
+            return {
+                tokenPairs: splitToPair(detailedYFITokens),
+                loading: loading || loadingTokenDetails
+            }
+        },
+        [chainId, detailedYFITokens, loadingTokenDetails],
+    )
 }

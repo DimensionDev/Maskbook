@@ -15,12 +15,12 @@ import { SavingsProtocol, TabType } from '../types'
 import { useStyles } from './SavingsDialogStyles'
 import { SavingsTable } from './SavingsTable'
 import { SavingsForm } from './SavingsForm'
-import { YearnProtocol } from '../protocols/YearnProtocol'
 import { LDO_PAIRS } from '../constants'
 import { LidoProtocol } from '../protocols/LDOProtocol'
+import { useAaveTokens } from '../hooks/useAaveTokens'
 import { AAVEProtocol } from '../protocols/AAVEProtocol'
 import { useYearnTokens } from '../hooks/useYearnTokens'
-import { useAaveTokens } from '../hooks/useAaveTokens'
+import { YearnProtocol } from '../protocols/YearnProtocol'
 
 export interface SavingsDialogProps {
     open: boolean
@@ -53,7 +53,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
             ...aaveTokenPairs.map(AAVEProtocol.fromTokenPair),
             ...yfiTokenPairs.map(YearnProtocol.fromTokenPair),
         ],
-        [chainId, aaveTokenPairs, yfiTokenPairs],
+        [chainId  , aaveTokenPairs, yfiTokenPairs ],
     )
 
     useUpdateEffect(() => {

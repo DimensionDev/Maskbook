@@ -4,10 +4,11 @@ import BigNumber from 'bignumber.js'
 import { ZERO } from '@masknet/web3-shared-base'
 import { ChainId, createContract, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 
-import { ProtocolType, SavingsProtocol } from '../types'
+import { ChainIdYearn, ProtocolType, SavingsProtocol } from '../types'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import { VaultInterface, Vault, Yearn } from '@yfi/sdk'
+import { Web3Provider } from '@ethersproject/providers'
 
 export class YearnProtocol implements SavingsProtocol {
     static DEFAULT_APR = '0.1'
@@ -41,15 +42,16 @@ export class YearnProtocol implements SavingsProtocol {
         return this.pair[1]
     }
 
-    public async updateApr(chainId: ChainId, web3: Web3) {
+    public async updateApr(chainId: ChainIdYearn, web3: Web3) {
         try {
-            // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
+            
+            const web3Provider = new Web3Provider(web3.currentProvider as any)
+            
             const yearn = new Yearn(chainId, {
-                provider: web3.currentProvider,
+                provider: web3Provider, // web3.currentProvider,
             })
-
-            // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
-            const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
+            
+            const vaultInterface = new VaultInterface(yearn, chainId, yearn.context)
 
             const vaults: Vault[] = await vaultInterface.get([this.stakeToken.address])
             this._apr = YearnProtocol.DEFAULT_APR
@@ -63,9 +65,9 @@ export class YearnProtocol implements SavingsProtocol {
             console.error('YFI APR ERROR: ', error)
             this._apr = YearnProtocol.DEFAULT_APR
         }
-    }
+    } 
 
-    public async updateBalance(chainId: ChainId, web3: Web3, account: string) {
+    public async updateBalance(chainId: ChainIdYearn, web3: Web3, account: string) {
         try {
             const contract = createContract<ERC20>(web3, this.stakeToken.address, ERC20ABI as AbiItem[])
             this._balance = new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')
@@ -77,7 +79,7 @@ export class YearnProtocol implements SavingsProtocol {
 
     public async depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
-            const gasEstimate = ZERO
+            const gasEstimate = '150000'
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
             console.error('YFI deposit estimate ERROR: ', error)
@@ -85,17 +87,16 @@ export class YearnProtocol implements SavingsProtocol {
         }
     }
 
-    public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+    public async deposit(account: string, chainId: ChainIdYearn , web3: Web3, value: BigNumber.Value) {
         try {
             const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
 
-            // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
+            const web3Provider = new Web3Provider(web3.currentProvider as any)            
             const yearn = new Yearn(chainId, {
-                provider: web3.currentProvider,
+                provider: web3Provider,
             })
-
-            // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
-            const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
+            
+            const vaultInterface = new VaultInterface(yearn, chainId, yearn.context)
 
             const tResponse = await vaultInterface.deposit(
                 this.stakeToken.address,
@@ -111,26 +112,25 @@ export class YearnProtocol implements SavingsProtocol {
         }
     }
 
-    public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+    public async withdrawEstimate(account: string, chainId: ChainIdYearn, web3: Web3, value: BigNumber.Value) {
         try {
-            const gasEstimate = ZERO
+            const gasEstimate = '150000'
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
             return ZERO
         }
     }
 
-    public async withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+    public async withdraw(account: string, chainId: ChainIdYearn, web3: Web3, value: BigNumber.Value) {
         try {
             const gasEstimate = await this.withdrawEstimate(account, chainId, web3, value)
 
-            // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
+            const web3Provider = new Web3Provider(web3.currentProvider as any)
             const yearn = new Yearn(chainId, {
-                provider: web3.currentProvider,
+                provider: web3Provider,
             })
 
-            // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
-            const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
+            const vaultInterface = new VaultInterface(yearn, chainId, yearn.context)
 
             const tResponse = await vaultInterface.withdraw(
                 this.stakeToken.address,
