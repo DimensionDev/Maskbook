@@ -495,7 +495,13 @@ export async function INTERNAL_nativeSend(
         payload.method = EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT
 
     try {
-        const response = await nativeAPI?.api.send(payload)
+        let response: JsonRpcResponse | undefined
+        const _ = await nativeAPI?.api.send(payload)
+        if (_) {
+            const { error, ...rest } = _
+            response = { ...rest }
+            if (error) response.error = { message: error }
+        }
         callback(null, response)
         if (payload.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
             handleNonce(chainIdFinally, account, null, response)
