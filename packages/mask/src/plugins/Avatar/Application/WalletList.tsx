@@ -15,7 +15,7 @@ import { BindingProof, PopupRoutes } from '@masknet/shared-base'
 import Services from '../../../extension/service'
 import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     root: {},
     wrapper: {
         backgroundColor: '#F6F8F8',
@@ -25,11 +25,11 @@ const useStyles = makeStyles()(() => ({
         cursor: 'pointer',
     },
     address: {},
-    copy: {},
-    link: {},
-    linkIcon: {
-        color: '#536471',
+    copy: {
+        color: theme.palette.secondary.main,
     },
+    link: { color: theme.palette.secondary.main },
+    linkIcon: {},
     icon: {
         width: 24,
         height: 24,
@@ -178,7 +178,9 @@ function WalletUI(props: WalletUIProps) {
                     <ReversedAddress address={address} />
                 </Stack>
                 <Stack direction="row" alignItems="center">
-                    <Typography className={classes.address}>{formatEthereumAddress(address, 4)}</Typography>
+                    <Typography variant="body2" color="textSecondary" className={classes.address}>
+                        {formatEthereumAddress(address, 4)}
+                    </Typography>
                     <CopyIconButton text={address} className={classes.copy} />
                     <Link
                         className={classes.link}

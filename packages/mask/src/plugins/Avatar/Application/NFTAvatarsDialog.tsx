@@ -51,7 +51,10 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
     }, [step])
 
     return (
-        <InjectedDialog title="NFT PFP" open={props.open} onClose={onClose}>
+        <InjectedDialog
+            title={step === CreateNFTAvatarStep.UploadAvatar ? 'Edit Profile' : 'NFT PFP'}
+            open={props.open}
+            onClose={onClose}>
             <DialogContent sx={{ margin: 0, padding: '0px !important' }}>
                 {step === CreateNFTAvatarStep.Persona ? (
                     <PersonaPage onNext={onNext} onChange={onPersonaChange} />

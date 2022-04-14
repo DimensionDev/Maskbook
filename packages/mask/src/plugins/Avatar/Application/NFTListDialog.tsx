@@ -46,6 +46,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [open_, setOpen_] = useState(false)
     const [selectedAccount, setSelectedAccount] = useState('')
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed>()
+    const [disabled, setDisabled] = useState(false)
     const onChange = useCallback((address: string) => {
         setSelectedAccount(address)
     }, [])
@@ -56,9 +57,11 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     const onSave = useCallback(async () => {
         if (!selectedToken || !selectedToken.info.imageURL) return
+        setDisabled(true)
         const image = await downloadUrl(selectedToken.info.imageURL)
         onSelected({ image: URL.createObjectURL(image), account: selectedAccount, token: selectedToken })
         onNext()
+        setDisabled(false)
     }, [selectedToken, selectedAccount])
 
     const onClick = useCallback(() => {
@@ -89,7 +92,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     </Typography>
                 </Stack>
 
-                <Button disabled={!selectedToken && !tokenInfo} className={classes.button} onClick={onSave}>
+                <Button
+                    disabled={(!selectedToken && !tokenInfo) || disabled}
+                    className={classes.button}
+                    onClick={onSave}>
                     Set NFT Avatar
                 </Button>
             </DialogActions>

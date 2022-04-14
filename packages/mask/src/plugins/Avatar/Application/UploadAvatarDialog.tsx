@@ -27,10 +27,12 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
     const [scale, setScale] = useState(1)
     const { showSnackbar } = useCustomSnackbar()
+    const [disabled, setDisabled] = useState(false)
     const onSave = useCallback(() => {
         if (!editor || !account || !token) return
         editor.getImage().toBlob(async (blob) => {
             if (!blob) return
+            setDisabled(true)
             const data = await Twitter.uploadUserAvatar(identity.identifier.userId, blob)
             const avatarId = getAvatarId(data?.imageUrl ?? '')
 
@@ -46,14 +48,17 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 RSS3_KEY_SNS.TWITTER,
             ).catch((error) => {
                 showSnackbar(error.message, { variant: 'error' })
+                setDisabled(false)
                 return
             })
             if (!avatar) {
                 showSnackbar('Sorry, failed to save NFT Avatar. Please set again.', { variant: 'error' })
+                setDisabled(false)
                 return
             }
             showSnackbar('Update NFT Avatar Success!', { variant: 'success' })
             onClose()
+            setDisabled(false)
         })
     }, [editor, identity, onClose])
 
@@ -84,7 +89,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 <Button sx={{ flex: 1 }} variant="text" onClick={onBack}>
                     Cancel
                 </Button>
-                <Button sx={{ flex: 1 }} variant="contained" onClick={onSave}>
+                <Button disabled={disabled} sx={{ flex: 1 }} variant="contained" onClick={onSave}>
                     Save
                 </Button>
             </DialogActions>
