@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import type { RenderConfig } from '../registry'
+import type { RenderConfig } from '../registry.js'
 
 export const RegistryContext = createContext<(type: string) => undefined | RenderConfig<any>>(() => {
     console.error(

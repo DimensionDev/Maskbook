@@ -5,22 +5,24 @@
   "type": "module",
   "exports": {
     ".": {
-      "webpack": "./src/index.ts",
-      "default": "./dist/src/index.js"
+      "types": "./dist/src/entry.d.ts",
+      "webpack": "./src/entry.ts",
+      "default": "./dist/src/entry.d.ts"
     },
-    "./constants": {
-      "webpack": "./src/constants.ts",
-      "default": "./dist/src/constants.js"
+    "./base": {
+      "types": "./dist/src/entry-base.d.ts",
+      "webpack": "./src/entry-base.ts",
+      "default": "./dist/src/entry-base.js"
     }
   },
   "typesVersions": {
     "*": {
-      "constants": [
-        "./dist/src/constants.d.ts"
+      "base": [
+        "./dist/src/entry-base.d.ts"
       ]
     }
   },
-  "types": "./dist/src/index.d.ts",
+  "types": "./dist/src/entry.d.ts",
   "scripts": {
     "build-storybook": "build -- build-storybook",
     "start": "dev -- start-storybook -p 6006"
@@ -33,10 +35,10 @@
     "@types/tinycolor2": "^1.4.3",
     "classnames": "^2.3.1",
     "fuse.js": "^6.5.3",
-    "notistack": "2.0.3",
+    "notistack": "2.0.4",
     "react-window": "^1.8.6",
     "tinycolor2": "^1.4.2",
-    "tss-react": "^3.6.0",
+    "tss-react": "^3.6.1",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.6.0"
   },

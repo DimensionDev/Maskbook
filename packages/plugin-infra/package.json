@@ -36,11 +36,21 @@
   },
   "typesVersions": {
     "*": {
-      "web3": ["./dist/entry-web3.d.ts"],
-      "dom": ["./dist/entry-dom.d.ts"],
-      "background-worker": ["./dist/entry-background-worker.d.ts"],
-      "dashboard": ["./dist/entry-dashboard.d.ts"],
-      "content-script": ["./dist/entry-content-script.d.ts"]
+      "web3": [
+        "./dist/entry-web3.d.ts"
+      ],
+      "dom": [
+        "./dist/entry-dom.d.ts"
+      ],
+      "background-worker": [
+        "./dist/entry-background-worker.d.ts"
+      ],
+      "dashboard": [
+        "./dist/entry-dashboard.d.ts"
+      ],
+      "content-script": [
+        "./dist/entry-content-script.d.ts"
+      ]
     }
   },
   "types": "./dist/entry.d.ts",
@@ -62,7 +72,7 @@
     "use-subscription": "^1.6.0"
   },
   "devDependencies": {
-    "react-i18next": "^11.16.2"
+    "react-i18next": "^11.16.5"
   },
   "peerDependencies": {
     "react-i18next": "^11.15.3"

@@ -69,6 +69,7 @@ export namespace Plugin.Shared {
         personaSign(payload: PersonaSignRequest): Promise<PersonaSignResult>
         /** Sign a message with wallet */
         walletSign(message: string, address: string): Promise<string>
+        currentPersona: Subscription<PersonaIdentifier | undefined>
     }
     export interface Definition {
         /**
@@ -215,8 +216,8 @@ export namespace Plugin.Shared {
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedContext {
-        /** Get current persona */
-        currentPersona: Subscription<PersonaIdentifier | undefined>
+        lastRecognizedProfile: Subscription<IdentityResolved | undefined>
+        currentVisitingProfile: Subscription<IdentityResolved | undefined>
     }
     export interface Definition extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
@@ -665,6 +666,14 @@ export enum CurrentSNSNetwork {
     Twitter = 2,
     Instagram = 3,
     Minds = 4,
+}
+
+export interface IdentityResolved {
+    identifier: ProfileIdentifier
+    nickname?: string
+    avatar?: string
+    bio?: string
+    homepage?: string
 }
 
 /**

@@ -1,19 +1,19 @@
-export * from './empty'
-export * from './text'
-export * from './image'
-export * from './tuple'
-export * from './unknown'
-export * from './promise'
+export * from './empty.js'
+export * from './text.js'
+export * from './image.js'
+export * from './tuple.js'
+export * from './unknown.js'
+export * from './promise.js'
 
-import * as empty from './empty'
-import * as unknown from './unknown'
-import * as tuple from './tuple'
-import * as text from './text'
-import * as image from './image'
-import * as promise from './promise'
+import * as empty from './empty.js'
+import * as unknown from './unknown.js'
+import * as tuple from './tuple.js'
+import * as text from './text.js'
+import * as image from './image.js'
+import * as promise from './promise.js'
 
-import type { TypedMessage } from '../base'
-import { composeSome } from '../utils/internal'
+import type { TypedMessage } from '../base.js'
+import { composeSome } from '../utils/internal.js'
 
 export type CoreTypedMessages =
     | empty.TypedMessageEmpty

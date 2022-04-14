@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ThemeProvider, StyledEngineProvider, Box } from '@mui/material'
-import { MaskDarkTheme, MaskLightTheme, applyMaskColorVars, DisableShadowRootContext } from '../src/index'
+import { MaskDarkTheme, MaskLightTheme, applyMaskColorVars, DisableShadowRootContext } from '@masknet/theme'
 // Not compatible?
 // import { withMatrix } from 'storybook-addon-matrix'
 import { I18nextProvider, initReactI18next } from 'react-i18next'

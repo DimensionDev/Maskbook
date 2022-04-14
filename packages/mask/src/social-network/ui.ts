@@ -13,9 +13,10 @@ import {
     PersonaIdentifier,
     EnhanceableSite,
     i18NextInstance,
+    createSubscriptionFromValueRef,
 } from '@masknet/shared-base'
-import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
-import { startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
+import { IdentityResolved, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
@@ -108,6 +109,21 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),
         createPluginHost(signal, (pluginID, signal) => {
+            const personaSub = createSubscriptionFromAsync(
+                Services.Settings.getCurrentPersonaIdentifier,
+                undefined as PersonaIdentifier | undefined,
+                MaskMessages.events.currentPersonaIdentifier.on,
+                signal,
+            )
+            const empty = new ValueRef<IdentityResolved | undefined>(undefined)
+            const lastRecognizedSub = createSubscriptionFromValueRef(
+                ui.collecting.identityProvider?.recognized || empty,
+                signal,
+            )
+            const currentVisitingSub = createSubscriptionFromValueRef(
+                ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
+                signal,
+            )
             return {
                 createKVStorage(type, defaultValues) {
                     if (type === 'memory')
@@ -116,11 +132,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 },
                 personaSign: Services.Identity.signWithPersona,
                 walletSign: Services.Ethereum.personalSign,
-                currentPersona: createSubscriptionFromAsync(
-                    Services.Settings.getCurrentPersonaIdentifier,
-                    undefined as PersonaIdentifier | undefined,
-                    MaskMessages.events.currentPersonaIdentifier.on,
-                ),
+                currentPersona: personaSub,
+                lastRecognizedProfile: lastRecognizedSub,
+                currentVisitingProfile: currentVisitingSub,
             }
         }),
     )

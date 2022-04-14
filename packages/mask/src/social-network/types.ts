@@ -1,6 +1,6 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
-import type { PostInfo } from '@masknet/plugin-infra/content-script'
+import type { IdentityResolved, PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
     Identifier,
     ObservableWeakMap,
@@ -228,7 +228,6 @@ export namespace SocialNetworkUI {
             getSearchedKeyword?(): string
         }
         export type ProfileUI = { bioContent: string }
-        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar' | 'bio' | 'homepage'>
 
         /** Resolve the information of who am I on the current network. */
         export interface IdentityResolveProvider {

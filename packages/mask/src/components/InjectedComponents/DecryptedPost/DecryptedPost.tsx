@@ -6,7 +6,6 @@ import {
     TypedMessageTuple,
 } from '@masknet/typed-message'
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import { or } from '@masknet/theme'
 
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
@@ -69,7 +68,7 @@ export function DecryptPost(props: DecryptPostProps) {
     const authorInPayload = usePostClaimedAuthor()
     const current = usePostInfo()!
     const currentPostBy = usePostInfoDetails.author()
-    const postBy = or(authorInPayload, currentPostBy)
+    const postBy = authorInPayload || currentPostBy
     const postMetadataImages = usePostInfoDetails.postMetadataImages()
     const mentionedLinks = usePostInfoDetails.mentionedLinks()
     const Success = props.successComponent || DecryptPostSuccess
