@@ -12,8 +12,8 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { NFTWalletConnect } from './WalletConnect'
 import { BindingProof, PopupRoutes } from '@masknet/shared-base'
-import Services from '../../../extension/service'
 import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
+import { Services } from '../../../extension/service'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},

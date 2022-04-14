@@ -40,7 +40,7 @@ export function PersonaPage(props: PersonaPageProps) {
     }, [nextIDConnectStatus])
 
     const onSelect = useCallback(
-        (tokenInfo: TokenInfo) => {
+        (tokenInfo?: TokenInfo) => {
             onChange(wallets, tokenInfo)
             onNext()
         },

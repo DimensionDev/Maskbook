@@ -35,7 +35,7 @@ interface PersonaItemProps {
     userId: string
     nickname?: string
     platform?: string
-    onSelect?: (tokenInfo: TokenInfo) => void
+    onSelect?: (tokenInfo?: TokenInfo) => void
 }
 
 export function PersonaItem(props: PersonaItemProps) {
@@ -51,8 +51,7 @@ export function PersonaItem(props: PersonaItemProps) {
     )
 
     const onClick = useCallback(() => {
-        if (!_avatar) return
-        onSelect?.({ address: _avatar?.address, tokenId: _avatar?.tokenId })
+        onSelect?.(_avatar ? { address: _avatar?.address, tokenId: _avatar?.tokenId } : undefined)
     }, [_avatar])
     return (
         <div className={classes.root} onClick={onClick}>
