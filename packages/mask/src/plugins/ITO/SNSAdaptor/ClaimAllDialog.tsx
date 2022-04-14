@@ -1,9 +1,11 @@
-import { usePluginIDContext, PluginId, useActivatedPlugin } from '@masknet/plugin-infra'
-import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
 import { SnackbarProvider, makeStyles } from '@masknet/theme'
-import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
+import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog, FormattedBalance } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
 import {
     formatBalance,
@@ -25,7 +27,6 @@ import { useI18N } from '../../../utils'
 import { Flags } from '../../../../shared'
 import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
 import { NftAirdropCard } from './NftAirdropCard'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useClaimAll } from './hooks/useClaimAll'
 import { WalletMessages } from '../../Wallet/messages'
 import { useClaimCallback } from './hooks/useClaimCallback'
@@ -95,7 +96,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             width: '100%',
             alignItems: 'center',
             justifyContent: 'space-between',
-            '-webkit-font-smoothing': 'antialiased',
+            WebkitFontSmoothing: 'antialiased',
             fontSize: 14,
         },
         cardHeaderLocked: {
@@ -229,7 +230,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
     const ITO_Definition = useActivatedPlugin(PluginId.ITO, 'any')
-    const pluginId = usePluginIDContext()
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount()
@@ -269,10 +270,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         setTimeout(() => setInitLoading(false), 1000)
     }, [])
 
-    const onClaimButtonClick = useCallback(() => {
-        claimCallback()
-    }, [claimCallback, chainId])
-
     const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
@@ -300,7 +297,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         if (claimState.type === TransactionStateType.HASH) {
             const { hash } = claimState
             setTimeout(() => {
-                window.open(resolveTransactionLinkOnExplorer(chainId, hash), '_blank', 'noopener noreferrer')
+                openWindow(resolveTransactionLinkOnExplorer(chainId, hash))
             }, 2000)
             return
         }
@@ -365,6 +362,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     chainId={chainId}
                                     classes={{ switchButton: classes.claimAllButton }}
                                     noSwitchNetworkTip
+                                    disablePadding
                                     switchButtonStyle={{
                                         minHeight: 'auto',
                                         width: '100%',
@@ -390,8 +388,8 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                                         TransactionStateType.WAIT_FOR_CONFIRMING,
                                                     ].includes(claimState.type)
                                                 }
-                                                size="large"
-                                                onClick={onClaimButtonClick}>
+                                                size="small"
+                                                onClick={claimCallback}>
                                                 {t('plugin_ito_claim_all')}
                                             </ActionButton>
                                         </EthereumWalletConnectedBoundary>

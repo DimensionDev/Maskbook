@@ -7,9 +7,16 @@ import { isTwitter } from '../social-network-adaptor/twitter.com/base'
 import { usePersonaConnectStatus } from '../components/DataSource/usePersonaConnectStatus'
 import { useI18N } from '../utils'
 import { Box } from '@mui/system'
-import { usePluginI18NField, PluginI18NFieldRender, PluginWrapperComponent, Plugin } from '@masknet/plugin-infra'
+import {
+    usePluginI18NField,
+    PluginI18NFieldRender,
+    PluginWrapperComponent,
+    Plugin,
+    PluginWrapperMethods,
+} from '@masknet/plugin-infra/content-script'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
+    open?: boolean
     title: string
     width?: number
     action?: ReactNode
@@ -65,7 +72,7 @@ const useStyles = makeStyles()((theme) => {
 
 export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const { classes } = useStyles()
-    const { title, children, action, publisher, publisherLink } = props
+    const { open, title, children, action, publisher, publisherLink } = props
     const personaConnectStatus = usePersonaConnectStatus()
     const { t } = useI18N()
 
@@ -110,7 +117,10 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     }, [publisher, publisherLink])
 
     const inner = (
-        <div className={classes.card} onClick={(ev) => ev.stopPropagation()}>
+        <div
+            className={classes.card}
+            style={{ display: open ? 'block' : 'none' }}
+            onClick={(ev) => ev.stopPropagation()}>
             <div className={classes.header}>
                 <MaskIcon size={45} />
                 <div className={classes.title}>
@@ -137,11 +147,19 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
         const [open, setOpen] = useState<boolean>(false)
         const [title, setTitle] = useState<string | undefined>(undefined)
 
-        useImperativeHandle(ref, () => ({ setWidth, setWrap: setOpen, setWrapperName: setTitle }), [])
+        const refItem = useMemo((): PluginWrapperMethods => {
+            return {
+                setWidth,
+                setWrap: setOpen,
+                setWrapperName: setTitle,
+            }
+        }, [])
 
-        if (!open) return <>{props.children}</>
+        useImperativeHandle(ref, () => refItem, [refItem])
+
         return (
             <MaskPostExtraInfoWrapper
+                open={open}
                 title={title || t(ID, name)}
                 width={width}
                 publisher={publisher ? <PluginI18NFieldRender pluginID={ID} field={publisher.name} /> : undefined}

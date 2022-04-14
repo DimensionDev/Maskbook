@@ -10,7 +10,7 @@ export enum TabType {
 export enum ProtocolType {
     Lido = 0,
     AAVE = 1,
-    Venus = 2,
+    Convex = 2,
 }
 export interface SavingsProtocol {
     readonly type: ProtocolType

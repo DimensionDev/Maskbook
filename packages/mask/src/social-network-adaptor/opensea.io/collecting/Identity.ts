@@ -1,6 +1,7 @@
 import { SocialNetworkUI, creator } from '../../../social-network'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { openseaBase } from '../base'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 export const IdentityProviderOpensea: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     async start(signal) {
         const ref = this.recognized
@@ -16,7 +17,7 @@ export const IdentityProviderOpensea: SocialNetworkUI.CollectingCapabilities.Ide
     recognized: creator.EmptyIdentityResolveProviderState(),
 }
 
-async function query(): Promise<null | SocialNetworkUI.CollectingCapabilities.IdentityResolved> {
+async function query(): Promise<null | IdentityResolved> {
     function cookie2Json() {
         const res = decodeURIComponent(document.cookie)
             .split('; ')

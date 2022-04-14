@@ -2,7 +2,7 @@ import { useWeb3Context } from '../context'
 import { useAsyncRetry } from 'react-use'
 import type { NotifyFn, RequestMessage } from '@masknet/web3-shared-base'
 import { v4 as uuid } from 'uuid'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 type SocketMessage = Omit<RequestMessage, 'notify'>
 
@@ -18,13 +18,20 @@ export const useSocket = <T>(message: SocketMessage) => {
     const [data, setData] = useState<T[]>([])
     const [state, setState] = useState(SocketState.init)
     const [error, setError] = useState<unknown>()
-    const [id, setId] = useState(uuid())
+    const [id, setId] = useState(uuid)
     const { value: socket, loading } = useAsyncRetry(() => providerSocket, [])
+    const requestId = `${message.id}_${id}`
+
+    useEffect(() => {
+        setState(SocketState.init)
+        setData([])
+        setError(undefined)
+    }, [message.id])
 
     const { retry } = useAsyncRetry(async () => {
         if (!socket || !message.id || loading) return
-        const requestId = `${message.id}_${id}`
         const notifyUpdatedHook: NotifyFn = (info) => {
+            if (requestId !== info.id) return
             if (!info.done) {
                 setState(SocketState.receiving)
             } else {
@@ -33,7 +40,6 @@ export const useSocket = <T>(message: SocketMessage) => {
             }
             setError(info.error)
             if (!socket) return
-            const requestId = `${message.id}_${id}`
             setData(socket.getResult<T>(requestId))
         }
 
@@ -41,7 +47,7 @@ export const useSocket = <T>(message: SocketMessage) => {
         // Get data from cache
         setData(socket.getResult<T>(requestId))
         setState(SocketState.sent)
-    }, [message.id, socket, loading, id])
+    }, [requestId, socket, loading])
 
     const handleRetry = useCallback(() => {
         setId(uuid())

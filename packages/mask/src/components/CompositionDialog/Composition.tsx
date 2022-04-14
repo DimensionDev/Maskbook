@@ -3,8 +3,9 @@ import { DialogContent } from '@mui/material'
 import { DialogStackingProvider } from '@masknet/theme'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { MaskMessages, useI18N } from '../../utils'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useFriendsList as useRecipientsList } from '../DataSource/useActivatedUI'
-import { InjectedDialog } from '../shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 import { CompositionDialogUI, CompositionRef } from './CompositionUI'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest'
 import Services from '../../extension/service'
@@ -18,6 +19,7 @@ let openOnInitAnswered = false
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useI18N()
 
+    const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     // #region Open
     const [open, setOpen] = useState(false)
     const onClose = useCallback(() => {
@@ -44,9 +46,15 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [onQueryClipboardPermission])
 
     useEffect(() => {
-        return MaskMessages.events.requestComposition.on(({ reason, open, content, options }) => {
-            if (reason !== type || globalUIState.profiles.value.length <= 0) return
+        return CrossIsolationMessages.events.requestComposition.on(({ reason, open, content, options }) => {
+            if (
+                (reason !== 'reply' && reason !== type) ||
+                (reason === 'reply' && type === 'popup') ||
+                globalUIState.profiles.value.length <= 0
+            )
+                return
             setOpen(open)
+            setReason(reason)
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
             if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin)
@@ -63,12 +71,12 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     // #endregion
 
     // #region submit
-    const onSubmit_ = useSubmit(onClose)
+    const onSubmit_ = useSubmit(onClose, reason)
     // #endregion
 
     const UI = useRef<CompositionRef>(null)
-
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
+    const recipients = useRecipientsList()
     return (
         <DialogStackingProvider>
             <InjectedDialog keepMounted open={open} onClose={onClose} title={t('post_dialog__title')}>
@@ -78,7 +86,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         hasClipboardPermission={hasClipboardPermission}
                         onRequestClipboardPermission={onRequestClipboardPermission}
                         requireClipboardPermission={requireClipboardPermission}
-                        recipients={useRecipientsList()}
+                        recipients={recipients}
                         maxLength={560}
                         onSubmit={onSubmit_}
                         supportImageEncoding={networkSupport?.text ?? false}

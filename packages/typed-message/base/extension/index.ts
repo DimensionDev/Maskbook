@@ -1,9 +1,9 @@
-export * from './anchor'
-export * from './MaskPayload'
+export * from './anchor.js'
+export * from './MaskPayload.js'
 
-import { composeSome } from '../utils/internal'
-import * as anchor from './anchor'
-import * as MaskPayload from './MaskPayload'
+import { composeSome } from '../utils/internal.js'
+import * as anchor from './anchor.js'
+import * as MaskPayload from './MaskPayload.js'
 export type WellKnownExtensionTypedMessages = anchor.TypedMessageAnchor | MaskPayload.TypedMessageMaskPayload
 
 export const isWellKnownExtensionTypedMessages = composeSome(

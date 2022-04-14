@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import { useEffect } from 'react'
 import { File } from 'react-feather'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useExchange } from '../hooks/Exchange'
 import { useI18N } from '../../locales/i18n_generated'
 import { FileRouter } from '../../constants'
@@ -12,6 +12,7 @@ import type { FileInfo } from '../../types'
 import { FileName } from './FileName'
 import { resolveGatewayAPI } from '../../helpers'
 import urlcat from 'urlcat'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()({
     container: {
@@ -59,15 +60,15 @@ const useStyles = makeStyles()({
 export const Uploaded: React.FC = () => {
     const t = useI18N()
     const { classes } = useStyles()
-    const history = useHistory()
+    const navigate = useNavigate()
     const { onInsert, onDialogClose } = useExchange()
-    const { state } = useLocation<FileInfo>()
+    const state = useLocation().state as FileInfo
     useEffect(() => {
         onInsert(state)
     }, [onInsert, state])
     const onBack = () => {
         onInsert(null)
-        history.replace(FileRouter.upload)
+        navigate(FileRouter.upload)
     }
 
     // return upload route
@@ -82,7 +83,7 @@ export const Uploaded: React.FC = () => {
 
         const linkPrefix = resolveGatewayAPI(state.provider)
         const link = urlcat(linkPrefix, '/:txId', { txId: state.landingTxID })
-        open(state.key ? `${link}#${state.key}` : link)
+        openWindow(state.key ? `${link}#${state.key}` : link)
     }
     return (
         <Grid container className={classes.container}>

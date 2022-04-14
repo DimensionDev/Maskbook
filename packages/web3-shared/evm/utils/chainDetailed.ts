@@ -95,6 +95,7 @@ export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, 
         [NetworkType.Polygon]: ChainId.Matic,
         [NetworkType.xDai]: ChainId.xDai,
         [NetworkType.Aurora]: ChainId.Aurora,
+        [NetworkType.Conflux]: ChainId.Conflux,
     },
     ChainId.Mainnet,
 )
@@ -102,10 +103,10 @@ export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, 
 // The value should be same as chain field in packages/web3-shared/evm/assets/chains.json
 const chainNameMap: Record<NetworkType, string> = {
     [NetworkType.Ethereum]: 'ETH',
-    [NetworkType.Binance]: 'BSC',
+    [NetworkType.Binance]: 'BNB Chain',
     [NetworkType.Polygon]: 'Polygon',
     [NetworkType.Arbitrum]: 'Arbitrum',
-    [NetworkType.xDai]: 'xDai',
+    [NetworkType.xDai]: 'Gnosis',
     [NetworkType.Celo]: 'CELO',
     [NetworkType.Fantom]: 'FTM',
     [NetworkType.Aurora]: 'Aurora',
@@ -114,6 +115,7 @@ const chainNameMap: Record<NetworkType, string> = {
     [NetworkType.Fuse]: 'Fuse',
     [NetworkType.Metis]: 'Metis',
     [NetworkType.Optimistic]: 'Optimistic',
+    [NetworkType.Conflux]: 'Conflux',
 }
 export function getNetworkTypeFromChainId(chainId: ChainId, value?: boolean) {
     const chainDetailed = getChainDetailed(chainId)

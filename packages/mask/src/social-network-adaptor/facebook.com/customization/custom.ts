@@ -2,10 +2,10 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
-import { useValueRef } from '@masknet/shared'
-import { SubscriptionFromValueRef } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import type { SocialNetworkUI } from '../../../social-network'
-import { fromRGB, isDark, shade, toRGB } from '../../../utils/theme-tools'
+import { fromRGB, isDark, shade, toRGB } from '../../../utils/theme'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))
@@ -13,7 +13,7 @@ const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
 
 const currentTheme = new ValueRef<PaletteMode>('light')
 export const PaletteModeProviderFacebook: SocialNetworkUI.Customization.PaletteModeProvider = {
-    current: SubscriptionFromValueRef(currentTheme),
+    current: createSubscriptionFromValueRef(currentTheme),
     start: startWatchThemeColor,
 }
 

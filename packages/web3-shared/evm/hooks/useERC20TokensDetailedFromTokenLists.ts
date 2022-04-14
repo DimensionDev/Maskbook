@@ -7,19 +7,21 @@ import { useWeb3Context } from '../context'
 import { useChainId } from './useChainId'
 import { currySameAddress } from '../utils'
 import type { ERC20TokenDetailed, NativeTokenDetailed, ChainId } from '../types'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 export function useERC20TokensDetailedFromTokenLists(
     lists?: string[],
     keyword = '',
-    additionalTokens: (ERC20TokenDetailed | NativeTokenDetailed)[] = [],
+    additionalTokens: (ERC20TokenDetailed | NativeTokenDetailed)[] = EMPTY_LIST,
     targetChainId?: ChainId,
 ): AsyncStateRetry<(ERC20TokenDetailed | NativeTokenDetailed)[]> {
     // #region fetch token lists
     const currentChainId = useChainId()
     const chainId = targetChainId ?? currentChainId
     const { fetchERC20TokensFromTokenLists } = useWeb3Context()
-    const { value: tokensFromList = [], ...asyncResult } = useAsyncRetry(
+    const { value: tokensFromList = EMPTY_LIST, ...asyncResult } = useAsyncRetry(
         async () => (!lists || lists.length === 0 ? [] : fetchERC20TokensFromTokenLists(lists, chainId)),
+        // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
         [chainId, lists?.sort().join()],
     )
     // #endregion
@@ -35,7 +37,7 @@ export function useERC20TokensDetailedFromTokenLists(
                     { name: 'symbol', weight: 1 },
                 ],
             }),
-        [tokensFromList, additionalTokens],
+        [tokensFromList, additionalTokens.map((x) => x.address).join()],
     )
     // #endregion
 
@@ -48,7 +50,7 @@ export function useERC20TokensDetailedFromTokenLists(
             ...(EthereumAddress.isValid(keyword) ? allToken.filter(currySameAddress(keyword)) : []),
             ...fuse.search(keyword).map((x) => x.item),
         ]
-    }, [keyword, fuse, tokensFromList, additionalTokens])
+    }, [keyword, fuse, tokensFromList, additionalTokens.map((x) => x.address).join()])
     // #endregion
 
     if (!asyncResult.error)

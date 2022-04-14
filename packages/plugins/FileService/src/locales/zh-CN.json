@@ -1,5 +1,6 @@
 {
     "__display_name": "插件：文件服务",
+    "__description": "上传和分享文件至 Arweave 网络，永久性地存储数据。",
     "__composition_entry": "📃 文件服务",
     "on_insert": "使用该文件",
     "uploading_preparing": "准备中",
@@ -23,5 +24,8 @@
     "drop_here": "将文件拖放到此处来上传。",
     "error_101": "此输入不是单个文件。",
     "error_102": "文件太大，限制为 {{limit}}。",
-    "on_change_file": "更改文件"
+    "on_change_file": "更改文件",
+    "provider_arweave": "Arweave",
+    "provider_ipfs": "IPFS",
+    "provider_swarm": "Swarm"
 }

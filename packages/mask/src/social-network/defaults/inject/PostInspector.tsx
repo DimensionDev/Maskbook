@@ -1,10 +1,9 @@
 import { memo } from 'react'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
-import type { PostInfo } from '../../PostInfo'
+import { type PostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostInspector, PostInspectorProps } from '../../../components/InjectedComponents/PostInspector'
 import { makeStyles } from '@masknet/theme'
-import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-unified'
 
 export function injectPostInspectorDefault<T extends string>(
@@ -41,7 +40,7 @@ export function injectPostInspectorDefault<T extends string>(
             signal,
         })
         root.render(jsx)
-        return root.destory
+        return root.destroy
     }
 }
 

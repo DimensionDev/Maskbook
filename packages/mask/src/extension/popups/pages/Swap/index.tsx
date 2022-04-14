@@ -1,6 +1,7 @@
 import { Appearance, applyMaskColorVars, makeStyles } from '@masknet/theme'
 import { TransactionStatusType, useChainId, useWallet, Web3Provider } from '@masknet/web3-shared-evm'
 import { ThemeProvider, Typography } from '@mui/material'
+import { SharedContextProvider } from '@masknet/shared'
 import { useCallback } from 'react'
 import { useRecentTransactions } from '../../../../plugins/Wallet/hooks/useRecentTransactions'
 import Services from '../../../service'
@@ -8,8 +9,9 @@ import { WalletStateBarUI } from '../../components/WalletStateBar'
 import { SwapBox } from './SwapBox'
 import { SwapWeb3Context } from '../../../../web3/context'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useI18N, usePopupsMaskFullPageTheme } from '../../../../utils'
-import { NetworkPluginID, useReverseAddress } from '@masknet/plugin-infra'
+import { useI18N } from '../../../../utils'
+import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme'
+import { NetworkPluginID, useReverseAddress } from '@masknet/plugin-infra/web3'
 import { TargetChainIdContext } from '../../../../plugins/Trader/trader/useTargetChainIdContext'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
 
@@ -67,7 +69,7 @@ export default function SwapPage() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
-    const theme = usePopupsMaskFullPageTheme()
+    const theme = useSwapPageTheme()
     const { value: pendingTransactions = [] } = useRecentTransactions({
         status: TransactionStatusType.NOT_DEPEND,
     })
@@ -86,30 +88,32 @@ export default function SwapPage() {
     return (
         <Web3Provider value={SwapWeb3Context}>
             <ThemeProvider theme={theme}>
-                <div className={classes.page}>
-                    <div className={classes.container}>
-                        <header className={classes.header}>
-                            <WalletStateBarUI
-                                className={classes.walletStateBar}
-                                isPending={pendingTransactions.length > 0}
-                                openConnectWalletDialog={openPopupsWindow}
-                                walletName={wallet?.name}
-                                domain={domain}
-                                walletAddress={wallet?.address}
-                            />
-                        </header>
-                        <main className={classes.main}>
-                            <Typography variant="h1" className={classes.title}>
-                                {t('plugin_trader_swap')}
-                            </Typography>
-                            <TargetChainIdContext.Provider>
-                                <AllProviderTradeContext.Provider>
-                                    <SwapBox />
-                                </AllProviderTradeContext.Provider>
-                            </TargetChainIdContext.Provider>
-                        </main>
+                <SharedContextProvider>
+                    <div className={classes.page}>
+                        <div className={classes.container}>
+                            <header className={classes.header}>
+                                <WalletStateBarUI
+                                    className={classes.walletStateBar}
+                                    isPending={pendingTransactions.length > 0}
+                                    openConnectWalletDialog={openPopupsWindow}
+                                    walletName={wallet?.name}
+                                    domain={domain}
+                                    walletAddress={wallet?.address}
+                                />
+                            </header>
+                            <main className={classes.main}>
+                                <Typography variant="h1" className={classes.title}>
+                                    {t('plugin_trader_swap')}
+                                </Typography>
+                                <TargetChainIdContext.Provider>
+                                    <AllProviderTradeContext.Provider>
+                                        <SwapBox />
+                                    </AllProviderTradeContext.Provider>
+                                </TargetChainIdContext.Provider>
+                            </main>
+                        </div>
                     </div>
-                </div>
+                </SharedContextProvider>
             </ThemeProvider>
         </Web3Provider>
     )

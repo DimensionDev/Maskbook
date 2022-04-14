@@ -4,7 +4,7 @@ import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import {
     ChainId,
-    getSavingsConstants,
+    getConvexConstants,
     createContract,
     FungibleTokenDetailed,
     ZERO_ADDRESS,
@@ -20,7 +20,7 @@ import ConvexBoosterABI from '@masknet/web3-contracts/abis/ConvexBooster.json'
 import CurveFiABI from '@masknet/web3-contracts/abis/ICurveFi.json'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
-import { ProtocolType, SavingsProtocol } from '../../Savings Old/types'
+import { ProtocolType, SavingsProtocol } from '../types'
 
 import { CONVEX_POOLS } from '../constants'
 
@@ -58,7 +58,7 @@ export class ConvexProtocol implements SavingsProtocol {
         return this.pair[1]
     }
 
-    public async updateApr(web3: Web3, chainId: ChainId) {
+    public async updateApr(chainId: ChainId, web3: Web3) {
         try {
             const subgraphUrl = CONVEX_STAKING_SUBGRAPH || ''
 
@@ -100,11 +100,11 @@ export class ConvexProtocol implements SavingsProtocol {
         }
     }
 
-    public async updateBalance(web3: Web3, account: string, chainId: ChainId) {
+    public async updateBalance(chainId: ChainId, web3: Web3, account: string) {
         try {
             const poolData = CONVEX_POOLS.find((pool: { token: string }) => pool.token === this.bareToken.address)
 
-            const boostAddress = getSavingsConstants(chainId).CONVEX_BOOSTER_ADDRESS || ZERO_ADDRESS
+            const boostAddress = getConvexConstants(chainId).CONVEX_BOOSTER_ADDRESS || ZERO_ADDRESS
 
             const BoostContract = createContract<ConvexBooster>(web3, boostAddress, ConvexBoosterABI as AbiItem[])
 
@@ -141,7 +141,7 @@ export class ConvexProtocol implements SavingsProtocol {
     private async createDepositTokenOperation(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         const poolData = CONVEX_POOLS.find((pool: { token: string }) => pool.token === this.bareToken.address)
 
-        const boostAddress = getSavingsConstants(chainId).CONVEX_BOOSTER_ADDRESS || ZERO_ADDRESS
+        const boostAddress = getConvexConstants(chainId).CONVEX_BOOSTER_ADDRESS || ZERO_ADDRESS
 
         const BoostContract = createContract<ConvexBooster>(web3, boostAddress, ConvexBoosterABI as AbiItem[])
 
@@ -151,15 +151,6 @@ export class ConvexProtocol implements SavingsProtocol {
 
         const stakingToken = createContract<ICurveFi>(web3, tokenPooladdress || ZERO_ADDRESS, CurveFiABI as AbiItem[])
         const stakingTokenERC20 = createContract<ERC20>(web3, tokenPooladdress || ZERO_ADDRESS, ERC20ABI as AbiItem[])
-
-        const allowance = await stakingTokenERC20?.methods.allowance(account, boostAddress).call()
-
-        // // check allowance
-        // if (allowance) {
-        //     // eslint-disable-next-line no-sparse-arrays
-        //     return stakingToken?.methods.add_liquidity([new BigNumber(value).toFixed(), 0, 0, 0], account)
-        // }
-        // return stakingTokenERC20?.methods.approve(boostAddress, account).call()
 
         return stakingToken?.methods.add_liquidity([new BigNumber(value).toFixed(), 0, 0, 0], account)
     }
@@ -185,7 +176,7 @@ export class ConvexProtocol implements SavingsProtocol {
         try {
             const poolData = CONVEX_POOLS.find((pool) => pool.token === this.bareToken.address)
 
-            const boostAddress = getSavingsConstants(chainId).CONVEX_BOOSTER_ADDRESS || ZERO_ADDRESS
+            const boostAddress = getConvexConstants(chainId).CONVEX_BOOSTER_ADDRESS || ZERO_ADDRESS
 
             const BoostContract = createContract<ConvexBooster>(web3, boostAddress, ConvexBoosterABI as AbiItem[])
             const poolID = poolData?.id!
@@ -205,7 +196,7 @@ export class ConvexProtocol implements SavingsProtocol {
             const poolData = CONVEX_POOLS.find((pool) => pool.token === this.bareToken.address)
             const poolID = poolData?.id!
 
-            const boostAddress = getSavingsConstants(chainId).CONVEX_BOOSTER_ADDRESS || ZERO_ADDRESS
+            const boostAddress = getConvexConstants(chainId).CONVEX_BOOSTER_ADDRESS || ZERO_ADDRESS
 
             const BoostContract = createContract<ConvexBooster>(web3, boostAddress, ConvexBoosterABI as AbiItem[])
 

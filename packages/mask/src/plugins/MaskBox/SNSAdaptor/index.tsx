@@ -1,11 +1,13 @@
 import { useMemo } from 'react'
-import { Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra'
+import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { base } from '../base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { PreviewCard } from './components/PreviewCard'
 import { Context } from '../hooks/useContext'
+import { ApplicationEntry } from '@masknet/shared'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
@@ -26,6 +28,34 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    ApplicationEntries: [
+        {
+            RenderEntryComponent({ disabled }) {
+                return (
+                    <ApplicationEntry
+                        title="Mask Bridge"
+                        disabled={disabled}
+                        icon={new URL('../assets/bridge.png', import.meta.url).toString()}
+                        onClick={() => openWindow('https://bridge.mask.io/#/')}
+                    />
+                )
+            },
+            defaultSortingPriority: 5,
+        },
+        {
+            RenderEntryComponent({ disabled }) {
+                return (
+                    <ApplicationEntry
+                        title="MaskBox"
+                        disabled={disabled}
+                        icon={new URL('../assets/mask_box.png', import.meta.url).toString()}
+                        onClick={() => openWindow('https://box.mask.io/#/')}
+                    />
+                )
+            },
+            defaultSortingPriority: 6,
+        },
+    ],
 }
 
 export default sns

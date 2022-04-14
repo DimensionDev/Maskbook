@@ -1,4 +1,3 @@
-/* eslint-disable import/no-deprecated */
 import {
     isBackupJSONFileVersion1,
     patchNonBreakingUpgradeForBackupJSONFileVersion1,

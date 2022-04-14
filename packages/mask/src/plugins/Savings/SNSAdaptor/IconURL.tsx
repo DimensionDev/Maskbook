@@ -3,5 +3,5 @@ import { ProtocolType } from '../types'
 export const ProviderIconURLs: Record<ProtocolType, string> = {
     [ProtocolType.Lido]: new URL('./assets/lido.png', import.meta.url).toString(),
     [ProtocolType.AAVE]: new URL('./assets/aave.png', import.meta.url).toString(),
-    [ProtocolType.Venus]: new URL('./assets/venus.png', import.meta.url).toString(),
+    [ProtocolType.Convex]: new URL('./assets/convex.png', import.meta.url).toString(),
 }

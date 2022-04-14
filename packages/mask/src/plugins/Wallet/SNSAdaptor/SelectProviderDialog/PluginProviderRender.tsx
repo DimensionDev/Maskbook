@@ -1,5 +1,5 @@
 import { SelectedIcon } from '@masknet/icons'
-import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
+import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ImageIcon } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'

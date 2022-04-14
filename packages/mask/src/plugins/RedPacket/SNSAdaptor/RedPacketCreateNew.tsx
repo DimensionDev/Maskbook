@@ -1,10 +1,10 @@
 import { makeStyles } from '@masknet/theme'
+import { MINDS_ID } from '@masknet/shared'
 import { useChainId, ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketFormProps, RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../../../utils'
-import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
 
 import { IconURLs } from './IconURL'
@@ -83,7 +83,7 @@ export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly
                 ),
                 children: <RedPacketERC721Form onClose={onClose} />,
                 sx: { p: 0 },
-                disabled: ![ChainId.Mainnet, ChainId.Matic, ChainId.BSC].includes(chainId),
+                disabled: ![ChainId.Mainnet, ChainId.Matic, ChainId.BSC, ChainId.Conflux].includes(chainId),
             },
         ],
         state,

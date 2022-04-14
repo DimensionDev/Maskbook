@@ -3,10 +3,6 @@ import Services from '../extension/service'
 import { MaskMessages } from '../utils/messages'
 import { defer } from '@dimensiondev/kit'
 
-export interface SettingsTexts {
-    primary: () => string
-    secondary?: () => string
-}
 export type InternalSettings<T> = ValueRef<T> & {
     readonly key: string
     readonly ready: boolean
@@ -14,6 +10,8 @@ export type InternalSettings<T> = ValueRef<T> & {
     readonly resolve: (value: T) => void
     readonly reject: (e: Error) => void
 }
+export type ValueComparer<T> = (a: T, b: T) => boolean
+const defaultValueComparer = (a: any, b: any) => a === b
 
 const cached: Map<string, InternalSettings<any>> = new Map()
 const lastEventId: Map<string, number> = new Map()
@@ -46,10 +44,10 @@ MaskMessages.events.createInternalSettingsUpdated.on(async (payload) => {
     settings.resolve(settings.value)
 })
 
-export function createInternalSettings<T extends browser.storage.StorageValue>(
+export function createComplexInternalSettings<T extends browser.storage.StorageValue>(
     key: string,
     value: T,
-    comparer: (a: T, b: T) => boolean = (a, b) => a === b,
+    comparer: ValueComparer<T>,
 ) {
     const settings = new ValueRef(value, comparer) as InternalSettings<T>
     const [readyPromise, resolve, reject] = defer<T>()
@@ -89,31 +87,49 @@ export function createInternalSettings<T extends browser.storage.StorageValue>(
     return settings
 }
 
-export function createGlobalSettings<T extends browser.storage.StorageValue>(
+export function createInternalSettings(key: string, defaultValue: number): InternalSettings<number>
+export function createInternalSettings(key: string, defaultValue: string): InternalSettings<string>
+export function createInternalSettings(key: string, defaultValue: boolean): InternalSettings<boolean>
+export function createInternalSettings<T extends string | number>(key: string, defaultValue: T): InternalSettings<T>
+export function createInternalSettings(key: string, defaultValue: any): InternalSettings<any> {
+    return createComplexInternalSettings(key, defaultValue, defaultValueComparer)
+}
+
+export function createComplexGlobalSettings<T extends browser.storage.StorageValue>(
     key: string,
     value: T,
-    UITexts: SettingsTexts,
-    comparer: (a: T, b: T) => boolean = (a, b) => a === b,
+    comparer: ValueComparer<T>,
 ) {
-    const settings = createInternalSettings(`settings+${key}`, value, comparer)
+    const settings = createComplexInternalSettings(`settings+${key}`, value, comparer)
     return settings
+}
+export function createGlobalSettings(key: string, defaultValue: number): InternalSettings<number>
+export function createGlobalSettings(key: string, defaultValue: string): InternalSettings<string>
+export function createGlobalSettings(key: string, defaultValue: boolean): InternalSettings<boolean>
+export function createGlobalSettings<T extends string | number>(key: string, defaultValue: T): InternalSettings<T>
+export function createGlobalSettings(key: string, defaultValue: any): InternalSettings<any> {
+    return createComplexGlobalSettings(key, defaultValue, defaultValueComparer)
 }
 
 export interface NetworkSettings<T> {
     [networkKey: string]: ValueRef<T> & { ready: boolean; readyPromise: Promise<T> }
 }
 
-export function createNetworkSettings<T extends browser.storage.StorageValue>(settingsKey: string, defaultValue: T) {
+export function createComplexNetworkSettings<T extends browser.storage.StorageValue>(
+    settingsKey: string,
+    defaultValue: T,
+    comparer: ValueComparer<T>,
+) {
     const cached: NetworkSettings<T> = {}
     MaskMessages.events.createNetworkSettingsReady.on((networkKey) => {
         if (networkKey.startsWith('plugin:') || settingsKey === 'pluginsEnabled') return
         if (!(networkKey in cached))
-            cached[networkKey] = createInternalSettings(`${networkKey}+${settingsKey}`, defaultValue)
+            cached[networkKey] = createComplexInternalSettings(`${networkKey}+${settingsKey}`, defaultValue, comparer)
     })
     return new Proxy(cached, {
         get(target, networkKey: string) {
             if (!(networkKey in target)) {
-                const settings = createInternalSettings(`${networkKey}+${settingsKey}`, defaultValue)
+                const settings = createComplexInternalSettings(`${networkKey}+${settingsKey}`, defaultValue, comparer)
                 target[networkKey] = settings
                 settings.readyPromise.then(() => MaskMessages.events.createNetworkSettingsReady.sendToAll(networkKey))
             }
@@ -125,4 +141,11 @@ export function createNetworkSettings<T extends browser.storage.StorageValue>(se
             return true
         },
     })
+}
+export function createNetworkSettings(key: string, defaultValue: number): NetworkSettings<number>
+export function createNetworkSettings(key: string, defaultValue: string): NetworkSettings<string>
+export function createNetworkSettings(key: string, defaultValue: boolean): NetworkSettings<boolean>
+export function createNetworkSettings<T extends string | number>(key: string, defaultValue: T): NetworkSettings<T>
+export function createNetworkSettings(key: string, defaultValue: any): NetworkSettings<any> {
+    return createComplexNetworkSettings(key, defaultValue, defaultValueComparer)
 }

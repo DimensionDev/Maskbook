@@ -1,4 +1,4 @@
-import type { PostInfo } from '../../../social-network/PostInfo'
+import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { injectPostReplacer } from '../../../social-network/defaults/inject/PostReplacer'
 
 function resolveLangNode(node: HTMLElement) {

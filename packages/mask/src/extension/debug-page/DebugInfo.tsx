@@ -1,6 +1,7 @@
 import { map } from 'lodash-unified'
 import { makeNewBugIssueURL } from './issue'
 import { useI18N } from '../../utils'
+import { openWindow } from '@masknet/shared-base-ui'
 export const DEBUG_INFO = {
     'User Agent': navigator.userAgent,
     'Mask Version': process.env.VERSION,
@@ -16,9 +17,7 @@ export const DEBUG_INFO = {
 
 export const DebugInfo = () => {
     const { t } = useI18N()
-    const onNewBugIssue = () => {
-        open(makeNewBugIssueURL())
-    }
+    const onNewBugIssue = () => openWindow(makeNewBugIssueURL())
 
     return (
         <>

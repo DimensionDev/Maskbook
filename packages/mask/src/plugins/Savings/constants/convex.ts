@@ -1,4 +1,4 @@
-import { ChainId, createERC20Tokens } from '@masknet/web3-shared-evm'
+import { ChainId, createERC20Tokens, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 
 export const CONVEX_POOLS = [
     {
@@ -946,7 +946,7 @@ export const CONVEX_POOLS = [
     },
 ]
 
-export const CONVEX_PAIRS = [
+export const CONVEX_PAIRS: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
     [
         createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)[ChainId.Mainnet],
         createERC20Tokens('CONVEX_USDT_LP_ADDRESS', 'Convex  USDT ', 'USDT', 6)[ChainId.Mainnet],
@@ -964,7 +964,7 @@ export const CONVEX_PAIRS = [
             ChainId.Mainnet
         ],
         createERC20Tokens(
-            'CONVEX_YPOOL_LP_ADDRESSS',
+            'CONVEX_YPOOL_LP_ADDRESS',
             'Curve.fi yDAI/yUSDC/yUSDT/yTUSD',
             'cvxyDAI+yUSDC+yUSDT+yTUSD',
             18,
@@ -1075,7 +1075,7 @@ export const CONVEX_PAIRS = [
         )[ChainId.Mainnet],
     ],
     [
-        createERC20Tokens('CONVEX_D3POOL_ADDRESSS', 'Curve.fi Factory Plain Pool: d3pool', 'D3-f', 18)[ChainId.Mainnet],
+        createERC20Tokens('CONVEX_D3POOL_ADDRESS', 'Curve.fi Factory Plain Pool: d3pool', 'D3-f', 18)[ChainId.Mainnet],
         createERC20Tokens('CONVEX_D3POOL_LP_ADDRESS', 'Curve.fi Factory Plain Pool: d3pool Deposit', 'D3-f', 18)[
             ChainId.Mainnet
         ],
