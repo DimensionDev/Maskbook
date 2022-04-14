@@ -68,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
     roundBtn: {
         borderRadius: 99,
     },
-    diasbleBtn: {
+    disableBtn: {
         pointerEvents: 'none',
         opacity: 0.5,
     },
@@ -170,7 +170,7 @@ export function Steps(props: StepsProps) {
                     Cancel
                 </ActionButton>
                 <ActionButton
-                    className={disableConfirm ? classNames(classes.roundBtn, classes.diasbleBtn) : classes.roundBtn}
+                    className={disableConfirm ? classNames(classes.roundBtn, classes.disableBtn) : classes.roundBtn}
                     variant="contained"
                     size="large"
                     fullWidth
