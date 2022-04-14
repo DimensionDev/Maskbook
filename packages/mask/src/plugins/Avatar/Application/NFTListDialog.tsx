@@ -15,20 +15,12 @@ const useStyles = makeStyles()((theme) => ({
         top: 8,
         right: 4,
     },
-    bar: {
-        alignItems: 'center',
-        position: 'absolute',
-        bottom: theme.spacing(2),
-        display: 'flex',
-    },
-    info: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    add: {},
+
     button: {
         width: 219,
+    },
+    actions: {
+        padding: theme.spacing(0, 2, 2, 2),
     },
 }))
 interface NFTListDialogProps {
@@ -68,6 +60,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setOpen_(true)
     }, [])
 
+    useEffect(() => {
+        if (!selectedToken) setDisabled(true)
+    }, [selectedToken, tokenInfo])
+
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
     return (
         <>
@@ -82,7 +78,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     <NFTList tokenInfo={tokenInfo} address={selectedAccount} onSelect={onSelect} />
                 )}
             </DialogContent>
-            <DialogActions>
+            <DialogActions className={classes.actions}>
                 <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
                     <Typography variant="body1" color="textPrimary">
                         Can' find it.
@@ -92,10 +88,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     </Typography>
                 </Stack>
 
-                <Button
-                    disabled={(!selectedToken && !tokenInfo) || disabled}
-                    className={classes.button}
-                    onClick={onSave}>
+                <Button disabled={disabled} className={classes.button} onClick={onSave}>
                     Set NFT Avatar
                 </Button>
             </DialogActions>
