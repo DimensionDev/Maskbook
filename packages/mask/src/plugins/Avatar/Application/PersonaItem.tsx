@@ -9,7 +9,7 @@ import { useCheckTokenOwner, useTokenOwner } from '../hooks/useTokenOwner'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import type { TokenInfo } from '../types'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
@@ -45,10 +45,13 @@ export function PersonaItem(props: PersonaItemProps) {
     const { value: _avatar, loading } = useNFTAvatar(userId.toLowerCase(), RSS3_KEY_SNS.TWITTER)
     const { value: token, loading: loadingToken } = useTokenOwner(_avatar?.address ?? '', _avatar?.tokenId ?? '')
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(token?.owner)
+    const [haveNFT, setHaveNFT] = useState(false)
 
-    const haveNFT = Boolean(
-        _avatar && token && isOwner && _avatar.avatarId === getAvatarId(currentIdentity.avatar ?? ''),
-    )
+    useEffect(() => {
+        setHaveNFT(
+            Boolean(_avatar && token && isOwner && _avatar.avatarId === getAvatarId(currentIdentity.avatar ?? '')),
+        )
+    }, [_avatar, token, isOwner, currentIdentity.avatar])
 
     const onClick = useCallback(() => {
         onSelect?.(_avatar ? { address: _avatar?.address, tokenId: _avatar?.tokenId } : undefined)

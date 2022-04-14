@@ -17,9 +17,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     <Avatar src={avatar} />
                 </RainbowBox>
             ) : (
-                <>
-                    <Avatar src={avatar} />
-                </>
+                <Avatar src={avatar} />
             )}
 
             <Stack sx={{ position: 'absolute', right: -9, bottom: 0, borderRadius: '100%', backgroundColor: 'white' }}>
