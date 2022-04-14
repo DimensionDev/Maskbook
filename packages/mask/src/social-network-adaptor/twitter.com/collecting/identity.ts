@@ -49,7 +49,7 @@ function resolveLastRecognizedIdentityMobileInner(
     const onLocationChange = async () => {
         const settings = await Twitter.getSettings()
 
-        if (settings?.screen_name && !ref.value.identifier) {
+        if (settings?.screen_name && (!ref.value.identifier || ref.value.identifier.isUnknown)) {
             ref.value = {
                 ...ref.value,
                 identifier: new ProfileIdentifier(twitterBase.networkIdentifier, settings.screen_name),
@@ -57,6 +57,7 @@ function resolveLastRecognizedIdentityMobileInner(
         }
     }
 
+    onLocationChange()
     window.addEventListener('locationchange', onLocationChange)
     cancel.addEventListener('abort', () => window.removeEventListener('locationchange', onLocationChange))
 }
