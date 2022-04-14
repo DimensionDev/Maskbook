@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { ERC721TokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
+import { SelectedIcon } from '../assets/selected'
 
 const useStyles = makeStyles()((theme) => ({
     imgBackground: {
@@ -37,6 +38,7 @@ interface NFTImageProps {
     token: ERC721TokenDetailed
     selectedToken?: ERC721TokenDetailed
     onChange: (token: ERC721TokenDetailed) => void
+    haveBadge?: boolean
 }
 
 function isSameNFT(a: ERC721TokenDetailed, b?: ERC721TokenDetailed) {
@@ -48,7 +50,7 @@ function isSameNFT(a: ERC721TokenDetailed, b?: ERC721TokenDetailed) {
 }
 
 export function NFTImage(props: NFTImageProps) {
-    const { token, onChange, selectedToken } = props
+    const { token, onChange, selectedToken, haveBadge = false } = props
     const { classes } = useStyles()
 
     return (
@@ -58,6 +60,7 @@ export function NFTImage(props: NFTImageProps) {
                 src={token.info.imageURL}
                 className={classNames(classes.image, isSameNFT(token, selectedToken) ? classes.selected : '')}
             />
+            {haveBadge && isSameNFT(token, selectedToken) ? <SelectedIcon className={classes.icon} /> : null}
         </div>
     )
 }

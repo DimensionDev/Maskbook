@@ -10,7 +10,6 @@ interface NFTAvatarProps {
 
 export function NFTAvatar(props: NFTAvatarProps) {
     const { avatar, hasBorder, platform = '' } = props
-    console.log('hasborder:', hasBorder)
     return (
         <Stack position="relative">
             {hasBorder ? (

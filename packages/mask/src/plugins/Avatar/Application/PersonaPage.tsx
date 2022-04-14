@@ -47,7 +47,6 @@ export function PersonaPage(props: PersonaPageProps) {
         [wallets],
     )
 
-    console.log(binds)
     return (
         <DialogContent sx={{ height: 612 }}>
             {loading ? (

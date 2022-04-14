@@ -1,50 +1,24 @@
 import { createIcon } from '@masknet/icons'
+import { SvgIcon, SvgIconProps } from '@mui/material'
 
-export const CheckedIcon = createIcon(
-    'CheckedIcon',
-    <g>
-        <g filter="url(#filter0_d_1838_8775)">
-            <circle cx="20" cy="16" r="10" fill="#3DC233" />
-        </g>
+const CheckedSvg = (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" fill="#3DC233" />
         <path
-            d="M15.166 16.6309L18.4993 20.1309L25.166 13.1309"
+            d="M7 12.5L10.3333 16L17 9"
             stroke="white"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
-        <defs>
-            <filter
-                id="filter0_d_1838_8775"
-                x="0"
-                y="0"
-                width="40"
-                height="40"
-                filterUnits="userSpaceOnUse"
-                colorInterpolationFilters="sRGB">
-                <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                <feColorMatrix
-                    in="SourceAlpha"
-                    type="matrix"
-                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                    result="hardAlpha"
-                />
-                <feOffset dy="4" />
-                <feGaussianBlur stdDeviation="5" />
-                <feComposite in2="hardAlpha" operator="out" />
-                <feColorMatrix type="matrix" values="0 0 0 0 0.239216 0 0 0 0 0.760784 0 0 0 0 0.2 0 0 0 0.2 0" />
-                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1838_8775" />
-                <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1838_8775" result="shape" />
-            </filter>
-        </defs>
-    </g>,
-    '0 0 40 40',
+    </svg>
 )
+export const CheckedIcon = (props: SvgIconProps) => <SvgIcon {...props}>{CheckedSvg}</SvgIcon>
 
 export const UncheckIcon = createIcon(
     'UncheckIcon',
     <g>
-        <circle cx="20" cy="16" r="10" fill="none" stroke="#CFD9DE" strokeWidth="2" />
+        <circle cx="12" cy="12" r="10" fill="none" strokeWidth="2" stroke="#CFD9DE" />
     </g>,
-    '0 0 40 40',
+    '0 0 24 24',
 )

@@ -27,10 +27,12 @@ const useStyles = makeStyles()(() => ({
     address: {},
     copy: {},
     link: {},
-    linkIcon: {},
+    linkIcon: {
+        color: '#536471',
+    },
     icon: {
-        width: 40,
-        height: 40,
+        width: 24,
+        height: 24,
     },
 }))
 
