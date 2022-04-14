@@ -1,13 +1,13 @@
-import type { NetworkPluginID } from '..'
+import type { NetworkPluginID } from '../web3-types'
 import { useNetworkType } from './useNetworkType'
-import { usePluginIDContext } from './Context'
+import { useCurrentWeb3NetworkPluginID } from './Context'
 import { getPluginDefine } from '../manager/store'
 
 export function useNetworkDescriptor(
     expectedChainIdOrNetworkTypeOrID?: number | string,
     expectedPluginID?: NetworkPluginID,
 ) {
-    const pluginID = usePluginIDContext()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const pid = expectedPluginID ?? pluginID
     const networkType = useNetworkType(pid)
 

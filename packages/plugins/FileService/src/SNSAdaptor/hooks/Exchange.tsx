@@ -2,7 +2,7 @@ import { noop, omit } from 'lodash-unified'
 import { createContext, useContext } from 'react'
 import type { FileInfo, DialogCloseCallback } from '../../types'
 
-export interface Props {
+export interface Props extends React.PropsWithChildren<{}> {
     onInsert(info: FileInfo | null): void
     onUploading(enabled: boolean): void
     onDialogClose(cb: DialogCloseCallback): void

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import type { DataProvider } from '@masknet/public-api'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { currentDataProviderSettings } from '../settings'
 
 export function useCurrentDataProvider(availableDataProviders: DataProvider[]) {
@@ -13,6 +13,10 @@ export function useCurrentDataProvider(availableDataProviders: DataProvider[]) {
         setDataProvider(
             availableDataProviders.includes(currentDataProvider) ? currentDataProvider : availableDataProviders[0],
         )
-    }, [availableDataProviders.sort().join(), currentDataProvider])
+    }, [
+        // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
+        availableDataProviders.sort().join(),
+        currentDataProvider,
+    ])
     return dataProvider
 }

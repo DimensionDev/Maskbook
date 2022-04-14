@@ -2,7 +2,7 @@ import { postsContentSelector, postsImageSelector, timelinePostContentSelector }
 import { IntervalWatcher, DOMProxy, DOMProxyEvents } from '@dimensiondev/holoflows-kit'
 import type { EventListener } from '@servie/events'
 import { creator, globalUIState, SocialNetworkUI as Next } from '../../../social-network'
-import type { PostInfo } from '../../../social-network/PostInfo'
+import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { postIdParser, postParser, postImagesParser, postContentMessageParser } from '../utils/fetch'
 import { memoize, noop } from 'lodash-unified'
 import Services from '../../../extension/service'
@@ -15,6 +15,7 @@ import {
     makeTypedMessagePromise,
     makeTypedMessageTuple,
     isTypedMessageText,
+    isTypedMessageAnchor,
 } from '@masknet/typed-message'
 import { untilElementAvailable } from '../../../utils/dom'
 import { twitterBase } from '../base'
@@ -153,11 +154,18 @@ export function collectVerificationPost(keyword: string) {
     for (const postNode of postNodes) {
         const postId = postIdParser(postNode)
         const postContent = postContentMessageParser(postNode)
+        const content = postContent
+            .map((x) => {
+                if (isTypedMessageText(x)) return x.content ?? ''
+                if (isTypedMessageAnchor(x) && x.category === 'user') return x.content ?? ''
+                if (isTypedMessageAnchor(x) && x.category === 'normal')
+                    return (x.content ?? '').replace(/http(.*)\/\//g, '')
+                return ''
+            })
+            .join('')
         const isVerified =
             postId &&
-            postContent[0] &&
-            isTypedMessageText(postContent[0]) &&
-            (postContent[0].content ?? '').toLowerCase() === keyword.toLowerCase()
+            content.toLowerCase().replace(/\r\n|\n|\r/gm, '') === keyword.toLowerCase().replace(/\r\n|\n|\r/gm, '')
 
         if (isVerified && userId) {
             return new PostIdentifier(userId, postId)

@@ -1,9 +1,16 @@
 {
   "name": "@masknet/plugin-solana",
   "private": true,
-  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "types": "./dist/index.d.ts",
   "dependencies": {
+    "@bonfida/name-offers": "^0.0.1",
+    "@bonfida/spl-name-service": "^0.1.27",
     "@masknet/icons": "workspace:*",
     "@masknet/injected-script": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
@@ -15,6 +22,7 @@
     "@masknet/web3-shared-solana": "workspace:*",
     "@metaplex-foundation/mpl-token-metadata": "^1.1.0",
     "@metaplex/js": "^4.11.7",
+    "@solana/spl-name-service": "^0.1.3",
     "@solana/spl-token": "^0.1.8",
     "@solana/spl-token-registry": "^0.2.1301",
     "@solana/web3.js": "^1.30.2",

@@ -1,13 +1,13 @@
 import { useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent, DialogProps, Chip, Button, InputBase } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { pluginMetaKey } from '../constants'
 import type { UnlockLocks } from '../types'
 import { PluginUnlockProtocolRPC } from '../messages'
 import { SelectRecipientsUnlockDialogUI } from './SelectRecipientsUnlockDialog'
-import { useCompositionContext } from '@masknet/plugin-infra'
+import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 
 interface UnlockProtocolDialogProps extends withClasses<'wrapper'> {

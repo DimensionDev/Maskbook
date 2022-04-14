@@ -10,10 +10,13 @@ import {
     IconButtonProps,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ThemeProvider } from '@mui/material/styles'
+import { Theme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
 import CloseIcon from '@mui/icons-material/Close'
-// eslint-disable-next-line import/no-deprecated
-import { extendsTheme, useClassicMaskFullPageTheme, useMatchXS } from '../../../utils'
+import { useMatchXS } from '../../../utils'
+import { useClassicMaskFullPageTheme } from '../../../utils/theme/useClassicMaskFullPageTheme'
+import { appearanceSettings, languageSettings } from '../../../settings/settings'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { cloneDeep, merge } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -78,7 +81,6 @@ function reducer<Props extends object>(
 
 /** @deprecated */
 export function useModal<DialogProps extends object, AdditionalPropsAppendByDispatch extends Partial<DialogProps>>(
-    // eslint-disable-next-line import/no-deprecated
     Modal: React.FunctionComponent<WrappedDialogProps<DialogProps>>,
     ComponentProps?: DialogProps,
 ): [React.ReactNode, () => void, (props: AdditionalPropsAppendByDispatch) => void] {
@@ -96,7 +98,6 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
     const compositeProps =
         ComponentProps || props ? { ComponentProps: { ...ComponentProps, ...props } as DialogProps } : {}
 
-    // eslint-disable-next-line import/no-deprecated
     const modalProps: WrappedDialogProps<DialogProps> = {
         TransitionProps: { onExited },
         ...compositeProps,
@@ -104,8 +105,7 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
         onClose,
     }
     // Restore old theme
-    // eslint-disable-next-line import/no-deprecated
-    const theme = useClassicMaskFullPageTheme()
+    const theme = useClassicMaskFullPageTheme(useValueRef(appearanceSettings), useValueRef(languageSettings))
     const renderedComponent =
         state === DialogState.Destroyed ? null : (
             <ThemeProvider theme={theme}>
@@ -164,6 +164,9 @@ const useDashboardDialogWrapperStyles = makeStyles<DashboardDialogWrapperProps>(
     },
 }))
 
+function extendsTheme(extend: (theme: Theme) => ThemeOptions) {
+    return (theme: Theme) => merge(cloneDeep(theme), extend(theme))
+}
 const dialogTheme = extendsTheme((theme) => ({
     components: {
         MuiOutlinedInput: {

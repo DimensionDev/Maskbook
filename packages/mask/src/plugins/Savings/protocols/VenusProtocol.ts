@@ -4,7 +4,7 @@ import {
     ChainId,
     createContract,
     FungibleTokenDetailed,
-    getSavingsConstants,
+    getVenusConstants,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { ProtocolType, SavingsProtocol } from '../types'
@@ -58,8 +58,8 @@ export class VenusProtocol implements SavingsProtocol {
                 query: `{
 
                     markets(where: {
-                        underlyingAddress: "${this.bareToken.address}"
-                    })) {
+                        id: "${this.bareToken.address}"
+                    }) {
                         id
                         underlyingAddress
                         exchangeRate
@@ -187,7 +187,7 @@ export class VenusProtocol implements SavingsProtocol {
             }
         } else {
             try {
-                const vBEPaddress = getSavingsConstants(chainId).VENUS_GOVERNOR_DELEGATOR
+                const vBEPaddress = getVenusConstants(chainId).VENUS_GOVERNOR_DELEGATOR
                 const bnbContract = createContract<Vbnb>(web3, vBEPaddress!, VbnbABI as AbiItem[])
                 const contractData = bnbContract?.methods.repayBorrow().encodeABI()
 
@@ -248,7 +248,7 @@ export class VenusProtocol implements SavingsProtocol {
         try {
             const vbepContract = createContract<Vbep>(
                 web3,
-                getSavingsConstants(chainId).VENUS_vBEP20_DELEGATE || ZERO_ADDRESS,
+                getVenusConstants(chainId).VENUS_vBEP20_DELEGATE || ZERO_ADDRESS,
                 vbepABI as AbiItem[],
             )
             const vToken = createContract<VenusToken>(

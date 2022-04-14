@@ -1,5 +1,10 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import type { PostContext, PostContextAuthor, PostContextCreation, PostContextSNSActions } from '@masknet/plugin-infra'
+import type {
+    PostContext,
+    PostContextAuthor,
+    PostContextCreation,
+    PostContextSNSActions,
+} from '@masknet/plugin-infra/content-script'
 import {
     extractTextFromTypedMessage,
     isTypedMessageEqual,
@@ -15,14 +20,16 @@ import {
     Payload,
     PostIdentifier,
     ProfileIdentifier,
-    SubscriptionFromValueRef,
+    createSubscriptionFromValueRef,
     SubscriptionDebug as debug,
     mapSubscription,
+    EMPTY_LIST,
 } from '@masknet/shared-base'
 import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
-import { activatedSocialNetworkUI } from '../'
+import { activatedSocialNetworkUI } from '../ui'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink'
+import type { SupportedPayloadVersions } from '@masknet/encryption'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
@@ -59,7 +66,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             }),
         )
         const linksSubscribe: Subscription<string[]> = debug({
-            getCurrentValue: () => [...links],
+            getCurrentValue: () => (links.size ? [...links] : EMPTY_LIST),
             subscribe: (sub) => links.event.on(ALL_EVENTS, sub),
         })
         // #endregion
@@ -104,8 +111,15 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 return () => void [a(), b()]
             },
         })
+        const iv = new ValueRef<string | null>(null)
+        const isPublicShared = new ValueRef<boolean | undefined>(undefined)
+        const ownersAESKeyEncrypted = new ValueRef<string | undefined>(undefined)
+        const version = new ValueRef<SupportedPayloadVersions | undefined>(undefined)
         return {
-            ...author,
+            author: author.author,
+            avatarURL: author.avatarURL,
+            nickname: author.nickname,
+            snsID: author.snsID,
 
             get rootNode() {
                 return opt.rootElement.realCurrent
@@ -130,24 +144,25 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             postMetadataImages:
                 opt.postImagesProvider ||
                 debug({
-                    getCurrentValue: () => [],
+                    getCurrentValue: () => EMPTY_LIST,
                     subscribe: () => () => {},
                 }),
 
             rawMessage: opt.rawMessage,
             rawMessagePiped: transformedPostContent,
-            postContent: SubscriptionFromValueRef(postContent),
+            postContent: createSubscriptionFromValueRef(postContent),
 
-            containingMaskPayload: SubscriptionFromValueRef(postPayload),
-            decryptedPayloadForImage: new ValueRef(null),
-            iv: new ValueRef(null),
-            publicShared: debug({
-                getCurrentValue: () =>
-                    postPayload.value
-                        .map((val) => val.version === -38 && val.sharedPublic)
-                        .unwrapOr<undefined>(undefined),
-                subscribe: (sub) => postPayload.addListener(sub),
-            }),
+            containingMaskPayload: createSubscriptionFromValueRef(postPayload),
+            iv,
+            publicShared: createSubscriptionFromValueRef(isPublicShared),
+            ownersKeyEncrypted: createSubscriptionFromValueRef(ownersAESKeyEncrypted),
+            version: createSubscriptionFromValueRef(version),
+            decryptedReport(opts) {
+                if (opts.iv) iv.value = opts.iv
+                if (opts.sharedPublic?.some) isPublicShared.value = opts.sharedPublic.val
+                if (opts.ownersAESKeyEncrypted) ownersAESKeyEncrypted.value = opts.ownersAESKeyEncrypted
+                if (opts.version) version.value = opts.version
+            },
         }
     }
 }
@@ -160,23 +175,24 @@ export function createRefsForCreatePostContext() {
     const postMetadataImages = new ObservableSet<string>()
     const postMetadataMentionedLinks = new ObservableMap<unknown, string>()
     const subscriptions: Omit<PostContextCreation, 'rootElement' | 'actionsElement' | 'suggestedInjectionPoint'> = {
-        avatarURL: mapSubscription(SubscriptionFromValueRef(avatarURL), (x) => {
+        avatarURL: mapSubscription(createSubscriptionFromValueRef(avatarURL), (x) => {
             if (!x) return null
             try {
                 return new URL(x)
             } catch {}
             return null
         }),
-        nickname: SubscriptionFromValueRef(nickname),
-        author: SubscriptionFromValueRef(postBy),
-        snsID: SubscriptionFromValueRef(postID),
-        rawMessage: SubscriptionFromValueRef(postMessage),
+        nickname: createSubscriptionFromValueRef(nickname),
+        author: createSubscriptionFromValueRef(postBy),
+        snsID: createSubscriptionFromValueRef(postID),
+        rawMessage: createSubscriptionFromValueRef(postMessage),
         postImagesProvider: debug({
-            getCurrentValue: () => [...postMetadataImages],
+            getCurrentValue: () => (postMetadataImages.size ? [...postMetadataImages] : EMPTY_LIST),
             subscribe: (sub) => postMetadataImages.event.on(ALL_EVENTS, sub),
         }),
         postMentionedLinksProvider: debug({
-            getCurrentValue: () => [...postMetadataMentionedLinks.values()],
+            getCurrentValue: () =>
+                postMetadataMentionedLinks.size ? [...postMetadataMentionedLinks.values()] : EMPTY_LIST,
             subscribe: (sub) => postMetadataMentionedLinks.event.on(ALL_EVENTS, sub),
         }),
     }

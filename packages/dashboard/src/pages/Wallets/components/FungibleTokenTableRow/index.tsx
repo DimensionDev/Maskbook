@@ -8,10 +8,11 @@ import {
     NetworkPluginID,
     useChainId,
     useNetworkDescriptors,
-    usePluginIDContext,
+    useCurrentWeb3NetworkPluginID,
     useWeb3State,
     Web3Plugin,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/web3'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 import { getTokenUSDValue } from '../../utils/getTokenUSDValue'
@@ -76,7 +77,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
     const currentChainId = useChainId()
     const { Utils } = useWeb3State()
     const networkDescriptors = useNetworkDescriptors()
-    const currentPluginId = usePluginIDContext()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const isOnCurrentChain = useMemo(() => currentChainId === asset.token.chainId, [asset, currentChainId])
 
     return (
@@ -151,7 +152,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                         </span>
                     </Tooltip>
                     <Tooltip
-                        disableHoverListener={isOnCurrentChain}
+                        disableHoverListener={isOnCurrentChain || asset.token.chainId !== ChainId.Conflux}
                         disableTouchListener
                         title={<ChangeNetworkTip chainId={asset.token.chainId} />}
                         placement="top"
@@ -160,8 +161,12 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                         <span>
                             <Button
                                 size="small"
-                                style={!isOnCurrentChain ? { pointerEvents: 'none' } : {}}
-                                disabled={!isOnCurrentChain}
+                                style={
+                                    !isOnCurrentChain || asset.token.chainId === ChainId.Conflux
+                                        ? { pointerEvents: 'none' }
+                                        : {}
+                                }
+                                disabled={!isOnCurrentChain || asset.token.chainId === ChainId.Conflux}
                                 variant="outlined"
                                 color="secondary"
                                 onClick={onSwap}

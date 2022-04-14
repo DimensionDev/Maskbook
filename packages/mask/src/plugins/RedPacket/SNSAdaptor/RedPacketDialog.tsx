@@ -1,7 +1,8 @@
 import { useState, useCallback, useRef, useMemo, useEffect } from 'react'
 import { DialogContent } from '@mui/material'
 import { usePortalShadowRoot, makeStyles } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { RedPacketJSONPayload, DialogTabs, RedPacketRecord, RpTypeTabs } from '../types'
@@ -9,7 +10,6 @@ import { RedPacketRPC } from '../messages'
 import { RedPacketMetaKey } from '../constants'
 import { RedPacketCreateNew } from './RedPacketCreateNew'
 import { RedPacketPast } from './RedPacketPast'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import Services from '../../../extension/service'
 import Web3Utils from 'web3-utils'
 import {
@@ -26,7 +26,7 @@ import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
-import { useCompositionContext } from '@masknet/plugin-infra'
+import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -75,7 +75,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { classes } = useStyles()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
     const { attachMetadata, dropMetadata } = useCompositionContext()
-
     const state = useState(DialogTabs.create)
 
     const networkType = useNetworkType()
@@ -239,7 +238,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const tokenState = useState(RpTypeTabs.ERC20)
 
-    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 640
+    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 670
 
     const tabProps: AbstractTabProps = {
         tabs: [

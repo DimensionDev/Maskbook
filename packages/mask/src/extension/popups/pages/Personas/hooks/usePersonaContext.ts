@@ -1,5 +1,5 @@
 import { createContainer } from 'unstated-next'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { ECKeyIdentifier, Identifier, PersonaInformation } from '@masknet/shared-base'
 import { currentPersonaIdentifier } from '../../../../../settings/settings'
 import { useAsyncRetry } from 'react-use'

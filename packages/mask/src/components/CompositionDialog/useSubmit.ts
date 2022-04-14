@@ -2,7 +2,7 @@ import { ProfileIdentifier } from '@masknet/shared-base'
 import { useCallback } from 'react'
 import Services from '../../extension/service'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
-import type { ImageTemplateTypes } from '@masknet/encryption'
+import { ImageTemplateTypes, socialNetworkEncoder } from '@masknet/encryption'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../utils'
@@ -12,7 +12,7 @@ import { unreachable } from '@dimensiondev/kit'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base'
 
-export function useSubmit(onClose: () => void) {
+export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
     const { t } = useI18N()
     const whoAmI = useLastRecognizedIdentity()
 
@@ -27,12 +27,9 @@ export function useSubmit(onClose: () => void) {
                     unreachable('Cannot figure out current profile' as never),
             )
 
-            const [encrypted, token] = await Services.Crypto.encryptTo(
-                content,
-                target === 'Everyone' ? [] : target.map((x) => x.identifier),
-                whoAmI?.identifier ?? currentProfile,
-                target === 'Everyone',
-            )
+            const _encrypted = await Services.Crypto.encryptTo(content, target, whoAmI?.identifier ?? currentProfile)
+            const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, _encrypted)
+
             const redPacketPreText =
                 isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                     ? t('additional_post_box__encrypted_post_pre_red_packet_twitter_official_account', {
@@ -48,34 +45,40 @@ export function useSubmit(onClose: () => void) {
                     random: new Date().toLocaleString(),
                 })
                 if (redPacketMetadata.ok) {
-                    await pasteImage(redPacketPreText.replace(encrypted, '') ?? defaultText, encrypted, 'eth')
+                    await pasteImage(redPacketPreText.replace(encrypted, '') ?? defaultText, encrypted, 'eth', reason)
                 } else {
-                    await pasteImage(defaultText, encrypted, 'v2')
+                    await pasteImage(defaultText, encrypted, 'v2', reason)
                 }
             } else {
                 pasteTextEncode(
                     (redPacketMetadata.ok ? redPacketPreText : null) ??
                         t('additional_post_box__encrypted_post_pre', { encrypted }),
+                    reason,
                 )
             }
-            // This step write data on gun. There is nothing to write if it shared with public
-            if (target !== 'Everyone') Services.Crypto.publishPostAESKey(token)
             onClose()
         },
-        [t, whoAmI, onClose],
+        [t, whoAmI, onClose, reason],
     )
 }
 
-function pasteTextEncode(text: string) {
+function pasteTextEncode(text: string, reason: 'timeline' | 'popup' | 'reply') {
     activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.(text, {
         recover: true,
+        reason,
     })
 }
-async function pasteImage(relatedTextPayload: string, encrypted: string, template: ImageTemplateTypes) {
+async function pasteImage(
+    relatedTextPayload: string,
+    encrypted: string,
+    template: ImageTemplateTypes,
+    reason: 'timeline' | 'popup' | 'reply',
+) {
     const img = await SteganographyTextPayload(template, encrypted)
     // Don't await this, otherwise the dialog won't disappear
     activatedSocialNetworkUI.automation.nativeCompositionDialog!.attachImage!(img, {
         recover: true,
         relatedTextPayload,
+        reason,
     })
 }

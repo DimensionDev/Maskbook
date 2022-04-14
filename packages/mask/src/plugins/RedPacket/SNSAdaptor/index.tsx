@@ -1,4 +1,4 @@
-import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
+import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import {
     ChainId,
     EthereumTokenType,
@@ -20,6 +20,8 @@ import RedPacketDialog from './RedPacketDialog'
 import { RedPacketInPost } from './RedPacketInPost'
 import { RedPacketNftInPost } from './RedPacketNftInPost'
 import { RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
+import { CrossIsolationMessages } from '@masknet/shared-base'
+import { ApplicationEntry } from '@masknet/shared'
 
 function Render(props: React.PropsWithChildren<{ name: string }>) {
     usePluginWrapper(true, { name: props.name })
@@ -81,15 +83,36 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ]),
     CompositionDialogEntry: {
         dialog: RedPacketDialog,
-        label: {
-            fallback: (
-                <>
-                    <RedPacketIcon style={badgeSvgIconSize} />
-                    Luck drop
-                </>
-            ),
-        },
+        label: (
+            <>
+                <RedPacketIcon style={badgeSvgIconSize} />
+                Lucky drop
+            </>
+        ),
     },
+    ApplicationEntries: [
+        {
+            RenderEntryComponent({ disabled }) {
+                return (
+                    <ApplicationEntry
+                        title="Lucky Drop"
+                        disabled={disabled}
+                        icon={new URL('./assets/lucky_drop.png', import.meta.url).toString()}
+                        onClick={() =>
+                            CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                reason: 'timeline',
+                                open: true,
+                                options: {
+                                    startupPlugin: base.ID,
+                                },
+                            })
+                        }
+                    />
+                )
+            },
+            defaultSortingPriority: 1,
+        },
+    ],
 }
 interface ERC20RedpacketBadgeProps {
     payload: RedPacketJSONPayload
@@ -104,7 +127,7 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
         payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token ?? fetchedToken
     return (
         <div style={containerStyle}>
-            <RedPacketIcon style={badgeSvgIconSize} /> A Lucky Drop with
+            <RedPacketIcon style={badgeSvgIconSize} /> A Lucky Drop with{' '}
             {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
             {tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'} from {payload.sender.name}
         </div>

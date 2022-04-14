@@ -1,4 +1,4 @@
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import type { MetadataRenderProps } from '@masknet/typed-message/dom'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import {

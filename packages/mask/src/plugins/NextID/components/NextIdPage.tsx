@@ -1,15 +1,19 @@
-import { useI18N } from '../locales'
+import { NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { NextIDProof } from '@masknet/web3-providers'
 import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
-import { BindDialog } from './BindDialog'
-import { useAsync, useAsyncRetry, useCounter } from 'react-use'
-import Services from '../../../extension/service'
-import { BindingItem } from './BindingItem'
-import type { Platform } from '../types'
-import { UnbindDialog } from './UnbindDialog'
+import { useAsync, useAsyncRetry } from 'react-use'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
+import Services from '../../../extension/service'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { TAB_SELECTOR } from '../constants'
+import { useI18N } from '../locales'
+import { BindDialog } from './BindDialog'
+import { BindingItem } from './BindingItem'
+import { UnbindDialog } from './UnbindDialog'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -20,6 +24,21 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         color: theme.palette.text.primary,
     },
+    verifyIntro: {
+        fontSize: '14px',
+        fontWeight: 500,
+        marginBottom: '12px',
+    },
+    verifyDetail: {
+        fontSize: '14px',
+        fontWeight: 400,
+        color: theme.palette.grey[700],
+    },
+    verifyInstruction: {
+        fontSize: '14px',
+        fontWeight: 400,
+        color: theme.palette.grey[700],
+    },
     skeleton: {
         borderRadius: 8,
         margin: theme.spacing(1),
@@ -29,20 +48,23 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NextIDPageProps {}
+interface NextIDPageProps {
+    personaList: string[]
+}
 
-export function NextIdPage({}: NextIDPageProps) {
+export function NextIdPage({ personaList }: NextIDPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
+    const { reset, isVerified } = useNextIDConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
-    const [count, { inc }] = useCounter(0)
-
+    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const isOwn = currentProfileIdentifier.identifier.toText() === visitingPersonaIdentifier.identifier.toText()
+    const tipable = !isOwn
 
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
@@ -55,23 +77,35 @@ export function NextIdPage({}: NextIDPageProps) {
         )
     }, [personaConnectStatus, t])
 
-    const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(() => {
-        if (!currentProfileIdentifier) return Promise.resolve(undefined)
-        return Services.Identity.queryPersonaByProfile(currentProfileIdentifier.identifier)
-    }, [currentProfileIdentifier, personaConnectStatus.hasPersona])
+    const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
+        if (!visitingPersonaIdentifier) return
+        return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
+    }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
 
-    const { value: bindings, loading } = useAsync(async () => {
+    const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
+        if (!currentPersona?.publicHexKey) return
+        return NextIDProof.queryIsBound(
+            currentPersona.publicHexKey,
+            platform,
+            visitingPersonaIdentifier.identifier.userId,
+        )
+    }, [isOwn, currentPersona, visitingPersonaIdentifier, isVerified])
+
+    const {
+        value: bindings,
+        loading,
+        retry: retryQueryBinding,
+    } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        if (isOwn) {
-            return Services.Helper.queryExistedBinding(currentPersona.identifier)
-        }
+        return NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey!)
+    }, [currentPersona, isOwn])
 
-        if (!visitingPersonaIdentifier) return null
-        const visitingPersona = await Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
-
-        if (!visitingPersona) return null
-        return Services.Helper.queryExistedBinding(visitingPersona.identifier)
-    }, [currentPersona, count, visitingPersonaIdentifier, isOwn])
+    const onVerify = async () => {
+        reset()
+        const firstTab = TAB_SELECTOR?.[platform]?.evaluate()?.querySelector('div')?.parentNode
+            ?.firstChild as HTMLElement
+        firstTab.click()
+    }
 
     if (personaActionButton) {
         return (
@@ -81,7 +115,7 @@ export function NextIdPage({}: NextIDPageProps) {
         )
     }
 
-    if (loading || loadingPersona) {
+    if (loading || loadingPersona || loadingVerifyInfo) {
         return (
             <>
                 {Array.from({ length: 2 })
@@ -95,16 +129,34 @@ export function NextIdPage({}: NextIDPageProps) {
         )
     }
 
-    if (bindings?.proofs.length) {
+    if (!isAccountVerified && isOwn) {
+        return (
+            <Box>
+                <Box className={classes.tip}>
+                    <Typography className={classes.verifyIntro}>{t.verify_Twitter_ID_intro()}</Typography>
+                    <Typography className={classes.verifyDetail}>{t.verify_Twitter_ID()}</Typography>
+                </Box>
+
+                <Stack justifyContent="center" direction="row" mt="24px">
+                    <Button variant="contained" onClick={onVerify}>
+                        {t.verify_Twitter_ID_button()}
+                    </Button>
+                </Stack>
+            </Box>
+        )
+    }
+
+    if (bindings?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum).length) {
         return (
             <>
                 <Box>
                     <Box>
                         {bindings.proofs.map((x) => (
                             <BindingItem
-                                enableAction={isOwn}
+                                deletable={isOwn}
+                                tipable={tipable}
                                 key={x.identity}
-                                platform={x.platform as Platform}
+                                platform={x.platform}
                                 identity={x.identity}
                                 onUnBind={setUnBindAddress}
                             />
@@ -124,7 +176,7 @@ export function NextIdPage({}: NextIDPageProps) {
                         onClose={() => toggleBindDialog(false)}
                         persona={currentPersona}
                         bounds={bindings?.proofs ?? []}
-                        onBind={() => inc(1)}
+                        onBound={retryQueryBinding}
                     />
                 )}
                 {unbindAddress && currentPersona && isOwn && (
@@ -132,7 +184,7 @@ export function NextIdPage({}: NextIDPageProps) {
                         unbindAddress={unbindAddress}
                         onClose={() => setUnBindAddress(undefined)}
                         persona={currentPersona}
-                        onUnBind={() => inc(1)}
+                        onUnBound={retryQueryBinding}
                         bounds={bindings?.proofs ?? []}
                     />
                 )}
@@ -145,12 +197,19 @@ export function NextIdPage({}: NextIDPageProps) {
             <Box>
                 {isOwn ? (
                     <Box className={classes.tip}>
-                        <Typography>{t.connect_wallet_tip_intro()}</Typography>
-                        <Typography>{t.connect_wallet_tip()}</Typography>
+                        <Typography className={classes.verifyIntro}>{t.verify_wallet_intro()}</Typography>
+                        <Typography className={classes.verifyDetail}>{t.verify_wallet()}</Typography>
                     </Box>
                 ) : (
                     <Box className={classes.tip}>
-                        <Typography>{t.connect_wallet__other_user_tip_intro()}</Typography>
+                        <Typography className={classes.verifyIntro}>
+                            {t.connect_wallet__other_user_tip_intro()}
+                        </Typography>
+                        <Typography className={classes.verifyInstruction}>
+                            {t.connect_wallet_other_user_instruction()}
+                        </Typography>
+                        <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip1()}</Typography>
+                        <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip2()}</Typography>
                     </Box>
                 )}
                 {isOwn && (
@@ -167,7 +226,7 @@ export function NextIdPage({}: NextIDPageProps) {
                     onClose={() => toggleBindDialog(false)}
                     persona={currentPersona}
                     bounds={bindings?.proofs ?? []}
-                    onBind={() => inc(1)}
+                    onBound={retryQueryBinding}
                 />
             )}
         </>

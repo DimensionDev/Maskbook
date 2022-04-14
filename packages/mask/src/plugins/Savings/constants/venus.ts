@@ -15,6 +15,7 @@ export const VENUS_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Fuse]: '',
     [NetworkType.Metis]: '',
     [NetworkType.Optimistic]: '',
+    [NetworkType.Conflux]: '',
 }
 
 export const VENUS_SUBGRAPH = 'https://api.thegraph.com/subgraphs/name/venusprotocol/venus-subgraph'

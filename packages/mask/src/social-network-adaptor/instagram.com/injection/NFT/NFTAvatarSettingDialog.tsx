@@ -1,17 +1,21 @@
-import { searchInstagramAvatarOpenFilesSelector } from '../../utils/selector'
 import { MaskMessages, useI18N } from '../../../../utils'
 import { useCallback, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { toPNG } from '../../../../plugins/Avatar/utils'
-import { InMemoryStorages } from '../../../../../shared'
 import { useMount } from 'react-use'
-import { clearStorages } from '../../utils/user'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { getAvatarId } from '../../utils/user'
+import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { DialogStackingProvider, makeStyles } from '@masknet/theme'
-import { hookInputUploadOnce } from '@masknet/injected-script'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { Instagram } from '@masknet/web3-providers'
+import { useWallet } from '@masknet/plugin-infra/web3'
+import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
+import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
+import { activatedSocialNetworkUI } from '../../../../social-network'
+import { delay } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -20,38 +24,77 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-async function changeImageToActiveElements(image: File | Blob): Promise<void> {
-    const imageBuffer = await image.arrayBuffer()
-    hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(imageBuffer))
-    searchInstagramAvatarOpenFilesSelector().evaluate()?.click()
-}
-
 export function NFTAvatarSettingDialog() {
     const { t } = useI18N()
     const [open, setOpen] = useState(false)
     const { classes } = useStyles()
-
+    const wallet = useWallet()
     const identity = useCurrentVisitingIdentity()
 
     const onChange = useCallback(
         async (token: ERC721TokenDetailed) => {
-            if (!token.info.imageURL) return
-            const image = await toPNG(token.info.imageURL)
-            if (!image) return
-            await changeImageToActiveElements(image)
+            try {
+                if (!token.info.imageURL) return
+                const image = await toPNG(token.info.imageURL)
+                if (!image || !wallet) return
 
-            InMemoryStorages.InstagramNFTEvent?.storage.userId.setValue(identity.identifier.userId)
-            InMemoryStorages.InstagramNFTEvent?.storage.address.setValue(token.contractDetailed.address)
-            InMemoryStorages.InstagramNFTEvent?.storage.tokenId.setValue(token.tokenId)
-            setOpen(false)
+                await Instagram.uploadUserAvatar(image, identity.identifier.userId)
+
+                await delay(1000)
+
+                const url = `${location.protocol}//${location.host}/${identity.identifier.userId}`
+
+                const response = await fetch(url)
+                const htmlString = await response.text()
+
+                const html = document.createElement('html')
+                html.innerHTML = htmlString
+
+                const metaTag = html.querySelector<HTMLMetaElement>('meta[property="og:image"]')
+
+                if (!metaTag?.content) return
+
+                const avatarInfo = await PluginNFTAvatarRPC.saveNFTAvatar(
+                    wallet.address,
+                    {
+                        userId: identity.identifier.userId,
+                        tokenId: token.tokenId,
+                        address: token.contractDetailed.address,
+                        avatarId: getAvatarId(metaTag.content),
+                    } as AvatarMetaDB,
+                    identity.identifier.network,
+                    RSS3_KEY_SNS.INSTAGRAM,
+                )
+
+                if (!avatarInfo) {
+                    window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+                    setOpen(false)
+                    return
+                }
+
+                await PluginNFTAvatarRPC.clearCache(
+                    identity.identifier.userId,
+                    activatedSocialNetworkUI.networkIdentifier,
+                    RSS3_KEY_SNS.INSTAGRAM,
+                )
+
+                // If the avatar is set successfully, reload the page
+                window.location.reload()
+
+                setOpen(false)
+            } catch (error) {
+                if (error instanceof Error) {
+                    window.alert(error.message)
+                    return
+                }
+            }
         },
-        [identity],
+        [identity, wallet],
     )
 
     const onClose = useCallback(() => setOpen(false), [])
 
     useMount(() => {
-        clearStorages()
         return MaskMessages.events.nftAvatarSettingDialogUpdated.on((data) => setOpen(data.open))
     })
 

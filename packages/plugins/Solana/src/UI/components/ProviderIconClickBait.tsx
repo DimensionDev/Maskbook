@@ -1,10 +1,8 @@
-import { bridgedSolanaProvider } from '@masknet/injected-script'
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { isDashboardPage } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-solana'
 import { cloneElement, isValidElement, useCallback } from 'react'
-import { getStorage } from '../../storage'
-import { hexToBase58 } from '../../utils'
+import { connectWallet } from '../../wallet'
 
 export function ProviderIconClickBait({
     network,
@@ -15,12 +13,8 @@ export function ProviderIconClickBait({
 }: Web3Plugin.UI.ProviderIconClickBaitProps) {
     const onLogIn = useCallback(async () => {
         onClick?.(network, provider)
-        const rsp = await bridgedSolanaProvider.connect()
-        if (rsp?.publicKey) {
-            const base58Key = typeof rsp.publicKey === 'string' ? rsp.publicKey : hexToBase58(rsp.publicKey._bn)
-            const storage = getStorage()
-            await storage.publicKey.setValue(base58Key)
-            await storage.network.setValue(network.chainId)
+        const publicKey = await connectWallet()
+        if (publicKey) {
             onSubmit?.(network, provider)
         }
     }, [provider, onClick, onSubmit])

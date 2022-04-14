@@ -1,4 +1,4 @@
-import { CrashUI as C } from '@masknet/shared'
+import { CrashUI as C } from '@masknet/shared-base-ui'
 import { story } from '@masknet/storybook-shared'
 
 const { meta, of } = story(C)

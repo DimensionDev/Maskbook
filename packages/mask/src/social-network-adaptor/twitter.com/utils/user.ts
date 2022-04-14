@@ -1,7 +1,7 @@
 import { isNull } from 'lodash-unified'
 import type { SocialNetwork } from '../../../social-network'
 import {
-    bioDescriptionSelector,
+    profileBioSelector,
     searchAvatarSelector,
     searchNickNameSelector,
     personalHomepageSelector,
@@ -23,24 +23,13 @@ export const usernameValidator: NonNullable<SocialNetwork.Utils['isValidUsername
 }
 
 export const getNickname = () => {
-    const node = searchNickNameSelector().evaluate()?.parentElement?.parentElement?.firstChild
-        ?.nextSibling as HTMLDivElement
+    const node = searchNickNameSelector().evaluate()
     if (!node) return ''
 
-    const nicknameNode = node.querySelector<HTMLSpanElement>('div span')
-    if (!nicknameNode) return ''
-
-    return collectNodeText(nicknameNode)
+    return collectNodeText(node)
 }
 
 export const getTwitterId = () => {
-    const node = searchNickNameSelector().evaluate()?.parentElement?.parentElement?.firstChild?.nextSibling?.firstChild
-        ?.firstChild?.lastChild as HTMLDivElement
-    if (node) {
-        const twitterIdNode = node.querySelector('div span')
-        if (twitterIdNode) return twitterIdNode.innerHTML.trim().replace('@', '')
-    }
-
     const ele = searchAvatarSelector().evaluate()?.closest('a') || searchNFTAvatarSelector().evaluate()?.closest('a')
     if (ele) {
         const link = ele.getAttribute('href')
@@ -53,8 +42,8 @@ export const getTwitterId = () => {
     return ''
 }
 
-export const getBioDescription = () => {
-    const node = bioDescriptionSelector().evaluate()
+export const getBio = () => {
+    const node = profileBioSelector().evaluate()
     return node ? collectNodeText(node) : ''
 }
 

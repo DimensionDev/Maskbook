@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useWeb3, isSameAddress } from '@masknet/web3-shared-evm'
-import { useAccount, usePluginIDContext, NetworkPluginID } from '@masknet/plugin-infra'
+import { useAccount, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra/web3'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages'
 import { CircularProgress, useTheme, Typography } from '@mui/material'
@@ -94,13 +94,13 @@ export default function ConnectButton({
     const web3 = useWeb3()
     const myAddress = useAccount()
     const [cc, setCc] = useState<CyberConnect | null>(null)
-    const [isFollowing, setIsFollowing] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const blockChainNetwork = usePluginIDContext()
+    const [isFollowing, setFollowing] = useState(false)
+    const [isLoading, setLoading] = useState(false)
+    const blockChainNetwork = useCurrentWeb3NetworkPluginID()
     useAsync(async () => {
         if (isSameAddress(myAddress, address)) return
         const res = await PluginCyberConnectRPC.fetchFollowStatus(myAddress, address)
-        setIsFollowing(res.data.followStatus.isFollowing)
+        setFollowing(res.data.followStatus.isFollowing)
     }, [address, myAddress])
 
     useEffect(() => {
@@ -115,27 +115,25 @@ export default function ConnectButton({
     }, [web3, myAddress])
 
     const handleClick = useCallback(() => {
-        if (!cc) {
-            return
-        }
-        setIsLoading(true)
+        if (!cc) return
+        setLoading(true)
         if (!isFollowing) {
             cc.connect(address)
                 .then(() => {
-                    setIsFollowing(true)
+                    setFollowing(true)
                     refreshFollowList()
                 })
                 .finally(() => {
-                    setIsLoading(false)
+                    setLoading(false)
                 })
         } else {
             cc.disconnect(address)
                 .then(() => {
-                    setIsFollowing(false)
+                    setFollowing(false)
                     refreshFollowList()
                 })
                 .finally(() => {
-                    setIsLoading(false)
+                    setLoading(false)
                 })
         }
     }, [cc, myAddress, isFollowing])

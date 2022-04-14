@@ -1,8 +1,13 @@
 {
   "name": "@masknet/web3-shared-evm",
   "private": true,
-  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "webpack": "./index.ts",
+      "default": "../dist/evm/index.js"
+    }
+  },
   "sideEffects": false,
   "dependencies": {
     "@ensdomains/address-encoder": "^0.2.6",
@@ -20,12 +25,12 @@
     "react-use": "^17.3.2",
     "unstated-next": "^1.1.0",
     "urlcat": "^2.0.4",
-    "use-subscription": "^1.5.1",
+    "use-subscription": "^1.6.0",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
-    "web3": "1.5.2",
-    "web3-core-helpers": "1.5.2",
-    "web3-utils": "1.5.2"
+    "web3": "1.7.3",
+    "web3-core-helpers": "1.7.3",
+    "web3-utils": "1.7.3"
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.0"

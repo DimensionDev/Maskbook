@@ -6,6 +6,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { isDashboardPage } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     useAccount,
     useWeb3State,
@@ -15,8 +16,8 @@ import {
     useProviderType,
     useReverseAddress,
     useWallet,
-} from '@masknet/plugin-infra'
-import { FormattedAddress, useRemoteControlledDialog, useSnackbarCallback, WalletIcon } from '@masknet/shared'
+} from '@masknet/plugin-infra/web3'
+import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import Services from '../../extension/service'
@@ -149,10 +150,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
         }
     }, [chainId, providerType, setWalletConnectDialog])
 
-    const onChange = useCallback(() => {
-        openSelectProviderDialog()
-    }, [openSelectProviderDialog])
-
     return account ? (
         <section className={classNames(classes.currentAccount, props.isDashboard ? classes.dashboardBackground : '')}>
             <WalletIcon
@@ -223,7 +220,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                         className={classNames(classes.actionButton)}
                         variant="contained"
                         size="small"
-                        onClick={onChange}>
+                        onClick={openSelectProviderDialog}>
                         {t('wallet_status_button_change')}
                     </Button>
                 </section>
@@ -236,7 +233,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 color="primary"
                 variant="contained"
                 size="small"
-                onClick={onChange}>
+                onClick={openSelectProviderDialog}>
                 {t('plugin_wallet_on_connect')}
             </Button>
         </section>

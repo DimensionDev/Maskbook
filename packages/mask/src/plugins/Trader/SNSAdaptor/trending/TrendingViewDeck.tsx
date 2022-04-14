@@ -5,7 +5,8 @@ import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlin
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-unified'
-import { FormattedCurrency, useValueRef, useRemoteControlledDialog, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat, Trending } from '../../types'
 import { DataProvider } from '@masknet/public-api'
@@ -20,7 +21,8 @@ import { currentDataProviderSettings, getCurrentPreferredCoinIdSettings } from '
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
-import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { PluginId } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => {
     return {

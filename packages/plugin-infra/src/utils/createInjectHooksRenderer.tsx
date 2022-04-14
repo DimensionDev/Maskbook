@@ -1,14 +1,15 @@
+import { ErrorBoundary } from '@masknet/shared-base-ui'
+import { ShadowRootIsolation } from '@masknet/theme'
+import { createContext, memo, useContext, useEffect, useRef, useState } from 'react'
+import { PluginWrapperComponent, PluginWrapperMethods, useAvailablePlugins, usePluginI18NField } from '../hooks'
+import { PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
 import type { Plugin } from '../types'
-import { useEffect, useState, useRef, memo, createContext, useContext } from 'react'
-import { ErrorBoundary } from '@masknet/shared'
-import { usePluginI18NField, PluginWrapperComponent, PluginWrapperMethods } from '../hooks'
-import { emptyPluginWrapperMethods, PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
 
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
 
 const PropsContext = createContext<unknown>(null)
-export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType>(
+export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType extends object>(
     usePlugins: () => PluginDefinition[],
     pickInjectorHook: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
     PluginWrapperComponent?: PluginWrapperComponent<PluginDefinition>,
@@ -17,10 +18,16 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         const [ref, setRef] = useState<PluginWrapperMethods | null>(null)
         if (PluginWrapperComponent) {
             return (
-                <PluginWrapperComponent definition={plugin} ref={setRef}>
-                    <PluginWrapperMethodsContext.Provider value={ref || emptyPluginWrapperMethods}>
-                        {element}
-                    </PluginWrapperMethodsContext.Provider>
+                <PluginWrapperComponent
+                    definition={plugin}
+                    ref={(methods) => {
+                        if (methods) setRef(methods)
+                    }}>
+                    {ref ? (
+                        <PluginWrapperMethodsContext.Provider value={ref}>
+                            {element}
+                        </PluginWrapperMethodsContext.Provider>
+                    ) : null}
                 </PluginWrapperComponent>
             )
         }
@@ -40,20 +47,24 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         )
     }
     function PluginsInjectionHookRender(props: PropsType) {
-        const all = usePlugins()
-            .filter(pickInjectorHook)
-            .map((plugin) => (
-                <PropsContext.Provider key={plugin.ID} value={props}>
-                    <SinglePluginWithinErrorBoundary key={plugin.ID} plugin={plugin} />
-                </PropsContext.Provider>
-            ))
+        const allPlugins = usePlugins()
+        const availablePlugins = useAvailablePlugins(allPlugins) as PluginDefinition[]
+        const all = availablePlugins.filter(pickInjectorHook).map((plugin) => (
+            <PropsContext.Provider key={plugin.ID} value={props}>
+                <ShadowRootIsolation data-plugin={plugin.ID}>
+                    <SinglePluginWithinErrorBoundary plugin={plugin} />
+                </ShadowRootIsolation>
+            </PropsContext.Provider>
+        ))
         return <>{all}</>
     }
     return memo(function PluginsInjectionHookRenderErrorBoundary(props: PropsType) {
         return (
-            <ErrorBoundary>
-                <PluginsInjectionHookRender {...props} />
-            </ErrorBoundary>
+            <span data-plugin-render="">
+                <ErrorBoundary>
+                    <PluginsInjectionHookRender {...props} />
+                </ErrorBoundary>
+            </span>
         )
     })
 }
@@ -76,7 +87,7 @@ function RawHookRender<T>({ UI, data }: { data: T; UI: Raw<T> }) {
     }, [ref, UI.init])
     useEffect(() => void f?.(data), [f, data])
 
-    return <div ref={(r) => ref === r || setRef(r)} />
+    return <div ref={setRef} />
 }
 function isRawInjectHook<T>(x: Inject<T>): x is Raw<T> {
     return 'type' in x && x.type === 'raw'

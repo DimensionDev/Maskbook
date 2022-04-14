@@ -1,12 +1,5 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
-import {
-    AESKey,
-    AESAlgorithmEnum,
-    AsymmetryCryptoKey,
-    PayloadParseResult,
-    PublicKeyAlgorithmEnum,
-    Signature,
-} from '../payload'
+/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
+import { EC_Key, PayloadParseResult, EC_KeyCurveEnum, Signature } from '../payload'
 import { CryptoException, PayloadException } from '../types'
 import { Result, Ok, Some } from 'ts-results'
 import {
@@ -14,8 +7,8 @@ import {
     decodeTextF,
     decryptWithAES,
     assertIVLengthEq16,
-    importAESFromJWK,
-    importAsymmetryKeyFromJsonWebKeyOrSPKI,
+    importAES,
+    importEC_Key,
     JSONParseF,
 } from '../utils'
 import type { PayloadParserResult } from '.'
@@ -34,7 +27,7 @@ const decodeUint8Array = decodeUint8ArrayF(PayloadException.InvalidPayload, Payl
 const decodeUint8ArrayCrypto = decodeUint8ArrayF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
 const decodeTextCrypto = decodeTextF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
 const JSONParse = JSONParseF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
-const importEC = CheckedError.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, CryptoException.InvalidCryptoKey)
+const importEC = CheckedError.withErr(importEC_Key, CryptoException.InvalidCryptoKey)
 
 export async function parse38(payload: string): PayloadParserResult {
     // #region Parse text
@@ -121,20 +114,18 @@ async function decodePublicSharedAESKey(
     const publicSharedKey = await get_v38PublicSharedCryptoKey()
     if (publicSharedKey.err) return publicSharedKey
 
-    const import_AES_GCM_256 = CheckedError.withErr(importAESFromJWK.AES_GCM_256, CryptoException.InvalidCryptoKey)
+    const import_AES_GCM_256 = CheckedError.withErr(importAES, CryptoException.InvalidCryptoKey)
     const decrypt = CheckedError.withErr(decryptWithAES, CryptoException.InvalidCryptoKey)
 
-    const jwk_in_u8arr = await decrypt(AESAlgorithmEnum.A256GCM, publicSharedKey.val, iv.val, encryptedKey.val)
+    const jwk_in_u8arr = await decrypt(publicSharedKey.val, iv.val, encryptedKey.val)
     const jwk_in_text = await andThenAsync(jwk_in_u8arr, decodeTextCrypto)
     const jwk = await andThenAsync(jwk_in_text, JSONParse)
     const aes = await andThenAsync(jwk, import_AES_GCM_256)
 
-    return aes.map<AESKey>((key) => ({ algr: AESAlgorithmEnum.A256GCM, key }))
+    return aes
 }
 
-async function decodeECDHPublicKey(
-    compressedPublic: string,
-): Promise<OptionalResult<AsymmetryCryptoKey, CryptoException>> {
+async function decodeECDHPublicKey(compressedPublic: string): Promise<OptionalResult<EC_Key, CryptoException>> {
     const key = decodeUint8ArrayCrypto(compressedPublic).andThen((val) =>
         Result.wrap(() => decompressSecp256k1Point(val)).mapErr(
             (e) => new CheckedError(CryptoException.InvalidCryptoKey, e),
@@ -151,10 +142,10 @@ async function decodeECDHPublicKey(
         key_ops: ['deriveKey', 'deriveBits'],
         kty: 'EC',
     }
-    const imported = await importEC(jwk, PublicKeyAlgorithmEnum.secp256k1)
+    const imported = await importEC(jwk, EC_KeyCurveEnum.secp256k1)
     if (imported.err) return imported
-    return OptionalResult.Some<AsymmetryCryptoKey>({
-        algr: PublicKeyAlgorithmEnum.secp256k1,
+    return OptionalResult.Some<EC_Key>({
+        algr: EC_KeyCurveEnum.secp256k1,
         key: imported.val,
     })
 }

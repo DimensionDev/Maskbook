@@ -31,9 +31,9 @@ export default [
         plugins: plugins(),
     },
     {
-        input: join(__dirname, './elliptic.js'),
+        input: join(__dirname, './regenerator.js'),
         output: {
-            file: 'internal_elliptic.js',
+            file: 'regenerator.js',
             format: 'iife',
         },
         plugins: plugins(),
