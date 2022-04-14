@@ -1269,7 +1269,7 @@ importers:
 
   packages/web3-shared/evm:
     specifiers:
-      '@codingsh/harmony-crypto': 0.1.57
+      '@codingsh/harmony-crypto': 0.1.58
       '@ensdomains/address-encoder': ^0.2.6
       '@harmony-js/utils': ^0.1.56
       '@masknet/shared-base': workspace:*
@@ -1294,7 +1294,7 @@ importers:
       web3-core-helpers: 1.5.2
       web3-utils: 1.5.2
     dependencies:
-      '@codingsh/harmony-crypto': 0.1.57
+      '@codingsh/harmony-crypto': 0.1.58
       '@ensdomains/address-encoder': 0.2.6
       '@harmony-js/utils': 0.1.56
       '@masknet/shared-base': link:../../shared-base
@@ -4767,8 +4767,8 @@ packages:
       minimist: 1.2.5
     dev: true
 
-  /@codingsh/harmony-crypto/0.1.57:
-    resolution: {integrity: sha512-rBpna+JgCCv2LiG9t7mFrH8QUdKGNygAd72gyZqLFrqspAv67w9M2Zwf7DUyAFibeOCVFGUuzqoPcYjF4wCZQw==}
+  /@codingsh/harmony-crypto/0.1.58:
+    resolution: {integrity: sha512-WFCTlaB6CohnCO41hHnHN7RseWJBYFA8iO0uT3wivomDZYdZ7KlNTRU9daC8xWkgg41dKo3Jf1XEHh9Pvjrx+w==}
     dependencies:
       '@harmony-js/utils': 0.1.56
       aes-js: 3.1.2
