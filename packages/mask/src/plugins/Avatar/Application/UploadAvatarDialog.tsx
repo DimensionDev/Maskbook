@@ -46,7 +46,6 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 RSS3_KEY_SNS.TWITTER,
             ).catch((error) => {
                 showSnackbar(error.message, { variant: 'error' })
-                window.alert()
                 return
             })
             if (!avatar) {
