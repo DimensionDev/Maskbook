@@ -64,6 +64,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })
+    const [isOpen, setIsOpen] = useState(false)
 
     const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', chainId)
 
@@ -183,7 +184,14 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                 })
                 if (
                     !(await protocol.deposit(account, chainId, web3, tokenAmount, (state) => {
-                        setTradeState(state)
+                        setTradeState((prev) => {
+                            if (
+                                prev.type === TransactionStateType.UNKNOWN &&
+                                state.type === TransactionStateType.CONFIRMED
+                            )
+                                return prev
+                            return state
+                        })
                     }))
                 ) {
                     throw new Error('Failed to deposit token.')

@@ -193,28 +193,24 @@ export class AAVEProtocol implements SavingsProtocol {
             const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
             const operation = await this.createDepositTokenOperation(account, chainId, web3, value)
             if (operation) {
-                await new Promise((resolve, reject) => {
-                    operation
-                        .send({
-                            from: account,
-                            gas: gasEstimate.toNumber(),
+                await operation
+                    .send({
+                        from: account,
+                        gas: gasEstimate.toNumber(),
+                    })
+                    .on(TransactionEventType.ERROR, (error) => {
+                        onChange({
+                            type: TransactionStateType.FAILED,
+                            error: error,
                         })
-                        .on(TransactionEventType.ERROR, (error) => {
-                            onChange({
-                                type: TransactionStateType.FAILED,
-                                error: error,
-                            })
-                            reject(error)
+                    })
+                    .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                        onChange({
+                            type: TransactionStateType.CONFIRMED,
+                            no,
+                            receipt,
                         })
-                        .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
-                            onChange({
-                                type: TransactionStateType.CONFIRMED,
-                                no,
-                                receipt,
-                            })
-                            resolve(receipt.transactionHash)
-                        })
-                })
+                    })
 
                 return true
             }
