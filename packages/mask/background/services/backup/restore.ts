@@ -36,13 +36,9 @@ export async function restoreUnconfirmedBackup({ id, action }: RestoreUnconfirme
     const granted = await requestHostPermission(backup.settings.grantedHostPermissions)
     if (!granted) return
 
-    try {
-        if (action === 'confirm') await restoreNormalizedBackup(backup)
-        else if (action === 'wallet') await openPopupWindow(PopupRoutes.WalletRecovered, { backupId: id })
-        else unreachable(action)
-    } finally {
-        unconfirmedBackup.delete(id)
-    }
+    if (action === 'confirm') await restoreNormalizedBackup(backup)
+    else if (action === 'wallet') await openPopupWindow(PopupRoutes.WalletRecovered, { backupId: id })
+    else unreachable(action)
 }
 
 export async function addUnconfirmedBackup(raw: string): Promise<Result<{ info: BackupPreview; id: string }, unknown>> {

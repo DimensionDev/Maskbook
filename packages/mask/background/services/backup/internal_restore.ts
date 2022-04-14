@@ -53,6 +53,9 @@ async function restorePersonas(backup: NormalizedBackup.Data) {
                         }))
                         .unwrapOr(undefined),
                     linkedProfiles: persona.linkedProfiles as IdentifierMap<ProfileIdentifier, unknown> as any,
+                    // "login" again because this is the restore process.
+                    // We need to explicitly set this flag because the backup may already in the database (but marked as "logout").
+                    hasLogout: false,
                 },
                 {
                     explicitUndefinedField: 'ignore',
