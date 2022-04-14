@@ -53,6 +53,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 globalUIState.profiles.value.length <= 0
             )
                 return
+
             setOpen(open)
             setReason(reason)
             if (content) UI.current?.setMessage(content)

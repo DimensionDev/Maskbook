@@ -105,10 +105,7 @@ export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, tr
 export const headingTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
     querySelector<HTMLAnchorElement>('[role="banner"] [role="heading"]')
 
-export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
-        '[aria-labelledby="modal-header"] > div:first-child > div:first-child > div:first-child > div:nth-child(3)',
-    )
+export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root div')
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('div[data-testid="toolBar"] div[data-testid="geoButton"]')
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
