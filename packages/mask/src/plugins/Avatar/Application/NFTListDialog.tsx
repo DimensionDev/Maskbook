@@ -7,7 +7,7 @@ import { downloadUrl } from '../../../utils'
 import { NFTList } from './NFTList'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import type { BindingProof } from '@masknet/shared-base'
-import type { SelectTokenInfo } from '../types'
+import type { SelectTokenInfo, TokenInfo } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -33,19 +33,19 @@ const useStyles = makeStyles()((theme) => ({
 }))
 interface NFTListDialogProps {
     onNext: () => void
+    tokenInfo?: TokenInfo
     wallets?: BindingProof[]
     onSelected: (info: SelectTokenInfo) => void
 }
 
 export function NFTListDialog(props: NFTListDialogProps) {
-    const { onNext, wallets, onSelected } = props
+    const { onNext, wallets, onSelected, tokenInfo } = props
     const { classes } = useStyles()
 
     const account = useAccount()
     const [open_, setOpen_] = useState(false)
     const [selectedAccount, setSelectedAccount] = useState('')
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed>()
-    const [image, setImage] = useState('')
     const onChange = useCallback((address: string) => {
         setSelectedAccount(address)
     }, [])
@@ -75,7 +75,9 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     classes={{ root: classes.AddressNames }}
                     onChange={onChange}
                 />
-                {(account || wallets?.length) && <NFTList address={selectedAccount} onSelect={onSelect} />}
+                {(account || wallets?.length) && (
+                    <NFTList tokenInfo={tokenInfo} address={selectedAccount} onSelect={onSelect} />
+                )}
             </DialogContent>
             <DialogActions>
                 <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
@@ -87,7 +89,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     </Typography>
                 </Stack>
 
-                <Button disabled={!selectedToken} className={classes.button} onClick={onSave}>
+                <Button disabled={!selectedToken && !tokenInfo} className={classes.button} onClick={onSave}>
                     Set NFT Avatar
                 </Button>
             </DialogActions>

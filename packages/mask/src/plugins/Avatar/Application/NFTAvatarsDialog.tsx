@@ -4,7 +4,7 @@ import { NFTListDialog } from './NFTListDialog'
 import { InjectedDialog } from '@masknet/shared'
 import { UploadAvatarDialog } from './UploadAvatarDialog'
 import type { BindingProof } from '@masknet/shared-base'
-import type { SelectTokenInfo } from '../types'
+import type { SelectTokenInfo, TokenInfo } from '../types'
 import { PersonaPage } from './PersonaPage'
 import { DialogContent } from '@mui/material'
 
@@ -28,9 +28,11 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
     const [step, setStep] = useState(CreateNFTAvatarStep.Persona)
     const [wallets, setWallets] = useState<BindingProof[]>()
     const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
+    const [tokenInfo, setTokenInfo] = useState<TokenInfo>()
 
-    const onPersonaChange = (wallets?: BindingProof[]) => {
+    const onPersonaChange = (wallets?: BindingProof[], tokenInfo?: TokenInfo) => {
         setWallets(wallets)
+        setTokenInfo(tokenInfo)
     }
 
     const onSelected = (info: SelectTokenInfo) => {
@@ -55,7 +57,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                     <PersonaPage onNext={onNext} onChange={onPersonaChange} />
                 ) : null}
                 {step === CreateNFTAvatarStep.NFTList ? (
-                    <NFTListDialog wallets={wallets} onNext={onNext} onSelected={onSelected} />
+                    <NFTListDialog tokenInfo={tokenInfo} wallets={wallets} onNext={onNext} onSelected={onSelected} />
                 ) : null}
                 {step === CreateNFTAvatarStep.UploadAvatar ? (
                     <UploadAvatarDialog

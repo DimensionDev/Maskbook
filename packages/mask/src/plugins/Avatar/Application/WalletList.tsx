@@ -28,6 +28,10 @@ const useStyles = makeStyles()(() => ({
     copy: {},
     link: {},
     linkIcon: {},
+    icon: {
+        width: 40,
+        height: 40,
+    },
 }))
 
 interface AddressNamesProps extends withClasses<'root'> {
@@ -89,9 +93,9 @@ export function AddressNames(props: AddressNamesProps) {
                     <MenuItem key={account} value={account} onClick={() => onClick(account)}>
                         <ListItemIcon>
                             {selectedWallet === account ? (
-                                <CheckedIcon style={{ width: 38, height: 38 }} />
+                                <CheckedIcon className={classes.icon} />
                             ) : (
-                                <UncheckIcon />
+                                <UncheckIcon className={classes.icon} />
                             )}
                         </ListItemIcon>
                         <WalletUI address={account} />
@@ -114,9 +118,9 @@ export function AddressNames(props: AddressNamesProps) {
                         <MenuItem key={x.identity} value={x.identity} onClick={() => onClick(x.identity)}>
                             <ListItemIcon>
                                 {selectedWallet === x.identity ? (
-                                    <CheckedIcon style={{ width: 38, height: 38 }} />
+                                    <CheckedIcon className={classes.icon} />
                                 ) : (
-                                    <UncheckIcon />
+                                    <UncheckIcon className={classes.icon} />
                                 )}
                             </ListItemIcon>
                             <WalletUI address={x.identity} />

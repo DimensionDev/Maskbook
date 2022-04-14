@@ -23,3 +23,8 @@ export interface SelectTokenInfo {
     token: ERC721TokenDetailed
     image: string
 }
+
+export interface TokenInfo {
+    address: string
+    tokenId: string
+}

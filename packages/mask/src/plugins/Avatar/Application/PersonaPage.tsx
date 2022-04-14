@@ -6,6 +6,7 @@ import { useLastRecognizedIdentity } from '../../../components/DataSource/useAct
 import { NextIDVerificationStatus, useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
 import { CloseIcon } from '../assets/close'
 import { usePersonas } from '../hooks/usePersonas'
+import type { TokenInfo } from '../types'
 import { PersonaItem } from './PersonaItem'
 
 const useStyles = makeStyles()(() => ({
@@ -21,7 +22,7 @@ const useStyles = makeStyles()(() => ({
 
 interface PersonaPageProps {
     onNext: () => void
-    onChange: (wallets?: BindingProof[]) => void
+    onChange: (wallets?: BindingProof[], tokenInfo?: TokenInfo) => void
 }
 
 export function PersonaPage(props: PersonaPageProps) {
@@ -38,10 +39,13 @@ export function PersonaPage(props: PersonaPageProps) {
         if (action) action()
     }, [nextIDConnectStatus])
 
-    const onClick = useCallback(() => {
-        onChange(wallets)
-        onNext()
-    }, [wallets])
+    const onSelect = useCallback(
+        (tokenInfo: TokenInfo) => {
+            onChange(wallets, tokenInfo)
+            onNext()
+        },
+        [wallets],
+    )
 
     console.log(binds)
     return (
@@ -71,7 +75,7 @@ export function PersonaPage(props: PersonaPageProps) {
                                     avatar={currentIdentity.avatar}
                                     userId={currentIdentity.identifier.userId}
                                     nickname={currentIdentity.nickname}
-                                    onClick={onClick}
+                                    onSelect={onSelect}
                                     platform={x.platform}
                                 />
                             ) : (

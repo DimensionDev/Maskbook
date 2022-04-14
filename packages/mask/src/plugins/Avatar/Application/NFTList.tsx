@@ -3,6 +3,7 @@ import { ChainId, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Tabs } from '@mui/material'
 import { useI18N } from '../../../utils'
+import type { TokenInfo } from '../types'
 import { NFTListPage } from './NFTListPage'
 
 const useStyles = makeStyles()((theme) => ({
@@ -10,18 +11,17 @@ const useStyles = makeStyles()((theme) => ({
 }))
 interface NFTListProps {
     address: string
+    tokenInfo?: TokenInfo
     onSelect: (token: ERC721TokenDetailed) => void
 }
 
 export function NFTList(props: NFTListProps) {
     const { classes } = useStyles()
-    const { address, onSelect } = props
+    const { address, onSelect, tokenInfo } = props
     const { t } = useI18N()
 
     const [currentTab, onChange, tabs] = useTabs('ETH', 'Polygon')
 
-    console.log('-----')
-    console.log(address)
     if (!address) return null
     return (
         <TabContext value={currentTab}>
@@ -30,10 +30,10 @@ export function NFTList(props: NFTListProps) {
                 <Tab label="Polygon" value={tabs.Polygon} />
             </Tabs>
             <TabPanel value={tabs.ETH}>
-                <NFTListPage chainId={ChainId.Mainnet} address={address} onSelect={onSelect} />
+                <NFTListPage tokenInfo={tokenInfo} chainId={ChainId.Mainnet} address={address} onSelect={onSelect} />
             </TabPanel>
             <TabPanel value={tabs.Polygon}>
-                <NFTListPage chainId={ChainId.Matic} address={address} onSelect={onSelect} />
+                <NFTListPage tokenInfo={tokenInfo} chainId={ChainId.Matic} address={address} onSelect={onSelect} />
             </TabPanel>
         </TabContext>
     )

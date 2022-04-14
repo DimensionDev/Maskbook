@@ -1,10 +1,19 @@
 import { makeStyles } from '@masknet/theme'
-import { ChainId, ERC721TokenDetailed, SocketState, useCollectibles, useImageChecker } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    createERC721Token,
+    ERC721TokenDetailed,
+    EthereumTokenType,
+    SocketState,
+    useCollectibles,
+    useImageChecker,
+} from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { uniqBy } from 'lodash-unified'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'
 import { NFTImage } from '../SNSAdaptor/NFTImage'
+import type { TokenInfo } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -49,16 +58,30 @@ const useStyles = makeStyles()((theme) => ({
 interface NFTListPageProps {
     chainId: ChainId
     address: string
+    tokenInfo?: TokenInfo
     onSelect?: (token: ERC721TokenDetailed) => void
 }
 
 export function NFTListPage(props: NFTListPageProps) {
     const { classes } = useStyles()
-
-    const { address, onSelect, chainId } = props
+    const { address, onSelect, chainId, tokenInfo } = props
     const { t } = useI18N()
     const { data: collectibles, error, retry, state } = useCollectibles(address, chainId)
-    const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>()
+    const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>(
+        tokenInfo
+            ? createERC721Token(
+                  {
+                      name: 'unknown',
+                      address: tokenInfo.address,
+                      chainId,
+                      symbol: '',
+                      type: EthereumTokenType.ERC721,
+                  },
+                  {},
+                  tokenInfo.tokenId,
+              )
+            : undefined,
+    )
 
     const onChange = (token: ERC721TokenDetailed) => {
         if (!token) return
