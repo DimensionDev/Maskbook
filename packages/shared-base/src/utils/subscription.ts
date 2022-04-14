@@ -13,6 +13,7 @@ export function createSubscriptionFromAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,
     onChange: (callback: () => void) => () => void,
+    signal?: AbortSignal,
 ): Subscription<T> {
     // 0 - idle, 1 - updating state, > 1 - waiting state
     let beats = 0
@@ -35,11 +36,13 @@ export function createSubscriptionFromAsync<T>(
     return {
         getCurrentValue: () => state,
         subscribe: (sub) => {
+            if (signal?.aborted) return () => {}
             const a = subscribe(sub)
             const b = onChange(async () => {
                 beats += 1
                 if (beats === 1) flush()
             })
+            signal?.addEventListener('abort', () => [a(), b()], { once: true })
             return () => void [a(), b()]
         },
     }
@@ -70,10 +73,15 @@ export function mapSubscription<T, Q>(sub: Subscription<T>, mapper: (val: T) => 
     }
 }
 
-export function SubscriptionFromValueRef<T>(ref: ValueRef<T>): Subscription<T> {
+export function SubscriptionFromValueRef<T>(ref: ValueRef<T>, signal?: AbortSignal): Subscription<T> {
     return SubscriptionDebug({
         getCurrentValue: () => ref.value,
-        subscribe: (sub) => ref.addListener(sub),
+        subscribe: (sub) => {
+            if (signal?.aborted) return noop
+            const f = ref.addListener(sub)
+            signal?.addEventListener('abort', f, { once: true })
+            return f
+        },
     })
 }
 export function SubscriptionDebug<T>(x: Subscription<T>): Subscription<T> {

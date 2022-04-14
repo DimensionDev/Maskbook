@@ -45,6 +45,7 @@ importers:
       eslint-plugin-unused-imports: ^2.0.0
       gulp: ^4.0.2
       husky: ^7.0.4
+      immer: 9.0.12
       jest: ^28.0.0-alpha.8
       lint-staged: ^12.3.7
       lodash: ^4.17.21
@@ -54,6 +55,7 @@ importers:
       react: 18.0.0
       react-dom: 18.0.0
       react-i18next: ^11.16.5
+      ses: 0.15.12
       ts-jest: ^27.1.4
       ts-node: ^10.7.0
       ts-results: 3.3.0
@@ -75,12 +77,14 @@ importers:
       '@types/react': 18.0.2
       '@types/react-dom': 18.0.0
       '@types/web': 0.0.61
+      immer: 9.0.12
       lodash: 4.17.21
       lodash-es: 4.17.21
       lodash-unified: 1.0.2_da03a4540fbd16bbaafbb96724306afd
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       react-i18next: 11.16.5_react-dom@18.0.0+react@18.0.0
+      ses: 0.15.12
       ts-results: 3.3.0
       web3-core: 1.7.3
       web3-core-method: 1.7.3
@@ -237,11 +241,13 @@ importers:
 
   packages/encryption:
     specifiers:
+      '@dimensiondev/secp256k1-webcrypto': 1.0.0-20220412114204-be816df
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@masknet/shared-base': workspace:*
       '@masknet/typed-message': workspace:*
       '@msgpack/msgpack': ^2.7.2
     dependencies:
+      '@dimensiondev/secp256k1-webcrypto': 1.0.0-20220412114204-be816df
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@masknet/shared-base': link:../shared-base
       '@masknet/typed-message': link:../typed-message
@@ -288,6 +294,7 @@ importers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
+      '@dimensiondev/secp256k1-webcrypto': 1.0.0-20220412114204-be816df
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12
       '@ethersproject/abi': ^5.4.0
       '@ethersproject/address': ^5.0.4
@@ -375,7 +382,6 @@ importers:
       https-browserify: ^1.0.0
       idb: ^7.0.1
       iframe-resizer-react: ^1.1.0
-      immer: ^9.0.12
       isomorphic-dompurify: ^0.18.0
       jsbi: 3.1.4
       json-stable-stringify: ^1.0.1
@@ -429,6 +435,7 @@ importers:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0_webextension-polyfill@0.9.0
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f_protobufjs@6.11.2
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
+      '@dimensiondev/secp256k1-webcrypto': 1.0.0-20220412114204-be816df
       '@ethersproject/abi': 5.4.0
       '@ethersproject/address': 5.4.0
       '@ethersproject/providers': 5.4.2
@@ -508,7 +515,6 @@ importers:
       https-browserify: 1.0.0
       idb: 7.0.1
       iframe-resizer-react: 1.1.0_react-dom@18.0.0+react@18.0.0
-      immer: 9.0.12
       isomorphic-dompurify: 0.18.0
       jsbi: 3.1.4
       json-stable-stringify: 1.0.1
@@ -926,16 +932,13 @@ importers:
       clipboard-polyfill: ^3.0.3
       core-js: ^3.21.1
       core-js-builder: ^3.21.1
-      elliptic: ^6.5.4
+      regenerator-runtime: ^0.13.9
       rollup: ^2.70.1
       rollup-plugin-terser: ^7.0.2
-      webcrypto-liner: 1.3.1
     dependencies:
       buffer: 6.0.3
       clipboard-polyfill: 3.0.3
       core-js: 3.21.1
-      elliptic: 6.5.4
-      webcrypto-liner: 1.3.1
     devDependencies:
       '@rollup/plugin-commonjs': 21.0.3_rollup@2.70.1
       '@rollup/plugin-json': 4.1.0_rollup@2.70.1
@@ -943,6 +946,7 @@ importers:
       '@rollup/plugin-sucrase': 4.0.2_rollup@2.70.1
       '@types/node': 17.0.23
       core-js-builder: 3.21.1
+      regenerator-runtime: 0.13.9
       rollup: 2.70.1
       rollup-plugin-terser: 7.0.2_rollup@2.70.1
 
@@ -1074,7 +1078,6 @@ importers:
       i18next: ^21.6.15
       i18next-browser-languagedetector: ^6.1.4
       idb: ^7.0.1
-      immer: ^9.0.12
       pvtsutils: ^1.2.2
       react: link:..\empty
       tiny-secp256k1: ^2.2.1
@@ -1099,7 +1102,6 @@ importers:
       i18next: 21.6.15
       i18next-browser-languagedetector: 6.1.4
       idb: 7.0.1
-      immer: 9.0.12
       pvtsutils: 1.2.2
       react: link:../empty
       tiny-secp256k1: 2.2.1
@@ -1197,13 +1199,11 @@ importers:
       '@msgpack/msgpack': ^2.7.2
       '@mui/material': link:..\empty
       anchorme: ^2.1.2
-      immer: ^9.0.12
       z-schema: ^5.0.3
     dependencies:
       '@msgpack/msgpack': 2.7.2
       '@mui/material': link:../empty
       anchorme: 2.1.2
-      immer: 9.0.12
       z-schema: 5.0.3
 
   packages/web3-constants:
@@ -4041,6 +4041,13 @@ packages:
       tmp: 0.0.33
     dev: true
 
+  /@dimensiondev/secp256k1-webcrypto/1.0.0-20220412114204-be816df:
+    resolution: {integrity: sha512-gDNH39SnATJogShz7egcc4aJqBUurB7xzyNVuVy78XmkAz57xG7nWlo5KyC8sh9cZDHNwi12vYI1zJz5UPgN2A==, tarball: download/@dimensiondev/secp256k1-webcrypto/1.0.0-20220412114204-be816df/7e05b026476e62dc08df835fa6a559e9dbcfe976128f54172b8d0d0221aad6af}
+    dependencies:
+      elliptic: 6.5.4
+      pvtsutils: 1.2.2
+    dev: false
+
   /@dimensiondev/stego-js/0.11.1-20201027083223-8ab41be:
     resolution: {integrity: sha512-lm49qcX2O40Nn+AGKN6J4qrpPHaffGnvUI3mCh+obyiZxT9H5/vZv1B+SUm2bXq8r2LeLHIeW90x1lpyg1roTQ==, tarball: download/@dimensiondev/stego-js/0.11.1-20201027083223-8ab41be/2d41418365c7ea41e10de432e82b0707c3a3a3b70a20a3733276162eeb6c4bcd}
     hasBin: true
@@ -5906,6 +5913,7 @@ packages:
       pvtsutils: 1.2.1
       tslib: 2.3.1
     dev: false
+    optional: true
 
   /@peculiar/json-schema/1.1.12:
     resolution: {integrity: sha512-coUfuoMeIB7B8/NMekxaDzLhaYmp0HZNPEjYRm9goRou8UZIC3z21s0sL9AWoCw4EG876QyO3kYrc61WNF9B/w==}
@@ -5913,6 +5921,7 @@ packages:
     dependencies:
       tslib: 2.3.1
     dev: false
+    optional: true
 
   /@peculiar/webcrypto/1.2.3:
     resolution: {integrity: sha512-q7wDfZy3k/tpnsYB23/MyyDkjn6IdHh8w+xwoVMS5cu6CjVoFzngXDZEOOuSE4zus2yO6ciQhhHxd4XkLpwVnQ==}
@@ -8333,6 +8342,7 @@ packages:
   /@types/asn1js/2.0.2:
     resolution: {integrity: sha512-t4YHCgtD+ERvH0FyxvNlYwJ2ezhqw7t+Ygh4urQ7dJER8i185JPv6oIM3ey5YQmGN6Zp9EMbpohkjZi9t3UxwA==}
     dev: false
+    optional: true
 
   /@types/babel__core/7.1.18:
     resolution: {integrity: sha512-S7unDjm/C7z2A2R9NzfKCK1I+BAALDtxEmsJBwlB3EzNfb929ykjL++1CK9LO++EIp2fQrC8O+BwjKvz6UeDyQ==}
@@ -10323,10 +10333,6 @@ packages:
     resolution: {integrity: sha1-5QNHYR1+aQlDIIu9r+vLwvuGbUY=}
     dev: false
 
-  /asmcrypto.js/2.3.2:
-    resolution: {integrity: sha512-3FgFARf7RupsZETQ1nHnhLUUvpcttcCq1iZCaVAbJZbCZ5VNRrNyvpDyHTOb0KC3llFcsyOT/a99NZcCbeiEsA==}
-    dev: false
-
   /asn1.js/5.4.1:
     resolution: {integrity: sha512-+I//4cYPccV8LdmBLiX8CYvf9Sp3vQsrqu2QNXRcrbiWvcx/UdlFiqUJJzxRQxgsZmvhXhn4cSKeSmoFjVdupA==}
     dependencies:
@@ -10347,6 +10353,7 @@ packages:
     dependencies:
       pvutils: 1.1.3
     dev: false
+    optional: true
 
   /assert-plus/1.0.0:
     resolution: {integrity: sha1-8S4PPF13sLHN2RRpQuTpbB5N1SU=}
@@ -21780,6 +21787,7 @@ packages:
     dependencies:
       tslib: 2.3.1
     dev: false
+    optional: true
 
   /pvtsutils/1.2.2:
     resolution: {integrity: sha512-OALo5ZEdqiI127i64+CXwkCOyFHUA+tCQgaUO/MvRDFXWPr53f2sx28ECNztUEzuyu5xvuuD1EB/szg9mwJoGA==}
@@ -21791,6 +21799,7 @@ packages:
     resolution: {integrity: sha512-pMpnA0qRdFp32b1sJl1wOJNxZLQ2cbQx+k6tjNtZ8CpvVhNqEPRgivZ2WOUev2YMajecdH7ctUPDvEe87nariQ==}
     engines: {node: '>=6.0.0'}
     dev: false
+    optional: true
 
   /q/1.5.1:
     resolution: {integrity: sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=}
@@ -23336,6 +23345,10 @@ packages:
       xhr: 2.6.0
     dev: false
 
+  /ses/0.15.12:
+    resolution: {integrity: sha512-bni8g6GYb58bW+TtesiBHGU+QI+gHVaVWHg3ZCKNeD8d+QMFarLh2pcP5HpRFAPcrh2L0LVgnMMSzFJHb1VzyA==}
+    dev: false
+
   /set-blocking/2.0.0:
     resolution: {integrity: sha1-BF+XgtARrppoA93TgrJDkrPYkPc=}
 
@@ -24289,7 +24302,7 @@ packages:
     dependencies:
       '@swc/core': 1.2.165
       loader-utils: 2.0.2
-      webpack: 5.72.0_d159b08e00e92b5d1326c67bfa14033d
+      webpack: 5.72.0_@swc+core@1.2.165
     dev: true
 
   /symbol-tree/3.2.4:
@@ -24458,7 +24471,7 @@ packages:
       serialize-javascript: 6.0.0
       source-map: 0.6.1
       terser: 5.12.1
-      webpack: 5.72.0_d159b08e00e92b5d1326c67bfa14033d
+      webpack: 5.72.0_@swc+core@1.2.165
     dev: true
 
   /terser/4.8.0:
@@ -26180,21 +26193,7 @@ packages:
       pvtsutils: 1.2.1
       tslib: 2.3.1
     dev: false
-
-  /webcrypto-liner/1.3.1:
-    resolution: {integrity: sha512-xCxg3DKpJ8UNsriAQq0KpOpY4xU6lvQFZbs0d/pnGdE8IRzzfAao4Z2qXsSvDRN0OraH3MlvK3j2ocUk23ymFA==}
-    dependencies:
-      '@peculiar/asn1-schema': 2.0.44
-      '@peculiar/json-schema': 1.1.12
-      asmcrypto.js: 2.3.2
-      asn1js: 2.2.0
-      core-js: 3.21.1
-      des.js: 1.0.1
-      elliptic: 6.5.4
-      pvtsutils: 1.2.1
-      tslib: 2.3.1
-      webcrypto-core: 1.4.0
-    dev: false
+    optional: true
 
   /webextension-polyfill-ts/0.22.0:
     resolution: {integrity: sha512-3P33ClMwZ/qiAT7UH1ROrkRC1KM78umlnPpRhdC/292UyoTTW9NcjJEqDsv83HbibcTB6qCtpVeuB2q2/oniHQ==}

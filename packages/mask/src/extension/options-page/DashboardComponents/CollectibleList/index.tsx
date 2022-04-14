@@ -190,14 +190,14 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                     </Box>
                 ) : (
                     <Box className={classes.root}>
-                        {collectibles.map((x, i) => (
+                        {collectibles.map((token, index) => (
                             <CollectibleItem
-                                renderOrder={i}
-                                token={x}
+                                renderOrder={index}
+                                token={token}
                                 provider={provider}
                                 wallet={wallet}
                                 readonly={readonly}
-                                key={x.tokenId + x.contractDetailed.address}
+                                key={index}
                             />
                         ))}
                     </Box>
