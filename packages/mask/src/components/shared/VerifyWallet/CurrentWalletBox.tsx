@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(1),
     },
     accountName: {
-        fontSize: 16,
+        fontSize: 14,
         marginRight: 4,
         fontWeight: 'bold',
     },
@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     actionButton: {
-        fontSize: 14,
+        fontSize: 12,
         marginLeft: theme.spacing(1),
         padding: '8px 12px',
         fontWeight: 'bold',
@@ -57,7 +57,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '6px',
     },
     address: {
-        fontSize: 12,
+        fontSize: 10,
         marginRight: theme.spacing(1),
         display: 'inline-block',
         color: theme.palette.text.secondary,
@@ -94,6 +94,7 @@ const useStyles = makeStyles()((theme) => ({
 interface CurrentWalletBox {
     isDashboard?: boolean
     disableChange?: boolean
+    changeWallet: () => void
 }
 export function CurrentWalletBox(props: CurrentWalletBox) {
     const { t } = useI18N()
@@ -134,14 +135,12 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
         }
     }, [chainId, providerType, setWalletConnectDialog])
 
-    const onChange = useCallback(() => {
-        openSelectProviderDialog()
-    }, [openSelectProviderDialog])
+    const onChange = props.changeWallet
 
     return account ? (
         <section className={classNames(classes.currentAccount)}>
             <WalletIcon
-                size={48}
+                size={30}
                 badgeSize={16}
                 networkIcon={providerDescriptor?.icon}
                 providerIcon={networkDescriptor?.icon}

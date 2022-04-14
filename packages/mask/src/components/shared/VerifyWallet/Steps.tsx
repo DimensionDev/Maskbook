@@ -1,4 +1,4 @@
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { CurrentWalletBox } from './CurrentWalletBox'
 import {
     step1ActiveIcon,
@@ -13,6 +13,8 @@ import { ImageIcon } from '@masknet/shared'
 import { Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useNavigate } from 'react-router-dom'
+import classNames from 'classnames'
+import { useEffect } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -43,9 +45,14 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.secondary,
         minHeight: 100,
     },
+    stepTitle: {
+        fontSize: 14,
+        fontWeight: 700,
+    },
+
     stepIntro: {
         marginTop: 12,
-        fontSize: 14,
+        fontSize: 12,
     },
     divider: {
         margin: '4px 0',
@@ -61,6 +68,10 @@ const useStyles = makeStyles()((theme) => ({
     roundBtn: {
         borderRadius: 99,
     },
+    diableBtn: {
+        pointerEvents: 'none',
+        opacity: 0.5,
+    },
 }))
 
 export enum SignSteps {
@@ -73,13 +84,18 @@ interface StepsProps {
     step: SignSteps
     personaSign: () => void
     walletSign: () => void
+    changeWallet: () => void
+    onDone: () => void
+    persona: any
+    wallet: any
+    disableConfirm?: boolean
 }
 
 export function Steps(props: StepsProps) {
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { step, personaSign, walletSign } = props
-
+    const { step, personaSign, walletSign, changeWallet, persona, wallet, onDone, disableConfirm } = props
+    const { showSnackbar } = useCustomSnackbar()
     const stepIconMap = {
         [SignSteps.Ready]: {
             step1: step1ActiveIcon,
@@ -98,13 +114,19 @@ export function Steps(props: StepsProps) {
         },
     }
 
+    useEffect(() => {
+        if (disableConfirm) {
+            showSnackbar('The wallet has been bound.Please switch wallets.', { variant: 'error' })
+        }
+    }, [disableConfirm])
+
     const onConfirm = () => {
         if (step === SignSteps.Ready) {
             personaSign()
         } else if (step === SignSteps.FirstStepDone) {
             walletSign()
         } else {
-            navigate(-1)
+            onDone()
         }
     }
 
@@ -114,22 +136,22 @@ export function Steps(props: StepsProps) {
 
     return (
         <div className={classes.container}>
-            <CurrentWalletBox />
+            <CurrentWalletBox changeWallet={changeWallet} />
             <div className={classes.stepBox}>
                 <div className={classes.stepLine}>
-                    <ImageIcon size={24} icon={stepIconMap[step].step1} />
+                    <ImageIcon size={22} icon={stepIconMap[step].step1} />
                     <img className={classes.divider} src={stepIconMap[step].divider.toString()} />
-                    <ImageIcon size={24} icon={stepIconMap[step].step2} />
+                    <ImageIcon size={22} icon={stepIconMap[step].step2} />
                 </div>
                 <div className={classes.stepRowBox}>
                     <div className={classes.stepRow}>
-                        <Typography sx={{ fontWeight: 'bold' }}>Persona Name Sign</Typography>
+                        <Typography className={classes.stepTitle}>{persona.nickname ?? 'Persona Name'} Sign</Typography>
                         <Typography className={classes.stepIntro}>
                             Sign seamlessly with Persona, ensure the validity of data.
                         </Typography>
                     </div>
                     <div className={classes.stepRow}>
-                        <Typography sx={{ fontWeight: 'bold' }}>Wallet Name Sign</Typography>
+                        <Typography className={classes.stepTitle}>{wallet.providerType} Wallet Sign</Typography>
                         <Typography className={classes.stepIntro}>
                             After two steps, you will own, view, utilize all your cyber identities through Next.ID. You
                             can also disconnect them easily.
@@ -148,12 +170,12 @@ export function Steps(props: StepsProps) {
                     Cancel
                 </ActionButton>
                 <ActionButton
-                    className={classes.roundBtn}
+                    className={disableConfirm ? classNames(classes.roundBtn, classes.diableBtn) : classes.roundBtn}
                     variant="contained"
                     size="large"
                     fullWidth
                     onClick={onConfirm}>
-                    {step === 2 ? 'Done' : 'Confirm'}
+                    {disableConfirm ? 'Peronsa Sign' : step === 2 ? 'Done' : 'Confirm'}
                 </ActionButton>
             </div>
         </div>

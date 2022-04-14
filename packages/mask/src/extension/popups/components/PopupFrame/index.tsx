@@ -27,10 +27,12 @@ function GlobalCss() {
 
 const useStyles = makeStyles()((theme) => ({
     container: {
+        height: '100%',
         minHeight: 560,
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
+        background: '#F7F9FA',
     },
 }))
 

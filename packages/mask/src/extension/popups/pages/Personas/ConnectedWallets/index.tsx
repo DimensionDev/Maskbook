@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useEffect } from 'react'
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { ConnectedWalletsUI } from './UI'
@@ -89,9 +89,9 @@ const ConnectedWallets = memo(() => {
         [currentPersona],
     )
 
-    const openVerifyWalletWindow = useCallback(async () => {
-        Service.Helper.openPopupWindow(PopupRoutes.ConnectWallet)
-    }, [])
+    const navigateToConnectWallet = () => {
+        navigate(PopupRoutes.ConnectWallet)
+    }
 
     useTitle(t('popups_connected_wallets'))
 
@@ -107,7 +107,7 @@ const ConnectedWallets = memo(() => {
             chainId={chainId}
             releaseLoading={confirmState.loading}
             onRelease={onConfirmRelease}
-            onAddVerifyWallet={openVerifyWalletWindow}
+            onAddVerifyWallet={navigateToConnectWallet}
             personaName={currentPersona.nickname}
         />
     )

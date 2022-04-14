@@ -35,15 +35,17 @@ const useStyles = makeStyles()((theme) => ({
         gap: 4,
         padding: '12px 0',
         boxSizing: 'content-box',
-        fontSize: 12,
-        fontWeight: 700,
-        color: theme.palette.text.secondary,
-        fontFamily: 'Helvetica',
         height: 'fit-content',
     },
     walletIcon: {
-        width: '5rem',
-        height: '5rem',
+        width: '30px',
+        height: '30px',
+    },
+    walletName: {
+        fontSize: 12,
+        fontFamily: 'Helvetica',
+        fontWeight: 700,
+        color: 'rgba(118, 127, 141, 1)',
     },
 }))
 
@@ -64,7 +66,6 @@ const ConnectWalletPage = memo(() => {
     const onSubmit = useCallback(async (result?: Web3Plugin.ConnectionResult) => {
         console.log('DEBUG: connection result')
         console.log(result)
-
         navigate(PopupRoutes.VerifyWallet, {
             state: result as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>,
         })
@@ -85,13 +86,13 @@ const ConnectWalletPage = memo(() => {
                         onSubmit={(network, provider, result) => onSubmit(result)}>
                         <div className={classes.walletItem}>
                             <img src={provider.icon.toString()} className={classes.walletIcon} />
-                            <Typography>{provider.name}</Typography>
+                            <Typography className={classes.walletName}>{provider.name}</Typography>
                         </div>
                     </ProviderIconClickBait>
                 ) : (
                     <div className={classes.walletItem} key={provider.ID}>
                         <img src={provider.icon.toString()} className={classes.walletIcon} />
-                        <Typography>{provider.name}</Typography>
+                        <Typography className={classes.walletName}>{provider.name}</Typography>
                     </div>
                 )
             })}
