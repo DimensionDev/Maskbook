@@ -13,6 +13,7 @@ import AddWalletView from './bodyViews/AddWallet'
 import { useProvedWallets } from '../hooks/useProvedWallets'
 import { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
 import Empty from './components/empty'
+import { useKvGet } from '../hooks/useKv'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -64,6 +65,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const walletsList = proofRes.value
         ? (proofRes.value as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
         : []
+
+    const { value: kv } = useKvGet()
+    console.log(kv, 'gggg')
+
     const WalletButton = () => {
         const { classes } = useStyles()
         return (
