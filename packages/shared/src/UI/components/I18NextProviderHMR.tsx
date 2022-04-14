@@ -23,7 +23,6 @@ export const I18NextProviderHMR =
               return I18nextProvider({
                   i18n,
                   defaultNS,
-                  // @ts-expect-error react-18
                   children,
               })
           }

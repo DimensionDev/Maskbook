@@ -3,10 +3,10 @@ import {
     isTypedMessageTupleSerializable,
     TypedMessageText,
     TypedMessageTupleSerializable,
-} from '../core'
-import type { SerializableTypedMessages, TypedMessage } from '../base'
+} from '../core/index.js'
+import type { SerializableTypedMessages, TypedMessage } from '../base.js'
 import { encode } from '@msgpack/msgpack'
-import { TypedMessageBinaryEncodingTypeEnum } from './type'
+import { TypedMessageBinaryEncodingTypeEnum } from './type.js'
 
 const HEAD = '[@masknet/typed-message] '
 export function encodeTypedMessageToDocument(tm: SerializableTypedMessages) {

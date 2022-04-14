@@ -1,7 +1,7 @@
 import type { DependencyList } from 'react'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useBeatRetry } from '@masknet/web3-shared-base'
-import { useWeb3State } from '..'
+import { useWeb3State } from '.'
 import { useChainId } from './useChainId'
 
 const DEFAULT_SINGLE_BLOCK_DELAY = 15 * 1000

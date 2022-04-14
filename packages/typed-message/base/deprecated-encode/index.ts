@@ -1,5 +1,5 @@
 import { None, Ok, Result } from 'ts-results'
-import { makeTypedMessageText, TypedMessageText } from '../core'
+import { makeTypedMessageText, TypedMessageText } from '../core/index.js'
 
 export function encodeTypedMessageV38Format(message: TypedMessageText) {
     const encoder = new TextEncoder()

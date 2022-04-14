@@ -1,5 +1,10 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import type { PostContext, PostContextAuthor, PostContextCreation, PostContextSNSActions } from '@masknet/plugin-infra'
+import type {
+    PostContext,
+    PostContextAuthor,
+    PostContextCreation,
+    PostContextSNSActions,
+} from '@masknet/plugin-infra/content-script'
 import {
     extractTextFromTypedMessage,
     isTypedMessageEqual,
@@ -15,7 +20,7 @@ import {
     Payload,
     PostIdentifier,
     ProfileIdentifier,
-    SubscriptionFromValueRef,
+    createSubscriptionFromValueRef,
     SubscriptionDebug as debug,
     mapSubscription,
     EMPTY_LIST,
@@ -145,13 +150,13 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
 
             rawMessage: opt.rawMessage,
             rawMessagePiped: transformedPostContent,
-            postContent: SubscriptionFromValueRef(postContent),
+            postContent: createSubscriptionFromValueRef(postContent),
 
-            containingMaskPayload: SubscriptionFromValueRef(postPayload),
+            containingMaskPayload: createSubscriptionFromValueRef(postPayload),
             iv,
-            publicShared: SubscriptionFromValueRef(isPublicShared),
-            ownersKeyEncrypted: SubscriptionFromValueRef(ownersAESKeyEncrypted),
-            version: SubscriptionFromValueRef(version),
+            publicShared: createSubscriptionFromValueRef(isPublicShared),
+            ownersKeyEncrypted: createSubscriptionFromValueRef(ownersAESKeyEncrypted),
+            version: createSubscriptionFromValueRef(version),
             decryptedReport(opts) {
                 if (opts.iv) iv.value = opts.iv
                 if (opts.sharedPublic?.some) isPublicShared.value = opts.sharedPublic.val
@@ -170,17 +175,17 @@ export function createRefsForCreatePostContext() {
     const postMetadataImages = new ObservableSet<string>()
     const postMetadataMentionedLinks = new ObservableMap<unknown, string>()
     const subscriptions: Omit<PostContextCreation, 'rootElement' | 'actionsElement' | 'suggestedInjectionPoint'> = {
-        avatarURL: mapSubscription(SubscriptionFromValueRef(avatarURL), (x) => {
+        avatarURL: mapSubscription(createSubscriptionFromValueRef(avatarURL), (x) => {
             if (!x) return null
             try {
                 return new URL(x)
             } catch {}
             return null
         }),
-        nickname: SubscriptionFromValueRef(nickname),
-        author: SubscriptionFromValueRef(postBy),
-        snsID: SubscriptionFromValueRef(postID),
-        rawMessage: SubscriptionFromValueRef(postMessage),
+        nickname: createSubscriptionFromValueRef(nickname),
+        author: createSubscriptionFromValueRef(postBy),
+        snsID: createSubscriptionFromValueRef(postID),
+        rawMessage: createSubscriptionFromValueRef(postMessage),
         postImagesProvider: debug({
             getCurrentValue: () => (postMetadataImages.size ? [...postMetadataImages] : EMPTY_LIST),
             subscribe: (sub) => postMetadataImages.event.on(ALL_EVENTS, sub),

@@ -1,7 +1,7 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Trader, TraderProps } from './Trader'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { useChainId } from '@masknet/plugin-infra'
+import { useChainId } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     return {

@@ -1,5 +1,5 @@
-import type { NonSerializableTypedMessage } from '../base'
-import { createIsType } from '../utils/internal'
+import type { NonSerializableTypedMessage } from '../base.js'
+import { createIsType } from '../utils/internal.js'
 
 export interface TypedMessageUnknown extends NonSerializableTypedMessage {
     readonly type: 'unknown'

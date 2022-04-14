@@ -7,11 +7,11 @@ import {
     makeTypedMessageText,
     makeTypedMessageTuple,
     makeTypedMessageTupleSerializable,
-} from '../core'
-import type { TypedMessage } from '../base'
-import { visitEachTypedMessageChild } from '../visitor'
-import { isSerializableTypedMessage } from '../utils'
-import { emptyTransformationContext, TransformationContext } from './context'
+} from '../core/index.js'
+import type { TypedMessage } from '../base.js'
+import { visitEachTypedMessageChild } from '../visitor/index.js'
+import { isSerializableTypedMessage } from '../utils/index.js'
+import { emptyTransformationContext, TransformationContext } from './context.js'
 
 export function FlattenTypedMessage(message: TypedMessage, context: TransformationContext): TypedMessage {
     if (isTypedMessagePromise(message) && message.promise.value) return message.promise.value

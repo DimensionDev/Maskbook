@@ -1,4 +1,4 @@
-import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
+import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import {
     ChainId,
     EthereumTokenType,
@@ -86,7 +86,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         label: (
             <>
                 <RedPacketIcon style={badgeSvgIconSize} />
-                Luck drop
+                Lucky drop
             </>
         ),
     },

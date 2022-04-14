@@ -105,7 +105,7 @@ Object {
     "network": "localhost",
     "postIV": "Z/9AS037AaQi7QQQfq+OIw==",
   },
-  "output": Uint8Array [ 9200c501329700a96c6f63616c686f7374a3626f6202c4583056301006072a8648ce3d020106052b8104000a03420004fbdd1a19eeb484e44ced760c141ff185b4bef2eb8998a052054cb7e4548716bf1032b7bbdae5dd881e40cf98e40d196bfd1f0dc2d20c3c8f71e6eb7330b5f1a19401c430e3b51fe6c57b5831460666e8ddf01b49ebb513848cc9eb014a4c322b3afbbf0af21a902912080179494adc12941bc3dbc41067ff404b4dfb01a422ed04107eaf8e2381a132c4583056301006072a8648ce3d020106052b8104000a03420004640c0574dbba0be00e7e6f0080fb2f4428f72245b5adb4d3bd95694d645a6b2423c6d09bab7075a1b9f63d7c6760189bc6b0cfa341ea1be9fe3d8b95fda37268c42251312d4d2137b78846f8cd793113e78726fef59ec68c2335a51d6a27d12d4c78172d ],
+  "output": Uint8Array [ 9200c4c49700a96c6f63616c686f7374a3626f6202c42103fbdd1a19eeb484e44ced760c141ff185b4bef2eb8998a052054cb7e4548716bf9401c430e3b51fe6c57b5831460666e8ddf01b49ebb513848cc9eb014a4c322b3afbbf0af21a902912080179494adc12941bc3dbc41067ff404b4dfb01a422ed04107eaf8e2381a132c42102640c0574dbba0be00e7e6f0080fb2f4428f72245b5adb4d3bd95694d645a6b24c42251312d4d2137b78846f8cd793113e78726fef59ec68c2335a51d6a27d12d4c78172d ],
   "postKey": CryptoKey { [opaque crypto key material] },
 }
 `;
@@ -148,7 +148,7 @@ Object {
     "network": "localhost",
     "postIV": "AAECAwQFBgcICQoLDA0ODw==",
   },
-  "output": Uint8Array [ 9200c5011c9700a96c6f63616c686f7374a5616c69636502c4583056301006072a8648ce3d020106052b8104000a03420004afdb55600abe8749b944469377a78c4d60522bb64842ccf0820a225346a8e58c931d5975900006531c46a73f84b33a03755dfbe567ec504c470dd244440dd63e930092a74132353647434dd92b4a526872524b796b6d6e6d335362754e77364f6358465f6a69773067496c57335169574e5630316a656145c410000102030405060708090a0b0c0d0e0fc463422847d65139731573ca340118fa81883ae4cffa41cb7c91d378dd43c72ebad227c7af84e61f19fd4820fca920472d68a1076ccbe42f620eb73036bc7e13eb330d6f065c1e6ea02cb219d3e8a06a31a58d3d0b52bf8a8d03a0d001119d1b93f377ceab ],
+  "output": Uint8Array [ 9200c4d19700a96c6f63616c686f7374a5616c69636502c42102afdb55600abe8749b944469377a78c4d60522bb64842ccf0820a225346a8e58c9300c42025186b44aca49a79b749bb8dc3a39c5c5fe38b0d202255b742258d574d6379a1c410000102030405060708090a0b0c0d0e0fc463422847d65139731573ca340118fa81883ae4cffa41cb7c91d378dd43c72ebad227c7af84e61f19fd4820fca920472d68a1076ccbe42f620eb73036bc7e13eb330d6f065c1e6ea02cb219d3e8a06a31a58d3d0b52bf8a8d03a0d001119d1b93f377ceab ],
   "postKey": CryptoKey { [opaque crypto key material] },
 }
 `;
@@ -207,10 +207,7 @@ Object {
   })),
   "encrypted": Ok(Uint8Array [ 422847d65139731573ca340118fa81883ae4cffa41cb7c91d378dd43c72ebad227c7af84e61f19fd4820fca920472d68a1076ccbe42f620eb73036bc7e13eb330d6f065c1e6ea02cb219d3e8a06a31a58d3d0b52bf8a8d03a0d001119d1b93f377ceab ]),
   "encryption": Ok(Object {
-    "AESKey": Ok(Object {
-      "algr": "A256GCM",
-      "key": CryptoKey { [opaque crypto key material] },
-    }),
+    "AESKey": Ok(CryptoKey { [opaque crypto key material] }),
     "iv": Ok(Uint8Array [ 000102030405060708090a0b0c0d0e0f ]),
     "type": "public",
   }),
@@ -230,7 +227,7 @@ Object {
     "network": "localhost",
     "postIV": "AAECAwQFBgcICQoLDA0ODw==",
   },
-  "output": Uint8Array [ 9200c4829700a96c6f63616c686f7374a5616c696365c0c0930092a74132353647434dd92b4a526872524b796b6d6e6d335362754e77364f6358465f6a69773067496c57335169574e5630316a656145c410000102030405060708090a0b0c0d0e0fc422422847d751786b14798828024dea879478f32c9aed87c5f427ae352faa7b50a13721 ],
+  "output": Uint8Array [ 9200c46e9700a96c6f63616c686f7374a5616c696365c0c09300c42025186b44aca49a79b749bb8dc3a39c5c5fe38b0d202255b742258d574d6379a1c410000102030405060708090a0b0c0d0e0fc422422847d751786b14798828024dea879478f32c9aed87c5f427ae352faa7b50a13721 ],
   "postKey": CryptoKey { [opaque crypto key material] },
 }
 `;
@@ -259,10 +256,7 @@ Object {
   "authorPublicKey": Ok(None),
   "encrypted": Ok(Uint8Array [ 422847d751786b14798828024dea879478f32c9aed87c5f427ae352faa7b50a13721 ]),
   "encryption": Ok(Object {
-    "AESKey": Ok(Object {
-      "algr": "A256GCM",
-      "key": CryptoKey { [opaque crypto key material] },
-    }),
+    "AESKey": Ok(CryptoKey { [opaque crypto key material] }),
     "iv": Ok(Uint8Array [ 000102030405060708090a0b0c0d0e0f ]),
     "type": "public",
   }),
@@ -443,10 +437,7 @@ Object {
   })),
   "encrypted": Ok(Uint8Array [ b84dbfba3f98b7136e8820505beab78cb64a1d7440403c589a989a ]),
   "encryption": Ok(Object {
-    "AESKey": Ok(Object {
-      "algr": "A256GCM",
-      "key": CryptoKey { [opaque crypto key material] },
-    }),
+    "AESKey": Ok(CryptoKey { [opaque crypto key material] }),
     "iv": Ok(Uint8Array [ 000102030405060708090a0b0c0d0e0f ]),
     "type": "public",
   }),
@@ -495,10 +486,7 @@ Object {
   "authorPublicKey": Ok(None),
   "encrypted": Ok(Uint8Array [ b84dbfba3f98b7136e8820505beab78cb64a1d7440403c589a989a ]),
   "encryption": Ok(Object {
-    "AESKey": Ok(Object {
-      "algr": "A256GCM",
-      "key": CryptoKey { [opaque crypto key material] },
-    }),
+    "AESKey": Ok(CryptoKey { [opaque crypto key material] }),
     "iv": Ok(Uint8Array [ 000102030405060708090a0b0c0d0e0f ]),
     "type": "public",
   }),
