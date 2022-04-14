@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector'
 import { twitterEncoding } from '../encoding'
