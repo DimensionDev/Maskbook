@@ -19,10 +19,10 @@ export default function LanguageSetting() {
         <SettingSelect value={lang} onChange={handleChange}>
             <MenuItem value={LanguageOptions.__auto__}>{t.settings_language_auto()}</MenuItem>
             <MenuItem value={LanguageOptions.enUS}>English</MenuItem>
-            <MenuItem value={LanguageOptions.zhCN}>&#x7B80;&#x4F53;&#x4E2D;&#x6587;</MenuItem>
-            <MenuItem value={LanguageOptions.zhTW}>&#x7E41;&#x4F53;&#x4E2D;&#x6587;</MenuItem>
-            <MenuItem value={LanguageOptions.jaJP}>&#x65E5;&#x672C;&#x8A9E;</MenuItem>
-            <MenuItem value={LanguageOptions.koKR}>&#xD55C;&#xAD6D;&#xC778;</MenuItem>
+            <MenuItem value={LanguageOptions.zhCN}>简体中文</MenuItem>
+            <MenuItem value={LanguageOptions.zhTW}>繁体中文</MenuItem>
+            <MenuItem value={LanguageOptions.jaJP}>日本語</MenuItem>
+            <MenuItem value={LanguageOptions.koKR}>한국인</MenuItem>
         </SettingSelect>
     )
 }
