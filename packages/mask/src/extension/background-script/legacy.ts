@@ -8,7 +8,7 @@ import {
     recoverWalletFromMnemonic,
     recoverWalletFromPrivateKey,
 } from '../../plugins/Wallet/services'
-import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra'
+import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra/background-worker'
 import { Some, None } from 'ts-results'
 import { concatArrayBuffer, isNonNull, timeout } from '@dimensiondev/kit'
 import { delegatePluginBackup, delegateWalletBackup } from '../../../background/services/backup/internal_create'
