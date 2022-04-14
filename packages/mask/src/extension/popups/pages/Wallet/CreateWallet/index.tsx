@@ -3,13 +3,13 @@ import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Controller } from 'react-hook-form'
 import type { z as zod } from 'zod'
-import { NetworkSelector } from '../../../components/NetworkSelector'
 import { StyledInput } from '../../../components/StyledInput'
 import { useNavigate } from 'react-router-dom'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     header: {
@@ -69,12 +69,10 @@ const CreateWallet = memo(() => {
 
     const onSubmit = handleSubmit(onCreate)
 
+    useTitle(t('popups_create_wallet'))
+
     return (
         <>
-            <div className={classes.header}>
-                <Typography className={classes.title}>{t('wallet_new')}</Typography>
-                <NetworkSelector />
-            </div>
             <div className={classes.content}>
                 <div>
                     <Typography className={classes.label}>{t('wallet_name')}</Typography>

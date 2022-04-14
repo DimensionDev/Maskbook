@@ -96,7 +96,7 @@ export interface PluginProviderRenderProps {
     setUndeterminedNetworkID: (id: string) => void
     NetworkIconClickBait?: React.ComponentType<Web3Plugin.UI.NetworkIconClickBaitProps>
     ProviderIconClickBait?: React.ComponentType<Web3Plugin.UI.ProviderIconClickBaitProps>
-    onSubmit: () => void
+    onSubmit: (result?: Web3Plugin.ConnectionResult) => Promise<void>
 }
 
 export function PluginProviderRender({
@@ -164,7 +164,9 @@ export function PluginProviderRender({
                                             networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
                                         }
                                         provider={provider}
-                                        onSubmit={onSubmit}>
+                                        onSubmit={(network, provider, result) => {
+                                            onSubmit(result)
+                                        }}>
                                         <ListItem className={classes.walletItem} key={provider.ID}>
                                             <ProviderIcon
                                                 className={classes.providerIcon}

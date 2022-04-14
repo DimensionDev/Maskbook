@@ -7,6 +7,7 @@ import { searchAvatarSelector, searchUserIdOnMobileSelector } from '../utils/sel
 import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user'
 import { delay } from '@dimensiondev/kit'
 import type { IdentityResolved } from '@masknet/plugin-infra'
+import Services from '../../../extension/service'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,
@@ -53,6 +54,16 @@ function resolveCurrentVisitingIdentityInner(
         const homepage = getPersonalHomepage()
 
         const avatar = getAvatar()
+
+        if (handle && avatar) {
+            const identifier = new ProfileIdentifier(EnhanceableSite.Facebook, handle)
+
+            if (avatar) {
+                Services.Identity.updateProfileInfo(identifier, {
+                    avatarURL: avatar,
+                })
+            }
+        }
 
         ref.value = {
             identifier: handle ? new ProfileIdentifier(EnhanceableSite.Facebook, handle) : ProfileIdentifier.unknown,

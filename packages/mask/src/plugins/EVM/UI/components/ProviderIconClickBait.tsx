@@ -21,18 +21,20 @@ export function ProviderIconClickBait({
     onClick,
     onSubmit,
 }: Web3Plugin.UI.ProviderIconClickBaitProps) {
+    const providerType = provider.type as ProviderType
+    const networkType = network.type as NetworkType
+
     // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
         (ev) => {
             if (ev.open) return
-            if (ev.result) onSubmit?.(network, provider)
+            if (!ev.result) return
+            if (ev.result?.providerType === providerType && ev.result?.networkType === networkType)
+                onSubmit?.(network, provider, ev.result)
         },
     )
     // #endregion
-
-    const providerType = provider.type as ProviderType
-    const networkType = network.type as NetworkType
 
     const injectedEthereumProviderType = useInjectedProviderType('ethereum')
     const injectedCoin98ProviderType = useInjectedProviderType('coin98')

@@ -2,7 +2,7 @@ import { createIcon } from '../utils'
 
 export const SettingIcon = createIcon(
     'SettingIcon',
-    <g>
+    <g fill="none">
         <path
             d="M9 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
             strokeWidth="1.5"

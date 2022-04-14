@@ -1,4 +1,4 @@
-import { lazy } from 'react'
+import { lazy, useState } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -8,6 +8,7 @@ import { Web3Provider } from '@masknet/web3-shared-evm'
 import { PopupWeb3Context } from '../../web3/context'
 import { PopupFrame } from './components/PopupFrame'
 import { MaskUIRoot } from '../../UIRoot'
+import { PageTitleContext } from './context'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { languageSettings } from '../../settings/settings'
 
@@ -24,25 +25,28 @@ const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermis
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
 export default function Popups() {
+    const [title, setTitle] = useState('')
     return (
         <MaskUIRoot useTheme={usePopupTheme} kind="page">
             <Web3Provider value={PopupWeb3Context}>
-                <HashRouter>
-                    <Routes>
-                        <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />
-                        <Route path={PopupRoutes.Wallet + '/*'} element={frame(<Wallet />)} />
-                        <Route path={PopupRoutes.Swap} element={<SwapPage />} />
-                        <Route path={PopupRoutes.RequestPermission} element={<RequestPermissionPage />} />
-                        <Route path={PopupRoutes.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
-                        <Route
-                            path={PopupRoutes.ThirdPartyRequestPermission}
-                            element={<ThirdPartyRequestPermission />}
-                        />
-                        <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
-                    </Routes>
-                    {/* TODO: Should only load plugins when the page is plugin-aware. */}
-                    <PluginRender />
-                </HashRouter>
+                <PageTitleContext.Provider value={{ title, setTitle }}>
+                    <HashRouter>
+                        <Routes>
+                            <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />
+                            <Route path={PopupRoutes.Wallet + '/*'} element={frame(<Wallet />)} />
+                            <Route path={PopupRoutes.Swap} element={<SwapPage />} />
+                            <Route path={PopupRoutes.RequestPermission} element={<RequestPermissionPage />} />
+                            <Route path={PopupRoutes.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
+                            <Route
+                                path={PopupRoutes.ThirdPartyRequestPermission}
+                                element={<ThirdPartyRequestPermission />}
+                            />
+                            <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
+                        </Routes>
+                        {/* TODO: Should only load plugins when the page is plugin-aware. */}
+                        <PluginRender />
+                    </HashRouter>
+                </PageTitleContext.Provider>
             </Web3Provider>
         </MaskUIRoot>
     )
