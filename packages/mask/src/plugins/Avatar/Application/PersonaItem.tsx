@@ -40,6 +40,7 @@ export function PersonaItem(props: PersonaItemProps) {
     const { value: token, loading: loadingToken } = useTokenOwner(_avatar?.address ?? '', _avatar?.tokenId ?? '')
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(token?.owner)
 
+    console.log(token)
     return (
         <div
             className={classes.root}

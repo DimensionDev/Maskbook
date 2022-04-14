@@ -1,36 +1,33 @@
 import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
 import AvatarEditor from 'react-avatar-editor'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
-import { InjectedDialog } from '@masknet/shared'
 import { Twitter } from '@masknet/web3-providers'
 import { PluginNFTAvatarRPC } from '../../Avatar/messages'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { RSS3_KEY_SNS } from '../../Avatar/constants'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
-import { CrossIsolationMessages } from '@masknet/shared-base'
-
 const useStyles = makeStyles()(() => ({
     root: {},
 }))
 
 interface UploadAvatarDialogProps {
-    account: string
-    open: boolean
+    account?: string
+    image?: string | File
+    token?: ERC721TokenDetailed
     onClose: () => void
-    image: string | File
-    token: ERC721TokenDetailed
 }
 
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
-    const { image, open, onClose, account, token } = props
+    const { image, account, token, onClose } = props
     const { classes } = useStyles()
     const identity = useCurrentVisitingIdentity()
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
     const [scale, setScale] = useState(1)
+    const { showSnackbar } = useCustomSnackbar()
     const onSave = useCallback(() => {
-        if (!editor) return
+        if (!editor || !account || !token) return
         editor.getImage().toBlob(async (blob) => {
             if (!blob) return
             const data = await Twitter.uploadUserAvatar(identity.identifier.userId, blob)
@@ -47,19 +44,23 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 identity.identifier.network,
                 RSS3_KEY_SNS.TWITTER,
             ).catch((error) => {
-                window.alert(error.message)
+                showSnackbar(error.message, { variant: 'error' })
+                window.alert()
                 return
             })
             if (!avatar) {
-                window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+                showSnackbar('Sorry, failed to save NFT Avatar. Please set again.', { variant: 'error' })
                 return
             }
-            CrossIsolationMessages.events.requestComposition.sendToLocal({ open: false, reason: 'timeline' })
+            showSnackbar('Update NFT Avatar Success!', { variant: 'success' })
+            onClose()
         })
-        onClose()
-    }, [editor, identity])
+    }, [editor, identity, onClose])
+
+    if (!account || !image || !token) return null
+
     return (
-        <InjectedDialog open={open} title="Edit Profile" onClose={onClose}>
+        <>
             <DialogContent>
                 <AvatarEditor
                     ref={(e) => setEditor(e)}
@@ -80,13 +81,13 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 />
             </DialogContent>
             <DialogActions>
-                <Button sx={{ flex: 1 }} variant="text" onClick={onClose}>
+                <Button sx={{ flex: 1 }} variant="text">
                     Cancel
                 </Button>
                 <Button sx={{ flex: 1 }} variant="contained" onClick={onSave}>
                     Save
                 </Button>
             </DialogActions>
-        </InjectedDialog>
+        </>
     )
 }

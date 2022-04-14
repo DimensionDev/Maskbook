@@ -1,3 +1,4 @@
+import { NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -6,8 +7,8 @@ import Services from '../../../extension/service'
 
 export function usePersonas() {
     const personaConnectStatus = usePersonaConnectStatus()
-    const currentIdentity = useCurrentVisitingIdentity()
-    const identity = useLastRecognizedIdentity()
+    const identity = useCurrentVisitingIdentity()
+    const currentIdentity = useLastRecognizedIdentity()
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
         if (!currentIdentity) return
@@ -19,6 +20,7 @@ export function usePersonas() {
     }, [currentPersona])
 
     const isOwner = currentIdentity.identifier.toText() === identity.identifier.toText()
+    const wallets = binds?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
 
-    return { loading: loadingPersona || loadingBinds, isOwner, binds, personaConnectStatus }
+    return { loading: loadingPersona || loadingBinds, isOwner, binds, personaConnectStatus, wallets }
 }
