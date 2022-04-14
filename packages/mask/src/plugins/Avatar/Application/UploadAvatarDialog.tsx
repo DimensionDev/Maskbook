@@ -16,11 +16,12 @@ interface UploadAvatarDialogProps {
     account?: string
     image?: string | File
     token?: ERC721TokenDetailed
+    onBack: () => void
     onClose: () => void
 }
 
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
-    const { image, account, token, onClose } = props
+    const { image, account, token, onClose, onBack } = props
     const { classes } = useStyles()
     const identity = useCurrentVisitingIdentity()
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
@@ -36,7 +37,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
                 account,
                 {
-                    userId: data?.userId ?? '',
+                    userId: data?.userId?.toLowerCase() ?? '',
                     address: token.contractDetailed.address,
                     tokenId: token.tokenId,
                     avatarId,
@@ -81,7 +82,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 />
             </DialogContent>
             <DialogActions>
-                <Button sx={{ flex: 1 }} variant="text">
+                <Button sx={{ flex: 1 }} variant="text" onClick={onBack}>
                     Cancel
                 </Button>
                 <Button sx={{ flex: 1 }} variant="contained" onClick={onSave}>

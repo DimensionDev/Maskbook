@@ -62,6 +62,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                         account={selectedTokenInfo?.account}
                         image={selectedTokenInfo?.image}
                         token={selectedTokenInfo?.token}
+                        onBack={onClose}
                         onClose={() => {
                             setStep(CreateNFTAvatarStep.Persona)
                             props.onClose()

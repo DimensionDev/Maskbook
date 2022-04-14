@@ -20,11 +20,13 @@ export function NFTInfo(props: NFTInfoProps) {
 
     return (
         <Box className={classes.root}>
-            {!owner ? (
+            {!nft ? (
+                <Typography>Set NFT PFPs</Typography>
+            ) : !owner ? (
                 <Typography variant="body1" color="#FFB915">
                     NFT PFP verification failed
                 </Typography>
-            ) : nft ? (
+            ) : (
                 <Box className={classes.nft}>
                     <ApplicationIcon />
                     <Box sx={{ marginLeft: 0.5 }}>
@@ -36,8 +38,6 @@ export function NFTInfo(props: NFTInfoProps) {
                         </Typography>
                     </Box>
                 </Box>
-            ) : (
-                <Typography>Set NFT PFPs</Typography>
             )}
         </Box>
     )

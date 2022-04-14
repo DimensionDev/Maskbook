@@ -6,6 +6,8 @@ import { MoreIcon } from '../assets/more'
 import { useNFTAvatar } from '../hooks'
 import { RSS3_KEY_SNS } from '../constants'
 import { useCheckTokenOwner, useTokenOwner } from '../hooks/useTokenOwner'
+import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
+import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
@@ -34,12 +36,15 @@ interface PersonaItemProps {
 }
 
 export function PersonaItem(props: PersonaItemProps) {
+    const currentIdentity = useLastRecognizedIdentity()
     const { avatar, userId, nickname, onClick, owner = false } = props
     const { classes } = useStyles({ disabled: !owner })
-    const { value: _avatar, loading } = useNFTAvatar(userId, RSS3_KEY_SNS.TWITTER)
+    const { value: _avatar, loading } = useNFTAvatar(userId.toLowerCase(), RSS3_KEY_SNS.TWITTER)
     const { value: token, loading: loadingToken } = useTokenOwner(_avatar?.address ?? '', _avatar?.tokenId ?? '')
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(token?.owner)
 
+    console.log(currentIdentity)
+    console.log(_avatar)
     console.log(token)
     return (
         <div
@@ -61,7 +66,10 @@ export function PersonaItem(props: PersonaItemProps) {
                     <NFTInfo
                         owner={isOwner}
                         nft={
-                            _avatar && token && isOwner
+                            _avatar &&
+                            token &&
+                            isOwner &&
+                            _avatar.avatarId === getAvatarId(currentIdentity.avatar ?? '')
                                 ? {
                                       name: token?.name ?? '',
                                       symbol: token?.symbol ?? '',
