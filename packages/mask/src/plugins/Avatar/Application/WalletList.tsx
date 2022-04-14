@@ -77,6 +77,29 @@ export function AddressNames(props: AddressNamesProps) {
         onClose()
     }, [])
 
+    const walletItem = (
+        selectedWallet: string,
+        wallet: string,
+        enableChange: boolean,
+        onClick: (wallet: string) => void,
+        onChange?: () => void,
+    ) => (
+        <MenuItem key={wallet} value={wallet} onClick={() => onClick(account)}>
+            <ListItemIcon>
+                {selectedWallet === wallet ? (
+                    <CheckedIcon className={classes.icon} />
+                ) : (
+                    <UncheckIcon className={classes.icon} />
+                )}
+            </ListItemIcon>
+            <WalletUI address={wallet} />
+            {enableChange && (
+                <Button style={{ marginLeft: 16 }} onClick={onChange}>
+                    Change
+                </Button>
+            )}
+        </MenuItem>
+    )
     if (!account && !wallets.length) return <NFTWalletConnect />
 
     return (
@@ -92,21 +115,7 @@ export function AddressNames(props: AddressNamesProps) {
             </Stack>
             <ShadowRootMenu open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={onClose} disableRestoreFocus>
                 {account ? (
-                    <MenuItem key={account} value={account} onClick={() => onClick(account)}>
-                        <ListItemIcon>
-                            {selectedWallet === account ? (
-                                <CheckedIcon className={classes.icon} />
-                            ) : (
-                                <UncheckIcon className={classes.icon} />
-                            )}
-                        </ListItemIcon>
-                        <WalletUI address={account} />
-                        {account && (
-                            <Button style={{ marginLeft: 16 }} onClick={onConnectWallet}>
-                                Change
-                            </Button>
-                        )}
-                    </MenuItem>
+                    walletItem(selectedWallet, account, Boolean(account), () => onClick(account), onConnectWallet)
                 ) : (
                     <MenuItem key="Connect">
                         <Button fullWidth onClick={onConnectWallet}>
@@ -116,18 +125,7 @@ export function AddressNames(props: AddressNamesProps) {
                 )}
                 {wallets
                     ?.filter((x) => !isSameAddress(x.identity, account))
-                    .map((x) => (
-                        <MenuItem key={x.identity} value={x.identity} onClick={() => onClick(x.identity)}>
-                            <ListItemIcon>
-                                {selectedWallet === x.identity ? (
-                                    <CheckedIcon className={classes.icon} />
-                                ) : (
-                                    <UncheckIcon className={classes.icon} />
-                                )}
-                            </ListItemIcon>
-                            <WalletUI address={x.identity} />
-                        </MenuItem>
-                    ))}
+                    .map((x) => walletItem(selectedWallet, x.identity, false, () => onClick(x.identity)))}
                 <Divider />
 
                 <MenuItem

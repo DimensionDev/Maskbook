@@ -64,7 +64,7 @@ interface NFTListPageProps {
 
 export function NFTListPage(props: NFTListPageProps) {
     const { classes } = useStyles()
-    const { address, onSelect, chainId, tokenInfo, haveBadge = false } = props
+    const { address, onSelect, chainId, tokenInfo } = props
     const { t } = useI18N()
     const { data: collectibles, error, retry, state } = useCollectibles(address, chainId)
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>(

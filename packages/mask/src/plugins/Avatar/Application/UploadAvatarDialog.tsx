@@ -8,8 +8,10 @@ import { useCurrentVisitingIdentity } from '../../../components/DataSource/useAc
 import { RSS3_KEY_SNS } from '../../Avatar/constants'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
-const useStyles = makeStyles()(() => ({
-    root: {},
+const useStyles = makeStyles()((theme) => ({
+    actions: {
+        padding: theme.spacing(0, 2, 2, 2),
+    },
 }))
 
 interface UploadAvatarDialogProps {
@@ -85,7 +87,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                     aria-label="Scale"
                 />
             </DialogContent>
-            <DialogActions>
+            <DialogActions className={classes.actions}>
                 <Button sx={{ flex: 1 }} variant="text" onClick={onBack}>
                     Cancel
                 </Button>
