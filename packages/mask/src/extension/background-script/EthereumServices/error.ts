@@ -1,6 +1,7 @@
 import { isNil } from 'lodash-unified'
 import type { JsonRpcResponse } from 'web3-core-helpers'
 import { JSON_RPC_ERROR_CODE } from '@masknet/plugin-wallet'
+import { i18n } from '../../../../shared-ui/locales_legacy'
 
 function getInternalError(error: unknown, response?: JsonRpcResponse | null, fallback?: string): Error {
     {
@@ -31,17 +32,17 @@ export function getError(error: unknown, response?: JsonRpcResponse | null, fall
         const { code, message } = internalError as unknown as { code?: number; message: string }
 
         if (message.includes(`"code":${JSON_RPC_ERROR_CODE.INTERNAL_ERROR}`))
-            return 'Transaction was failed due to an internal JSON-RPC server error.'
-        if (message.includes('User denied message signature.')) return 'Signature canceled.'
-        if (message.includes('User denied transaction signature.')) return 'Transaction was rejected!'
-        if (message.includes('transaction underpriced')) return 'Transaction underpriced.'
+            return i18n.t('plugin_wallet_transaction_server_error')
+        if (message.includes('User denied message signature.')) return i18n.t('plugin_wallet_cancel_sign')
+        if (message.includes('User denied transaction signature.')) return i18n.t('plugin_wallet_transaction_rejected')
+        if (message.includes('transaction underpriced')) return i18n.t('plugin_wallet_transaction_underpriced')
         if (
             typeof code === 'number' &&
             (code === JSON_RPC_ERROR_CODE.INTERNAL_ERROR ||
                 (code <= JSON_RPC_ERROR_CODE.SERVER_ERROR_RANGE_START &&
                     code >= JSON_RPC_ERROR_CODE.SERVER_ERROR_RANGE_END))
         ) {
-            return 'Transaction was failed due to an internal JSON-RPC server error.'
+            return i18n.t('plugin_wallet_transaction_server_error')
         }
         return internalError.message
     })()

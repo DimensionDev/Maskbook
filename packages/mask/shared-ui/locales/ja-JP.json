@@ -102,6 +102,8 @@
     "plugin_wallet_transaction_submitted": "取引は送信されました。",
     "plugin_wallet_transaction_confirmed": "取引は成功しました。",
     "plugin_wallet_transaction_reverted": "取引は元に戻されました。",
+    "plugin_wallet_transaction_rejected": "取引は拒否されました。",
+    "plugin_wallet_transaction_server_error": "取引は内部の JSON-RPC サーバーのエラーにより失敗しました。",
     "plugin_wallet_view_on_explorer": "Explorer で見る",
     "plugin_wallet_wrong_network_tip": "正しい Ethereum ネットワークを選択してください。",
     "plugin_wallet_on_create": "ウォレットを作成",

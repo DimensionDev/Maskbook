@@ -102,7 +102,9 @@ const WalletRecovery = memo(() => {
             try {
                 await WalletRPC.setPassword(data.password)
             } catch (error) {
-                setError('password', { message: t('popups_wallet_unlock_error_password') })
+                if (error instanceof Error) {
+                    setError('password', { message: error.message })
+                }
             }
         },
         [setError],
