@@ -68,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
     roundBtn: {
         borderRadius: 99,
     },
-    diableBtn: {
+    diasbleBtn: {
         pointerEvents: 'none',
         opacity: 0.5,
     },
@@ -170,12 +170,12 @@ export function Steps(props: StepsProps) {
                     Cancel
                 </ActionButton>
                 <ActionButton
-                    className={disableConfirm ? classNames(classes.roundBtn, classes.diableBtn) : classes.roundBtn}
+                    className={disableConfirm ? classNames(classes.roundBtn, classes.diasbleBtn) : classes.roundBtn}
                     variant="contained"
                     size="large"
                     fullWidth
                     onClick={onConfirm}>
-                    {disableConfirm ? 'Peronsa Sign' : step === 2 ? 'Done' : 'Confirm'}
+                    {disableConfirm ? 'Persona Sign' : step === 2 ? 'Done' : 'Confirm'}
                 </ActionButton>
             </div>
         </div>
