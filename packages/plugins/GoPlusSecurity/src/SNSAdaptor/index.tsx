@@ -1,7 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { CheckSecurityDialog } from './CheckSecurityDialog'
-import { Trans } from 'react-i18next'
 import { useState } from 'react'
 import { ApplicationEntry } from '@masknet/shared'
 import { SecurityCheckerIcon } from '@masknet/icons'
@@ -20,7 +19,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     </>
                 )
             },
-            name: <Trans i18nKey="plugin_go_plus_security_name" />,
+            name: { i18nKey: 'plugin_name', fallback: 'Check Security' },
             icon: <SecurityCheckerIcon />,
             appBoardSortingDefaultPriority: 13,
             marketListSortingPriority: 16,

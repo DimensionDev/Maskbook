@@ -2,7 +2,7 @@ import { Fragment, useState, useMemo } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography, useTheme, CircularProgress } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSNSAdaptor, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -171,7 +171,7 @@ function RenderEntryComponentWrapper({ application }: RenderEntryComponentWrappe
         <RenderEntryComponent
             disabled={!application.enabled}
             icon={application.entry.icon}
-            title={application.entry.name}
+            title={<PluginI18NFieldRender field={application.entry.name} pluginID={application.pluginId} />}
         />
     )
 }

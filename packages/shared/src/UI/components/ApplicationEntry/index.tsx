@@ -42,8 +42,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props {
-    icon: JSX.Element
-    title: JSX.Element
+    icon: React.ReactNode
+    title: React.ReactNode
     disabled?: boolean
     onClick: () => void
 }

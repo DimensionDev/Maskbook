@@ -309,8 +309,8 @@ export namespace Plugin.SNSAdaptor {
          */
         RenderEntryComponent?: (props: {
             disabled: boolean
-            icon: JSX.Element
-            title: JSX.Element
+            icon: React.ReactNode
+            title: React.ReactNode
         }) => JSX.Element | null
         /**
          * Used to order the applications on the board
@@ -322,11 +322,11 @@ export namespace Plugin.SNSAdaptor {
          */
         marketListSortingPriority?: number
 
-        icon: JSX.Element
+        icon: React.ReactNode
 
-        name: JSX.Element
+        name: I18NFieldOrReactNode
 
-        description?: JSX.Element
+        description?: I18NFieldOrReactNode
 
         tutorialLink?: string
         /**
