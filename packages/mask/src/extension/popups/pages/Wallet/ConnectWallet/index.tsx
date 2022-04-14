@@ -1,9 +1,16 @@
+import { memo, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { memo } from 'react'
-import { supportedWallets } from './constants'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
+import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import {
+    getRegisteredWeb3Networks,
+    getRegisteredWeb3Providers,
+    NetworkPluginID,
+    useWeb3UI,
+    Web3Plugin,
+} from '@masknet/plugin-infra/web3'
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 
@@ -39,23 +46,52 @@ const useStyles = makeStyles()((theme) => ({
         height: '5rem',
     },
 }))
+
 const ConnectWalletPage = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const clickItem = () => {
-        navigate(PopupRoutes.VerifyWallet)
-    }
+
+    // connect to ethereum mainnet
+    const network = getRegisteredWeb3Networks().find(
+        (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM && x.chainId === ChainId.Mainnet,
+    )
+    const providers = getRegisteredWeb3Providers().filter(
+        (x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM,
+    )
+    const { ProviderIconClickBait } = useWeb3UI(NetworkPluginID.PLUGIN_EVM).SelectProviderDialog ?? {}
+
+    const onSubmit = useCallback(async (result?: Web3Plugin.ConnectionResult) => {
+        console.log('DEBUG: connection result')
+        console.log(result)
+
+        navigate(PopupRoutes.VerifyWallet, {
+            state: result as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>,
+        })
+    }, [])
 
     useTitle(t('plugin_wallet_on_connect'))
 
+    if (!network) return null
+
     return (
         <div className={classes.container}>
-            {supportedWallets.map((item, idx) => {
-                return (
-                    <div key={idx} className={classes.walletItem} onClick={clickItem}>
-                        <img src={item.icon} className={classes.walletIcon} />
-                        <Typography>{item.title}</Typography>
+            {providers.map((provider) => {
+                return ProviderIconClickBait ? (
+                    <ProviderIconClickBait
+                        key={provider.ID}
+                        network={network}
+                        provider={provider}
+                        onSubmit={(network, provider, result) => onSubmit(result)}>
+                        <div className={classes.walletItem}>
+                            <img src={provider.icon.toString()} className={classes.walletIcon} />
+                            <Typography>{provider.name}</Typography>
+                        </div>
+                    </ProviderIconClickBait>
+                ) : (
+                    <div className={classes.walletItem} key={provider.ID}>
+                        <img src={provider.icon.toString()} className={classes.walletIcon} />
+                        <Typography>{provider.name}</Typography>
                     </div>
                 )
             })}
