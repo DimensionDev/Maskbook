@@ -13,7 +13,7 @@ import {
     PersonaIdentifier,
     EnhanceableSite,
     i18NextInstance,
-    SubscriptionFromValueRef,
+    createSubscriptionFromValueRef,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentityResolved, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -116,11 +116,11 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 signal,
             )
             const empty = new ValueRef<IdentityResolved | undefined>(undefined)
-            const lastRecognizedSub = SubscriptionFromValueRef(
+            const lastRecognizedSub = createSubscriptionFromValueRef(
                 ui.collecting.identityProvider?.recognized || empty,
                 signal,
             )
-            const currentVisitingSub = SubscriptionFromValueRef(
+            const currentVisitingSub = createSubscriptionFromValueRef(
                 ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
                 signal,
             )
