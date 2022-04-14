@@ -1,6 +1,9 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Link, Stack, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ApplicationIcon } from '../assets/application'
+import { LinkIcon } from '../assets/link'
+import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
+import { formatTokenId } from '../utils'
 
 const useStyles = makeStyles()(() => ({
     root: {},
@@ -33,9 +36,18 @@ export function NFTInfo(props: NFTInfoProps) {
                         <Typography variant="body1" color="textPrimary">
                             {nft.name}
                         </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                            {nft.symbol} #{nft.tokenId}
-                        </Typography>
+                        <Stack display="flex" flexDirection="row">
+                            <Typography variant="body2" color="textSecondary">
+                                {formatTokenId(nft.symbol, nft.tokenId)}
+                            </Typography>
+                            <Link
+                                sx={{ marginLeft: 0.5 }}
+                                href={resolveOpenSeaLink(nft.address, nft.tokenId)}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                <LinkIcon />
+                            </Link>
+                        </Stack>
                     </Box>
                 </Box>
             )}

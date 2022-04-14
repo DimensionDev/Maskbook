@@ -1,10 +1,10 @@
-import { CloseIcon } from '@masknet/icons'
 import { BindingProof, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, CircularProgress, DialogContent, Stack, Typography } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { NextIDVerificationStatus, useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
+import { CloseIcon } from '../assets/close'
 import { usePersonas } from '../hooks/usePersonas'
 import { PersonaItem } from './PersonaItem'
 
@@ -58,7 +58,7 @@ export function PersonaPage(props: PersonaPageProps) {
                                 Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3
                                 vibe.
                             </Typography>
-                            <CloseIcon onClick={() => setVisible(false)} />
+                            <CloseIcon sx={{ cursor: 'pointer' }} onClick={() => setVisible(false)} />
                         </Box>
                     ) : null}
                     {binds?.proofs
