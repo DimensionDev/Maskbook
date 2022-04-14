@@ -32,26 +32,27 @@ interface PersonaItemProps {
     avatar?: string
     userId: string
     nickname?: string
+    platform?: string
     onClick?: (token?: { address?: string; tokenId?: string }) => void
 }
 
 export function PersonaItem(props: PersonaItemProps) {
     const currentIdentity = useLastRecognizedIdentity()
-    const { avatar, userId, nickname, onClick, owner = false } = props
+    const { avatar, userId, nickname, onClick, owner = false, platform } = props
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = useNFTAvatar(userId.toLowerCase(), RSS3_KEY_SNS.TWITTER)
     const { value: token, loading: loadingToken } = useTokenOwner(_avatar?.address ?? '', _avatar?.tokenId ?? '')
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(token?.owner)
 
-    console.log(currentIdentity)
-    console.log(_avatar)
-    console.log(token)
+    const haveNFT = Boolean(
+        _avatar && token && isOwner && _avatar.avatarId === getAvatarId(currentIdentity.avatar ?? ''),
+    )
     return (
         <div
             className={classes.root}
             onClick={() => onClick?.({ address: _avatar?.address, tokenId: _avatar?.tokenId })}>
             <>
-                <NFTAvatar avatar={avatar} hasBorder />
+                <NFTAvatar avatar={avatar} hasBorder={haveNFT} platform={platform} />
                 <Box className={classes.userInfo}>
                     <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
                         {nickname}
@@ -66,10 +67,7 @@ export function PersonaItem(props: PersonaItemProps) {
                     <NFTInfo
                         owner={isOwner}
                         nft={
-                            _avatar &&
-                            token &&
-                            isOwner &&
-                            _avatar.avatarId === getAvatarId(currentIdentity.avatar ?? '')
+                            haveNFT
                                 ? {
                                       name: token?.name ?? '',
                                       symbol: token?.symbol ?? '',

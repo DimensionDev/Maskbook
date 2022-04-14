@@ -72,6 +72,7 @@ export function PersonaPage(props: PersonaPageProps) {
                                     userId={currentIdentity.identifier.userId}
                                     nickname={currentIdentity.nickname}
                                     onClick={onClick}
+                                    platform={x.platform}
                                 />
                             ) : (
                                 <PersonaItem key={i} owner={false} avatar="" userId={x.identity} nickname="" />
