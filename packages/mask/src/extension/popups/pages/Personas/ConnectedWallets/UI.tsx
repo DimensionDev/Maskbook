@@ -25,6 +25,7 @@ const useStyles = makeStyles()(() => ({
         alignItems: 'center',
         backgroundColor: '#ffffff',
         borderRadius: 8,
+        cursor: 'pointer',
     },
     content: {
         marginLeft: 8,
@@ -134,7 +135,6 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                     confirmLoading={releaseLoading}
                     onConfirmDisconnect={async () => onRelease(selectedWallet)}
                     address={selectedWallet?.identity}
-                    personaName={personaName}
                     onClose={() => setOpen(false)}
                     open={open}
                 />

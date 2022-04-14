@@ -58,12 +58,11 @@ export interface DisconnectWalletDialogProps extends DialogProps {
     confirmLoading: boolean
     onConfirmDisconnect: () => Promise<void>
     address?: string
-    personaName?: string
     onClose: () => void
 }
 
 export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
-    ({ open, personaName, confirmLoading, onConfirmDisconnect, onClose, address }) => {
+    ({ open, confirmLoading, onConfirmDisconnect, onClose, address }) => {
         const { classes } = useStyles()
         const { t } = useI18N()
 
@@ -81,7 +80,6 @@ export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
                             i18nKey="popups_disconnect_wallet_tip"
                             components={{ strong: <strong className={classes.strong} /> }}
                             values={{
-                                persona: personaName,
                                 address: formatEthereumAddress(address ?? '', 4),
                             }}
                         />
