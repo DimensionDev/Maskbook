@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, useAccount } from '@masknet/web3-shared-evm'
+import { ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { AddressNames } from './WalletList'
 import { useCallback, useState, useEffect } from 'react'
@@ -23,6 +23,11 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(0, 2, 2, 2),
     },
 }))
+
+function isSameToken(token?: ERC721TokenDetailed, tokenInfo?: TokenInfo) {
+    if (!token && !tokenInfo) return false
+    return isSameAddress(token?.contractDetailed.address, tokenInfo?.address) && token?.tokenId === tokenInfo?.tokenId
+}
 interface NFTListDialogProps {
     onNext: () => void
     tokenInfo?: TokenInfo
@@ -61,7 +66,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     }, [])
 
     useEffect(() => {
-        if (!selectedToken) setDisabled(true)
+        setDisabled(!selectedToken || isSameToken(selectedToken, tokenInfo))
     }, [selectedToken, tokenInfo])
 
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
