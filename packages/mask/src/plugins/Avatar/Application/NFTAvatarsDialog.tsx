@@ -27,7 +27,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
     const { classes } = useStyles()
     const [step, setStep] = useState(CreateNFTAvatarStep.Persona)
     const [wallets, setWallets] = useState<BindingProof[]>()
-    const [selctedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
+    const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
 
     const onPersonaChange = (wallets?: BindingProof[]) => {
         setWallets(wallets)
@@ -59,9 +59,9 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                 ) : null}
                 {step === CreateNFTAvatarStep.UploadAvatar ? (
                     <UploadAvatarDialog
-                        account={selctedTokenInfo?.account}
-                        image={selctedTokenInfo?.image}
-                        token={selctedTokenInfo?.token}
+                        account={selectedTokenInfo?.account}
+                        image={selectedTokenInfo?.image}
+                        token={selectedTokenInfo?.token}
                         onClose={() => {
                             setStep(CreateNFTAvatarStep.Persona)
                             props.onClose()
