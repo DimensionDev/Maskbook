@@ -199,10 +199,6 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             setRandom(e.target.value as number)
                         }}
                         MenuProps={{
-                            anchorOrigin: {
-                                vertical: 'top',
-                                horizontal: 'left',
-                            },
                             ...props.SelectMenuProps,
                         }}>
                         <MenuItem value={0}>{t('plugin_red_packet_average')}</MenuItem>
