@@ -193,8 +193,6 @@
     "plugin_wallet_transaction_submitted": "你的交易已經被送出！",
     "plugin_wallet_transaction_confirmed": "你的交易已經被確認！",
     "plugin_wallet_transaction_reverted": "交易被復原！",
-    "plugin_wallet_transaction_rejected": "交易被拒絕！",
-    "plugin_wallet_transaction_server_error": "交易由於內部 JSON-RPC 伺服器錯誤而失敗。",
     "plugin_wallet_view_on_explorer": "在區塊鏈瀏覽器上查看",
     "plugin_ito_placeholder_when_token_unselected": "請先選擇一種代幣",
     "plugin_wallet_wrong_network_tip": "請連接到適當的乙太坊網絡。",

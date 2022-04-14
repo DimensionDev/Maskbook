@@ -82,9 +82,7 @@ const SetPaymentPassword = memo(() => {
                 await WalletRPC.setPassword(data.password)
                 navigate(PopupRoutes.ImportWallet, { replace: true })
             } catch (error) {
-                if (error instanceof Error) {
-                    setError('password', { message: error.message })
-                }
+                setError('password', { message: t('popups_wallet_unlock_error_password') })
             }
         },
         [history, setError],

@@ -31,6 +31,9 @@ const useStyles = makeStyles()({
         marginLeft: 4,
         cursor: 'pointer',
     },
+    domain: {
+        marginLeft: 4,
+    },
     name: {
         fontSize: 14,
         color: '#1C68F3',
@@ -96,11 +99,13 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
                 <Typography className={classes.name}>
                     <Typography component="span" display="flex" alignItems="center">
                         {wallet.name}
+                        {domain && Utils?.formatDomainName ? (
+                            <Typography component="span" className={classes.domain}>
+                                ({Utils.formatDomainName(domain)})
+                            </Typography>
+                        ) : null}
                         {isHovering ? <EditIcon className={classes.edit} onClick={handleRename} /> : null}
                     </Typography>
-                    {domain && Utils?.formatDomainName ? (
-                        <Typography component="span">({Utils.formatDomainName(domain)})</Typography>
-                    ) : null}
                 </Typography>
                 <Typography className={classes.address}>
                     <FormattedAddress address={wallet.address} size={4} formatter={formatEthereumAddress} />

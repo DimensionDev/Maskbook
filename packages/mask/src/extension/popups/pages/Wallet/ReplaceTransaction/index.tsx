@@ -133,7 +133,7 @@ const ReplaceTransaction = memo(() => {
     const gasPriceEIP1559 = new BigNumber(maxFeePerGas ? maxFeePerGas : 0)
     const gasPricePrior1559 = new BigNumber(gasPrice ? gasPrice : 0)
 
-    const gasFee = multipliedBy(is1559 ? gasPriceEIP1559 : gasPricePrior1559, gas ?? 0)
+    const gasFee = multipliedBy(is1559 ? gasPriceEIP1559 : gasPricePrior1559, gas ? gas : 0)
         .integerValue()
         .toFixed()
 

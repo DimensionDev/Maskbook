@@ -130,8 +130,8 @@ const DeleteWallet = memo(() => {
                 }
                 navigate(PopupRoutes.Wallet, { replace: true })
             } catch (error) {
-                if (error instanceof Error) {
-                    setErrorMessage(error.message)
+                if (error instanceof Error && error.message === 'Wrong password') {
+                    setErrorMessage(t('popups_wallet_unlock_error_password'))
                 }
             }
         }

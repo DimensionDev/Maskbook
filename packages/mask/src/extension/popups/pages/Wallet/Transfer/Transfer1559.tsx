@@ -39,7 +39,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Chip, Collapse, Link, MenuItem, Popover, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
 import { RightIcon, UserIcon } from '@masknet/icons'
-import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-unified'
 import { ExpandMore } from '@mui/icons-material'
@@ -87,6 +87,7 @@ const useStyles = makeStyles()({
         fontSize: 12,
         lineHeight: '16px',
         color: '#15181B',
+        fontWeight: 700,
     },
     balance: {
         color: '#7B8192',
@@ -166,6 +167,10 @@ const useStyles = makeStyles()({
         color: '#7B8192',
         fontSize: 14,
         lineHeight: '20px',
+    },
+    menu: {
+        left: '16px !important',
+        width: '100%',
     },
 })
 const MIN_GAS_LIMIT = 21000
@@ -420,20 +425,25 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         [selectedAsset, transferCallback, registeredAddress, Utils],
     )
 
-    const [menu, openMenu] = useMenu(
-        <MenuItem className={classes.expand} key="expand">
-            <Typography className={classes.title}>{t('wallet_transfer_between_my_accounts')}</Typography>
-            <ExpandMore style={{ fontSize: 20 }} />
-        </MenuItem>,
-        <Collapse in>
-            {otherWallets.map((account, index) => (
-                <AccountItem
-                    account={account}
-                    onClick={() => methods.setValue('address', account.address)}
-                    key={index}
-                />
-            ))}
-        </Collapse>,
+    const [menu, openMenu] = useMenuConfig(
+        [
+            <MenuItem className={classes.expand} key="expand">
+                <Typography className={classes.title}>{t('wallet_transfer_between_my_accounts')}</Typography>
+                <ExpandMore style={{ fontSize: 20 }} />
+            </MenuItem>,
+            <Collapse key="collapse" in>
+                {otherWallets.map((account, index) => (
+                    <AccountItem
+                        account={account}
+                        onClick={() => methods.setValue('address', account.address)}
+                        key={index}
+                    />
+                ))}
+            </Collapse>,
+        ],
+        {
+            classes: { paper: classes.menu },
+        },
     )
 
     const popoverContent = useMemo(() => {
