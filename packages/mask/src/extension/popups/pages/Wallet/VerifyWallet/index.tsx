@@ -1,16 +1,17 @@
+import { memo, useState } from 'react'
+import { useLocation } from 'react-use'
+import { useNavigate } from 'react-router-dom'
 import { NextIDAction, NextIDPayload, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { memo, useState } from 'react'
+import { ChainId, isSameAddress, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import type { Web3Plugin } from '@masknet/plugin-infra/src/web3-types'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps'
 import Services from '../../../../service'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { useQueryIsBound } from '../../../hook/useQueryIsBound'
-import { useNavigate } from 'react-router-dom'
-import { useLocation } from 'react-use'
-import { isSameAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -32,7 +33,7 @@ const VerifyWallet = memo(() => {
     const navigate = useNavigate()
     useTitle(t('popups_add_wallet'))
     const location = useLocation()
-    const wallet = location.state.usr
+    const wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
 
     const bounds = useQueryIsBound(wallet.account)
     if (bounds && bounds.length > 0 && !isBound) {
@@ -72,7 +73,10 @@ const VerifyWallet = memo(() => {
     const walletSign = async () => {
         if (!payload) throw new Error('payload error')
         try {
-            const walletSig = await Services.Ethereum.personalSign(payload.signPayload, wallet.account)
+            const walletSig = await Services.Ethereum.personalSign(payload.signPayload, wallet.account, '', {
+                chainId: wallet.chainId,
+                providerType: wallet.providerType,
+            })
             if (!walletSig) throw new Error('Wallet sign failed')
             await NextIDProof.bindProof(
                 payload.uuid,

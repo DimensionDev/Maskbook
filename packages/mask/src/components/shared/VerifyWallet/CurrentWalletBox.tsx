@@ -1,10 +1,8 @@
-import { useCallback } from 'react'
 import { ExternalLink } from 'react-feather'
 import classNames from 'classnames'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     useAccount,
     useWeb3State,
@@ -16,10 +14,7 @@ import {
     useWallet,
 } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
-import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { useI18N } from '../../../utils'
-import Services from '../../../extension/service'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -109,34 +104,6 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
 
     const { value: domain } = useReverseAddress(account)
 
-    // #region change provider
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
-    // #endregion
-
-    // #region walletconnect
-    const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletConnectQRCodeDialogUpdated,
-    )
-    // #endregion
-
-    const onDisconnect = useCallback(async () => {
-        switch (providerType) {
-            case ProviderType.WalletConnect:
-                setWalletConnectDialog({
-                    open: true,
-                    uri: await Services.Ethereum.createConnectionURI(),
-                })
-                break
-            case ProviderType.Fortmatic:
-                await Services.Ethereum.disconnectFortmatic(chainId)
-                break
-        }
-    }, [chainId, providerType, setWalletConnectDialog])
-
-    const onChange = props.changeWallet
-
     return account ? (
         <section className={classNames(classes.currentAccount)}>
             <WalletIcon
@@ -181,25 +148,11 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
             </div>
             {!props.disableChange && (
                 <section>
-                    {providerType === ProviderType.WalletConnect || providerType === ProviderType.Fortmatic ? (
-                        <ActionButtonPromise
-                            className={classes.actionButton}
-                            size="small"
-                            variant="contained"
-                            init={t('wallet_status_button_disconnect')}
-                            waiting={t('wallet_status_button_disconnecting')}
-                            failed={t('failed')}
-                            complete={t('done')}
-                            executor={onDisconnect}
-                            completeIcon={<></>}
-                            failIcon={<></>}
-                        />
-                    ) : null}
                     <Button
                         className={classNames(classes.actionButton)}
                         variant="contained"
                         size="small"
-                        onClick={onChange}>
+                        onClick={props.changeWallet}>
                         {t('wallet_status_button_change')}
                     </Button>
                 </section>
@@ -207,7 +160,11 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
         </section>
     ) : (
         <section className={classes.connectButtonWrapper}>
-            <Button className={classNames(classes.actionButton)} variant="contained" size="small" onClick={onChange}>
+            <Button
+                className={classNames(classes.actionButton)}
+                variant="contained"
+                size="small"
+                onClick={props.changeWallet}>
                 {t('plugin_wallet_on_connect')}
             </Button>
         </section>
