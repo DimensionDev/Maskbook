@@ -60,8 +60,8 @@ export default function DashboardRoot() {
                                         <SharedContextProvider>
                                             <HashRouter>
                                                 <Pages />
+                                                <PluginRender />
                                             </HashRouter>
-                                            <PluginRender />
                                         </SharedContextProvider>
                                     </CustomSnackbarProvider>
                                 </ErrorBoundary>

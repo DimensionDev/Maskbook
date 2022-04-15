@@ -3,8 +3,8 @@ import type { HttpProvider } from 'web3-core'
 import { PopupRoutes } from '@masknet/shared-base'
 import { ChainId, getChainRPC, ProviderType } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
-import { getWallets, selectAccountPrepare } from '../../../../plugins/Wallet/services'
 import { openPopupWindow } from '../../../../../background/services/helper'
+import { WalletRPC } from '../../../../plugins/Wallet/messages'
 
 // #region providers
 const providerPool = new Map<string, HttpProvider>()
@@ -67,13 +67,13 @@ export function createWeb3({
 // #endregion
 
 export async function requestAccounts(chainId: ChainId) {
-    const wallets = await getWallets(ProviderType.MaskWallet)
+    const wallets = await WalletRPC.getWallets(ProviderType.MaskWallet)
     return new Promise<{
         chainId: ChainId
         accounts: string[]
     }>(async (resolve, reject) => {
         try {
-            await selectAccountPrepare((accounts, chainId) => {
+            await WalletRPC.selectAccountPrepare((accounts, chainId) => {
                 resolve({
                     chainId,
                     accounts,

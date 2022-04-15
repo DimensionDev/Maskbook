@@ -1,5 +1,8 @@
 import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
+import urlcat from 'urlcat'
+import { useNavigate } from 'react-router-dom'
+import { first } from 'lodash-unified'
 import { DialogContent } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { safeUnreachable, delay } from '@dimensiondev/kit'
@@ -12,11 +15,13 @@ import {
     resolveNetworkName,
     resolveProviderName,
 } from '@masknet/web3-shared-evm'
+import { isPopupPage, PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
+import { useSelectAccount } from '../../hooks/useSelectAccount'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -28,6 +33,9 @@ export interface ConnectWalletDialogProps {}
 
 export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
+
+    const navigate = useNavigate()
+    const [onSelectAccountPrepare] = useSelectAccount()
 
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
@@ -68,7 +76,26 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
         switch (providerType) {
             case ProviderType.MaskWallet:
-                ;({ account, chainId } = await Services.Ethereum.connectMaskWallet(expectedChainId))
+                if (isPopupPage()) {
+                    ;({ account, chainId } = await new Promise<{
+                        account: string
+                        chainId: ChainId
+                    }>(async (resolve) => {
+                        onSelectAccountPrepare(async (accounts, chainId) => {
+                            resolve({
+                                chainId,
+                                account: first(accounts) ?? '',
+                            })
+                        })
+                        navigate(
+                            urlcat(PopupRoutes.SelectWallet, {
+                                popup: true,
+                            }),
+                        )
+                    }))
+                } else {
+                    ;({ account, chainId } = await Services.Ethereum.connectMaskWallet(expectedChainId))
+                }
                 break
             case ProviderType.MetaMask:
                 ;({ account, chainId } = await Services.Ethereum.connectMetaMask())
@@ -141,7 +168,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             networkType,
             providerType,
         }
-    }, [networkType, providerType])
+    }, [networkType, providerType, onSelectAccountPrepare])
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
@@ -155,6 +182,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     }, [open, connectTo, setConnectWalletDialog])
 
     if (!providerType) return null
+
+    // The connection state is transferring between pages when we connect Mask Wallet on the popup page
+    if (isPopupPage() && providerType === ProviderType.MaskWallet) return null
 
     return (
         <InjectedDialog title={`Connect to ${resolveProviderName(providerType)}`} open={open} onClose={onClose}>
