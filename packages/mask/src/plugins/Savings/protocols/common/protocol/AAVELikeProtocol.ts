@@ -109,6 +109,7 @@ export default class AAVELikeProtocol implements SavingsProtocol {
                     gas: gasEstimate.toNumber(),
                 })
             }
+            return null
         } catch (error) {
             throw error
         }

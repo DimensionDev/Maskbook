@@ -136,6 +136,7 @@ export default class CompoundTimestampBasedProtocol implements SavingsProtocol {
             if (operation) {
                 return operation.send(args)
             }
+            return null
         } catch (error) {
             throw error
         }

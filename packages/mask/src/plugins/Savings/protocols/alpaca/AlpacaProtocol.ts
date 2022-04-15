@@ -158,6 +158,7 @@ export class AlpacaProtocol implements SavingsProtocol {
                       }
                 return operation.send(args)
             }
+            return null
         } catch (error) {
             throw error
         }
