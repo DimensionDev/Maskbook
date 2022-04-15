@@ -1,0 +1,19 @@
+{
+    "name": "@masknet/plugin-traderxyz",
+    "private": true,
+    "exports": {
+        ".": {
+            "webpack": "./src/index.ts",
+            "default": "./dist/index.js"
+        }
+    },
+    "types": "./dist/index.d.ts",
+    "dependencies": {
+        "@masknet/plugin-infra": "workspace:*",
+        "@masknet/shared": "workspace:*",
+        "@masknet/shared-base": "workspace:*",
+        "@traderxyz/nft-swap-sdk": "^0.22.1",
+        "react-use": "^17.3.2",
+        "use-subscription": "^1.6.0"
+    }
+}
