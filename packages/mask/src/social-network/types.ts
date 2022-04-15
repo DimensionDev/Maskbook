@@ -330,8 +330,5 @@ export namespace SocialNetworkWorker {
     /**
      * A SocialNetworkWorker is running in the background page
      */
-    export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared, WorkerBase {
-        tasks: Tasks
-    }
-    export interface Tasks {}
+    export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared, WorkerBase {}
 }

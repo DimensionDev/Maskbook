@@ -28,7 +28,7 @@ export function usePersonaConnectStatus() {
     return useMemo(() => {
         const id = new ProfileIdentifier(activatedSocialNetworkUI.networkIdentifier, lastRecognized.identifier.userId)
         let connected = false
-        let currentConnectedPersona: Persona | undefined
+        let currentConnectedPersona: Pick<Persona, 'identifier' | 'publicHexKey'> | undefined
         personas.forEach((p) => {
             if (!p.linkedProfiles.get(id)) return
             connected = true
