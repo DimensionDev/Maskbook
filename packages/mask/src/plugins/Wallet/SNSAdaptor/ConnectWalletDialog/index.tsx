@@ -68,7 +68,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
         switch (providerType) {
             case ProviderType.MaskWallet:
-                ;({ account, chainId } = await Services.Ethereum.connectMaskWallet(networkType))
+                ;({ account, chainId } = await Services.Ethereum.connectMaskWallet(expectedChainId))
                 break
             case ProviderType.MetaMask:
                 ;({ account, chainId } = await Services.Ethereum.connectMetaMask())
