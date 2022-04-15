@@ -48,7 +48,6 @@ export function PersonaItem(props: PersonaItemProps) {
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(token?.owner)
     const [haveNFT, setHaveNFT] = useState(false)
 
-    console.log(_avatar)
     useEffect(() => {
         setHaveNFT(
             Boolean(_avatar && token && isOwner && _avatar.avatarId === getAvatarId(currentIdentity.avatar ?? '')),
