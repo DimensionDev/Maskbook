@@ -21,14 +21,11 @@ export function useCurrentVisitingIdentity() {
         activatedSocialNetworkUI.collecting.currentVisitingIdentityProvider?.recognized || default_,
     )
 }
-export function useMyIdentities() {
-    return useValueRef(globalUIState.profiles)
-}
 export function useCurrentIdentity(): Profile | null {
     return useSubscription(CurrentIdentitySubscription)
 }
 
-export const CurrentIdentitySubscription: Subscription<Profile> = {
+const CurrentIdentitySubscription: Subscription<Profile> = {
     getCurrentValue() {
         const all = globalUIState.profiles.value
         const current = (activatedSocialNetworkUI.collecting.identityProvider?.recognized || default_).value.identifier

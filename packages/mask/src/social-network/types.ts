@@ -88,7 +88,6 @@ export namespace SocialNetworkUI {
         customization: Customization.Define
         configuration: Configuration.Define
     }
-    export type State = AutonomousState & ManagedState
     /** The init() should setup watcher for those states */
     export interface AutonomousState {
         /** @deprecated Performance. Don't use it. */
@@ -96,7 +95,6 @@ export namespace SocialNetworkUI {
         /** My profiles at current network */
         readonly profiles: ValueRef<readonly Profile[]>
     }
-    export interface ManagedState {}
     export interface RuntimePermission {
         /** This function should check if Mask has the permission to the site */
         has(): Promise<boolean>
