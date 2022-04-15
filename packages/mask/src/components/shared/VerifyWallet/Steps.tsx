@@ -151,7 +151,7 @@ export function Steps(props: StepsProps) {
                         </Typography>
                     </div>
                     <div className={classes.stepRow}>
-                        <Typography className={classes.stepTitle}>{wallet.providerType} Wallet Sign</Typography>
+                        <Typography className={classes.stepTitle}>{wallet.name ?? wallet.providerType} Sign</Typography>
                         <Typography className={classes.stepIntro}>
                             After two steps, you will own, view, utilize all your cyber identities through Next.ID. You
                             can also disconnect them easily.

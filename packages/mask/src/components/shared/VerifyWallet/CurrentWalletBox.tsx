@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { ExternalLink } from 'react-feather'
 import classNames from 'classnames'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ProviderType, useWallet } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -13,7 +13,6 @@ import {
     useProviderDescriptor,
     useProviderType,
     useReverseAddress,
-    useWallet,
 } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
@@ -108,12 +107,6 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const { Utils } = useWeb3State() ?? {}
 
     const { value: domain } = useReverseAddress(account)
-
-    // #region change provider
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
-    // #endregion
 
     // #region walletconnect
     const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(

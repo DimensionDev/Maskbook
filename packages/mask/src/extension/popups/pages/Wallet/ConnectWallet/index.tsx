@@ -23,6 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         rowGap: 16,
         padding: '16px',
         boxSizing: 'border-box',
+        background: '#F7F9FA',
     },
     walletItem: {
         cursor: 'pointer',
