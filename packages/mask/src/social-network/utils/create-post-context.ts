@@ -24,6 +24,7 @@ import {
     mapSubscription,
     EMPTY_LIST,
     PostIVIdentifier,
+    EnhanceableSite,
 } from '@masknet/shared-base'
 import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
@@ -45,16 +46,15 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
         // #endregion
 
         // #region Mentioned links
+        const isFacebook = activatedSocialNetworkUI.networkIdentifier === EnhanceableSite.Facebook
         const links = new ObservableSet<string>()
         cancel.push(
             postContent.addListener((post) => {
                 links.clear()
-                parseURL(post).forEach((link) =>
-                    links.add(resolveFacebookLink(link, activatedSocialNetworkUI.networkIdentifier)),
-                )
+                parseURL(post).forEach((link) => links.add(isFacebook ? resolveFacebookLink(link) : link))
                 opt.postMentionedLinksProvider
                     ?.getCurrentValue()
-                    .forEach((link) => links.add(resolveFacebookLink(link, activatedSocialNetworkUI.networkIdentifier)))
+                    .forEach((link) => links.add(isFacebook ? resolveFacebookLink(link) : link))
             }),
         )
         cancel.push(
@@ -62,7 +62,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 // Not clean old links cause post content not changed
                 opt.postMentionedLinksProvider
                     ?.getCurrentValue()
-                    .forEach((link) => links.add(resolveFacebookLink(link, activatedSocialNetworkUI.networkIdentifier)))
+                    .forEach((link) => links.add(isFacebook ? resolveFacebookLink(link) : link))
             }),
         )
         const linksSubscribe: Subscription<string[]> = debug({
