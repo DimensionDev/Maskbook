@@ -6,10 +6,7 @@ import type { ChipProps } from '@mui/material/Chip'
 import Lock from '@mui/icons-material/Lock'
 import { useEffect } from 'react'
 import { useAsync } from 'react-use'
-import Services from '../../extension/service'
-import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { decodeArrayBuffer } from '@dimensiondev/kit'
 
 const useStyle = makeStyles()({
     root: {
@@ -47,22 +44,11 @@ export interface PostCommentProps {
 export function PostComment(props: PostCommentProps) {
     const { needZip } = props
     const comment = useValueRef(props.comment)
-    const postContent = usePostInfoDetails.rawMessagePiped()
-    const iv = usePostInfoDetails.iv()
+    const decrypt = usePostInfoDetails.decryptComment()
 
-    const dec = useAsync(async () => {
-        const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
-        if (!iv || !decryptedText) throw new Error('Decrypt comment failed')
-        const result = await Services.Crypto.decryptComment(
-            new Uint8Array(decodeArrayBuffer(iv)),
-            decryptedText,
-            comment,
-        )
-        if (result === null) throw new Error('Decrypt result empty')
-        return result
-    }, [iv, postContent, comment])
+    const { value } = useAsync(async () => decrypt?.(comment), [decrypt, comment])
 
-    useEffect(() => void (dec.value && needZip()), [dec.value, needZip])
-    if (dec.value) return <PostCommentDecrypted>{dec.value}</PostCommentDecrypted>
+    useEffect(() => void (value && needZip()), [value, needZip])
+    if (value) return <PostCommentDecrypted>{value}</PostCommentDecrypted>
     return null
 }
