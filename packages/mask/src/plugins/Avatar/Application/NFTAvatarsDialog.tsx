@@ -29,10 +29,12 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
     const [wallets, setWallets] = useState<BindingProof[]>()
     const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
     const [tokenInfo, setTokenInfo] = useState<TokenInfo>()
+    const [proof, setProof] = useState<BindingProof>()
 
-    const onPersonaChange = (wallets?: BindingProof[], tokenInfo?: TokenInfo) => {
+    const onPersonaChange = (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: TokenInfo) => {
         setWallets(wallets)
         setTokenInfo(tokenInfo)
+        setProof(proof)
     }
 
     const onSelected = (info: SelectTokenInfo) => {
@@ -64,6 +66,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                 ) : null}
                 {step === CreateNFTAvatarStep.UploadAvatar ? (
                     <UploadAvatarDialog
+                        proof={proof}
                         account={selectedTokenInfo?.account}
                         image={selectedTokenInfo?.image}
                         token={selectedTokenInfo?.token}

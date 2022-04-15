@@ -22,7 +22,7 @@ const useStyles = makeStyles()(() => ({
 
 interface PersonaPageProps {
     onNext: () => void
-    onChange: (wallets?: BindingProof[], tokenInfo?: TokenInfo) => void
+    onChange: (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: TokenInfo) => void
 }
 
 export function PersonaPage(props: PersonaPageProps) {
@@ -40,12 +40,14 @@ export function PersonaPage(props: PersonaPageProps) {
     }, [nextIDConnectStatus])
 
     const onSelect = useCallback(
-        (tokenInfo?: TokenInfo) => {
-            onChange(wallets, tokenInfo)
+        (proof: BindingProof, tokenInfo?: TokenInfo) => {
+            onChange(proof, wallets, tokenInfo)
             onNext()
         },
         [wallets],
     )
+
+    console.log(binds)
 
     return (
         <DialogContent sx={{ height: 612 }}>
@@ -71,14 +73,21 @@ export function PersonaPage(props: PersonaPageProps) {
                                 <PersonaItem
                                     key={i}
                                     owner
+                                    proof={x}
                                     avatar={currentIdentity.avatar}
                                     userId={currentIdentity.identifier.userId}
                                     nickname={currentIdentity.nickname}
                                     onSelect={onSelect}
-                                    platform={x.platform}
                                 />
                             ) : (
-                                <PersonaItem key={i} owner={false} avatar="" userId={x.identity} nickname="" />
+                                <PersonaItem
+                                    key={i}
+                                    owner={false}
+                                    avatar=""
+                                    userId={x.identity}
+                                    nickname=""
+                                    proof={x}
+                                />
                             ),
                         )}
                 </>

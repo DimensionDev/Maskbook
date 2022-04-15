@@ -10,7 +10,7 @@ export function usePersonas() {
     const identity = useCurrentVisitingIdentity()
     const currentIdentity = useLastRecognizedIdentity()
 
-    const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
+    const { value: currentPersona, loading: loadingCurrentPersona } = useAsyncRetry(async () => {
         if (!currentIdentity) return
         return Services.Identity.queryPersonaByProfile(currentIdentity.identifier)
     }, [currentIdentity, personaConnectStatus.hasPersona])
@@ -22,5 +22,12 @@ export function usePersonas() {
     const isOwner = currentIdentity.identifier.toText() === identity.identifier.toText()
     const wallets = binds?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
 
-    return { loading: loadingPersona || loadingBinds, isOwner, binds, personaConnectStatus, wallets }
+    return {
+        loading: loadingCurrentPersona || loadingBinds,
+
+        isOwner,
+        binds,
+        personaConnectStatus,
+        wallets,
+    }
 }
