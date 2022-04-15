@@ -74,6 +74,7 @@ export abstract class Identifier {
     static IdentifiersToString(a: Identifier[], isOrderImportant = false) {
         const ax = a.map((x) => x.toText())
         if (!isOrderImportant) {
+            // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
             ax.sort()
         }
         return ax.join(',')

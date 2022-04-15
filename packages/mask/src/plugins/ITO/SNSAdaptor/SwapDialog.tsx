@@ -159,6 +159,7 @@ export function SwapDialog(props: SwapDialogProps) {
         pickToken,
         exchangeTokens
             .map((x) => x.address)
+            // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
             .sort()
             .join(),
     ])

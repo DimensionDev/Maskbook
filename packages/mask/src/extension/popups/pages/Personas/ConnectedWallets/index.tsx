@@ -72,8 +72,6 @@ const ConnectedWallets = memo(() => {
 
             if (!signature) return
 
-            const walletSignature = await Service.Ethereum.personalSign(result.signPayload, wallet.identity)
-
             await NextIDProof.bindProof(
                 result.uuid,
                 currentPersona.publicHexKey,
@@ -81,7 +79,7 @@ const ConnectedWallets = memo(() => {
                 wallet.platform,
                 wallet.identity,
                 result.createdAt,
-                { walletSignature: walletSignature, signature: signature.signature.signature },
+                { signature: signature.signature.signature },
             )
 
             refreshProofs()

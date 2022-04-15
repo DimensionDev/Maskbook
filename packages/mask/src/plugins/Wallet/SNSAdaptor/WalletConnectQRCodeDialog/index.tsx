@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useAsync } from 'react-use'
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -34,6 +35,12 @@ export const WalletConnectQRCodeDialog: React.FC = () => {
         (ev) => ev.open && setURI(ev.uri),
     )
     // #endregion
+
+    useAsync(async () => {
+        if (!open) return
+        await Services.Ethereum.connectWalletConnect()
+        closeDialog()
+    }, [open])
 
     let mode: QRCodeDialogProps['mode'] = 'qrcode'
     if (process.env.architecture === 'app' && process.env.engine === 'firefox') {

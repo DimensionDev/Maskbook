@@ -1,8 +1,11 @@
 import { memo } from 'react'
+import { HashRouter } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { PageInspector, PageInspectorProps } from '../../../components/InjectedComponents/PageInspector'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { Flags } from '../../../../shared'
+
+export interface InjectPageInspectorDefaultConfig {}
 
 export function injectPageInspectorDefault<T extends string>(
     config: InjectPageInspectorDefaultConfig = {},
@@ -20,8 +23,10 @@ export function injectPageInspectorDefault<T extends string>(
             .appendChild(document.createElement('div'))
             .attachShadow({ mode: Flags.using_ShadowDOM_attach_mode })
 
-        createReactRootShadowed(dom, { signal, key: 'page-inspector' }).render(<PageInspectorDefault />)
+        createReactRootShadowed(dom, { signal, key: 'page-inspector' }).render(
+            <HashRouter>
+                <PageInspectorDefault />
+            </HashRouter>,
+        )
     }
 }
-
-interface InjectPageInspectorDefaultConfig {}
