@@ -52,7 +52,6 @@ export class TranquilPairResolver implements ProtocolPairsResolver {
             return []
         }
         const allPairs = await CompoundLikeFetcher.fetch(TRANQUIL_COMPTROLLER, chainId, web3)
-        console.log('allPairs', allPairs)
         return (
             allPairs
                 // .filter(

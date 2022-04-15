@@ -131,7 +131,6 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
         const allPrice = await this.fetchPrices(needLoadPricePairs, notInPairTokens, web3)
         const currentMarketSpeeds = await this.fetchSpeeds(web3)
         const indexBySymbol: IndexWithStatus = {}
-        console.log(allPrice, needLoadPricePairs)
         allPrice.forEach((item: MarketStatus) => {
             indexBySymbol[item.symbol] = item
         })
@@ -155,7 +154,6 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
                 comptroller,
                 web3,
             )
-            // console.log('symbolWithPrice', symbolWithPrice)
             //  market supply
             const [totalSupply, exchangeRate] = await Promise.all([
                 market.methods.totalSupply().call(),
@@ -171,7 +169,6 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
             const totalPrice = marketPrice ? totalSupplyAmount.times(marketPrice) : ZERO
 
             const rewardsAPR = this.rewardTokens.map(({ symbol }) => {
-                console.log('symbol', symbol, symbolWithPrice, currentMarketSpeeds)
                 const { price: rewardPrice } = symbolWithPrice[symbol]
                 const speedItem = currentMarketSpeeds.find((_) => _.symbol === symbol)
                 if (!speedItem)
@@ -214,7 +211,7 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
             // })
             return totalDistributionAPR
         } catch (error) {
-            console.log('getDistributionAPR', error)
+            console.error('getDistributionAPR', error)
             return ZERO
         }
     }

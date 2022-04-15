@@ -32,9 +32,7 @@ export default class CompoundLikeFetcher {
         if (comptroller === null) {
             return []
         }
-        console.log('allMarkets fetch')
         const allMarkets = await comptroller.methods.getAllMarkets().call()
-        console.log('allMarkets', allMarkets)
         const allMarketsPairs = await Promise.all(allMarkets.map((market: string) => this.lookupMeta(market, web3)))
         const allTokens =
             compact(flatten(allMarketsPairs)).map((m) => {
@@ -45,7 +43,6 @@ export default class CompoundLikeFetcher {
 
     static async fetch(compAddress: string, chainId: ChainId, web3: Web3) {
         const cacheValue = cache.get(compAddress)
-        console.log('cacheValue', cacheValue)
         if (cacheValue !== undefined && cacheValue !== null) {
             return cacheValue
         }

@@ -36,30 +36,12 @@ export default class AAVELikeFetcher {
         const protocolDataContract = this.getProtocolDataContract(dataProviderAddress, chainId, web3)
         if (protocolDataContract === null) return []
         const tokens = await protocolDataContract?.methods.getAllReservesTokens().call()
-        console.log('tokens', tokens, 'dataProviderAddress')
         const aaveTokens = await Promise.all(
             tokens?.map(async (token) => {
                 const tokenAddress = await protocolDataContract.methods.getReserveTokensAddresses(token[1]).call()
                 return [token[1], tokenAddress?.aTokenAddress]
             }),
         )
-        // const aTokens = await protocolDataContract?.methods.getAllATokens().call()
-        // console.log('aTokens', {
-        //     aTokens,
-        //     tokens,
-        // })
-        // const aaveTokens = tokens?.map((token) => {
-        //     const matchSymbol = `${prefix}${token[0]}`.toUpperCase()
-        //     const matchSymbolSecond = `${prefix}W${token[0]}`.toUpperCase() // gWBTC/BTC, gFTM/WFTM
-        //     const matchToken = aTokens?.filter(
-        //         (f) => f[0].toUpperCase() === matchSymbol || f[0].toUpperCase() === matchSymbolSecond,
-        //     )[0]
-        //     if (!matchToken) {
-        //         console.log('matchSymbol', matchSymbol)
-        //     }
-        //     return [token[1], matchToken ? matchToken[1] : null]
-        // })
-        console.log('aaveTokens', aaveTokens)
         const allTokens =
             compact(flatten(aaveTokens ?? [])).map((m) => {
                 return { address: m, type: EthereumTokenType.ERC20 }

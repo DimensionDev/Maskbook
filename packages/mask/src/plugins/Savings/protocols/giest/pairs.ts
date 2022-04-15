@@ -34,7 +34,6 @@ export class GiestPairResolver implements ProtocolPairsResolver {
             chainId,
             web3,
         )
-        console.log('allPairsWithArgs', allPairsWithArgs)
         return allPairsWithArgs.map((args: [[FungibleTokenDetailed, FungibleTokenDetailed], string, string]) => {
             const [pair, pool, dataProvider] = args
             const [bareToken, stakeToken] = pair

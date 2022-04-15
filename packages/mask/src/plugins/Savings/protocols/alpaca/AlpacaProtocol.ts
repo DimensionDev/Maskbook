@@ -65,47 +65,12 @@ export class AlpacaProtocol implements SavingsProtocol {
 
     public async updateApr(chainId: ChainId, web3: Web3) {
         try {
-            // const contract = this.getPoolContract(web3)
-            // if (contract === null) {
-            //     console.log('contract')
-            //     return
-            // }
-            // const [configAddr, vaultDebtVal, reservePool, totalToken] = await Promise.all([
-            //     contract.methods.config().call(),
-            //     contract.methods.vaultDebtVal().call(),
-            //     contract.methods.reservePool().call(),
-            //     contract.methods.totalToken().call(),
-            // ])
-            // console.log({
-            //     configAddr,
-            //     vaultDebtVal,
-            //     reservePool,
-            //     totalToken,
-            // })
-            // const config = createAlpacaConfigContract(configAddr, web3)
-            // if (config === null) {
-            //     console.log('config', config)
-            //     return
-            // }
-            // const balance = new BigNumber(totalToken)
-            //     .minus(new BigNumber(vaultDebtVal))
-            //     .plus(new BigNumber(reservePool))
-            // console.log('getInterestRate', {
-            //     vaultDebtVal,
-            //     balance: balance.toFixed(),
-            // })
-            // const ratePerSec = await config.methods.getInterestRate(vaultDebtVal, balance.toFixed()).call()
-            // console.log('ratePerSec', ratePerSec)
-            // const supplyBase = new BigNumber(ratePerSec).times(TIMESTAMPS_PER_DAY)
-            // const apy = supplyBase.times(DAYS_PER_YEAR).shiftedBy(-16)
-            // this._apr = apy.toFixed(2)
             const req = await fetch(SUMMARY_API)
             const response = await req.json()
             const { lendingPools } = response.data
             const summary = lendingPools.find((_: any) => _.ibToken.address === this.stakeToken.address)
             this._apr = new BigNumber(summary.lendingApr).toFixed(2)
         } catch (error) {
-            console.log('error', error)
             this._apr = AlpacaProtocol.DEFAULT_APR
         }
     }
@@ -121,7 +86,6 @@ export class AlpacaProtocol implements SavingsProtocol {
                 contract.methods.balanceOf(account).call(),
                 this.getSharePrice(web3),
             ])
-            console.log('shares', shares)
             // balance = shares * sharePrice
             this._balance = new BigNumber(shares).multipliedBy(new BigNumber(sharePrice)).shiftedBy(-18)
         } catch (error) {
@@ -139,10 +103,6 @@ export class AlpacaProtocol implements SavingsProtocol {
                 contract.methods.totalToken().call(),
                 contract.methods.totalSupply().call(),
             ])
-            console.log('getSharePrice', {
-                totalToken,
-                totalSupply,
-            })
             // sharePrice = totalToken / totalSupply
             return new BigNumber(totalToken).shiftedBy(18).dividedBy(new BigNumber(totalSupply))
         } catch (error) {
@@ -172,7 +132,6 @@ export class AlpacaProtocol implements SavingsProtocol {
             )
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
-            console.log('depositEstimate.error', error)
             return ZERO
         }
     }
@@ -197,13 +156,11 @@ export class AlpacaProtocol implements SavingsProtocol {
                           from: account,
                           gas: gasEstimate.toNumber(),
                       }
-                console.log('deposit', args)
                 await operation.send(args)
                 return true
             }
             return false
         } catch (error) {
-            console.log('error', error)
             return false
         }
     }
@@ -211,7 +168,6 @@ export class AlpacaProtocol implements SavingsProtocol {
     private async createWithdrawTokenOperation(web3: Web3, value: BigNumber.Value) {
         const contract = this.getPoolContract(web3)
         const sharesToWithdraw = await this.amountToShares(web3, value)
-        console.log('sharesToWithdraw', sharesToWithdraw)
         return contract?.methods.withdraw(sharesToWithdraw)
     }
 
@@ -223,7 +179,6 @@ export class AlpacaProtocol implements SavingsProtocol {
             })
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
-            console.log('withdrawEstimate', error)
             return ZERO
         }
     }
