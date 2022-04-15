@@ -89,7 +89,7 @@ export const RestoreFromLocal = memo(() => {
         if (!currentPersona) {
             const lastedPersona = await Services.Identity.queryLastPersonaCreated()
             if (lastedPersona) {
-                await changeCurrentPersona(lastedPersona.identifier)
+                await changeCurrentPersona(lastedPersona)
             }
         }
         navigate(DashboardRoutes.Personas, { replace: true })

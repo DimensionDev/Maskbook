@@ -7,6 +7,7 @@ import type { PostRecord } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PluginId } from '@masknet/plugin-infra'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const MSG_DELIMITER = '2c1aca02'
 
@@ -94,7 +95,7 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
 
     const rowClickHandler = useCallback((event: React.MouseEvent<HTMLElement>) => {
         if ((event.target as HTMLElement).tagName !== 'A') {
-            post.url && Services.Settings.openTab(post.url)
+            openWindow(post?.url, '_blank')
         }
     }, [])
 

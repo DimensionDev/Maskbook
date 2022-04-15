@@ -5,6 +5,5 @@ import { facebookShared } from './shared'
 const facebookWorker: SocialNetworkWorker.Definition = {
     ...facebookWorkerBase,
     ...facebookShared,
-    tasks: {},
 }
 export default facebookWorker

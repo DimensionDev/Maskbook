@@ -21,7 +21,9 @@ import type { PersonaInformation } from '@masknet/shared-base'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
-const personaFormatter = (p: Persona) => {
+const personaFormatter = (
+    p: Pick<Persona, 'identifier' | 'nickname' | 'hasPrivateKey' | 'createdAt' | 'updatedAt' | 'linkedProfiles'>,
+) => {
     const profiles = {}
 
     for (const [key, value] of p.linkedProfiles) {
@@ -131,7 +133,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
     persona_queryPersonas: async ({ identifier, hasPrivateKey }) => {
         const id = identifier ? stringToPersonaIdentifier(identifier) : undefined
-        const result = await Services.Identity.queryPersonas(id, hasPrivateKey)
+        const result = await Services.Identity.app_only_queryPersonas(id, hasPrivateKey)
 
         return result?.map(personaFormatter)
     },
@@ -278,7 +280,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         }))
     },
     get_all_indexedDB_records: async () => {
-        const personas = await Services.Identity.queryPersonaRecordsFromIndexedDB()
+        const personas = await Services.Identity.app_only_queryPersonaRecordsFromIndexedDB()
         const profiles = await Services.Identity.queryProfileRecordFromIndexedDB()
         const relations = await Services.Identity.queryRelationsRecordFromIndexedDB()
         return {

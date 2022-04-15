@@ -86,7 +86,7 @@ export const RestoreFromCloud = memo(() => {
         if (!currentPersona) {
             const lastedPersona = await Services.Identity.queryLastPersonaCreated()
             if (lastedPersona) {
-                await changeCurrentPersona(lastedPersona.identifier)
+                await changeCurrentPersona(lastedPersona)
             }
         }
         if (account) {

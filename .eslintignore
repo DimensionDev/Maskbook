@@ -1,7 +1,8 @@
 *.d.ts
 *.test.tsx
 build/
-dist/
+dist
+gun.js
 e2e
 package.json
 packages/contracts
