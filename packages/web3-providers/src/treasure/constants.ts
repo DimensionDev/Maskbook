@@ -1,0 +1,5 @@
+export const TREASURE_ARBITRUM_GRAPHQL_URL = 'https://api.thegraph.com/subgraphs/name/wyze/treasure-marketplace'
+export const TREASURE_BRIDGEWORLD_GRAPHQL_URL = 'https://api.thegraph.com/subgraphs/name/treasureproject/bridgeworld'
+export const TREASURE_METADATA_GRAPHQL_URL = 'https://api.thegraph.com/subgraphs/name/treasureproject/metadata'
+export const TREASURE_SMOLVERSE_GRAPHQL_URL = 'https://api.thegraph.com/subgraphs/name/treasureproject/smolverse'
+export const TREASURE_MARKETPLACE_GRAPHQL_URL = 'https://api.thegraph.com/subgraphs/name/treasureproject/marketplace'
