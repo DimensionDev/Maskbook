@@ -27,7 +27,7 @@ import { useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
 import Services from '../../../../service'
-import { isPositive, multipliedBy } from '@masknet/web3-shared-base'
+import { isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
 import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
@@ -83,26 +83,31 @@ const ReplaceTransaction = memo(() => {
     const is1559 = isEIP1559Supported(getChainIdFromNetworkType(networkType))
 
     const schema = useMemo(() => {
-        return zod.object({
-            gas: zod
-                .string()
-                .refine(
-                    (gas) => new BigNumber(gas).gte(hexToNumber(defaultGas) ?? 0),
-                    t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: hexToNumber(defaultGas) }),
-                ),
-            gasPrice: is1559
-                ? zod.string().optional()
-                : zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
-            maxPriorityFeePerGas: is1559
-                ? zod
-                      .string()
-                      .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
-                      .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
-                : zod.string().optional(),
-            maxFeePerGas: is1559
-                ? zod.string().min(1, t('wallet_transfer_error_max_fee_absence'))
-                : zod.string().optional(),
-        })
+        return zod
+            .object({
+                gas: zod
+                    .string()
+                    .refine(
+                        (gas) => new BigNumber(gas).gte(hexToNumber(defaultGas) ?? 0),
+                        t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: hexToNumber(defaultGas) }),
+                    ),
+                gasPrice: is1559
+                    ? zod.string().optional()
+                    : zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
+                maxPriorityFeePerGas: is1559
+                    ? zod
+                          .string()
+                          .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
+                          .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
+                    : zod.string().optional(),
+                maxFeePerGas: is1559
+                    ? zod.string().min(1, t('wallet_transfer_error_max_fee_absence'))
+                    : zod.string().optional(),
+            })
+            .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas ?? 0, data.maxFeePerGas ?? 0), {
+                message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
+                path: ['maxFeePerGas'],
+            })
     }, [defaultGas, is1559])
 
     const {
@@ -170,6 +175,10 @@ const ReplaceTransaction = memo(() => {
                 }
             } catch (error) {
                 if (error instanceof Error) {
+                    if (error.message.includes('maxFeePerGas cannot be less thant maxPriorityFeePerGas')) {
+                        setErrorMessage(t('wallet_transfer_error_max_fee_too_low'))
+                        return
+                    }
                     setErrorMessage(error.message)
                 }
             }
