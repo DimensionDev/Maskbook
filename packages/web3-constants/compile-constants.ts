@@ -56,6 +56,7 @@ compileConstants(path.join(__dirname, 'evm'), [
     'Avalanche',
     'Avalanche_Fuji',
     'Celo',
+    'Harmony',
     'Fantom',
     'Aurora',
     'Aurora_Testnet',

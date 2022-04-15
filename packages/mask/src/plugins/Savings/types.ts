@@ -9,13 +9,14 @@ export enum TabType {
 
 export enum ProtocolType {
     Lido = 0,
+    AAVE = 1,
     BENQI = 2,
     Compound = 3,
-    AAVE = 1,
     Giest = 4,
     Moola = 5,
     Alpaca = 6,
     Aurigami = 7,
+    Tranquil = 8,
 }
 
 export interface SavingsProtocol {

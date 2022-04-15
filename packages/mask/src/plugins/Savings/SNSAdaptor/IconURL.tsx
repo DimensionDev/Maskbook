@@ -9,4 +9,5 @@ export const ProviderIconURLs: Record<ProtocolType, string> = {
     [ProtocolType.Giest]: new URL('./assets/giest.png', import.meta.url).toString(),
     [ProtocolType.Alpaca]: new URL('./assets/alpaca.png', import.meta.url).toString(),
     [ProtocolType.Moola]: new URL('./assets/moola.png', import.meta.url).toString(),
+    [ProtocolType.Tranquil]: new URL('./assets/tranquil.png', import.meta.url).toString(),
 }

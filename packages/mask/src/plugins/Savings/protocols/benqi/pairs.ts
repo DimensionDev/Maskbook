@@ -5,6 +5,22 @@ import { BENQI_COMPTROLLER } from '../../constants'
 import CompoundLikeFetcher from '../common/CompoundLikeFetcher'
 import BenQiProtocol from './BenQiProtocol'
 
+export type RewardToken = {
+    symbol: string
+    rewardType: number
+}
+
+const rewardTokens: Array<RewardToken> = [
+    {
+        symbol: 'qiQI',
+        rewardType: 0,
+    },
+    {
+        symbol: 'qiAVAX',
+        rewardType: 1,
+    },
+]
+
 export class BenQiPairResolver implements ProtocolPairsResolver {
     public supportChains: ChainId[] = [ChainId.Avalanche]
     public async resolve(chainId: ChainId, web3: Web3): Promise<SavingsProtocol[]> {
@@ -17,7 +33,7 @@ export class BenQiPairResolver implements ProtocolPairsResolver {
             if (stakeToken.symbol === BenQiProtocol.nativeToken) {
                 pair[0] = createNativeToken(ChainId.Avalanche)
             }
-            return new BenQiProtocol(pair)
+            return new BenQiProtocol(pair, allPairs, rewardTokens)
         })
     }
 }

@@ -55,6 +55,10 @@ export default class CompoundTimestampBasedProtocol implements SavingsProtocol {
         return contract
     }
 
+    public async getDistributionAPR(chainId: ChainId, web3: Web3): Promise<BigNumber.Value> {
+        return ZERO
+    }
+
     public async updateApr(chainId: ChainId, web3: Web3) {
         try {
             const contract = this.getPoolContract(web3)
@@ -62,10 +66,13 @@ export default class CompoundTimestampBasedProtocol implements SavingsProtocol {
                 this._apr = this.DEFAULT_APR
                 return
             }
-            const supplyRate = await contract.methods.supplyRatePerTimestamp().call()
+            const [supplyRate, distributionAPR] = await Promise.all([
+                contract.methods.supplyRatePerTimestamp().call(),
+                this.getDistributionAPR(chainId, web3),
+            ])
             const supplyBase = new BigNumber(supplyRate).times(TIMESTAMPS_PER_DAY)
             const apy = supplyBase.times(DAYS_PER_YEAR).shiftedBy(-16)
-            this._apr = apy.toFixed(2)
+            this._apr = apy.plus(distributionAPR).toFixed(2)
         } catch (error) {
             this._apr = this.DEFAULT_APR
         }

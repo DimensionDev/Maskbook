@@ -12,7 +12,7 @@ import CEtherABI from '@masknet/web3-contracts/abis/CEther.json'
 export const BLOCKS_PER_DAY = 6570
 export const DAYS_PER_YEAR = 365
 
-export class CompoundBlockBasedProtocol implements SavingsProtocol {
+export default class CompoundBlockBasedProtocol implements SavingsProtocol {
     private DEFAULT_APR = '0.00'
 
     private _apr = '0.00'

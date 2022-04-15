@@ -18,7 +18,6 @@ export default class CompoundLikeFetcher {
     static async lookupMeta(marketAddress: string, web3: Web3) {
         const contract = createContract<CERC20>(web3, marketAddress, CERC20ABI as AbiItem[])
         try {
-            // const symbol = await contract?.methods.symbol().call()
             const underlying = await contract?.methods.underlying().call()
             return [underlying, marketAddress]
         } catch (error) {
@@ -33,7 +32,9 @@ export default class CompoundLikeFetcher {
         if (comptroller === null) {
             return []
         }
+        console.log('allMarkets fetch')
         const allMarkets = await comptroller.methods.getAllMarkets().call()
+        console.log('allMarkets', allMarkets)
         const allMarketsPairs = await Promise.all(allMarkets.map((market: string) => this.lookupMeta(market, web3)))
         const allTokens =
             compact(flatten(allMarketsPairs)).map((m) => {
@@ -44,6 +45,7 @@ export default class CompoundLikeFetcher {
 
     static async fetch(compAddress: string, chainId: ChainId, web3: Web3) {
         const cacheValue = cache.get(compAddress)
+        console.log('cacheValue', cacheValue)
         if (cacheValue !== undefined && cacheValue !== null) {
             return cacheValue
         }

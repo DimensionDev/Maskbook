@@ -7,6 +7,7 @@ import { aurigamiLazyResolver } from './aurigami/pairs'
 import { alpacaLazyResolver } from './alpaca/pairs'
 import { giestLazyResolver } from './giest/pairs'
 import { moolaLazyResolver } from './moola/pairs'
+import { tranquilLazyResolver } from './tranquil/pairs'
 
 export const SavingsProtocols = [...LDO_PAIRS]
 
@@ -18,4 +19,5 @@ export const LazyProtocolsResolvers = [
     alpacaLazyResolver,
     giestLazyResolver,
     moolaLazyResolver,
+    tranquilLazyResolver,
 ]

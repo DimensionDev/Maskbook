@@ -1,8 +1,8 @@
 import { ProtocolType } from '../../types'
-import CompoundTimestampBasedProtocol from '../common/protocol/CompoundTimestampBasedProtocol'
+import CompoundBlockBasedProtocol from '../common/protocol/CompoundBlockBasedProtocol'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 
-export default class CompoundProtocol extends CompoundTimestampBasedProtocol {
+export default class CompoundProtocol extends CompoundBlockBasedProtocol {
     static nativeToken = 'cETH'
 
     constructor(pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {

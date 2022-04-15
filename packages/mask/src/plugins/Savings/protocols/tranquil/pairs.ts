@@ -1,44 +1,58 @@
 import type Web3 from 'web3'
 import { ChainId, FungibleTokenDetailed, createNativeToken } from '@masknet/web3-shared-evm'
 import type { SavingsProtocol, ProtocolPairsResolver } from '../../types'
-import { ProtocolType } from '../../types'
-
 import CompoundLikeFetcher from '../common/CompoundLikeFetcher'
-import CompoundTimestampBasedProtocol from '../common/protocol/CompoundTimestampBasedProtocol'
+import TranquilProtocol from './TranquilProtocol'
+import type { RewardToken, PairConfig } from '../common/protocol/BenQiRewardProtocol'
 
 // https://github.com/vfat-tools/vfat-tools/blob/6329bce901461f1320afa06d5daf95fc4bcd1cec/src/static/js/harmony_tranquil.js#L135
 export const TRANQUIL_COMPTROLLER = '0x6a82A17B48EF6be278BBC56138F35d04594587E3'
-const defaultChain = ChainId.Aurora
+export const TRANQUIL_Oracle = '0x0C99E05CD2dCb52A583a3694F4d91813eFb5B071'
+export const TRANQ_ADDRESS = '0xcf1709ad76a79d5a60210f23e81ce2460542a836'
+export const rewardTokens: Array<RewardToken> = [
+    {
+        symbol: 'TRANQ',
+        rewardType: 0,
+    },
+    {
+        symbol: 'tqONE',
+        rewardType: 1,
+    },
+]
 
-const TokenLogos: { [key: string]: string } = {
-    STNEAR: 'https://static.debank.com/image/aurora_token/logo_url/0xc42c30ac6cc15fac9bd938618bcaa1a1fae8501d/af4e945c578e905bd2e9dd50deb46972.png',
-    USDT: 'https://static.debank.com/image/aurora_token/logo_url/0x4988a896b1227218e4a686fde5eabdcabd91571f/3c1a718331e468abe1fc2ebe319f6c77.png',
-    AURORA: 'https://static.debank.com/image/aurora_token/logo_url/0x8bec47865ade3b172a928df8f990bc7f2a3b9f79/ec63b91b7247ce338caa842eb6439530.png',
-    USDC: 'https://static.debank.com/image/aurora_token/logo_url/0xb12bfca5a55806aaf64e99521918a4bf0fc40802/43cebbf7a996ebbb31c6b1513e282f0b.png',
-    NEAR: 'https://static.debank.com/image/aurora_token/logo_url/0xc42c30ac6cc15fac9bd938618bcaa1a1fae8501d/af4e945c578e905bd2e9dd50deb46972.png',
-    WBTC: 'https://static.debank.com/image/aurora_token/logo_url/0xf4eb217ba2454613b15dbdea6e5f22276410e89e/4b8dce79188a892a6ebf6caeec886bed.png',
-    TRI: 'https://static.debank.com/image/aurora_token/logo_url/0xfa94348467f64d5a457f75f8bc40495d33c65abb/f529cbfca541546078d1aa49ecf81056.png',
+const pairConfig = <PairConfig>{
+    comptroller: TRANQUIL_COMPTROLLER,
+    oracle: TRANQUIL_Oracle,
 }
 
-export default class TranquilProtocol extends CompoundTimestampBasedProtocol {
-    static nativeToken = 'tqONE'
+const defaultChain = ChainId.Harmony
 
-    constructor(pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {
-        super(pair, TranquilProtocol.nativeToken)
-    }
-
-    override get type() {
-        return ProtocolType.BENQI
-    }
+// https://openapi.debank.com/v1/token/list_by_ids?is_all=true&has_balance=true&ids=0x3095c7557bCb296ccc6e363DE01b760bA031F2d9,0x6983D1E6DEf3690C4d616b13597A09e6193EA013,0x985458E523dB3d53125813eD68c274899e9DfAb4,0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f,0x22D62b19b7039333ad773b7185BB61294F3AdC19,0xEf977d2f931C1978Db5F6747666fa1eACB0d0339,0xdc54046c0451f9269FEe1840aeC808D36015697d
+// // temp1.filter(c => c.chain == 'ftm').reduce((all, item) => { all[item.symbol] = item.logo_url;  return all; }, {})
+const TokenLogos: { [key: string]: string } = {
+    ONE: 'https://static.debank.com/image/hmy_token/logo_url/0x22d62b19b7039333ad773b7185bb61294f3adc19/2f50553aafc56d830f636a2d67487786.png',
+    stONE: 'https://static.debank.com/image/hmy_token/logo_url/0x22d62b19b7039333ad773b7185bb61294f3adc19/2f50553aafc56d830f636a2d67487786.png',
+    '1WBTC':
+        'https://static.debank.com/image/hmy_token/logo_url/0x3095c7557bcb296ccc6e363de01b760ba031f2d9/4b8dce79188a892a6ebf6caeec886bed.png',
+    '1USDT':
+        'https://static.debank.com/image/hmy_token/logo_url/0x3c2b8be99c50593081eaa2a724f0b8285f5aba8f/3c1a718331e468abe1fc2ebe319f6c77.png',
+    '1ETH': 'https://static.debank.com/image/hmy_token/logo_url/0x6983d1e6def3690c4d616b13597a09e6193ea013/56f5de0d16e8848bb9ff27cbd8f73f30.png',
+    '1USDC':
+        'https://static.debank.com/image/hmy_token/logo_url/0x985458e523db3d53125813ed68c274899e9dfab4/43cebbf7a996ebbb31c6b1513e282f0b.png',
+    '1BTC': 'https://static.debank.com/image/hmy_token/logo_url/0xdc54046c0451f9269fee1840aec808d36015697d/ed6d39af4cdeca39b6d19dab162b5c02.png',
+    '1DAI': 'https://static.debank.com/image/hmy_token/logo_url/0xef977d2f931c1978db5f6747666fa1eacb0d0339/61b18dee6896c6dab0684a78d0eee10a.png',
 }
 
 export class TranquilPairResolver implements ProtocolPairsResolver {
     public supportChains: ChainId[] = [defaultChain]
+    public rewardTokens: Array<RewardToken> = rewardTokens
+
     public async resolve(chainId: ChainId, web3: Web3): Promise<SavingsProtocol[]> {
         if (!this.supportChains.includes(defaultChain)) {
             return []
         }
         const allPairs = await CompoundLikeFetcher.fetch(TRANQUIL_COMPTROLLER, chainId, web3)
+        console.log('allPairs', allPairs)
         return (
             allPairs
                 // .filter(
@@ -50,9 +64,9 @@ export class TranquilPairResolver implements ProtocolPairsResolver {
                     if (stakeToken.symbol === TranquilProtocol.nativeToken) {
                         pair[0] = createNativeToken(defaultChain)
                     }
-
-                    if (bareToken.symbol) bareToken.logoURI = TokenLogos[bareToken.symbol]
-                    return new TranquilProtocol(pair)
+                    const baseToken = pair[0]
+                    if (baseToken.symbol) baseToken.logoURI = TokenLogos[baseToken.symbol]
+                    return new TranquilProtocol(pair, allPairs, this.rewardTokens, pairConfig)
                 })
         )
     }

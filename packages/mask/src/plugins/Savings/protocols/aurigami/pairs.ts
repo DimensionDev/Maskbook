@@ -1,11 +1,15 @@
 import type Web3 from 'web3'
 import { ChainId, FungibleTokenDetailed, createNativeToken } from '@masknet/web3-shared-evm'
 import type { SavingsProtocol, ProtocolPairsResolver } from '../../types'
-// import { AURIGAMI_COMPTROLLER } from '../../constants'
 import CompoundLikeFetcher from '../common/CompoundLikeFetcher'
 import AurigamiProtocol from './AurigamiProtocol'
+import type { PairConfig } from '../common/protocol/BenQiRewardProtocol'
 
+// https://app.aurigami.finance/assets/vendor.1efcd1de.js  search: 'COMPTROLLER:'
 export const AURIGAMI_COMPTROLLER = '0x817af6cfAF35BdC1A634d6cC94eE9e4c68369Aeb'
+export const AURIGAMI_ORACLE = '0xC6e5185438e1730959c1eF3551059A3feC744E90'
+export const AURIGAMI_LENS = '0xC41a5C1625d492436600789469c1CE2eA20CEA6B'
+
 const excludePairs = ['DAI']
 const TokenLogos: { [key: string]: string } = {
     STNEAR: 'https://static.debank.com/image/aurora_token/logo_url/0xc42c30ac6cc15fac9bd938618bcaa1a1fae8501d/af4e945c578e905bd2e9dd50deb46972.png',
@@ -15,6 +19,12 @@ const TokenLogos: { [key: string]: string } = {
     NEAR: 'https://static.debank.com/image/aurora_token/logo_url/0xc42c30ac6cc15fac9bd938618bcaa1a1fae8501d/af4e945c578e905bd2e9dd50deb46972.png',
     WBTC: 'https://static.debank.com/image/aurora_token/logo_url/0xf4eb217ba2454613b15dbdea6e5f22276410e89e/4b8dce79188a892a6ebf6caeec886bed.png',
     TRI: 'https://static.debank.com/image/aurora_token/logo_url/0xfa94348467f64d5a457f75f8bc40495d33c65abb/f529cbfca541546078d1aa49ecf81056.png',
+}
+
+const pairConfig = <PairConfig>{
+    comptroller: AURIGAMI_COMPTROLLER,
+    oracle: AURIGAMI_ORACLE,
+    lens: AURIGAMI_LENS,
 }
 
 export class AurigamiPairResolver implements ProtocolPairsResolver {
@@ -36,7 +46,7 @@ export class AurigamiPairResolver implements ProtocolPairsResolver {
                 }
 
                 if (bareToken.symbol) bareToken.logoURI = TokenLogos[bareToken.symbol]
-                return new AurigamiProtocol(pair)
+                return new AurigamiProtocol(pair, allPairs, pairConfig)
             })
     }
 }

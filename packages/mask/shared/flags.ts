@@ -56,6 +56,7 @@ export const Flags = {
     fantom_enabled: true,
     flow_enabled: true,
     celo_enabled: true,
+    harmony_enabled: true,
     aurora_enabled: true,
     nft_airdrop_enabled: false,
     post_actions_enabled: true,
