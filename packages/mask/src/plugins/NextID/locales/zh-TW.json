@@ -18,6 +18,9 @@
     "tip_to": "到",
     "token_insufficient_balance": "餘額不足",
     "tip_type_token": "代幣",
+    "tip_type_nft": "非同質化代幣 (NFT)",
+    "tip_wallets_missed": "錢包定位失敗！",
     "send_tip": "送出",
-    "sending_tip": "傳送中…"
+    "sending_tip": "傳送中…",
+    "send_tip_successfully": "小費打賞成功"
 }

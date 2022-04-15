@@ -2,7 +2,6 @@ import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransi
 import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { ImagePayloadIcon } from '@masknet/icons'
 import { Send } from '@mui/icons-material'
@@ -10,15 +9,15 @@ import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
 import { CharLimitIndicator } from './CharLimitIndicator'
 import { useI18N } from '../../utils'
-import { Flags } from '../../../shared'
-import { debugModeSetting } from '../../settings/settings'
+import { Flags, PersistentStorages } from '../../../shared'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
 import type { Profile } from '../../database'
-import { CompositionContext } from '@masknet/plugin-infra'
+import { CompositionContext } from '@masknet/plugin-infra/content-script'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { Trans } from 'react-i18next'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
+import { useSubscription } from 'use-subscription'
 
 const useStyles = makeStyles()({
     root: {
@@ -289,7 +288,7 @@ function useEncryptionEncode(props: Pick<CompositionProps, 'supportImageEncoding
 }
 
 function useMetadataDebugger(context: CompositionContext, Editor: TypedMessageEditorRef | null) {
-    const isDebug = useValueRef(debugModeSetting)
+    const isDebug = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
     const [__MetadataDebuggerMeta, __configureMetadataDebugger] = useState<TypedMessage['meta'] | null>(null)
 
     const __syncMetadataDebugger = () => {

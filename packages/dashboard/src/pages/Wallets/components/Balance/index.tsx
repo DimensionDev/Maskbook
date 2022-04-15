@@ -1,5 +1,5 @@
 import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { MiniNetworkSelector } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskColorVar } from '@masknet/theme'

@@ -1,6 +1,6 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
-import type { PostInfo } from '@masknet/plugin-infra'
+import type { IdentityResolved, PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
     Identifier,
     ObservableWeakMap,
@@ -88,7 +88,6 @@ export namespace SocialNetworkUI {
         customization: Customization.Define
         configuration: Configuration.Define
     }
-    export type State = AutonomousState & ManagedState
     /** The init() should setup watcher for those states */
     export interface AutonomousState {
         /** @deprecated Performance. Don't use it. */
@@ -96,7 +95,6 @@ export namespace SocialNetworkUI {
         /** My profiles at current network */
         readonly profiles: ValueRef<readonly Profile[]>
     }
-    export interface ManagedState {}
     export interface RuntimePermission {
         /** This function should check if Mask has the permission to the site */
         has(): Promise<boolean>
@@ -227,7 +225,6 @@ export namespace SocialNetworkUI {
             getSearchedKeyword?(): string
         }
         export type ProfileUI = { bioContent: string }
-        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar' | 'bio' | 'homepage'>
 
         /** Resolve the information of who am I on the current network. */
         export interface IdentityResolveProvider {

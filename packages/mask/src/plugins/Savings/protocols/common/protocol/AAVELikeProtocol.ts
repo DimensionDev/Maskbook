@@ -104,16 +104,14 @@ export default class AAVELikeProtocol implements SavingsProtocol {
             const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
             const operation = await this.createDepositTokenOperation(account, chainId, web3, value)
             if (operation) {
-                await operation.send({
+                return operation.send({
                     from: account,
                     gas: gasEstimate.toNumber(),
                 })
-                return true
             }
-            return false
-        } catch (error) {
-            return false
-        }
+        } catch (error) {}
+
+        return null
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {

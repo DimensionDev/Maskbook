@@ -1,7 +1,7 @@
 import { memo, useContext, useEffect, useState } from 'react'
-import type { TypedMessageImage } from '../../../base'
-import { useMetadataRender } from '../MetadataRender'
-import { RenderFragmentsContext, DefaultRenderFragments } from '../utils/RenderFragments'
+import type { TypedMessageImage } from '../../../base/index.js'
+import { useMetadataRender } from '../MetadataRender.js'
+import { RenderFragmentsContext, DefaultRenderFragments } from '../utils/RenderFragments.js'
 
 export const TypedMessageImageRenderer = memo(function TypedMessageImageRenderer(props: TypedMessageImage) {
     const { Image = DefaultRenderFragments.Image } = useContext(RenderFragmentsContext)

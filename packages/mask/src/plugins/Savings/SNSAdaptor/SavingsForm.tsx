@@ -1,32 +1,39 @@
 import BigNumber from 'bignumber.js'
 import { Typography } from '@mui/material'
-import { useState, useMemo, useCallback } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { unreachable } from '@dimensiondev/kit'
 import { isGreaterThan, isLessThan, rightShift, ZERO } from '@masknet/web3-shared-base'
 import {
-    EthereumTokenType,
-    useFungibleTokenBalance,
-    useWeb3,
-    useAccount,
-    formatCurrency,
-    formatBalance,
-    isSameAddress,
-    useTokenConstants,
     createERC20Token,
+    EthereumTokenType,
+    formatBalance,
+    formatCurrency,
+    isSameAddress,
+    TransactionState,
+    TransactionStateType,
+    useAccount,
+    useFungibleTokenBalance,
+    useTokenConstants,
+    useWeb3,
 } from '@masknet/web3-shared-evm'
-import { TokenAmountPanel, FormattedCurrency, LoadingAnimation, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, LoadingAnimation, TokenAmountPanel, TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
-import { TabType, ProtocolType, SavingsProtocol } from '../types'
+import { ProtocolType, SavingsProtocol, TabType } from '../types'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { WalletMessages } from '../../Wallet/messages'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+
 export interface SavingsFormProps {
     chainId: number
     protocol: SavingsProtocol
@@ -43,7 +50,9 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
-
+    const [tradeState, setTradeState] = useState<TransactionState>({
+        type: TransactionStateType.UNKNOWN,
+    })
     const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', chainId)
 
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
@@ -132,14 +141,45 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
         }
     }, [protocol.bareToken, inputAmount, chainId])
 
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
+        WalletMessages.events.transactionDialogUpdated,
+        (ev) => {
+            if (ev.open) return
+            setTradeState({
+                type: TransactionStateType.UNKNOWN,
+            })
+        },
+    )
+
     const [, executor] = useAsyncFn(async () => {
         switch (tab) {
             case TabType.Deposit:
-                if (!(await protocol.deposit(account, chainId, web3, tokenAmount))) {
-                    throw new Error('Failed to deposit token.')
-                } else {
-                    await protocol.updateBalance(chainId, web3, account)
-                }
+                setTradeState({
+                    type: TransactionStateType.WAIT_FOR_CONFIRMING,
+                })
+                const receipt = await protocol.deposit(account, chainId, web3, tokenAmount)
+                if (receipt === null) throw new Error('Failed to deposit token.')
+                console.log('receipt', receipt)
+                setTradeState({
+                    type: TransactionStateType.RECEIPT,
+                    receipt: receipt,
+                })
+
+                // if (
+                //         setTradeState((prev) => {
+                //             if (
+                //                 prev.type === TransactionStateType.UNKNOWN &&
+                //                 state.type === TransactionStateType.CONFIRMED
+                //             )
+                //                 return prev
+                //             return state
+                //         })
+                //     }))
+                // ) {
+                //     throw new Error('Failed to deposit token.')
+                // } else {
+                //     await protocol.updateBalance(chainId, web3, account)
+                // }
                 return
             case TabType.Withdraw:
                 switch (protocol.type) {
@@ -159,6 +199,24 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                 unreachable(tab)
         }
     }, [tab, protocol, account, chainId, web3, tokenAmount])
+
+    useEffect(() => {
+        if (tradeState.type === TransactionStateType.UNKNOWN) return
+        setTransactionDialog({
+            open: true,
+            state: tradeState,
+            shareText: [
+                `I just deposit ${inputAmount} ${protocol.bareToken.symbol} with . ${
+                    isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                        ? `Follow @${
+                              isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                          } (mask.io) to deposit.`
+                        : ''
+                }`,
+                '#mask_io',
+            ].join('\n'),
+        })
+    }, [tradeState])
 
     const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
 

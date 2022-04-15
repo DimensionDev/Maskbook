@@ -1,4 +1,4 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { CurrencyType, formatBalance, getTokenConstants, isSameAddress } from '@masknet/web3-shared-evm'
 
 // TODO: remove

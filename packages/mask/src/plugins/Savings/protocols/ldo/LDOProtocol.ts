@@ -3,9 +3,9 @@ import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import {
     ChainId,
-    getLidoConstants,
     createContract,
     FungibleTokenDetailed,
+    getLidoConstants,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { ZERO } from '@masknet/web3-shared-base'
@@ -88,17 +88,16 @@ export class LidoProtocol implements SavingsProtocol {
                 getLidoConstants(chainId).LIDO_stETH_ADDRESS || ZERO_ADDRESS,
                 LidoABI as AbiItem[],
             )
-            await contract?.methods.submit(getLidoConstants(chainId).LIDO_REFERRAL_ADDRESS || ZERO_ADDRESS).send({
+            if (contract === null) return null
+            return contract.methods.submit(getLidoConstants(chainId).LIDO_REFERRAL_ADDRESS || ZERO_ADDRESS).send({
                 from: account,
                 value: value.toString(),
                 gas: 300000,
             })
-
-            return true
         } catch (error) {
             console.error('LDO `deposit()` Error', error)
-            return false
         }
+        return null
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {

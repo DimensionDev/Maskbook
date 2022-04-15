@@ -10,7 +10,7 @@ let id = 0
 interface Task extends TipTask {
     id: number
 }
-export const TipTaskManager: FC = ({ children }) => {
+export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const [tasks, setTasks] = useState<Task[]>(EMPTY_LIST)
 
     const removeTask = useCallback((task: Task) => {

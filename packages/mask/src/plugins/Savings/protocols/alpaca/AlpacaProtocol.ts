@@ -156,13 +156,11 @@ export class AlpacaProtocol implements SavingsProtocol {
                           from: account,
                           gas: gasEstimate.toNumber(),
                       }
-                await operation.send(args)
-                return true
+                return operation.send(args)
             }
-            return false
-        } catch (error) {
-            return false
-        }
+        } catch (error) {}
+
+        return null
     }
 
     private async createWithdrawTokenOperation(web3: Web3, value: BigNumber.Value) {

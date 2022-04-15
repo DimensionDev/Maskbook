@@ -54,6 +54,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     classes?: Partial<Record<InjectedDialogClassKey, string>>
     onClose?(): void
     title?: React.ReactChild
+    titleTail?: React.ReactChild | null
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
@@ -78,8 +79,17 @@ export function InjectedDialog(props: InjectedDialogProps) {
     const t = useSharedI18N()
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
     const isDashboard = isDashboardPage()
-    const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, disableTitleBorder, ...rest } =
-        props
+    const {
+        children,
+        open,
+        disableBackdropClick,
+        titleBarIconStyle,
+        onClose,
+        title,
+        titleTail = null,
+        disableTitleBorder,
+        ...rest
+    } = props
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
     const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
@@ -128,6 +138,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">
                                 {title}
                             </Typography>
+                            {titleTail}
                         </DialogTitle>
                     ) : null}
                     {/* There is a .MuiDialogTitle+.MuiDialogContent selector that provides paddingTop: 0 */}
@@ -150,7 +161,7 @@ function CopyElementWithNewProps<T>(
         Children.map(children, (child: any) =>
             child?.type === Target
                 ? cloneElement(child, {
-                      classes: mergeClasses(extraClasses, child.props.classes),
+                      classes: mergeClasses(extraClasses as any, child.props.classes),
                   } as DialogContentProps)
                 : null,
         ) || []

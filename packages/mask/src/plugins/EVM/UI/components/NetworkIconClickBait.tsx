@@ -1,6 +1,6 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
 import { unreachable } from '@dimensiondev/kit'
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getChainIdFromNetworkType, isFortmaticSupported, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../../Wallet/messages'

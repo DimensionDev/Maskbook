@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type { PayloadParseResult, Signature } from '../payload'
 import { Ok } from 'ts-results'
 import { PayloadException } from '../types'

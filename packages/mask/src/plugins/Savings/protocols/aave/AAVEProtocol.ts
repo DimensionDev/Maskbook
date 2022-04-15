@@ -4,9 +4,9 @@ import BigNumber from 'bignumber.js'
 import { pow10, ZERO } from '@masknet/web3-shared-base'
 import {
     ChainId,
-    getAaveConstants,
     createContract,
     FungibleTokenDetailed,
+    getAaveConstants,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import type { AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool'
@@ -174,16 +174,38 @@ export class AAVEProtocol implements SavingsProtocol {
             const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
             const operation = await this.createDepositTokenOperation(account, chainId, web3, value)
             if (operation) {
-                await operation.send({
+                // await operation
+                //     .send({
+                //         from: account,
+                //         gas: gasEstimate.toNumber(),
+                //     })
+                //     .on(TransactionEventType.ERROR, (error) => {
+                //         onChange({
+                //             type: TransactionStateType.FAILED,
+                //             error: error,
+                //         })
+                //     })
+                //     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                //         onChange({
+                //             type: TransactionStateType.CONFIRMED,
+                //             no,
+                //             receipt,
+                //         })
+                //     })
+                return operation.send({
                     from: account,
                     gas: gasEstimate.toNumber(),
                 })
-                return true
             }
-            return false
+            return null
         } catch (error) {
-            return false
+            // onChange({
+            //     type: TransactionStateType.FAILED,
+            //     error: new Error('deposit failed'),
+            // })
+            // return false
         }
+        return null
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {

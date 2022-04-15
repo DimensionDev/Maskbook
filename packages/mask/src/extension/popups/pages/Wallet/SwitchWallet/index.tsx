@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useCopyToClipboard } from 'react-use'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { WalletItem } from './WalletItem'
@@ -89,8 +88,6 @@ const SwitchWallet = memo(() => {
     const wallet = useWallet()
     const wallets = useWallets(ProviderType.MaskWallet)
 
-    const [, copyToClipboard] = useCopyToClipboard()
-
     const handleClickCreate = useCallback(() => {
         if (!walletPrimary) {
             browser.tabs.create({
@@ -103,7 +100,7 @@ const SwitchWallet = memo(() => {
     }, [walletPrimary, history])
 
     const handleSelect = useCallback(
-        async (address) => {
+        async (address: string | undefined) => {
             await WalletRPC.updateMaskAccount({
                 account: address,
             })
@@ -114,13 +111,6 @@ const SwitchWallet = memo(() => {
             navigate(PopupRoutes.Wallet, { replace: true })
         },
         [history],
-    )
-
-    const onCopy = useCallback(
-        (address: string) => {
-            copyToClipboard(address)
-        },
-        [copyToClipboard],
     )
 
     return (

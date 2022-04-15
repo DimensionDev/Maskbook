@@ -13,7 +13,6 @@ import { clickSeeMore } from '../injection/PostInspector'
 import { startWatch } from '../../../utils/watcher'
 import { facebookShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
-import { Flags } from '../../../../shared'
 import { collectNodeText } from '../../../utils'
 import { None, Some, Option } from 'ts-results'
 
@@ -42,8 +41,8 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 .closest('[role=article] div[dir="auto"] > [id] > div > div')
 
             const rootProxy = DOMProxy({
-                afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
-                beforeShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
+                afterShadowRootInit: { mode: 'closed' },
+                beforeShadowRootInit: { mode: 'closed' },
             })
             rootProxy.realCurrent = root.evaluate()[0] as HTMLElement
 

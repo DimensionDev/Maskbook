@@ -134,13 +134,11 @@ export default class CompoundTimestampBasedProtocol implements SavingsProtocol {
                       gas: gasEstimate.toNumber(),
                   }
             if (operation) {
-                await operation.send(args)
-                return true
+                return operation.send(args)
             }
-            return false
-        } catch (error) {
-            return false
-        }
+        } catch (error) {}
+
+        return null
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {

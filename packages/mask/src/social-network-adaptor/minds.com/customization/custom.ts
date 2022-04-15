@@ -3,9 +3,9 @@ import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/mate
 import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { SubscriptionFromValueRef } from '@masknet/shared-base'
+import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import type { SocialNetworkUI } from '../../../social-network'
-import { fromRGB, getBackgroundColor, getForegroundColor, shade, toRGB } from '../../../utils/theme-tools'
+import { fromRGB, getBackgroundColor, getForegroundColor, shade, toRGB } from '../../../utils/theme'
 import { themeListItemSelector } from '../utils/selector'
 
 // TODO: get this from DOM. But currently Minds has a single primary color
@@ -15,7 +15,7 @@ const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
 
 const currentTheme = new ValueRef<PaletteMode>('light')
 export const PaletteModeProviderMinds: SocialNetworkUI.Customization.PaletteModeProvider = {
-    current: SubscriptionFromValueRef(currentTheme),
+    current: createSubscriptionFromValueRef(currentTheme),
     start: startWatchThemeColor,
 }
 
