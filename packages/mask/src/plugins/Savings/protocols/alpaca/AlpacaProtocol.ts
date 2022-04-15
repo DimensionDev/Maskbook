@@ -158,9 +158,9 @@ export class AlpacaProtocol implements SavingsProtocol {
                       }
                 return operation.send(args)
             }
-        } catch (error) {}
-
-        return null
+        } catch (error) {
+            throw error
+        }
     }
 
     private async createWithdrawTokenOperation(web3: Web3, value: BigNumber.Value) {

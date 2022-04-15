@@ -129,9 +129,9 @@ export default class CompoundBlockBasedProtocol implements SavingsProtocol {
             if (operation) {
                 return operation.send(args)
             }
-        } catch (error) {}
-
-        return null
+        } catch (error) {
+            throw error
+        }
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {

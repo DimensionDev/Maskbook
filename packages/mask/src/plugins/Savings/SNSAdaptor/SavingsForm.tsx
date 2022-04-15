@@ -33,6 +33,7 @@ import { WalletMessages } from '../../Wallet/messages'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { AllProtocolInfos } from '../info'
 
 export interface SavingsFormProps {
     chainId: number
@@ -157,29 +158,29 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                 setTradeState({
                     type: TransactionStateType.WAIT_FOR_CONFIRMING,
                 })
-                const receipt = await protocol.deposit(account, chainId, web3, tokenAmount)
-                if (receipt === null) throw new Error('Failed to deposit token.')
-                console.log('receipt', receipt)
-                setTradeState({
-                    type: TransactionStateType.RECEIPT,
-                    receipt: receipt,
-                })
+                let receipt
+                try {
+                    receipt = await protocol.deposit(account, chainId, web3, tokenAmount)
+                    if (receipt !== null) {
+                        setTradeState({
+                            type: TransactionStateType.CONFIRMED,
+                            no: 1,
+                            receipt: receipt,
+                        })
+                        await protocol.updateBalance(chainId, web3, account)
+                    }
+                } catch (error) {
+                    setTradeState({
+                        type: TransactionStateType.FAILED,
+                        error: error as Error,
+                    })
+                }
 
-                // if (
-                //         setTradeState((prev) => {
-                //             if (
-                //                 prev.type === TransactionStateType.UNKNOWN &&
-                //                 state.type === TransactionStateType.CONFIRMED
-                //             )
-                //                 return prev
-                //             return state
-                //         })
-                //     }))
-                // ) {
-                //     throw new Error('Failed to deposit token.')
-                // } else {
-                //     await protocol.updateBalance(chainId, web3, account)
-                // }
+                if (receipt !== null) {
+                    await protocol.updateBalance(chainId, web3, account)
+                } else {
+                    throw new Error('Failed to deposit token.')
+                }
                 return
             case TabType.Withdraw:
                 switch (protocol.type) {
@@ -202,11 +203,16 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
 
     useEffect(() => {
         if (tradeState.type === TransactionStateType.UNKNOWN) return
+
+        const protocolInfo = AllProtocolInfos[protocol.type]
+        const currentApr = protocol.apr
         setTransactionDialog({
             open: true,
             state: tradeState,
             shareText: [
-                `I just deposit ${inputAmount} ${protocol.bareToken.symbol} with . ${
+                `I just deposit ${inputAmount} ${protocol.bareToken.symbol} with @${
+                    protocolInfo.twitter
+                } for ${currentApr}% APR. ${
                     isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                         ? `Follow @${
                               isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')

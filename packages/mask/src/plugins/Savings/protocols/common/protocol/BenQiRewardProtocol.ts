@@ -7,8 +7,6 @@ import { createContract } from '@masknet/web3-shared-evm'
 import { ZERO } from '@masknet/web3-shared-base'
 import type { BenQiComptroller } from '@masknet/web3-contracts/types/BenQiComptroller'
 import BenQiComptrollerABI from '@masknet/web3-contracts/abis/BenQiComptroller.json'
-// import { BENQI_COMPTROLLER } from '../../constants'
-// import type { RewardToken } from './pairs'
 import type { BenqiChainlinkOracle } from '@masknet/web3-contracts/types/BenqiChainlinkOracle'
 import BenqiChainlinkOracleABI from '@masknet/web3-contracts/abis/BenqiChainlinkOracle.json'
 
@@ -154,6 +152,7 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
                 comptroller,
                 web3,
             )
+
             //  market supply
             const [totalSupply, exchangeRate] = await Promise.all([
                 market.methods.totalSupply().call(),
@@ -198,17 +197,6 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
                 .reduce((total, item) => {
                     return total.plus(item.apr)
                 }, ZERO)
-            // console.log('prices', this.bareToken.symbol, {
-            //     totalDistributionAPR: totalDistributionAPR.toString(),
-            //     marketPrice: marketPrice?.toString(10),
-            //     totalPrice: totalPrice.toString(10),
-            //     totalSupply,
-            //     exchangeRate,
-            //     pair: this.pair,
-            //     symbolWithPrice,
-            //     rewardsAPR,
-            //     totalSupplyAmount: totalSupplyAmount.toString(10),
-            // })
             return totalDistributionAPR
         } catch (error) {
             console.error('getDistributionAPR', error)

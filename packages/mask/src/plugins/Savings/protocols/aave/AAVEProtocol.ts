@@ -174,24 +174,6 @@ export class AAVEProtocol implements SavingsProtocol {
             const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
             const operation = await this.createDepositTokenOperation(account, chainId, web3, value)
             if (operation) {
-                // await operation
-                //     .send({
-                //         from: account,
-                //         gas: gasEstimate.toNumber(),
-                //     })
-                //     .on(TransactionEventType.ERROR, (error) => {
-                //         onChange({
-                //             type: TransactionStateType.FAILED,
-                //             error: error,
-                //         })
-                //     })
-                //     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
-                //         onChange({
-                //             type: TransactionStateType.CONFIRMED,
-                //             no,
-                //             receipt,
-                //         })
-                //     })
                 return operation.send({
                     from: account,
                     gas: gasEstimate.toNumber(),
@@ -199,13 +181,8 @@ export class AAVEProtocol implements SavingsProtocol {
             }
             return null
         } catch (error) {
-            // onChange({
-            //     type: TransactionStateType.FAILED,
-            //     error: new Error('deposit failed'),
-            // })
-            // return false
+            throw error
         }
-        return null
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {

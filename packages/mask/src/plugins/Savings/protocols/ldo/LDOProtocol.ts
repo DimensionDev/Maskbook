@@ -95,9 +95,8 @@ export class LidoProtocol implements SavingsProtocol {
                 gas: 300000,
             })
         } catch (error) {
-            console.error('LDO `deposit()` Error', error)
+            throw error
         }
-        return null
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
