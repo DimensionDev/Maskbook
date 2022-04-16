@@ -51,12 +51,10 @@ export function useAaveTokens(chainId: ChainId, web3: Web3) {
         chainId,
     )
 
-    return useMemo(() => {
-        return {
+    return useMemo(() => ({
             tokenPairs: splitToPair(detailedAaveTokens),
             loading: loading || loadingTokenDetails,
             error,
             retry,
-        }
-    }, [chainId, detailedAaveTokens, loadingTokenDetails])
+        }), [chainId, detailedAaveTokens, loadingTokenDetails])
 }
