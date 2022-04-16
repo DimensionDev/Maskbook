@@ -40,18 +40,14 @@ export function useYearnTokens(chainId: ChainId, web3: Web3) {
     }, [web3, chainId])
 
     const { value: detailedYFITokens, loading: loadingTokenDetails } = useFungibleTokensDetailed(
-        compact(flatten(yfiTokens ?? [])).map((address: string) => {
-            return { address, type: EthereumTokenType.ERC20 }
-        }) ?? [],
+        compact(flatten(yfiTokens ?? [])).map((address: string) => ({ address, type: EthereumTokenType.ERC20 })) ?? [],
         chainId,
     )
 
-    return useMemo(() => {
-        return {
+    return useMemo(() => ({
             tokenPairs: splitToPair(detailedYFITokens),
             loading: loading || loadingTokenDetails,
             error,
             retry,
-        }
-    }, [chainId, detailedYFITokens, loadingTokenDetails])
+    }), [chainId, detailedYFITokens, loadingTokenDetails])
 }

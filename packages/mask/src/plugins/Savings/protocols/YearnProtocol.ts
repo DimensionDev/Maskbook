@@ -99,7 +99,7 @@ export class YearnProtocol implements SavingsProtocol {
                 account,
                 {},
                 {
-                    gasLimit: gasEstimate.toNumber(),
+                    gasLimit: gasEstimate.isFinite() ? gasEstimate.toNumber() : Number.NaN,
                 },
             )
 
