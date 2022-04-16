@@ -1,18 +1,23 @@
-import { EthereumMethodType, EthereumRpcType, isSameAddress, isZeroAddress } from '@masknet/web3-shared-evm'
+import {
+    ComputedPayload,
+    EthereumMethodType,
+    EthereumRpcType,
+    EthereumTransactionConfig,
+    isSameAddress,
+    isZeroAddress,
+} from '@masknet/web3-shared-evm'
 import { getWeb3State } from '../..'
-import { getSendTransactionComputedPayload } from '../rpc'
+import { PayloadComputer } from '../payload'
 import type { Context, Middleware } from '../types'
 
-type ComputedPayload = UnboxPromise<ReturnType<typeof getSendTransactionComputedPayload>>
-
 export class AddressBook implements Middleware<Context> {
-    private getFrom(computedPayload: ComputedPayload) {
+    private getFrom(computedPayload?: ComputedPayload) {
         if (!computedPayload) return
-        const tx = computedPayload?._tx
-        return tx.from as string | undefined
+        const tx = (computedPayload as { _tx?: EthereumTransactionConfig })?._tx
+        return tx?.from as string | undefined
     }
 
-    private getTo(computedPayload: ComputedPayload) {
+    private getTo(computedPayload?: ComputedPayload) {
         if (!computedPayload) return
         switch (computedPayload.type) {
             case EthereumRpcType.SEND_ETHER:
@@ -32,7 +37,8 @@ export class AddressBook implements Middleware<Context> {
         if (context.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
 
         try {
-            const computedPayload = await getSendTransactionComputedPayload(context.config)
+            const computer = new PayloadComputer(context.connection)
+            const computedPayload = await computer.getSendTransactionComputedPayload(context.config)
             const from = this.getFrom(computedPayload)
             const to = this.getTo(computedPayload)
 

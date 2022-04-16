@@ -49,17 +49,17 @@ export type Color =
     | `#${string}${string}${string}`
     | `hsl(${number}, ${number}%, ${number}%)`
 
-// Borrow from @masknet/web3-shared-evm
-interface ERC721TokenInfo {
-    name?: string
-    description?: string
-    tokenURI?: string
-    mediaUrl?: string
-    imageURL?: string
-    owner?: string
-    // loading tokenURI
-    hasTokenDetailed?: boolean
-}
+// // Borrow from @masknet/web3-shared-evm
+// interface ERC721TokenInfo {
+//     name?: string
+//     description?: string
+//     tokenURI?: string
+//     mediaUrl?: string
+//     imageURL?: string
+//     owner?: string
+//     // loading tokenURI
+//     hasTokenDetailed?: boolean
+// }
 
 export declare namespace Web3Plugin {
     /**
@@ -468,43 +468,91 @@ export declare namespace Web3Plugin {
             /** The provider type of the currently visiting site. */
             providerType?: Subscription<ProviderType>
 
-            /** Connect with the provider. */
+            /** Connect with the provider and set chain id. */
             connect?: (chainId: ChainId, providerType: ProviderType) => Promise<Account>
             /** Discconect with the provider. */
-            discconect?: (providerType: ProviderType) => Promise<void>
+            disconect?: (providerType: ProviderType) => Promise<void>
             /** Invoke it when selected chain id of provider changed. */
             setChainId?: (providerType: ProviderType, chainId: ChainId) => Promise<void>
             /** Invoke it when selected account of provider changed. */
             setAccount?: (providerType: ProviderType, account: string) => Promise<void>
         }
-        export interface ProtocolState<ChainId, Signature, TransactionConfig> {
+        export interface ProtocolState<ChainId, Signature, TransactionConfig, SendOverrides, RequestOptions, Web3> {
+            /** Get web3 client */
+            getWeb3?: (sendOverrides?: SendOverrides, options?: RequestOptions) => Promise<Web3>
             /** Get the current account */
-            getAccont?: () => Promise<string>
+            getAccont?: (sendOverrides?: SendOverrides, options?: RequestOptions) => Promise<string>
             /** Get the current chain id */
-            getChainId?: () => Promise<ChainId>
+            getChainId?: (sendOverrides?: SendOverrides, options?: RequestOptions) => Promise<ChainId>
             /** Get the latest block height of chain */
-            getLatestBlockNumber?: (chainId: ChainId) => Promise<number>
+            getLatestBlockNumber?: (
+                chainId: ChainId,
+                sendOverrides?: SendOverrides,
+                options?: RequestOptions,
+            ) => Promise<number>
             /** Get the latest balance of account */
-            getLatestBalance?: (chainId: ChainId, account: string) => Promise<string>
+            getLatestBalance?: (
+                chainId: ChainId,
+                account: string,
+                sendOverrides?: SendOverrides,
+                options?: RequestOptions,
+            ) => Promise<string>
             /** Get transaction status */
-            getTransactionStatus?: (chainId: ChainId, id: string) => Promise<TransactionStatusType>
+            getTransactionStatus?: (
+                chainId: ChainId,
+                id: string,
+                sendOverrides?: SendOverrides,
+                options?: RequestOptions,
+            ) => Promise<TransactionStatusType>
             /** Sign a plain message, some chain support multiple sign methods */
-            signMessage?: (address: string, message: string, signType?: string) => Promise<Signature>
+            signMessage?: (
+                address: string,
+                message: string,
+                signType?: string,
+                sendOverrides?: SendOverrides,
+                options?: RequestOptions,
+            ) => Promise<Signature>
             /** Verify a signed message */
             verifyMessage?: (
                 address: string,
                 messsage: string,
                 signature: Signature,
                 signType?: string,
+                sendOverrides?: SendOverrides,
+                options?: RequestOptions,
             ) => Promise<boolean>
+            /** Add a sub-network */
+            addChain?: (chainId: ChainId, sendOverrides?: SendOverrides, options?: RequestOptions) => Promise<void>
+            /** Switch to sub network */
+            switchChain?: (chainId: ChainId, sendOverrides?: SendOverrides, options?: RequestOptions) => Promise<void>
             /** Sign a transaction, and the result could send as a raw transaction */
-            signTransaction?: (address: string, transaction: TransactionConfig) => Promise<string>
+            signTransaction?: (
+                address: string,
+                transaction: TransactionConfig,
+                sendOverrides?: SendOverrides,
+                options?: RequestOptions,
+            ) => Promise<string>
             /** Send raw transaction and get tx id */
-            sendSignedTransaction?: (chainid: ChainId, rawTransaction: string) => Promise<string>
+            sendSignedTransaction?: (
+                chainid: ChainId,
+                rawTransaction: string,
+                sendOverrides?: SendOverrides,
+                options?: RequestOptions,
+            ) => Promise<string>
             /** Send transaction and get tx id */
-            sendTransaction?: (chainId: ChainId, transaction: TransactionConfig) => Promise<string>
+            sendTransaction?: (
+                chainId: ChainId,
+                transaction: TransactionConfig,
+                sendOverrides?: SendOverrides,
+                options?: RequestOptions,
+            ) => Promise<string>
             /** Send (raw) transaction and wait until it confirmed */
-            sendAndConfirmTransaction?: (chainId: ChainId, transaction: TransactionConfig) => Promise<string>
+            sendAndConfirmTransaction?: (
+                chainId: ChainId,
+                transaction: TransactionConfig,
+                sendOverrides?: SendOverrides,
+                options?: RequestOptions,
+            ) => Promise<string>
         }
         export interface WalletState {
             /** The currently stored wallet by MaskWallet. */
@@ -553,6 +601,9 @@ export declare namespace Web3Plugin {
             NetworkType = string,
             Signature = string,
             TransactionConfig = unknown,
+            SendOverrides = unknown,
+            RequestOptions = unknown,
+            Web3 = unknown,
         > {
             AddressBook?: AddressBookState<ChainId>
             Asset?: AssetState<ChainId>
@@ -562,7 +613,7 @@ export declare namespace Web3Plugin {
             TokenPrice?: TokenPriceState<ChainId>
             TokenList?: TokenListState<ChainId>
             Transaction?: TransactionState<ChainId, TransactionConfig>
-            Protocol?: ProtocolState<ChainId, Signature, TransactionConfig>
+            Protocol?: ProtocolState<ChainId, Signature, TransactionConfig, SendOverrides, RequestOptions, Web3>
             Provider?: ProviderState<ChainId, NetworkType, ProviderType>
             Wallet?: WalletState
             Utils?: Others<ChainId>

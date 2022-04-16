@@ -16,15 +16,20 @@
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "@metamask/eth-sig-util": "^4.0.0",
+    "@servie/events": "^3.0.0",
+    "@walletconnect/client": "^1.7.5",
+    "@walletconnect/qrcode-modal": "^1.7.5",
+    "@walletconnect/types": "^1.7.7",
     "bignumber.js": "^9.0.2",
     "ethereumjs-util": "^7.1.0",
     "ethjs-ens": "^2.0.1",
+    "fortmatic": "^2.2.1",
     "react-use": "^17.3.2",
     "wallet.ts": "^1.0.1",
-    "web3": "1.5.2",
-    "web3-core": "1.5.2",
-    "web3-core-helpers": "1.5.2",
-    "web3-eth-abi": "1.5.2",
-    "web3-utils": "1.5.2"
+    "web3": "1.7.3",
+    "web3-core": "1.7.3",
+    "web3-core-helpers": "1.7.3",
+    "web3-eth-abi": "1.7.3",
+    "web3-utils": "1.7.3"
   }
 }

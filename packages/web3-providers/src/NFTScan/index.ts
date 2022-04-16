@@ -124,6 +124,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
         })
         if (!response?.data)
             return {
+                currentPage: 0,
                 data: [],
                 hasNextPage: false,
             }
@@ -131,6 +132,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             response.data.content.map(createERC721TokenAsset).map((x) => ({ ...x, provideBy: 'NFTScan' })) ?? []
         const total = response.data.total
         return {
+            currentPage: page,
             data,
             hasNextPage: total - (page + 1) * size > 0,
         }

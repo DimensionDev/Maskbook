@@ -1,4 +1,4 @@
-import type { Pagination, Web3Plugin } from '@masknet/plugin-infra'
+import type { Pagination, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { OpenSea, NFTScan, DeBank, Zerion } from '@masknet/web3-providers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 

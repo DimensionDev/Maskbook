@@ -1,5 +1,4 @@
 import type { Subscription } from 'use-subscription'
-import type { Web3Plugin, Plugin } from '@masknet/plugin-infra'
 import {
     EnhanceableSite,
     ExtensionSite,
@@ -8,11 +7,13 @@ import {
     mergeSubscription,
     StorageObject,
 } from '@masknet/shared-base'
+import type { Plugin } from '../types'
+import type { Web3Plugin } from '../web3-types'
 
 export interface ProviderStorage<Account, ProviderType extends string> {
-    /** Provider map to account settings. */
+    /** Providers map to account settings. */
     accounts: Record<ProviderType, Account>
-    /** Site map to provider type. */
+    /** Sites map to provider type. */
     providers: Record<EnhanceableSite | ExtensionSite, ProviderType>
 }
 
@@ -50,7 +51,9 @@ export class ProviderState<
 
         const site = this.site
         if (!site) return
+
         this.providerType = mapSubscription(this.storage.providers.subscription, (providers) => providers[site])
+
         this.chainId = mapSubscription(
             mergeSubscription<[ProviderType, Record<ProviderType, Account>]>(
                 this.providerType,

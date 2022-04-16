@@ -1,5 +1,6 @@
 import type { CompositeSignature, MutateOptions } from '@blocto/fcl'
-import type { Plugin, Web3Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-flow'
 import { AddressBook } from './AddressBook'
 import { Asset } from './Asset'

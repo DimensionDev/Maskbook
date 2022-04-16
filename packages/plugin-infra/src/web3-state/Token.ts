@@ -1,8 +1,8 @@
 import { uniqBy } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
-import type { Plugin, Web3Plugin } from '@masknet/plugin-infra'
 import { mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
-import { TokenType } from '../web3-types'
+import type { Plugin } from '../types'
+import { TokenType, Web3Plugin } from '../web3-types'
 
 export interface TokenStorage {
     fungibleTokens: Web3Plugin.FungibleToken[]

@@ -9,6 +9,7 @@ import {
     createNativeToken,
     createERC20Token,
 } from '@masknet/web3-shared-evm'
+import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra/web3'
 import type { NonFungibleTokenAPI } from '../types'
 import { getOrderUSDPrice, toImage } from './utils'
 import type {
@@ -21,7 +22,6 @@ import type {
 } from './types'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_KEY, OPENSEA_API_URL } from './constants'
 import { isProxyENV } from '../helpers'
-import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import getUnixTime from 'date-fns/getUnixTime'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: string) {
@@ -284,6 +284,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
             )
             .map((asset: OpenSeaResponse) => createNFTToken(chainId, asset))
         return {
+            currentPage: page,
             data: tokens,
             hasNextPage: tokens.length === size,
         }

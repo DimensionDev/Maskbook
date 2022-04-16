@@ -1,7 +1,6 @@
-import type { Pageable, Pagination } from '../types'
-import type { Web3Plugin } from '../web3-types'
+import type { Web3Plugin, Pageable, Pagination } from '../web3-types'
 
-async function* getItemsAsIterator<ChainId extends number, Item>(
+async function* getPagableItemsAsIterator<ChainId extends number, Item>(
     chainId: ChainId,
     address: string,
     getItems?: (chainId: ChainId, address: string, pagination: Pagination) => Promise<Pageable<Item>>,
@@ -20,7 +19,6 @@ async function* getItemsAsIterator<ChainId extends number, Item>(
     }
 
     const { startAt = 0, endAt = 10, size = 50 } = options
-
     let page = startAt
 
     while (page < endAt) {
@@ -36,8 +34,4 @@ async function* getItemsAsIterator<ChainId extends number, Item>(
     }
 }
 
-export class AssetState<ChainId extends number> implements Web3Plugin.ObjectCapabilities.AssetState<ChainId> {
-    getAllFungibleAssets(chainId: ChainId, address: string) {
-        return getItemsAsIterator(chainId, address, this.getAllFungibleAssets)
-    }
-}
+export class AssetState<ChainId extends number> implements Web3Plugin.ObjectCapabilities.AssetState<ChainId> {}

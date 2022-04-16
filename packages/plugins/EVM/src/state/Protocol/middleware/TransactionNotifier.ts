@@ -12,7 +12,6 @@ import {
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
-import { getTransactionByHash } from '../network'
 
 class ProgressManager {
     private watchedProgress: Map<string, TransactionProgress> = new Map()
@@ -113,7 +112,11 @@ export class TransactionNotifier implements Middleware<Context> {
                     const receipt = context.result as TransactionReceipt | undefined
                     if (receipt) {
                         const state = getTransactionState(receipt)
-                        const transaction = await getTransactionByHash(receipt.transactionHash)
+                        const transaction = await context.connection.getTransactionByHash(
+                            receipt.transactionHash,
+                            context.sendOverrides,
+                            context.requestOptions,
+                        )
                         this.progressManager.notifyTransactionProgress(transaction, state)
                     }
                     break

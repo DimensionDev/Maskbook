@@ -4,6 +4,8 @@ import { unreachable } from '@dimensiondev/kit'
 import type { TransactionState } from '../hooks'
 import { EthereumTransactionConfig, TransactionStateType, TransactionStatusType } from '../types'
 import { getReceiptStatus } from './payload'
+import { isEmptyHex } from './address'
+import { ZERO_ADDRESS } from '../constants'
 
 export function isEIP1559Transaction(receipt: EthereumTransactionConfig) {
     return typeof receipt.maxFeePerGas !== 'undefined' && typeof receipt.maxPriorityFeePerGas !== 'undefined'
@@ -50,6 +52,31 @@ export function isNextStateAvailable(type: TransactionStateType, nextType: Trans
         default:
             unreachable(nextType)
     }
+}
+
+export function getData(config: EthereumTransactionConfig) {
+    const { data } = config
+    if (!data) return
+    if (isEmptyHex(data)) return
+    if (!data.startsWith('0x')) return `0x${data}`
+    return data
+}
+
+export function getTo(config: EthereumTransactionConfig) {
+    const { to } = config
+    if (!to) return ZERO_ADDRESS
+    if (isEmptyHex(to)) return ZERO_ADDRESS
+    return to
+}
+
+export function getFunctionSignature(tx: EthereumTransactionConfig) {
+    const data = getData(tx)
+    return data?.slice(0, 10)
+}
+
+export function getFunctionParameters(tx: EthereumTransactionConfig) {
+    const data = getData(tx)
+    return data?.slice(10)
 }
 
 export function getTransactionSignature(transaction: Transaction | null) {

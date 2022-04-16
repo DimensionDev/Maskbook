@@ -1,5 +1,4 @@
 import type { RequestArguments } from 'web3-core'
-import { ExtensionSite } from '@masknet/shared-base'
 import {
     getPayloadChainId,
     getPayloadConfig,
@@ -12,7 +11,7 @@ import {
     ChainId,
 } from '@masknet/web3-shared-evm'
 import { getError, hasError } from './error'
-import type { Context, Middleware } from './types'
+import type { Context, Connection, Middleware } from './types'
 import { getWeb3State } from '..'
 import { getSharedContext } from '../../context'
 
@@ -61,6 +60,7 @@ class RequestContext implements Context {
     private _providerType = getWeb3State().Provider?.providerType?.getCurrentValue() ?? ProviderType.MaskWallet
 
     constructor(
+        private _connection: Connection,
         private _requestArguments: RequestArguments,
         private _overrides?: SendOverrides,
         private _options?: RequestOptions,
@@ -89,10 +89,6 @@ class RequestContext implements Context {
         return getPayloadChainId(this.request) ?? this.sendOverrides?.chainId ?? this._chainId
     }
 
-    get site() {
-        return this.requestOptions?.site ?? ExtensionSite.Popup
-    }
-
     get providerType() {
         return this.requestOptions?.providerType ?? this._providerType
     }
@@ -111,6 +107,10 @@ class RequestContext implements Context {
             method: this.method,
             params: [config],
         }
+    }
+
+    get connection() {
+        return this._connection
     }
 
     get sendOverrides() {
@@ -195,6 +195,11 @@ export function dispatch(context: Context, next: () => Promise<void>) {
     return composer.dispatch(context, next)
 }
 
-export function createContext(requestArguments: RequestArguments, overrides?: SendOverrides, options?: RequestOptions) {
-    return new RequestContext(requestArguments, overrides, options)
+export function createContext(
+    connection: Connection,
+    requestArguments: RequestArguments,
+    overrides?: SendOverrides,
+    options?: RequestOptions,
+) {
+    return new RequestContext(connection, requestArguments, overrides, options)
 }

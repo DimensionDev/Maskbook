@@ -90,6 +90,7 @@ export async function getNonFungibleAssets(
     const tokens = await getNftList(chainId, address)
 
     return {
+        currentPage: 0,
         hasNextPage: false,
         data: tokens,
     }

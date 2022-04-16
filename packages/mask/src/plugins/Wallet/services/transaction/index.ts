@@ -1,10 +1,10 @@
-import { ChainId, EthereumTransactionConfig, getReceiptStatus, TransactionStatusType } from '@masknet/web3-shared-evm'
 import {
-    getSendTransactionComputedPayload,
-    watchTransaction,
-    unwatchTransaction,
-    getTransactionReceiptHijacked,
-} from '../../../../extension/background-script/EthereumService'
+    ChainId,
+    ComputedPayload,
+    EthereumTransactionConfig,
+    getReceiptStatus,
+    TransactionStatusType,
+} from '@masknet/web3-shared-evm'
 import * as database from './database'
 
 export interface RecentTransactionOptions {

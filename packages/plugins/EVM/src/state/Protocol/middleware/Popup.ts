@@ -2,7 +2,6 @@ import { defer } from '@dimensiondev/kit'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { EthereumMethodType, getPayloadConfig, ProviderType } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
-import { sendTransaction } from '../network'
 import { getSharedContext } from '../../../context'
 
 export class Popup implements Middleware<Context> {
@@ -57,7 +56,7 @@ export class Popup implements Middleware<Context> {
                         }
 
                         // re-send the previous request
-                        await sendTransaction(config, context.sendOverrides, context.requestOptions)
+                        await context.connection.sendTransaction(config, context.sendOverrides, context.requestOptions)
                     }
                 } else {
                     if (previousRequest) {

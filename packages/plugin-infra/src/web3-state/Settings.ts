@@ -1,6 +1,7 @@
 import type { Subscription } from 'use-subscription'
-import { CurrencyType, Plugin, Web3Plugin } from '@masknet/plugin-infra'
 import { createConstantSubscription, StorageObject } from '@masknet/shared-base'
+import type { Plugin } from '../types'
+import { Web3Plugin, CurrencyType } from '../web3-types'
 
 export interface SettingsStorage {
     currencyType: CurrencyType

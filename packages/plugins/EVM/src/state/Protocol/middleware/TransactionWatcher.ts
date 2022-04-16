@@ -11,8 +11,7 @@ import {
 import type { TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { Explorer } from '@masknet/web3-providers'
-import type { Context, Middleware } from '../types'
-import { getTransactionReceipt } from '../network'
+import type { Context, Connection, Middleware } from '../types'
 
 interface StorageItem {
     at: number
@@ -85,12 +84,14 @@ class Watcher {
     private timer: NodeJS.Timeout | null = null
     private storage = new Storage()
 
+    constructor(private connection: Connection) {}
+
     public async getReceiptFromCache(chainId: ChainId, hash: string) {
         return this.storage.getItem(chainId, hash)?.receipt ?? null
     }
 
     public async getReceiptFromChain(chainId: ChainId, hash: string) {
-        return getTransactionReceipt(hash, {
+        return this.connection.getTransactionReceipt(hash, {
             chainId,
         })
     }
@@ -191,19 +192,18 @@ class Watcher {
 }
 
 export class TransactionWatcher implements Middleware<Context> {
-    private watcher = new Watcher()
-
     async fn(context: Context, next: () => Promise<void>) {
+        const watcher = new Watcher(context.connection)
         switch (context.method) {
             case EthereumMethodType.MASK_WATCH_TRANSACTION: {
                 const [hash, payload] = context.request.params as [string, JsonRpcPayload]
-                this.watcher.watchTransaction(context.chainId, hash, payload)
+                watcher.watchTransaction(context.chainId, hash, payload)
                 context.end()
                 break
             }
             case EthereumMethodType.MASK_UNWATCH_TRANSACTION: {
                 const [hash] = context.request.params as [string]
-                this.watcher.unwatchTransaction(context.chainId, hash)
+                watcher.unwatchTransaction(context.chainId, hash)
                 context.end()
                 break
             }
@@ -212,7 +212,7 @@ export class TransactionWatcher implements Middleware<Context> {
             case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
                 try {
                     const [hash] = context.request.params as [string]
-                    context.write(await this.watcher.getReceiptFromCache(context.chainId, hash))
+                    context.write(await watcher.getReceiptFromCache(context.chainId, hash))
                 } catch {
                     context.end()
                 }
@@ -222,7 +222,7 @@ export class TransactionWatcher implements Middleware<Context> {
             case EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT:
                 try {
                     const [hash] = context.request.params as [string]
-                    context.write(await getTransactionReceipt(hash))
+                    context.write(await context.connection.getTransactionReceipt(hash))
                 } catch (error) {
                     context.abort(error)
                 }

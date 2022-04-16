@@ -1,6 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { Plugin, TokenListState, Web3Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import { TokenListState, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-solana'
 
 export class TokenList extends TokenListState<ChainId> {

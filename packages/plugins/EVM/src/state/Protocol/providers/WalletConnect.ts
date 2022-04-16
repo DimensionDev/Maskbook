@@ -1,10 +1,13 @@
+import { first } from 'lodash-unified'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { defer } from '@dimensiondev/kit'
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
 import QRCodeModal from '@walletconnect/qrcode-modal'
-import { ChainId, EIP1193Provider, EthereumMethodType } from '../types'
+import { ChainId, EthereumMethodType } from '@masknet/web3-shared-evm'
+import { BaseProvider } from './Base'
+import type { Provider } from '../types'
 
 interface SessionPayload {
     event: 'connect' | 'session_update'
@@ -26,9 +29,8 @@ interface ModalClosePayload {
     params: []
 }
 
-export default class WalletConnectSDK implements EIP1193Provider {
+export default class WalletConnectProvider extends BaseProvider implements Provider {
     private connector = this.createConnector()
-    private events = new Map<string, Set<(event?: any) => void>>()
 
     /**
      * The ongoing walletconnect connection which the listeners use to resolve later.
@@ -70,8 +72,7 @@ export default class WalletConnectSDK implements EIP1193Provider {
 
         if (error) return
 
-        const disconnectListeners = this.events.get('disconnect') ?? []
-        disconnectListeners.forEach((x) => x())
+        this.emitter.emit('discconect')
     }
 
     private onSessionUpdate(error: Error | null, payload: SessionPayload) {
@@ -82,11 +83,8 @@ export default class WalletConnectSDK implements EIP1193Provider {
 
         if (error) return
 
-        const accountChangedListeners = this.events.get('accountsChanged') ?? []
-        const chianIdChangedListeners = this.events.get('chainChanged') ?? []
-
-        chianIdChangedListeners.forEach((x) => x(toHex(payload.params[0].chainId)))
-        accountChangedListeners.forEach((x) => x(payload.params[0].accounts))
+        this.emitter.emit('chainId', toHex(payload.params[0].chainId))
+        this.emitter.emit('accounts', payload.params[0].accounts)
     }
 
     private onModalClose(error: Error | null, payload: ModalClosePayload) {
@@ -94,7 +92,7 @@ export default class WalletConnectSDK implements EIP1193Provider {
         this.connection.reject(error || new Error('User closed modal.'))
     }
 
-    async login(chainId?: ChainId) {
+    private async login(chainId?: ChainId) {
         // delay to return the result until session is updated or connected
         const [deferred, resolve, reject] = defer<string[]>()
 
@@ -115,16 +113,12 @@ export default class WalletConnectSDK implements EIP1193Provider {
         })
     }
 
-    async logout(chainId?: ChainId) {
+    private async logout() {
         await this.connector.killSession()
     }
 
-    request<T extends unknown>(requestArguments: RequestArguments): Promise<T> {
+    override request<T extends unknown>(requestArguments: RequestArguments): Promise<T> {
         switch (requestArguments.method) {
-            case EthereumMethodType.MASK_REQUEST_ACCOUNTS:
-                return this.login() as Promise<T>
-            case EthereumMethodType.MASK_DISMISS_ACCOUNTS:
-                return this.logout() as Promise<T>
             case EthereumMethodType.ETH_CHAIN_ID:
                 return Promise.resolve(this.connector.chainId) as Promise<T>
             case EthereumMethodType.ETH_SEND_TRANSACTION: {
@@ -136,29 +130,29 @@ export default class WalletConnectSDK implements EIP1193Provider {
                 return this.connector.signTransaction(config) as Promise<T>
             }
             case EthereumMethodType.PERSONAL_SIGN: {
-                const [data, address] = requestArguments.params as [string, string]
-                return this.connector.signPersonalMessage([data, address]) as Promise<T>
+                return this.connector.signPersonalMessage(requestArguments.params) as Promise<T>
             }
             case EthereumMethodType.ETH_SIGN: {
-                const [address, data] = requestArguments.params as [string, string]
-                return this.connector.signMessage([address, data]) as Promise<T>
+                return this.connector.signMessage(requestArguments.params) as Promise<T>
             }
             case EthereumMethodType.ETH_SIGN_TYPED_DATA: {
-                const [address, data] = requestArguments.params as [string, string]
-                return this.connector.signTypedData([address, data]) as Promise<T>
+                return this.connector.signTypedData(requestArguments.params) as Promise<T>
             }
             default:
                 return this.connector.sendCustomRequest(requestArguments)
         }
     }
 
-    on(name: string, listener: (event: any) => void): EIP1193Provider {
-        if (!this.events.has(name)) this.events.set(name, new Set([listener]))
-        else this.events.get(name)!.add(listener)
-        return this
+    override async connect(chainId: ChainId) {
+        const accounts = await this.login(chainId)
+        if (!accounts.length) throw new Error(`Failed to connect to ${chainId}.`)
+        return {
+            chainId,
+            account: first(accounts)!,
+        }
     }
-    removeListener(name: string, listener: (event: any) => void): EIP1193Provider {
-        this.events.get(name)?.delete(listener)
-        return this
+
+    override async disconnect() {
+        await this.logout()
     }
 }

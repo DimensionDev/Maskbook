@@ -1,5 +1,14 @@
-import type { Plugin, Web3Plugin } from '@masknet/plugin-infra'
-import type { ChainId, EthereumTransactionConfig, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import type Web3 from 'web3'
+import type { Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import type {
+    ChainId,
+    EthereumTransactionConfig,
+    NetworkType,
+    ProviderType,
+    RequestOptions,
+    SendOverrides,
+} from '@masknet/web3-shared-evm'
 import { AddressBook } from './AddressBook'
 import { Asset } from './Asset'
 import { Token } from './Token'
@@ -11,20 +20,26 @@ import { Provider } from './Provider'
 import { Wallet } from './Wallet'
 import { Utils } from './Utils'
 import { Settings } from './Settings'
+import { defer } from '@dimensiondev/kit'
 
 export type State = Web3Plugin.ObjectCapabilities.Capabilities<
     ChainId,
     ProviderType,
     NetworkType,
     string,
-    EthereumTransactionConfig
+    EthereumTransactionConfig,
+    SendOverrides,
+    RequestOptions,
+    Web3
 >
 
 let state: State = null!
+let [promise, resolve] = defer<void>()
 
 export async function setupWeb3State(context: Plugin.SNSAdaptor.SNSAdaptorContext) {
     const Provider_ = new Provider(context)
-    state = {
+
+    setWeb3State({
         AddressBook: new AddressBook(context, {
             chainId: Provider_.chainId,
         }),
@@ -44,11 +59,19 @@ export async function setupWeb3State(context: Plugin.SNSAdaptor.SNSAdaptorContex
             account: Provider_.account,
         }),
         Provider: Provider_,
-        Protocol: new Protocol(context),
+        Protocol: new Protocol(context, {
+            chainId: Provider_.chainId,
+            account: Provider_.account,
+            providerType: Provider_.providerType,
+        }),
         Wallet: new Wallet(context),
         Utils: new Utils(),
-    }
+    })
     return state
+}
+
+export function untilWeb3State() {
+    return promise
 }
 
 export function getWeb3State() {
@@ -58,4 +81,5 @@ export function getWeb3State() {
 
 export async function setWeb3State(newState: State) {
     state = newState
+    resolve()
 }

@@ -1,5 +1,4 @@
 import { toHex } from 'web3-utils'
-import { PopupRoutes } from '@masknet/shared-base'
 import { EthereumMethodType } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
 import { getWeb3State } from '../..'
@@ -13,13 +12,11 @@ export class MaskWallet implements Middleware<Context> {
             nativeType,
             nativeSend,
             nativeSendJsonString,
+            account,
             chainId,
-            wallets,
-            openPopupWindow,
-            signMessage,
             signTransaction,
+            signPersonalMessage,
             signTypedData,
-            selectAccountPrepare,
         } = getSharedContext()
 
         // redirect to native app
@@ -27,8 +24,8 @@ export class MaskWallet implements Middleware<Context> {
             try {
                 const response =
                     nativeType === 'Android'
-                        ? JSON.parse(await nativeSendJsonString(JSON.stringify(context.request)))
-                        : await nativeSend(context.request)
+                        ? JSON.parse(await nativeSendJsonString!(JSON.stringify(context.request)))
+                        : await nativeSend!(context.request)
 
                 context.end(new Error(response.error), response.result)
             } catch (error) {
@@ -44,29 +41,7 @@ export class MaskWallet implements Middleware<Context> {
                 context.write(toHex(chainId.getCurrentValue()))
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
-            case EthereumMethodType.MASK_REQUEST_ACCOUNTS:
-                try {
-                    const accounts = await new Promise<string[]>(async (resolve, reject) => {
-                        const onSelectAccount = (accounts: string[]) => resolve(accounts)
-                        try {
-                            await openPopupWindow(
-                                wallets.getCurrentValue().length > 0 ? PopupRoutes.SelectWallet : undefined,
-                                {
-                                    chainId: context.chainId,
-                                },
-                            )
-                            await selectAccountPrepare(onSelectAccount)
-                        } catch (error) {
-                            reject(error)
-                        }
-                    })
-                    context.write(accounts)
-                } catch (error) {
-                    context.abort(error, 'Failed to request accounts.')
-                }
-                break
-            case EthereumMethodType.MASK_DISMISS_ACCOUNTS:
-                context.end()
+                context.write([account])
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
                 const config = context.config
@@ -83,7 +58,7 @@ export class MaskWallet implements Middleware<Context> {
                         break
                     }
 
-                    const tx = await Protocol?.sendRawTransaction?.(context.chainId, rawTransaction)
+                    const tx = await Protocol?.sendSignedTransaction?.(context.chainId, rawTransaction)
                     context.write(tx)
                 } catch (error) {
                     context.abort(error, 'Failed to send transaction.')
@@ -92,7 +67,7 @@ export class MaskWallet implements Middleware<Context> {
             case EthereumMethodType.PERSONAL_SIGN:
                 try {
                     const [data, address] = context.request.params as [string, string]
-                    context.write(await signMessage(data, address))
+                    context.write(await signPersonalMessage(data, address))
                 } catch (error) {
                     context.abort(error, 'Failed to sign data.')
                 }

@@ -1,8 +1,7 @@
-export * from './getFungibleAssets'
-export * from './getNonFungibleAssets'
 import { first } from 'lodash-unified'
 import type { TransactionConfig } from 'web3-core'
-import type { Plugin, Web3Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../messages'
 

@@ -1,8 +1,7 @@
 import type { RequestArguments, TransactionConfig as TransactionConfig_ } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import type { CurrencyType } from '@masknet/plugin-infra'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
-import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
+import type { CurrencyType } from '@masknet/plugin-infra/src/entry-web3'
 
 export interface SendOverrides {
     chainId?: ChainId
@@ -10,7 +9,6 @@ export interface SendOverrides {
 }
 
 export interface RequestOptions {
-    site?: EnhanceableSite | ExtensionSite
     providerType?: ProviderType
     popupsWindow?: boolean
 }
@@ -340,15 +338,9 @@ export enum EthereumMethodType {
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
     MASK_CONFIRM_TRANSACTION = 'mask_confirmTransaction',
     MASK_REJECT_TRANSACTION = 'mask_rejectTransaction',
-    MASK_REQUEST_ACCOUNTS = 'mask_requestAccounts',
-    MASK_DISMISS_ACCOUNTS = 'mask_dismissAccounts',
 }
 
 export type EthereumTransactionConfig = TransactionConfig_ & {
-    // EIP1559
-    maxFeePerGas?: string
-    maxPriorityFeePerGas?: string
-
     // CELO
     feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee
     gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
@@ -498,7 +490,7 @@ export interface WatchAssetComputed {
     asset: EthereumAssetDetailed
 }
 
-export type EthereumRPC_Computed =
+export type ComputedPayload =
     | RepalceTransactionComputed
     | SendEtherComputed
     | ContractDeploymentComputed
@@ -638,7 +630,7 @@ export interface RecentTransaction {
     hash: string
     status: TransactionStatusType
     candidates: Record<string, EthereumTransactionConfig>
-    computedPayload?: EthereumRPC_Computed
+    computedPayload?: ComputedPayload
 }
 
 // #region address name

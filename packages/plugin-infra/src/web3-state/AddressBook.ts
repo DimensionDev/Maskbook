@@ -1,7 +1,8 @@
 import { uniqBy } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
-import type { Plugin, Web3Plugin } from '@masknet/plugin-infra'
 import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
+import type { Plugin } from '../types'
+import type { Web3Plugin } from '../web3-types'
 
 export class AddressBookState<ChainId extends number, AddressBook extends Record<ChainId, string[]>>
     implements Web3Plugin.ObjectCapabilities.AddressBookState<ChainId>

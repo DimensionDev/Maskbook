@@ -1,5 +1,6 @@
 import type { Subscription } from 'use-subscription'
-import { Plugin, TokenState, TokenStorage } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import { TokenState, TokenStorage } from '@masknet/plugin-infra/web3'
 import { formatEthereumAddress, isSameAddress, isValidAddress } from '@masknet/web3-shared-evm'
 
 export class Token extends TokenState {

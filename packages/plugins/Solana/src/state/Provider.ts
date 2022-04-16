@@ -1,6 +1,7 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
-import { Plugin, ProviderState } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import { ProviderState } from '@masknet/plugin-infra/web3'
 import { ChainId, getNetworkTypeFromChainId, NetworkType, ProviderType } from '@masknet/web3-shared-solana'
 
 interface Account {

@@ -1,23 +1,14 @@
 import ENS from 'ethjs-ens'
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { NameServiceState, Plugin } from '@masknet/plugin-infra'
-import {
-    ChainId,
-    createExternalProvider,
-    formatEthereumAddress,
-    isValidAddress,
-    isZeroAddress,
-} from '@masknet/web3-shared-evm'
-import { request } from './Protocol/request'
+import type { Plugin } from '@masknet/plugin-infra'
+import { NameServiceState } from '@masknet/plugin-infra/web3'
+import { ChainId, formatEthereumAddress, isValidAddress, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { Providers } from './Protocol/provider'
 
 export class NameService extends NameServiceState<ChainId> {
-    private provider = createExternalProvider(request, () => ({
-        chainId: ChainId.Mainnet,
-    }))
-
     private ens = new ENS({
-        provider: this.provider,
+        provider: Providers[ProviderType.MaskWallet].createExternalProvider(ChainId.Mainnet),
         network: ChainId.Mainnet,
     })
 

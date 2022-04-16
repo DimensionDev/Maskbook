@@ -1,5 +1,6 @@
 import type { Subscription } from 'use-subscription'
-import type { Plugin, Web3Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '../types'
+import type { Web3Plugin } from '../web3-types'
 
 export class WalletState implements Web3Plugin.ObjectCapabilities.WalletState {
     public wallets?: Subscription<Web3Plugin.Wallet[]>

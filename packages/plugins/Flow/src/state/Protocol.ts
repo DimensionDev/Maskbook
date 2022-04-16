@@ -1,5 +1,6 @@
 import type { CompositeSignatures, CurrentUserObject, MutateOptions } from '@blocto/fcl'
-import type { Plugin, Web3Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-flow'
 import { mapSubscription, StorageObject } from '@masknet/shared-base'
 import { FlowRPC } from '../messages'

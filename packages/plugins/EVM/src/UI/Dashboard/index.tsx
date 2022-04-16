@@ -5,7 +5,7 @@ import { GlobalInjection } from '../components/GlobalInjection'
 import { setupSharedContext } from '../../context'
 import { setupWeb3State } from '../../state'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.Dashboard.Definition = {
     ...base,
     async init(signal, context) {
         setupSharedContext(context)

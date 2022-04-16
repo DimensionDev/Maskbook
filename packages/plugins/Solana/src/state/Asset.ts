@@ -1,4 +1,5 @@
-import type { Pagination, Web3Plugin } from '@masknet/plugin-infra'
+import type { Pagination } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../messages'
 

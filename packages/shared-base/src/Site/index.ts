@@ -37,3 +37,11 @@ function getExtensionSiteType() {
 export function getSiteType() {
     return getEnhanceableSiteType() ?? getExtensionSiteType()
 }
+
+export function isEnhanceableSiteType() {
+    return !!getEnhanceableSiteType()
+}
+
+export function isExtensionSiteType() {
+    return !!getExtensionSiteType()
+}

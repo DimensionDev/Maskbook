@@ -1,9 +1,16 @@
+import { defer } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 
 let context: Plugin.Shared.SharedContext = null!
+let [promise, resolve] = defer<void>()
 
 export function setupSharedContext(sharedContext: Plugin.Shared.SharedContext) {
-    context = sharedContext
+    setSharedContext(sharedContext)
+    return context
+}
+
+export function untilSharedContext() {
+    return promise
 }
 
 export function getSharedContext() {
@@ -13,4 +20,5 @@ export function getSharedContext() {
 
 export async function setSharedContext(newContext: Plugin.Shared.SharedContext) {
     context = newContext
+    resolve()
 }

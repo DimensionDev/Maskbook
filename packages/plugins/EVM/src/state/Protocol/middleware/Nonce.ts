@@ -1,12 +1,12 @@
 import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
 import { EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
-import type { Context, Middleware } from '../types'
-import { getTransactionCount } from '../network'
+import type { Context, Connection, Middleware } from '../types'
 import { getSharedContext } from '../../../context'
 
 class NonceManager {
-    constructor(private address: string) {}
+    constructor(private address: string, private connection: Connection) {}
+
     private nonce = NonceManager.INITIAL_NONCE
     private locked = false
     private tasks: (() => void)[] = []
@@ -35,7 +35,7 @@ class NonceManager {
                     this.lock()
                     callback(
                         null,
-                        await getTransactionCount(
+                        await this.connection.getTransactionCount(
                             this.address,
                             {
                                 chainId: chainId.getCurrentValue(),
@@ -99,23 +99,23 @@ export class Nonce implements Middleware<Context> {
         })
     }
 
-    private getManager(address: string) {
+    private getManager(address: string, connection: Connection) {
         const address_ = EthereumAddress.checksumAddress(address)
-        if (!this.cache.has(address_)) this.cache.set(address_, new NonceManager(address_))
+        if (!this.cache.has(address_)) this.cache.set(address_, new NonceManager(address_, connection))
         return this.cache.get(address_)!
     }
 
-    private getNonce(address: string) {
-        return this.getManager(address).getNonce()
+    private getNonce(address: string, connection: Connection) {
+        return this.getManager(address, connection).getNonce()
     }
 
-    private async commitNonce(address: string) {
-        const manager = this.getManager(address)
+    private async commitNonce(address: string, connection: Connection) {
+        const manager = this.getManager(address, connection)
         return manager.setNonce((await manager.getNonce()) + 1)
     }
 
-    private resetNonce(address: string) {
-        const manager = this.getManager(address)
+    private resetNonce(address: string, connection: Connection) {
+        const manager = this.getManager(address, connection)
         return manager.resetNonce()
     }
 
@@ -135,7 +135,7 @@ export class Nonce implements Middleware<Context> {
                 params: [
                     {
                         ...context.config,
-                        nonce: toHex(await this.getNonce(context.account)),
+                        nonce: toHex(await this.getNonce(context.account, context.connection)),
                     },
                 ],
             }
@@ -151,9 +151,10 @@ export class Nonce implements Middleware<Context> {
             const isAuroraErrorNonce = message.includes('ERR_INCORRECT_NONCE')
 
             // if a transaction hash was received then commit the nonce
-            if (isGeneralErrorNonce || isAuroraErrorNonce) await this.resetNonce(context.account)
+            if (isGeneralErrorNonce || isAuroraErrorNonce) await this.resetNonce(context.account, context.connection)
             // else if a nonce error was occurred then reset the nonce
-            else if (!context.error && typeof context.result === 'string') await this.commitNonce(context.account)
+            else if (!context.error && typeof context.result === 'string')
+                await this.commitNonce(context.account, context.connection)
         } catch {
             // to scan the context to determine how to update the local nonce, allow to fail silently
         }

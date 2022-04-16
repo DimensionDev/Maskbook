@@ -1,6 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { Plugin, TransactionState, TransactionStorage } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import { TransactionState, TransactionStorage } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-flow'
 import type { MutateOptions } from '@blocto/fcl'
 import { formatAddress } from '../helpers'

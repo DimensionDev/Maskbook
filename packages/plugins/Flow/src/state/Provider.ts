@@ -1,5 +1,6 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { ProviderState, Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import { ProviderState } from '@masknet/plugin-infra/web3'
 import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import { ChainId, getNetworkTypeFromChainId, NetworkType, ProviderType } from '@masknet/web3-shared-flow'
 

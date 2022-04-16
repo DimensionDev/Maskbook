@@ -6,7 +6,6 @@ import {
     TransactionStatusType,
 } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
-import { sendTransaction } from '../network'
 import { getWeb3State } from '../..'
 
 export class RecentTransaction implements Middleware<Context> {
@@ -21,7 +20,9 @@ export class RecentTransaction implements Middleware<Context> {
 
                     // remember the hash of the replaced tx
                     replacedHash = hash
-                    context.write(await sendTransaction(config, context.sendOverrides, context.requestOptions))
+                    context.write(
+                        await context.connection.sendTransaction(config, context.sendOverrides, context.requestOptions),
+                    )
                 } catch (error) {
                     context.abort(error)
                 }
