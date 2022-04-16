@@ -77,13 +77,8 @@ export class YearnProtocol implements SavingsProtocol {
     }
 
     public async depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
-        try {
-            const gasEstimate = '150000'
-            return new BigNumber(gasEstimate || 0)
-        } catch (error) {
-            console.error('YFI deposit estimate ERROR: ', error)
-            return ZERO
-        }
+        const gasEstimate = '500000'
+        return new BigNumber(gasEstimate)
     }
 
     public async deposit(account: string, chainId: ChainIdYearn, web3: Web3, value: BigNumber.Value) {
@@ -116,12 +111,8 @@ export class YearnProtocol implements SavingsProtocol {
     }
 
     public async withdrawEstimate(account: string, chainId: ChainIdYearn, web3: Web3, value: BigNumber.Value) {
-        try {
-            const gasEstimate = '150000'
-            return new BigNumber(gasEstimate || 0)
-        } catch (error) {
-            return ZERO
-        }
+        const gasEstimate = '500000'
+        return new BigNumber(gasEstimate)
     }
 
     public async withdraw(account: string, chainId: ChainIdYearn, web3: Web3, value: BigNumber.Value) {
@@ -140,6 +131,10 @@ export class YearnProtocol implements SavingsProtocol {
                 this.bareToken.address,
                 value.toString(),
                 account,
+                {},
+                {
+                    gasLimit: gasEstimate.toNumber(),
+                },
             )
 
             return true
