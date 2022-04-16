@@ -10,24 +10,16 @@ export function usePersonas() {
     const identity = useCurrentVisitingIdentity()
     const currentIdentity = useLastRecognizedIdentity()
 
-    const { value: currentPersona, loading: loadingCurrentPersona } = useAsyncRetry(async () => {
+    return useAsyncRetry(async () => {
         if (!currentIdentity) return
-        return Services.Identity.queryPersonaByProfile(currentIdentity.identifier)
-    }, [currentIdentity, personaConnectStatus.hasPersona])
-    const { value: binds, loading: loadingBinds } = useAsyncRetry(async () => {
-        if (!currentPersona) return
-        return NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey!)
-    }, [currentPersona])
+        const persona = await Services.Identity.queryPersonaByProfile(currentIdentity.identifier)
+        if (!persona) return
+        const binds = await NextIDProof.queryExistedBindingByPersona(persona.publicHexKey!)
 
-    const isOwner = currentIdentity.identifier.toText() === identity.identifier.toText()
-    const wallets = binds?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
+        const isOwner = currentIdentity.identifier.toText() === identity.identifier.toText()
 
-    return {
-        loading: loadingCurrentPersona || loadingBinds,
+        const wallets = binds?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
 
-        isOwner,
-        binds,
-        personaConnectStatus,
-        wallets,
-    }
+        return { wallets, isOwner, binds, persona, status: personaConnectStatus }
+    }, [currentIdentity, identity, personaConnectStatus.hasPersona])
 }

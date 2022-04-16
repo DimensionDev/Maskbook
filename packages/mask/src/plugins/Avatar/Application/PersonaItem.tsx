@@ -60,10 +60,10 @@ export function PersonaItem(props: PersonaItemProps) {
     return (
         <div className={classes.root} onClick={onClick}>
             <>
-                <NFTAvatar avatar={avatar} hasBorder={haveNFT} platform={proof.platform} />
+                <NFTAvatar avatar={avatar || _avatar?.imageUrl} hasBorder={haveNFT} platform={proof.platform} />
                 <Box className={classes.userInfo}>
                     <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
-                        {nickname}
+                        {nickname || _avatar?.nickname}
                     </Typography>
                     <Typography variant="body1" color="textSecondary" fontSize={12}>
                         @{userId}

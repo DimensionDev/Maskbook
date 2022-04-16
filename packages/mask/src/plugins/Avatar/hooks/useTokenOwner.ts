@@ -17,7 +17,7 @@ export function useTokenOwner(address: string, tokenId: string) {
 
 export function useCheckTokenOwner(owner?: string) {
     const account = useAccount()
-    const { binds, loading } = usePersonas()
+    const { value: persona, loading } = usePersonas()
 
     return {
         loading,
@@ -25,7 +25,7 @@ export function useCheckTokenOwner(owner?: string) {
             account &&
                 owner &&
                 (isSameAddress(account, owner) ||
-                    binds?.proofs
+                    persona?.binds?.proofs
                         .filter((x) => x.platform === NextIDPlatform.Ethereum)
                         .filter((x) => isSameAddress(x.identity, owner))),
         ),

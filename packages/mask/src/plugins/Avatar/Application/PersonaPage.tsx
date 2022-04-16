@@ -30,24 +30,22 @@ export function PersonaPage(props: PersonaPageProps) {
     const [visible, setVisible] = useState(true)
     const currentIdentity = useLastRecognizedIdentity()
     const { classes } = useStyles()
-    const { loading, personaConnectStatus, binds, wallets } = usePersonas()
+    const { loading, value: persona } = usePersonas()
     const nextIDConnectStatus = useNextIDConnectStatus()
     useEffect(() => {
-        if (!personaConnectStatus.action) return
+        if (!persona?.status.action) return
         const { status, action, isVerified } = nextIDConnectStatus
         if (isVerified || status === NextIDVerificationStatus.WaitingLocalConnect) return
         if (action) action()
-    }, [nextIDConnectStatus])
+    }, [nextIDConnectStatus, persona?.status])
 
     const onSelect = useCallback(
         (proof: BindingProof, tokenInfo?: TokenInfo) => {
-            onChange(proof, wallets, tokenInfo)
+            onChange(proof, persona?.wallets, tokenInfo)
             onNext()
         },
-        [wallets],
+        [persona?.wallets],
     )
-
-    console.log(binds)
 
     return (
         <DialogContent sx={{ height: 612 }}>
@@ -66,7 +64,7 @@ export function PersonaPage(props: PersonaPageProps) {
                             <CloseIcon sx={{ cursor: 'pointer' }} onClick={() => setVisible(false)} />
                         </Box>
                     ) : null}
-                    {binds?.proofs
+                    {persona?.binds?.proofs
                         .filter((proof) => proof.platform !== NextIDPlatform.Ethereum)
                         .map((x, i) =>
                             x.identity.toLowerCase() === currentIdentity.identifier.userId.toLowerCase() ? (

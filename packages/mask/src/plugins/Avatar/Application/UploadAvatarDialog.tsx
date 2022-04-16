@@ -30,8 +30,7 @@ interface UploadAvatarDialogProps {
 
 async function personaSign(account: string, message: string, identifier: ECKeyIdentifier) {
     try {
-        const result1 = Services.Ethereum.personalSign(message, account)
-        return result1
+        return Services.Ethereum.personalSign(message, account)
     } catch {
         return
     }
@@ -46,6 +45,7 @@ async function Save(
     proof?: BindingProof,
 ) {
     if (!data || !proof || !persona?.publicHexKey) return false
+
     const info: NextIDAvatarMeta = {
         nickname: data?.nickname,
         userId: data?.userId,
@@ -54,11 +54,11 @@ async function Save(
         address: token.contractDetailed.address,
         tokenId: token.tokenId,
     }
+
     const sign = await personaSign(account, JSON.stringify(info), persona.identifier)
     if (!sign) return false
 
     const response = await NextIDStorage.getPayload(persona?.publicHexKey, proof?.platform, proof?.identity, info)
-    console.log(response)
     if (!response.ok) {
         return false
     }
