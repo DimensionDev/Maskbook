@@ -8,7 +8,7 @@ import { ChainIdYearn, ProtocolType, SavingsProtocol } from '../types'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import { VaultInterface, Vault, Yearn } from '@yfi/sdk'
-import { Web3Provider } from '@ethersproject/providers'
+import { ExternalProvider, Web3Provider } from '@ethersproject/providers'
 
 export class YearnProtocol implements SavingsProtocol {
     static DEFAULT_APR = '0.1'
@@ -44,10 +44,10 @@ export class YearnProtocol implements SavingsProtocol {
 
     public async updateApr(chainId: ChainIdYearn, web3: Web3) {
         try {
-            const web3Provider = new Web3Provider(web3.currentProvider as any)
+            const web3Provider = new Web3Provider(web3.currentProvider as ExternalProvider)
 
             const yearn = new Yearn(chainId, {
-                provider: web3Provider, // web3.currentProvider,
+                provider: web3Provider,
             })
 
             const vaultInterface = new VaultInterface(yearn, chainId, yearn.context)
@@ -69,7 +69,8 @@ export class YearnProtocol implements SavingsProtocol {
     public async updateBalance(chainId: ChainIdYearn, web3: Web3, account: string) {
         try {
             const contract = createContract<ERC20>(web3, this.stakeToken.address, ERC20ABI as AbiItem[])
-            this._balance = new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')
+            const balance = await contract?.methods.balanceOf(account).call()
+            this._balance = new BigNumber(balance ?? '0')
         } catch (error) {
             console.error('YFI BALANCE ERROR: ', error)
             this._balance = ZERO
@@ -85,7 +86,7 @@ export class YearnProtocol implements SavingsProtocol {
         try {
             const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
 
-            const web3Provider = new Web3Provider(web3.currentProvider as any)
+            const web3Provider = new Web3Provider(web3.currentProvider as ExternalProvider)
             const yearn = new Yearn(chainId, {
                 provider: web3Provider,
             })
@@ -119,7 +120,7 @@ export class YearnProtocol implements SavingsProtocol {
         try {
             const gasEstimate = await this.withdrawEstimate(account, chainId, web3, value)
 
-            const web3Provider = new Web3Provider(web3.currentProvider as any)
+            const web3Provider = new Web3Provider(web3.currentProvider as ExternalProvider)
             const yearn = new Yearn(chainId, {
                 provider: web3Provider,
             })

@@ -44,10 +44,13 @@ export function useYearnTokens(chainId: ChainId, web3: Web3) {
         chainId,
     )
 
-    return useMemo(() => ({
+    return useMemo(
+        () => ({
             tokenPairs: splitToPair(detailedYFITokens),
             loading: loading || loadingTokenDetails,
             error,
             retry,
-    }), [chainId, detailedYFITokens, loadingTokenDetails])
+        }),
+        [chainId, detailedYFITokens, loadingTokenDetails],
+    )
 }
