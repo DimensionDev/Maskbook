@@ -77,7 +77,7 @@ export class YearnProtocol implements SavingsProtocol {
     }
 
     public async depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
-        const gasEstimate = '500000'
+        const gasEstimate = '5000000'
         return new BigNumber(gasEstimate)
     }
 
@@ -111,7 +111,7 @@ export class YearnProtocol implements SavingsProtocol {
     }
 
     public async withdrawEstimate(account: string, chainId: ChainIdYearn, web3: Web3, value: BigNumber.Value) {
-        const gasEstimate = '500000'
+        const gasEstimate = '5000000'
         return new BigNumber(gasEstimate)
     }
 
