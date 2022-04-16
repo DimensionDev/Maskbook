@@ -10,6 +10,7 @@ import Service from '../../../../service'
 import { DisconnectDialog } from '../components/DisconnectDialog'
 import { NextIDProof } from '@masknet/web3-providers'
 import { SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID } from '@masknet/shared'
+import { SnackbarType, useCustomSnackbar } from '@masknet/theme'
 
 const AccountDetail = memo(() => {
     const { t } = useI18N()
@@ -17,18 +18,29 @@ const AccountDetail = memo(() => {
     const { selectedAccount, currentPersona } = PersonaContext.useContainer()
     const [open, setOpen] = useState(false)
 
-    const [disconnectState, onDisconnect] = useAsyncFn(async () => {
-        if (!selectedAccount?.identifier) return
+    const { showSnackbar } = useCustomSnackbar(SnackbarType.POPUP)
 
-        if (
-            SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(selectedAccount.identifier.network) &&
-            selectedAccount.is_valid
-        ) {
-            setOpen(true)
-            return
+    const [disconnectState, onDisconnect] = useAsyncFn(async () => {
+        try {
+            if (!selectedAccount?.identifier) return
+
+            if (
+                SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(selectedAccount.identifier.network) &&
+                selectedAccount.is_valid
+            ) {
+                setOpen(true)
+                return
+            }
+            await Service.Identity.detachProfile(selectedAccount.identifier)
+            showSnackbar(t('popups_disconnect_success'), {
+                variant: 'success',
+            })
+            navigate(PopupRoutes.SocialAccounts)
+        } catch {
+            showSnackbar(t('popups_disconnect_failed'), {
+                variant: 'error',
+            })
         }
-        await Service.Identity.detachProfile(selectedAccount.identifier)
-        navigate(PopupRoutes.SocialAccounts)
     }, [selectedAccount])
 
     const [confirmState, onConfirmReleaseBind] = useAsyncFn(async () => {
@@ -58,10 +70,14 @@ const AccountDetail = memo(() => {
             )
 
             await Service.Identity.detachProfile(selectedAccount.identifier)
-
+            showSnackbar(t('popups_disconnect_success'), {
+                variant: 'success',
+            })
             navigate(PopupRoutes.SocialAccounts)
         } catch {
-            console.log('Disconnect failed')
+            showSnackbar(t('popups_disconnect_failed'), {
+                variant: 'error',
+            })
         }
     }, [selectedAccount, currentPersona])
 

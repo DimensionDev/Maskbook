@@ -11,6 +11,7 @@ import { MaskUIRoot } from '../../UIRoot'
 import { PageTitleContext } from './context'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { languageSettings } from '../../settings/settings'
+import { SnackbarType } from '@masknet/theme'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
@@ -27,7 +28,7 @@ const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x)
 export default function Popups() {
     const [title, setTitle] = useState('')
     return (
-        <MaskUIRoot useTheme={usePopupTheme} kind="page">
+        <MaskUIRoot useTheme={usePopupTheme} kind="page" snackbarType={SnackbarType.POPUP}>
             <Web3Provider value={PopupWeb3Context}>
                 <PageTitleContext.Provider value={{ title, setTitle }}>
                     <HashRouter>
