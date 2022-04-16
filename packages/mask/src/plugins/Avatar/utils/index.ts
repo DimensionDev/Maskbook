@@ -93,10 +93,6 @@ export function formatText(name: string, tokenId: string) {
 }
 
 export function formatTokenId(symbol: string, tokenId: string) {
-    const _name = `${symbol} #${tokenId}`
-    let name = _name
-    if (_name.length > 18) {
-        name = _name.slice(0, 18) + '...'
-    }
-    return name
+    const name = `${symbol} #${tokenId}`
+    return name.length > 18 ? name.slice(0, 18) + '...' : name
 }

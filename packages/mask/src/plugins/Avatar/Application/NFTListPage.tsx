@@ -9,7 +9,6 @@ import {
     useImageChecker,
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
-import { uniqBy } from 'lodash-unified'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'
 import { NFTImage } from '../SNSAdaptor/NFTImage'
@@ -112,16 +111,14 @@ export function NFTListPage(props: NFTListPageProps) {
                         ? LoadStatus
                         : error || collectibles.length === 0
                         ? Retry
-                        : uniqBy(collectibles, (x) => x.contractDetailed.address && x.tokenId).map(
-                              (token: ERC721TokenDetailed, i) => (
-                                  <NFTImageCollectibleAvatar
-                                      key={i}
-                                      token={token}
-                                      selectedToken={selectedToken}
-                                      onChange={(token) => onChange(token)}
-                                  />
-                              ),
-                          )}
+                        : collectibles.map((token: ERC721TokenDetailed, i) => (
+                              <NFTImageCollectibleAvatar
+                                  key={i}
+                                  token={token}
+                                  selectedToken={selectedToken}
+                                  onChange={(token) => onChange(token)}
+                              />
+                          ))}
                 </Box>
             </Box>
         </>

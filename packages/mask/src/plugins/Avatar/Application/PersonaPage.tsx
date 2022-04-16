@@ -6,6 +6,7 @@ import { useLastRecognizedIdentity } from '../../../components/DataSource/useAct
 import { NextIDVerificationStatus, useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
 import { CloseIcon } from '../assets/close'
 import { usePersonas } from '../hooks/usePersonas'
+import { useI18N } from '../locales'
 import type { TokenInfo } from '../types'
 import { PersonaItem } from './PersonaItem'
 
@@ -32,6 +33,8 @@ export function PersonaPage(props: PersonaPageProps) {
     const { classes } = useStyles()
     const { loading, value: persona } = usePersonas()
     const nextIDConnectStatus = useNextIDConnectStatus()
+    const t = useI18N()
+
     useEffect(() => {
         if (!persona?.status.action) return
         const { status, action, isVerified } = nextIDConnectStatus
@@ -58,14 +61,13 @@ export function PersonaPage(props: PersonaPageProps) {
                     {visible ? (
                         <Box className={classes.messageBox}>
                             <Typography color="#1C68F3" variant="body1" fontSize={14}>
-                                Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3
-                                vibe.
+                                {t.persona_hint()}
                             </Typography>
                             <CloseIcon sx={{ cursor: 'pointer' }} onClick={() => setVisible(false)} />
                         </Box>
                     ) : null}
                     {persona?.binds?.proofs
-                        .filter((proof) => proof.platform !== NextIDPlatform.Ethereum)
+                        .filter((proof) => proof.platform === NextIDPlatform.Twitter)
                         .map((x, i) =>
                             x.identity.toLowerCase() === currentIdentity.identifier.userId.toLowerCase() ? (
                                 <PersonaItem

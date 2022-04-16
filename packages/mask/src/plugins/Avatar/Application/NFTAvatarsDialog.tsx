@@ -7,6 +7,7 @@ import type { BindingProof } from '@masknet/shared-base'
 import type { SelectTokenInfo, TokenInfo } from '../types'
 import { PersonaPage } from './PersonaPage'
 import { DialogContent } from '@mui/material'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -30,6 +31,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
     const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
     const [tokenInfo, setTokenInfo] = useState<TokenInfo>()
     const [proof, setProof] = useState<BindingProof>()
+    const t = useI18N()
 
     const onPersonaChange = (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: TokenInfo) => {
         setWallets(wallets)
@@ -46,7 +48,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
         else if (step === CreateNFTAvatarStep.NFTList) setStep(CreateNFTAvatarStep.UploadAvatar)
     }, [step])
 
-    const onClose = useCallback(() => {
+    const onBack = useCallback(() => {
         if (step === CreateNFTAvatarStep.UploadAvatar) setStep(CreateNFTAvatarStep.NFTList)
         else if (step === CreateNFTAvatarStep.NFTList) setStep(CreateNFTAvatarStep.Persona)
         else props.onClose()
@@ -54,9 +56,13 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
 
     return (
         <InjectedDialog
-            title={step === CreateNFTAvatarStep.UploadAvatar ? 'Edit Profile' : 'NFT PFP'}
+            title={
+                step === CreateNFTAvatarStep.UploadAvatar
+                    ? t.application_edit_profile_dialog_title()
+                    : t.application_dialog_title()
+            }
             open={props.open}
-            onClose={onClose}>
+            onClose={onBack}>
             <DialogContent sx={{ margin: 0, padding: '0px !important' }}>
                 {step === CreateNFTAvatarStep.Persona ? (
                     <PersonaPage onNext={onNext} onChange={onPersonaChange} />
@@ -70,7 +76,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                         account={selectedTokenInfo?.account}
                         image={selectedTokenInfo?.image}
                         token={selectedTokenInfo?.token}
-                        onBack={onClose}
+                        onBack={onBack}
                         onClose={() => {
                             setStep(CreateNFTAvatarStep.Persona)
                             props.onClose()

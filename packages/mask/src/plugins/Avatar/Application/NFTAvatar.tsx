@@ -21,7 +21,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
             )}
 
             <Stack sx={{ position: 'absolute', right: -9, bottom: 0, borderRadius: '100%', backgroundColor: 'white' }}>
-                {SOCIAL_MEDIA_ICON_MAPPING[`${platform}.com`]}
+                {platform.endsWith('.com')
+                    ? SOCIAL_MEDIA_ICON_MAPPING[platform]
+                    : SOCIAL_MEDIA_ICON_MAPPING[`${platform}.com`]}
             </Stack>
         </Stack>
     )

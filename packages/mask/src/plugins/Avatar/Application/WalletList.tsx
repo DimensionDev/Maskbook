@@ -14,6 +14,7 @@ import { NFTWalletConnect } from './WalletConnect'
 import { BindingProof, PopupRoutes } from '@masknet/shared-base'
 import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 import { Services } from '../../../extension/service'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -48,6 +49,7 @@ export function AddressNames(props: AddressNamesProps) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const onClose = () => setAnchorEl(null)
     const onOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
+    const t = useI18N()
 
     const [selectedWallet, setSelectedWallet] = useState(account || wallets?.[0]?.identity || '')
     const onClick = useCallback((address: string) => {
@@ -75,7 +77,7 @@ export function AddressNames(props: AddressNamesProps) {
     const onConnectWallet = useCallback(() => {
         openSelectProviderDialog()
         onClose()
-    }, [])
+    }, [openSelectProviderDialog, onClose])
 
     const walletItem = (
         selectedWallet: string,
@@ -95,7 +97,7 @@ export function AddressNames(props: AddressNamesProps) {
             <WalletUI address={wallet} />
             {enableChange && (
                 <Button style={{ marginLeft: 16 }} onClick={onChange}>
-                    Change
+                    {t.change()}
                 </Button>
             )}
         </MenuItem>
@@ -119,7 +121,7 @@ export function AddressNames(props: AddressNamesProps) {
                 ) : (
                     <MenuItem key="Connect">
                         <Button fullWidth onClick={onConnectWallet}>
-                            Connect your wallet
+                            {t.connect_your_wallet()}
                         </Button>
                     </MenuItem>
                 )}
@@ -137,7 +139,7 @@ export function AddressNames(props: AddressNamesProps) {
                     <ListItemIcon>
                         <WalletSettingIcon />
                     </ListItemIcon>
-                    Wallet settings
+                    {t.wallet_settings()}
                 </MenuItem>
             </ShadowRootMenu>
         </Stack>

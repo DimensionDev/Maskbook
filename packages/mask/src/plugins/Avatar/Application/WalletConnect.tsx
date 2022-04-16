@@ -6,6 +6,7 @@ import { Box, Button, Link, Typography } from '@mui/material'
 import { ApplicationIcon } from '../assets/application'
 import { WalletIcon } from '../assets/wallet'
 import LaunchIcon from '@mui/icons-material/Launch'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -43,6 +44,7 @@ interface NFTWalletConnectProps extends withClasses<'root'> {}
 export function NFTWalletConnect(props: NFTWalletConnectProps) {
     const classes = useStylesExtends(useStyles(), props)
     const providerType = useProviderType()
+    const t = useI18N()
 
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
@@ -52,7 +54,7 @@ export function NFTWalletConnect(props: NFTWalletConnectProps) {
             <Box className={classes.title}>
                 <ApplicationIcon />
                 <Typography variant="body1" color="textPrimary" fontSize={15} fontWeight={700} sx={{ flex: 1 }}>
-                    NFT PFP
+                    {t.application_dialog_title()}
                 </Typography>
 
                 <Typography variant="body1" color="textPrimary">
@@ -73,7 +75,7 @@ export function NFTWalletConnect(props: NFTWalletConnectProps) {
                     onClick={openSelectProviderDialog}
                     style={{ width: 254 }}
                     startIcon={<WalletIcon style={{ width: 18, height: 18 }} />}>
-                    Connect your wallet
+                    {t.connect_your_wallet()}
                 </Button>
             </Box>
         </Box>

@@ -12,6 +12,7 @@ import Services from '../../../extension/service'
 import { BindingProof, ECKeyIdentifier, fromHex, toBase64 } from '@masknet/shared-base'
 import type { Persona } from '../../../database'
 import type { NextIDAvatarMeta } from '../types'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -30,7 +31,11 @@ interface UploadAvatarDialogProps {
 
 async function personaSign(account: string, message: string, identifier: ECKeyIdentifier) {
     try {
-        return Services.Ethereum.personalSign(message, account)
+        return Services.Identity.signWithPersona({
+            method: 'eth',
+            message: message,
+            identifier: identifier.toText(),
+        })
     } catch {
         return
     }
@@ -55,17 +60,18 @@ async function Save(
         tokenId: token.tokenId,
     }
 
-    const sign = await personaSign(account, JSON.stringify(info), persona.identifier)
-    if (!sign) return false
-
     const response = await NextIDStorage.getPayload(persona?.publicHexKey, proof?.platform, proof?.identity, info)
     if (!response.ok) {
         return false
     }
+
+    const sign = await personaSign(account, response.val.signPayload, persona.identifier)
+    if (!sign) return false
+
     const setResponse = await NextIDStorage.set(
         response.val.uuid,
         persona.publicHexKey,
-        toBase64(fromHex(sign)),
+        toBase64(fromHex(sign.signature.signature)),
         proof.platform,
         proof.identity,
         response.val.createdAt,
@@ -83,6 +89,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { showSnackbar } = useCustomSnackbar()
     const [disabled, setDisabled] = useState(false)
     const personaConnectStatus = usePersonaConnectStatus()
+    const t = useI18N()
 
     const { value: persona, loading: loadingPersona } = useAsyncRetry(async () => {
         if (!identity) return
@@ -95,16 +102,19 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             if (!blob) return
             setDisabled(true)
 
-            const data = await Twitter.uploadUserAvatar(identity.identifier.userId, blob)
+            console.log('a----------------')
+
+            const media = await Twitter.uploadUserAvatar(identity.identifier.userId, blob)
+            const data = await Twitter.updateProfileImage(identity.identifier.userId, media.media_id_string)
             const avatarId = getAvatarId(data?.imageUrl ?? '')
 
             const response = await Save(account, token, avatarId, data, persona, proof)
             if (!response) {
-                showSnackbar('Sorry, failed to save NFT Avatar. Please set again.', { variant: 'error' })
+                showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
                 setDisabled(false)
                 return
             }
-            showSnackbar('Update NFT Avatar Success!', { variant: 'success' })
+            showSnackbar(t.upload_avatar_success_message(), { variant: 'success' })
             onClose()
             setDisabled(false)
         })
@@ -135,10 +145,10 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <Button sx={{ flex: 1 }} variant="text" onClick={onBack}>
-                    Cancel
+                    {t.connect_your_wallet()}
                 </Button>
                 <Button disabled={disabled} sx={{ flex: 1 }} variant="contained" onClick={onSave}>
-                    Save
+                    {t.save()}
                 </Button>
             </DialogActions>
         </>

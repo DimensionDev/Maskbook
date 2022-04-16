@@ -4,6 +4,7 @@ import { ApplicationIcon } from '../assets/application'
 import { LinkIcon } from '../assets/link'
 import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import { formatTokenId } from '../utils'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles()(() => ({
     root: {},
@@ -20,14 +21,15 @@ interface NFTInfoProps extends withClasses<'root'> {
 export function NFTInfo(props: NFTInfoProps) {
     const { nft, owner } = props
     const classes = useStylesExtends(useStyles(), props)
+    const t = useI18N()
 
     return (
         <Box className={classes.root}>
             {!nft ? (
-                <Typography>Set NFT PFPs</Typography>
+                <Typography>{t.persona_set_nft()}</Typography>
             ) : !owner ? (
                 <Typography variant="body1" color="#FFB915">
-                    NFT PFP verification failed
+                    {t.peronsa_verification_failed()}
                 </Typography>
             ) : (
                 <Box className={classes.nft}>

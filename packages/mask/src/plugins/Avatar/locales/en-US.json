@@ -1,4 +1,17 @@
 {
     "application_dialog_title": "NFT PFP",
-    "application_edit_profile_dialog_title": "Edit Profile"
+    "application_edit_profile_dialog_title": "Edit Profile",
+    "persona_set_nft": "Set NFT PFPs",
+    "peronsa_verification_failed": "NFT PFP verification failed",
+    "cancel": "Cancel",
+    "save": "Save",
+    "change": "Change",
+    "connect_your_wallet": "Connect your wallet",
+    "upload_avatar_failed_message": "Sorry, failed to save NFT Avatar. Please set again.",
+    "upload_avatar_success_message": "Update NFT Avatar Success!",
+    "collectible_not_found": "Can' find it.",
+    "add_collectible": "Add collectibles",
+    "set_avatar_title": "Set NFT Avatar",
+    "wallet_settings": "Wallet settings",
+    "persona_hint": "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
 }

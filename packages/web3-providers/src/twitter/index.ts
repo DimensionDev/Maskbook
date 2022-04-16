@@ -100,7 +100,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         }
     }
 
-    async uploadUserAvatar(screenName: string, image: File | Blob) {
+    async uploadUserAvatar(screenName: string, image: File | Blob): Promise<any> {
         // INIT
         const initURL = `${UPLOAD_AVATAR_URL}?command=INIT&total_bytes=${image.size}&media_type=${encodeURIComponent(
             image.type,
@@ -123,7 +123,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
 
         // FINALIZE
         const finalizeURL = `${UPLOAD_AVATAR_URL}?command=FINALIZE&media_id=${mediaId}`
-        const data = await request<{
+        return request<{
             media_id: number
             media_id_string: string
             size: number
@@ -136,7 +136,8 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             method: 'POST',
             credentials: 'include',
         })
-
+    }
+    async updateProfileImage(screenName: string, media_id_str: string): Promise<TwitterBaseAPI.AvatarInfo | undefined> {
         const { bearerToken, queryToken, csrfToken } = await getTokens()
         const headers = {
             authorization: `Bearer ${bearerToken}`,
@@ -150,7 +151,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         const updateProfileImageURL = 'https://twitter.com/i/api/1.1/account/update_profile_image.json'
         const response = await fetch(
             urlcat(updateProfileImageURL, {
-                media_id: data.media_id_string,
+                media_id: media_id_str,
                 skip_status: 1,
                 return_user: true,
             }),
@@ -162,20 +163,12 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         )
 
         const updateInfo = await response.json()
-        const avatarContentUrl = 'https://twitter.com/i/api/fleets/v1/avatar_content'
-        const avatarContent = await fetch(
-            urlcat(avatarContentUrl, {
-                user_ids: updateInfo.id_str,
-                only_spaces: true,
-            }),
-            { method: 'GET', headers },
-        )
         return {
             imageUrl: updateInfo.profile_image_url_https,
             mediaId: updateInfo.id_str,
             nickname: updateInfo.description,
             userId: updateInfo.screen_name,
-        } as TwitterBaseAPI.AvatarInfo
+        }
     }
 }
 
