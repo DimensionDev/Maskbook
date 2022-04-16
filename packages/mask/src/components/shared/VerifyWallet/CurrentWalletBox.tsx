@@ -96,9 +96,8 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const networkDescriptor = useNetworkDescriptor(wallet.networkType)
     const { Utils } = useWeb3State() ?? {}
     const { value: domain } = useReverseAddress(wallet.account)
-    console.log(wallet, 'ggg', providerDescriptor, domain)
 
-    return wallet ? (
+    return (
         <section className={classNames(classes.currentAccount)}>
             <WalletIcon
                 size={30}
@@ -149,16 +148,6 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                     {t('wallet_status_button_change')}
                 </Button>
             </section>
-        </section>
-    ) : (
-        <section className={classes.connectButtonWrapper}>
-            <Button
-                className={classNames(classes.actionButton)}
-                variant="contained"
-                size="small"
-                onClick={props.changeWallet}>
-                {t('plugin_wallet_on_connect')}
-            </Button>
         </section>
     )
 }
