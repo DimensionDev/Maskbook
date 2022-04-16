@@ -15,10 +15,9 @@ export function useSelectAccount() {
     }, [])
 
     const onSelectAccount = useCallback((accounts: string[], chainId: ChainId) => {
-        if (!(globalCallback)) return;
-            globalCallback(accounts, chainId)
-            globalCallback = undefined
-        
+        if (!globalCallback) return
+        globalCallback(accounts, chainId)
+        globalCallback = undefined
     }, [])
 
     return [onSelectAccountPrepare, onSelectAccount] as const

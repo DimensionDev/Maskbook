@@ -1,4 +1,4 @@
-const MAX_PERSONA_NAME_LENGTH = 12
+import { MAX_PERSONA_NAME_LENGTH } from '@masknet/shared-base'
 
 export const formatPersonaName = (nickname?: string) => {
     if (!nickname) return ''
