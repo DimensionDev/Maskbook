@@ -5,8 +5,6 @@ export interface AvatarMetaDB {
     tokenId: string
     address: string
     avatarId: string
-    updateFlag?: boolean
-    account?: string
 }
 
 export interface NFT {
@@ -27,4 +25,9 @@ export interface SelectTokenInfo {
 export interface TokenInfo {
     address: string
     tokenId: string
+}
+
+export interface NextIDAvatarMeta extends AvatarMetaDB {
+    nickname: string
+    imageUrl: string
 }

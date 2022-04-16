@@ -2,17 +2,17 @@ import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
 import AvatarEditor from 'react-avatar-editor'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
-import { NextIDStorage, Twitter } from '@masknet/web3-providers'
-import { PluginNFTAvatarRPC } from '../../Avatar/messages'
+import { NextIDStorage, Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-import { RSS3_KEY_SNS } from '../../Avatar/constants'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { useAsyncRetry } from 'react-use'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import Services from '../../../extension/service'
-import { v4 as uuid } from 'uuid'
-import type { BindingProof, ECKeyIdentifier } from '@masknet/shared-base'
+import { BindingProof, ECKeyIdentifier, fromHex, toBase64 } from '@masknet/shared-base'
+import type { Persona } from '../../../database'
+import type { NextIDAvatarMeta } from '../types'
+
 const useStyles = makeStyles()((theme) => ({
     actions: {
         padding: theme.spacing(0, 2, 2, 2),
@@ -28,18 +28,52 @@ interface UploadAvatarDialogProps {
     onClose: () => void
 }
 
-async function personaSign(message: string, identifier: ECKeyIdentifier) {
+async function personaSign(account: string, message: string, identifier: ECKeyIdentifier) {
     try {
-        const result = await Services.Identity.signWithPersona({
-            method: 'eth',
-            message: message,
-            identifier: identifier.toText(),
-        })
-        return result
+        const result1 = Services.Ethereum.personalSign(message, account)
+        return result1
     } catch {
         return
     }
 }
+
+async function Save(
+    account: string,
+    token: ERC721TokenDetailed,
+    avatarId: string,
+    data?: TwitterBaseAPI.AvatarInfo,
+    persona?: Persona,
+    proof?: BindingProof,
+) {
+    if (!data || !proof || !persona?.publicHexKey) return false
+    const info: NextIDAvatarMeta = {
+        nickname: data?.nickname,
+        userId: data?.userId,
+        imageUrl: data?.imageUrl,
+        avatarId,
+        address: token.contractDetailed.address,
+        tokenId: token.tokenId,
+    }
+    const sign = await personaSign(account, JSON.stringify(info), persona.identifier)
+    if (!sign) return false
+
+    const response = await NextIDStorage.getPayload(persona?.publicHexKey, proof?.platform, proof?.identity, info)
+    console.log(response)
+    if (!response.ok) {
+        return false
+    }
+    const setResponse = await NextIDStorage.set(
+        response.val.uuid,
+        persona.publicHexKey,
+        toBase64(fromHex(sign)),
+        proof.platform,
+        proof.identity,
+        response.val.createdAt,
+        info,
+    )
+    return setResponse.ok
+}
+
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { image, account, token, onClose, onBack, proof } = props
     const { classes } = useStyles()
@@ -64,42 +98,8 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             const data = await Twitter.uploadUserAvatar(identity.identifier.userId, blob)
             const avatarId = getAvatarId(data?.imageUrl ?? '')
 
-            const info = {
-                nickname: data?.nickname,
-                userId: data?.userId,
-                imageUrl: data?.imageUrl,
-                avatarId,
-                address: token.contractDetailed.address,
-                tokenId: token.tokenId,
-            }
-
-            const result = await personaSign(JSON.stringify(info), persona.identifier)
-            if (!result) return
-            await NextIDStorage.set(
-                uuid(),
-                persona.publicHexKey!,
-                result?.signature.signature,
-                proof.platform,
-                proof.identity,
-                new Date().toISOString(),
-                info,
-            )
-            const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
-                account,
-                {
-                    userId: data?.userId ?? '',
-                    address: token.contractDetailed.address,
-                    tokenId: token.tokenId,
-                    avatarId,
-                },
-                identity.identifier.network,
-                RSS3_KEY_SNS.TWITTER,
-            ).catch((error) => {
-                showSnackbar(error.message, { variant: 'error' })
-                setDisabled(false)
-                return
-            })
-            if (!avatar) {
+            const response = await Save(account, token, avatarId, data, persona, proof)
+            if (!response) {
                 showSnackbar('Sorry, failed to save NFT Avatar. Please set again.', { variant: 'error' })
                 setDisabled(false)
                 return
@@ -108,7 +108,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             onClose()
             setDisabled(false)
         })
-    }, [editor, identity, onClose, persona, proof])
+    }, [account, editor, identity, onClose, persona, proof])
 
     if (!account || !image || !token || !proof) return null
 
