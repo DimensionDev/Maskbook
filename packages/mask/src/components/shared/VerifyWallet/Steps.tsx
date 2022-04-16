@@ -1,4 +1,4 @@
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, SnackbarType, useCustomSnackbar } from '@masknet/theme'
 import { CurrentWalletBox } from './CurrentWalletBox'
 import {
     step1ActiveIcon,
@@ -15,6 +15,10 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import { useEffect } from 'react'
+import { useI18N } from '../../../utils'
+import type { Web3Plugin } from '@masknet/plugin-infra/src/web3-types'
+import { ChainId, isSameAddress, NetworkType, ProviderType, useWallets } from '@masknet/web3-shared-evm'
+import type { PersonaInformation } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -86,16 +90,20 @@ interface StepsProps {
     walletSign: () => void
     changeWallet: () => void
     onDone: () => void
-    persona: any
-    wallet: any
+    persona: PersonaInformation
+    wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
     disableConfirm?: boolean
 }
 
 export function Steps(props: StepsProps) {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const { step, personaSign, walletSign, changeWallet, persona, wallet, onDone, disableConfirm } = props
-    const { showSnackbar } = useCustomSnackbar()
+    const { showSnackbar } = useCustomSnackbar(SnackbarType.POPUP)
+
+    const walletName = useWallets(wallet.providerType).find((x) => isSameAddress(x.address, wallet.account))?.name
+
     const stepIconMap = {
         [SignSteps.Ready]: {
             step1: step1ActiveIcon,
@@ -116,7 +124,7 @@ export function Steps(props: StepsProps) {
 
     useEffect(() => {
         if (disableConfirm) {
-            showSnackbar('The wallet has been bound.Please switch wallets.', { variant: 'error' })
+            showSnackbar(t('wallet_verify_has_bound'), { variant: 'error' })
         }
     }, [disableConfirm])
 
@@ -136,7 +144,7 @@ export function Steps(props: StepsProps) {
 
     return (
         <div className={classes.container}>
-            <CurrentWalletBox changeWallet={changeWallet} />
+            <CurrentWalletBox walletName={walletName} wallet={wallet} changeWallet={changeWallet} />
             <div className={classes.stepBox}>
                 <div className={classes.stepLine}>
                     <ImageIcon size={22} icon={stepIconMap[step].step1} />
@@ -145,17 +153,16 @@ export function Steps(props: StepsProps) {
                 </div>
                 <div className={classes.stepRowBox}>
                     <div className={classes.stepRow}>
-                        <Typography className={classes.stepTitle}>{persona.nickname ?? 'Persona Name'} Sign</Typography>
-                        <Typography className={classes.stepIntro}>
-                            Sign seamlessly with Persona, ensure the validity of data.
+                        <Typography className={classes.stepTitle}>
+                            {t('wallet_verify_persona_name', {
+                                personaName: persona.nickname ?? 'Persona Name',
+                            })}
                         </Typography>
+                        <Typography className={classes.stepIntro}>{t('wallet_verify_persona_sign_intro')}</Typography>
                     </div>
                     <div className={classes.stepRow}>
-                        <Typography className={classes.stepTitle}>{wallet.name ?? wallet.providerType} Sign</Typography>
-                        <Typography className={classes.stepIntro}>
-                            After two steps, you will own, view, utilize all your cyber identities through Next.ID. You
-                            can also disconnect them easily.
-                        </Typography>
+                        <Typography className={classes.stepTitle}>{walletName ?? wallet.providerType} Sign</Typography>
+                        <Typography className={classes.stepIntro}>{t('waller_verify_wallet_sign_intro')}</Typography>
                     </div>
                 </div>
             </div>
@@ -167,7 +174,7 @@ export function Steps(props: StepsProps) {
                     fullWidth
                     color="primary"
                     onClick={onCancel}>
-                    Cancel
+                    {t('cancel')}
                 </ActionButton>
                 <ActionButton
                     className={disableConfirm ? classNames(classes.roundBtn, classes.disableBtn) : classes.roundBtn}
@@ -175,7 +182,7 @@ export function Steps(props: StepsProps) {
                     size="large"
                     fullWidth
                     onClick={onConfirm}>
-                    {disableConfirm ? 'Persona Sign' : step === 2 ? 'Done' : 'Confirm'}
+                    {disableConfirm ? t('wallet_verify_persona_sign') : step === 2 ? t('done') : t('confirm')}
                 </ActionButton>
             </div>
         </div>

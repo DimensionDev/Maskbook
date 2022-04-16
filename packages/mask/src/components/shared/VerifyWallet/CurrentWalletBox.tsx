@@ -1,16 +1,14 @@
 import { ExternalLink } from 'react-feather'
 import classNames from 'classnames'
-import { ProviderType, useWallet } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType, NetworkType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
-    useAccount,
     useWeb3State,
-    useChainId,
     useNetworkDescriptor,
     useProviderDescriptor,
-    useProviderType,
     useReverseAddress,
+    Web3Plugin,
 } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils'
@@ -86,24 +84,21 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface CurrentWalletBox {
-    isDashboard?: boolean
-    disableChange?: boolean
+    wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
+    walletName?: string
     changeWallet: () => void
 }
 export function CurrentWalletBox(props: CurrentWalletBox) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
-    const account = useAccount()
-    const wallet = useWallet()
-    const providerType = useProviderType()
-    const providerDescriptor = useProviderDescriptor()
-    const networkDescriptor = useNetworkDescriptor()
+    const { wallet, walletName } = props
+    const providerDescriptor = useProviderDescriptor(wallet.providerType)
+    const networkDescriptor = useNetworkDescriptor(wallet.networkType)
     const { Utils } = useWeb3State() ?? {}
+    const { value: domain } = useReverseAddress(wallet.account)
+    console.log(wallet, 'ggg', providerDescriptor, domain)
 
-    const { value: domain } = useReverseAddress(account)
-
-    return account ? (
+    return wallet ? (
         <section className={classNames(classes.currentAccount)}>
             <WalletIcon
                 size={30}
@@ -113,7 +108,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow} style={{ marginBottom: 3 }}>
-                    {providerType !== ProviderType.MaskWallet ? (
+                    {wallet.providerType !== ProviderType.MaskWallet ? (
                         <Typography className={classes.accountName}>
                             {domain && Utils?.formatDomainName
                                 ? Utils.formatDomainName(domain)
@@ -122,7 +117,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                     ) : (
                         <>
                             <Typography className={classes.accountName}>
-                                {wallet?.name ?? providerDescriptor?.name}
+                                {walletName ?? providerDescriptor?.name}
                             </Typography>
                             {domain && Utils?.formatDomainName ? (
                                 <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
@@ -131,13 +126,13 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                     )}
                 </div>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.address} variant="body2" title={account}>
-                        <FormattedAddress address={account} size={4} formatter={Utils?.formatAddress} />
+                    <Typography className={classes.address} variant="body2" title={wallet.account}>
+                        <FormattedAddress address={wallet.account} size={4} formatter={Utils?.formatAddress} />
                     </Typography>
 
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(chainId, account) ?? ''}
+                        href={Utils?.resolveAddressLink?.(wallet.chainId, wallet.account) ?? ''}
                         target="_blank"
                         title={t('plugin_wallet_view_on_explorer')}
                         rel="noopener noreferrer">
@@ -145,17 +140,15 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                     </Link>
                 </div>
             </div>
-            {!props.disableChange && (
-                <section>
-                    <Button
-                        className={classNames(classes.actionButton)}
-                        variant="contained"
-                        size="small"
-                        onClick={props.changeWallet}>
-                        {t('wallet_status_button_change')}
-                    </Button>
-                </section>
-            )}
+            <section>
+                <Button
+                    className={classNames(classes.actionButton)}
+                    variant="contained"
+                    size="small"
+                    onClick={props.changeWallet}>
+                    {t('wallet_status_button_change')}
+                </Button>
+            </section>
         </section>
     ) : (
         <section className={classes.connectButtonWrapper}>

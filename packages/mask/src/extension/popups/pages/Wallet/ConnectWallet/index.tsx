@@ -15,6 +15,10 @@ import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
+    box: {
+        height: 'calc( 100% - 50px )',
+        background: '#F7F9FA',
+    },
     container: {
         width: '100%',
         display: 'flex',
@@ -23,7 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         rowGap: 16,
         padding: '16px',
         boxSizing: 'border-box',
-        background: '#F7F9FA',
     },
     walletItem: {
         cursor: 'pointer',
@@ -77,26 +80,28 @@ const ConnectWalletPage = memo(() => {
     if (!network) return null
 
     return (
-        <div className={classes.container}>
-            {providers.map((provider) => {
-                return ProviderIconClickBait ? (
-                    <ProviderIconClickBait
-                        key={provider.ID}
-                        network={network}
-                        provider={provider}
-                        onSubmit={(network, provider, result) => onSubmit(result)}>
-                        <div className={classes.walletItem}>
+        <div className={classes.box}>
+            <div className={classes.container}>
+                {providers.map((provider) => {
+                    return ProviderIconClickBait ? (
+                        <ProviderIconClickBait
+                            key={provider.ID}
+                            network={network}
+                            provider={provider}
+                            onSubmit={(network, provider, result) => onSubmit(result)}>
+                            <div className={classes.walletItem}>
+                                <img src={provider.icon.toString()} className={classes.walletIcon} />
+                                <Typography className={classes.walletName}>{provider.name}</Typography>
+                            </div>
+                        </ProviderIconClickBait>
+                    ) : (
+                        <div className={classes.walletItem} key={provider.ID}>
                             <img src={provider.icon.toString()} className={classes.walletIcon} />
                             <Typography className={classes.walletName}>{provider.name}</Typography>
                         </div>
-                    </ProviderIconClickBait>
-                ) : (
-                    <div className={classes.walletItem} key={provider.ID}>
-                        <img src={provider.icon.toString()} className={classes.walletIcon} />
-                        <Typography className={classes.walletName}>{provider.name}</Typography>
-                    </div>
-                )
-            })}
+                    )
+                })}
+            </div>
         </div>
     )
 })
