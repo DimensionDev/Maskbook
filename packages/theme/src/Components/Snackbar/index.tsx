@@ -18,10 +18,10 @@ import WarningIcon from '@mui/icons-material/Warning'
 import InfoIcon from '@mui/icons-material/Info'
 import DoneIcon from '@mui/icons-material/Done'
 import { LoadingIcon, RiskIcon } from '@masknet/icons'
-import { makeStyles } from '../../UIHelper/makeStyles'
-import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
+import { makeStyles, useStylesExtends } from '../../UIHelper'
 import { MaskColorVar } from '../../CSSVariables'
-
+import { PopupSnackbarContent } from './PopupSnackbar'
+export { PopupSnackbarProvider } from './PopupSnackbar'
 export { SnackbarProvider, useSnackbar } from 'notistack'
 export type { VariantType, OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack'
 
@@ -252,7 +252,12 @@ export interface ShowSnackbarOptions
     extends OptionsObject,
         Pick<CustomSnackbarContentProps, 'message' | 'processing' | 'icon' | 'classes'> {}
 
-export function useCustomSnackbar() {
+export enum SnackbarType {
+    NORMAL = 'NORMAL',
+    POPUP = 'POPUP',
+}
+
+export function useCustomSnackbar(type?: SnackbarType) {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const showSnackbar = useCallback(
         (
@@ -265,7 +270,7 @@ export function useCustomSnackbar() {
             return enqueueSnackbar(text, {
                 variant: options.variant,
                 content: (key, title) => {
-                    return (
+                    return type !== SnackbarType.POPUP ? (
                         <CustomSnackbarContent
                             variant={variant ?? 'default'}
                             id={key}
@@ -275,6 +280,8 @@ export function useCustomSnackbar() {
                             action={rest.action}
                             classes={rest.classes}
                         />
+                    ) : (
+                        <PopupSnackbarContent id={key} title={title} variant={variant} />
                     )
                 },
                 ...rest,

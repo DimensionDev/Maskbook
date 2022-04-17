@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { usePasswordForm } from '../hooks/usePasswordForm'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     container: {
@@ -90,6 +91,8 @@ const SetPaymentPassword = memo(() => {
     )
 
     const onSubmit = handleSubmit(onConfirm)
+
+    useTitle(t('popups_set_the_payment_password'))
 
     return (
         <>

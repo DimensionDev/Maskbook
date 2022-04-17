@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { first } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -14,6 +14,7 @@ import {
 import { Button, List, Typography } from '@mui/material'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
+import { useSelectAccount } from '../../../../../plugins/Wallet/hooks/useSelectAccount'
 import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
 import { WalletItem } from './WalletItem'
@@ -58,7 +59,7 @@ const useStyles = makeStyles()({
         marginRight: 10,
     },
     list: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#F7F9FA',
         padding: 0,
         height: 'calc(100vh - 168px)',
         overflow: 'auto',
@@ -87,28 +88,42 @@ const SelectWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const location = useLocation()
+    const navigate = useNavigate()
     const wallet = useAccount()
     const wallets = useWallets(ProviderType.MaskWallet)
 
     const [selected, setSelected] = useState(wallet)
+    const [, onSelectAccount] = useSelectAccount()
 
     const search = new URLSearchParams(location.search)
 
     const chainIdSearched = search.get('chainId')
-    const chainId = chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined
+    // The previous page is popup page
+    const isPopup = search.get('popup')
     // Swap page also uses SelectWallet, but changing wallet in Swap page
     // should not affect other pages, for example, dashboard.
     // So we make Swap page 'internal' for popups
     const isInternal = search.get('internal')
 
+    const chainId = chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : ChainId.Mainnet
     const chainIdValid = useChainIdValid()
 
     const handleCancel = useCallback(async () => {
-        await WalletRPC.selectAccount([], ChainId.Mainnet)
-        await Services.Helper.removePopupWindow()
-    }, [])
+        if (isPopup) {
+            onSelectAccount([], ChainId.Mainnet)
+        } else {
+            await WalletRPC.selectAccount([], ChainId.Mainnet)
+            await Services.Helper.removePopupWindow()
+        }
+    }, [isPopup, navigate])
 
     const handleConfirm = useCallback(async () => {
+        if (isPopup) {
+            onSelectAccount([selected], chainId)
+            navigate(-1)
+            return
+        }
+
         await WalletRPC.updateMaskAccount({
             chainId,
             account: selected,
@@ -120,17 +135,15 @@ const SelectWallet = memo(() => {
                 providerType: ProviderType.MaskWallet,
             })
         }
-        if (chainId) {
-            await WalletRPC.selectAccount([selected], chainId)
-        }
+        await WalletRPC.selectAccount([selected], chainId)
         return Services.Helper.removePopupWindow()
-    }, [chainId, selected, isInternal])
+    }, [chainId, selected, isPopup, isInternal, navigate])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
-    }, [selected, wallets])
+    }, [selected, wallets, location.state])
 
-    return chainId && chainIdValid ? (
+    return chainIdValid ? (
         <>
             <div className={classes.content}>
                 <div className={classes.header}>

@@ -79,9 +79,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-        },
     )
     // #endregion
 
