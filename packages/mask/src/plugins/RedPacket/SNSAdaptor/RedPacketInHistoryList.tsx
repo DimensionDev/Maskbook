@@ -18,6 +18,8 @@ import {
     FungibleTokenDetailed,
     useFungibleTokenDetailed,
     useTokenConstants,
+    ERC20TokenDetailed,
+    NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -208,7 +210,10 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         tokenAddress ?? '',
     )
 
-    const historyToken = (history as RedPacketJSONPayload).token ?? tokenDetailed
+    const historyToken =
+        (history as RedPacketJSONPayload).token ??
+        tokenDetailed ??
+        ({ address: history.token_address } as ERC20TokenDetailed | NativeTokenDetailed)
 
     // #region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
