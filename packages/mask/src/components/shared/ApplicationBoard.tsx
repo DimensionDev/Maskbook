@@ -108,7 +108,7 @@ export function ApplicationBoard() {
                         (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0),
                 )
                 .filter((x) => Boolean(x.entry.RenderEntryComponent)),
-        [snsAdaptorPlugins],
+        [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
     const listedAppList = applicationList.filter((x) => !getUnlistedApp(x))
     return (
