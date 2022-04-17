@@ -33,7 +33,6 @@ const SetPaymentPassword = lazy(() => import('./SetPaymentPassword'))
 const WalletRecovery = lazy(() => import('./WalletRecovery'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction'))
-const VerifyWallet = lazy(() => import('./VerifyWallet'))
 const ConnectWallet = lazy(() => import('./ConnectWallet'))
 
 const r = relativeRouteOf(PopupRoutes.Wallet)
