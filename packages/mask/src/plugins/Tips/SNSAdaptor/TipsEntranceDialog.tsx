@@ -13,6 +13,7 @@ import { useProvedWallets } from '../hooks/useProvedWallets'
 import {
     BindingProof,
     ECKeyIdentifier,
+    NextIDAction,
     NextIDPersonaBindings,
     NextIDPlatform,
     NextIdStorageInfo,
@@ -21,9 +22,11 @@ import {
 import Empty from './components/empty'
 import { getKvPayload, kvSet, useKvGet } from '../hooks/useKv'
 import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
-import { useAsyncRetry } from 'react-use'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
 import { PluginId } from '@masknet/plugin-infra'
+import { NextIDProof } from '@masknet/web3-providers'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -104,9 +107,20 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             ? (proofRes as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
             : []
         if (kv !== undefined && (kv?.val as NextIdStorageInfo).proofs.length > 0) {
-            const res = (kv.val as NextIdStorageInfo).proofs.find((x) => x.identity === currentPersona?.publicHexKey)
-            setRawWalletList(JSON.parse(JSON.stringify(res?.content[PluginId.Tip])))
-            setRawPatchData(JSON.parse(JSON.stringify(res?.content[PluginId.Tip])))
+            const kvCache = (kv.val as NextIdStorageInfo).proofs.find(
+                (x) => x.identity === currentPersona?.publicHexKey,
+            )
+            const result = walletsList.reduce((res: WalletProof[], x) => {
+                const temp = (kvCache?.content[PluginId.Tip] as WalletProof[]).filter((i) =>
+                    isSameAddress(x.identity, i.identity),
+                )
+                if (temp && temp.length > 0) {
+                    res.push(temp[0])
+                }
+                return res
+            }, [])
+            setRawWalletList(JSON.parse(JSON.stringify(result)))
+            setRawPatchData(JSON.parse(JSON.stringify(result)))
             return
         }
         ;(walletsList as WalletProof[]).forEach((x, idx) => {
@@ -119,7 +133,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         })
         setRawWalletList(JSON.parse(JSON.stringify(walletsList)))
         setRawPatchData(JSON.parse(JSON.stringify(walletsList)))
-    }, [proofRes, kv])
+    }, [proofRes, kv, open])
 
     const onCancel = () => {
         setRawPatchData(JSON.parse(JSON.stringify(rawWalletList)))
@@ -161,7 +175,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         changed[idx].isPublic = v ? 1 : 0
         setRawPatchData(changed)
         setHasChanged(true)
-        console.log(rawPatchData, idx, v, 'gggg')
     }
 
     const onConfirm = async () => {
@@ -180,9 +193,35 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             console.error(error)
         }
     }
-    const onDisconnect = async () => {
-        console.log('disconnect')
-    }
+    const [confirmState, onConfirmRelease] = useAsyncFn(
+        async (wallet?: WalletProof) => {
+            if (!currentPersona?.publicHexKey || !wallet) return
+
+            const result = await NextIDProof.createPersonaPayload(
+                currentPersona.publicHexKey,
+                NextIDAction.Delete,
+                wallet.identity,
+                wallet.platform,
+            )
+            if (!result) return
+
+            const signature = await Services.Identity.generateSignResult(currentPersona.identifier, result.signPayload)
+
+            if (!signature) return
+            await NextIDProof.bindProof(
+                result.uuid,
+                currentPersona.publicHexKey,
+                NextIDAction.Delete,
+                wallet.platform,
+                wallet.identity,
+                result.createdAt,
+                { signature: signature.signature.signature },
+            )
+            retryKv()
+            retryProof()
+        },
+        [currentPersona],
+    )
     return (
         <InjectedDialog open={open} onClose={clickBack} title={bodyView} titleTail={WalletButton()}>
             {loading ? (
@@ -223,8 +262,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     {bodyView === BodyViewSteps.wallets && (
                         <WalletsView
                             personaName={currentPersona?.nickname}
-                            releaseLoading={false}
-                            onRelease={onDisconnect}
+                            releaseLoading={confirmState.loading}
+                            onRelease={onConfirmRelease}
                             wallets={rawPatchData}
                         />
                     )}
