@@ -4,7 +4,7 @@ import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { ExternalLink } from 'react-feather'
 import { useState } from 'react'
-import { useWeb3State } from '@masknet/web3-shared-evm'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
