@@ -2,7 +2,7 @@ import { getMaskColor, makeStyles } from '@masknet/theme'
 import { SettingsIcon } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { WalletCom } from './WalletCom'
-import type { BindingProof } from '@masknet/shared-base'
+import type { WalletProof } from '../TipsEnteranceDialog'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
 interface WalletsByNetworkProps {
     network: any
     toSetting: any
-    wallets: BindingProof[]
+    wallets: WalletProof[]
 }
 
 export function WalletsByNetwork({ wallets, network, toSetting }: WalletsByNetworkProps) {
@@ -61,7 +61,7 @@ export function WalletsByNetwork({ wallets, network, toSetting }: WalletsByNetwo
                 <div className={classes.content}>
                     {(wallets.length &&
                         wallets.map((x, idx) => {
-                            return <WalletCom key={idx} index={idx} address={x.identity} isDefault />
+                            return <WalletCom key={idx} index={idx} address={x.identity} isDefault={!!x.isDefault} />
                         })) || <Typography className={classes.empty}>No connected or verified wallets.</Typography>}
                 </div>
             )}

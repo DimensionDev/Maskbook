@@ -10,7 +10,7 @@ import SettingView from './bodyViews/Setting'
 import WalletsView from './bodyViews/Wallets'
 import AddWalletView from './bodyViews/AddWallet'
 import { useProvedWallets } from '../hooks/useProvedWallets'
-import { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
+import { BindingProof, NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
 import Empty from './components/empty'
 import { useKvGet } from '../hooks/useKv'
 import { InjectedDialog } from '@masknet/shared'
@@ -52,6 +52,9 @@ enum BodyViewSteps {
     wallets = 'Wallets',
     addWallet = 'Add wallet',
 }
+export interface WalletProof extends BindingProof {
+    isDefault: number
+}
 export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -73,7 +76,17 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { value: kv } = useKvGet()
 
     const resolveWallets = () => {
-        if (!kv) return walletsList
+        if (!kv) {
+            ;(walletsList as WalletProof[]).forEach((x, idx) => {
+                if (idx === 0) {
+                    x.isDefault = 1
+                    return
+                }
+                x.isDefault = 0
+            })
+            return walletsList as WalletProof[]
+        }
+
         return []
     }
 
