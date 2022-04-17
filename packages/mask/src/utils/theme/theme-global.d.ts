@@ -3,6 +3,7 @@ declare module '@mui/material/styles/createPalette.d' {
         secondaryDivider: string
     }
     export interface TypeText {
+        third: string
         hint: string
         strong: string
         buttonText: string
@@ -16,6 +17,7 @@ declare module '@mui/material/styles/createPalette.d' {
         input: string
         tipMask: string
         messageShadow: string
+        modalTitle: string
     }
 }
 export {}

@@ -71,21 +71,14 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
         setAutoFreeze(false)
 
         const TwitterTheme = produce(baseTheme, (theme) => {
-            theme.palette.background.paper = backgroundColor
             const isDark = theme.palette.mode === 'dark'
-            const isDarker = backgroundColor === 'rgb(0,0,0)'
             theme.palette.primary = {
                 light: toRGB(shade(primaryColorRGB, 10)),
                 main: toRGB(primaryColorRGB),
                 dark: toRGB(shade(primaryColorRGB, -10)),
                 contrastText: toRGB(primaryContrastColorRGB),
             }
-            const themeName = isDark ? (isDarker ? 'darker' : 'dark') : 'light'
-
-            // Just for design
-            if (themeName === 'dark') {
-                theme.palette.background.paper = '#151D26'
-            }
+            const themeName = isDark ? 'dark' : 'light'
 
             const colorSchema = twitterColorSchema[themeName]
             const colors = Object.keys(colorSchema) as Array<keyof typeof colorSchema>
@@ -100,6 +93,23 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
             theme.components = theme.components || {}
             const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+            theme.components.MuiInputBase = {
+                styleOverrides: {
+                    root: {
+                        background: theme.palette.background.input,
+                    },
+                    input: {
+                        background: theme.palette.background.input,
+                    },
+                },
+            }
+            theme.components.MuiDialogTitle = {
+                styleOverrides: {
+                    root: {
+                        background: theme.palette.background.modalTitle,
+                    },
+                },
+            }
             theme.components.MuiButton = {
                 defaultProps: {
                     size: 'medium',
