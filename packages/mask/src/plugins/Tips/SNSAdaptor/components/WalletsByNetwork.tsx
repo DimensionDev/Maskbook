@@ -61,7 +61,7 @@ export function WalletsByNetwork({ wallets, network, toSetting }: WalletsByNetwo
                 <div className={classes.content}>
                     {(wallets.length &&
                         wallets.map((x, idx) => {
-                            return <WalletCom key={idx} name="wallet" address={x.identity} isDefault />
+                            return <WalletCom key={idx} index={idx} address={x.identity} isDefault />
                         })) || <Typography className={classes.empty}>No connected or verified wallets.</Typography>}
                 </div>
             )}

@@ -5,6 +5,7 @@ import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { Copy, ExternalLink } from 'react-feather'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { isSameAddress, useWallets } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -65,14 +66,14 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface WalletComProps {
-    name?: string
     address: string
     isDefault?: boolean
     canDelete?: boolean
     onDelete?: any
+    index?: number
 }
 
-export function WalletCom({ name, address, isDefault, canDelete }: WalletComProps) {
+export function WalletCom({ address, isDefault, canDelete, index }: WalletComProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
@@ -87,6 +88,7 @@ export function WalletCom({ name, address, isDefault, canDelete }: WalletComProp
         undefined,
         t('copy_success_of_wallet_addr'),
     )
+    const walletName = useWallets().find((x) => isSameAddress(x.address, address))?.name
     const { Utils } = useWeb3State() ?? {}
     const getActionRender = () => {
         if (!canDelete && !isDefault) return <Typography className={classes.defaultBtn}>Set as default</Typography>
@@ -98,7 +100,7 @@ export function WalletCom({ name, address, isDefault, canDelete }: WalletComProp
         <div className={classes.currentAccount}>
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.accountName}>{name}</Typography>
+                    <Typography className={classes.accountName}>{walletName ?? 'Wallet ' + index}</Typography>
                     {isDefault && <div className={classes.defaultBadge}>Default</div>}
                 </div>
                 <div className={classes.infoRow}>

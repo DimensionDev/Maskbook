@@ -39,6 +39,11 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         boxSizing: 'border-box',
     },
+    btnContainer: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row-reverse',
+    },
 }))
 
 enum BodyViewSteps {
@@ -65,28 +70,34 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const walletsList = proofRes.value
         ? (proofRes.value as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
         : []
-
     const { value: kv } = useKvGet()
-    console.log(kv, 'gggg')
+
+    const resolveWallets = () => {
+        if (!kv) return walletsList
+        return []
+    }
 
     const WalletButton = () => {
         const { classes } = useStyles()
         return (
             (bodyView !== BodyViewSteps.addWallet && (
-                <Button
-                    onClick={() => {
-                        if (bodyView === BodyViewSteps.wallets) {
-                            setBodyView(BodyViewSteps.addWallet)
-                        } else {
-                            setBodyView(BodyViewSteps.wallets)
-                        }
-                    }}
-                    className={classes.walletBtn}
-                    variant="contained"
-                    size="small">
-                    {bodyView === BodyViewSteps.wallets ? BodyViewSteps.addWallet : BodyViewSteps.wallets}
-                </Button>
-            )) || <></>
+                <div className={classes.btnContainer}>
+                    <Button
+                        onClick={() => {
+                            if (bodyView === BodyViewSteps.wallets) {
+                                setBodyView(BodyViewSteps.addWallet)
+                            } else {
+                                setBodyView(BodyViewSteps.wallets)
+                            }
+                        }}
+                        className={classes.walletBtn}
+                        variant="contained"
+                        size="small">
+                        {bodyView === BodyViewSteps.wallets ? BodyViewSteps.addWallet : BodyViewSteps.wallets}
+                    </Button>
+                </div>
+            )) ||
+            null
         )
     }
     return (
@@ -98,12 +109,12 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     </div>
                 )}
 
-                {bodyView === BodyViewSteps.main && walletsList.length > 0 ? (
+                {bodyView === BodyViewSteps.main && resolveWallets().length > 0 ? (
                     <div>
                         {supportedNetworks.map((x, idx) => {
                             return (
                                 <WalletsByNetwork
-                                    wallets={walletsList}
+                                    wallets={resolveWallets()}
                                     toSetting={() => setBodyView(BodyViewSteps.setting)}
                                     key={idx}
                                     network={x}
@@ -111,15 +122,15 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                             )
                         })}
                     </div>
-                ) : bodyView === BodyViewSteps.main && walletsList.length === 0 ? (
+                ) : bodyView === BodyViewSteps.main && resolveWallets().length === 0 ? (
                     <Empty />
                 ) : null}
 
-                {bodyView === BodyViewSteps.setting && <SettingView wallets={walletsList} />}
-                {bodyView === BodyViewSteps.wallets && <WalletsView wallets={walletsList} />}
+                {bodyView === BodyViewSteps.setting && <SettingView wallets={resolveWallets()} />}
+                {bodyView === BodyViewSteps.wallets && <WalletsView wallets={resolveWallets()} />}
                 {bodyView === BodyViewSteps.addWallet && <AddWalletView />}
 
-                {![BodyViewSteps.addWallet, BodyViewSteps.wallets].includes(bodyView) && walletsList.length > 0 && (
+                {![BodyViewSteps.addWallet, BodyViewSteps.wallets].includes(bodyView) && resolveWallets().length > 0 && (
                     <div className={classes.actions}>
                         <ActionButton fullWidth color="secondary">
                             Cancel
