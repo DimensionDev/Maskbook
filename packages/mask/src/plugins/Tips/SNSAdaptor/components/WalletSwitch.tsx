@@ -48,13 +48,14 @@ const useStyles = makeStyles()((theme) => ({
 interface WalletSwitchProps {
     type: number
     address: string
+    isPublic: boolean
 }
 
-export function WalletSwitch({ type, address }: WalletSwitchProps) {
+export function WalletSwitch({ type, address, isPublic }: WalletSwitchProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { Utils } = useWeb3State() ?? {}
-    const [checked, setChecked] = useState(false)
+    const [checked, setChecked] = useState(!!isPublic)
     const getWalletName = () => {
         return ['EVM wallet', 'Solona wallet', 'Flow wallet'][type]
     }

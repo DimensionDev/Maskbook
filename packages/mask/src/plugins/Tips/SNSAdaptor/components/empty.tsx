@@ -1,3 +1,5 @@
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { ExternalLink } from 'react-feather'
@@ -69,6 +71,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 const Empty = memo(() => {
     const { classes } = useStyles()
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     return (
         <div className={classes.container}>
             <div className={classes.topbar}>
@@ -91,7 +96,7 @@ const Empty = memo(() => {
                 src={new URL('../../assets/emptyUnion.png', import.meta.url).toString()}
                 alt=""
             />
-            <div className={classes.actionBtn}>
+            <div className={classes.actionBtn} onClick={openSelectProviderDialog}>
                 <img src={new URL('../../assets/wallet.png', import.meta.url).toString()} alt="" />
                 <div>Connect your wallet</div>
             </div>

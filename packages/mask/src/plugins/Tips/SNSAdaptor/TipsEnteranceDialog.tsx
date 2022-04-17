@@ -54,6 +54,7 @@ enum BodyViewSteps {
 }
 export interface WalletProof extends BindingProof {
     isDefault: number
+    isPublic: number
 }
 export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { t } = useI18N()
@@ -61,6 +62,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const [showAlert, setShowAlert] = useState(true)
     const supportedNetworks = TipsSupportedChains
     const [bodyView, setBodyView] = useState(BodyViewSteps.main)
+    const [hasChanged, setHasChanged] = useState(false)
     const clickBack = () => {
         if (bodyView === BodyViewSteps.main) {
             onClose()
@@ -78,11 +80,12 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const resolveWallets = () => {
         if (!kv) {
             ;(walletsList as WalletProof[]).forEach((x, idx) => {
+                x.isPublic = 1
+                x.isDefault = 0
                 if (idx === 0) {
                     x.isDefault = 1
                     return
                 }
-                x.isDefault = 0
             })
             return walletsList as WalletProof[]
         }
@@ -148,7 +151,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         <ActionButton fullWidth color="secondary">
                             Cancel
                         </ActionButton>
-                        <ActionButton fullWidth>Confirm</ActionButton>
+                        <ActionButton fullWidth disabled={!hasChanged}>
+                            Confirm
+                        </ActionButton>
                     </div>
                 )}
             </DialogContent>
