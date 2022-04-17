@@ -180,6 +180,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             console.error(error)
         }
     }
+    const onDisconnect = async () => {
+        console.log('disconnect')
+    }
     return (
         <InjectedDialog open={open} onClose={clickBack} title={bodyView} titleTail={WalletButton()}>
             {loading ? (
@@ -217,7 +220,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     {bodyView === BodyViewSteps.setting && (
                         <SettingView onSwitchChange={onSwitchChange} wallets={rawPatchData} />
                     )}
-                    {bodyView === BodyViewSteps.wallets && <WalletsView wallets={rawPatchData} />}
+                    {bodyView === BodyViewSteps.wallets && (
+                        <WalletsView
+                            personaName={currentPersona?.nickname}
+                            releaseLoading={false}
+                            onRelease={onDisconnect}
+                            wallets={rawPatchData}
+                        />
+                    )}
                     {bodyView === BodyViewSteps.addWallet && <AddWalletView />}
 
                     {![BodyViewSteps.addWallet, BodyViewSteps.wallets].includes(bodyView) && rawPatchData.length > 0 && (

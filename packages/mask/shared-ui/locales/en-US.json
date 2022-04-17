@@ -1050,5 +1050,7 @@
     "plugin_artblocks_smt_wrong": "Something went wrong!",
     "plugin_artblocks_share": "I just purchased a beautiful piece of art from '{{name}}' collection for {{price}} {{symbol}}. Install @realMaskNetwork to get yours.",
     "plugin_artblocks_share_no_official_account": "I just purchased a beautiful piece of art from '{{name}}' collection for {{price}} {{symbol}}. Welcome to join.",
-    "nft_button_set_avatar": "Set NFT Avatar"
+    "nft_button_set_avatar": "Set NFT Avatar",
+    "plugin_tips_disconnect_intro": "Are you going to disconnect {{persona}} and wallet <strong>{{address}}<strong/>?",
+    "plugin_tips_disconnect_dialog_title": "Disconnect Wallet ?"
 }
