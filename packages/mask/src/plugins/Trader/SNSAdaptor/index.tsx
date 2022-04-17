@@ -25,6 +25,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     enhanceTag,
     ApplicationEntries: [
         {
+            ID: base.ID,
             RenderEntryComponent({ disabled, icon, title }) {
                 const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 

@@ -1,6 +1,6 @@
 import { Fragment, useState, useMemo } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { Typography, useTheme, CircularProgress } from '@mui/material'
+import { Typography, useTheme } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
@@ -8,9 +8,7 @@ import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
 import { ApplicationSettingDialog } from './ApplicationSettingDialog'
-import { Application, useUnListedApplicationList } from './ApplicationSettingPluginList'
-import { currentPersonaIdentifier } from '../../settings/settings'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -73,7 +71,6 @@ export function ApplicationBoard() {
     const { classes } = useStyles()
     const theme = useTheme()
     const { t } = useI18N()
-    const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const [openSettings, setOpenSettings] = useState(false)
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
@@ -113,9 +110,7 @@ export function ApplicationBoard() {
                 .filter((x) => Boolean(x.entry.RenderEntryComponent)),
         [snsAdaptorPlugins],
     )
-
-    const { value, retry, loading } = useUnListedApplicationList(applicationList, currentIdentifier)
-    const listedAppList = value?.listedAppList ?? applicationList
+    const listedAppList = applicationList.filter((x) => !getUnlistedApp(x))
     return (
         <>
             <div className={classes.header}>
@@ -127,11 +122,7 @@ export function ApplicationBoard() {
                 />
             </div>
 
-            {loading ? (
-                <div className={classes.loadingWrapper}>
-                    <CircularProgress size={24} color="primary" sx={{ marginRight: 1 }} />
-                </div>
-            ) : listedAppList.length > 0 ? (
+            {listedAppList.length > 0 ? (
                 <section className={classes.applicationWrapper}>
                     {listedAppList.map((application) => {
                         return (
@@ -149,13 +140,7 @@ export function ApplicationBoard() {
                 </div>
             )}
             {openSettings ? (
-                <ApplicationSettingDialog
-                    open={openSettings}
-                    onClose={() => {
-                        setOpenSettings(false)
-                        retry()
-                    }}
-                />
+                <ApplicationSettingDialog open={openSettings} onClose={() => setOpenSettings(false)} />
             ) : null}
         </>
     )

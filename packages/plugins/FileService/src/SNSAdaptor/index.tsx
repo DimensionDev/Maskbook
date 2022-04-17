@@ -34,6 +34,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
+            ID: base.ID,
             RenderEntryComponent({ disabled, icon, title }) {
                 return (
                     <ApplicationEntry

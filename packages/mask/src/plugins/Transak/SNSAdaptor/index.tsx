@@ -15,6 +15,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
+            ID: base.ID,
             RenderEntryComponent({ disabled, icon, title }) {
                 const { openDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 

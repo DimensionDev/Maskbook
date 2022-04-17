@@ -19,9 +19,29 @@ export const InMemoryStorages = {
         tokenId: '',
     }),
 }
+
+export const ApplicationEntryUnlistedListKey = 'application_entry_unlisted_list'
 export const PersistentStorages = {
     Plugin: createPersistentKVStorage('plugin', {}),
     Settings: createPersistentKVStorage('settings', {
         debugging: false,
     }),
+    ApplicationEntryUnListedList: createPersistentKVStorage<{ [key: string]: boolean }>(
+        ApplicationEntryUnlistedListKey,
+        {
+            'com.maskbook.red_packet': false,
+            'com.maskbook.fileservice': false,
+            'com.maskbook.ito': false,
+            'com.maskbook.ito_claim': false,
+            'io.mask.cross-chain-bridge': false,
+            'com.maskbook.box': false,
+            'com.savings': false,
+            'com.maskbook.avatar': false,
+            'com.maskbook.trader': false,
+            'com.maskbook.transak': false,
+            'com.maskbook.pets': false,
+            'org.findtruman': false,
+            'io.gopluslabs.security': false,
+        },
+    ),
 }

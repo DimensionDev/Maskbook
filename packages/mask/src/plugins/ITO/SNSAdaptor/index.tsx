@@ -62,6 +62,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
+            ID: base.ID,
             RenderEntryComponent({ disabled, icon, title }) {
                 return (
                     <ApplicationEntry
@@ -90,6 +91,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 'https://realmasknetwork.notion.site/Launch-an-ITO-Initial-Twitter-Offering-Support-ETH-BSC-Polygon-Arbitrum-d84c60903f974f4880d2085a13906d55',
         },
         {
+            ID: `${base.ID}_claim`,
             RenderEntryComponent({ disabled, icon, title }) {
                 const [open, setOpen] = useState(false)
                 return (

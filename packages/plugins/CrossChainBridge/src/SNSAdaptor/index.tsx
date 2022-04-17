@@ -10,6 +10,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal, context) {},
     ApplicationEntries: [
         {
+            ID: base.ID,
             RenderEntryComponent({ disabled, icon, title }) {
                 const [open, setOpen] = useState(false)
                 return (

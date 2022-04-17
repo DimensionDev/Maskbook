@@ -32,6 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
+            ID: base.ID,
             category: 'dapp',
             marketListSortingPriority: 13,
             description: <Trans i18nKey="plugin_good_ghosting_description" />,

@@ -305,6 +305,7 @@ export namespace Plugin.SNSAdaptor {
     // #endregion
 
     export interface ApplicationEntry {
+        ID: string
         /**
          * Render entry component
          */

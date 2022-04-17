@@ -1,13 +1,9 @@
 import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
-import { useAsyncRetry } from 'react-use'
-import classNames from 'classnames'
-import { useLayoutEffect, useState, Fragment, useEffect, useMemo } from 'react'
-import { List, ListItem, Typography, CircularProgress } from '@mui/material'
+import { Fragment, useMemo, useEffect, useState } from 'react'
+import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { KeyValue } from '@masknet/web3-providers'
 import { useI18N } from '../../utils'
-import { currentPersonaIdentifier } from '../../settings/settings'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { PersistentStorages, MaskMessages, ApplicationEntryUnlistedListKey } from '../../../shared'
 
 export interface Application {
     entry: Plugin.SNSAdaptor.ApplicationEntry
@@ -16,33 +12,12 @@ export interface Application {
 }
 
 // #region kv storage
-export const APPLICATION_ENTRY_SETTING_KEY = 'application_entry_setting'
-const storage = KeyValue.createJSON_Storage(APPLICATION_ENTRY_SETTING_KEY)
-
-async function setAppUnlisted(app: Application, unlisted: boolean, identifier: string) {
-    await storage.set(app.pluginId + '_' + app.entry.name + '_' + identifier, { unlisted })
+export function setUnlistedApp(app: Application, unlisted: boolean) {
+    PersistentStorages.ApplicationEntryUnListedList.storage[app.entry.ID].setValue(unlisted)
 }
 
-export async function getAppUnlisted(app: Application, identifier: string) {
-    return storage.get<{ unlisted: boolean }>(app.pluginId + '_' + app.entry.name + '_' + identifier)
-}
-
-export function useUnListedApplicationList(list: Application[], identifier: string) {
-    return useAsyncRetry(async () => {
-        const calls = list.map(async (x) => {
-            try {
-                const result = await getAppUnlisted(x, identifier)
-                if (result?.unlisted) return { value: x, unlisted: true }
-                return { value: x, unlisted: false }
-            } catch {
-                return { value: x, unlisted: false }
-            }
-        })
-        const results = await Promise.all(calls)
-        const unlistedAppList = results.filter((x) => x.unlisted).map((x) => x.value)
-        const listedAppList = results.filter((x) => !x.unlisted).map((x) => x.value)
-        return { listedAppList, unlistedAppList }
-    }, [JSON.stringify(list)])
+export function getUnlistedApp(app: Application): boolean {
+    return PersistentStorages.ApplicationEntryUnListedList.storage[app.entry.ID].value
 }
 // #endregion
 
@@ -93,23 +68,12 @@ const useStyles = makeStyles()((theme) => ({
     placeholder: {
         color: getMaskColor(theme).textLight,
     },
-    loadingItem: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translateX(-50%) translateY(-50%)',
-    },
-    loadingListItem: {
-        opacity: 0.6,
-    },
 }))
 
 export function ApplicationSettingPluginList() {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
-    const [hasInit, setInit] = useState(false)
     const applicationList = useMemo(
         () =>
             snsAdaptorPlugins
@@ -130,59 +94,42 @@ export function ApplicationSettingPluginList() {
                 ),
         [snsAdaptorPlugins],
     )
-    const { value, retry, loading } = useUnListedApplicationList(applicationList, currentIdentifier)
+    const [listedAppList, setListedAppList] = useState(applicationList.filter((x) => !getUnlistedApp(x)))
+    const [unlistedAppList, setUnListedAppList] = useState(applicationList.filter((x) => getUnlistedApp(x)))
 
-    useLayoutEffect(() => {
-        if (!loading) setInit(true)
-    }, [loading])
+    useEffect(() => {
+        return MaskMessages.events.__kv_backend_persistent__.on((data) => {
+            if (data[0].split(':')[0] !== ApplicationEntryUnlistedListKey) return
+            setListedAppList(applicationList.filter((x) => !getUnlistedApp(x)))
+            setUnListedAppList(applicationList.filter((x) => getUnlistedApp(x)))
+        })
+    }, [])
 
-    return loading && !hasInit ? (
-        <div className={classes.loadingWrapper}>
-            <CircularProgress size={24} color="primary" sx={{ marginRight: 1 }} />
-        </div>
-    ) : (
+    return (
         <div>
-            {value ? (
-                <AppList
-                    appList={value.listedAppList}
-                    retry={retry}
-                    setAppUnlisted={setAppUnlisted}
-                    isListed
-                    loading={loading}
-                />
-            ) : null}
+            <AppList appList={listedAppList} setUnlistedApp={setUnlistedApp} isListed />
             <Typography className={classes.unlisted}>{t('application_settings_tab_plug_app-list-unlisted')}</Typography>
-            {value ? (
-                <AppList
-                    appList={value.unlistedAppList}
-                    retry={retry}
-                    setAppUnlisted={setAppUnlisted}
-                    isListed={false}
-                    loading={loading}
-                />
-            ) : null}
+            <AppList appList={unlistedAppList} setUnlistedApp={setUnlistedApp} isListed={false} />
         </div>
     )
 }
 
 interface AppListProps {
     appList: Application[]
-    retry: () => void
-    setAppUnlisted: (app: Application, unlisted: boolean, identifier: string) => Promise<void>
+    setUnlistedApp: (app: Application, unlisted: boolean) => void
     isListed: boolean
-    loading: boolean
 }
 
 function AppList(props: AppListProps) {
-    const { appList, retry, setAppUnlisted, isListed } = props
+    const { appList, setUnlistedApp, isListed } = props
     const { classes } = useStyles()
     const { t } = useI18N()
 
     return appList.length > 0 ? (
         <List className={classes.list}>
             {appList.map((x, i) => (
-                <Fragment key={x.pluginId}>
-                    <AppListItem application={x} retry={retry} setAppUnlisted={setAppUnlisted} isListed={isListed} />
+                <Fragment key={x.entry.ID}>
+                    <AppListItem application={x} setUnlistedApp={setUnlistedApp} isListed={isListed} />
                 </Fragment>
             ))}
         </List>
@@ -199,35 +146,16 @@ function AppList(props: AppListProps) {
 
 interface AppListItemProps {
     application: Application
-    retry: () => void
-    setAppUnlisted: (app: Application, unlisted: boolean, identifier: string) => Promise<void>
+    setUnlistedApp: (app: Application, unlisted: boolean) => void
     isListed: boolean
 }
 
 function AppListItem(props: AppListItemProps) {
-    const { application, retry, setAppUnlisted, isListed } = props
-    const [isRequesting, setRequesting] = useState(false)
-    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+    const { application, setUnlistedApp, isListed } = props
     const { classes } = useStyles()
-
-    useEffect(() => {
-        setRequesting(false)
-    }, [isListed])
-
     return (
-        <ListItem
-            className={classNames(classes.listItem, isRequesting ? classes.loadingListItem : '')}
-            onClick={async () => {
-                setRequesting(true)
-                await setAppUnlisted(application, isListed, currentIdentifier)
-                retry()
-            }}>
+        <ListItem className={classes.listItem} onClick={() => setUnlistedApp(application, isListed)}>
             <div className={classes.iconWrapper}>{application.entry.icon}</div>
-            {isRequesting ? (
-                <div className={classes.loadingItem}>
-                    <CircularProgress size={18} color="primary" />
-                </div>
-            ) : null}
         </ListItem>
     )
 }

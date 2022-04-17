@@ -32,6 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
+            ID: base.ID,
             category: 'dapp',
             marketListSortingPriority: 17,
             description: {

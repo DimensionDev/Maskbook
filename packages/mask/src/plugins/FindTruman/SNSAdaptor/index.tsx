@@ -90,6 +90,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
+            ID: base.ID,
             RenderEntryComponent({ disabled, icon, title }) {
                 const [open, setOpen] = useState(false)
                 return (
@@ -99,7 +100,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     </>
                 )
             },
-            appBoardSortingDefaultPriority: 11,
+            appBoardSortingDefaultPriority: 12,
             icon: <FindTrumanIcon />,
             name: <Trans i18nKey="plugin_find_truman_name" />,
         },
