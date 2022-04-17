@@ -10,6 +10,7 @@
       "@masknet/theme": "workspace:*",
       "@masknet/icons": "workspace:*",
       "@masknet/web3-shared-evm": "workspace:*",
+      "@masknet/web3-providers": "workspace:*",
       "react-use": "^17.3.2",
       "use-subscription": "^1.6.0",
       "react-feather": "^2.0.9",

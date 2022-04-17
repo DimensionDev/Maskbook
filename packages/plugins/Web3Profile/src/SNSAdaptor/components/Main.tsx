@@ -13,7 +13,9 @@ export function Main(props: MainProps) {
         <div>
             {persona?.linkedProfiles?.map((identifier) => (
                 <PlatformCard
-                    openImageSetting={openImageSetting}
+                    openImageSetting={(str: string) => {
+                        openImageSetting(str)
+                    }}
                     key={identifier?.identifier?.userId}
                     nickName={identifier?.nickname}
                     platformId={identifier?.identifier?.userId}

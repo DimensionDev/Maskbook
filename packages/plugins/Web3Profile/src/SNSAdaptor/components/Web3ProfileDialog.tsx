@@ -6,6 +6,12 @@ import { InjectedDialog } from '@masknet/shared'
 import { PersonaAction } from './PersonaAction'
 import { useAllPersona, useCurrentPersona, useCurrentVisitingProfile } from '../hooks/usePersona'
 import { Main } from './Main'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { useAddressNames } from '@masknet/web3-shared-evm'
+import { NextIDProof } from '@masknet/web3-providers'
+import { useAsyncRetry } from 'react-use'
+import { ImageManagement } from './ImageManagement'
+import { ImageList } from './ImageList'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -50,6 +56,16 @@ const useStyles = makeStyles()((theme) => ({
     actions: {
         padding: '0px !important',
     },
+    buttonWrapper: {
+        padding: '16px',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexGrow: 1,
+    },
+    button: {
+        width: '48%',
+    },
 }))
 
 export interface BuyTokenDialogProps extends withClasses<never | 'root'> {
@@ -71,11 +87,24 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     const { open, onClose } = props
     const [title, setTitle] = useState('Web3 Profile')
     const [steps, setSteps] = useState(BodyViewSteps.main)
+    const [settingAddress, setSettingAddress] = useState<string>()
     const persona = useCurrentPersona()
     const currentVisitingProfile = useCurrentVisitingProfile()
+    const { value: addressNames = EMPTY_LIST, loading: loadingAddressNames } = useAddressNames(currentVisitingProfile!)
+
     const allPersona = useAllPersona()
     const currentPersona = allPersona?.find((x) => x.identifier.compressedPoint === persona?.compressedPoint)
-    console.log({ currentPersona, currentVisitingProfile })
+    console.log({ currentPersona, currentVisitingProfile, addressNames })
+
+    const {
+        value: bindings,
+        loading,
+        retry: retryQueryBinding,
+    } = useAsyncRetry(async () => {
+        if (!currentPersona) return
+        return NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey!)
+    }, [currentPersona])
+    console.log({ bindings })
 
     const handleBack = () => {
         switch (steps) {
@@ -90,7 +119,7 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
                 setSteps(BodyViewSteps.image_display)
                 break
             case BodyViewSteps.wallet_setting:
-                setSteps(BodyViewSteps.image_setting)
+                setSteps(BodyViewSteps.image_display)
                 break
             default:
                 onClose()
@@ -139,10 +168,27 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
                         currentVisitingProfile={currentVisitingProfile}
                     />
                 )}
-                {/* {steps === BodyViewSteps.image_display && <ImageSetting wallets={wallets} />} */}
+                {steps === BodyViewSteps.image_display && (
+                    <ImageManagement
+                        addresses={bindings?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)}
+                        onSetting={(addr: string) => {
+                            setSteps(BodyViewSteps.image_setting)
+                            setSettingAddress(addr)
+                        }}
+                    />
+                )}
+                {steps === BodyViewSteps.image_setting && <ImageList address={settingAddress} />}
             </DialogContent>
             <DialogActions>
-                <PersonaAction currentPersona={currentPersona} currentVisitingProfile={currentVisitingProfile} />
+                {(steps === BodyViewSteps.main || steps === BodyViewSteps.image_display) && (
+                    <PersonaAction currentPersona={currentPersona} currentVisitingProfile={currentVisitingProfile} />
+                )}
+                {(steps === BodyViewSteps.image_setting || steps === BodyViewSteps.wallet_setting) && (
+                    <div className={classes.buttonWrapper}>
+                        <Button className={classes.button}>Cancel</Button>
+                        <Button className={classes.button}>Confirm</Button>
+                    </div>
+                )}
             </DialogActions>
         </InjectedDialog>
     )
