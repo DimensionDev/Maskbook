@@ -2,7 +2,7 @@
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type { TypedMessage } from '@masknet/typed-message'
-import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
+import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier, PersonaInformation } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
@@ -218,6 +218,7 @@ export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
+        allPersona: Subscription<PersonaInformation[] | undefined>
     }
     export interface Definition extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
@@ -694,6 +695,7 @@ export enum PluginId {
     CyberConnect = 'me.cyberconnect.app',
     GoPlusSecurity = 'io.gopluslabs.security',
     CrossChainBridge = 'io.mask.cross-chain-bridge',
+    Web3Profile = 'io.mask.web3-profile-plugin',
     // @masknet/scripts: insert-here
 }
 /**

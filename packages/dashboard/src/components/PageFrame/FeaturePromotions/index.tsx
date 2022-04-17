@@ -34,8 +34,8 @@ export const FeaturePromotions = memo(() => {
     const account = useAccount()
 
     const { currentPersona, connectPersona } = PersonaContext.useContainer()
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
 
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
     const isConnectedTwitter = useMemo(() => {
         if (!currentPersona) return false
 

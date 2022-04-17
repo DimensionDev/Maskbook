@@ -319,6 +319,7 @@ importers:
       '@masknet/plugin-rss3': workspace:*
       '@masknet/plugin-solana': workspace:*
       '@masknet/plugin-wallet': workspace:*
+      '@masknet/plugin-web3-profile': workspace:*
       '@masknet/public-api': workspace:*
       '@masknet/sdk': workspace:*
       '@masknet/shared': workspace:*
@@ -459,6 +460,7 @@ importers:
       '@masknet/plugin-rss3': link:../plugins/RSS3
       '@masknet/plugin-solana': link:../plugins/Solana
       '@masknet/plugin-wallet': link:../plugins/Wallet
+      '@masknet/plugin-web3-profile': link:../plugins/Web3Profile
       '@masknet/public-api': link:../public-api
       '@masknet/sdk': link:../mask-sdk
       '@masknet/shared': link:../shared
@@ -900,6 +902,30 @@ importers:
       bignumber.js: 9.0.2
       react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
       web3-core-helpers: 1.7.3
+
+  packages/plugins/Web3Profile:
+    specifiers:
+      '@masknet/icons': workspace:*
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      classnames: ^2.3.1
+      react-feather: ^2.0.9
+      react-use: ^17.3.2
+      use-subscription: ^1.6.0
+    dependencies:
+      '@masknet/icons': link:../../icons
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/theme': link:../../theme
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      classnames: 2.3.1
+      react-feather: 2.0.9_react@18.0.0
+      react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
+      use-subscription: 1.6.0_react@18.0.0
 
   packages/plugins/example:
     specifiers:
@@ -3967,6 +3993,7 @@ packages:
 
   /@dimensiondev/eslint-plugin/0.0.2-20220414093950-7d54c58_eslint@8.13.0:
     resolution: {integrity: sha512-H6ZmwT+mhplwYU0j8bvNmBNp0y5pT6fMfb3OjWiWkhF5W7LKxUy9YZLc6XfsCHC56hPTPq5u/pCjRBtE4Y1qxQ==, tarball: download/@dimensiondev/eslint-plugin/0.0.2-20220414093950-7d54c58/515fb9cbdd7dba3b6da5e0686027b2ec170872dc10618b545a9035dea7a12633}
+    engines: {node: '>= 16'}
     peerDependencies:
       eslint: '>= 8'
     dependencies:
@@ -11312,12 +11339,12 @@ packages:
     resolution: {integrity: sha512-Rl/1AWP4J/zRrk54hhlxH4drNxPJXYUaKffODVI53/dAsV4t9fBxyxYKAVPU1XBHxYwOWP9h9H0hM2MVw4YfJA==}
     dependencies:
       safe-buffer: 5.2.1
+    dev: false
 
   /base-x/3.0.9:
     resolution: {integrity: sha512-H7JU6iBHTal1gp56aKoaa//YUxEaAOUiydvrV/pILqIHXTtqxSkATOnDA2u+jZ/61sD+L/412+7kzXRtWukhpQ==}
     dependencies:
       safe-buffer: 5.2.1
-    dev: false
 
   /base/0.11.2:
     resolution: {integrity: sha512-5T6P4xPgpp0YDFvSWwEZ4NoE3aM4QBQXDzmVbraCkFj8zHM+mba8SyqB5DbZWyR7mYHo6Y7BdQo3MoA4m0TeQg==}
@@ -11738,7 +11765,7 @@ packages:
   /bs58/4.0.1:
     resolution: {integrity: sha1-vhYedsNU9veIrkBx9j806MTwpCo=}
     dependencies:
-      base-x: 3.0.8
+      base-x: 3.0.9
 
   /bs58check/2.1.2:
     resolution: {integrity: sha512-0TS1jicxdU09dwJMNZtVAfzPi6Q6QeN0pM1Fkzrjn+XYHvzMKPU3pHVpva+769iNVSfIYWf7LJ6WR+BuuMf8cA==}
@@ -14302,17 +14329,10 @@ packages:
       u3: 0.1.1
     dev: false
 
-  /error-stack-parser/2.0.6:
-    resolution: {integrity: sha512-d51brTeqC+BHlwF0BhPtcYgF5nlzf9ZZ0ZIUQNZpc9ZB9qw5IJ2diTrBY9jlCJkTLITYPjmiX6OWCwH+fuyNgQ==}
-    dependencies:
-      stackframe: 1.2.0
-    dev: false
-
   /error-stack-parser/2.0.7:
     resolution: {integrity: sha512-chLOW0ZGRf4s8raLrDxa5sdkvPec5YdvwbFnqJme4rk0rFajP8mPtrDL1+I+CwrQDCjswDA5sREX7jYQDQs9vA==}
     dependencies:
       stackframe: 1.2.1
-    dev: true
 
   /errors-utils/0.1.0:
     resolution: {integrity: sha512-BcAD40AzRrcoNJZRGFRZdGp1tvRsv0k9W3TZY1coOXIwKUb8/eRWFmhSM2kemgH6+1iwUtgC8sJJOJpGolqUCg==}
@@ -23026,7 +23046,7 @@ packages:
   /rtl-css-js/1.15.0:
     resolution: {integrity: sha512-99Cu4wNNIhrI10xxUaABHsdDqzalrSRTie4GeCmbGVuehm4oj+fIy8fTzB+16pmKe8Bv9rl+hxIBez6KxExTew==}
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.17.8
     dev: false
 
   /run-parallel/1.2.0:
@@ -23824,7 +23844,7 @@ packages:
   /stack-generator/2.0.5:
     resolution: {integrity: sha512-/t1ebrbHkrLrDuNMdeAcsvynWgoH/i4o8EGGfX7dEYDoTXOYVAkEpFdtshlvabzc6JlJ8Kf9YdFEoz7JkzGN9Q==}
     dependencies:
-      stackframe: 1.2.0
+      stackframe: 1.2.1
     dev: false
 
   /stack-trace/0.0.10:
@@ -23838,25 +23858,20 @@ packages:
       escape-string-regexp: 2.0.0
     dev: true
 
-  /stackframe/1.2.0:
-    resolution: {integrity: sha512-GrdeshiRmS1YLMYgzF16olf2jJ/IzxXY9lhKOskuVziubpTYcYqyOwYeJKzQkwy7uN0fYSsbsC4RQaXf9LCrYA==}
-    dev: false
-
   /stackframe/1.2.1:
     resolution: {integrity: sha512-h88QkzREN/hy8eRdyNhhsO7RSJ5oyTqxxmmn0dzBIMUclZsjpfmrsg81vp8mjjAs2vAZ72nyWxRUwSwmh0e4xg==}
-    dev: true
 
   /stacktrace-gps/3.0.4:
     resolution: {integrity: sha512-qIr8x41yZVSldqdqe6jciXEaSCKw1U8XTXpjDuy0ki/apyTn/r3w9hDAAQOhZdxvsC93H+WwwEu5cq5VemzYeg==}
     dependencies:
       source-map: 0.5.6
-      stackframe: 1.2.0
+      stackframe: 1.2.1
     dev: false
 
   /stacktrace-js/2.0.2:
     resolution: {integrity: sha512-Je5vBeY4S1r/RnLydLl0TBTi3F2qdfWmYsGvtfZgEI+SCprPppaIhQf5nGcal4gI4cGpCV/duLcAzT1np6sQqg==}
     dependencies:
-      error-stack-parser: 2.0.6
+      error-stack-parser: 2.0.7
       stack-generator: 2.0.5
       stacktrace-gps: 3.0.4
     dev: false
