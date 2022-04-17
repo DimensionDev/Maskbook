@@ -17,21 +17,11 @@ export interface ProviderStorage<Account, ProviderType extends string> {
     providers: Record<EnhanceableSite | ExtensionSite, ProviderType>
 }
 
-export class ProviderState<
-    ChainId extends number,
-    NetworkType extends string,
-    ProviderType extends string,
-    Account extends {
-        account: string
-        chainId: ChainId
-    } = {
-        account: string
-        chainId: ChainId
-    },
-> implements Web3Plugin.ObjectCapabilities.ProviderState<ChainId, NetworkType, ProviderType, Account>
+export class ProviderState<ChainId extends number, NetworkType extends string, ProviderType extends string>
+    implements Web3Plugin.ObjectCapabilities.ProviderState<ChainId, NetworkType, ProviderType>
 {
     protected site = getSiteType()
-    protected storage: StorageObject<ProviderStorage<Account, ProviderType>> = null!
+    protected storage: StorageObject<ProviderStorage<Web3Plugin.Account<ChainId>, ProviderType>> = null!
 
     public account?: Subscription<string>
     public chainId?: Subscription<ChainId>
@@ -40,7 +30,7 @@ export class ProviderState<
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
-        protected defaultValue: ProviderStorage<Account, ProviderType>,
+        protected defaultValue: ProviderStorage<Web3Plugin.Account<ChainId>, ProviderType>,
         protected options: {
             isSameAddress(a?: string, b?: string): boolean
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
@@ -55,21 +45,21 @@ export class ProviderState<
         this.providerType = mapSubscription(this.storage.providers.subscription, (providers) => providers[site])
 
         this.chainId = mapSubscription(
-            mergeSubscription<[ProviderType, Record<ProviderType, Account>]>(
+            mergeSubscription<[ProviderType, Record<ProviderType, Web3Plugin.Account<ChainId>>]>(
                 this.providerType,
                 this.storage.accounts.subscription,
             ),
             ([providerType, accounts]) => accounts[providerType].chainId,
         )
         this.account = mapSubscription(
-            mergeSubscription<[ProviderType, Record<ProviderType, Account>]>(
+            mergeSubscription<[ProviderType, Record<ProviderType, Web3Plugin.Account<ChainId>>]>(
                 this.providerType,
                 this.storage.accounts.subscription,
             ),
             ([providerType, accounts]) => accounts[providerType].account,
         )
         this.networkType = mapSubscription(
-            mergeSubscription<[ProviderType, Record<ProviderType, Account>]>(
+            mergeSubscription<[ProviderType, Record<ProviderType, Web3Plugin.Account<ChainId>>]>(
                 this.providerType,
                 this.storage.accounts.subscription,
             ),

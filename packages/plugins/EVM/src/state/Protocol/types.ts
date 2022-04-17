@@ -1,109 +1,46 @@
 import type Web3 from 'web3'
-import type { RequestArguments, Transaction, TransactionConfig, TransactionReceipt } from 'web3-core'
+import type { RequestArguments, Transaction, TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import type {
     ChainId,
-    SendOverrides,
-    RequestOptions,
-    ExternalProvider,
+    NetworkType,
     ProviderType,
-    EthereumTransactionConfig,
+    EIP1193Provider,
     EthereumMethodType,
+    EthereumTransactionConfig,
 } from '@masknet/web3-shared-evm'
-import type { Emitter } from '@servie/events'
 
-export interface ProviderEvents {
-    chainId: [string]
-    accounts: [string[]]
-    connect: [
-        {
-            chainId: ChainId
-            account: string
-        },
-    ]
-    discconect: []
+export type Web3State = Web3Plugin.ObjectCapabilities.Capabilities<
+    ChainId,
+    ProviderType,
+    NetworkType,
+    string,
+    EthereumTransactionConfig,
+    Transaction,
+    string,
+    Web3
+>
+
+export type RequestOptions = Web3Plugin.ConnectionOptions<ChainId, ProviderType, EthereumTransactionConfig> & {
+    popupsWindow?: boolean
 }
 
-export interface Provider {
-    emitter: Emitter<ProviderEvents>
-    /** Get to know whether the provider is ready */
-    readonly isReady: boolean
-    /** Keep waiting until the provider is ready */
-    untilReady: () => Promise<void>
+export interface Provider extends Web3Plugin.Provider<ChainId, EIP1193Provider, Web3> {
     /** The basic RPC request method. */
     request<T extends unknown>(requestArguments: RequestArguments): Promise<T>
-    /** Create an web3 instance. */
-    createWeb3(chainId?: ChainId): Web3
-    /** Create an ExternalProvider which can be an EIP-1193 provider. */
-    createExternalProvider(chainId?: ChainId): ExternalProvider
-    /** Create the connection */
-    connect(chainId: ChainId): Promise<{
-        chainId: ChainId
-        account: string
-    }>
-    /** Dismiss the connection */
-    disconnect(): Promise<void>
 }
 
-export interface Connection {
-    getWeb3(): Web3
-    getAccounts(overrides?: SendOverrides, options?: RequestOptions): Promise<string[]>
-    getChainId(overrides?: SendOverrides, options?: RequestOptions): Promise<string>
-    getBlockNumber(overrides?: SendOverrides, options?: RequestOptions): Promise<number>
-    getBalance(address: string, overrides?: SendOverrides, options?: RequestOptions): Promise<string>
-    getCode(address: string, overrides?: SendOverrides, options?: RequestOptions): Promise<string>
-    getTransactionByHash(hash: string, overrides?: SendOverrides, options?: RequestOptions): Promise<Transaction>
-    getTransactionReceiptHijacked(
-        hash: string,
-        overrides?: SendOverrides,
-        options?: RequestOptions,
-    ): Promise<TransactionReceipt | null>
-    getTransactionReceipt(
-        hash: string,
-        overrides?: SendOverrides,
-        options?: RequestOptions,
-    ): Promise<TransactionReceipt | null>
-    getTransactionCount(address: string, overrides?: SendOverrides, options?: RequestOptions): Promise<number>
-    call(config: TransactionConfig, overrides?: SendOverrides, options?: RequestOptions): Promise<string>
-    personalSign(
-        dataToSign: string,
-        address: string,
-        password?: string,
-        overrides?: SendOverrides,
-        options?: RequestOptions,
-    ): Promise<string>
-    typedDataSign(
-        address: string,
-        dataToSign: string,
-        overrides?: SendOverrides,
-        options?: RequestOptions,
-    ): Promise<string>
-    addChain(chainId: ChainId, overrides?: SendOverrides, options?: RequestOptions): Promise<boolean>
-    switchChain(chainId: ChainId, overrides?: SendOverrides, options?: RequestOptions): Promise<boolean>
-    signTransaction(config: TransactionConfig, overrides?: SendOverrides, options?: RequestOptions): Promise<string>
-    sendTransaction(config: TransactionConfig, overrides?: SendOverrides, options?: RequestOptions): Promise<void>
-    sendRawTransaction(raw: string, overrides?: SendOverrides, options?: RequestOptions): Promise<string>
-    watchTransaction(
-        hash: string,
-        config: TransactionConfig,
-        overrides?: SendOverrides,
-        options?: RequestOptions,
-    ): Promise<void>
-    unwatchTransaction(hash: string, overrides?: SendOverrides, options?: RequestOptions): Promise<void>
-    confirmRequest(overrides?: SendOverrides, options?: RequestOptions): Promise<void>
-    rejectRequest(overrides?: SendOverrides, options?: RequestOptions): Promise<void>
-    replaceRequest(
-        hash: string,
-        config: TransactionConfig,
-        overrides?: SendOverrides,
-        options?: RequestOptions,
-    ): Promise<void>
-    cancelRequest(
-        hash: string,
-        config: TransactionConfig,
-        overrides?: SendOverrides,
-        options?: RequestOptions,
-    ): Promise<void>
+export interface Connection
+    extends Web3Plugin.Connection<ChainId, ProviderType, string, EthereumTransactionConfig, Transaction, string, Web3> {
+    getCode(address: string, options?: RequestOptions): Promise<string>
+    getTransactionReceiptHijacked(hash: string, options?: RequestOptions): Promise<TransactionReceipt | null>
+    getTransactionReceipt(hash: string, options?: RequestOptions): Promise<TransactionReceipt | null>
+    call(config: EthereumTransactionConfig, options?: RequestOptions): Promise<string>
+    confirmRequest(options?: RequestOptions): Promise<void>
+    rejectRequest(options?: RequestOptions): Promise<void>
+    replaceRequest(hash: string, config: EthereumTransactionConfig, options?: RequestOptions): Promise<void>
+    cancelRequest(hash: string, config: EthereumTransactionConfig, options?: RequestOptions): Promise<void>
 }
 
 export interface Context {
@@ -114,7 +51,6 @@ export interface Context {
     readonly providerType: ProviderType
     readonly method: EthereumMethodType
     readonly connection: Connection
-    readonly sendOverrides: SendOverrides | undefined
     readonly requestOptions: RequestOptions | undefined
 
     /**

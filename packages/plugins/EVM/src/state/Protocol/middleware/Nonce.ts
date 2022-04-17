@@ -2,7 +2,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
 import { EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import type { Context, Connection, Middleware } from '../types'
-import { getSharedContext } from '../../../context'
+import { SharedContextSettings } from '../../../settings'
 
 class NonceManager {
     constructor(private address: string, private connection: Connection) {}
@@ -21,7 +21,7 @@ class NonceManager {
         if (!this.locked) this.tasks.shift()?.()
     }
     private async getRemoteNonce() {
-        const { chainId } = getSharedContext()
+        const { chainId } = SharedContextSettings.value
 
         return new Promise<number>(async (resolve, reject) => {
             const callback = (error: Error | null, nonce = 0) => {
@@ -35,7 +35,7 @@ class NonceManager {
                     this.lock()
                     callback(
                         null,
-                        await this.connection.getTransactionCount(
+                        await this.connection.getTransactionNonce(
                             this.address,
                             {
                                 chainId: chainId.getCurrentValue(),
@@ -91,7 +91,7 @@ export class Nonce implements Middleware<Context> {
     private cache = new Map<string, NonceManager>()
 
     constructor() {
-        const { chainId } = getSharedContext()
+        const { chainId } = SharedContextSettings.value
 
         // reset all nonce if the chain id of mask wallet was changed
         chainId.subscribe(() => {

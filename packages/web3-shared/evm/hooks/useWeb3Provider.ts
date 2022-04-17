@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
 import { useWeb3Context } from '../context'
 import type { RequestOptions, SendOverrides } from '../types'
-import { createExternalProvider } from '../utils'
+import { createEIP1193Provider } from '../utils'
 
 export function useWeb3Provider(overrides?: SendOverrides, options?: RequestOptions) {
     const { request, getSendOverrides, getRequestOptions } = useWeb3Context()
     return useMemo(() => {
-        return createExternalProvider(
+        return createEIP1193Provider(
             request,
             () => ({
                 ...getSendOverrides?.(),

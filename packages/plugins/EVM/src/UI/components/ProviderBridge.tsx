@@ -1,9 +1,8 @@
 import { useEffect, useCallback } from 'react'
 // import { useMount } from 'react-use'
 import type { ProviderType, ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
+import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra/web3'
 import { EVM_Messages, EVM_RPC } from '../../messages'
-import { useBridgedProvider } from '../../hooks'
 import { getSiteType } from '@masknet/shared-base'
 
 export interface ProviderBridgeProps {

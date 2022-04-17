@@ -8,7 +8,8 @@ import { Providers } from './Protocol/provider'
 
 export class NameService extends NameServiceState<ChainId> {
     private ens = new ENS({
-        provider: Providers[ProviderType.MaskWallet].createExternalProvider(ChainId.Mainnet),
+        // @ts-ignore
+        provider: Providers[ProviderType.MaskWallet].createWeb3Provider(ChainId.Mainnet),
         network: ChainId.Mainnet,
     })
 

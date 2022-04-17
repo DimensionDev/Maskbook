@@ -10,25 +10,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 
-export function toPayload(transaction: Transaction): JsonRpcPayload {
-    return {
-        jsonrpc: '2.0',
-        id: '0',
-        method: EthereumMethodType.ETH_SEND_TRANSACTION,
-        params: [
-            {
-                from: transaction.from,
-                to: transaction.to,
-                value: transaction.value,
-                gas: transaction.gas,
-                gasPrice: transaction.gasPrice,
-                data: transaction.input,
-                nonce: transaction.nonce,
-            },
-        ],
-    }
-}
-
 export function getPayloadConfig(payload: JsonRpcPayload) {
     if (!payload.id || payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
     const [config] = payload.params as [TransactionConfig]

@@ -1,33 +1,19 @@
 import { toHex } from 'web3-utils'
 import { EthereumMethodType } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
-import { getWeb3State } from '../..'
-import { getSharedContext } from '../../../context'
+import { SharedContextSettings, Web3StateSettings } from '../../../settings'
 
 export class MaskWallet implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
-        const { Protocol } = getWeb3State()
-        const {
-            hasNativeAPI,
-            nativeType,
-            nativeSend,
-            nativeSendJsonString,
-            account,
-            chainId,
-            signTransaction,
-            signPersonalMessage,
-            signTypedData,
-        } = getSharedContext()
+        const { Protocol } = Web3StateSettings.value
+        const { hasNativeAPI, nativeSend, account, chainId, signTransaction, signPersonalMessage, signTypedData } =
+            SharedContextSettings.value
 
         // redirect to native app
         if (hasNativeAPI) {
             try {
-                const response =
-                    nativeType === 'Android'
-                        ? JSON.parse(await nativeSendJsonString!(JSON.stringify(context.request)))
-                        : await nativeSend!(context.request)
-
-                context.end(new Error(response.error), response.result)
+                const response = await nativeSend(context.request)
+                context.end(new Error(response.error?.message ?? 'Unknown Error'), response.result)
             } catch (error) {
                 context.abort(error)
             } finally {

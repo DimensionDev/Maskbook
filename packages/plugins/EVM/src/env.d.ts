@@ -1,4 +1,5 @@
 /// <reference types="@masknet/global-types/webpack" />
+
 declare module 'ethjs-ens' {
     import { provider as Provider } from 'web3-core'
     export default class Ens {

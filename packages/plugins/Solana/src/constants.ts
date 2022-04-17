@@ -5,7 +5,6 @@ import { PublicKey } from '@solana/web3.js'
 export const PLUGIN_META_KEY = 'com.mask.solana'
 export const PLUGIN_ID = 'com.mask.solana'
 export const PLUGIN_NAME = 'Solana Chain'
-export const PLUGIN_ICON = '\u{1F305}'
 export const PLUGIN_DESCRIPTION = ''
 export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
     {
@@ -44,5 +43,6 @@ export const NETWORK_ENDPOINTS: Record<ChainId, string> = {
     [ChainId.Testnet]: 'https://api.testnet.solana.com',
     [ChainId.Devnet]: 'https://api.devnet.solana.com',
 }
+
 export const ENDPOINT_KEY = 'mainnet-beta'
 export const SOL_TLD_AUTHORITY = new PublicKey('58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx')

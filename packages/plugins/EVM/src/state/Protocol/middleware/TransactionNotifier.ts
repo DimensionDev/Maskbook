@@ -112,7 +112,7 @@ export class TransactionNotifier implements Middleware<Context> {
                     const receipt = context.result as TransactionReceipt | undefined
                     if (receipt) {
                         const state = getTransactionState(receipt)
-                        const transaction = await context.connection.getTransactionByHash(
+                        const transaction = await context.connection.getTransaction(
                             receipt.transactionHash,
                             context.sendOverrides,
                             context.requestOptions,

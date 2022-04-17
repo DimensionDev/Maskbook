@@ -1,18 +1,38 @@
+import Web3, { PublicKey } from '@solana/web3.js'
 import bs58 from 'bs58'
 import { Buffer } from 'buffer'
 import urlcat from 'urlcat'
-import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra'
+import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { leftShift, multipliedBy, createLookupTableResolver } from '@masknet/web3-shared-base'
 import { ChainId, ProviderType, NetworkType } from '../types'
 import { getChainConstants } from '../constants'
 
+// #region
+export function encodePublicKey(key: PublicKey) {
+    return key.toBase58()
+}
+
+export function deocdeAddress(initData: string | Buffer) {
+    const data = typeof initData === 'string' ? bs58.decode(initData) : initData
+    if (!PublicKey.isOnCurve(data)) throw new Error(`Failed to create public key from ${bs58.encode(data)}.`)
+    return new PublicKey(data)
+}
+// #endregion
+
 // #region formatter
-export function formatAddress(address: string, size?: number) {
-    return address
+export function formatAddress(address: string, size = 0) {
+    if (!isValidAddress(address)) return address
+    const address_ = bs58.encode(Buffer.from(address, 'hex'))
+    if (size === 0 || size > 21) return address_
+    return `${address_.substring(0, size)}...${address_.substring(-size)}`
 }
 // #endregion
 
 // #region validator
+export function isChainIdValid(chainId: ChainId, allowTestnet = false) {
+    return resolveChainName(chainId) === 'mainnet' || allowTestnet
+}
+
 export function isSameAddress(a?: string, b?: string) {
     if (!a || !b) return false
     return a.toLowerCase() === b.toLowerCase()
@@ -22,15 +42,10 @@ export function isValidDomain(domain: string) {
     return /.+\.sol/i.test(domain)
 }
 
-export function isValidAddress(address: string) {
-    return true
+export function isValidAddress(address?: string) {
+    return !!(address && Web3.PublicKey.isOnCurve(bs58.decode(address)))
 }
 // #endregion
-
-export function hexToBase58(hex: string) {
-    const buffer = Buffer.from(hex, 'hex')
-    return bs58.encode(buffer)
-}
 
 // #region token
 export function createFungibleToken(
@@ -107,6 +122,10 @@ export function resolveNonFungibleTokenLink(chainId: ChainId, address: string, t
     return ''
 }
 
+export function resolveFungileTokenLink(chainId: ChainId, address: string) {
+    return ''
+}
+
 export function resolveDomainLink(domain: string) {
     return ''
 }
@@ -120,12 +139,22 @@ export function resolveChainFullName(chainId: ChainId) {
     return NAME ?? FULL_NAME ?? 'Flow'
 }
 
+export const resolveChainName = createLookupTableResolver<ChainId, string>(
+    {
+        [ChainId.Mainnet]: 'mainnet',
+        [ChainId.Devnet]: 'devnet',
+        [ChainId.Testnet]: 'testnet',
+    },
+    () => 'unknown',
+)
+
 export const resolveProviderName = createLookupTableResolver<ProviderType, string>(
     {
         [ProviderType.Phantom]: 'Phantom',
+        [ProviderType.Coin98]: 'Coin98',
         [ProviderType.Sollet]: 'Sollet',
     },
-    () => 'Unknown provider type',
+    () => 'Unknown',
 )
 
 // #endregion

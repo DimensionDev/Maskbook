@@ -3,7 +3,7 @@ import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared
 import type { Plugin } from '../types'
 import { Web3Plugin, TransactionStatusType } from '../web3-types'
 
-export type TransactionStorage<ChainId extends number, TransactionConfig> = Record<
+export type TransactionStorage<ChainId extends number, Transaction> = Record<
     // chainId
     ChainId,
     Partial<
@@ -14,24 +14,24 @@ export type TransactionStorage<ChainId extends number, TransactionConfig> = Reco
                 candidates: Record<
                     // transaction id
                     string,
-                    TransactionConfig
+                    Transaction
                 >
             })[]
         >
     >
 >
 
-export class TransactionState<ChainId extends number, TransactionConfig>
-    implements Web3Plugin.ObjectCapabilities.TransactionState<ChainId, TransactionConfig>
+export class TransactionState<ChainId extends number, Transaction>
+    implements Web3Plugin.ObjectCapabilities.TransactionState<ChainId, Transaction>
 {
     static MAX_RECORD_SIZE = 20
 
-    protected storage: StorageItem<TransactionStorage<ChainId, TransactionConfig>> = null!
+    protected storage: StorageItem<TransactionStorage<ChainId, Transaction>> = null!
     public transactions?: Subscription<Web3Plugin.RecentTransaction[]>
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
-        protected defaultValue: TransactionStorage<ChainId, TransactionConfig>,
+        protected defaultValue: TransactionStorage<ChainId, Transaction>,
         protected subscriptions: {
             account?: Subscription<string>
             chainId?: Subscription<ChainId>
@@ -47,7 +47,7 @@ export class TransactionState<ChainId extends number, TransactionConfig>
 
         if (this.subscriptions.chainId && this.subscriptions.account) {
             this.transactions = mapSubscription(
-                mergeSubscription<[ChainId, string, TransactionStorage<ChainId, TransactionConfig>]>(
+                mergeSubscription<[ChainId, string, TransactionStorage<ChainId, Transaction>]>(
                     this.subscriptions.chainId,
                     this.subscriptions.account,
                     this.storage.subscription,
@@ -57,7 +57,7 @@ export class TransactionState<ChainId extends number, TransactionConfig>
         }
     }
 
-    async addTransaction(chainId: ChainId, address: string, id: string, transaction: TransactionConfig) {
+    async addTransaction(chainId: ChainId, address: string, id: string, transaction: Transaction) {
         const now = new Date()
         const all = this.storage.value
         const address_ = this.options.formatAddress(address)
@@ -79,7 +79,7 @@ export class TransactionState<ChainId extends number, TransactionConfig>
                         updatedAt: now,
                         status: TransactionStatusType.NOT_DEPEND,
                         candidates: {
-                            [id]: transaction as TransactionConfig,
+                            [id]: transaction as Transaction,
                         },
                     },
                     ...(all[chainId][address_] ?? []),
@@ -88,13 +88,7 @@ export class TransactionState<ChainId extends number, TransactionConfig>
         })
     }
 
-    async replaceTransaction(
-        chainId: ChainId,
-        address: string,
-        id: string,
-        newId: string,
-        transaction: TransactionConfig,
-    ) {
+    async replaceTransaction(chainId: ChainId, address: string, id: string, newId: string, transaction: Transaction) {
         const now = new Date()
         const all = this.storage.value
         const address_ = this.options.formatAddress(address)

@@ -1,9 +1,9 @@
-import type { ProviderType } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
+import type { ProviderType } from '@masknet/web3-shared-evm'
 import { Providers } from '../state/Protocol/provider'
 
 export function useProviderReady(providerType: ProviderType) {
     return useAsyncRetry(async () => {
-        return Providers[providerType]?.untilReady()
+        return Providers[providerType]?.readyPromise
     }, [providerType])
 }

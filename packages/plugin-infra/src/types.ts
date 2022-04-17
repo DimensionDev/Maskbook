@@ -81,10 +81,8 @@ export namespace Plugin.Shared {
         nativeType?: 'Android' | 'iOS'
         /** Native API supported */
         hasNativeAPI: boolean
-        /** iOS Ethereum send request */
-        nativeSend?: (payload: JsonRpcPayload) => Promise<JsonRpcResponse>
-        /** Android Ethereum send request */
-        nativeSendJsonString?: (message: string) => Promise<string>
+        /** Send request to native API */
+        nativeSend: (payload: JsonRpcPayload) => Promise<JsonRpcResponse>
 
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
@@ -287,7 +285,16 @@ export namespace Plugin.SNSAdaptor {
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3Plugin.UI.UI
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<number, string, string, string, object>
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<
+            number,
+            string,
+            string,
+            string,
+            unknown,
+            unknown,
+            string,
+            unknown
+        >
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -448,7 +455,16 @@ export namespace Plugin.Dashboard {
          */
         Web3UI?: Web3Plugin.UI.UI
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<number, string, string, object, object>
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<
+            number,
+            string,
+            string,
+            string,
+            unknown,
+            unknown,
+            string,
+            unknown
+        >
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
         __general_ui__?: GeneralUI.DefinitionDeferred
     }

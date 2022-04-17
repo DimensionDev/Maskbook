@@ -15,24 +15,19 @@ import { Providers } from './Protocol/provider'
 import { createConnection } from './Protocol/connection'
 import type { Provider as BaseProvider } from './Protocol/types'
 
-interface Account {
-    account: string
-    chainId: ChainId
-}
-
 export class Provider
-    extends ProviderState<ChainId, NetworkType, ProviderType, Account>
-    implements Web3Plugin.ObjectCapabilities.ProviderState<ChainId, NetworkType, ProviderType, Account>
+    extends ProviderState<ChainId, NetworkType, ProviderType>
+    implements Web3Plugin.ObjectCapabilities.ProviderState<ChainId, NetworkType, ProviderType>
 {
     constructor(context: Plugin.Shared.SharedContext) {
-        const defaultValue: ProviderStorage<Account, ProviderType> = {
+        const defaultValue: ProviderStorage<Web3Plugin.Account<ChainId>, ProviderType> = {
             accounts: getEnumAsArray(ProviderType).reduce((accumulator, providerType) => {
                 accumulator[providerType.value] = {
                     account: '',
                     chainId: ChainId.Mainnet,
                 }
                 return accumulator
-            }, {} as Record<ProviderType, Account>),
+            }, {} as Record<ProviderType, Web3Plugin.Account<ChainId>>),
             providers: [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].reduce(
                 (accumulator, site) => {
                     accumulator[site.value] = ProviderType.MaskWallet

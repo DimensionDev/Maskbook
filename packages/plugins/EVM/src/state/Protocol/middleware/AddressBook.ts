@@ -6,15 +6,14 @@ import {
     isSameAddress,
     isZeroAddress,
 } from '@masknet/web3-shared-evm'
-import { getWeb3State } from '../..'
 import { PayloadComputer } from '../payload'
 import type { Context, Middleware } from '../types'
+import { Web3StateSettings } from '../../../settings'
 
 export class AddressBook implements Middleware<Context> {
     private getFrom(computedPayload?: ComputedPayload) {
         if (!computedPayload) return
-        const tx = (computedPayload as { _tx?: EthereumTransactionConfig })?._tx
-        return tx?.from as string | undefined
+        return (computedPayload as { _tx?: EthereumTransactionConfig })?._tx?.from as string | undefined
     }
 
     private getTo(computedPayload?: ComputedPayload) {
@@ -30,7 +29,7 @@ export class AddressBook implements Middleware<Context> {
     }
 
     async fn(context: Context, next: () => Promise<void>) {
-        const { AddressBook } = getWeb3State()
+        const { AddressBook } = Web3StateSettings.value
 
         await next()
 

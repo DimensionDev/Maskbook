@@ -1,23 +1,22 @@
 import Web3 from 'web3'
 import type { RequestArguments } from 'web3-core'
 import { Emitter } from '@servie/events'
-import { ChainId, createExternalProvider } from '@masknet/web3-shared-evm'
-import type { Provider, ProviderEvents } from '../types'
+import { ChainId, createEIP1193Provider, EIP1193Provider } from '@masknet/web3-shared-evm'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { Provider } from '../types'
 
 export class BaseProvider implements Provider {
-    // To prevent creating many times, we cache the web3 instance.
-    private web3: Web3 | null = null
+    web3: Web3 | null = null
+    provider: EIP1193Provider | null = null
+    emitter = new Emitter<Web3Plugin.ProviderEvents<ChainId>>()
 
-    // A bridge for runtime provider events.
-    emitter = new Emitter<ProviderEvents>()
-
-    /** No need to wait by default */
-    get isReady() {
+    // No need to wait by default
+    get ready() {
         return true
     }
 
-    /** No need to wait by default */
-    untilReady() {
+    // No need to wait by default
+    get readyPromise() {
         return Promise.resolve()
     }
 
@@ -27,22 +26,25 @@ export class BaseProvider implements Provider {
         throw new Error('Method not implemented.')
     }
 
-    // Create a web3 instance from external provider by default.
-    createWeb3(chainId?: ChainId) {
+    // Create a web3 instance from the external provider by default.
+    async createWeb3(chainId?: ChainId) {
         if (this.web3) return this.web3
-        const provider = this.createExternalProvider(chainId)
-        this.web3 = new Web3(provider)
+
+        // @ts-ignore
+        this.web3 = new Web3(await this.createWeb3Provider(chainId))
         return this.web3
     }
 
     // Create an external provider from the basic request method.
-    createExternalProvider(chainId?: ChainId) {
-        const provider = createExternalProvider(this.request.bind(this))
-        if (!provider.request) throw new Error('Failed to create provider.')
-        return provider
+    async createWeb3Provider(chainId?: ChainId) {
+        await this.readyPromise
+
+        if (this.provider) return this.provider
+        this.provider = createEIP1193Provider(this.request.bind(this))
+        return this.provider
     }
 
-    connect(chainId: ChainId): Promise<{ chainId: ChainId; account: string }> {
+    connect(chainId: ChainId): Promise<Web3Plugin.Account<ChainId>> {
         throw new Error('Method not implemented')
     }
 

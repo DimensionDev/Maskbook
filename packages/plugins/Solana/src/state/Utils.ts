@@ -1,25 +1,22 @@
 import type { Web3Plugin } from '@masknet/plugin-infra/web3'
-import { formatBalance } from '@masknet/web3-shared-evm'
+import { formatBalance, formatCurrency, formatDomainName } from '@masknet/web3-shared-evm'
 import {
     isValidDomain,
     isValidAddress,
     isSameAddress,
     ChainId,
-    formatCurrency,
-    formatEthereumAddress,
+    formatAddress,
     getChainDetailed,
     isChainIdValid,
-    NonFungibleAssetProvider,
     resolveAddressLinkOnExplorer,
     resolveBlockLinkOnExplorer,
     resolveChainColor,
     resolveChainFullName,
     resolveChainName,
-    resolveCollectibleLink,
     resolveTransactionLinkOnExplorer,
+    resolveFungileTokenLink,
     resolveNonFungibleTokenLink,
     resolveDomainLink,
-    formatDomainName,
 } from '@masknet/web3-shared-solana'
 
 export class Utils implements Web3Plugin.ObjectCapabilities.Others<ChainId> {
@@ -28,15 +25,15 @@ export class Utils implements Web3Plugin.ObjectCapabilities.Others<ChainId> {
     isValidAddress = isValidAddress
     isSameAddress = isSameAddress
 
+    formatAddress = formatAddress
+    formatCurrency = formatCurrency
+    formatBalance = formatBalance
+    formatDomainName = formatDomainName
+
     getChainDetailed = getChainDetailed
     getAverageBlockDelay = (chainId: ChainId) => {
         return 15 * 1000
     }
-
-    formatAddress = formatEthereumAddress
-    formatCurrency = formatCurrency
-    formatBalance = formatBalance
-    formatDomainName = formatDomainName
 
     resolveChainName = resolveChainName
     resolveChainFullName = resolveChainFullName
@@ -46,5 +43,6 @@ export class Utils implements Web3Plugin.ObjectCapabilities.Others<ChainId> {
     resolveAddressLink = resolveAddressLinkOnExplorer
     resolveBlockLink = resolveBlockLinkOnExplorer
     resolveDomainLink = resolveDomainLink
+    resolveFungileTokenLink = resolveFungileTokenLink
     resolveNonFungibleTokenLink = resolveNonFungibleTokenLink
 }

@@ -1,13 +1,12 @@
 import Web3 from 'web3'
 import { toHex } from 'web3-utils'
+import { first } from 'lodash-unified'
 import type { HttpProvider, RequestArguments } from 'web3-core'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { first } from 'lodash-unified'
-import { ChainId, createExternalProvider, createPayload, getChainRPC, getRPCConstants } from '@masknet/web3-shared-evm'
+import { ChainId, createEIP1193Provider, createPayload, getChainRPC, getRPCConstants } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { Provider } from '../types'
-import { getWeb3State } from '../..'
-import { getSharedContext, untilSharedContext } from '../../../context'
+import { SharedContextSettings, Web3StateSettings } from '../../../settings'
 
 const WEIGHTS_LENGTH = getRPCConstants(ChainId.Mainnet).RPC_WEIGHTS?.length ?? 4
 
@@ -19,32 +18,27 @@ export class MaskWalletProvider extends BaseProvider implements Provider {
 
     constructor() {
         super()
-        untilSharedContext().then(this.addShareContextListeners)
+        Web3StateSettings.readyPromise.then(this.addShareContextListeners)
     }
 
     /**
      * Block by the share context
      * @returns
      */
-    override get isReady() {
-        try {
-            getSharedContext()
-            return true
-        } catch {
-            return false
-        }
+    override get ready() {
+        return Web3StateSettings.ready
     }
 
     /**
      * Block by the share context
      * @returns
      */
-    override untilReady() {
-        return untilSharedContext()
+    override get readyPromise() {
+        return Web3StateSettings.readyPromise.then(() => {})
     }
 
     private addShareContextListeners() {
-        const sharedContext = getSharedContext()
+        const sharedContext = SharedContextSettings.value
 
         sharedContext.chainId.subscribe(() => {
             this.emitter.emit('chainId', toHex(sharedContext.chainId.getCurrentValue()))
@@ -76,8 +70,10 @@ export class MaskWalletProvider extends BaseProvider implements Provider {
         return newInstance
     }
 
-    private createProvider(chainId?: ChainId) {
-        const defaultChainId = getWeb3State().Provider?.chainId?.getCurrentValue()
+    private async createProvider(chainId?: ChainId) {
+        await this.readyPromise
+
+        const defaultChainId = Web3StateSettings.value.Provider?.chainId?.getCurrentValue()
         const url = getChainRPC(chainId ?? defaultChainId ?? ChainId.Mainnet, this.seed)
         if (!url) throw new Error('Failed to create provider.')
         return this.createProviderInstance(url)
@@ -92,13 +88,12 @@ export class MaskWalletProvider extends BaseProvider implements Provider {
         return newInstance
     }
 
-    override createWeb3(chainId?: ChainId) {
-        const provider = this.createProvider(chainId)
-        return this.createWeb3Instance(provider)
+    override async createWeb3(chainId?: ChainId) {
+        return this.createWeb3Instance(await this.createProvider(chainId))
     }
 
-    override createExternalProvider(chainId?: ChainId) {
-        const provider = this.createProvider(chainId)
+    override async createWeb3Provider(chainId?: ChainId) {
+        const provider = await this.createProvider(chainId)
         const request = <T extends unknown>(requestArguments: RequestArguments) => {
             return new Promise<T>((resolve, reject) => {
                 this.id += 1
@@ -112,11 +107,11 @@ export class MaskWalletProvider extends BaseProvider implements Provider {
                 )
             })
         }
-        return createExternalProvider(request)
+        return createEIP1193Provider(request)
     }
 
     override async connect(chainId: ChainId) {
-        const provider = this.createWeb3(chainId)
+        const provider = await this.createWeb3(chainId)
         const accounts = await provider.eth.requestAccounts()
         if (!accounts.length) throw new Error(`Failed to connect to ${chainId}.`)
 

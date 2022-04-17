@@ -1,6 +1,7 @@
 // All plugin manager need to call createPluginHost so let's register plugins implicitly.
 import './register'
 
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
 import { MaskMessages } from '../../shared/messages'
@@ -8,9 +9,9 @@ import Services from '../extension/service'
 import {
     createI18NBundle,
     createSubscriptionFromAsync,
+    createSubscriptionFromValueRef,
     EMPTY_LIST,
     i18NextInstance,
-    SubscriptionFromValueRef,
 } from '@masknet/shared-base'
 import { InMemoryStorages, PersistentStorages } from '../../shared'
 import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc'
@@ -27,14 +28,21 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
 
         nativeType: nativeAPI?.type,
         hasNativeAPI,
-        nativeSend: nativeAPI?.type === 'iOS' ? nativeAPI.api.send : undefined,
-        nativeSendJsonString: nativeAPI?.type === 'Android' ? nativeAPI.api.sendJsonString : undefined,
+        nativeSend: async (payload: JsonRpcPayload) => {
+            if (nativeAPI?.type === 'iOS') {
+                return nativeAPI.api.send(payload)
+            } else {
+                const response = await nativeAPI?.api.sendJsonString(JSON.stringify(payload))
+                if (!response) throw new Error('Failed to send request to native APP.')
+                return JSON.parse(response) as JsonRpcResponse
+            }
+        },
 
         openPopupWindow: Services.Helper.openPopupWindow,
         closePopupWindow: Services.Helper.removePopupWindow,
 
-        account: SubscriptionFromValueRef(currentMaskWalletAccountSettings),
-        chainId: SubscriptionFromValueRef(currentChainIdSettings),
+        account: createSubscriptionFromValueRef(currentMaskWalletAccountSettings),
+        chainId: createSubscriptionFromValueRef(currentChainIdSettings),
 
         currentPersona: createSubscriptionFromAsync(
             Services.Settings.getCurrentPersonaIdentifier,

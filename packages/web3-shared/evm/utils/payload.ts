@@ -1,5 +1,6 @@
+import { first } from 'lodash-unified'
 import { sha3 } from 'web3-utils'
-import type { Transaction, TransactionReceipt } from 'web3-core'
+import type { TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { EthereumMethodType, EthereumTransactionConfig, TransactionStatusType } from '../types'
 import { isSameAddress } from './address'
@@ -25,9 +26,18 @@ export function getPayloadSignature(payload: JsonRpcPayload) {
     return sha3([from, to, data, value].join('_')) ?? undefined
 }
 
-export function getPayloadFrom(payload: JsonRpcPayload) {
-    const config = getPayloadConfig(payload)
-    return config?.from as string | undefined
+export function getPayloadFrom(payload: JsonRpcPayload): string | undefined {
+    switch (payload.method) {
+        case EthereumMethodType.ETH_SIGN:
+            return first(payload.params)
+        case EthereumMethodType.PERSONAL_SIGN:
+            return payload.params?.[1]
+        case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+            return first(payload.params)
+        default:
+            const config = getPayloadConfig(payload)
+            return config?.from as string | undefined
+    }
 }
 
 export function getPayloadTo(payload: JsonRpcPayload) {
@@ -86,39 +96,4 @@ export function getReceiptStatus(receipt: TransactionReceipt | null) {
         return TransactionStatusType.SUCCEED
     }
     return TransactionStatusType.NOT_DEPEND
-}
-
-export function toReceipt(status: true | string, transaction: Transaction): TransactionReceipt {
-    return {
-        status: ['1', '0x1', true].includes(status),
-        transactionHash: transaction.hash,
-        transactionIndex: transaction.transactionIndex ?? 0,
-        blockHash: transaction.blockHash ?? '',
-        blockNumber: transaction.blockNumber ?? 0,
-        from: transaction.from,
-        to: transaction.to ?? '',
-        cumulativeGasUsed: 0,
-        gasUsed: 0,
-        logs: [],
-        logsBloom: '',
-    }
-}
-
-export function toPayload(transaction: Transaction): JsonRpcPayload {
-    return {
-        jsonrpc: '2.0',
-        id: '0',
-        method: EthereumMethodType.ETH_SEND_TRANSACTION,
-        params: [
-            {
-                from: transaction.from,
-                to: transaction.to,
-                value: transaction.value,
-                gas: transaction.gas,
-                gasPrice: transaction.gasPrice,
-                data: transaction.input,
-                nonce: transaction.nonce,
-            },
-        ],
-    }
 }

@@ -1,5 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
+import type { Emitter } from '@servie/events'
 import type { MaskBaseAPI } from '@masknet/web3-providers'
 import type { Plugin } from './types'
 
@@ -48,18 +49,6 @@ export type Color =
     | `#${string}${string}${string}${string}${string}${string}`
     | `#${string}${string}${string}`
     | `hsl(${number}, ${number}%, ${number}%)`
-
-// // Borrow from @masknet/web3-shared-evm
-// interface ERC721TokenInfo {
-//     name?: string
-//     description?: string
-//     tokenURI?: string
-//     mediaUrl?: string
-//     imageURL?: string
-//     owner?: string
-//     // loading tokenURI
-//     hasTokenDetailed?: boolean
-// }
 
 export declare namespace Web3Plugin {
     /**
@@ -210,7 +199,7 @@ export declare namespace Web3Plugin {
         updatedAt: Date
     }
 
-    export interface Account {
+    export interface Identity {
         address: string
         nickname?: string
         avatarURL?: string
@@ -288,9 +277,9 @@ export declare namespace Web3Plugin {
      */
     export interface NonFungibleAsset extends NonFungibleToken {
         /** the creator data */
-        creator?: Account
+        creator?: Identity
         /** the owner data */
-        owner?: Account
+        owner?: Identity
         /** estimated price */
         price?: {
             [key in CurrencyType]?: string
@@ -317,9 +306,9 @@ export declare namespace Web3Plugin {
             /** buy or sell */
             side?: string | number
             /** the account make the order */
-            maker?: Account
+            maker?: Identity
             /** the account fullfil the order */
-            taker?: Account
+            taker?: Identity
             /** unix timestamp */
             createdAt?: number
             /** unix timestamp */
@@ -347,6 +336,106 @@ export declare namespace Web3Plugin {
         description?: string
         /** fungile or non-fungile tokens */
         tokens: Token[]
+    }
+
+    export interface Account<ChainId> {
+        account: string
+        chainId: ChainId
+    }
+
+    export interface ProviderEvents<ChainId> {
+        /** Emit when the chain id changed. */
+        chainId: [string]
+        /** Emit when the accounts changed. */
+        accounts: [string[]]
+        /** Emit when the site connects with a provider. */
+        connect: [Web3Plugin.Account<ChainId>]
+        /** Emit when the site discconect with a provider. */
+        discconect: []
+    }
+
+    export interface Provider<ChainId, Web3Provider, Web3> {
+        emitter: Emitter<ProviderEvents<ChainId>>
+        /** The web3 instance. */
+        web3: Web3 | null
+        /** The web3 provider instance. */
+        provider: Web3Provider | null
+        /** Get to know whether the provider is ready. */
+        readonly ready: boolean
+        /** Keep waiting until the provider is ready. */
+        readonly readyPromise: Promise<void>
+        /** Create an web3 instance. */
+        createWeb3(chainId?: ChainId): Promise<Web3>
+        /** Create an provider instance. */
+        createWeb3Provider(chainId?: ChainId): Promise<Web3Provider>
+        /** Create the connection. */
+        connect(chainId?: ChainId): Promise<Web3Plugin.Account<ChainId>>
+        /** Dismiss the connection. */
+        disconnect(): Promise<void>
+    }
+
+    export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
+        /** Designate the sub-network id of the transaction. */
+        chainId?: ChainId
+        /** Designate the signer of the transaction. */
+        account?: string
+        /** Designate the provider to handle the transaction. */
+        providerType?: ProviderType
+        /** Fragments to merge into the transaction. */
+        overrides?: Partial<Transaction>
+    }
+
+    export interface Connection<
+        ChainId,
+        ProviderType,
+        Signature,
+        Transaction,
+        TransactionDetailed,
+        TransactionSignature,
+        Web3,
+        Web3Options = ConnectionOptions<ChainId, ProviderType, Transaction>,
+    > {
+        /** Get web3 client instance. */
+        getWeb3(options?: Web3Options): Promise<Web3>
+        /** Get the currently connected account. */
+        getAccount(options?: Web3Options): Promise<string>
+        /** Get the currently chain id. */
+        getChainId(options?: Web3Options): Promise<ChainId>
+        /** Get the latest block number. */
+        getBlockNumber(options?: Web3Options): Promise<number>
+        /** Get the latest balance of the account. */
+        getBalance(address: string, options?: Web3Options): Promise<string>
+        /** Get the detailed of transaction by id. */
+        getTransaction(id: string, options?: Web3Options): Promise<TransactionDetailed | null>
+        /** Get the latest transaction status. */
+        getTransactionStatus(id: string, options?: Web3Options): Promise<TransactionStatusType>
+        /** Get the latest transaction nonce. */
+        getTransactionNonce(address: string, options?: Web3Options): Promise<number>
+        /** Sign message */
+        signMessage(dataToSign: string, signType?: string, options?: Web3Options): Promise<Signature>
+        /** Verify message */
+        verifyMessage(
+            dataToVerify: string,
+            signature: Signature,
+            signType?: string,
+            options?: Web3Options,
+        ): Promise<boolean>
+        /** Watch a transaction */
+        watchTransaction(id: string, transaction: Transaction, options?: Web3Options): Promise<void>
+        /** Unwatch a transaction */
+        unwatchTransaction(id: string, options?: Web3Options): Promise<void>
+        /** Sign a transaction */
+        signTransaction(transaction: Transaction, options?: Web3Options): Promise<TransactionSignature>
+        /** Sign multiple transactions */
+        signTransactions(transactions: Transaction[], options?: Web3Options): Promise<TransactionSignature[]>
+        /** Send a tranaction */
+        sendTransaction(transaction: Transaction, options?: Web3Options): Promise<string>
+        /** Send a signed transaction */
+        sendSignedTransaction(signature: TransactionSignature, options?: Web3Options): Promise<string>
+        /** Add a chain. */
+        addChain(chainId: ChainId, options?: Web3Options): Promise<void>
+        /** Switch to a chain. */
+        switchChain(chainId: ChainId, options?: Web3Options): Promise<void>
     }
 
     export namespace ObjectCapabilities {
@@ -423,22 +512,17 @@ export declare namespace Web3Plugin {
             trustToken?: (address: string, token: Token) => Promise<void>
             blockToken?: (address: string, token: Token) => Promise<void>
         }
-        export interface TransactionState<ChainId, TransactionConfig> {
+        export interface TransactionState<ChainId, Transaction> {
             /** The tracked transactions of currently chosen sub-network */
             transactions?: Subscription<RecentTransaction[]>
 
-            addTransaction?: (
-                chainId: ChainId,
-                address: string,
-                id: string,
-                transaction: TransactionConfig,
-            ) => Promise<void>
+            addTransaction?: (chainId: ChainId, address: string, id: string, transaction: Transaction) => Promise<void>
             replaceTransaction?: (
                 chainId: ChainId,
                 address: string,
                 id: string,
                 newId: string,
-                transaction: TransactionConfig,
+                transaction: Transaction,
             ) => Promise<void>
             updateTransaction?: (
                 chainId: ChainId,
@@ -450,15 +534,7 @@ export declare namespace Web3Plugin {
             /** clear all transactions relate to account under given chain */
             clearTransactions?: (chainId: ChainId, address: string) => Promise<void>
         }
-        export interface ProviderState<
-            ChainId,
-            NetworkType,
-            ProviderType,
-            Account = {
-                account: string
-                chainId: ChainId
-            },
-        > {
+        export interface ProviderState<ChainId, NetworkType, ProviderType> {
             /** The account of the currently visiting site. */
             account?: Subscription<string>
             /** The chain id of the currently visiting site. */
@@ -469,7 +545,7 @@ export declare namespace Web3Plugin {
             providerType?: Subscription<ProviderType>
 
             /** Connect with the provider and set chain id. */
-            connect?: (chainId: ChainId, providerType: ProviderType) => Promise<Account>
+            connect?: (chainId: ChainId, providerType: ProviderType) => Promise<Account<ChainId>>
             /** Discconect with the provider. */
             disconect?: (providerType: ProviderType) => Promise<void>
             /** Invoke it when selected chain id of provider changed. */
@@ -477,82 +553,59 @@ export declare namespace Web3Plugin {
             /** Invoke it when selected account of provider changed. */
             setAccount?: (providerType: ProviderType, account: string) => Promise<void>
         }
-        export interface ProtocolState<ChainId, Signature, TransactionConfig, SendOverrides, RequestOptions, Web3> {
+        export interface ProtocolState<
+            ChainId,
+            ProviderType,
+            Signature,
+            Transaction,
+            TransactionDetailed,
+            TransactionSignature,
+            Web3,
+            Web3Options = ConnectionOptions<ChainId, ProviderType, Transaction>,
+            Web3Connection = Connection<
+                ChainId,
+                ProviderType,
+                Signature,
+                Transaction,
+                TransactionDetailed,
+                TransactionSignature,
+                Web3,
+                Web3Options
+            >,
+        > {
+            /** Get connection */
+            getConnection?: (options?: Web3Options) => Web3Connection | null
             /** Get web3 client */
-            getWeb3?: (sendOverrides?: SendOverrides, options?: RequestOptions) => Promise<Web3>
+            getWeb3?: (options?: Web3Options) => Promise<Web3>
             /** Get the current account */
-            getAccont?: (sendOverrides?: SendOverrides, options?: RequestOptions) => Promise<string>
+            getAccont?: (options?: Web3Options) => Promise<string>
             /** Get the current chain id */
-            getChainId?: (sendOverrides?: SendOverrides, options?: RequestOptions) => Promise<ChainId>
-            /** Get the latest block height of chain */
-            getLatestBlockNumber?: (
-                chainId: ChainId,
-                sendOverrides?: SendOverrides,
-                options?: RequestOptions,
-            ) => Promise<number>
+            getChainId?: (options?: Web3Options) => Promise<ChainId>
             /** Get the latest balance of account */
-            getLatestBalance?: (
-                chainId: ChainId,
-                account: string,
-                sendOverrides?: SendOverrides,
-                options?: RequestOptions,
-            ) => Promise<string>
+            getLatestBalance?: (account: string, options?: Web3Options) => Promise<string>
+            /** Get the latest block height of chain */
+            getLatestBlockNumber?: (options?: Web3Options) => Promise<number>
             /** Get transaction status */
-            getTransactionStatus?: (
-                chainId: ChainId,
-                id: string,
-                sendOverrides?: SendOverrides,
-                options?: RequestOptions,
-            ) => Promise<TransactionStatusType>
+            getTransactionStatus?: (id: string, options?: Web3Options) => Promise<TransactionStatusType>
             /** Sign a plain message, some chain support multiple sign methods */
-            signMessage?: (
-                address: string,
-                message: string,
-                signType?: string,
-                sendOverrides?: SendOverrides,
-                options?: RequestOptions,
-            ) => Promise<Signature>
+            signMessage?: (dataToSign: string, signType?: string, options?: Web3Options) => Promise<Signature>
             /** Verify a signed message */
             verifyMessage?: (
-                address: string,
-                messsage: string,
+                dataToVerify: string,
                 signature: Signature,
                 signType?: string,
-                sendOverrides?: SendOverrides,
-                options?: RequestOptions,
+                options?: Web3Options,
             ) => Promise<boolean>
-            /** Add a sub-network */
-            addChain?: (chainId: ChainId, sendOverrides?: SendOverrides, options?: RequestOptions) => Promise<void>
-            /** Switch to sub network */
-            switchChain?: (chainId: ChainId, sendOverrides?: SendOverrides, options?: RequestOptions) => Promise<void>
             /** Sign a transaction, and the result could send as a raw transaction */
-            signTransaction?: (
-                address: string,
-                transaction: TransactionConfig,
-                sendOverrides?: SendOverrides,
-                options?: RequestOptions,
-            ) => Promise<string>
-            /** Send raw transaction and get tx id */
-            sendSignedTransaction?: (
-                chainid: ChainId,
-                rawTransaction: string,
-                sendOverrides?: SendOverrides,
-                options?: RequestOptions,
-            ) => Promise<string>
+            signTransaction?: (transaction: Transaction, options?: Web3Options) => Promise<TransactionSignature>
             /** Send transaction and get tx id */
-            sendTransaction?: (
-                chainId: ChainId,
-                transaction: TransactionConfig,
-                sendOverrides?: SendOverrides,
-                options?: RequestOptions,
-            ) => Promise<string>
-            /** Send (raw) transaction and wait until it confirmed */
-            sendAndConfirmTransaction?: (
-                chainId: ChainId,
-                transaction: TransactionConfig,
-                sendOverrides?: SendOverrides,
-                options?: RequestOptions,
-            ) => Promise<string>
+            sendTransaction?: (transaction: Transaction, options?: Web3Options) => Promise<string>
+            /** Send raw transaction and get tx id */
+            sendSignedTransaction?: (transaction: TransactionSignature, options?: Web3Options) => Promise<string>
+            /** Add a sub-network */
+            addChain?: (options?: Web3Options) => Promise<void>
+            /** Switch to sub network */
+            switchChain?: (options?: Web3Options) => Promise<void>
         }
         export interface WalletState {
             /** The currently stored wallet by MaskWallet. */
@@ -583,6 +636,7 @@ export declare namespace Web3Plugin {
             /** chain customization */
             getChainDetailed?: (chainId: ChainId) => ChainDetailed | undefined
             getAverageBlockDelay?: (chainId: ChainId, scale?: number) => number
+
             resolveChainName?: (chainId: ChainId) => string
             resolveChainColor?: (chainId: ChainId) => string
             resolveChainFullName?: (chainId: ChainId) => string
@@ -600,9 +654,9 @@ export declare namespace Web3Plugin {
             ProviderType = string,
             NetworkType = string,
             Signature = string,
-            TransactionConfig = unknown,
-            SendOverrides = unknown,
-            RequestOptions = unknown,
+            Transaction = unknown,
+            TransactionDetailed = unknown,
+            TransactionSignature = string,
             Web3 = unknown,
         > {
             AddressBook?: AddressBookState<ChainId>
@@ -612,8 +666,16 @@ export declare namespace Web3Plugin {
             Token?: TokenState
             TokenPrice?: TokenPriceState<ChainId>
             TokenList?: TokenListState<ChainId>
-            Transaction?: TransactionState<ChainId, TransactionConfig>
-            Protocol?: ProtocolState<ChainId, Signature, TransactionConfig, SendOverrides, RequestOptions, Web3>
+            Transaction?: TransactionState<ChainId, Transaction>
+            Protocol?: ProtocolState<
+                ChainId,
+                ProviderType,
+                Signature,
+                Transaction,
+                TransactionDetailed,
+                TransactionSignature,
+                Web3
+            >
             Provider?: ProviderState<ChainId, NetworkType, ProviderType>
             Wallet?: WalletState
             Utils?: Others<ChainId>

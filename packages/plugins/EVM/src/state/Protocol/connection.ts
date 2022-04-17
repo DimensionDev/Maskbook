@@ -1,16 +1,18 @@
+import { first } from 'lodash-unified'
 import { toHex } from 'web3-utils'
-import type { RequestArguments, SignedTransaction, Transaction, TransactionConfig, TransactionReceipt } from 'web3-core'
+import type { RequestArguments, SignedTransaction, Transaction, TransactionReceipt } from 'web3-core'
 import {
     ChainId,
     EthereumMethodType,
-    RequestOptions,
-    SendOverrides,
     getChainDetailedCAIP,
     ProviderType,
+    getReceiptStatus,
+    EthereumTransactionConfig,
 } from '@masknet/web3-shared-evm'
+import type { TransactionStatusType, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { createContext, dispatch } from './composer'
 import { Providers } from './provider'
-import type { Connection as BaseConnection } from './types'
+import type { Connection as BaseConnection, RequestOptions } from './types'
 
 function isUniversalMethod(method: EthereumMethodType) {
     return [
@@ -35,37 +37,26 @@ class Connection implements BaseConnection {
 
     // Hijack RPC requests and process them with koa like middlewares
     private get hijackedRequest() {
-        return <T extends unknown>(
-            requestArguments: RequestArguments,
-            overrides?: SendOverrides,
-            options?: RequestOptions,
-        ) => {
+        return <T extends unknown>(requestArguments: RequestArguments, options?: RequestOptions) => {
             return new Promise<T>(async (resolve, reject) => {
-                const context = createContext(
-                    this,
-                    requestArguments,
-                    {
-                        account: this.account,
-                        chainId: this.chainId,
-                        ...overrides,
-                    },
-                    {
-                        popupsWindow: true,
-                        providerType: this.providerType,
-                        ...options,
-                    },
-                )
+                const context = createContext(this, requestArguments, {
+                    account: this.account,
+                    chainId: this.chainId,
+                    providerType: this.providerType,
+                    popupsWindow: true,
+                    ...options,
+                })
 
                 try {
                     await dispatch(context, async () => {
                         if (!context.writeable) return
                         try {
-                            const externalProvider = Providers[
+                            const web3Provider = await Providers[
                                 isUniversalMethod(context.method) ? ProviderType.MaskWallet : this.providerType
-                            ].createExternalProvider(this.chainId)
+                            ].createWeb3Provider(this.chainId)
 
                             // send request and set result in the context
-                            context.write((await externalProvider.request(context.requestArguments)) as T)
+                            context.write((await web3Provider.request(context.requestArguments)) as T)
                         } catch (error) {
                             context.abort(error)
                         }
@@ -80,160 +71,168 @@ class Connection implements BaseConnection {
         }
     }
 
-    getWeb3() {
-        return Providers[this.providerType].createWeb3(this.chainId)
+    getWeb3(options?: RequestOptions) {
+        return Providers[options?.providerType ?? this.providerType].createWeb3(options?.chainId ?? this.chainId)
     }
 
-    getAccounts(overrides?: SendOverrides, options?: RequestOptions) {
-        return this.hijackedRequest<string[]>(
+    async getAccount(options?: RequestOptions) {
+        const accounts = await this.hijackedRequest<string[]>(
             {
                 method: EthereumMethodType.ETH_ACCOUNTS,
             },
-            overrides,
             options,
         )
+        return first(accounts) ?? ''
     }
 
-    getChainId(overrides?: SendOverrides, options?: RequestOptions) {
-        return this.hijackedRequest<string>(
+    async getChainId(options?: RequestOptions) {
+        const chainId = await this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CHAIN_ID,
             },
-            overrides,
             options,
         )
+        return Number.parseInt(chainId, 16)
     }
 
-    getBlockNumber(overrides?: SendOverrides, options?: RequestOptions) {
+    getBlockNumber(options?: RequestOptions) {
         return this.hijackedRequest<number>(
             {
                 method: EthereumMethodType.ETH_BLOCK_NUMBER,
             },
-            overrides,
             options,
         )
     }
 
-    getBalance(address: string, overrides?: SendOverrides, options?: RequestOptions) {
+    getBalance(address: string, options?: RequestOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_GET_BALANCE,
                 params: [address],
             },
-            overrides,
             options,
         )
     }
 
-    getCode(address: string, overrides?: SendOverrides, options?: RequestOptions) {
+    getCode(address: string, options?: RequestOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_GET_CODE,
                 params: [address, 'latest'],
             },
-            overrides,
             options,
         )
     }
 
-    getTransactionByHash(hash: string, overrides?: SendOverrides, options?: RequestOptions) {
+    async getTransaction(hash: string, options?: RequestOptions) {
         return this.hijackedRequest<Transaction>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
                 params: [hash],
             },
-            overrides,
             options,
         )
     }
 
-    getTransactionReceiptHijacked(hash: string, overrides?: SendOverrides, options?: RequestOptions) {
+    getTransactionReceiptHijacked(hash: string, options?: RequestOptions) {
         return this.hijackedRequest<TransactionReceipt | null>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
                 params: [hash],
             },
-            overrides,
             options,
         )
     }
 
-    getTransactionReceipt(hash: string, overrides?: SendOverrides, options?: RequestOptions) {
+    getTransactionReceipt(hash: string, options?: RequestOptions) {
         return this.hijackedRequest<TransactionReceipt | null>(
             {
                 method: EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT,
                 params: [hash],
             },
-            overrides,
             options,
         )
     }
 
-    async getTransactionCount(address: string, overrides?: SendOverrides, options?: RequestOptions) {
+    async getTransactionStatus(id: string, options?: RequestOptions): Promise<TransactionStatusType> {
+        const receipt = await this.getTransactionReceiptHijacked(id, options)
+        return getReceiptStatus(receipt)
+    }
+
+    async getTransactionNonce(address: string, options?: RequestOptions) {
         const count = await this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
                 params: [address, 'latest'],
             },
-            overrides,
             options,
         )
         return Number.parseInt(count, 16) || 0
     }
 
-    call(config: TransactionConfig, overrides?: SendOverrides, options?: RequestOptions) {
+    call(transaction: EthereumTransactionConfig, options?: RequestOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CALL,
-                params: [config, 'latest'],
+                params: [transaction, 'latest'],
             },
-            overrides,
             options,
         )
     }
 
-    personalSign(
+    signMessage(
         dataToSign: string,
-        address: string,
-        password?: string,
-        overrides?: SendOverrides,
+        signType?: 'personaSign' | 'typedDataSign' | Omit<string, 'personaSign' | 'typedDataSign'>,
         options?: RequestOptions,
     ) {
-        return this.hijackedRequest<string>(
-            {
-                method: EthereumMethodType.PERSONAL_SIGN,
-                params: [dataToSign, address, password].filter((x) => typeof x !== 'undefined'),
-            },
-            overrides,
-            options,
-        )
+        if (!options?.account) throw new Error('Unknown account.')
+
+        switch (signType) {
+            case 'personaSign':
+                return this.hijackedRequest<string>(
+                    {
+                        method: EthereumMethodType.PERSONAL_SIGN,
+                        params: [dataToSign, options.account, ''].filter((x) => typeof x !== 'undefined'),
+                    },
+                    options,
+                )
+            case 'typedDataSign':
+                return this.hijackedRequest<string>(
+                    {
+                        method: EthereumMethodType.ETH_SIGN_TYPED_DATA,
+                        params: [options.account, dataToSign],
+                    },
+                    options,
+                )
+            default:
+                throw new Error(`Unknown sign type: ${signType}.`)
+        }
     }
 
-    typedDataSign(address: string, dataToSign: string, overrides?: SendOverrides, options?: RequestOptions) {
-        return this.hijackedRequest<string>(
-            {
-                method: EthereumMethodType.ETH_SIGN_TYPED_DATA,
-                params: [address, dataToSign],
-            },
-            overrides,
-            options,
-        )
+    async verifyMessage(
+        dataToVerify: string,
+        signature: string,
+        signType?: string,
+        options?: Web3Plugin.ConnectionOptions<ChainId, ProviderType, EthereumTransactionConfig>,
+    ) {
+        const web3 = await this.getWeb3(options)
+        const dataToSign = await web3.eth.personal.ecRecover(dataToVerify, signature)
+        return dataToSign === dataToVerify
     }
 
-    addChain(chainId: ChainId, overrides?: SendOverrides, options?: RequestOptions) {
+    addChain(chainId: ChainId, options?: RequestOptions) {
         const chainDetailed = getChainDetailedCAIP(chainId)
-        return this.hijackedRequest<boolean>(
+        return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
                 params: [chainDetailed].filter(Boolean),
             },
-            overrides,
             options,
         )
     }
 
-    switchChain(chainId: ChainId, overrides?: SendOverrides, options?: RequestOptions) {
-        return this.hijackedRequest<boolean>(
+    switchChain(chainId: ChainId, options?: RequestOptions) {
+        return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
                 params: [
@@ -242,115 +241,109 @@ class Connection implements BaseConnection {
                     },
                 ],
             },
-            overrides,
             options,
         )
     }
 
-    async signTransaction(config: TransactionConfig, overrides?: SendOverrides, options?: RequestOptions) {
+    async signTransaction(transaction: EthereumTransactionConfig, options?: RequestOptions) {
         const signed = await this.hijackedRequest<SignedTransaction>(
             {
                 method: EthereumMethodType.ETH_SIGN_TRANSACTION,
-                params: [config],
+                params: [transaction],
             },
-            overrides,
             options,
         )
         return signed.rawTransaction ?? ''
     }
 
-    sendTransaction(config: TransactionConfig, overrides?: SendOverrides, options?: RequestOptions) {
-        return this.hijackedRequest<void>(
+    signTransactions(transactions: EthereumTransactionConfig[], options?: RequestOptions) {
+        return Promise.all(transactions.map((x) => this.signTransaction(x)))
+    }
+
+    sendTransaction(transaction: EthereumTransactionConfig, options?: RequestOptions) {
+        return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
-                params: [config],
+                params: [transaction],
             },
-            overrides,
             options,
         )
     }
 
-    sendRawTransaction(raw: string, overrides?: SendOverrides, options?: RequestOptions) {
+    sendSignedTransaction(signature: string, options?: RequestOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                params: [raw],
+                params: [signature],
             },
-            overrides,
             options,
         )
     }
 
-    watchTransaction(hash: string, config: TransactionConfig, overrides?: SendOverrides, options?: RequestOptions) {
+    watchTransaction(hash: string, transaction: EthereumTransactionConfig, options?: RequestOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_WATCH_TRANSACTION,
-                params: [hash, config],
+                params: [hash, transaction],
             },
-            overrides,
             options,
         )
     }
 
-    unwatchTransaction(hash: string, overrides?: SendOverrides, options?: RequestOptions) {
+    unwatchTransaction(hash: string, options?: RequestOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_UNWATCH_TRANSACTION,
                 params: [hash],
             },
-            overrides,
             options,
         )
     }
 
-    confirmRequest(overrides?: SendOverrides, options?: RequestOptions) {
+    confirmRequest(options?: RequestOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_CONFIRM_TRANSACTION,
                 params: [],
             },
-            overrides,
             options,
         )
     }
 
-    rejectRequest(overrides?: SendOverrides, options?: RequestOptions) {
+    rejectRequest(options?: RequestOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_REJECT_TRANSACTION,
                 params: [],
             },
-            overrides,
             options,
         )
     }
 
-    replaceRequest(hash: string, config: TransactionConfig, overrides?: SendOverrides, options?: RequestOptions) {
+    replaceRequest(hash: string, transaction: EthereumTransactionConfig, options?: RequestOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
-                params: [hash, config],
+                params: [hash, transaction],
             },
-            overrides,
             options,
         )
     }
 
-    cancelRequest(hash: string, config: TransactionConfig, overrides?: SendOverrides, options?: RequestOptions) {
+    cancelRequest(hash: string, transaction: EthereumTransactionConfig, options?: RequestOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
                 params: [
                     hash,
                     {
-                        ...config,
-                        to: config.from,
+                        ...transaction,
+                        to: transaction.from,
                         data: '0x0',
                         value: '0x0',
                     },
                 ],
             },
-            overrides,
             options,
         )
     }

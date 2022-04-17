@@ -4,11 +4,11 @@ import {
     ChainId,
     NonFungibleAssetProvider,
     CryptoPrice,
-    GasOptions,
     NetworkType,
     FungibleAssetProvider,
     ProviderType,
     LockStatus,
+    GasOptions,
 } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants'
 

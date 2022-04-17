@@ -1,40 +1,20 @@
+import { noop } from 'lodash-unified'
 import Web3 from 'web3'
 import type { RequestArguments } from 'web3-core'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import type { RequestOptions, SendOverrides, ExternalProvider } from '../types'
+import type { EIP1193Provider, RequestOptions, SendOverrides } from '../types'
 
-export function createExternalProvider(
+export function createEIP1193Provider(
     request: <T>(requestArguments: RequestArguments, overrides?: SendOverrides, options?: RequestOptions) => Promise<T>,
     getOverrides?: () => SendOverrides,
     getOptions?: () => RequestOptions,
-): ExternalProvider {
-    const send = (payload: JsonRpcPayload, callback: (error: Error | null, response?: JsonRpcResponse) => void) => {
-        request(
-            {
-                method: payload.method,
-                params: payload.params,
-            },
-            getOverrides?.(),
-            getOptions?.(),
-        ).then(
-            (result) => {
-                callback(null, {
-                    jsonrpc: '2.0',
-                    id: payload.id as number,
-                    result,
-                })
-            },
-            (error: unknown) => {
-                if (error instanceof Error) callback(error)
-            },
-        )
-    }
-
+): EIP1193Provider {
     return {
+        // @ts-ignore
+        on: noop,
+        // @ts-ignore
+        removeListener: noop,
         request: <T>(requestArguments: RequestArguments) =>
             request<T>(requestArguments, getOverrides?.(), getOptions?.()),
-        send,
-        sendAsync: send,
     }
 }
 
@@ -47,5 +27,6 @@ export function createWeb3(
     getOverrides?: () => SendOverrides,
     getOptions?: () => RequestOptions,
 ) {
-    return new Web3(createExternalProvider(request, getOverrides, getOptions))
+    // @ts-ignore
+    return new Web3(createEIP1193Provider(request, getOverrides, getOptions))
 }
