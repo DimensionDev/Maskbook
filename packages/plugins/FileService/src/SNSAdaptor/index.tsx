@@ -57,11 +57,11 @@ const definition: Plugin.SNSAdaptor.Definition = {
             icon: <FileServiceIcon />,
             category: 'dapp',
             description: {
-                i18nKey: 'plugin_description',
+                i18nKey: '__plugin_description',
                 fallback:
                     'Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network.',
             },
-            name: { i18nKey: 'plugin_name', fallback: 'File Service' },
+            name: { i18nKey: '__plugin_name', fallback: 'File Service' },
             tutorialLink:
                 'https://realmasknetwork.notion.site/Use-File-Service-via-Arweave-IPFS-SIA-Swarm-soon-8c8fe1efce5a48b49739a38f4ea8c60f',
         },

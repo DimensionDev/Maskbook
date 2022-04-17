@@ -71,7 +71,7 @@ export function CrossChainBridgeDialog(props: CrossChainBridgeDialogProps) {
     return (
         <MaskDialog
             DialogProps={{ classes: { paper: classes.paperRoot } }}
-            title={t.plugin_name()}
+            title={t.__plugin_name()}
             open={open}
             onBack={onClose}>
             <DialogContent className={classes.content}>

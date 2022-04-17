@@ -35,10 +35,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
             category: 'dapp',
             marketListSortingPriority: 17,
             description: {
-                i18nKey: 'plugin_description',
+                i18nKey: '__plugin_description',
                 fallback: 'Decentralized social graph protocol for user-centric Web3.',
             },
-            name: { i18nKey: 'plugin_name', fallback: 'CyberConnect' },
+            name: { i18nKey: '__plugin_name', fallback: 'CyberConnect' },
             icon: <CyberConnectIcon />,
             tutorialLink: 'https://cyberconnect.me/',
         },

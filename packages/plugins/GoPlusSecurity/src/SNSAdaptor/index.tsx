@@ -19,7 +19,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     </>
                 )
             },
-            name: { i18nKey: 'plugin_name', fallback: 'Check Security' },
+            name: { i18nKey: '__plugin_name', fallback: 'Check Security' },
             icon: <SecurityCheckerIcon />,
             appBoardSortingDefaultPriority: 13,
             marketListSortingPriority: 16,

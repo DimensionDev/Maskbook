@@ -20,7 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 )
             },
             appBoardSortingDefaultPriority: 5,
-            name: { i18nKey: 'plugin_name', fallback: 'Cross-bridge' },
+            name: { i18nKey: '__plugin_name', fallback: 'Cross-bridge' },
             icon: <CrossBridgeIcon />,
         },
     ],
