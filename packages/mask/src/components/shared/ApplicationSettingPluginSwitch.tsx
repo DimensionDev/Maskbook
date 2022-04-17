@@ -5,7 +5,6 @@ import { useActivatedPluginsSNSAdaptor, Plugin, PluginI18NFieldRender } from '@m
 import { SettingSwitch } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Services } from '../../extension/service'
-import { useI18N } from '../../utils'
 interface Props {}
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -37,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(0.5),
         cursor: 'pointer',
         color: MaskColorVar.textSecondary,
+        opacity: theme.palette.mode === 'dark' ? 0.5 : 1,
     },
     avatar: {
         background: theme.palette.background.default,
@@ -57,11 +57,11 @@ const useStyles = makeStyles()((theme) => ({
     desc: {
         fontSize: 12,
         fontWeight: 400,
+        color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.text.primary,
     },
 }))
 export function ApplicationSettingPluginSwitch(props: Props) {
     const { classes } = useStyles()
-    const { t, i18n } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
 
