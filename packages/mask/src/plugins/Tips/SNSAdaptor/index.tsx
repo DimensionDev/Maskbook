@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { ApplicationEntry } from '@masknet/shared'
 import { useState } from 'react'
-import { TipsEntranceDialog } from './TipsEnteranceDialog'
+import { TipsEntranceDialog } from './TipsEntranceDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

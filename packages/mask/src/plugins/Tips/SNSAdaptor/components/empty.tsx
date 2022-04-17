@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         minHeight: 200,
     },
-    topbar: {
+    topBox: {
         width: '100%',
         display: 'flex',
         alignItems: 'center',
@@ -76,7 +76,7 @@ const Empty = memo(() => {
     )
     return (
         <div className={classes.container}>
-            <div className={classes.topbar}>
+            <div className={classes.topBox}>
                 <div className={classes.iconBox}>
                     <img
                         className={classes.tipIcon}

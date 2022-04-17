@@ -3,7 +3,7 @@ import { Typography } from '@mui/material'
 import { memo } from 'react'
 import { WalletSwitch } from '../components/WalletSwitch'
 
-import type { WalletProof } from '../TipsEnteranceDialog'
+import type { WalletProof } from '../TipsEntranceDialog'
 const useStyles = makeStyles()((theme) => ({
     container: {
         height: '100%',
@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         flexWrap: 'wrap',
         gap: 12,
     },
-    swtichContainer: {
+    switchContainer: {
         width: 'calc(50% - 6px)',
     },
 }))
@@ -43,7 +43,7 @@ const SettingPage = memo(({ wallets, onChange }: SettingPageProp) => {
             <div className={classes.walletSwitchBox}>
                 {wallets.map((x, idx) => {
                     return (
-                        <div key={idx} className={classes.swtichContainer}>
+                        <div key={idx} className={classes.switchContainer}>
                             <WalletSwitch
                                 onChange={onSwitchChange}
                                 type={0}

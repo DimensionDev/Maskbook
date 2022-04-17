@@ -2,14 +2,14 @@ import { getMaskColor, makeStyles } from '@masknet/theme'
 import { SettingsIcon } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { WalletCom } from './WalletCom'
-import type { WalletProof } from '../TipsEnteranceDialog'
+import type { WalletProof } from '../TipsEntranceDialog'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         boxSizing: 'border-box',
         marginBottom: theme.spacing(2.5),
     },
-    topbar: {
+    topBox: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -51,7 +51,7 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
 
     return (
         <div className={classes.container}>
-            <div className={classes.topbar}>
+            <div className={classes.topBox}>
                 <Typography className={classes.commonFlexBox} sx={{ fontWeight: 'bold' }}>
                     <img style={{ height: 18 }} src={network.icon.toString()} />
                     {network.name}

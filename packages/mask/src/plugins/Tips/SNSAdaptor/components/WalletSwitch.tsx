@@ -58,7 +58,7 @@ export function WalletSwitch({ type, address, isPublic, onChange }: WalletSwitch
     const { Utils } = useWeb3State() ?? {}
     const [checked, setChecked] = useState(!!isPublic)
     const getWalletName = () => {
-        return ['EVM wallet', 'Solona wallet', 'Flow wallet'][type]
+        return ['EVM wallet', 'Solana wallet', 'Flow wallet'][type]
     }
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = e.target.checked

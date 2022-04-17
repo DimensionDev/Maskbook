@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { WalletCom } from '../components/WalletCom'
-import type { WalletProof } from '../TipsEnteranceDialog'
+import type { WalletProof } from '../TipsEntranceDialog'
 
 interface WalletsPageProp {
     wallets: WalletProof[]
