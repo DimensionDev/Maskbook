@@ -1,12 +1,18 @@
 {
   "name": "@masknet/plugin-template",
   "private": true,
-  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",
-    "react-use": "^17.3.2"
+    "react-use": "^17.3.2",
+    "use-subscription": "^1.6.0"
   }
 }

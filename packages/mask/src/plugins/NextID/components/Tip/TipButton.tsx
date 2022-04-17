@@ -1,17 +1,18 @@
 import { TipCoin } from '@masknet/icons'
-import { usePostInfoDetails } from '@masknet/plugin-infra'
+import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { TooltipProps } from '@mui/material'
 import classnames from 'classnames'
 import { uniq } from 'lodash-unified'
-import { FC, HTMLProps, MouseEventHandler, useCallback, useMemo } from 'react'
+import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { useI18N } from '../../locales'
 import { PluginNextIdMessages } from '../../messages'
+import { MaskMessages } from '../../../../../shared'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     addresses?: string[]
@@ -71,7 +72,11 @@ export const TipButton: FC<Props> = ({
         return Services.Identity.queryPersonaByProfile(receiver)
     }, [receiver])
 
-    const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(() => {
+    const {
+        value: isAccountVerified,
+        loading: loadingVerifyInfo,
+        retry: retryLoadVerifyInfo,
+    } = useAsyncRetry(() => {
         if (!receiverPersona?.publicHexKey || !receiver?.userId) return Promise.resolve(false)
         return NextIDProof.queryIsBound(receiverPersona.publicHexKey, platform, receiver.userId, true)
     }, [receiverPersona?.publicHexKey, platform, receiver?.userId])
@@ -90,6 +95,13 @@ export const TipButton: FC<Props> = ({
     }, [receiver])
 
     useAsync(queryBindings, [queryBindings])
+
+    useEffect(() => {
+        return MaskMessages.events.ownProofChanged.on(() => {
+            retryLoadVerifyInfo()
+            queryBindings()
+        })
+    }, [])
 
     const allAddresses = useMemo(() => {
         return uniq([...(walletsState.value || []), ...addresses])

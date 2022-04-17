@@ -6,7 +6,7 @@ import {
     loginPersona,
     personaRecordToPersona,
     queryAvatarDataURL,
-    queryPersona,
+    queryPersona as queryPersonaRAW,
     queryPostPagedDB,
     queryProfile,
     queryProfilesWithQuery,
@@ -112,9 +112,28 @@ export function removeProfile(id: ProfileIdentifier): Promise<void> {
 // #endregion
 
 // #region Persona
-export { queryPersona, createPersonaByMnemonic, createPersonaByMnemonicV2, renamePersona } from '../../database'
+export { createPersonaByMnemonic, createPersonaByMnemonicV2, renamePersona } from '../../database'
 
-export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
+/** @deprecated */
+export async function queryPersona(
+    identifier: PersonaIdentifier,
+): Promise<
+    Pick<
+        Persona,
+        | 'publicHexKey'
+        | 'identifier'
+        | 'hasPrivateKey'
+        | 'mnemonic'
+        | 'createdAt'
+        | 'updatedAt'
+        | 'linkedProfiles'
+        | 'nickname'
+    >
+> {
+    return queryPersonaRAW(identifier)
+}
+
+export async function queryPersonaByMnemonic(mnemonic: string, password: ''): Promise<PersonaIdentifier | null> {
     const verify = validateMnemonic(mnemonic)
     if (!verify) {
         throw new Error('Verify error')
@@ -125,12 +144,16 @@ export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
     const persona = await queryPersonaDB(identifier, undefined, true)
     if (persona) {
         await loginPersona(persona.identifier)
-        return persona
+        return persona.identifier
     }
 
     return null
 }
-export async function queryPersonas(identifier?: PersonaIdentifier, requirePrivateKey = false): Promise<Persona[]> {
+export async function app_only_queryPersonas(identifier?: PersonaIdentifier, requirePrivateKey = false) {
+    if (process.env.architecture !== 'app') throw new Error('This function is only available in app')
+    return queryPersonas_inner(identifier, requirePrivateKey)
+}
+async function queryPersonas_inner(identifier?: PersonaIdentifier, requirePrivateKey = false): Promise<Persona[]> {
     if (typeof identifier === 'undefined')
         return (await queryPersonasDB({ hasPrivateKey: requirePrivateKey })).map(personaRecordToPersona)
     const x = await queryPersonaDB(identifier)
@@ -138,30 +161,46 @@ export async function queryPersonas(identifier?: PersonaIdentifier, requirePriva
     return [personaRecordToPersona(x)]
 }
 
-export async function queryPersonaRecordsFromIndexedDB() {
+export async function app_only_queryPersonaRecordsFromIndexedDB() {
+    if (process.env.architecture !== 'app') throw new Error('This function is only available in app')
     return queryPersonasFromIndexedDB()
 }
 
-export function queryMyPersonas(network?: string): Promise<Persona[]> {
-    return queryPersonas(undefined, true).then((x) =>
-        typeof network === 'string'
-            ? x.filter((y) => {
-                  for (const z of y.linkedProfiles.keys()) {
-                      if (z.network === network) return true
-                  }
-                  return false
-              })
-            : x,
-    )
+export async function queryMyPersonas(
+    network?: string,
+): Promise<
+    Pick<
+        Persona,
+        | 'nickname'
+        | 'identifier'
+        | 'fingerprint'
+        | 'publicHexKey'
+        | 'linkedProfiles'
+        | 'uninitialized'
+        | 'createdAt'
+        | 'hasPrivateKey'
+        | 'updatedAt'
+    >[]
+> {
+    const x = await queryPersonas_inner(undefined, true)
+    if (typeof network === 'string') {
+        return x.filter((y) => {
+            for (const z of y.linkedProfiles.keys()) {
+                if (z.network === network) return true
+            }
+            return false
+        })
+    }
+    return x
 }
 
-export async function queryLastPersonaCreated() {
-    const all = await queryPersonas(undefined, true)
-    return first(orderBy(all, (x) => x.createdAt, 'desc'))
+export async function queryLastPersonaCreated(): Promise<PersonaIdentifier | undefined> {
+    const all = await queryPersonas_inner(undefined, true)
+    return first(orderBy(all, (x) => x.createdAt, 'desc'))?.identifier
 }
 
 export async function queryOwnedPersonaInformation(): Promise<PersonaInformation[]> {
-    const personas = await queryPersonas(undefined, true)
+    const personas = await queryPersonas_inner(undefined, true)
     const result: PersonaInformation[] = []
     for (const persona of personas.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))) {
         const map: ProfileInformation[] = []
@@ -183,7 +222,7 @@ export async function restoreFromObject(object: null | BackupJSONFileLatest): Pr
     if (!object) return null
     await restoreBackup(object)
     if (object?.personas?.length) {
-        return queryPersona(Identifier.fromString(object.personas[0].identifier, ECKeyIdentifier).unwrap())
+        return queryPersonaRAW(Identifier.fromString(object.personas[0].identifier, ECKeyIdentifier).unwrap())
     }
     return null
 }
@@ -197,7 +236,7 @@ export async function restoreFromMnemonicWords(
         nickname,
     })
 
-    return queryPersona(identifier)
+    return queryPersonaRAW(identifier)
 }
 export async function restoreFromBase64(base64: string): Promise<Persona | null> {
     return restoreFromObject(JSON.parse(decodeText(decodeArrayBuffer(base64))) as BackupJSONFileLatest)
@@ -253,7 +292,7 @@ export async function patchCreateOrUpdateRelation(
     profiles: ProfileIdentifier[],
     personas: PersonaIdentifier[],
     defaultFavor = RelationFavor.UNCOLLECTED,
-) {
+): Promise<void> {
     await consistentPersonaDBWriteAccess(async (t) => {
         for (const persona of personas) {
             for (const profile of profiles) {
@@ -269,7 +308,7 @@ export async function patchCreateOrUpdateRelation(
     return
 }
 
-export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'network'>[]) {
+export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'network'>[]): Promise<void> {
     await consistentPersonaDBWriteAccess(async (t) => {
         for (const relation of relations) {
             const relationInDB = await t
@@ -297,7 +336,7 @@ export async function createNewRelation(
     profile: ProfileIdentifier,
     linked: PersonaIdentifier,
     favor = RelationFavor.UNCOLLECTED,
-) {
+): Promise<void> {
     const t = await createRelationsTransaction()
     const relationInDB = await t.objectStore('relations').get([linked.toText(), profile.toText()])
     if (relationInDB) return
@@ -357,7 +396,7 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
 // #endregion
 
 // #region avatar
-export const updateCurrentPersonaAvatar = async (avatar: Blob) => {
+export async function updateCurrentPersonaAvatar(avatar: Blob) {
     const identifier = await getCurrentPersonaIdentifier()
 
     if (identifier) {
@@ -366,7 +405,7 @@ export const updateCurrentPersonaAvatar = async (avatar: Blob) => {
     }
 }
 
-export const getCurrentPersonaAvatar = async () => {
+export async function getCurrentPersonaAvatar() {
     const identifier = await getCurrentPersonaIdentifier()
     if (!identifier) return null
 
@@ -405,7 +444,7 @@ export async function detachProfileWithNextID(
         signature?: string
         proofLocation?: string
     },
-) {
+): Promise<void> {
     await NextIDProof.bindProof(uuid, personaPublicKey, NextIDAction.Delete, platform, identity, createdAt, {
         signature: options?.signature,
     })

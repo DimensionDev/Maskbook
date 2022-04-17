@@ -1,28 +1,26 @@
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
     useAccount,
+    useChainId,
+    useFungibleTokenBalance,
     useNativeTokenDetailed,
     useRedPacketConstants,
-    useFungibleTokenBalance,
-    useChainId,
 } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
-import { omit } from 'lodash-unified'
-import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import BigNumber from 'bignumber.js'
-import { ChangeEvent, useCallback, useMemo, useState, useEffect } from 'react'
-import { v4 as uuid } from 'uuid'
+import { omit } from 'lodash-unified'
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { usePickToken } from '@masknet/shared'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 
@@ -77,7 +75,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface RedPacketFormProps extends withClasses<never> {
-    SelectMenuProps?: Partial<MenuProps>
     onChange(settings: RedPacketSettings): void
     onClose: () => void
     origin?: RedPacketSettings
@@ -96,27 +93,14 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     // #region select token
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     const [token = nativeTokenDetailed, setToken] = useState<FungibleTokenDetailed | undefined>(origin?.token)
-    const [id] = useState(uuid)
-    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                setToken(ev.token)
-            },
-            [id],
-        ),
-    )
-    const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialog({
-            open: true,
-            uuid: id,
+    const pickToken = usePickToken()
+    const onSelectTokenChipClick = useCallback(async () => {
+        const picked = await pickToken({
             disableNativeToken: false,
-            FungibleTokenListProps: {
-                selectedTokens: token ? [token.address] : [],
-            },
+            selectedTokens: token ? [token.address] : [],
         })
-    }, [id, token?.address])
+        if (picked) setToken(picked)
+    }, [pickToken, token?.address])
     // #endregion
 
     // #region packet settings
@@ -199,6 +183,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         onNext()
     }, [creatingParams, onChange, onNext])
 
+    const selectRef = useRef(null)
+
     if (!token) return null
     return (
         <>
@@ -206,6 +192,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 <FormControl className={classes.input} variant="outlined">
                     <InputLabel className={classes.selectShrinkLabel}>{t('plugin_red_packet_split_mode')}</InputLabel>
                     <Select
+                        ref={selectRef}
                         value={isRandom ? 1 : 0}
                         onChange={(e) => {
                             // foolproof, reset amount since the meaning of amount changed:
@@ -215,10 +202,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         }}
                         MenuProps={{
                             anchorOrigin: {
-                                vertical: 'top',
-                                horizontal: 'left',
+                                vertical: 'bottom',
+                                horizontal: 'center',
                             },
-                            ...props.SelectMenuProps,
+                            container: selectRef.current,
+                            anchorEl: selectRef.current,
                         }}>
                         <MenuItem value={0}>{t('plugin_red_packet_average')}</MenuItem>
                         <MenuItem value={1}>{t('plugin_red_packet_random')}</MenuItem>

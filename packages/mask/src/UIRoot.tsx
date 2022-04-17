@@ -1,10 +1,10 @@
 import { Suspense } from 'react'
 import { Web3Provider } from '@masknet/web3-shared-evm'
-import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material'
-import { NetworkPluginID, PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra'
-import { I18NextProviderHMR } from '@masknet/shared'
+import { StyledEngineProvider, Theme } from '@mui/material'
+import { NetworkPluginID, PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra/web3'
+import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef } from '@masknet/shared-base-ui'
-import i18nNextInstance from '../shared-ui/locales_legacy'
+import { i18NextInstance } from '@masknet/shared-base'
 import { Web3Context } from './web3/context'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown'
 import { activatedSocialNetworkUI } from './social-network'
@@ -50,17 +50,16 @@ export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
                 <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State} children={jsx} />
             </Web3Provider>
         ),
-        (jsx) => <I18NextProviderHMR i18n={i18nNextInstance} children={jsx} />,
+        (jsx) => <I18NextProviderHMR i18n={i18NextInstance} children={jsx} />,
         kind === 'page' ? (jsx) => <StyledEngineProvider injectFirst children={jsx} /> : identity,
         (jsx) => (
             <MaskThemeProvider
                 useMaskIconPalette={useMaskIconPalette}
                 CustomSnackbarOffsetY={isFacebook(activatedSocialNetworkUI) ? 80 : undefined}
                 useTheme={useTheme}
-                baseline={kind === 'page'}>
-                <CssBaseline />
-                {jsx}
-            </MaskThemeProvider>
+                children={jsx}
+            />
         ),
+        (jsx) => <SharedContextProvider>{jsx}</SharedContextProvider>,
     )
 }

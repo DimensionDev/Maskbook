@@ -3,7 +3,7 @@ import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
 import { Box, InputAdornment } from '@mui/material'
-import { makeStyles } from '../../makeStyles'
+import { makeStyles } from '../../UIHelper/makeStyles'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
 import { SearchIcon } from '@masknet/icons'
@@ -18,7 +18,7 @@ export interface MaskSearchableListProps<T> {
     /** The key of list item for search */
     searchKey?: string[]
     /** Renderer for each list item */
-    itemRender: ReactNode
+    itemRender: React.ComponentType<{ data: T; index: number; onSelect(): void }>
     /** The props to react-window */
     FixedSizeListProps?: Partial<FixedSizeListProps>
     /** The callback when clicked someone list item */
@@ -48,7 +48,7 @@ export interface MaskSearchableListProps<T> {
  *      />
  * )
  */
-export function SearchableList<T>({
+export function SearchableList<T extends {}>({
     itemKey,
     data,
     placeholder,
@@ -126,7 +126,9 @@ export function SearchableList<T>({
                         }}
                         itemCount={readyToRenderData.length}
                         {...rest}>
-                        {(props) => <MaskSearchableItemInList<T> {...props}>{itemRender}</MaskSearchableItemInList>}
+                        {(props) => (
+                            <MaskSearchableItemInList<T> {...props}>{itemRender as any}</MaskSearchableItemInList>
+                        )}
                     </FixedSizeList>
                 </div>
             )}

@@ -1,4 +1,4 @@
-import type { SerializableTypedMessage, TypedMessage } from '../base'
+import type { SerializableTypedMessage, TypedMessage } from '../base.js'
 
 /** @internal */
 export function createIsType<T extends TypedMessage>(x: T['type'], version?: number) {

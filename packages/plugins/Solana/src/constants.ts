@@ -1,5 +1,6 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-solana'
+import { PublicKey } from '@solana/web3.js'
 
 export const PLUGIN_META_KEY = 'com.mask.solana'
 export const PLUGIN_ID = 'com.mask.solana'
@@ -44,3 +45,4 @@ export const NETWORK_ENDPOINTS: Record<ChainId, string> = {
     [ChainId.Devnet]: 'https://api.devnet.solana.com',
 }
 export const ENDPOINT_KEY = 'mainnet-beta'
+export const SOL_TLD_AUTHORITY = new PublicKey('58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx')

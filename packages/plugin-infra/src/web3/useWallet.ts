@@ -1,4 +1,4 @@
-import type { NetworkPluginID } from '..'
+import type { NetworkPluginID } from '../web3-types'
 import { useAccount } from './useAccount'
 import { usePluginWeb3StateContext } from './Context'
 

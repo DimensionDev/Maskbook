@@ -1,6 +1,7 @@
 import { getNftRedPacketConstants, isSameAddress } from '@masknet/web3-shared-evm'
 import { i18n } from '../../../../../../shared-ui/locales_legacy'
-import type { ContractMethodInfo, ComputedPayload } from '../type'
+import type { ComputedPayload } from '../../../../../extension/background-script/EthereumServices/rpc'
+import type { ContractMethodInfo } from '../type'
 
 export function getNFTRedpacketDescription(
     { name, address, chainId }: ContractMethodInfo,

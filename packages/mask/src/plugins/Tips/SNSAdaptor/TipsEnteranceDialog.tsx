@@ -90,7 +90,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         )
     }
     return (
-        <InjectedDialog open={open} onClose={clickBack} title={bodyView} badgeAction={WalletButton()}>
+        <InjectedDialog open={open} onClose={clickBack} title={bodyView} titleTail={WalletButton()}>
             <DialogContent className={classes.dContent}>
                 {showAlert && bodyView === BodyViewSteps.main && (
                     <div className={classes.alertBox}>

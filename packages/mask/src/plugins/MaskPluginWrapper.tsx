@@ -13,9 +13,10 @@ import {
     PluginWrapperComponent,
     Plugin,
     PluginWrapperMethods,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/content-script'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
+    open?: boolean
     title: string
     width?: number
     action?: ReactNode
@@ -71,7 +72,7 @@ const useStyles = makeStyles()((theme) => {
 
 export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const { classes } = useStyles()
-    const { title, children, action, publisher, publisherLink } = props
+    const { open, title, children, action, publisher, publisherLink } = props
     const personaConnectStatus = usePersonaConnectStatus()
     const { t } = useI18N()
 
@@ -116,7 +117,10 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     }, [publisher, publisherLink])
 
     const inner = (
-        <div className={classes.card} onClick={(ev) => ev.stopPropagation()}>
+        <div
+            className={classes.card}
+            style={{ display: open ? 'block' : 'none' }}
+            onClick={(ev) => ev.stopPropagation()}>
             <div className={classes.header}>
                 <MaskIcon size={45} />
                 <div className={classes.title}>
@@ -153,9 +157,9 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
 
         useImperativeHandle(ref, () => refItem, [refItem])
 
-        if (!open) return <>{props.children}</>
         return (
             <MaskPostExtraInfoWrapper
+                open={open}
                 title={title || t(ID, name)}
                 width={width}
                 publisher={publisher ? <PluginI18NFieldRender pluginID={ID} field={publisher.name} /> : undefined}

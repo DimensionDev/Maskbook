@@ -4,9 +4,12 @@ import BigNumber from 'bignumber.js'
 import { pow10, ZERO } from '@masknet/web3-shared-base'
 import {
     ChainId,
-    getAaveConstants,
     createContract,
     FungibleTokenDetailed,
+    getAaveConstants,
+    TransactionEventType,
+    TransactionState,
+    TransactionStateType,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import type { AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool'
@@ -179,19 +182,48 @@ export class AAVEProtocol implements SavingsProtocol {
         return contract?.methods.deposit(this.bareToken.address, new BigNumber(value).toFixed(), account, '0')
     }
 
-    public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+    public async deposit(
+        account: string,
+        chainId: ChainId,
+        web3: Web3,
+        value: BigNumber.Value,
+        onChange: (state: TransactionState) => void,
+    ) {
         try {
             const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
             const operation = await this.createDepositTokenOperation(account, chainId, web3, value)
             if (operation) {
-                await operation.send({
-                    from: account,
-                    gas: gasEstimate.toNumber(),
-                })
+                await operation
+                    .send({
+                        from: account,
+                        gas: gasEstimate.toNumber(),
+                    })
+                    .on(TransactionEventType.ERROR, (error) => {
+                        onChange({
+                            type: TransactionStateType.FAILED,
+                            error: error,
+                        })
+                    })
+                    .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                        onChange({
+                            type: TransactionStateType.CONFIRMED,
+                            no,
+                            receipt,
+                        })
+                    })
+
                 return true
             }
+            onChange({
+                type: TransactionStateType.FAILED,
+                error: new Error("Can't create deposit operation"),
+            })
             return false
         } catch (error) {
+            onChange({
+                type: TransactionStateType.FAILED,
+                error: new Error('deposit failed'),
+            })
             return false
         }
     }
