@@ -122,7 +122,7 @@ export const resolveChainName = createLookupTableResolver<ChainId, string>(
         [ChainId.Mainnet]: 'mainnet',
         [ChainId.Testnet]: 'testnet',
     },
-    () => 'Unknown chain id',
+    () => 'unknown',
 )
 
 export const resolveProviderName = createLookupTableResolver<ProviderType, string>(
@@ -131,7 +131,7 @@ export const resolveProviderName = createLookupTableResolver<ProviderType, strin
         [ProviderType.Dapper]: 'Dapper',
         [ProviderType.Ledger]: 'Ledger',
     },
-    () => 'Unknown provider type',
+    () => 'Unknown',
 )
 
 // #endregion

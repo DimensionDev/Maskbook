@@ -1,5 +1,6 @@
-import type { Plugin, Web3Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-solana'
+import type { Web3Plugin } from '@masknet/plugin-infra/src/entry-web3'
 import { Provider } from './Provider'
 import { AddressBook } from './AddressBook'
 import { Asset } from './Asset'
@@ -10,13 +11,7 @@ import { Transaction } from './Transaction'
 import { Wallet } from './Wallet'
 import { Utils } from './Utils'
 
-export type State = Web3Plugin.ObjectCapabilities.Capabilities<
-    ChainId,
-    ProviderType,
-    NetworkType,
-    CompositeSignature[],
-    MutateOptions
->
+export type State = Web3Plugin.ObjectCapabilities.Capabilities<ChainId, ProviderType, NetworkType, string[], {}, {}, {}>
 
 let state: State = null!
 

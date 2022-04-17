@@ -583,6 +583,7 @@ export declare namespace Web3Plugin {
             /** chain customization */
             getChainDetailed?: (chainId: ChainId) => ChainDetailed | undefined
             getAverageBlockDelay?: (chainId: ChainId, scale?: number) => number
+
             resolveChainName?: (chainId: ChainId) => string
             resolveChainColor?: (chainId: ChainId) => string
             resolveChainFullName?: (chainId: ChainId) => string

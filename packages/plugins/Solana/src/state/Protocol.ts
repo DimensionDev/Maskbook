@@ -1,3 +1,4 @@
+import type Web3 from '@solana/web3.js'
 import { first } from 'lodash-unified'
 import type { TransactionConfig } from 'web3-core'
 import type { Plugin } from '@masknet/plugin-infra'
@@ -5,7 +6,9 @@ import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../messages'
 
-export class Protocol implements Web3Plugin.ObjectCapabilities.ProtocolState<ChainId, string, TransactionConfig> {
+export class Protocol
+    implements Web3Plugin.ObjectCapabilities.ProtocolState<ChainId, string, TransactionConfig, {}, {}, typeof Web3>
+{
     constructor(private context: Plugin.Shared.SharedContext) {}
 
     async getAccount() {

@@ -9,10 +9,11 @@
     }
   },
   "dependencies": {
-    "@masknet/shared-base": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
+    "@solana/web3.js": "^1.30.2",
     "bignumber.js": "9.0.2",
     "react-use": "^17.3.2",
     "urlcat": "^2.0.4"

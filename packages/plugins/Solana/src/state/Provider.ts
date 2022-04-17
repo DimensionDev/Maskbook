@@ -2,6 +2,7 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ProviderState } from '@masknet/plugin-infra/web3'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import { ChainId, getNetworkTypeFromChainId, NetworkType, ProviderType } from '@masknet/web3-shared-solana'
 
 interface Account {
@@ -29,6 +30,7 @@ export class Provider extends ProviderState<ChainId, NetworkType, ProviderType, 
         }
 
         super(context, defaultValue, {
+            isSameAddress,
             getNetworkTypeFromChainId,
         })
     }

@@ -13,6 +13,11 @@ export function isSameAddress(a?: string, b?: string) {
     return a.toLowerCase() === b.toLowerCase()
 }
 
+export function isValidAddress(address?: string) {
+    if (!address) return false
+    return EthereumAddress.isValid(address)
+}
+
 export function currySameAddress(addresses: string | string[] = []) {
     addresses = compact(uniq(castArray(addresses))).map((address) => address.toLowerCase())
     return (target?: string | { address: string }) => {
@@ -57,9 +62,4 @@ export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
                 isSameAddress(HAPPY_RED_PACKET_ADDRESS_V4, address)
             )
     }
-}
-
-export function isValidAddress(address?: string) {
-    if (!address) return false
-    return EthereumAddress.isValid(address)
 }
