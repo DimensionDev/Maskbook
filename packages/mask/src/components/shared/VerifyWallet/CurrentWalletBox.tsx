@@ -15,7 +15,7 @@ import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
-        padding: '12px 8px',
+        padding: '12px 8px 12px 12px',
         width: '100%',
         background: '#fff',
         boxSizing: 'border-box',
@@ -33,23 +33,27 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         marginRight: 4,
         fontWeight: 'bold',
+        lineHeight: '18px',
     },
     infoRow: {
         display: 'flex',
         alignItems: 'center',
     },
     actionButton: {
+        boxSizing: 'border-box',
         fontSize: 12,
-        marginLeft: theme.spacing(1),
+        lineHeight: '16px',
         padding: '8px 12px',
         fontWeight: 'bold',
         background: 'rgba(15, 20, 25, 1)',
         color: '#fff',
-        minWidth: 70,
         borderRadius: '6px',
+        minWidth: 'unset',
+        width: '69px',
     },
     address: {
         fontSize: 10,
+        lineHeight: 1,
         marginRight: theme.spacing(1),
         display: 'inline-block',
         color: theme.palette.text.secondary,
@@ -101,12 +105,12 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
         <section className={classNames(classes.currentAccount)}>
             <WalletIcon
                 size={30}
-                badgeSize={16}
+                badgeSize={12}
                 networkIcon={providerDescriptor?.icon}
                 providerIcon={networkDescriptor?.icon}
             />
             <div className={classes.accountInfo}>
-                <div className={classes.infoRow} style={{ marginBottom: 3 }}>
+                <div className={classes.infoRow}>
                     {wallet.providerType !== ProviderType.MaskWallet ? (
                         <Typography className={classes.accountName}>
                             {domain && Utils?.formatDomainName
@@ -139,15 +143,14 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                     </Link>
                 </div>
             </div>
-            <section>
-                <Button
-                    className={classNames(classes.actionButton)}
-                    variant="contained"
-                    size="small"
-                    onClick={props.changeWallet}>
-                    {t('wallet_status_button_change')}
-                </Button>
-            </section>
+            <Button
+                className={classNames(classes.actionButton)}
+                variant="contained"
+                size="small"
+                onClick={props.changeWallet}>
+                {/* {t('wallet_status_button_change')} */}
+                Change
+            </Button>
         </section>
     )
 }
