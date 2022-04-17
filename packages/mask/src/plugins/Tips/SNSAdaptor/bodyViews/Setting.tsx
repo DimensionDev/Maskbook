@@ -26,11 +26,14 @@ const useStyles = makeStyles()((theme) => ({
 
 interface SettingPageProp {
     wallets: WalletProof[]
+    onChange: any
 }
 
-const SettingPage = memo(({ wallets }: SettingPageProp) => {
+const SettingPage = memo(({ wallets, onChange }: SettingPageProp) => {
     const { classes } = useStyles()
-
+    const onSwitchChange = () => {
+        console.log(wallets, 'switch')
+    }
     return (
         <div className={classes.container}>
             <div className={classes.titleBox}>
@@ -41,7 +44,12 @@ const SettingPage = memo(({ wallets }: SettingPageProp) => {
                 {wallets.map((x, idx) => {
                     return (
                         <div key={idx} className={classes.swtichContainer}>
-                            <WalletSwitch type={0} address={x.identity} isPublic={!!x.isPublic} />
+                            <WalletSwitch
+                                onChange={onSwitchChange}
+                                type={0}
+                                address={x.identity}
+                                isPublic={!!x.isPublic}
+                            />
                         </div>
                     )
                 })}

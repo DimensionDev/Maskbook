@@ -320,6 +320,7 @@ export namespace NextIDBaseAPI {
             identity: string,
             createdAt: string,
             patchData: unknown,
+            pluginId: string,
         ): Promise<Result<T, string>>
         get<T>(key: string): Promise<Result<T, string>>
         getPayload(
@@ -327,6 +328,7 @@ export namespace NextIDBaseAPI {
             platform: NextIDPlatform,
             identity: string,
             patchData: unknown,
+            pluginId: string,
         ): Promise<Result<NextIDStoragePayload, string>>
     }
     export interface Proof {

@@ -2,7 +2,7 @@ import { DialogContent, Button } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { TipsSupportedChains } from '../constants'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -10,10 +10,18 @@ import SettingView from './bodyViews/Setting'
 import WalletsView from './bodyViews/Wallets'
 import AddWalletView from './bodyViews/AddWallet'
 import { useProvedWallets } from '../hooks/useProvedWallets'
-import { BindingProof, NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
+import {
+    BindingProof,
+    ECKeyIdentifier,
+    NextIDPersonaBindings,
+    NextIDPlatform,
+    NextIDStoragePayload,
+} from '@masknet/shared-base'
 import Empty from './components/empty'
-import { useKvGet } from '../hooks/useKv'
-import { InjectedDialog } from '@masknet/shared'
+import { getKvPayload, kvSet, useKvGet } from '../hooks/useKv'
+import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
+import { useAsyncRetry } from 'react-use'
+import Services from '../../../extension/service'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -44,6 +52,12 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'row-reverse',
     },
+    loading: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)',
+    },
 }))
 
 enum BodyViewSteps {
@@ -61,8 +75,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { classes } = useStyles()
     const [showAlert, setShowAlert] = useState(true)
     const supportedNetworks = TipsSupportedChains
-    const [bodyView, setBodyView] = useState(BodyViewSteps.main)
+    const [bodyView, setBodyView] = useState<BodyViewSteps>(BodyViewSteps.main)
     const [hasChanged, setHasChanged] = useState(false)
+    const [rawPatchData, setRawPatchData] = useState<WalletProof[]>([])
+    const [rawWalletList, setRawWalletList] = useState<WalletProof[]>([])
+    const { value: currentPersonaIdentifier } = useAsyncRetry(
+        () => Services.Settings.getCurrentPersonaIdentifier(),
+        [open],
+    )
     const clickBack = () => {
         if (bodyView === BodyViewSteps.main) {
             onClose()
@@ -70,15 +90,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             setBodyView(BodyViewSteps.main)
         }
     }
-
-    const proofRes = useProvedWallets()
-    const walletsList = proofRes.value
-        ? (proofRes.value as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
-        : []
     const { value: kv } = useKvGet()
+    const { loading, value: proofRes } = useProvedWallets()
 
-    const resolveWallets = () => {
-        if (!kv) {
+    useEffect(() => {
+        const walletsList = proofRes
+            ? (proofRes as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
+            : []
+        if (!kv || !(kv as any).val.proofs.length) {
             ;(walletsList as WalletProof[]).forEach((x, idx) => {
                 x.isPublic = 1
                 x.isDefault = 0
@@ -87,12 +106,18 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     return
                 }
             })
-            return walletsList as WalletProof[]
         }
+        setRawWalletList(JSON.parse(JSON.stringify(walletsList)))
+        setRawPatchData(JSON.parse(JSON.stringify(walletsList)))
+    }, [proofRes])
 
-        return []
+    const onChange = () => {
+        setHasChanged(true)
     }
-
+    const onCancel = () => {
+        setRawPatchData(JSON.parse(JSON.stringify(rawWalletList)))
+        setHasChanged(false)
+    }
     const WalletButton = () => {
         const { classes } = useStyles()
         return (
@@ -116,47 +141,78 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             null
         )
     }
+    const setAsDefault = (idx: number) => {
+        const changed = JSON.parse(JSON.stringify(rawPatchData))
+        changed.forEach((x: any) => (x.isDefault = 0))
+        changed[idx].isDefault = 1
+        setRawPatchData(changed)
+        setHasChanged(true)
+    }
+
+    const onConfirm = async () => {
+        try {
+            const payload = await getKvPayload(rawPatchData)
+            if (!payload || !payload.val) throw new Error('payload error')
+            const signResult = await Services.Identity.generateSignResult(
+                currentPersonaIdentifier as ECKeyIdentifier,
+                (payload.val as NextIDStoragePayload).signPayload,
+            )
+            if (!signResult) throw new Error('sign error')
+            await kvSet(payload.val, signResult.signature.signature, rawPatchData)
+        } catch (error) {
+            console.error(error)
+        }
+    }
     return (
         <InjectedDialog open={open} onClose={clickBack} title={bodyView} titleTail={WalletButton()}>
-            <DialogContent className={classes.dContent}>
-                {showAlert && bodyView === BodyViewSteps.main && (
-                    <div className={classes.alertBox}>
-                        <VerifyAlertLine onClose={() => setShowAlert(false)} />
+            {loading ? (
+                <DialogContent className={classes.dContent}>
+                    <div className={classes.loading}>
+                        <LoadingAnimation />
                     </div>
-                )}
+                </DialogContent>
+            ) : (
+                <DialogContent className={classes.dContent}>
+                    {showAlert && bodyView === BodyViewSteps.main && (
+                        <div className={classes.alertBox}>
+                            <VerifyAlertLine onClose={() => setShowAlert(false)} />
+                        </div>
+                    )}
 
-                {bodyView === BodyViewSteps.main && resolveWallets().length > 0 ? (
-                    <div>
-                        {supportedNetworks.map((x, idx) => {
-                            return (
-                                <WalletsByNetwork
-                                    wallets={resolveWallets()}
-                                    toSetting={() => setBodyView(BodyViewSteps.setting)}
-                                    key={idx}
-                                    network={x}
-                                />
-                            )
-                        })}
-                    </div>
-                ) : bodyView === BodyViewSteps.main && resolveWallets().length === 0 ? (
-                    <Empty />
-                ) : null}
+                    {bodyView === BodyViewSteps.main && rawPatchData.length > 0 ? (
+                        <div>
+                            {supportedNetworks.map((x, idx) => {
+                                return (
+                                    <WalletsByNetwork
+                                        wallets={rawPatchData}
+                                        toSetting={() => setBodyView(BodyViewSteps.setting)}
+                                        key={idx}
+                                        network={x}
+                                        setAsDefault={setAsDefault}
+                                    />
+                                )
+                            })}
+                        </div>
+                    ) : bodyView === BodyViewSteps.main && rawPatchData.length === 0 ? (
+                        <Empty />
+                    ) : null}
 
-                {bodyView === BodyViewSteps.setting && <SettingView wallets={resolveWallets()} />}
-                {bodyView === BodyViewSteps.wallets && <WalletsView wallets={resolveWallets()} />}
-                {bodyView === BodyViewSteps.addWallet && <AddWalletView />}
+                    {bodyView === BodyViewSteps.setting && <SettingView onChange={onChange} wallets={rawPatchData} />}
+                    {bodyView === BodyViewSteps.wallets && <WalletsView wallets={rawPatchData} />}
+                    {bodyView === BodyViewSteps.addWallet && <AddWalletView />}
 
-                {![BodyViewSteps.addWallet, BodyViewSteps.wallets].includes(bodyView) && resolveWallets().length > 0 && (
-                    <div className={classes.actions}>
-                        <ActionButton fullWidth color="secondary">
-                            Cancel
-                        </ActionButton>
-                        <ActionButton fullWidth disabled={!hasChanged}>
-                            Confirm
-                        </ActionButton>
-                    </div>
-                )}
-            </DialogContent>
+                    {![BodyViewSteps.addWallet, BodyViewSteps.wallets].includes(bodyView) && rawPatchData.length > 0 && (
+                        <div className={classes.actions}>
+                            <ActionButton fullWidth color="secondary" disabled={!hasChanged} onClick={onCancel}>
+                                {t('cancel')}
+                            </ActionButton>
+                            <ActionButton fullWidth disabled={!hasChanged} onClick={onConfirm}>
+                                {t('confirm')}
+                            </ActionButton>
+                        </div>
+                    )}
+                </DialogContent>
+            )}
         </InjectedDialog>
     )
 }

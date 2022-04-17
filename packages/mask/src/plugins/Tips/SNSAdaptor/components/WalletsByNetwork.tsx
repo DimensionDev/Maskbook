@@ -43,9 +43,10 @@ interface WalletsByNetworkProps {
     network: any
     toSetting: any
     wallets: WalletProof[]
+    setAsDefault: (idx: number) => void
 }
 
-export function WalletsByNetwork({ wallets, network, toSetting }: WalletsByNetworkProps) {
+export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: WalletsByNetworkProps) {
     const { classes } = useStyles()
 
     return (
@@ -61,7 +62,15 @@ export function WalletsByNetwork({ wallets, network, toSetting }: WalletsByNetwo
                 <div className={classes.content}>
                     {(wallets.length &&
                         wallets.map((x, idx) => {
-                            return <WalletCom key={idx} index={idx} address={x.identity} isDefault={!!x.isDefault} />
+                            return (
+                                <WalletCom
+                                    setAsDefault={setAsDefault}
+                                    key={idx}
+                                    index={idx}
+                                    address={x.identity}
+                                    isDefault={!!x.isDefault}
+                                />
+                            )
                         })) || <Typography className={classes.empty}>No connected or verified wallets.</Typography>}
                 </div>
             )}

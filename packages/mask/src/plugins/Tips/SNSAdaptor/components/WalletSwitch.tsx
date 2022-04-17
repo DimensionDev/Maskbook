@@ -49,9 +49,10 @@ interface WalletSwitchProps {
     type: number
     address: string
     isPublic: boolean
+    onChange: any
 }
 
-export function WalletSwitch({ type, address, isPublic }: WalletSwitchProps) {
+export function WalletSwitch({ type, address, isPublic, onChange }: WalletSwitchProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { Utils } = useWeb3State() ?? {}
@@ -62,6 +63,7 @@ export function WalletSwitch({ type, address, isPublic }: WalletSwitchProps) {
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = e.target.checked
         setChecked(v)
+        onChange()
     }
     return (
         <div className={classes.currentAccount}>

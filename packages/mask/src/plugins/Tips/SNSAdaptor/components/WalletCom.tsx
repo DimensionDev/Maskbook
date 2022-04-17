@@ -71,9 +71,10 @@ interface WalletComProps {
     canDelete?: boolean
     onDelete?: any
     index?: number
+    setAsDefault?: (idx: number) => void
 }
 
-export function WalletCom({ address, isDefault, canDelete, index }: WalletComProps) {
+export function WalletCom({ address, isDefault, canDelete, index, setAsDefault }: WalletComProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
@@ -91,7 +92,17 @@ export function WalletCom({ address, isDefault, canDelete, index }: WalletComPro
     const walletName = useWallets().find((x) => isSameAddress(x.address, address))?.name
     const { Utils } = useWeb3State() ?? {}
     const getActionRender = () => {
-        if (!canDelete && !isDefault) return <Typography className={classes.defaultBtn}>Set as default</Typography>
+        if (!canDelete && !isDefault)
+            return (
+                <div
+                    className={classes.defaultBtn}
+                    onClick={() => {
+                        if (!setAsDefault) return
+                        setAsDefault(index ?? 0)
+                    }}>
+                    Set as default
+                </div>
+            )
         if (canDelete)
             return <img className={classes.delIcon} src={new URL('../../assets/del.png', import.meta.url).toString()} />
         return null
