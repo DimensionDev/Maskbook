@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { WalletSwitch } from '../components/WalletSwitch'
 
 import type { WalletProof } from '../TipsEntranceDialog'
@@ -26,25 +26,35 @@ const useStyles = makeStyles()((theme) => ({
 
 interface SettingPageProp {
     wallets: WalletProof[]
-    onChange: any
+    onSwitchChange: (idx: number, v: boolean) => void
 }
 
-const SettingPage = memo(({ wallets, onChange }: SettingPageProp) => {
+const SettingPage = memo(({ wallets, onSwitchChange }: SettingPageProp) => {
     const { classes } = useStyles()
-    const onSwitchChange = () => {
-        console.log(wallets, 'switch')
-    }
+    const [data, setData] = useState<WalletProof[]>([])
+    useEffect(() => {
+        setData(wallets)
+    }, [wallets])
+    const publicNum = wallets.reduce((num, x) => {
+        if (x.isPublic === 1) {
+            num += 1
+        }
+        return num
+    }, 0)
     return (
         <div className={classes.container}>
             <div className={classes.titleBox}>
                 <Typography sx={{ fontWeight: 'bold', fontSize: 16 }}>Tips</Typography>
-                <Typography>(0/4)</Typography>
+                <Typography>
+                    ({publicNum}/{wallets.length})
+                </Typography>
             </div>
             <div className={classes.walletSwitchBox}>
-                {wallets.map((x, idx) => {
+                {data.map((x, idx) => {
                     return (
                         <div key={idx} className={classes.switchContainer}>
                             <WalletSwitch
+                                index={idx}
                                 onChange={onSwitchChange}
                                 type={0}
                                 address={x.identity}

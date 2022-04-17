@@ -60,16 +60,19 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
             </div>
             {network.isEvm && (
                 <div className={classes.content}>
-                    {(wallets.length &&
+                    {(wallets.length > 0 &&
                         wallets.map((x, idx) => {
                             return (
-                                <WalletCom
-                                    setAsDefault={setAsDefault}
-                                    key={idx}
-                                    index={idx}
-                                    address={x.identity}
-                                    isDefault={!!x.isDefault}
-                                />
+                                (x.isPublic && (
+                                    <WalletCom
+                                        setAsDefault={setAsDefault}
+                                        key={idx}
+                                        index={idx}
+                                        address={x.identity}
+                                        isDefault={!!x.isDefault}
+                                    />
+                                )) ||
+                                null
                             )
                         })) || <Typography className={classes.empty}>No connected or verified wallets.</Typography>}
                 </div>

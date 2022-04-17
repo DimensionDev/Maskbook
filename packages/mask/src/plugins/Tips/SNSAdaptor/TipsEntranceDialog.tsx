@@ -119,11 +119,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         })
         setRawWalletList(JSON.parse(JSON.stringify(walletsList)))
         setRawPatchData(JSON.parse(JSON.stringify(walletsList)))
-    }, [proofRes])
+    }, [proofRes, kv])
 
-    const onChange = () => {
-        setHasChanged(true)
-    }
     const onCancel = () => {
         setRawPatchData(JSON.parse(JSON.stringify(rawWalletList)))
         setHasChanged(false)
@@ -157,6 +154,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         changed[idx].isDefault = 1
         setRawPatchData(changed)
         setHasChanged(true)
+    }
+
+    const onSwitchChange = (idx: number, v: boolean) => {
+        const changed = JSON.parse(JSON.stringify(rawPatchData))
+        changed[idx].isPublic = v ? 1 : 0
+        setRawPatchData(changed)
+        setHasChanged(true)
+        console.log(rawPatchData, idx, v, 'gggg')
     }
 
     const onConfirm = async () => {
@@ -209,7 +214,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         <Empty />
                     ) : null}
 
-                    {bodyView === BodyViewSteps.setting && <SettingView onChange={onChange} wallets={rawPatchData} />}
+                    {bodyView === BodyViewSteps.setting && (
+                        <SettingView onSwitchChange={onSwitchChange} wallets={rawPatchData} />
+                    )}
                     {bodyView === BodyViewSteps.wallets && <WalletsView wallets={rawPatchData} />}
                     {bodyView === BodyViewSteps.addWallet && <AddWalletView />}
 

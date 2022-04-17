@@ -3,7 +3,7 @@ import { Link, Switch, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { ExternalLink } from 'react-feather'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
@@ -50,20 +50,24 @@ interface WalletSwitchProps {
     address: string
     isPublic: boolean
     onChange: any
+    index: number
 }
 
-export function WalletSwitch({ type, address, isPublic, onChange }: WalletSwitchProps) {
+export function WalletSwitch({ type, address, isPublic, onChange, index }: WalletSwitchProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { Utils } = useWeb3State() ?? {}
     const [checked, setChecked] = useState(!!isPublic)
+    useEffect(() => {
+        setChecked(!!isPublic)
+    }, [isPublic])
     const getWalletName = () => {
         return ['EVM wallet', 'Solana wallet', 'Flow wallet'][type]
     }
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = e.target.checked
         setChecked(v)
-        onChange()
+        onChange(index, v)
     }
     return (
         <div className={classes.currentAccount}>
