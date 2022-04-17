@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
 const VerifyWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { currentPersona } = PersonaContext.useContainer()
+    const { currentPersona, refreshProofs } = PersonaContext.useContainer()
     const [step, setStep] = useState(SignSteps.Ready)
     const [signature, setSignature] = useState<string>()
     const [payload, setPayload] = useState<NextIDPayload>()
@@ -90,6 +90,7 @@ const VerifyWallet = memo(() => {
                     signature: signature,
                 },
             )
+            refreshProofs()
             setStep(SignSteps.SecondStepDone)
         } catch (error) {
             console.error(error)
