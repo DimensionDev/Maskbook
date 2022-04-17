@@ -35,9 +35,8 @@ export const TokenSection: FC = () => {
 
     useEffect(() => {
         if (isNativeToken) {
-            const is1559Supported = isEIP1559Supported(chainId)
             setGasConfig(
-                is1559Supported
+                isEIP1559Supported(chainId)
                     ? {
                           gas: GAS_LIMIT,
                           maxFeePerGas: gasConfig?.maxFeePerGas || defaultGasPrice,
