@@ -5,6 +5,5 @@ import { twitterShared } from './shared'
 const twitterWorker: SocialNetworkWorker.Definition = {
     ...twitterWorkerBase,
     ...twitterShared,
-    tasks: {},
 }
 export default twitterWorker

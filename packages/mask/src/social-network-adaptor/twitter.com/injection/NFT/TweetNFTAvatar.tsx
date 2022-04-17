@@ -1,7 +1,6 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTBadgeTweet } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTweet'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { Flags } from '../../../../../shared'
 import { getInjectNodeInfo } from '../../utils/avatar'
 import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector'
 import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
@@ -17,7 +16,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 const info = getInjectNodeInfo(ele.firstChild as HTMLElement)
                 if (!info) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
+                const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
                 proxy.realCurrent = info.element.firstChild as HTMLElement
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
                 root.render(

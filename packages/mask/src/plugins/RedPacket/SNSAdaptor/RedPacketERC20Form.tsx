@@ -10,10 +10,10 @@ import {
     useNativeTokenDetailed,
     useRedPacketConstants,
 } from '@masknet/web3-shared-evm'
-import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@mui/material'
+import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { usePickToken } from '@masknet/shared'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -75,7 +75,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface RedPacketFormProps extends withClasses<never> {
-    SelectMenuProps?: Partial<MenuProps>
     onChange(settings: RedPacketSettings): void
     onClose: () => void
     origin?: RedPacketSettings
@@ -184,6 +183,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         onNext()
     }, [creatingParams, onChange, onNext])
 
+    const selectRef = useRef(null)
+
     if (!token) return null
     return (
         <>
@@ -191,6 +192,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 <FormControl className={classes.input} variant="outlined">
                     <InputLabel className={classes.selectShrinkLabel}>{t('plugin_red_packet_split_mode')}</InputLabel>
                     <Select
+                        ref={selectRef}
                         value={isRandom ? 1 : 0}
                         onChange={(e) => {
                             // foolproof, reset amount since the meaning of amount changed:
@@ -200,10 +202,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         }}
                         MenuProps={{
                             anchorOrigin: {
-                                vertical: 'top',
-                                horizontal: 'left',
+                                vertical: 'bottom',
+                                horizontal: 'center',
                             },
-                            ...props.SelectMenuProps,
+                            container: selectRef.current,
+                            anchorEl: selectRef.current,
                         }}>
                         <MenuItem value={0}>{t('plugin_red_packet_average')}</MenuItem>
                         <MenuItem value={1}>{t('plugin_red_packet_random')}</MenuItem>

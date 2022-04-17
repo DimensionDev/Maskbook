@@ -259,6 +259,9 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     root: {
                         backgroundColor: theme.palette.action.mask,
                     },
+                    invisible: {
+                        opacity: '0 !important',
+                    },
                 },
             }
             theme.components.MuiTooltip = {

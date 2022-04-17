@@ -1,12 +1,12 @@
-import { definedSocialNetworkUIs, getNetworkWorker, loadSocialNetworkUI } from '../../social-network'
+import { definedSocialNetworkUIs, getNetworkWorker, loadSocialNetworkUI, SocialNetworkUI } from '../../social-network'
 import { Flags } from '../../../shared'
-import { requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
 
 import { currentSetupGuideStatus } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
 import { SetupGuideStep } from '../../components/InjectedComponents/SetupGuide/types'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { delay } from '@dimensiondev/kit'
+import { requestExtensionPermission } from '../../../background/services/helper'
 
 export async function getDefinedSocialNetworkUIs() {
     return [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {
@@ -15,6 +15,13 @@ export async function getDefinedSocialNetworkUIs() {
         }
     })
 }
+
+function requestSNSAdaptorPermission(ui: SocialNetworkUI.Definition) {
+    const req = ui.permission?.request()
+    if (req) return req
+    return requestExtensionPermission({ origins: [...ui.declarativePermissions.origins] })
+}
+
 export async function connectSocialNetwork(
     identifier: PersonaIdentifier,
     network: string,

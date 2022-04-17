@@ -1,6 +1,7 @@
 import {
     ObservableMap,
     ObservableSet,
+    PostIVIdentifier,
     type Payload,
     type PostIdentifier,
     type ProfileIdentifier,
@@ -71,27 +72,22 @@ export interface PostContext extends PostContextAuthor {
     // #endregion
     // #region Raw post content (not decrypted)
     readonly rawMessage: Subscription<TypedMessageTuple>
-    // TODO: should be a Subscription
-    readonly rawMessagePiped: ValueRef<TypedMessageTuple>
-    /** @deprecated Use postMessage or transformedPostContent (depends on your usage) instead */
-    readonly postContent: Subscription<string>
+    readonly encryptComment: ValueRef<null | ((commentToEncrypt: string) => Promise<string>)>
+    readonly decryptComment: ValueRef<null | ((commentEncrypted: string) => Promise<string | null>)>
     // #endregion
     // #region Post payload discovered in the rawMessage
     readonly containingMaskPayload: Subscription<Result<Payload, unknown>>
-    // TODO: should be a Subscription
-    readonly iv: ValueRef<string | null>
+    readonly postIVIdentifier: Subscription<PostIVIdentifier | null>
     /**
      * undefined => payload not found
      */
     readonly publicShared: Subscription<boolean | undefined>
-    /** @deprecated */
-    readonly ownersKeyEncrypted: Subscription<string | undefined>
-    /** @deprecated */
+    readonly isAuthorOfPost: Subscription<boolean | undefined>
     readonly version: Subscription<SupportedPayloadVersions | undefined>
     decryptedReport(content: {
         sharedPublic?: Some<boolean>
         iv?: string
-        ownersAESKeyEncrypted?: string
+        isAuthorOfPost?: Some<boolean>
         version?: SupportedPayloadVersions
     }): void
     // #endregion
