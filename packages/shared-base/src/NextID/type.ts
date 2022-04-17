@@ -55,4 +55,16 @@ export interface NextIDStoragePayload {
     signPayload: string
     createdAt: string
 }
+export interface NextIdStorageInfo {
+    persona: string
+    proofs: NextIdKvStorageProofs[]
+}
+export interface NextIdKvStorageProofs {
+    content: {
+        // pluginId
+        [index: string]: unknown
+    }
+    identity: string
+    platform: NextIDPlatform
+}
 // #endregion

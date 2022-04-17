@@ -2,7 +2,7 @@
  * Document url: https://github.com/nextdotid/kv_server/blob/develop/docs/api.apib
  */
 import urlcat from 'urlcat'
-import type { NextIDStoragePayload, NextIDPlatform } from '@masknet/shared-base'
+import type { NextIDStoragePayload, NextIDPlatform, NextIdStorageInfo } from '@masknet/shared-base'
 import { fetchJSON } from './helper'
 import type { Result } from 'ts-results'
 import type { NextIDBaseAPI } from '../types'
@@ -29,7 +29,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
      * @param personaPublicKey
      *
      */
-    async get<T>(personaPublicKey: string): Promise<Result<T, string>> {
+    async get<T>(personaPublicKey: string): Promise<Result<NextIdStorageInfo, string>> {
         const full = await fetchJSON<{ [MASK_STORAGE_KEY]: T }>(
             urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
         )

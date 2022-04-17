@@ -15,6 +15,7 @@ import {
     ECKeyIdentifier,
     NextIDPersonaBindings,
     NextIDPlatform,
+    NextIdStorageInfo,
     NextIDStoragePayload,
 } from '@masknet/shared-base'
 import Empty from './components/empty'
@@ -22,6 +23,7 @@ import { getKvPayload, kvSet, useKvGet } from '../hooks/useKv'
 import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
+import { PluginId } from '@masknet/plugin-infra'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -83,6 +85,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         () => Services.Settings.getCurrentPersonaIdentifier(),
         [open],
     )
+    const { value: currentPersona } = useAsyncRetry(
+        () => Services.Identity.queryPersona(currentPersonaIdentifier as ECKeyIdentifier),
+        [currentPersonaIdentifier],
+    )
     const clickBack = () => {
         if (bodyView === BodyViewSteps.main) {
             onClose()
@@ -90,23 +96,27 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             setBodyView(BodyViewSteps.main)
         }
     }
-    const { value: kv } = useKvGet()
-    const { loading, value: proofRes } = useProvedWallets()
-
+    const { value: kv, retry: retryKv } = useKvGet()
+    const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
     useEffect(() => {
+        setHasChanged(false)
         const walletsList = proofRes
             ? (proofRes as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
             : []
-        if (!kv || !(kv as any).val.proofs.length) {
-            ;(walletsList as WalletProof[]).forEach((x, idx) => {
-                x.isPublic = 1
-                x.isDefault = 0
-                if (idx === 0) {
-                    x.isDefault = 1
-                    return
-                }
-            })
+        if (kv !== undefined && (kv?.val as NextIdStorageInfo).proofs.length > 0) {
+            const res = (kv.val as NextIdStorageInfo).proofs.find((x) => x.identity === currentPersona?.publicHexKey)
+            setRawWalletList(JSON.parse(JSON.stringify(res?.content[PluginId.Tip])))
+            setRawPatchData(JSON.parse(JSON.stringify(res?.content[PluginId.Tip])))
+            return
         }
+        ;(walletsList as WalletProof[]).forEach((x, idx) => {
+            x.isPublic = 1
+            x.isDefault = 0
+            if (idx === 0) {
+                x.isDefault = 1
+                return
+            }
+        })
         setRawWalletList(JSON.parse(JSON.stringify(walletsList)))
         setRawPatchData(JSON.parse(JSON.stringify(walletsList)))
     }, [proofRes])
@@ -159,6 +169,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             )
             if (!signResult) throw new Error('sign error')
             await kvSet(payload.val, signResult.signature.signature, rawPatchData)
+            retryKv()
+            retryProof()
         } catch (error) {
             console.error(error)
         }
