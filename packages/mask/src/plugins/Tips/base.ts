@@ -1,10 +1,10 @@
-import { Plugin, NetworkPluginID } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { TipsEnterancePluginId } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: TipsEnterancePluginId,
-    icon: '\u{1F4B0}',
     name: { fallback: 'Tips' },
     description: {
         fallback: 'Tips Enterance',

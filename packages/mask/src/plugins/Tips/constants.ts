@@ -1,4 +1,6 @@
-import { PluginId, getRegisteredWeb3Networks, NetworkPluginID } from '@masknet/plugin-infra'
+import { PluginId } from '@masknet/plugin-infra'
+import { getRegisteredWeb3Networks, NetworkPluginID } from '@masknet/plugin-infra/web3'
+
 export const TipsEnterancePluginId = PluginId.Tip
 
 const networks = getRegisteredWeb3Networks()

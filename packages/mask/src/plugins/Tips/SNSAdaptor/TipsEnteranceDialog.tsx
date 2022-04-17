@@ -1,4 +1,3 @@
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { DialogContent, Button } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
@@ -14,6 +13,7 @@ import { useProvedWallets } from '../hooks/useProvedWallets'
 import { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
 import Empty from './components/empty'
 import { useKvGet } from '../hooks/useKv'
+import { InjectedDialog } from '@masknet/shared'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void

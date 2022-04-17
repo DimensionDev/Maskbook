@@ -4,7 +4,7 @@ import { useCopyToClipboard } from 'react-use'
 import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { Copy, ExternalLink } from 'react-feather'
-import { useWeb3State } from '@masknet/plugin-infra'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -76,7 +76,6 @@ export function WalletCom({ name, address, isDefault, canDelete }: WalletComProp
     const { classes } = useStyles()
     const { t } = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
-    const { Utils } = useWeb3State() ?? {}
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
             ev.stopPropagation()
@@ -88,6 +87,7 @@ export function WalletCom({ name, address, isDefault, canDelete }: WalletComProp
         undefined,
         t('copy_success_of_wallet_addr'),
     )
+    const { Utils } = useWeb3State() ?? {}
     const getActionRender = () => {
         if (!canDelete && !isDefault) return <Typography className={classes.defaultBtn}>Set as default</Typography>
         if (canDelete)

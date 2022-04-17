@@ -3,8 +3,8 @@ import { Link, Switch, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { ExternalLink } from 'react-feather'
-import { useWeb3State } from '@masknet/plugin-infra'
 import { useState } from 'react'
+import { useWeb3State } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
