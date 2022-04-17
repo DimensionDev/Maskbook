@@ -72,6 +72,7 @@ const ConnectWalletPage = memo(() => {
         console.log(result)
         navigate(PopupRoutes.VerifyWallet, {
             state: result as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>,
+            replace: true,
         })
     }, [])
 

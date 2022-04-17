@@ -108,7 +108,7 @@ const VerifyWallet = memo(() => {
                 step={step}
                 personaSign={personaSilentSign}
                 walletSign={walletSign}
-                onDone={() => navigate(PopupRoutes.ConnectedWallets)}
+                onDone={() => navigate(PopupRoutes.ConnectedWallets, { replace: true })}
             />
         </div>
     )

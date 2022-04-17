@@ -88,7 +88,7 @@ const ConnectedWallets = memo(() => {
     )
 
     const navigateToConnectWallet = () => {
-        navigate(PopupRoutes.ConnectWallet)
+        navigate(PopupRoutes.ConnectWallet, { replace: true })
     }
 
     useTitle(t('popups_connected_wallets'))
