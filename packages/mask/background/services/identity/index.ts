@@ -1,6 +1,12 @@
 export { createPersonaByPrivateKey } from './persona/create'
 export { mobile_queryPersonaRecordsFromIndexedDB } from './persona/query'
-export { deletePersona, logoutPersona, setupPersona } from './persona/update'
+export {
+    deletePersona,
+    logoutPersona,
+    setupPersona,
+    loginExistPersonaByPrivateKey,
+    mobile_queryPersonaByPrivateKey,
+} from './persona/update'
 export { signWithPersona, type SignRequest, type SignRequestResult, generateSignResult } from './persona/sign'
 export { exportPersonaMnemonicWords, exportPersonaPrivateKey } from './persona/backup'
 
