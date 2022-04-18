@@ -69,7 +69,7 @@ export function Banner(props: BannerProps) {
 
         hasNativeAPI
             ? nativeAPI?.api.misc_openDashboardView()
-            : Services.Welcome.openOptionsPage(
+            : Services.Helper.openDashboard(
                   personaConnectStatus.hasPersona ? DashboardRoutes.Personas : DashboardRoutes.Setup,
               )
     }, [networkIdentifier, nextStep])

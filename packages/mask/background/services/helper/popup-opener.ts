@@ -1,4 +1,4 @@
-import { PopupRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { MaskMessages } from '../../../shared'
 
@@ -87,4 +87,11 @@ export async function removePopupWindow(): Promise<void> {
     if (!currentPopupWindowId) return
     browser.windows.remove(currentPopupWindowId)
     currentPopupWindowId = 0
+}
+
+export async function openDashboard(route?: DashboardRoutes, search?: string) {
+    return browser.tabs.create({
+        active: true,
+        url: browser.runtime.getURL(`/dashboard.html#${route}${search ? `?${search}` : ''}`),
+    })
 }
