@@ -1,12 +1,16 @@
-import { NextIDAction, ProfileIdentifier } from '@masknet/shared-base'
+import { NextIDAction, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { MaskMessages } from '../../../../shared/messages'
 import { storeAvatar } from '../../../database/avatar-cache/avatar'
 import {
+    attachProfileDB,
     consistentPersonaDBWriteAccess,
     createOrUpdateProfileDB,
     createProfileDB,
     deleteProfileDB,
+    detachProfileDB,
+    LinkedProfileDetails,
     ProfileRecord,
+    queryProfileDB,
     queryProfilesDB,
 } from '../../../database/persona/db'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -69,4 +73,23 @@ export async function resolveUnknownLegacyIdentity(identifier: ProfileIdentifier
     } catch {
         // the profile already exists
     }
+}
+
+/**
+ * Remove an identity.
+ */
+export async function attachProfile(
+    source: ProfileIdentifier,
+    target: ProfileIdentifier | PersonaIdentifier,
+    data: LinkedProfileDetails,
+): Promise<void> {
+    if (target instanceof ProfileIdentifier) {
+        const profile = await queryProfileDB(target)
+        if (!profile?.linkedPersona) throw new Error('target not found')
+        target = profile.linkedPersona
+    }
+    return attachProfileDB(source, target, data)
+}
+export function detachProfile(identifier: ProfileIdentifier): Promise<void> {
+    return detachProfileDB(identifier)
 }
