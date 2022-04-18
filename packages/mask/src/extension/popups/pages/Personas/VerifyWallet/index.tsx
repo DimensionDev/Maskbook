@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { useLocation } from 'react-use'
+import { useAsync, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { NextIDAction, NextIDPayload, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -11,7 +11,6 @@ import Services from '../../../../service'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
-import { useQueryIsBound } from '../../../hook/useQueryIsBound'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -35,7 +34,10 @@ const VerifyWallet = memo(() => {
     const location = useLocation()
     const wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
 
-    const bounds = useQueryIsBound(wallet?.account)
+    const { value: bounds } = useAsync(async () => {
+        if (!wallet.account) return false
+        return NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, wallet.account)
+    })
     if (bounds && bounds.length > 0 && !isBound) {
         const res = bounds.filter((x) => x.persona === currentPersona?.publicHexKey)
         if (res.length > 0) {
