@@ -284,7 +284,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     get_all_indexedDB_records: async () => {
         const personas = await Services.Identity.mobile_queryPersonaRecordsFromIndexedDB()
         const profiles = await Services.Identity.mobile_queryProfileRecordFromIndexedDB()
-        const relations = await Services.Identity.queryRelationsRecordFromIndexedDB()
+        const relations = await Services.Identity.mobile_queryRelationsRecordFromIndexedDB()
         return {
             personas: personas.map((x) => ({
                 mnemonic: x.mnemonic,

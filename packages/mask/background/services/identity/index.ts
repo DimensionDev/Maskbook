@@ -18,3 +18,7 @@ export {
     detachProfileWithNextID,
     resolveUnknownLegacyIdentity,
 } from './profile/update'
+
+export { createNewRelation } from './relation/create'
+export { mobile_queryRelationsRecordFromIndexedDB } from './relation/query'
+export { updateRelation } from './relation/update'
