@@ -2,9 +2,9 @@ import { BindingProof, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, CircularProgress, DialogContent, Stack, Typography } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
-import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { NextIDVerificationStatus, useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
 import { CloseIcon } from '../assets/close'
+import { context } from '../context'
 import { usePersonas } from '../hooks/usePersonas'
 import { useI18N } from '../locales/i18n_generated'
 import type { TokenInfo } from '../types'
@@ -29,7 +29,7 @@ interface PersonaPageProps {
 export function PersonaPage(props: PersonaPageProps) {
     const { onNext, onChange } = props
     const [visible, setVisible] = useState(true)
-    const currentIdentity = useLastRecognizedIdentity()
+    const currentIdentity = context.currentVisitingProfile.getCurrentValue()
     const { classes } = useStyles()
     const { loading, value: persona } = usePersonas()
     const nextIDConnectStatus = useNextIDConnectStatus()
@@ -69,7 +69,7 @@ export function PersonaPage(props: PersonaPageProps) {
                     {persona?.binds?.proofs
                         .filter((proof) => proof.platform === NextIDPlatform.Twitter)
                         .map((x, i) =>
-                            x.identity.toLowerCase() === currentIdentity.identifier.userId.toLowerCase() ? (
+                            x.identity.toLowerCase() === currentIdentity?.identifier.userId.toLowerCase() ? (
                                 <PersonaItem
                                     key={i}
                                     owner

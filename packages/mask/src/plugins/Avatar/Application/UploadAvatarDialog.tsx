@@ -3,7 +3,6 @@ import AvatarEditor from 'react-avatar-editor'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { NextIDStorage, Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
-import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
@@ -12,6 +11,7 @@ import { BindingProof, ECKeyIdentifier, fromHex, toBase64 } from '@masknet/share
 import type { Persona } from '../../../database'
 import type { NextIDAvatarMeta } from '../types'
 import { useI18N } from '../locales/i18n_generated'
+import { context } from '../context'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -78,7 +78,7 @@ async function Save(
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { image, account, token, onClose, onBack, proof } = props
     const { classes } = useStyles()
-    const identity = useCurrentVisitingIdentity()
+    const identifier = context.currentVisitingProfile.getCurrentValue()?.identifier
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
     const [scale, setScale] = useState(1)
     const { showSnackbar } = useCustomSnackbar()
@@ -87,13 +87,13 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const t = useI18N()
 
     const onSave = useCallback(() => {
-        if (!editor || !account || !token || !currentConnectedPersona || !proof) return
+        if (!editor || !account || !token || !currentConnectedPersona || !proof || !identifier) return
         editor.getImage().toBlob(async (blob) => {
             if (!blob) return
             setDisabled(true)
 
-            const media = await Twitter.uploadUserAvatar(identity.identifier.userId, blob)
-            const data = await Twitter.updateProfileImage(identity.identifier.userId, media.media_id_string)
+            const media = await Twitter.uploadUserAvatar(identifier.userId, blob)
+            const data = await Twitter.updateProfileImage(identifier.userId, media.media_id_string)
             if (!data) {
                 setDisabled(false)
                 return
@@ -110,7 +110,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             onClose()
             setDisabled(false)
         })
-    }, [account, editor, identity, onClose, currentConnectedPersona, proof])
+    }, [account, editor, identifier, onClose, currentConnectedPersona, proof])
 
     if (!account || !image || !token || !proof) return null
 

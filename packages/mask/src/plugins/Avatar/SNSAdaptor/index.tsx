@@ -3,10 +3,13 @@ import { ApplicationEntry } from '@masknet/shared'
 import { useState } from 'react'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
 import { base } from '../base'
+import { setupContext } from '../context'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        setupContext(context)
+    },
     ApplicationEntries: [
         {
             RenderEntryComponent({ disabled }) {
