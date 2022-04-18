@@ -1,4 +1,6 @@
 {
     "name": "Example Plugin",
+    "display_name": "Traderxyz",
+    "meta_attach_message": "Trader XYZ NFR Attached",
     "__entry__": "🤔 Example"
 }
