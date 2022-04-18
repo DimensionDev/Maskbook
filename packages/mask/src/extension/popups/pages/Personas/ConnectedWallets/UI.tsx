@@ -138,6 +138,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                     address={selectedWallet?.identity}
                     onClose={() => setOpen(false)}
                     open={open}
+                    personaName={personaName}
                 />
 
                 <Button className={classes.button} onClick={onAddVerifyWallet}>

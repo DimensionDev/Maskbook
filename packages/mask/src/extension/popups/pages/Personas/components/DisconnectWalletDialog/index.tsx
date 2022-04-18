@@ -13,17 +13,20 @@ const useStyles = makeStyles()(() => ({
         fontSize: 16,
         lineHeight: '22px',
         color: '#0F1419',
+        textAlign: 'center',
     },
     content: {
-        marginTop: 24,
+        marginTop: 8,
         fontSize: 14,
         lineHeight: '20px',
         color: '#536471',
+        textAlign: 'center',
     },
     actions: {
         display: 'flex',
         flexDirection: 'column',
         gap: 16,
+        padding: 24,
         '& > *': {
             marginLeft: '0px !important',
         },
@@ -59,10 +62,11 @@ export interface DisconnectWalletDialogProps extends DialogProps {
     onConfirmDisconnect: () => Promise<void>
     address?: string
     onClose: () => void
+    personaName?: string
 }
 
 export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
-    ({ open, confirmLoading, onConfirmDisconnect, onClose, address }) => {
+    ({ open, confirmLoading, onConfirmDisconnect, onClose, address, personaName }) => {
         const { classes } = useStyles()
         const { t } = useI18N()
 
@@ -80,6 +84,7 @@ export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
                             i18nKey="popups_disconnect_wallet_tip"
                             components={{ strong: <strong className={classes.strong} /> }}
                             values={{
+                                persona: personaName,
                                 address: formatEthereumAddress(address ?? '', 4),
                             }}
                         />
