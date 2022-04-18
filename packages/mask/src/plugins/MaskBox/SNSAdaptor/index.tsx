@@ -35,7 +35,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <MaskBoxIcon />
             const name = <Trans i18nKey="plugin_mask_box_name" />
             return {
-                ID: base.ID,
+                ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
                     return (
                         <ApplicationEntry

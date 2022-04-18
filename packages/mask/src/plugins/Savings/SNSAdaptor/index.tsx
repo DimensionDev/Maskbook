@@ -14,7 +14,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <SavingsIcon />
             const name = <Trans i18nKey="plugin_savings" />
             return {
-                ID: base.ID,
+                ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
                     const [open, setOpen] = useState(false)
                     return (

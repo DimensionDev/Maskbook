@@ -65,7 +65,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <MarketsIcon />
             const name = <Trans i18nKey="plugin_ito_name" />
             return {
-                ID: base.ID,
+                ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
                     return (
                         <ApplicationEntry
@@ -98,7 +98,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <MarketsClaimIcon />
             const name = <Trans i18nKey="plugin_ito_claim" />
             return {
-                ID: `${base.ID}_claim`,
+                ApplicationEntryID: `${base.ID}_claim`,
                 RenderEntryComponent({ disabled }) {
                     const [open, setOpen] = useState(false)
                     return (

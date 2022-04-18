@@ -28,7 +28,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <SwapIcon />
             const name = <Trans i18nKey="plugin_trader_swap" />
             return {
-                ID: base.ID,
+                ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
                     const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 

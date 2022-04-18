@@ -37,7 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            ID: base.ID,
+            ApplicationEntryID: base.ID,
             category: 'dapp',
             description: <Trans i18nKey="plugin_pooltogether_description" />,
             name: <Trans i18nKey="plugin_pooltogether_name" />,

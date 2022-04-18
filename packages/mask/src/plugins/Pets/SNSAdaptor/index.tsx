@@ -24,7 +24,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <LootManIcon />
             const name = <Trans i18nKey="plugin_pets_name" />
             return {
-                ID: base.ID,
+                ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
                     const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
 

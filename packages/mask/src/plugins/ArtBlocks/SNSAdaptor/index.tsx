@@ -27,7 +27,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            ID: base.ID,
+            ApplicationEntryID: base.ID,
             category: 'dapp',
             marketListSortingPriority: 15,
             description: <Trans i18nKey="plugin_artblocks_description" />,

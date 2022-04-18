@@ -96,7 +96,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <RedPacketIcon />
             const name = <Trans i18nKey="plugin_red_packet_name" />
             return {
-                ID: base.ID,
+                ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
                     return (
                         <ApplicationEntry

@@ -14,7 +14,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <CrossBridgeIcon />
             const name = { i18nKey: '__plugin_name', fallback: 'Cross-bridge' }
             return {
-                ID: base.ID,
+                ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
                     const [open, setOpen] = useState(false)
                     return (

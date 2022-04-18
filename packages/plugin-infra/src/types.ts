@@ -305,7 +305,10 @@ export namespace Plugin.SNSAdaptor {
     // #endregion
 
     export interface ApplicationEntry {
-        ID: string
+        /**
+         * The contrast between ApplicationEntryID and PluginID is that one plugin may contains multiple entries.
+         */
+        ApplicationEntryID: string
         /**
          * Render entry component
          */

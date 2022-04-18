@@ -93,7 +93,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <FindTrumanIcon />
             const name = <Trans i18nKey="plugin_find_truman_name" />
             return {
-                ID: base.ID,
+                ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
                     const [open, setOpen] = useState(false)
                     return (

@@ -18,7 +18,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <TransakIcon />
             const name = <Trans i18nKey="plugin_transak_name" />
             return {
-                ID: base.ID,
+                ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
                     const { openDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 

@@ -13,11 +13,11 @@ export interface Application {
 
 // #region kv storage
 export function setUnlistedApp(app: Application, unlisted: boolean) {
-    PersistentStorages.ApplicationEntryUnListedList.storage[app.entry.ID].setValue(unlisted)
+    PersistentStorages.ApplicationEntryUnListedList.storage[app.entry.ApplicationEntryID].setValue(unlisted)
 }
 
 export function getUnlistedApp(app: Application): boolean {
-    return PersistentStorages.ApplicationEntryUnListedList.storage[app.entry.ID].value
+    return PersistentStorages.ApplicationEntryUnListedList.storage[app.entry.ApplicationEntryID].value
 }
 // #endregion
 
@@ -131,7 +131,7 @@ function AppList(props: AppListProps) {
     return appList.length > 0 ? (
         <List className={classes.list}>
             {appList.map((x, i) => (
-                <Fragment key={x.entry.ID}>
+                <Fragment key={x.entry.ApplicationEntryID}>
                     <AppListItem application={x} setUnlistedApp={setUnlistedApp} isListed={isListed} />
                 </Fragment>
             ))}

@@ -38,7 +38,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
             const icon = <FileServiceIcon />
             const name = { i18nKey: '__plugin_name', fallback: 'File Service' }
             return {
-                ID: base.ID,
+                ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
                     return (
                         <ApplicationEntry

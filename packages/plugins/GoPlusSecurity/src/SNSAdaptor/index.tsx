@@ -15,7 +15,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = { i18nKey: '__plugin_name', fallback: 'Check Security' }
 
             return {
-                ID: base.ID,
+                ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
                     const [open, setOpen] = useState(false)
                     return (
