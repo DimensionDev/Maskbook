@@ -29,7 +29,7 @@ interface PersonaPageProps {
 export function PersonaPage(props: PersonaPageProps) {
     const { onNext, onChange } = props
     const [visible, setVisible] = useState(true)
-    const currentIdentity = context.currentVisitingProfile.getCurrentValue()
+    const currentIdentity = context.lastRecognizedProfile.getCurrentValue()
     const { classes } = useStyles()
     const { loading, value: persona } = usePersonas()
     const nextIDConnectStatus = useNextIDConnectStatus()

@@ -163,7 +163,6 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         )
 
         const updateInfo = await response.json()
-        console.log(updateInfo)
         return {
             imageUrl: updateInfo.profile_image_url_https,
             mediaId: updateInfo.id_str,

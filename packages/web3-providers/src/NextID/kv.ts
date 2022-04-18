@@ -46,7 +46,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             response.val.proofs?.filter((x) => x.identity === identity.toLowerCase() && x.platform === platform) ?? []
         if (!data) return Err('Not found')
         const content = data[0].content[MASK_STORAGE_KEY]
-        return Ok(content[`${platform}_${identity}`])
+        return Ok(content[`${platform}_${identity.toLowerCase()}`])
     }
 
     /**
