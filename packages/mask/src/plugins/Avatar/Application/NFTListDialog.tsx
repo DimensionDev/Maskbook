@@ -8,6 +8,7 @@ import { NFTList } from './NFTList'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import type { BindingProof } from '@masknet/shared-base'
 import type { SelectTokenInfo, TokenInfo } from '../types'
+import { uniqBy } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -44,6 +45,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [selectedAccount, setSelectedAccount] = useState('')
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed>()
     const [disabled, setDisabled] = useState(false)
+    const [tokens, setTokens] = useState<ERC721TokenDetailed[]>([])
     const onChange = useCallback((address: string) => {
         setSelectedAccount(address)
     }, [])
@@ -70,6 +72,13 @@ export function NFTListDialog(props: NFTListDialogProps) {
     }, [selectedToken, tokenInfo])
 
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
+
+    const onAddClick = useCallback(
+        (token: ERC721TokenDetailed) =>
+            setTokens((tokens) => uniqBy([token, ...tokens], (x) => x.contractDetailed.address && x.tokenId)),
+        [tokens],
+    )
+
     return (
         <>
             <DialogContent sx={{ height: 612 }}>
@@ -80,7 +89,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     onChange={onChange}
                 />
                 {(account || wallets?.length) && (
-                    <NFTList tokenInfo={tokenInfo} address={selectedAccount} onSelect={onSelect} />
+                    <NFTList tokenInfo={tokenInfo} address={selectedAccount} onSelect={onSelect} tokens={tokens} />
                 )}
             </DialogContent>
             <DialogActions className={classes.actions}>
@@ -97,7 +106,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     Set NFT Avatar
                 </Button>
             </DialogActions>
-            <AddNFT open={open_} onClose={() => setOpen_(false)} />
+            <AddNFT open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
         </>
     )
 }

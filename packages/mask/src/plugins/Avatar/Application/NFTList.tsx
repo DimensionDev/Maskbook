@@ -4,7 +4,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Tabs } from '@mui/material'
 import { useI18N } from '../../../utils'
 import type { TokenInfo } from '../types'
-import { NFTListPage } from './NFTListPage'
+import { NFTListPage, NFTListPagePolygon } from './NFTListPage'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -13,11 +13,12 @@ interface NFTListProps {
     address: string
     tokenInfo?: TokenInfo
     onSelect: (token: ERC721TokenDetailed) => void
+    tokens?: ERC721TokenDetailed[]
 }
 
 export function NFTList(props: NFTListProps) {
     const { classes } = useStyles()
-    const { address, onSelect, tokenInfo } = props
+    const { address, onSelect, tokenInfo, tokens = [] } = props
     const { t } = useI18N()
 
     const [currentTab, onChange, tabs] = useTabs('ETH', 'Polygon')
@@ -30,10 +31,22 @@ export function NFTList(props: NFTListProps) {
                 <Tab label="Polygon" value={tabs.Polygon} />
             </Tabs>
             <TabPanel value={tabs.ETH}>
-                <NFTListPage tokenInfo={tokenInfo} chainId={ChainId.Mainnet} address={address} onSelect={onSelect} />
+                <NFTListPage
+                    tokens={tokens.filter((x) => x.contractDetailed.chainId === ChainId.Mainnet) ?? []}
+                    tokenInfo={tokenInfo}
+                    chainId={ChainId.Mainnet}
+                    address={address}
+                    onSelect={onSelect}
+                />
             </TabPanel>
             <TabPanel value={tabs.Polygon}>
-                <NFTListPage tokenInfo={tokenInfo} chainId={ChainId.Matic} address={address} onSelect={onSelect} />
+                <NFTListPagePolygon
+                    tokens={tokens.filter((x) => x.contractDetailed.chainId === ChainId.Matic) ?? []}
+                    tokenInfo={tokenInfo}
+                    chainId={ChainId.Matic}
+                    address={address}
+                    onSelect={onSelect}
+                />
             </TabPanel>
         </TabContext>
     )

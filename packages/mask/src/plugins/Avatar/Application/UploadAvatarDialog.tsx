@@ -107,6 +107,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 return
             }
             showSnackbar(t.upload_avatar_success_message(), { variant: 'success' })
+            location.reload()
             onClose()
             setDisabled(false)
         })

@@ -9,8 +9,10 @@ import {
     useImageChecker,
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
-import { useState } from 'react'
-import { useI18N } from '../../../utils'
+import { uniqBy } from 'lodash-unified'
+import { useCallback, useState } from 'react'
+import { useI18N } from '../locales'
+import { AddNFT } from '../SNSAdaptor/AddNFT'
 import { NFTImage } from '../SNSAdaptor/NFTImage'
 import type { TokenInfo } from '../types'
 
@@ -58,19 +60,20 @@ interface NFTListPageProps {
     chainId: ChainId
     address: string
     tokenInfo?: TokenInfo
+    tokens: ERC721TokenDetailed[]
     onSelect?: (token: ERC721TokenDetailed) => void
 }
 
 export function NFTListPage(props: NFTListPageProps) {
     const { classes } = useStyles()
     const { address, onSelect, chainId, tokenInfo } = props
-    const { t } = useI18N()
+    const t = useI18N()
     const { data: collectibles, error, retry, state } = useCollectibles(address, chainId)
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>(
         tokenInfo
             ? createERC721Token(
                   {
-                      name: 'unknown',
+                      name: '',
                       address: tokenInfo.address,
                       chainId,
                       symbol: '',
@@ -97,9 +100,9 @@ export function NFTListPage(props: NFTListPageProps) {
         ))
     const Retry = (
         <Box className={classes.error}>
-            <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
+            <Typography color="textSecondary">{t.no_collectible_found()}</Typography>
             <Button className={classes.button} variant="text" onClick={retry}>
-                {t('plugin_collectible_retry')}
+                {t.retry()}
             </Button>
         </Box>
     )
@@ -121,6 +124,69 @@ export function NFTListPage(props: NFTListPageProps) {
                           ))}
                 </Box>
             </Box>
+        </>
+    )
+}
+
+export function NFTListPagePolygon(props: NFTListPageProps) {
+    const { classes } = useStyles()
+    const { address, onSelect, chainId, tokenInfo, tokens = [] } = props
+    const t = useI18N()
+    const [tokens_, setTokens_] = useState<ERC721TokenDetailed[]>(tokens)
+    const [open, setOpen] = useState(false)
+    const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>(
+        tokenInfo
+            ? createERC721Token(
+                  {
+                      name: '',
+                      address: tokenInfo.address,
+                      chainId,
+                      symbol: '',
+                      type: EthereumTokenType.ERC721,
+                  },
+                  {},
+                  tokenInfo.tokenId,
+              )
+            : undefined,
+    )
+
+    const onChange = (token: ERC721TokenDetailed) => {
+        if (!token) return
+        setSelectedToken(token)
+        onSelect?.(token)
+    }
+
+    const onAddClick = useCallback(
+        (token: ERC721TokenDetailed) =>
+            setTokens_((tokens) => uniqBy([token, ...tokens], (x) => x.contractDetailed.address && x.tokenId)),
+        [tokens_],
+    )
+
+    const AddCollectible = (
+        <Box className={classes.error}>
+            <Typography color="textSecondary">{t.collectible_on_polygon()}</Typography>
+            <Button className={classes.button} variant="text" onClick={() => setOpen(true)}>
+                {t.add_collectible()}
+            </Button>
+        </Box>
+    )
+    return (
+        <>
+            <Box className={classes.root}>
+                <Box className={classes.gallery}>
+                    {tokens_.length === 0
+                        ? AddCollectible
+                        : tokens_.map((token: ERC721TokenDetailed, i) => (
+                              <NFTImageCollectibleAvatar
+                                  key={i}
+                                  token={token}
+                                  selectedToken={selectedToken}
+                                  onChange={(token) => onChange(token)}
+                              />
+                          ))}
+                </Box>
+            </Box>
+            <AddNFT open={open} onClose={() => setOpen(false)} onAddClick={onAddClick} />
         </>
     )
 }
