@@ -7,7 +7,13 @@ import type {
     Log,
 } from 'web3-core'
 import { toHex } from 'web3-utils'
-import { ChainId, EthereumChainDetailed, EthereumMethodType, SendOverrides } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    EthereumChainDetailed,
+    EthereumMethodType,
+    RequestOptions,
+    SendOverrides,
+} from '@masknet/web3-shared-evm'
 import { request } from './request'
 
 export async function getChainId(overrides?: SendOverrides) {
@@ -147,13 +153,20 @@ export async function sign(dataToSign: string, address: string, overrides?: Send
     )
 }
 
-export async function personalSign(dataToSign: string, address: string, password?: string, overrides?: SendOverrides) {
+export async function personalSign(
+    dataToSign: string,
+    address: string,
+    password?: string,
+    overrides?: SendOverrides,
+    requestOptions?: RequestOptions,
+) {
     return request<string>(
         {
             method: EthereumMethodType.PERSONAL_SIGN,
             params: [dataToSign, address, password].filter((x) => typeof x !== 'undefined'),
         },
         overrides,
+        requestOptions,
     )
 }
 

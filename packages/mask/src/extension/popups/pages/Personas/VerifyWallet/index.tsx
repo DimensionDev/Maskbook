@@ -1,16 +1,17 @@
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useAsync, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { NextIDAction, NextIDPayload, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { ChainId, isSameAddress, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumRpcType, isSameAddress, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import type { Web3Plugin } from '@masknet/plugin-infra/dist/web3-types'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps'
 import Services from '../../../../service'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
+import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -32,6 +33,9 @@ const VerifyWallet = memo(() => {
     const navigate = useNavigate()
     useTitle(t('popups_add_wallet'))
     const location = useLocation()
+
+    const { value: request } = useUnconfirmedRequest()
+
     const wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
 
     const { value: bounds } = useAsync(async () => {
@@ -47,6 +51,11 @@ const VerifyWallet = memo(() => {
             if (final.length > 0) setIsBound(true)
         }
     }
+    useEffect(() => {
+        if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
+
+        navigate(PopupRoutes.WalletSignRequest)
+    }, [request])
 
     if (!currentPersona || !wallet) return null
 
@@ -75,10 +84,16 @@ const VerifyWallet = memo(() => {
     const walletSign = async () => {
         if (!payload) throw new Error('payload error')
         try {
-            const walletSig = await Services.Ethereum.personalSign(payload.signPayload, wallet.account, '', {
-                chainId: wallet.chainId,
-                providerType: wallet.providerType,
-            })
+            const walletSig = await Services.Ethereum.personalSign(
+                payload.signPayload,
+                wallet.account,
+                '',
+                {
+                    chainId: wallet.chainId,
+                    providerType: wallet.providerType,
+                },
+                { popupsWindow: false },
+            )
             if (!walletSig) throw new Error('Wallet sign failed')
             await NextIDProof.bindProof(
                 payload.uuid,
@@ -101,6 +116,7 @@ const VerifyWallet = memo(() => {
     const changeWallet = () => {
         navigate(PopupRoutes.ConnectWallet)
     }
+
     return (
         <div className={classes.container}>
             <Steps
