@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import { EC_Key, PayloadParseResult, EC_KeyCurveEnum, Signature } from '../payload'
 import { CryptoException, PayloadException } from '../types'
 import { Result, Ok, Some } from 'ts-results'

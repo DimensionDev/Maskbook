@@ -12,11 +12,7 @@ const define: SocialNetworkUI.Definition = {
     collecting: {
         identityProvider: IdentityProviderOpensea,
     },
-    configuration: {
-        setupWizard: {
-            disableSayHello: true,
-        },
-    },
+    configuration: {},
     customization: {},
     init(signal) {
         const friends = stateCreator.friends()

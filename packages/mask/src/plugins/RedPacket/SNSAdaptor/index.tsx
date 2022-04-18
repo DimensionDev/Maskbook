@@ -86,7 +86,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         label: (
             <>
                 <RedPacketIcon style={badgeSvgIconSize} />
-                Luck drop
+                Lucky Drop
             </>
         ),
     },

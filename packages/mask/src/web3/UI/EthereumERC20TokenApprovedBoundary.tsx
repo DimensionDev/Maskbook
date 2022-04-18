@@ -16,9 +16,11 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         position: 'relative',
         marginTop: theme.spacing(1.5),
-        lineHeight: 1,
+        lineHeight: '22px',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: '13px 0',
+        fontSize: 18,
     },
     buttonLabel: {
         display: 'block',

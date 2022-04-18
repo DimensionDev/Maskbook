@@ -10,13 +10,14 @@ export default meta({
 export const BackupPreviewCard = of({
     args: {
         json: {
-            email: 'alice@example.com',
             personas: 2,
             accounts: 2,
             posts: 5,
             contacts: 66,
             files: 8,
             wallets: 1,
+            createdAt: 0,
+            relations: 0,
         },
     },
 })

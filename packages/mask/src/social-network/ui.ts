@@ -3,7 +3,6 @@ import '../utils/debug/ui'
 import Services from '../extension/service'
 import { Flags, InMemoryStorages, PersistentStorages } from '../../shared'
 import type { SocialNetworkUI } from './types'
-import { managedStateCreator } from './utils'
 import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
 import {
@@ -13,7 +12,7 @@ import {
     PersonaIdentifier,
     EnhanceableSite,
     i18NextInstance,
-    SubscriptionFromValueRef,
+    createSubscriptionFromValueRef,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentityResolved, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -46,7 +45,7 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     notReadyForProduction: true,
     declarativePermissions: { origins: [] },
 }
-export let globalUIState: Readonly<SocialNetworkUI.State> = {} as any
+export let globalUIState: Readonly<SocialNetworkUI.AutonomousState> = {} as any
 
 export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.DeferredDefinition): Promise<void> {
     assertNotEnvironment(Environment.ManifestBackground)
@@ -77,8 +76,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     await waitDocumentReadyState('interactive')
 
     i18nOverwrite()
-    const state = await ui.init(signal)
-    globalUIState = { ...state, ...managedStateCreator() }
+    globalUIState = await ui.init(signal)
 
     ui.customization.paletteMode?.start(signal)
     startIntermediateSetupGuide()
@@ -116,11 +114,11 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 signal,
             )
             const empty = new ValueRef<IdentityResolved | undefined>(undefined)
-            const lastRecognizedSub = SubscriptionFromValueRef(
+            const lastRecognizedSub = createSubscriptionFromValueRef(
                 ui.collecting.identityProvider?.recognized || empty,
                 signal,
             )
-            const currentVisitingSub = SubscriptionFromValueRef(
+            const currentVisitingSub = createSubscriptionFromValueRef(
                 ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
                 signal,
             )

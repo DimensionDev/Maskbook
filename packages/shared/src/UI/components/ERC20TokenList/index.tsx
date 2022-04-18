@@ -115,6 +115,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
         assetsLoading,
         assets
             .map((x) => x.token.address)
+            // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
             .sort()
             .join(),
     ])

@@ -7,7 +7,6 @@ import type {
 } from '@masknet/plugin-infra/content-script'
 import {
     extractTextFromTypedMessage,
-    isTypedMessageEqual,
     makeTypedMessageTupleFromList,
     type TypedMessage,
     type TypedMessageTuple,
@@ -20,10 +19,12 @@ import {
     Payload,
     PostIdentifier,
     ProfileIdentifier,
-    SubscriptionFromValueRef,
+    createSubscriptionFromValueRef,
     SubscriptionDebug as debug,
     mapSubscription,
     EMPTY_LIST,
+    PostIVIdentifier,
+    EnhanceableSite,
 } from '@masknet/shared-base'
 import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
@@ -45,16 +46,15 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
         // #endregion
 
         // #region Mentioned links
+        const isFacebook = activatedSocialNetworkUI.networkIdentifier === EnhanceableSite.Facebook
         const links = new ObservableSet<string>()
         cancel.push(
             postContent.addListener((post) => {
                 links.clear()
-                parseURL(post).forEach((link) =>
-                    links.add(resolveFacebookLink(link, activatedSocialNetworkUI.networkIdentifier)),
-                )
+                parseURL(post).forEach((link) => links.add(isFacebook ? resolveFacebookLink(link) : link))
                 opt.postMentionedLinksProvider
                     ?.getCurrentValue()
-                    .forEach((link) => links.add(resolveFacebookLink(link, activatedSocialNetworkUI.networkIdentifier)))
+                    .forEach((link) => links.add(isFacebook ? resolveFacebookLink(link) : link))
             }),
         )
         cancel.push(
@@ -62,7 +62,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 // Not clean old links cause post content not changed
                 opt.postMentionedLinksProvider
                     ?.getCurrentValue()
-                    .forEach((link) => links.add(resolveFacebookLink(link, activatedSocialNetworkUI.networkIdentifier)))
+                    .forEach((link) => links.add(isFacebook ? resolveFacebookLink(link) : link))
             }),
         )
         const linksSubscribe: Subscription<string[]> = debug({
@@ -97,7 +97,6 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             author: opt.author,
             snsID: opt.snsID,
         }
-        const transformedPostContent = new ValueRef(makeTypedMessageTupleFromList(), isTypedMessageEqual)
         const postIdentifier = debug({
             getCurrentValue: () => {
                 const by = opt.author.getCurrentValue()
@@ -111,9 +110,9 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 return () => void [a(), b()]
             },
         })
-        const iv = new ValueRef<string | null>(null)
+        const postIVIdentifier = new ValueRef<PostIVIdentifier | null>(null, PostIVIdentifier.equals)
         const isPublicShared = new ValueRef<boolean | undefined>(undefined)
-        const ownersAESKeyEncrypted = new ValueRef<string | undefined>(undefined)
+        const isAuthorOfPost = new ValueRef<boolean | undefined>(undefined)
         const version = new ValueRef<SupportedPayloadVersions | undefined>(undefined)
         return {
             author: author.author,
@@ -129,6 +128,8 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             suggestedInjectionPoint: opt.suggestedInjectionPoint,
 
             comment: opt.comments,
+            encryptComment: new ValueRef(null),
+            decryptComment: new ValueRef(null),
 
             identifier: postIdentifier,
             url: debug({
@@ -149,18 +150,17 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 }),
 
             rawMessage: opt.rawMessage,
-            rawMessagePiped: transformedPostContent,
-            postContent: SubscriptionFromValueRef(postContent),
 
-            containingMaskPayload: SubscriptionFromValueRef(postPayload),
-            iv,
-            publicShared: SubscriptionFromValueRef(isPublicShared),
-            ownersKeyEncrypted: SubscriptionFromValueRef(ownersAESKeyEncrypted),
-            version: SubscriptionFromValueRef(version),
+            containingMaskPayload: createSubscriptionFromValueRef(postPayload),
+            postIVIdentifier: createSubscriptionFromValueRef(postIVIdentifier),
+            publicShared: createSubscriptionFromValueRef(isPublicShared),
+            isAuthorOfPost: createSubscriptionFromValueRef(isAuthorOfPost),
+            version: createSubscriptionFromValueRef(version),
             decryptedReport(opts) {
-                if (opts.iv) iv.value = opts.iv
+                if (opts.iv)
+                    postIVIdentifier.value = new PostIVIdentifier(author.author.getCurrentValue().network, opts.iv)
                 if (opts.sharedPublic?.some) isPublicShared.value = opts.sharedPublic.val
-                if (opts.ownersAESKeyEncrypted) ownersAESKeyEncrypted.value = opts.ownersAESKeyEncrypted
+                if (opts.isAuthorOfPost) isAuthorOfPost.value = opts.isAuthorOfPost.val
                 if (opts.version) version.value = opts.version
             },
         }
@@ -175,17 +175,17 @@ export function createRefsForCreatePostContext() {
     const postMetadataImages = new ObservableSet<string>()
     const postMetadataMentionedLinks = new ObservableMap<unknown, string>()
     const subscriptions: Omit<PostContextCreation, 'rootElement' | 'actionsElement' | 'suggestedInjectionPoint'> = {
-        avatarURL: mapSubscription(SubscriptionFromValueRef(avatarURL), (x) => {
+        avatarURL: mapSubscription(createSubscriptionFromValueRef(avatarURL), (x) => {
             if (!x) return null
             try {
                 return new URL(x)
             } catch {}
             return null
         }),
-        nickname: SubscriptionFromValueRef(nickname),
-        author: SubscriptionFromValueRef(postBy),
-        snsID: SubscriptionFromValueRef(postID),
-        rawMessage: SubscriptionFromValueRef(postMessage),
+        nickname: createSubscriptionFromValueRef(nickname),
+        author: createSubscriptionFromValueRef(postBy),
+        snsID: createSubscriptionFromValueRef(postID),
+        rawMessage: createSubscriptionFromValueRef(postMessage),
         postImagesProvider: debug({
             getCurrentValue: () => (postMetadataImages.size ? [...postMetadataImages] : EMPTY_LIST),
             subscribe: (sub) => postMetadataImages.event.on(ALL_EVENTS, sub),
