@@ -18,6 +18,7 @@ import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
 import type { PersonaInformation } from '@masknet/shared-base'
+import type { MobileProfiles } from '../../../background/services/identity/profile/query'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
@@ -41,7 +42,9 @@ const personaFormatter = (
     }
 }
 
-const profileFormatter = (p: Profile) => {
+function profileFormatter(
+    p: Pick<Profile, 'identifier' | 'nickname' | 'createdAt' | 'updatedAt' | 'linkedPersona'> | MobileProfiles,
+) {
     return {
         identifier: p.identifier.toText(),
         nickname: p.nickname,
@@ -128,7 +131,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         await Services.Welcome.restoreUnconfirmedBackup({ id, action: 'confirm' })
     },
     persona_createPersonaByMnemonic: async ({ mnemonic, nickname, password }) => {
-        const x = await Services.Identity.restoreFromMnemonicWords(mnemonic, nickname, password)
+        const x = await Services.Identity.mobile_restoreFromMnemonicWords(mnemonic, nickname, password)
         return personaFormatter(x)
     },
     persona_queryPersonas: async ({ identifier, hasPrivateKey }) => {
@@ -212,7 +215,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         await Services.Identity.logoutPersona(stringToPersonaIdentifier(identifier))
     },
     profile_queryProfiles: async ({ network }) => {
-        const result = await Services.Identity.queryProfiles(network)
+        const result = await Services.Identity.mobile_queryProfiles(network)
 
         return result?.map(profileFormatter)
     },
@@ -225,7 +228,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         await Services.Identity.updateProfileInfo(stringToProfileIdentifier(identifier), data)
     },
     profile_removeProfile: async ({ identifier }) => {
-        await Services.Identity.removeProfile(stringToProfileIdentifier(identifier))
+        await Services.Identity.mobile_removeProfile(stringToProfileIdentifier(identifier))
     },
     profile_updateRelation: async ({ profile, linked, favor }) => {
         await Services.Identity.updateRelation(
@@ -280,8 +283,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         }))
     },
     get_all_indexedDB_records: async () => {
-        const personas = await Services.Identity.app_only_queryPersonaRecordsFromIndexedDB()
-        const profiles = await Services.Identity.queryProfileRecordFromIndexedDB()
+        const personas = await Services.Identity.mobile_queryPersonaRecordsFromIndexedDB()
+        const profiles = await Services.Identity.mobile_queryProfileRecordFromIndexedDB()
         const relations = await Services.Identity.queryRelationsRecordFromIndexedDB()
         return {
             personas: personas.map((x) => ({
