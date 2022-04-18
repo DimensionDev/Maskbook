@@ -40,9 +40,9 @@ async function Save(
     account: string,
     token: ERC721TokenDetailed,
     avatarId: string,
-    data?: TwitterBaseAPI.AvatarInfo,
-    persona?: Persona,
-    proof?: BindingProof,
+    data: TwitterBaseAPI.AvatarInfo,
+    persona: Persona,
+    proof: BindingProof,
 ) {
     if (!data || !proof || !persona?.publicHexKey) return false
 
@@ -55,7 +55,7 @@ async function Save(
         tokenId: token.tokenId,
     }
 
-    const response = await NextIDStorage.getPayload(persona?.publicHexKey, proof?.platform, proof?.identity, info)
+    const response = await NextIDStorage.getPayload(persona.publicHexKey, proof?.platform, proof?.identity, info)
     if (!response.ok) {
         return false
     }
