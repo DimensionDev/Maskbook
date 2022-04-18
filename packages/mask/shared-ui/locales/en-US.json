@@ -152,7 +152,6 @@
     "select_specific_friends_dialog__button": "Done",
     "select_specific_friends_dialog__title": "Select Specific Contacts",
     "service_decryption_failed": "Decryption failed.",
-    "service_invalid_backup_file": "This does not seem like a backup of Mask.",
     "service_unknown_payload": "Unknown post version. You may need to update Mask.",
     "service_username_invalid": "Invalid Username",
     "speed_up": "Speed up",

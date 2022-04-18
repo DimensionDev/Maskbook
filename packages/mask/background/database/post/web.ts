@@ -196,6 +196,10 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
     },
 )
 export const PostDBAccess = db
+export async function withPostDBTransaction(task: (t: PostReadWriteTransaction) => Promise<void>) {
+    const t = createTransaction(await PostDBAccess(), 'readwrite')('post')
+    await task(t)
+}
 
 export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction) {
     t ||= createTransaction(await db(), 'readwrite')('post')

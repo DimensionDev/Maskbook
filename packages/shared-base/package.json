@@ -33,5 +33,8 @@
     "typeson-registry": "^2.0.0",
     "use-subscription": "^1.6.0",
     "z-schema": "^5.0.3"
+  },
+  "devDependencies": {
+    "@types/use-subscription": "^1.0.0"
   }
 }
