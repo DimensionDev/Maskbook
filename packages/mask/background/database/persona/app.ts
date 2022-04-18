@@ -126,7 +126,7 @@ export async function updatePersonaDB( // Do a copy here. We need to delete keys
 
 export async function createOrUpdatePersonaDB(
     record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier' | 'publicKey'>,
-    howToMerge: Parameters<typeof updatePersonaDB>[1] & { protectPrivateKey?: boolean },
+    howToMerge: Parameters<typeof updatePersonaDB>[1],
     t?: PersonasTransaction<'readwrite'>,
 ): Promise<void> {
     return nativeAPI?.api.update_persona({
@@ -134,7 +134,6 @@ export async function createOrUpdatePersonaDB(
         options: {
             linkedProfileMergePolicy: howToMerge.linkedProfiles === 'replace' ? 0 : 1,
             deleteUndefinedFields: howToMerge.explicitUndefinedField !== 'ignore',
-            protectPrivateKey: howToMerge.protectPrivateKey,
             createWhenNotExist: true,
         },
     })
@@ -365,6 +364,25 @@ export async function updateRelationDB(
         MaskMessages.events.relationsChanged.sendToAll([
             { of: updating.profile, favor: updating.favor, reason: 'update' },
         ])
+    }
+}
+
+// TODO: should have a batch API for this.
+export async function createOrUpdateRelationDB(
+    record: Omit<RelationRecord, 'network'>,
+    t: RelationTransaction<'readwrite'>,
+    silent = false,
+) {
+    const old = await nativeAPI?.api.query_relations({
+        options: {
+            personaIdentifier: record.linked.toText(),
+        },
+    })
+
+    if (old?.length) {
+        await updateRelationDB(record, t, silent)
+    } else {
+        await createRelationDB(record, t, silent)
     }
 }
 

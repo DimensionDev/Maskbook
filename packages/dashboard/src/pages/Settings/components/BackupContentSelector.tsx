@@ -1,8 +1,8 @@
 import { Box, Checkbox, Typography, experimentalStyled as styled } from '@mui/material'
 import { useDashboardI18N } from '../../../locales'
-import type { BackupPreview } from './BackupPreviewCard'
 import { MaskColorVar } from '@masknet/theme'
 import { useState, useEffect } from 'react'
+import type { BackupPreview } from '@masknet/backup-format'
 
 const SelectItem = styled('div')(({ theme }) => ({
     borderRadius: 8,

@@ -1,7 +1,7 @@
 import * as bip39 from 'bip39'
 import { validateMnemonic } from 'bip39'
 import { decode } from '@msgpack/msgpack'
-import { decodeArrayBuffer, decodeText } from '@dimensiondev/kit'
+import { decodeArrayBuffer } from '@dimensiondev/kit'
 import {
     loginPersona,
     personaRecordToPersona,
@@ -13,8 +13,6 @@ import {
     storeAvatar,
 } from '../../database'
 import {
-    ECKeyIdentifier,
-    Identifier,
     PersonaIdentifier,
     ProfileIdentifier,
     ECKeyIdentifierFromJsonWebKey,
@@ -48,10 +46,7 @@ import {
     queryProfilesDB as queryProfilesFromIndexedDB,
     queryRelations as queryRelationsFromIndexedDB,
 } from '../../../background/database/persona/web'
-import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
-import { restoreBackup } from './WelcomeServices/restoreBackup'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
-import { convertBackupFileToObject, fixBackupFilePermission } from '../../utils/type-transform/BackupFile'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { getCurrentPersonaIdentifier } from './SettingsService'
@@ -218,14 +213,6 @@ export async function queryOwnedPersonaInformation(): Promise<PersonaInformation
     }
     return result
 }
-export async function restoreFromObject(object: null | BackupJSONFileLatest): Promise<Persona | null> {
-    if (!object) return null
-    await restoreBackup(object)
-    if (object?.personas?.length) {
-        return queryPersonaRAW(Identifier.fromString(object.personas[0].identifier, ECKeyIdentifier).unwrap())
-    }
-    return null
-}
 export async function restoreFromMnemonicWords(
     mnemonicWords: string,
     nickname: string,
@@ -237,12 +224,6 @@ export async function restoreFromMnemonicWords(
     })
 
     return queryPersonaRAW(identifier)
-}
-export async function restoreFromBase64(base64: string): Promise<Persona | null> {
-    return restoreFromObject(JSON.parse(decodeText(decodeArrayBuffer(base64))) as BackupJSONFileLatest)
-}
-export async function restoreFromBackup(backup: string): Promise<Persona | null> {
-    return restoreFromObject(fixBackupFilePermission(UpgradeBackupJSONFile(convertBackupFileToObject(backup))))
 }
 // #endregion
 
@@ -288,50 +269,6 @@ export async function queryPagedPostHistory(
 // #endregion
 
 // #region Relation
-export async function patchCreateOrUpdateRelation(
-    profiles: ProfileIdentifier[],
-    personas: PersonaIdentifier[],
-    defaultFavor = RelationFavor.UNCOLLECTED,
-): Promise<void> {
-    await consistentPersonaDBWriteAccess(async (t) => {
-        for (const persona of personas) {
-            for (const profile of profiles) {
-                const relationInDB = await t.objectStore('relations').get([persona.toText(), profile.toText()])
-                if (relationInDB) {
-                    await updateRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
-                    continue
-                }
-                await createRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
-            }
-        }
-    })
-    return
-}
-
-export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'network'>[]): Promise<void> {
-    await consistentPersonaDBWriteAccess(async (t) => {
-        for (const relation of relations) {
-            const relationInDB = await t
-                .objectStore('relations')
-                .get([relation.linked.toText(), relation.profile.toText()])
-
-            if (relationInDB) {
-                await updateRelationDB(relation, t, true)
-                continue
-            }
-
-            await createRelationDB(
-                {
-                    ...relation,
-                    favor: relation.favor === RelationFavor.DEPRECATED ? RelationFavor.UNCOLLECTED : relation.favor,
-                },
-                t,
-            )
-        }
-    })
-    return
-}
-
 export async function createNewRelation(
     profile: ProfileIdentifier,
     linked: PersonaIdentifier,
