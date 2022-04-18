@@ -29,7 +29,11 @@ function usePersonaContext() {
         ),
     )
 
-    const { value: proofs, retry: refreshProofs } = useAsyncRetry(async () => {
+    const {
+        value: proofs,
+        retry: refreshProofs,
+        loading: fetchProofsLoading,
+    } = useAsyncRetry(async () => {
         try {
             if (!currentPersona?.publicHexKey) return []
 
@@ -51,6 +55,7 @@ function usePersonaContext() {
         setSelectedPersona,
         proofs,
         refreshProofs,
+        fetchProofsLoading,
     }
 }
 

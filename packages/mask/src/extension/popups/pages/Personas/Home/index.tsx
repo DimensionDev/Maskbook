@@ -4,7 +4,7 @@ import { PersonaContext } from '../hooks/usePersonaContext'
 import { NextIDPlatform } from '@masknet/shared-base'
 
 const PersonaHome = memo(() => {
-    const { avatar, currentPersona, proofs, setSelectedPersona } = PersonaContext.useContainer()
+    const { avatar, currentPersona, proofs, setSelectedPersona, fetchProofsLoading } = PersonaContext.useContainer()
 
     const wallets = useMemo(() => {
         if (!proofs) return []
@@ -23,6 +23,7 @@ const PersonaHome = memo(() => {
             accountsCount={currentPersona?.linkedProfiles.length ?? 0}
             walletsCount={wallets.length}
             onEdit={onEdit}
+            fetchProofsLoading={fetchProofsLoading}
         />
     )
 })

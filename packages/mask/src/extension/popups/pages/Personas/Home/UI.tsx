@@ -65,10 +65,11 @@ export interface PersonaHomeUIProps {
     accountsCount: number
     walletsCount: number
     onEdit: () => void
+    fetchProofsLoading: boolean
 }
 
 export const PersonaHomeUI = memo<PersonaHomeUIProps>(
-    ({ avatar, fingerprint, nickname, accountsCount, walletsCount, onEdit }) => {
+    ({ avatar, fingerprint, nickname, accountsCount, walletsCount, onEdit, fetchProofsLoading }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
 
@@ -112,7 +113,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                     <Link className={classes.item} to={PopupRoutes.ConnectedWallets}>
                         <Typography>{t('popups_connected_wallets')}</Typography>
                         <Typography className={classes.content}>
-                            {walletsCount}
+                            {!fetchProofsLoading ? walletsCount : '...'}
                             <ArrowRightIosIcon className={classes.arrow} />
                         </Typography>
                     </Link>
