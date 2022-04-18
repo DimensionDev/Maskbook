@@ -9,7 +9,7 @@ interface ReverseAddressProps {
 }
 
 export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginId, domainSize, size = 5 }) => {
-    const { value: domain } = useReverseAddress(address, pluginId)
+    const { value: domain } = useReverseAddress(pluginId, address)
     const { Utils } = useWeb3State(pluginId)
 
     if (!domain || !Utils?.formatDomainName) return <>{Utils?.formatAddress?.(address, size) ?? address}</>

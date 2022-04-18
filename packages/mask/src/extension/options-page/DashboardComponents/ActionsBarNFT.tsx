@@ -2,11 +2,10 @@ import { useCallback } from 'react'
 import { IconButton, MenuItem } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import { Wallet, EthereumTokenType, useChainIdValid } from '@masknet/web3-shared-evm'
 import { useMenu, useI18N } from '../../../utils'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogNFT } from '../DashboardDialogs/Wallet'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import { useChainIdValid, Web3Plugin } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     more: {
@@ -15,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ActionsBarNFT_Props extends withClasses<'more'> {
-    wallet: Wallet
+    wallet: Web3Plugin.Wallet
     token: Web3Plugin.NonFungibleAsset
 }
 
@@ -30,7 +29,8 @@ export function ActionsBarNFT(props: ActionsBarNFT_Props) {
     const [transferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogNFT)
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu([
-        token.contract?.type === EthereumTokenType.ERC721 ? (
+        // TODO: contract type
+        token.contract?.type === 'erc721' ? (
             // @ts-ignore
             // TODO: remvoe ignore
             <MenuItem key="transfer" disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ token })}>

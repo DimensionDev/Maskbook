@@ -1,9 +1,6 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { AddressName, ChainId, isSameAddress, NonFungibleAssetProvider, Wallet } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Stack, styled, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -11,8 +8,8 @@ import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { ReversedAddress } from '@masknet/shared'
-import { useNonFungibleAssets, Web3Plugin } from '@masknet/plugin-infra/web3'
-import { IteratorCollectorStatus } from '@masknet/web3-shared-base'
+import { useNonFungibleAssets, Web3Plugin, useWeb3State } from '@masknet/plugin-infra/web3'
+import { IteratorCollectorState } from '@masknet/web3-shared-base'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -104,15 +101,14 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface CollectibleItemProps {
-    provider: NonFungibleAssetProvider
-    wallet?: Wallet
+    wallet?: Web3Plugin.Wallet
     token: Web3Plugin.NonFungibleAsset
     readonly?: boolean
     renderOrder: number
 }
 
 function CollectibleItem(props: CollectibleItemProps) {
-    const { provider, wallet, token, readonly, renderOrder } = props
+    const { wallet, token, readonly, renderOrder } = props
     const { classes } = useStyles()
     return (
         <div className={classes.card}>
@@ -127,8 +123,7 @@ function CollectibleItem(props: CollectibleItemProps) {
 }
 
 interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'> {
-    provider: NonFungibleAssetProvider
-    wallet?: Wallet
+    wallet?: Web3Plugin.Wallet
     collectibles: Web3Plugin.NonFungibleAsset[]
     loading: boolean
     collectiblesRetry: () => void
@@ -137,7 +132,7 @@ interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'
     hasRetry?: boolean
 }
 function CollectibleListUI(props: CollectibleListUIProps) {
-    const { provider, wallet, collectibles, loading, collectiblesRetry, error, readonly, hasRetry = true } = props
+    const { wallet, collectibles, loading, collectiblesRetry, error, readonly, hasRetry = true } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -179,7 +174,6 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                             <CollectibleItem
                                 renderOrder={index}
                                 token={token}
-                                provider={provider}
                                 wallet={wallet}
                                 readonly={readonly}
                                 key={index}
@@ -202,13 +196,11 @@ export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
 
 export function CollectibleList(props: CollectibleListProps) {
     const { address, collectibles, error, loading, retry } = props
-    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const classes = props.classes ?? {}
 
     return (
         <CollectibleListUI
             classes={classes}
-            provider={provider}
             collectibles={collectibles}
             loading={loading}
             collectiblesRetry={retry}
@@ -223,24 +215,24 @@ export function CollectionList({
     addressName,
     onSelectAddress,
 }: {
-    addressName: AddressName
+    addressName: Web3Plugin.AddressName
     onSelectAddress: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) {
-    const chainId = ChainId.Mainnet
     const { t } = useI18N()
     const { classes } = useStyles()
     const [selectedCollection, setSelectedCollection] = useState<
         Web3Plugin.NonFungibleTokenContract | 'all' | undefined
     >('all')
-    const { resolvedAddress: address } = addressName
+    const { resolvedAddress: address, ownerAddress } = addressName
+    const { Utils } = useWeb3State()
 
     useEffect(() => {
         setSelectedCollection('all')
     }, [address])
 
-    const { data: collectibles, status: loadingCollectibleDone } = useNonFungibleAssets(address, chainId)
+    const { data: collectibles, status: loadingCollectibleDone } = useNonFungibleAssets(address ?? ownerAddress, 1)
 
-    const isLoading = loadingCollectibleDone !== IteratorCollectorStatus.done
+    const isLoading = loadingCollectibleDone !== IteratorCollectorState.done
 
     const renderWithRarible = useMemo(() => {
         if (isLoading) return []
@@ -252,7 +244,7 @@ export function CollectionList({
         if (!selectedCollection) return collectibles.filter((x) => !x.collection)
 
         return (collectibles ?? []).filter((x) => {
-            return isSameAddress(selectedCollection.address, x.contract?.address)
+            return Utils?.isSameAddress?.(selectedCollection.address, x.contract?.address)
         })
     }, [selectedCollection, collectibles.length])
 
@@ -274,7 +266,7 @@ export function CollectionList({
                                 className={classes.button}
                                 variant="outlined"
                                 size="small">
-                                <ReversedAddress address={addressName.resolvedAddress} />
+                                <ReversedAddress address={addressName.resolvedAddress ?? addressName.ownerAddress} />
                                 <KeyboardArrowDownIcon />
                             </Button>
                         </Box>
@@ -303,7 +295,7 @@ export function CollectionList({
                 </Stack>
                 <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
                     <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
-                        <ReversedAddress address={addressName.resolvedAddress} />
+                        <ReversedAddress address={addressName.resolvedAddress ?? addressName.ownerAddress} />
                         <KeyboardArrowDownIcon />
                     </Button>
                 </Box>
@@ -341,11 +333,11 @@ export function CollectionList({
                             </Box>
                         )}
                         <CollectibleList
-                            address={address}
+                            address={address ?? addressName.ownerAddress}
                             retry={() => {}}
                             collectibles={renderCollectibles}
                             loading={
-                                loadingCollectibleDone !== IteratorCollectorStatus.done &&
+                                loadingCollectibleDone !== IteratorCollectorState.done &&
                                 renderCollectibles.length === 0
                             }
                         />
