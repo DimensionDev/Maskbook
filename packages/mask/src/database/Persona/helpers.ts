@@ -16,7 +16,6 @@ import { ProfileIdentifier, type PersonaIdentifier, IdentifierMap } from '@maskn
 import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
 import {
     deriveLocalKeyFromECDHKey,
-    generate_ECDH_256k1_KeyPair_ByMnemonicWord,
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,
 } from '../../../background/services/identity/persona/utils'
 
@@ -113,23 +112,6 @@ export async function renamePersona(identifier: PersonaIdentifier, nickname: str
 
 export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
-}
-
-export async function createPersonaByMnemonic(
-    nickname: string | undefined,
-    password: string,
-): Promise<PersonaIdentifier> {
-    const { key, mnemonicRecord: mnemonic } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
-    const { privateKey, publicKey } = key
-    const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
-    return createPersonaByJsonWebKey({
-        privateKey,
-        publicKey,
-        localKey,
-        mnemonic,
-        nickname,
-        uninitialized: false,
-    })
 }
 
 export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: string | undefined, password: string) {

@@ -24,5 +24,3 @@ export async function openOptionsPage(route?: DashboardRoutes, search?: string) 
         url: browser.runtime.getURL(`/dashboard.html#${route}${search ? `?${search}` : ''}`),
     })
 }
-
-export { createPersonaByMnemonic } from '../../database'
