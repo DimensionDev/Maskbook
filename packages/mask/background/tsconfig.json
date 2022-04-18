@@ -15,6 +15,7 @@
     { "path": "../utils-pure" },
     { "path": "../../encryption" },
     { "path": "../../backup-format" },
-    { "path": "../../gun-utils" }
+    { "path": "../../gun-utils" },
+    { "path": "../../web3-providers" }
   ]
 }

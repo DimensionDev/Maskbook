@@ -5,4 +5,9 @@ export { signWithPersona, type SignRequest, type SignRequestResult, generateSign
 export { exportPersonaMnemonicWords, exportPersonaPrivateKey } from './persona/backup'
 
 export { mobile_queryProfiles, mobile_queryProfileRecordFromIndexedDB } from './profile/query'
-export { updateProfileInfo, type UpdateProfileInfo, mobile_removeProfile } from './profile/update'
+export {
+    updateProfileInfo,
+    type UpdateProfileInfo,
+    mobile_removeProfile,
+    detachProfileWithNextID,
+} from './profile/update'
