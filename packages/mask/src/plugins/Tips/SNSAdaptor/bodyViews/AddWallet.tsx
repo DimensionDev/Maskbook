@@ -89,7 +89,9 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     }, [currentPersona?.publicHexKey, payload, wallet, signature])
     const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {
         try {
-            if (signed) onCancel
+            if (signed) {
+                onCancel()
+            }
 
             if (!signature && !walletSignState) {
                 await personaSilentSign()
@@ -98,7 +100,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                 await walletSign()
                 return SignSteps.SecondStepDone
             } else {
-                return onCancel()
+                return Services.Helper.removePopupWindow()
             }
         } catch {
             showSnackbar('Connect error', { variant: 'error' })

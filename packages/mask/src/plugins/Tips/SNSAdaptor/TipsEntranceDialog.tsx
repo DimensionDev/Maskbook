@@ -106,8 +106,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         const walletsList = proofRes
             ? (proofRes as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
             : []
-
-        if (kv !== undefined && (kv?.val as NextIdStorageInfo).proofs.length > 0) {
+        if (kv !== undefined && (kv?.val as NextIdStorageInfo).proofs.length > 0 && walletsList.length > 0) {
             const kvCache = (kv.val as NextIdStorageInfo).proofs.find(
                 (x) => x.identity === currentPersona?.publicHexKey,
             )
@@ -135,11 +134,16 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         })
         setRawWalletList(JSON.parse(JSON.stringify(walletsList)))
         setRawPatchData(JSON.parse(JSON.stringify(walletsList)))
-    }, [proofRes, bodyView])
+    }, [proofRes, bodyView, kv])
 
     const onCancel = () => {
         setRawPatchData(JSON.parse(JSON.stringify(rawWalletList)))
         setHasChanged(false)
+    }
+    const refresh = () => {
+        setBodyView(BodyViewSteps.main)
+        retryProof()
+        retryKv()
     }
     const WalletButton = () => {
         const { classes } = useStyles()
@@ -219,6 +223,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 result.createdAt,
                 { signature: signature.signature.signature },
             )
+            console.log('sssss')
             retryKv()
             retryProof()
         },
@@ -270,11 +275,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         />
                     )}
                     {bodyView === BodyViewSteps.addWallet && (
-                        <AddWalletView
-                            onCancel={() => setBodyView(BodyViewSteps.main)}
-                            bounds={rawWalletList}
-                            currentPersona={currentPersona}
-                        />
+                        <AddWalletView onCancel={refresh} bounds={rawWalletList} currentPersona={currentPersona} />
                     )}
 
                     {![BodyViewSteps.addWallet, BodyViewSteps.wallets].includes(bodyView) && rawPatchData.length > 0 && (
