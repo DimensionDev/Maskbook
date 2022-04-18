@@ -3,16 +3,7 @@ import { Typography } from '@mui/material'
 import classNames from 'classnames'
 import { useDashboardI18N } from '../../../locales'
 import formatDateTime from 'date-fns/format'
-export interface BackupPreview {
-    email?: string
-    personas: number
-    accounts: number
-    posts: number
-    contacts: number
-    files: number
-    wallets: number
-    createdAt?: number
-}
+import type { BackupPreview } from '@masknet/backup-format'
 
 const useStyles = makeStyles()(() => ({
     root: {

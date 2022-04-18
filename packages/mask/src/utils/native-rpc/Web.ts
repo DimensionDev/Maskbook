@@ -12,18 +12,18 @@ import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-
 import { definedSocialNetworkWorkers } from '../../social-network/define'
 import { launchPageSettings } from '../../settings/settings'
 import Services from '../../extension/service'
-import type { Persona, Profile } from '../../database'
+import type { Profile } from '../../database'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
 import type { PersonaInformation } from '@masknet/shared-base'
+import type { MobileProfiles } from '../../../background/services/identity/profile/query'
+import type { MobilePersona } from '../../../background/services/identity/persona/update'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
-const personaFormatter = (
-    p: Pick<Persona, 'identifier' | 'nickname' | 'hasPrivateKey' | 'createdAt' | 'updatedAt' | 'linkedProfiles'>,
-) => {
+function personaFormatter(p: MobilePersona) {
     const profiles = {}
 
     for (const [key, value] of p.linkedProfiles) {
@@ -41,7 +41,9 @@ const personaFormatter = (
     }
 }
 
-const profileFormatter = (p: Profile) => {
+function profileFormatter(
+    p: Pick<Profile, 'identifier' | 'nickname' | 'createdAt' | 'updatedAt' | 'linkedPersona'> | MobileProfiles,
+) {
     return {
         identifier: p.identifier.toText(),
         nickname: p.nickname,
@@ -118,21 +120,17 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     settings_setTheme: ({ theme }) => Services.Settings.setTheme(theme),
     settings_getLanguage: () => Services.Settings.getLanguage(),
     settings_setLanguage: ({ language }) => Services.Settings.setLanguage(language),
-    settings_createBackupJson: (options) => Services.Welcome.generateBackupJSON(options),
+    settings_createBackupJson: (options) => Services.Backup.mobile_generateBackupJSON(options),
     settings_getBackupPreviewInfo: async ({ backupInfo }) => {
-        const data = await Services.Welcome.parseBackupStr(backupInfo)
-        return data?.info
+        const data = await Services.Backup.addUnconfirmedBackup(backupInfo)
+        return data.unwrap().info
     },
-    settings_restoreBackup: ({ backupInfo }) => {
-        try {
-            const json = JSON.parse(backupInfo)
-            return Services.Welcome.restoreBackup(json)
-        } catch (error) {
-            throw new Error('invalid json')
-        }
+    settings_restoreBackup: async ({ backupInfo }) => {
+        const { id } = (await Services.Backup.addUnconfirmedBackup(backupInfo)).unwrap()
+        await Services.Backup.restoreUnconfirmedBackup({ id, action: 'confirm' })
     },
     persona_createPersonaByMnemonic: async ({ mnemonic, nickname, password }) => {
-        const x = await Services.Identity.restoreFromMnemonicWords(mnemonic, nickname, password)
+        const x = await Services.Identity.mobile_restoreFromMnemonicWords(mnemonic, nickname, password)
         return personaFormatter(x)
     },
     persona_queryPersonas: async ({ identifier, hasPrivateKey }) => {
@@ -153,14 +151,11 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     persona_removePersona: ({ identifier }) =>
         Services.Identity.deletePersona(stringToPersonaIdentifier(identifier), 'delete even with private'),
     persona_restoreFromJson: async ({ backup }) => {
-        const result = await Services.Identity.restoreFromBackup(backup)
-
-        if (!result) throw new Error('invalid json')
+        const { id } = (await Services.Backup.addUnconfirmedBackup(backup)).unwrap()
+        await Services.Backup.restoreUnconfirmedBackup({ id, action: 'confirm' })
     },
     persona_restoreFromBase64: async ({ backup }) => {
-        const result = await Services.Identity.restoreFromBase64(backup)
-
-        if (!result) throw new Error('invalid base64')
+        await Services.Backup.mobile_restoreFromBase64(backup)
     },
     persona_connectProfile: async ({ profileIdentifier, personaIdentifier }) => {
         const profileId = stringToProfileIdentifier(profileIdentifier)
@@ -181,12 +176,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return persona.mnemonic?.words
     },
     persona_backupJson: async ({ identifier }) => {
-        const persona = await Services.Identity.queryPersona(stringToPersonaIdentifier(identifier))
-        return Services.Welcome.generateBackupJSON({
-            noPosts: true,
-            noWallets: true,
-            filter: { type: 'persona', wanted: [persona.identifier] },
-        })
+        return Services.Backup.mobile_generateBackupJSONOnlyForPersona(stringToPersonaIdentifier(identifier))
     },
     persona_restoreFromPrivateKey: async ({ privateKey, nickname }) => {
         const identifier = await Services.Identity.createPersonaByPrivateKey(privateKey, nickname)
@@ -202,7 +192,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return privateKey
     },
     persona_queryPersonaByPrivateKey: async ({ privateKey }) => {
-        const persona = await Services.Identity.queryPersonaByPrivateKey(privateKey)
+        const persona = await Services.Identity.mobile_queryPersonaByPrivateKey(privateKey)
         return persona ? personaFormatter(persona) : undefined
     },
     persona_getCurrentPersonaIdentifier: async () => {
@@ -224,7 +214,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         await Services.Identity.logoutPersona(stringToPersonaIdentifier(identifier))
     },
     profile_queryProfiles: async ({ network }) => {
-        const result = await Services.Identity.queryProfiles(network)
+        const result = await Services.Identity.mobile_queryProfiles(network)
 
         return result?.map(profileFormatter)
     },
@@ -237,7 +227,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         await Services.Identity.updateProfileInfo(stringToProfileIdentifier(identifier), data)
     },
     profile_removeProfile: async ({ identifier }) => {
-        await Services.Identity.removeProfile(stringToProfileIdentifier(identifier))
+        await Services.Identity.mobile_removeProfile(stringToProfileIdentifier(identifier))
     },
     profile_updateRelation: async ({ profile, linked, favor }) => {
         await Services.Identity.updateRelation(
@@ -292,9 +282,9 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         }))
     },
     get_all_indexedDB_records: async () => {
-        const personas = await Services.Identity.app_only_queryPersonaRecordsFromIndexedDB()
-        const profiles = await Services.Identity.queryProfileRecordFromIndexedDB()
-        const relations = await Services.Identity.queryRelationsRecordFromIndexedDB()
+        const personas = await Services.Identity.mobile_queryPersonaRecordsFromIndexedDB()
+        const profiles = await Services.Identity.mobile_queryProfileRecordFromIndexedDB()
+        const relations = await Services.Identity.mobile_queryRelationsRecordFromIndexedDB()
         return {
             personas: personas.map((x) => ({
                 mnemonic: x.mnemonic,

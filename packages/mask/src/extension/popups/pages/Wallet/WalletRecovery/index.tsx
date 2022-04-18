@@ -83,7 +83,7 @@ const WalletRecovery = memo(() => {
     const backupId = new URLSearchParams(location.search).get('backupId')
 
     const { loading, value } = useAsync(async () => {
-        if (backupId) return Services.Welcome.getUnconfirmedBackup(backupId)
+        if (backupId) return Services.Backup.getUnconfirmedBackup(backupId)
         return undefined
     }, [backupId])
 
@@ -119,9 +119,9 @@ const WalletRecovery = memo(() => {
         }
 
         if (backupId) {
-            const json = await Services.Welcome.getUnconfirmedBackup(backupId)
+            const json = await Services.Backup.getUnconfirmedBackup(backupId)
             if (json) {
-                await Services.Welcome.restoreBackup(json)
+                await Services.Backup.restoreUnconfirmedBackup({ id: backupId, action: 'confirm' })
 
                 // Set default wallet
                 if (json.wallets) await WalletRPC.setDefaultWallet()

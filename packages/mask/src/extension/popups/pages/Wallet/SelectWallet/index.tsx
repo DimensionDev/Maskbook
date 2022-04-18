@@ -111,6 +111,7 @@ const SelectWallet = memo(() => {
     const handleCancel = useCallback(async () => {
         if (isPopup) {
             onSelectAccount([], ChainId.Mainnet)
+            navigate(-1)
         } else {
             await WalletRPC.selectAccount([], ChainId.Mainnet)
             await Services.Helper.removePopupWindow()

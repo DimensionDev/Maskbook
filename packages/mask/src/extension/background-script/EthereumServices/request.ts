@@ -198,7 +198,7 @@ export async function confirmRequest(payload: JsonRpcPayload, disableClose?: boo
                 WalletRPC.deleteUnconfirmedRequest(payload)
                     .then(() => {
                         if (disableClose) return
-                        return Services.Helper.removePopupWindow
+                        return removePopupWindow()
                     })
                     .then(() => {
                         UNCONFIRMED_CALLBACK_MAP.delete(pid)

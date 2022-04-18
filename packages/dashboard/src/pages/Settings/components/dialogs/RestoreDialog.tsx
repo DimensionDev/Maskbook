@@ -7,7 +7,7 @@ import ConfirmDialog from '../../../../components/ConfirmDialog'
 import FileUpload from '../../../../components/FileUpload'
 import { Services } from '../../../../API'
 import BackupPreviewCard from '../BackupPreviewCard'
-import type { BackupPreview } from '../BackupPreviewCard'
+import type { BackupPreview } from '@masknet/backup-format'
 
 const useStyles = makeStyles()(() => ({
     container: { flex: 1 },
@@ -70,8 +70,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
     const [text, setText] = useState('')
     // file content
     const [content, setContent] = useState('')
-    // parsed json
-    const [json, setJSON] = useState<BackupPreview | null>(null)
+    const [preview, setPreview] = useState<BackupPreview | null>(null)
     // backup id
     const [id, setId] = useState('')
 
@@ -80,25 +79,25 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
         setTab('file')
         setText('')
         setContent('')
-        setJSON(null)
+        setPreview(null)
     }
     const handleConfirm = async () => {
-        if (!json) return
+        if (!preview) return
 
-        await Services.Welcome.checkPermissionsAndRestore(id)
+        await Services.Backup.restoreUnconfirmedBackup({ id, action: 'confirm' })
     }
 
     useAsync(async () => {
         const str = tab === 'file' ? content : text
 
         if (str) {
-            const obj = await Services.Welcome.parseBackupStr(str)
-            if (obj) {
-                setJSON(obj.info)
-                setId(obj.id)
+            const obj = await Services.Backup.addUnconfirmedBackup(str)
+            if (obj.ok) {
+                setPreview(obj.val.info)
+                setId(obj.val.id)
             }
         } else {
-            setJSON(null)
+            setPreview(null)
             setId('')
         }
     }, [tab, text, content])
@@ -108,7 +107,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
             title="Restore Backups"
             confirmText="Restore"
             open={open}
-            confirmDisabled={!json}
+            confirmDisabled={!preview}
             onClose={handleClose}
             onConfirm={handleConfirm}>
             <div className={classes.container}>
@@ -118,13 +117,13 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
                         <StyledTab label="Text" value="text" />
                     </StyledTabList>
                     <StyledTabPanel value="file">
-                        <div className={json && content ? classes.hide : ''}>
+                        <div className={preview && content ? classes.hide : ''}>
                             <FileUpload height={180} readAsText onChange={(_, content) => setContent(content || '')} />
                         </div>
-                        {json && content ? <BackupPreviewCard json={json} /> : null}
+                        {preview && content ? <BackupPreviewCard json={preview} /> : null}
                     </StyledTabPanel>
                     <StyledTabPanel value="text">
-                        <div className={json && text ? classes.hide : ''}>
+                        <div className={preview && text ? classes.hide : ''}>
                             <TextArea
                                 value={text}
                                 onChange={(event) => setText(event.target.value)}
@@ -134,7 +133,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
                                 placeholder="Paste the database backup as text here..."
                             />
                         </div>
-                        {json && text ? <BackupPreviewCard json={json} /> : null}
+                        {preview && text ? <BackupPreviewCard json={preview} /> : null}
                     </StyledTabPanel>
                 </TabContext>
             </div>

@@ -170,7 +170,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             provider.recognized.addListener((id) => {
                 if (signal.aborted) return
                 if (id.identifier.isUnknown) return
-                Services.Identity.resolveIdentity(id.identifier)
+                Services.Identity.resolveUnknownLegacyIdentity(id.identifier)
             })
         }
     }
