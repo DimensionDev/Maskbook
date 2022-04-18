@@ -116,6 +116,7 @@ const SignRequest = memo(() => {
         if (value) {
             try {
                 await Services.Ethereum.confirmRequest(value.payload)
+                navigate(-1)
             } catch (error_) {
                 setTransferError(true)
             }
