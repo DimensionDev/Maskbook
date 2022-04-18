@@ -20,5 +20,7 @@
     "address_viewer_address_name_rns": "RNS",
     "address_viewer_address_name_address": "address",
     "address_viewer_address_name_twitter": "twitter blue",
-    "dialog_dismiss": "Dismiss"
+    "dialog_dismiss": "Dismiss",
+    "dialog_confirm": "Confirm",
+    "dialog_confirm_label": "Confirm"
 }

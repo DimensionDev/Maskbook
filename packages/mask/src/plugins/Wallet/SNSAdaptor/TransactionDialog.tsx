@@ -10,7 +10,7 @@ import {
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, useShowConfirm } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { WalletMessages } from '../messages'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -41,6 +41,34 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface TransactionDialogUIProps extends withClasses<never> {}
+
+interface ShowTransactionPendingOptions {
+    title: string
+    content: string
+}
+
+function useShowTransactionPending({ title, content }: ShowTransactionPendingOptions) {
+    const showConfirm = useShowConfirm()
+    const { classes } = useStyles()
+    const { t } = useI18N()
+
+    return () => {
+        return showConfirm({
+            title: title,
+            content: (
+                <>
+                    <CircularProgress size={64} color="primary" />
+                    <Typography className={classes.primary} color="textPrimary" variant="subtitle1">
+                        {t('plugin_wallet_transaction_wait_for_confirmation')}
+                    </Typography>
+                    <Typography className={classes.secondary} color="textSecondary">
+                        {content}
+                    </Typography>
+                </>
+            ),
+        })
+    }
+}
 
 function TransactionDialogUI(props: TransactionDialogUIProps) {
     const { t } = useI18N()
