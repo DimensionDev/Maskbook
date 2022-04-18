@@ -16,4 +16,5 @@ export {
     type UpdateProfileInfo,
     mobile_removeProfile,
     detachProfileWithNextID,
+    resolveUnknownLegacyIdentity,
 } from './profile/update'

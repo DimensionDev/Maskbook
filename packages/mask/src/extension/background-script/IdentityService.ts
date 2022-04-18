@@ -21,14 +21,10 @@ import {
 import type { Persona, Profile } from '../../database/Persona/types'
 import {
     attachProfileDB,
-    consistentPersonaDBWriteAccess,
-    createProfileDB,
     createRelationDB,
     createRelationsTransaction,
-    deleteProfileDB,
     queryPersonaDB,
     queryPersonasDB,
-    queryProfilesDB,
     queryRelationsPagedDB,
     updateRelationDB,
     LinkedProfileDetails,
@@ -264,31 +260,6 @@ export async function queryRelationPaged(
 export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: RelationFavor) {
     const t = await createRelationsTransaction()
     await updateRelationDB({ profile, linked, favor }, t)
-}
-// #endregion
-/**
- * In older version of Mask, identity is marked as `ProfileIdentifier(network, '$unknown')` or `ProfileIdentifier(network, '$self')`. After upgrading to the newer version of Mask, Mask will try to find the current user in that network and call this function to replace old identifier into a "resolved" identity.
- * @param identifier The resolved identity
- */
-export async function resolveIdentity(identifier: ProfileIdentifier): Promise<void> {
-    const unknown = new ProfileIdentifier(identifier.network, '$unknown')
-    const self = new ProfileIdentifier(identifier.network, '$self')
-
-    const r = await queryProfilesDB({ identifiers: [unknown, self] })
-    if (!r.length) return
-    const final = {
-        ...r.reduce((p, c) => ({ ...p, ...c })),
-        identifier,
-    }
-    try {
-        await consistentPersonaDBWriteAccess(async (t) => {
-            await createProfileDB(final, t)
-            await deleteProfileDB(unknown, t).catch(() => {})
-            await deleteProfileDB(self, t).catch(() => {})
-        })
-    } catch {
-        // the profile already exists
-    }
 }
 // #endregion
 
