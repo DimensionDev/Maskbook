@@ -1,6 +1,4 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-solana'
-import type { Web3Plugin } from '@masknet/plugin-infra/src/entry-web3'
 import { Provider } from './Provider'
 import { AddressBook } from './AddressBook'
 import { Asset } from './Asset'
@@ -11,13 +9,10 @@ import { Transaction } from './Transaction'
 import { Wallet } from './Wallet'
 import { Utils } from './Utils'
 
-export type State = Web3Plugin.ObjectCapabilities.Capabilities<ChainId, ProviderType, NetworkType, string[], {}, {}, {}>
-
-let state: State = null!
-
-export async function setupWeb3State(context: Plugin.SNSAdaptor.SNSAdaptorContext) {
+export function createWeb3State(context: Plugin.SNSAdaptor.SNSAdaptorContext) {
     const Provider_ = new Provider(context)
-    state = {
+
+    return {
         AddressBook: new AddressBook(context, {
             chainId: Provider_.chainId,
         }),
@@ -35,15 +30,4 @@ export async function setupWeb3State(context: Plugin.SNSAdaptor.SNSAdaptorContex
         Wallet: new Wallet(context),
         Utils: new Utils(),
     }
-
-    return state
-}
-
-export function getWeb3State() {
-    if (!state) throw new Error('Please setup state at first.')
-    return state
-}
-
-export async function setWeb3State(newState: State) {
-    state = newState
 }

@@ -12,8 +12,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { getError, hasError } from './error'
 import type { Context, Connection, Middleware } from './types'
-import { getWeb3State } from '..'
-import { getSharedContext } from '../../context'
+import { SharedContextSettings, Web3StateSettings } from '../../settings'
 
 class Composer<T> {
     private listOfMiddleware: Middleware<T>[] = []
@@ -55,9 +54,9 @@ class RequestContext implements Context {
     private _writeable = true
     private _error: Error | null = null
     private _result: unknown
-    private _account = getWeb3State().Provider?.account?.getCurrentValue() ?? ''
-    private _chainId = getWeb3State().Provider?.chainId?.getCurrentValue() ?? ChainId.Mainnet
-    private _providerType = getWeb3State().Provider?.providerType?.getCurrentValue() ?? ProviderType.MaskWallet
+    private _account = Web3StateSettings.value.Provider?.account?.getCurrentValue() ?? ''
+    private _chainId = Web3StateSettings.value.Provider?.chainId?.getCurrentValue() ?? ChainId.Mainnet
+    private _providerType = Web3StateSettings.value.Provider?.providerType?.getCurrentValue() ?? ProviderType.MaskWallet
 
     constructor(
         private _connection: Connection,
@@ -71,7 +70,7 @@ class RequestContext implements Context {
 
         // mask wallet settings
         if (this.providerType === ProviderType.MaskWallet) {
-            const { account, chainId } = getSharedContext()
+            const { account, chainId } = SharedContextSettings.value
             this._account = account.getCurrentValue()
             this._chainId = chainId.getCurrentValue()
         }

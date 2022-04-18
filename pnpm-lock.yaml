@@ -719,6 +719,7 @@ importers:
 
   packages/plugins/EVM:
     specifiers:
+      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@dimensiondev/metamask-extension-provider': ^3.0.6-20210519045409-1835d4d
       '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
@@ -747,6 +748,7 @@ importers:
       web3-eth-abi: 1.7.3
       web3-utils: 1.7.3
     dependencies:
+      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra

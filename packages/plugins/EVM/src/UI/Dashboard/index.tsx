@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../../base'
 import { Web3UI } from '../components/Web3UI'
 import { GlobalInjection } from '../components/GlobalInjection'
-import { setupSharedContext } from '../../context'
+import { setupSharedContext } from '../../settings'
 import { setupWeb3State } from '../../state'
 
 const sns: Plugin.Dashboard.Definition = {

@@ -1,12 +1,11 @@
 import { toHex } from 'web3-utils'
 import { EthereumMethodType } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
-import { getWeb3State } from '../..'
-import { getSharedContext } from '../../../context'
+import { SharedContextSettings, Web3StateSettings } from '../../../settings'
 
 export class MaskWallet implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
-        const { Protocol } = getWeb3State()
+        const { Protocol } = Web3StateSettings.value
         const {
             hasNativeAPI,
             nativeType,
@@ -17,7 +16,7 @@ export class MaskWallet implements Middleware<Context> {
             signTransaction,
             signPersonalMessage,
             signTypedData,
-        } = getSharedContext()
+        } = SharedContextSettings.value
 
         // redirect to native app
         if (hasNativeAPI) {

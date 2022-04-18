@@ -6,11 +6,11 @@ import {
     TransactionStatusType,
 } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
-import { getWeb3State } from '../..'
+import { Web3StateSettings } from '../../../settings'
 
 export class RecentTransaction implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
-        const { Transaction } = getWeb3State()
+        const { Transaction } = Web3StateSettings.value
         let replacedHash
 
         switch (context.method) {

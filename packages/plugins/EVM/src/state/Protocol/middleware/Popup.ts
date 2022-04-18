@@ -2,7 +2,7 @@ import { defer } from '@dimensiondev/kit'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { EthereumMethodType, getPayloadConfig, ProviderType } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
-import { getSharedContext } from '../../../context'
+import { SharedContextSettings } from '../../../settings'
 
 export class Popup implements Middleware<Context> {
     private previousRequests: {
@@ -24,7 +24,7 @@ export class Popup implements Middleware<Context> {
 
     async fn(context: Context, next: () => Promise<void>) {
         const { hasNativeAPI, shiftUnconfirmedRequest, pushUnconfirmedRequest, openPopupWindow, closePopupWindow } =
-            getSharedContext()
+            SharedContextSettings.value
 
         if (context.providerType !== ProviderType.MaskWallet || hasNativeAPI || !context.requestOptions?.popupsWindow) {
             await next()

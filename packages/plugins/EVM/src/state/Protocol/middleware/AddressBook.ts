@@ -6,7 +6,7 @@ import {
     isSameAddress,
     isZeroAddress,
 } from '@masknet/web3-shared-evm'
-import { getWeb3State } from '../..'
+import { Web3StateSettings } from '../../../settings'
 import { PayloadComputer } from '../payload'
 import type { Context, Middleware } from '../types'
 
@@ -30,7 +30,7 @@ export class AddressBook implements Middleware<Context> {
     }
 
     async fn(context: Context, next: () => Promise<void>) {
-        const { AddressBook } = getWeb3State()
+        const { AddressBook } = Web3StateSettings.value
 
         await next()
 
