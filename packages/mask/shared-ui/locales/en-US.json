@@ -906,7 +906,7 @@
     "popups_verify_warning_alert": "Your current account has not been verified. Please switch to your current Twitter account to verify.",
     "popups_disconnect_warning_alert": "Are you sure to disconnect Persona {{persona}} from {{network}} {{account}}?",
     "popups_verify_account": "Verify Account",
-    "popups_disconnect_wallet_tip": "Are you sure to disconnect {{persona}} from wallet <strong>{{address}}<strong/>?",
+    "popups_disconnect_wallet_tip": "Are you sure to disconnect from wallet <strong>{{address}}<strong/>?",
     "popups_add_and_verify_wallet": "Add and verify Wallet",
     "popups_add_derive": "Add Derive",
     "popups_rename": "Rename",

@@ -25,7 +25,6 @@ const useStyles = makeStyles()(() => ({
         alignItems: 'center',
         backgroundColor: '#ffffff',
         borderRadius: 8,
-        cursor: 'pointer',
     },
     content: {
         marginLeft: 8,
@@ -47,10 +46,12 @@ const useStyles = makeStyles()(() => ({
     icon: {
         fontSize: 16,
         marginLeft: 4,
+        cursor: 'pointer',
     },
     delete: {
         fontSize: 24,
         stroke: '#536471',
+        cursor: 'pointer',
     },
     placeholder: {
         display: 'flex',
