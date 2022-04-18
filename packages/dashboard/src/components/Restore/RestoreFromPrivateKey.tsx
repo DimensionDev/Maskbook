@@ -40,9 +40,9 @@ export const RestoreFromPrivateKey = memo(() => {
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         try {
-            const persona = await Services.Identity.queryPersonaByPrivateKey(data.privateKey)
+            const persona = await Services.Identity.loginExistPersonaByPrivateKey(data.privateKey)
             if (persona) {
-                await changeCurrentPersona(persona.identifier)
+                await changeCurrentPersona(persona)
                 // Waiting persona changed event notify
                 await delay(100)
                 navigate(DashboardRoutes.Personas)

@@ -12,19 +12,18 @@ import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-
 import { definedSocialNetworkWorkers } from '../../social-network/define'
 import { launchPageSettings } from '../../settings/settings'
 import Services from '../../extension/service'
-import type { Persona, Profile } from '../../database'
+import type { Profile } from '../../database'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { MobileProfiles } from '../../../background/services/identity/profile/query'
+import type { MobilePersona } from '../../../background/services/identity/persona/update'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
-const personaFormatter = (
-    p: Pick<Persona, 'identifier' | 'nickname' | 'hasPrivateKey' | 'createdAt' | 'updatedAt' | 'linkedProfiles'>,
-) => {
+function personaFormatter(p: MobilePersona) {
     const profiles = {}
 
     for (const [key, value] of p.linkedProfiles) {
@@ -193,7 +192,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return privateKey
     },
     persona_queryPersonaByPrivateKey: async ({ privateKey }) => {
-        const persona = await Services.Identity.queryPersonaByPrivateKey(privateKey)
+        const persona = await Services.Identity.mobile_queryPersonaByPrivateKey(privateKey)
         return persona ? personaFormatter(persona) : undefined
     },
     persona_getCurrentPersonaIdentifier: async () => {

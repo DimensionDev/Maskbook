@@ -1,7 +1,5 @@
 import * as bip39 from 'bip39'
 import { validateMnemonic } from 'bip39'
-import { decode } from '@msgpack/msgpack'
-import { decodeArrayBuffer } from '@dimensiondev/kit'
 import {
     personaRecordToPersona,
     queryAvatarDataURL,
@@ -15,7 +13,6 @@ import {
     PersonaIdentifier,
     ProfileIdentifier,
     ECKeyIdentifierFromJsonWebKey,
-    EC_JsonWebKey,
     PersonaInformation,
     ProfileInformation,
     PostIVIdentifier,
@@ -314,21 +311,5 @@ export async function getCurrentPersonaAvatar() {
     } catch {
         return null
     }
-}
-// #endregion
-
-// #region Private / Public key
-
-export async function queryPersonaByPrivateKey(privateKeyString: string) {
-    const privateKey = decode(decodeArrayBuffer(privateKeyString)) as EC_JsonWebKey
-    const identifier = ECKeyIdentifierFromJsonWebKey(privateKey)
-
-    const persona = await queryPersonaDB(identifier, undefined, true)
-    if (persona) {
-        await loginPersona(persona.identifier)
-        return personaRecordToPersona(persona)
-    }
-
-    return null
 }
 // #endregion
