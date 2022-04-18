@@ -36,7 +36,7 @@ export const RestoreFromMnemonic = () => {
         try {
             const persona = await Services.Identity.queryPersonaByMnemonic(values.join(' '), '')
             if (persona) {
-                await changeCurrentPersona(persona.identifier)
+                await changeCurrentPersona(persona)
                 // Waiting persona changed event notify
                 await delay(100)
                 navigate(DashboardRoutes.Personas, { replace: true })

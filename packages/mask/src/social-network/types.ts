@@ -290,7 +290,6 @@ export namespace SocialNetworkUI {
         export interface Define {
             nextIDConfig?: NextIDConfig
             steganography?: SteganographyConfig
-            setupWizard?: SetupWizardConfig
         }
         export interface SteganographyConfig {
             grayscaleAlgorithm?: GrayscaleAlgorithm
@@ -299,9 +298,6 @@ export namespace SocialNetworkUI {
              * !!! Any observable change might cause a breaking change on steganography !!!
              */
             password?(): string
-        }
-        export interface SetupWizardConfig {
-            disableSayHello?: boolean
         }
         export interface NextIDConfig {
             enable?: boolean
@@ -334,8 +330,5 @@ export namespace SocialNetworkWorker {
     /**
      * A SocialNetworkWorker is running in the background page
      */
-    export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared, WorkerBase {
-        tasks: Tasks
-    }
-    export interface Tasks {}
+    export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared, WorkerBase {}
 }
