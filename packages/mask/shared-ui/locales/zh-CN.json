@@ -139,7 +139,6 @@
     "select_specific_friends_dialog__button": "完成",
     "select_specific_friends_dialog__title": "选择特定联系人",
     "service_decryption_failed": "解密失败",
-    "service_invalid_backup_file": "这似乎不是Mask的备份。",
     "service_unknown_payload": "未知的贴文版本。您可能需要更新Mask。",
     "service_username_invalid": "无效的用户名",
     "speed_up": "加速",
