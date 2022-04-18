@@ -106,6 +106,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         const walletsList = proofRes
             ? (proofRes as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
             : []
+
         if (kv !== undefined && (kv?.val as NextIdStorageInfo).proofs.length > 0) {
             const kvCache = (kv.val as NextIdStorageInfo).proofs.find(
                 (x) => x.identity === currentPersona?.publicHexKey,
@@ -115,8 +116,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     isSameAddress(x.identity, i.identity),
                 )
                 if (temp && temp.length > 0) {
-                    res.push(temp[0])
+                    x = temp[0]
                 }
+                res.push(x as WalletProof)
                 return res
             }, [])
             setRawWalletList(JSON.parse(JSON.stringify(result)))
@@ -133,7 +135,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         })
         setRawWalletList(JSON.parse(JSON.stringify(walletsList)))
         setRawPatchData(JSON.parse(JSON.stringify(walletsList)))
-    }, [proofRes, kv])
+    }, [proofRes, bodyView])
 
     const onCancel = () => {
         setRawPatchData(JSON.parse(JSON.stringify(rawWalletList)))

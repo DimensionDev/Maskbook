@@ -26,9 +26,13 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
         account: useWallet()?.address,
     }
     useEffect(() => {
-        if (!(bounds && bounds.length > 0 && !isBound)) return
+        if (bounds === []) return
         const res = bounds.filter((x) => isSameAddress(x.identity, wallet.address))
-        if (res.length > 0) setIsBound(true)
+        if (res.length > 0) {
+            setIsBound(true)
+        } else {
+            setIsBound(false)
+        }
     }, [wallet, currentPersona, bounds])
 
     const { value: payload } = useAsync(async () => {
@@ -40,7 +44,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
             NextIDPlatform.Ethereum,
             'default',
         )
-    }, [currentPersona?.publicHexKey, wallet])
+    }, [])
 
     const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier) return
@@ -54,7 +58,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
             console.error(error)
             return
         }
-    }, [currentPersona?.identifier, payload?.signPayload])
+    }, [currentPersona?.identifier, payload])
 
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.publicHexKey || !wallet.account) return false
@@ -85,7 +89,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     }, [currentPersona?.publicHexKey, payload, wallet, signature])
     const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {
         try {
-            if (signed) Services.Helper.removePopupWindow()
+            if (signed) onCancel
 
             if (!signature && !walletSignState) {
                 await personaSilentSign()

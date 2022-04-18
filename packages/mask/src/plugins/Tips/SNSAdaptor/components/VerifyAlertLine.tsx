@@ -27,7 +27,7 @@ export function VerifyAlertLine({ onClose }: VerifyAlertLineProps) {
     const { classes } = useStyles()
     return (
         <div className={classes.container}>
-            <Typography>Add and verify your wallet to receive tips from your friends. </Typography>
+            <Typography>Please add and verify your wallet to set the address for receiving tips.</Typography>
             <CloseIcon className={classes.closeIcon} onClick={() => onClose()} />
         </div>
     )
