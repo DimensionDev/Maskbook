@@ -23,7 +23,7 @@ const AddWalletView = memo(({ persona }: AddWalletViewProps) => {
                 persona={persona}
                 step={curStep}
                 onConfirm={onConfirm}
-                confirmLoading
+                confirmLoading={false}
             />
         </div>
     )
