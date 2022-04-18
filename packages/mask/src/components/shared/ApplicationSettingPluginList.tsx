@@ -28,7 +28,10 @@ const useStyles = makeStyles()((theme) => ({
         gridTemplateColumns: 'repeat(6, 1fr)',
         gridTemplateRows: 'repeat(3, 1fr)',
         width: '100%',
-        padding: '8px 16px 0px 0px',
+        paddingTop: '8px 0px 0px 0px',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
         overflowY: 'scroll',
         height: 238,
     },

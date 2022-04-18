@@ -13,7 +13,7 @@ import { ApplicationBoard } from '../../../../components/shared/ApplicationBoard
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: theme.spacing(2, 0, 3, 3),
+        padding: theme.spacing(2, 2, 3, 3),
     },
     footer: {
         fontSize: 12,
@@ -66,9 +66,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
         <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
                 <Typography className={classes.subTitle}>{t('wallets')}</Typography>
-                <div className={classes.walletStatusWrapper}>
-                    <WalletStatusBox isDashboard={props.isDashboard} />
-                </div>
+                <WalletStatusBox isDashboard={props.isDashboard} />
                 {!props.isDashboard && <ApplicationBoard />}
             </DialogContent>
             {!chainIdValid ? (

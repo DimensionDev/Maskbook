@@ -15,7 +15,6 @@ const useStyles = makeStyles()((theme) => {
     return {
         applicationWrapper: {
             marginTop: theme.spacing(0.5),
-            paddingRight: 16,
             overflowY: 'scroll',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
@@ -23,6 +22,9 @@ const useStyles = makeStyles()((theme) => {
             gridGap: theme.spacing(1.5),
             justifyContent: 'space-between',
             height: 324,
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
             [smallQuery]: {
                 overflow: 'auto',
                 overscrollBehavior: 'contain',
@@ -44,7 +46,6 @@ const useStyles = makeStyles()((theme) => {
         },
         header: {
             display: 'flex',
-            paddingRight: 16,
             justifyContent: 'space-between',
             alignItems: 'center',
             marginBottom: 11.5,
