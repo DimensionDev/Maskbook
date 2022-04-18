@@ -79,7 +79,7 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
                                 )) ||
                                 null
                             )
-                        })) || <Typography className={classes.empty}>No connected or verified wallets.</Typography>}
+                        })) || <Typography className={classes.empty}>Please set wallets to receive tips.</Typography>}
                 </div>
             )}
         </div>

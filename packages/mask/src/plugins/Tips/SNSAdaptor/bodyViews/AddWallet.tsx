@@ -17,7 +17,6 @@ interface AddWalletViewProps {
 
 const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewProps) => {
     const [isBound, setIsBound] = useState(false)
-    const [signed, setSigned] = useState(false)
     const chainId = useChainId()
     const providerType = useProviderType()
     const { showSnackbar } = useCustomSnackbar()
@@ -53,8 +52,10 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                 currentPersona.identifier,
                 payload.signPayload,
             )
+            showSnackbar('Persona signed successfully.', { variant: 'success' })
             return signResult.signature.signature
         } catch (error) {
+            showSnackbar('Persona Signature failed.', { variant: 'error' })
             console.error(error)
             return
         }
@@ -63,10 +64,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.publicHexKey || !wallet.account) return false
         try {
-            const walletSig = await Services.Ethereum.personalSign(payload.signPayload, wallet.account, '', {
-                chainId: chainId,
-                providerType: providerType,
-            })
+            const walletSig = await Services.Ethereum.personalSign(payload.signPayload, wallet.account)
             if (!walletSig) throw new Error('Wallet sign failed')
             await NextIDProof.bindProof(
                 payload.uuid,
@@ -80,33 +78,30 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                     signature: signature,
                 },
             )
-            setSigned(true)
+            showSnackbar("Wallet's connected.", { variant: 'success' })
             return true
         } catch (error) {
+            showSnackbar('Wallet connection failed.', { variant: 'error' })
             console.error(error)
             return false
         }
     }, [currentPersona?.publicHexKey, payload, wallet, signature])
     const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {
         try {
-            if (signed) {
-                onCancel()
-            }
-
             if (!signature && !walletSignState) {
                 await personaSilentSign()
                 return SignSteps.FirstStepDone
             } else if (signature && !walletSignState) {
-                await walletSign()
-                return SignSteps.SecondStepDone
+                const res = await walletSign()
+                return res ? SignSteps.SecondStepDone : SignSteps.FirstStepDone
             } else {
-                return Services.Helper.removePopupWindow()
+                return SignSteps.SecondStepDone
             }
         } catch {
             showSnackbar('Connect error', { variant: 'error' })
             return SignSteps.Ready
         }
-    }, [signature, walletSignState, walletSign, personaSilentSign, signed])
+    }, [signature, walletSignState, walletSign, personaSilentSign])
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
@@ -117,9 +112,9 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
             <Steps
                 wallet={wallet as any}
                 persona={currentPersona}
-                step={signed ? SignSteps.SecondStepDone : step}
+                step={step}
                 confirmLoading={confirmLoading}
-                disableConfirm={isBound && !signed}
+                disableConfirm={isBound}
                 notInPop
                 changeWallet={openSelectProviderDialog}
                 onConfirm={handleConfirm}

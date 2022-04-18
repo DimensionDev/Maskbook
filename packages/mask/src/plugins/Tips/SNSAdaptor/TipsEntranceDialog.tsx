@@ -102,6 +102,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { value: kv, retry: retryKv } = useKvGet()
     const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
     useEffect(() => {
+        setShowAlert(true)
+    }, [open])
+    useEffect(() => {
         setHasChanged(false)
         const walletsList = proofRes
             ? (proofRes as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
