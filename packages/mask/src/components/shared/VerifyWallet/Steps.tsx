@@ -1,4 +1,4 @@
-import { makeStyles, SnackbarType, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { CurrentWalletBox } from './CurrentWalletBox'
 import {
     step1ActiveIcon,
@@ -10,8 +10,7 @@ import {
     step2ActiveIcon,
 } from './constants'
 import { ImageIcon } from '@masknet/shared'
-import { Typography } from '@mui/material'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { Button, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import { useEffect } from 'react'
@@ -19,6 +18,7 @@ import { useI18N } from '../../../utils'
 import type { Web3Plugin } from '@masknet/plugin-infra/src/web3-types'
 import { ChainId, isSameAddress, NetworkType, ProviderType, useWallets } from '@masknet/web3-shared-evm'
 import type { PersonaInformation } from '@masknet/shared-base'
+import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -86,21 +86,20 @@ export enum SignSteps {
 
 interface StepsProps {
     step: SignSteps
-    personaSign: () => void
-    walletSign: () => void
     changeWallet: () => void
-    onDone: () => void
     persona: PersonaInformation
     wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
     disableConfirm?: boolean
+    onConfirm: () => void
+    confirmLoading: boolean
 }
 
 export function Steps(props: StepsProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { step, personaSign, walletSign, changeWallet, persona, wallet, onDone, disableConfirm } = props
-    const { showSnackbar } = useCustomSnackbar(SnackbarType.POPUP)
+    const { changeWallet, persona, wallet, disableConfirm, onConfirm, step, confirmLoading } = props
+    const { showSnackbar } = usePopupCustomSnackbar()
 
     const walletName = useWallets(wallet.providerType).find((x) => isSameAddress(x.address, wallet.account))?.name
 
@@ -127,16 +126,6 @@ export function Steps(props: StepsProps) {
             showSnackbar(t('wallet_verify_has_bound'), { variant: 'error' })
         }
     }, [disableConfirm])
-
-    const onConfirm = () => {
-        if (step === SignSteps.Ready) {
-            personaSign()
-        } else if (step === SignSteps.FirstStepDone) {
-            walletSign()
-        } else {
-            onDone()
-        }
-    }
 
     const onCancel = () => {
         navigate(-1)
@@ -167,7 +156,7 @@ export function Steps(props: StepsProps) {
                 </div>
             </div>
             <div className={classes.actionBox}>
-                <ActionButton
+                <Button
                     className={classes.roundBtn}
                     variant="outlined"
                     size="large"
@@ -175,15 +164,16 @@ export function Steps(props: StepsProps) {
                     color="primary"
                     onClick={onCancel}>
                     {t('cancel')}
-                </ActionButton>
-                <ActionButton
+                </Button>
+                <LoadingButton
+                    loading={confirmLoading}
                     className={disableConfirm ? classNames(classes.roundBtn, classes.disableBtn) : classes.roundBtn}
                     variant="contained"
                     size="large"
                     fullWidth
                     onClick={onConfirm}>
                     {disableConfirm ? t('wallet_verify_persona_sign') : step === 2 ? t('done') : t('confirm')}
-                </ActionButton>
+                </LoadingButton>
             </div>
         </div>
     )

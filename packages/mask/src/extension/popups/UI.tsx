@@ -11,7 +11,7 @@ import { MaskUIRoot } from '../../UIRoot'
 import { PageTitleContext } from './context'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { languageSettings } from '../../settings/settings'
-import { SnackbarType } from '@masknet/theme'
+import { PopupSnackbarProvider } from '@masknet/theme'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
@@ -28,27 +28,32 @@ const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x)
 export default function Popups() {
     const [title, setTitle] = useState('')
     return (
-        <MaskUIRoot useTheme={usePopupTheme} kind="page" snackbarType={SnackbarType.POPUP}>
-            <Web3Provider value={PopupWeb3Context}>
-                <PageTitleContext.Provider value={{ title, setTitle }}>
-                    <HashRouter>
-                        <Routes>
-                            <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />
-                            <Route path={PopupRoutes.Wallet + '/*'} element={frame(<Wallet />)} />
-                            <Route path={PopupRoutes.Swap} element={<SwapPage />} />
-                            <Route path={PopupRoutes.RequestPermission} element={<RequestPermissionPage />} />
-                            <Route path={PopupRoutes.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
-                            <Route
-                                path={PopupRoutes.ThirdPartyRequestPermission}
-                                element={<ThirdPartyRequestPermission />}
-                            />
-                            <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
-                        </Routes>
-                        {/* TODO: Should only load plugins when the page is plugin-aware. */}
-                        <PluginRender />
-                    </HashRouter>
-                </PageTitleContext.Provider>
-            </Web3Provider>
+        <MaskUIRoot useTheme={usePopupTheme} kind="page">
+            <PopupSnackbarProvider>
+                <Web3Provider value={PopupWeb3Context}>
+                    <PageTitleContext.Provider value={{ title, setTitle }}>
+                        <HashRouter>
+                            <Routes>
+                                <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />
+                                <Route path={PopupRoutes.Wallet + '/*'} element={frame(<Wallet />)} />
+                                <Route path={PopupRoutes.Swap} element={<SwapPage />} />
+                                <Route path={PopupRoutes.RequestPermission} element={<RequestPermissionPage />} />
+                                <Route
+                                    path={PopupRoutes.PermissionAwareRedirect}
+                                    element={<PermissionAwareRedirect />}
+                                />
+                                <Route
+                                    path={PopupRoutes.ThirdPartyRequestPermission}
+                                    element={<ThirdPartyRequestPermission />}
+                                />
+                                <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
+                            </Routes>
+                            {/* TODO: Should only load plugins when the page is plugin-aware. */}
+                            <PluginRender />
+                        </HashRouter>
+                    </PageTitleContext.Provider>
+                </Web3Provider>
+            </PopupSnackbarProvider>
         </MaskUIRoot>
     )
 }

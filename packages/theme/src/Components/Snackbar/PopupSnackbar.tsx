@@ -1,4 +1,4 @@
-import { memo, useRef, forwardRef } from 'react'
+import { memo, useRef, forwardRef, useCallback } from 'react'
 import { Typography, collapseClasses } from '@mui/material'
 import {
     SnackbarProvider,
@@ -7,9 +7,11 @@ import {
     SnackbarContent,
     VariantType,
     SnackbarKey,
+    useSnackbar,
 } from 'notistack'
 import { makeStyles } from '../../UIHelper'
 import classnames from 'classnames'
+import type { ShowSnackbarOptions } from './index'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -82,3 +84,27 @@ export const PopupSnackbarContent = forwardRef<HTMLDivElement, PopupSnackbarCont
         </SnackbarContent>
     )
 })
+
+export function usePopupCustomSnackbar() {
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const showSnackbar = useCallback(
+        (
+            text: SnackbarMessage,
+            options: ShowSnackbarOptions = {
+                variant: 'success',
+            },
+        ) => {
+            const { processing, message, variant, ...rest } = options
+            return enqueueSnackbar(text, {
+                variant: options.variant,
+                content: (key, title) => {
+                    return <PopupSnackbarContent id={key} title={title} variant={variant} />
+                },
+                ...rest,
+            })
+        },
+        [enqueueSnackbar],
+    )
+
+    return { showSnackbar, closeSnackbar }
+}

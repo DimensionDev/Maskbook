@@ -9,10 +9,10 @@ import { makeStyles } from '@masknet/theme'
 import { Navigator } from '../../../components/Navigator'
 import { Avatar, Typography } from '@mui/material'
 import { ArrowRightIosIcon, MenuPersonasActiveIcon } from '@masknet/icons'
-import { formatPersonaFingerprint } from '@masknet/shared-base'
+import { formatPersonaFingerprint, PopupRoutes, formatPersonaName } from '@masknet/shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useI18N } from '../../../../../utils'
-import { formatPersonaName } from '../../../utils'
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles()({
     container: {
@@ -32,13 +32,14 @@ const useStyles = makeStyles()({
         fontWeight: 700,
         lineHeight: '18px',
         color: '#15181B',
+        textDecoration: 'unset',
+        cursor: 'pointer',
     },
     content: {
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'center',
         flex: 1,
-        cursor: 'pointer',
     },
     copy: {
         fontSize: 16,
@@ -64,12 +65,11 @@ export interface PersonaHomeUIProps {
     accountsCount: number
     walletsCount: number
     onEdit: () => void
-    onEnterAccounts: () => void
-    onEnterWallets: () => void
+    fetchProofsLoading: boolean
 }
 
 export const PersonaHomeUI = memo<PersonaHomeUIProps>(
-    ({ avatar, fingerprint, nickname, accountsCount, walletsCount, onEdit, onEnterAccounts, onEnterWallets }) => {
+    ({ avatar, fingerprint, nickname, accountsCount, walletsCount, onEdit, fetchProofsLoading }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
 
@@ -96,27 +96,27 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             </Typography>
                         ) : null}
                     </div>
-                    <div className={classes.item}>
+                    <Link className={classes.item} to={PopupRoutes.PersonaRename} onClick={onEdit}>
                         <Typography>{t('popups_name')}</Typography>
                         <Typography className={classes.content} onClick={onEdit}>
                             {formatPersonaName(nickname)}
                             <ArrowRightIosIcon className={classes.arrow} />
                         </Typography>
-                    </div>
-                    <div className={classes.item}>
+                    </Link>
+                    <Link className={classes.item} to={PopupRoutes.SocialAccounts}>
                         <Typography>{t('popups_social_account')}</Typography>
-                        <Typography className={classes.content} onClick={onEnterAccounts}>
+                        <Typography className={classes.content}>
                             {accountsCount}
                             <ArrowRightIosIcon className={classes.arrow} />
                         </Typography>
-                    </div>
-                    <div className={classes.item}>
+                    </Link>
+                    <Link className={classes.item} to={PopupRoutes.ConnectedWallets}>
                         <Typography>{t('popups_connected_wallets')}</Typography>
-                        <Typography className={classes.content} onClick={onEnterWallets}>
-                            {walletsCount}
+                        <Typography className={classes.content}>
+                            {!fetchProofsLoading ? walletsCount : '...'}
                             <ArrowRightIosIcon className={classes.arrow} />
                         </Typography>
-                    </div>
+                    </Link>
                 </div>
                 <Navigator />
             </>

@@ -5,7 +5,7 @@ import { NetworkPluginID, useNetworkDescriptor } from '@masknet/plugin-infra/web
 import { FormattedAddress, ImageIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../components/CopyIconButton'
-import { DeleteIcon, EmptyIcon, PopupLinkIcon } from '@masknet/icons'
+import { CircleLoadingIcon, DeleteIcon, EmptyIcon, PopupLinkIcon } from '@masknet/icons'
 import type { ConnectedWalletInfo } from '../type'
 import { DisconnectWalletDialog } from '../components/DisconnectWalletDialog'
 import { useI18N } from '../../../../../utils'
@@ -19,13 +19,32 @@ const useStyles = makeStyles()(() => ({
         flex: 1,
         backgroundColor: '#F7F9FA',
     },
+    loading: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: '#F7F9FA',
+        paddingBottom: 72,
+    },
+    animated: {
+        '@keyframes loadingAnimation': {
+            '0%': {
+                transform: 'rotate(0deg)',
+            },
+            '100%': {
+                transform: 'rotate(360deg)',
+            },
+        },
+        animation: 'loadingAnimation 1s linear infinite',
+    },
     item: {
         padding: '12px 16px',
         display: 'flex',
         alignItems: 'center',
         backgroundColor: '#ffffff',
         borderRadius: 8,
-        cursor: 'pointer',
     },
     content: {
         marginLeft: 8,
@@ -47,10 +66,12 @@ const useStyles = makeStyles()(() => ({
     icon: {
         fontSize: 16,
         marginLeft: 4,
+        cursor: 'pointer',
     },
     delete: {
         fontSize: 24,
         stroke: '#536471',
+        cursor: 'pointer',
     },
     placeholder: {
         display: 'flex',
@@ -82,10 +103,11 @@ interface ConnectedWalletsUIProps {
     onAddVerifyWallet: () => void
     releaseLoading: boolean
     personaName?: string
+    loading: boolean
 }
 
 export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
-    ({ wallets, chainId, onRelease, releaseLoading, personaName, onAddVerifyWallet }) => {
+    ({ wallets, chainId, onRelease, releaseLoading, personaName, onAddVerifyWallet, loading }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
         const [open, setOpen] = useState(false)
@@ -98,6 +120,17 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
 
         // TODO: remove this after next dot id support multiple chain
         const networkDescriptor = useNetworkDescriptor(ChainId.Mainnet, NetworkPluginID.PLUGIN_EVM)
+
+        if (loading)
+            return (
+                <div className={classes.loading}>
+                    <CircleLoadingIcon className={classes.animated} />
+                    <Typography>{t('popups_loading')}</Typography>
+                    <Button className={classes.button} onClick={onAddVerifyWallet}>
+                        {t('popups_add_and_verify_wallet')}
+                    </Button>
+                </div>
+            )
 
         return (
             <div className={classes.container}>
@@ -137,6 +170,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                     address={selectedWallet?.identity}
                     onClose={() => setOpen(false)}
                     open={open}
+                    personaName={personaName}
                 />
 
                 <Button className={classes.button} onClick={onAddVerifyWallet}>
