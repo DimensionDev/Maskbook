@@ -20,7 +20,7 @@ import { CopyIcon } from '@masknet/icons'
 const useStyles = makeStyles()((theme) => ({
     root: {},
     wrapper: {
-        backgroundColor: '#F6F8F8',
+        backgroundColor: theme.palette.background.paper,
         borderRadius: 9999,
         paddingLeft: 8,
         paddingRight: 8,
