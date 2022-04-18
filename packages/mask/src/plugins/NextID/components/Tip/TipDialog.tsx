@@ -49,9 +49,24 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
     },
-    networkTab: {
+    abstractTabWrapper: {
         width: '100%',
-        margin: theme.spacing(1, 'auto', 2),
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(2),
+        flexShrink: 0,
+    },
+    tab: {
+        height: 36,
+        minHeight: 36,
+    },
+    tabPaper: {
+        backgroundColor: 'inherit',
+    },
+    tabs: {
+        height: 36,
+        minHeight: 36,
+        margin: '0 auto',
+        borderRadius: 4,
     },
     tipForm: {
         flexGrow: 1,
@@ -279,12 +294,14 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 title={t.tips()}
                 titleTail={walletChip}>
                 <DialogContent className={classes.content}>
-                    <NetworkTab
-                        className={classes.networkTab}
-                        chainId={targetChainId}
-                        setChainId={setTargetChainId}
-                        chains={chainIdList}
-                    />
+                    <div className={classes.abstractTabWrapper}>
+                        <NetworkTab
+                            classes={classes}
+                            chainId={targetChainId}
+                            setChainId={setTargetChainId}
+                            chains={chainIdList}
+                        />
+                    </div>
                     <TipForm className={classes.tipForm} onAddToken={() => openAddTokenDialog(true)} />
                 </DialogContent>
             </InjectedDialog>

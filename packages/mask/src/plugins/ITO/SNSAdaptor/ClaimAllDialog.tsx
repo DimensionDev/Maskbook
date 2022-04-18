@@ -132,8 +132,26 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             fontSize: 18,
             fontWeight: 300,
         },
+        tab: {
+            height: 36,
+            minHeight: 36,
+            fontWeight: 300,
+        },
+        tabs: {
+            height: 36,
+            minHeight: 36,
+            borderRadius: 4,
+            backgroundColor: theme.palette.background.default,
+            '& .Mui-selected': {
+                color: theme.palette.primary.contrastText,
+                backgroundColor: theme.palette.primary.main,
+            },
+        },
         indicator: {
             display: 'none',
+        },
+        tabPanel: {
+            marginTop: theme.spacing(3),
         },
         contentWrapper: {
             display: 'flex',
@@ -183,12 +201,13 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
         snackbarError: {
             backgroundColor: '#FF5555',
         },
-        networkTab: {
+        abstractTabWrapper: {
             position: 'sticky',
             top: 0,
             width: '100%',
             zIndex: 2,
-            margin: theme.spacing(1, 'auto', 2),
+            paddingTop: theme.spacing(1),
+            paddingBottom: theme.spacing(2),
             backgroundColor: theme.palette.background.paper,
         },
         walletStatusBox: {
@@ -309,12 +328,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                     <div className={classes.walletStatusBox}>
                         <WalletStatusBox />
                     </div>
-                    <NetworkTab
-                        chainId={chainId}
-                        setChainId={setChainId}
-                        className={classes.networkTab}
-                        chains={chainIdList}
-                    />
+                    <div className={classes.abstractTabWrapper}>
+                        <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chainIdList} />
+                    </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
                         {(showNftAirdrop || loadingAirdrop) &&
                         chainId === ChainId.Matic &&

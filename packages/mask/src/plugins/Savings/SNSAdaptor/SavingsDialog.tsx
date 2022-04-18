@@ -133,12 +133,14 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                             <SavingsForm tab={tab} chainId={chainId} protocol={selectedProtocol} onClose={onClose} />
                         ) : (
                             <>
-                                <NetworkTab
-                                    chainId={chainId}
-                                    setChainId={setChainId}
-                                    className={classes.networkTab}
-                                    chains={chains}
-                                />
+                                <div className={classes.abstractTabWrapper}>
+                                    <NetworkTab
+                                        chainId={chainId}
+                                        setChainId={setChainId}
+                                        classes={classes}
+                                        chains={chains}
+                                    />
+                                </div>
                                 <div className={classes.tableTabWrapper}>
                                     {protocols.length === 0 ? (
                                         <Typography variant="body2" textAlign="center">
