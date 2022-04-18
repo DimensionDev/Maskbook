@@ -16,8 +16,8 @@ import {
     useAccount,
     useCurrentWeb3NetworkPluginID,
     NetworkPluginID,
+    useNonFungibleAssets,
 } from '@masknet/plugin-infra/web3'
-import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()({
     root: {
@@ -54,27 +54,9 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const [loadingSize, setLoadingSize] = useState(0)
     const [renderData, setRenderData] = useState<Web3Plugin.NonFungibleToken[]>([])
 
-    const {
-        value = { data: EMPTY_LIST, hasNextPage: false },
-        error: collectiblesError,
-        loading: isQuerying,
-        retry,
-    } = useAsyncRetry(
-        async () =>
-            Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }, undefined, selectedNetwork || undefined),
-        [account, Asset?.getNonFungibleAssets, network, selectedNetwork],
-    )
+    const { data = EMPTY_LIST, status: isQuerying } = useNonFungibleAssets(account, network?.chainId)
     useEffect(() => {
         const unsubscribeTokens = PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
-        const unsubscribeSocket = PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
-            if (!info.done) {
-                retry()
-            }
-        })
-        return () => {
-            unsubscribeTokens()
-            unsubscribeSocket()
-        }
     }, [retry])
 
     useEffect(() => {

@@ -24,4 +24,22 @@ export class Asset implements Web3Plugin.ObjectCapabilities.AssetState<ChainId> 
             })
         }
     }
+
+    async *getAllFungibleAssets(chainId: ChainId, address: string) {
+        // todo: use cache
+        const result = this.getFungibleAssets(chainId, address)
+        yield result
+    }
+
+    async *getAllNonFungibleAssets(chainId: ChainId, address: string) {
+        let currentPage = 0
+        let haveNextPage = true
+
+        while (haveNextPage) {
+            const result = await this.getNonFungibleAssets(chainId, address, { page: currentPage, size: 50 })
+            yield result.data
+            haveNextPage = result.hasNextPage
+            currentPage = currentPage + 1
+        }
+    }
 }

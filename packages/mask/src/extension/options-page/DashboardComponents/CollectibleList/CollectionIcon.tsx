@@ -4,8 +4,8 @@ import { Image } from '../../../../components/shared/Image'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-evm'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     collectionWrap: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CollectionIconProps {
     selectedCollection?: string
-    collection?: ERC721ContractDetailed
+    collection?: Web3Plugin.NonFungibleTokenContract
     onClick?(): void
 }
 

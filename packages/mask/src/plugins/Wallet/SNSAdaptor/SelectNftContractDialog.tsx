@@ -6,10 +6,8 @@ import {
     EthereumTokenType,
     formatEthereumAddress,
     resolveAddressLinkOnExplorer,
-    SocketState,
     useAccount,
     useChainId,
-    useCollections,
     useERC721ContractDetailed,
     useERC721Tokens,
 } from '@masknet/web3-shared-evm'
@@ -23,6 +21,8 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
 import { unionBy } from 'lodash-unified'
 import type { NonFungibleTokenAPI } from '@masknet/web3-providers'
+import { useNonFungibleContracts } from '@masknet/plugin-infra/web3'
+import { IteratorCollectorStatus } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -154,7 +154,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     // #endregion
 
-    const { data: assets, state: loadingCollectionState } = useCollections(account, chainId, open)
+    const { data: assets, status: loadingCollectionState } = useNonFungibleContracts(account, chainId)
 
     const erc721InDb = useERC721Tokens()
     const allContractsInDb = unionBy(
@@ -209,7 +209,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                         }}
                     />
                 </div>
-                {loadingCollectionState === SocketState.done && (
+                {loadingCollectionState === IteratorCollectorStatus.done && (
                     <SearchResultBox
                         keyword={keyword}
                         contractList={contractList}
@@ -217,7 +217,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                         onSubmit={onSubmit}
                     />
                 )}
-                {loadingCollectionState !== SocketState.done && (
+                {loadingCollectionState !== IteratorCollectorStatus.done && (
                     <Box
                         display="flex"
                         alignItems="center"
@@ -233,6 +233,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
 export interface SearchResultBoxProps extends withClasses<never> {
     keyword: string
+    // TODO: remove this
     contractList: NonFungibleTokenAPI.ContractBalance[]
     searchedTokenList: NonFungibleTokenAPI.ContractBalance[]
     onSubmit: (contract: ERC721ContractDetailed) => void

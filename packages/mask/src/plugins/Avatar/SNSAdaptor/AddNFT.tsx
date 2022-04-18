@@ -1,11 +1,12 @@
 import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared-evm'
+import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { InputBox } from '../../../extension/options-page/DashboardComponents/InputBox'
 import { useI18N } from '../../../utils'
 import { createNFT } from '../utils'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -28,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 export interface AddNFTProps {
     onClose: () => void
-    onAddClick: (token: ERC721TokenDetailed) => void
+    onAddClick: (token: Web3Plugin.NonFungibleAsset) => void
     open: boolean
 }
 export function AddNFT(props: AddNFTProps) {

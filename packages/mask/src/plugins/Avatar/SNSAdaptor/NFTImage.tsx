@@ -1,5 +1,6 @@
+import type { Web3Plugin } from '@masknet/plugin-infra'
 import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
@@ -34,15 +35,15 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTImageProps {
-    token: ERC721TokenDetailed
-    selectedToken?: ERC721TokenDetailed
-    onChange: (token: ERC721TokenDetailed) => void
+    token: Web3Plugin.NonFungibleAsset
+    selectedToken?: Web3Plugin.NonFungibleAsset
+    onChange: (token: Web3Plugin.NonFungibleAsset) => void
 }
 
-function isSameNFT(a: ERC721TokenDetailed, b?: ERC721TokenDetailed) {
+function isSameNFT(a: Web3Plugin.NonFungibleAsset, b?: Web3Plugin.NonFungibleAsset) {
     return (
-        isSameAddress(a.contractDetailed.address, b?.contractDetailed.address) &&
-        a.contractDetailed.chainId === b?.contractDetailed.chainId &&
+        isSameAddress(a.contract?.address, b?.contract?.address) &&
+        a.contract?.chainId === b?.contract?.chainId &&
         a.tokenId === b?.tokenId
     )
 }

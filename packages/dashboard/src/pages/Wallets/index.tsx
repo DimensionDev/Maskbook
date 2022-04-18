@@ -9,6 +9,7 @@ import {
     useWallets,
     useWeb3State as useWeb3PluginState,
     Web3Plugin,
+    useFungibleAssets,
 } from '@masknet/plugin-infra/web3'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
@@ -16,7 +17,6 @@ import { useWeb3State } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useEffect, useMemo, useState } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
-import { useAsync } from 'react-use'
 import { PluginMessages } from '../../API'
 import { PageFrame } from '../../components/PageFrame'
 import { useDashboardI18N } from '../../locales'
@@ -59,11 +59,8 @@ function Wallets() {
 
     const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+    const { data: detailedTokens } = useFungibleAssets(account, chainId)
 
-    const { value: detailedTokens } = useAsync(
-        async () => Asset?.getFungibleAssets?.(chainId, account, portfolioProvider, network!),
-        [account, Asset, portfolioProvider, network],
-    )
     const renderNetworks = useMemo(() => {
         return networks.filter((x) => pluginId === x.networkSupporterPluginID && x.isMainnet)
     }, [networks, pluginId])

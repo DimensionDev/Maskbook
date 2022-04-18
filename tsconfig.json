@@ -7,7 +7,6 @@
     { "path": "./packages/mask-sdk/main" },
     { "path": "./packages/mask-sdk/public-api" },
     { "path": "./packages/dashboard" },
-    { "path": "./packages/provider-proxy" },
     // Storybooks are considered as a "project" not depended by any other project
     { "path": "./packages/dashboard/stories" },
     { "path": "./packages/theme/stories" },
@@ -70,7 +69,6 @@
       "@masknet/mask-sdk": ["./packages/mask-sdk/server"],
       "@masknet/plugin-infra": ["./packages/plugin-infra/src"],
       "@masknet/global-types/*": ["./packages/polyfills/types/*"],
-      "@masknet/provider-proxy": ["./packages/provider-proxy/src"],
       "@masknet/public-api": ["./packages/public-api/src"],
       // @masknet/scripts is not listed. It does not mean to be installed as a dependency and not join the type check.
       "@masknet/shared": ["./packages/shared/src"],

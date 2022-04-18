@@ -226,6 +226,18 @@ export declare namespace Web3Plugin {
         logoURI?: string | string[]
     }
 
+    export interface NonFungibleTokenContract {
+        /** a type for casting later */
+        type: string | number
+        chainId: number
+        address: string
+        name: string
+        symbol: string
+        baseURI?: string
+        iconURL?: string
+        balance?: number
+    }
+
     export interface NonFungibleToken extends Token {
         tokenId: string
         metadata?: {
@@ -237,17 +249,7 @@ export declare namespace Web3Plugin {
             imageURL?: string
             mediaType?: string
         }
-        contract?: {
-            /** a type for casting later */
-            type: string | number
-            chainId: number
-            address: string
-            name: string
-            symbol: string
-            baseURI?: string
-            iconURL?: string
-            balance?: number
-        }
+        contract?: NonFungibleTokenContract
         collection?: {
             name: string
             slug: string
@@ -375,6 +377,10 @@ export declare namespace Web3Plugin {
             getAllFungibleAssets?: (chainId: ChainId, address: string) => AsyncIterableIterator<FungibleAsset[]>
             /** Get all non-fungible assets of given account. */
             getAllNonFungibleAssets?: (chainId: ChainId, address: string) => AsyncIterableIterator<NonFungibleAsset[]>
+            getAllNonFungibleContract?: (
+                chainId: ChainId,
+                address: string,
+            ) => AsyncIterableIterator<NonFungibleTokenContract[]>
         }
         export interface NameServiceState<ChainId, DomainBook = Record<string, string>> {
             /** The tracked domains of currently chosen sub-network */

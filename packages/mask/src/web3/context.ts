@@ -31,8 +31,6 @@ import {
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
 import { Flags, isAndroidApp } from '../../shared'
-import Services from '../extension/service'
-import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 import { TokenList, Twitter } from '@masknet/web3-providers'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import type { AbiItem } from 'web3-utils'
@@ -165,7 +163,6 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         },
         getTransactionList: WalletRPC.getTransactionList,
         fetchERC20TokensFromTokenLists: TokenList.fetchFungibleTokensFromTokenLists,
-        providerSocket: getProxyWebsocketInstance((info) => WalletMessages.events.socketMessageUpdated.sendToAll(info)),
     }
 }
 

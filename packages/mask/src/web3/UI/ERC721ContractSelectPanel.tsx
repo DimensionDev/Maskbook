@@ -5,9 +5,7 @@ import {
     ERC721ContractDetailed,
     EthereumTokenType,
     isSameAddress,
-    SocketState,
     useAccount,
-    useCollections,
     useERC721ContractBalance,
 } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
@@ -18,6 +16,8 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { SelectNftContractDialogEvent, WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
+import { IteratorCollectorStatus } from '@masknet/web3-shared-base'
+import { useNonFungibleContracts } from '@masknet/plugin-infra/web3'
 
 interface StyleProps {
     hasIcon: boolean
@@ -82,7 +82,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const account = useAccount()
     const { classes } = useStyles({ hasIcon: Boolean(contract?.iconURL) })
     const { value: balanceFromChain, loading: loadingFromChain } = useERC721ContractBalance(contract?.address, account)
-    const { data: assets, state: loadingBalanceFromRemoteState } = useCollections(account, chainId, !!contract)
+    const { data: assets, status: loadingBalanceFromRemoteState } = useNonFungibleContracts(account, chainId)
 
     const convertedAssets = assets.map((x) => ({
         contractDetailed: {
@@ -109,7 +109,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
         onBalanceChange?.(balance)
     }, [onBalanceChange, balance])
 
-    const loading = (loadingFromChain || loadingBalanceFromRemoteState !== SocketState.done) && !balance
+    const loading = (loadingFromChain || loadingBalanceFromRemoteState !== IteratorCollectorStatus.done) && !balance
 
     // #region select contract
     const [id] = useState(uuid)

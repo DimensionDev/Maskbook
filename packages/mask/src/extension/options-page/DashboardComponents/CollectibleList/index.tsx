@@ -1,17 +1,6 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
-import {
-    AddressName,
-    ChainId,
-    ERC721ContractDetailed,
-    ERC721TokenDetailed,
-    isSameAddress,
-    NonFungibleAssetProvider,
-    SocketState,
-    useCollectibles,
-    useCollections,
-    Wallet,
-} from '@masknet/web3-shared-evm'
+import { AddressName, ChainId, isSameAddress, NonFungibleAssetProvider, Wallet } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Stack, styled, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
@@ -22,6 +11,8 @@ import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { ReversedAddress } from '@masknet/shared'
+import { useNonFungibleAssets, Web3Plugin } from '@masknet/plugin-infra/web3'
+import { IteratorCollectorStatus } from '@masknet/web3-shared-base'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -115,7 +106,7 @@ const useStyles = makeStyles()((theme) => ({
 interface CollectibleItemProps {
     provider: NonFungibleAssetProvider
     wallet?: Wallet
-    token: ERC721TokenDetailed
+    token: Web3Plugin.NonFungibleAsset
     readonly?: boolean
     renderOrder: number
 }
@@ -125,16 +116,10 @@ function CollectibleItem(props: CollectibleItemProps) {
     const { classes } = useStyles()
     return (
         <div className={classes.card}>
-            <CollectibleCard
-                token={token}
-                provider={provider}
-                wallet={wallet}
-                readonly={readonly}
-                renderOrder={renderOrder}
-            />
+            <CollectibleCard token={token} wallet={wallet} readonly={readonly} renderOrder={renderOrder} />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
-                    {token.info.name}
+                    {token.metadata?.name}
                 </Typography>
             </div>
         </div>
@@ -144,7 +129,7 @@ function CollectibleItem(props: CollectibleItemProps) {
 interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'> {
     provider: NonFungibleAssetProvider
     wallet?: Wallet
-    collectibles: ERC721TokenDetailed[]
+    collectibles: Web3Plugin.NonFungibleAsset[]
     loading: boolean
     collectiblesRetry: () => void
     error: string | undefined
@@ -209,7 +194,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
 
 export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
     address: string
-    collectibles: ERC721TokenDetailed[]
+    collectibles: Web3Plugin.NonFungibleAsset[]
     error?: string
     loading: boolean
     retry(): void
@@ -244,21 +229,18 @@ export function CollectionList({
     const chainId = ChainId.Mainnet
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [selectedCollection, setSelectedCollection] = useState<ERC721ContractDetailed | 'all' | undefined>('all')
+    const [selectedCollection, setSelectedCollection] = useState<
+        Web3Plugin.NonFungibleTokenContract | 'all' | undefined
+    >('all')
     const { resolvedAddress: address } = addressName
 
     useEffect(() => {
         setSelectedCollection('all')
     }, [address])
 
-    const { data: collectionsFormRemote } = useCollections(address, chainId)
-    const {
-        data: collectibles,
-        state: loadingCollectibleDone,
-        retry: retryFetchCollectible,
-    } = useCollectibles(address, chainId)
+    const { data: collectibles, status: loadingCollectibleDone } = useNonFungibleAssets(address, chainId)
 
-    const isLoading = loadingCollectibleDone !== SocketState.done
+    const isLoading = loadingCollectibleDone !== IteratorCollectorStatus.done
 
     const renderWithRarible = useMemo(() => {
         if (isLoading) return []
@@ -270,28 +252,16 @@ export function CollectionList({
         if (!selectedCollection) return collectibles.filter((x) => !x.collection)
 
         return (collectibles ?? []).filter((x) => {
-            return isSameAddress(selectedCollection.address, x.contractDetailed.address)
+            return isSameAddress(selectedCollection.address, x.contract?.address)
         })
     }, [selectedCollection, collectibles.length])
 
     const collections = useMemo(() => {
         return uniqBy(
-            collectibles.map((x) => x.contractDetailed),
-            (x) => x.address.toLowerCase(),
-        ).map((x) => {
-            const item = collectionsFormRemote.find((c) => isSameAddress(c.address, x.address))
-            if (item) {
-                return {
-                    name: item.name,
-                    symbol: item.name,
-                    baseURI: item.iconURL,
-                    iconURL: item.iconURL,
-                    address: item.address,
-                } as ERC721ContractDetailed
-            }
-            return x
-        })
-    }, [collectibles.length, collectionsFormRemote.length])
+            collectibles.map((x) => x.contract),
+            (x) => x?.address.toLowerCase(),
+        )
+    }, [collectibles.length])
 
     if (!isLoading && !collectibles.length)
         return (
@@ -372,9 +342,12 @@ export function CollectionList({
                         )}
                         <CollectibleList
                             address={address}
-                            retry={retryFetchCollectible}
+                            retry={() => {}}
                             collectibles={renderCollectibles}
-                            loading={loadingCollectibleDone !== SocketState.done && renderCollectibles.length === 0}
+                            loading={
+                                loadingCollectibleDone !== IteratorCollectorStatus.done &&
+                                renderCollectibles.length === 0
+                            }
                         />
                     </Box>
                 </Box>
