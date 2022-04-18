@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react'
-import { useAsync, useLocation } from 'react-use'
+import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { NextIDAction, NextIDPayload, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
+import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { ChainId, EthereumRpcType, isSameAddress, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
@@ -26,11 +26,7 @@ const VerifyWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { currentPersona, refreshProofs } = PersonaContext.useContainer()
-    const [step, setStep] = useState(SignSteps.Ready)
-    const [signature, setSignature] = useState<string>()
-    const [payload, setPayload] = useState<NextIDPayload>()
     const [isBound, setIsBound] = useState(false)
-    const [loadingBtn, setLoadingBtn] = useState(false)
     const navigate = useNavigate()
     useTitle(t('popups_add_wallet'))
     const location = useLocation()
@@ -39,7 +35,7 @@ const VerifyWallet = memo(() => {
 
     const wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
 
-    const { loading: confirmLoading, value: bounds } = useAsync(async () => {
+    const { value: bounds } = useAsync(async () => {
         if (!wallet.account) return false
         return NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, wallet.account)
     })
@@ -55,39 +51,36 @@ const VerifyWallet = memo(() => {
     useEffect(() => {
         if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
 
-        navigate(PopupRoutes.WalletSignRequest)
+        navigate(PopupRoutes.WalletSignRequest, { replace: true })
     }, [request])
 
-    if (!currentPersona || !wallet) return null
+    const { value: payload } = useAsync(async () => {
+        if (!currentPersona?.publicHexKey || !wallet) return
+        return NextIDProof.createPersonaPayload(
+            currentPersona.publicHexKey,
+            NextIDAction.Create,
+            wallet.account,
+            NextIDPlatform.Ethereum,
+            'default',
+        )
+    }, [currentPersona?.publicHexKey, wallet])
 
-    const personaSilentSign = async () => {
-        setLoadingBtn(true)
+    const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
+        if (!payload || !currentPersona?.identifier) return
         try {
-            const payload = await NextIDProof.createPersonaPayload(
-                currentPersona.publicHexKey as string,
-                NextIDAction.Create,
-                wallet.account,
-                NextIDPlatform.Ethereum,
-                'default',
-            )
-            if (!payload) throw new Error('Failed to create persona payload.')
-            setPayload(payload)
             const signResult = await Services.Identity.generateSignResult(
                 currentPersona.identifier,
                 payload.signPayload,
             )
-            setSignature(signResult.signature.signature)
-            if (!signResult) throw new Error('Failed to sign persona.')
-            setStep(SignSteps.FirstStepDone)
+            return signResult.signature.signature
         } catch (error) {
             console.error(error)
-        } finally {
-            setLoadingBtn(false)
+            return
         }
-    }
-    const walletSign = async () => {
-        setLoadingBtn(true)
-        if (!payload) throw new Error('payload error')
+    }, [currentPersona?.identifier, payload?.signPayload])
+
+    const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
+        if (!payload || !currentPersona?.publicHexKey) return false
         try {
             const walletSig = await Services.Ethereum.personalSign(
                 payload.signPayload,
@@ -99,10 +92,11 @@ const VerifyWallet = memo(() => {
                 },
                 { popupsWindow: false },
             )
+
             if (!walletSig) throw new Error('Wallet sign failed')
             await NextIDProof.bindProof(
                 payload.uuid,
-                currentPersona.publicHexKey as string,
+                currentPersona.publicHexKey,
                 NextIDAction.Create,
                 NextIDPlatform.Ethereum,
                 wallet.account,
@@ -113,29 +107,47 @@ const VerifyWallet = memo(() => {
                 },
             )
             refreshProofs()
-            setStep(SignSteps.SecondStepDone)
+            return true
         } catch (error) {
             console.error(error)
-        } finally {
-            setLoadingBtn(false)
+            return false
         }
-    }
+    }, [currentPersona?.publicHexKey, payload, wallet, signature])
+
     const changeWallet = () => {
         navigate(PopupRoutes.ConnectWallet)
     }
 
+    const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {
+        try {
+            // first Step
+            if (!signature && !walletSignState) {
+                await personaSilentSign()
+                return SignSteps.FirstStepDone
+            } else if (signature && !walletSignState) {
+                await walletSign()
+                return SignSteps.SecondStepDone
+            } else {
+                return navigate(PopupRoutes.ConnectedWallets, { replace: true })
+            }
+        } catch {
+            // Maybe we need error state
+            return SignSteps.Ready
+        }
+    }, [signature, walletSignState, walletSign, personaSilentSign])
+
+    if (!currentPersona || !wallet) return null
+
     return (
         <div className={classes.container}>
             <Steps
-                confirmBtnLoading={confirmLoading || loadingBtn}
                 disableConfirm={isBound}
                 persona={currentPersona}
                 wallet={wallet}
-                changeWallet={changeWallet}
                 step={step}
-                personaSign={personaSilentSign}
-                walletSign={walletSign}
-                onDone={() => navigate(PopupRoutes.ConnectedWallets, { replace: true })}
+                changeWallet={changeWallet}
+                onConfirm={handleConfirm}
+                confirmLoading={confirmLoading}
             />
         </div>
     )

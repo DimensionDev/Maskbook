@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
 import { EthereumRpcType, useWallet } from '@masknet/web3-shared-evm'
-import { useAsyncFn, useUpdateEffect } from 'react-use'
+import { useAsyncFn } from 'react-use'
 import Services from '../../../../service'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
@@ -129,11 +129,11 @@ const SignRequest = memo(() => {
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [value])
 
-    useUpdateEffect(() => {
-        if (!value && !requestLoading) {
-            navigate(PopupRoutes.Wallet, { replace: true })
-        }
-    }, [value, requestLoading])
+    // useUpdateEffect(() => {
+    //     if (!value && !requestLoading && !loading) {
+    //         navigate(PopupRoutes.Wallet, { replace: true })
+    //     }
+    // }, [value, requestLoading, loading])
 
     useTitle(t('approve'))
 

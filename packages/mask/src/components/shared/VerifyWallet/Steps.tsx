@@ -10,8 +10,7 @@ import {
     step2ActiveIcon,
 } from './constants'
 import { ImageIcon } from '@masknet/shared'
-import { Typography } from '@mui/material'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { Button, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import { useEffect } from 'react'
@@ -65,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
     actionBox: {
         width: 'calc(100% - 32px)',
         gap: 12,
-        position: 'absolute',
+        position: 'fixed',
         bottom: 16,
         display: 'flex',
         alignItems: 'center',
@@ -87,22 +86,19 @@ export enum SignSteps {
 
 interface StepsProps {
     step: SignSteps
-    personaSign: () => void
-    walletSign: () => void
     changeWallet: () => void
-    onDone: () => void
     persona: PersonaInformation
     wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
     disableConfirm?: boolean
-    confirmBtnLoading?: boolean
+    onConfirm: () => void
+    confirmLoading: boolean
 }
 
 export function Steps(props: StepsProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { step, personaSign, walletSign, changeWallet, persona, wallet, onDone, disableConfirm, confirmBtnLoading } =
-        props
+    const { changeWallet, persona, wallet, disableConfirm, onConfirm, step, confirmLoading } = props
     const { showSnackbar } = usePopupCustomSnackbar()
 
     const walletName = useWallets(wallet.providerType).find((x) => isSameAddress(x.address, wallet.account))?.name
@@ -130,16 +126,6 @@ export function Steps(props: StepsProps) {
             showSnackbar(t('wallet_verify_has_bound'), { variant: 'error' })
         }
     }, [disableConfirm])
-
-    const onConfirm = () => {
-        if (step === SignSteps.Ready) {
-            personaSign()
-        } else if (step === SignSteps.FirstStepDone) {
-            walletSign()
-        } else {
-            onDone()
-        }
-    }
 
     const onCancel = () => {
         navigate(-1)
@@ -170,7 +156,7 @@ export function Steps(props: StepsProps) {
                 </div>
             </div>
             <div className={classes.actionBox}>
-                <ActionButton
+                <Button
                     className={classes.roundBtn}
                     variant="outlined"
                     size="large"
@@ -178,9 +164,9 @@ export function Steps(props: StepsProps) {
                     color="primary"
                     onClick={onCancel}>
                     {t('cancel')}
-                </ActionButton>
+                </Button>
                 <LoadingButton
-                    loading={confirmBtnLoading}
+                    loading={confirmLoading}
                     className={disableConfirm ? classNames(classes.roundBtn, classes.disableBtn) : classes.roundBtn}
                     variant="contained"
                     size="large"
