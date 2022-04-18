@@ -11,14 +11,14 @@ import {
     queryProfilesPagedDB,
 } from '../../../background/database/persona/db'
 import { queryAvatarDataURL } from '../../../background/database/avatar-cache/avatar'
-import {
-    generate_ECDH_256k1_KeyPair_ByMnemonicWord,
-    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
-} from '../../utils/mnemonic-code'
-import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import { validateMnemonic } from 'bip39'
+import * as bip39 from 'bip39'
 import { ProfileIdentifier, type PersonaIdentifier, IdentifierMap } from '@masknet/shared-base'
 import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
+import {
+    deriveLocalKeyFromECDHKey,
+    generate_ECDH_256k1_KeyPair_ByMnemonicWord,
+    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
+} from '../../../background/services/identity/persona/utils'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -136,7 +136,7 @@ export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: 
     const personas = await queryPersonasWithQuery({ nameContains: nickname })
     if (personas.length > 0) throw new Error('Nickname already exists')
 
-    const verify = validateMnemonic(mnemonicWord)
+    const verify = bip39.validateMnemonic(mnemonicWord)
     if (!verify) throw new Error('Verify error')
 
     const { key, mnemonicRecord: mnemonic } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWord, password)

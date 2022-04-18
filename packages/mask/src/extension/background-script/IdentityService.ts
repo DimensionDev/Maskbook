@@ -1,4 +1,3 @@
-import * as bip39 from 'bip39'
 import { validateMnemonic } from 'bip39'
 import {
     personaRecordToPersona,
@@ -24,21 +23,19 @@ import {
     queryRelationsPagedDB,
     RelationRecord,
 } from '../../../background/database/persona/db'
-import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { MaskMessages } from '../../utils'
 import { first, orderBy } from 'lodash-unified'
-import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { loginPersona } from '../../../background/services/identity/persona/update'
+import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../../background/services/identity/persona/utils'
 
 assertEnvironment(Environment.ManifestBackground)
 
-export { validateMnemonic } from '../../utils/mnemonic-code'
+export { validateMnemonic } from '../../../background/services/identity/persona/utils'
 export * from '../../../background/services/identity'
 
-// #region Profile
 export { queryProfile, queryProfilePaged, queryPersonaByProfile } from '../../database'
 
 /** @deprecated */
@@ -58,9 +55,7 @@ export async function queryMyProfiles(network?: string): Promise<Profile[]> {
             .map(queryProfile),
     )
 }
-// #endregion
 
-// #region Persona
 export { createPersonaByMnemonic, createPersonaByMnemonicV2, renamePersona } from '../../database'
 
 /** @deprecated */
@@ -162,20 +157,7 @@ export async function queryOwnedPersonaInformation(): Promise<PersonaInformation
     }
     return result
 }
-export async function mobile_restoreFromMnemonicWords(
-    mnemonicWords: string,
-    nickname: string,
-    password: string,
-): Promise<Persona> {
-    if (process.env.architecture !== 'app') throw new Error('This function is only available in mobile')
-    if (!bip39.validateMnemonic(mnemonicWords)) throw new Error('the mnemonic words are not valid')
-    const identifier = await restoreNewIdentityWithMnemonicWord(mnemonicWords, password, {
-        nickname,
-    })
 
-    return queryPersonaRAW(identifier)
-}
-// #endregion
 export async function queryPagedPostHistory(
     options: {
         network: string
@@ -193,7 +175,6 @@ export async function queryPagedPostHistory(
     return []
 }
 
-// #region Relation
 export async function queryRelationPaged(
     options: {
         network: string
@@ -209,9 +190,7 @@ export async function queryRelationPaged(
 
     return []
 }
-// #endregion
 
-// #region avatar
 export async function updateCurrentPersonaAvatar(avatar: Blob) {
     const identifier = await getCurrentPersonaIdentifier()
 
@@ -231,4 +210,3 @@ export async function getCurrentPersonaAvatar() {
         return null
     }
 }
-// #endregion

@@ -1,4 +1,4 @@
-export { createPersonaByPrivateKey } from './persona/create'
+export { createPersonaByPrivateKey, mobile_restoreFromMnemonicWords } from './persona/create'
 export { mobile_queryPersonaRecordsFromIndexedDB } from './persona/query'
 export {
     deletePersona,

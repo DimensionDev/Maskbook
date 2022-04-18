@@ -1,9 +1,5 @@
 import { encodeText } from '@dimensiondev/kit'
-import type { DashboardRoutes, PersonaIdentifier, ProfileIdentifier, AESJsonWebKey } from '@masknet/shared-base'
-import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
-import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
-import { attachProfileDB, LinkedProfileDetails } from '../../../background/database/persona/db'
-import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
+import type { DashboardRoutes } from '@masknet/shared-base'
 import { saveFileFromBuffer } from '../../../shared'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
@@ -25,44 +21,9 @@ export {
 
 assertEnvironment(Environment.ManifestBackground)
 
-/**
- * Recover new identity by a password and mnemonic words
- *
- * @param password password used to generate mnemonic word, can be empty string
- * @param word mnemonic words
- * @param info additional information
- */
-export async function restoreNewIdentityWithMnemonicWord(
-    word: string,
-    password: string,
-    info: {
-        whoAmI?: ProfileIdentifier
-        nickname?: string
-        localKey?: AESJsonWebKey
-        details?: LinkedProfileDetails
-    },
-): Promise<PersonaIdentifier> {
-    const { key, mnemonicRecord } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(word, password)
-    const { privateKey, publicKey } = key
-    const localKeyJwk = await deriveLocalKeyFromECDHKey(publicKey, mnemonicRecord.words)
-
-    const ecKeyID = await createPersonaByJsonWebKey({
-        publicKey,
-        privateKey,
-        localKey: info.localKey || localKeyJwk,
-        mnemonic: mnemonicRecord,
-        nickname: info.nickname,
-    })
-    if (info.whoAmI) {
-        await attachProfileDB(info.whoAmI, ecKeyID, info.details || { connectionConfirmState: 'pending' })
-    }
-    return ecKeyID
-}
-
-export async function downloadBackup<T>(obj: T, type?: 'txt' | 'json') {
+export async function downloadBackup(obj: unknown, type?: 'txt' | 'json'): Promise<void> {
     const { buffer, mimeType, fileName } = await createBackupInfo(obj, type)
     saveFileFromBuffer(buffer, mimeType, fileName)
-    return obj
 }
 
 export async function downloadBackupV2(buffer: ArrayBuffer) {
