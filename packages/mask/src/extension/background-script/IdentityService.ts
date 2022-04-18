@@ -19,11 +19,9 @@ import {
 } from '@masknet/shared-base'
 import type { Persona, Profile } from '../../database/Persona/types'
 import {
-    attachProfileDB,
     queryPersonaDB,
     queryPersonasDB,
     queryRelationsPagedDB,
-    LinkedProfileDetails,
     RelationRecord,
 } from '../../../background/database/persona/db'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
@@ -178,29 +176,6 @@ export async function mobile_restoreFromMnemonicWords(
     return queryPersonaRAW(identifier)
 }
 // #endregion
-
-// #region Profile & Persona
-/**
- * Remove an identity.
- */
-export async function attachProfile(
-    source: ProfileIdentifier,
-    target: ProfileIdentifier | PersonaIdentifier,
-    data: LinkedProfileDetails,
-): Promise<void> {
-    if (target instanceof ProfileIdentifier) {
-        const profile = await queryProfile(target)
-        if (!profile.linkedPersona) throw new Error('target not found')
-        target = profile.linkedPersona.identifier
-    }
-    return attachProfileDB(source, target, data)
-}
-export { detachProfileDB as detachProfile } from '../../../background/database/persona/db'
-// #endregion
-
-// #region Post
-export { queryPostsDB } from '../../database'
-
 export async function queryPagedPostHistory(
     options: {
         network: string
@@ -217,7 +192,6 @@ export async function queryPagedPostHistory(
 
     return []
 }
-// #endregion
 
 // #region Relation
 export async function queryRelationPaged(

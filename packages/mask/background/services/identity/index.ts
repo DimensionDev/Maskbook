@@ -17,6 +17,8 @@ export {
     mobile_removeProfile,
     detachProfileWithNextID,
     resolveUnknownLegacyIdentity,
+    attachProfile,
+    detachProfile,
 } from './profile/update'
 
 export { createNewRelation } from './relation/create'
