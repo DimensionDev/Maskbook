@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
     actionBox: {
         width: 'calc(100% - 32px)',
         gap: 12,
-        position: 'fixed',
+        position: 'absolute',
         bottom: 16,
         display: 'flex',
         alignItems: 'center',
