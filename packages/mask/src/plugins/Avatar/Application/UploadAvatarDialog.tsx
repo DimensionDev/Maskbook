@@ -28,7 +28,7 @@ interface UploadAvatarDialogProps {
     onClose: () => void
 }
 
-async function personaSign(account: string, message: string, identifier: ECKeyIdentifier) {
+async function personaSign(message: string, identifier: ECKeyIdentifier) {
     try {
         return Services.Identity.generateSignResult(identifier, message)
     } catch {
@@ -40,9 +40,9 @@ async function Save(
     account: string,
     token: ERC721TokenDetailed,
     avatarId: string,
-    data?: TwitterBaseAPI.AvatarInfo,
-    persona?: Persona,
-    proof?: BindingProof,
+    data: TwitterBaseAPI.AvatarInfo,
+    persona: Persona,
+    proof: BindingProof,
 ) {
     if (!data || !proof || !persona?.publicHexKey) return false
 
@@ -55,12 +55,12 @@ async function Save(
         tokenId: token.tokenId,
     }
 
-    const response = await NextIDStorage.getPayload(persona?.publicHexKey, proof?.platform, proof?.identity, info)
+    const response = await NextIDStorage.getPayload(persona.publicHexKey, proof?.platform, proof?.identity, info)
     if (!response.ok) {
         return false
     }
 
-    const sign = await personaSign(account, response.val.signPayload, persona.identifier)
+    const sign = await personaSign(response.val.signPayload, persona.identifier)
     if (!sign) return false
 
     const setResponse = await NextIDStorage.set(
@@ -94,6 +94,8 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
 
             const media = await Twitter.uploadUserAvatar(identity.identifier.userId, blob)
             const data = await Twitter.updateProfileImage(identity.identifier.userId, media.media_id_string)
+            if (!data) return
+
             const avatarId = getAvatarId(data?.imageUrl ?? '')
 
             const response = await Save(account, token, avatarId, data, currentConnectedPersona, proof)
