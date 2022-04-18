@@ -56,7 +56,7 @@ export async function queryMyProfiles(network?: string): Promise<Profile[]> {
     )
 }
 
-export { createPersonaByMnemonic, createPersonaByMnemonicV2, renamePersona } from '../../database'
+export { createPersonaByMnemonicV2, renamePersona } from '../../database'
 
 /** @deprecated */
 export async function queryPersona(

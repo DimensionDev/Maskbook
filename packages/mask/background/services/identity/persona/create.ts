@@ -12,7 +12,11 @@ import { decode } from '@msgpack/msgpack'
 import { omit } from 'lodash-unified'
 import type { MobilePersona } from './update'
 import { attachProfileDB, LinkedProfileDetails, queryPersonaDB } from '../../../database/persona/db'
-import { deriveLocalKeyFromECDHKey, recover_ECDH_256k1_KeyPair_ByMnemonicWord } from './utils'
+import {
+    deriveLocalKeyFromECDHKey,
+    generate_ECDH_256k1_KeyPair_ByMnemonicWord,
+    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
+} from './utils'
 
 export async function createPersonaByPrivateKey(
     privateKeyString: string,
@@ -79,4 +83,21 @@ export async function mobile_restoreFromMnemonicWords(
         }
         return ecKeyID
     }
+}
+
+export async function createPersonaByMnemonic(
+    nickname: string | undefined,
+    password: string,
+): Promise<PersonaIdentifier> {
+    const { key, mnemonicRecord: mnemonic } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
+    const { privateKey, publicKey } = key
+    const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
+    return createPersonaByJsonWebKey({
+        privateKey,
+        publicKey,
+        localKey,
+        mnemonic,
+        nickname,
+        uninitialized: false,
+    })
 }
