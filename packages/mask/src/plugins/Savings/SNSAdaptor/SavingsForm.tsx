@@ -6,7 +6,6 @@ import { unreachable } from '@dimensiondev/kit'
 import { isGreaterThan, isLessThan, rightShift, ZERO } from '@masknet/web3-shared-base'
 import {
     createERC20Token,
-    createLookupTableResolver,
     EthereumTokenType,
     formatBalance,
     formatCurrency,
