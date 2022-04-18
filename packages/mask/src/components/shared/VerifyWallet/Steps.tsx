@@ -19,6 +19,7 @@ import { useI18N } from '../../../utils'
 import type { Web3Plugin } from '@masknet/plugin-infra/src/web3-types'
 import { ChainId, isSameAddress, NetworkType, ProviderType, useWallets } from '@masknet/web3-shared-evm'
 import type { PersonaInformation } from '@masknet/shared-base'
+import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -93,13 +94,15 @@ interface StepsProps {
     persona: PersonaInformation
     wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
     disableConfirm?: boolean
+    confirmBtnLoading?: boolean
 }
 
 export function Steps(props: StepsProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { step, personaSign, walletSign, changeWallet, persona, wallet, onDone, disableConfirm } = props
+    const { step, personaSign, walletSign, changeWallet, persona, wallet, onDone, disableConfirm, confirmBtnLoading } =
+        props
     const { showSnackbar } = usePopupCustomSnackbar()
 
     const walletName = useWallets(wallet.providerType).find((x) => isSameAddress(x.address, wallet.account))?.name
@@ -176,14 +179,15 @@ export function Steps(props: StepsProps) {
                     onClick={onCancel}>
                     {t('cancel')}
                 </ActionButton>
-                <ActionButton
+                <LoadingButton
+                    loading={confirmBtnLoading}
                     className={disableConfirm ? classNames(classes.roundBtn, classes.disableBtn) : classes.roundBtn}
                     variant="contained"
                     size="large"
                     fullWidth
                     onClick={onConfirm}>
                     {disableConfirm ? t('wallet_verify_persona_sign') : step === 2 ? t('done') : t('confirm')}
-                </ActionButton>
+                </LoadingButton>
             </div>
         </div>
     )

@@ -30,6 +30,7 @@ const VerifyWallet = memo(() => {
     const [signature, setSignature] = useState<string>()
     const [payload, setPayload] = useState<NextIDPayload>()
     const [isBound, setIsBound] = useState(false)
+    const [loadingBtn, setLoadingBtn] = useState(false)
     const navigate = useNavigate()
     useTitle(t('popups_add_wallet'))
     const location = useLocation()
@@ -38,7 +39,7 @@ const VerifyWallet = memo(() => {
 
     const wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
 
-    const { value: bounds } = useAsync(async () => {
+    const { loading: confirmLoading, value: bounds } = useAsync(async () => {
         if (!wallet.account) return false
         return NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, wallet.account)
     })
@@ -60,6 +61,7 @@ const VerifyWallet = memo(() => {
     if (!currentPersona || !wallet) return null
 
     const personaSilentSign = async () => {
+        setLoadingBtn(true)
         try {
             const payload = await NextIDProof.createPersonaPayload(
                 currentPersona.publicHexKey as string,
@@ -79,9 +81,12 @@ const VerifyWallet = memo(() => {
             setStep(SignSteps.FirstStepDone)
         } catch (error) {
             console.error(error)
+        } finally {
+            setLoadingBtn(false)
         }
     }
     const walletSign = async () => {
+        setLoadingBtn(true)
         if (!payload) throw new Error('payload error')
         try {
             const walletSig = await Services.Ethereum.personalSign(
@@ -111,6 +116,8 @@ const VerifyWallet = memo(() => {
             setStep(SignSteps.SecondStepDone)
         } catch (error) {
             console.error(error)
+        } finally {
+            setLoadingBtn(false)
         }
     }
     const changeWallet = () => {
@@ -120,6 +127,7 @@ const VerifyWallet = memo(() => {
     return (
         <div className={classes.container}>
             <Steps
+                confirmBtnLoading={confirmLoading || loadingBtn}
                 disableConfirm={isBound}
                 persona={currentPersona}
                 wallet={wallet}
