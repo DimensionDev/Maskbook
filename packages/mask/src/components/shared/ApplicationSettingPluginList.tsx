@@ -1,9 +1,9 @@
 import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
-import { Fragment, useMemo, useEffect, useState } from 'react'
+import { Fragment, useMemo, useState, useCallback } from 'react'
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { useI18N } from '../../utils'
-import { PersistentStorages, MaskMessages, ApplicationEntryUnlistedListKey } from '../../../shared'
+import { PersistentStorages } from '../../../shared'
 
 export interface Application {
     entry: Plugin.SNSAdaptor.ApplicationEntry
@@ -100,19 +100,29 @@ export function ApplicationSettingPluginList() {
     const [listedAppList, setListedAppList] = useState(applicationList.filter((x) => !getUnlistedApp(x)))
     const [unlistedAppList, setUnListedAppList] = useState(applicationList.filter((x) => getUnlistedApp(x)))
 
-    useEffect(() => {
-        return MaskMessages.events.__kv_backend_persistent__.on((data) => {
-            if (data[0].split(':')[0] !== ApplicationEntryUnlistedListKey) return
-            setListedAppList(applicationList.filter((x) => !getUnlistedApp(x)))
-            setUnListedAppList(applicationList.filter((x) => getUnlistedApp(x)))
-        })
-    }, [])
+    const setAppList = useCallback(
+        (app: Application, unlisted: boolean) => {
+            setUnlistedApp(app, unlisted)
+            if (unlisted) {
+                setUnListedAppList(unlistedAppList.concat(app))
+                setListedAppList(
+                    listedAppList.filter((x) => x.entry.ApplicationEntryID !== app.entry.ApplicationEntryID),
+                )
+            } else {
+                setListedAppList(listedAppList.concat(app))
+                setUnListedAppList(
+                    unlistedAppList.filter((x) => x.entry.ApplicationEntryID !== app.entry.ApplicationEntryID),
+                )
+            }
+        },
+        [applicationList, listedAppList, unlistedAppList],
+    )
 
     return (
         <div>
-            <AppList appList={listedAppList} setUnlistedApp={setUnlistedApp} isListed />
+            <AppList appList={listedAppList} setUnlistedApp={setAppList} isListed />
             <Typography className={classes.unlisted}>{t('application_settings_tab_plug_app-list-unlisted')}</Typography>
-            <AppList appList={unlistedAppList} setUnlistedApp={setUnlistedApp} isListed={false} />
+            <AppList appList={unlistedAppList} setUnlistedApp={setAppList} isListed={false} />
         </div>
     )
 }
