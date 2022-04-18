@@ -3,7 +3,6 @@ import { validateMnemonic } from 'bip39'
 import { decode } from '@msgpack/msgpack'
 import { decodeArrayBuffer } from '@dimensiondev/kit'
 import {
-    loginPersona,
     personaRecordToPersona,
     queryAvatarDataURL,
     queryPersona as queryPersonaRAW,
@@ -27,7 +26,6 @@ import type { Persona, Profile } from '../../database/Persona/types'
 import {
     attachProfileDB,
     consistentPersonaDBWriteAccess,
-    createOrUpdateProfileDB,
     createProfileDB,
     createRelationDB,
     createRelationsTransaction,
@@ -37,15 +35,10 @@ import {
     queryProfilesDB,
     queryRelationsPagedDB,
     updateRelationDB,
-    ProfileRecord,
     LinkedProfileDetails,
     RelationRecord,
 } from '../../../background/database/persona/db'
-import {
-    queryPersonasDB as queryPersonasFromIndexedDB,
-    queryProfilesDB as queryProfilesFromIndexedDB,
-    queryRelations as queryRelationsFromIndexedDB,
-} from '../../../background/database/persona/web'
+import { queryRelations as queryRelationsFromIndexedDB } from '../../../background/database/persona/web'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
@@ -54,6 +47,7 @@ import { MaskMessages } from '../../utils'
 import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { NextIDProof } from '@masknet/web3-providers'
+import { loginPersona } from '../../../background/services/identity/persona/update'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -63,12 +57,9 @@ export * from '../../../background/services/identity'
 // #region Profile
 export { queryProfile, queryProfilePaged, queryPersonaByProfile } from '../../database'
 
+/** @deprecated */
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery({ network })
-}
-
-export async function queryProfileRecordFromIndexedDB() {
-    return queryProfilesFromIndexedDB({})
 }
 
 export function queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]) {
@@ -82,27 +73,6 @@ export async function queryMyProfiles(network?: string): Promise<Profile[]> {
             .filter((y) => !network || network === y.network)
             .map(queryProfile),
     )
-}
-export async function updateProfileInfo(
-    identifier: ProfileIdentifier,
-    data: {
-        nickname?: string | null
-        avatarURL?: string | null
-    },
-): Promise<void> {
-    if (data.nickname) {
-        const rec: ProfileRecord = {
-            identifier,
-            nickname: data.nickname,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        }
-        await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t))
-    }
-    if (data.avatarURL) await storeAvatar(identifier, data.avatarURL)
-}
-export function removeProfile(id: ProfileIdentifier): Promise<void> {
-    return consistentPersonaDBWriteAccess((t) => deleteProfileDB(id, t))
 }
 // #endregion
 
@@ -154,11 +124,6 @@ async function queryPersonas_inner(identifier?: PersonaIdentifier, requirePrivat
     const x = await queryPersonaDB(identifier)
     if (!x || (!x.privateKey && requirePrivateKey)) return []
     return [personaRecordToPersona(x)]
-}
-
-export async function app_only_queryPersonaRecordsFromIndexedDB() {
-    if (process.env.architecture !== 'app') throw new Error('This function is only available in app')
-    return queryPersonasFromIndexedDB()
 }
 
 export async function queryMyPersonas(
@@ -213,11 +178,12 @@ export async function queryOwnedPersonaInformation(): Promise<PersonaInformation
     }
     return result
 }
-export async function restoreFromMnemonicWords(
+export async function mobile_restoreFromMnemonicWords(
     mnemonicWords: string,
     nickname: string,
     password: string,
 ): Promise<Persona> {
+    if (process.env.architecture !== 'app') throw new Error('This function is only available in mobile')
     if (!bip39.validateMnemonic(mnemonicWords)) throw new Error('the mnemonic words are not valid')
     const identifier = await restoreNewIdentityWithMnemonicWord(mnemonicWords, password, {
         nickname,
@@ -231,7 +197,6 @@ export async function restoreFromMnemonicWords(
 /**
  * Remove an identity.
  */
-export { setupPersona, deletePersona, logoutPersona } from '../../database'
 export async function attachProfile(
     source: ProfileIdentifier,
     target: ProfileIdentifier | PersonaIdentifier,
