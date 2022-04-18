@@ -16,11 +16,10 @@ export const useIteratorCollector = <T>(iterator?: AsyncIterableIterator<T[]>, d
 
     useEffect(() => {
         toggleIsRunning(true)
-        const newData = {
-            data: cache?.data ?? [],
+        setCache({
+            data: [],
             status: IteratorCollectorState.init,
-        }
-        setCache(newData)
+        })
     }, [iterator])
 
     useInterval(

@@ -13,7 +13,6 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { useWeb3State } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useEffect, useMemo, useState } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
@@ -40,7 +39,6 @@ function Wallets() {
     const chainId = useChainId()
     const { Asset } = useWeb3PluginState()
     const account = useAccount()
-    const { portfolioProvider } = useWeb3State()
     const network = useNetworkDescriptor()
 
     const { pathname } = useLocation()

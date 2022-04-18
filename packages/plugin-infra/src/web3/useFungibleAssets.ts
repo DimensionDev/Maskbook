@@ -4,7 +4,7 @@ import type { Web3Plugin, NetworkPluginID } from '../web3-types'
 import { useIteratorCollector } from '@masknet/web3-shared-base'
 
 export const useFungibleAssets = (account: string, chainId: number, pluginID?: NetworkPluginID) => {
-    const { Asset, Token } = useWeb3State(pluginID)
+    const { Asset } = useWeb3State(pluginID)
     const iterator = useMemo(() => Asset?.getAllFungibleAssets?.(chainId, account), [])
 
     const { data, status } = useIteratorCollector<Web3Plugin.FungibleAsset>(
@@ -12,8 +12,9 @@ export const useFungibleAssets = (account: string, chainId: number, pluginID?: N
         (x: Web3Plugin.FungibleAsset) => `${x.address}_${chainId}`,
     )
 
+    // todo: add local token
     return {
-        data: [...(Token?.fungibleTokens?.getCurrentValue() ?? []), ...data],
+        data,
         status,
     }
 }

@@ -18,6 +18,7 @@ import {
     NetworkPluginID,
     useNonFungibleAssets,
 } from '@masknet/plugin-infra/web3'
+import { IteratorCollectorState } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     root: {
@@ -54,16 +55,18 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const [loadingSize, setLoadingSize] = useState(0)
     const [renderData, setRenderData] = useState<Web3Plugin.NonFungibleToken[]>([])
 
-    const { data = EMPTY_LIST, status: isQuerying } = useNonFungibleAssets(account, network?.chainId)
+    const { data = EMPTY_LIST, status, retry } = useNonFungibleAssets(account, network?.chainId)
+    const isQuerying = status !== IteratorCollectorState.done
+
     useEffect(() => {
-        const unsubscribeTokens = PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
+        PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
     }, [retry])
 
     useEffect(() => {
         if (!loadingSize) return
-        const render = value.data.slice(page * loadingSize, (page + 1) * loadingSize)
+        const render = data.slice(page * loadingSize, (page + 1) * loadingSize)
         setRenderData(render)
-    }, [value.data, loadingSize, page])
+    }, [data, loadingSize, page])
 
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const onSend = useCallback(
@@ -80,13 +83,13 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         [currentPluginId],
     )
 
-    const hasNextPage = (page + 1) * loadingSize < value.data.length
+    const hasNextPage = (page + 1) * loadingSize < data.length
     const isLoading = renderData.length === 0 && isQuerying
 
     return (
         <CollectibleListUI
             isLoading={isLoading}
-            isEmpty={!!collectiblesError || renderData.length === 0}
+            isEmpty={!isQuerying && renderData.length === 0}
             page={page}
             onPageChange={setPage}
             hasNextPage={hasNextPage}
