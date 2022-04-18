@@ -51,7 +51,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const onCreate = useCallback(async () => {
         closeDialog()
         await delay(100)
-        await Services.Welcome.openOptionsPage(DashboardRoutes.CreateMaskWallet, `create=${Date.now()}`)
+        await Services.Helper.openDashboard(DashboardRoutes.CreateMaskWallet, `create=${Date.now()}`)
     }, [history, closeDialog])
     // #endregion
 

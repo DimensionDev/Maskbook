@@ -8,9 +8,12 @@ import { useWallet } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
-import Services from '../../../../service'
 import { WalletContext } from '../hooks/useWalletContext'
 import { useTitle } from '../../../hook/useTitle'
+import formatDateTime from 'date-fns/format'
+import { saveFileFromBuffer } from '../../../../../../shared'
+import { encodeText } from '@dimensiondev/kit'
+import { MimeTypes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     header: {
@@ -141,9 +144,14 @@ const BackupWallet = memo(() => {
         privateKey: '',
     }
 
-    const [{ value: downloadValue }, onExport] = useAsyncFn(async () => {
+    const [, onExport] = useAsyncFn(async () => {
         try {
-            await Services.Welcome.downloadBackup(jsonFile, 'json')
+            const now = formatDateTime(Date.now(), 'yyyy-MM-dd')
+            await saveFileFromBuffer({
+                fileContent: encodeText(JSON.stringify(jsonFile)),
+                fileName: `mask-network-keystore-backup-${now}.json`,
+                mimeType: MimeTypes.JSON,
+            })
             return true
         } catch (error) {
             if (error instanceof Error) {

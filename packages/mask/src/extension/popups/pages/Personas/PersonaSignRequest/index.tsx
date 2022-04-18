@@ -88,7 +88,7 @@ const PersonaSignRequest = memo(() => {
     const { classes } = useStyles()
     const [requestID, setRequestID] = useState<string>()
     const [message, setMessage] = useState<string>()
-    const [selected, setSelected] = useState<Persona>()
+    const [selected, setSelected] = useState<Pick<Persona, 'nickname' | 'identifier' | 'fingerprint'>>()
     const personas = useMyPersonas()
     const { currentPersona } = PersonaContext.useContainer()
     useEffect(() => {

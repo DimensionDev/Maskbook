@@ -21,8 +21,7 @@ import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { INTERNAL_nativeSend, INTERNAL_send } from './send'
 import { defer } from '@dimensiondev/kit'
 import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
-import { openPopupWindow } from '../../../../background/services/helper'
-import Services from '../../service'
+import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper'
 import { toHex } from 'web3-utils'
 import { isLessThan } from '@masknet/web3-shared-base'
 
@@ -198,7 +197,7 @@ export async function confirmRequest(payload: JsonRpcPayload, disableClose?: boo
                 WalletRPC.deleteUnconfirmedRequest(payload)
                     .then(() => {
                         if (disableClose) return
-                        return Services.Helper.removePopupWindow
+                        return removePopupWindow()
                     })
                     .then(() => {
                         UNCONFIRMED_CALLBACK_MAP.delete(pid)
@@ -220,7 +219,7 @@ export async function rejectRequest(payload: JsonRpcPayload) {
     if (!pid) return
     UNCONFIRMED_CALLBACK_MAP.get(pid)?.(new Error('User rejected!'))
     await WalletRPC.deleteUnconfirmedRequest(payload)
-    await Services.Helper.removePopupWindow()
+    await removePopupWindow()
     UNCONFIRMED_CALLBACK_MAP.delete(pid)
 }
 

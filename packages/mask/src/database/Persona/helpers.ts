@@ -6,22 +6,18 @@ import {
     queryProfileDB,
     queryPersonaDB,
     queryPersonasDB,
-    detachProfileDB,
-    deletePersonaDB,
-    safeDeletePersonaDB,
     consistentPersonaDBWriteAccess,
     updatePersonaDB,
     queryProfilesPagedDB,
 } from '../../../background/database/persona/db'
 import { queryAvatarDataURL } from '../../../background/database/avatar-cache/avatar'
-import {
-    generate_ECDH_256k1_KeyPair_ByMnemonicWord,
-    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
-} from '../../utils/mnemonic-code'
-import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import { validateMnemonic } from 'bip39'
+import * as bip39 from 'bip39'
 import { ProfileIdentifier, type PersonaIdentifier, IdentifierMap } from '@masknet/shared-base'
 import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
+import {
+    deriveLocalKeyFromECDHKey,
+    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
+} from '../../../background/services/identity/persona/utils'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -103,38 +99,6 @@ export async function queryPersonasWithQuery(query?: Parameters<typeof queryPers
     return _.map(personaRecordToPersona)
 }
 
-export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even with private' | 'safe delete') {
-    return consistentPersonaDBWriteAccess(async (t) => {
-        const d = await queryPersonaDB(id, t)
-        if (!d) return
-        for (const e of d.linkedProfiles) {
-            await detachProfileDB(e[0], t)
-        }
-        if (confirm === 'delete even with private') await deletePersonaDB(id, 'delete even with private', t)
-        else if (confirm === 'safe delete') await safeDeletePersonaDB(id, t)
-    })
-}
-
-export async function loginPersona(identifier: PersonaIdentifier) {
-    return consistentPersonaDBWriteAccess((t) =>
-        updatePersonaDB(
-            { identifier, hasLogout: false },
-            { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' },
-            t,
-        ),
-    )
-}
-
-export async function logoutPersona(identifier: PersonaIdentifier) {
-    return consistentPersonaDBWriteAccess((t) =>
-        updatePersonaDB(
-            { identifier, hasLogout: true },
-            { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' },
-            t,
-        ),
-    )
-}
-
 export async function renamePersona(identifier: PersonaIdentifier, nickname: string) {
     const personas = await queryPersonasWithQuery({ nameContains: nickname })
     if (personas.length > 0) {
@@ -146,47 +110,15 @@ export async function renamePersona(identifier: PersonaIdentifier, nickname: str
     )
 }
 
-export async function setupPersona(id: PersonaIdentifier) {
-    return consistentPersonaDBWriteAccess(async (t) => {
-        const d = await queryPersonaDB(id, t)
-        if (!d) throw new Error('cannot find persona')
-        if (d.linkedProfiles.size === 0) throw new Error('persona should link at least one profile')
-        if (d.uninitialized) {
-            await updatePersonaDB(
-                { identifier: id, uninitialized: false },
-                { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' },
-                t,
-            )
-        }
-    })
-}
-
 export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
-}
-
-export async function createPersonaByMnemonic(
-    nickname: string | undefined,
-    password: string,
-): Promise<PersonaIdentifier> {
-    const { key, mnemonicRecord: mnemonic } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
-    const { privateKey, publicKey } = key
-    const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
-    return createPersonaByJsonWebKey({
-        privateKey,
-        publicKey,
-        localKey,
-        mnemonic,
-        nickname,
-        uninitialized: false,
-    })
 }
 
 export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: string | undefined, password: string) {
     const personas = await queryPersonasWithQuery({ nameContains: nickname })
     if (personas.length > 0) throw new Error('Nickname already exists')
 
-    const verify = validateMnemonic(mnemonicWord)
+    const verify = bip39.validateMnemonic(mnemonicWord)
     if (!verify) throw new Error('Verify error')
 
     const { key, mnemonicRecord: mnemonic } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWord, password)

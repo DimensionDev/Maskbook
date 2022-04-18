@@ -100,7 +100,7 @@ const Logout = memo(() => {
         const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
         if (!currentPersona) {
             const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
-            if (lastCreatedPersona) await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona.identifier)
+            if (lastCreatedPersona) await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona)
         }
         navigate(PopupRoutes.Personas, { replace: true })
     }, [selectedPersona, history])
