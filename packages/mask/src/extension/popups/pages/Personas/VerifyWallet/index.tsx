@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from 'react'
 import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { ChainId, EthereumRpcType, isSameAddress, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import type { Web3Plugin } from '@masknet/plugin-infra/dist/web3-types'
@@ -30,7 +30,7 @@ const VerifyWallet = memo(() => {
     const navigate = useNavigate()
     useTitle(t('popups_add_wallet'))
     const location = useLocation()
-
+    const { showSnackbar } = usePopupCustomSnackbar()
     const { value: request } = useUnconfirmedRequest()
 
     const wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
@@ -131,7 +131,8 @@ const VerifyWallet = memo(() => {
                 return Services.Helper.removePopupWindow()
             }
         } catch {
-            // Maybe we need error state
+            // err step
+            showSnackbar('Connect error', { variant: 'error' })
             return SignSteps.Ready
         }
     }, [signature, walletSignState, walletSign, personaSilentSign])
