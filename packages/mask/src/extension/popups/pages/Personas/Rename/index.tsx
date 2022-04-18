@@ -52,7 +52,7 @@ const PersonaRename = memo(() => {
 
     const [{ loading }, renamePersona] = useAsyncFn(async () => {
         if (!name || !selectedPersona) return
-        if (name.length >= PERSONA_NAME_MAX_LENGTH) {
+        if (name.length > PERSONA_NAME_MAX_LENGTH) {
             setError(t('popups_rename_error_tip', { length: PERSONA_NAME_MAX_LENGTH }))
             return
         }
