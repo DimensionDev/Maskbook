@@ -16,21 +16,16 @@ import {
     PersonaInformation,
     ProfileInformation,
     PostIVIdentifier,
-    RelationFavor,
 } from '@masknet/shared-base'
 import type { Persona, Profile } from '../../database/Persona/types'
 import {
     attachProfileDB,
-    createRelationDB,
-    createRelationsTransaction,
     queryPersonaDB,
     queryPersonasDB,
     queryRelationsPagedDB,
-    updateRelationDB,
     LinkedProfileDetails,
     RelationRecord,
 } from '../../../background/database/persona/db'
-import { queryRelations as queryRelationsFromIndexedDB } from '../../../background/database/persona/web'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
@@ -225,22 +220,6 @@ export async function queryPagedPostHistory(
 // #endregion
 
 // #region Relation
-export async function createNewRelation(
-    profile: ProfileIdentifier,
-    linked: PersonaIdentifier,
-    favor = RelationFavor.UNCOLLECTED,
-): Promise<void> {
-    const t = await createRelationsTransaction()
-    const relationInDB = await t.objectStore('relations').get([linked.toText(), profile.toText()])
-    if (relationInDB) return
-
-    await createRelationDB({ profile, linked, favor }, t)
-}
-
-export async function queryRelationsRecordFromIndexedDB(): Promise<RelationRecord[]> {
-    return queryRelationsFromIndexedDB(() => true)
-}
-
 export async function queryRelationPaged(
     options: {
         network: string
@@ -255,11 +234,6 @@ export async function queryRelationPaged(
     }
 
     return []
-}
-
-export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: RelationFavor) {
-    const t = await createRelationsTransaction()
-    await updateRelationDB({ profile, linked, favor }, t)
 }
 // #endregion
 
