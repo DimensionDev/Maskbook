@@ -12,21 +12,18 @@ const AddWalletView = memo(({ persona }: AddWalletViewProps) => {
         ...useWallet(),
         account: useWallet()?.address,
     }
-    const walletSign = async () => {}
-    const personaSign = async () => {}
+    const onConfirm = () => {}
     const walletChange = () => {}
-    const onDone = () => {}
 
     return (
         <div>
             <Steps
-                onDone={onDone}
                 changeWallet={walletChange}
                 wallet={wallet as any}
                 persona={persona}
                 step={curStep}
-                personaSign={personaSign}
-                walletSign={walletSign}
+                onConfirm={onConfirm}
+                confirmLoading
             />
         </div>
     )
