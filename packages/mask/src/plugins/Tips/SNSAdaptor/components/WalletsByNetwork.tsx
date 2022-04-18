@@ -48,7 +48,12 @@ interface WalletsByNetworkProps {
 
 export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: WalletsByNetworkProps) {
     const { classes } = useStyles()
-
+    const isAllHide = wallets.reduce((res, x) => {
+        if (x.isPublic) {
+            res = false
+        }
+        return res
+    }, true)
     return (
         <div className={classes.container}>
             <div className={classes.topBox}>
@@ -60,7 +65,7 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
             </div>
             {network.isEvm && (
                 <div className={classes.content}>
-                    {(wallets.length > 0 &&
+                    {(!isAllHide &&
                         wallets.map((x, idx) => {
                             return (
                                 (x.isPublic && (
