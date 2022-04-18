@@ -13,6 +13,8 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
+import { PopupContext } from '../../../hook/usePopupContext'
+import { useMount } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -58,6 +60,8 @@ const ConnectWalletPage = memo(() => {
     const { classes } = useStyles()
     const navigate = useNavigate()
 
+    const { setSigned } = PopupContext.useContainer()
+
     // connect to ethereum mainnet
     const network = getRegisteredWeb3Networks().find(
         (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM && x.chainId === ChainId.Mainnet,
@@ -77,6 +81,9 @@ const ConnectWalletPage = memo(() => {
 
     useTitle(t('plugin_wallet_on_connect'))
 
+    useMount(() => {
+        setSigned(false)
+    })
     if (!network) return null
 
     return (

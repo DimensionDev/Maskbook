@@ -8,7 +8,7 @@ import { useAsyncFn } from 'react-use'
 import Services from '../../../../service'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle'
 
@@ -84,9 +84,8 @@ const useStyles = makeStyles()(() => ({
 const SignRequest = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const location = useLocation()
     const { classes } = useStyles()
-    const { value, loading: requestLoading } = useUnconfirmedRequest()
+    const { value } = useUnconfirmedRequest()
     const wallet = useWallet()
     const [transferError, setTransferError] = useState(false)
 
@@ -113,9 +112,11 @@ const SignRequest = memo(() => {
     }, [value])
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
+        const goBack = new URLSearchParams(location.search).get('goBack')
+
         if (value) {
             try {
-                await Services.Ethereum.confirmRequest(value.payload)
+                await Services.Ethereum.confirmRequest(value.payload, !!goBack)
                 navigate(-1)
             } catch (error_) {
                 setTransferError(true)
@@ -128,12 +129,6 @@ const SignRequest = memo(() => {
         await Services.Ethereum.rejectRequest(value.payload)
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [value])
-
-    // useUpdateEffect(() => {
-    //     if (!value && !requestLoading && !loading) {
-    //         navigate(PopupRoutes.Wallet, { replace: true })
-    //     }
-    // }, [value, requestLoading, loading])
 
     useTitle(t('approve'))
 
