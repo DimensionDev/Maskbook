@@ -64,7 +64,7 @@ export function RedPacket(props: RedPacketProps) {
         payload.token?.address ?? payload.token_address ?? '',
     )
     const token =
-        payload.token && ['chainId', 'decimal', 'symbol'].every((k) => k in (payload.token ?? {}))
+        payload.token && ['chainId', 'decimal', 'symbol'].every((k) => Reflect.has(payload.token ?? {}, k))
             ? payload.token
             : tokenDetailed
     // #endregion
