@@ -92,6 +92,7 @@ export function usePopupCustomSnackbar() {
             text: SnackbarMessage,
             options: ShowSnackbarOptions = {
                 variant: 'success',
+                autoHideDuration: 2000,
             },
         ) => {
             const { processing, message, variant, ...rest } = options
