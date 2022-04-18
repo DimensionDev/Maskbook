@@ -14,6 +14,7 @@ import { encryptBackup } from '@masknet/backup-format'
 import { encode } from '@msgpack/msgpack'
 import PasswordFiled from '../../../../components/PasswordField'
 import { MaskAlert } from '../../../../components/MaskAlert'
+import { MimeTypes } from '@masknet/shared-base'
 
 export interface BackupDialogProps {
     local?: boolean
@@ -63,7 +64,12 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
             if (local) {
                 // local backup, no account
                 const encrypted = await encryptBackup(encode(backupPassword), encode(file))
-                await Services.Welcome.downloadBackupV2(encrypted)
+                const now = formatDateTime(Date.now(), 'yyyy-MM-dd')
+                await Services.Helper.saveFileFromBuffer({
+                    fileContent: encrypted,
+                    fileName: `mask-network-keystore-backup-${now}.bin`,
+                    mimeType: MimeTypes.Binary,
+                })
             } else if (params) {
                 const abstract = personaNickNames.join(', ')
                 const uploadUrl = await fetchUploadLink({ ...params, abstract })

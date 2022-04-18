@@ -6,3 +6,7 @@ export * from './sessionStorageCache'
 export * from './subscription'
 export * from './getAssetAsBlobURL'
 export * from './personas'
+export enum MimeTypes {
+    JSON = 'application/json',
+    Binary = 'application/octet-stream',
+}
