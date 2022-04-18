@@ -1,10 +1,9 @@
-import { ImageIcon, ReversedAddress } from '@masknet/shared'
+import { ImageIcon, ReversedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu, useStylesExtends } from '@masknet/theme'
 import { formatEthereumAddress, isSameAddress, useChainId } from '@masknet/web3-shared-evm'
-import { Button, Divider, Link, ListItemIcon, MenuItem, Stack, Typography } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
-import { ExternalLink } from 'react-feather'
-import { CopyIconButton } from '../../NextID/components/CopyIconButton'
+import { Button, Divider, Link, ListItemIcon, MenuItem, Stack, Tooltip, Typography, useTheme } from '@mui/material'
+import { memo, useCallback, useEffect, useState } from 'react'
+import { ExternalLink, IconProps } from 'react-feather'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { WalletSettingIcon } from '../assets/setting'
 import { CheckedIcon, UncheckIcon } from '../assets/checked'
@@ -15,6 +14,8 @@ import { BindingProof, PopupRoutes } from '@masknet/shared-base'
 import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 import { Services } from '../../../extension/service'
 import { useI18N } from '../locales/i18n_generated'
+import { useCopyToClipboard } from 'react-use'
+import { CopyIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -195,3 +196,30 @@ function WalletUI(props: WalletUIProps) {
         </Stack>
     )
 }
+
+interface CopyIconButtonProps extends IconProps {
+    text: string
+}
+const CopyIconButton = memo<CopyIconButtonProps>(({ text, ...props }) => {
+    const t = useI18N()
+    const theme = useTheme()
+    const [, copyToClipboard] = useCopyToClipboard()
+    const [open, setOpen] = useState(false)
+
+    const onCopy = useSnackbarCallback({
+        executor: async () => copyToClipboard(text),
+        deps: [],
+        successText: t.copy_success_of_wallet_address(),
+    })
+
+    return (
+        <Tooltip
+            title={<span style={{ color: theme.palette.text.primary }}>{t.copied()}</span>}
+            open={open}
+            onMouseLeave={() => setOpen(false)}
+            disableFocusListener
+            disableTouchListener>
+            <CopyIcon onClick={onCopy} className={props.className} />
+        </Tooltip>
+    )
+})
