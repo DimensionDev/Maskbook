@@ -34,6 +34,8 @@ export function useAssetOrder(provider: NonFungibleAssetProvider, token?: Collec
                 return
             case NonFungibleAssetProvider.ZORA:
                 return
+            case NonFungibleAssetProvider.LOOKSRARE:
+                return
             default:
                 unreachable(provider)
         }

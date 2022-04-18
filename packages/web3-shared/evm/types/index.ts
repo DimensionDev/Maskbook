@@ -683,6 +683,7 @@ export enum NonFungibleAssetProvider {
     RARIBLE = 'Rarible',
     NFTSCAN = 'NFTScan',
     ZORA = 'Zora',
+    LOOKSRARE = 'LooksRare',
 }
 
 export interface PriceRecord {

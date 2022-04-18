@@ -2,6 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { OpenSeaIcon } from '../../../resources/OpenSeaIcon'
 import { RaribleIcon } from '../../../resources/RaribleIcon'
 import { ZoraIcon } from '../../../resources/ZoraIcon'
+import { LooksRareIcon } from '../../../resources/LooksRareIcon'
 import { unreachable } from '@dimensiondev/kit'
 import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 
@@ -17,6 +18,11 @@ const useStyles = makeStyles()({
         verticalAlign: 'bottom',
     },
     NFTScan: {
+        width: 16,
+        height: 16,
+        verticalAlign: 'bottom',
+    },
+    looksrare: {
         width: 16,
         height: 16,
         verticalAlign: 'bottom',
@@ -40,6 +46,8 @@ export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
             return <RaribleIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
         case NonFungibleAssetProvider.ZORA:
             return <ZoraIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+        case NonFungibleAssetProvider.LOOKSRARE:
+            return <LooksRareIcon classes={{ root: classes.looksrare }} viewBox="0 0 16 16" />
         default:
             unreachable(props.provider)
     }

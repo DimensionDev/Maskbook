@@ -268,6 +268,8 @@ export namespace NonFungibleTokenAPI {
         chainId?: ChainId
         page?: number
         size?: number
+        first?: number
+        cursor?: number
         pageInfo?: { [key in string]: unknown }
     }
 

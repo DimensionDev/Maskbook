@@ -57,6 +57,7 @@ export const resolveCollectibleProviderName = createLookupTableResolver<NonFungi
         [NonFungibleAssetProvider.RARIBLE]: 'Rarible',
         [NonFungibleAssetProvider.NFTSCAN]: 'NFTScan',
         [NonFungibleAssetProvider.ZORA]: 'Zora',
+        [NonFungibleAssetProvider.LOOKSRARE]: 'LooksRare',
     },
     (providerType) => {
         throw new Error(`Unknown provider type: ${providerType}.`)
@@ -96,6 +97,14 @@ export const resolveLinkOnZora = createLookupTableResolver<ChainId, string>(
     'https://zora.co',
 )
 
+export const resolveLinkOnLooks = createLookupTableResolver<ChainId, string>(
+    {
+        [ChainId.Mainnet]: 'https://looksrare.org/',
+        [ChainId.Rinkeby]: 'https://rinkeby.looksrare.org/',
+    },
+    'https://looksrare.org/',
+)
+
 export function resolveTraitLinkOnOpenSea(chainId: ChainId, slug: string, search: string, value: string) {
     if (chainId === ChainId.Rinkeby) {
         return `https://testnets.opensea.io/assets/${slug}?search[stringTraits][0][name]=${search}&search[stringTraits][0][values][0]=${value}`
@@ -119,6 +128,8 @@ export function resolveAssetLinkOnCurrentProvider(
             return ''
         case NonFungibleAssetProvider.ZORA:
             return urlcat(resolveLinkOnZora(chainId), '/collections/:address/:id', { address, id })
+        case NonFungibleAssetProvider.LOOKSRARE:
+            return urlcat(resolveLinkOnLooks(chainId), '/collections/:address/:id', { address, id })
         default:
             return ''
     }
@@ -139,6 +150,8 @@ export function resolveUserUrlOnCurrentProvider(
             return ''
         case NonFungibleAssetProvider.ZORA:
             return urlcat(resolveLinkOnZora(chainId), `/${address}`)
+        case NonFungibleAssetProvider.LOOKSRARE:
+            return urlcat(resolveLinkOnLooks(chainId), `/${address}`)
         default:
             return ''
     }
@@ -154,6 +167,8 @@ export function resolveAvatarLinkOnCurrentProvider(chainId: ChainId, asset: any,
             return ''
         case NonFungibleAssetProvider.ZORA:
             return ''
+        case NonFungibleAssetProvider.LOOKSRARE:
+            return urlcat(resolveLinkOnLooks(chainId), `/collections/${asset.token_address ?? ''}`)
         default:
             return ''
     }

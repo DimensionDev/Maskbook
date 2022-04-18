@@ -41,6 +41,8 @@ export async function getNFT(options: NFTOption) {
             return Rarible.getToken(address, tokenId)
         case NonFungibleAssetProvider.ZORA:
             return Zora.getToken(address, tokenId)
+        case NonFungibleAssetProvider.LOOKSRARE:
+            return NFTScan.getToken(address, tokenId)
         default:
             unreachable(provider)
     }
@@ -53,6 +55,7 @@ export async function getNFTBalance(options: BalanceOption) {
         case NonFungibleAssetProvider.OPENSEA:
         case NonFungibleAssetProvider.NFTSCAN:
         case NonFungibleAssetProvider.ZORA:
+        case NonFungibleAssetProvider.LOOKSRARE:
             return NFTScan.getContractBalance(address)
 
         default:
@@ -70,6 +73,8 @@ export async function getNFTContract(options: ContractOption) {
             return
         case NonFungibleAssetProvider.ZORA:
             return
+        case NonFungibleAssetProvider.LOOKSRARE:
+            return
         default:
             unreachable(provider)
     }
@@ -85,6 +90,8 @@ export async function getNFTsByPagination(options: NFTsByPaginationOption) {
         case NonFungibleAssetProvider.RARIBLE:
             return Rarible.getTokens(from, options)
         case NonFungibleAssetProvider.ZORA:
+            return Rarible.getTokens(from, options)
+        case NonFungibleAssetProvider.LOOKSRARE:
             return Rarible.getTokens(from, options)
         default:
             unreachable(provider)

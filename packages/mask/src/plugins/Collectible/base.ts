@@ -16,6 +16,7 @@ export const base: Plugin.Shared.Definition = {
             /opensea.io\/assets\/(0x[\dA-Fa-f]{40})\/(\d+)/,
             /rarible.com\/token\/(0x[\dA-Fa-f]{40}):(\d+)/,
             /zora.co\/collections\/(0x[\dA-Fa-f]{40})\/\d+$/,
+            /looksrare.org\/collections\/(0x[\dA-Fa-f]{40})\/\d+$/,
         ]),
     },
 }

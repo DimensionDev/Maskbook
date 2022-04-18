@@ -200,6 +200,9 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFu
             return 'https://nftscan.com'
         case NonFungibleAssetProvider.ZORA:
             return 'https://zora.co'
+        case NonFungibleAssetProvider.LOOKSRARE:
+            if (chainId === ChainId.Rinkeby) return 'https://rinkeby.looksrare.org'
+            return 'https://looksrare.org'
         default:
             unreachable(provider)
     }
@@ -216,6 +219,8 @@ export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungi
         case NonFungibleAssetProvider.NFTSCAN:
             return ''
         case NonFungibleAssetProvider.ZORA:
+            return ''
+        case NonFungibleAssetProvider.LOOKSRARE:
             return ''
         default:
             unreachable(provider)
@@ -238,6 +243,8 @@ export function resolveCollectibleLink(
         case NonFungibleAssetProvider.NFTSCAN:
             return ''
         case NonFungibleAssetProvider.ZORA:
+            return ''
+        case NonFungibleAssetProvider.LOOKSRARE:
             return ''
         default:
             unreachable(provider)

@@ -14,6 +14,9 @@ export const rariblePathnameRegexMatcher = /^\/token\/(0x[\dA-Fa-f]{40}):(\d+)/
 export const zoraHostnames = ['zora.co']
 export const zoraPathnameRegexMatcher = /^\/collections\/(0x[\dA-Fa-f]{40})\/(\d+)$/
 
+export const looksHostnames = ['looksrare.org']
+export const looksPathnameRegexMatcher = /^\/collections\/(0x[\dA-Fa-f]{40})\/(\d+)$/
+
 export const OpenSeaAPI_Key = 'c38fe2446ee34f919436c32db480a2e3'
 export const NullAddress = 'NullAddress'
 export const ReferrerAddress = ''
@@ -23,3 +26,6 @@ export const OpenSeaTestnetURL = 'https://testnets.opensea.io'
 export const RaribleUserURL = 'https://rarible.com/user/'
 export const RaribleRopstenUserURL = 'https://ropsten.rarible.com/user/'
 export const RaribleRinkebyUserURL = 'https://rinkeby.rarible.com/user/'
+
+export const LooksAPIRinkeby = 'https://api-rinkeby.looksrare.org'
+export const LooksAPI = 'https://api.looksrare.org'
