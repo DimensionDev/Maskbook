@@ -98,8 +98,9 @@ const ConnectedWallets = memo(() => {
         [currentPersona],
     )
 
-    const navigateToConnectWallet = () => {
-        navigate(PopupRoutes.ConnectWallet, { replace: true })
+    const navigateToConnectWallet = async () => {
+        await Service.Helper.openPopupWindow(PopupRoutes.ConnectWallet)
+        window.close()
     }
 
     useTitle(t('popups_connected_wallets'))

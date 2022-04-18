@@ -128,7 +128,7 @@ const VerifyWallet = memo(() => {
                 await walletSign()
                 return SignSteps.SecondStepDone
             } else {
-                return navigate(PopupRoutes.ConnectedWallets, { replace: true })
+                return Services.Helper.removePopupWindow()
             }
         } catch {
             // Maybe we need error state
