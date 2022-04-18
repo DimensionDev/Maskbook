@@ -68,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
 enum BodyViewSteps {
     main = 'Tips',
     setting = 'Settings',
-    wallets = 'Wallet management',
+    wallets = 'Wallets',
     addWallet = 'Add wallet',
 }
 export interface WalletProof extends BindingProof {
@@ -253,7 +253,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                             })}
                         </div>
                     ) : bodyView === BodyViewSteps.main && rawPatchData.length === 0 ? (
-                        <Empty />
+                        <Empty toAdd={() => setBodyView(BodyViewSteps.addWallet)} />
                     ) : null}
 
                     {bodyView === BodyViewSteps.setting && (
@@ -267,7 +267,13 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                             wallets={rawPatchData}
                         />
                     )}
-                    {bodyView === BodyViewSteps.addWallet && <AddWalletView persona={currentPersona} />}
+                    {bodyView === BodyViewSteps.addWallet && (
+                        <AddWalletView
+                            onCancel={() => setBodyView(BodyViewSteps.main)}
+                            bounds={rawWalletList}
+                            currentPersona={currentPersona}
+                        />
+                    )}
 
                     {![BodyViewSteps.addWallet, BodyViewSteps.wallets].includes(bodyView) && rawPatchData.length > 0 && (
                         <div className={classes.actions}>

@@ -76,6 +76,11 @@ const useStyles = makeStyles()((theme) => ({
         pointerEvents: 'none',
         opacity: 0.5,
     },
+    hasBound: {
+        width: '100%',
+        textAlign: 'left',
+        color: theme.palette.error.main,
+    },
 }))
 
 export enum SignSteps {
@@ -86,19 +91,22 @@ export enum SignSteps {
 
 interface StepsProps {
     step: SignSteps
-    changeWallet: () => void
     persona: PersonaInformation
     wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
     disableConfirm?: boolean
-    onConfirm: () => void
     confirmLoading: boolean
+    notInPop?: boolean
+    changeWallet: () => void
+    onConfirm: () => void
+    onCustomCancel?: () => void
 }
 
 export function Steps(props: StepsProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { changeWallet, persona, wallet, disableConfirm, onConfirm, step, confirmLoading } = props
+    const { changeWallet, persona, wallet, disableConfirm, onConfirm, step, confirmLoading, notInPop, onCustomCancel } =
+        props
     const { showSnackbar } = usePopupCustomSnackbar()
 
     const walletName = useWallets(wallet.providerType).find((x) => isSameAddress(x.address, wallet.account))?.name
@@ -122,18 +130,25 @@ export function Steps(props: StepsProps) {
     }
 
     useEffect(() => {
-        if (disableConfirm) {
+        if (disableConfirm && !notInPop) {
             showSnackbar(t('wallet_verify_has_bound'), { variant: 'error' })
         }
     }, [disableConfirm])
 
     const onCancel = () => {
+        if (notInPop && onCustomCancel !== undefined) {
+            onCustomCancel()
+            return
+        }
         navigate(-1)
     }
 
     return (
         <div className={classes.container}>
             <CurrentWalletBox walletName={walletName} wallet={wallet} changeWallet={changeWallet} />
+            {notInPop && disableConfirm && (
+                <Typography className={classes.hasBound}>{t('wallet_verify_has_bound')}</Typography>
+            )}
             <div className={classes.stepBox}>
                 <div className={classes.stepLine}>
                     <ImageIcon size={22} icon={stepIconMap[step].step1} />
