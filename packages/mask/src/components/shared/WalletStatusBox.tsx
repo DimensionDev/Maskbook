@@ -17,7 +17,7 @@ import {
     useReverseAddress,
     useWallet,
 } from '@masknet/plugin-infra/web3'
-import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
+import { FormattedAddress, useShowConfirm, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import Services from '../../extension/service'
@@ -136,6 +136,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     )
     // #endregion
 
+    const showConfirm = useShowConfirm()
     const onDisconnect = useCallback(async () => {
         switch (providerType) {
             case ProviderType.WalletConnect:
@@ -199,6 +200,12 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     </Link>
                 </div>
             </div>
+            <Button
+                onClick={async () => {
+                    const v = await showConfirm({ content: 'hello', confirmLabel: 'no' })
+                }}>
+                show confirm
+            </Button>
             {!props.disableChange && (
                 <section>
                     {providerType === ProviderType.WalletConnect || providerType === ProviderType.Fortmatic ? (
