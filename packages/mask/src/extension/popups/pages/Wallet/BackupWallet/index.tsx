@@ -141,7 +141,7 @@ const BackupWallet = memo(() => {
         privateKey: '',
     }
 
-    const [{ value: downloadValue }, onExport] = useAsyncFn(async () => {
+    const [, onExport] = useAsyncFn(async () => {
         try {
             await Services.Welcome.downloadBackup(jsonFile, 'json')
             return true
