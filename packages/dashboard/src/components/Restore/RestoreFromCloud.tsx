@@ -64,7 +64,7 @@ export const RestoreFromCloud = memo(() => {
                 return t.sign_in_account_cloud_backup_decrypt_failed()
             }
 
-            const backupNormalized = await Services.Welcome.addUnconfirmedBackup(backupDecrypted)
+            const backupNormalized = await Services.Backup.addUnconfirmedBackup(backupDecrypted)
             if (backupNormalized.err) return t.sign_in_account_cloud_backup_decrypt_failed()
 
             const { id, info } = backupNormalized.val
@@ -104,10 +104,10 @@ export const RestoreFromCloud = memo(() => {
         async (backupInfo: { info: BackupPreview; id: string }) => {
             try {
                 if (backupInfo.info?.wallets) {
-                    await Services.Welcome.restoreUnconfirmedBackup({ id: backupInfo.id, action: 'wallet' })
+                    await Services.Backup.restoreUnconfirmedBackup({ id: backupInfo.id, action: 'wallet' })
                     return
                 } else {
-                    await Services.Welcome.restoreUnconfirmedBackup({ id: backupInfo.id, action: 'confirm' })
+                    await Services.Backup.restoreUnconfirmedBackup({ id: backupInfo.id, action: 'confirm' })
                     await restoreCallback()
                 }
             } catch {

@@ -62,7 +62,7 @@ export const RestoreFromLocal = memo(() => {
         if (!backupValue) return
 
         setRestoreStatus(RestoreStatus.Verifying)
-        const backupInfo = await Services.Welcome.addUnconfirmedBackup(backupValue)
+        const backupInfo = await Services.Backup.addUnconfirmedBackup(backupValue)
         if (backupInfo.ok) {
             setJSON(backupInfo.val.info)
             setBackupId(backupInfo.val.id)
@@ -99,10 +99,10 @@ export const RestoreFromLocal = memo(() => {
         try {
             // If json has wallets, restore in popup.
             if (json?.wallets) {
-                await Services.Welcome.restoreUnconfirmedBackup({ id: backupId, action: 'wallet' })
+                await Services.Backup.restoreUnconfirmedBackup({ id: backupId, action: 'wallet' })
                 return
             } else {
-                await Services.Welcome.restoreUnconfirmedBackup({ id: backupId, action: 'confirm' })
+                await Services.Backup.restoreUnconfirmedBackup({ id: backupId, action: 'confirm' })
 
                 await restoreCallback()
             }

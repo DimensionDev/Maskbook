@@ -1,3 +1,8 @@
+export * from '../../../background/services/backup'
+
+import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+assertEnvironment(Environment.ManifestBackground)
+
 import { currySameAddress, isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
 import {
     exportMnemonic,

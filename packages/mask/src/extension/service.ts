@@ -23,7 +23,7 @@ const log: AsyncCallOptions['log'] = {
 export const Services = {
     Crypto: add(() => import('./background-script/CryptoService'), 'Crypto'),
     Identity: add(() => import('./background-script/IdentityService'), 'Identity'),
-    Welcome: add(() => import('./background-script/WelcomeService'), 'Welcome'),
+    Backup: add(() => import('./background-script/BackupService'), 'Backup'),
     Helper: add(() => import('../../background/services/helper'), 'Helper'),
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
     SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
@@ -42,7 +42,7 @@ if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Envi
         [
             './background-script/CryptoService',
             './background-script/IdentityService',
-            './background-script/WelcomeService',
+            './background-script/BackupService',
             '../../background/services/helper',
             './background-script/EthereumService',
             './background-script/SettingsService',

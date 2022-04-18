@@ -120,14 +120,14 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     settings_setTheme: ({ theme }) => Services.Settings.setTheme(theme),
     settings_getLanguage: () => Services.Settings.getLanguage(),
     settings_setLanguage: ({ language }) => Services.Settings.setLanguage(language),
-    settings_createBackupJson: (options) => Services.Welcome.mobile_generateBackupJSON(options),
+    settings_createBackupJson: (options) => Services.Backup.mobile_generateBackupJSON(options),
     settings_getBackupPreviewInfo: async ({ backupInfo }) => {
-        const data = await Services.Welcome.addUnconfirmedBackup(backupInfo)
+        const data = await Services.Backup.addUnconfirmedBackup(backupInfo)
         return data.unwrap().info
     },
     settings_restoreBackup: async ({ backupInfo }) => {
-        const { id } = (await Services.Welcome.addUnconfirmedBackup(backupInfo)).unwrap()
-        await Services.Welcome.restoreUnconfirmedBackup({ id, action: 'confirm' })
+        const { id } = (await Services.Backup.addUnconfirmedBackup(backupInfo)).unwrap()
+        await Services.Backup.restoreUnconfirmedBackup({ id, action: 'confirm' })
     },
     persona_createPersonaByMnemonic: async ({ mnemonic, nickname, password }) => {
         const x = await Services.Identity.mobile_restoreFromMnemonicWords(mnemonic, nickname, password)
@@ -151,11 +151,11 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     persona_removePersona: ({ identifier }) =>
         Services.Identity.deletePersona(stringToPersonaIdentifier(identifier), 'delete even with private'),
     persona_restoreFromJson: async ({ backup }) => {
-        const { id } = (await Services.Welcome.addUnconfirmedBackup(backup)).unwrap()
-        await Services.Welcome.restoreUnconfirmedBackup({ id, action: 'confirm' })
+        const { id } = (await Services.Backup.addUnconfirmedBackup(backup)).unwrap()
+        await Services.Backup.restoreUnconfirmedBackup({ id, action: 'confirm' })
     },
     persona_restoreFromBase64: async ({ backup }) => {
-        await Services.Welcome.mobile_restoreFromBase64(backup)
+        await Services.Backup.mobile_restoreFromBase64(backup)
     },
     persona_connectProfile: async ({ profileIdentifier, personaIdentifier }) => {
         const profileId = stringToProfileIdentifier(profileIdentifier)
@@ -176,7 +176,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return persona.mnemonic?.words
     },
     persona_backupJson: async ({ identifier }) => {
-        return Services.Welcome.mobile_generateBackupJSONOnlyForPersona(stringToPersonaIdentifier(identifier))
+        return Services.Backup.mobile_generateBackupJSONOnlyForPersona(stringToPersonaIdentifier(identifier))
     },
     persona_restoreFromPrivateKey: async ({ privateKey, nickname }) => {
         const identifier = await Services.Identity.createPersonaByPrivateKey(privateKey, nickname)

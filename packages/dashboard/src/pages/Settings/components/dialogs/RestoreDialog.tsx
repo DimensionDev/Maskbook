@@ -84,14 +84,14 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
     const handleConfirm = async () => {
         if (!preview) return
 
-        await Services.Welcome.restoreUnconfirmedBackup({ id, action: 'confirm' })
+        await Services.Backup.restoreUnconfirmedBackup({ id, action: 'confirm' })
     }
 
     useAsync(async () => {
         const str = tab === 'file' ? content : text
 
         if (str) {
-            const obj = await Services.Welcome.addUnconfirmedBackup(str)
+            const obj = await Services.Backup.addUnconfirmedBackup(str)
             if (obj.ok) {
                 setPreview(obj.val.info)
                 setId(obj.val.id)
