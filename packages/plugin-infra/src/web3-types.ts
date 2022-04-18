@@ -157,6 +157,11 @@ export declare namespace Web3Plugin {
         updatedAt: Date
     }
 
+    export interface Account<ChainId> {
+        account: string
+        chainId: ChainId
+    }
+
     export interface AddressName {
         id: string
         /** eg. vitalik.eth */
@@ -198,7 +203,7 @@ export declare namespace Web3Plugin {
         updatedAt: Date
     }
 
-    export interface Account {
+    export interface Identity {
         address: string
         nickname?: string
         avatarURL?: string
@@ -276,9 +281,9 @@ export declare namespace Web3Plugin {
      */
     export interface NonFungibleAsset extends NonFungibleToken {
         /** the creator data */
-        creator?: Account
+        creator?: Identity
         /** the owner data */
-        owner?: Account
+        owner?: Identity
         /** estimated price */
         price?: {
             [key in CurrencyType]?: string
@@ -305,9 +310,9 @@ export declare namespace Web3Plugin {
             /** buy or sell */
             side?: string | number
             /** the account make the order */
-            maker?: Account
+            maker?: Identity
             /** the account fullfil the order */
-            taker?: Account
+            taker?: Identity
             /** unix timestamp */
             createdAt?: number
             /** unix timestamp */
@@ -438,15 +443,7 @@ export declare namespace Web3Plugin {
             /** clear all transactions relate to account under given chain */
             clearTransactions?: (chainId: ChainId, address: string) => Promise<void>
         }
-        export interface ProviderState<
-            ChainId,
-            NetworkType,
-            ProviderType,
-            Account = {
-                account: string
-                chainId: ChainId
-            },
-        > {
+        export interface ProviderState<ChainId, NetworkType, ProviderType> {
             /** The account of the currently visiting site. */
             account?: Subscription<string>
             /** The chain id of the currently visiting site. */
@@ -457,7 +454,7 @@ export declare namespace Web3Plugin {
             providerType?: Subscription<ProviderType>
 
             /** Connect with the provider and set chain id. */
-            connect?: (chainId: ChainId, providerType: ProviderType) => Promise<Account>
+            connect?: (chainId: ChainId, providerType: ProviderType) => Promise<Account<ChainId>>
             /** Discconect with the provider. */
             disconect?: (providerType: ProviderType) => Promise<void>
             /** Invoke it when selected chain id of provider changed. */

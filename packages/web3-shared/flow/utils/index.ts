@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra'
+import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { leftShift, multipliedBy, createLookupTableResolver } from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType } from '../types'
 import { getChainConstants } from '../constants'

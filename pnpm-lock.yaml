@@ -919,6 +919,7 @@ importers:
       '@masknet/web3-shared-solana': workspace:*
       '@metaplex-foundation/mpl-token-metadata': ^1.1.0
       '@metaplex/js': ^4.11.7
+      '@project-serum/sol-wallet-adapter': ^0.2.6
       '@solana/spl-name-service': ^0.1.3
       '@solana/spl-token': ^0.1.8
       '@solana/spl-token-registry': ^0.2.1301
@@ -943,6 +944,7 @@ importers:
       '@masknet/web3-shared-solana': link:../../web3-shared/solana
       '@metaplex-foundation/mpl-token-metadata': 1.1.0
       '@metaplex/js': 4.11.7
+      '@project-serum/sol-wallet-adapter': 0.2.6_@solana+web3.js@1.31.0
       '@solana/spl-name-service': 0.1.3
       '@solana/spl-token': 0.1.8
       '@solana/spl-token-registry': 0.2.1301
@@ -6131,6 +6133,17 @@ packages:
     engines: {node: '>=10'}
     peerDependencies:
       '@solana/web3.js': ^0.70.3
+    dependencies:
+      '@solana/web3.js': 1.31.0
+      bs58: 4.0.1
+      eventemitter3: 4.0.7
+    dev: false
+
+  /@project-serum/sol-wallet-adapter/0.2.6_@solana+web3.js@1.31.0:
+    resolution: {integrity: sha512-cpIb13aWPW8y4KzkZAPDgw+Kb+DXjCC6rZoH74MGm3I/6e/zKyGnfAuW5olb2zxonFqsYgnv7ev8MQnvSgJ3/g==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      '@solana/web3.js': ^1.5.0
     dependencies:
       '@solana/web3.js': 1.31.0
       bs58: 4.0.1
