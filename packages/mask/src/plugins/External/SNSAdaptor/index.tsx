@@ -41,7 +41,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             </Suspense>
         )
     },
-    CompositionDialogEntry: { label: '\u{1F9E9} Third party plugins', dialog: ThirdPartyPluginCompositionEntry },
+    CompositionDialogEntry: { label: '\u{1F9E9} Third-party Plugins', dialog: ThirdPartyPluginCompositionEntry },
     CompositionDialogMetadataBadgeRender: (key, val) =>
         key.startsWith('plugin:')
             ? {

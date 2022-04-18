@@ -54,26 +54,20 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
                 }
             }
 
-            const fileJson = await Services.Welcome.createBackupFile({
-                noPosts: !showPassword.base,
-                noPersonas: !showPassword.base,
-                noProfiles: !showPassword.base,
-                noWallets: !showPassword.wallet,
-                download: false,
-                onlyBackupWhoAmI: false,
+            const { file, personaNickNames } = await Services.Welcome.createBackupFile({
+                excludeBase: !showPassword,
+                excludeWallet: !showPassword.wallet,
             })
 
+            // TODO: move this to background
             if (local) {
                 // local backup, no account
-                const encrypted = await encryptBackup(encode(backupPassword), encode(fileJson))
+                const encrypted = await encryptBackup(encode(backupPassword), encode(file))
                 await Services.Welcome.downloadBackupV2(encrypted)
             } else if (params) {
-                const abstract = fileJson.personas
-                    .filter((x) => x.nickname)
-                    .map((x) => x.nickname)
-                    .join(', ')
+                const abstract = personaNickNames.join(', ')
                 const uploadUrl = await fetchUploadLink({ ...params, abstract })
-                const encrypted = await encryptBackup(encode(params.account + backupPassword), encode(fileJson))
+                const encrypted = await encryptBackup(encode(params.account + backupPassword), encode(file))
 
                 uploadBackupValue(uploadUrl, encrypted).then(() => {
                     showSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
