@@ -148,8 +148,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                 variant="contained"
                 size="small"
                 onClick={props.changeWallet}>
-                {/* {t('wallet_status_button_change')} */}
-                Change
+                {t('wallet_status_button_change')}
             </Button>
         </section>
     )
