@@ -1,13 +1,14 @@
 import { BindingProof, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { isSameAddress, useChainId, useProviderType, useWallet } from '@masknet/web3-shared-evm'
+import { isSameAddress, useWallet } from '@masknet/web3-shared-evm'
 import { memo, useEffect, useState } from 'react'
 import { SignSteps, Steps } from '../../../../components/shared/VerifyWallet/Steps'
 import { useAsync, useAsyncFn } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../../../extension/service'
 import { useCustomSnackbar } from '@masknet/theme'
+import formatDateTime from 'date-fns/format'
 
 interface AddWalletViewProps {
     currentPersona: any
@@ -17,13 +18,12 @@ interface AddWalletViewProps {
 
 const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewProps) => {
     const [isBound, setIsBound] = useState(false)
-    const chainId = useChainId()
-    const providerType = useProviderType()
     const { showSnackbar } = useCustomSnackbar()
     const wallet = {
         ...useWallet(),
         account: useWallet()?.address,
     }
+    const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
     useEffect(() => {
         if (bounds === []) return
         const res = bounds.filter((x) => isSameAddress(x.identity, wallet.address))
@@ -52,10 +52,16 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                 currentPersona.identifier,
                 payload.signPayload,
             )
-            showSnackbar('Persona signed successfully.', { variant: 'success' })
+            showSnackbar('Persona signed successfully.', {
+                variant: 'success',
+                message: nowTime,
+            })
             return signResult.signature.signature
         } catch (error) {
-            showSnackbar('Persona Signature failed.', { variant: 'error' })
+            showSnackbar('Persona Signature failed.', {
+                variant: 'error',
+                message: nowTime,
+            })
             console.error(error)
             return
         }
@@ -78,10 +84,10 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                     signature: signature,
                 },
             )
-            showSnackbar("Wallet's connected.", { variant: 'success' })
+            showSnackbar("Wallet's connected.", { variant: 'success', message: nowTime })
             return true
         } catch (error) {
-            showSnackbar('Wallet connection failed.', { variant: 'error' })
+            showSnackbar('Wallet connection failed.', { variant: 'error', message: nowTime })
             console.error(error)
             return false
         }
@@ -95,10 +101,10 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                 const res = await walletSign()
                 return res ? SignSteps.SecondStepDone : SignSteps.FirstStepDone
             } else {
-                return SignSteps.SecondStepDone
+                return onCancel()
             }
         } catch {
-            showSnackbar('Connect error', { variant: 'error' })
+            showSnackbar('Connect error', { variant: 'error', message: nowTime })
             return SignSteps.Ready
         }
     }, [signature, walletSignState, walletSign, personaSilentSign])

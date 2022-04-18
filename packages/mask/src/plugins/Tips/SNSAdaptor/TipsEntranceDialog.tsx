@@ -226,7 +226,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 result.createdAt,
                 { signature: signature.signature.signature },
             )
-            console.log('sssss')
             retryKv()
             retryProof()
         },
