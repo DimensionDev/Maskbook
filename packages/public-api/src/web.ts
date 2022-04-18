@@ -200,6 +200,7 @@ export enum TradeProvider {
     TRADERJOE = 13,
     PANGOLIN = 14,
     MDEX = 15,
+    WOOFI = 16,
 }
 
 /** Supported language settings */

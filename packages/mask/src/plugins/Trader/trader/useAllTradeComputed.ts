@@ -23,6 +23,9 @@ import { useTradeGasLimit as useBancorTradeGasLimit } from './bancor/useTradeGas
 import { useTradeComputed as useOpenOceanTradeComputed } from './openocean/useTradeComputed'
 import { useTrade as useOpenOceanTrade } from './openocean/useTrade'
 import { useTradeGasLimit as useOpenOceanTradeGasLimit } from './openocean/useTradeGasLimit'
+import { useTrade as useWoofiTrade } from './woofi/useTrade'
+import { useTradeComputed as useWoofiTradeComputed } from './woofi/useTradeComputed'
+import { useTradeGasLimit as useWoofiTradeGasLimit } from './woofi/useTradeGasLimit'
 import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders'
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit'
@@ -206,6 +209,18 @@ export function useAllTradeComputed(
         traderEstimateGas: mdexEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.MDEX, inputAmount_, inputToken, outputToken)
 
+    // woofi
+    const woofi_ = useWoofiTrade(
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.WOOFI) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.WOOFI) ? outputToken : undefined,
+        temporarySlippage,
+    )
+    const woofi = useWoofiTradeComputed(woofi_.value ?? null, TradeStrategy.ExactIn, inputToken, outputToken)
+    const woofiEstimateGas = useWoofiTradeGasLimit(woofi)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -223,6 +238,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
         { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
+        { provider: TradeProvider.WOOFI, ...woofi_, value: woofi, gas: woofiEstimateGas },
     ]
 
     return nativeToken_.value

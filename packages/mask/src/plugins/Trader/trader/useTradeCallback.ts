@@ -10,6 +10,7 @@ import type {
     SwapRouteSuccessResponse,
     TradeComputed,
     SwapOOSuccessResponse,
+    WoofiSwapSuccessResponse,
 } from '../types'
 import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback'
 import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback'
@@ -18,6 +19,7 @@ import { useTradeCallback as useBalancerCallback } from './balancer/useTradeCall
 import { useTradeCallback as useDODOCallback } from './dodo/useTradeCallback'
 import { useTradeCallback as useBancorCallback } from './bancor/useTradeCallback'
 import { useTradeCallback as useOpenOceanCallback } from './openocean/useTradeCallback'
+import { useTradeCallback as useWoofiCallback } from './woofi/useTradeCallback'
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract'
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { isNativeTokenWrapper } from '../helpers'
@@ -53,6 +55,9 @@ export function useTradeCallback(
     const tradeComputedForOpenOcean = !isNativeTokenWrapper_
         ? (tradeComputed as TradeComputed<SwapOOSuccessResponse>)
         : null
+    const tradeComputedForWoofi = !isNativeTokenWrapper_
+        ? (tradeComputed as TradeComputed<WoofiSwapSuccessResponse>)
+        : null
     // uniswap like providers
     const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like, provider, gasConfig, allowedSlippage)
     const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider, gasConfig, allowedSlippage)
@@ -74,6 +79,7 @@ export function useTradeCallback(
         provider === TradeProvider.OPENOCEAN ? tradeComputedForOpenOcean : null,
         gasConfig,
     )
+    const woofi = useWoofiCallback(provider === TradeProvider.WOOFI ? tradeComputedForWoofi : null, gasConfig)
 
     // the trade is an ETH-WETH pair
     const nativeTokenWrapper = useNativeTokenWrapperCallback(
@@ -116,6 +122,8 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.OPENOCEAN:
             return openocean
+        case TradeProvider.WOOFI:
+            return woofi
         default:
             if (provider) unreachable(provider)
             return []

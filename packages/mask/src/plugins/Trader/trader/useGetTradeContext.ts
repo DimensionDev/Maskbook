@@ -23,6 +23,8 @@ import {
     TRISOLARIS_CUSTOM_BASES,
     MDEX_BASE_AGAINST_TOKENS,
     MDEX_CUSTOM_BASES,
+    WOOFI_BASE_AGAINST_TOKENS,
+    WOOFI_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -187,6 +189,18 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                 return {
                     TYPE: tradeProvider,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.BANCOR_EXCHANGE_PROXY_ADDRESS,
+                }
+            case TradeProvider.WOOFI:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.WOOFI_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.WOOFI_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.WOOFI_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.WOOFI_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: WOOFI_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: WOOFI_CUSTOM_BASES,
                 }
             default:
                 if (tradeProvider) unreachable(tradeProvider)
