@@ -13,7 +13,7 @@ import { pluginIDSettings } from './settings/settings'
 import { fixWeb3State } from './plugins/EVM/UI/Web3State'
 import { getBackgroundColor } from './utils'
 import { isTwitter } from './social-network-adaptor/twitter.com/base'
-import { MaskThemeProvider, SnackbarType } from '@masknet/theme'
+import { MaskThemeProvider } from '@masknet/theme'
 
 const identity = (jsx: React.ReactNode) => jsx as JSX.Element
 function compose(init: React.ReactNode, ...f: ((children: React.ReactNode) => JSX.Element)[]) {
@@ -29,11 +29,10 @@ function useMaskIconPalette(theme: Theme) {
 }
 export interface MaskUIRootProps extends React.PropsWithChildren<{}> {
     kind: 'page' | 'sns'
-    snackbarType?: SnackbarType
     useTheme(): Theme
 }
 
-export function MaskUIRoot({ children, kind, useTheme, snackbarType }: MaskUIRootProps) {
+export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
     const pluginID = useValueRef(pluginIDSettings)
     const PluginsWeb3State = useAllPluginsWeb3State()
 
@@ -59,7 +58,6 @@ export function MaskUIRoot({ children, kind, useTheme, snackbarType }: MaskUIRoo
                 CustomSnackbarOffsetY={isFacebook(activatedSocialNetworkUI) ? 80 : undefined}
                 useTheme={useTheme}
                 children={jsx}
-                snackbarType={snackbarType}
             />
         ),
         (jsx) => <SharedContextProvider>{jsx}</SharedContextProvider>,

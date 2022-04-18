@@ -1,4 +1,4 @@
-import { makeStyles, SnackbarType, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { CurrentWalletBox } from './CurrentWalletBox'
 import {
     step1ActiveIcon,
@@ -100,7 +100,7 @@ export function Steps(props: StepsProps) {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const { step, personaSign, walletSign, changeWallet, persona, wallet, onDone, disableConfirm } = props
-    const { showSnackbar } = useCustomSnackbar(SnackbarType.POPUP)
+    const { showSnackbar } = usePopupCustomSnackbar()
 
     const walletName = useWallets(wallet.providerType).find((x) => isSameAddress(x.address, wallet.account))?.name
 

@@ -10,7 +10,7 @@ import Service from '../../../../service'
 import { DisconnectDialog } from '../components/DisconnectDialog'
 import { NextIDProof } from '@masknet/web3-providers'
 import { SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID } from '@masknet/shared'
-import { SnackbarType, useCustomSnackbar } from '@masknet/theme'
+import { usePopupCustomSnackbar } from '@masknet/theme'
 
 const AccountDetail = memo(() => {
     const { t } = useI18N()
@@ -18,7 +18,7 @@ const AccountDetail = memo(() => {
     const { selectedAccount, currentPersona } = PersonaContext.useContainer()
     const [open, setOpen] = useState(false)
 
-    const { showSnackbar } = useCustomSnackbar(SnackbarType.POPUP)
+    const { showSnackbar } = usePopupCustomSnackbar()
 
     const [disconnectState, onDisconnect] = useAsyncFn(async () => {
         try {

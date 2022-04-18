@@ -3,8 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
 import { ArrowDropIcon, MaskNotSquareIcon, MasksIcon } from '@masknet/icons'
-import { formatPersonaFingerprint } from '@masknet/shared-base'
-import { formatPersonaName } from '../../../../utils'
+import { formatPersonaFingerprint, formatPersonaName } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
