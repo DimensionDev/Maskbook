@@ -31,27 +31,31 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     ApplicationEntries: [
-        {
-            ID: base.ID,
-            RenderEntryComponent({ disabled, icon, title }) {
-                return (
-                    <ApplicationEntry
-                        title={title}
-                        disabled={disabled}
-                        icon={icon}
-                        onClick={() => openWindow('https://box.mask.io/#/')}
-                    />
-                )
-            },
-            appBoardSortingDefaultPriority: 6,
-            marketListSortingPriority: 4,
-            icon: <MaskBoxIcon />,
-            tutorialLink:
-                'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
-            description: <Trans i18nKey="plugin_mask_box_description" />,
-            category: 'dapp',
-            name: <Trans i18nKey="plugin_mask_box_name" />,
-        },
+        (() => {
+            const icon = <MaskBoxIcon />
+            const name = <Trans i18nKey="plugin_mask_box_name" />
+            return {
+                ID: base.ID,
+                RenderEntryComponent({ disabled }) {
+                    return (
+                        <ApplicationEntry
+                            title={name}
+                            disabled={disabled}
+                            icon={icon}
+                            onClick={() => openWindow('https://box.mask.io/#/')}
+                        />
+                    )
+                },
+                appBoardSortingDefaultPriority: 6,
+                marketListSortingPriority: 4,
+                icon,
+                tutorialLink:
+                    'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
+                description: <Trans i18nKey="plugin_mask_box_description" />,
+                category: 'dapp',
+                name,
+            }
+        })(),
     ],
 }
 

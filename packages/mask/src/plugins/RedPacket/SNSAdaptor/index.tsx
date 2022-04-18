@@ -92,35 +92,39 @@ const sns: Plugin.SNSAdaptor.Definition = {
         ),
     },
     ApplicationEntries: [
-        {
-            ID: base.ID,
-            RenderEntryComponent({ disabled, icon, title }) {
-                return (
-                    <ApplicationEntry
-                        title={title}
-                        disabled={disabled}
-                        icon={icon}
-                        onClick={() =>
-                            CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                reason: 'timeline',
-                                open: true,
-                                options: {
-                                    startupPlugin: base.ID,
-                                },
-                            })
-                        }
-                    />
-                )
-            },
-            appBoardSortingDefaultPriority: 1,
-            marketListSortingPriority: 1,
-            icon: <RedPacketIcon />,
-            description: <Trans i18nKey="plugin_red_packet_description" />,
-            name: <Trans i18nKey="plugin_red_packet_name" />,
-            tutorialLink:
-                'https://realmasknetwork.notion.site/Gift-token-NFTs-to-your-friends-Support-ETH-BSC-and-Polygon-0a71fd421aae4563bd07caa3e2129e5b',
-            category: 'dapp',
-        },
+        (() => {
+            const icon = <RedPacketIcon />
+            const name = <Trans i18nKey="plugin_red_packet_name" />
+            return {
+                ID: base.ID,
+                RenderEntryComponent({ disabled }) {
+                    return (
+                        <ApplicationEntry
+                            title={name}
+                            disabled={disabled}
+                            icon={icon}
+                            onClick={() =>
+                                CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                    reason: 'timeline',
+                                    open: true,
+                                    options: {
+                                        startupPlugin: base.ID,
+                                    },
+                                })
+                            }
+                        />
+                    )
+                },
+                appBoardSortingDefaultPriority: 1,
+                marketListSortingPriority: 1,
+                icon,
+                description: <Trans i18nKey="plugin_red_packet_description" />,
+                name,
+                tutorialLink:
+                    'https://realmasknetwork.notion.site/Gift-token-NFTs-to-your-friends-Support-ETH-BSC-and-Polygon-0a71fd421aae4563bd07caa3e2129e5b',
+                category: 'dapp',
+            }
+        })(),
     ],
 }
 interface ERC20RedpacketBadgeProps {

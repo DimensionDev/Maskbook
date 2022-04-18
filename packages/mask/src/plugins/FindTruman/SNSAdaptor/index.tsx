@@ -89,21 +89,30 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     ApplicationEntries: [
-        {
-            ID: base.ID,
-            RenderEntryComponent({ disabled, icon, title }) {
-                const [open, setOpen] = useState(false)
-                return (
-                    <>
-                        <ApplicationEntry disabled={disabled} title={title} icon={icon} onClick={() => setOpen(true)} />
-                        <FindTrumanDialog open={open} onClose={() => setOpen(false)} />
-                    </>
-                )
-            },
-            appBoardSortingDefaultPriority: 12,
-            icon: <FindTrumanIcon />,
-            name: <Trans i18nKey="plugin_find_truman_name" />,
-        },
+        (() => {
+            const icon = <FindTrumanIcon />
+            const name = <Trans i18nKey="plugin_find_truman_name" />
+            return {
+                ID: base.ID,
+                RenderEntryComponent({ disabled }) {
+                    const [open, setOpen] = useState(false)
+                    return (
+                        <>
+                            <ApplicationEntry
+                                disabled={disabled}
+                                title={name}
+                                icon={icon}
+                                onClick={() => setOpen(true)}
+                            />
+                            <FindTrumanDialog open={open} onClose={() => setOpen(false)} />
+                        </>
+                    )
+                },
+                appBoardSortingDefaultPriority: 12,
+                icon,
+                name: <Trans i18nKey="plugin_find_truman_name" />,
+            }
+        })(),
     ],
 }
 

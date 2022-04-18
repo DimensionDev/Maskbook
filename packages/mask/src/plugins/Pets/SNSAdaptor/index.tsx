@@ -20,21 +20,25 @@ const sns: Plugin.SNSAdaptor.Definition = {
         )
     },
     ApplicationEntries: [
-        {
-            ID: base.ID,
-            RenderEntryComponent({ disabled, icon, title }) {
-                const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
+        (() => {
+            const icon = <LootManIcon />
+            const name = <Trans i18nKey="plugin_pets_name" />
+            return {
+                ID: base.ID,
+                RenderEntryComponent({ disabled }) {
+                    const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
 
-                return <ApplicationEntry disabled={disabled} title={title} icon={icon} onClick={openDialog} />
-            },
-            appBoardSortingDefaultPriority: 11,
-            marketListSortingPriority: 12,
-            icon: <LootManIcon />,
-            description: <Trans i18nKey="plugin_pets_description" />,
-            name: <Trans i18nKey="plugin_pets_name" />,
-            tutorialLink: 'https://twitter.com/mintteamnft?s=21',
-            category: 'dapp',
-        },
+                    return <ApplicationEntry disabled={disabled} title={name} icon={icon} onClick={openDialog} />
+                },
+                appBoardSortingDefaultPriority: 11,
+                marketListSortingPriority: 12,
+                icon,
+                description: <Trans i18nKey="plugin_pets_description" />,
+                name,
+                tutorialLink: 'https://twitter.com/mintteamnft?s=21',
+                category: 'dapp',
+            }
+        })(),
     ],
 }
 

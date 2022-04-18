@@ -24,22 +24,26 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     enhanceTag,
     ApplicationEntries: [
-        {
-            ID: base.ID,
-            RenderEntryComponent({ disabled, icon, title }) {
-                const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+        (() => {
+            const icon = <SwapIcon />
+            const name = <Trans i18nKey="plugin_trader_swap" />
+            return {
+                ID: base.ID,
+                RenderEntryComponent({ disabled }) {
+                    const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
-                return <ApplicationEntry disabled={disabled} title={title} icon={icon} onClick={openDialog} />
-            },
-            appBoardSortingDefaultPriority: 9,
-            marketListSortingPriority: 5,
-            icon: <SwapIcon />,
-            category: 'dapp',
-            name: <Trans i18nKey="plugin_trader_swap" />,
-            tutorialLink:
-                'https://realmasknetwork.notion.site/Trade-cryptos-on-Twitter-via-Uniswap-Sushi-0x-Support-ETH-BSC-Polygon-Arbitrum-f2e7d081ee38487ca1db958393ac1edc',
-            description: <Trans i18nKey="plugin_trader_swap_description" />,
-        },
+                    return <ApplicationEntry disabled={disabled} title={name} icon={icon} onClick={openDialog} />
+                },
+                appBoardSortingDefaultPriority: 9,
+                marketListSortingPriority: 5,
+                icon,
+                category: 'dapp',
+                name,
+                tutorialLink:
+                    'https://realmasknetwork.notion.site/Trade-cryptos-on-Twitter-via-Uniswap-Sushi-0x-Support-ETH-BSC-Polygon-Arbitrum-f2e7d081ee38487ca1db958393ac1edc',
+                description: <Trans i18nKey="plugin_trader_swap_description" />,
+            }
+        })(),
     ],
 }
 

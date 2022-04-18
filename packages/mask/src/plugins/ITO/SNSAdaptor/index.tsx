@@ -61,50 +61,63 @@ const sns: Plugin.SNSAdaptor.Definition = {
         ),
     },
     ApplicationEntries: [
-        {
-            ID: base.ID,
-            RenderEntryComponent({ disabled, icon, title }) {
-                return (
-                    <ApplicationEntry
-                        disabled={disabled}
-                        title={title}
-                        icon={icon}
-                        onClick={() =>
-                            CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                reason: 'timeline',
-                                open: true,
-                                options: {
-                                    startupPlugin: base.ID,
-                                },
-                            })
-                        }
-                    />
-                )
-            },
-            appBoardSortingDefaultPriority: 3,
-            marketListSortingPriority: 3,
-            icon: <MarketsIcon />,
-            description: <Trans i18nKey="plugin_ito_description" />,
-            category: 'dapp',
-            name: <Trans i18nKey="plugin_ito_name" />,
-            tutorialLink:
-                'https://realmasknetwork.notion.site/Launch-an-ITO-Initial-Twitter-Offering-Support-ETH-BSC-Polygon-Arbitrum-d84c60903f974f4880d2085a13906d55',
-        },
-        {
-            ID: `${base.ID}_claim`,
-            RenderEntryComponent({ disabled, icon, title }) {
-                const [open, setOpen] = useState(false)
-                return (
-                    <>
-                        <ApplicationEntry title={title} icon={icon} disabled={disabled} onClick={() => setOpen(true)} />
-                        <ClaimAllDialog open={open} onClose={() => setOpen(false)} />
-                    </>
-                )
-            },
-            appBoardSortingDefaultPriority: 4,
-            icon: <MarketsClaimIcon />,
-            name: <Trans i18nKey="plugin_ito_claim" />,
-        },
+        (() => {
+            const icon = <MarketsIcon />
+            const name = <Trans i18nKey="plugin_ito_name" />
+            return {
+                ID: base.ID,
+                RenderEntryComponent({ disabled }) {
+                    return (
+                        <ApplicationEntry
+                            disabled={disabled}
+                            title={name}
+                            icon={icon}
+                            onClick={() =>
+                                CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                    reason: 'timeline',
+                                    open: true,
+                                    options: {
+                                        startupPlugin: base.ID,
+                                    },
+                                })
+                            }
+                        />
+                    )
+                },
+                appBoardSortingDefaultPriority: 3,
+                marketListSortingPriority: 3,
+                icon,
+                description: <Trans i18nKey="plugin_ito_description" />,
+                category: 'dapp',
+                name,
+                tutorialLink:
+                    'https://realmasknetwork.notion.site/Launch-an-ITO-Initial-Twitter-Offering-Support-ETH-BSC-Polygon-Arbitrum-d84c60903f974f4880d2085a13906d55',
+            }
+        })(),
+        (() => {
+            const icon = <MarketsClaimIcon />
+            const name = <Trans i18nKey="plugin_ito_claim" />
+            return {
+                ID: `${base.ID}_claim`,
+                RenderEntryComponent({ disabled }) {
+                    const [open, setOpen] = useState(false)
+                    return (
+                        <>
+                            <ApplicationEntry
+                                title={name}
+                                icon={icon}
+                                disabled={disabled}
+                                onClick={() => setOpen(true)}
+                            />
+                            <ClaimAllDialog open={open} onClose={() => setOpen(false)} />
+                        </>
+                    )
+                },
+                appBoardSortingDefaultPriority: 4,
+                icon,
+                name,
+            }
+        })(),
     ],
 }
 
