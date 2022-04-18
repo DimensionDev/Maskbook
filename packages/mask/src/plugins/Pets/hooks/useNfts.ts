@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { OpenSea } from '@masknet/web3-providers'
-import { useChainId, isSameAddress, resolveIPFSLink, Constant, transform } from '@masknet/web3-shared-evm'
-import { cloneDeep, findLastIndex } from 'lodash-unified'
+import { resolveIPFSLink, Constant, transform } from '@masknet/web3-shared-evm'
+import { cloneDeep, findLastIndex, set } from 'lodash-unified'
 import { delay } from '@dimensiondev/kit'
 import type { User, FilterContract } from '../types'
 import { Punk3D } from '../constants'
-import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAssets, useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { IteratorCollectorStatus } from '@masknet/web3-shared-base'
 import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 
@@ -23,6 +23,7 @@ function useInitNFTs(config: Record<string, Constant> | undefined) {
 
 export function useNFTs(user: User | undefined, configNFTs: Record<string, Constant> | undefined) {
     const initContracts = useInitNFTs(configNFTs)
+    const { Utils } = useWeb3State()
     const [nfts, setNfts] = useState<FilterContract[]>(initContracts)
     const chainId = useChainId()
     const [fetchTotal, setFetchTotal] = useState<Web3Plugin.NonFungibleAsset[]>([])
@@ -37,18 +38,18 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
             const total = [...fetchTotal, ...collectibles]
             setFetchTotal(total)
             for (const NFT of total) {
-                const sameNFT = tempNFTs.find((temp) => isSameAddress(temp.contract, NFT.contract?.address))
+                const sameNFT = tempNFTs.find((temp) => Utils?.isSameAddress?.(temp.contract, NFT.contract?.address))
                 if (!sameNFT) continue
-                const isPunk = isSameAddress(NFT.contract?.address, Punk3D.contract) && NFT.tokenId === Punk3D.tokenId
+                const isPunk =
+                    Utils?.isSameAddress?.(NFT.contract?.address, Punk3D.contract) && NFT.tokenId === Punk3D.tokenId
                 if (isPunk) {
-                    // TODO: remove this
-                    NFT.metadata.mediaURL = Punk3D.url
+                    set(NFT, 'metadata.mediaURL', Punk3D.url)
                 }
                 const glbSupport = NFT.metadata?.mediaURL?.endsWith('.glb') || isPunk
-                if (NFT.metadata.mediaURL?.includes('ipfs://')) {
+                if (NFT.metadata?.mediaURL?.includes('ipfs://')) {
                     NFT.metadata.mediaURL = resolveIPFSLink(NFT.metadata?.mediaURL.replace('ipfs://', ''))
                 }
-                const item = { ...NFT.metadata, tokenId: NFT.tokenId, glbSupport }
+                const item = { ...NFT.metadata, tokenId: NFT.tokenId, glbSupport: !!glbSupport }
                 const sameTokenIndex = findLastIndex(sameNFT.tokens, (v) => v.tokenId === NFT.tokenId)
                 if (sameTokenIndex === -1) {
                     sameNFT.tokens.push(item)

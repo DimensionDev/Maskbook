@@ -1,16 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Avatar, Box, CircularProgress, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
-import {
-    ERC721ContractDetailed,
-    EthereumTokenType,
-    formatEthereumAddress,
-    resolveAddressLinkOnExplorer,
-    useAccount,
-    useChainId,
-    useERC721ContractDetailed,
-    useERC721Tokens,
-} from '@masknet/web3-shared-evm'
+import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
+import { useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { WalletMessages } from '../messages'
@@ -20,9 +11,13 @@ import { SearchInput } from '../../../extension/options-page/DashboardComponents
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
 import { unionBy } from 'lodash-unified'
-import type { NonFungibleTokenAPI } from '@masknet/web3-providers'
-import { useNonFungibleTokenList } from '@masknet/plugin-infra/web3'
-import { IteratorCollectorStatus } from '@masknet/web3-shared-base'
+import {
+    useNonFungibleTokenList,
+    useNonFungibleTokens,
+    Web3Plugin,
+    useWeb3State,
+    useAccount,
+} from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -120,8 +115,6 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const chainId = useChainId()
-
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
     const account = useAccount()
@@ -135,7 +128,8 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         },
     )
     const onSubmit = useCallback(
-        (contract: ERC721ContractDetailed) => {
+        (contract?: Web3Plugin.NonFungibleTokenContract) => {
+            if (!contract) return
             setKeyword('')
             setDialog({
                 open: false,
@@ -154,30 +148,10 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     // #endregion
 
-    const { data: assets, status: loadingCollectionState } = useNonFungibleTokenList(account, chainId)
+    const assets = useNonFungibleTokenList()
 
-    const erc721InDb = useERC721Tokens()
-    const allContractsInDb = unionBy(
-        erc721InDb.map((x) => ({ ...x.contractDetailed, address: formatEthereumAddress(x.contractDetailed.address) })),
-        'address',
-    ).map((x) => ({ contractDetailed: x, balance: undefined }))
-
-    const renderAssets = assets.map((x) => ({
-        contractDetailed: {
-            type: EthereumTokenType.ERC721,
-            address: x.address,
-            chainId,
-            name: x.name,
-            symbol: x.symbol,
-            baseURI: x.iconURL,
-            iconURL: x.iconURL,
-        } as ERC721ContractDetailed,
-        balance: x.balance,
-    }))
-
-    const contractList = renderAssets
-        ? unionBy([...renderAssets, ...allContractsInDb], 'contractDetailed.address')
-        : allContractsInDb
+    const erc721InDb = useNonFungibleTokens()
+    const contractList = assets ? unionBy([...assets, ...erc721InDb], 'contract.address') : erc721InDb
 
     // #region fuse
     const fuse = useMemo(
@@ -195,7 +169,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         [contractList],
     )
 
-    const searchedTokenList = fuse.search(keyword).map((x) => x.item)
+    const searchedTokenList = fuse.search<Web3Plugin.NonFungibleToken>(keyword).map((x) => x.item)
     // #endregion
 
     return (
@@ -209,23 +183,22 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                         }}
                     />
                 </div>
-                {loadingCollectionState === IteratorCollectorStatus.done && (
-                    <SearchResultBox
-                        keyword={keyword}
-                        contractList={contractList}
-                        searchedTokenList={searchedTokenList}
-                        onSubmit={onSubmit}
-                    />
-                )}
-                {loadingCollectionState !== IteratorCollectorStatus.done && (
-                    <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                        <CircularProgress size={24} />
-                    </Box>
-                )}
+                <SearchResultBox
+                    keyword={keyword}
+                    contractList={contractList}
+                    searchedTokenList={searchedTokenList}
+                    onSubmit={onSubmit}
+                />
+                {/* TODO: double check should have loading status */}
+                {/* {loadingCollectionState !== IteratorCollectorStatus.done && ( */}
+                {/*     <Box */}
+                {/*         display="flex" */}
+                {/*         alignItems="center" */}
+                {/*         justifyContent="center" */}
+                {/*         sx={{ paddingTop: 4, paddingBottom: 4 }}> */}
+                {/*         <CircularProgress size={24} /> */}
+                {/*     </Box> */}
+                {/* )} */}
             </DialogContent>
         </InjectedDialog>
     )
@@ -234,9 +207,9 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 export interface SearchResultBoxProps extends withClasses<never> {
     keyword: string
     // TODO: remove this
-    contractList: NonFungibleTokenAPI.ContractBalance[]
-    searchedTokenList: NonFungibleTokenAPI.ContractBalance[]
-    onSubmit: (contract: ERC721ContractDetailed) => void
+    contractList: Web3Plugin.NonFungibleToken[]
+    searchedTokenList: Web3Plugin.NonFungibleToken[]
+    onSubmit: (contract?: Web3Plugin.NonFungibleTokenContract) => void
 }
 
 function SearchResultBox(props: SearchResultBoxProps) {
@@ -260,7 +233,8 @@ function SearchResultBox(props: SearchResultBoxProps) {
                         </Box>
                     ) : (
                         <List>
-                            <ContractListItem key="0" onSubmit={onSubmit} contract={{ contractDetailed }} />
+                            {/* // TODO: migrate useERC721ContractDetailed */}
+                            <ContractListItem key="0" onSubmit={onSubmit} nonFungibleToken={{ contractDetailed }} />
                         </List>
                     )}
                 </div>
@@ -268,7 +242,7 @@ function SearchResultBox(props: SearchResultBoxProps) {
                 <List>
                     {(keyword === '' ? contractList : searchedTokenList).map((contract, i) => (
                         <div key={i}>
-                            <ContractListItem onSubmit={onSubmit} contract={contract} />
+                            <ContractListItem onSubmit={onSubmit} nonFungibleToken={contract} />
                         </div>
                     ))}
                 </List>
@@ -278,33 +252,36 @@ function SearchResultBox(props: SearchResultBoxProps) {
 }
 
 interface ContractListItemProps {
-    contract: NonFungibleTokenAPI.ContractBalance
-    onSubmit: (contract: ERC721ContractDetailed) => void
+    nonFungibleToken: Web3Plugin.NonFungibleToken
+    onSubmit: (contract?: Web3Plugin.NonFungibleTokenContract) => void
 }
 
 function ContractListItem(props: ContractListItemProps) {
-    const { onSubmit, contract } = props
+    const { onSubmit, nonFungibleToken } = props
     const { classes } = useStyles()
-    const chainId = contract.contractDetailed.chainId
+    const chainId = nonFungibleToken.contract?.chainId
+    const { Utils } = useWeb3State()
 
     return (
         <div style={{ position: 'relative' }}>
-            <ListItem className={classes.listItem} onClick={() => onSubmit(contract.contractDetailed)}>
-                <Avatar className={classes.icon} src={contract.contractDetailed.iconURL} />
+            <ListItem className={classes.listItem} onClick={() => onSubmit(nonFungibleToken.contract)}>
+                <Avatar className={classes.icon} src={nonFungibleToken.contract?.iconURL} />
                 <Typography className={classes.contractName}>
-                    {contract.contractDetailed.name}{' '}
-                    {contract.contractDetailed.symbol && contract.contractDetailed.symbol !== 'UNKNOWN'
-                        ? '(' + contract.contractDetailed.symbol + ')'
+                    {nonFungibleToken.contract?.name}{' '}
+                    {nonFungibleToken.contract?.symbol && nonFungibleToken.contract?.symbol !== 'UNKNOWN'
+                        ? '(' + nonFungibleToken.contract?.symbol + ')'
                         : ''}
                 </Typography>
-                {contract.balance ? <Typography className={classes.balance}>{contract.balance}</Typography> : null}
+                {nonFungibleToken.contract?.balance ? (
+                    <Typography className={classes.balance}>{nonFungibleToken.contract?.balance}</Typography>
+                ) : null}
             </ListItem>
             <div className={classes.address}>
-                <Typography onClick={() => onSubmit(contract.contractDetailed)} className={classes.addressText}>
-                    {contract.contractDetailed.address}
+                <Typography onClick={() => onSubmit(nonFungibleToken.contract)} className={classes.addressText}>
+                    {nonFungibleToken.contract?.address}
                 </Typography>
                 <Link
-                    href={resolveAddressLinkOnExplorer(chainId, contract.contractDetailed.address)}
+                    href={Utils?.resolveAddressLink?.(chainId ?? 1, nonFungibleToken.contract?.address ?? '')}
                     target="_blank"
                     rel="noopener noreferrer">
                     <OpenInNewIcon className={classes.openIcon} fontSize="small" />

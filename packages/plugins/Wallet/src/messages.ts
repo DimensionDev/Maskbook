@@ -1,7 +1,7 @@
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 import type {
     ChainId,
-    ERC721ContractDetailed,
     GasOption,
     GasOptions,
     NetworkType,
@@ -109,7 +109,7 @@ export type SelectNftContractDialogEvent = {
     /**
      * The selected detailed nft contract.
      */
-    contract?: ERC721ContractDetailed
+    contract?: Web3Plugin.NonFungibleTokenContract
 }
 
 export type SocketMessageUpdatedEvent = {

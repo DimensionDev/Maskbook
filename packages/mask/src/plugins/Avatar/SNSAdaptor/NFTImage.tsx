@@ -1,6 +1,5 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import { Web3Plugin, useWeb3State } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
@@ -40,23 +39,24 @@ interface NFTImageProps {
     onChange: (token: Web3Plugin.NonFungibleAsset) => void
 }
 
-function isSameNFT(a: Web3Plugin.NonFungibleAsset, b?: Web3Plugin.NonFungibleAsset) {
-    return (
-        isSameAddress(a.contract?.address, b?.contract?.address) &&
-        a.contract?.chainId === b?.contract?.chainId &&
-        a.tokenId === b?.tokenId
-    )
-}
-
 export function NFTImage(props: NFTImageProps) {
     const { token, onChange, selectedToken } = props
     const { classes } = useStyles()
+    const { Utils } = useWeb3State()
+
+    const isSameNFT = (a: Web3Plugin.NonFungibleAsset, b?: Web3Plugin.NonFungibleAsset) => {
+        return (
+            Utils?.isSameAddress?.(a.contract?.address, b?.contract?.address) &&
+            a.contract?.chainId === b?.contract?.chainId &&
+            a.tokenId === b?.tokenId
+        )
+    }
 
     return (
         <div className={classes.imgBackground}>
             <img
                 onClick={() => onChange(token)}
-                src={token.info.imageURL}
+                src={token.metadata?.imageURL}
                 className={classNames(classes.image, isSameNFT(token, selectedToken) ? classes.selected : '')}
             />
         </div>
