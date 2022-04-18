@@ -1,14 +1,42 @@
 import * as bip39 from 'bip39'
 import * as wallet from 'wallet.ts'
-import { encodeArrayBuffer } from '@dimensiondev/kit'
-import type { PersonaRecord } from '../../../background/database/persona/db'
+import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 import {
     EC_Private_JsonWebKey,
     EC_Public_JsonWebKey,
     JsonWebKeyPair,
     toBase64URL,
     decompressSecp256k1Key,
+    AESCryptoKey,
+    AESJsonWebKey,
+    assertEC_Private_JsonWebKey,
 } from '@masknet/shared-base'
+import { CryptoKeyToJsonWebKey } from '../../../../utils-pure'
+import type { PersonaRecord } from '../../../database/persona/db'
+
+/**
+ * Local key (AES key) is used to encrypt message to myself.
+ * This key should never be published.
+ */
+
+export async function deriveLocalKeyFromECDHKey(
+    pub: EC_Public_JsonWebKey,
+    mnemonicWord: string,
+): Promise<AESJsonWebKey> {
+    // ? Derive method: publicKey as "password" and password for the mnemonicWord as hash
+    const pbkdf2 = await crypto.subtle.importKey('raw', encodeText(pub.x! + pub.y!), 'PBKDF2', false, [
+        'deriveBits',
+        'deriveKey',
+    ])
+    const aes = await crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: encodeText(mnemonicWord), iterations: 100000, hash: 'SHA-256' },
+        pbkdf2,
+        { name: 'AES-GCM', length: 256 },
+        true,
+        ['encrypt', 'decrypt'],
+    )
+    return CryptoKeyToJsonWebKey(aes as AESCryptoKey)
+}
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -70,9 +98,8 @@ function HDKeyToJwk(hdk: wallet.HDKey): JsonWebKey {
 async function split_ec_k256_keypair_into_pub_priv(
     key: Readonly<JsonWebKey>,
 ): Promise<JsonWebKeyPair<EC_Public_JsonWebKey, EC_Private_JsonWebKey>> {
+    assertEC_Private_JsonWebKey(key)
     const { d, ...pub } = key
-    if (!d) throw new TypeError('split_ec_k256_keypair_into_pub_priv requires a private key (jwk.d)')
-    // TODO: maybe should do some extra check on properties
     // @ts-expect-error Do a force transform
     return { privateKey: { ...key }, publicKey: pub }
 }
