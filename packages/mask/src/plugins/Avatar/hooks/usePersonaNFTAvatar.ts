@@ -1,4 +1,4 @@
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { NextIDStorage } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
@@ -7,7 +7,7 @@ import type { RSS3_KEY_SNS } from '../constants'
 import { PluginNFTAvatarRPC } from '../messages'
 import type { NextIDAvatarMeta } from '../types'
 
-export function usePersonaNFTAvatar(userId: string, snsKey: RSS3_KEY_SNS) {
+export function usePersonaNFTAvatar(userId: string, snsKey: RSS3_KEY_SNS, platform?: NextIDPlatform) {
     const personas = useMyPersonas()
     return useAsyncRetry(async () => {
         if (!userId || userId === '$unknown') return
@@ -15,9 +15,16 @@ export function usePersonaNFTAvatar(userId: string, snsKey: RSS3_KEY_SNS) {
         const _personas = personas.filter((p) => {
             return p.linkedProfiles.get(id)
         })
+
         const publicHexKey = _personas?.[0]?.publicHexKey
         if (!publicHexKey) return
-        const response = await NextIDStorage.get<NextIDAvatarMeta>(publicHexKey)
+
+        const response = await NextIDStorage.get<NextIDAvatarMeta>(
+            publicHexKey,
+            platform ?? NextIDPlatform.Twitter,
+            userId,
+        )
+
         if (response.ok) return response.val
         const avatarMeta = await PluginNFTAvatarRPC.getNFTAvatar(
             userId,

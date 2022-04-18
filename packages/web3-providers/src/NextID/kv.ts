@@ -4,7 +4,7 @@
 import urlcat from 'urlcat'
 import type { NextIDStoragePayload, NextIDPlatform } from '@masknet/shared-base'
 import { fetchJSON } from './helper'
-import type { Result } from 'ts-results'
+import { Err, Ok, Result } from 'ts-results'
 import type { NextIDBaseAPI } from '../types'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD, MASK_STORAGE_KEY } from './constants'
 
@@ -31,11 +31,22 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
      * @param personaPublicKey
      *
      */
-    async get<T>(personaPublicKey: string): Promise<Result<T, string>> {
-        const full = await fetchJSON<{ [MASK_STORAGE_KEY]: T }>(
-            urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
-        )
-        return full.map((x) => x[MASK_STORAGE_KEY])
+    async get<T>(personaPublicKey: string, platform: NextIDPlatform, identity: string): Promise<Result<T, string>> {
+        const response = await fetchJSON<{
+            persona: string
+            proofs: {
+                platform: NextIDPlatform
+                identity: string
+                content: { [MASK_STORAGE_KEY]: any }
+            }[]
+        }>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+        if (!response.ok) return Err('User not found')
+
+        const data =
+            response.val.proofs?.filter((x) => x.identity === identity.toLowerCase() && x.platform === platform) ?? []
+        if (!data) return Err('Not found')
+        const content = data[0].content[MASK_STORAGE_KEY]
+        return Ok(content[`${platform}_${identity}`])
     }
 
     /**

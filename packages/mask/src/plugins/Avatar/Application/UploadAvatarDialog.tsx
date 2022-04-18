@@ -6,13 +6,12 @@ import { NextIDStorage, Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
-import { useAsyncRetry } from 'react-use'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import Services from '../../../extension/service'
 import { BindingProof, ECKeyIdentifier, fromHex, toBase64 } from '@masknet/shared-base'
 import type { Persona } from '../../../database'
 import type { NextIDAvatarMeta } from '../types'
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/i18n_generated'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -29,13 +28,9 @@ interface UploadAvatarDialogProps {
     onClose: () => void
 }
 
-async function personaSign(account: string, message: string, identifier: ECKeyIdentifier) {
+async function personaSign(message: string, identifier: ECKeyIdentifier) {
     try {
-        return Services.Identity.signWithPersona({
-            method: 'eth',
-            message: message,
-            identifier: identifier.toText(),
-        })
+        return Services.Identity.generateSignResult(identifier, message)
     } catch {
         return
     }
@@ -65,7 +60,7 @@ async function Save(
         return false
     }
 
-    const sign = await personaSign(account, response.val.signPayload, persona.identifier)
+    const sign = await personaSign(response.val.signPayload, persona.identifier)
     if (!sign) return false
 
     const setResponse = await NextIDStorage.set(
@@ -88,27 +83,24 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const [scale, setScale] = useState(1)
     const { showSnackbar } = useCustomSnackbar()
     const [disabled, setDisabled] = useState(false)
-    const personaConnectStatus = usePersonaConnectStatus()
+    const { currentConnectedPersona } = usePersonaConnectStatus()
     const t = useI18N()
 
-    const { value: persona, loading: loadingPersona } = useAsyncRetry(async () => {
-        if (!identity) return
-        return Services.Identity.queryPersonaByProfile(identity.identifier)
-    }, [identity, personaConnectStatus.hasPersona])
-
     const onSave = useCallback(() => {
-        if (!editor || !account || !token || !persona || !proof) return
+        if (!editor || !account || !token || !currentConnectedPersona || !proof) return
         editor.getImage().toBlob(async (blob) => {
             if (!blob) return
             setDisabled(true)
 
-            console.log('a----------------')
-
             const media = await Twitter.uploadUserAvatar(identity.identifier.userId, blob)
             const data = await Twitter.updateProfileImage(identity.identifier.userId, media.media_id_string)
+            if (!data) {
+                setDisabled(false)
+                return
+            }
             const avatarId = getAvatarId(data?.imageUrl ?? '')
 
-            const response = await Save(account, token, avatarId, data, persona, proof)
+            const response = await Save(account, token, avatarId, data, currentConnectedPersona, proof)
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
                 setDisabled(false)
@@ -118,7 +110,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             onClose()
             setDisabled(false)
         })
-    }, [account, editor, identity, onClose, persona, proof])
+    }, [account, editor, identity, onClose, currentConnectedPersona, proof])
 
     if (!account || !image || !token || !proof) return null
 

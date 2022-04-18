@@ -14,7 +14,7 @@ import { NFTWalletConnect } from './WalletConnect'
 import { BindingProof, PopupRoutes } from '@masknet/shared-base'
 import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 import { Services } from '../../../extension/service'
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/i18n_generated'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},

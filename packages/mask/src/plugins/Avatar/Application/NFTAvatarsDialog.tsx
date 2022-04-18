@@ -7,7 +7,7 @@ import type { BindingProof } from '@masknet/shared-base'
 import type { SelectTokenInfo, TokenInfo } from '../types'
 import { PersonaPage } from './PersonaPage'
 import { DialogContent } from '@mui/material'
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/i18n_generated'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},

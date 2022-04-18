@@ -6,7 +6,7 @@ import { Box, Button, Link, Typography } from '@mui/material'
 import { ApplicationIcon } from '../assets/application'
 import { WalletIcon } from '../assets/wallet'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/i18n_generated'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

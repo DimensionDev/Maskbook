@@ -6,7 +6,7 @@ import { useLastRecognizedIdentity } from '../../../components/DataSource/useAct
 import { NextIDVerificationStatus, useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
 import { CloseIcon } from '../assets/close'
 import { usePersonas } from '../hooks/usePersonas'
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/i18n_generated'
 import type { TokenInfo } from '../types'
 import { PersonaItem } from './PersonaItem'
 

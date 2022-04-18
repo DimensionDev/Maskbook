@@ -4,7 +4,7 @@ import { ApplicationIcon } from '../assets/application'
 import { LinkIcon } from '../assets/link'
 import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import { formatTokenId } from '../utils'
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/i18n_generated'
 
 const useStyles = makeStyles()(() => ({
     root: {},

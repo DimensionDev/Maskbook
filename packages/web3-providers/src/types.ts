@@ -321,7 +321,7 @@ export namespace NextIDBaseAPI {
             createdAt: string,
             patchData: unknown,
         ): Promise<Result<T, string>>
-        get<T>(key: string): Promise<Result<T, string>>
+        get<T>(key: string, platform: NextIDPlatform, identity: string): Promise<Result<T, string>>
         getPayload(
             personaPublicKey: string,
             platform: NextIDPlatform,
