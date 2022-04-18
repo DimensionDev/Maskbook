@@ -184,7 +184,7 @@ export async function request<T extends unknown>(
     })
 }
 
-export async function confirmRequest(payload: JsonRpcPayload) {
+export async function confirmRequest(payload: JsonRpcPayload, disableClose?: boolean) {
     const pid = getPayloadId(payload)
     if (!pid) return
     const [deferred, resolve, reject] = defer<JsonRpcResponse | undefined, Error>()
@@ -192,12 +192,14 @@ export async function confirmRequest(payload: JsonRpcPayload) {
         payload,
         (error, response) => {
             UNCONFIRMED_CALLBACK_MAP.get(pid)?.(error, response)
-
             if (error) reject(error)
             else if (response?.error) reject(new Error(`Failed to send transaction: ${response.error}`))
             else {
                 WalletRPC.deleteUnconfirmedRequest(payload)
-                    .then(Services.Helper.removePopupWindow)
+                    .then(() => {
+                        if (disableClose) return
+                        return Services.Helper.removePopupWindow
+                    })
                     .then(() => {
                         UNCONFIRMED_CALLBACK_MAP.delete(pid)
                     })

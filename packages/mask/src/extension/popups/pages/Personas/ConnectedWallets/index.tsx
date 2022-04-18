@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react'
+import { memo } from 'react'
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { ConnectedWalletsUI } from './UI'
@@ -104,10 +104,6 @@ const ConnectedWallets = memo(() => {
     }
 
     useTitle(t('popups_connected_wallets'))
-
-    useEffect(() => {
-        if (!proofs) navigate(PopupRoutes.Personas)
-    }, [proofs])
 
     if (!proofs || !connectedWallets || !currentPersona) return null
 

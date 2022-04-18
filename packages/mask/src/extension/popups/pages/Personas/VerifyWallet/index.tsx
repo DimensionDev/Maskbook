@@ -12,6 +12,8 @@ import { PersonaContext } from '../hooks/usePersonaContext'
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest'
+import { PopupContext } from '../../../hook/usePopupContext'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -26,6 +28,7 @@ const VerifyWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { currentPersona, refreshProofs } = PersonaContext.useContainer()
+    const { signed, setSigned } = PopupContext.useContainer()
     const [isBound, setIsBound] = useState(false)
     const navigate = useNavigate()
     useTitle(t('popups_add_wallet'))
@@ -51,7 +54,7 @@ const VerifyWallet = memo(() => {
     useEffect(() => {
         if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
 
-        navigate(PopupRoutes.WalletSignRequest, { replace: true })
+        navigate(urlcat(PopupRoutes.WalletSignRequest, { goBack: true }))
     }, [request])
 
     const { value: payload } = useAsync(async () => {
@@ -106,6 +109,7 @@ const VerifyWallet = memo(() => {
                     signature: signature,
                 },
             )
+            setSigned(true)
             refreshProofs()
             return true
         } catch (error) {
@@ -120,6 +124,8 @@ const VerifyWallet = memo(() => {
 
     const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {
         try {
+            if (signed) Services.Helper.removePopupWindow()
+
             // first Step
             if (!signature && !walletSignState) {
                 await personaSilentSign()
@@ -135,17 +141,17 @@ const VerifyWallet = memo(() => {
             showSnackbar('Connect error', { variant: 'error' })
             return SignSteps.Ready
         }
-    }, [signature, walletSignState, walletSign, personaSilentSign])
+    }, [signature, walletSignState, walletSign, personaSilentSign, signed])
 
     if (!currentPersona || !wallet) return null
 
     return (
         <div className={classes.container}>
             <Steps
-                disableConfirm={isBound}
+                disableConfirm={isBound && !signed}
                 persona={currentPersona}
                 wallet={wallet}
-                step={step}
+                step={signed ? SignSteps.SecondStepDone : step}
                 changeWallet={changeWallet}
                 onConfirm={handleConfirm}
                 confirmLoading={confirmLoading}
