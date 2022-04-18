@@ -12,6 +12,8 @@ import { useMemo, useState } from 'react'
 import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
 import { uniqBy } from 'lodash-unified'
+import { RSS3 } from '@masknet/web3-providers'
+import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()((theme) => {
     console.log({ theme })
@@ -73,6 +75,11 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
     //     return usePersonaBoundPlatform
     // },[])
 
+    const { value: nameInfo } = useAsyncRetry(async () => {
+        return RSS3.getNameInfo(address)
+    }, [address])
+    console.log({ nameInfo, address })
+
     const chainId = ChainId.Mainnet
     const { data: collectionsFormRemote } = useCollections(address, chainId)
     const {
@@ -89,28 +96,35 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
         return uniqBy(
             collectibles.map((x) => x.contractDetailed),
             (x) => x.address.toLowerCase(),
-        ).map((x) => {
-            const item = collectionsFormRemote.find((c) => isSameAddress(c.address, x.address))
-            if (item) {
-                return {
-                    name: item.name,
-                    symbol: item.name,
-                    baseURI: item.iconURL,
-                    iconURL: item.iconURL,
-                    address: item.address,
-                } as ERC721ContractDetailed
-            }
-            return x
-        })
+        )
+            .map((x) => {
+                const item = collectionsFormRemote.find((c) => isSameAddress(c.address, x.address))
+                if (item) {
+                    return {
+                        name: item.name,
+                        symbol: item.name,
+                        baseURI: item.iconURL,
+                        iconURL: item.iconURL,
+                        address: item.address,
+                    } as ERC721ContractDetailed
+                }
+                return x
+            })
+            .filter((collection) => collection?.iconURL)
     }, [collectibles.length, collectionsFormRemote.length])
+    console.log('assetsCollection', collections)
 
     return (
         <Card className={classes.wrapper}>
             <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div className={classes.walletInfo}>
-                        <ImageIcon icon={networkIcon} size={20} borderRadius="0" />
-                        <Typography className={classes.walletName}>{address}</Typography>
+                        <ImageIcon
+                            icon={new URL('../assets/ethereum.png', import.meta.url)}
+                            size={20}
+                            borderRadius="0"
+                        />
+                        <Typography className={classes.walletName}>{nameInfo?.ensName}</Typography>
                         <Link
                             className={classes.link}
                             href="https://etherscan.io/address/0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41#code"

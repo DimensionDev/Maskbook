@@ -25,6 +25,9 @@ const useStyles = makeStyles()((theme) => {
             ':hover': {
                 cursor: 'pointer',
             },
+            '&:first-child:hover': {
+                cursor: 'default',
+            },
         },
         arrowIcon: {
             alignSelf: 'center',
@@ -65,7 +68,7 @@ export function PlatformCard(props: PlatformCardProps) {
                     <div style={{ display: 'flex' }}>
                         <PlatformAvatar
                             networkIcon={avatar}
-                            providerIcon={avatar ? new URL('../assets/twitter.png', import.meta.url) : undefined}
+                            providerIcon={new URL('../assets/twitter.png', import.meta.url)}
                             size={36}
                         />
                         <div style={{ marginLeft: '20px' }}>
@@ -76,7 +79,6 @@ export function PlatformCard(props: PlatformCardProps) {
                             <Typography>@{platformId}</Typography>
                         </div>
                     </div>
-                    <ArrowForwardIosIcon className={classes.arrowIcon} />
                 </div>
                 <div className={classes.flexItem} onClick={() => openImageSetting('NFTS')}>
                     <div>

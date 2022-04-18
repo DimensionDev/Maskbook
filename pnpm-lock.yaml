@@ -915,6 +915,7 @@ importers:
       classnames: ^2.3.1
       react-feather: ^2.0.9
       react-use: ^17.3.2
+      urlcat: ^2.0.4
       use-subscription: ^1.6.0
     dependencies:
       '@masknet/icons': link:../../icons
@@ -927,6 +928,7 @@ importers:
       classnames: 2.3.1
       react-feather: 2.0.9_react@18.0.0
       react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
+      urlcat: 2.0.4
       use-subscription: 1.6.0_react@18.0.0
 
   packages/plugins/example:
@@ -27422,7 +27424,7 @@ packages:
     dev: false
 
   github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d:
-    resolution: {commit: 3d2d89641a6ad5984929b6ca4b646452ec74f73d, repo: git+ssh://git@github.com/ProjectWyvern/ethereumjs-abi.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ProjectWyvern/ethereumjs-abi/tar.gz/3d2d89641a6ad5984929b6ca4b646452ec74f73d}
     name: ethereumjs-abi
     version: 0.6.6
     dependencies:
@@ -27431,7 +27433,7 @@ packages:
     dev: false
 
   github.com/ahultgren/async-eventemitter/fa06e39e56786ba541c180061dbf2c0a5bbf951c:
-    resolution: {commit: fa06e39e56786ba541c180061dbf2c0a5bbf951c, repo: git+ssh://git@github.com/ahultgren/async-eventemitter.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ahultgren/async-eventemitter/tar.gz/fa06e39e56786ba541c180061dbf2c0a5bbf951c}
     name: async-eventemitter
     version: 0.2.3
     dependencies:

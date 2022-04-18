@@ -14,6 +14,7 @@
       "react-use": "^17.3.2",
       "use-subscription": "^1.6.0",
       "react-feather": "^2.0.9",
-      "classnames": "^2.3.1"
+      "classnames": "^2.3.1",
+      "urlcat": "^2.0.4"
   }
 }

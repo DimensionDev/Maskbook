@@ -35,7 +35,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         const full = await fetchJSON<{ [MASK_STORAGE_KEY]: T }>(
             urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
         )
-        return full.map((x) => x[MASK_STORAGE_KEY])
+        return full
     }
 
     /**

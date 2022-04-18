@@ -11,8 +11,9 @@ import { useAddressNames } from '@masknet/web3-shared-evm'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { ImageManagement } from './ImageManagement'
-import { ImageList } from './ImageList'
-
+import { useDonations } from '../hooks/useDonations'
+import { useFootprints } from '../hooks/useFootprints'
+import WalletSetting from './WalletSetting'
 const useStyles = makeStyles()((theme) => ({
     root: {
         width: 520,
@@ -76,9 +77,6 @@ export interface BuyTokenDialogProps extends withClasses<never | 'root'> {
 enum BodyViewSteps {
     main = 'Web3 Profile',
     image_display = 'Settings',
-    image_setting = 'Wallets',
-    wallet_setting = 'Add wallet',
-    wallet = 'wallet',
 }
 
 export function Web3ProfileDialog(props: BuyTokenDialogProps) {
@@ -87,11 +85,10 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     const { open, onClose } = props
     const [title, setTitle] = useState('Web3 Profile')
     const [steps, setSteps] = useState(BodyViewSteps.main)
-    const [settingAddress, setSettingAddress] = useState<string>()
+    const [walletSwitchOpen, setWalletSwitchOpen] = useState(false)
     const persona = useCurrentPersona()
     const currentVisitingProfile = useCurrentVisitingProfile()
     const { value: addressNames = EMPTY_LIST, loading: loadingAddressNames } = useAddressNames(currentVisitingProfile!)
-
     const allPersona = useAllPersona()
     const currentPersona = allPersona?.find((x) => x.identifier.compressedPoint === persona?.compressedPoint)
     console.log({ currentPersona, currentVisitingProfile, addressNames })
@@ -115,12 +112,6 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
                 setSteps(BodyViewSteps.main)
                 setTitle('Web3 Profile')
                 break
-            case BodyViewSteps.image_setting:
-                setSteps(BodyViewSteps.image_display)
-                break
-            case BodyViewSteps.wallet_setting:
-                setSteps(BodyViewSteps.image_display)
-                break
             default:
                 onClose()
         }
@@ -134,62 +125,60 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
                 break
             case BodyViewSteps.image_display:
                 button = (
-                    <Button style={{ marginLeft: 'auto' }} onClick={() => setSteps(BodyViewSteps.wallet_setting)}>
+                    <Button style={{ marginLeft: 'auto' }} onClick={() => setWalletSwitchOpen(true)}>
                         Settings
                     </Button>
                 )
-                break
-            case BodyViewSteps.image_setting:
-                button = <></>
-                break
-            case BodyViewSteps.wallet_setting:
-                button = <Button style={{ marginLeft: 'auto' }}>Wallets</Button>
                 break
         }
         return button
     }
 
+    const wallets = bindings?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum) || []
+    const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(
+        '0xe93735Deb30AAa0810DfdA7fb2B0E2115982B1d1',
+    )
+    const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(
+        '0xe93735Deb30AAa0810DfdA7fb2B0E2115982B1d1',
+    )
+    console.log({ donations, footprints })
+
     return (
-        <InjectedDialog
-            classes={{ paper: classes.root, dialogContent: classes.content, dialogActions: classes.actions }}
-            title={title}
-            fullWidth={false}
-            open={open}
-            titleTail={TitleButton()}
-            onClose={handleBack}>
-            <DialogContent className={classes.content}>
-                {steps === BodyViewSteps.main && (
-                    <Main
-                        openImageSetting={(str: string) => {
-                            setTitle(str)
-                            setSteps(BodyViewSteps.image_display)
-                        }}
-                        persona={currentPersona}
-                        currentVisitingProfile={currentVisitingProfile}
-                    />
-                )}
-                {steps === BodyViewSteps.image_display && (
-                    <ImageManagement
-                        addresses={bindings?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)}
-                        onSetting={(addr: string) => {
-                            setSteps(BodyViewSteps.image_setting)
-                            setSettingAddress(addr)
-                        }}
-                    />
-                )}
-                {steps === BodyViewSteps.image_setting && <ImageList address={settingAddress} />}
-            </DialogContent>
-            <DialogActions>
-                {(steps === BodyViewSteps.main || steps === BodyViewSteps.image_display) && (
+        <>
+            <InjectedDialog
+                classes={{ paper: classes.root, dialogContent: classes.content, dialogActions: classes.actions }}
+                title={title}
+                fullWidth={false}
+                open={open}
+                titleTail={TitleButton()}
+                onClose={handleBack}>
+                <DialogContent className={classes.content}>
+                    {steps === BodyViewSteps.main && (
+                        <Main
+                            openImageSetting={(str: string) => {
+                                setTitle(str)
+                                setSteps(BodyViewSteps.image_display)
+                            }}
+                            persona={currentPersona}
+                            currentVisitingProfile={currentVisitingProfile}
+                        />
+                    )}
+                    {steps === BodyViewSteps.image_display && (
+                        <ImageManagement currentPersona={currentPersona} addresses={wallets} title={title} />
+                    )}
+                </DialogContent>
+                <DialogActions>
                     <PersonaAction currentPersona={currentPersona} currentVisitingProfile={currentVisitingProfile} />
-                )}
-                {(steps === BodyViewSteps.image_setting || steps === BodyViewSteps.wallet_setting) && (
-                    <div className={classes.buttonWrapper}>
-                        <Button className={classes.button}>Cancel</Button>
-                        <Button className={classes.button}>Confirm</Button>
-                    </div>
-                )}
-            </DialogActions>
-        </InjectedDialog>
+                </DialogActions>
+            </InjectedDialog>
+            <WalletSetting
+                wallets={wallets}
+                open={walletSwitchOpen}
+                title={title}
+                onClose={() => setWalletSwitchOpen(false)}
+                currentPersona={currentPersona}
+                currentVisitingProfile={currentVisitingProfile}
+            />
+        </>
     )
 }

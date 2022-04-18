@@ -2,7 +2,9 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 // import { Copy } from 'react-feather'
 import { WalletAssetsCard } from './WalletAssets'
-import { BindingProof } from '@masknet/shared-base'
+import type { BindingProof, PersonaInformation } from '@masknet/shared-base'
+import { ImageListDialog } from './ImageList'
+import { useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -50,23 +52,37 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ImageManagementProps extends withClasses<never | 'root'> {
     addresses?: BindingProof[]
-    onSetting: (addr: string) => void
+    title: string
+    currentPersona?: PersonaInformation
 }
 
 export function ImageManagement(props: ImageManagementProps) {
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const { addresses, onSetting } = props
+    const { addresses, title, currentPersona } = props
+    const [settingAddress, setSettingAddress] = useState<string>()
+    const [open, setOpen] = useState(false)
+    const onClose = () => setOpen(false)
 
     return (
         <div>
             {addresses?.map((address) => (
                 <WalletAssetsCard
                     key={address.identity}
-                    onSetting={() => onSetting(address.identity)}
+                    onSetting={() => {
+                        setSettingAddress(address.identity)
+                        setOpen(true)
+                    }}
                     address={address.identity}
                 />
             ))}
+            <ImageListDialog
+                currentPersona={currentPersona}
+                title={title}
+                address={settingAddress}
+                open={open}
+                onClose={onClose}
+            />
         </div>
     )
 }
