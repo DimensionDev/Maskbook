@@ -25,7 +25,7 @@ export * from './useWallets'
 export * from './useWeb3UI'
 export * from './useWeb3State'
 export * from './useNonFungibleAssets'
-export * from './useNonFungibleContracts'
 export * from './useFungibleAssets'
+export * from './useNonFungibleTokenList'
 
 export * from './Context'

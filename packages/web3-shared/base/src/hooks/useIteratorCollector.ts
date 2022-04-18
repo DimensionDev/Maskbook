@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useBoolean, useInterval } from 'react-use'
 import { uniqBy } from 'lodash-unified'
 
-export enum IteratorCollectorStatus {
+export enum IteratorCollectorState {
     init = 'init',
     fetching = 'fetching',
     done = 'done',
@@ -10,7 +10,7 @@ export enum IteratorCollectorStatus {
 }
 
 export const useIteratorCollector = <T>(iterator?: AsyncIterableIterator<T[]>, distinctBy?: (data: T) => string) => {
-    const [cache, setCache] = useState<{ data: T[]; status: IteratorCollectorStatus }>()
+    const [cache, setCache] = useState<{ data: T[]; status: IteratorCollectorState }>()
     const [isRunning, toggleIsRunning] = useBoolean(true)
     const [delay] = useState(1000)
 
@@ -18,7 +18,7 @@ export const useIteratorCollector = <T>(iterator?: AsyncIterableIterator<T[]>, d
         toggleIsRunning(true)
         const newData = {
             data: cache?.data ?? [],
-            status: IteratorCollectorStatus.init,
+            status: IteratorCollectorState.init,
         }
         setCache(newData)
     }, [iterator])
@@ -35,7 +35,7 @@ export const useIteratorCollector = <T>(iterator?: AsyncIterableIterator<T[]>, d
                 } else {
                     const newData = {
                         data: uniqBy([...(cache?.data ?? []), ...value], (x) => (!distinctBy ? true : distinctBy(x))),
-                        status: result.done ? IteratorCollectorStatus.done : IteratorCollectorStatus.fetching,
+                        status: result.done ? IteratorCollectorState.done : IteratorCollectorState.fetching,
                     }
                     setCache(newData)
                 }
@@ -43,7 +43,7 @@ export const useIteratorCollector = <T>(iterator?: AsyncIterableIterator<T[]>, d
                 const exist = cache?.data ?? []
                 const newData = {
                     data: exist,
-                    status: IteratorCollectorStatus.error,
+                    status: IteratorCollectorState.error,
                 }
                 setCache(newData)
             }
@@ -51,5 +51,5 @@ export const useIteratorCollector = <T>(iterator?: AsyncIterableIterator<T[]>, d
         isRunning && iterator ? delay : null,
     )
 
-    return cache ?? { data: [], status: IteratorCollectorStatus.init }
+    return cache ?? { data: [], status: IteratorCollectorState.init }
 }

@@ -3,7 +3,6 @@ import { v4 as uuid } from 'uuid'
 import {
     ChainId,
     ERC721ContractDetailed,
-    EthereumTokenType,
     isSameAddress,
     useAccount,
     useERC721ContractBalance,
@@ -16,8 +15,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { SelectNftContractDialogEvent, WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { IteratorCollectorStatus } from '@masknet/web3-shared-base'
-import { useNonFungibleContracts } from '@masknet/plugin-infra/web3'
+import { useNonFungibleTokenList } from '@masknet/plugin-infra/web3'
 
 interface StyleProps {
     hasIcon: boolean
@@ -82,25 +80,12 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const account = useAccount()
     const { classes } = useStyles({ hasIcon: Boolean(contract?.iconURL) })
     const { value: balanceFromChain, loading: loadingFromChain } = useERC721ContractBalance(contract?.address, account)
-    const { data: assets, status: loadingBalanceFromRemoteState } = useNonFungibleContracts(account, chainId)
-
-    const convertedAssets = assets.map((x) => ({
-        contractDetailed: {
-            type: EthereumTokenType.ERC721,
-            address: x.address,
-            chainId,
-            name: x.name,
-            symbol: x.symbol,
-            baseURI: x.iconURL,
-            iconURL: x.iconURL,
-        } as ERC721ContractDetailed,
-        balance: x.balance,
-    }))
+    const assets = useNonFungibleTokenList()
 
     const { t } = useI18N()
 
-    const balanceFromRemote = convertedAssets
-        ? convertedAssets.find((asset) => isSameAddress(asset.contractDetailed.address, contract?.address))?.balance
+    const balanceFromRemote = assets
+        ? assets.find((asset) => isSameAddress(asset.contract?.address, contract?.address))?.contract?.balance
         : undefined
 
     const balance = balanceFromChain ? Number(balanceFromChain) : balanceFromRemote ?? 0
@@ -109,7 +94,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
         onBalanceChange?.(balance)
     }, [onBalanceChange, balance])
 
-    const loading = (loadingFromChain || loadingBalanceFromRemoteState !== IteratorCollectorStatus.done) && !balance
+    const loading = loadingFromChain && !balance
 
     // #region select contract
     const [id] = useState(uuid)

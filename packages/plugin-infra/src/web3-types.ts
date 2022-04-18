@@ -377,10 +377,6 @@ export declare namespace Web3Plugin {
             getAllFungibleAssets?: (chainId: ChainId, address: string) => AsyncIterableIterator<FungibleAsset[]>
             /** Get all non-fungible assets of given account. */
             getAllNonFungibleAssets?: (chainId: ChainId, address: string) => AsyncIterableIterator<NonFungibleAsset[]>
-            getAllNonFungibleContract?: (
-                chainId: ChainId,
-                address: string,
-            ) => AsyncIterableIterator<NonFungibleTokenContract[]>
         }
         export interface NameServiceState<ChainId, DomainBook = Record<string, string>> {
             /** The tracked domains of currently chosen sub-network */

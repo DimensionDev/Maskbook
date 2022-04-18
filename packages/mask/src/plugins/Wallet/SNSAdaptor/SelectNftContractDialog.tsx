@@ -21,7 +21,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
 import { unionBy } from 'lodash-unified'
 import type { NonFungibleTokenAPI } from '@masknet/web3-providers'
-import { useNonFungibleContracts } from '@masknet/plugin-infra/web3'
+import { useNonFungibleTokenList } from '@masknet/plugin-infra/web3'
 import { IteratorCollectorStatus } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -154,7 +154,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     // #endregion
 
-    const { data: assets, status: loadingCollectionState } = useNonFungibleContracts(account, chainId)
+    const { data: assets, status: loadingCollectionState } = useNonFungibleTokenList(account, chainId)
 
     const erc721InDb = useERC721Tokens()
     const allContractsInDb = unionBy(
