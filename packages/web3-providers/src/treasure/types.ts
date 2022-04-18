@@ -170,3 +170,26 @@ interface TreasureTokenMetadata {
 export interface TreasureTokenWithMetadata {
     token: TreasureTokenMetadata
 }
+
+export interface Asset {
+    id: string
+    collection: Collection
+    _owners: ![!string]
+    filters: ![!string]
+    floorPrice: bigint
+    listings: [!Listing]
+    metadata: Metadata
+    metadataUri: string
+    name: string
+
+    owner: User
+
+    owners: [!UserToken]
+    rank: number
+    rarity: number
+    tokenId: number
+
+    totalItems: number
+
+    totalOwners: number
+}
