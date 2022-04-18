@@ -57,12 +57,12 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
             const encrypted = await fetchBackupValue(info.downloadURL)
             const decrypted = await decryptBackup(encode(account + backupPassword), encrypted)
             const backupText = JSON.stringify(decode(decrypted))
-            const data = (await Services.Welcome.addUnconfirmedBackup(backupText)).unwrap()
+            const data = (await Services.Backup.addUnconfirmedBackup(backupText)).unwrap()
 
             if (data.info.wallets) {
-                await Services.Welcome.restoreUnconfirmedBackup({ id: data.id, action: 'wallet' })
+                await Services.Backup.restoreUnconfirmedBackup({ id: data.id, action: 'wallet' })
             } else {
-                await Services.Welcome.restoreUnconfirmedBackup({ id: data.id, action: 'confirm' })
+                await Services.Backup.restoreUnconfirmedBackup({ id: data.id, action: 'confirm' })
 
                 restoreCallback()
                 setBackupPassword('')

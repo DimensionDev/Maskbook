@@ -38,7 +38,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
     const title = local ? t.settings_local_backup() : t.settings_cloud_backup()
     const { user, updateUser } = useContext(UserContext)
 
-    const { value: previewInfo, loading: searching } = useAsync(() => Services.Welcome.generateBackupPreviewInfo())
+    const { value: previewInfo, loading: searching } = useAsync(() => Services.Backup.generateBackupPreviewInfo())
 
     const [{ loading }, handleBackup] = useAsyncFn(async () => {
         if (backupPassword !== user.backupPassword) {
@@ -55,7 +55,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
                 }
             }
 
-            const { file, personaNickNames } = await Services.Welcome.createBackupFile({
+            const { file, personaNickNames } = await Services.Backup.createBackupFile({
                 excludeBase: !showPassword,
                 excludeWallet: !showPassword.wallet,
             })
