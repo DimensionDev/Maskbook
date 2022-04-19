@@ -6,20 +6,15 @@ import {
 } from '../../database'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { Persona, Profile } from '../../database/Persona/types'
-import {
-    queryPersonaDB,
-    queryPersonasDB,
-    queryRelationsPagedDB,
-    RelationRecord,
-} from '../../../background/database/persona/db'
+import { queryPersonasDB } from '../../../background/database/persona/db'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { getCurrentPersonaIdentifier } from './SettingsService'
 
 assertEnvironment(Environment.ManifestBackground)
 
 export * from '../../../background/services/identity'
 
+/** @deprecated */
 export { queryProfile, queryPersonaByProfile } from '../../database'
 
 /** @deprecated */
@@ -27,9 +22,12 @@ export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery({ network })
 }
 
+/** @deprecated */
 export function queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]) {
     return queryProfilesWithQuery({ identifiers })
 }
+
+/** @deprecated */
 export async function queryMyProfiles(network?: string): Promise<Profile[]> {
     const myPersonas = (await queryMyPersonas(network)).filter((x) => !x.uninitialized)
     return Promise.all(
@@ -59,14 +57,7 @@ export async function queryPersona(
     return queryPersonaRAW(identifier)
 }
 
-async function queryPersonas_inner(identifier?: PersonaIdentifier, requirePrivateKey = false): Promise<Persona[]> {
-    if (typeof identifier === 'undefined')
-        return (await queryPersonasDB({ hasPrivateKey: requirePrivateKey })).map(personaRecordToPersona)
-    const x = await queryPersonaDB(identifier)
-    if (!x || (!x.privateKey && requirePrivateKey)) return []
-    return [personaRecordToPersona(x)]
-}
-
+/** @deprecated */
 export async function queryMyPersonas(
     network?: string,
 ): Promise<
@@ -83,7 +74,7 @@ export async function queryMyPersonas(
         | 'updatedAt'
     >[]
 > {
-    const x = await queryPersonas_inner(undefined, true)
+    const x = (await queryPersonasDB({ hasPrivateKey: true })).map(personaRecordToPersona)
     if (typeof network === 'string') {
         return x.filter((y) => {
             for (const z of y.linkedProfiles.keys()) {
@@ -93,20 +84,4 @@ export async function queryMyPersonas(
         })
     }
     return x
-}
-
-export async function queryRelationPaged(
-    options: {
-        network: string
-        after?: RelationRecord
-        pageOffset?: number
-    },
-    count: number,
-): Promise<RelationRecord[]> {
-    const currentPersona = await getCurrentPersonaIdentifier()
-    if (currentPersona) {
-        return queryRelationsPagedDB(currentPersona, options, count)
-    }
-
-    return []
 }

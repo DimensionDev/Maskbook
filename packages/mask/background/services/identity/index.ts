@@ -34,7 +34,11 @@ export {
 } from './profile/update'
 
 export { createNewRelation } from './relation/create'
-export { mobile_queryRelationsRecordFromIndexedDB } from './relation/query'
+export {
+    mobile_queryRelationsRecordFromIndexedDB,
+    queryRelationPaged,
+    type QueryRelationPagedOptions,
+} from './relation/query'
 export { updateRelation } from './relation/update'
 
 export { validateMnemonic } from './persona/utils'

@@ -18,6 +18,7 @@ export const useContacts = (network: string, page: number, size = 20) => {
         const lastValue = cache.current.get(page - 1)
 
         const values = await Services.Identity.queryRelationPaged(
+            currentPersona?.identifier,
             {
                 network,
                 after: lastValue,

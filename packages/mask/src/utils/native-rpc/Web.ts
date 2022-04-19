@@ -245,7 +245,11 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 linked: stringToPersonaIdentifier(after.linked),
             }
         }
-        const records = await Services.Identity.queryRelationPaged({ network, after: afterRecord }, count)
+        const records = await Services.Identity.queryRelationPaged(
+            await Services.Settings.getCurrentPersonaIdentifier(),
+            { network, after: afterRecord },
+            count,
+        )
 
         const profiles = await Services.Identity.queryProfilesWithIdentifiers(records.map((x) => x.profile))
 
