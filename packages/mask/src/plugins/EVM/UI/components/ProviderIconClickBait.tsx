@@ -2,7 +2,7 @@ import { useCallback, cloneElement, isValidElement } from 'react'
 import { unreachable } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { isDashboardPage } from '@masknet/shared-base'
+import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import {
     getChainIdFromNetworkType,
     isFortmaticSupported,
@@ -52,6 +52,13 @@ export function ProviderIconClickBait({
                 openWindow(downloadLink)
                 return
             }
+        }
+
+        // it's not necessary to open the connection dialog on popup page.
+        // it will switch to the wallet selection page directly.
+        if (isPopupPage() && providerType === ProviderType.MaskWallet) {
+            onClick?.(network, provider)
+            return
         }
 
         switch (providerType) {
