@@ -1,7 +1,7 @@
 import { ImageIcon, ReversedAddress, useSnackbarCallback } from '@masknet/shared'
-import { makeStyles, ShadowRootMenu, useStylesExtends } from '@masknet/theme'
+import { makeStyles, ShadowRootMenu, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
 import { formatEthereumAddress, isSameAddress, useChainId } from '@masknet/web3-shared-evm'
-import { Button, Divider, Link, ListItemIcon, MenuItem, Stack, Tooltip, Typography, useTheme } from '@mui/material'
+import { Button, Divider, Link, ListItemIcon, MenuItem, Stack, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { ExternalLink, IconProps } from 'react-feather'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
@@ -213,13 +213,13 @@ const CopyIconButton = memo<CopyIconButtonProps>(({ text, ...props }) => {
     })
 
     return (
-        <Tooltip
+        <ShadowRootTooltip
             title={<span style={{ color: theme.palette.text.primary }}>{t.copied()}</span>}
             open={open}
             onMouseLeave={() => setOpen(false)}
             disableFocusListener
             disableTouchListener>
             <CopyIcon onClick={onCopy} className={props.className} />
-        </Tooltip>
+        </ShadowRootTooltip>
     )
 })

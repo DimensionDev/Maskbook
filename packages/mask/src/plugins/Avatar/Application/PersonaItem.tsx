@@ -14,7 +14,7 @@ import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
-        margin: theme.spacing(0.5),
+        margin: theme.spacing(2, 0.5),
         border: `1px solid ${theme.palette.divider}`,
         borderRadius: 16,
         padding: 16,

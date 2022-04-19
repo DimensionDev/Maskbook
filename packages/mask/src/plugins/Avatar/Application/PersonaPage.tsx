@@ -10,12 +10,12 @@ import { useI18N } from '../locales/i18n_generated'
 import type { TokenInfo } from '../types'
 import { PersonaItem } from './PersonaItem'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     messageBox: {
         display: 'flex',
         borderRadius: 4,
         padding: 8,
-        backgroundColor: 'rgba(28, 104, 243, 0.1)',
+        backgroundColor: theme.palette.background.default,
         fontSize: 14,
         alignItems: 'center',
     },
@@ -60,7 +60,7 @@ export function PersonaPage(props: PersonaPageProps) {
                 <>
                     {visible ? (
                         <Box className={classes.messageBox}>
-                            <Typography color="#1C68F3" variant="body1" fontSize={14}>
+                            <Typography color="textPrimary" variant="body1" fontSize={14}>
                                 {t.persona_hint()}
                             </Typography>
                             <CloseIcon sx={{ cursor: 'pointer' }} onClick={() => setVisible(false)} />
