@@ -186,7 +186,7 @@ export function NFTListPagePolygon(props: NFTListPageProps) {
                           ))}
                 </Box>
             </Box>
-            <AddNFT open={open} onClose={() => setOpen(false)} onAddClick={onAddClick} />
+            <AddNFT title={t.add_collectible()} open={open} onClose={() => setOpen(false)} onAddClick={onAddClick} />
         </>
     )
 }

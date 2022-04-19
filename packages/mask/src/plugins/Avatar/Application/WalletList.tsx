@@ -162,6 +162,7 @@ const useWalletUIStyles = makeStyles()((theme) => ({
     linkIcon: {
         width: 16,
         height: 16,
+        color: '#536471',
     },
 }))
 

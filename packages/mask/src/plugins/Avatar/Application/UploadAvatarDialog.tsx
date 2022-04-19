@@ -1,4 +1,4 @@
-import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
+import { Button, DialogActions, DialogContent, Slider, useTheme } from '@mui/material'
 import AvatarEditor from 'react-avatar-editor'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
@@ -16,6 +16,10 @@ import { context } from '../context'
 const useStyles = makeStyles()((theme) => ({
     actions: {
         padding: theme.spacing(0, 2, 2, 2),
+    },
+    cancel: {
+        backgroundColor: theme.palette.background.default,
+        border: 'none',
     },
 }))
 
@@ -85,6 +89,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const t = useI18N()
+    const theme = useTheme()
 
     const onSave = useCallback(() => {
         if (!editor || !account || !token || !currentConnectedPersona || !proof || !identifier) return
@@ -137,10 +142,10 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 />
             </DialogContent>
             <DialogActions className={classes.actions}>
-                <Button sx={{ flex: 1 }} variant="text" onClick={onBack}>
-                    {t.connect_your_wallet()}
+                <Button className={classes.cancel} fullWidth variant="outlined" onClick={onBack}>
+                    {t.cancel()}
                 </Button>
-                <Button disabled={disabled} sx={{ flex: 1 }} variant="contained" onClick={onSave}>
+                <Button disabled={disabled} fullWidth variant="contained" onClick={onSave}>
                     {t.save()}
                 </Button>
             </DialogActions>

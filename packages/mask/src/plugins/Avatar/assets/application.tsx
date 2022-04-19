@@ -1,7 +1,8 @@
-import { SvgIcon, SvgIconProps } from '@mui/material'
+import { createIcon } from '@masknet/icons'
 
-const svg = (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const ApplicationIcon = createIcon(
+    'ApplicationIcon',
+    <g>
         <path
             d="M3 3C3 1.89543 3.89543 1 5 1H19C20.1046 1 21 1.89543 21 3V21C21 22.1046 20.1046 23 19 23H5C3.89543 23 3 22.1046 3 21V3Z"
             fill="url(#paint0_linear_632_5441)"
@@ -22,7 +23,6 @@ const svg = (
                 <stop offset="0.99" stopColor="#FFC49A" />
             </linearGradient>
         </defs>
-    </svg>
+    </g>,
+    '0 0 24 24',
 )
-
-export const ApplicationIcon = (props: SvgIconProps) => <SvgIcon {...props}>{svg}</SvgIcon>

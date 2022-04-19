@@ -31,6 +31,7 @@ export interface AddNFTProps {
     onClose: () => void
     onAddClick?: (token: ERC721TokenDetailed) => void
     open: boolean
+    title?: string
 }
 export function AddNFT(props: AddNFTProps) {
     const { t } = useI18N()
@@ -38,7 +39,7 @@ export function AddNFT(props: AddNFTProps) {
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
-    const { onClose, open, onAddClick } = props
+    const { onClose, open, onAddClick, title } = props
     const account = useAccount()
 
     const onClick = useCallback(async () => {
@@ -79,7 +80,7 @@ export function AddNFT(props: AddNFTProps) {
     }
 
     return (
-        <InjectedDialog title={t('nft_add_dialog_title')} open={open} onClose={handleClose}>
+        <InjectedDialog title={title ?? t('nft_add_dialog_title')} open={open} onClose={handleClose}>
             <DialogContent>
                 <Button className={classes.addNFT} variant="contained" size="small" onClick={onClick}>
                     {t('nft_add_button_label')}

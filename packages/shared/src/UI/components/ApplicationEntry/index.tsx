@@ -41,7 +41,7 @@ interface Props {
     disabled?: boolean
     onClick: () => void
     tooltipProps?: Partial<TooltipProps>
-    hint?: string
+    hint?: string | React.ReactElement
 }
 
 export function ApplicationEntry(props: Props) {

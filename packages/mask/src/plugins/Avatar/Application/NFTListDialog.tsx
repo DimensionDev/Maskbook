@@ -9,6 +9,7 @@ import { AddNFT } from '../SNSAdaptor/AddNFT'
 import type { BindingProof } from '@masknet/shared-base'
 import type { SelectTokenInfo, TokenInfo } from '../types'
 import { uniqBy } from 'lodash-unified'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -45,6 +46,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [selectedAccount, setSelectedAccount] = useState('')
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed>()
     const [disabled, setDisabled] = useState(false)
+    const t = useI18N()
     const [tokens, setTokens] = useState<ERC721TokenDetailed[]>([])
     const onChange = useCallback((address: string) => {
         setSelectedAccount(address)
@@ -81,7 +83,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     return (
         <>
-            <DialogContent sx={{ height: 612 }}>
+            <DialogContent sx={{ height: 612, padding: 0 }}>
                 <AddressNames
                     account={account}
                     wallets={wallets ?? []}
@@ -95,18 +97,18 @@ export function NFTListDialog(props: NFTListDialogProps) {
             <DialogActions className={classes.actions}>
                 <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
                     <Typography variant="body1" color="textPrimary">
-                        Can' find it.
+                        {t.collectible_not_found()}
                     </Typography>
                     <Typography variant="body1" color="#1D9BF0" sx={{ cursor: 'pointer' }} onClick={onClick}>
-                        Add collectibles
+                        {t.add_collectible()}
                     </Typography>
                 </Stack>
 
                 <Button disabled={disabled} className={classes.button} onClick={onSave}>
-                    Set NFT Avatar
+                    {t.set_avatar_title()}
                 </Button>
             </DialogActions>
-            <AddNFT open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
+            <AddNFT title={t.add_collectible()} open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
         </>
     )
 }

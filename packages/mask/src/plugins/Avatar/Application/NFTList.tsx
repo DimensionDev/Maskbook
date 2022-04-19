@@ -8,6 +8,15 @@ import { NFTListPage, NFTListPagePolygon } from './NFTListPage'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
+    selected: {
+        backgroundColor: theme.palette.background.paper,
+        borderTop: `2px solid ${theme.palette.background.default}`,
+        color: `${theme.palette.text.primary} !important`,
+    },
+    tab: {
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.secondary,
+    },
 }))
 interface NFTListProps {
     address: string
@@ -26,9 +35,23 @@ export function NFTList(props: NFTListProps) {
     if (!address) return null
     return (
         <TabContext value={currentTab}>
-            <Tabs value={currentTab} variant="fullWidth" onChange={onChange}>
-                <Tab label="ETH" value={tabs.ETH} />
-                <Tab label="Polygon" value={tabs.Polygon} />
+            <Tabs
+                value={currentTab}
+                variant="fullWidth"
+                onChange={onChange}
+                sx={{
+                    '.MuiTabs-indicator': { display: 'none' },
+                }}>
+                <Tab
+                    label="ETH"
+                    value={tabs.ETH}
+                    className={currentTab === tabs.ETH ? classes.selected : classes.tab}
+                />
+                <Tab
+                    label="Polygon"
+                    value={tabs.Polygon}
+                    className={currentTab === tabs.Polygon ? classes.selected : classes.tab}
+                />
             </Tabs>
             <TabPanel value={tabs.ETH}>
                 <NFTListPage
