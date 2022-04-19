@@ -8,13 +8,12 @@ import { useWallet } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
-import formatDateTime from 'date-fns/format'
-import { saveFileFromBuffer } from '../../../../../../shared/helpers/download'
-import { encodeText } from '@dimensiondev/kit'
-import { MimeTypes } from '@masknet/shared-base'
-import Services from '../../../../service'
 import { WalletContext } from '../hooks/useWalletContext'
 import { useTitle } from '../../../hook/useTitle'
+import formatDateTime from 'date-fns/format'
+import { saveFileFromBuffer } from '../../../../../../shared'
+import { encodeText } from '@dimensiondev/kit'
+import { MimeTypes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     header: {

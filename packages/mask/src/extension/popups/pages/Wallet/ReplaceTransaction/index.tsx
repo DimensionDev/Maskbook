@@ -194,7 +194,7 @@ const ReplaceTransaction = memo(() => {
         <>
             <Box component="main" p={2}>
                 <Typography fontSize={18} lineHeight="24px" fontWeight={500}>
-                    {type === ReplaceType.CANCEL ? 'Cancel Transaction' : 'Speed up transaction'}
+                    {type === ReplaceType.CANCEL ? t('popups_cancel_transaction') : t('popups_speed_up_transaction')}
                 </Typography>
                 <Box display="flex" flexDirection="column" alignItems="center" style={{ padding: '14.5px 0' }}>
                     <Typography fontWeight={500} fontSize={24} lineHeight="30px">

@@ -4,7 +4,6 @@ import { useI18N } from '../../../../../utils'
 import { ConnectedWalletsUI } from './UI'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { useChainId, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
-import { useNavigate } from 'react-router-dom'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -18,7 +17,6 @@ const ConnectedWallets = memo(() => {
     const { t } = useI18N()
     const chainId = useChainId()
     const { NameService } = useWeb3State()
-    const navigate = useNavigate()
     const wallets = useWallets()
     const { proofs, currentPersona, refreshProofs, fetchProofsLoading } = PersonaContext.useContainer()
 
@@ -105,8 +103,6 @@ const ConnectedWallets = memo(() => {
 
     useTitle(t('popups_connected_wallets'))
 
-    if (!proofs || !connectedWallets || !currentPersona) return null
-
     return (
         <ConnectedWalletsUI
             wallets={connectedWallets}
@@ -114,7 +110,7 @@ const ConnectedWallets = memo(() => {
             releaseLoading={confirmState.loading}
             onRelease={onConfirmRelease}
             onAddVerifyWallet={navigateToConnectWallet}
-            personaName={currentPersona.nickname}
+            personaName={currentPersona?.nickname}
             loading={fetchProofsLoading || resolveWalletNameLoading}
         />
     )

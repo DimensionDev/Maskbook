@@ -97,7 +97,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 interface ConnectedWalletsUIProps {
-    wallets: ConnectedWalletInfo[]
+    wallets?: ConnectedWalletInfo[]
     chainId: ChainId
     onRelease: (wallet?: ConnectedWalletInfo) => Promise<void>
     onAddVerifyWallet: () => void
@@ -134,7 +134,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
 
         return (
             <div className={classes.container}>
-                {wallets.length > 0 ? (
+                {wallets && wallets?.length > 0 ? (
                     wallets.map((wallet, key) => (
                         <div className={classes.item} key={key}>
                             <ImageIcon size={30} icon={networkDescriptor?.icon} />

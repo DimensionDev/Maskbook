@@ -72,8 +72,6 @@ const ConnectWalletPage = memo(() => {
     const { ProviderIconClickBait } = useWeb3UI(NetworkPluginID.PLUGIN_EVM).SelectProviderDialog ?? {}
 
     const onSubmit = useCallback(async (result?: Web3Plugin.ConnectionResult) => {
-        console.log('DEBUG: connection result')
-        console.log(result)
         navigate(PopupRoutes.VerifyWallet, {
             state: result as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>,
         })

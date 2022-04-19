@@ -6,6 +6,7 @@ import { useI18N } from '../../../../../utils'
 import { ConnectDialog } from '../components/ConnectDialog'
 import { EmptyIcon } from '@masknet/icons'
 import type { Account } from '../type'
+import type { EnhanceableSite } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -58,8 +59,8 @@ const useStyles = makeStyles()(() => ({
 
 export interface AccountsUIProps {
     accounts: Account[]
-    networks: string[]
-    onConnect: (networkIdentifier: string) => void
+    networks: EnhanceableSite[]
+    onConnect: (networkIdentifier: EnhanceableSite) => void
     onEnterDetail: (account: Account) => void
 }
 
