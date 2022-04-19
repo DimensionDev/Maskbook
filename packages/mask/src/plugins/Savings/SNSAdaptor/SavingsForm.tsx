@@ -21,7 +21,8 @@ import {
     useWeb3,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
-import { FormattedCurrency, LoadingAnimation, TokenAmountPanel, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, LoadingAnimation, TokenIcon } from '@masknet/shared'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
 import { useI18N } from '../../../utils'
