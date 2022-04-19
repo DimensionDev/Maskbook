@@ -1,10 +1,8 @@
 import {
     personaRecordToPersona,
-    queryAvatarDataURL,
     queryPersona as queryPersonaRAW,
     queryProfile,
     queryProfilesWithQuery,
-    storeAvatar,
 } from '../../database'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { Persona, Profile } from '../../database/Persona/types'
@@ -17,7 +15,6 @@ import {
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { getCurrentPersonaIdentifier } from './SettingsService'
-import { MaskMessages } from '../../utils'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -112,24 +109,4 @@ export async function queryRelationPaged(
     }
 
     return []
-}
-
-export async function updateCurrentPersonaAvatar(avatar: Blob) {
-    const identifier = await getCurrentPersonaIdentifier()
-
-    if (identifier) {
-        await storeAvatar(identifier, await avatar.arrayBuffer())
-        MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
-    }
-}
-
-export async function getCurrentPersonaAvatar() {
-    const identifier = await getCurrentPersonaIdentifier()
-    if (!identifier) return null
-
-    try {
-        return await queryAvatarDataURL(identifier)
-    } catch {
-        return null
-    }
 }

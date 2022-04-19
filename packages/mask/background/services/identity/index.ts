@@ -20,6 +20,7 @@ export {
     queryPersonaByMnemonic,
 } from './persona/update'
 export { signWithPersona, type SignRequest, type SignRequestResult, generateSignResult } from './persona/sign'
+export { getPersonaAvatar, updatePersonaAvatar } from './persona/avatar'
 
 export { mobile_queryProfiles, mobile_queryProfileRecordFromIndexedDB } from './profile/query'
 export {
