@@ -19,7 +19,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { MobileProfiles } from '../../../background/services/identity/profile/query'
-import type { MobilePersona } from '../../../background/services/identity/persona/update'
+import type { MobilePersona } from '../../../background/services/identity/persona/mobile'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
@@ -131,11 +131,11 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
     persona_createPersonaByMnemonic: async ({ mnemonic, nickname, password }) => {
         const x = await Services.Identity.mobile_restoreFromMnemonicWords(mnemonic, nickname, password)
-        return personaFormatter(x)
+        return personaFormatter(x!)
     },
     persona_queryPersonas: async ({ identifier, hasPrivateKey }) => {
         const id = identifier ? stringToPersonaIdentifier(identifier) : undefined
-        const result = await Services.Identity.app_only_queryPersonas(id, hasPrivateKey)
+        const result = await Services.Identity.mobile_queryPersonas(id, hasPrivateKey)
 
         return result?.map(personaFormatter)
     },

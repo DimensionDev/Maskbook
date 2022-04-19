@@ -70,10 +70,6 @@ export async function queryPersona(
     return queryPersonaRAW(identifier)
 }
 
-export async function app_only_queryPersonas(identifier?: PersonaIdentifier, requirePrivateKey = false) {
-    if (process.env.architecture !== 'app') throw new Error('This function is only available in app')
-    return queryPersonas_inner(identifier, requirePrivateKey)
-}
 async function queryPersonas_inner(identifier?: PersonaIdentifier, requirePrivateKey = false): Promise<Persona[]> {
     if (typeof identifier === 'undefined')
         return (await queryPersonasDB({ hasPrivateKey: requirePrivateKey })).map(personaRecordToPersona)

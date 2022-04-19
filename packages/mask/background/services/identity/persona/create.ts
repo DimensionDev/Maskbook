@@ -10,7 +10,7 @@ import {
 import { createPersonaByJsonWebKey } from '../../../database/persona/helper'
 import { decode } from '@msgpack/msgpack'
 import { omit } from 'lodash-unified'
-import type { MobilePersona } from './update'
+import { MobilePersona, personaRecordToMobilePersona } from './mobile'
 import { attachProfileDB, LinkedProfileDetails, queryPersonaDB, queryPersonasDB } from '../../../database/persona/db'
 import {
     deriveLocalKeyFromECDHKey,
@@ -32,23 +32,14 @@ export async function mobile_restoreFromMnemonicWords(
     mnemonicWords: string,
     nickname: string,
     password: string,
-): Promise<MobilePersona> {
+): Promise<MobilePersona | null> {
     if (process.env.architecture !== 'app') throw new Error('This function is only available in mobile')
     if (!bip39.validateMnemonic(mnemonicWords)) throw new Error('the mnemonic words are not valid')
     const identifier = await restoreNewIdentityWithMnemonicWord(mnemonicWords, password, {
         nickname,
     })
 
-    const persona = (await queryPersonaDB(identifier))!
-    const result: MobilePersona = {
-        identifier: persona.identifier,
-        createdAt: persona.createdAt,
-        updatedAt: persona.updatedAt,
-        nickname: persona.nickname,
-        hasPrivateKey: !!persona.privateKey,
-        linkedProfiles: persona.linkedProfiles,
-    }
-    return result
+    return queryPersonaDB(identifier).then((x) => personaRecordToMobilePersona(x))
 
     /**
      * Recover new identity by a password and mnemonic words

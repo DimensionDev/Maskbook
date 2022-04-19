@@ -4,8 +4,6 @@ import {
     EC_JsonWebKey,
     isEC_Private_JsonWebKey,
     PersonaIdentifier,
-    ProfileIdentifier,
-    ReadonlyIdentifierMap,
 } from '@masknet/shared-base'
 import { decode } from '@msgpack/msgpack'
 import {
@@ -15,9 +13,9 @@ import {
     deletePersonaDB,
     safeDeletePersonaDB,
     updatePersonaDB,
-    LinkedProfileDetails,
     queryPersonasDB,
 } from '../../../database/persona/db'
+import { MobilePersona, personaRecordToMobilePersona } from './mobile'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord, validateMnemonic } from './utils'
 
 export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even with private' | 'safe delete') {
@@ -82,14 +80,6 @@ export async function loginExistPersonaByPrivateKey(privateKeyString: string): P
     return null
 }
 
-export interface MobilePersona {
-    identifier: PersonaIdentifier
-    nickname?: string
-    linkedProfiles: ReadonlyIdentifierMap<ProfileIdentifier, LinkedProfileDetails>
-    hasPrivateKey: boolean
-    createdAt: Date
-    updatedAt: Date
-}
 export async function mobile_queryPersonaByPrivateKey(privateKeyString: string): Promise<MobilePersona | null> {
     if (process.env.architecture !== 'app') throw new Error('This function is only available in app')
     const privateKey = decode(decodeArrayBuffer(privateKeyString)) as EC_JsonWebKey
@@ -98,17 +88,8 @@ export async function mobile_queryPersonaByPrivateKey(privateKeyString: string):
     const persona = await queryPersonaDB(identifier, undefined, true)
     if (persona) {
         await loginPersona(persona.identifier)
-        const result: MobilePersona = {
-            identifier: persona.identifier,
-            createdAt: persona.createdAt,
-            updatedAt: persona.updatedAt,
-            hasPrivateKey: !!persona.privateKey,
-            nickname: persona.nickname,
-            linkedProfiles: persona.linkedProfiles,
-        }
-        return result
+        return personaRecordToMobilePersona(persona)
     }
-
     return null
 }
 
