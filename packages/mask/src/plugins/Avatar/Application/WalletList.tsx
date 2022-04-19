@@ -15,6 +15,7 @@ import { Services } from '../../../extension/service'
 import { useI18N } from '../locales/i18n_generated'
 import { useCopyToClipboard } from 'react-use'
 import { LinkIcon } from '../assets/link'
+import { CopyIcon } from '../assets/copy'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -152,12 +153,15 @@ const useWalletUIStyles = makeStyles()((theme) => ({
     },
     copy: {
         fontSize: 16,
-        stroke: theme.palette.text.secondary,
         cursor: 'pointer',
     },
-    link: { color: theme.palette.text.secondary },
+    link: {
+        color: theme.palette.text.secondary,
+        lineHeight: 0,
+    },
     linkIcon: {
-        transform: 'translate(3px, 6px)',
+        width: 16,
+        height: 16,
     },
 }))
 

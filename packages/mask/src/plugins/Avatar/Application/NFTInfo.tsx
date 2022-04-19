@@ -43,11 +43,11 @@ export function NFTInfo(props: NFTInfoProps) {
                                 {formatTokenId(nft.symbol, nft.tokenId)}
                             </Typography>
                             <Link
-                                sx={{ marginLeft: 0.5 }}
+                                sx={{ marginLeft: 0.5, lineHeight: 0 }}
                                 href={resolveOpenSeaLink(nft.address, nft.tokenId)}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <LinkIcon />
+                                <LinkIcon sx={{ width: 16, height: 16 }} />
                             </Link>
                         </Stack>
                     </Box>
