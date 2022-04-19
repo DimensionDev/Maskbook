@@ -1,27 +1,36 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable spaced-comment */
-/* eslint-disable eqeqeq */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable no-restricted-imports */
+// /* eslint-disable spaced-comment */
+// /* eslint-disable eqeqeq */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useI18N } from '../locales/i18n_generated'
 import { InputTokenPanel } from '../../../../../packages/mask/src/plugins/Trader/SNSAdaptor/trader/InputTokenPanel'
 import { TokenPanelType } from '../../../../../packages/mask/src/plugins/Trader/types'
 
-import { noop } from 'lodash'
+import { noop } from 'lodash-unified'
 import { DropIcon } from '../../../../icons/general'
 import { useCallback, useState } from 'react'
 import { usePickToken } from '@masknet/shared'
-import { useFungibleTokenBalance, isSameAddress, EthereumTokenType, useTokenConstants } from '@masknet/web3-shared-evm'
+import {
+    type FungibleTokenDetailed,
+    ChainId,
+    useFungibleTokenBalance,
+    isSameAddress,
+    EthereumTokenType,
+    useTokenConstants,
+} from '@masknet/web3-shared-evm'
 import { Grid, IconButton, Typography } from '@mui/material'
 import { ArrowBack } from '@mui/icons-material'
 
-export const SelectTokenView = (props: {
-    chainId: number
-    onAmountChange: any
-    setDisplaySection: any
-    classes: any
-    inputToken: any
+interface SelectTokenView {
+    chainId: ChainId
+    onAmountChange: Function
+    setDisplaySection: Function
+    classes: Record<string, string>
+    inputToken: FungibleTokenDetailed | null | undefined
     inputTokenAmount: string
-}): JSX.Element => {
+}
+
+export const SelectTokenView = (props: SelectTokenView): JSX.Element => {
     const t = useI18N()
 
     const { inputToken } = props
@@ -52,11 +61,11 @@ export const SelectTokenView = (props: {
             })
             if (picked) {
                 console.log('picked=', picked)
-                //setToken(picked)
+                // setToken(picked)
                 // #region update balance
                 console.log('tokenBalance=', inputTokenBalance_)
                 props.onAmountChange(picked, props.inputTokenAmount)
-                //setInputTokenBalance(inputTokenBalance_)
+                // setInputTokenBalance(inputTokenBalance_)
             }
         },
         [excludeTokens.join(), chainId],
@@ -93,7 +102,7 @@ export const SelectTokenView = (props: {
                     balance={inputTokenBalance}
                     token={inputToken}
                     onAmountChange={(a: string) => {
-                        ///setInputAmount(a)
+                        /// setInputAmount(a)
                         props.onAmountChange(inputToken, a)
                     }}
                     SelectTokenChip={{

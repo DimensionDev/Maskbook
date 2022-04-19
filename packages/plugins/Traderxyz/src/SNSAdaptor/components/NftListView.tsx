@@ -1,12 +1,18 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable spaced-comment */
-/* eslint-disable eqeqeq */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable no-restricted-imports */
+// /* eslint-disable spaced-comment */
+// /* eslint-disable eqeqeq */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { makeStyles } from '@masknet/theme'
 import TreeView from '@mui/lab/TreeView'
-import * as React from 'react'
-import { CustomTreeChild, CustomTreeChildItem, CustomTreeParent } from './NftListTree'
 import { AddCircle, RemoveCircle } from '@mui/icons-material'
+import type { PreviewNftList, TreeNftData } from '../../types'
+
+import TreeParentContent from './TreeParentContent'
+import TreeChildContent from './TreeChildContent'
+import TreeChildItemContent from './TreeChildItemContent'
+
+import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem'
+import { alpha, styled } from '@mui/material/styles'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -25,7 +31,11 @@ const useStyles = makeStyles()(() => {
     }
 })
 
-const NftListView = (props: { nftList: any[]; handleSelection: any }): JSX.Element => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const NftListView = (props: {
+    nftList: PreviewNftList[] | null | undefined
+    handleSelection(collection_index: number, item_index: number, type: string): void
+}): JSX.Element => {
     const { classes } = useStyles()
     const myComponentStyle1 = {
         color: 'white',
@@ -33,23 +43,84 @@ const NftListView = (props: { nftList: any[]; handleSelection: any }): JSX.Eleme
         display: 'block',
     }
 
-    const previewImages = props?.nftList
-        .map((x: { tokens: any }) => x.tokens)
+    const previewImages: string[] | null | undefined = props?.nftList
+        ?.map((x) => x?.tokens)
         .flat()
         .map((y) => {
-            return y.image_preview_url
+            return y?.image_preview_url
         })
         .slice(0, 3)
 
-    const collectionItemList = props?.nftList.map((item: any, index: any) => {
+    const CustomTreeParent = styled(
+        (props: TreeItemProps & { ContentProps?: { previewImages: string[] | null | undefined } }) => (
+            <TreeItem {...props} ContentComponent={TreeParentContent} />
+        ),
+    )(({ theme }) => ({
+        [`& .${treeItemClasses.label}`]: {
+            paddingLeft: 15,
+        },
+        [`& .${treeItemClasses.iconContainer}`]: {
+            '& .close': {
+                opacity: 0.3,
+            },
+        },
+        [`& .${treeItemClasses.group}`]: {
+            marginLeft: 15,
+            paddingLeft: 18,
+            borderLeft: `1px solid ${alpha(theme.palette.text.primary, 0.4)}`,
+        },
+    }))
+
+    const CustomTreeChild = styled((props: TreeItemProps & { ContentProps?: { collectionImage: string } }) => (
+        <TreeItem {...props} ContentComponent={TreeChildContent} />
+    ))(({ theme }) => ({
+        [`& .${treeItemClasses.iconContainer}`]: {
+            '& .close': {
+                opacity: 0.3,
+            },
+        },
+        [`& .${treeItemClasses.group}`]: {
+            marginLeft: 15,
+            paddingLeft: 18,
+            borderLeft: `1px solid ${alpha(theme.palette.text.primary, 0.4)}`,
+        },
+    }))
+
+    const CustomTreeChildItem = styled(
+        (
+            props: TreeItemProps & {
+                ContentProps?: {
+                    // nftData?: TreeNftData
+                    // handleSelection(collection_index: number, item_index: number): void
+                    nftData?: TreeNftData
+                    handleSelection?(collection_index: number, item_index: number, type: string): void
+                }
+                className: string
+            },
+        ) => <TreeItem {...props} className={props.className} ContentComponent={TreeChildItemContent} />,
+    )(({ theme }) => ({
+        [`& .${treeItemClasses.iconContainer}`]: {
+            '& .close': {
+                opacity: 0.3,
+            },
+        },
+        [`& .${treeItemClasses.group}`]: {
+            marginLeft: 15,
+            paddingLeft: 18,
+            borderLeft: `1px solid ${alpha(theme.palette.text.primary, 0.4)}`,
+        },
+    }))
+
+    const collectionItemList = props?.nftList?.map((item, index) => {
+        const collectionImage = 'item?.tokens?item.tokens[0]?.image_preview_url'
         return (
             <CustomTreeChild
                 nodeId={'p-' + index}
                 key={'p-' + index}
                 style={myComponentStyle1}
                 label={item.collection_name}
-                ContentProps={{ collectionImage: item.tokens[0].image_preview_url }}>
-                {item.tokens.map((item: any, i: any) => (
+                ContentProps={{ collectionImage: collectionImage }}>
+                {item?.tokens?.map((item, i) => (
                     <CustomTreeChildItem
                         className={classes.wrapper}
                         classes={{ label: classes.label }}
@@ -62,7 +133,6 @@ const NftListView = (props: { nftList: any[]; handleSelection: any }): JSX.Eleme
                                 image_preview_url: item.image_preview_url,
                                 token_id: item.token_id,
                                 is_selected: item.is_selected,
-                                image_exist: item.image_exist,
                                 collection_index: index,
                                 item_index: i,
                             },
@@ -84,7 +154,7 @@ const NftListView = (props: { nftList: any[]; handleSelection: any }): JSX.Eleme
             <CustomTreeParent
                 nodeId="mp0"
                 key="mp0"
-                label="Collectibles & NFTs"
+                label="Collectibles & NFTs3"
                 ContentProps={{ previewImages: previewImages }}>
                 {collectionItemList}
             </CustomTreeParent>

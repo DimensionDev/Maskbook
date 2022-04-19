@@ -1,14 +1,16 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable spaced-comment */
-/* eslint-disable eqeqeq */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable no-restricted-imports */
+// /* eslint-disable spaced-comment */
+// /* eslint-disable eqeqeq */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Chip, Grid, IconButton, Typography, Avatar } from '@mui/material'
 import { ArrowBack } from '@mui/icons-material'
+import type { nftData } from '../types'
+
 export const PreviewOrderView = (props: {
-    nftList: any
-    setDisplaySection: any
-    classes: any
-    amountLabel: any
+    nftList: nftData[]
+    setDisplaySection: Function
+    classes: Record<string, string>
+    amountLabel: string
 }): JSX.Element => {
     const { nftList, classes, amountLabel } = props
     const child = (
@@ -19,7 +21,7 @@ export const PreviewOrderView = (props: {
         />
     )
 
-    const previewImages = nftList?.map((item: any, index: any) => {
+    const previewImages = nftList?.map((item: nftData) => {
         return (
             <>
                 <Grid padding={1}>
@@ -36,14 +38,14 @@ export const PreviewOrderView = (props: {
 
     let labelString = ''
 
-    if (nftList.length > 0) {
-        labelString = `Buy ${nftList[0].nft_name} (#${nftList[0].nft_id})`
+    if (nftList?.length > 0) {
+        labelString = `Buy ${nftList[0]?.nft_name} (#${nftList[0]?.nft_id})`
 
-        if (nftList.length == 2) {
-            labelString += ` and ${nftList[1].nft_name} (#${nftList[1].nft_id})`
+        if (nftList?.length === 2) {
+            labelString += ` and ${nftList[1]?.nft_name} (#${nftList[1]?.nft_id})`
         }
 
-        if (nftList.length > 2) {
+        if (nftList?.length > 2) {
             labelString += ' and Others'
         }
     }

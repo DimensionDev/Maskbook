@@ -1,59 +1,38 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable spaced-comment */
-/* eslint-disable eqeqeq */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable no-restricted-imports */
+// /* eslint-disable spaced-comment */
+// /* eslint-disable eqeqeq */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TreeItemContentProps, useTreeItem } from '@mui/lab/TreeItem'
 import { Fade, Grid, Typography, Avatar } from '@mui/material'
 import * as React from 'react'
 import clsx from 'clsx'
+import type { TreeNftData } from '../../types'
 
 const TreeChildItemContent = React.forwardRef(function CustomContent(
     props: TreeItemContentProps & {
-        nftData?: {
-            id: any
-            image_preview_url: any
-            token_id: any
-            is_selected: any
-            collection_index: number
-            item_index: number
-        }
+        nftData?: TreeNftData
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         handleSelection?: any
     },
     ref,
 ) {
-    const {
-        classes,
-        className,
-        label,
-        nodeId,
-        icon: iconProp,
-        expansionIcon,
-        displayIcon,
-        nftData,
-        handleSelection,
-    } = props
+    const { classes, className, label, nodeId, icon: iconProp, expansionIcon, displayIcon, handleSelection } = props
 
-    const { disabled, expanded, selected, focused, handleExpansion, preventSelection } = useTreeItem(nodeId)
+    const nftData = props.nftData
+
+    const { disabled, expanded, selected, focused } = useTreeItem(nodeId)
 
     const icon = iconProp || expansionIcon || displayIcon
 
-    const handleMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        //preventSelection(event)
-    }
-
-    const handleExpansionClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        //handleExpansion(event)
-    }
-
     const handleSelectionClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        collection_index: any,
-        item_index: any,
+        collection_index: number | undefined,
+        item_index: number | undefined,
     ) => {
         handleSelection(collection_index, item_index)
-        //nftList[0].tokens[0].is_selected = !nftList[0].tokens[0].is_selected
+        // nftList[0].tokens[0].is_selected = !nftList[0].tokens[0].is_selected
     }
-    //in your component
+    // in your component
     // https://trader.xyz/images/missing-img-lg.png
     const child = (
         <img alt="no-image" src="https://trader.xyz/images/missing-img-lg.png" style={{ width: 100, height: 100 }} />
@@ -72,13 +51,11 @@ const TreeChildItemContent = React.forwardRef(function CustomContent(
                     [classes.focused]: focused,
                     [classes.disabled]: disabled,
                 })}
-                onMouseDown={handleMouseDown}
                 onClick={(event) => handleSelectionClick(event, nftData?.collection_index, nftData?.item_index)}
                 ref={ref as React.Ref<HTMLDivElement>}>
                 <Grid container direction="column" justifyContent="center" alignItems="center">
                     <Grid item>
                         <Avatar
-                            alt={label}
                             style={{
                                 width: '100px',
                                 height: '100px',
@@ -92,7 +69,7 @@ const TreeChildItemContent = React.forwardRef(function CustomContent(
                             children={child}
                             src={nftData?.image_preview_url}
                         />
-                        {nftData?.is_selected == true && (
+                        {nftData?.is_selected === true && (
                             <div
                                 style={{
                                     position: 'relative',

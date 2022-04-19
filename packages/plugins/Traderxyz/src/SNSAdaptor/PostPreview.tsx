@@ -1,14 +1,13 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable spaced-comment */
-/* eslint-disable eqeqeq */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable no-restricted-imports */
+// /* eslint-disable spaced-comment */
+// /* eslint-disable eqeqeq */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, Chip, Grid, Typography, useTheme } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useI18N } from '../locales/i18n_generated'
 import { usePluginWrapper, usePostInfo } from '@masknet/plugin-infra/content-script'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { getTraderApi } from '../apis/nftswap'
-import { usePostLink } from '../../../../mask/src/components/DataSource/usePostInfo'
 import type { TradeMetaData, nftData } from '../types'
 import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
 
@@ -125,7 +124,7 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
     const { showSnackbar } = useCustomSnackbar()
 
     const p = usePostInfo()
-    const l = usePostLink()
+    // const l = usePostLink()
 
     const sharePost = () => {
         // console.log('usePostInfo=', p)

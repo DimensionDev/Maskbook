@@ -1,7 +1,7 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable spaced-comment */
-/* eslint-disable eqeqeq */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable no-restricted-imports */
+// /* eslint-disable spaced-comment */
+// /* eslint-disable eqeqeq */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TreeItemContentProps, useTreeItem } from '@mui/lab/TreeItem'
 import { Typography, Avatar } from '@mui/material'
 import * as React from 'react'
@@ -9,7 +9,7 @@ import clsx from 'clsx'
 
 const TreeChildContent = React.forwardRef(function CustomContent(
     props: TreeItemContentProps & {
-        collectionImage?: any
+        collectionImage?: string
     },
     ref,
 ) {

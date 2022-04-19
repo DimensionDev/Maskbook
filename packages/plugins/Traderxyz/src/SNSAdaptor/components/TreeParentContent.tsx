@@ -1,7 +1,7 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable spaced-comment */
-/* eslint-disable eqeqeq */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable no-restricted-imports */
+// /* eslint-disable spaced-comment */
+// /* eslint-disable eqeqeq */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TreeItemContentProps, useTreeItem } from '@mui/lab/TreeItem'
 import { Avatar, Fade, Typography, AvatarGroup } from '@mui/material'
 import * as React from 'react'
@@ -9,7 +9,7 @@ import clsx from 'clsx'
 
 const TreeParentContent = React.forwardRef(function CustomContent(
     props: TreeItemContentProps & {
-        previewImages?: any
+        previewImages?: string[]
     },
     ref,
 ) {
@@ -35,7 +35,7 @@ const TreeParentContent = React.forwardRef(function CustomContent(
     const child = (
         <img alt="no-image" src="https://trader.xyz/images/missing-img-lg.png" style={{ width: 40, height: 40 }} />
     )
-    const ShowNft = previewImages?.map((item: any, index: any) => {
+    const ShowNft = previewImages?.map((item, index) => {
         return <Avatar key={`pimage-${index}`} alt="Remy Sharp" children={child} src={item} />
     })
 

@@ -1,10 +1,9 @@
-/* eslint-disable eqeqeq */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable eqeqeq */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, DialogActions, DialogContent, Grid, Typography } from '@mui/material'
 import { makeStyles, MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { WalletMessages } from '../../../../../packages/mask/src/plugins/Wallet/messages'
-
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { META_KEY } from '../constants'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useChainId, useAccount } from '@masknet/plugin-infra/web3'
@@ -15,6 +14,11 @@ import { getTraderApi } from '../apis/nftswap'
 import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
 import { SelectTokenView } from './SelectTokenView'
 import { PreviewOrderView } from './PreviewOrderView'
+import NftListView from './components/NftListView'
+
+import type { OpeanSeaToken, OpenSeaCollection, Token, AssetContract, PreviewNftList } from '../types'
+
+import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 
 export enum TokenPanelType {
     Input = 0,
@@ -22,6 +26,7 @@ export enum TokenPanelType {
 }
 
 interface orderInfo {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any
     receiving_token: object
 }
@@ -40,9 +45,6 @@ export const OPENSEA_API_KEY = 'c38fe2446ee34f919436c32db480a2e3'
 // import { OPENSEA_API_KEY, isProxyENV } from '@masknet/web3-providers'
 // import { OPENSEA_API_KEY } from '../../../../web3-providers/src/opensea/constants'
 // import { isProxyENV } from '../../../../web3-providers/src/helpers'
-
-import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
-import NftListView from './components/NftListView'
 
 interface Props {
     onClose: () => void
@@ -165,9 +167,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     const [step1, setState1] = useState(true)
     const [step2, setState2] = useState(false)
     const [step3, setState3] = useState(false)
-    let setPreviewNftList: any
-    let previewNftList: any
-    ;[previewNftList, setPreviewNftList] = useState([])
+    const [previewNftList, setPreviewNftList] = useState<PreviewNftList[] | null>()
     const [count, setCount] = useState(0)
     const [openBd, setBdOpen] = useState(false)
 
@@ -214,24 +214,14 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
 
                     const asset_contract = [
                         ...new Set(
-                            result.assets.map(
-                                (ele: { asset_contract: { address: any } }) => ele.asset_contract.address,
-                            ),
+                            result.assets.map((ele: { asset_contract: AssetContract }) => ele.asset_contract.address),
                         ),
                     ]
 
-                    const final = asset_contract.map((ele: any) => {
+                    const final = asset_contract.map((filteredAddress) => {
                         const t = result.assets
-                            .filter((ele1: { asset_contract: { address: any } }) => ele1.asset_contract.address == ele)
-                            .map(function (ele2: {
-                                id: any
-                                token_id: any
-                                name: any
-                                image_preview_url: any
-                                image_thumbnail_url: any
-                                is_selected: any
-                                asset_contract: any
-                            }) {
+                            .filter((ele1: OpeanSeaToken) => ele1.asset_contract.address === filteredAddress)
+                            .map(function (ele2: Token) {
                                 return {
                                     id: ele2.id,
                                     token_id: ele2.token_id,
@@ -244,15 +234,18 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                             })
 
                         const r = result.assets
-                            .filter((ele1: { asset_contract: { address: any } }) => ele1.asset_contract.address == ele)
-                            .map(function (ele2: { collection: { name: any }; asset_contract: { address: any } }) {
+                            .filter(
+                                (ele1: { asset_contract: AssetContract }) =>
+                                    ele1.asset_contract.address === filteredAddress,
+                            )
+                            .map(function (ele2: { collection: OpenSeaCollection; asset_contract: AssetContract }) {
                                 return {
                                     collection_name: ele2.collection.name,
                                     contract_address: ele2.asset_contract.address,
                                 }
                             })
 
-                        const rBoj = {
+                        const rBoj: PreviewNftList = {
                             ...r[0],
                             tokens: t,
                         }
@@ -274,12 +267,11 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     }
 
     const handleSelection = (collection_index: number, item_index: number, type: string) => {
-        previewNftList[collection_index].tokens[item_index].is_selected =
-            !previewNftList[collection_index].tokens[item_index].is_selected
-
-        console.log('collection_index=', collection_index, 'item_index=', item_index)
-
-        setPreviewNftList(previewNftList)
+        const p = previewNftList
+        p
+            ? (p[collection_index].tokens[item_index].is_selected = !p[collection_index].tokens[item_index].is_selected)
+            : p
+        setPreviewNftList(p)
         setCount(count + 1)
     }
 
@@ -298,7 +290,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
         const approvalStatusForUserA = await nftSwapSdk
             .loadApprovalStatus(assetsToSwapUserA[0] as SwappableAsset, account)
             .then(
-                async (result: { contractApproved: any }) => {
+                async (result) => {
                     //             alert('fine')
                     console.log('approvalStatusForUserA=', result)
                     if (!result.contractApproved) {
@@ -323,7 +315,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                         )
                         setBdOpen(true)
                         const signedOrder = await nftSwapSdk.signOrder(order, account).then(
-                            (result: any) => {
+                            (result) => {
                                 setBdOpen(false)
                                 showSnackbar('Order is Signed', { variant: 'success' })
                                 // console.log('Order is Signed=', result) //
@@ -336,7 +328,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                                 closeWalletStatusDialog()
                                 onClose()
                             },
-                            function (error: any) {
+                            function (error) {
                                 setBdOpen(false)
                                 showSnackbar('Order has error:' + error, { variant: 'error' })
                             },
@@ -349,49 +341,47 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
             )
     }
 
-    function strtodec(amount: any, dec: any) {
-        let i = 0
-        if (amount.toString().indexOf('.') != -1) {
-            i = amount.toString().length - (amount.toString().indexOf('.') + 1)
-        }
-        let stringf = (amount.toString().split('.').join('') * 1).toString()
+    function strtodec(amount: string, dec: number | undefined) {
+        // let i = 0
+        // if (amount.toString().indexOf('.') !== -1) {
+        //     i = amount.toString().length - (amount.toString().indexOf('.') + 1)
+        // }
+        // let stringf = (amount.toString().split('.').join('') * 1).toString()
 
-        if (dec < i) {
-            console.warn('strtodec: amount was truncated')
-            stringf = stringf.substring(0, stringf.length - (i - dec))
-        } else {
-            stringf = stringf + '0'.repeat(dec - i)
-        }
-        return stringf
+        // if (dec < i) {
+        //     console.warn('strtodec: amount was truncated')
+        //     stringf = stringf.substring(0, stringf.length - (i - dec))
+        // } else {
+        //     stringf = stringf + '0'.repeat(dec - i)
+        // }
+        // return stringf
+        return amount
     }
 
     const setPreviewOrderData = () => {
         // IN PREVIEW WE WILL GET LIST OF ALL SELECTED ASSETS AND SET THE FINAL ARRAY FOR SELL
 
-        const nfts = previewNftList
-            .map((x: { tokens: any }) => x.tokens)
+        const selectedTokens = previewNftList
+            ?.map((x) => x.tokens)
             .flat()
-            .filter((p: { is_selected: any }) => p.is_selected)
-            .map((y: { asset_contract: { address: any; schema_name: any }; token_id: any }) => {
-                return {
-                    tokenAddress: y.asset_contract.address,
-                    tokenId: y.token_id,
-                    type: y.asset_contract.schema_name,
-                }
-            })
+            .filter((p) => p?.is_selected)
 
-        const nftMediaInfo = previewNftList
-            .map((x: { tokens: any }) => x.tokens)
-            .flat()
-            .filter((p: { is_selected: any }) => p.is_selected)
-            .map((y: { image_preview_url: string; image_thumbnail_url: string; name: string; token_id: number }) => {
-                return {
-                    image_preview_url: y.image_preview_url,
-                    image_thumbnail_url: y.image_thumbnail_url,
-                    nft_name: y.name,
-                    nft_id: y.token_id,
-                }
-            })
+        const nfts = selectedTokens?.map((y) => {
+            return {
+                tokenAddress: y?.asset_contract.address,
+                tokenId: y?.token_id,
+                type: y?.asset_contract.schema_name,
+            }
+        })
+
+        const nftMediaInfo = selectedTokens?.map((y) => {
+            return {
+                image_preview_url: y?.image_preview_url,
+                image_thumbnail_url: y?.image_thumbnail_url,
+                nft_name: y?.name,
+                nft_id: y?.token_id,
+            }
+        })
 
         console.log('previewOrder-nfts=', nfts)
 
@@ -428,9 +418,9 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
 
         if (step1) {
             const c = previewNftList
-                .map((x: { tokens: any }) => x.tokens)
+                ?.map((x) => x.tokens)
                 .flat()
-                .filter((p: { is_selected: any }) => p.is_selected)
+                .filter((p) => p?.is_selected).length
 
             return (
                 <Button
@@ -439,7 +429,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                     onClick={() => {
                         setDisplaySection(false, true, false)
                     }}
-                    disabled={c.length == 0}>
+                    disabled={c === 0}>
                     Continue
                 </Button>
             )
@@ -453,7 +443,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                     onClick={() => {
                         setDisplaySection(false, false, true), setPreviewOrderData()
                     }}
-                    disabled={inputAmount == '0' || token?.address == null}>
+                    disabled={inputAmount === '0' || token?.address === null}>
                     Preview
                 </Button>
             )
@@ -551,6 +541,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     return (
         <MaskDialog open={open} title="Traderxyz" onClose={onClose}>
             <DialogContent>
+                {/* <pre>{JSON.stringify(previewNftList, null, 2)}</pre> */}
                 {selectNftSection()}
                 {selecTokenSection()}
                 {previewOrderSection()}

@@ -12,6 +12,7 @@
         "@ethersproject/providers": "^5.0.9",
         "@masknet/icons": "workspace:*",
         "@masknet/plugin-infra": "workspace:*",
+        "@masknet/plugin-wallet": "workspace:*",
         "@masknet/shared": "workspace:*",
         "@masknet/shared-base": "workspace:*",
         "@masknet/shared-base-ui": "workspace:*",
