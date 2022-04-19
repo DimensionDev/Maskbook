@@ -1,7 +1,7 @@
 import { BindingProof, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { isSameAddress, useWallet } from '@masknet/web3-shared-evm'
+import { ChainId, isSameAddress, NetworkType, ProviderType, useWallet } from '@masknet/web3-shared-evm'
 import { memo, useEffect, useState } from 'react'
 import { SignSteps, Steps } from '../../../../components/shared/VerifyWallet/Steps'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -9,6 +9,7 @@ import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../../../extension/service'
 import { useCustomSnackbar } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
+import { useProviderDescriptor, Web3Plugin } from '@masknet/plugin-infra/web3'
 
 interface AddWalletViewProps {
     currentPersona: any
@@ -23,6 +24,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
         ...useWallet(),
         account: useWallet()?.address,
     }
+    const isNotEvm = !useProviderDescriptor()?.providerAdaptorPluginID.includes('evm')
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
     useEffect(() => {
         if (bounds === []) return
@@ -116,11 +118,12 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     return (
         <div>
             <Steps
-                wallet={wallet as any}
+                notEvm={isNotEvm}
+                wallet={wallet as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>}
                 persona={currentPersona}
                 step={step}
                 confirmLoading={confirmLoading}
-                disableConfirm={isBound}
+                disableConfirm={isBound || isNotEvm}
                 notInPop
                 changeWallet={openSelectProviderDialog}
                 onConfirm={handleConfirm}

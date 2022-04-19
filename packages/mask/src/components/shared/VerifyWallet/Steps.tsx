@@ -77,6 +77,7 @@ const useStyles = makeStyles()((theme) => ({
         opacity: 0.5,
     },
     hasBound: {
+        fontSize: 14,
         width: '100%',
         textAlign: 'left',
         color: theme.palette.error.main,
@@ -96,6 +97,7 @@ interface StepsProps {
     disableConfirm?: boolean
     confirmLoading: boolean
     notInPop?: boolean
+    notEvm?: boolean
     changeWallet: () => void
     onConfirm: () => void
     onCustomCancel?: () => void
@@ -105,8 +107,18 @@ export function Steps(props: StepsProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { changeWallet, persona, wallet, disableConfirm, onConfirm, step, confirmLoading, notInPop, onCustomCancel } =
-        props
+    const {
+        changeWallet,
+        persona,
+        wallet,
+        disableConfirm,
+        onConfirm,
+        step,
+        confirmLoading,
+        notInPop,
+        notEvm,
+        onCustomCancel,
+    } = props
     const { showSnackbar } = usePopupCustomSnackbar()
 
     const walletName = useWallets(wallet.providerType).find((x) => isSameAddress(x.address, wallet.account))?.name
@@ -146,7 +158,12 @@ export function Steps(props: StepsProps) {
     return (
         <div className={classes.container}>
             <CurrentWalletBox walletName={walletName} wallet={wallet} changeWallet={changeWallet} />
-            {notInPop && disableConfirm && (
+            {notEvm && (
+                <Typography className={classes.hasBound}>
+                    The tips feature only supports EVM chains, and other chains are starting to support it.
+                </Typography>
+            )}
+            {notInPop && disableConfirm && !notEvm && (
                 <Typography className={classes.hasBound}>{t('wallet_verify_has_bound')}</Typography>
             )}
             <div className={classes.stepBox}>
