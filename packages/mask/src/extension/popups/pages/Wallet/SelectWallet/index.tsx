@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { first } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
@@ -18,6 +18,8 @@ import { useSelectAccount } from '../../../../../plugins/Wallet/hooks/useSelectA
 import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
 import { WalletItem } from './WalletItem'
+import { getRegisteredWeb3Networks } from '@masknet/plugin-infra/web3'
+import { ChainIcon, WalletIcon } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     content: {
@@ -56,7 +58,7 @@ const useStyles = makeStyles()({
         width: 20,
         height: 20,
         borderRadius: 20,
-        marginRight: 10,
+        marginRight: 6,
     },
     list: {
         backgroundColor: '#F7F9FA',
@@ -81,6 +83,10 @@ const useStyles = makeStyles()({
         borderRadius: 20,
         fontSize: 14,
         lineHeight: '20px',
+    },
+    colorChainICon: {
+        borderRadius: '999px!important',
+        margin: '0px !important',
     },
 })
 
@@ -107,6 +113,12 @@ const SelectWallet = memo(() => {
 
     const chainId = chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : ChainId.Mainnet
     const chainIdValid = useChainIdValid()
+
+    const networks = getRegisteredWeb3Networks()
+    const currentNetwork = useMemo(
+        () => networks.find((x) => x.chainId === chainId) ?? networks[0],
+        [networks, chainId],
+    )
 
     const handleCancel = useCallback(async () => {
         if (isPopup) {
@@ -149,7 +161,17 @@ const SelectWallet = memo(() => {
             <div className={classes.content}>
                 <div className={classes.header}>
                     <div className={classes.network}>
-                        <div className={classes.iconWrapper}>{/* <ChainIcon chainId={chainId} /> */}</div>
+                        <div className={classes.iconWrapper}>
+                            {currentNetwork.isMainnet ? (
+                                <WalletIcon networkIcon={currentNetwork.icon} size={20} />
+                            ) : (
+                                <ChainIcon
+                                    color={currentNetwork.iconColor}
+                                    size={20}
+                                    classes={{ point: classes.colorChainICon }}
+                                />
+                            )}
+                        </div>
                         <Typography className={classes.title}>{getNetworkName(chainId)}</Typography>
                     </div>
                 </div>
