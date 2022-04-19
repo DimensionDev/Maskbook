@@ -1,28 +1,28 @@
-import { forwardRef, useRef, memo, useCallback } from 'react'
-import { keyframes } from 'tss-react'
+import { CircleLoadingIcon, Icon, SuccessForSnackBarIcon } from '@masknet/icons'
+import { Close as CloseIcon } from '@mui/icons-material'
+import InfoIcon from '@mui/icons-material/Info'
+import WarningIcon from '@mui/icons-material/Warning'
+import { alpha, IconButton, Typography } from '@mui/material'
+import classnames from 'classnames'
 import {
+    OptionsObject,
+    SnackbarAction,
+    SnackbarContent,
+    SnackbarKey,
+    SnackbarMessage,
     SnackbarProvider,
     SnackbarProviderProps,
-    SnackbarKey,
     useSnackbar,
     VariantType,
-    SnackbarMessage,
-    SnackbarContent,
-    SnackbarAction,
-    OptionsObject,
 } from 'notistack'
-import { Typography, IconButton, alpha } from '@mui/material'
-import classnames from 'classnames'
-import { Close as CloseIcon } from '@mui/icons-material'
-import WarningIcon from '@mui/icons-material/Warning'
-import InfoIcon from '@mui/icons-material/Info'
-import { CircleLoadingIcon, RiskIcon, SuccessForSnackBarIcon } from '@masknet/icons'
-import { makeStyles, useStylesExtends } from '../../UIHelper'
+import { forwardRef, memo, useCallback, useRef } from 'react'
+import { keyframes } from 'tss-react'
 import { MaskColorVar } from '../../CSSVariables'
+import { makeStyles, useStylesExtends } from '../../UIHelper'
 
-export { PopupSnackbarProvider, usePopupCustomSnackbar } from './PopupSnackbar'
 export { SnackbarProvider, useSnackbar } from 'notistack'
-export type { VariantType, OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack'
+export type { OptionsObject, SnackbarKey, SnackbarMessage, VariantType } from 'notistack'
+export { PopupSnackbarProvider, usePopupCustomSnackbar } from './PopupSnackbar'
 
 interface StyleProps {
     offsetY?: number
@@ -188,7 +188,7 @@ export interface CustomSnackbarContentProps {
 const IconMap: Record<VariantType, React.ReactNode> = {
     default: <InfoIcon color="inherit" />,
     success: <SuccessForSnackBarIcon />,
-    error: <RiskIcon />,
+    error: <Icon type="risk" />,
     warning: <WarningIcon color="inherit" />,
     info: <InfoIcon color="inherit" />,
 }

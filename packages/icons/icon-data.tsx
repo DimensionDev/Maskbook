@@ -163,9 +163,42 @@ export const closeIcon = new URL('./general/Close.svg', import.meta.url).href
 export const cloudBackupIcon = new URL('./general/CloudBackup.svg', import.meta.url).href
 export const cloudLinkIcon = new URL('./general/CloudLink.svg', import.meta.url).href
 export const collectibleIcon = new URL('./general/Collectible.svg', import.meta.url).href
-export const copyIcon = new URL('./general/Copy.svg', import.meta.url).href
+export const copyIcon = (
+    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <g>
+            <path
+                d="M16.115 8h-6.23C9.12 8 8.5 8.62 8.5 9.385v6.23C8.5 16.38 9.12 17 9.885 17h6.23c.765 0 1.385-.62 1.385-1.385v-6.23C17.5 8.62 16.88 8 16.115 8z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M5.577 12h-.692A1.385 1.385 0 013.5 10.615v-6.23A1.385 1.385 0 014.885 3h6.23A1.385 1.385 0 0112.5 4.385v.692"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </g>
+    </svg>
+)
 export const cramIcon = new URL('./general/Cram.svg', import.meta.url).href
-export const deleteIcon = new URL('./general/Delete.svg', import.meta.url).href
+export const deleteIcon = (
+    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none">
+            <path
+                stroke="currentColor"
+                d="M2 4h12M5.333 4V2.667a1.333 1.333 0 011.334-1.334h2.666a1.334 1.334 0 011.334 1.334V4m2 0v9.333a1.334 1.334 0 01-1.334 1.334H4.667a1.333 1.333 0 01-1.334-1.334V4h9.334zM6.667 7.333v4M9.333 7.333v4"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </g>
+    </svg>
+)
 export const documentIcon = new URL('./general/Document.svg', import.meta.url).href
 export const downloadIcon = new URL('./general/Download.svg', import.meta.url).href
 export const dropIcon = new URL('./general/Drop.svg', import.meta.url).href
@@ -431,6 +464,8 @@ export const unlockIcon = new URL('./plugins/Unlock.svg', import.meta.url).href
 
 export const iconsWithDynamicColor = [
     'chevronUp',
+    'copy',
+    'delete',
     'drop2',
     'edit2',
     'info',

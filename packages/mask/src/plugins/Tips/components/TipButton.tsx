@@ -1,4 +1,4 @@
-import { TipCoin } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
@@ -159,7 +159,7 @@ export const TipButton: FC<Props> = ({
             {...rest}
             role="button"
             onClick={createTipTask}>
-            <TipCoin viewBox="0 0 24 24" />
+            <Icon type="tipCoin" size={24} />
             {children}
         </div>
     )

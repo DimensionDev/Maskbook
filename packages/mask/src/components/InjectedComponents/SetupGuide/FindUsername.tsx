@@ -5,7 +5,7 @@ import { SetupGuideStep } from './types'
 import { Box, Typography } from '@mui/material'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import classNames from 'classnames'
-import { VerifiedIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
@@ -76,7 +76,9 @@ export function FindUsername({
                                         src={avatar}
                                         className={classNames(findUsernameClasses.avatar, connected ? 'connected' : '')}
                                     />
-                                    {connected ? <VerifiedIcon className={findUsernameClasses.verified} /> : null}
+                                    {connected ? (
+                                        <Icon type="verified" size={16} className={findUsernameClasses.verified} />
+                                    ) : null}
                                 </Box>
                                 <Typography variant="body2" className={classes.name}>
                                     {username}

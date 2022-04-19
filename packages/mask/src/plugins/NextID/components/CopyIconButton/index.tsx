@@ -1,9 +1,9 @@
+import { Icon, IconProps } from '@masknet/icons'
+import { useSnackbarCallback } from '@masknet/shared'
+import { Tooltip, useTheme } from '@mui/material'
 import { memo, useState } from 'react'
-import { IconProps, Tooltip, useTheme } from '@mui/material'
-import { CopyIcon } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../locales'
-import { useSnackbarCallback } from '@masknet/shared'
 
 export interface CopyIconButtonProps extends IconProps {
     text: string
@@ -28,13 +28,16 @@ export const CopyIconButton = memo<CopyIconButtonProps>(({ text, ...props }) => 
             onMouseLeave={() => setOpen(false)}
             disableFocusListener
             disableTouchListener>
-            <CopyIcon
+            <Icon
+                {...props}
+                type="copy"
+                aria-hidden="false"
+                role="button"
                 onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
                     onCopy()
                 }}
-                className={props.className}
             />
         </Tooltip>
     )

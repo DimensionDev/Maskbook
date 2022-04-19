@@ -8,7 +8,7 @@ export interface IconProps extends React.HTMLProps<HTMLSpanElement> {
     color?: string
 }
 
-export const Icon: FC<IconProps> = memo(({ type, iconUrl, size, className, style, color, ...rest }) => {
+export const Icon: FC<IconProps> = memo(({ type, iconUrl, size, style, color, ...rest }) => {
     const iconSize = size ?? 24
     const isDynamicColor = type && iconsWithDynamicColor.includes(type)
     const iconStyle = useMemo(() => {
@@ -33,12 +33,12 @@ export const Icon: FC<IconProps> = memo(({ type, iconUrl, size, className, style
 
     if (isDynamicColor) {
         return cloneElement(icons[type] as JSX.Element, {
-            ariaHidden: true,
+            'aria-hidden': true,
             ...rest,
             style: iconStyle,
         })
     }
-    return <span aria-hidden="true" {...rest} className={className} style={iconStyle} />
+    return <span aria-hidden="true" {...rest} style={iconStyle} />
 })
 
 export { icons }

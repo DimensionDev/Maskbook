@@ -2,7 +2,7 @@ import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-
 import { Box, Link, Stack, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { NextIDPlatform } from '@masknet/shared-base'
-import { DeleteIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { CopyIconButton } from './CopyIconButton'
 import { ExternalLink } from 'react-feather'
@@ -23,7 +23,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     copy: {
         color: theme.palette.text.primary,
-        fontSize: 16,
         cursor: 'pointer',
     },
     address: {
@@ -78,7 +77,7 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
                 <Stack direction="row" alignItems="center" gap="12px">
                     <ImageIcon size={18} icon={networkDescriptor?.icon} />
                     <Typography className={classes.address}>{formatEthereumAddress(identity, 4)}</Typography>
-                    <CopyIconButton text={identity} className={classes.copy} />
+                    <CopyIconButton text={identity} className={classes.copy} size={16} />
                     <Link
                         className={classes.link}
                         href={explorerResolver.addressLink(ChainId.Mainnet, identity) ?? ''}
@@ -98,7 +97,15 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
                             <span className={classes.tipButtonLabel}>{t.tips()}</span>
                         </TipButton>
                     ) : null}
-                    {deletable ? <DeleteIcon className={classes.delButton} onClick={() => onUnBind(identity)} /> : null}
+                    {deletable ? (
+                        <Icon
+                            type="delete"
+                            aria-hidden="false"
+                            role="button"
+                            className={classes.delButton}
+                            onClick={() => onUnBind(identity)}
+                        />
+                    ) : null}
                 </Box>
             </Stack>
         )

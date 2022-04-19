@@ -2,7 +2,7 @@ import { useI18N } from '../../../utils'
 import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import classNames from 'classnames'
-import { VerifiedIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useWizardDialogStyles, WizardDialogProps, WizardDialog } from './WizardDialog'
 import { useFindUsernameStyles } from './FindUsername'
@@ -60,7 +60,7 @@ export const VerifyNextID = ({
                             <Box className={classes.connectItem}>
                                 <Box position="relative" width={48}>
                                     <img src={avatar} className={classNames(findUsernameClasses.avatar, 'connected')} />
-                                    <VerifiedIcon className={findUsernameClasses.verified} />
+                                    <Icon type="verified" className={findUsernameClasses.verified} />
                                 </Box>
                                 <Typography variant="body2" className={classes.name}>
                                     {username}
