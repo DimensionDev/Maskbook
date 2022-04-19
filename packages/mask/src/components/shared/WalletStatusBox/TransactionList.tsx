@@ -42,6 +42,9 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 'bold',
         fontSize: 14,
         textTransform: 'capitalize',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     cell: {
         fontSize: 14,
@@ -50,9 +53,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(0, 0.5),
         color: theme.palette.text.primary,
         boxSizing: 'border-box',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
     },
     link: {
         fill: 'none',
@@ -71,13 +71,6 @@ const statusTextColorMap: Record<TransactionStatusType, string> = {
     [TransactionStatusType.FAILED]: '#FF5F5F',
     [TransactionStatusType.CANCELLED]: '#FF5F5F',
 }
-const statusTextMap: Record<TransactionStatusType, string> = {
-    [TransactionStatusType.NOT_DEPEND]: 'Pending',
-    [TransactionStatusType.SUCCEED]: 'Success',
-    [TransactionStatusType.FAILED]: 'Failed',
-    [TransactionStatusType.CANCELLED]: 'Cancelled',
-}
-
 const getContractFunctionName = async (data: string | undefined) => {
     if (!data) return null
     const sig = data.slice(0, 10)
@@ -94,6 +87,13 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
     const { t } = useI18N()
     const { Utils } = useWeb3State()
     const { classes, theme } = useStyles()
+
+    const statusTextMap: Record<TransactionStatusType, string> = {
+        [TransactionStatusType.NOT_DEPEND]: t('recent_transaction_pending'),
+        [TransactionStatusType.SUCCEED]: t('recent_transaction_success'),
+        [TransactionStatusType.FAILED]: t('recent_transaction_failed'),
+        [TransactionStatusType.CANCELLED]: t('recent_transaction_cancelled'),
+    }
 
     const web3 = useWeb3()
     const { value: targetAddress } = useAsync(async () => {
@@ -135,7 +135,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
     return (
         <Grid container {...rest}>
             <Grid item className={classes.cell} textAlign="left" md={4}>
-                <Stack>
+                <Stack overflow="hidden">
                     <Typography
                         className={classes.methodName}
                         title={functionName || ''}

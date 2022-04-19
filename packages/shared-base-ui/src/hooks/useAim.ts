@@ -1,3 +1,4 @@
+import { throttle } from 'lodash-unified'
 import { RefObject, useEffect, useRef, useState } from 'react'
 
 type Point = [x: number, y: number]
@@ -8,9 +9,9 @@ type Polygon = Point[]
  * Performs the even-odd-rule Algorithm (a ray-casting algorithm) to find out whether a point is in a given polygon.
  * This runs in O(n) where n is the number of edges of the polygon.
  *
- * @param polygon an array representation of the polygon where polygon[i][0] is the x Value of the i-th point and polygon[i][1] is the y Value.
- * @param point   an array representation of the point where point[0] is its x Value and point[1] is its y Value
- * @return whether the point is in the polygon (not on the edge, just turn < into <= and > into >= for that)
+ * @param polygon
+ * @param point
+ * @return whether the point is in the polygon (includes the edge)
  */
 const pointInPolygon = (polygon: Polygon, point: Point): boolean => {
     // A point is in a polygon if a line from the point to infinity crosses the polygon an odd number of times
@@ -19,9 +20,9 @@ const pointInPolygon = (polygon: Polygon, point: Point): boolean => {
     for (let i = 0, j = polygon.length - 1; i < polygon.length; i += 1) {
         // If a line from the point into infinity crosses this edge
         if (
-            polygon[i][1] > point[1] !== polygon[j][1] > point[1] && // One point needs to be above, one below our y coordinate
+            polygon[i][1] >= point[1] !== polygon[j][1] >= point[1] && // One point needs to be above, one below our y coordinate
             // ...and the edge doesn't cross our Y coordinate before our x coordinate (but between our x coordinate and infinity)
-            point[0] <
+            point[0] <=
                 ((polygon[j][0] - polygon[i][0]) * (point[1] - polygon[i][1])) / (polygon[j][1] - polygon[i][1]) +
                     polygon[i][0]
         ) {
@@ -33,6 +34,8 @@ const pointInPolygon = (polygon: Polygon, point: Point): boolean => {
     // If the number of crossings was odd, the point is in the polygon
     return odd
 }
+
+const INTERVAL = 1000 / 60
 
 // Inspired by http://bjk5.com/post/44698559168/breaking-down-amazons-mega-dropdown
 export function useAim(sourceRef: RefObject<HTMLElement>, targetRef: RefObject<HTMLElement>) {
@@ -58,18 +61,20 @@ export function useAim(sourceRef: RefObject<HTMLElement>, targetRef: RefObject<H
         }
         const hide = () => {
             clearTimeout(timer)
-            timer = setTimeout(updateActive, 50, false)
+            timer = setTimeout(updateActive, INTERVAL, false)
         }
 
         const handleSourceMouseEnter = () => {
             if (unmounted) return
             show()
+            inTargetRef.current = false
             inSourceRef.current = true
         }
         const handleSourceLeave = () => {
             inSourceRef.current = false
         }
         const handleTargetMouseEnter = () => {
+            inSourceRef.current = false
             inTargetRef.current = true
             show()
         }
@@ -77,7 +82,7 @@ export function useAim(sourceRef: RefObject<HTMLElement>, targetRef: RefObject<H
             inTargetRef.current = false
             hide()
         }
-        const handleDocMouseMove = (evt: MouseEvent) => {
+        const handleDocMouseMove = throttle((evt: MouseEvent) => {
             if (inSourceRef.current || inTargetRef.current) return
             const source = sourceRef.current
             const target = targetRef.current
@@ -90,10 +95,10 @@ export function useAim(sourceRef: RefObject<HTMLElement>, targetRef: RefObject<H
             const p4: Point = [targetRect.left, targetRect.top]
 
             const mousePoint: Point = [evt.x, evt.y]
-            const polygon = [p1, p2, p3, p4, p1]
+            const polygon = [p1, p2, p3, p4, p1].filter(([x, y]) => x || y)
             const inArea = pointInPolygon(polygon, mousePoint)
             inArea ? show() : hide()
-        }
+        }, INTERVAL)
         source.addEventListener('mouseenter', handleSourceMouseEnter)
         source.addEventListener('mouseleave', handleSourceLeave)
         target?.addEventListener('mouseenter', handleTargetMouseEnter)

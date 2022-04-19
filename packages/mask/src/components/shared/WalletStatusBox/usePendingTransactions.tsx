@@ -52,13 +52,10 @@ export function usePendingTransactions() {
     })
     // frozenTxes would not be reactive to pendingTransactions, it would be recreated then the list shows up.
     const frozenTxes = useRef<RecentTransaction[]>([])
-    const [meltedTxHashes, setMeltedTxHashes] = useState<string[]>(EMPTY_LIST)
+    const [meltedTxHashes, setMeltedTxHashes] = useState<string[]>([])
     useEffect(() => {
         frozenTxes.current = pendingTransactions.slice(0, 2)
-        // trigger rerender in next loop
-        Promise.resolve().then(() => {
-            setMeltedTxHashes(EMPTY_LIST)
-        })
+        setMeltedTxHashes([])
     }, [showRecentTransactions])
     const clearRecentTxes = useClearRecentTransactions()
     const removeRecentTx = useRemoveRecentTransaction()
@@ -72,7 +69,7 @@ export function usePendingTransactions() {
                 ref={pendingSummaryRef}
                 className={classnames(classes.summaryWrapper, pendingTransactions.length ? '' : classes.hide)}>
                 {pendingTransactions.length ? (
-                    <Typography ref={pendingSummaryRef} className={classes.pendingSummary} variant="body2" mr={1}>
+                    <Typography className={classes.pendingSummary} variant="body2" mr={1}>
                         {pendingTransactions.length} {t('wallet_status_pending')}
                         <LoadingAnimation sx={{ fontSize: 16, ml: 0.5 }} />
                     </Typography>
