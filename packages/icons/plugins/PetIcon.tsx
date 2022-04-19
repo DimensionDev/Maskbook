@@ -457,5 +457,5 @@ export const PetIcon: typeof SvgIcon = createIcon(
 		c-0.4-1.6-0.8-3.2-1.2-4.8C18.1,4.8,18.3,4.8,18.6,4.8z"
         />
     </g>,
-    '0 0 24 13.4',
+    '0 0 24 24',
 )

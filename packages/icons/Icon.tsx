@@ -1,4 +1,4 @@
-import { FC, memo, useMemo } from 'react'
+import { cloneElement, FC, memo, useMemo } from 'react'
 import icons, { IconType, iconsWithDynamicColor } from './icon-data'
 
 export interface IconProps extends React.HTMLProps<HTMLSpanElement> {
@@ -30,21 +30,15 @@ export const Icon: FC<IconProps> = memo(({ type, iconUrl, size, className, style
             ...style,
         }
     }, [iconSize, iconUrl, type, isDynamicColor, color])
-    return (
-        <span
-            aria-hidden="true"
-            dangerouslySetInnerHTML={
-                isDynamicColor
-                    ? {
-                          __html: icons[type],
-                      }
-                    : undefined
-            }
-            {...rest}
-            className={className}
-            style={iconStyle}
-        />
-    )
+
+    if (isDynamicColor) {
+        return cloneElement(icons[type] as JSX.Element, {
+            ariaHidden: true,
+            ...rest,
+            style: iconStyle,
+        })
+    }
+    return <span aria-hidden="true" {...rest} className={className} style={iconStyle} />
 })
 
 export { icons }

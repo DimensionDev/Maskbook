@@ -7,20 +7,23 @@ import { camelCase } from 'lodash-unified'
 
 const pattern = 'packages/icons/**/*.@(svg|jpe?g|png)'
 const iconRoot = path.resolve(__dirname, '../../../icons')
-const CODE_FILE = path.resolve(iconRoot, 'icon-data.ts')
+const CODE_FILE = path.resolve(iconRoot, 'icon-data.tsx')
 
 const currentColorRe = /\w=('|")currentColor\1/
 
 const hasCurrentColor = (code: string) => currentColorRe.test(code)
 
-function optimizeSvg(code: string) {
+function svg2jsx(code: string) {
     return (
         code
             .trim()
             // set both height and width to 100%, let svg's container, aka <Icon />, decide the size
             // We don't use g flag here, because we only want to change the first attribute of each
-            .replace(/\b(height)=('|")\d+\2/, '$1="100%"')
-            .replace(/\b(width)=('|")\d+\2/, '$1="100%"')
+            .replace(/\b(height)=('|")\d+\2/, '')
+            .replace(/\b(width)=('|")\d+\2/, '')
+            .replace(/(\w+-\w+)=('|").*?\2/g, (p: string, m1: string) => {
+                return p.replace(m1, camelCase(m1))
+            })
     )
 }
 
@@ -44,18 +47,17 @@ export async function generateIcons() {
         const code = isSvg ? fs.readFileSync(filePath, 'utf8') : ''
         if (isSvg && hasCurrentColor(code)) {
             iconsWithDynamicColor.push(name)
-            lines.push(`export const ${name}Icon = ${JSON.stringify(optimizeSvg(code))}`)
+            lines.push(`export const ${name}Icon = ${svg2jsx(code)}`)
         } else {
             const importPath = path.relative(iconRoot, path.join(ROOT_PATH, filePath))
-            console.log('from', iconRoot)
-            console.log('to', path.join(ROOT_PATH, filePath))
-            console.log('importPath', importPath)
+            // console.log('from', iconRoot)
+            // console.log('to', path.join(ROOT_PATH, filePath))
+            // console.log('importPath', importPath)
             lines.push(`export const ${name}Icon = new URL("./${importPath}", import.meta.url).href`)
         }
     })
 
     const declareType = `export type IconType = ${names.map((n) => JSON.stringify(n)).join(' | ')}`
-    const map = `export const iconNameMap = ${JSON.stringify(nameMap)}`
     const defaultExport = `const icons = {
     ${names.map((name) => `${name}:${name}Icon`).join(',')}
   }
@@ -63,7 +65,6 @@ export async function generateIcons() {
 
     return `
   ${declareType}
-  ${map}
   ${lines.join('\n')}
 
   export const iconsWithDynamicColor = ${JSON.stringify(iconsWithDynamicColor)}
@@ -79,12 +80,12 @@ async function generate() {
     fs.writeFileSync(CODE_FILE, prettied)
 }
 
-export async function generateIconsTask() {
+export async function iconCodegen() {
     await generate()
 }
 
-export async function generateIconsWatchTask() {
-    watch(pattern, generateIconsTask)
+export async function iconCodegenWatch() {
+    watch(pattern, iconCodegen)
 }
 
-watchTask(generateIconsTask, generateIconsWatchTask, 'icon-codegen', 'Generate icons')
+watchTask(iconCodegen, iconCodegenWatch, 'icon-codegen', 'Generate icons')

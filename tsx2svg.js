@@ -27,7 +27,7 @@ files.forEach((file) => {
     if (code.startsWith('<>') && code.endsWith('</>')) {
         code = code.slice('<>'.length).slice(0, -'</>'.length).trim()
     }
-    code = `<svg width="${width}" height="${height}" viewBox="${viewport[0]}" fill="none" xmlns="http://www.w3.org/2000/svg">
+    code = `<svg width="${width}" height="${height}" viewBox="${viewport[0]}" xmlns="http://www.w3.org/2000/svg">
 ${code}
 </svg>
   `

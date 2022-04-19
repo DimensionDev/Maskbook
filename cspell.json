@@ -5,6 +5,7 @@
         ".github",
         ".prettierignore",
         "*.snap",
+        "*.svg",
         "**/*.json",
         "**/dist/**",
         "**/node_modules/**",
