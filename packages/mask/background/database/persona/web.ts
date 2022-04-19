@@ -448,43 +448,6 @@ const fuse = new Fuse([] as ProfileRecord[], {
 })
 
 /**
- * @deprecated
- * @param options
- * @param count
- */
-export async function queryProfilesPagedDB(
-    options: {
-        after?: ProfileIdentifier
-        query?: string
-    },
-    count: number,
-): Promise<ProfileRecord[]> {
-    const t = createTransaction(await db(), 'readonly')('profiles')
-    const breakPoint = options.after?.toText()
-    let firstRecord = true
-    const data: ProfileRecord[] = []
-    for await (const rec of t.objectStore('profiles').iterate()) {
-        if (firstRecord && breakPoint && rec.key !== breakPoint) {
-            rec.continue(breakPoint)
-            firstRecord = false
-            continue
-        }
-        firstRecord = false
-        // after this record
-        if (rec.key === breakPoint) continue
-        if (count <= 0) break
-        const outData = profileOutDB(rec.value)
-        if (typeof options.query === 'string') {
-            fuse.setCollection([outData])
-            if (!fuse.search(options.query).length) continue
-        }
-        count -= 1
-        data.push(outData)
-    }
-    return data
-}
-
-/**
  * Update a profile.
  */
 export async function updateProfileDB(

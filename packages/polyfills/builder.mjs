@@ -31,7 +31,7 @@ await builder({
     targets: [
         'iOS >= 14.0',
         // Android
-        'Firefox >= 91',
+        'Firefox >= 99',
         'last 2 Chrome versions',
         'last 2 Firefox versions',
     ],
