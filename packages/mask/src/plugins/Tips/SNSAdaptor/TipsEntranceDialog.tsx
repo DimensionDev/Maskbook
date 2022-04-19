@@ -28,6 +28,7 @@ import { PluginId } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
+import { LoadingButton } from '@mui/lab'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -113,6 +114,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         const walletsList = proofRes
             ? (proofRes as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
             : []
+        walletsList.sort((a, b) => Number.parseInt(a.created_at, 10) - Number.parseInt(b.created_at, 10))
         if (kv !== undefined && (kv?.val as NextIdStorageInfo).proofs.length > 0 && walletsList.length > 0) {
             const kvCache = (kv.val as NextIdStorageInfo).proofs.find(
                 (x) => x.identity === currentPersona?.publicHexKey,
@@ -127,6 +129,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 res.push(x as WalletProof)
                 return res
             }, [])
+            const idx = result.findIndex((x) => x.isDefault)
+            if (idx !== -1) {
+                result.unshift(result.splice(idx, 1)[0])
+            }
             setRawWalletList(JSON.parse(JSON.stringify(result)))
             setRawPatchData(JSON.parse(JSON.stringify(result)))
             return
@@ -142,7 +148,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         setRawWalletList(JSON.parse(JSON.stringify(walletsList)))
         setRawPatchData(JSON.parse(JSON.stringify(walletsList)))
     }, [proofRes, bodyView, kv])
-
     const onCancel = () => {
         setRawPatchData(JSON.parse(JSON.stringify(rawWalletList)))
         setHasChanged(false)
@@ -190,30 +195,22 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         setHasChanged(true)
     }
 
-    const onConfirm = async () => {
-        try {
-            const payload = await getKvPayload(rawPatchData)
-            if (!payload || !payload.val) throw new Error('payload error')
-            const signResult = await Services.Identity.generateSignResult(
-                currentPersonaIdentifier as ECKeyIdentifier,
-                (payload.val as NextIDStoragePayload).signPayload,
-            )
-            if (!signResult) throw new Error('sign error')
-            await kvSet(payload.val, signResult.signature.signature, rawPatchData)
-            showSnackbar('Success', {
-                variant: 'success',
-                message: nowTime,
-            })
-            retryKv()
-            retryProof()
-        } catch (error) {
-            showSnackbar('Error', {
-                variant: 'error',
-                message: nowTime,
-            })
-            console.error(error)
-        }
-    }
+    const [kvFetchState, onConfirm] = useAsyncFn(async () => {
+        const payload = await getKvPayload(rawPatchData)
+        if (!payload || !payload.val) throw new Error('payload error')
+        const signResult = await Services.Identity.generateSignResult(
+            currentPersonaIdentifier as ECKeyIdentifier,
+            (payload.val as NextIDStoragePayload).signPayload,
+        )
+        if (!signResult) throw new Error('sign error')
+        await kvSet(payload.val, signResult.signature.signature, rawPatchData)
+        showSnackbar('Success', {
+            variant: 'success',
+            message: nowTime,
+        })
+        retryKv()
+        retryProof()
+    })
     const [confirmState, onConfirmRelease] = useAsyncFn(
         async (wallet?: WalletProof) => {
             if (!currentPersona?.publicHexKey || !wallet) return
@@ -297,9 +294,16 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                             <ActionButton fullWidth color="secondary" disabled={!hasChanged} onClick={onCancel}>
                                 {t('cancel')}
                             </ActionButton>
-                            <ActionButton fullWidth disabled={!hasChanged} onClick={onConfirm}>
+                            <LoadingButton
+                                color="primary"
+                                variant="contained"
+                                size="large"
+                                loading={kvFetchState.loading}
+                                fullWidth
+                                disabled={!hasChanged}
+                                onClick={onConfirm}>
                                 {t('confirm')}
-                            </ActionButton>
+                            </LoadingButton>
                         </div>
                     )}
                 </DialogContent>
