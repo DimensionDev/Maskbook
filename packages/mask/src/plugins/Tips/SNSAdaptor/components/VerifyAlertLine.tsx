@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close'
 const useStyles = makeStyles()((theme) => ({
     container: {
         width: '100%',
-        backgroundColor: theme.palette.text.secondary,
+        backgroundColor: theme.palette.background.default,
         color: theme.palette.text.primary,
         display: 'flex',
         alignItems: 'center',

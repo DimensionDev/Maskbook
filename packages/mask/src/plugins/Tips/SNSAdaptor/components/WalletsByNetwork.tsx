@@ -1,4 +1,4 @@
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { SettingsIcon } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { WalletCom } from './WalletCom'
@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        color: getMaskColor(theme).main,
+        color: theme.palette.text.primary,
         marginBottom: theme.spacing(2.5),
     },
     content: {
@@ -22,10 +22,11 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1),
     },
     settingIcon: {
-        fontSize: '18px',
+        fontSize: 16,
         cursor: 'pointer',
     },
     commonFlexBox: {
+        fontSize: 14,
         display: 'flex',
         alignItems: 'center',
         gap: theme.spacing(0.5),
