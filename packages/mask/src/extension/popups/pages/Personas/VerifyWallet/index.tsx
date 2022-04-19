@@ -55,7 +55,9 @@ const VerifyWallet = memo(() => {
     useEffect(() => {
         if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
 
-        navigate(urlcat(PopupRoutes.WalletSignRequest, { goBack: true }))
+        navigate(urlcat(PopupRoutes.WalletSignRequest, { goBack: true }), {
+            state: location.state,
+        })
     }, [request])
 
     const { value: payload } = useAsync(async () => {
@@ -92,6 +94,7 @@ const VerifyWallet = memo(() => {
                 '',
                 {
                     chainId: wallet.chainId,
+                    account: wallet.account,
                     providerType: wallet.providerType,
                 },
                 { popupsWindow: false },

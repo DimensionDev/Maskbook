@@ -183,7 +183,7 @@ export async function request<T extends unknown>(
     })
 }
 
-export async function confirmRequest(payload: JsonRpcPayload, disableClose?: boolean) {
+export async function confirmRequest(payload: JsonRpcPayload, disableClose?: boolean, overrides?: SendOverrides) {
     const pid = getPayloadId(payload)
     if (!pid) return
     const [deferred, resolve, reject] = defer<JsonRpcResponse | undefined, Error>()
@@ -205,7 +205,7 @@ export async function confirmRequest(payload: JsonRpcPayload, disableClose?: boo
                 resolve(response)
             }
         },
-        {
+        overrides ?? {
             account: currentMaskWalletAccountSettings.value,
             chainId: currentMaskWalletChainIdSettings.value,
             providerType: ProviderType.MaskWallet,

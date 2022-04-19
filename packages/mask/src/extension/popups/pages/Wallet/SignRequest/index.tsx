@@ -3,14 +3,15 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
-import { EthereumRpcType, useWallet } from '@masknet/web3-shared-evm'
-import { useAsyncFn } from 'react-use'
+import { ChainId, EthereumRpcType, NetworkType, ProviderType, useWallet } from '@masknet/web3-shared-evm'
+import { useAsyncFn, useLocation } from 'react-use'
 import Services from '../../../../service'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle'
+import type { Web3Plugin } from '@masknet/plugin-infra/dist/web3-types'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -83,11 +84,14 @@ const useStyles = makeStyles()(() => ({
 
 const SignRequest = memo(() => {
     const { t } = useI18N()
+    const location = useLocation()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const { value } = useUnconfirmedRequest()
     const wallet = useWallet()
     const [transferError, setTransferError] = useState(false)
+
+    const selectedWallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
 
     const { data, address } = useMemo(() => {
         if (
@@ -116,13 +120,13 @@ const SignRequest = memo(() => {
 
         if (value) {
             try {
-                await Services.Ethereum.confirmRequest(value.payload, !!goBack)
+                await Services.Ethereum.confirmRequest(value.payload, !!goBack, selectedWallet)
                 navigate(-1)
             } catch (error_) {
                 setTransferError(true)
             }
         }
-    }, [value, location.search, history])
+    }, [value, location.search, history, selectedWallet])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!value) return
@@ -130,7 +134,7 @@ const SignRequest = memo(() => {
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [value])
 
-    useTitle(t('approve'))
+    useTitle(t('popups_wallet_signature_request'))
 
     return (
         <main className={classes.container}>
