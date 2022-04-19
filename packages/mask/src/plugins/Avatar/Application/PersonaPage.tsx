@@ -23,11 +23,12 @@ const useStyles = makeStyles()((theme) => ({
 
 interface PersonaPageProps {
     onNext: () => void
+    onClose(): void
     onChange: (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: TokenInfo) => void
 }
 
 export function PersonaPage(props: PersonaPageProps) {
-    const { onNext, onChange } = props
+    const { onNext, onChange, onClose } = props
     const [visible, setVisible] = useState(true)
     const currentIdentity = context.lastRecognizedProfile.getCurrentValue()
     const { classes } = useStyles()
@@ -35,12 +36,13 @@ export function PersonaPage(props: PersonaPageProps) {
     const nextIDConnectStatus = useNextIDConnectStatus()
     const t = useI18N()
 
+    console.log(nextIDConnectStatus)
     useEffect(() => {
-        if (!persona?.status.action) return
-        const { status, action, isVerified } = nextIDConnectStatus
+        const { status, reset, isVerified } = nextIDConnectStatus
         if (isVerified || status === NextIDVerificationStatus.WaitingLocalConnect) return
-        if (action) action()
-    }, [nextIDConnectStatus, persona?.status])
+        reset()
+        onClose()
+    }, [nextIDConnectStatus, persona?.status, onClose])
 
     const onSelect = useCallback(
         (proof: BindingProof, tokenInfo?: TokenInfo) => {

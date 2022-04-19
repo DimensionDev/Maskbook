@@ -7,16 +7,16 @@ import { context } from '../context'
 
 export function usePersonas() {
     const personaConnectStatus = usePersonaConnectStatus()
-
+    const currentIdentifier = context.currentVisitingProfile.getCurrentValue()?.identifier
+    const identifier = context.lastRecognizedProfile.getCurrentValue()?.identifier
     return useAsyncRetry(async () => {
-        const currentIdentifier = context.currentVisitingProfile.getCurrentValue()?.identifier
-        const identifier = context.lastRecognizedProfile.getCurrentValue()?.identifier
-        if (!currentIdentifier || !identifier) return
-        const persona = await Services.Identity.queryPersonaByProfile(currentIdentifier!)
+        if (!identifier) return
+        const persona = await Services.Identity.queryPersonaByProfile(identifier)
         if (!persona) return
         const binds = await NextIDProof.queryExistedBindingByPersona(persona.publicHexKey!)
-        const isOwner = currentIdentifier.toText() === identifier.toText()
+        const isOwner =
+            (!currentIdentifier?.toText() && identifier.toText()) || currentIdentifier?.toText() === identifier.toText()
         const wallets = binds?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
         return { wallets, isOwner, binds, persona, status: personaConnectStatus }
-    }, [context, personaConnectStatus.hasPersona])
+    }, [currentIdentifier, identifier, personaConnectStatus.hasPersona])
 }

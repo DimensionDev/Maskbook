@@ -34,7 +34,11 @@ interface UploadAvatarDialogProps {
 
 async function personaSign(message: string, identifier: ECKeyIdentifier) {
     try {
-        return Services.Identity.generateSignResult(identifier, message)
+        return Services.Identity.signWithPersona({
+            message,
+            method: 'eth',
+            identifier: identifier.toText(),
+        })
     } catch {
         return
     }

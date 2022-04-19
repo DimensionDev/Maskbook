@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 import { NFTListDialog } from './NFTListDialog'
 import { InjectedDialog } from '@masknet/shared'
 import { UploadAvatarDialog } from './UploadAvatarDialog'
-import type { BindingProof } from '@masknet/shared-base'
+import { BindingProof } from '@masknet/shared-base'
 import type { SelectTokenInfo, TokenInfo } from '../types'
 import { PersonaPage } from './PersonaPage'
 import { DialogContent } from '@mui/material'
@@ -54,6 +54,11 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
         else props.onClose()
     }, [step])
 
+    const onClose = useCallback(() => {
+        setStep(CreateNFTAvatarStep.Persona)
+        props.onClose()
+    }, [props.onClose])
+
     return (
         <InjectedDialog
             title={
@@ -65,7 +70,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
             onClose={onBack}>
             <DialogContent sx={{ margin: 0, padding: '0px !important' }}>
                 {step === CreateNFTAvatarStep.Persona ? (
-                    <PersonaPage onNext={onNext} onChange={onPersonaChange} />
+                    <PersonaPage onClose={onClose} onNext={onNext} onChange={onPersonaChange} />
                 ) : null}
                 {step === CreateNFTAvatarStep.NFTList ? (
                     <NFTListDialog tokenInfo={tokenInfo} wallets={wallets} onNext={onNext} onSelected={onSelected} />
@@ -77,10 +82,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                         image={selectedTokenInfo?.image}
                         token={selectedTokenInfo?.token}
                         onBack={onBack}
-                        onClose={() => {
-                            setStep(CreateNFTAvatarStep.Persona)
-                            props.onClose()
-                        }}
+                        onClose={onClose}
                     />
                 ) : null}
             </DialogContent>

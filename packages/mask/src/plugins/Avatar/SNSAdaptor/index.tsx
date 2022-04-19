@@ -14,7 +14,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled }: props) {
+            RenderEntryComponent({ disabled }) {
                 const [open, setOpen] = useState(false)
                 const t = useI18N()
                 return (
