@@ -14,14 +14,14 @@ const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            marginTop: theme.spacing(0.5),
+            padding: theme.spacing(1, 0.25),
             overflowY: 'scroll',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             gridTemplateRows: '100px',
-            gridGap: theme.spacing(1.5),
+            gridGap: theme.spacing(2),
             justifyContent: 'space-between',
-            height: 324,
+            height: 340,
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

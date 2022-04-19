@@ -13,7 +13,7 @@ import { ApplicationBoard } from '../../../../components/shared/ApplicationBoard
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: theme.spacing(2, 2, 3, 3),
+        padding: theme.spacing(2.5),
     },
     footer: {
         fontSize: 12,
