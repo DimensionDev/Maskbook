@@ -8,7 +8,6 @@ import {
     queryPersonasDB,
     consistentPersonaDBWriteAccess,
     updatePersonaDB,
-    queryProfilesPagedDB,
 } from '../../../background/database/persona/db'
 import { queryAvatarDataURL } from '../../../background/database/avatar-cache/avatar'
 import * as bip39 from 'bip39'
@@ -58,11 +57,6 @@ export async function queryProfile(identifier: ProfileIdentifier): Promise<Profi
         createdAt: new Date(),
         updatedAt: new Date(),
     }
-}
-
-export async function queryProfilePaged(...args: Parameters<typeof queryProfilesPagedDB>): Promise<Profile[]> {
-    const _ = await queryProfilesPagedDB(...args)
-    return Promise.all(_.map(profileRecordToProfile))
 }
 
 /**

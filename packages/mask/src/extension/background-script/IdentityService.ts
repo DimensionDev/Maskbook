@@ -36,7 +36,7 @@ assertEnvironment(Environment.ManifestBackground)
 export { validateMnemonic } from '../../../background/services/identity/persona/utils'
 export * from '../../../background/services/identity'
 
-export { queryProfile, queryProfilePaged, queryPersonaByProfile } from '../../database'
+export { queryProfile, queryPersonaByProfile } from '../../database'
 
 /** @deprecated */
 export function queryProfiles(network?: string): Promise<Profile[]> {

@@ -16,7 +16,6 @@ export const {
     consistentPersonaDBWriteAccess,
     updatePersonaDB,
     createOrUpdatePersonaDB,
-    queryProfilesPagedDB,
     createOrUpdateProfileDB,
     createProfileDB,
     createRelationDB,
