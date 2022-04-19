@@ -35,7 +35,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 icon,
                 description: <Trans i18nKey="plugin_pets_description" />,
                 name,
-                tutorialLink: 'https://twitter.com/mintteamnft?s=21',
+                tutorialLink: 'https://twitter.com/NonFFriend',
                 category: 'dapp',
             }
         })(),
