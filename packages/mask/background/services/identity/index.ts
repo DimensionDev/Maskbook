@@ -15,7 +15,6 @@ export {
     queryPersonaByMnemonic,
 } from './persona/update'
 export { signWithPersona, type SignRequest, type SignRequestResult, generateSignResult } from './persona/sign'
-export { exportPersonaMnemonicWords, exportPersonaPrivateKey } from './persona/backup'
 
 export { mobile_queryProfiles, mobile_queryProfileRecordFromIndexedDB } from './profile/query'
 export {

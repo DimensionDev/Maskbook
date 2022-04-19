@@ -10,3 +10,4 @@ export {
     restoreUnconfirmedBackup,
     mobile_restoreFromBase64,
 } from './restore'
+export { backupPersonaPrivateKey } from './persona'
