@@ -2,9 +2,9 @@ import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { ZERO } from '@masknet/web3-shared-base'
-import { ChainId, createContract, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { ChainId, createContract } from '@masknet/web3-shared-evm'
 
-import { ChainIdYearn, ProtocolType, SavingsProtocol } from '../types'
+import { ChainIdYearn, FungibleTokenPair, ProtocolType, SavingsProtocol } from '../types'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import { VaultInterface, Vault, Yearn } from '@yfi/sdk'
@@ -16,9 +16,9 @@ export class YearnProtocol implements SavingsProtocol {
     private _apr = '0.00'
     private _balance = ZERO
 
-    constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
+    constructor(readonly pair: FungibleTokenPair) {}
 
-    static fromTokenPair(pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {
+    static fromTokenPair(pair: FungibleTokenPair) {
         return new YearnProtocol(pair)
     }
 

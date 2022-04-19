@@ -15,6 +15,8 @@ export enum ProtocolType {
 
 export type ChainIdYearn = ChainId.Mainnet | ChainId.Fantom | ChainId.Arbitrum
 
+export type FungibleTokenPair = [FungibleTokenDetailed, FungibleTokenDetailed]
+
 export interface SavingsProtocol {
     readonly type: ProtocolType
 
@@ -31,7 +33,7 @@ export interface SavingsProtocol {
     /**
      * combine a bare token and a staked token with being a pair
      */
-    readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]
+    readonly pair: FungibleTokenPair
 
     readonly bareToken: FungibleTokenDetailed
     readonly stakeToken: FungibleTokenDetailed

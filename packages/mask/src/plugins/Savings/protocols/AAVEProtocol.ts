@@ -2,18 +2,12 @@ import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { pow10, ZERO } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    getAaveConstants,
-    createContract,
-    FungibleTokenDetailed,
-    ZERO_ADDRESS,
-} from '@masknet/web3-shared-evm'
+import { ChainId, getAaveConstants, createContract, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import type { AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.json'
-import { ProtocolType, SavingsProtocol } from '../types'
+import { FungibleTokenPair, ProtocolType, SavingsProtocol } from '../types'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
@@ -23,9 +17,9 @@ export class AAVEProtocol implements SavingsProtocol {
     private _apr = '0.00'
     private _balance = ZERO
 
-    constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
+    constructor(readonly pair: FungibleTokenPair) {}
 
-    static fromTokenPair(pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {
+    static fromTokenPair(pair: FungibleTokenPair) {
         return new AAVEProtocol(pair)
     }
     get type() {
