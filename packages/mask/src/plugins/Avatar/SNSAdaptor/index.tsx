@@ -30,7 +30,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             }}
                             hint={
                                 <Typography fontSize={12} style={{ whiteSpace: 'nowrap' }}>
-                                    <Translate.application_hint />
+                                    <Translate.application_hint
+                                        components={{
+                                            br: <br />,
+                                        }}
+                                    />
                                 </Typography>
                             }
                         />
