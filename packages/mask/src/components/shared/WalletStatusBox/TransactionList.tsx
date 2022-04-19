@@ -5,6 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
     getContractOwnerDomain,
+    isSameAddress,
     TransactionStateType,
     TransactionStatusType,
     useChainId,
@@ -24,6 +25,8 @@ const useStyles = makeStyles()((theme) => ({
     list: {
         borderRadius: 8,
         overflow: 'hidden',
+        backgroundColor: theme.palette.background.paper,
+        padding: 0,
     },
     listItem: {
         height: 54,
@@ -37,15 +40,19 @@ const useStyles = makeStyles()((theme) => ({
     },
     methodName: {
         fontWeight: 'bold',
+        fontSize: 14,
         textTransform: 'capitalize',
     },
     cell: {
+        fontSize: 14,
         display: 'flex',
         alignItems: 'center',
         padding: theme.spacing(0, 0.5),
-        whiteSpace: 'nowrap',
         color: theme.palette.text.primary,
         boxSizing: 'border-box',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     link: {
         fill: 'none',
@@ -127,9 +134,13 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
 
     return (
         <Grid container {...rest}>
-            <Grid item className={classes.cell} textAlign="left" md={5}>
+            <Grid item className={classes.cell} textAlign="left" md={4}>
                 <Stack>
-                    <Typography className={classes.methodName} variant="body1" component="strong">
+                    <Typography
+                        className={classes.methodName}
+                        title={functionName || ''}
+                        variant="body1"
+                        component="strong">
                         {functionName}
                     </Typography>
                     <Typography variant="body1" color={theme.palette.text.secondary}>
@@ -138,7 +149,9 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
                 </Stack>
             </Grid>
             <Grid item className={classes.cell} flexGrow={1} md={4} justifyContent="right">
-                {address && domain === address ? Utils?.formatAddress?.(address, 4) : domain || address}
+                <Typography variant="body1">
+                    {address && isSameAddress(domain, address) ? Utils?.formatAddress?.(address, 4) : domain || address}
+                </Typography>
                 <Link
                     className={classes.link}
                     href={Utils?.resolveTransactionLink?.(chainId, tx.hash)}
@@ -147,14 +160,12 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
                     <LinkOutIcon className={classes.linkIcon} />
                 </Link>
             </Grid>
-            <Grid
-                item
-                className={classes.cell}
-                md={1.5}
-                style={{ color: statusTextColorMap[txStatus], textAlign: 'center' }}>
-                {statusTextMap[txStatus]}
+            <Grid item className={classes.cell} md={2} justifyContent="center">
+                <Typography justifyContent="center" color={statusTextColorMap[txStatus]}>
+                    {statusTextMap[txStatus]}
+                </Typography>
             </Grid>
-            <Grid item className={classes.cell} md={1.5} textAlign="center">
+            <Grid item className={classes.cell} md={2} justifyContent="center">
                 {txStatus === TransactionStatusType.NOT_DEPEND ? (
                     <Button variant="text" size="small" onClick={handleClear}>
                         {t('wallet_status_pending_clear')}
@@ -173,6 +184,7 @@ interface Props extends ListProps {
 export const TransactionList: FC<Props> = forwardRef(({ className, transactions, onClear = noop, ...rest }, ref) => {
     const { classes } = useStyles()
     const chainId = useChainId()
+    if (!transactions.length) return null
     return (
         <List className={classnames(classes.list, className)} {...rest} ref={ref}>
             {transactions.map((tx) => (
