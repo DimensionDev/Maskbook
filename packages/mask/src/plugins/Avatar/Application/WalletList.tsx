@@ -1,9 +1,8 @@
 import { ImageIcon, ReversedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
 import { formatEthereumAddress, isSameAddress, useChainId } from '@masknet/web3-shared-evm'
-import { Button, Divider, Link, ListItemIcon, MenuItem, Stack, Typography, useTheme } from '@mui/material'
+import { Button, Divider, IconProps, Link, ListItemIcon, MenuItem, Stack, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useEffect, useState } from 'react'
-import { ExternalLink, IconProps } from 'react-feather'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { WalletSettingIcon } from '../assets/setting'
 import { CheckedIcon, UncheckIcon } from '../assets/checked'
@@ -15,7 +14,7 @@ import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 import { Services } from '../../../extension/service'
 import { useI18N } from '../locales/i18n_generated'
 import { useCopyToClipboard } from 'react-use'
-import { CopyIcon } from '@masknet/icons'
+import { LinkIcon } from '../assets/link'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -30,8 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     copy: {
         color: theme.palette.secondary.main,
     },
-    link: { color: theme.palette.secondary.main },
-    linkIcon: {},
+
     icon: {
         width: 24,
         height: 24,
@@ -154,11 +152,13 @@ const useWalletUIStyles = makeStyles()((theme) => ({
     },
     copy: {
         fontSize: 16,
-        stroke: theme.palette.text.primary,
+        stroke: theme.palette.text.secondary,
         cursor: 'pointer',
     },
-    link: {},
-    linkIcon: {},
+    link: { color: theme.palette.text.secondary },
+    linkIcon: {
+        transform: 'translate(3px, 6px)',
+    },
 }))
 
 interface WalletUIProps {
@@ -189,7 +189,7 @@ function WalletUI(props: WalletUIProps) {
                         target="_blank"
                         title="View on Explorer"
                         rel="noopener noreferrer">
-                        <ExternalLink className={classes.linkIcon} size={14} />
+                        <LinkIcon className={classes.linkIcon} />
                     </Link>
                 </Stack>
             </Stack>
