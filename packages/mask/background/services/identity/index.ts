@@ -8,6 +8,7 @@ export {
     mobile_queryPersonaRecordsFromIndexedDB,
     mobile_queryPersonas,
     queryOwnedPersonaInformation,
+    queryLastPersonaCreated,
 } from './persona/query'
 export {
     deletePersona,

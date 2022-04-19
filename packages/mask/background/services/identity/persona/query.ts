@@ -1,5 +1,5 @@
 import type { PersonaIdentifier, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
-import { noop } from 'lodash-unified'
+import { first, noop, orderBy } from 'lodash-unified'
 import { queryAvatarDataURL } from '../../../database/avatar-cache/avatar'
 import {
     createPersonaDBReadonlyAccess,
@@ -54,4 +54,9 @@ export async function queryOwnedPersonaInformation(): Promise<PersonaInformation
     })
     await Promise.all(extraPromises)
     return result
+}
+
+export async function queryLastPersonaCreated(): Promise<PersonaIdentifier | undefined> {
+    const all = await queryPersonasDB({ hasPrivateKey: true })
+    return first(orderBy(all, (x) => x.createdAt, 'desc'))?.identifier
 }

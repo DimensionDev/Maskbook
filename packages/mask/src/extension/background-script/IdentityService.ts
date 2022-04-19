@@ -19,7 +19,6 @@ import {
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { MaskMessages } from '../../utils'
-import { first, orderBy } from 'lodash-unified'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -98,11 +97,6 @@ export async function queryMyPersonas(
         })
     }
     return x
-}
-
-export async function queryLastPersonaCreated(): Promise<PersonaIdentifier | undefined> {
-    const all = await queryPersonas_inner(undefined, true)
-    return first(orderBy(all, (x) => x.createdAt, 'desc'))?.identifier
 }
 
 export async function queryPagedPostHistory(
