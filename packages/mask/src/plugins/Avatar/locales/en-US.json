@@ -18,5 +18,6 @@
     "copied": "Copied",
     "collectible_on_polygon": "No any collectible is available to preview. Please add your collectible here.",
     "no_collectible_found": "No collectible found.",
-    "retry": "Retry"
+    "retry": "Retry",
+    "application_hint": "Socialize and show off your NFTs. People can bid,\nbuy, view your valuable NFTs without leaving Twitter."
 }

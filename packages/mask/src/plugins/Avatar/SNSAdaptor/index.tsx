@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
 import { base } from '../base'
 import { setupContext } from '../context'
+import { useI18N } from '../locales'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -14,6 +15,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             RenderEntryComponent({ disabled }) {
                 const [open, setOpen] = useState(false)
+                const t = useI18N()
                 return (
                     <>
                         <ApplicationEntry
@@ -21,7 +23,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             disabled={disabled}
                             icon={new URL('../assets/nftavatar.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}
+                            tooltipProps={{
+                                arrow: true,
+                                placement: 'top',
+                            }}
+                            hint={t.application_hint()}
                         />
+
                         <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
                     </>
                 )
