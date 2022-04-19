@@ -1,4 +1,4 @@
-import { makeStyles, getMaskColor } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Link, Typography } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
 import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
@@ -10,7 +10,6 @@ import { isSameAddress, useProviderType, useWallets } from '@masknet/web3-shared
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
         padding: theme.spacing(1.5),
-        marginBottom: theme.spacing(2),
         display: 'flex',
         border: `1px solid ${theme.palette.background.default}`,
         borderRadius: 8,
@@ -27,11 +26,12 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     accountName: {
-        fontSize: 16,
+        fontWeight: 700,
+        fontSize: 14,
         marginRight: 6,
     },
     address: {
-        fontSize: 14,
+        fontSize: 10,
         marginRight: theme.spacing(1),
         color: theme.palette.text.secondary,
         display: 'inline-block',
@@ -58,9 +58,9 @@ const useStyles = makeStyles()((theme) => ({
     defaultBadge: {
         padding: '2px 4px',
         borderRadius: 4,
-        fontSize: 14,
+        fontSize: 12,
         backgroundColor: 'rgba(28, 104, 243, 0.1)',
-        color: getMaskColor(theme).primary,
+        color: '#1C68F3',
         fontWeight: 700,
         marginLeft: 4,
     },
@@ -136,7 +136,6 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
                             <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
                         ) : null}
                     </>
-                    <Typography className={classes.accountName}>{walletName ?? 'Wallet ' + index}</Typography>
                     {isDefault && <div className={classes.defaultBadge}>Default</div>}
                 </div>
                 <div className={classes.infoRow}>

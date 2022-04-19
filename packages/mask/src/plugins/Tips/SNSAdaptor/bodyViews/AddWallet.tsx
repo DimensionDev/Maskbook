@@ -20,13 +20,15 @@ interface AddWalletViewProps {
 const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewProps) => {
     const [isBound, setIsBound] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
-    const wallet = useWallet()
-    const account = useAccount()
+    const wallet = {
+        ...useWallet(),
+        account: useAccount(),
+    }
     const isNotEvm = !useProviderDescriptor()?.providerAdaptorPluginID.includes('evm')
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
     useEffect(() => {
         if (bounds === []) return
-        const res = bounds.filter((x) => isSameAddress(x.identity, account))
+        const res = bounds.filter((x) => isSameAddress(x.identity, wallet.account))
         if (res.length > 0) {
             setIsBound(true)
         } else {
@@ -35,11 +37,11 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     }, [wallet, currentPersona, bounds])
 
     const { value: payload } = useAsync(async () => {
-        if (!currentPersona?.publicHexKey || !account) return
+        if (!currentPersona?.publicHexKey || !wallet.account) return
         return NextIDProof.createPersonaPayload(
             currentPersona.publicHexKey,
             NextIDAction.Create,
-            account,
+            wallet.account,
             NextIDPlatform.Ethereum,
             'default',
         )
@@ -68,16 +70,16 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     }, [currentPersona?.identifier, payload])
 
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
-        if (!payload || !currentPersona?.publicHexKey || !account) return false
+        if (!payload || !currentPersona?.publicHexKey || !wallet.account) return false
         try {
-            const walletSig = await Services.Ethereum.personalSign(payload.signPayload, account)
+            const walletSig = await Services.Ethereum.personalSign(payload.signPayload, wallet.account)
             if (!walletSig) throw new Error('Wallet sign failed')
             await NextIDProof.bindProof(
                 payload.uuid,
                 currentPersona.publicHexKey,
                 NextIDAction.Create,
                 NextIDPlatform.Ethereum,
-                account,
+                wallet.account,
                 payload.createdAt,
                 {
                     walletSignature: walletSig,

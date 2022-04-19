@@ -65,6 +65,9 @@ const useStyles = makeStyles()((theme) => ({
         left: '50%',
         transform: 'translate(-50%,-50%)',
     },
+    cancelBtn: {
+        border: `1px solid ${theme.palette.text.secondary}`,
+    },
 }))
 
 enum BodyViewSteps {
@@ -291,7 +294,12 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
                     {![BodyViewSteps.addWallet, BodyViewSteps.wallets].includes(bodyView) && rawPatchData.length > 0 && (
                         <div className={classes.actions}>
-                            <ActionButton fullWidth color="secondary" disabled={!hasChanged} onClick={onCancel}>
+                            <ActionButton
+                                className={classes.cancelBtn}
+                                fullWidth
+                                color="secondary"
+                                disabled={!hasChanged}
+                                onClick={onCancel}>
                                 {t('cancel')}
                             </ActionButton>
                             <LoadingButton
