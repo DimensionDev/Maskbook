@@ -5,7 +5,7 @@ import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { Copy, ExternalLink } from 'react-feather'
 import { useProviderDescriptor, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import { isSameAddress, useProviderType, useWallets } from '@masknet/web3-shared-evm'
+import { isSameAddress, ProviderType, useProviderType, useWallets } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -130,12 +130,19 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
         <div className={classes.currentAccount}>
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    <>
-                        <Typography className={classes.accountName}>{walletName ?? 'Wallet ' + index}</Typography>
-                        {domain && Utils?.formatDomainName ? (
-                            <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
-                        ) : null}
-                    </>
+                    {providerType !== ProviderType.MaskWallet ? (
+                        <Typography className={classes.accountName}>
+                            {domain && Utils?.formatDomainName
+                                ? Utils.formatDomainName(domain)
+                                : providerDescriptor?.name}
+                        </Typography>
+                    ) : (
+                        <Typography className={classes.accountName}>
+                            {domain && Utils?.formatDomainName
+                                ? Utils.formatDomainName(domain)
+                                : walletName ?? 'Wallet ' + index}
+                        </Typography>
+                    )}
                     {isDefault && <div className={classes.defaultBadge}>Default</div>}
                 </div>
                 <div className={classes.infoRow}>

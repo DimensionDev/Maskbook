@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'baseline',
         color: theme.palette.text.secondary,
         gap: 4,
-        fontSize: 12,
+        fontSize: 14,
     },
     badge: {
         cursor: 'pointer',
@@ -43,28 +43,34 @@ const useStyles = makeStyles()((theme) => ({
     },
     linkIcon: {
         cursor: 'pointer',
+        width: 16,
+        textDecoration: 'none',
     },
     emptyImg: {
         margin: '16px 0',
         width: '100%',
     },
     actionBtn: {
+        width: 254,
         cursor: 'pointer',
         position: 'absolute',
         bottom: '16px',
         left: '50%',
         transform: 'translateX(-50%)',
         minWidth: 200,
-        background: theme.palette.background.default,
+        background: 'rgba(7, 16, 27, 1)',
         borderRadius: '99px',
         padding: '11px 0',
-        color: theme.palette.text.primary,
+        color: '#fff',
         fontSize: 14,
         fontWeight: 700,
         display: 'flex',
         alignItems: 'center',
         gap: 4,
         justifyContent: 'center',
+    },
+    walletIcon: {
+        width: 18,
     },
 }))
 interface EmptyProps {
@@ -87,7 +93,9 @@ const Empty = memo(({ toAdd }: EmptyProps) => {
                 <div className={classes.provided}>
                     <div>Provided by</div>
                     <div className={classes.badge}>Mask Network</div>
-                    <ExternalLink className={classes.linkIcon} size={14} />
+                    <a href="https://mask.io" className={classes.linkIcon} target="_blank">
+                        <ExternalLink size={16} />
+                    </a>
                 </div>
             </div>
             <img
@@ -96,7 +104,11 @@ const Empty = memo(({ toAdd }: EmptyProps) => {
                 alt=""
             />
             <div className={classes.actionBtn} onClick={toAdd}>
-                <img src={new URL('../../assets/wallet.png', import.meta.url).toString()} alt="" />
+                <img
+                    className={classes.walletIcon}
+                    src={new URL('../../assets/wallet.png', import.meta.url).toString()}
+                    alt=""
+                />
                 <div>Connect your wallet</div>
             </div>
         </div>

@@ -158,11 +158,7 @@ export function Steps(props: StepsProps) {
     return (
         <div className={classes.container}>
             <CurrentWalletBox walletName={walletName} wallet={wallet} changeWallet={changeWallet} />
-            {notEvm && (
-                <Typography className={classes.hasBound}>
-                    The tips feature only supports EVM chains, and other chains are starting to support it.
-                </Typography>
-            )}
+            {notEvm && <Typography className={classes.hasBound}>{t('plugin_tips_not_evm_alert')}</Typography>}
             {notInPop && disableConfirm && !notEvm && (
                 <Typography className={classes.hasBound}>{t('wallet_verify_has_bound')}</Typography>
             )}

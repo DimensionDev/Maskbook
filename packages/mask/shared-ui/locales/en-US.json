@@ -74,7 +74,7 @@
     "delete_wallet": "Delete Wallet",
     "hide_token": "Hide Token",
     "hide_token_hint": "You can add <strong>{{token}}</strong> back in the future by going to \"Add Token\" in the wallet panel.",
-    "done": "Done!",
+    "done": "Done",
     "download": "Download",
     "failed": "Failed",
     "buy_now": "Buy Now",
@@ -1053,6 +1053,7 @@
     "plugin_artblocks_share": "I just purchased a beautiful piece of art from '{{name}}' collection for {{price}} {{symbol}}. Install @realMaskNetwork to get yours.",
     "plugin_artblocks_share_no_official_account": "I just purchased a beautiful piece of art from '{{name}}' collection for {{price}} {{symbol}}. Welcome to join.",
     "nft_button_set_avatar": "Set NFT Avatar",
-    "plugin_tips_disconnect_intro": "Are you going to disconnect {{persona}} and wallet <strong>{{address}}<strong/>?",
-    "plugin_tips_disconnect_dialog_title": "Disconnect Wallet ?"
+    "plugin_tips_disconnect_intro": "Are you going to disconnect {{persona}} from wallet <strong>{{address}}<strong/>?",
+    "plugin_tips_disconnect_dialog_title": "Disconnect Wallet ?",
+    "plugin_tips_not_evm_alert": "The tips feature only supports EVM chains, and other chains are starting to support it."
 }
