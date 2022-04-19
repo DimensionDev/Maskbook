@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         borderRadius: 4,
         padding: 8,
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: '#F9F9F9',
         fontSize: 14,
         alignItems: 'center',
     },
@@ -51,7 +51,7 @@ export function PersonaPage(props: PersonaPageProps) {
     )
 
     return (
-        <DialogContent sx={{ height: 612 }}>
+        <DialogContent sx={{ height: 612, padding: 2 }}>
             {loading ? (
                 <Stack justifyContent="center" alignItems="center">
                     <CircularProgress />
@@ -60,10 +60,13 @@ export function PersonaPage(props: PersonaPageProps) {
                 <>
                     {visible ? (
                         <Box className={classes.messageBox}>
-                            <Typography color="textPrimary" variant="body1" fontSize={14}>
+                            <Typography color="#07101B" variant="body1" fontSize={14}>
                                 {t.persona_hint()}
                             </Typography>
-                            <CloseIcon sx={{ cursor: 'pointer' }} onClick={() => setVisible(false)} />
+                            <CloseIcon
+                                sx={{ cursor: 'pointer', stroke: '#07101B' }}
+                                onClick={() => setVisible(false)}
+                            />
                         </Box>
                     ) : null}
                     {persona?.binds?.proofs

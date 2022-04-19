@@ -1,10 +1,11 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
+import { Typography } from '@mui/material'
 import { useState } from 'react'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
 import { base } from '../base'
 import { setupContext } from '../context'
-import { useI18N } from '../locales'
+import { Translate, useI18N } from '../locales'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -13,13 +14,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent({ disabled }) {
+            RenderEntryComponent({ disabled }: props) {
                 const [open, setOpen] = useState(false)
                 const t = useI18N()
                 return (
                     <>
                         <ApplicationEntry
-                            title="NFT Avatars"
+                            title={t.application_dialog_title()}
                             disabled={disabled}
                             icon={new URL('../assets/nftavatar.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}
@@ -27,7 +28,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 arrow: true,
                                 placement: 'top',
                             }}
-                            hint={t.application_hint()}
+                            hint={
+                                <Typography fontSize={12} style={{ whiteSpace: 'nowrap' }}>
+                                    <Translate.application_hint />
+                                </Typography>
+                            }
                         />
 
                         <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
