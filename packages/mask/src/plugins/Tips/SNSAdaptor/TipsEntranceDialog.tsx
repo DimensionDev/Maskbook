@@ -1,6 +1,6 @@
 import { DialogContent, Button } from '@mui/material'
 import { useI18N } from '../../../utils'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { useEffect, useState } from 'react'
 import { TipsSupportedChains } from '../constants'
@@ -27,6 +27,7 @@ import Services from '../../../extension/service'
 import { PluginId } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-evm'
+import formatDateTime from 'date-fns/format'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -84,6 +85,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const [hasChanged, setHasChanged] = useState(false)
     const [rawPatchData, setRawPatchData] = useState<WalletProof[]>([])
     const [rawWalletList, setRawWalletList] = useState<WalletProof[]>([])
+    const { showSnackbar } = useCustomSnackbar()
+    const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
+
     const { value: currentPersonaIdentifier } = useAsyncRetry(
         () => Services.Settings.getCurrentPersonaIdentifier(),
         [open],
@@ -196,9 +200,17 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             )
             if (!signResult) throw new Error('sign error')
             await kvSet(payload.val, signResult.signature.signature, rawPatchData)
+            showSnackbar('Success', {
+                variant: 'success',
+                message: nowTime,
+            })
             retryKv()
             retryProof()
         } catch (error) {
+            showSnackbar('Error', {
+                variant: 'error',
+                message: nowTime,
+            })
             console.error(error)
         }
     }

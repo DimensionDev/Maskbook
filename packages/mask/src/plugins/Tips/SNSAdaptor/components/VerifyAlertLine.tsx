@@ -1,12 +1,12 @@
-import { makeStyles, getMaskColor } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         width: '100%',
-        backgroundColor: 'rgba(28, 104, 243, 0.1)',
-        color: getMaskColor(theme).primary,
+        backgroundColor: theme.palette.text.secondary,
+        color: theme.palette.text.primary,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
