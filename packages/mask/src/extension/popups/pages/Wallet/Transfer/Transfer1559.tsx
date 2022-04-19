@@ -221,7 +221,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .refine((amount) => {
                         const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
                         return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
-                    }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
+                    }, t('wallet_transfer_error_insufficient_balance', { symbol: selectedAsset?.token.symbol })),
                 gasLimit: zod
                     .string()
                     .min(1, t('wallet_transfer_error_gas_limit_absence'))
