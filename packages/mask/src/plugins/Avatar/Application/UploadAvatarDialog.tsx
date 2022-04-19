@@ -25,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface UploadAvatarDialogProps {
     account?: string
+    haveBindAccount?: boolean
     image?: string | File
     token?: ERC721TokenDetailed
     proof?: BindingProof
@@ -32,13 +33,14 @@ interface UploadAvatarDialogProps {
     onClose: () => void
 }
 
-async function personaSign(message: string, identifier: ECKeyIdentifier) {
+async function personaSign(account: string, haveBindAccount: boolean, message: string, identifier: ECKeyIdentifier) {
     try {
-        return Services.Identity.signWithPersona({
-            message,
-            method: 'eth',
-            identifier: identifier.toText(),
-        })
+        if (haveBindAccount) {
+            const result = await Services.Identity.generateSignResult(identifier, message)
+            return result.signature.signature
+        } else {
+            return context.walletSign(message, account)
+        }
     } catch {
         return
     }
@@ -46,6 +48,7 @@ async function personaSign(message: string, identifier: ECKeyIdentifier) {
 
 async function Save(
     account: string,
+    haveBindAccount: boolean,
     token: ERC721TokenDetailed,
     avatarId: string,
     data: TwitterBaseAPI.AvatarInfo,
@@ -68,13 +71,13 @@ async function Save(
         return false
     }
 
-    const sign = await personaSign(response.val.signPayload, persona.identifier)
+    const sign = await personaSign(account, haveBindAccount, response.val.signPayload, persona.identifier)
     if (!sign) return false
 
     const setResponse = await NextIDStorage.set(
         response.val.uuid,
         persona.publicHexKey,
-        toBase64(fromHex(sign.signature.signature)),
+        toBase64(fromHex(sign)),
         proof.platform,
         proof.identity,
         response.val.createdAt,
@@ -84,7 +87,7 @@ async function Save(
 }
 
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
-    const { image, account, token, onClose, onBack, proof } = props
+    const { image, account, token, onClose, onBack, proof, haveBindAccount = false } = props
     const { classes } = useStyles()
     const identifier = context.currentVisitingProfile.getCurrentValue()?.identifier
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
@@ -109,7 +112,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             }
             const avatarId = getAvatarId(data?.imageUrl ?? '')
 
-            const response = await Save(account, token, avatarId, data, currentConnectedPersona, proof)
+            const response = await Save(account, haveBindAccount, token, avatarId, data, currentConnectedPersona, proof)
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
                 setDisabled(false)
@@ -120,7 +123,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             onClose()
             setDisabled(false)
         })
-    }, [account, editor, identifier, onClose, currentConnectedPersona, proof])
+    }, [account, editor, identifier, onClose, currentConnectedPersona, proof, haveBindAccount])
 
     if (!account || !image || !token || !proof) return null
 

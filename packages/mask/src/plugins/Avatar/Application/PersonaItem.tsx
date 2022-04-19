@@ -5,12 +5,12 @@ import { NFTInfo } from './NFTInfo'
 import { MoreIcon } from '../assets/more'
 import { RSS3_KEY_SNS } from '../constants'
 import { useCheckTokenOwner, useTokenOwner } from '../hooks/useTokenOwner'
-import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import type { TokenInfo } from '../types'
 import { useCallback, useEffect, useState } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
+import { context } from '../context'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
@@ -39,7 +39,7 @@ interface PersonaItemProps {
 }
 
 export function PersonaItem(props: PersonaItemProps) {
-    const currentIdentity = useLastRecognizedIdentity()
+    const currentIdentity = context.lastRecognizedProfile.getCurrentValue()
     const { userId, onSelect, owner = false, proof } = props
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = usePersonaNFTAvatar(userId, RSS3_KEY_SNS.TWITTER, proof.platform)
@@ -48,10 +48,11 @@ export function PersonaItem(props: PersonaItemProps) {
     const [haveNFT, setHaveNFT] = useState(false)
 
     useEffect(() => {
+        if (!currentIdentity) return
         setHaveNFT(
-            Boolean(_avatar && token && isOwner && _avatar.avatarId === getAvatarId(currentIdentity.avatar ?? '')),
+            Boolean(_avatar && token && isOwner && _avatar.avatarId === getAvatarId(currentIdentity?.avatar ?? '')),
         )
-    }, [_avatar, token, isOwner, currentIdentity.avatar])
+    }, [_avatar, token, isOwner, currentIdentity?.avatar])
 
     const onClick = useCallback(() => {
         onSelect?.(proof, _avatar ? { address: _avatar?.address, tokenId: _avatar?.tokenId } : undefined)

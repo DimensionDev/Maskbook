@@ -78,6 +78,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                 {step === CreateNFTAvatarStep.UploadAvatar ? (
                     <UploadAvatarDialog
                         proof={proof}
+                        haveBindAccount={Boolean(wallets?.length)}
                         account={selectedTokenInfo?.account}
                         image={selectedTokenInfo?.image}
                         token={selectedTokenInfo?.token}
