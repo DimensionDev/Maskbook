@@ -1,5 +1,12 @@
-import type { PersonaIdentifier } from '@masknet/shared-base'
-import { queryPersonaDB, queryPersonasDB } from '../../../database/persona/db'
+import type { PersonaIdentifier, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
+import { noop } from 'lodash-unified'
+import { queryAvatarDataURL } from '../../../database/avatar-cache/avatar'
+import {
+    createPersonaDBReadonlyAccess,
+    queryPersonaDB,
+    queryPersonasDB,
+    queryProfileDB,
+} from '../../../database/persona/db'
 import { queryPersonasDB as queryPersonasFromIndexedDB } from '../../../database/persona/web'
 import { MobilePersona, personaRecordToMobilePersona } from './mobile'
 
@@ -20,4 +27,31 @@ export async function mobile_queryPersonas(
     if (!x) return []
     if (!x.privateKey && requirePrivateKey) return []
     return [personaRecordToMobilePersona(x)]
+}
+
+export async function queryOwnedPersonaInformation(): Promise<PersonaInformation[]> {
+    const result: PersonaInformation[] = []
+    const extraPromises: Promise<any>[] = []
+    await createPersonaDBReadonlyAccess(async (t) => {
+        const personas = await queryPersonasDB({ hasPrivateKey: true }, t)
+        for (const persona of personas.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))) {
+            const map: ProfileInformation[] = []
+            result.push({
+                nickname: persona.nickname,
+                identifier: persona.identifier,
+                linkedProfiles: map,
+                publicHexKey: persona.publicHexKey,
+            })
+            for (const [profile] of persona.linkedProfiles) {
+                const linkedProfile = await queryProfileDB(profile, t)
+
+                const rec: ProfileInformation = { identifier: profile, nickname: linkedProfile?.nickname }
+                // We must not await another task inside db transaction
+                queryAvatarDataURL(profile).then((x) => (rec.avatar = x), noop)
+                map.push(rec)
+            }
+        }
+    })
+    await Promise.all(extraPromises)
+    return result
 }

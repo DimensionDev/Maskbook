@@ -7,13 +7,7 @@ import {
     queryProfilesWithQuery,
     storeAvatar,
 } from '../../database'
-import type {
-    PersonaIdentifier,
-    ProfileIdentifier,
-    PersonaInformation,
-    ProfileInformation,
-    PostIVIdentifier,
-} from '@masknet/shared-base'
+import type { PersonaIdentifier, ProfileIdentifier, PostIVIdentifier } from '@masknet/shared-base'
 import type { Persona, Profile } from '../../database/Persona/types'
 import {
     queryPersonaDB,
@@ -109,26 +103,6 @@ export async function queryMyPersonas(
 export async function queryLastPersonaCreated(): Promise<PersonaIdentifier | undefined> {
     const all = await queryPersonas_inner(undefined, true)
     return first(orderBy(all, (x) => x.createdAt, 'desc'))?.identifier
-}
-
-export async function queryOwnedPersonaInformation(): Promise<PersonaInformation[]> {
-    const personas = await queryPersonas_inner(undefined, true)
-    const result: PersonaInformation[] = []
-    for (const persona of personas.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))) {
-        const map: ProfileInformation[] = []
-        result.push({
-            nickname: persona.nickname,
-            identifier: persona.identifier,
-            linkedProfiles: map,
-            publicHexKey: persona.publicHexKey,
-        })
-        for (const [profile] of persona.linkedProfiles) {
-            const linkedProfile = await queryProfile(profile)
-
-            map.push({ identifier: profile, nickname: linkedProfile.nickname, avatar: linkedProfile.avatar })
-        }
-    }
-    return result
 }
 
 export async function queryPagedPostHistory(

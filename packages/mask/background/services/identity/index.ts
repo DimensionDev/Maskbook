@@ -4,7 +4,11 @@ export {
     createPersonaByMnemonic,
     createPersonaByMnemonicV2,
 } from './persona/create'
-export { mobile_queryPersonaRecordsFromIndexedDB, mobile_queryPersonas } from './persona/query'
+export {
+    mobile_queryPersonaRecordsFromIndexedDB,
+    mobile_queryPersonas,
+    queryOwnedPersonaInformation,
+} from './persona/query'
 export {
     deletePersona,
     logoutPersona,
