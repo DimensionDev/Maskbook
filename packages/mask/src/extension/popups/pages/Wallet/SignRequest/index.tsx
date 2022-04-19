@@ -1,14 +1,14 @@
 import { memo, useMemo, useState } from 'react'
+import { useAsyncFn } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import { LoadingButton } from '@mui/lab'
+import { toUtf8 } from 'web3-utils'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
 import { EthereumRpcType, useWallet } from '@masknet/web3-shared-evm'
-import { useAsyncFn } from 'react-use'
 import Services from '../../../../service'
-import { LoadingButton } from '@mui/lab'
-import { toUtf8 } from 'web3-utils'
-import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle'
 
@@ -96,7 +96,7 @@ const SignRequest = memo(() => {
         ) {
             let message = value.computedPayload.data
             try {
-                message = toUtf8(message)
+                message = toUtf8(value.computedPayload.data)
             } catch (error) {
                 console.log(error)
             }

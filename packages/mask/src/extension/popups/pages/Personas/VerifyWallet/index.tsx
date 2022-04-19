@@ -92,6 +92,7 @@ const VerifyWallet = memo(() => {
                 '',
                 {
                     chainId: wallet.chainId,
+                    account: wallet.account,
                     providerType: wallet.providerType,
                 },
                 { popupsWindow: false },
