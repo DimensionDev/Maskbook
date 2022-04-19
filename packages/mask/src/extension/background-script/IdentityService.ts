@@ -1,4 +1,3 @@
-import { validateMnemonic } from 'bip39'
 import {
     personaRecordToPersona,
     queryAvatarDataURL,
@@ -8,10 +7,9 @@ import {
     queryProfilesWithQuery,
     storeAvatar,
 } from '../../database'
-import {
+import type {
     PersonaIdentifier,
     ProfileIdentifier,
-    ECKeyIdentifierFromJsonWebKey,
     PersonaInformation,
     ProfileInformation,
     PostIVIdentifier,
@@ -28,12 +26,9 @@ import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { MaskMessages } from '../../utils'
 import { first, orderBy } from 'lodash-unified'
-import { loginPersona } from '../../../background/services/identity/persona/update'
-import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../../background/services/identity/persona/utils'
 
 assertEnvironment(Environment.ManifestBackground)
 
-export { validateMnemonic } from '../../../background/services/identity/persona/utils'
 export * from '../../../background/services/identity'
 
 export { queryProfile, queryPersonaByProfile } from '../../database'
@@ -75,22 +70,6 @@ export async function queryPersona(
     return queryPersonaRAW(identifier)
 }
 
-export async function queryPersonaByMnemonic(mnemonic: string, password: ''): Promise<PersonaIdentifier | null> {
-    const verify = validateMnemonic(mnemonic)
-    if (!verify) {
-        throw new Error('Verify error')
-    }
-
-    const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
-    const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey)
-    const persona = await queryPersonaDB(identifier, undefined, true)
-    if (persona) {
-        await loginPersona(persona.identifier)
-        return persona.identifier
-    }
-
-    return null
-}
 export async function app_only_queryPersonas(identifier?: PersonaIdentifier, requirePrivateKey = false) {
     if (process.env.architecture !== 'app') throw new Error('This function is only available in app')
     return queryPersonas_inner(identifier, requirePrivateKey)

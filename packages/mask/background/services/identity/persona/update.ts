@@ -18,6 +18,7 @@ import {
     LinkedProfileDetails,
     queryPersonasDB,
 } from '../../../database/persona/db'
+import { recover_ECDH_256k1_KeyPair_ByMnemonicWord, validateMnemonic } from './utils'
 
 export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even with private' | 'safe delete') {
     return consistentPersonaDBWriteAccess(async (t) => {
@@ -118,4 +119,21 @@ export async function renamePersona(identifier: PersonaIdentifier, nickname: str
     return consistentPersonaDBWriteAccess((t) =>
         updatePersonaDB({ identifier, nickname }, { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' }, t),
     )
+}
+
+export async function queryPersonaByMnemonic(mnemonic: string, password: ''): Promise<PersonaIdentifier | null> {
+    const verify = validateMnemonic(mnemonic)
+    if (!verify) {
+        throw new Error('Verify error')
+    }
+
+    const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
+    const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey)
+    const persona = await queryPersonaDB(identifier, undefined, true)
+    if (persona) {
+        await loginPersona(persona.identifier)
+        return persona.identifier
+    }
+
+    return null
 }
