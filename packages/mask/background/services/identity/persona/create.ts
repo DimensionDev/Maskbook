@@ -11,7 +11,7 @@ import { createPersonaByJsonWebKey } from '../../../database/persona/helper'
 import { decode } from '@msgpack/msgpack'
 import { omit } from 'lodash-unified'
 import type { MobilePersona } from './update'
-import { attachProfileDB, LinkedProfileDetails, queryPersonaDB } from '../../../database/persona/db'
+import { attachProfileDB, LinkedProfileDetails, queryPersonaDB, queryPersonasDB } from '../../../database/persona/db'
 import {
     deriveLocalKeyFromECDHKey,
     generate_ECDH_256k1_KeyPair_ByMnemonicWord,
@@ -90,6 +90,30 @@ export async function createPersonaByMnemonic(
     password: string,
 ): Promise<PersonaIdentifier> {
     const { key, mnemonicRecord: mnemonic } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
+    const { privateKey, publicKey } = key
+    const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
+    return createPersonaByJsonWebKey({
+        privateKey,
+        publicKey,
+        localKey,
+        mnemonic,
+        nickname,
+        uninitialized: false,
+    })
+}
+
+export async function createPersonaByMnemonicV2(
+    mnemonicWord: string,
+    nickname: string | undefined,
+    password: string,
+): Promise<PersonaIdentifier> {
+    const personas = await queryPersonasDB({ nameContains: nickname })
+    if (personas.length > 0) throw new Error('Nickname already exists')
+
+    const verify = bip39.validateMnemonic(mnemonicWord)
+    if (!verify) throw new Error('Verify error')
+
+    const { key, mnemonicRecord: mnemonic } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWord, password)
     const { privateKey, publicKey } = key
     const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
     return createPersonaByJsonWebKey({

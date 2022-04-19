@@ -16,6 +16,7 @@ import {
     safeDeletePersonaDB,
     updatePersonaDB,
     LinkedProfileDetails,
+    queryPersonasDB,
 } from '../../../database/persona/db'
 
 export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even with private' | 'safe delete') {
@@ -108,4 +109,13 @@ export async function mobile_queryPersonaByPrivateKey(privateKeyString: string):
     }
 
     return null
+}
+
+export async function renamePersona(identifier: PersonaIdentifier, nickname: string): Promise<void> {
+    const personas = await queryPersonasDB({ nameContains: nickname })
+    if (personas.length > 0) throw new Error('Nickname already exists')
+
+    return consistentPersonaDBWriteAccess((t) =>
+        updatePersonaDB({ identifier, nickname }, { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' }, t),
+    )
 }

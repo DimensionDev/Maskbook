@@ -56,8 +56,6 @@ export async function queryMyProfiles(network?: string): Promise<Profile[]> {
     )
 }
 
-export { createPersonaByMnemonicV2, renamePersona } from '../../database'
-
 /** @deprecated */
 export async function queryPersona(
     identifier: PersonaIdentifier,

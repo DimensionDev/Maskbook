@@ -1,4 +1,9 @@
-export { createPersonaByPrivateKey, mobile_restoreFromMnemonicWords, createPersonaByMnemonic } from './persona/create'
+export {
+    createPersonaByPrivateKey,
+    mobile_restoreFromMnemonicWords,
+    createPersonaByMnemonic,
+    createPersonaByMnemonicV2,
+} from './persona/create'
 export { mobile_queryPersonaRecordsFromIndexedDB } from './persona/query'
 export {
     deletePersona,
@@ -6,6 +11,7 @@ export {
     setupPersona,
     loginExistPersonaByPrivateKey,
     mobile_queryPersonaByPrivateKey,
+    renamePersona,
 } from './persona/update'
 export { signWithPersona, type SignRequest, type SignRequestResult, generateSignResult } from './persona/sign'
 export { exportPersonaMnemonicWords, exportPersonaPrivateKey } from './persona/backup'
