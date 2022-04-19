@@ -213,7 +213,7 @@
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
-                "namespace": "com.mask.avatar",
+                "namespace": "com.maskbook.avatar",
                 "trans": "Translate",
                 "sourceMap": "inline"
             }

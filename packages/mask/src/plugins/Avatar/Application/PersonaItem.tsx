@@ -22,7 +22,7 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
         alignItems: 'center',
         cursor: 'pointer',
     },
-    avatar: {},
+
     userInfo: {
         fontSize: 14,
         marginLeft: 16,
@@ -32,16 +32,15 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
 
 interface PersonaItemProps {
     owner?: boolean
-    avatar?: string
+
     userId: string
-    nickname?: string
     proof: BindingProof
     onSelect?: (proof: BindingProof, tokenInfo?: TokenInfo) => void
 }
 
 export function PersonaItem(props: PersonaItemProps) {
     const currentIdentity = useLastRecognizedIdentity()
-    const { avatar, userId, nickname, onSelect, owner = false, proof } = props
+    const { userId, onSelect, owner = false, proof } = props
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = usePersonaNFTAvatar(userId, RSS3_KEY_SNS.TWITTER, proof.platform)
     const { value: token, loading: loadingToken } = useTokenOwner(_avatar?.address ?? '', _avatar?.tokenId ?? '')
@@ -57,13 +56,14 @@ export function PersonaItem(props: PersonaItemProps) {
     const onClick = useCallback(() => {
         onSelect?.(proof, _avatar ? { address: _avatar?.address, tokenId: _avatar?.tokenId } : undefined)
     }, [_avatar, proof])
+    console.log(userId, owner)
     return (
         <div className={classes.root} onClick={onClick}>
             <>
-                <NFTAvatar avatar={avatar || _avatar?.imageUrl} hasBorder={haveNFT} platform={proof.platform} />
+                <NFTAvatar owner={owner} avatar={_avatar?.imageUrl} hasBorder={haveNFT} platform={proof.platform} />
                 <Box className={classes.userInfo}>
                     <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
-                        {nickname || _avatar?.nickname}
+                        {_avatar?.nickname}
                     </Typography>
                     <Typography variant="body1" color="textSecondary" fontSize={12}>
                         @{userId}

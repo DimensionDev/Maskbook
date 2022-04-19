@@ -12,7 +12,7 @@ if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(['./en-US.json'], () =>
         globalThis.dispatchEvent?.(
             new CustomEvent('MASK_I18N_HMR', {
-                detail: ['com.mask.avatar', { en: en_US }],
+                detail: ['com.maskbook.avatar', { en: en_US }],
             }),
         ),
     )

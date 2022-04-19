@@ -74,20 +74,11 @@ export function PersonaPage(props: PersonaPageProps) {
                                     key={i}
                                     owner
                                     proof={x}
-                                    avatar={currentIdentity.avatar}
                                     userId={currentIdentity.identifier.userId}
-                                    nickname={currentIdentity.nickname}
                                     onSelect={onSelect}
                                 />
                             ) : (
-                                <PersonaItem
-                                    key={i}
-                                    owner={false}
-                                    avatar=""
-                                    userId={x.identity}
-                                    nickname=""
-                                    proof={x}
-                                />
+                                <PersonaItem key={i} owner={false} userId={x.identity} proof={x} />
                             ),
                         )}
                 </>
