@@ -912,6 +912,8 @@
     "popups_add_and_verify_wallet": "Add and verify Wallet",
     "popups_add_derive": "Add Derive",
     "popups_rename": "Rename",
+    "popups_speed_up_transaction": "Speed up transaction",
+    "popups_cancel_transaction": "Cancel Transaction",
     "popups_import_the_wallet": "Import the wallet",
     "popups_delete_wallet": "Disconnect Wallet",
     "popups_create_wallet": "Create Wallet",

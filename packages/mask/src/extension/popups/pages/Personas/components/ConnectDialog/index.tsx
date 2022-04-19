@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui
 import { useI18N } from '../../../../../../utils'
 import { Close } from '@mui/icons-material'
 import { SOCIAL_MEDIA_ROUND_ICON_MAPPING, SOCIAL_MEDIA_NAME } from '@masknet/shared'
+import type { EnhanceableSite } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     dialog: {
@@ -58,8 +59,8 @@ const useStyles = makeStyles()(() => ({
 
 interface ConnectDialogProps extends DialogProps {
     onClose: () => void
-    onConnect: (networkIdentifier: string) => void
-    networks: string[]
+    onConnect: (networkIdentifier: EnhanceableSite) => void
+    networks: EnhanceableSite[]
 }
 
 export const ConnectDialog = memo<ConnectDialogProps>(({ open, onClose, networks, onConnect }) => {
