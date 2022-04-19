@@ -37,7 +37,7 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             proofs: {
                 platform: NextIDPlatform
                 identity: string
-                content: { [MASK_STORAGE_KEY]: any }
+                content: { [MASK_STORAGE_KEY]: Record<string, T> }
             }[]
         }>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
         if (!response.ok) return Err('User not found')

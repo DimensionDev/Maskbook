@@ -56,7 +56,7 @@ export function PersonaItem(props: PersonaItemProps) {
     const onClick = useCallback(() => {
         onSelect?.(proof, _avatar ? { address: _avatar?.address, tokenId: _avatar?.tokenId } : undefined)
     }, [_avatar, proof])
-    console.log(userId, owner)
+
     return (
         <div className={classes.root} onClick={onClick}>
             <>
