@@ -4,8 +4,8 @@ import { useCopyToClipboard } from 'react-use'
 import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { Copy, ExternalLink } from 'react-feather'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { isSameAddress, useWallets } from '@masknet/web3-shared-evm'
+import { useProviderDescriptor, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { isSameAddress, ProviderType, useProviderType, useWallets } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -63,6 +63,15 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         marginLeft: 4,
     },
+    domain: {
+        fontSize: 16,
+        lineHeight: '18px',
+        marginLeft: 6,
+        padding: 4,
+        borderRadius: 8,
+        backgroundColor: '#ffffff',
+        color: theme.palette.common.black,
+    },
 }))
 
 interface WalletComProps {
@@ -78,6 +87,10 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
     const { classes } = useStyles()
     const { t } = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
+    const providerType = useProviderType()
+    const { value: domain } = useReverseAddress(address)
+    const providerDescriptor = useProviderDescriptor()
+    const { Utils } = useWeb3State() ?? {}
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
             ev.stopPropagation()
@@ -90,7 +103,6 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
         t('copy_success_of_wallet_addr'),
     )
     const walletName = useWallets().find((x) => isSameAddress(x.address, address))?.name
-    const { Utils } = useWeb3State() ?? {}
     const getActionRender = () => {
         if (!canDelete && !isDefault)
             return (
@@ -117,6 +129,20 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
         <div className={classes.currentAccount}>
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
+                    {providerType !== ProviderType.MaskWallet ? (
+                        <Typography className={classes.accountName}>
+                            {domain && Utils?.formatDomainName
+                                ? Utils.formatDomainName(domain)
+                                : providerDescriptor?.name}
+                        </Typography>
+                    ) : (
+                        <>
+                            <Typography className={classes.accountName}>{walletName ?? 'Wallet ' + index}</Typography>
+                            {domain && Utils?.formatDomainName ? (
+                                <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
+                            ) : null}
+                        </>
+                    )}
                     <Typography className={classes.accountName}>{walletName ?? 'Wallet ' + index}</Typography>
                     {isDefault && <div className={classes.defaultBadge}>Default</div>}
                 </div>
