@@ -204,7 +204,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         )
         if (!signResult) throw new Error('sign error')
         await kvSet(payload.val, signResult.signature.signature, rawPatchData)
-        showSnackbar('Success', {
+        showSnackbar('Persona signed successfully.', {
             variant: 'success',
             message: nowTime,
         })
