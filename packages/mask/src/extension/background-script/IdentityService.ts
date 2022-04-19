@@ -2,12 +2,11 @@ import {
     personaRecordToPersona,
     queryAvatarDataURL,
     queryPersona as queryPersonaRAW,
-    queryPostPagedDB,
     queryProfile,
     queryProfilesWithQuery,
     storeAvatar,
 } from '../../database'
-import type { PersonaIdentifier, ProfileIdentifier, PostIVIdentifier } from '@masknet/shared-base'
+import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { Persona, Profile } from '../../database/Persona/types'
 import {
     queryPersonaDB,
@@ -97,23 +96,6 @@ export async function queryMyPersonas(
         })
     }
     return x
-}
-
-export async function queryPagedPostHistory(
-    options: {
-        network: string
-        userIds: string[]
-        after?: PostIVIdentifier
-        pageOffset?: number
-    },
-    count: number,
-) {
-    const currentPersona = await getCurrentPersonaIdentifier()
-    if (currentPersona) {
-        return queryPostPagedDB(currentPersona, options, count)
-    }
-
-    return []
 }
 
 export async function queryRelationPaged(
