@@ -1,10 +1,10 @@
+import urlcat from 'urlcat'
 import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import urlcat from 'urlcat'
-import { useNavigate } from 'react-router-dom'
+import type { NavigateFunction } from 'react-router-dom'
 import { first } from 'lodash-unified'
 import { DialogContent } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { safeUnreachable, delay } from '@dimensiondev/kit'
 import {
     ChainId,
@@ -29,12 +29,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ConnectWalletDialogProps {}
+export interface ConnectWalletDialogProps {
+    onNavigate?: NavigateFunction
+}
 
 export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
-    const classes = useStylesExtends(useStyles(), props)
-
-    const navigate = useNavigate()
+    const { onNavigate } = props
+    const { classes } = useStyles()
     const [onSelectAccountPrepare] = useSelectAccount()
 
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
@@ -87,7 +88,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                                 account: first(accounts) ?? '',
                             })
                         })
-                        navigate(
+                        onNavigate?.(
                             urlcat(PopupRoutes.SelectWallet, {
                                 popup: true,
                             }),
@@ -168,7 +169,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             networkType,
             providerType,
         }
-    }, [networkType, providerType, onSelectAccountPrepare])
+    }, [networkType, providerType, onNavigate, onSelectAccountPrepare])
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true

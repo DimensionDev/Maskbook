@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
 import { SelectNftContractDialog } from '../SNSAdaptor/SelectNftContractDialog'
@@ -17,6 +18,7 @@ const dashboard: Plugin.Dashboard.Definition = {
     ...base,
     init(signal) {},
     GlobalInjection: function Component() {
+        const navigate = useNavigate()
         return (
             <>
                 <TransactionDialog />
@@ -24,7 +26,7 @@ const dashboard: Plugin.Dashboard.Definition = {
                 <SelectProviderDialog />
                 <SelectNftContractDialog />
                 <WalletStatusDialog isDashboard />
-                <ConnectWalletDialog />
+                <ConnectWalletDialog onNavigate={navigate} />
                 <WalletConnectQRCodeDialog />
                 <WalletRenameWalletDialog />
                 <WalletRiskWarningDialog />
