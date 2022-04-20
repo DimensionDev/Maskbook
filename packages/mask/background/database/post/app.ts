@@ -117,7 +117,10 @@ export async function queryPostsDB(
     return []
 }
 
-export const PostDBAccess = () => undefined
+export async function withPostDBTransaction(task: (t: PostReadWriteTransaction) => Promise<void>) {
+    await task(null!)
+}
+
 // #endregion
 
 type RecipientReasonJSON = (

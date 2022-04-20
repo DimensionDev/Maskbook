@@ -10,7 +10,7 @@ import { useLastRecognizedIdentity } from './useActivatedUI'
 import { useMyPersonas } from './useMyPersonas'
 
 const createPersona = () => {
-    Services.Welcome.openOptionsPage(DashboardRoutes.Setup)
+    Services.Helper.openDashboard(DashboardRoutes.Setup)
 }
 
 const connectPersona = async () => {

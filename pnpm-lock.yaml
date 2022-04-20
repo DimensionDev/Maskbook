@@ -119,8 +119,10 @@ importers:
 
   packages/backup-format:
     specifiers:
+      '@masknet/shared-base': workspace:*
       '@msgpack/msgpack': ^2.7.2
     dependencies:
+      '@masknet/shared-base': link:../shared-base
       '@msgpack/msgpack': 2.7.2
 
   packages/configuration:
@@ -305,6 +307,7 @@ importers:
       '@ethersproject/providers': ^5.0.9
       '@ethersproject/solidity': ^5.0.4
       '@hookform/resolvers': 2.8.8
+      '@masknet/backup-format': workspace:*
       '@masknet/dashboard': workspace:*
       '@masknet/encryption': workspace:^0.0.0
       '@masknet/external-plugin-previewer': workspace:*
@@ -447,6 +450,7 @@ importers:
       '@ethersproject/providers': 5.4.2
       '@ethersproject/solidity': 5.4.0
       '@hookform/resolvers': 2.8.8_react-hook-form@7.29.0
+      '@masknet/backup-format': link:../backup-format
       '@masknet/dashboard': link:../dashboard
       '@masknet/encryption': link:../encryption
       '@masknet/external-plugin-previewer': link:../external-plugin-previewer
@@ -1086,6 +1090,7 @@ importers:
       '@mui/system': link:..\empty
       '@servie/events': ^3.0.0
       '@types/react': 18.0.2
+      '@types/use-subscription': ^1.0.0
       anchorme: ^2.1.2
       async-call-rpc: ^6.0.2
       bignumber.js: ^9.0.2
@@ -1123,6 +1128,8 @@ importers:
       typeson-registry: 2.0.0
       use-subscription: 1.6.0_react@18.0.0
       z-schema: 5.0.3
+    devDependencies:
+      '@types/use-subscription': 1.0.0
 
   packages/shared-base-ui:
     specifiers:
