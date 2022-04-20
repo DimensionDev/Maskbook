@@ -119,7 +119,6 @@ export function Steps(props: StepsProps) {
         notInPop,
         notEvm,
         onCustomCancel,
-        account,
     } = props
     const { showSnackbar } = usePopupCustomSnackbar()
 
@@ -159,7 +158,7 @@ export function Steps(props: StepsProps) {
 
     return (
         <div className={classes.container}>
-            <CurrentWalletBox account={account} walletName={walletName} wallet={wallet} changeWallet={changeWallet} />
+            <CurrentWalletBox walletName={walletName} wallet={wallet} changeWallet={changeWallet} />
             {notEvm && <Typography className={classes.hasBound}>{t('plugin_tips_not_evm_alert')}</Typography>}
             {notInPop && disableConfirm && !notEvm && (
                 <Typography className={classes.hasBound}>{t('wallet_verify_has_bound')}</Typography>
@@ -181,7 +180,12 @@ export function Steps(props: StepsProps) {
                     </div>
                     <div className={classes.stepRow}>
                         <Typography className={classes.stepTitle}>
-                            {walletName ?? `${wallet.providerType} Wallet`} Sign
+                            {notEvm
+                                ? `${wallet.providerType} Wallet`
+                                : walletName
+                                ? walletName
+                                : `${wallet.providerType} Wallet`}{' '}
+                            Sign
                         </Typography>
                         <Typography className={classes.stepIntro}>{t('waller_verify_wallet_sign_intro')}</Typography>
                     </div>

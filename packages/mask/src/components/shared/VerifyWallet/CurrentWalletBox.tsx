@@ -1,6 +1,6 @@
 import { ExternalLink } from 'react-feather'
 import classNames from 'classnames'
-import { ChainId, ProviderType, NetworkType } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType, NetworkType, useAccount } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -91,14 +91,14 @@ interface CurrentWalletBox {
     wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
     walletName?: string
     changeWallet: () => void
-    account?: string
 }
 export function CurrentWalletBox(props: CurrentWalletBox) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { wallet, walletName, account } = props
+    const { wallet, walletName } = props
     const providerDescriptor = useProviderDescriptor(wallet.providerType)
     const networkDescriptor = useNetworkDescriptor(wallet.networkType)
+    const account = useAccount()
     const { Utils } = useWeb3State() ?? {}
     const { value: domain } = useReverseAddress(wallet.account)
 
@@ -130,12 +130,8 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                     )}
                 </div>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.address} variant="body2" title={wallet.account}>
-                        <FormattedAddress
-                            address={account ? account : wallet.account}
-                            size={4}
-                            formatter={Utils?.formatAddress}
-                        />
+                    <Typography className={classes.address} variant="body2" title={account}>
+                        <FormattedAddress address={account} size={4} formatter={Utils?.formatAddress} />
                     </Typography>
 
                     <Link

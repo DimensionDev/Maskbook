@@ -65,9 +65,6 @@ const useStyles = makeStyles()((theme) => ({
         left: '50%',
         transform: 'translate(-50%,-50%)',
     },
-    cancelBtn: {
-        border: '1px solid rgba(47, 51, 54, 1)',
-    },
 }))
 
 enum BodyViewSteps {
@@ -186,14 +183,18 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         )
     }
     const setAsDefault = (idx: number) => {
-        rawPatchData.forEach((x: any) => (x.isDefault = 0))
-        rawPatchData[idx].isDefault = 1
-        rawPatchData.unshift(rawPatchData.splice(idx, 1)[0])
+        const changed = JSON.parse(JSON.stringify(rawPatchData))
+        changed.forEach((x: any) => (x.isDefault = 0))
+        changed[idx].isDefault = 1
+        changed.unshift(changed.splice(idx, 1)[0])
+        setRawPatchData(changed)
         setHasChanged(true)
     }
 
     const onSwitchChange = (idx: number, v: boolean) => {
-        rawPatchData[idx].isPublic = v ? 1 : 0
+        const changed = JSON.parse(JSON.stringify(rawPatchData))
+        changed[idx].isPublic = v ? 1 : 0
+        setRawPatchData(changed)
         setHasChanged(true)
     }
 
@@ -317,8 +318,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     {![BodyViewSteps.addWallet, BodyViewSteps.wallets].includes(bodyView) && rawPatchData.length > 0 && (
                         <div className={classes.actions}>
                             <ActionButton
-                                className={classes.cancelBtn}
                                 fullWidth
+                                variant="outlined"
                                 color="secondary"
                                 disabled={!hasChanged}
                                 onClick={onCancel}>
