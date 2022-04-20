@@ -1,6 +1,6 @@
 import { memo, useMemo, useState } from 'react'
 import { useAsyncFn, useLocation } from 'react-use'
-import { useLocation as useRouteLocation , useNavigate } from 'react-router-dom'
+import { useLocation as useRouteLocation, useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
@@ -121,7 +121,7 @@ const SignRequest = memo(() => {
 
         if (value) {
             try {
-                await Services.Ethereum.confirmRequest(value.payload, !!goBack, selectedWallet)
+                await Services.Ethereum.confirmRequest(value.payload, !!goBack)
                 navigate(-1)
             } catch (error_) {
                 setTransferError(true)
