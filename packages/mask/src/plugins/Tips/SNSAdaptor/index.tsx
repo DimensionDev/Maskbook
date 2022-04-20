@@ -62,7 +62,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     <></>
                 )
             },
-            defaultSortingPriority: 8,
+            ApplicationEntryID: base.ID,
+            icon: <img src={new URL('../assets/Tip.png', import.meta.url).toString()} />,
+            name: base.name,
+            appBoardSortingDefaultPriority: 8,
         },
     ],
 }
