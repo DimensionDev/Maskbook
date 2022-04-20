@@ -18,7 +18,8 @@ export function setUnlistedApp(app: Application, unlisted: boolean) {
 }
 
 export function getUnlistedApp(app: Application): boolean {
-    return PersistentStorages.ApplicationEntryUnListedList.storage[app.entry.ApplicationEntryID].value
+    const state = PersistentStorages.ApplicationEntryUnListedList.storage[app.entry.ApplicationEntryID]
+    return state.initialized ? state.value : true
 }
 // #endregion
 
