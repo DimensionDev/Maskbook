@@ -24,7 +24,6 @@ import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper'
 import { toHex } from 'web3-utils'
 import { isLessThan } from '@masknet/web3-shared-base'
-import Services from '../../service'
 
 let id = 0
 

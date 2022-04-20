@@ -2,7 +2,7 @@ import { DialogContent, Button } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { TipsSupportedChains } from '../constants'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -227,9 +227,13 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             return false
         }
     }, [hasChanged])
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+    const { openDialog: openSelectProviderDialog, closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
+    const emptyWallet = useCallback(() => {
+        closeDialog()
+        setBodyView(BodyViewSteps.addWallet)
+    }, [])
     const [confirmState, onConfirmRelease] = useAsyncFn(
         async (wallet?: WalletProof) => {
             try {
@@ -309,6 +313,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                                     setBodyView(BodyViewSteps.addWallet)
                                 } else {
                                     openSelectProviderDialog()
+                                    emptyWallet()
                                 }
                             }}
                         />

@@ -113,9 +113,10 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
             return SignSteps.Ready
         }
     }, [signature, walletSignState, walletSign, personaSilentSign])
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+    const { openDialog: openSelectProviderDialog, closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
+
     if (!currentPersona || !wallet) return null
 
     return (
