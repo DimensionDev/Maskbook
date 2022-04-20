@@ -101,6 +101,7 @@ interface StepsProps {
     changeWallet: () => void
     onConfirm: () => void
     onCustomCancel?: () => void
+    account?: string
 }
 
 export function Steps(props: StepsProps) {
@@ -118,6 +119,7 @@ export function Steps(props: StepsProps) {
         notInPop,
         notEvm,
         onCustomCancel,
+        account,
     } = props
     const { showSnackbar } = usePopupCustomSnackbar()
 
@@ -157,7 +159,7 @@ export function Steps(props: StepsProps) {
 
     return (
         <div className={classes.container}>
-            <CurrentWalletBox walletName={walletName} wallet={wallet} changeWallet={changeWallet} />
+            <CurrentWalletBox account={account} walletName={walletName} wallet={wallet} changeWallet={changeWallet} />
             {notEvm && <Typography className={classes.hasBound}>{t('plugin_tips_not_evm_alert')}</Typography>}
             {notInPop && disableConfirm && !notEvm && (
                 <Typography className={classes.hasBound}>{t('wallet_verify_has_bound')}</Typography>

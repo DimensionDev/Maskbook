@@ -91,11 +91,12 @@ interface CurrentWalletBox {
     wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
     walletName?: string
     changeWallet: () => void
+    account?: string
 }
 export function CurrentWalletBox(props: CurrentWalletBox) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { wallet, walletName } = props
+    const { wallet, walletName, account } = props
     const providerDescriptor = useProviderDescriptor(wallet.providerType)
     const networkDescriptor = useNetworkDescriptor(wallet.networkType)
     const { Utils } = useWeb3State() ?? {}
@@ -130,7 +131,11 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={wallet.account}>
-                        <FormattedAddress address={wallet.account} size={4} formatter={Utils?.formatAddress} />
+                        <FormattedAddress
+                            address={account ? account : wallet.account}
+                            size={4}
+                            formatter={Utils?.formatAddress}
+                        />
                     </Typography>
 
                     <Link
