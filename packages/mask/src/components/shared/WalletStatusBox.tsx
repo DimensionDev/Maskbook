@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { Copy, ExternalLink } from 'react-feather'
 import classNames from 'classnames'
@@ -20,8 +19,6 @@ import {
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import Services from '../../extension/service'
-import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     content: {
@@ -130,26 +127,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
     )
     // #endregion
 
-    // #region walletconnect
-    const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletConnectQRCodeDialogUpdated,
-    )
-    // #endregion
-
-    const onDisconnect = useCallback(async () => {
-        switch (providerType) {
-            case ProviderType.WalletConnect:
-                setWalletConnectDialog({
-                    open: true,
-                    uri: await Services.Ethereum.createConnectionURI(),
-                })
-                break
-            case ProviderType.Fortmatic:
-                await Services.Ethereum.disconnectFortmatic(chainId)
-                break
-        }
-    }, [chainId, providerType, setWalletConnectDialog])
-
     return account ? (
         <section className={classNames(classes.currentAccount, props.isDashboard ? classes.dashboardBackground : '')}>
             <WalletIcon
@@ -201,21 +178,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
             </div>
             {!props.disableChange && (
                 <section>
-                    {providerType === ProviderType.WalletConnect || providerType === ProviderType.Fortmatic ? (
-                        <ActionButtonPromise
-                            className={classes.actionButton}
-                            color="primary"
-                            size="small"
-                            variant="contained"
-                            init={t('wallet_status_button_disconnect')}
-                            waiting={t('wallet_status_button_disconnecting')}
-                            failed={t('failed')}
-                            complete={t('done')}
-                            executor={onDisconnect}
-                            completeIcon={<></>}
-                            failIcon={<></>}
-                        />
-                    ) : null}
                     <Button
                         className={classNames(classes.actionButton)}
                         variant="contained"

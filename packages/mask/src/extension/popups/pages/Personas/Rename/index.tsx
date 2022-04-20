@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useState } from 'react'
-import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@mui/lab'
 import { useI18N } from '../../../../../utils'
@@ -9,6 +8,7 @@ import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import Services from '../../../../service'
 import { PopupRoutes } from '@masknet/shared-base'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     header: {
@@ -44,36 +44,36 @@ const PERSONA_NAME_MAX_LENGTH = 24
 const PersonaRename = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
+
     const [name, setName] = useState('')
     const [error, setError] = useState('')
-    const { currentPersona } = PersonaContext.useContainer()
+    const { selectedPersona } = PersonaContext.useContainer()
     const { classes } = useStyles()
 
     const [{ loading }, renamePersona] = useAsyncFn(async () => {
-        if (!name || !currentPersona) return
-        if (name.length >= PERSONA_NAME_MAX_LENGTH) {
+        if (!name || !selectedPersona) return
+        if (name.length > PERSONA_NAME_MAX_LENGTH) {
             setError(t('popups_rename_error_tip', { length: PERSONA_NAME_MAX_LENGTH }))
             return
         }
 
         try {
-            await Services.Identity.renamePersona(currentPersona.identifier, name)
+            await Services.Identity.renamePersona(selectedPersona.identifier, name)
         } catch (error) {
             setError(t('popups_persona_persona_name_exists'))
             return
         }
         navigate(PopupRoutes.Personas, { replace: true })
-    }, [currentPersona, name])
+    }, [selectedPersona, name])
+
+    useTitle(t('popups_rename'))
 
     return (
         <>
-            <div className={classes.header}>
-                <Typography className={classes.title}>{t('rename')}</Typography>
-            </div>
             <div className={classes.content}>
                 <StyledInput
                     onChange={(e) => setName(e.target.value)}
-                    defaultValue={currentPersona?.nickname}
+                    defaultValue={selectedPersona?.nickname}
                     error={!!error}
                     helperText={error}
                 />

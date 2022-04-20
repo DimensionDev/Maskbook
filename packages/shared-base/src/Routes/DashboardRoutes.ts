@@ -15,5 +15,4 @@ export enum DashboardRoutes {
     CreateMaskWalletForm = '/create-mask-wallet/form',
     CreateMaskWalletMnemonic = '/create-mask-wallet/mnemonic',
     Settings = '/settings',
-    Labs = '/labs',
 }
