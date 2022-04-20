@@ -1,14 +1,14 @@
 import { memo, useMemo, useState } from 'react'
+import { useAsyncFn, useLocation } from 'react-use'
+import { useLocation as useRouteLocation , useNavigate } from 'react-router-dom'
+import { LoadingButton } from '@mui/lab'
+import { toUtf8 } from 'web3-utils'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
 import { ChainId, EthereumRpcType, NetworkType, ProviderType, useWallet } from '@masknet/web3-shared-evm'
-import { useAsyncFn, useLocation } from 'react-use'
-import { useLocation as useRouteLocation , useNavigate } from 'react-router-dom'
 import Services from '../../../../service'
-import { LoadingButton } from '@mui/lab'
-import { toUtf8 } from 'web3-utils'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle'
 import type { Web3Plugin } from '@masknet/plugin-infra/dist/web3-types'
@@ -101,7 +101,7 @@ const SignRequest = memo(() => {
         ) {
             let message = value.computedPayload.data
             try {
-                message = toUtf8(message)
+                message = toUtf8(value.computedPayload.data)
             } catch (error) {
                 console.log(error)
             }

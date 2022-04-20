@@ -5,6 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
     getNetworkName,
+    getNetworkTypeFromChainId,
     isSameAddress,
     ProviderType,
     useAccount,
@@ -14,12 +15,12 @@ import {
 import { Button, List, Typography } from '@mui/material'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
-import { useSelectAccount } from '../../../../../plugins/Wallet/hooks/useSelectAccount'
 import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
 import { WalletItem } from './WalletItem'
-import { getRegisteredWeb3Networks } from '@masknet/plugin-infra/web3'
 import { ChainIcon, WalletIcon } from '@masknet/shared'
+import { PopupRoutes } from '@masknet/shared-base'
+import { getRegisteredWeb3Networks } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     content: {
@@ -99,7 +100,6 @@ const SelectWallet = memo(() => {
     const wallets = useWallets(ProviderType.MaskWallet)
 
     const [selected, setSelected] = useState(wallet)
-    const [, onSelectAccount] = useSelectAccount()
 
     const search = new URLSearchParams(location.search)
 
@@ -122,18 +122,23 @@ const SelectWallet = memo(() => {
 
     const handleCancel = useCallback(async () => {
         if (isPopup) {
-            onSelectAccount([], ChainId.Mainnet)
             navigate(-1)
         } else {
             await WalletRPC.selectAccount([], ChainId.Mainnet)
             await Services.Helper.removePopupWindow()
         }
-    }, [isPopup, navigate])
+    }, [isPopup])
 
     const handleConfirm = useCallback(async () => {
         if (isPopup) {
-            onSelectAccount([selected], chainId)
-            navigate(-1)
+            navigate(PopupRoutes.VerifyWallet, {
+                state: {
+                    chainId,
+                    account: selected,
+                    networkType: getNetworkTypeFromChainId(chainId),
+                    providerType: ProviderType.MaskWallet,
+                },
+            })
             return
         }
 
@@ -150,7 +155,7 @@ const SelectWallet = memo(() => {
         }
         await WalletRPC.selectAccount([selected], chainId)
         return Services.Helper.removePopupWindow()
-    }, [chainId, selected, isPopup, isInternal, navigate])
+    }, [chainId, selected, isPopup, isInternal])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
