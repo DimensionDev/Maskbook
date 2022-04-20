@@ -98,6 +98,8 @@
     "opensea-js": "^1.2.7",
     "promievent": "^0.1.4",
     "protobufjs": "^6.11.2",
+    "react-dnd": "^16.0.0",
+    "react-dnd-html5-backend": "^16.0.0",
     "react-draggable": "^4.4.4",
     "react-feather": "^2.0.9",
     "react-highlight-words": "^0.18.0",

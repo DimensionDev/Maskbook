@@ -49,15 +49,6 @@ function resolveCurrentVisitingIdentityInner(
         const handle = getTwitterId()
         const avatar = getAvatar()
 
-        if (handle && avatar) {
-            const identifier = new ProfileIdentifier(twitterBase.networkIdentifier, handle)
-
-            if (avatar) {
-                Services.Identity.updateProfileInfo(identifier, {
-                    avatarURL: avatar,
-                })
-            }
-        }
         ref.value = {
             identifier: new ProfileIdentifier(twitterBase.networkIdentifier, handle),
             nickname,

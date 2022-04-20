@@ -85,6 +85,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.collecting.postsProvider?.start(signal)
     startPostListener()
     ui.collecting.currentVisitingIdentityProvider?.start(signal)
+
     ui.injection.pageInspector?.(signal)
     if (Flags.toolbox_enabled) ui.injection.toolbox?.(signal)
     ui.injection.setupPrompt?.(signal)
@@ -103,6 +104,13 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.openNFTAvatar?.(signal)
     ui.injection.postAndReplyNFTAvatar?.(signal)
     ui.injection.avatarClipNFT?.(signal)
+
+    // Update user avatar
+    ui.collecting.currentVisitingIdentityProvider?.recognized.addListener((ref) => {
+        if (ref.avatar && ref.identifier) {
+            Services.Identity.updateProfileInfo(ref.identifier, { avatarURL: ref.avatar })
+        }
+    })
 
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),

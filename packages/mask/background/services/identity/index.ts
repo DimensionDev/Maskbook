@@ -1,14 +1,26 @@
-export { createPersonaByPrivateKey, mobile_restoreFromMnemonicWords, createPersonaByMnemonic } from './persona/create'
-export { mobile_queryPersonaRecordsFromIndexedDB } from './persona/query'
+export {
+    createPersonaByPrivateKey,
+    mobile_restoreFromMnemonicWords,
+    createPersonaByMnemonic,
+    createPersonaByMnemonicV2,
+} from './persona/create'
+export {
+    mobile_queryPersonaRecordsFromIndexedDB,
+    mobile_queryPersonas,
+    queryOwnedPersonaInformation,
+    queryLastPersonaCreated,
+} from './persona/query'
 export {
     deletePersona,
     logoutPersona,
     setupPersona,
     loginExistPersonaByPrivateKey,
     mobile_queryPersonaByPrivateKey,
+    renamePersona,
+    queryPersonaByMnemonic,
 } from './persona/update'
 export { signWithPersona, type SignRequest, type SignRequestResult, generateSignResult } from './persona/sign'
-export { exportPersonaMnemonicWords, exportPersonaPrivateKey } from './persona/backup'
+export { getPersonaAvatar, updatePersonaAvatar } from './persona/avatar'
 
 export { mobile_queryProfiles, mobile_queryProfileRecordFromIndexedDB } from './profile/query'
 export {
@@ -22,5 +34,11 @@ export {
 } from './profile/update'
 
 export { createNewRelation } from './relation/create'
-export { mobile_queryRelationsRecordFromIndexedDB } from './relation/query'
+export {
+    mobile_queryRelationsRecordFromIndexedDB,
+    queryRelationPaged,
+    type QueryRelationPagedOptions,
+} from './relation/query'
 export { updateRelation } from './relation/update'
+
+export { validateMnemonic } from './persona/utils'

@@ -4,13 +4,13 @@ import { AccountsUI } from './UI'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { useI18N } from '../../../../../utils'
 import { compact } from 'lodash-unified'
-import { definedSocialNetworkUIs } from '../../../../../social-network'
 import { EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../service'
 import type { Account } from '../type'
 import { useNavigate } from 'react-router-dom'
 import { SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID } from '@masknet/shared'
+import { getEnumAsArray } from '@dimensiondev/kit'
 
 const Accounts = memo(() => {
     const { t } = useI18N()
@@ -41,14 +41,16 @@ const Accounts = memo(() => {
     }, [proofs, currentPersona])
 
     const definedSocialNetworks = compact(
-        [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {
-            if (networkIdentifier === EnhanceableSite.Localhost) return null
-            return networkIdentifier
+        getEnumAsArray(EnhanceableSite).map((x) => {
+            if (x.value === EnhanceableSite.Localhost) return null
+            return x.value
         }),
     )
 
+    console.log(definedSocialNetworks)
+
     const [, onConnect] = useAsyncFn(
-        async (networkIdentifier: string) => {
+        async (networkIdentifier: EnhanceableSite) => {
             if (currentPersona) {
                 await Services.SocialNetwork.connectSocialNetwork(currentPersona.identifier, networkIdentifier, 'local')
             }

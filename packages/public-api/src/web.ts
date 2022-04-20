@@ -11,21 +11,6 @@ export type PersonaIdentifier_string = string
 export interface MaskNetworkAPIs {
     app_suspended(): Promise<void>
     app_resume(): Promise<void>
-    /**
-     * Echo the message back.
-     */
-    web_echo<T>(params: { echo: T }): Promise<T>
-    /**
-     * @returns A fully quantified URL in forms of
-     * "holoflows-extension://...." or "moz-extension://...." (based on the platform)
-     */
-    getDashboardURL(): Promise<string>
-
-    /**
-     * @returns A stringified JSON string.
-     * @example [[{ network: "twitter.com", connected: false } ]]
-     */
-    getConnectedPersonas(): Promise<string>
     app_isPluginEnabled(params: { pluginID: string }): Promise<boolean>
     app_setPluginStatus(params: { pluginID: string; enabled: boolean }): Promise<void>
     settings_getTrendingDataSource(): Promise<DataProvider>
@@ -48,21 +33,16 @@ export interface MaskNetworkAPIs {
     persona_removePersona(params: { identifier: PersonaIdentifier_string }): Promise<void>
     /** @deprecated It's an alias of settings_restoreBackup */
     persona_restoreFromJson(params: { backup: string }): Promise<void>
-    persona_restoreFromBase64(params: { backup: string }): Promise<void>
     persona_restoreFromPrivateKey(params: { privateKey: string; nickname: string }): Promise<Persona>
     persona_connectProfile(params: {
         profileIdentifier: ProfileIdentifier_string
         personaIdentifier: PersonaIdentifier_string
     }): Promise<void>
     persona_disconnectProfile(params: { identifier: ProfileIdentifier_string }): Promise<void>
-    persona_backupMnemonic(params: { identifier: PersonaIdentifier_string }): Promise<string | undefined>
-    persona_backupBase64(params: { identifier: PersonaIdentifier_string }): Promise<string>
-    persona_backupJson(params: { identifier: PersonaIdentifier_string }): Promise<unknown>
     persona_backupPrivateKey(params: { identifier: PersonaIdentifier_string }): Promise<string | undefined>
     persona_queryPersonaByPrivateKey(params: { privateKey: string }): Promise<Persona | undefined>
     persona_getCurrentPersonaIdentifier(): Promise<string | undefined>
     persona_setCurrentPersonaIdentifier(params: { identifier: PersonaIdentifier_string }): Promise<void>
-    persona_getOwnedPersonaInformation(params: { identifier: PersonaIdentifier_string }): Promise<PersonaInformation>
     persona_logout(params: { identifier: PersonaIdentifier_string }): Promise<void>
     profile_queryProfiles(params: { network: string }): Promise<Profile[]>
     profile_queryMyProfiles(params: { network: string }): Promise<Profile[]>

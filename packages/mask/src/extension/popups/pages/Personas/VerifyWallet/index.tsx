@@ -1,7 +1,7 @@
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { ChainId, EthereumRpcType, isSameAddress, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
@@ -29,9 +29,7 @@ const VerifyWallet = memo(() => {
     const { classes } = useStyles()
     const { currentPersona, refreshProofs } = PersonaContext.useContainer()
     const { signed, setSigned } = PopupContext.useContainer()
-    const [isBound, setIsBound] = useState(false)
     const navigate = useNavigate()
-    useTitle(t('popups_add_wallet'))
     const location = useLocation()
     const { showSnackbar } = usePopupCustomSnackbar()
     const { value: request } = useUnconfirmedRequest()
@@ -39,23 +37,28 @@ const VerifyWallet = memo(() => {
     const wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
 
     const { value: bounds } = useAsync(async () => {
-        if (!wallet.account) return false
+        if (!wallet.account) return EMPTY_LIST
         return NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, wallet.account)
-    })
-    if (bounds && bounds.length > 0 && !isBound) {
+    }, [wallet])
+    const isBound = useMemo(() => {
+        if (!bounds || !bounds.length) return false
         const res = bounds.filter((x) => x.persona === currentPersona?.publicHexKey)
         if (res.length > 0) {
             const final = res[0].proofs.filter((x) => {
                 return isSameAddress(x.identity, wallet?.account)
             })
-            if (final.length > 0) setIsBound(true)
+            if (final.length > 0) return true
         }
-    }
+        return false
+    }, [bounds])
+
     useEffect(() => {
         if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
 
-        navigate(urlcat(PopupRoutes.WalletSignRequest, { goBack: true }))
-    }, [request])
+        navigate(urlcat(PopupRoutes.WalletSignRequest, { goBack: true }), {
+            state: wallet,
+        })
+    }, [request, wallet])
 
     const { value: payload } = useAsync(async () => {
         if (!currentPersona?.publicHexKey || !wallet) return
@@ -91,6 +94,7 @@ const VerifyWallet = memo(() => {
                 '',
                 {
                     chainId: wallet.chainId,
+                    account: wallet.account,
                     providerType: wallet.providerType,
                 },
                 { popupsWindow: false },
@@ -134,7 +138,8 @@ const VerifyWallet = memo(() => {
                 await walletSign()
                 return SignSteps.SecondStepDone
             } else {
-                return Services.Helper.removePopupWindow()
+                await Services.Helper.removePopupWindow()
+                return
             }
         } catch {
             // err step
@@ -142,6 +147,8 @@ const VerifyWallet = memo(() => {
             return SignSteps.Ready
         }
     }, [signature, walletSignState, walletSign, personaSilentSign, signed])
+
+    useTitle(t('popups_add_wallet'))
 
     if (!currentPersona || !wallet) return null
 

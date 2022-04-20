@@ -1,4 +1,4 @@
-import { decodeArrayBuffer, decodeText, unreachable } from '@dimensiondev/kit'
+import { unreachable } from '@dimensiondev/kit'
 import { BackupPreview, getBackupPreviewInfo, normalizeBackup, NormalizedBackup } from '@masknet/backup-format'
 import { PopupRoutes } from '@masknet/shared-base'
 import { Result } from 'ts-results'
@@ -6,16 +6,6 @@ import { v4 as uuid } from 'uuid'
 import { openPopupWindow } from '../helper/popup-opener'
 import { requestHostPermission } from '../helper/request-permission'
 import { restoreNormalizedBackup } from './internal_restore'
-
-/**
- * Only for mobile.
- */
-export async function mobile_restoreFromBase64(rawString: string): Promise<void> {
-    if (process.env.architecture !== 'app') throw new Error('Only for mobile')
-    const raw = JSON.parse(decodeText(decodeArrayBuffer(rawString)))
-    const backup = normalizeBackup(raw)
-    return restoreNormalizedBackup(backup)
-}
 
 const unconfirmedBackup = new Map<string, NormalizedBackup.Data>()
 export interface RestoreUnconfirmedBackupOptions {

@@ -38,7 +38,7 @@ export const Punk3D = {
 }
 
 export const Share_Twitter = 'https://twitter.com/realMaskNetwork/status/1486648872558424064'
-export const Share_Twitter_TXT = `I just set up my Non-Fungible Friend with @realMaskNetwork (powered by @MintTeamNFT). Visit my profile to check it out! Install Mask Network extension from mask.io and set yours.\n #mask_io #nonfungiblefriends\n${Share_Twitter}`
+export const Share_Twitter_TXT = `I just set up my Non-Fungible Friend with @realMaskNetwork (powered by @NonFFriend). Visit my profile to check it out! Install Mask Network extension from mask.io and set yours.\n #mask_io #nonfungiblefriends\n${Share_Twitter}`
 
 export const GLB3DIcon = new URL('./assets/glb3D.png', import.meta.url).toString()
 export const CloseIcon = new URL('./assets/close.png', import.meta.url).toString()

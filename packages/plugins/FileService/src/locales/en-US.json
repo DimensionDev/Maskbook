@@ -25,6 +25,8 @@
     "error_101": "The input is not a single file.",
     "error_102": "The file is too large; limit is {{limit}}.",
     "on_change_file": "Change File",
+    "__plugin_name": "File Service",
+    "__plugin_description": "Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network.",
     "provider_arweave": "Arweave",
     "provider_ipfs": "IPFS",
     "provider_swarm": "Swarm"

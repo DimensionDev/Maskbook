@@ -1,9 +1,11 @@
+import urlcat from 'urlcat'
 import { memo, useCallback } from 'react'
+import { useMount } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
@@ -14,7 +16,6 @@ import {
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { PopupContext } from '../../../hook/usePopupContext'
-import { useMount } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -71,13 +72,27 @@ const ConnectWalletPage = memo(() => {
     )
     const { ProviderIconClickBait } = useWeb3UI(NetworkPluginID.PLUGIN_EVM).SelectProviderDialog ?? {}
 
-    const onSubmit = useCallback(async (result?: Web3Plugin.ConnectionResult) => {
-        console.log('DEBUG: connection result')
-        console.log(result)
-        navigate(PopupRoutes.VerifyWallet, {
-            state: result as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>,
-        })
+    const onClick = useCallback((network: Web3Plugin.NetworkDescriptor, provider: Web3Plugin.ProviderDescriptor) => {
+        if (provider.type !== ProviderType.MaskWallet) return
+        navigate(
+            urlcat(PopupRoutes.SelectWallet, {
+                popup: true,
+            }),
+        )
     }, [])
+
+    const onSubmit = useCallback(
+        async (
+            network: Web3Plugin.NetworkDescriptor,
+            provider: Web3Plugin.ProviderDescriptor,
+            result?: Web3Plugin.ConnectionResult,
+        ) => {
+            navigate(PopupRoutes.VerifyWallet, {
+                state: result,
+            })
+        },
+        [],
+    )
 
     useTitle(t('plugin_wallet_on_connect'))
 
@@ -95,7 +110,8 @@ const ConnectWalletPage = memo(() => {
                             key={provider.ID}
                             network={network}
                             provider={provider}
-                            onSubmit={(network, provider, result) => onSubmit(result)}>
+                            onClick={onClick}
+                            onSubmit={onSubmit}>
                             <div className={classes.walletItem}>
                                 <img src={provider.icon.toString()} className={classes.walletIcon} />
                                 <Typography className={classes.walletName}>{provider.name}</Typography>

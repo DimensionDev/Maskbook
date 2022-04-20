@@ -58,7 +58,7 @@
     "create": "创建",
     "copied": "已复制",
     "daily": "每日",
-    "dashboard_tab_collectibles": "收藏品",
+    "collectibles_name": "收藏品",
     "dashboard_no_collectible_found": "未找到任何收藏品",
     "dashboard_collectible_menu_all": "全部 ({{count}})",
     "days": "每隔 {{days}} 天",

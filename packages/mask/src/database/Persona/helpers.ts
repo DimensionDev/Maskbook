@@ -6,9 +6,6 @@ import {
     queryProfileDB,
     queryPersonaDB,
     queryPersonasDB,
-    consistentPersonaDBWriteAccess,
-    updatePersonaDB,
-    queryProfilesPagedDB,
 } from '../../../background/database/persona/db'
 import { queryAvatarDataURL } from '../../../background/database/avatar-cache/avatar'
 import * as bip39 from 'bip39'
@@ -60,11 +57,6 @@ export async function queryProfile(identifier: ProfileIdentifier): Promise<Profi
     }
 }
 
-export async function queryProfilePaged(...args: Parameters<typeof queryProfilesPagedDB>): Promise<Profile[]> {
-    const _ = await queryProfilesPagedDB(...args)
-    return Promise.all(_.map(profileRecordToProfile))
-}
-
 /**
  * Query a persona even it is not stored in the database.
  * @param identifier - Identifier for people want to query
@@ -97,17 +89,6 @@ export async function queryProfilesWithQuery(query: Parameters<typeof queryProfi
 export async function queryPersonasWithQuery(query?: Parameters<typeof queryPersonasDB>[0]): Promise<Persona[]> {
     const _ = await queryPersonasDB(query)
     return _.map(personaRecordToPersona)
-}
-
-export async function renamePersona(identifier: PersonaIdentifier, nickname: string) {
-    const personas = await queryPersonasWithQuery({ nameContains: nickname })
-    if (personas.length > 0) {
-        throw new Error('Nickname already exists')
-    }
-
-    return consistentPersonaDBWriteAccess((t) =>
-        updatePersonaDB({ identifier, nickname }, { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' }, t),
-    )
 }
 
 export async function queryPersonaByProfile(i: ProfileIdentifier) {

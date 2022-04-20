@@ -1,4 +1,5 @@
 import {
+    GasConfig,
     TransactionStateType,
     useChainId,
     useERC721ContractDetailed,
@@ -48,7 +49,8 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         if (!nativeTokenDetailed) return
         setToken(nativeTokenDetailed)
     }, [nativeTokenDetailed])
-    const tokenTipTuple = useTokenTip(recipient, token, amount)
+    const [gasConfig, setGasConfig] = useState<GasConfig | undefined>()
+    const tokenTipTuple = useTokenTip(recipient, token, amount, gasConfig)
     const nftTipTuple = useNftTip(recipient, erc721TokenId, erc721Address)
 
     const sendTipTuple = tipType === TipType.Token ? tokenTipTuple : nftTipTuple
@@ -89,6 +91,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
             sendState,
             storedTokens: storedTokens.filter((t) => t.contract?.chainId === chainId),
             reset,
+            setGasConfig,
         }
     }, [
         chainId,
