@@ -112,22 +112,20 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
         onClear(tx)
     }, [onClear, tx])
 
-    const domain = useMemo(() => getContractOwnerDomain(address), [address])
+    const domainOrAddress = useMemo(() => getContractOwnerDomain(address), [address])
 
     const [txStatus, setTxStatus] = useState(tx.status)
 
     useEffect(() => {
         return WalletMessages.events.transactionStateUpdated.on((data) => {
-            switch (data.type) {
-                case TransactionStateType.CONFIRMED:
-                    if (tx.hash === data.receipt.transactionHash) {
+            if ('receipt' in data && tx.hash === data.receipt?.transactionHash) {
+                switch (data.type) {
+                    case TransactionStateType.CONFIRMED:
                         setTxStatus(TransactionStatusType.SUCCEED)
-                    }
-                    break
-                case TransactionStateType.FAILED:
-                    if (tx.hash === data.receipt?.transactionHash) {
+                        break
+                    case TransactionStateType.FAILED:
                         setTxStatus(TransactionStatusType.FAILED)
-                    }
+                }
             }
         })
     }, [tx.hash])
@@ -150,7 +148,9 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
             </Grid>
             <Grid item className={classes.cell} flexGrow={1} md={4} justifyContent="right">
                 <Typography variant="body1">
-                    {address && isSameAddress(domain, address) ? Utils?.formatAddress?.(address, 4) : domain || address}
+                    {address && isSameAddress(domainOrAddress, address)
+                        ? Utils?.formatAddress?.(address, 4)
+                        : domainOrAddress || address}
                 </Typography>
                 <Link
                     className={classes.link}

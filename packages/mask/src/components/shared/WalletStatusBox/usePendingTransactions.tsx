@@ -50,7 +50,8 @@ export function usePendingTransactions() {
     const { value: pendingTransactions = EMPTY_LIST } = useRecentTransactions({
         status: TransactionStatusType.NOT_DEPEND,
     })
-    // frozenTxes would not be reactive to pendingTransactions, it would be recreated then the list shows up.
+    // frozenTxes would not be reactive to pendingTransactions,
+    // it would be recreated then the list shows up.
     const frozenTxes = useRef<RecentTransaction[]>([])
     const [meltedTxHashes, setMeltedTxHashes] = useState<string[]>([])
     useEffect(() => {
@@ -61,8 +62,8 @@ export function usePendingTransactions() {
     const removeRecentTx = useRemoveRecentTransaction()
 
     const transactions = frozenTxes.current.filter((tx) => !meltedTxHashes.includes(tx.hash))
-
     // #endregion
+
     const summary = (
         <>
             <div
