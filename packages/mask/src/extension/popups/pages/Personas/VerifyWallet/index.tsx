@@ -55,8 +55,10 @@ const VerifyWallet = memo(() => {
     useEffect(() => {
         if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
 
-        navigate(urlcat(PopupRoutes.WalletSignRequest, { goBack: true }))
-    }, [request])
+        navigate(urlcat(PopupRoutes.WalletSignRequest, { goBack: true }), {
+            state: wallet,
+        })
+    }, [request, wallet])
 
     const { value: payload } = useAsync(async () => {
         if (!currentPersona?.publicHexKey || !wallet) return
