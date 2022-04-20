@@ -12,61 +12,68 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { currentSetupGuideStatus } from '../../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../../settings/types'
+import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { WalletMessages } from '../../Wallet/messages'
+import { TipsIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     ApplicationEntries: [
-        {
-            RenderEntryComponent({ disabled }) {
-                const ui = activatedSocialNetworkUI
-                const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
-                const [open, setOpen] = useState(false)
-                const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
-                const lastState_ = useValueRef(lastStateRef)
-                const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
-                    try {
-                        return JSON.parse(lastState_)
-                    } catch {
-                        return {}
-                    }
-                }, [lastState_])
-                const lastRecognized = useLastRecognizedIdentity()
-                const getUsername = () =>
-                    lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
-                const [username] = useState(getUsername)
-                const { value: isBound } = useAsync(async () => {
-                    const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
-                    const persona = await Services.Identity.queryPersona(currentPersonaIdentifier!)
-                    return NextIDProof.queryIsBound(persona.publicHexKey ?? '', platform, username)
-                }, [platform, username])
-                const { closeDialog } = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
+        (() => {
+            const name = base.name
+            const icon = <TipsIcon />
+            return {
+                RenderEntryComponent({ disabled }) {
+                    const ui = activatedSocialNetworkUI
+                    const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
+                    const [open, setOpen] = useState(false)
+                    const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
+                    const lastState_ = useValueRef(lastStateRef)
+                    const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
+                        try {
+                            return JSON.parse(lastState_)
+                        } catch {
+                            return {}
+                        }
+                    }, [lastState_])
+                    const lastRecognized = useLastRecognizedIdentity()
+                    const getUsername = () =>
+                        lastState.username ||
+                        (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
+                    const [username] = useState(getUsername)
+                    const { value: isBound } = useAsync(async () => {
+                        const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
+                        const persona = await Services.Identity.queryPersona(currentPersonaIdentifier!)
+                        return NextIDProof.queryIsBound(persona.publicHexKey ?? '', platform, username)
+                    }, [platform, username])
+                    const { closeDialog } = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
 
-                const onNextIDVerify = useCallback(() => {
-                    closeDialog()
-                    CrossIsolationMessages.events.triggerSetupGuideVerifyOnNextIDStep.sendToAll({})
-                }, [])
+                    const onNextIDVerify = useCallback(() => {
+                        closeDialog()
+                        CrossIsolationMessages.events.triggerSetupGuideVerifyOnNextIDStep.sendToAll({})
+                    }, [])
 
-                return isBound !== undefined ? (
-                    <>
-                        <ApplicationEntry
-                            title="Tips"
-                            disabled={disabled}
-                            icon={new URL('../assets/Tip.png', import.meta.url).toString()}
-                            onClick={() => (!isBound ? onNextIDVerify() : setOpen(true))}
-                        />
-                        <TipsEntranceDialog open={open} onClose={() => setOpen(false)} />
-                    </>
-                ) : (
-                    <></>
-                )
-            },
-            ApplicationEntryID: base.ID,
-            icon: <img src={new URL('../assets/Tip.png', import.meta.url).toString()} />,
-            name: base.name,
-            appBoardSortingDefaultPriority: 8,
-        },
+                    return isBound !== undefined ? (
+                        <>
+                            <ApplicationEntry
+                                title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
+                                disabled={disabled}
+                                icon={icon}
+                                onClick={() => (!isBound ? onNextIDVerify() : setOpen(true))}
+                            />
+                            <TipsEntranceDialog open={open} onClose={() => setOpen(false)} />
+                        </>
+                    ) : (
+                        <></>
+                    )
+                },
+                ApplicationEntryID: base.ID,
+                icon,
+                name,
+                appBoardSortingDefaultPriority: 8,
+            }
+        })(),
     ],
 }
 
