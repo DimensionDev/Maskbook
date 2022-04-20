@@ -96,6 +96,7 @@ export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, 
         [NetworkType.xDai]: ChainId.xDai,
         [NetworkType.Aurora]: ChainId.Aurora,
         [NetworkType.Conflux]: ChainId.Conflux,
+        [NetworkType.Harmony]: ChainId.Harmony,
     },
     ChainId.Mainnet,
 )

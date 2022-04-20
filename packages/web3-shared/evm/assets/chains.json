@@ -2684,8 +2684,8 @@
         "networkId": 1313161556
     },
     {
-        "name": "Harmony Mainnet Shard 0",
-        "chain": "harmony",
+        "name": "Harmony",
+        "chain": "Harmony",
         "network": "mainnet",
         "rpc": ["https://api.harmony.one"],
         "faucets": [],
