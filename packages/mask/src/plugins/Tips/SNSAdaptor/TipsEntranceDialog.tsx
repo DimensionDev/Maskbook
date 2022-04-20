@@ -150,7 +150,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         })
         setRawWalletList(JSON.parse(JSON.stringify(walletsList)))
         setRawPatchData(JSON.parse(JSON.stringify(walletsList)))
-        console.log(rawPatchData, 'ggggfffff')
     }, [proofRes, kv, open, bodyView])
 
     const onCancel = () => {
@@ -187,25 +186,19 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         )
     }
     const setAsDefault = (idx: number) => {
-        const changed = JSON.parse(JSON.stringify(rawPatchData))
-        changed.forEach((x: any) => (x.isDefault = 0))
-        changed[idx].isDefault = 1
-        changed.unshift(changed.splice(idx, 1)[0])
-        setRawPatchData(changed)
-        console.log(idx, rawPatchData, 'ggg')
+        rawPatchData.forEach((x: any) => (x.isDefault = 0))
+        rawPatchData[idx].isDefault = 1
+        rawPatchData.unshift(rawPatchData.splice(idx, 1)[0])
         setHasChanged(true)
     }
 
     const onSwitchChange = (idx: number, v: boolean) => {
-        const changed = JSON.parse(JSON.stringify(rawPatchData))
-        changed[idx].isPublic = v ? 1 : 0
-        setRawPatchData(changed)
+        rawPatchData[idx].isPublic = v ? 1 : 0
         setHasChanged(true)
     }
 
     const [kvFetchState, onConfirm] = useAsyncFn(async () => {
         try {
-            console.log(rawPatchData, 'ggg')
             const payload = await getKvPayload(rawPatchData)
             if (!payload || !payload.val) throw new Error('payload error')
             const signResult = await Services.Identity.generateSignResult(
@@ -229,7 +222,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             console.error(error)
             return false
         }
-    })
+    }, [hasChanged])
     const [confirmState, onConfirmRelease] = useAsyncFn(async (wallet?: WalletProof) => {
         try {
             if (!currentPersona?.publicHexKey || !wallet) throw new Error('failed')
