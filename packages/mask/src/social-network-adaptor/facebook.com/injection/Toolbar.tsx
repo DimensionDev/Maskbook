@@ -6,5 +6,7 @@ import { ToolboxAtFacebook } from './ToolbarUI'
 export function injectToolboxHintAtFacebook(signal: AbortSignal, category: 'wallet' | 'application') {
     const watcher = new MutationObserverWatcher(toolBoxInSideBarSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ToolboxAtFacebook />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+        <ToolboxAtFacebook category={category} />,
+    )
 }
