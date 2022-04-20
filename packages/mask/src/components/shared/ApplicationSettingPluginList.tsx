@@ -104,17 +104,13 @@ export function ApplicationSettingPluginList() {
     const setAppList = useCallback(
         (app: Application, unlisted: boolean) => {
             setUnlistedApp(app, unlisted)
-            const _setAppList = (appList: Application[]) =>
+            const removeFromAppList = (appList: Application[]) =>
                 appList.filter((x) => x.entry.ApplicationEntryID !== app.entry.ApplicationEntryID)
-            if (unlisted) {
-                setUnListedAppList(unlistedAppList.concat(app))
-                setListedAppList(_setAppList)
-            } else {
-                setListedAppList(listedAppList.concat(app))
-                setUnListedAppList(_setAppList)
-            }
+            const addToAppList = (appList: Application[]) => appList.concat(app)
+            setListedAppList(unlisted ? removeFromAppList : addToAppList)
+            setUnListedAppList(unlisted ? addToAppList : removeFromAppList)
         },
-        [applicationList, listedAppList, unlistedAppList],
+        [applicationList],
     )
 
     return (
