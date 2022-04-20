@@ -109,7 +109,6 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const account = notInPop ? frontAccount : wallet.account ?? (wallet as any).address
     const { Utils } = useWeb3State() ?? {}
     const { value: domain } = useReverseAddress(wallet.account)
-    console.log(wallet, 'ggg', walletName)
     return account ? (
         <section className={classNames(classes.currentAccount)}>
             <WalletIcon
