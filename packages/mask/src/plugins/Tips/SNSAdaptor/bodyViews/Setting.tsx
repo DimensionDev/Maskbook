@@ -34,6 +34,7 @@ const SettingPage = memo(({ wallets, onSwitchChange }: SettingPageProp) => {
     const [data, setData] = useState<WalletProof[]>([])
     useEffect(() => {
         setData(wallets)
+        console.log(wallets, 'fff')
     }, [wallets])
     const publicNum = wallets.reduce((num, x) => {
         if (x.isPublic === 1) {

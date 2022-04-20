@@ -19,6 +19,7 @@ interface AddWalletViewProps {
 
 const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewProps) => {
     const [isBound, setIsBound] = useState(false)
+    const [signed, setSigned] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
     const wallet = {
         ...useWallet(),
@@ -36,7 +37,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
         }
     }, [wallet, currentPersona, bounds])
 
-    const { value: payload } = useAsync(async () => {
+    const { value: payload, loading: payloadLoading } = useAsync(async () => {
         if (!currentPersona?.publicHexKey || !wallet.account) return
         return NextIDProof.createPersonaPayload(
             currentPersona.publicHexKey,
@@ -45,7 +46,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
             NextIDPlatform.Ethereum,
             'default',
         )
-    }, [])
+    }, [currentPersona?.publicHexKey, wallet.address])
 
     const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier) return
@@ -86,6 +87,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                     signature: signature,
                 },
             )
+            setSigned(true)
             showSnackbar("Wallet's connected.", { variant: 'success', message: nowTime })
             return true
         } catch (error) {
@@ -96,6 +98,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     }, [currentPersona?.publicHexKey, payload, wallet, signature])
     const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {
         try {
+            if (signed) onCancel()
             if (!signature && !walletSignState) {
                 await personaSilentSign()
                 return SignSteps.FirstStepDone
@@ -122,7 +125,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                 wallet={wallet as any}
                 persona={currentPersona}
                 step={step}
-                confirmLoading={confirmLoading}
+                confirmLoading={confirmLoading || payloadLoading}
                 disableConfirm={isBound || isNotEvm}
                 notInPop
                 changeWallet={openSelectProviderDialog}

@@ -150,11 +150,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         })
         setRawWalletList(JSON.parse(JSON.stringify(walletsList)))
         setRawPatchData(JSON.parse(JSON.stringify(walletsList)))
-    }, [proofRes, bodyView, kv])
+        console.log(rawPatchData, 'ggggfffff')
+    }, [proofRes, kv, open, bodyView])
+
     const onCancel = () => {
         setRawPatchData(JSON.parse(JSON.stringify(rawWalletList)))
         setHasChanged(false)
     }
+
     const refresh = () => {
         setBodyView(BodyViewSteps.main)
         retryProof()
@@ -187,7 +190,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         const changed = JSON.parse(JSON.stringify(rawPatchData))
         changed.forEach((x: any) => (x.isDefault = 0))
         changed[idx].isDefault = 1
+        changed.unshift(changed.splice(idx, 1)[0])
         setRawPatchData(changed)
+        console.log(idx, rawPatchData, 'ggg')
         setHasChanged(true)
     }
 
@@ -199,24 +204,35 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     }
 
     const [kvFetchState, onConfirm] = useAsyncFn(async () => {
-        const payload = await getKvPayload(rawPatchData)
-        if (!payload || !payload.val) throw new Error('payload error')
-        const signResult = await Services.Identity.generateSignResult(
-            currentPersonaIdentifier as ECKeyIdentifier,
-            (payload.val as NextIDStoragePayload).signPayload,
-        )
-        if (!signResult) throw new Error('sign error')
-        await kvSet(payload.val, signResult.signature.signature, rawPatchData)
-        showSnackbar('Persona signed successfully.', {
-            variant: 'success',
-            message: nowTime,
-        })
-        retryKv()
-        retryProof()
+        try {
+            console.log(rawPatchData, 'ggg')
+            const payload = await getKvPayload(rawPatchData)
+            if (!payload || !payload.val) throw new Error('payload error')
+            const signResult = await Services.Identity.generateSignResult(
+                currentPersonaIdentifier as ECKeyIdentifier,
+                (payload.val as NextIDStoragePayload).signPayload,
+            )
+            if (!signResult) throw new Error('sign error')
+            await kvSet(payload.val, signResult.signature.signature, rawPatchData)
+            showSnackbar('Persona signed successfully.', {
+                variant: 'success',
+                message: nowTime,
+            })
+            retryProof()
+            retryKv()
+            return true
+        } catch (error) {
+            showSnackbar('Persona Signature failed.', {
+                variant: 'error',
+                message: nowTime,
+            })
+            console.error(error)
+            return false
+        }
     })
-    const [confirmState, onConfirmRelease] = useAsyncFn(
-        async (wallet?: WalletProof) => {
-            if (!currentPersona?.publicHexKey || !wallet) return
+    const [confirmState, onConfirmRelease] = useAsyncFn(async (wallet?: WalletProof) => {
+        try {
+            if (!currentPersona?.publicHexKey || !wallet) throw new Error('failed')
 
             const result = await NextIDProof.createPersonaPayload(
                 currentPersona.publicHexKey,
@@ -224,11 +240,11 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 wallet.identity,
                 wallet.platform,
             )
-            if (!result) return
+            if (!result) throw new Error('payload error')
 
             const signature = await Services.Identity.generateSignResult(currentPersona.identifier, result.signPayload)
 
-            if (!signature) return
+            if (!signature) throw new Error('sign error')
             await NextIDProof.bindProof(
                 result.uuid,
                 currentPersona.publicHexKey,
@@ -238,11 +254,18 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 result.createdAt,
                 { signature: signature.signature.signature },
             )
-            retryKv()
             retryProof()
-        },
-        [currentPersona],
-    )
+            retryKv()
+            return true
+        } catch (error) {
+            showSnackbar('Persona Signature failed.', {
+                variant: 'error',
+                message: nowTime,
+            })
+            console.error(error)
+            return false
+        }
+    })
     return (
         <InjectedDialog open={open} onClose={clickBack} title={bodyView} titleTail={WalletButton()}>
             {loading ? (
@@ -284,7 +307,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         <WalletsView
                             personaName={currentPersona?.nickname}
                             releaseLoading={confirmState.loading}
-                            onRelease={onConfirmRelease}
+                            onRelease={(wallet) => onConfirmRelease(wallet)}
                             wallets={rawPatchData}
                         />
                     )}

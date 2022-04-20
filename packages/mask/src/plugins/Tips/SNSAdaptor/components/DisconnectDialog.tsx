@@ -71,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface DisconnectWalletDialogProps extends DialogProps {
     confirmLoading: boolean
-    onConfirmDisconnect: () => Promise<void>
+    onConfirmDisconnect: () => Promise<boolean>
     address?: string
     onClose: () => void
     personaName: string | undefined
@@ -85,7 +85,7 @@ export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
         const handleConfirm = useCallback(async () => {
             await onConfirmDisconnect()
             onClose()
-        }, [onConfirmDisconnect])
+        }, [onConfirmDisconnect, address])
 
         return (
             <InjectedDialog open={open}>

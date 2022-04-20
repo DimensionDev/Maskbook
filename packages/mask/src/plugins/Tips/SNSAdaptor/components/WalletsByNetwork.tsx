@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
         flexDirection: 'column',
-        gap: theme.spacing(1),
+        gap: 12,
     },
     settingIcon: {
         fontSize: 16,

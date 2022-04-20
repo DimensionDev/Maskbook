@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
 interface WalletsPageProp {
     wallets: WalletProof[]
     releaseLoading: boolean
-    onRelease: (wallet?: WalletProof) => Promise<void>
+    onRelease: (wallet?: WalletProof) => Promise<boolean>
     personaName: string | undefined
 }
 
@@ -65,7 +65,7 @@ const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: W
             <DisconnectWalletDialog
                 personaName={personaName}
                 confirmLoading={releaseLoading}
-                onConfirmDisconnect={async () => onRelease(walletToDel)}
+                onConfirmDisconnect={() => onRelease(walletToDel)}
                 address={walletToDel?.identity}
                 onClose={() => setOpen(false)}
                 open={open}
