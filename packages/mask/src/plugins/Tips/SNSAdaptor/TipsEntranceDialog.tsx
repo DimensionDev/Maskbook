@@ -223,42 +223,48 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             return false
         }
     }, [hasChanged])
-    const [confirmState, onConfirmRelease] = useAsyncFn(async (wallet?: WalletProof) => {
-        try {
-            if (!currentPersona?.publicHexKey || !wallet) throw new Error('failed')
+    const [confirmState, onConfirmRelease] = useAsyncFn(
+        async (wallet?: WalletProof) => {
+            try {
+                if (!currentPersona?.publicHexKey || !wallet) throw new Error('failed')
 
-            const result = await NextIDProof.createPersonaPayload(
-                currentPersona.publicHexKey,
-                NextIDAction.Delete,
-                wallet.identity,
-                wallet.platform,
-            )
-            if (!result) throw new Error('payload error')
+                const result = await NextIDProof.createPersonaPayload(
+                    currentPersona.publicHexKey,
+                    NextIDAction.Delete,
+                    wallet.identity,
+                    wallet.platform,
+                )
+                if (!result) throw new Error('payload error')
 
-            const signature = await Services.Identity.generateSignResult(currentPersona.identifier, result.signPayload)
+                const signature = await Services.Identity.generateSignResult(
+                    currentPersona.identifier,
+                    result.signPayload,
+                )
 
-            if (!signature) throw new Error('sign error')
-            await NextIDProof.bindProof(
-                result.uuid,
-                currentPersona.publicHexKey,
-                NextIDAction.Delete,
-                wallet.platform,
-                wallet.identity,
-                result.createdAt,
-                { signature: signature.signature.signature },
-            )
-            retryProof()
-            retryKv()
-            return true
-        } catch (error) {
-            showSnackbar('Persona Signature failed.', {
-                variant: 'error',
-                message: nowTime,
-            })
-            console.error(error)
-            return false
-        }
-    })
+                if (!signature) throw new Error('sign error')
+                await NextIDProof.bindProof(
+                    result.uuid,
+                    currentPersona.publicHexKey,
+                    NextIDAction.Delete,
+                    wallet.platform,
+                    wallet.identity,
+                    result.createdAt,
+                    { signature: signature.signature.signature },
+                )
+                retryProof()
+                retryKv()
+                return true
+            } catch (error) {
+                showSnackbar('Persona Signature failed.', {
+                    variant: 'error',
+                    message: nowTime,
+                })
+                console.error(error, 'sss')
+                return false
+            }
+        },
+        [currentPersona],
+    )
     return (
         <InjectedDialog open={open} onClose={clickBack} title={bodyView} titleTail={WalletButton()}>
             {loading ? (
