@@ -227,13 +227,19 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             return false
         }
     }, [hasChanged])
-    const { openDialog: openSelectProviderDialog, closeDialog } = useRemoteControlledDialog(
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    const emptyWallet = useCallback(() => {
-        closeDialog()
-        setBodyView(BodyViewSteps.addWallet)
-    }, [])
+    const onConnectWalletClick = useCallback(() => {
+        if (account) {
+            setBodyView(BodyViewSteps.addWallet)
+        } else {
+            openSelectProviderDialog()
+            WalletMessages.events.walletsUpdated.on(() => {
+                setBodyView(BodyViewSteps.addWallet)
+            })
+        }
+    }, [account])
     const [confirmState, onConfirmRelease] = useAsyncFn(
         async (wallet?: WalletProof) => {
             try {
@@ -307,16 +313,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                             })}
                         </div>
                     ) : bodyView === BodyViewSteps.main && rawPatchData.length === 0 ? (
-                        <Empty
-                            toAdd={() => {
-                                if (account) {
-                                    setBodyView(BodyViewSteps.addWallet)
-                                } else {
-                                    openSelectProviderDialog()
-                                    emptyWallet()
-                                }
-                            }}
-                        />
+                        <Empty toAdd={onConnectWalletClick} />
                     ) : null}
 
                     {bodyView === BodyViewSteps.setting && (
