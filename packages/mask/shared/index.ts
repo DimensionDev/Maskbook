@@ -1,4 +1,4 @@
 export * from './messages'
 export * from './flags'
-export { InMemoryStorages, PersistentStorages, ApplicationEntryUnlistedListKey } from './kv-storage'
+export { InMemoryStorages, PersistentStorages } from './kv-storage'
 export * from './helpers'

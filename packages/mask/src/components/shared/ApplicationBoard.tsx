@@ -4,6 +4,7 @@ import { Typography, useTheme } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
@@ -101,9 +102,9 @@ export function ApplicationBoard() {
                                 enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
                                 pluginId: cur.ID,
                             }
-                        }) ?? [],
+                        }) ?? EMPTY_LIST,
                     )
-                }, [])
+                }, EMPTY_LIST)
                 .sort(
                     (a, b) =>
                         (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0),

@@ -85,8 +85,8 @@ export function ApplicationSettingPluginSwitch(props: Props) {
                 }, [])
                 .filter((x) => x.entry.category === 'dapp')
                 .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
-                .map((x, i) => (
-                    <ListItem key={x.pluginId + i} className={classes.listItem}>
+                .map((x) => (
+                    <ListItem key={x.entry.ApplicationEntryID} className={classes.listItem}>
                         <section className={classes.listContent}>
                             <ListItemAvatar>
                                 <Avatar className={classes.avatar}>{x.entry.icon}</Avatar>

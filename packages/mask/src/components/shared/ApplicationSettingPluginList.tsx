@@ -2,6 +2,7 @@ import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/con
 import { Fragment, useMemo, useState, useCallback } from 'react'
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { useI18N } from '../../utils'
 import { PersistentStorages } from '../../../shared'
 
@@ -88,9 +89,9 @@ export function ApplicationSettingPluginList() {
                                 entry: x,
                                 pluginId: cur.ID,
                             }
-                        }) ?? [],
+                        }) ?? EMPTY_LIST,
                     )
-                }, [])
+                }, EMPTY_LIST)
                 .sort(
                     (a, b) =>
                         (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0),

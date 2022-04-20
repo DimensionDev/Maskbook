@@ -1,4 +1,5 @@
 import { createProxyKVStorageBackend, createKVStorageHost, KVStorageBackend } from '@masknet/shared-base'
+import { PluginId } from '@masknet/plugin-infra'
 import { MaskMessages } from './messages'
 
 const indexedDBProxy = createProxyKVStorageBackend()
@@ -20,7 +21,7 @@ export const InMemoryStorages = {
     }),
 }
 
-export const ApplicationEntryUnlistedListKey = 'application_entry_unlisted_list'
+const ApplicationEntryUnlistedListKey = 'application_entry_unlisted_list'
 export const PersistentStorages = {
     Plugin: createPersistentKVStorage('plugin', {}),
     Settings: createPersistentKVStorage('settings', {
@@ -29,19 +30,19 @@ export const PersistentStorages = {
     ApplicationEntryUnListedList: createPersistentKVStorage<{ [key: string]: boolean }>(
         ApplicationEntryUnlistedListKey,
         {
-            'com.maskbook.red_packet': false,
-            'com.maskbook.fileservice': false,
-            'com.maskbook.ito': false,
-            'com.maskbook.ito_claim': false,
-            'io.mask.cross-chain-bridge': false,
-            'com.maskbook.box': false,
-            'com.savings': false,
-            'com.maskbook.avatar': false,
-            'com.maskbook.trader': false,
-            'com.maskbook.transak': false,
-            'com.maskbook.pets': false,
-            'org.findtruman': false,
-            'io.gopluslabs.security': false,
+            [PluginId.RedPacket]: false,
+            [PluginId.FileService]: false,
+            [PluginId.ITO]: false,
+            [`${PluginId.ITO}_claim`]: false,
+            [PluginId.CrossChainBridge]: false,
+            [PluginId.MaskBox]: false,
+            [PluginId.Savings]: false,
+            [PluginId.Avatar]: false,
+            [PluginId.Trader]: false,
+            [PluginId.Transak]: false,
+            [PluginId.Pets]: false,
+            [PluginId.FindTruman]: false,
+            [PluginId.GoPlusSecurity]: false,
         },
     ),
 }
