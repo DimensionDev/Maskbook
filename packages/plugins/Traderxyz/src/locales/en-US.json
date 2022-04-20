@@ -12,8 +12,15 @@
     "nft_tree_parent_title": "Collectibles & NFT",
     "submit_order_signed_message": "Order is Signed",
     "submit_order_submit_error_message": "Order has error",
+    "submit_order_filled_message": " Order filled. TxHash: ",
     "meta_attach_message": "Traderxyz NFT Attached",
     "__plugin_name": "Traderxyz",
     "__plugin_description": "Traderxyz plugin, sell NFT faster and cheaper.",
-    "__entry__": "Traderxyz"
+    "__entry__": "Traderxyz",
+    "order_filled": "Order is filled already",
+    "order_expired": "Order is Expired",
+    "order_cancelled": "Order is Cancelled",
+    "order_invalid": "Invalid Order",
+    "order_invlid_maker": "Invalid Maker Asset Amount",
+    "order_invlid_taker": "Invalid Taker Asset Amount"
 }

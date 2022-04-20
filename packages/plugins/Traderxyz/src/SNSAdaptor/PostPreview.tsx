@@ -6,7 +6,7 @@ import { Box, Button, Chip, Grid, Typography, useTheme } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useI18N } from '../locales/i18n_generated'
 import { usePluginWrapper, usePostInfo } from '@masknet/plugin-infra/content-script'
-import { useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useGasLimit, useGasPrice } from '@masknet/web3-shared-evm'
 import { getTraderApi } from '../apis/nftswap'
 import type { TradeMetaData, nftData } from '../types'
 import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
@@ -123,6 +123,8 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
     const t = useI18N()
     const theme = useTheme()
     const { showSnackbar } = useCustomSnackbar()
+    const gasLimit = useGasLimit()
+    const gasPrice = useGasPrice()
 
     const p = usePostInfo()
     // const l = usePostLink()
@@ -155,6 +157,9 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
 
     const signOrder = async () => {
         // WE CAN SET GAS LIMIT IF WE WANT
+
+        console.log(gasLimit, gasPrice)
+
         const TransactionOverrides = {
             gasLimit: 10000000,
             gasPrice: 10000000000,
@@ -180,7 +185,6 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
         // Cancelled = 6
 
         const orderStatus = await nftSwapSdk.getOrderStatus(normalizeSignedOrder)
-        console.log('getOrderStatus1', orderStatus)
 
         if (orderStatus === 3) {
             // Fillable
@@ -190,7 +194,6 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
                 walletAddressUserA,
             )
 
-            console.log('swap-approved:', approvalStatusForUserA)
             // Check if buyer needs to approve the sell token contract or no
             if (!approvalStatusForUserA.contractApproved) {
                 // If not approved
@@ -201,67 +204,75 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
 
                 await approvalTx.wait().then(
                     (msg) =>
-                        console.log(
-                            `Approved ${assetsToSwapUserA[0].tokenAddress} contract to swap with 0x (txHash: ${msg.transactionHash})`,
+                        showSnackbar(
+                            `Approved ${assetsToSwapUserA[0]?.tokenAddress} contract to swap with 0x (txHash: ${msg.transactionHash})`,
+                            { variant: 'success' },
                         ),
-                    (error) => console.log('swap error ', error),
+                    (error) => showSnackbar(t.submit_order_submit_error_message() + error, { variant: 'error' }),
                 )
             }
             // fill order
             const fillTx = await nftSwapSdk.fillSignedOrder(normalizeSignedOrder, undefined, TransactionOverrides).then(
                 async (fillTx) => {
-                    console.log('fillTx=', fillTx)
                     const fillTxReceipt = await nftSwapSdk.awaitTransactionHash(fillTx?.hash).then(
                         (fillTxReceipt) => {
-                            console.log('fillTxReceipt=', fillTxReceipt)
                             if (fillTxReceipt.status !== 0) {
-                                console.log(
-                                    `\u{1F389} \u{1F973} Order filled. TxHash: ${fillTxReceipt?.transactionHash}`,
+                                showSnackbar(
+                                    `\u{1F389} \u{1F973} ${t.submit_order_filled_message()} ${
+                                        fillTxReceipt?.transactionHash
+                                    }`,
+                                    { variant: 'success' },
                                 )
                             } else {
-                                console.log(`${fillTxReceipt?.transactionHash} failed`)
+                                showSnackbar(
+                                    t.submit_order_submit_error_message() + fillTxReceipt?.transactionHash + ' failed',
+                                    { variant: 'error' },
+                                )
                             }
                         },
-                        (error) => console.log('fillTxReceipterror=', error),
+                        (error) =>
+                            showSnackbar(t.submit_order_submit_error_message() + ' fillTxReceipterror :' + error, {
+                                variant: 'error',
+                            }),
                     )
                 },
-                (error) => console.log('error=', error),
+                (error) => showSnackbar(t.submit_order_submit_error_message() + error, { variant: 'error' }),
             )
         }
 
         if (orderStatus === 5) {
             // FullyFilled
-            alert('Order is filled already')
+            showSnackbar(t.order_filled(), { variant: 'error' })
         }
 
         if (orderStatus === 4) {
             // Expired
-            alert('Order is Expired')
+            showSnackbar(t.order_expired(), { variant: 'error' })
         }
 
         if (orderStatus === 6) {
             // Cancelled
-            alert('Order is Cancelled')
+            showSnackbar(t.order_cancelled(), { variant: 'error' })
         }
 
         if (orderStatus === 6) {
             // Cancelled
-            alert('Order is Cancelled')
+            showSnackbar(t.order_cancelled(), { variant: 'error' })
         }
 
         if (orderStatus === 0) {
             // Cancelled
-            alert('Invalid Order')
+            showSnackbar(t.order_invalid(), { variant: 'error' })
         }
 
         if (orderStatus === 1) {
-            // Cancelled
-            alert('Invalid Maker Asset Amount')
+            // Invalid
+            showSnackbar(t.order_invlid_maker(), { variant: 'error' })
         }
 
         if (orderStatus === 2) {
-            // Cancelled
-            alert('Invalid Taker Asset Amount')
+            // Invalid
+            showSnackbar(t.order_invlid_taker(), { variant: 'error' })
         }
     }
 

@@ -34,7 +34,6 @@ export const SelectTokenView = (props: SelectTokenView): JSX.Element => {
     const t = useI18N()
 
     const { inputToken } = props
-    // console.log('inputToken=', inputToken)
     const [inputTokenBalance, setInputTokenBalance] = useState<string>('0')
 
     const chainId = props.chainId
@@ -60,12 +59,7 @@ export const SelectTokenView = (props: SelectTokenView): JSX.Element => {
                 selectedTokens: excludeTokens,
             })
             if (picked) {
-                // console.log('picked=', picked)
-                // setToken(picked)
-                // #region update balance
-                // console.log('tokenBalance=', inputTokenBalance_)
                 props.onAmountChange(picked, props.inputTokenAmount)
-                // setInputTokenBalance(inputTokenBalance_)
             }
         },
         [excludeTokens.join(), chainId],

@@ -219,7 +219,6 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
             .then(async (response) => {
                 if (response.ok) {
                     const result = await response.json()
-                    console.log('result=', result)
 
                     const asset_contract = [
                         ...new Set(
@@ -293,6 +292,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
 
     //  Submit order to traderXYZ sdk
     const submitOrder = async () => {
+        // SAMPLE TO TEST SDK
         // const MY_NFT = {
         //     tokenAddress: '0xeE897A2c8637f27F9B8FB324E36361ef03ec7Ae4', // MEOCAT2 NFT ON rinkeby
         //     tokenId: '2',
@@ -313,9 +313,6 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
 
         const assetsToSwapUserA = [orderInfo?.nfts, orderInfo?.receiving_token].flat(1)
         // const assetsToSwapUserA = [MY_NFT, MY_NFT1, SIXTY_NINE_USDC]
-
-        // console.log('assetsToSwapUserA1=', assetsToSwapUserA)
-        // console.log('assetsToSwapUserA1-account-', account)
 
         // Check if we need to approve the NFT for swapping
         const approvalStatusForUserA = await nftSwapSdk
@@ -390,8 +387,6 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
             }
         })
 
-        // console.log('previewOrder-nfts=', nfts)
-
         const am = amountToWei(inputAmount, token ? token.decimals : 0)
 
         const previewInfo = {
@@ -415,9 +410,6 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
         }
 
         setOrderInfo(orderInfo)
-
-        // console.log('previewOrder-tokens=', receivingToken)
-        // console.log('previewOrder-orderInfo=', orderInfo)
     }
 
     const nextButtonSection = () => {

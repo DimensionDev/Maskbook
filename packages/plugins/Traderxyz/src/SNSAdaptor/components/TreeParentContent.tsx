@@ -21,7 +21,6 @@ const TreeParentContent = React.forwardRef(function CustomContent(
 
     const handleExpansionClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         handleExpansion(event)
-        console.log('expanded', expanded)
     }
 
     const child = (
