@@ -42,12 +42,17 @@ export type SelectProviderDialogEvent =
 export type ConnectWalletDialogEvent =
     | {
           open: true
-          providerType: ProviderType
           networkType: NetworkType
+          providerType: ProviderType
       }
     | {
           open: false
-          result: boolean
+          result?: {
+              account: string
+              chainId: ChainId
+              networkType: NetworkType
+              providerType: ProviderType
+          }
       }
 
 export type SelectWalletDialogEvent =
