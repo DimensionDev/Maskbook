@@ -5,7 +5,7 @@
     "outDir": "dist",
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
-  "include": ["src", "src/**/*.json", "../../mask/src"],
+  "include": ["src", "src/**/*.json"],
   "references": [
     { "path": "../../theme" },
     { "path": "../../mask/src" },
