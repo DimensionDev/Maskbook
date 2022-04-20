@@ -74,7 +74,7 @@
     "delete_wallet": "Delete Wallet",
     "hide_token": "Hide Token",
     "hide_token_hint": "You can add <strong>{{token}}</strong> back in the future by going to \"Add Token\" in the wallet panel.",
-    "done": "Done!",
+    "done": "Done",
     "download": "Download",
     "failed": "Failed",
     "buy_now": "Buy Now",
