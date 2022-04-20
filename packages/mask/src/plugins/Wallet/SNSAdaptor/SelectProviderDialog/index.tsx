@@ -37,22 +37,20 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const { classes } = useStyles()
     const [onlyEvm, setOnlyEvm] = useState(false)
     // #region remote controlled dialog logic
-    const { open, closeDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-        (ev?) => {
-            if ((ev as { onlyEvm: true }).onlyEvm) {
-                setOnlyEvm(true)
-            }
-        },
-    )
     // #endregion
-
+    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     // #region native app
     useEffect(() => {
-        setOnlyEvm(false)
         if (!open) return
+        WalletMessages.events.selectProviderDialogUpdated.on((ev?) => {
+            if ((ev as { onlyEvm: boolean }).onlyEvm) {
+                setOnlyEvm(true)
+            } else {
+                setOnlyEvm(false)
+            }
+        })
         if (hasNativeAPI) nativeAPI?.api.misc_openCreateWalletView()
-    }, [open])
+    }, [open, onlyEvm])
     // #endregion
 
     const isDashboard = isDashboardPage()
