@@ -24,7 +24,7 @@ import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Box, Button, Chip, Collapse, MenuItem, Popover, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
 import { UserIcon } from '@masknet/icons'
-import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
@@ -67,6 +67,7 @@ const useStyles = makeStyles()({
         fontSize: 12,
         lineHeight: '16px',
         color: '#15181B',
+        fontWeight: 700,
     },
     balance: {
         color: '#7B8192',
@@ -137,6 +138,10 @@ const useStyles = makeStyles()({
         lineHeight: '22px',
         fontWeight: 500,
     },
+    menu: {
+        left: '16px !important',
+        width: '100%',
+    },
 })
 
 export interface Prior1559TransferProps {
@@ -170,7 +175,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 .refine((amount) => {
                     const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
                     return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
-                }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
+                }, t('wallet_transfer_error_insufficient_balance', { symbol: selectedAsset?.token.symbol })),
             gasLimit: zod
                 .string()
                 .min(1, t('wallet_transfer_error_gas_limit_absence'))
@@ -294,24 +299,33 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         [selectedAsset],
     )
 
-    const [menu, openMenu] = useMenu(
-        <MenuItem className={classes.expand} key="expand">
-            <Typography className={classes.title}>{t('wallet_transfer_between_my_accounts')}</Typography>
-            <ExpandMore style={{ fontSize: 20 }} />
-        </MenuItem>,
-        <Collapse in>
-            {otherWallets.map((account, index) => (
-                <MenuItem
-                    key={index}
-                    className={classes.menuItem}
-                    onClick={() => methods.setValue('address', account.address)}>
-                    <Typography>{account.name}</Typography>
-                    <Typography>
-                        <FormattedAddress address={account.address ?? ''} size={4} formatter={formatEthereumAddress} />
-                    </Typography>
-                </MenuItem>
-            ))}
-        </Collapse>,
+    const [menu, openMenu] = useMenuConfig(
+        [
+            <MenuItem className={classes.expand} key="expand">
+                <Typography className={classes.title}>{t('wallet_transfer_between_my_accounts')}</Typography>
+                <ExpandMore style={{ fontSize: 20 }} />
+            </MenuItem>,
+            <Collapse key="collapse" in>
+                {otherWallets.map((account, index) => (
+                    <MenuItem
+                        key={index}
+                        className={classes.menuItem}
+                        onClick={() => methods.setValue('address', account.address)}>
+                        <Typography>{account.name}</Typography>
+                        <Typography>
+                            <FormattedAddress
+                                address={account.address ?? ''}
+                                size={4}
+                                formatter={formatEthereumAddress}
+                            />
+                        </Typography>
+                    </MenuItem>
+                ))}
+            </Collapse>,
+        ],
+        {
+            classes: { paper: classes.menu },
+        },
     )
     const popoverContent = useMemo(() => {
         if (!addressTip) return
@@ -406,7 +420,9 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         return (
             <>
                 <form className={classes.container} onSubmit={handleConfirm}>
-                    <Typography className={classes.label}>{t('wallet_transfer_account')}</Typography>
+                    <Typography className={classes.label} style={{ marginTop: 0 }}>
+                        {t('wallet_transfer_account')}
+                    </Typography>
                     <Typography className={classes.accountName}>{accountName}</Typography>
                     <Typography className={classes.label}>{t('wallet_transfer_receiving_account')}</Typography>
                     <Controller

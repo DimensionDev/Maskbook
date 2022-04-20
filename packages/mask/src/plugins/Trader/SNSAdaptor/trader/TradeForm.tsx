@@ -100,9 +100,9 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             fontSize: 18,
             lineHeight: '22px',
             fontWeight: 600,
-            padding: '13px 0',
             borderRadius: isDashboard ? 8 : 24,
             height: 'auto',
+            padding: '13px 0',
             marginTop: '0px !important',
         },
         disabledButton: {
@@ -500,7 +500,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                                 arrow
                                                 disableFocusListener
                                                 disableTouchListener>
-                                                <HelpOutline style={{ marginLeft: 10 }} />
+                                                <HelpOutline style={{ marginLeft: 10, height: 22 }} />
                                             </Tooltip>
                                         </Box>
                                     }

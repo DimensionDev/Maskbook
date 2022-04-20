@@ -340,9 +340,6 @@ export function ITO(props: ITO_Props) {
 
     // #region claim
     const [claimState, claimCallback] = useClaimCallback([pid], payload.contract_address)
-    const onClaimButtonClick = useCallback(() => {
-        claimCallback()
-    }, [claimCallback])
 
     const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
@@ -556,7 +553,7 @@ export function ITO(props: ITO_Props) {
         if (!availability?.claimed) {
             return (
                 <ActionButton
-                    onClick={onClaimButtonClick}
+                    onClick={claimCallback}
                     variant="contained"
                     size="large"
                     disabled={claimState.type === TransactionStateType.HASH}
@@ -600,9 +597,14 @@ export function ITO(props: ITO_Props) {
 
     const FooterBuyerButton = useMemo(
         () => (
-            <Grid container spacing={2}>
+            <div>
                 {(() => {
-                    if (hasLockTime) return FooterBuyerWithLockTimeButton
+                    if (hasLockTime)
+                        return (
+                            <Grid container spacing={2}>
+                                {FooterBuyerWithLockTimeButton}
+                            </Grid>
+                        )
                     if (canWithdraw) {
                         return (
                             <ActionButton
@@ -616,7 +618,7 @@ export function ITO(props: ITO_Props) {
                     }
                     return null
                 })()}
-            </Grid>
+            </div>
         ),
         [hasLockTime, canWithdraw],
     )

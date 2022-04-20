@@ -20,8 +20,6 @@ import { DashboardContext } from './context'
 import {
     MaskBannerIcon,
     MaskNotSquareIcon,
-    MenuLabsActiveIcon,
-    MenuLabsIcon,
     MenuPersonasActiveIcon,
     MenuPersonasIcon,
     MenuSettingsActiveIcon,
@@ -32,7 +30,7 @@ import {
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
+import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
     const navigate = useNavigate()
@@ -167,10 +165,6 @@ export function Navigation({ onClose }: NavigationProps) {
                     )}
                 </List>
             </Collapse>
-            <ListItemLink to={DashboardRoutes.Labs}>
-                <ItemIcon>{useMatch(DashboardRoutes.Labs) ? <MenuLabsActiveIcon /> : <MenuLabsIcon />}</ItemIcon>
-                <ListItemText primary={t.labs()} />
-            </ListItemLink>
             <ListItemLink to={DashboardRoutes.Settings}>
                 <ItemIcon sx={{ fontSize: 36 }}>
                     {useMatch(DashboardRoutes.Settings) ? <MenuSettingsActiveIcon /> : <MenuSettingsIcon />}

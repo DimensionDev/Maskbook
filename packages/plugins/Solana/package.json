@@ -1,7 +1,12 @@
 {
   "name": "@masknet/plugin-solana",
   "private": true,
-  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@bonfida/name-offers": "^0.0.1",

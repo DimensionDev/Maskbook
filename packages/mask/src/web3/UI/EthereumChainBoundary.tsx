@@ -2,7 +2,8 @@ import React, { useCallback } from 'react'
 import { Box, Typography, Theme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
-import { NetworkPluginID, useActivatedPlugin, useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { NetworkPluginID, useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
 import {
     ChainId,
     getChainDetailedCAIP,
@@ -78,9 +79,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-        },
     )
     // #endregion
 

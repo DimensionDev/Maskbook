@@ -1,8 +1,13 @@
 {
   "name": "@masknet/web3-shared-evm",
   "private": true,
-  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "webpack": "./index.ts",
+      "default": "../dist/evm/index.js"
+    }
+  },
   "sideEffects": false,
   "dependencies": {
     "@codingsh/harmony-crypto": "0.1.58",
@@ -25,9 +30,9 @@
     "use-subscription": "^1.6.0",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
-    "web3": "1.5.2",
-    "web3-core-helpers": "1.5.2",
-    "web3-utils": "1.5.2"
+    "web3": "1.7.3",
+    "web3-core-helpers": "1.7.3",
+    "web3-utils": "1.7.3"
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.0"

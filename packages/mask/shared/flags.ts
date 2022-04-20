@@ -11,7 +11,6 @@ const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
 export const Flags = {
     isolated_dashboard_bridge_enabled: false,
     mask_SDK_ready: betaOrInsiderOnly,
-    using_ShadowDOM_attach_mode: 'closed' as ShadowRootMode,
     /** Don't inject injected script in this mode. Native side will do the job. */
     support_declarative_user_script: is_iOSApp,
     /** Don't show welcome page in this mode. Native side will do the job. */

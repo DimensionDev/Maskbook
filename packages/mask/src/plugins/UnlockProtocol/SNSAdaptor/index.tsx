@@ -19,14 +19,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
         [pluginMetaKey, (meta: UnlockLockInMetadata) => 'An Unlock Protocol post has been added'],
     ]),
     CompositionDialogEntry: {
-        label: {
-            fallback: (
-                <>
-                    <UnlockIcon style={{ width: 16, height: 16 }} />
-                    {pluginName}
-                </>
-            ),
-        },
+        label: (
+            <>
+                <UnlockIcon style={{ width: 16, height: 16 }} />
+                {pluginName}
+            </>
+        ),
         dialog: UnlockProtocolDialog,
     },
 }

@@ -16,10 +16,6 @@ import { serializer, getLocalImplementation } from '@masknet/shared-base'
 const SERVICE_HMR_EVENT = 'service-hmr'
 const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services' })
 const log: AsyncCallOptions['log'] = {
-    beCalled: true,
-    localError: true,
-    remoteError: true,
-    sendLocalStack: true,
     type: 'pretty',
     requestReplay: process.env.NODE_ENV === 'development',
 }
@@ -27,7 +23,7 @@ const log: AsyncCallOptions['log'] = {
 export const Services = {
     Crypto: add(() => import('./background-script/CryptoService'), 'Crypto'),
     Identity: add(() => import('./background-script/IdentityService'), 'Identity'),
-    Welcome: add(() => import('./background-script/WelcomeService'), 'Welcome'),
+    Backup: add(() => import('./background-script/BackupService'), 'Backup'),
     Helper: add(() => import('../../background/services/helper'), 'Helper'),
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
     SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
@@ -46,7 +42,7 @@ if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Envi
         [
             './background-script/CryptoService',
             './background-script/IdentityService',
-            './background-script/WelcomeService',
+            './background-script/BackupService',
             '../../background/services/helper',
             './background-script/EthereumService',
             './background-script/SettingsService',

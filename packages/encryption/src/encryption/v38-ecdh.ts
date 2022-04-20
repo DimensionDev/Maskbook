@@ -1,6 +1,5 @@
 import { concatArrayBuffer, decodeArrayBuffer } from '@dimensiondev/kit'
 import { AESCryptoKey, EC_Public_CryptoKey, IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
-import { AESAlgorithmEnum } from '../payload'
 import { encryptWithAES } from '../utils'
 import {
     EncryptError,
@@ -76,7 +75,7 @@ export async function v38_addReceiver(
                 receiverPublicKey.key,
                 ivToBePublished,
             )
-            const encryptedPostKey = await encryptWithAES(AESAlgorithmEnum.A256GCM, aes, iv, await postKeyEncoded)
+            const encryptedPostKey = await encryptWithAES(aes, iv, await postKeyEncoded)
             return {
                 ivToBePublished,
                 encryptedPostKey: encryptedPostKey.unwrap(),

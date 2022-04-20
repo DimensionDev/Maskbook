@@ -2,14 +2,18 @@ import { memo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { Button, styled, Tab, tabClasses, Tabs, tabsClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { NetworkSelector } from '../../../components/NetworkSelector'
 import { TabContext, TabPanel } from '@mui/lab'
 import { File as FileIcon } from '@masknet/icons'
 import { useWallet } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
-import Services from '../../../../service'
+import { WalletContext } from '../hooks/useWalletContext'
+import { useTitle } from '../../../hook/useTitle'
+import formatDateTime from 'date-fns/format'
+import { saveFileFromBuffer } from '../../../../../../shared'
+import { encodeText } from '@dimensiondev/kit'
+import { MimeTypes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     header: {
@@ -112,7 +116,10 @@ enum BackupTabs {
 const BackupWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const wallet = useWallet()
+    const { selectedWallet } = WalletContext.useContainer()
+    const currentWallet = useWallet()
+    const wallet = selectedWallet ?? currentWallet
+
     const [currentTab, setCurrentTab] = useState(BackupTabs.JsonFile)
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
@@ -137,9 +144,14 @@ const BackupWallet = memo(() => {
         privateKey: '',
     }
 
-    const [{ value: downloadValue }, onExport] = useAsyncFn(async () => {
+    const [, onExport] = useAsyncFn(async () => {
         try {
-            await Services.Welcome.downloadBackup(jsonFile, 'json')
+            const now = formatDateTime(Date.now(), 'yyyy-MM-dd')
+            await saveFileFromBuffer({
+                fileContent: encodeText(JSON.stringify(jsonFile)),
+                fileName: `mask-network-keystore-backup-${now}.json`,
+                mimeType: MimeTypes.JSON,
+            })
             return true
         } catch (error) {
             if (error instanceof Error) {
@@ -149,12 +161,10 @@ const BackupWallet = memo(() => {
         }
     }, [jsonFile])
 
+    useTitle(t('popups_back_up_the_wallet'))
+
     return (
         <>
-            <div className={classes.header}>
-                <Typography className={classes.title}>{t('popups_wallet_backup_wallet')}</Typography>
-                <NetworkSelector />
-            </div>
             <div className={classes.content}>
                 <TabContext value={currentTab}>
                     <StyledTabs value={currentTab} onChange={(event, tab) => setCurrentTab(tab)}>

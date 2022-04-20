@@ -49,7 +49,9 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
             </DialogContent>
             {rejection && (
                 <DialogContent className={classes.content}>
-                    Error: {rejection.message} {console.error(rejection)}
+                    <>
+                        Error: {rejection.message} {console.error(rejection)}
+                    </>
                 </DialogContent>
             )}
             <DialogActions>

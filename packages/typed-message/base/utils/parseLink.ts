@@ -1,7 +1,5 @@
-import _anchorme from 'anchorme'
-import type { TypedMessageAnchor } from '../extension'
-// ESM/CJS compat
-const anchorme = ((_anchorme as any).default || _anchorme) as typeof _anchorme
+import anchorme from 'anchorme'
+import type { TypedMessageAnchor } from '../extension/index.js'
 
 export type ParseLinkResult =
     | {
@@ -15,7 +13,8 @@ export type ParseLinkResult =
       }
 
 export function parseLink(text: string): ParseLinkResult[] {
-    const parsed = anchorme.list(text)
+    // ESM-CJS cooperation
+    const parsed = (anchorme as any as typeof anchorme.default).list(text)
 
     const result: ParseLinkResult[] = []
 

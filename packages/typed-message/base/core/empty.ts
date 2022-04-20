@@ -1,5 +1,5 @@
-import type { SerializableTypedMessage } from '../base'
-import { createIsType } from '../utils/internal'
+import type { SerializableTypedMessage } from '../base.js'
+import { createIsType } from '../utils/internal.js'
 
 export interface TypedMessageEmpty extends SerializableTypedMessage<1> {
     readonly type: 'empty'

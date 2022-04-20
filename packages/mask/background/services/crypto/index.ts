@@ -8,4 +8,4 @@ export { encryptComment, decryptComment } from './comment'
 // Steganography
 export { steganographyEncodeImage } from './steganography'
 
-// export { getPartialSharedListOfPost } from './CryptoServices/getPartialSharedListOfPost'
+export { queryPagedPostHistory, type QueryPagedPostHistoryOptions } from './posts'

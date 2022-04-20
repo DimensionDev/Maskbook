@@ -1,8 +1,7 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import { encodeText, encodeArrayBuffer } from '@dimensiondev/kit'
 import { Ok, Option, Result } from 'ts-results'
 import type { PayloadWellFormed, Signature } from '..'
-import { AESAlgorithmEnum } from '../payload'
 import { CryptoException, PayloadException } from '../types'
 import { encryptWithAES, exportCryptoKeyToJWK } from '../utils'
 import { get_v38PublicSharedCryptoKey } from './shared'
@@ -52,7 +51,7 @@ async function encodeAESKeyEncrypted(
         const publicSharedKey = await get_v38PublicSharedCryptoKey()
         if (publicSharedKey.err) return publicSharedKey
 
-        const jwk = await exportCryptoKeyToJWK(AESKey.key)
+        const jwk = await exportCryptoKeyToJWK(AESKey)
         if (jwk.err) return jwk.mapErr((e) => new CheckedError(CryptoException.InvalidCryptoKey, e))
 
         // There is no reason that these two steps will fail.
@@ -63,7 +62,7 @@ async function encodeAESKeyEncrypted(
         const text = `{"alg":"A256GCM","ext":true,"k":"${jwk.val.k}","key_ops":["decrypt","encrypt"],"kty":"oct"}`
         const ab = encodeText(text)
 
-        const encryptedKey = await encryptWithAES(AESAlgorithmEnum.A256GCM, publicSharedKey.val, iv, ab)
+        const encryptedKey = await encryptWithAES(publicSharedKey.val, iv, ab)
         if (encryptedKey.err) return encryptedKey.mapErr((e) => new CheckedError(CryptoException.EncryptFailed, e))
         return Ok(encodeArrayBuffer(encryptedKey.val.slice()))
     }

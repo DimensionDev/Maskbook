@@ -1,7 +1,8 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import {
     ERC721ContractDetailed,
     FungibleTokenDetailed,
+    GasConfig,
     TransactionState,
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
@@ -30,6 +31,7 @@ export interface ContextOptions {
     sendState: TransactionState
     storedTokens: Web3Plugin.NonFungibleToken[]
     reset: () => void
+    setGasConfig: Dispatch<SetStateAction<GasConfig | undefined>>
 }
 
 export const TipContext = createContext<ContextOptions>({
@@ -53,4 +55,5 @@ export const TipContext = createContext<ContextOptions>({
     sendState: { type: TransactionStateType.UNKNOWN },
     storedTokens: [],
     reset: noop,
+    setGasConfig: noop,
 })

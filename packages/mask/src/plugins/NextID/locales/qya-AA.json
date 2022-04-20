@@ -62,5 +62,13 @@
     "tip_contracts": "crwdns14782:0crwdne14782:0",
     "tip_mask_promote": "crwdns14806:0crwdne14806:0",
     "tip_token_share_post": "crwdns14784:0{{amount}}crwdnd14784:0{{symbol}}crwdnd14784:0{{recipientSnsId}}crwdnd14784:0{{recipient}}crwdnd14784:0{{promote}}crwdne14784:0",
-    "tip_nft_share_post": "crwdns14786:0{{name}}crwdnd14786:0{{recipientSnsId}}crwdnd14786:0{{recipient}}crwdnd14786:0{{promote}}crwdne14786:0"
+    "tip_nft_share_post": "crwdns14786:0{{name}}crwdnd14786:0{{recipientSnsId}}crwdnd14786:0{{recipient}}crwdnd14786:0{{promote}}crwdne14786:0",
+    "tip_add": "crwdns14980:0crwdne14980:0",
+    "tip_adding": "crwdns14982:0crwdne14982:0",
+    "tip_add_collectibles": "crwdns14984:0crwdne14984:0",
+    "tip_add_collectibles_contract_address": "crwdns14986:0crwdne14986:0",
+    "tip_add_collectibles_token_id": "crwdns14988:0crwdne14988:0",
+    "tip_add_collectibles_error": "crwdns14990:0crwdne14990:0",
+    "tip_loading": "crwdns14992:0crwdne14992:0",
+    "tip_empty_nft": "crwdns14994:0crwdne14994:0"
 }

@@ -11,7 +11,7 @@ import { SwapWeb3Context } from '../../../../web3/context'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils'
 import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme'
-import { NetworkPluginID, useReverseAddress } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseAddress } from '@masknet/plugin-infra/web3'
 import { TargetChainIdContext } from '../../../../plugins/Trader/trader/useTargetChainIdContext'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
 

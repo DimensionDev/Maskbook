@@ -7,6 +7,8 @@ import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
 import { Transfer1559 } from './Transfer1559'
 import { Prior1559Transfer } from './Prior1559Transfer'
+import { useI18N } from '../../../../../utils'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     assetItem: {
@@ -24,6 +26,7 @@ const useStyles = makeStyles()({
 })
 
 const Transfer = memo(() => {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
     const wallets = useWallets(ProviderType.MaskWallet)
@@ -55,6 +58,8 @@ const Transfer = memo(() => {
             )
         }),
     )
+
+    useTitle(t('popups_send'))
 
     return (
         <>

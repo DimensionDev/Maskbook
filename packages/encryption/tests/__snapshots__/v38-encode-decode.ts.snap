@@ -14,10 +14,7 @@ Ok(Object {
   })),
   "encrypted": Ok(Uint8Array [ 3a0d6ee692c6f46896b196f14301c01ad2fa26aa ]),
   "encryption": Ok(Object {
-    "AESKey": Ok(Object {
-      "algr": "A256GCM",
-      "key": CryptoKey { [opaque crypto key material] },
-    }),
+    "AESKey": Ok(CryptoKey { [opaque crypto key material] }),
     "iv": Ok(Uint8Array [ 0633db7e24805c2bdcff69ea2afda7cd ]),
     "type": "public",
   }),
@@ -54,10 +51,7 @@ Object {
   })),
   "encrypted": Ok(Uint8Array [ 3a0d6ee692c6f46896b196f14301c01ad2fa26aa ]),
   "encryption": Ok(Object {
-    "AESKey": Ok(Object {
-      "algr": "A256GCM",
-      "key": CryptoKey { [opaque crypto key material] },
-    }),
+    "AESKey": Ok(CryptoKey { [opaque crypto key material] }),
     "iv": Ok(Uint8Array [ 0633db7e24805c2bdcff69ea2afda7cd ]),
     "type": "public",
   }),

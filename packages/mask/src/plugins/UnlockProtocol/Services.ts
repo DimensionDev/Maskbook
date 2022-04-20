@@ -21,7 +21,7 @@ export interface verifyHolderResponse {
     }[]
 }
 
-const verifyHolder = async <verifyHolderResponse>(_lockAddress: String, _holder: String, _chain: number) => {
+const verifyHolder = async <verifyHolderResponse>(_lockAddress: string, _holder: string, _chain: number) => {
     const query = gql`
         query keyHolders($address: String!) {
             keyHolders(where: { address: $address }) {
@@ -59,7 +59,7 @@ const verifyActiveLock = (data: { lock: string; address: string; chain: number }
     })
 }
 
-export const verifyPurchase = async (_userAddress: String, _lockAddress: String, _lockChain: number) => {
+export const verifyPurchase = async (_userAddress: string, _lockAddress: string, _lockChain: number) => {
     const query = gql`
         query locks($address: String!) {
             locks(where: { address: $address }) {
@@ -87,7 +87,7 @@ export const verifyPurchase = async (_userAddress: String, _lockAddress: String,
     return flag
 }
 
-export const getLocks = async <UnlockLocks>(_address1: String) => {
+export const getLocks = async <UnlockLocks>(_address1: string) => {
     const query = gql`
         query lockManager($address: String!) {
             lockManagers(where: { address: $address }) {

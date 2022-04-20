@@ -4,8 +4,14 @@ import parseInt from 'lodash-es/parseInt'
 
 export type I18nOptions = 'rate' | 'quantity'
 
+enum SecurityType {
+    Contract = 'contract-security',
+    Transaction = 'transaction-security',
+    Info = 'info-security',
+}
+
 export interface SecurityMessage {
-    type: 'contract-security' | 'transaction-security'
+    type: SecurityType
     level: SecurityMessageLevel
     condition(info: TokenSecurity): boolean
     titleKey: keyof ReturnType<typeof useI18N>
@@ -15,96 +21,97 @@ export interface SecurityMessage {
 }
 
 const percentageToNumber = (value?: string) => parseInt((value ?? '').replace('%', '')) * 100
+const isUnset = (name: keyof TokenSecurity) => (info: TokenSecurity) => info[name] === undefined
 
 export const SecurityMessages: SecurityMessage[] = [
     // open source
     {
-        type: 'contract-security',
+        type: SecurityType.Contract,
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => info.is_open_source === '1',
         titleKey: 'risk_contract_source_code_verified_title',
         messageKey: 'risk_contract_source_code_verified_body',
-        shouldHide: (info: TokenSecurity) => info.is_open_source === undefined,
+        shouldHide: isUnset('is_open_source'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Contract,
         level: SecurityMessageLevel.High,
         condition: (info: TokenSecurity) => info.is_open_source === '0',
         titleKey: 'risk_contract_source_code_not_verified_title',
         messageKey: 'risk_contract_source_code_not_verified_body',
-        shouldHide: (info: TokenSecurity) => info.is_open_source === undefined,
+        shouldHide: isUnset('is_open_source'),
     },
     // proxy
     {
-        type: 'contract-security',
+        type: SecurityType.Contract,
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) => info.is_proxy === '1',
         titleKey: 'risk_proxy_contract_title',
         messageKey: 'risk_proxy_contract_body',
-        shouldHide: (info: TokenSecurity) => info.is_proxy === undefined,
+        shouldHide: isUnset('is_proxy'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Contract,
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => info.is_proxy === '0',
         titleKey: 'risk_no_proxy_title',
         messageKey: 'risk_no_proxy_body',
-        shouldHide: (info: TokenSecurity) => info.is_proxy === undefined,
+        shouldHide: isUnset('is_proxy'),
     },
     // mint
     {
-        type: 'contract-security',
+        type: SecurityType.Contract,
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => info.is_mintable === '0',
         titleKey: 'risk_no_mint_function_title',
         messageKey: 'risk_no_mint_function_body',
-        shouldHide: (info: TokenSecurity) => info.is_mintable === undefined,
+        shouldHide: isUnset('is_mintable'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Contract,
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) => info.is_mintable === '1',
         titleKey: 'risk_mint_function_title',
         messageKey: 'risk_mint_function_body',
-        shouldHide: (info: TokenSecurity) => info.is_mintable === undefined,
+        shouldHide: isUnset('is_mintable'),
     },
     // owner change balance
     {
-        type: 'contract-security',
+        type: SecurityType.Contract,
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => info.owner_change_balance === '0',
         titleKey: 'risk_owner_can_not_change_balance_title',
         messageKey: 'risk_owner_can_not_change_balance_body',
-        shouldHide: (info: TokenSecurity) => info.owner_change_balance === undefined,
+        shouldHide: isUnset('owner_change_balance'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Contract,
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) => info.owner_change_balance === '1',
         titleKey: 'risk_owner_change_balance_title',
         messageKey: 'risk_owner_change_balance_body',
-        shouldHide: (info: TokenSecurity) => info.owner_change_balance === undefined,
+        shouldHide: isUnset('owner_change_balance'),
     },
     // can take back ownership
     {
-        type: 'contract-security',
+        type: SecurityType.Contract,
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => info.can_take_back_ownership === '0',
         titleKey: 'risk_no_can_take_back_ownership_title',
         messageKey: 'risk_no_can_take_back_ownership_body',
-        shouldHide: (info: TokenSecurity) => info.can_take_back_ownership === undefined,
+        shouldHide: isUnset('can_take_back_ownership'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Contract,
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) => info.can_take_back_ownership === '1',
         titleKey: 'risk_can_take_back_ownership_title',
         messageKey: 'risk_can_take_back_ownership_body',
-        shouldHide: (info: TokenSecurity) => info.can_take_back_ownership === undefined,
+        shouldHide: isUnset('can_take_back_ownership'),
     },
     // buy tax
     {
-        type: 'transaction-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => percentageToNumber(info.buy_tax) < 10,
         titleKey: 'risk_buy_tax_title',
@@ -113,10 +120,10 @@ export const SecurityMessages: SecurityMessage[] = [
             rate: `${percentageToNumber(info.buy_tax)}%`,
             quantity: '',
         }),
-        shouldHide: (info: TokenSecurity) => info.buy_tax === undefined,
+        shouldHide: isUnset('buy_tax'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) =>
             percentageToNumber(info.buy_tax) >= 10 && percentageToNumber(info.buy_tax) < 50,
@@ -126,10 +133,10 @@ export const SecurityMessages: SecurityMessage[] = [
             rate: `${percentageToNumber(info.buy_tax)}%`,
             quantity: '',
         }),
-        shouldHide: (info: TokenSecurity) => info.buy_tax === undefined,
+        shouldHide: isUnset('buy_tax'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.High,
         condition: (info: TokenSecurity) => percentageToNumber(info.buy_tax) >= 50,
         titleKey: 'risk_buy_tax_title',
@@ -138,11 +145,11 @@ export const SecurityMessages: SecurityMessage[] = [
             rate: `${percentageToNumber(info.buy_tax)}%`,
             quantity: '',
         }),
-        shouldHide: (info: TokenSecurity) => info.buy_tax === undefined,
+        shouldHide: isUnset('buy_tax'),
     },
     // sell tax
     {
-        type: 'transaction-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => percentageToNumber(info.sell_tax) < 10,
         titleKey: 'risk_sell_tax_title',
@@ -151,10 +158,10 @@ export const SecurityMessages: SecurityMessage[] = [
             rate: `${percentageToNumber(info.sell_tax)}%`,
             quantity: '',
         }),
-        shouldHide: (info: TokenSecurity) => info.sell_tax === undefined,
+        shouldHide: isUnset('sell_tax'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) =>
             percentageToNumber(info.sell_tax) >= 10 && percentageToNumber(info.sell_tax) < 50,
@@ -164,10 +171,10 @@ export const SecurityMessages: SecurityMessage[] = [
             rate: `${percentageToNumber(info.sell_tax)}%`,
             quantity: '',
         }),
-        shouldHide: (info: TokenSecurity) => info.sell_tax === undefined,
+        shouldHide: isUnset('sell_tax'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.High,
         condition: (info: TokenSecurity) => percentageToNumber(info.sell_tax) >= 50,
         titleKey: 'risk_sell_tax_title',
@@ -176,108 +183,142 @@ export const SecurityMessages: SecurityMessage[] = [
             rate: `${percentageToNumber(info.sell_tax)}%`,
             quantity: '',
         }),
-        shouldHide: (info: TokenSecurity) => info.sell_tax === undefined,
+        shouldHide: isUnset('sell_tax'),
     },
     // honeypot
     {
-        type: 'transaction-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => info.is_honeypot === '0',
         titleKey: 'risk_is_not_honeypot_title',
         messageKey: 'risk_is_not_honeypot_body',
-        shouldHide: (info: TokenSecurity) => info.is_honeypot === undefined,
+        shouldHide: isUnset('is_honeypot'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.High,
         condition: (info: TokenSecurity) => info.is_honeypot === '1',
         titleKey: 'risk_is_honeypot_title',
         messageKey: 'risk_is_honeypot_body',
-        shouldHide: (info: TokenSecurity) => info.is_honeypot === undefined,
+        shouldHide: isUnset('is_honeypot'),
     },
     // transfer_pausable
     {
-        type: 'transaction-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => info.transfer_pausable === '0',
         titleKey: 'risk_no_code_transfer_pausable_title',
         messageKey: 'risk_no_code_transfer_pausable_title',
-        shouldHide: (info: TokenSecurity) => info.transfer_pausable === undefined,
+        shouldHide: isUnset('transfer_pausable'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) => info.transfer_pausable === '1',
         titleKey: 'risk_transfer_pausable_title',
         messageKey: 'risk_transfer_pausable_body',
-        shouldHide: (info: TokenSecurity) => info.transfer_pausable === undefined,
+        shouldHide: isUnset('transfer_pausable'),
     },
     // anti whale
     {
-        type: 'transaction-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => info.is_anti_whale === '0',
         titleKey: 'risk_is_no_anti_whale_title',
         messageKey: 'risk_is_no_anti_whale_body',
-        shouldHide: (info: TokenSecurity) => info.is_anti_whale === undefined,
+        shouldHide: isUnset('is_anti_whale'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) => info.is_anti_whale === '1',
         titleKey: 'risk_is_anti_whale_title',
         messageKey: 'risk_is_anti_whale_body',
-        shouldHide: (info: TokenSecurity) => info.is_anti_whale === undefined,
+        shouldHide: isUnset('is_anti_whale'),
     },
     // slippage modifiable
     {
-        type: 'transaction-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => info.slippage_modifiable === '0',
         titleKey: 'risk_not_slippage_modifiable_title',
         messageKey: 'risk_not_slippage_modifiable_body',
-        shouldHide: (info: TokenSecurity) => info.slippage_modifiable === undefined,
+        shouldHide: isUnset('slippage_modifiable'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) => info.slippage_modifiable === '1',
         titleKey: 'risk_slippage_modifiable_title',
         messageKey: 'risk_slippage_modifiable_body',
-        shouldHide: (info: TokenSecurity) => info.slippage_modifiable === undefined,
+        shouldHide: isUnset('slippage_modifiable'),
     },
     // black list
     {
-        type: 'transaction-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => info.is_blacklisted === '0',
         titleKey: 'risk_not_is_blacklisted_title',
         messageKey: 'risk_not_is_blacklisted_body',
-        shouldHide: (info: TokenSecurity) => info.is_blacklisted === undefined,
+        shouldHide: isUnset('is_blacklisted'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) => info.is_blacklisted === '1',
         titleKey: 'risk_is_blacklisted_title',
         messageKey: 'risk_is_blacklisted_body',
-        shouldHide: (info: TokenSecurity) => info.is_blacklisted === undefined,
+        shouldHide: isUnset('is_blacklisted'),
     },
     // white list
     {
-        type: 'transaction-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => info.is_whitelisted === '0',
         titleKey: 'risk_not_is_whitelisted_title',
         messageKey: 'risk_not_is_whitelisted_body',
-        shouldHide: (info: TokenSecurity) => info.is_whitelisted === undefined,
+        shouldHide: isUnset('is_whitelisted'),
     },
     {
-        type: 'contract-security',
+        type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) => info.is_whitelisted === '1',
         titleKey: 'risk_is_whitelisted_title',
         messageKey: 'risk_is_whitelisted_body',
-        shouldHide: (info: TokenSecurity) => info.is_whitelisted === undefined,
+        shouldHide: isUnset('is_whitelisted'),
+    },
+    // true token
+    {
+        type: SecurityType.Info,
+        level: SecurityMessageLevel.Safe,
+        condition: (info: TokenSecurity) => info.is_true_token === '1',
+        titleKey: 'risk_is_true_token_title',
+        messageKey: 'risk_is_true_token_body',
+        shouldHide: isUnset('is_true_token'),
+    },
+    {
+        type: SecurityType.Info,
+        level: SecurityMessageLevel.High,
+        condition: (info: TokenSecurity) => info.is_true_token === '0',
+        titleKey: 'risk_not_is_true_token_title',
+        messageKey: 'risk_not_is_true_token_body',
+        shouldHide: isUnset('is_true_token'),
+    },
+    // Airdrop scam
+    {
+        type: SecurityType.Info,
+        level: SecurityMessageLevel.Safe,
+        condition: (info: TokenSecurity) => info.is_airdrop_scam === '0',
+        titleKey: 'risk_is_airdrop_scam_title',
+        messageKey: 'risk_is_airdrop_scam_body',
+        shouldHide: isUnset('is_airdrop_scam'),
+    },
+    {
+        type: SecurityType.Info,
+        level: SecurityMessageLevel.High,
+        condition: (info: TokenSecurity) => info.is_airdrop_scam === '1',
+        titleKey: 'risk_not_is_airdrop_scam_title',
+        messageKey: 'risk_not_is_airdrop_scam_body',
+        shouldHide: isUnset('is_airdrop_scam'),
     },
 ]

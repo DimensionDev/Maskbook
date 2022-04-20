@@ -1,5 +1,5 @@
-import type { TypedMessage, NonSerializableTypedMessage } from '../base'
-import { createIsType } from '../utils/internal'
+import type { TypedMessage, NonSerializableTypedMessage } from '../base.js'
+import { createIsType } from '../utils/internal.js'
 
 export interface TypedMessagePromise<T extends TypedMessage = TypedMessage> extends NonSerializableTypedMessage {
     readonly type: 'promise'

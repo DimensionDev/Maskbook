@@ -1,13 +1,12 @@
 import { Drop2Icon, LinkOutIcon, SuccessIcon } from '@masknet/icons'
+import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
-    PluginId,
-    useActivatedPlugin,
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
     useProviderDescriptor,
     useReverseAddress,
     useWeb3State,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/web3'
 import { InjectedDialog, NFTCardStyledAssetPlayer, WalletIcon } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -36,6 +35,7 @@ import { TipForm } from './TipForm'
 const useStyles = makeStyles()((theme) => ({
     dialog: {
         width: 600,
+        backgroundImage: 'none',
     },
     dialogTitle: {
         height: 60,
@@ -257,7 +257,12 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const walletChip = account ? (
         <div className={classes.walletChip}>
-            <WalletIcon size={30} networkIcon={providerDescriptor?.icon} providerIcon={networkDescriptor?.icon} />
+            <WalletIcon
+                size={30}
+                badgeSize={12}
+                networkIcon={providerDescriptor?.icon}
+                providerIcon={networkDescriptor?.icon}
+            />
             <div className={classes.wallet}>
                 <Typography ml={1} className={classes.walletTitle}>
                     {walletTitle}

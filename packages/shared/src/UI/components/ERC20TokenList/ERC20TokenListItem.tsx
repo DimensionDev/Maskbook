@@ -142,6 +142,7 @@ export const getERC20TokenListItem =
 
         return (
             <ListItem
+                key={address}
                 button
                 className={`${classes.list} dashboard token-list`}
                 onClick={handleTokenSelect}

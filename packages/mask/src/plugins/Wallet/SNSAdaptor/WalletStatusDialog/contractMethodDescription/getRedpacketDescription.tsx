@@ -6,8 +6,9 @@ import {
     isNativeTokenAddress,
     useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
+import type { ComputedPayload } from '../../../../../extension/background-script/EthereumServices/rpc'
 import { useI18N } from '../../../../../utils'
-import type { ContractMethodInfo, ComputedPayload } from '../type'
+import type { ContractMethodInfo } from '../type'
 
 export function getRedpacketDescription(
     { name, address, chainId }: ContractMethodInfo,
@@ -17,12 +18,15 @@ export function getRedpacketDescription(
 
     if (!isSameAddress(address, HAPPY_RED_PACKET_ADDRESS_V4)) return undefined
 
+    const transactionComputedPayloadParams =
+        (computedPayload && 'parameters' in computedPayload && computedPayload.parameters) || undefined
+
     switch (name) {
         case 'create_red_packet':
             return (
                 <CreateRedpacketDescription
-                    tokenAddress={computedPayload?.parameters?._token_addr ?? ''}
-                    tokenAmount={computedPayload?.parameters?._total_tokens}
+                    tokenAddress={transactionComputedPayloadParams?._token_addr ?? ''}
+                    tokenAmount={transactionComputedPayloadParams?._total_tokens!}
                 />
             )
         default:

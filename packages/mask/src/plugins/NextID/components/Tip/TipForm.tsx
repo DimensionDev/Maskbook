@@ -1,4 +1,4 @@
-import { useWeb3State } from '@masknet/plugin-infra'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'

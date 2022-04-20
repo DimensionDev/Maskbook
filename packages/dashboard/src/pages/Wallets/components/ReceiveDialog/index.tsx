@@ -7,7 +7,7 @@ import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContai
 import { useCopyToClipboard } from 'react-use'
 import { useCurrentSelectedWalletNetwork } from '../../api'
 import { NetworkType, resolveNetworkAddressPrefix } from '@masknet/web3-shared-evm'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
