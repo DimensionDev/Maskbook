@@ -1,6 +1,19 @@
 {
-    "name": "Example Plugin",
+    "name": "Traderxyz",
     "display_name": "Traderxyz",
-    "meta_attach_message": "Trader XYZ NFR Attached",
-    "__entry__": "🤔 Example"
+    "select_nft_heading": "What do you want to sell?",
+    "select_token_heading": "What do you want to receive?",
+    "preview_order_heading": "Confirm and Share",
+    "preview_order_subheading": " Ready to checkout! Take a final look to confirm your order?",
+    "preview_order_confirmation_title": "Waiting for your confirmation",
+    "preview_order_label_title1": "Buy",
+    "preview_order_label_title2": "and",
+    "preview_order_label_title3": "and Others",
+    "nft_tree_parent_title": "Collectibles & NFT",
+    "submit_order_signed_message": "Order is Signed",
+    "submit_order_submit_error_message": "Order has error",
+    "meta_attach_message": "Traderxyz NFT Attached",
+    "__plugin_name": "Traderxyz",
+    "__plugin_description": "Traderxyz plugin, sell NFT faster and cheaper.",
+    "__entry__": "Traderxyz"
 }

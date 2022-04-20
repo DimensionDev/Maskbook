@@ -32,7 +32,11 @@ const TreeChildContent = React.forwardRef(function CustomContent(
         handleSelection(event)
     }
     const child = (
-        <img alt="no-image" src="https://trader.xyz/images/missing-img-lg.png" style={{ width: 40, height: 40 }} />
+        <img
+            alt="no-image"
+            src={new URL('../assets/missing-img.png', import.meta.url).toString()}
+            style={{ width: 40, height: 40 }}
+        />
     )
     return (
         <div

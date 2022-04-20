@@ -6,7 +6,7 @@ import { Box, Button, Chip, Grid, Typography, useTheme } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useI18N } from '../locales/i18n_generated'
 import { usePluginWrapper, usePostInfo } from '@masknet/plugin-infra/content-script'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { getTraderApi } from '../apis/nftswap'
 import type { TradeMetaData, nftData } from '../types'
 import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
@@ -116,7 +116,8 @@ const useStyles = makeStyles()((theme, props) => ({
  */
 
 export function PostPreview({ info }: { info: TradeMetaData }) {
-    const nftSwapSdk = getTraderApi()
+    const selectedChainId = useChainId()
+    const nftSwapSdk = getTraderApi(selectedChainId)
     const account = useAccount()
     const { classes } = useStyles()
     const t = useI18N()

@@ -7,6 +7,47 @@ import { Fade, Grid, Typography, Avatar } from '@mui/material'
 import * as React from 'react'
 import clsx from 'clsx'
 import type { TreeNftData } from '../../types'
+import { makeStyles } from '@masknet/theme'
+import { CheckIcon } from './SvgIcons'
+
+const useStyles = makeStyles()((theme) => {
+    return {
+        itemWrapper: {
+            color: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
+            height: 128,
+            margin: 10,
+            border: '0x solid blue',
+            width: 'auto',
+            float: 'left',
+        },
+        itemLabel: {
+            width: '100px',
+            border: '0px solid red',
+            float: 'left',
+            display: 'block',
+            color: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
+            paddingLeft: '0px !important',
+        },
+        itemAvtar: {
+            width: '100px',
+            height: '100px',
+            border: '0px solid red',
+            float: 'left',
+            display: 'block',
+            borderRadius: '10px',
+            color: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
+            paddingLeft: '0px !important',
+        },
+        checkBoxContainer: {
+            position: 'relative',
+            display: 'block',
+            right: '-65px',
+            top: '0px',
+            height: '32px',
+            width: '32px',
+        },
+    }
+})
 
 const TreeChildItemContent = React.forwardRef(function CustomContent(
     props: TreeItemContentProps & {
@@ -16,7 +57,9 @@ const TreeChildItemContent = React.forwardRef(function CustomContent(
     },
     ref,
 ) {
-    const { classes, className, label, nodeId, icon: iconProp, expansionIcon, displayIcon, handleSelection } = props
+    const customClasses = useStyles().classes
+
+    const { classes, label, nodeId, icon: iconProp, expansionIcon, displayIcon, handleSelection } = props
 
     const nftData = props.nftData
 
@@ -35,17 +78,18 @@ const TreeChildItemContent = React.forwardRef(function CustomContent(
     // in your component
     // https://trader.xyz/images/missing-img-lg.png
     const child = (
-        <img alt="no-image" src="https://trader.xyz/images/missing-img-lg.png" style={{ width: 100, height: 100 }} />
+        <img
+            alt="no-image"
+            src={new URL('../assets/missing-img.png', import.meta.url).toString()}
+            style={{ width: 100, height: 100 }}
+        />
     )
+
     return (
         <Fade in key={nodeId}>
             <div
                 key={nodeId}
-                style={{
-                    width: '100px',
-                    border: '0px solid green',
-                }}
-                className={clsx(className, classes.root, {
+                className={clsx(customClasses.itemWrapper, classes.root, {
                     [classes.expanded]: expanded,
                     [classes.selected]: selected,
                     [classes.focused]: focused,
@@ -55,75 +99,15 @@ const TreeChildItemContent = React.forwardRef(function CustomContent(
                 ref={ref as React.Ref<HTMLDivElement>}>
                 <Grid container direction="column" justifyContent="center" alignItems="center">
                     <Grid item>
-                        <Avatar
-                            style={{
-                                width: '100px',
-                                height: '100px',
-                                borderRadius: 10,
-                                position: 'relative',
-                                right: '0px',
-                                border: '0px solid purple',
-                                float: 'left',
-                                display: 'block',
-                            }}
-                            children={child}
-                            src={nftData?.image_preview_url}
-                        />
+                        <Avatar className={customClasses.itemAvtar} children={child} src={nftData?.image_preview_url} />
                         {nftData?.is_selected === true && (
-                            <div
-                                style={{
-                                    position: 'relative',
-                                    display: 'block',
-                                    right: '-65px',
-                                    top: '0px',
-                                    height: '32px',
-                                    width: '32px',
-                                }}>
-                                <svg
-                                    style={{
-                                        position: 'absolute',
-                                        display: 'block',
-                                        alignItems: 'center',
-                                        right: '0px',
-                                        top: '0px',
-                                        borderRadius: '100%',
-                                        height: '32px',
-                                        width: '32px',
-                                        background: 'rgb(153, 255, 120)',
-                                        border: '2px solid rgb(255, 255, 255)',
-                                        boxShadow: 'rgb(0 0 0 / 4%) 0px 6px 40px, rgb(0 0 0 / 2%) 0px 3px 6px',
-                                    }}
-                                    viewBox="0 0 2 2"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <ellipse
-                                        style={{
-                                            fill: 'rgb(153, 255, 120)',
-                                            stroke: '0px rgb(255,255,255)',
-                                        }}
-                                        cx="1.026"
-                                        cy="0.979"
-                                        rx="0.899"
-                                        ry="0.899"
-                                    />
-                                    <path
-                                        fill="#000"
-                                        d="M 0.521 0.988 L 0.623 0.881 L 0.827 1.035 C 1.004 0.838 1.234 0.697 1.489 0.627 L 1.54 0.729 C 1.54 0.729 1.053 0.932 0.818 1.37 L 0.521 0.988 Z"
-                                    />
-                                </svg>
+                            <div className={customClasses.checkBoxContainer}>
+                                <CheckIcon />
                             </div>
                         )}
                     </Grid>
                     <Grid item>
-                        <Typography
-                            style={{
-                                width: '100px',
-                                border: '0px solid red',
-                                float: 'left',
-                                display: 'block',
-                                color: 'white',
-                            }}
-                            component="div"
-                            className={classes.label}>
+                        <Typography component="div" className={customClasses.itemLabel}>
                             {label}
                         </Typography>
                     </Grid>

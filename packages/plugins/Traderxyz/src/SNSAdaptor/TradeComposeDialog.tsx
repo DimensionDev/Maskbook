@@ -9,42 +9,40 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useChainId, useAccount } from '@masknet/plugin-infra/web3'
 import { type FungibleTokenDetailed, ChainId } from '@masknet/web3-shared-evm'
 import { useEffect, useState } from 'react'
-// import { getNftList } from '../helpers'
+import { amountToWei } from '../helpers'
 import { getTraderApi } from '../apis/nftswap'
 import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
 import { SelectTokenView } from './SelectTokenView'
 import { PreviewOrderView } from './PreviewOrderView'
 import NftListView from './components/NftListView'
+import { useI18N } from '../locales/i18n_generated'
 
-import type { OpeanSeaToken, OpenSeaCollection, Token, AssetContract, PreviewNftList } from '../types'
+import { OPENSEA_API_KEY, isProxyENV } from '@masknet/web3-providers'
+
+import type { OpeanSeaToken, OpenSeaCollection, Token, AssetContract, PreviewNftList, nftData } from '../types'
 
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 
-export enum TokenPanelType {
-    Input = 0,
-    Output = 1,
+interface nfts {
+    tokenAddress: string
+    tokenId: string
+    type: string
 }
-
 interface orderInfo {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [key: string]: any
-    receiving_token: object
-}
-
-/** todo*/
-export function isProxyENV() {
-    try {
-        return process.env.PROVIDER_API_ENV === 'proxy'
-    } catch {
-        return false
+    nfts: nfts[] | undefined | null
+    receiving_token: {
+        tokenAddress: string | undefined
+        amount: string
+        type: string
+    }
+    preview_info: {
+        nftMediaUrls: nftData[] | undefined
+        receivingSymbol: {
+            symbol: string | undefined
+            amount: string
+        }
     }
 }
-
-export const OPENSEA_API_KEY = 'c38fe2446ee34f919436c32db480a2e3'
-
-// import { OPENSEA_API_KEY, isProxyENV } from '@masknet/web3-providers'
-// import { OPENSEA_API_KEY } from '../../../../web3-providers/src/opensea/constants'
-// import { isProxyENV } from '../../../../web3-providers/src/helpers'
 
 interface Props {
     onClose: () => void
@@ -63,15 +61,15 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         },
         button: {
             borderRadius: 26,
-            background: '#D9D9D9',
+            background: theme.palette.mode === 'dark' ? '##D9D9D9' : '0F1419',
             marginTop: 24,
             fontSize: 14,
             fontWeight: 400,
             lineHeight: 2.5,
             paddingLeft: 35,
-            color: '#0F1419',
+            color: theme.palette.mode === 'dark' ? '#0F1419' : '#ffffff',
             paddingRight: 35,
-            width: '563px',
+            width: '100%',
         },
         disabledButton: {
             borderRadius: 26,
@@ -151,12 +149,24 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             fontSize: '14px',
             color: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
         },
+        paper: {
+            width: '600px !important',
+            maxWidth: 'none',
+            boxShadow: 'none',
+            backgroundImage: 'none',
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                display: 'block !important',
+                margin: 12,
+            },
+        },
     }
 })
 
 // const { onClose, open } = props
 // const { onClose, open } = props
 const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
+    const t = useI18N()
+
     // APP BASE VARS
     const isDashboard = isDashboardPage()
     const isPopup = isPopupPage()
@@ -172,11 +182,10 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     const [openBd, setBdOpen] = useState(false)
 
     const selectedChainId = useChainId()
-    // console.log('selectedChainId=', selectedChainId)
     const [token, setToken] = useState<FungibleTokenDetailed | null>()
     const [inputAmount, setInputAmount] = useState<string>('0')
     const [orderInfo, setOrderInfo] = useState<orderInfo>()
-    const nftSwapSdk = getTraderApi()
+    const nftSwapSdk = getTraderApi(selectedChainId)
     const account = useAccount()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
@@ -186,7 +195,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
 
     useEffect(() => {
         // // declare the data fetching function
-        const fetchData1 = async () => {
+        const fetchNftData = async () => {
             const headers: HeadersInit =
                 ChainId.Rinkeby === selectedChainId
                     ? { Accept: 'application/json' }
@@ -206,7 +215,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
         }
 
         // call the function
-        fetchData1()
+        fetchNftData()
             .then(async (response) => {
                 if (response.ok) {
                     const result = await response.json()
@@ -257,42 +266,62 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                 return true
             })
             .catch(console.error)
-    }, [selectedChainId])
+    }, [selectedChainId, account])
 
+    //  on amount change in select token area
     const onAmountChange = (token: FungibleTokenDetailed, amount: string) => {
         setToken(token)
         setInputAmount(amount)
-        console.log('onAmountChange-token=', token)
-        console.log('onAmountChange-amount=', amount)
     }
 
+    //  on NFT image click to selct
     const handleSelection = (collection_index: number, item_index: number, type: string) => {
         const p = previewNftList
         p
             ? (p[collection_index].tokens[item_index].is_selected = !p[collection_index].tokens[item_index].is_selected)
             : p
         setPreviewNftList(p)
-        setCount(count + 1)
+        setCount(count + 1) // This is the heck to re-render the whole view
     }
 
+    //  Enable dynamic view section
     const setDisplaySection = (step1: boolean, step2: boolean, step3: boolean) => {
         setState1(step1)
         setState2(step2)
         setState3(step3)
     }
 
+    //  Submit order to traderXYZ sdk
     const submitOrder = async () => {
-        const assetsToSwapUserA = [...orderInfo?.nfts, orderInfo?.receiving_token]
+        // const MY_NFT = {
+        //     tokenAddress: '0xeE897A2c8637f27F9B8FB324E36361ef03ec7Ae4', // MEOCAT2 NFT ON rinkeby
+        //     tokenId: '2',
+        //     type: 'ERC721',
+        // }
 
-        console.log('assetsToSwapUser[0]=', assetsToSwapUserA)
+        // const MY_NFT1 = {
+        //     tokenAddress: '0xee897a2c8637f27f9b8fb324e36361ef03ec7ae4', // MEOCAT2 NFT ON rinkeby
+        //     tokenId: '3',
+        //     type: 'ERC721',
+        // }
+
+        // const SIXTY_NINE_USDC = {
+        //     tokenAddress: '0xc778417e063141139fce010982780140aa0cd5ab', // WETH contract address
+        //     amount: '100000000000000', // 0.0001 WETH (WETH is 6 digits)
+        //     type: 'ERC20',
+        // }
+
+        const assetsToSwapUserA = [orderInfo?.nfts, orderInfo?.receiving_token].flat(1)
+        // const assetsToSwapUserA = [MY_NFT, MY_NFT1, SIXTY_NINE_USDC]
+
+        // console.log('assetsToSwapUserA1=', assetsToSwapUserA)
+        // console.log('assetsToSwapUserA1-account-', account)
 
         // Check if we need to approve the NFT for swapping
         const approvalStatusForUserA = await nftSwapSdk
             .loadApprovalStatus(assetsToSwapUserA[0] as SwappableAsset, account)
             .then(
                 async (result) => {
-                    //             alert('fine')
-                    console.log('approvalStatusForUserA=', result)
                     if (!result.contractApproved) {
                         const approvalTx = await nftSwapSdk.approveTokenOrNftByAsset(
                             assetsToSwapUserA[0] as SwappableAsset,
@@ -300,16 +329,13 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                         )
                         const approvalTxReceipt = await approvalTx.wait()
                         showSnackbar(
-                            `Approved ${assetsToSwapUserA[0].tokenAddress} contract to swap with 0x (txHash: ${approvalTxReceipt?.transactionHash})`,
+                            `Approved ${assetsToSwapUserA[0]?.tokenAddress} contract to swap with 0x (txHash: ${approvalTxReceipt?.transactionHash})`,
                             { variant: 'success' },
                         )
-                        // console.log(
-                        //     `Approved ${assetsToSwapUserA[0].tokenAddress} contract to swap with 0x (txHash: ${approvalTxReceipt?.transactionHash})`,
-                        // )
                     }
                     if (result.contractApproved) {
                         const order = nftSwapSdk.buildOrder(
-                            [...orderInfo?.nfts] as SwappableAsset[], // Maker asset(s) to swap
+                            orderInfo?.nfts as SwappableAsset[], // Maker asset(s) to swap
                             [orderInfo?.receiving_token] as SwappableAsset[], // Taker asset(s) to swap
                             account,
                         )
@@ -317,9 +343,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                         const signedOrder = await nftSwapSdk.signOrder(order, account).then(
                             (result) => {
                                 setBdOpen(false)
-                                showSnackbar('Order is Signed', { variant: 'success' })
-                                // console.log('Order is Signed=', result) //
-                                // setSignedOrderData(result)
+                                showSnackbar(t.submit_order_signed_message(), { variant: 'success' })
                                 const d = {
                                     assetsInfo: orderInfo,
                                     signedOrder: result,
@@ -330,32 +354,15 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                             },
                             function (error) {
                                 setBdOpen(false)
-                                showSnackbar('Order has error:' + error, { variant: 'error' })
+                                showSnackbar(t.submit_order_submit_error_message() + error, { variant: 'error' })
                             },
                         )
                     }
                 },
                 function (error) {
-                    showSnackbar('Order has error:' + error, { variant: 'error' })
+                    showSnackbar(t.submit_order_submit_error_message() + error, { variant: 'error' })
                 },
             )
-    }
-
-    function strtodec(amount: string, dec: number | undefined) {
-        // let i = 0
-        // if (amount.toString().indexOf('.') !== -1) {
-        //     i = amount.toString().length - (amount.toString().indexOf('.') + 1)
-        // }
-        // let stringf = (amount.toString().split('.').join('') * 1).toString()
-
-        // if (dec < i) {
-        //     console.warn('strtodec: amount was truncated')
-        //     stringf = stringf.substring(0, stringf.length - (i - dec))
-        // } else {
-        //     stringf = stringf + '0'.repeat(dec - i)
-        // }
-        // return stringf
-        return amount
     }
 
     const setPreviewOrderData = () => {
@@ -383,9 +390,9 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
             }
         })
 
-        console.log('previewOrder-nfts=', nfts)
+        // console.log('previewOrder-nfts=', nfts)
 
-        const am = strtodec(inputAmount, token?.decimals)
+        const am = amountToWei(inputAmount, token ? token.decimals : 0)
 
         const previewInfo = {
             nftMediaUrls: nftMediaInfo,
@@ -409,8 +416,8 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
 
         setOrderInfo(orderInfo)
 
-        console.log('previewOrder-tokens=', receivingToken)
-        console.log('previewOrder-orderInfo=', orderInfo)
+        // console.log('previewOrder-tokens=', receivingToken)
+        // console.log('previewOrder-orderInfo=', orderInfo)
     }
 
     const nextButtonSection = () => {
@@ -468,17 +475,12 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     }
 
     const selectNftSection = () => {
+        if (!step1) return
         return (
-            <Grid
-                container
-                spacing={0}
-                direction="column"
-                justifyContent="space-between"
-                alignItems="stretch"
-                style={{ display: step1 ? 'block' : 'none' }}>
+            <Grid container spacing={0} direction="column" justifyContent="space-between" alignItems="stretch">
                 <Grid item style={{ paddingTop: '10px' }}>
                     <Typography variant="h5" className={classes.mainTitle}>
-                        What do you want to sell??
+                        {t.select_nft_heading()}
                     </Typography>
                 </Grid>
                 <Grid item style={{ paddingTop: '10px' }}>
@@ -490,14 +492,9 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     }
 
     const selecTokenSection = () => {
+        if (!step2) return
         return (
-            <Grid
-                container
-                spacing={0}
-                direction="column"
-                justifyContent="space-between"
-                alignItems="stretch"
-                style={{ display: step2 ? 'block' : 'none' }}>
+            <Grid container spacing={0} direction="column" justifyContent="space-between" alignItems="stretch">
                 <Grid item style={{ paddingTop: '10px' }}>
                     <SelectTokenView
                         classes={classes}
@@ -517,15 +514,8 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
         const amountLabel =
             orderInfo?.preview_info?.receivingSymbol?.amount + ' ' + orderInfo?.preview_info?.receivingSymbol?.symbol
         const m = orderInfo?.preview_info?.nftMediaUrls
-        console.log('nftList=', m)
         return (
-            <Grid
-                container
-                spacing={0}
-                direction="column"
-                justifyContent="space-between"
-                alignItems="stretch"
-                style={{ display: step3 ? 'block' : 'none' }}>
+            <Grid container spacing={0} direction="column" justifyContent="space-between" alignItems="stretch">
                 <Grid item style={{ paddingTop: '10px' }}>
                     <PreviewOrderView
                         classes={classes}
@@ -538,10 +528,18 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
         )
     }
 
+    const onDecline = () => {
+        dropMetadata(META_KEY)
+        onClose()
+    }
+
     return (
-        <MaskDialog open={open} title="Traderxyz" onClose={onClose}>
+        <MaskDialog
+            DialogProps={{ scroll: 'paper', classes: { paper: classes.paper } }}
+            open={open}
+            title={t.display_name()}
+            onClose={onDecline}>
             <DialogContent>
-                {/* <pre>{JSON.stringify(previewNftList, null, 2)}</pre> */}
                 {selectNftSection()}
                 {selecTokenSection()}
                 {previewOrderSection()}

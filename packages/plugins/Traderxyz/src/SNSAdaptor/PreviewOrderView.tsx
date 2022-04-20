@@ -1,17 +1,15 @@
-// /* eslint-disable no-restricted-imports */
-// /* eslint-disable spaced-comment */
-// /* eslint-disable eqeqeq */
-// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Chip, Grid, IconButton, Typography, Avatar } from '@mui/material'
 import { ArrowBack } from '@mui/icons-material'
 import type { nftData } from '../types'
+import { useI18N } from '../locales/i18n_generated'
 
 export const PreviewOrderView = (props: {
-    nftList: nftData[]
+    nftList: nftData[] | undefined
     setDisplaySection: Function
     classes: Record<string, string>
     amountLabel: string
 }): JSX.Element => {
+    const t = useI18N()
     const { nftList, classes, amountLabel } = props
     const child = (
         <img
@@ -37,16 +35,18 @@ export const PreviewOrderView = (props: {
     })
 
     let labelString = ''
+    const n = nftList
+    if (n) {
+        if (n?.length > 0) {
+            labelString = `${t.preview_order_label_title1()} ${n[0]?.nft_name} (#${n[0]?.nft_id})`
 
-    if (nftList?.length > 0) {
-        labelString = `Buy ${nftList[0]?.nft_name} (#${nftList[0]?.nft_id})`
+            if (n?.length === 2) {
+                labelString += ` ${t.preview_order_label_title2()} ${n[1]?.nft_name} (#${n[1]?.nft_id})`
+            }
 
-        if (nftList?.length === 2) {
-            labelString += ` and ${nftList[1]?.nft_name} (#${nftList[1]?.nft_id})`
-        }
-
-        if (nftList?.length > 2) {
-            labelString += ' and Others'
+            if (n?.length > 2) {
+                labelString += ` ${t.preview_order_label_title3()}`
+            }
         }
     }
 
@@ -65,13 +65,13 @@ export const PreviewOrderView = (props: {
                         </IconButton>
                     </Grid>
                     <Grid item xs={10}>
-                        <Typography variant="h4" className={classes.mainTitle}>
-                            Confirm and Share
+                        <Typography variant="h5" className={classes.mainTitle}>
+                            {t.preview_order_heading()}
                         </Typography>
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant="h6" className={classes.mainTitle}>
-                            Ready to checkout! Take a final look to confirm your order?
+                            {t.preview_order_subheading()}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -96,7 +96,7 @@ export const PreviewOrderView = (props: {
                                 paddingBottom={1}
                                 variant="subtitle2"
                                 className={classes.previewBoxInnerGridFooterTitle2}>
-                                Waiting for your confirmation
+                                {t.preview_order_confirmation_title()}
                             </Typography>
                         </Grid>
                     </Grid>

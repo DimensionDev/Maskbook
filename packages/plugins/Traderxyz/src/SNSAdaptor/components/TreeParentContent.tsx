@@ -24,19 +24,15 @@ const TreeParentContent = React.forwardRef(function CustomContent(
         console.log('expanded', expanded)
     }
 
-    // style={{
-    //     width: '32px',
-    //     borderRadius: 99,
-    //     position: 'relative',
-    //     right: getNftPrevewPositon(index),
-    //     float: 'left',
-    //     border: '1px solid white',
-    // }}
     const child = (
-        <img alt="no-image" src="https://trader.xyz/images/missing-img-lg.png" style={{ width: 40, height: 40 }} />
+        <img
+            alt="no-image"
+            src={new URL('../assets/missing-img.png', import.meta.url).toString()}
+            style={{ width: 40, height: 40 }}
+        />
     )
     const ShowNft = previewImages?.map((item, index) => {
-        return <Avatar key={`pimage-${index}`} alt="Remy Sharp" children={child} src={item} />
+        return <Avatar key={`pimage-${index}`} alt="-" children={child} src={item} />
     })
 
     return (

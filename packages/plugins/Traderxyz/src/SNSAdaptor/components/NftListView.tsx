@@ -13,20 +13,13 @@ import TreeChildItemContent from './TreeChildItemContent'
 
 import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem'
 import { alpha, styled } from '@mui/material/styles'
+import { useI18N } from '../../locales/i18n_generated'
 
-const useStyles = makeStyles()(() => {
+const useStyles = makeStyles()((theme) => {
     return {
-        wrapper: {
-            color: 'black',
-            height: 128,
-            margin: 10,
-            border: '0x solid blue',
-            width: 'auto',
-            float: 'left',
-        },
         label: {
-            color: 'black',
-            paddingLeft: '20px',
+            color: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
+            paddingLeft: '20px !important',
         },
     }
 })
@@ -37,19 +30,7 @@ const NftListView = (props: {
     handleSelection(collection_index: number, item_index: number, type: string): void
 }): JSX.Element => {
     const { classes } = useStyles()
-    const myComponentStyle1 = {
-        color: 'white',
-        border: '0px solid blue',
-        display: 'block',
-    }
-
-    const previewImages: string[] | null | undefined = props?.nftList
-        ?.map((x) => x?.tokens)
-        .flat()
-        .map((y) => {
-            return y?.image_preview_url
-        })
-        .slice(0, 3)
+    const t = useI18N()
 
     const CustomTreeParent = styled(
         (props: TreeItemProps & { ContentProps?: { previewImages: string[] | null | undefined } }) => (
@@ -71,9 +52,11 @@ const NftListView = (props: {
         },
     }))
 
-    const CustomTreeChild = styled((props: TreeItemProps & { ContentProps?: { collectionImage: string } }) => (
-        <TreeItem {...props} ContentComponent={TreeChildContent} />
-    ))(({ theme }) => ({
+    const CustomTreeChild = styled(
+        (props: TreeItemProps & { ContentProps?: { collectionImage: string | undefined } }) => (
+            <TreeItem {...props} ContentComponent={TreeChildContent} />
+        ),
+    )(({ theme }) => ({
         [`& .${treeItemClasses.iconContainer}`]: {
             '& .close': {
                 opacity: 0.3,
@@ -95,7 +78,6 @@ const NftListView = (props: {
                     nftData?: TreeNftData
                     handleSelection?(collection_index: number, item_index: number, type: string): void
                 }
-                className: string
             },
         ) => <TreeItem {...props} className={props.className} ContentComponent={TreeChildItemContent} />,
     )(({ theme }) => ({
@@ -112,18 +94,16 @@ const NftListView = (props: {
     }))
 
     const collectionItemList = props?.nftList?.map((item, index) => {
-        const collectionImage = 'item?.tokens?item.tokens[0]?.image_preview_url'
+        const collectionImage = item.tokens[0].image_preview_url
         return (
             <CustomTreeChild
                 nodeId={'p-' + index}
                 key={'p-' + index}
-                style={myComponentStyle1}
+                classes={{ label: classes.label }}
                 label={item.collection_name}
                 ContentProps={{ collectionImage: collectionImage }}>
                 {item?.tokens?.map((item, i) => (
                     <CustomTreeChildItem
-                        className={classes.wrapper}
-                        classes={{ label: classes.label }}
                         nodeId={'p-' + index + 'c-' + i}
                         key={'p-' + index + 'c-' + i}
                         label={item.name}
@@ -144,6 +124,14 @@ const NftListView = (props: {
         )
     })
 
+    const previewImages1 = props?.nftList
+        ?.map((x) => x?.tokens)
+        .flat()
+        .map((y) => {
+            return y?.image_preview_url
+        })
+        .slice(0, 3)
+
     return (
         <TreeView
             aria-label="icon expansion"
@@ -154,8 +142,8 @@ const NftListView = (props: {
             <CustomTreeParent
                 nodeId="mp0"
                 key="mp0"
-                label="Collectibles & NFTs3"
-                ContentProps={{ previewImages: previewImages }}>
+                label={t.nft_tree_parent_title()}
+                ContentProps={{ previewImages: previewImages1 }}>
                 {collectionItemList}
             </CustomTreeParent>
         </TreeView>

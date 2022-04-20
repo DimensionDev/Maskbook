@@ -34,7 +34,7 @@ export const SelectTokenView = (props: SelectTokenView): JSX.Element => {
     const t = useI18N()
 
     const { inputToken } = props
-    console.log('inputToken=', inputToken)
+    // console.log('inputToken=', inputToken)
     const [inputTokenBalance, setInputTokenBalance] = useState<string>('0')
 
     const chainId = props.chainId
@@ -60,10 +60,10 @@ export const SelectTokenView = (props: SelectTokenView): JSX.Element => {
                 selectedTokens: excludeTokens,
             })
             if (picked) {
-                console.log('picked=', picked)
+                // console.log('picked=', picked)
                 // setToken(picked)
                 // #region update balance
-                console.log('tokenBalance=', inputTokenBalance_)
+                // console.log('tokenBalance=', inputTokenBalance_)
                 props.onAmountChange(picked, props.inputTokenAmount)
                 // setInputTokenBalance(inputTokenBalance_)
             }
@@ -89,8 +89,8 @@ export const SelectTokenView = (props: SelectTokenView): JSX.Element => {
                         </IconButton>
                     </Grid>
                     <Grid item xs={10}>
-                        <Typography variant="h4" className={props.classes.mainTitle}>
-                            What do you want to receive?
+                        <Typography variant="h5" className={props.classes.mainTitle}>
+                            {t.select_nft_heading()}
                         </Typography>
                     </Grid>
                 </Grid>
