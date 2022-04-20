@@ -86,6 +86,6 @@ export interface OpenSeaCollection {
     name: string
 }
 
-export interface OpeanSeaToken {
+export interface OpenSeaToken {
     asset_contract: OpenSeaAssetContract
 }

@@ -1,7 +1,3 @@
-// /* eslint-disable no-restricted-imports */
-// /* eslint-disable spaced-comment */
-// /* eslint-disable eqeqeq */
-// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useI18N } from '../locales/i18n_generated'
 import { InputTokenPanel } from '../../../../../packages/mask/src/plugins/Trader/SNSAdaptor/trader/InputTokenPanel'
 import { TokenPanelType } from '../../../../../packages/mask/src/plugins/Trader/types'

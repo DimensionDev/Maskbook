@@ -1,7 +1,3 @@
-// /* eslint-disable no-restricted-imports */
-// /* eslint-disable spaced-comment */
-// /* eslint-disable eqeqeq */
-// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TreeItemContentProps, useTreeItem } from '@mui/lab/TreeItem'
 import { Typography, Avatar } from '@mui/material'
 import * as React from 'react'

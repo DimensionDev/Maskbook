@@ -1,5 +1,3 @@
-// /* eslint-disable eqeqeq */
-// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, DialogActions, DialogContent, Grid, Typography } from '@mui/material'
 import { makeStyles, MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -19,7 +17,7 @@ import { useI18N } from '../locales/i18n_generated'
 
 import { OPENSEA_API_KEY, isProxyENV } from '@masknet/web3-providers'
 
-import type { OpeanSeaToken, OpenSeaCollection, Token, AssetContract, PreviewNftList, nftData } from '../types'
+import type { OpenSeaToken, OpenSeaCollection, Token, AssetContract, PreviewNftList, nftData } from '../types'
 
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 
@@ -228,7 +226,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
 
                     const final = asset_contract.map((filteredAddress) => {
                         const t = result.assets
-                            .filter((ele1: OpeanSeaToken) => ele1.asset_contract.address === filteredAddress)
+                            .filter((ele1: OpenSeaToken) => ele1.asset_contract.address === filteredAddress)
                             .map(function (ele2: Token) {
                                 return {
                                     id: ele2.id,
@@ -273,7 +271,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
         setInputAmount(amount)
     }
 
-    //  on NFT image click to selct
+    //  on NFT image click to select
     const handleSelection = (collection_index: number, item_index: number, type: string) => {
         const p = previewNftList
         p
@@ -294,13 +292,13 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     const submitOrder = async () => {
         // SAMPLE TO TEST SDK
         // const MY_NFT = {
-        //     tokenAddress: '0xeE897A2c8637f27F9B8FB324E36361ef03ec7Ae4', // MEOCAT2 NFT ON rinkeby
+        //     tokenAddress: '0xeE897A2c8637f27F9B8FB324E36361ef03ec7Ae4', // MEO CAT2 NFT ON rinkeby
         //     tokenId: '2',
         //     type: 'ERC721',
         // }
 
         // const MY_NFT1 = {
-        //     tokenAddress: '0xee897a2c8637f27f9b8fb324e36361ef03ec7ae4', // MEOCAT2 NFT ON rinkeby
+        //     tokenAddress: '0xee897a2c8637f27f9b8fb324e36361ef03ec7ae4', // MEO CAT2 NFT ON rinkeby
         //     tokenId: '3',
         //     type: 'ERC721',
         // }
@@ -483,7 +481,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
         )
     }
 
-    const selecTokenSection = () => {
+    const selectTokenSection = () => {
         if (!step2) return
         return (
             <Grid container spacing={0} direction="column" justifyContent="space-between" alignItems="stretch">
@@ -533,7 +531,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
             onClose={onDecline}>
             <DialogContent>
                 {selectNftSection()}
-                {selecTokenSection()}
+                {selectTokenSection()}
                 {previewOrderSection()}
             </DialogContent>
             <DialogActions>{nextButtonSection()}</DialogActions>

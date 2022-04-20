@@ -1,7 +1,3 @@
-// /* eslint-disable no-restricted-imports */
-// /* eslint-disable spaced-comment */
-// /* eslint-disable eqeqeq */
-// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { makeStyles } from '@masknet/theme'
 import TreeView from '@mui/lab/TreeView'
 import { AddCircle, RemoveCircle } from '@mui/icons-material'

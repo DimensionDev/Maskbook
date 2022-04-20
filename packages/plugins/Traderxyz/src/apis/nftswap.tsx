@@ -1,5 +1,4 @@
 import { NftSwap } from '@traderxyz/nft-swap-sdk'
-// import { createExternalProvider } from '../../../../mask/src/web3/helpers'
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers'
 import { getNetworkName, useWeb3Provider } from '@masknet/web3-shared-evm'
 

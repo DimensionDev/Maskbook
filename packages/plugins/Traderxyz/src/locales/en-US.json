@@ -21,6 +21,6 @@
     "order_expired": "Order is Expired",
     "order_cancelled": "Order is Cancelled",
     "order_invalid": "Invalid Order",
-    "order_invlid_maker": "Invalid Maker Asset Amount",
-    "order_invlid_taker": "Invalid Taker Asset Amount"
+    "order_invalid_maker": "Invalid Maker Asset Amount",
+    "order_invalid_taker": "Invalid Taker Asset Amount"
 }

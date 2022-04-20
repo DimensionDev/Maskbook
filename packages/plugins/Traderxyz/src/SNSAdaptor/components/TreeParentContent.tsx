@@ -1,7 +1,3 @@
-// /* eslint-disable no-restricted-imports */
-// /* eslint-disable spaced-comment */
-// /* eslint-disable eqeqeq */
-// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TreeItemContentProps, useTreeItem } from '@mui/lab/TreeItem'
 import { Avatar, Fade, Typography, AvatarGroup } from '@mui/material'
 import * as React from 'react'
@@ -31,7 +27,7 @@ const TreeParentContent = React.forwardRef(function CustomContent(
         />
     )
     const ShowNft = previewImages?.map((item, index) => {
-        return <Avatar key={`pimage-${index}`} alt="-" children={child} src={item} />
+        return <Avatar key={`p-image-${index}`} alt="-" children={child} src={item} />
     })
 
     return (

@@ -1,7 +1,3 @@
-// /* eslint-disable no-restricted-imports */
-// /* eslint-disable spaced-comment */
-// /* eslint-disable eqeqeq */
-// /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { setupContext } from './context'

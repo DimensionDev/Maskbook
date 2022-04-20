@@ -1,7 +1,3 @@
-// /* eslint-disable no-restricted-imports */
-// /* eslint-disable spaced-comment */
-// /* eslint-disable eqeqeq */
-// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, Chip, Grid, Typography, useTheme } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useI18N } from '../locales/i18n_generated'
@@ -112,7 +108,7 @@ const useStyles = makeStyles()((theme, props) => ({
 }))
 
 /**
- * This page we use to fullfill order
+ * This page we use to full fill order
  */
 
 export function PostPreview({ info }: { info: TradeMetaData }) {
@@ -152,7 +148,7 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
         //         ].join('\n'),
         //     )
         //     .toString()
-        // console.log('usePostshareLink=', shareLink)
+        // console.log('use-Post-shareLink=', shareLink)
     }
 
     const signOrder = async () => {
@@ -231,7 +227,7 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
                             }
                         },
                         (error) =>
-                            showSnackbar(t.submit_order_submit_error_message() + ' fillTxReceipterror :' + error, {
+                            showSnackbar(t.submit_order_submit_error_message() + ' fillTxReceipt error :' + error, {
                                 variant: 'error',
                             }),
                     )
@@ -267,12 +263,12 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
 
         if (orderStatus === 1) {
             // Invalid
-            showSnackbar(t.order_invlid_maker(), { variant: 'error' })
+            showSnackbar(t.order_invalid_maker(), { variant: 'error' })
         }
 
         if (orderStatus === 2) {
             // Invalid
-            showSnackbar(t.order_invlid_taker(), { variant: 'error' })
+            showSnackbar(t.order_invalid_taker(), { variant: 'error' })
         }
     }
 

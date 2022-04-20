@@ -1,10 +1,4 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable spaced-comment */
-/* eslint-disable eqeqeq */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { type TypedMessage, createTypedMessageMetadataReader } from '@masknet/typed-message'
-//import { getAssetsList } from '../../../../../packages/mask/src/plugins/Wallet/apis/opensea'
-
 import type { TradeMetaData } from './types'
 import { META_KEY } from './constants'
 import schema from './schema.json'
