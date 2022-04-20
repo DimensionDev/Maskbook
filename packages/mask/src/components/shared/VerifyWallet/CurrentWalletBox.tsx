@@ -39,6 +39,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
+    connectButton: {
+        fontSize: 12,
+        marginLeft: theme.spacing(1),
+        padding: theme.spacing(1, 2),
+    },
     actionButton: {
         boxSizing: 'border-box',
         fontSize: 12,
@@ -157,7 +162,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     ) : (
         <section className={classes.connectButtonWrapper}>
             <Button
-                className={classNames(classes.actionButton)}
+                className={classNames(classes.connectButton)}
                 color="primary"
                 variant="contained"
                 size="small"

@@ -121,12 +121,14 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     return (
         <div>
             <Steps
+                isBound={isBound}
                 notEvm={isNotEvm}
+                notConnected={!wallet.account}
                 wallet={wallet as any}
                 persona={currentPersona}
                 step={step}
                 confirmLoading={confirmLoading || payloadLoading}
-                disableConfirm={isBound || isNotEvm}
+                disableConfirm={isBound || isNotEvm || !wallet.account}
                 notInPop
                 changeWallet={openSelectProviderDialog}
                 onConfirm={handleConfirm}

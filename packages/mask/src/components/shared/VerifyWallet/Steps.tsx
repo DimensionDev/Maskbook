@@ -102,6 +102,8 @@ interface StepsProps {
     onConfirm: () => void
     onCustomCancel?: () => void
     account?: string
+    notConnected?: boolean
+    isBound?: boolean
 }
 
 export function Steps(props: StepsProps) {
@@ -118,6 +120,8 @@ export function Steps(props: StepsProps) {
         confirmLoading,
         notInPop,
         notEvm,
+        isBound,
+        notConnected,
         onCustomCancel,
     } = props
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -159,37 +163,47 @@ export function Steps(props: StepsProps) {
         <div className={classes.container}>
             <CurrentWalletBox notInPop={notInPop} walletName={walletName} wallet={wallet} changeWallet={changeWallet} />
             {notEvm && <Typography className={classes.hasBound}>{t('plugin_tips_not_evm_alert')}</Typography>}
-            {notInPop && disableConfirm && !notEvm && (
-                <Typography className={classes.hasBound}>{t('wallet_verify_has_bound')}</Typography>
+            {isBound && <Typography className={classes.hasBound}>{t('wallet_verify_has_bound')}</Typography>}
+            {notConnected && (
+                <Typography className={classes.hasBound} style={{ textAlign: 'center' }}>
+                    Please connect your wallet first.
+                </Typography>
             )}
-            <div className={classes.stepBox}>
-                <div className={classes.stepLine}>
-                    <ImageIcon size={22} icon={stepIconMap[step].step1} />
-                    <img className={classes.divider} src={stepIconMap[step].divider.toString()} />
-                    <ImageIcon size={22} icon={stepIconMap[step].step2} />
-                </div>
-                <div className={classes.stepRowBox}>
-                    <div className={classes.stepRow}>
-                        <Typography className={classes.stepTitle}>
-                            {t('wallet_verify_persona_name', {
-                                personaName: persona.nickname ?? 'Persona Name',
-                            })}
-                        </Typography>
-                        <Typography className={classes.stepIntro}>{t('wallet_verify_persona_sign_intro')}</Typography>
+            {!notConnected && (
+                <div className={classes.stepBox}>
+                    <div className={classes.stepLine}>
+                        <ImageIcon size={22} icon={stepIconMap[step].step1} />
+                        <img className={classes.divider} src={stepIconMap[step].divider.toString()} />
+                        <ImageIcon size={22} icon={stepIconMap[step].step2} />
                     </div>
-                    <div className={classes.stepRow}>
-                        <Typography className={classes.stepTitle}>
-                            {notEvm
-                                ? `${wallet.providerType} Wallet`
-                                : walletName
-                                ? walletName
-                                : `${wallet.providerType} Wallet`}{' '}
-                            Sign
-                        </Typography>
-                        <Typography className={classes.stepIntro}>{t('waller_verify_wallet_sign_intro')}</Typography>
+                    <div className={classes.stepRowBox}>
+                        <div className={classes.stepRow}>
+                            <Typography className={classes.stepTitle}>
+                                {t('wallet_verify_persona_name', {
+                                    personaName: persona.nickname ?? 'Persona Name',
+                                })}
+                            </Typography>
+                            <Typography className={classes.stepIntro}>
+                                {t('wallet_verify_persona_sign_intro')}
+                            </Typography>
+                        </div>
+                        <div className={classes.stepRow}>
+                            <Typography className={classes.stepTitle}>
+                                {notEvm
+                                    ? `${wallet.providerType} Wallet`
+                                    : walletName
+                                    ? walletName
+                                    : `${wallet.providerType} Wallet`}{' '}
+                                Sign
+                            </Typography>
+                            <Typography className={classes.stepIntro}>
+                                {t('waller_verify_wallet_sign_intro')}
+                            </Typography>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
+
             <div className={classes.actionBox}>
                 <Button
                     className={classes.roundBtn}

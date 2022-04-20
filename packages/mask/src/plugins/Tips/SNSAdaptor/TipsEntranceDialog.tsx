@@ -26,9 +26,11 @@ import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
 import { PluginId } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
-import { isSameAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
 import { LoadingButton } from '@mui/lab'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { WalletMessages } from '@masknet/plugin-wallet'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -87,6 +89,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const [rawPatchData, setRawPatchData] = useState<WalletProof[]>([])
     const [rawWalletList, setRawWalletList] = useState<WalletProof[]>([])
     const { showSnackbar } = useCustomSnackbar()
+    const account = useAccount()
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
 
     const { value: currentPersonaIdentifier } = useAsyncRetry(
@@ -224,6 +227,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             return false
         }
     }, [hasChanged])
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     const [confirmState, onConfirmRelease] = useAsyncFn(
         async (wallet?: WalletProof) => {
             try {
@@ -297,7 +303,15 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                             })}
                         </div>
                     ) : bodyView === BodyViewSteps.main && rawPatchData.length === 0 ? (
-                        <Empty toAdd={() => setBodyView(BodyViewSteps.addWallet)} />
+                        <Empty
+                            toAdd={() => {
+                                if (account) {
+                                    setBodyView(BodyViewSteps.addWallet)
+                                } else {
+                                    openSelectProviderDialog()
+                                }
+                            }}
+                        />
                     ) : null}
 
                     {bodyView === BodyViewSteps.setting && (

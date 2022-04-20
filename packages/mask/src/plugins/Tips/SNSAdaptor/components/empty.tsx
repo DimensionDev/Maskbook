@@ -78,7 +78,6 @@ interface EmptyProps {
 }
 const Empty = memo(({ toAdd }: EmptyProps) => {
     const { classes } = useStyles()
-
     return (
         <div className={classes.container}>
             <div className={classes.topBox}>
