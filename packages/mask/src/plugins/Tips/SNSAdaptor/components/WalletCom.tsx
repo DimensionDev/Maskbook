@@ -5,7 +5,7 @@ import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { Copy, ExternalLink } from 'react-feather'
 import { useProviderDescriptor, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import { isSameAddress, ProviderType, useProviderType, useWallets } from '@masknet/web3-shared-evm'
+import { isSameAddress, useWallets } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -46,7 +46,6 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: theme.spacing(1),
     },
     defaultBtn: {
-        fontFamily: 'sans-serif',
         fontSize: 14,
         fontWeight: 'bold',
         cursor: 'pointer',
@@ -88,7 +87,6 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
     const { classes } = useStyles()
     const { t } = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
-    const providerType = useProviderType()
     const { value: domain } = useReverseAddress(address)
     const providerDescriptor = useProviderDescriptor()
     const { Utils } = useWeb3State() ?? {}
@@ -107,14 +105,14 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
     const getActionRender = () => {
         if (!canDelete && !isDefault)
             return (
-                <div
+                <Typography
                     className={classes.defaultBtn}
                     onClick={() => {
                         if (!setAsDefault) return
                         setAsDefault(index ?? 0)
                     }}>
                     Set as default
-                </div>
+                </Typography>
             )
         if (canDelete)
             return (
@@ -130,20 +128,12 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
         <div className={classes.currentAccount}>
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    {providerType !== ProviderType.MaskWallet ? (
-                        <Typography className={classes.accountName}>
-                            {domain && Utils?.formatDomainName
-                                ? Utils.formatDomainName(domain)
-                                : providerDescriptor?.name}
-                        </Typography>
-                    ) : (
-                        <Typography className={classes.accountName}>
-                            {domain && Utils?.formatDomainName
-                                ? Utils.formatDomainName(domain)
-                                : walletName ?? 'Wallet ' + index}
-                        </Typography>
-                    )}
-                    {isDefault && <div className={classes.defaultBadge}>Default</div>}
+                    <Typography className={classes.accountName}>
+                        {domain && Utils?.formatDomainName
+                            ? Utils.formatDomainName(domain)
+                            : walletName ?? 'Wallet ' + index}
+                    </Typography>
+                    {isDefault && <Typography className={classes.defaultBadge}>Default</Typography>}
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={address}>

@@ -1,4 +1,5 @@
 import { makeStyles } from '@masknet/theme'
+import { Typography } from '@mui/material'
 import { memo } from 'react'
 import { ExternalLink } from 'react-feather'
 const useStyles = makeStyles()((theme) => ({
@@ -19,18 +20,17 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
     },
     tipIcon: {
-        width: '20px',
+        width: 20,
+        height: 20,
     },
     iconBox: {
         display: 'flex',
         gap: 4,
-        fontSize: 16,
         color: 'rgba(7, 16, 27, 1)',
-        fontWeight: 700,
     },
     provided: {
         display: 'flex',
-        alignItems: 'baseline',
+        alignItems: 'center',
         color: theme.palette.text.secondary,
         gap: 4,
         fontSize: 14,
@@ -88,11 +88,11 @@ const Empty = memo(({ toAdd }: EmptyProps) => {
                         src={new URL('../../assets/Tip.png', import.meta.url).toString()}
                         alt=""
                     />
-                    <div>Tips</div>
+                    <Typography sx={{ fontSize: 16, fontWeight: 700 }}>Tips</Typography>
                 </div>
                 <div className={classes.provided}>
-                    <div>Provided by</div>
-                    <div className={classes.badge}>Mask Network</div>
+                    <Typography sx={{ fontSize: 14 }}>Provided by</Typography>
+                    <Typography className={classes.badge}>Mask Network</Typography>
                     <a href="https://mask.io" className={classes.linkIcon} target="_blank">
                         <ExternalLink size={16} />
                     </a>
@@ -109,7 +109,7 @@ const Empty = memo(({ toAdd }: EmptyProps) => {
                     src={new URL('../../assets/wallet.png', import.meta.url).toString()}
                     alt=""
                 />
-                <div>Connect your wallet</div>
+                <Typography sx={{ fontSize: 14, lineHeight: 18, fontWeight: 700 }}>Connect your wallet</Typography>
             </div>
         </div>
     )

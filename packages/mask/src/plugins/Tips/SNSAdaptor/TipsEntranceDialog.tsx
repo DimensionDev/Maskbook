@@ -66,7 +66,7 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translate(-50%,-50%)',
     },
     cancelBtn: {
-        border: `1px solid ${theme.palette.text.secondary}`,
+        border: '1px solid rgba(47, 51, 54, 1)',
     },
 }))
 
