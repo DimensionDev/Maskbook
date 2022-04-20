@@ -82,7 +82,7 @@ export interface ToolboxHintProps {
     iconSize?: number
     badgeSize?: number
     mini?: boolean
-    category?: 'wallet' | 'application'
+    category: 'wallet' | 'application'
 }
 export function ToolboxHintUnstyled(props: ToolboxHintProps) {
     return props.category === 'wallet' ? <ToolboxHintForWallet {...props} /> : <ToolboxHintForApplication {...props} />
