@@ -1,14 +1,19 @@
+import { TipsIcon } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { base } from '../base'
+import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { useState } from 'react'
+import { base } from '../base'
+import { PostTipButton, TipTaskManager } from '../components'
+import { RootContext } from '../contexts'
+import { setupStorage, storageDefaultValue } from '../storage'
 import { TipsEntranceDialog } from './TipsEntranceDialog'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { TipsIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(_, context) {
+        setupStorage(context.createKVStorage('memory', storageDefaultValue))
+    },
     ApplicationEntries: [
         (() => {
             const name = base.name
@@ -38,6 +43,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
+    GlobalInjection() {
+        return (
+            <RootContext>
+                <TipTaskManager />
+            </RootContext>
+        )
+    },
+    PostActions() {
+        return (
+            <RootContext>
+                <PostTipButton />
+            </RootContext>
+        )
+    },
 }
 
 export default sns

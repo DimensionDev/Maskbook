@@ -123,7 +123,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             setBodyViewStep(BodyViewStep.Main)
         }
     }
-    const { value: kv, retry: retryKv } = useKvGet()
+    const { value: kv, retry: retryKv } = useKvGet<NextIdStorageInfo>()
     const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
     const list = useTipsWalletsList(
         proofRes as BindingProof[],

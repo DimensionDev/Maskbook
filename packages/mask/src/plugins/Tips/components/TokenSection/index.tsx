@@ -8,9 +8,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FC, useCallback, useEffect, useMemo } from 'react'
-import { TokenAmountPanel } from '../../../../../web3/UI/TokenAmountPanel'
-import { useGasConfig } from '../../../../Trader/SNSAdaptor/trader/hooks/useGasConfig'
-import { TargetChainIdContext, useTip } from '../../../contexts'
+import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
+import { useGasConfig } from '../../../Trader/SNSAdaptor/trader/hooks/useGasConfig'
+import { TargetChainIdContext, useTip } from '../../contexts'
 
 const GAS_LIMIT = 21000
 export const TokenSection: FC = () => {

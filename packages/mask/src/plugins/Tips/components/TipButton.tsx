@@ -8,11 +8,11 @@ import classnames from 'classnames'
 import { uniq } from 'lodash-unified'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
-import Services from '../../../../extension/service'
-import { activatedSocialNetworkUI } from '../../../../social-network'
-import { useI18N } from '../../locales'
-import { PluginNextIDMessages } from '../../messages'
-import { MaskMessages } from '../../../../../shared'
+import Services from '../../../extension/service'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { useI18N } from '../locales'
+import { PluginNextIDMessages } from '../messages'
+import { MaskMessages } from '../../../../shared'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     addresses?: string[]
@@ -107,7 +107,7 @@ export const TipButton: FC<Props> = ({
         return uniq([...(walletsState.value || []), ...addresses])
     }, [walletsState.value, addresses])
 
-    const disabled = loadingPersona || loadingVerifyInfo || !isAccountVerified || allAddresses.length === 0
+    const disabled = false // loadingPersona || loadingVerifyInfo || allAddresses.length === 0
 
     const sendTip: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {

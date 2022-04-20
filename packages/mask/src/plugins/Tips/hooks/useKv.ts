@@ -13,10 +13,10 @@ const getCurrentPersonaPublicKey = async () => {
     if (!currentPersona?.publicHexKey) return ''
     return currentPersona.publicHexKey
 }
-export function useKvGet() {
+export function useKvGet<T>() {
     return useAsyncRetry(async () => {
         const publicHexKey = await getCurrentPersonaPublicKey()
-        return NextIDStorage.get(publicHexKey)
+        return NextIDStorage.get<T>(publicHexKey)
     })
 }
 

@@ -1,6 +1,7 @@
 import { Plugin, PluginId } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginId.Tips,
@@ -33,4 +34,5 @@ export const base: Plugin.Shared.Definition = {
             },
         },
     },
+    i18n: languages,
 }

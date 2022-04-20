@@ -6,7 +6,7 @@ import { Checkbox, Link, List, ListItem, Radio } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
-import type { TipNFTKeyPair } from '../../../types'
+import type { TipNFTKeyPair } from '../../types'
 
 interface Props {
     selectedPairs: TipNFTKeyPair[]
