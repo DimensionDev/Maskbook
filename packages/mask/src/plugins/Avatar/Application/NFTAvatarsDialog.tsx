@@ -8,6 +8,7 @@ import type { SelectTokenInfo, TokenInfo } from '../types'
 import { PersonaPage } from './PersonaPage'
 import { DialogContent } from '@mui/material'
 import { useI18N } from '../locales/i18n_generated'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -78,7 +79,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                 {step === CreateNFTAvatarStep.UploadAvatar ? (
                     <UploadAvatarDialog
                         proof={proof}
-                        haveBindAccount={Boolean(wallets?.length)}
+                        isBindAccount={wallets?.some((x) => isSameAddress(x.identity, selectedTokenInfo?.account))}
                         account={selectedTokenInfo?.account}
                         image={selectedTokenInfo?.image}
                         token={selectedTokenInfo?.token}

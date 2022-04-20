@@ -1,7 +1,8 @@
-import { SvgIcon, SvgIconProps } from '@mui/material'
+import { createIcon } from '@masknet/icons'
 
-const svg = (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const WalletIcon = createIcon(
+    'WalletIcon',
+    <g>
         <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -26,7 +27,6 @@ const svg = (
             d="M14.1901 9.29973C13.9309 9.29973 13.7037 9.40012 13.54 9.56833L13.5292 9.5791C13.3374 9.76637 13.2305 10.0327 13.2574 10.3154L13.2581 10.3224L13.258 10.3224C13.2959 10.7764 13.7348 11.1748 14.2801 11.1748H15.7276C15.8275 11.1748 15.9001 11.0946 15.9001 11.0097V9.46475C15.9001 9.37993 15.8275 9.29973 15.7276 9.29973H14.1901ZM12.6855 8.72574C13.0763 8.32732 13.6119 8.09973 14.1901 8.09973H15.7276C16.4826 8.09973 17.1001 8.70956 17.1001 9.46475V11.0097C17.1001 11.7649 16.4826 12.3748 15.7276 12.3748H14.2801C13.2064 12.3748 12.1614 11.5897 12.0625 10.4256C12.0009 9.76738 12.2515 9.15251 12.6855 8.72574Z"
             fill="white"
         />
-    </svg>
+    </g>,
+    '0 0 18 18',
 )
-
-export const WalletIcon = (props: SvgIconProps) => <SvgIcon {...props}>{svg}</SvgIcon>

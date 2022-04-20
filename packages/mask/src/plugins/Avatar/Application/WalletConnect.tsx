@@ -16,9 +16,11 @@ const useStyles = makeStyles()((theme) => ({
         padding: 8,
         position: 'relative',
         height: 196,
+        margin: theme.spacing(2),
     },
     title: {
         display: 'flex',
+        color: '#07101b',
     },
     button: {
         textAlign: 'center',
@@ -53,12 +55,15 @@ export function NFTWalletConnect(props: NFTWalletConnectProps) {
         <Box className={classes.root}>
             <Box className={classes.title}>
                 <ApplicationIcon />
-                <Typography variant="body1" color="textPrimary" fontSize={15} fontWeight={700} sx={{ flex: 1 }}>
+                <Typography variant="body1" fontSize={15} fontWeight={700} sx={{ flex: 1 }}>
                     {t.application_dialog_title()}
                 </Typography>
 
-                <Typography variant="body1" color="textPrimary">
-                    provided by <strong>{providerType}</strong>
+                <Typography variant="body1" color="#536471">
+                    {t.provider_by()}
+                </Typography>
+                <Typography variant="body1" color="#07101b" fontWeight={500}>
+                    {providerType}
                 </Typography>
                 <Link
                     className={classes.link}
@@ -73,7 +78,7 @@ export function NFTWalletConnect(props: NFTWalletConnectProps) {
             <Box className={classes.button}>
                 <Button
                     onClick={openSelectProviderDialog}
-                    style={{ width: 254 }}
+                    style={{ width: 254, backgroundColor: '#07101b', color: 'white' }}
                     startIcon={<WalletIcon style={{ width: 18, height: 18 }} />}>
                     {t.connect_your_wallet()}
                 </Button>

@@ -119,7 +119,7 @@ export function AddressNames(props: AddressNamesProps) {
                 {account ? (
                     walletItem(selectedWallet, account, Boolean(account), () => onClick(account), onConnectWallet)
                 ) : (
-                    <MenuItem key="Connect">
+                    <MenuItem key="connect">
                         <Button fullWidth onClick={onConnectWallet}>
                             {t.connect_your_wallet()}
                         </Button>
@@ -175,6 +175,7 @@ function WalletUI(props: WalletUIProps) {
     const networkDescriptor = useNetworkDescriptor()
     const { classes } = useWalletUIStyles()
 
+    if (!address) return null
     return (
         <Stack direction="row" alignItems="center" justifyContent="center">
             <ImageIcon size={30} icon={networkDescriptor?.icon} />

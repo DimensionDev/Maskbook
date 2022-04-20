@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface UploadAvatarDialogProps {
     account?: string
-    haveBindAccount?: boolean
+    isBindAccount?: boolean
     image?: string | File
     token?: ERC721TokenDetailed
     proof?: BindingProof
@@ -51,7 +51,7 @@ async function personaSign(account: string, haveBindAccount: boolean, message: s
 
 async function Save(
     account: string,
-    haveBindAccount: boolean,
+    isBindAccount: boolean,
     token: ERC721TokenDetailed,
     avatarId: string,
     data: TwitterBaseAPI.AvatarInfo,
@@ -74,7 +74,7 @@ async function Save(
         return false
     }
 
-    const sign = await personaSign(account, haveBindAccount, response.val.signPayload, persona.identifier)
+    const sign = await personaSign(account, isBindAccount, response.val.signPayload, persona.identifier)
     if (!sign) return false
 
     const setResponse = await NextIDStorage.set(
@@ -90,7 +90,7 @@ async function Save(
 }
 
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
-    const { image, account, token, onClose, onBack, proof, haveBindAccount = false } = props
+    const { image, account, token, onClose, onBack, proof, isBindAccount = false } = props
     const { classes } = useStyles()
     const identifier = context.currentVisitingProfile.getCurrentValue()?.identifier
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
@@ -115,7 +115,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             }
             const avatarId = getAvatarId(data?.imageUrl ?? '')
 
-            const response = await Save(account, haveBindAccount, token, avatarId, data, currentConnectedPersona, proof)
+            const response = await Save(account, isBindAccount, token, avatarId, data, currentConnectedPersona, proof)
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
                 setDisabled(false)
@@ -126,7 +126,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             onClose()
             setDisabled(false)
         })
-    }, [account, editor, identifier, onClose, currentConnectedPersona, proof, haveBindAccount])
+    }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount])
 
     if (!account || !image || !token || !proof) return null
 

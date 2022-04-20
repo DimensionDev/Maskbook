@@ -1,15 +1,15 @@
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { AddressNames } from './WalletList'
 import { useCallback, useState, useEffect } from 'react'
 import { downloadUrl } from '../../../utils'
-import { NFTList } from './NFTList'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import type { BindingProof } from '@masknet/shared-base'
 import type { SelectTokenInfo, TokenInfo } from '../types'
 import { uniqBy } from 'lodash-unified'
 import { useI18N } from '../locales'
+import { AddressNames } from './WalletList'
+import { NFTList } from './NFTList'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -48,6 +48,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
     const [tokens, setTokens] = useState<ERC721TokenDetailed[]>([])
+    const { showSnackbar } = useCustomSnackbar()
     const onChange = useCallback((address: string) => {
         setSelectedAccount(address)
     }, [])
@@ -66,8 +67,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
     }, [selectedToken, selectedAccount])
 
     const onClick = useCallback(() => {
+        if (!account && !wallets?.length) {
+            showSnackbar('Please connect your wallet!', { variant: 'error' })
+            return
+        }
         setOpen_(true)
-    }, [])
+    }, [account, wallets, showSnackbar])
 
     useEffect(() => {
         setDisabled(!selectedToken || isSameToken(selectedToken, tokenInfo))
@@ -90,7 +95,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     classes={{ root: classes.AddressNames }}
                     onChange={onChange}
                 />
-                {(account || wallets?.length) && (
+                {(account || Boolean(wallets?.length)) && (
                     <NFTList tokenInfo={tokenInfo} address={selectedAccount} onSelect={onSelect} tokens={tokens} />
                 )}
             </DialogContent>
