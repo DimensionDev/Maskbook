@@ -26,7 +26,6 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
-        borderBottom: `1px solid ${theme.palette.divider}`,
     },
     dialogContent: {
         overscrollBehavior: 'contain',

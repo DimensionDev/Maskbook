@@ -218,7 +218,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     ) : null}
                     <Button
                         className={classNames(classes.actionButton)}
-                        variant="contained"
+                        variant="roundedContained"
                         size="small"
                         onClick={openSelectProviderDialog}>
                         {t('wallet_status_button_change')}
