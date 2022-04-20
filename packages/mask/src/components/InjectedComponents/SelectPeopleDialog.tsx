@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Button, CircularProgress, DialogActions, DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../utils'
 import { SelectProfileUI } from '../shared/SelectProfileUI'
-import type { Profile } from '../../database'
+import type { Recipient as Profile } from '../../../background/services/crypto'
 
-export interface SelectProfileDialogProps extends withClasses<never> {
+export interface SelectProfileDialogProps {
     open: boolean
     profiles: Profile[]
     alreadySelectedPreviously: Profile[]
@@ -21,7 +21,7 @@ const useStyles = makeStyles()({
 
 export function SelectProfileDialog(props: SelectProfileDialogProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
     const [people, select] = useState<Profile[]>([])
     const [committed, setCommitted] = useState(false)
     const onClose = useCallback(() => {
@@ -67,29 +67,4 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
             </DialogActions>
         </InjectedDialog>
     )
-}
-
-export function useShareMenu(
-    people: Profile[],
-    onSelect: (people: Profile[]) => Promise<void>,
-    alreadySelectedPreviously: Profile[],
-    SelectPeopleDialogProps?: Partial<SelectProfileDialogProps>,
-) {
-    const [visible, setVisible] = useState(false)
-    const showShare = useCallback(() => setVisible(true), [])
-    const hideShare = useCallback(() => setVisible(false), [])
-
-    return {
-        showShare,
-        ShareMenu: (
-            <SelectProfileDialog
-                alreadySelectedPreviously={alreadySelectedPreviously}
-                profiles={people}
-                open={visible}
-                onClose={hideShare}
-                onSelect={onSelect}
-                {...SelectPeopleDialogProps}
-            />
-        ),
-    }
 }

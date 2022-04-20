@@ -1,15 +1,14 @@
-import { Fragment, useEffect, useMemo, useReducer } from 'react'
+import { Fragment, useEffect, useReducer } from 'react'
 import { extractTextFromTypedMessage, TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 
 import Services, { ServicesWithProgress } from '../../../extension/service'
-import type { Profile } from '../../../database'
 import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from './types'
 import { DecryptPostSuccess } from './DecryptedPostSuccess'
 import { DecryptPostAwaiting } from './DecryptPostAwaiting'
 import { DecryptPostFailed } from './DecryptPostFailed'
 import { usePostClaimedAuthor } from '../../DataSource/usePostInfo'
-import { delay, encodeArrayBuffer, safeUnreachable } from '@dimensiondev/kit'
+import { encodeArrayBuffer, safeUnreachable } from '@dimensiondev/kit'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { DecryptionContext, SocialNetworkEncodedPayload } from '../../../../background/services/crypto/decryption'
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
@@ -46,49 +45,28 @@ function progressReducer(
 
 export interface DecryptPostProps {
     whoAmI: ProfileIdentifier
-    profiles: Profile[]
-    alreadySelectedPreviously: Profile[]
-    requestAppendRecipients?(to: Profile[]): Promise<void>
 }
 export function DecryptPost(props: DecryptPostProps) {
-    const { whoAmI, profiles, alreadySelectedPreviously } = props
+    const { whoAmI } = props
     const deconstructedPayload = usePostInfoDetails.containingMaskPayload()
     const authorInPayload = usePostClaimedAuthor()
-    const current = usePostInfo()!
     const currentPostBy = usePostInfoDetails.author()
     const postBy = authorInPayload || currentPostBy
     const postMetadataImages = usePostInfoDetails.postMetadataImages()
     const mentionedLinks = usePostInfoDetails.mentionedLinks()
-    const postInfo = usePostInfo()
+    const postInfo = usePostInfo()!
 
-    const requestAppendRecipientsWrapped = useMemo(() => {
-        if (!postBy.equals(whoAmI)) return undefined
-        if (!props.requestAppendRecipients) return undefined
-        return async (people: Profile[]) => {
-            await props.requestAppendRecipients!(people)
-            await delay(1500)
-        }
-    }, [props.requestAppendRecipients, postBy, whoAmI])
-
-    // #region Progress
     const [progress, dispatch] = useReducer(progressReducer, [])
-    // #endregion
-
-    // #region decrypt
-
-    // pass 1:
-    // decrypt post content and image attachments
-    const sharedPublic = usePostInfoDetails.publicShared()
 
     useEffect(() => {
         function setCommentFns(iv: Uint8Array, message: TypedMessage) {
-            postInfo!.encryptComment.value = async (comment) =>
+            postInfo.encryptComment.value = async (comment) =>
                 Services.Crypto.encryptComment(iv, extractTextFromTypedMessage(message).unwrap(), comment)
-            postInfo!.decryptComment.value = async (encryptedComment) =>
+            postInfo.decryptComment.value = async (encryptedComment) =>
                 Services.Crypto.decryptComment(iv, extractTextFromTypedMessage(message).unwrap(), encryptedComment)
         }
         const signal = new AbortController()
-        const postURL = current.url.getCurrentValue()?.toString()
+        const postURL = postInfo.url.getCurrentValue()?.toString()
         const report =
             (key: string): ReportProgress =>
             (kind, message) => {
@@ -114,7 +92,7 @@ export function DecryptPost(props: DecryptPostProps) {
                 {
                     type: 'text',
                     text:
-                        extractTextFromTypedMessage(current.rawMessage.getCurrentValue()).unwrapOr('') +
+                        extractTextFromTypedMessage(postInfo.rawMessage.getCurrentValue()).unwrapOr('') +
                         ' ' +
                         mentionedLinks.join(' '),
                 },
@@ -131,7 +109,7 @@ export function DecryptPost(props: DecryptPostProps) {
                         },
                     })
                 },
-                current.decryptedReport,
+                postInfo.decryptedReport,
                 report('text'),
                 signal.signal,
             )
@@ -156,7 +134,7 @@ export function DecryptPost(props: DecryptPostProps) {
                         },
                     })
                 },
-                current.decryptedReport,
+                postInfo.decryptedReport,
                 report(url),
                 signal.signal,
             )
@@ -164,7 +142,6 @@ export function DecryptPost(props: DecryptPostProps) {
         return () => signal.abort()
     }, [deconstructedPayload.ok, postBy.toText(), postMetadataImages.join(), whoAmI.toText(), mentionedLinks.join()])
 
-    // it's not a secret post
     if (!deconstructedPayload.ok && progress.every((x) => x.progress.internal)) return null
     return (
         <>
@@ -182,13 +159,10 @@ export function DecryptPost(props: DecryptPostProps) {
             case 'success':
                 return (
                     <DecryptPostSuccess
-                        data={progress}
-                        alreadySelectedPreviously={alreadySelectedPreviously}
-                        requestAppendRecipients={requestAppendRecipientsWrapped}
-                        profiles={profiles}
-                        sharedPublic={sharedPublic}
                         author={authorInPayload}
                         postedBy={currentPostBy}
+                        whoAmI={whoAmI}
+                        message={progress.content}
                     />
                 )
             case 'error':

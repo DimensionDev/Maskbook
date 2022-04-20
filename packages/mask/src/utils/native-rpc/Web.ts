@@ -50,11 +50,7 @@ function profileFormatter(
     }
 }
 
-const profileRelationFormatter = (
-    p: Profile,
-    personaIdentifier: string | undefined,
-    favor: RelationFavor | undefined,
-) => {
+function profileRelationFormatter(p: Profile, personaIdentifier: string | undefined, favor: RelationFavor | undefined) {
     return {
         identifier: p.identifier.toText(),
         nickname: p.nickname,

@@ -1,6 +1,5 @@
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentifierWithAvatar, createAvatarDBAccess } from './db'
-import { MaskMessages } from '../../../shared'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import { blobToDataURL, memoizePromise } from '@dimensiondev/kit'
 import { createTransaction } from '../utils/openDB'
@@ -9,23 +8,21 @@ import { createTransaction } from '../utils/openDB'
  * Get a (cached) blob url for an identifier. No cache for native api.
  * ? Because of cross-origin restrictions, we cannot use blob url here. sad :(
  */
-export const queryAvatarDataURL = (
-    hasNativeAPI
-        ? async function (identifier: IdentifierWithAvatar): Promise<string | undefined> {
-              return nativeAPI?.api.query_avatar({ identifier: identifier.toText() })
-          }
-        : memoizePromise(
-              async function (identifier: IdentifierWithAvatar): Promise<string | undefined> {
-                  const t = createTransaction(await createAvatarDBAccess(), 'readonly')('avatars')
-                  const buffer = await queryAvatarDB(t, identifier)
-                  if (!buffer) throw new Error('Avatar not found')
-                  return blobToDataURL(new Blob([buffer], { type: 'image/png' }))
-              },
-              (id) => id.toText(),
-          )
-) as ((identifier: IdentifierWithAvatar) => Promise<string | undefined>) & {
-    cache?: Map<string, unknown>
+async function nativeImpl(identifier: IdentifierWithAvatar): Promise<string | undefined> {
+    return nativeAPI?.api.query_avatar({ identifier: identifier.toText() })
 }
+const indexedDBImpl = memoizePromise(
+    async function (identifier: IdentifierWithAvatar): Promise<string | undefined> {
+        const t = createTransaction(await createAvatarDBAccess(), 'readonly')('avatars')
+        const buffer = await queryAvatarDB(t, identifier)
+        if (!buffer) throw new Error('Avatar not found')
+        return blobToDataURL(new Blob([buffer], { type: 'image/png' }))
+    },
+    (id) => id.toText(),
+)
+export const queryAvatarDataURL: (identifier: IdentifierWithAvatar) => Promise<string | undefined> = hasNativeAPI
+    ? nativeImpl
+    : indexedDBImpl
 
 /**
  * Store an avatar with a url for an identifier.
@@ -66,9 +63,6 @@ export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: Arra
     } catch (error) {
         console.error('[AvatarDB] Store avatar failed', error)
     } finally {
-        queryAvatarDataURL.cache?.delete(identifier.toText())
-        if (identifier instanceof ProfileIdentifier) {
-            MaskMessages.events.profilesChanged.sendToAll([{ of: identifier, reason: 'update' }])
-        }
+        indexedDBImpl.cache?.delete(identifier.toText())
     }
 }

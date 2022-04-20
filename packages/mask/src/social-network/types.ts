@@ -7,7 +7,6 @@ import type {
     PersonaIdentifier,
     PostIdentifier,
     ProfileIdentifier,
-    ReadonlyIdentifierMap,
 } from '@masknet/shared-base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
@@ -90,8 +89,6 @@ export namespace SocialNetworkUI {
     }
     /** The init() should setup watcher for those states */
     export interface AutonomousState {
-        /** @deprecated Performance. Don't use it. */
-        readonly friends: ValueRef<ReadonlyIdentifierMap<ProfileIdentifier, Profile>>
         /** My profiles at current network */
         readonly profiles: ValueRef<readonly Profile[]>
     }
