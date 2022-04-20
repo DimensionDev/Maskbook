@@ -1,6 +1,6 @@
 import { createContainer } from 'unstated-next'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { ECKeyIdentifier, EMPTY_LIST, Identifier, PersonaInformation } from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST, Identifier, PersonaIdentifier, PersonaInformation } from '@masknet/shared-base'
 import { currentPersonaIdentifier } from '../../../../../settings/settings'
 import { useAsync, useAsyncRetry } from 'react-use'
 import Services from '../../../../service'
@@ -18,7 +18,11 @@ function usePersonaContext() {
         async () => Services.Identity.queryOwnedPersonaInformation(),
         [currentPersonaIdentifier],
     )
-    const { value: avatar } = useAsync(Services.Identity.getCurrentPersonaAvatar, [currentIdentifier])
+    const { value: avatar } = useAsync(async () => {
+        return Services.Identity.getPersonaAvatar(
+            Identifier.fromString<PersonaIdentifier>(currentIdentifier, ECKeyIdentifier).unwrap(),
+        )
+    }, [currentIdentifier])
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(retry)
     }, [retry])
