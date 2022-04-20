@@ -3,7 +3,6 @@ import { Link, Typography } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
 import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
-import { Copy, ExternalLink } from 'react-feather'
 import { useProviderDescriptor, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 import { isSameAddress, useWallets } from '@masknet/web3-shared-evm'
 
@@ -43,6 +42,8 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     linkIcon: {
+        width: 16,
+        height: 16,
         marginRight: theme.spacing(1),
     },
     defaultBtn: {
@@ -145,7 +146,10 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
                         component="button"
                         title={t('wallet_status_button_copy_address')}
                         onClick={onCopy}>
-                        <Copy className={classes.linkIcon} size={14} />
+                        <img
+                            src={new URL('../../assets/copy.png', import.meta.url).toString()}
+                            className={classes.linkIcon}
+                        />
                     </Link>
                     <Link
                         className={classes.link}
@@ -153,7 +157,10 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
                         target="_blank"
                         title={t('plugin_wallet_view_on_explorer')}
                         rel="noopener noreferrer">
-                        <ExternalLink className={classes.linkIcon} size={14} />
+                        <img
+                            src={new URL('../../assets/link.png', import.meta.url).toString()}
+                            className={classes.linkIcon}
+                        />
                     </Link>
                 </div>
             </div>
