@@ -138,7 +138,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             const idx = result.findIndex((i) => i.isDefault)
             if (idx !== -1) {
                 result.unshift(result.splice(idx, 1)[0])
+            } else {
+                result[0].isDefault = 1
             }
+
             setRawWalletList(result)
             setRawPatchData(result)
             return
