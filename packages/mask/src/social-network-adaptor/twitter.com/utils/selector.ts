@@ -122,7 +122,7 @@ export const postEditorDraftContentSelector = () => {
         )
     }
     if (isReplyPageSelector()) {
-        return querySelector<HTMLElement>('div[data-testid="tweetTextarea_0"]')
+        return querySelector<HTMLElement>('[data-testid="tweetTextarea_0"]')
     }
     return (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
         '.public-DraftEditor-content, [contenteditable][aria-label][spellcheck]',
