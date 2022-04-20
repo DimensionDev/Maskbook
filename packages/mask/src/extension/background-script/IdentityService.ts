@@ -18,12 +18,8 @@ export * from '../../../background/services/identity'
 export { queryProfile, queryPersonaByProfile } from '../../database'
 
 /** @deprecated */
-export function queryProfiles(network?: string): Promise<Profile[]> {
-    return queryProfilesWithQuery({ network })
-}
-
-/** @deprecated */
-export function queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]) {
+export function mobile_queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]) {
+    if (process.env.architecture !== 'app') throw new Error('This function is only available in the app')
     return queryProfilesWithQuery({ identifiers })
 }
 

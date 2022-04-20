@@ -203,7 +203,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             count,
         )
 
-        const profiles = await Services.Identity.queryProfilesWithIdentifiers(records.map((x) => x.profile))
+        const profiles = await Services.Identity.mobile_queryProfilesWithIdentifiers(records.map((x) => x.profile))
 
         return profiles.map((profile) => {
             const record = records.find((x) => x.profile.equals(profile.identifier))
