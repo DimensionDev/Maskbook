@@ -227,14 +227,15 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             return false
         }
     }, [hasChanged])
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
+    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnectWalletClick = useCallback(() => {
         if (account) {
             setBodyView(BodyViewSteps.addWallet)
         } else {
-            openSelectProviderDialog()
+            setDialog({
+                open: true,
+                onlyEvm: true,
+            })
             WalletMessages.events.walletsUpdated.on(() => {
                 setBodyView(BodyViewSteps.addWallet)
             })

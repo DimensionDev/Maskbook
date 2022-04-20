@@ -2,7 +2,7 @@ import { BindingProof, NextIDAction, NextIDPlatform } from '@masknet/shared-base
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { isSameAddress, useAccount, useWallet } from '@masknet/web3-shared-evm'
-import { memo, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { SignSteps, Steps } from '../../../../components/shared/VerifyWallet/Steps'
 import { useAsync, useAsyncFn } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -113,10 +113,13 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
             return SignSteps.Ready
         }
     }, [signature, walletSignState, walletSign, personaSilentSign])
-    const { openDialog: openSelectProviderDialog, closeDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
-
+    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const changeWallet = useCallback(() => {
+        setDialog({
+            open: true,
+            onlyEvm: true,
+        })
+    }, [])
     if (!currentPersona || !wallet) return null
 
     return (
@@ -131,7 +134,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                 confirmLoading={confirmLoading || payloadLoading}
                 disableConfirm={isBound || isNotEvm || !wallet.account}
                 notInPop
-                changeWallet={openSelectProviderDialog}
+                changeWallet={changeWallet}
                 onConfirm={handleConfirm}
                 onCustomCancel={onCancel}
             />

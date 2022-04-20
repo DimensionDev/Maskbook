@@ -92,6 +92,7 @@ export interface PluginProviderRenderProps {
     providers: Web3Plugin.ProviderDescriptor[]
     undeterminedPluginID?: string
     undeterminedNetworkID?: string
+    onlyEvm?: boolean
     setUndeterminedPluginID: (id: NetworkPluginID) => void
     setUndeterminedNetworkID: (id: string) => void
     NetworkIconClickBait?: React.ComponentType<Web3Plugin.UI.NetworkIconClickBaitProps>
@@ -108,11 +109,11 @@ export function PluginProviderRender({
     setUndeterminedNetworkID,
     NetworkIconClickBait,
     ProviderIconClickBait,
+    onlyEvm,
     onSubmit,
 }: PluginProviderRenderProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-
     return (
         <>
             <Box className={classes.root}>
@@ -123,30 +124,33 @@ export function PluginProviderRender({
                     <List className={classes.list}>
                         {networks
                             ?.filter((x) => x.isMainnet)
-                            .map((network) => (
-                                <ListItem
-                                    className={classes.networkItem}
-                                    key={network.ID}
-                                    onClick={() => {
-                                        setUndeterminedPluginID(network.networkSupporterPluginID as NetworkPluginID)
-                                        setUndeterminedNetworkID(network.ID)
-                                    }}>
-                                    <ShadowRootTooltip title={network.name} placement="top">
-                                        <div className={classes.iconWrapper}>
-                                            {NetworkIconClickBait ? (
-                                                <NetworkIconClickBait network={network}>
+                            .map((network) => {
+                                if (onlyEvm && network.networkSupporterPluginID !== 'com.mask.evm') return <></>
+                                return (
+                                    <ListItem
+                                        className={classes.networkItem}
+                                        key={network.ID}
+                                        onClick={() => {
+                                            setUndeterminedPluginID(network.networkSupporterPluginID as NetworkPluginID)
+                                            setUndeterminedNetworkID(network.ID)
+                                        }}>
+                                        <ShadowRootTooltip title={network.name} placement="top">
+                                            <div className={classes.iconWrapper}>
+                                                {NetworkIconClickBait ? (
+                                                    <NetworkIconClickBait network={network}>
+                                                        <ImageIcon icon={network.icon} />
+                                                    </NetworkIconClickBait>
+                                                ) : (
                                                     <ImageIcon icon={network.icon} />
-                                                </NetworkIconClickBait>
-                                            ) : (
-                                                <ImageIcon icon={network.icon} />
-                                            )}
-                                            {undeterminedNetworkID === network.ID && (
-                                                <SelectedIcon className={classes.checkedBadge} />
-                                            )}
-                                        </div>
-                                    </ShadowRootTooltip>
-                                </ListItem>
-                            ))}
+                                                )}
+                                                {undeterminedNetworkID === network.ID && (
+                                                    <SelectedIcon className={classes.checkedBadge} />
+                                                )}
+                                            </div>
+                                        </ShadowRootTooltip>
+                                    </ListItem>
+                                )
+                            })}
                     </List>
                 </section>
                 <section className={classes.section}>

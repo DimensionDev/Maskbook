@@ -38,6 +38,10 @@ export type SelectProviderDialogEvent =
           open: false
           address?: string
       }
+    | {
+          open: boolean
+          onlyEvm?: boolean
+      }
 
 export type ConnectWalletDialogEvent =
     | {
