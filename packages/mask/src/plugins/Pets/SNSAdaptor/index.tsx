@@ -6,7 +6,6 @@ import { PluginPetMessages } from '../messages'
 import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationEntry } from '@masknet/shared'
-import { LootManIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -21,7 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <LootManIcon />
+            const icon = <img src={new URL('../assets/pets.png', import.meta.url).toString()} />
             const name = <Trans i18nKey="plugin_pets_name" />
             return {
                 ApplicationEntryID: base.ID,
