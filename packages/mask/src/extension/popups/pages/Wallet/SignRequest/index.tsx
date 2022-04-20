@@ -5,10 +5,10 @@ import { Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
 import { ChainId, EthereumRpcType, NetworkType, ProviderType, useWallet } from '@masknet/web3-shared-evm'
 import { useAsyncFn, useLocation } from 'react-use'
+import { useLocation as useRouteLocation , useNavigate } from 'react-router-dom'
 import Services from '../../../../service'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
-import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle'
 import type { Web3Plugin } from '@masknet/plugin-infra/dist/web3-types'
@@ -85,6 +85,7 @@ const useStyles = makeStyles()(() => ({
 const SignRequest = memo(() => {
     const { t } = useI18N()
     const location = useLocation()
+    const routeLocation = useRouteLocation()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const { value } = useUnconfirmedRequest()
@@ -116,7 +117,7 @@ const SignRequest = memo(() => {
     }, [value])
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-        const goBack = new URLSearchParams(location.search).get('goBack')
+        const goBack = new URLSearchParams(routeLocation.search).get('goBack')
 
         if (value) {
             try {
@@ -126,7 +127,7 @@ const SignRequest = memo(() => {
                 setTransferError(true)
             }
         }
-    }, [value, location.search, history, selectedWallet])
+    }, [value, routeLocation.search, selectedWallet])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!value) return
@@ -134,7 +135,7 @@ const SignRequest = memo(() => {
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [value])
 
-    useTitle(t('popups_wallet_signature_request'))
+    useTitle(t('popups_wallet_signature_request_title'))
 
     return (
         <main className={classes.container}>
