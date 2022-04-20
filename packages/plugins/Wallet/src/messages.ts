@@ -63,6 +63,10 @@ export type WalletStatusDialogEvent = {
     open: boolean
 }
 
+export type ApplicationDialogEvent = {
+    open: boolean
+}
+
 export type GasSettingDialogEvent = {
     open: boolean
     gasLimit: number
@@ -149,6 +153,11 @@ export interface WalletMessage {
      * Wallet status dialog
      */
     walletStatusDialogUpdated: WalletStatusDialogEvent
+
+    /**
+     * Application dialog
+     */
+    ApplicationDialogUpdated: ApplicationDialogEvent
 
     /**
      * Wallet status dialog

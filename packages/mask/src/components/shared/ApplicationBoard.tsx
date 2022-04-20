@@ -1,4 +1,5 @@
 import { Fragment, useState, useMemo } from 'react'
+import { Close as CloseIcon } from '@mui/icons-material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography, useTheme } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
@@ -34,6 +35,7 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         subTitle: {
+            cursor: 'default',
             fontSize: 18,
             lineHeight: '24px',
             fontWeight: 600,
@@ -66,10 +68,17 @@ const useStyles = makeStyles()((theme) => {
         placeholder: {
             color: getMaskColor(theme).textLight,
         },
+        closeIcon: {
+            cursor: 'pointer',
+        },
     }
 })
 
-export function ApplicationBoard() {
+interface Props {
+    closeDialog(): void
+}
+
+export function ApplicationBoard(props: Props) {
     const { classes } = useStyles()
     const theme = useTheme()
     const { t } = useI18N()
@@ -116,6 +125,7 @@ export function ApplicationBoard() {
     return (
         <>
             <div className={classes.header}>
+                <CloseIcon className={classes.closeIcon} onClick={props.closeDialog} />
                 <Typography className={classes.subTitle}>{t('applications')}</Typography>
                 <img
                     src={theme.palette.mode === 'dark' ? SettingIconDarkModeUrl : SettingIconLightModeUrl}

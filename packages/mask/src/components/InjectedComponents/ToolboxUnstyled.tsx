@@ -82,8 +82,54 @@ export interface ToolboxHintProps {
     iconSize?: number
     badgeSize?: number
     mini?: boolean
+    category?: 'wallet' | 'application'
 }
 export function ToolboxHintUnstyled(props: ToolboxHintProps) {
+    return props.category === 'wallet' ? <ToolboxHintForWallet {...props} /> : <ToolboxHintForApplication {...props} />
+}
+
+function ToolboxHintForApplication(props: ToolboxHintProps) {
+    const {
+        ListItemButton = MuiListItemButton,
+        Container = 'div',
+        Typography = MuiTypography,
+        iconSize = 24,
+        mini,
+        ListItemText = MuiListItemText,
+    } = props
+    const { classes } = useStyles()
+    const { t } = useI18N()
+    const { openDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
+    return (
+        <Container>
+            <ListItemButton onClick={openDialog}>
+                <img
+                    src={new URL('../../plugins/EVM/assets/maskwallet.png', import.meta.url).toString()}
+                    style={{
+                        width: iconSize,
+                        height: iconSize,
+                    }}
+                />
+                {mini ? null : (
+                    <ListItemText
+                        primary={
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}>
+                                <Typography className={classes.title}>{t('mask_network')}</Typography>
+                            </Box>
+                        }
+                    />
+                )}
+            </ListItemButton>
+        </Container>
+    )
+}
+
+function ToolboxHintForWallet(props: ToolboxHintProps) {
     const { t } = useI18N()
     const nextIDConnectStatus = useNextIDConnectStatus()
     const {
