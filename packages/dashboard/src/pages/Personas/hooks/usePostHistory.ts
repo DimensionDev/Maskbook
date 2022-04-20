@@ -15,15 +15,18 @@ export const usePostHistory = (network: string, page: number, size = 20) => {
 
     return useAsyncRetry(async () => {
         const lastValue = cache.current.get(page - 1)
-        const values = await Services.Identity.queryPagedPostHistory(
-            {
-                network,
-                userIds: currentPersona?.linkedProfiles.map((profile) => profile.identifier.userId) ?? [],
-                after: lastValue?.identifier,
-                pageOffset: page,
-            },
-            size,
-        )
+        const values = !currentPersona
+            ? []
+            : await Services.Crypto.queryPagedPostHistory(
+                  currentPersona.identifier,
+                  {
+                      network,
+                      userIds: currentPersona?.linkedProfiles.map((profile) => profile.identifier.userId) ?? [],
+                      after: lastValue?.identifier,
+                      pageOffset: page,
+                  },
+                  size,
+              )
 
         cache.current.set(page, last(values))
 

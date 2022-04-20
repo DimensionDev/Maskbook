@@ -320,20 +320,10 @@ export async function updatePersonaDB(
 
 export async function createOrUpdatePersonaDB(
     record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier' | 'publicKey'>,
-    howToMerge: Parameters<typeof updatePersonaDB>[1] & { protectPrivateKey?: boolean },
+    howToMerge: Parameters<typeof updatePersonaDB>[1],
     t: PersonasTransaction<'readwrite'>,
 ) {
     const personaInDB = await t.objectStore('personas').get(record.identifier.toText())
-
-    if (howToMerge.protectPrivateKey && !!personaInDB?.privateKey && !record.privateKey) return
-
-    if (howToMerge.protectPrivateKey && !!personaInDB?.privateKey) {
-        const nextRecord = personaRecordOutDB(personaInDB)
-        nextRecord.hasLogout = false
-
-        return updatePersonaDB(nextRecord, howToMerge, t)
-    }
-
     if (personaInDB) return updatePersonaDB(record, howToMerge, t)
     else
         return createPersonaDB(
@@ -341,7 +331,7 @@ export async function createOrUpdatePersonaDB(
                 ...record,
                 createdAt: record.createdAt ?? new Date(),
                 updatedAt: record.updatedAt ?? new Date(),
-                linkedProfiles: new IdentifierMap(new Map()),
+                linkedProfiles: record.linkedProfiles ?? new IdentifierMap(new Map()),
             },
             t,
         )
@@ -456,43 +446,6 @@ const fuse = new Fuse([] as ProfileRecord[], {
         { name: 'identifier.network', weight: 0.2 },
     ],
 })
-
-/**
- * @deprecated
- * @param options
- * @param count
- */
-export async function queryProfilesPagedDB(
-    options: {
-        after?: ProfileIdentifier
-        query?: string
-    },
-    count: number,
-): Promise<ProfileRecord[]> {
-    const t = createTransaction(await db(), 'readonly')('profiles')
-    const breakPoint = options.after?.toText()
-    let firstRecord = true
-    const data: ProfileRecord[] = []
-    for await (const rec of t.objectStore('profiles').iterate()) {
-        if (firstRecord && breakPoint && rec.key !== breakPoint) {
-            rec.continue(breakPoint)
-            firstRecord = false
-            continue
-        }
-        firstRecord = false
-        // after this record
-        if (rec.key === breakPoint) continue
-        if (count <= 0) break
-        const outData = profileOutDB(rec.value)
-        if (typeof options.query === 'string') {
-            fuse.setCollection([outData])
-            if (!fuse.search(options.query).length) continue
-        }
-        count -= 1
-        data.push(outData)
-    }
-    return data
-}
 
 /**
  * Update a profile.
@@ -675,6 +628,22 @@ export async function updateRelationDB(
         MaskMessages.events.relationsChanged.sendToAll([
             { of: updating.profile, favor: updating.favor, reason: 'update' },
         ])
+    }
+}
+
+export async function createOrUpdateRelationDB(
+    record: Omit<RelationRecord, 'network'>,
+    t: RelationTransaction<'readwrite'>,
+    silent = false,
+) {
+    const old = await t
+        .objectStore('relations')
+        .get(IDBKeyRange.only([record.linked.toText(), record.profile.toText()]))
+
+    if (old) {
+        await updateRelationDB(record, t, silent)
+    } else {
+        await createRelationDB(record, t, silent)
     }
 }
 

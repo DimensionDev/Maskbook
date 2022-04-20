@@ -1,6 +1,8 @@
 // Notice, this module itself is not HMR ready.
 // If you change this file to add a new service, you need to reload.
 // This file should not rely on any other in-project files unless it is HMR ready.
+/// <reference path="../env.d.ts" />
+
 import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { assertEnvironment, Environment, MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { getLocalImplementation, serializer } from '@masknet/shared-base'
@@ -13,10 +15,20 @@ const hmr = new EventTarget()
 
 // #region Setup services
 setup('Crypto', () => import('./crypto'))
-import.meta.webpackHot && import.meta.webpackHot.accept(['./crypto'], () => hmr.dispatchEvent(new Event('crypto')))
-
+setup('Identity', () => import('./identity'))
+setup('Backup', () => import('./backup'))
 setup('Helper', () => import('./helper'))
-import.meta.webpackHot && import.meta.webpackHot.accept(['./helper'], () => hmr.dispatchEvent(new Event('helper')))
+setup('SocialNetwork', async () => ({}))
+setup('Settings', () => import('./settings'))
+setup('ThirdPartyPlugin', async () => ({}))
+
+if (import.meta.webpackHot) {
+    import.meta.webpackHot.accept(['./crypto'], () => hmr.dispatchEvent(new Event('crypto')))
+    import.meta.webpackHot.accept(['./identity'], () => hmr.dispatchEvent(new Event('identity')))
+    import.meta.webpackHot.accept(['./backup'], () => hmr.dispatchEvent(new Event('backup')))
+    import.meta.webpackHot.accept(['./helper'], () => hmr.dispatchEvent(new Event('helper')))
+    import.meta.webpackHot.accept(['./settings'], () => hmr.dispatchEvent(new Event('settings')))
+}
 
 function setup<K extends keyof Services>(key: K, implementation: () => Promise<Services[K]>) {
     const channel = message.events[key].bind(MessageTarget.Broadcast)
@@ -28,12 +40,10 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
         }
         return val
     }
-    load()
-
     if (import.meta.webpackHot) hmr.addEventListener(key, load)
 
     // setup server
-    AsyncCall(load, {
+    AsyncCall(load(), {
         key,
         serializer,
         channel,
