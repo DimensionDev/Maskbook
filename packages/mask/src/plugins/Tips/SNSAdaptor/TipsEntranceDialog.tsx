@@ -123,13 +123,11 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             setBodyViewStep(BodyViewStep.Main)
         }
     }
-    const { value: kv, retry: retryKv } = useKvGet<NextIdStorageInfo>()
-    const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
-    const list = useTipsWalletsList(
-        proofRes as BindingProof[],
-        currentPersona?.publicHexKey,
-        kv?.val as NextIDStorageInfo,
+    const { value: kv, retry: retryKv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(
+        currentPersonaIdentifier?.publicKeyAsHex,
     )
+    const { loading, value: proofRes, retry: retryProof } = useProvedWallets(currentPersonaIdentifier)
+    const list = useTipsWalletsList(proofRes, currentPersona?.publicHexKey, kv?.ok ? kv.val : undefined)
     useMemo(() => {
         setHasChanged(false)
         setRawPatchData(list)

@@ -1,18 +1,20 @@
 import { TipCoin } from '@masknet/icons'
+import { PluginId } from '@masknet/plugin-infra'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST, NextIDPlatform, NextIDStorageInfo, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { TooltipProps } from '@mui/material'
 import classnames from 'classnames'
 import { uniq } from 'lodash-unified'
-import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
+import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
+import { MaskMessages } from '../../../../shared'
 import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { useKvGet } from '../hooks/useKv'
 import { useI18N } from '../locales'
 import { PluginNextIDMessages } from '../messages'
-import { MaskMessages } from '../../../../shared'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     addresses?: string[]
@@ -81,11 +83,15 @@ export const TipButton: FC<Props> = ({
         return NextIDProof.queryIsBound(receiverPersona.publicHexKey, platform, receiver.userId, true)
     }, [receiverPersona?.publicHexKey, platform, receiver?.userId])
 
-    const [walletsState, queryBindings] = useAsyncFn(async () => {
+    const [publicKey, setPublicKey] = useState<string | null>(null)
+    const { value: kv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(publicKey)
+
+    const [NextIDWalletsState, queryBindings] = useAsyncFn(async () => {
         if (!receiver) return EMPTY_LIST
 
         const persona = await Services.Identity.queryPersonaByProfile(receiver)
         if (!persona?.publicHexKey) return EMPTY_LIST
+        setPublicKey(persona.publicHexKey)
 
         const bindings = await NextIDProof.queryExistedBindingByPersona(persona.publicHexKey, true)
         if (!bindings) return EMPTY_LIST
@@ -93,6 +99,27 @@ export const TipButton: FC<Props> = ({
         const wallets = bindings.proofs.filter((p) => p.platform === NextIDPlatform.Ethereum).map((p) => p.identity)
         return wallets
     }, [receiver])
+
+    const walletsFromCloud = useMemo(() => {
+        if (kv?.ok) {
+            if (!kv.val.proofs.length) return null
+            const tipWallets = kv.val.proofs.map((x) =>
+                x.content[PluginId.Tips].filter((y) => y.platform === NextIDPlatform.Ethereum),
+            )[0]
+            if (!tipWallets) return []
+            return tipWallets
+                .filter((x) => {
+                    if (NextIDWalletsState.value) {
+                        // Sometimes, the wallet might get deleted from next.id
+                        return x.isPublic && NextIDWalletsState.value.includes(x.identity)
+                    } else {
+                        return x.isPublic
+                    }
+                })
+                .map((x) => x.identity)
+        }
+        return null
+    }, [kv, NextIDWalletsState.value])
 
     useAsync(queryBindings, [queryBindings])
 
@@ -104,17 +131,20 @@ export const TipButton: FC<Props> = ({
     }, [])
 
     const allAddresses = useMemo(() => {
-        return uniq([...(walletsState.value || []), ...addresses])
-    }, [walletsState.value, addresses])
+        return walletsFromCloud || uniq([...(NextIDWalletsState.value || []), ...addresses])
+    }, [NextIDWalletsState.value, addresses, walletsFromCloud])
 
-    const disabled = false // loadingPersona || loadingVerifyInfo || allAddresses.length === 0
+    const hideAllWallets = walletsFromCloud !== null && walletsFromCloud.length === 0
+
+    const isChecking = loadingPersona || loadingVerifyInfo
+    const disabled = isChecking || !isAccountVerified || allAddresses.length === 0 || hideAllWallets
 
     const sendTip: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {
             evt.stopPropagation()
             evt.preventDefault()
             if (disabled) return
-            if (walletsState.loading || !walletsState.value) {
+            if (NextIDWalletsState.loading || !NextIDWalletsState.value) {
                 await queryBindings()
             }
             if (!allAddresses.length || !receiver?.userId) return
@@ -123,7 +153,7 @@ export const TipButton: FC<Props> = ({
                 addresses: allAddresses,
             })
         },
-        [disabled, walletsState, allAddresses, receiver?.userId, queryBindings],
+        [disabled, NextIDWalletsState, allAddresses, receiver?.userId, queryBindings],
     )
     const dom = (
         <div
@@ -140,7 +170,7 @@ export const TipButton: FC<Props> = ({
         return (
             <ShadowRootTooltip
                 classes={{ tooltip: classes.tooltip }}
-                title={t.tip_wallets_missed()}
+                title={isChecking ? '' : t.tip_wallets_missed()}
                 placement="bottom"
                 arrow={false}
                 {...tooltipProps}>

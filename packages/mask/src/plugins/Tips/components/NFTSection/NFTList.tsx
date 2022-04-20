@@ -134,8 +134,8 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
                 const link =
                     Utils?.resolveNonFungibleTokenLink && token.contract
                         ? Utils.resolveNonFungibleTokenLink(
-                              token.contract?.chainId,
-                              token.contract?.address,
+                              token.contract.chainId,
+                              token.contract.address,
                               token.tokenId,
                           )
                         : undefined
