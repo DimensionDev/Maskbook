@@ -91,18 +91,20 @@ interface CurrentWalletBox {
     wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
     walletName?: string
     changeWallet: () => void
+    notInPop?: boolean
 }
 export function CurrentWalletBox(props: CurrentWalletBox) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { wallet, walletName } = props
+    const { wallet, walletName, notInPop, changeWallet } = props
     const providerDescriptor = useProviderDescriptor(wallet.providerType)
     const networkDescriptor = useNetworkDescriptor(wallet.networkType)
-    const account = useAccount()
+    const frontAccount = useAccount()
+    const account = notInPop ? frontAccount : wallet.account ?? (wallet as any).address
     const { Utils } = useWeb3State() ?? {}
     const { value: domain } = useReverseAddress(wallet.account)
 
-    return (
+    return account ? (
         <section className={classNames(classes.currentAccount)}>
             <WalletIcon
                 size={30}
@@ -148,8 +150,19 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                 className={classNames(classes.actionButton)}
                 variant="contained"
                 size="small"
-                onClick={props.changeWallet}>
+                onClick={changeWallet}>
                 {t('wallet_status_button_change')}
+            </Button>
+        </section>
+    ) : (
+        <section className={classes.connectButtonWrapper}>
+            <Button
+                className={classNames(classes.actionButton)}
+                color="primary"
+                variant="contained"
+                size="small"
+                onClick={changeWallet}>
+                {t('plugin_wallet_on_connect')}
             </Button>
         </section>
     )

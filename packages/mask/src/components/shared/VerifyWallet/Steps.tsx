@@ -121,7 +121,6 @@ export function Steps(props: StepsProps) {
         onCustomCancel,
     } = props
     const { showSnackbar } = usePopupCustomSnackbar()
-
     const walletName = useWallets(wallet.providerType).find((x) => isSameAddress(x.address, wallet.account))?.name
 
     const stepIconMap = {
@@ -158,7 +157,7 @@ export function Steps(props: StepsProps) {
 
     return (
         <div className={classes.container}>
-            <CurrentWalletBox walletName={walletName} wallet={wallet} changeWallet={changeWallet} />
+            <CurrentWalletBox notInPop={notInPop} walletName={walletName} wallet={wallet} changeWallet={changeWallet} />
             {notEvm && <Typography className={classes.hasBound}>{t('plugin_tips_not_evm_alert')}</Typography>}
             {notInPop && disableConfirm && !notEvm && (
                 <Typography className={classes.hasBound}>{t('wallet_verify_has_bound')}</Typography>
