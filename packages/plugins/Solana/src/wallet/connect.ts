@@ -21,7 +21,12 @@ export async function storeConnection(pubKey: string | BNLike, chainId?: number)
     }
 }
 export async function connectWallet(init = false) {
-    const rsp = await bridgedSolanaProvider.connect({ onlyIfTrusted: init })
+    let rsp: Awaited<ReturnType<typeof bridgedSolanaProvider.connect>> | null = null
+    try {
+        rsp = await bridgedSolanaProvider.connect({ onlyIfTrusted: init })
+    } catch {
+        rsp = await bridgedSolanaProvider.connect()
+    }
     if (rsp?.publicKey) {
         await storeConnection(rsp.publicKey)
     }
