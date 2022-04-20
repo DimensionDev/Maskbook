@@ -136,8 +136,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             if (idx !== -1) {
                 result.unshift(result.splice(idx, 1)[0])
             }
-            setRawWalletList(JSON.parse(JSON.stringify(result)))
-            setRawPatchData(JSON.parse(JSON.stringify(result)))
+            setRawWalletList(result)
+            setRawPatchData(result)
             return
         }
         ;(walletsList as WalletProof[]).forEach((x, idx) => {
