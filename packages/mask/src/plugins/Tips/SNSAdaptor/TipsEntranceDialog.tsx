@@ -117,22 +117,25 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         const walletsList = proofRes
             ? (proofRes as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
             : []
-        walletsList.sort((a, b) => Number.parseInt(a.created_at, 10) - Number.parseInt(b.created_at, 10))
+        walletsList.sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
         if (kv?.ok && kv.val.proofs.length > 0 && walletsList.length > 0) {
             const kvCache = (kv.val as NextIdStorageInfo).proofs.find(
                 (x) => x.identity === currentPersona?.publicHexKey,
             )
             const result = walletsList.reduce((res: WalletProof[], x) => {
+                const item = x as WalletProof
+                item.isDefault = 0
+                item.isPublic = 1
                 const temp = (kvCache?.content[PluginId.Tip] as WalletProof[]).filter((i) =>
                     isSameAddress(x.identity, i.identity),
                 )
                 if (temp && temp.length > 0) {
                     x = temp[0]
                 }
-                res.push(x as WalletProof)
+                res.push(item)
                 return res
             }, [])
-            const idx = result.findIndex((x) => x.isDefault)
+            const idx = result.findIndex((i) => i.isDefault)
             if (idx !== -1) {
                 result.unshift(result.splice(idx, 1)[0])
             }

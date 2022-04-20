@@ -1,6 +1,6 @@
 import { ExternalLink } from 'react-feather'
 import classNames from 'classnames'
-import { ChainId, ProviderType, NetworkType, useAccount } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType, NetworkType, useAccount, useProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -102,13 +102,14 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { wallet, walletName, notInPop, changeWallet } = props
-    const providerDescriptor = useProviderDescriptor(wallet.providerType)
+    const providerType = useProviderType()
+    const providerDescriptor = useProviderDescriptor(wallet.providerType ?? providerType)
     const networkDescriptor = useNetworkDescriptor(wallet.networkType)
     const frontAccount = useAccount()
     const account = notInPop ? frontAccount : wallet.account ?? (wallet as any).address
     const { Utils } = useWeb3State() ?? {}
     const { value: domain } = useReverseAddress(wallet.account)
-
+    console.log(wallet, 'ggg', walletName)
     return account ? (
         <section className={classNames(classes.currentAccount)}>
             <WalletIcon
@@ -119,7 +120,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    {wallet.providerType !== ProviderType.MaskWallet ? (
+                    {wallet.providerType ?? providerType !== ProviderType.MaskWallet ? (
                         <Typography className={classes.accountName}>
                             {domain && Utils?.formatDomainName
                                 ? Utils.formatDomainName(domain)

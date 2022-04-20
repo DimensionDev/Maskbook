@@ -35,6 +35,7 @@ export interface BindingProof {
     invalid_reason: string
     latest_checked_at: string
     is_valid: boolean
+    last_checked_at: string
 }
 
 interface Pagination {
