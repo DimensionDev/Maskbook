@@ -20,6 +20,9 @@ const useStyles = makeStyles()((theme) => ({
     cancel: {
         backgroundColor: theme.palette.background.default,
         border: 'none',
+        '&:hover': {
+            border: 'none',
+        },
     },
 }))
 

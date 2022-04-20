@@ -34,7 +34,7 @@ export function PersonaPage(props: PersonaPageProps) {
     const currentIdentity = context.lastRecognizedProfile.getCurrentValue()
     const { classes } = useStyles()
     const { loading, value: persona } = usePersonas()
-    const { loading: loadingPeronaVerified, value: personaVerifiedStatus } = usePersonaVerify()
+    const { loading: loadingPersonaVerified, value: personaVerifiedStatus } = usePersonaVerify()
     const { reset } = useNextIDConnectStatus()
     const t = useI18N()
 
@@ -54,7 +54,7 @@ export function PersonaPage(props: PersonaPageProps) {
 
     return (
         <DialogContent sx={{ height: 612, padding: 2 }}>
-            {loading || loadingPeronaVerified ? (
+            {loading || loadingPersonaVerified ? (
                 <Stack justifyContent="center" alignItems="center">
                     <CircularProgress />
                 </Stack>

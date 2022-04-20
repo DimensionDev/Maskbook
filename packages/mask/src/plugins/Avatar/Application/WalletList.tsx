@@ -18,14 +18,14 @@ import { LinkIcon } from '../assets/link'
 import { CopyIcon } from '../assets/copy'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {},
-    wrapper: {
-        backgroundColor: theme.palette.background.paper,
+    root: {
+        backgroundColor: theme.palette.background.default,
         borderRadius: 9999,
-        paddingLeft: 8,
-        paddingRight: 8,
+        paddingLeft: 4,
+        paddingRight: 4,
         cursor: 'pointer',
     },
+    wrapper: {},
     address: {},
     copy: {
         color: theme.palette.secondary.main,
