@@ -2,6 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo } from 'react'
 import { ExternalLink } from 'react-feather'
+import { useI18N } from '../../../../utils'
 const useStyles = makeStyles()((theme) => ({
     container: {
         position: 'relative',
@@ -77,6 +78,7 @@ interface EmptyProps {
     toAdd: () => void
 }
 const Empty = memo(({ toAdd }: EmptyProps) => {
+    const { t } = useI18N()
     const { classes } = useStyles()
     return (
         <div className={classes.container}>
@@ -108,7 +110,9 @@ const Empty = memo(({ toAdd }: EmptyProps) => {
                     src={new URL('../../assets/wallet.png', import.meta.url).toString()}
                     alt=""
                 />
-                <Typography sx={{ fontSize: 14, lineHeight: 18, fontWeight: 700 }}>Connect your wallet</Typography>
+                <Typography sx={{ fontSize: 14, lineHeight: 18, fontWeight: 700 }}>
+                    {t('plugin_tips_connect_wallet')}
+                </Typography>
             </div>
         </div>
     )

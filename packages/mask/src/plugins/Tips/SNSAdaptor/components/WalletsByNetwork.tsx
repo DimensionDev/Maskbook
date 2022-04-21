@@ -3,6 +3,7 @@ import { SettingsIcon } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { WalletCom } from './WalletCom'
 import type { BindingProof } from '@masknet/shared-base'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -48,6 +49,7 @@ interface WalletsByNetworkProps {
 }
 
 export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: WalletsByNetworkProps) {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const isAllHide = wallets.reduce((res, x) => {
         if (x.isPublic) {
@@ -81,7 +83,7 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
                                 )) ||
                                 null
                             )
-                        })) || <Typography className={classes.empty}>Please set wallets to receive tips.</Typography>}
+                        })) || <Typography className={classes.empty}>{t('plugin_tips_empty_list')}</Typography>}
                 </div>
             )}
         </div>

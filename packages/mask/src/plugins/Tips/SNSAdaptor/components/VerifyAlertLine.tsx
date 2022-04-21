@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -24,10 +25,11 @@ interface VerifyAlertLineProps {
 }
 
 export function VerifyAlertLine({ onClose }: VerifyAlertLineProps) {
+    const { t } = useI18N()
     const { classes } = useStyles()
     return (
         <div className={classes.container}>
-            <Typography>Please add and verify your wallet to set the address for receiving tips.</Typography>
+            <Typography>{t('plugin_tips_verify_line_intro')}</Typography>
             <CloseIcon className={classes.closeIcon} onClick={() => onClose()} />
         </div>
     )

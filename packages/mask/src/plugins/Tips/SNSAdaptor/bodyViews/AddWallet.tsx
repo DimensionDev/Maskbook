@@ -10,6 +10,7 @@ import Services from '../../../../extension/service'
 import { useCustomSnackbar } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import { useProviderDescriptor } from '@masknet/plugin-infra/web3'
+import { useI18N } from '../../../../utils'
 
 interface AddWalletViewProps {
     currentPersona: any
@@ -18,6 +19,7 @@ interface AddWalletViewProps {
 }
 
 const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewProps) => {
+    const { t } = useI18N()
     const [isBound, setIsBound] = useState(false)
     const [signed, setSigned] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
@@ -55,13 +57,13 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                 currentPersona.identifier,
                 payload.signPayload,
             )
-            showSnackbar('Persona signed successfully.', {
+            showSnackbar(t('plugin_tips_persona_sign_success'), {
                 variant: 'success',
                 message: nowTime,
             })
             return signResult.signature.signature
         } catch (error) {
-            showSnackbar('Persona Signature failed.', {
+            showSnackbar(t('plugin_tips_persona_sign_error'), {
                 variant: 'error',
                 message: nowTime,
             })
@@ -88,10 +90,10 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                 },
             )
             setSigned(true)
-            showSnackbar("Wallet's connected.", { variant: 'success', message: nowTime })
+            showSnackbar(t('plugin_tips_wallet_sign_success'), { variant: 'success', message: nowTime })
             return true
         } catch (error) {
-            showSnackbar('Wallet connection failed.', { variant: 'error', message: nowTime })
+            showSnackbar(t('plugin_tips_wallet_sign_error'), { variant: 'error', message: nowTime })
             console.error(error)
             return false
         }

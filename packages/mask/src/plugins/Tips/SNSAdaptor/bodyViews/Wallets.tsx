@@ -2,6 +2,7 @@ import type { BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
+import { useI18N } from '../../../../utils'
 import { DisconnectWalletDialog } from '../components/DisconnectDialog'
 import { WalletCom } from '../components/WalletCom'
 
@@ -30,6 +31,7 @@ interface WalletsPageProp {
 }
 
 const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: WalletsPageProp) => {
+    const { t } = useI18N()
     const [open, setOpen] = useState(false)
     const { classes } = useStyles()
     const [walletToDel, setWalletToDel] = useState<BindingProof>()
@@ -60,7 +62,7 @@ const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: W
                         src={new URL('../../assets/empty.png', import.meta.url).toString()}
                         alt=""
                     />
-                    <Typography>Please add wallet</Typography>
+                    <Typography>{t('plugin_tips_wallet_add')}</Typography>
                 </div>
             )}
             <DisconnectWalletDialog
