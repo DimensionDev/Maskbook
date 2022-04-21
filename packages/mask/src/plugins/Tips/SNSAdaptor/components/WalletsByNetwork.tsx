@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { SettingsIcon } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { WalletCom } from './WalletCom'
-import type { WalletProof } from '../TipsEntranceDialog'
+import type { BindingProof } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
 interface WalletsByNetworkProps {
     network: any
     toSetting: any
-    wallets: WalletProof[]
+    wallets: BindingProof[]
     setAsDefault: (idx: number) => void
 }
 

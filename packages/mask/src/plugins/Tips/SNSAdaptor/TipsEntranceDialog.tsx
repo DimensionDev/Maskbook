@@ -75,11 +75,7 @@ enum BodyViewSteps {
     wallets = 'Wallets',
     addWallet = 'Add wallet',
 }
-export interface WalletProof extends BindingProof {
-    isDefault: number
-    isPublic: number
-    rawIdx: number
-}
+
 export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -87,8 +83,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const supportedNetworks = TipsSupportedChains
     const [bodyView, setBodyView] = useState<BodyViewSteps>(BodyViewSteps.main)
     const [hasChanged, setHasChanged] = useState(false)
-    const [rawPatchData, setRawPatchData] = useState<WalletProof[]>([])
-    const [rawWalletList, setRawWalletList] = useState<WalletProof[]>([])
+    const [rawPatchData, setRawPatchData] = useState<BindingProof[]>([])
+    const [rawWalletList, setRawWalletList] = useState<BindingProof[]>([])
     const { showSnackbar } = useCustomSnackbar()
     const account = useAccount()
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
@@ -118,22 +114,23 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         const walletsList = proofRes
             ? (proofRes as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
             : []
+        walletsList.forEach((i, idx) => (i.rawIdx = idx))
         walletsList.sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
         if (kv?.ok && kv.val.proofs.length > 0 && walletsList.length > 0) {
             const kvCache = (kv.val as NextIdStorageInfo).proofs.find(
                 (x) => x.identity === currentPersona?.publicHexKey,
             )
-            const result = walletsList.reduce((res: WalletProof[], x, idx) => {
-                ;(x as WalletProof).isDefault = 0
-                ;(x as WalletProof).isPublic = 1
-                ;(x as WalletProof).rawIdx = idx
-                const temp = (kvCache?.content[PluginId.Tip] as WalletProof[]).filter((i) =>
+            if (!kvCache) return
+            const result: BindingProof[] = walletsList.reduce<BindingProof[]>((res, x) => {
+                x.isDefault = 0
+                x.isPublic = 1
+                const temp = (kvCache?.content[PluginId.Tip] as BindingProof[]).filter((i) =>
                     isSameAddress(x.identity, i.identity),
                 )
                 if (temp && temp.length > 0) {
                     x = temp[0]
                 }
-                res.push(x as WalletProof)
+                res.push(x)
                 return res
             }, [])
             const idx = result.findIndex((i) => i.isDefault)
@@ -147,10 +144,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             setRawPatchData(result)
             return
         }
-        ;(walletsList as WalletProof[]).forEach((x, idx) => {
+        walletsList.forEach((x, idx) => {
             x.isPublic = 1
             x.isDefault = 0
-            x.rawIdx = idx
             if (idx === 0) {
                 x.isDefault = 1
                 return
@@ -194,12 +190,15 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         )
     }
     const setAsDefault = (idx: number) => {
-        const changed: WalletProof[] = JSON.parse(JSON.stringify(rawPatchData))
+        const changed = JSON.parse(JSON.stringify(rawPatchData))
         changed.forEach((x: any) => (x.isDefault = 0))
         changed[idx].isDefault = 1
         const defaultItem = JSON.parse(JSON.stringify(changed[idx]))
         changed.splice(idx, 1)
-        changed.sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
+        changed.sort(
+            (a: BindingProof, b: BindingProof) =>
+                Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10),
+        )
         changed.unshift(defaultItem)
         setRawPatchData(changed)
         setHasChanged(true)
@@ -253,7 +252,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         }
     }, [account])
     const [confirmState, onConfirmRelease] = useAsyncFn(
-        async (wallet?: WalletProof) => {
+        async (wallet) => {
             try {
                 if (!currentPersona?.publicHexKey || !wallet) throw new Error('failed')
 

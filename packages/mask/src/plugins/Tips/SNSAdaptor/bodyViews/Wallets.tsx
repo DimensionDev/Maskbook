@@ -1,9 +1,9 @@
+import type { BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { DisconnectWalletDialog } from '../components/DisconnectDialog'
 import { WalletCom } from '../components/WalletCom'
-import type { WalletProof } from '../TipsEntranceDialog'
 
 const useStyles = makeStyles()((theme) => ({
     emptyBox: {
@@ -23,17 +23,17 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface WalletsPageProp {
-    wallets: WalletProof[]
+    wallets: BindingProof[]
     releaseLoading: boolean
-    onRelease: (wallet?: WalletProof) => Promise<boolean>
+    onRelease: (wallet?: BindingProof) => Promise<boolean>
     personaName: string | undefined
 }
 
 const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: WalletsPageProp) => {
     const [open, setOpen] = useState(false)
     const { classes } = useStyles()
-    const [walletToDel, setWalletToDel] = useState<WalletProof>()
-    const deleteWallet = useCallback((wallet: WalletProof) => {
+    const [walletToDel, setWalletToDel] = useState<BindingProof>()
+    const deleteWallet = useCallback((wallet: BindingProof) => {
         setWalletToDel(wallet)
         setOpen(true)
     }, [])

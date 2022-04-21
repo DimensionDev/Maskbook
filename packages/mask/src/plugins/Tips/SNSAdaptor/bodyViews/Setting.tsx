@@ -1,9 +1,9 @@
+import type { BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo, useEffect, useState } from 'react'
 import { WalletSwitch } from '../components/WalletSwitch'
 
-import type { WalletProof } from '../TipsEntranceDialog'
 const useStyles = makeStyles()((theme) => ({
     container: {
         height: '100%',
@@ -25,13 +25,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface SettingPageProp {
-    wallets: WalletProof[]
+    wallets: BindingProof[]
     onSwitchChange: (idx: number, v: boolean) => void
 }
 
 const SettingPage = memo(({ wallets, onSwitchChange }: SettingPageProp) => {
     const { classes } = useStyles()
-    const [data, setData] = useState<WalletProof[]>([])
+    const [data, setData] = useState<BindingProof[]>([])
     useEffect(() => {
         setData(wallets)
     }, [wallets])

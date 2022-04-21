@@ -36,6 +36,9 @@ export interface BindingProof {
     latest_checked_at: string
     is_valid: boolean
     last_checked_at: string
+    rawIdx?: number
+    isDefault?: number
+    isPublic?: number
 }
 
 interface Pagination {
