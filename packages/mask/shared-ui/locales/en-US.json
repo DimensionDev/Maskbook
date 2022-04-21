@@ -1092,6 +1092,7 @@
     "plugin_tips_wallet_sign_error": "Wallet connection failed.",
     "plugin_tips_wallet_add": "Please add wallet",
     "plugin_tips_connect_wallet": "Connect your wallet",
+    "plugin_tips_sns_persona_unmatched": "Twitter ID verified persona({{currentSNSConnectedPersonaPublicKey}}) is not consistent with your current persona({{currentPersonaPublicKey}}). Please switch to persona({{currentSNSConnectedPersonaPublicKey}}) and try again.",
     "plugin_tips_verify_line_intro": "Please add and verify your wallet to set the address for receiving tips.",
     "plugin_tips_empty_list": "Please set wallets to receive tips.",
     "plugin_artblocks_description": "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account.",

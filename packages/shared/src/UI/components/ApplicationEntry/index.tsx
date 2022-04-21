@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
@@ -10,7 +10,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         backgroundColor: theme.palette.background.default,
         borderRadius: '8px',
-
         height: 100,
     },
     applicationBoxHover: {
@@ -45,20 +44,33 @@ interface Props {
     icon: React.ReactNode
     title: React.ReactNode
     disabled?: boolean
+    toolTip?: string
     onClick: () => void
 }
 
 export function ApplicationEntry(props: Props) {
-    const { title, onClick, disabled = false, icon } = props
+    const { title, onClick, disabled = false, icon, toolTip } = props
     const { classes } = useStyles()
     return (
-        <div
-            className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
-            onClick={disabled ? () => {} : onClick}>
-            <div className={classes.iconWrapper}>{icon}</div>
-            <Typography className={classes.title} color="textPrimary">
-                {title}
-            </Typography>
-        </div>
+        <ShadowRootTooltip
+            PopperProps={{
+                disablePortal: true,
+            }}
+            placement="top"
+            arrow
+            disableHoverListener={!toolTip}
+            title={<Typography>{toolTip}</Typography>}>
+            <div
+                className={classNames(
+                    classes.applicationBox,
+                    disabled ? classes.disabled : classes.applicationBoxHover,
+                )}
+                onClick={disabled ? () => {} : onClick}>
+                <div className={classes.iconWrapper}>{icon}</div>
+                <Typography className={classes.title} color="textPrimary">
+                    {title}
+                </Typography>
+            </div>
+        </ShadowRootTooltip>
     )
 }
