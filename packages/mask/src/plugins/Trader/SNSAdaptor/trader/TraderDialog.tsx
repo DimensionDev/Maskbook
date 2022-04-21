@@ -118,7 +118,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                                 chains={chainIdList}
                             />
                         </div>
-                        <Trader {...traderProps} chainId={chainId} classes={{ root: classes.tradeRoot }} />
+                        <Trader chainId={chainId} {...traderProps} classes={{ root: classes.tradeRoot }} />
                     </DialogContent>
                 </InjectedDialog>
             </AllProviderTradeContext.Provider>
