@@ -14,6 +14,7 @@
   "scripts": {
     "start": "dev",
     "start:mv3": "dev --mv3",
+    "start:fx": "dev --preset firefox",
     "codegen": "gulp codegen-watch",
     "build": "build",
     "build-ios": "build --preset iOS",

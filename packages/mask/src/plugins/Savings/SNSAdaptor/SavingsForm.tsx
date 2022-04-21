@@ -7,6 +7,7 @@ import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import {
     createContract,
     createERC20Token,
+    createLookupTableResolver,
     EthereumTokenType,
     formatBalance,
     formatCurrency,
@@ -47,10 +48,13 @@ export interface SavingsFormProps {
     onClose?: () => void
 }
 
-const ProtocolName = {
-    [ProtocolType.Lido]: 'lido',
-    [ProtocolType.AAVE]: 'aave',
-}
+export const resolveProtocolName = createLookupTableResolver<ProtocolType, string>(
+    {
+        [ProtocolType.Lido]: 'Lido',
+        [ProtocolType.AAVE]: 'AAVE',
+    },
+    'unknown',
+)
 
 export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProps) {
     const { t } = useI18N()
@@ -64,7 +68,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })
-    const [isOpen, setIsOpen] = useState(false)
+    const [open, setOpen] = useState(false)
 
     const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', chainId)
 
@@ -224,7 +228,9 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
             open: true,
             state: tradeState,
             shareText: [
-                `I just deposit ${inputAmount} ${protocol.bareToken.symbol} with ${ProtocolName[protocol.type]}. ${
+                `I just deposit ${inputAmount} ${protocol.bareToken.symbol} with ${resolveProtocolName(
+                    protocol.type,
+                )}. ${
                     isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                         ? `Follow @${
                               isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
