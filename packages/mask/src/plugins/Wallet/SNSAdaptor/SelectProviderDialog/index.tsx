@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
@@ -8,12 +10,12 @@ import {
     useNetworkDescriptor,
     useNetworkType,
     useWeb3UI,
-} from '@masknet/plugin-infra'
+    Web3Plugin,
+} from '@masknet/plugin-infra/web3'
 import { isDashboardPage } from '@masknet/shared-base'
-import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
+import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { WalletMessages } from '../../messages'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { WalletMessages, WalletRPC } from '../../messages'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
 import { PluginProviderRender } from './PluginProviderRender'
 import { pluginIDSettings } from '../../../../settings/settings'
@@ -51,21 +53,26 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const pluginID = useValueRef(pluginIDSettings) as NetworkPluginID
     const network = useNetworkDescriptor()
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
-    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
+    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID ?? NetworkPluginID.PLUGIN_EVM)
     const undeterminedNetwork = useNetworkDescriptor(undeterminedNetworkID, undeterminedPluginID)
 
     const networkType = useNetworkType(undeterminedPluginID)
 
     const { NetworkIconClickBait, ProviderIconClickBait } = useWeb3UI(undeterminedPluginID).SelectProviderDialog ?? {}
 
-    const onSubmit = useCallback(() => {
-        if (undeterminedNetwork?.type === networkType) {
-            pluginIDSettings.value = undeterminedPluginID
-        }
-        closeDialog()
+    const onSubmit = useCallback(
+        async (result?: Web3Plugin.ConnectionResult) => {
+            if (result)
+                await WalletRPC.updateAccount(result as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>)
 
-        if (isDashboard) WalletMessages.events.walletStatusDialogUpdated.sendToLocal({ open: false })
-    }, [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog, isDashboard])
+            if (undeterminedNetwork?.type === networkType) {
+                pluginIDSettings.value = undeterminedPluginID
+            }
+            closeDialog()
+            if (isDashboard) WalletMessages.events.walletStatusDialogUpdated.sendToLocal({ open: false })
+        },
+        [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog, isDashboard],
+    )
 
     // not available for the native app
     if (hasNativeAPI) return null

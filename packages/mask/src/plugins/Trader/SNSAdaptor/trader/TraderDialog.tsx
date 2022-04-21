@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { usePluginIDContext, useActivatedPlugin, PluginId } from '@masknet/plugin-infra'
+import { PluginId } from '@masknet/plugin-infra'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ChainId, useChainId, useChainIdValid } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { PluginTraderMessages } from '../../messages'
@@ -64,7 +66,7 @@ interface TraderDialogProps {
 
 export function TraderDialog({ open, onClose }: TraderDialogProps) {
     const isDashboard = isDashboardPage()
-    const pluginID = usePluginIDContext()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const traderDefinition = useActivatedPlugin(PluginId.Trader, 'any')
     const chainIdList = traderDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
     const { t } = useI18N()

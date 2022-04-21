@@ -6,6 +6,7 @@ import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { searchAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector'
 import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user'
 import { delay } from '@dimensiondev/kit'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,
@@ -15,7 +16,7 @@ export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.Id
     },
 }
 
-function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal: AbortSignal) {
+function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolved>, signal: AbortSignal) {
     const self = (isMobileFacebook ? myUsernameLiveSelectorMobile : myUsernameLiveSelectorPC)
         .clone()
         .map((x) => getProfileIdentifierAtFacebook(x, false))
@@ -29,7 +30,7 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal
             characterData: true,
         })
     signal.addEventListener('abort', () => watcher.stopWatch())
-    function assign(i: Value) {
+    function assign(i: IdentityResolved) {
         if (!i.identifier.isUnknown) ref.value = i
     }
     fetch('/me', { method: 'HEAD', signal })
@@ -103,5 +104,4 @@ const myUsernameLiveSelectorMobile = new LiveSelector().querySelector<HTMLAnchor
     '#bookmarks_flyout .mSideMenu > div > ul > li:first-child a, #MComposer a',
 )
 
-type Value = SocialNetworkUI.CollectingCapabilities.IdentityResolved
 // #endregion

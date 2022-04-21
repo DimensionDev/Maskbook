@@ -1,4 +1,4 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { isDashboardPage } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-solana'
 import { cloneElement, isValidElement, useCallback } from 'react'

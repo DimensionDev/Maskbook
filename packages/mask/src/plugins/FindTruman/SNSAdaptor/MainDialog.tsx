@@ -2,7 +2,7 @@ import { DialogContent, Card, Grid, Alert, Box, Typography, Button } from '@mui/
 import { makeStyles } from '@masknet/theme'
 import { useContext, useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
-import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { fetchConst, fetchUserParticipatedStoryStatus } from '../Worker/apis'
 import type { UserStoryStatus, FindTrumanConst } from '../types'

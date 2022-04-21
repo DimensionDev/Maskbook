@@ -1,4 +1,4 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { createConstantSubscription, mapSubscription } from '@masknet/shared-base'
 import { toFixed } from '@masknet/web3-shared-base'
 import {
@@ -9,7 +9,7 @@ import {
     resolveBlockLinkOnExplorer,
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-solana'
-import { getFungibleAssets, getNonFungibleAssets } from '../../apis'
+import { getFungibleAssets, getNonFungibleAssets, lookup, reverse } from '../../apis'
 import { formatAddress, formatCurrency } from '../../helpers'
 import { getStorage, StorageDefaultValue } from '../../storage'
 
@@ -57,6 +57,10 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             resolveTransactionLink: resolveTransactionLinkOnExplorer,
             resolveAddressLink: resolveAddressLinkOnExplorer,
             resolveBlockLink: resolveBlockLinkOnExplorer,
+        },
+        NameService: {
+            lookup: (domain: string) => lookup(domain, chainId),
+            reverse: (address: string) => reverse(address, chainId),
         },
     }
 }

@@ -1,4 +1,5 @@
 import { createProxyKVStorageBackend, createKVStorageHost, KVStorageBackend } from '@masknet/shared-base'
+import { PluginId } from '@masknet/plugin-infra'
 import { MaskMessages } from './messages'
 
 const indexedDBProxy = createProxyKVStorageBackend()
@@ -19,6 +20,29 @@ export const InMemoryStorages = {
         tokenId: '',
     }),
 }
+
+const ApplicationEntryUnlistedListKey = 'application_entry_unlisted_list'
 export const PersistentStorages = {
     Plugin: createPersistentKVStorage('plugin', {}),
+    Settings: createPersistentKVStorage('settings', {
+        debugging: false,
+    }),
+    ApplicationEntryUnListedList: createPersistentKVStorage<{ [key: string]: boolean }>(
+        ApplicationEntryUnlistedListKey,
+        {
+            [PluginId.RedPacket]: false,
+            [PluginId.FileService]: false,
+            [PluginId.ITO]: false,
+            [`${PluginId.ITO}_claim`]: false,
+            [PluginId.CrossChainBridge]: false,
+            [PluginId.MaskBox]: false,
+            [PluginId.Savings]: false,
+            [PluginId.Avatar]: false,
+            [PluginId.Trader]: false,
+            [PluginId.Transak]: false,
+            [PluginId.Pets]: false,
+            [PluginId.FindTruman]: false,
+            [PluginId.GoPlusSecurity]: false,
+        },
+    ),
 }

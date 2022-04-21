@@ -2,11 +2,11 @@ import { useCallback } from 'react'
 import classnames from 'classnames'
 import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { formatEthereumAddress, useAccount } from '@masknet/web3-shared-evm'
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh'
 import { Avatar, Button, DialogActions, DialogContent, Paper, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useI18N, useMatchXS } from '../../../../utils'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
@@ -50,9 +50,9 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(2),
         padding: theme.spacing(2),
         borderRadius: theme.spacing(1),
-        '&> :first-child': {
-            paddingBottom: theme.spacing(1),
-        },
+    },
+    texts: {
+        paddingBottom: theme.spacing(1),
     },
 }))
 
@@ -104,10 +104,10 @@ export function WalletRiskWarningDialog() {
                         children={<Trans i18nKey="multiline">{t('wallet_risk_warning_content')}</Trans>}
                     />
                     <Paper elevation={0} className={`${classes.wallet} dashboard-style`}>
-                        <Typography variant="body1" color="textSecondary">
+                        <Typography variant="body1" color="textSecondary" className={classes.texts}>
                             {t('nft_wallet_label')}
                         </Typography>
-                        <Typography variant="body1" color="textPrimary">
+                        <Typography variant="body1" color="textPrimary" className={classes.texts}>
                             {isMobile ? formatEthereumAddress(account, 5) : account}
                         </Typography>
                     </Paper>

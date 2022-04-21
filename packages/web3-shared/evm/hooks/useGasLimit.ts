@@ -4,6 +4,7 @@ import { useAccount } from './useAccount'
 import { useWeb3 } from './useWeb3'
 import { useAsync } from 'react-use'
 import { unreachable } from '@dimensiondev/kit'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
 export function useGasLimit(
     type?: EthereumTokenType,
@@ -11,7 +12,7 @@ export function useGasLimit(
     amount?: string,
     recipient?: string,
     tokenId?: string,
-) {
+): AsyncState<number> {
     const web3 = useWeb3()
     const account = useAccount()
     const erc20Contract = useERC20TokenContract(contractAddress)

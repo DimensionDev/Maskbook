@@ -1,4 +1,4 @@
-import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra'
+import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { leftShift, multipliedBy } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-flow'
 

@@ -1,77 +1,27 @@
-import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
-import { i18n } from '../../shared-ui/locales_legacy'
+import { createGlobalSettings, createNetworkSettings, createComplexNetworkSettings } from './createSettings'
 import { LaunchPage } from './types'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
-import { Identifier, ProfileIdentifier } from '@masknet/shared-base'
+import { updateLanguage } from '@masknet/shared-base'
 import { PLUGIN_ID } from '../plugins/EVM/constants'
 import { isEqual } from 'lodash-unified'
 
-/**
- * Does the debug mode on
- */
-export const debugModeSetting = createGlobalSettings<boolean>('debugMode', false, {
-    primary: () => i18n.t('settings_enable_debug'),
-    secondary: () => i18n.t('settings_enable_debug_desc'),
-})
+export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
+export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
+languageSettings.addListener(updateLanguage)
+export const pluginIDSettings = createGlobalSettings('pluginID', PLUGIN_ID)
 
-// #region appearance
-export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default, {
-    primary: () => i18n.t('settings_appearance'),
-    secondary: () => i18n.t('settings_appearance_secondary'),
-})
-// #endregion
-
-// #region language
-export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__, {
-    primary: () => i18n.t('settings_language'),
-    secondary: () => i18n.t('settings_language_secondary'),
-})
-// #endregion
-
-// #region web3 plugin ID
-export const pluginIDSettings = createGlobalSettings<string>('pluginID', PLUGIN_ID, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-// #endregion
-
-// #region network setting
-
-/**
- * Expected Usage: export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
- *
- * Work around the issue:
- *      https://github.com/microsoft/TypeScript/issues/42873
- *      https://github.com/microsoft/TypeScript/issues/30858
- *
- * References:
- *      PluginGitcoinMessages: packages/mask/src/plugins/Gitcoin/messages.ts
- *      PluginTraderMessages: packages/mask/src/plugins/Trader/messages.ts
- *      PluginTransakMessages: packages/mask/src/plugins/Transak/messages.ts
- */
-export const currentImagePayloadStatus: NetworkSettings<string> = createNetworkSettings('currentImagePayloadStatus', '')
-export const currentSelectedIdentity: NetworkSettings<string> = createNetworkSettings('currentSelectedIdentity', '')
-export function getCurrentSelectedIdentity(network: string) {
-    return Identifier.fromString<ProfileIdentifier>(currentSelectedIdentity[network].value, ProfileIdentifier).unwrapOr(
-        ProfileIdentifier.unknown,
-    )
-}
-export const currentSetupGuideStatus: NetworkSettings<string> = createNetworkSettings('currentSetupGuideStatus', '')
-export const userGuideStatus: NetworkSettings<string> = createNetworkSettings('userGuideStatus', '')
-export const sayHelloShowed: NetworkSettings<boolean> = createNetworkSettings('sayHelloShowed', false)
-export const dismissPinExtensionTip = createGlobalSettings<boolean>('dismissPinExtensionTip', false, {
-    primary: () => '',
-})
-export const userPinExtension = createGlobalSettings<boolean>('userPinExtension', false, {
-    primary: () => '',
-})
-export const dismissVerifyNextID: NetworkSettings<{ [key in string]: boolean }> = createNetworkSettings(
+export const currentSetupGuideStatus = createNetworkSettings('currentSetupGuideStatus', '')
+export const userGuideStatus = createNetworkSettings('userGuideStatus', '')
+export const sayHelloShowed = createNetworkSettings('sayHelloShowed', false)
+export const userPinExtension = createGlobalSettings('userPinExtension', false)
+export const dismissVerifyNextID = createComplexNetworkSettings(
     'dismissVerifyNextID',
-    {},
+    {} as Record<string, boolean>,
     isEqual,
 )
-export const bioDescription: NetworkSettings<string> = createNetworkSettings('bioDescription', '')
-export const personalHomepage: NetworkSettings<string> = createNetworkSettings('personalHomepage', '')
+export const bioDescription = createNetworkSettings('bioDescription', '')
+export const personalHomepage = createNetworkSettings('personalHomepage', '')
 // This is a misuse of concept "NetworkSettings" as "namespaced settings"
 // The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884
 /**
@@ -81,25 +31,9 @@ export const personalHomepage: NetworkSettings<string> = createNetworkSettings('
  * `useActivatedPluginsDashboard().find((x) => x.ID === PLUGIN_ID)` instead
  */
 // This was "currentPluginEnabled" before, but we used it to represent minimal mode now to make the settings be able to migrate.
-export const currentPluginMinimalModeNOTEnabled: NetworkSettings<boolean> = createNetworkSettings(
-    'pluginsEnabled',
-    true,
-)
-// #endregion
-
-export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard, {
-    primary: () => i18n.t('settings_launch_page'),
-    secondary: () => i18n.t('settings_launch_page_secondary'),
-})
-
-export const newDashboardConnection = createGlobalSettings('beta-dashboard', false, {
-    primary: () => 'Experimental: Allow isolated dashboard to connect',
-    secondary: () => "WARNING: DON'T OPEN THIS UNLESS YOU KNOW WHAT YOU ARE DOING.",
-})
-
-export const currentPersonaIdentifier = createGlobalSettings<string>('currentPersonaIdentifier', '', {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
+export const currentPluginMinimalModeNOTEnabled = createNetworkSettings('pluginsEnabled', true)
+export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard)
+export const currentPersonaIdentifier = createGlobalSettings('currentPersonaIdentifier', '')
 
 try {
     // Migrate language settings

@@ -5,12 +5,13 @@ import { makeStyles } from '@masknet/theme'
 import { MaskWalletIcon } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { EnterDashboard } from '../../../components/EnterDashboard'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
+import { Navigator } from '../../../components/Navigator'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()((theme) => ({
     contain: {
@@ -73,6 +74,8 @@ const Unlock = memo(() => {
         navigate({ pathname: from ?? PopupRoutes.Wallet, search: location.search }, { replace: true })
     }, [isLocked, getLockStatusLoading, location.search])
 
+    useTitle('')
+
     return (
         <>
             <main className={classes.contain}>
@@ -103,7 +106,7 @@ const Unlock = memo(() => {
                     {t('unlock')}
                 </LoadingButton>
             </main>
-            <EnterDashboard />
+            <Navigator />
         </>
     )
 })

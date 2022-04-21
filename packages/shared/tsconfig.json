@@ -9,6 +9,7 @@
   "references": [
     { "path": "../web3-shared/evm" },
     { "path": "../theme" },
+    { "path": "../shared-base-ui" },
     { "path": "../shared-base" },
     { "path": "../shared-base-ui" },
     { "path": "../icons" },

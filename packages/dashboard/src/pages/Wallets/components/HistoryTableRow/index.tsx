@@ -1,18 +1,13 @@
-import { memo, useMemo } from 'react'
-import formatDateTime from 'date-fns/format'
-import type { Transaction } from '@masknet/web3-shared-evm'
-import { Box, TableCell, TableRow, Typography, Link, Stack } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import {
-    ChainId,
-    DebankTransactionDirection,
-    TransactionType,
-    ZerionTransactionDirection,
-} from '@masknet/web3-shared-evm'
-import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import type { Transaction } from '@masknet/web3-shared-evm'
+import { ChainId, DebankTransactionDirection, ZerionTransactionDirection } from '@masknet/web3-shared-evm'
+import { Box, Link, Stack, TableCell, TableRow, Typography } from '@mui/material'
 import classNames from 'classnames'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import formatDateTime from 'date-fns/format'
+import { memo } from 'react'
+import { TransactionIcon } from '../TransactionIcon'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
@@ -60,12 +55,7 @@ export interface HistoryTableRowProps {
 export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction, selectedChainId }) => {
     const { value: domain } = useReverseAddress(transaction.toAddress)
 
-    const transactionType = useMemo(() => {
-        if (transaction.type === TransactionType.CREATE_RED_PACKET) {
-            return 'Create Lucky Drop'
-        }
-        return (transaction.type ?? '').replace(/_/g, ' ')
-    }, [transaction.type])
+    const transactionType = (transaction.type ?? '').replace(/_/g, ' ')
 
     return (
         <HistoryTableRowUI

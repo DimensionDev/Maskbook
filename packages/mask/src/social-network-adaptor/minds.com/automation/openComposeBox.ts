@@ -1,7 +1,7 @@
 import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
+import { CrossIsolationMessages, CompositionRequest } from '@masknet/shared-base'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 import { i18n } from '../../../../shared-ui/locales_legacy'
-import { MaskMessages, CompositionRequest } from '../../../utils/messages'
 import { composeButtonSelector, composeDialogIndicatorSelector, composeTextareaSelector } from '../utils/selector'
 
 export async function openComposeBoxMinds(
@@ -26,7 +26,7 @@ export async function openComposeBoxMinds(
     }
 
     await delay(800)
-    MaskMessages.events.requestComposition.sendToLocal({
+    CrossIsolationMessages.events.requestComposition.sendToLocal({
         reason: 'popup',
         open: true,
         content: typeof content === 'string' ? makeTypedMessageText(content) : content,

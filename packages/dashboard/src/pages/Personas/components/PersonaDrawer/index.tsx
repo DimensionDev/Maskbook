@@ -4,9 +4,8 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PersonaCard } from '../PersonaCard'
 import { useDashboardI18N } from '../../../../locales'
-import { PersonaIdentifier, PersonaInformation, DashboardRoutes } from '@masknet/shared-base'
+import { PersonaIdentifier, PersonaInformation, DashboardRoutes, MAX_PERSONA_LIMIT } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
-import { MAX_PERSONA_LIMIT } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

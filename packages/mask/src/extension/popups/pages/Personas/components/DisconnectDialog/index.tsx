@@ -2,8 +2,7 @@ import { memo } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, Typography, DialogProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import type { ProfileIdentifier } from '@masknet/shared-base'
-import { formatFingerprint } from '@masknet/shared'
+import { formatPersonaFingerprint, type ProfileIdentifier } from '@masknet/shared-base'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { LoadingButton } from '@mui/lab'
 import { useI18N } from '../../../../../../utils'
@@ -13,6 +12,7 @@ const useStyles = makeStyles()(() => ({
         fontSize: 16,
         lineHeight: '22px',
         color: '#0F1419',
+        textAlign: 'center',
     },
     content: {
         marginTop: 24,
@@ -37,10 +37,10 @@ const useStyles = makeStyles()(() => ({
         lineHeight: '20px',
     },
     confirmButton: {
-        backgroundColor: '#F4212E',
+        backgroundColor: '#FFB100',
         color: '#ffffff',
         '&:hover': {
-            backgroundColor: '#dc1e2a',
+            backgroundColor: '#ef9f00',
         },
     },
     cancelButton: {
@@ -71,7 +71,8 @@ export const DisconnectDialog = memo<DisconnectDialogProps>(
                         {t('popups_persona_disconnect_confirmation_description')}
                     </Typography>
                     <Typography className={classes.content}>
-                        {t('popups_persona')}: {formatFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
+                        {t('popups_persona')}:{' '}
+                        {formatPersonaFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
                         <br />
                         {t('popups_twitter_id')}: @{unbundledIdentity.userId}
                     </Typography>

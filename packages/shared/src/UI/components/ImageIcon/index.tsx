@@ -8,7 +8,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface ImageIconProps extends withClasses<'icon'> {
     size?: number
-    icon?: URL
+    icon?: URL | string
 }
 
 export function ImageIcon(props: ImageIconProps) {

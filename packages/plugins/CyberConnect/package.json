@@ -1,13 +1,20 @@
 {
   "name": "@masknet/plugin-cyberconnect",
   "private": true,
-  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/icons": "workspace:*",
     "@masknet/shared-base": "workspace:*",
+    "@masknet/typed-message": "workspace:*",
     "@cyberlab/cyberconnect": "^4.2.2",
     "boring-avatars": "^1.5.8",
     "react-use": "^17.3.2"

@@ -2,6 +2,8 @@ import { escapeRegExp } from 'lodash-unified'
 import urlcat from 'urlcat'
 import type { TwitterBaseAPI } from '../types'
 
+const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
+
 function getScriptURL(content: string, name: string) {
     const matchURL = new RegExp(
         `https://abs.twimg.com/responsive-web/\(client-web|client-web-\\w+\)\{1\}/${escapeRegExp(
@@ -97,4 +99,66 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             type_name: result.data.user.result.nft_avatar_metadata.smart_contract.__typename,
         }
     }
+
+    async uploadUserAvatar(image: File | Blob) {
+        // INIT
+        const initURL = `${UPLOAD_AVATAR_URL}?command=INIT&total_bytes=${image.size}&media_type=${encodeURIComponent(
+            image.type,
+        )}`
+        const initRes = await request<{ media_id_string: string }>(initURL, {
+            method: 'POST',
+            credentials: 'include',
+        })
+        const mediaId = initRes.media_id_string
+
+        // APPEND
+        const appendURL = `${UPLOAD_AVATAR_URL}?command=APPEND&media_id=${mediaId}&segment_index=0`
+        const formData = new FormData()
+        formData.append('media', image)
+        await fetch(appendURL, {
+            method: 'POST',
+            credentials: 'include',
+            body: formData,
+        })
+
+        // FINALIZE
+        const finalizeURL = `${UPLOAD_AVATAR_URL}?command=FINALIZE&media_id=${mediaId}`
+        const data = await request<{
+            media_id: number
+            media_id_string: string
+            size: number
+            image: {
+                image_type: string
+                w: number
+                h: number
+            }
+        }>(finalizeURL, {
+            method: 'POST',
+            credentials: 'include',
+        })
+
+        return data
+    }
+}
+
+function request<TResponse>(
+    url: string,
+    // `RequestInit` is a type for configuring
+    // a `fetch` request. By default, an empty object.
+    config: RequestInit = {},
+
+    // This function is async, it will return a Promise:
+): Promise<TResponse> {
+    // Inside, we call the `fetch` function with
+    // a URL and config given:
+    return (
+        fetch(url, config)
+            // When got a response call a `json` method on it
+            .then((response) => response.json())
+            // and return the result data.
+            .then((data) => data as TResponse)
+    )
+
+    // We also can use some post-response
+    // data-transformations in the last `then` clause.
 }

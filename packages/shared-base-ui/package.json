@@ -1,14 +1,21 @@
 {
   "name": "@masknet/shared-base-ui",
   "description": "This package MUST be pure.",
-  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "sideEffect": false,
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@masknet/shared-base": "workspace:*",
     "react-use": "^17.3.2",
-    "use-subscription": "^1.5.1",
-    "uuid": "^8.3.2"
+    "use-subscription": "^1.6.0",
+    "@types/use-subscription": "^1.0.0",
+    "uuid": "^8.3.2",
+    "@types/uuid": "^8.3.4"
   }
 }

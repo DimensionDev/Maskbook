@@ -25,8 +25,10 @@ export interface EVM_Messages {
     rpc: unknown
 }
 
+const evmEventEmitter: PluginMessageEmitter<EVM_Messages> = createPluginMessage<EVM_Messages>(PLUGIN_ID, serializer)
+
 export const EVM_Messages: { events: PluginMessageEmitter<EVM_Messages> } = {
-    events: createPluginMessage<EVM_Messages>(PLUGIN_ID, serializer),
+    events: evmEventEmitter,
 }
 
 export const EVM_RPC = createPluginRPC(PLUGIN_ID, () => import('./services'), EVM_Messages.events.rpc)

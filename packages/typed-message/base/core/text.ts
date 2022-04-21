@@ -1,5 +1,5 @@
-import type { SerializableTypedMessage, TypedMessage, Meta } from '../base'
-import { createIsType } from '../utils/internal'
+import type { SerializableTypedMessage, TypedMessage, Meta } from '../base.js'
+import { createIsType } from '../utils/internal.js'
 
 export type TypedMessageText = TypedMessageTextV1
 

@@ -1,84 +1,31 @@
-import { useCallback, useState } from 'react'
-import classNames from 'classnames'
-import { Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { ChainId, useChainId, useAccount, useWallet } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { MaskMessages } from '../../utils/messages'
-import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
-import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
-import { ITO_PluginID } from '../../plugins/ITO/constants'
-import { base as ITO_Definition } from '../../plugins/ITO/base'
-import { PluginTransakMessages } from '../../plugins/Transak/messages'
-import { PluginPetMessages } from '../../plugins/Pets/messages'
-import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
-import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
-import { NetworkTab } from './NetworkTab'
-import { SavingsDialog } from '../../plugins/Savings/SNSAdaptor/SavingsDialog'
-import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
-import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
-import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
-import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
+import { Fragment, useState, useMemo } from 'react'
+import { makeStyles, getMaskColor } from '@masknet/theme'
+import { Typography, useTheme } from '@mui/material'
+import { useChainId } from '@masknet/web3-shared-evm'
+import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
+import { useI18N } from '../../utils'
+import { ApplicationSettingDialog } from './ApplicationSettingDialog'
+import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
-        abstractTabWrapper: {
-            position: 'sticky',
-            top: 0,
-            width: '100%',
-            zIndex: 2,
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(2),
-            backgroundColor: theme.palette.background.paper,
-        },
-        tab: {
-            height: 36,
-            minHeight: 36,
-            fontWeight: 300,
-        },
-        tabs: {
-            width: 552,
-            height: 36,
-            minHeight: 36,
-            margin: '0 auto',
-            borderRadius: 4,
-            '& .Mui-selected': {
-                color: theme.palette.primary.contrastText,
-                backgroundColor: theme.palette.primary.main,
-            },
-        },
-        tabPanel: {
-            marginTop: theme.spacing(3),
-        },
-        indicator: {
-            display: 'none',
-        },
-        applicationBox: {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: theme.palette.background.default,
-            borderRadius: '8px',
-            cursor: 'pointer',
-            height: 100,
-            '@media (hover: hover)': {
-                '&:hover': {
-                    transform: 'scale(1.05) translateY(-4px)',
-                    boxShadow: theme.palette.mode === 'light' ? '0px 10px 16px rgba(0, 0, 0, 0.1)' : 'none',
-                },
-            },
-        },
         applicationWrapper: {
-            marginTop: theme.spacing(0.5),
+            padding: theme.spacing(1, 0.25),
+            overflowY: 'scroll',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             gridTemplateRows: '100px',
-            gridGap: theme.spacing(1.5),
+            gridGap: theme.spacing(2),
             justifyContent: 'space-between',
-            height: 324,
+            height: 340,
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
             [smallQuery]: {
                 overflow: 'auto',
                 overscrollBehavior: 'contain',
@@ -86,350 +33,126 @@ const useStyles = makeStyles()((theme) => {
                 gridGap: theme.spacing(1),
             },
         },
-        applicationImg: {
-            width: 36,
-            height: 36,
-            marginBottom: theme.spacing(1),
+        subTitle: {
+            fontSize: 18,
+            lineHeight: '24px',
+            fontWeight: 600,
+            color: theme.palette.text.primary,
         },
-        disabled: {
-            pointerEvents: 'none',
-            opacity: 0.5,
+        loadingWrapper: {
+            display: 'flex',
+            height: 324,
+            justifyContent: 'center',
+            alignItems: 'center',
         },
-        title: {
-            fontSize: 15,
-            [smallQuery]: {
-                fontSize: 13,
-            },
+        header: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 11.5,
+        },
+        settingIcon: {
+            height: 24,
+            width: 24,
+            cursor: 'pointer',
+        },
+        placeholderWrapper: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingRight: 24,
+            height: 324,
+        },
+        placeholder: {
+            color: getMaskColor(theme).textLight,
         },
     }
 })
 
-const SUPPORTED_CHAIN_ID_LIST = [
-    ChainId.Mainnet,
-    ChainId.BSC,
-    ChainId.Matic,
-    ChainId.Arbitrum,
-    ChainId.xDai,
-    ChainId.Celo,
-    ChainId.Fantom,
-    ChainId.Aurora,
-    ChainId.Avalanche,
-]
-
-export interface MaskAppEntry {
-    title: string
-    img: string
-    onClick: any
-    supportedChains?: ChainId[]
-    hidden: boolean
-    walletRequired: boolean
-}
-
-interface MaskApplicationBoxProps {
-    secondEntries?: MaskAppEntry[]
-    secondEntryChainTabs?: ChainId[]
-}
-
-export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskApplicationBoxProps) {
+export function ApplicationBoard() {
     const { classes } = useStyles()
-    const currentChainId = useChainId()
+    const theme = useTheme()
+    const { t } = useI18N()
+    const [openSettings, setOpenSettings] = useState(false)
+    const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
+    const currentWeb3Network = useCurrentWeb3NetworkPluginID()
+    const chainId = useChainId()
     const account = useAccount()
-    const selectedWallet = useWallet()
-    const currentPluginId = usePluginIDContext()
-    const isNotEvm = currentPluginId !== NetworkPluginID.PLUGIN_EVM
+    const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
+    const SettingIconDarkModeUrl = new URL('./assets/settings_dark_mode.png', import.meta.url).toString()
+    const SettingIconLightModeUrl = new URL('./assets/settings_light_mode.png', import.meta.url).toString()
+    const applicationList = useMemo(
+        () =>
+            snsAdaptorPlugins
+                .reduce<Application[]>((acc, cur) => {
+                    if (!cur.ApplicationEntries) return acc
+                    const currentWeb3NetworkSupportedChainIds = cur.enableRequirement.web3?.[currentWeb3Network]
+                    const isWeb3Enabled = Boolean(
+                        currentWeb3NetworkSupportedChainIds === undefined ||
+                            currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
+                    )
+                    const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
+                    const currentSNSIsSupportedNetwork = cur.enableRequirement.networks.networks[currentSNSNetwork]
+                    const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
 
-    // #region Encrypted message
-    const openEncryptedMessage = useCallback(
-        (id?: string) =>
-            MaskMessages.events.requestComposition.sendToLocal({
-                reason: 'timeline',
-                open: true,
-                options: {
-                    startupPlugin: id,
-                },
-            }),
-        [],
+                    return acc.concat(
+                        cur.ApplicationEntries.map((x) => {
+                            return {
+                                entry: x,
+                                enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
+                                pluginId: cur.ID,
+                            }
+                        }) ?? EMPTY_LIST,
+                    )
+                }, EMPTY_LIST)
+                .sort(
+                    (a, b) =>
+                        (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0),
+                )
+                .filter((x) => Boolean(x.entry.RenderEntryComponent)),
+        [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
-    // #endregion
-
-    // #region Claim All ITO
-    const {
-        open: isClaimAllDialogOpen,
-        onOpen: onClaimAllDialogOpen,
-        onClose: onClaimAllDialogClose,
-    } = useControlledDialog()
-    // #endregion
-
-    // #region Savings
-    const {
-        open: isSavingsDialogOpen,
-        onOpen: onSavingsDialogOpen,
-        onClose: onSavingsDialogClose,
-    } = useControlledDialog()
-    // #endregion
-
-    // #region Swap
-    const { open: isSwapDialogOpen, onOpen: onSwapDialogOpen, onClose: onSwapDialogClose } = useControlledDialog()
-    // #endregion
-
-    // #region Fiat on/off ramp
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
-    // #endregion
-
-    // #region pet friends
-    const { setDialog: setPetDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
-    // #endregion
-
-    // #region second level entry dialog
-    const {
-        open: isSecondLevelEntryDialogOpen,
-        onOpen: onSecondLevelEntryDialogOpen,
-        onClose: onSecondLevelEntryDialogClose,
-    } = useControlledDialog()
-
-    const [secondLevelEntryDialogTitle, setSecondLevelEntryDialogTitle] = useState('')
-    const [secondLevelEntryChains, setSecondLevelEntryChains] = useState<ChainId[] | undefined>([])
-    const [secondLevelEntries, setSecondLevelEntries] = useState<MaskAppEntry[]>([])
-
-    const [chainId, setChainId] = useState(
-        secondEntryChainTabs?.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
-    )
-
-    const openSecondEntryDir = useCallback(
-        (title: string, maskAppEntries: MaskAppEntry[], chains: ChainId[] | undefined) => {
-            setSecondLevelEntryDialogTitle(title)
-            setSecondLevelEntries(maskAppEntries)
-            setSecondLevelEntryChains(chains)
-            onSecondLevelEntryDialogOpen()
-        },
-        [],
-    )
-    // #endregion
-
-    // #region FindTruman
-    const {
-        open: isFindTrumanDialogOpen,
-        onOpen: onFindTrumanDialogOpen,
-        onClose: onFindTrumanDialogClose,
-    } = useControlledDialog()
-    // #endregion
-
-    function createEntry(
-        title: string,
-        img: string,
-        onClick: any,
-        supportedChains?: ChainId[],
-        hidden = false,
-        walletRequired = true,
-    ) {
-        return {
-            title,
-            img,
-            onClick,
-            supportedChains,
-            hidden,
-            walletRequired,
-        }
-    }
-
-    // Todo: remove this after refactor applicationBoard
-    const isITOSupportedChain =
-        ITO_Definition.enableRequirement.web3![currentPluginId]?.supportedChainIds?.includes(currentChainId)
-
-    const firstLevelEntries: MaskAppEntry[] = [
-        createEntry(
-            'Lucky Drop',
-            new URL('./assets/lucky_drop.png', import.meta.url).toString(),
-            () => openEncryptedMessage(RedPacketPluginID),
-            undefined,
-            isNotEvm,
-        ),
-        createEntry(
-            'File Service',
-            new URL('./assets/files.png', import.meta.url).toString(),
-            () => openEncryptedMessage(PluginId.FileService),
-            undefined,
-            false,
-            false,
-        ),
-        createEntry(
-            'ITO',
-            new URL('./assets/token.png', import.meta.url).toString(),
-            () => openEncryptedMessage(ITO_PluginID),
-            undefined,
-            !isITOSupportedChain,
-        ),
-        createEntry(
-            'Claim',
-            new URL('./assets/gift.png', import.meta.url).toString(),
-            onClaimAllDialogOpen,
-            undefined,
-            !isITOSupportedChain,
-        ),
-        createEntry(
-            'Mask Bridge',
-            new URL('./assets/bridge.png', import.meta.url).toString(),
-            () => window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer'),
-            undefined,
-            isNotEvm,
-            false,
-        ),
-        createEntry(
-            'MaskBox',
-            new URL('./assets/mask_box.png', import.meta.url).toString(),
-            () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
-            undefined,
-            isNotEvm,
-            false,
-        ),
-        createEntry(
-            'Savings',
-            new URL('./assets/savings.png', import.meta.url).toString(),
-            onSavingsDialogOpen,
-            undefined,
-            isNotEvm,
-        ),
-        createEntry(
-            'Swap',
-            new URL('./assets/swap.png', import.meta.url).toString(),
-            onSwapDialogOpen,
-            undefined,
-            isNotEvm || currentChainId === ChainId.Conflux,
-        ),
-        createEntry(
-            'Fiat On-Ramp',
-            new URL('./assets/fiat_ramp.png', import.meta.url).toString(),
-            () => setBuyDialog({ open: true, address: account }),
-            undefined,
-            false,
-            false,
-        ),
-        createEntry(
-            'NFTs',
-            new URL('./assets/nft.png', import.meta.url).toString(),
-            () =>
-                openSecondEntryDir(
-                    'NFTs',
-                    [
-                        createEntry(
-                            'MaskBox',
-                            new URL('./assets/mask_box.png', import.meta.url).toString(),
-                            () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
-                            undefined,
-                            false,
-                            false,
-                        ),
-                        createEntry(
-                            'Valuables',
-                            new URL('./assets/valuables.png', import.meta.url).toString(),
-                            () => {},
-                            undefined,
-                            true,
-                        ),
-                        createEntry(
-                            'Non-F Friends',
-                            new URL('./assets/mintTeam.png', import.meta.url).toString(),
-                            () => setPetDialog({ open: true }),
-                            [ChainId.Mainnet],
-                            currentChainId !== ChainId.Mainnet || !isTwitter(activatedSocialNetworkUI),
-                            true,
-                        ),
-                    ],
-                    undefined,
-                ),
-            undefined,
-            isNotEvm,
-        ),
-        createEntry(
-            'Investment',
-            new URL('./assets/investment.png', import.meta.url).toString(),
-            () =>
-                openSecondEntryDir(
-                    'Investment',
-                    [
-                        createEntry('Zerion', new URL('./assets/zerion.png', import.meta.url).toString(), () => {}, [
-                            ChainId.Mainnet,
-                        ]),
-                        createEntry('dHEDGE', new URL('./assets/dHEDGE.png', import.meta.url).toString(), () => {}),
-                    ],
-                    SUPPORTED_CHAIN_ID_LIST,
-                ),
-            undefined,
-            true,
-        ),
-        createEntry(
-            'Alternative',
-            new URL('./assets/more.png', import.meta.url).toString(),
-            () =>
-                openSecondEntryDir(
-                    'Alternative',
-                    [
-                        createEntry(
-                            'PoolTogether',
-                            new URL('./assets/pool_together.png', import.meta.url).toString(),
-                            () => {},
-                        ),
-                    ],
-                    SUPPORTED_CHAIN_ID_LIST,
-                ),
-            undefined,
-            true,
-        ),
-        createEntry(
-            'FindTruman',
-            new URL('./assets/findtruman.png', import.meta.url).toString(),
-            onFindTrumanDialogOpen,
-            [ChainId.Mainnet],
-            isNotEvm,
-            true,
-        ),
-    ]
-
+    const listedAppList = applicationList.filter((x) => !getUnlistedApp(x))
     return (
         <>
-            {secondEntryChainTabs?.length ? (
-                <div className={classes.abstractTabWrapper}>
-                    <NetworkTab
-                        chainId={chainId}
-                        setChainId={setChainId}
-                        classes={classes}
-                        chains={secondEntryChainTabs}
-                    />
-                </div>
-            ) : null}
-            <section className={classes.applicationWrapper}>
-                {(secondEntries ?? firstLevelEntries).map(
-                    ({ title, img, onClick, supportedChains, hidden, walletRequired }, i) =>
-                        (!supportedChains || supportedChains?.includes(chainId)) && !hidden ? (
-                            <div
-                                className={classNames(
-                                    classes.applicationBox,
-                                    walletRequired && !selectedWallet ? classes.disabled : '',
-                                )}
-                                onClick={onClick}
-                                key={i}>
-                                <img src={img} className={classes.applicationImg} />
-                                <Typography className={classes.title} color="textPrimary">
-                                    {title}
-                                </Typography>
-                            </div>
-                        ) : null,
-                )}
-            </section>
-            {isClaimAllDialogOpen ? <ClaimAllDialog open onClose={onClaimAllDialogClose} /> : null}
-            {isSecondLevelEntryDialogOpen ? (
-                <EntrySecondLevelDialog
-                    title={secondLevelEntryDialogTitle}
-                    open
-                    entries={secondLevelEntries}
-                    chains={secondLevelEntryChains}
-                    closeDialog={onSecondLevelEntryDialogClose}
+            <div className={classes.header}>
+                <Typography className={classes.subTitle}>{t('applications')}</Typography>
+                <img
+                    src={theme.palette.mode === 'dark' ? SettingIconDarkModeUrl : SettingIconLightModeUrl}
+                    className={classes.settingIcon}
+                    onClick={() => setOpenSettings(true)}
                 />
-            ) : null}
-            {isFindTrumanDialogOpen ? <FindTrumanDialog open onClose={onFindTrumanDialogClose} /> : null}
-            {isSwapDialogOpen ? <TraderDialog open onClose={onSwapDialogClose} /> : null}
+            </div>
 
-            {isSavingsDialogOpen ? <SavingsDialog open onClose={onSavingsDialogClose} /> : null}
+            {listedAppList.length > 0 ? (
+                <section className={classes.applicationWrapper}>
+                    {listedAppList.map((application) => {
+                        return (
+                            <Fragment key={application.entry.ApplicationEntryID}>
+                                <RenderEntryComponentWrapper application={application} />
+                            </Fragment>
+                        )
+                    })}
+                </section>
+            ) : (
+                <div className={classes.placeholderWrapper}>
+                    <Typography className={classes.placeholder}>
+                        {t('application_settings_tab_plug_app-unlisted-placeholder')}
+                    </Typography>
+                </div>
+            )}
+            {openSettings ? (
+                <ApplicationSettingDialog open={openSettings} onClose={() => setOpenSettings(false)} />
+            ) : null}
         </>
     )
+}
+
+interface RenderEntryComponentWrapperProps {
+    application: Application
+}
+
+function RenderEntryComponentWrapper({ application }: RenderEntryComponentWrapperProps) {
+    const RenderEntryComponent = application.entry.RenderEntryComponent!
+    return <RenderEntryComponent disabled={!application.enabled} />
 }

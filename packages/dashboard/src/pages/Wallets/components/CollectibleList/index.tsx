@@ -14,9 +14,9 @@ import {
     useWeb3State as useWeb3PluginState,
     Web3Plugin,
     useAccount,
-    usePluginIDContext,
+    useCurrentWeb3NetworkPluginID,
     NetworkPluginID,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/web3'
 import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()({
@@ -64,6 +64,18 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
             Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }, undefined, selectedNetwork || undefined),
         [account, Asset?.getNonFungibleAssets, network, selectedNetwork],
     )
+    useEffect(() => {
+        const unsubscribeTokens = PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
+        const unsubscribeSocket = PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
+            if (!info.done) {
+                retry()
+            }
+        })
+        return () => {
+            unsubscribeTokens()
+            unsubscribeSocket()
+        }
+    }, [retry])
 
     useEffect(() => {
         if (!loadingSize) return
@@ -71,7 +83,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         setRenderData(render)
     }, [value.data, loadingSize, page])
 
-    const currentPluginId = usePluginIDContext()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const onSend = useCallback(
         (detail: Web3Plugin.NonFungibleToken) => {
             // Sending NFT is only available on EVM currently.
@@ -85,15 +97,6 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         },
         [currentPluginId],
     )
-
-    useEffect(() => {
-        PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
-        PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
-            if (!info.done) {
-                retry()
-            }
-        })
-    }, [retry])
 
     const hasNextPage = (page + 1) * loadingSize < value.data.length
     const isLoading = renderData.length === 0 && isQuerying

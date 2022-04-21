@@ -1,5 +1,13 @@
-import { TransactionStateType, useNativeTokenDetailed } from '@masknet/web3-shared-evm'
+import {
+    GasConfig,
+    TransactionStateType,
+    useChainId,
+    useERC721ContractDetailed,
+    useNativeTokenDetailed,
+} from '@masknet/web3-shared-evm'
 import { FC, useContext, useEffect, useMemo, useState } from 'react'
+import { useSubscription } from 'use-subscription'
+import { getStorage } from '../../storage'
 import { TipTask, TipType } from '../../types'
 import { TargetChainIdContext } from '../TargetChainIdContext'
 import { ContextOptions, TipContext } from './TipContext'
@@ -10,15 +18,19 @@ interface Props {
     task: TipTask
 }
 
-export const TipTaskProvider: FC<Props> = ({ children, task }) => {
+export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, task }) => {
     const [recipient, setRecipient] = useState('')
     const [tipType, setTipType] = useState<TipType>(TipType.Token)
     const [amount, setAmount] = useState('')
     const { targetChainId } = TargetChainIdContext.useContainer()
-    const [erc721Contract, setErc721Contract] = useState<ContextOptions['erc721Contract']>(null)
+    const chainId = useChainId()
+    const [erc721Address, setErc721Address] = useState<string>('')
     const { value: nativeTokenDetailed = null } = useNativeTokenDetailed(targetChainId)
     const [token, setToken] = useState<ContextOptions['token']>(nativeTokenDetailed)
     const [erc721TokenId, setErc721TokenId] = useState<ContextOptions['erc721TokenId']>(null)
+    const storedTokens = useSubscription(getStorage().addedTokens.subscription)
+
+    const { value: erc721Contract } = useERC721ContractDetailed(erc721Address)
 
     useEffect(() => {
         setTipType(TipType.Token)
@@ -37,8 +49,9 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
         if (!nativeTokenDetailed) return
         setToken(nativeTokenDetailed)
     }, [nativeTokenDetailed])
-    const tokenTipTuple = useTokenTip(recipient, token, amount)
-    const nftTipTuple = useNftTip(recipient, erc721TokenId, erc721Contract)
+    const [gasConfig, setGasConfig] = useState<GasConfig | undefined>()
+    const tokenTipTuple = useTokenTip(recipient, token, amount, gasConfig)
+    const nftTipTuple = useNftTip(recipient, erc721TokenId, erc721Address)
 
     const sendTipTuple = tipType === TipType.Token ? tokenTipTuple : nftTipTuple
     const sendState = sendTipTuple[0]
@@ -50,6 +63,12 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
             TransactionStateType.HASH,
             TransactionStateType.RECEIPT,
         ].includes(sendState.type)
+
+        const reset = () => {
+            setAmount('')
+            setErc721TokenId(null)
+            setErc721Address('')
+        }
 
         return {
             recipient,
@@ -64,13 +83,18 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
             setAmount,
             erc721TokenId,
             setErc721TokenId,
-            erc721Contract,
-            setErc721Contract,
+            erc721Contract: erc721Contract || null,
+            erc721Address,
+            setErc721Address,
             sendTip,
             isSending,
             sendState,
+            storedTokens: storedTokens.filter((t) => t.contract?.chainId === chainId),
+            reset,
+            setGasConfig,
         }
     }, [
+        chainId,
         recipient,
         task.recipientSnsId,
         task.addresses,
@@ -78,9 +102,11 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
         amount,
         erc721TokenId,
         erc721Contract,
+        erc721Address,
         token,
         sendTip,
         sendState,
+        storedTokens,
     ])
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
 }

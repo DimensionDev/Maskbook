@@ -3,8 +3,9 @@ import { DialogContent } from '@mui/material'
 import { DialogStackingProvider } from '@masknet/theme'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { MaskMessages, useI18N } from '../../utils'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useFriendsList as useRecipientsList } from '../DataSource/useActivatedUI'
-import { InjectedDialog } from '../shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 import { CompositionDialogUI, CompositionRef } from './CompositionUI'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest'
 import Services from '../../extension/service'
@@ -45,7 +46,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [onQueryClipboardPermission])
 
     useEffect(() => {
-        return MaskMessages.events.requestComposition.on(({ reason, open, content, options }) => {
+        return CrossIsolationMessages.events.requestComposition.on(({ reason, open, content, options }) => {
             if (
                 (reason !== 'reply' && reason !== type) ||
                 (reason === 'reply' && type === 'popup') ||
@@ -75,6 +76,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     const UI = useRef<CompositionRef>(null)
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
+    const recipients = useRecipientsList()
     return (
         <DialogStackingProvider>
             <InjectedDialog keepMounted open={open} onClose={onClose} title={t('post_dialog__title')}>
@@ -84,7 +86,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         hasClipboardPermission={hasClipboardPermission}
                         onRequestClipboardPermission={onRequestClipboardPermission}
                         requireClipboardPermission={requireClipboardPermission}
-                        recipients={useRecipientsList()}
+                        recipients={recipients}
                         maxLength={560}
                         onSubmit={onSubmit_}
                         supportImageEncoding={networkSupport?.text ?? false}

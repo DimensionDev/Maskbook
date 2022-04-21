@@ -1,8 +1,8 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
 import { unreachable } from '@dimensiondev/kit'
-import type { Web3Plugin } from '@masknet/plugin-infra'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { isDashboardPage } from '@masknet/shared-base'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import {
     getChainIdFromNetworkType,
     isFortmaticSupported,
@@ -21,18 +21,20 @@ export function ProviderIconClickBait({
     onClick,
     onSubmit,
 }: Web3Plugin.UI.ProviderIconClickBaitProps) {
+    const providerType = provider.type as ProviderType
+    const networkType = network.type as NetworkType
+
     // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
         (ev) => {
             if (ev.open) return
-            if (ev.result) onSubmit?.(network, provider)
+            if (!ev.result) return
+            if (ev.result?.providerType === providerType && ev.result?.networkType === networkType)
+                onSubmit?.(network, provider, ev.result)
         },
     )
     // #endregion
-
-    const providerType = provider.type as ProviderType
-    const networkType = network.type as NetworkType
 
     const injectedEthereumProviderType = useInjectedProviderType('ethereum')
     const injectedCoin98ProviderType = useInjectedProviderType('coin98')
@@ -47,9 +49,16 @@ export function ProviderIconClickBait({
 
             if (!isProviderAvailable) {
                 const downloadLink = resolveProviderDownloadLink(providerType)
-                if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')
+                openWindow(downloadLink)
                 return
             }
+        }
+
+        // it's not necessary to open the connection dialog on popup page.
+        // it will switch to the wallet selection page directly.
+        if (isPopupPage() && providerType === ProviderType.MaskWallet) {
+            onClick?.(network, provider)
+            return
         }
 
         switch (providerType) {

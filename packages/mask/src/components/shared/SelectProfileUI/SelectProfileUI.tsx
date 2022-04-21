@@ -98,7 +98,10 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                 <InputBase
                     className={classes.input}
                     value={disabled ? '' : search}
-                    onChange={useCallback((e) => setSearch(e.target.value), [])}
+                    onChange={useCallback(
+                        (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setSearch(e.target.value),
+                        [],
+                    )}
                     onKeyDown={(e) => {
                         if (search === '' && e.key === 'Backspace') {
                             onSetSelected(selected.slice(0, selected.length - 1) as Profile[])

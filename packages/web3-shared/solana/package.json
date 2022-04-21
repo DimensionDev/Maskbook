@@ -1,8 +1,13 @@
 {
   "name": "@masknet/web3-shared-solana",
   "private": true,
-  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "webpack": "./index.ts",
+      "default": "../dist/solana/index.js"
+    }
+  },
   "dependencies": {
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",

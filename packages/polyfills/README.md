@@ -14,13 +14,13 @@ Extra:
 ## Supporting browsers
 
 - Safari 14+ (Released on Sept 2020)
-- Chrome Last 2 versions (about 3 months) (98+ at 3/4/2022)
-- Firefox Last 2 versions (about 3 months) (97+ at 3/4/2022)
-- GeckoView 91 (last updated at 7/23/2021).
+- Chrome Last 2 versions (about 3 months)
+- Firefox Last 2 versions (about 3 months)
+- GeckoView 99 (last updated at 4/5/2022).
 
 ## Targeting ES Syntax and APIs
 
-- Syntax: ES2020
+- Syntax: ES2021
 - Library: ES2022 (with [core-js](https://github.com/zloirock/core-js)).
 
 ### Caution

@@ -1,11 +1,11 @@
 import {
-    usePluginIDContext,
     useActivatedPluginSNSAdaptor_Web3Supported,
     useActivatedPluginsSNSAdaptor,
     Plugin,
     PluginI18NFieldRender,
     usePluginI18NField,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/content-script'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Result } from 'ts-results'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
@@ -28,7 +28,7 @@ export const PluginEntryRender = memo(
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
         const pluginField = usePluginI18NField()
         const chainId = useChainId()
-        const pluginID = usePluginIDContext()
+        const pluginID = useCurrentWeb3NetworkPluginID()
         const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_Web3Supported(chainId, pluginID)
         const result = [...useActivatedPluginsSNSAdaptor('any')]
             .sort((plugin) => {

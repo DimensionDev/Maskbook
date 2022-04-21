@@ -19,6 +19,7 @@ import { PageHeader } from '../components/PageHeader'
 import { PasswordField } from '../../../components/PasswordField'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { ProviderType, useChainId } from '@masknet/web3-shared-evm'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     container: {
@@ -218,6 +219,8 @@ const ImportWallet = memo(() => {
 
     const onSubmit = handleSubmit(onDerivedWallet)
 
+    useTitle(t('popups_import_the_wallet'))
+
     return (
         <>
             <div className={classes.container}>
@@ -269,16 +272,15 @@ const ImportWallet = memo(() => {
                     </Tabs>
                     <TabPanel value={tabs.mnemonic} className={classes.tabPanel}>
                         <StyledInput
-                            multiline
+                            type="password"
                             value={mnemonic}
                             onChange={(e) => {
                                 if (errorMessage) setErrorMessage('')
                                 setMnemonic(e.target.value.replaceAll('\n', ' '))
                             }}
                             placeholder={t('popups_wallet_name_mnemonic_placeholder')}
-                            InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
-                            className={classes.multiline}
-                            inputProps={{ className: classes.textArea }}
+                            InputProps={{ disableUnderline: true }}
+                            className={classes.textField}
                         />
                     </TabPanel>
                     <TabPanel value={tabs.json} className={classes.tabPanel}>
@@ -295,7 +297,7 @@ const ImportWallet = memo(() => {
                     </TabPanel>
                     <TabPanel value={tabs.privateKey} className={classes.tabPanel}>
                         <StyledInput
-                            multiline
+                            type="password"
                             value={privateKey}
                             onChange={(e) => {
                                 if (errorMessage) setErrorMessage('')
@@ -303,9 +305,8 @@ const ImportWallet = memo(() => {
                             }}
                             rows={4}
                             placeholder={t('popups_wallet_name_private_key')}
-                            InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
-                            className={classes.multiline}
-                            inputProps={{ className: classes.textArea }}
+                            InputProps={{ disableUnderline: true }}
+                            className={classes.textField}
                         />
                     </TabPanel>
                 </TabContext>

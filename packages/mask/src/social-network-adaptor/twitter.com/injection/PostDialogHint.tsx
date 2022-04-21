@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
-import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha } from '@mui/material'
@@ -51,7 +51,6 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const [isReply, setIsReply] = useState(false)
 
     const onHintButtonClicked = useCallback(() => {
         const content = sayHelloShowed[twitterBase.networkIdentifier].value
@@ -61,17 +60,13 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
                       t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' }),
               )
 
-        MaskMessages.events.requestComposition.sendToLocal({
+        CrossIsolationMessages.events.requestComposition.sendToLocal({
             reason: isReplyPageSelector() ? 'reply' : reason,
             open: true,
             content,
         })
         sayHelloShowed[twitterBase.networkIdentifier].value = true
     }, [reason, isReplyPageSelector])
-
-    useEffect(() => {
-        setIsReply(isReplyPageSelector())
-    }, [location])
 
     return (
         <PostDialogHint

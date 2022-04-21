@@ -1,17 +1,14 @@
-import { memo, useEffect, useState } from 'react'
-import { ContentContainer } from '../../../../components/ContentContainer'
+import { type Web3Plugin, NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab } from '@mui/material'
-import { makeStyles, useTabs } from '@masknet/theme'
-import { FungibleTokenTable } from '../FungibleTokenTable'
+import { memo, useEffect, useState } from 'react'
+import { usePickToken } from '@masknet/shared'
+import { ContentContainer } from '../../../../components/ContentContainer'
 import { useDashboardI18N } from '../../../../locales'
-import { CollectibleList } from '../CollectibleList'
 import { AddCollectibleDialog } from '../AddCollectibleDialog'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { PluginMessages } from '../../../../API'
-import type { Web3Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
-import { v4 as uuid } from 'uuid'
+import { CollectibleList } from '../CollectibleList'
+import { FungibleTokenTable } from '../FungibleTokenTable'
 
 const useStyles = makeStyles()((theme) => ({
     caption: {
@@ -46,9 +43,8 @@ interface TokenAssetsProps {
 
 export const Assets = memo<TokenAssetsProps>(({ network }) => {
     const t = useDashboardI18N()
-    const pluginId = usePluginIDContext()
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const { classes } = useStyles()
-    const [id] = useState(uuid())
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),
         [AssetTab.Investment]: t.wallets_assets_investment(),
@@ -58,15 +54,13 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
     const [currentTab, onChange, , setTab] = useTabs(AssetTab.Token, AssetTab.Collectibles)
 
     const [addCollectibleOpen, setAddCollectibleOpen] = useState(false)
-    const { setDialog: setSelectToken } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.selectTokenDialogUpdated,
-    )
 
     useEffect(() => {
         setTab(AssetTab.Token)
     }, [pluginId])
 
     const showCollectibles = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginId)
+    const pickToken = usePickToken()
 
     return (
         <>
@@ -85,16 +79,17 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                                 size="small"
                                 color="secondary"
                                 className={classes.addCustomTokenButton}
-                                onClick={() =>
-                                    currentTab === AssetTab.Token
-                                        ? setSelectToken({
-                                              open: true,
-                                              uuid: id,
-                                              title: t.wallets_add_token(),
-                                              FungibleTokenListProps: { whitelist: [] },
-                                          })
-                                        : setAddCollectibleOpen(true)
-                                }>
+                                onClick={async () => {
+                                    if (currentTab === AssetTab.Token) {
+                                        // TODO handle result
+                                        await pickToken({
+                                            whitelist: [],
+                                            title: t.wallets_add_token(),
+                                        })
+                                    } else {
+                                        setAddCollectibleOpen(true)
+                                    }
+                                }}>
                                 +{' '}
                                 {currentTab === AssetTab.Token
                                     ? t.wallets_add_token()
@@ -113,9 +108,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                     </TabPanel>
                 </TabContext>
             </ContentContainer>
-            {addCollectibleOpen && (
-                <AddCollectibleDialog open={addCollectibleOpen} onClose={() => setAddCollectibleOpen(false)} />
-            )}
+            {addCollectibleOpen && <AddCollectibleDialog open onClose={() => setAddCollectibleOpen(false)} />}
         </>
     )
 })

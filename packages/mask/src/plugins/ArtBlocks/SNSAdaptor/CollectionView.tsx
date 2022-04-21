@@ -80,7 +80,7 @@ export function CollectionView(props: CollectionProps) {
     const theme = useTheme()
     const { classes } = useStyles()
     const { project } = props
-    const [isImageLoaded, setIsImageLoaded] = useState(false)
+    const [isImageLoaded, setImageLoaded] = useState(false)
     const [activeStep, setActiveStep] = useState(1)
     const chainId = useChainId()
 
@@ -92,16 +92,16 @@ export function CollectionView(props: CollectionProps) {
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1)
-        setIsImageLoaded(false)
+        setImageLoaded(false)
     }
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1)
-        setIsImageLoaded(false)
+        setImageLoaded(false)
     }
 
     const handleImageLoad = () => {
-        setIsImageLoaded(true)
+        setImageLoaded(true)
     }
 
     const tokenLink = resolveTokenLinkOnArtBlocks(chainId, currentSelectedToken.tokenId)

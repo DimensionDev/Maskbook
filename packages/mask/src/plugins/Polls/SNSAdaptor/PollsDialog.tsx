@@ -15,6 +15,7 @@ import {
 import { makeStyles, useStylesExtends, usePortalShadowRoot } from '@masknet/theme'
 import AddIcon from '@mui/icons-material/Add'
 import addDate from 'date-fns/add'
+import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -22,9 +23,8 @@ import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
 import type { PollMetaData } from '../types'
 import { PLUGIN_META_KEY } from '../constants'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { PluginPollRPC } from '../messages'
-import { useCompositionContext } from '@masknet/plugin-infra'
+import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 
 const useNewPollStyles = makeStyles()((theme) => ({
     menuPaper: {

@@ -1,34 +1,41 @@
 import { useAsync } from 'react-use'
-import { Box, Grid, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { FormattedBalance } from '@masknet/shared'
-import { useWeb3, useAccount, formatBalance } from '@masknet/web3-shared-evm'
+import { Box, Button, Grid, Typography, CircularProgress } from '@mui/material'
+import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { isZero, rightShift } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import { IconURLs } from './IconURL'
+import { ChainId, formatBalance, isSameAddress, useAccount, useAssets, useWeb3 } from '@masknet/web3-shared-evm'
+import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
-import { ProtocolType, SavingsProtocol, TabType } from '../types'
-import { SavingsProtocols } from '../protocols'
+import { SavingsProtocol, TabType } from '../types'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
         fontFamily: theme.typography.fontFamily,
     },
+    tableContainer: {
+        maxHeight: 350,
+        overflowY: 'scroll',
+    },
     tableHeader: {
         display: 'flex',
         background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
-        borderRadius: '8px',
+        borderRadius: theme.spacing(1),
         margin: '0 0 15px 0',
     },
     tableRow: {
         display: 'flex',
         background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
-        borderRadius: '8px',
+        borderRadius: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+
+        '&:last-child': {
+            marginBottom: '0',
+        },
     },
     tableItem: {
         display: 'flex',
         background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
-        borderRadius: '8px',
+        borderRadius: theme.spacing(1),
     },
     tableCell: {
         display: 'flex',
@@ -41,58 +48,68 @@ const useStyles = makeStyles()((theme, props) => ({
         margin: '0 20px 0 0',
     },
     logo: {
+        width: '32px',
         height: '32px',
     },
     logoMini: {
         height: '16px',
         position: 'absolute',
-        bottom: '3px',
+        bottom: 0,
         right: '-5px',
     },
-    protocolLabel: {
-        fontSize: 12,
-        opacity: 0.5,
+    protocolLabel: {},
+    loading: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: 300,
+        width: '100%',
     },
 }))
-
-export interface MappableProtocol {
-    category: string
-    protocols: SavingsProtocol[]
-}
 
 export interface SavingsTableProps {
     chainId: ChainId
     tab: TabType
-    mappableProtocols: MappableProtocol[]
-    setSelectedProtocol(protocol: ProtocolType): void
+    protocols: SavingsProtocol[]
     setTab(tab: TabType): void
+    setSelectedProtocol(protocol: SavingsProtocol): void
 }
 
-export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProtocol, setTab }: SavingsTableProps) {
+export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProtocol }: SavingsTableProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
     const web3 = useWeb3({ chainId })
+
     const account = useAccount()
 
+    const { value: assets, loading: getAssetsLoading } = useAssets(
+        protocols.map((x) => x.bareToken),
+        chainId,
+    )
+
     // Only fetch protocol APR and Balance on chainId change
-    useAsync(async () => {
-        for (const protocol of SavingsProtocols) {
-            await protocol.getApr()
-            await protocol.getBalance(chainId, web3, account)
-        }
-    }, [chainId])
+    const { loading } = useAsync(async () => {
+        await Promise.all(
+            protocols.map(async (protocol) => {
+                protocol.updateApr(chainId, web3)
+                protocol.updateBalance(chainId, web3, account)
+            }),
+        )
+    }, [chainId, web3, account, protocols])
 
     return (
         <Box className={classes.containerWrap}>
             <Grid container spacing={0} className={classes.tableHeader}>
                 <Grid item xs={4} className={classes.tableCell}>
-                    <Typography variant="body1">{t('plugin_savings_type')}</Typography>
+                    <Typography variant="body1">{t('plugin_savings_asset')}</Typography>
                 </Grid>
-                <Grid item xs={2} className={classes.tableCell}>
-                    <Typography variant="body1"> {t('plugin_savings_apr')}</Typography>
-                </Grid>
-                <Grid item xs={3} className={classes.tableCell}>
+                {tab === TabType.Deposit ? (
+                    <Grid item xs={2} className={classes.tableCell}>
+                        <Typography variant="body1"> {t('plugin_savings_apr')}</Typography>
+                    </Grid>
+                ) : null}
+                <Grid item xs={tab === TabType.Deposit ? 3 : 5} className={classes.tableCell}>
                     <Typography variant="body1">{t('plugin_savings_wallet')}</Typography>
                 </Grid>
                 <Grid item xs={3} className={classes.tableCell}>
@@ -100,35 +117,48 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
                 </Grid>
             </Grid>
 
-            {mappableProtocols.map((categorizedProtocol) => {
-                const protocols = categorizedProtocol.protocols
-                if (protocols.length === 1) {
-                    const protocol = protocols[0]
-
-                    return (
-                        <Grid container spacing={0} className={classes.tableRow} key={protocol.type}>
+            {loading || getAssetsLoading ? (
+                <div className={classes.loading}>
+                    <CircularProgress />
+                </div>
+            ) : (
+                <div className={classes.tableContainer}>
+                    {protocols.map((protocol, index) => (
+                        <Grid container spacing={0} className={classes.tableRow} key={index}>
                             <Grid item xs={4} className={classes.tableCell}>
                                 <div className={classes.logoWrap}>
-                                    <img src={IconURLs[protocol.category]} className={classes.logo} />
-                                    <img src={IconURLs[protocol.image]} className={classes.logoMini} />
+                                    <TokenIcon
+                                        name={protocol.bareToken.name}
+                                        address={protocol.bareToken.address}
+                                        classes={{ icon: classes.logo }}
+                                        chainId={chainId}
+                                    />
+                                    <img src={ProviderIconURLs[protocol.type]} className={classes.logoMini} />
                                 </div>
                                 <div>
-                                    <Typography variant="body1">{protocol.category.toUpperCase()}</Typography>
                                     <Typography variant="body1" className={classes.protocolLabel}>
-                                        {protocol.name}
+                                        {protocol.bareToken.symbol}
                                     </Typography>
                                 </div>
                             </Grid>
-                            <Grid item xs={2} className={classes.tableCell}>
-                                <Typography variant="body1">{protocol.apr}%</Typography>
-                            </Grid>
-                            <Grid item xs={3} className={classes.tableCell}>
+                            {tab === TabType.Deposit ? (
+                                <Grid item xs={2} className={classes.tableCell}>
+                                    <Typography variant="body1">{protocol.apr}%</Typography>
+                                </Grid>
+                            ) : null}
+                            <Grid xs={tab === TabType.Deposit ? 3 : 5} className={classes.tableCell}>
                                 <Typography variant="body1">
                                     <FormattedBalance
-                                        value={protocol.balance}
-                                        decimals={protocol.decimals}
+                                        value={
+                                            tab === TabType.Deposit
+                                                ? assets.find((x) =>
+                                                      isSameAddress(x.token.address, protocol.bareToken.address),
+                                                  )?.balance
+                                                : protocol.balance
+                                        }
+                                        decimals={protocol.bareToken.decimals}
                                         significant={6}
-                                        minimumBalance={rightShift(10, protocol.decimals - 6)}
+                                        minimumBalance={rightShift(10, protocol.bareToken.decimals - 6)}
                                         formatter={formatBalance}
                                     />
                                 </Typography>
@@ -139,8 +169,8 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
                                     color="primary"
                                     disabled={tab === TabType.Withdraw ? isZero(protocol.balance) : false}
                                     onClick={() => {
-                                        setSelectedProtocol(protocol.type)
                                         setTab(tab)
+                                        setSelectedProtocol(protocol)
                                     }}>
                                     {tab === TabType.Deposit
                                         ? t('plugin_savings_deposit')
@@ -148,20 +178,9 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
                                 </Button>
                             </Grid>
                         </Grid>
-                    )
-                } else {
-                    /*
-                     *
-                     * @TODO: Add mappable protocols with chevron to toggle
-                     * currency pairs to expand and collapse as according to Figma
-                     *
-                     * Reference:
-                     * https://www.figma.com/file/gVkQ67y285b4FXVV1KPThN/TwitterV1?node-id=17600%3A374185
-                     *
-                     */
-                    return <></>
-                }
-            })}
+                    ))}
+                </div>
+            )}
         </Box>
     )
 }

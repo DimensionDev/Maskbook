@@ -24,7 +24,7 @@ export class JSON_Storage implements StorageAPI.Storage {
         }
     }
 
-    async set<T extends {}>(key: string, value: T) {
+    async set(key: string, value: any) {
         await fetch(
             urlcat(KV_ROOT_URL, 'api/:name', {
                 name: `${this.prefix}_${key}`,

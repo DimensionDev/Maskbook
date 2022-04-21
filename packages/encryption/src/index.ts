@@ -1,11 +1,9 @@
 export {
     encodePayload,
     parsePayload,
-    AESAlgorithmEnum,
     EC_KeyCurveEnum,
     SocialNetworkEnum,
     SocialNetworkEnumToProfileDomain,
-    type AESKey,
     type EC_Key,
     type Signature,
     type PayloadParseResult,
@@ -67,4 +65,4 @@ export {
 } from './image-steganography'
 
 // TODO: remove them in the future
-export { importEC_Key, importAESFromJWK } from './utils'
+export { importEC_Key, importAES as importAESFromJWK } from './utils'

@@ -39,6 +39,7 @@ export function computedBuildFlags(flags: ReturnType<typeof normalizeBuildFlags>
     const { runtime, mode } = flags
     let sourceMapKind: Configuration['devtool'] = false
     let supportWebAssembly = true
+    let lockdown = mode === 'development' && runtime.engine !== 'firefox'
     if (runtime.engine === 'safari' && runtime.architecture === 'app') {
         // Due to webextension-polyfill, eval on iOS is async.
         sourceMapKind = false
@@ -51,5 +52,5 @@ export function computedBuildFlags(flags: ReturnType<typeof normalizeBuildFlags>
     } else {
         sourceMapKind = false
     }
-    return { sourceMapKind, lockdown: mode === 'development', supportWebAssembly } as const
+    return { sourceMapKind, lockdown, supportWebAssembly } as const
 }

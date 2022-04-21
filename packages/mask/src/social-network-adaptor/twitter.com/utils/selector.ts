@@ -57,7 +57,7 @@ export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
 }
 
 export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="tweet"] a:not([target]) > div > div[dir="auto"] > span > span')
+    querySelector<E>('[data-testid="primaryColumn"] [data-testid="UserName"] div[dir="auto"] > span > span')
 export const searchAvatarSelector = () =>
     querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
 export const searchNFTAvatarSelector = () =>
@@ -146,7 +146,7 @@ export const twitterMainAvatarSelector: () => LiveSelector<E, true> = () =>
 
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
-export const bioDescriptionSelector = () => querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
+export const profileBioSelector = () => querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
 
 export const personalHomepageSelector = () => querySelector<HTMLDivElement>('[data-testid="UserUrl"]')
 

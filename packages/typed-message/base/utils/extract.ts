@@ -1,8 +1,8 @@
-import type { TypedMessage } from '../base'
-import { isTypedMessageText, isTypedMessageImage } from '../core'
-import { isTypedMessageAnchor } from '../extension'
+import type { TypedMessage } from '../base.js'
+import { isTypedMessageText, isTypedMessageImage } from '../core/index.js'
+import { isTypedMessageAnchor } from '../extension/index.js'
 import { Option, Some, None } from 'ts-results'
-import { forEachTypedMessageChild } from '../visitor'
+import { forEachTypedMessageChild } from '../visitor/index.js'
 
 /**
  * Get inner text from a TypedMessage

@@ -1,7 +1,6 @@
 import type { AESCryptoKey, PostIVIdentifier } from '@masknet/shared-base'
 import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
-import { createTransaction } from '../utils/openDB'
-import { PostDBAccess, queryPostDB, createPostDB, updatePostDB, PostRecord } from './index'
+import { withPostDBTransaction, queryPostDB, createPostDB, updatePostDB, PostRecord } from './index'
 
 export async function savePostKeyToDB(
     id: PostIVIdentifier,
@@ -9,8 +8,7 @@ export async function savePostKeyToDB(
     extraInfo: Omit<PostRecord, 'identifier' | 'foundAt' | 'postCryptoKey'>,
 ): Promise<void> {
     const jwk = await CryptoKeyToJsonWebKey(key)
-    {
-        const t = createTransaction(await PostDBAccess(), 'readwrite')('post')
+    await withPostDBTransaction(async (t) => {
         const post = await queryPostDB(id, t)
         if (!post) {
             await createPostDB(
@@ -25,5 +23,5 @@ export async function savePostKeyToDB(
         } else {
             await updatePostDB({ ...post, postCryptoKey: jwk }, 'override', t)
         }
-    }
+    })
 }

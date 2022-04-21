@@ -7,6 +7,7 @@ import { About } from './About'
 import { Close } from '@mui/icons-material'
 import { Version } from './Version'
 import links from './links.json'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     navRoot: {
@@ -105,9 +106,9 @@ export const FooterLine = memo(() => {
     const openVersionLink = (event: React.MouseEvent) => {
         // `MouseEvent.prototype.metaKey` on macOS (`Command` key), Windows (`Windows` key), Linux (`Super` key)
         if (process.env.channel === 'stable' && !event.metaKey) {
-            open(`${links.DOWNLOAD_LINK_STABLE_PREFIX}/v${version}`)
+            openWindow(`${links.DOWNLOAD_LINK_STABLE_PREFIX}/v${version}`)
         } else {
-            open(`${links.DOWNLOAD_LINK_UNSTABLE_PREFIX}/${process.env.COMMIT_HASH}`)
+            openWindow(`${links.DOWNLOAD_LINK_UNSTABLE_PREFIX}/${process.env.COMMIT_HASH}`)
         }
     }
     return (
