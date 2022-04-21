@@ -916,6 +916,8 @@
     "popups_add_wallet": "Add Wallet",
     "popups_profile_photo": "Profile Photo",
     "popups_public_key": "Public Key",
+    "popups_create_persona": "Create Persona",
+    "popups_restore_and_login": "Restore or Login",
     "popups_name": "Name",
     "popups_social_account": "Social Accounts",
     "popups_connected_wallets": "Connected Wallets",
