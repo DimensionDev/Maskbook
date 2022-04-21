@@ -17,4 +17,5 @@ export const CrossIsolationMessages = new WebExtensionMessage<CrossIsolationEven
 
 export interface CrossIsolationEvents {
     requestComposition: CompositionRequest
+    triggerSetupGuideVerifyOnNextIDStep: void
 }
