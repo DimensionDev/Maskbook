@@ -14,17 +14,16 @@ import { useSlippageTolerance } from '../0x/useSlippageTolerance'
 import { useTradeProviderSettings } from '../useTradeSettings'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 
-export function setTokenNativeNetwork(networkType: NetworkType) {
+export function resolveTokenNativeNetwork(networkType: NetworkType) {
     switch (networkType) {
         case NetworkType.Ethereum:
             return 'ETH'
         case NetworkType.Binance:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Polygon:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Arbitrum:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.xDai:
+        case NetworkType.Avalanche:
+        case NetworkType.Fantom:
             return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         default:
             safeUnreachable(networkType)
@@ -52,10 +51,10 @@ export function useTrade(
         if (outputAmount === '0' && !isExactIn) return null
 
         const sellToken = isNative(inputToken.address)
-            ? setTokenNativeNetwork(currentNetworkSettings.value)
+            ? resolveTokenNativeNetwork(currentNetworkSettings.value)
             : inputToken.address
         const buyToken = isNative(outputToken.address)
-            ? setTokenNativeNetwork(currentNetworkSettings.value)
+            ? resolveTokenNativeNetwork(currentNetworkSettings.value)
             : outputToken.address
         return PluginTraderRPC.swapOneQuote(
             {

@@ -10,6 +10,9 @@ export interface SwapQuoteOneResponse {
     estimatedGas: number
     tx: OneInchTx
     slippage: number
+    resPricePerToToken: number
+    resPricePerFromToken: number
+    priceImpact: number
 }
 
 export interface TokenOneInch {

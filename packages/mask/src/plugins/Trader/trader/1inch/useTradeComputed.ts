@@ -2,10 +2,10 @@ import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { rightShift, ZERO } from '@masknet/web3-shared-base'
-import { SwapRouteData, TradeComputed, TradeStrategy } from '../../types'
+import { SwapQuoteOneResponse, TradeComputed, TradeStrategy } from '../../types'
 
 export function useTradeComputed(
-    trade: SwapRouteData | null,
+    trade: SwapQuoteOneResponse | null,
     strategy: TradeStrategy,
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
@@ -15,9 +15,9 @@ export function useTradeComputed(
         if (!inputToken || !outputToken) return null
         const isExactIn = strategy === TradeStrategy.ExactIn
         if (!isExactIn) return null
-        const inputAmount = rightShift(trade.fromAmount, inputToken.decimals).integerValue()
+        const inputAmount = rightShift(trade.fromTokenAmount, inputToken.decimals).integerValue()
         const executionPrice = new BigNumber(trade.resPricePerToToken)
-        const outputAmount = rightShift(trade.resAmount, outputToken.decimals).integerValue()
+        const outputAmount = rightShift(trade.toTokenAmount, outputToken.decimals).integerValue()
         const priceImpact = new BigNumber(trade.priceImpact)
         return {
             strategy,
@@ -25,10 +25,11 @@ export function useTradeComputed(
             outputToken,
             inputAmount,
             outputAmount,
+
             executionPrice,
             fee: ZERO,
             maximumSold: inputAmount,
-            minimumReceived: new BigNumber(trade.fromAmount)
+            minimumReceived: new BigNumber(trade.fromTokenAmount)
                 .multipliedBy(trade.resPricePerFromToken)
                 .multipliedBy(1 - trade.slippage / 100)
                 .shiftedBy(outputToken.decimals),
@@ -37,6 +38,6 @@ export function useTradeComputed(
             priceImpact,
 
             trade_: { ...trade },
-        } as TradeComputed<SwapRouteData>
+        } as TradeComputed<SwapQuoteOneResponse>
     }, [trade, strategy, inputToken, outputToken])
 }

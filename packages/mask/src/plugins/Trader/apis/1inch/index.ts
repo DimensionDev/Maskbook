@@ -5,7 +5,7 @@ import type { SwapOneErrorResponse, SwapQuoteOneResponse, SwapQuoteOneRequest } 
 import urlcat from 'urlcat'
 
 import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
-import { fetchJSON } from '@masknet/web3-providers'
+import { fetchJSON } from '../../../../../../web3-providers/src/helpers'
 
 export async function swapOneQuote(request: SwapQuoteOneRequest) {
     const params: Record<string, string | number> = Object.fromEntries(Object.entries(request))
@@ -18,9 +18,9 @@ export async function swapOneQuote(request: SwapQuoteOneRequest) {
         urlcat(ONE_INCH_BASE_URL[netType], 'swap', params),
     )
 
-    if ('code' in response_) throw new Error(first(response_.validationErrors)?.reason ?? 'Unknown Error')
-
-    if ('reason' in response_) throw new Error(first(response_.validationErrors)?.reason || 'Unknown Error')
+    if ('code' in response_ || 'reason' in response_) {
+        throw new Error(first(response_.validationErrors)?.reason ?? 'Unknown Error')
+    }
 
     const successResponse = response_ as SwapQuoteOneResponse
     return successResponse

@@ -3,7 +3,7 @@ import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
-import { SwapOOData, TagType, TradeInfo, TradeStrategy } from '../types'
+import { SwapOOData, SwapQuoteOneResponse, TagType, TradeInfo, TradeStrategy } from '../types'
 import { useV3Trade as useUniswapV3Trade } from './uniswap/useTrade'
 import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeComputed'
 import { useTradeGasLimit as useUniswapTradeGasLimit } from './uniswap/useTradeGasLimit'
@@ -23,6 +23,9 @@ import { useTradeGasLimit as useBancorTradeGasLimit } from './bancor/useTradeGas
 import { useTradeComputed as useOpenOceanTradeComputed } from './openocean/useTradeComputed'
 import { useTrade as useOpenOceanTrade } from './openocean/useTrade'
 import { useTradeGasLimit as useOpenOceanTradeGasLimit } from './openocean/useTradeGasLimit'
+import { useTradeComputed as useOneInchTradeComputed } from './1inch/useTradeComputed'
+import { useTrade as useOneInchTrade } from './1inch/useTrade'
+import { useTradeGasLimit as useOneInchTradeGasLimit } from './1inch/useTradeGasLimit'
 import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders'
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit'
@@ -206,6 +209,11 @@ export function useAllTradeComputed(
         traderEstimateGas: mdexEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.MDEX, inputAmount_, inputToken, outputToken)
 
+    // oneinch
+    const oneinch_ = useOneInchTrade(TradeStrategy.ExactIn, inputAmount_, '0', inputToken, outputToken)
+    const oneinch = useOneInchTradeComputed(oneinch_.value ?? null, TradeStrategy.ExactIn, inputToken, outputToken)
+    const oneinchEstimateGas = useOneInchTradeGasLimit(oneinch as TradeComputed<SwapQuoteOneResponse> | null)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -223,6 +231,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
         { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
+        { provider: TradeProvider.ONE_INCH, ...oneinch_, value: oneinch, gas: oneinchEstimateGas },
     ]
 
     return nativeToken_.value

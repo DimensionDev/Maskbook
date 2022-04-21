@@ -1,4 +1,4 @@
-import type { SwapRouteData, TradeComputed } from '../../types'
+import type { SwapQuoteOneResponse, TradeComputed } from '../../types'
 import { useMemo } from 'react'
 import { useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
@@ -7,7 +7,7 @@ import type { TransactionConfig } from 'web3-core'
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
-export function useTradeGasLimit(tradeComputed: TradeComputed<SwapRouteData> | null): AsyncState<number> {
+export function useTradeGasLimit(tradeComputed: TradeComputed<SwapQuoteOneResponse> | null): AsyncState<number> {
     const { targetChainId } = TargetChainIdContext.useContainer()
 
     const web3 = useWeb3({ chainId: targetChainId })

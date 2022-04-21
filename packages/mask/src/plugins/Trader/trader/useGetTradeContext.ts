@@ -186,7 +186,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
             case TradeProvider.ONE_INCH:
                 return {
                     TYPE: tradeProvider,
-                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).ONEINCH_EXCHANGE_PROXY_ADDRESS,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.ONEINCH_EXCHANGE_PROXY_ADDRESS,
                 }
             case TradeProvider.OPENOCEAN:
                 return {
