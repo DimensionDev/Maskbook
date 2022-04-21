@@ -1,24 +1,25 @@
-import { useCopyToClipboard } from 'react-use'
-import { Copy, ExternalLink } from 'react-feather'
-import classNames from 'classnames'
-import { ProviderType } from '@masknet/web3-shared-evm'
-import { Button, Link, Typography } from '@mui/material'
-import { getMaskColor, makeStyles } from '@masknet/theme'
-import { isDashboardPage } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     useAccount,
-    useWeb3State,
     useChainId,
     useNetworkDescriptor,
     useProviderDescriptor,
     useProviderType,
     useReverseAddress,
     useWallet,
+    useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
-import { WalletMessages } from '../../plugins/Wallet/messages'
-import { useI18N } from '../../utils'
+import { isDashboardPage } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { getMaskColor, makeStyles } from '@masknet/theme'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { Button, Link, Typography } from '@mui/material'
+import classNames from 'classnames'
+import { Copy, ExternalLink } from 'react-feather'
+import { useCopyToClipboard } from 'react-use'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
+import { useI18N } from '../../../utils'
+import { usePendingTransactions } from './usePendingTransactions'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     content: {
@@ -86,6 +87,17 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         backgroundColor: '#ffffff',
         color: theme.palette.common.black,
     },
+    statusBox: {
+        position: 'relative',
+    },
+    transactionList: {
+        zIndex: 999,
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 88,
+        padding: 0,
+    },
 }))
 interface WalletStatusBox {
     isDashboard?: boolean
@@ -127,8 +139,15 @@ export function WalletStatusBox(props: WalletStatusBox) {
     )
     // #endregion
 
+    const { summary: pendingSummary, transactionList } = usePendingTransactions()
+
     return account ? (
-        <section className={classNames(classes.currentAccount, props.isDashboard ? classes.dashboardBackground : '')}>
+        <section
+            className={classNames(
+                classes.statusBox,
+                classes.currentAccount,
+                props.isDashboard ? classes.dashboardBackground : '',
+            )}>
             <WalletIcon
                 size={48}
                 badgeSize={16}
@@ -174,8 +193,10 @@ export function WalletStatusBox(props: WalletStatusBox) {
                         rel="noopener noreferrer">
                         <ExternalLink className={classes.linkIcon} size={14} />
                     </Link>
+                    {pendingSummary}
                 </div>
             </div>
+            <div className={classes.transactionList}>{transactionList}</div>
             {!props.disableChange && (
                 <section>
                     <Button
