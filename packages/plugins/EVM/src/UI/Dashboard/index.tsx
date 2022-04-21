@@ -3,7 +3,6 @@ import { base } from '../../base'
 import { createWeb3State } from '../../state'
 import { SharedContextSettings, Web3StateSettings } from '../../settings'
 import { Web3UI } from '../components/Web3UI'
-import { GlobalInjection } from '../components/GlobalInjection'
 
 const sns: Plugin.Dashboard.Definition = {
     ...base,
@@ -15,7 +14,6 @@ const sns: Plugin.Dashboard.Definition = {
         sns.Web3State = Web3StateSettings.value
     },
     Web3UI,
-    GlobalInjection,
 }
 
 export default sns

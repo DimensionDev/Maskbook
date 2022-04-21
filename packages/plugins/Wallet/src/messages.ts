@@ -131,11 +131,6 @@ export interface WalletMessage {
     gasPriceDialogUpdated: GasPriceDialogEvent
 
     /**
-     * Select wallet dialog
-     */
-    selectWalletDialogUpdated: SelectWalletDialogEvent
-
-    /**
      * Select provider dialog
      */
     selectProviderDialogUpdated: SelectProviderDialogEvent
@@ -151,11 +146,6 @@ export interface WalletMessage {
     walletStatusDialogUpdated: WalletStatusDialogEvent
 
     /**
-     * Wallet status dialog
-     */
-    walletRenameDialogUpdated: WalletRenameDialogEvent
-
-    /**
      * Gas setting dialog
      */
     gasSettingDialogUpdated: GasSettingDialogEvent
@@ -169,11 +159,6 @@ export interface WalletMessage {
      * Wallet Risk Warning dialog
      */
     walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
-
-    /**
-     * Restore Legacy Wallet Dialog
-     */
-    restoreLegacyWalletDialogUpdated: RestoreLegacyWalletDialogEvent
 
     walletsUpdated: void
     phrasesUpdated: void

@@ -1,8 +1,7 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
-import { unreachable } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { getChainIdFromNetworkType, isFortmaticSupported, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { EVM_Messages } from '../../messages'
 
 export function NetworkIconClickBait({
@@ -11,7 +10,7 @@ export function NetworkIconClickBait({
     children,
     onSubmit,
     onClick,
-}: Web3Plugin.UI.NetworkIconClickBaitProps) {
+}: Web3Plugin.UI.NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>) {
     // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         EVM_Messages.events.connectWalletDialogUpdated,
@@ -22,39 +21,20 @@ export function NetworkIconClickBait({
     )
     // #endregion
 
-    const providerType = provider?.type as ProviderType | undefined
-    const networkType = network.type as NetworkType
+    const providerType = provider?.type
+    const networkType = network.type
 
     const onClickNetwork = useCallback(async () => {
         if (!providerType) return
-
-        switch (providerType) {
-            case ProviderType.MaskWallet:
-            case ProviderType.MetaMask:
-            case ProviderType.WalletConnect:
-            case ProviderType.Coin98:
-            case ProviderType.WalletLink:
-            case ProviderType.MathWallet:
-            case ProviderType.Fortmatic:
-                setConnectWalletDialog({
-                    open: true,
-                    providerType,
-                    networkType,
-                })
-                break
-            case ProviderType.CustomNetwork:
-                throw new Error('To be implemented.')
-            default:
-                unreachable(providerType)
-        }
+        setConnectWalletDialog({
+            open: true,
+            providerType,
+            networkType,
+        })
         onClick?.(network, provider)
     }, [network, provider, onClick])
 
     if (!providerType) return null
-
-    // hide fortmatic for some networks because of incomplete supporting
-    if (providerType === ProviderType.Fortmatic && !isFortmaticSupported(getChainIdFromNetworkType(networkType)))
-        return null
 
     return (
         <>

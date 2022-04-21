@@ -9,6 +9,7 @@ import { ProviderIcon } from './ProviderIcon'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+
     return {
         root: {
             display: 'flex',
@@ -88,14 +89,14 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface PluginProviderRenderProps {
-    networks: Web3Plugin.NetworkDescriptor[]
-    providers: Web3Plugin.ProviderDescriptor[]
+    networks: Web3Plugin.NetworkDescriptor<number, string>[]
+    providers: Web3Plugin.ProviderDescriptor<number, string>[]
     undeterminedPluginID?: string
     undeterminedNetworkID?: string
     setUndeterminedPluginID: (id: NetworkPluginID) => void
     setUndeterminedNetworkID: (id: string) => void
-    NetworkIconClickBait?: React.ComponentType<Web3Plugin.UI.NetworkIconClickBaitProps>
-    ProviderIconClickBait?: React.ComponentType<Web3Plugin.UI.ProviderIconClickBaitProps>
+    NetworkIconClickBait?: React.ComponentType<Web3Plugin.UI.NetworkIconClickBaitProps<number, string, string>>
+    ProviderIconClickBait?: React.ComponentType<Web3Plugin.UI.ProviderIconClickBaitProps<number, string, string>>
     onSubmit: () => void
 }
 
@@ -112,14 +113,6 @@ export function PluginProviderRender({
 }: PluginProviderRenderProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-
-    console.log('DEBUG: providers')
-    console.log({
-        providers,
-        providersFiltered: providers.filter((x) => x.providerAdaptorPluginID === undeterminedPluginID),
-        undeterminedPluginID,
-        ProviderIconClickBait,
-    })
 
     return (
         <>

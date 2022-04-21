@@ -1,7 +1,6 @@
 import { createPluginMessage, createPluginRPC, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { serializer } from '@masknet/shared-base'
 import type { NetworkType, ProviderType } from '@masknet/web3-shared-evm'
-import type { JsonRpcPayload } from 'web3-core-helpers'
 import { PLUGIN_ID } from './constants'
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
@@ -18,17 +17,6 @@ export type ConnectWalletDialogEvent =
       }
 
 export interface EVM_Messages {
-    PROVIDER_RPC_REQUEST: {
-        providerType: ProviderType
-        payload: JsonRpcPayload
-    }
-    PROVIDER_RPC_RESPONSE: {
-        providerType: ProviderType
-        payload: JsonRpcPayload
-        result?: unknown
-        error: Error | null
-    }
-
     /**
      * Connect wallet dialog
      */

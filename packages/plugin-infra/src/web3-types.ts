@@ -2,6 +2,7 @@ import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
 import type { Emitter } from '@servie/events'
 import type { MaskBaseAPI } from '@masknet/web3-providers'
+import type { EnhanceableSite } from '@masknet/shared-base'
 import type { Plugin } from './types'
 
 export interface Pagination {
@@ -64,15 +65,15 @@ export declare namespace Web3Plugin {
         >
     >
 
-    export interface NetworkDescriptor {
+    export interface NetworkDescriptor<ChainId, NetworkType> {
         /** An unique ID for each network */
         ID: string
         /** The ID of a plugin that provides the functionality of this network. */
         networkSupporterPluginID: string
         /** The chain id */
-        chainId: number
+        chainId: ChainId
         /** The network type */
-        type: string
+        type: NetworkType
         /** The network icon */
         icon: URL
         /** The network icon in fixed color */
@@ -83,21 +84,21 @@ export declare namespace Web3Plugin {
         isMainnet: boolean
     }
 
-    export interface ProviderDescriptor {
+    export interface ProviderDescriptor<ChainId, ProviderType> {
         /** An unique ID for each wallet provider */
         ID: string
         /** The ID of a plugin that provides the adoption of this provider. */
         providerAdaptorPluginID: string
         /** The provider type */
-        type: string
+        type: ProviderType
         /** The provider icon */
         icon: URL
         /** The provider name */
         name: string
         /** Enable requirements */
         enableRequirements?: {
-            supportedChainIds?: number[]
-            supportedSNSIds?: string[]
+            supportedChainIds?: ChainId[]
+            supportedSNSIds?: EnhanceableSite[]
         }
     }
 
@@ -150,6 +151,7 @@ export declare namespace Web3Plugin {
         derivationPath?: string
         /** the derivation path when wallet last was derived */
         latestDerivationPath?: string
+        /** the internal presentation of mask wallet sdk */
         storedKeyInfo?: MaskBaseAPI.StoredKeyInfo
         /** the Mask SDK stored key info */
         /** record created at */
@@ -680,19 +682,31 @@ export declare namespace Web3Plugin {
         }
     }
     export namespace UI {
-        export interface NetworkIconClickBaitProps {
-            network: NetworkDescriptor
-            provider?: ProviderDescriptor
+        export interface NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType> {
+            network: NetworkDescriptor<ChainId, NetworkType>
+            provider?: ProviderDescriptor<ChainId, ProviderType>
             children?: React.ReactNode
-            onClick?: (network: NetworkDescriptor, provider?: ProviderDescriptor) => void
-            onSubmit?: (network: NetworkDescriptor, provider?: ProviderDescriptor) => void
+            onClick?: (
+                network: NetworkDescriptor<ChainId, NetworkType>,
+                provider?: ProviderDescriptor<ChainId, ProviderType>,
+            ) => void
+            onSubmit?: (
+                network: NetworkDescriptor<ChainId, NetworkType>,
+                provider?: ProviderDescriptor<ChainId, ProviderType>,
+            ) => void
         }
-        export interface ProviderIconClickBaitProps {
-            network: NetworkDescriptor
-            provider: ProviderDescriptor
+        export interface ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType> {
+            network: NetworkDescriptor<ChainId, NetworkType>
+            provider: ProviderDescriptor<ChainId, ProviderType>
             children?: React.ReactNode
-            onClick?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
-            onSubmit?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
+            onClick?: (
+                network: NetworkDescriptor<ChainId, NetworkType>,
+                provider: ProviderDescriptor<ChainId, ProviderType>,
+            ) => void
+            onSubmit?: (
+                network: NetworkDescriptor<ChainId, NetworkType>,
+                provider: ProviderDescriptor<ChainId, ProviderType>,
+            ) => void
         }
         export interface ApplicationCategoryIconClickBaitProps {
             category: ApplicationCategoryDescriptor
@@ -701,16 +715,22 @@ export declare namespace Web3Plugin {
             address: string
             size?: number
         }
-        export interface UI {
+        export interface UI<ChainId, ProviderType, NetworkType> {
             SelectNetworkMenu?: {
                 /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-                NetworkIconClickBait?: Plugin.InjectUIReact<UI.NetworkIconClickBaitProps>
+                NetworkIconClickBait?: Plugin.InjectUIReact<
+                    UI.NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>
+                >
             }
             SelectProviderDialog?: {
                 /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-                NetworkIconClickBait?: Plugin.InjectUIReact<UI.NetworkIconClickBaitProps>
+                NetworkIconClickBait?: Plugin.InjectUIReact<
+                    UI.NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>
+                >
                 /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
-                ProviderIconClickBait?: Plugin.InjectUIReact<UI.ProviderIconClickBaitProps>
+                ProviderIconClickBait?: Plugin.InjectUIReact<
+                    UI.ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>
+                >
             }
             WalletStatusDialog?: {
                 /** This UI will receive application category icon as children component, and the plugin may hook click handle on it. */
