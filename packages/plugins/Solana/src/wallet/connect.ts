@@ -24,9 +24,7 @@ export async function connectWallet(init = false) {
     let rsp: Awaited<ReturnType<typeof bridgedSolanaProvider.connect>> | null = null
     try {
         rsp = await bridgedSolanaProvider.connect({ onlyIfTrusted: init })
-    } catch {
-        rsp = await bridgedSolanaProvider.connect()
-    }
+    } catch {}
     if (rsp?.publicKey) {
         await storeConnection(rsp.publicKey)
     }
