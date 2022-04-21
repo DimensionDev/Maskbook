@@ -31,6 +31,7 @@ import formatDateTime from 'date-fns/format'
 import { LoadingButton } from '@mui/lab'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { cloneDeep } from 'lodash-unified'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -153,12 +154,12 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 return
             }
         })
-        setRawWalletList(JSON.parse(JSON.stringify(walletsList)))
-        setRawPatchData(JSON.parse(JSON.stringify(walletsList)))
+        setRawWalletList(cloneDeep(walletsList))
+        setRawPatchData(cloneDeep(walletsList))
     }, [proofRes, kv, bodyView])
 
     const onCancel = () => {
-        setRawPatchData(JSON.parse(JSON.stringify(rawWalletList)))
+        setRawPatchData(cloneDeep(rawWalletList))
         setHasChanged(false)
     }
 
@@ -191,10 +192,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         )
     }
     const setAsDefault = (idx: number) => {
-        const changed = JSON.parse(JSON.stringify(rawPatchData))
+        const changed = cloneDeep(rawPatchData)
         changed.forEach((x: any) => (x.isDefault = 0))
         changed[idx].isDefault = 1
-        const defaultItem = JSON.parse(JSON.stringify(changed[idx]))
+        const defaultItem = cloneDeep(changed[idx])
         changed.splice(idx, 1)
         changed.sort(
             (a: BindingProof, b: BindingProof) =>
@@ -206,7 +207,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     }
 
     const onSwitchChange = (idx: number, v: boolean) => {
-        const changed = JSON.parse(JSON.stringify(rawPatchData))
+        const changed = cloneDeep(rawPatchData)
         changed[idx].isPublic = v ? 1 : 0
         setRawPatchData(changed)
         setHasChanged(true)
