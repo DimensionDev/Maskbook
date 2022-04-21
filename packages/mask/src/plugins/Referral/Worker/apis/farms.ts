@@ -217,7 +217,7 @@ function parseBasicFarmEvents(unparsed: any, tokens: ERC20TokenDetailed[]) {
     )
     const farmExistsEventsMap = new Map(uniqueFarms.map((e) => [e.args.farmHash, e.args]))
 
-    // colect all deposit and dailyRewardRate for farmHash
+    // group all deposit and dailyRewardRate for farmHash
     const farmMap = new Map<string, { totalFarmRewards?: number; dailyFarmReward?: number }>()
     parsed.forEach((e) => {
         const { farmHash } = e.args
@@ -287,7 +287,7 @@ interface TokenFilter {
 
 export async function getFarmsForReferredToken(
     web3: Web3,
-    chaddr: ChainAddress,
+    chainAddress: ChainAddress,
     chainId: ChainId,
 ): Promise<Array<FarmExistsEvent>> {
     const farmsAddr = await getDaoAddress(web3, ReferralFarmsV1, chainId)
@@ -295,7 +295,7 @@ export async function getFarmsForReferredToken(
     const res = await queryIndexersWithNearestQuorum({
         addresses: [farmsAddr],
         topic1: [eventIds.FarmExists],
-        topic4: [expandBytes24ToBytes32(chaddr)],
+        topic4: [expandBytes24ToBytes32(chainAddress)],
         chainId: [chainId],
     })
 
@@ -304,7 +304,7 @@ export async function getFarmsForReferredToken(
 
 export async function getFarmsForRewardToken(
     web3: Web3,
-    chaddr: ChainAddress,
+    chainAddress: ChainAddress,
     chainId: ChainId,
 ): Promise<Array<FarmExistsEvent>> {
     const farmsAddr = await getDaoAddress(web3, ReferralFarmsV1, chainId)
@@ -312,7 +312,7 @@ export async function getFarmsForRewardToken(
     const res = await queryIndexersWithNearestQuorum({
         addresses: [farmsAddr],
         topic1: [eventIds.FarmExists],
-        topic3: [expandBytes24ToBytes32(chaddr)],
+        topic3: [expandBytes24ToBytes32(chainAddress)],
         chainId: [chainId],
     })
 

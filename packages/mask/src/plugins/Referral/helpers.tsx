@@ -40,7 +40,7 @@ export function buf(b: Buffer | Uint8Array | PrefixedHexString | BigNumber | num
         const hex = b.substring(2)
         if (hex.length % 2 !== 0 || !isHexString(b)) {
             // Buffer.from(hex, 'hex') will throw on invalid hex, should we do it?
-            throw new Error('invalid hexable string')
+            throw new Error('invalid hex string')
         }
 
         return Buffer.from(hex, 'hex')
@@ -92,9 +92,9 @@ export function toChainAddressEthers(chainId: number, address: string): string {
 
 export const referralMetadataReader = createTypedMessageMetadataReader<ReferralMetaData>(META_KEY, schema)
 
-export function parseChainAddress(chaddr: ChainAddress): ChainAddressProps {
-    const chainId = toChainId(chaddr)
-    const address = toEvmAddress(chaddr)
+export function parseChainAddress(chainAddress: ChainAddress): ChainAddressProps {
+    const chainId = toChainId(chainAddress)
+    const address = toEvmAddress(chainAddress)
     const isNative = chainId === Number.parseInt(address.substring(2 + 16 * 2), 16)
     return {
         chainId,

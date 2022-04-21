@@ -19,10 +19,10 @@ export async function getDiscovery(): Promise<{
 }
 export async function getDaoAddress(web3: Web3, key: string, chainId: number) {
     const {
-        discovery: { daos },
+        discovery: { daoList },
     } = await getDiscovery()
 
-    const daoConfig = daos.filter((d) => d.chainId === chainId)[0]
+    const daoConfig = daoList.filter((d) => d.chainId === chainId)[0]
     const dao = createContract(web3, daoConfig?.address ?? '', DAO_ABI as AbiItem[])
 
     const val = await dao?.methods.addresses(key).call()

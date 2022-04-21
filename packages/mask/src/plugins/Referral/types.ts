@@ -167,7 +167,7 @@ export type Airport = {
     lon: number
 }
 export type Discovery = {
-    daos: Dao[]
+    daoList: Dao[]
     indexers: Node[]
     womOracles: Node[]
     airports: Airport[]

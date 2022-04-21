@@ -105,7 +105,7 @@ async function findQuorum(nodes: Node[], airports: Airport[], pop: string, urlPa
     return responses
 }
 
-export async function queryIndexersWithNearestQuorum(searchParams: LogsearchParams): Promise<any> {
+export async function queryIndexersWithNearestQuorum(searchParams: LogParams): Promise<any> {
     const urlPath = makeIndexerUrlPath(searchParams)
     const { discovery, pop } = await getDiscovery()
     const minQuorum = 1
@@ -119,7 +119,7 @@ export async function queryIndexersWithNearestQuorum(searchParams: LogsearchPara
     return responses[0].value
 }
 
-interface LogsearchParams {
+interface LogParams {
     // Logs from these addresses only
     addresses?: EvmAddress[]
     // Search across all topics
@@ -138,7 +138,7 @@ interface LogsearchParams {
     strategy?: 'AND' | 'OR'
 }
 
-export function makeIndexerUrlPath(params: LogsearchParams) {
+export function makeIndexerUrlPath(params: LogParams) {
     const parts = []
     if (params.addresses) params.addresses.forEach((d) => parts.push(`address=${d}`))
     if (params.topics) params.topics.forEach((d) => parts.push(`topic=${d}`))
