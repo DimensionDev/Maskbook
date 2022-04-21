@@ -218,7 +218,13 @@ export function useAllTradeComputed(
         tradeProviders.some((x) => x === TradeProvider.WOOFI) ? outputToken : undefined,
         temporarySlippage,
     )
-    const woofi = useWoofiTradeComputed(woofi_.value ?? null, TradeStrategy.ExactIn, inputToken, outputToken)
+    const woofi = useWoofiTradeComputed(
+        woofi_.value ?? null,
+        TradeStrategy.ExactIn,
+        inputToken,
+        outputToken,
+        temporarySlippage,
+    )
     const woofiEstimateGas = useWoofiTradeGasLimit(woofi)
 
     const allTradeResult = [

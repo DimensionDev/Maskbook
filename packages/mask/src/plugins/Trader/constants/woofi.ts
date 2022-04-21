@@ -13,6 +13,7 @@ import {
 
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
+export const WOOFI_NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 export const woofiNetworkNames: Record<NetworkType, string> = {
     [NetworkType.Ethereum]: '',
     [NetworkType.Binance]: 'bsc',

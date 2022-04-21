@@ -195,10 +195,7 @@ export function useTradeContext(tradeProvider: TradeProvider) {
             case TradeProvider.WOOFI:
                 return {
                     TYPE: tradeProvider,
-                    GRAPH_API: DEX_TRADE.WOOFI_THEGRAPH,
-                    INIT_CODE_HASH: DEX_TRADE.WOOFI_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.WOOFI_ROUTER_ADDRESS,
-                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.WOOFI_FACTORY_ADDRESS,
                     AGAINST_TOKENS: WOOFI_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: WOOFI_CUSTOM_BASES,

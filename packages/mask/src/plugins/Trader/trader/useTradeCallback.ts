@@ -10,7 +10,7 @@ import type {
     SwapRouteSuccessResponse,
     TradeComputed,
     SwapOOSuccessResponse,
-    WoofiSwapSuccessResponse,
+    WoofiSwapData,
 } from '../types'
 import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback'
 import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback'
@@ -55,9 +55,7 @@ export function useTradeCallback(
     const tradeComputedForOpenOcean = !isNativeTokenWrapper_
         ? (tradeComputed as TradeComputed<SwapOOSuccessResponse>)
         : null
-    const tradeComputedForWoofi = !isNativeTokenWrapper_
-        ? (tradeComputed as TradeComputed<WoofiSwapSuccessResponse>)
-        : null
+    const tradeComputedForWoofi = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<WoofiSwapData>) : null
     // uniswap like providers
     const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like, provider, gasConfig, allowedSlippage)
     const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider, gasConfig, allowedSlippage)
@@ -79,7 +77,7 @@ export function useTradeCallback(
         provider === TradeProvider.OPENOCEAN ? tradeComputedForOpenOcean : null,
         gasConfig,
     )
-    const woofi = useWoofiCallback(provider === TradeProvider.WOOFI ? tradeComputedForWoofi : null, gasConfig)
+    const woofi = useWoofiCallback(provider === TradeProvider.WOOFI ? tradeComputedForWoofi : null, provider, gasConfig)
 
     // the trade is an ETH-WETH pair
     const nativeTokenWrapper = useNativeTokenWrapperCallback(
