@@ -9,7 +9,7 @@ import { injectPostInspectorInstagram } from './injection/post-inspector'
 import { CurrentVisitingIdentityProviderInstagram } from './collecting/identity'
 import { injectProfileNFTAvatarInInstagram } from './injection/NFT/ProfileNFTAvatar'
 import { injectNFTAvatarInInstagram } from './injection/NFT/NFTAvatarInInstagram'
-import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
+import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from './injection/NFT/NFTAvatarEditProfile'
 import { injectUserNFTAvatarAtInstagram } from './injection/NFT/NFTAvatarInTimeline'
 import { injectProfileTabAtInstagram } from './injection/ProfileTab'
 import { injectProfileTabContentAtInstagram } from './injection/ProfileTabContent'
@@ -48,6 +48,7 @@ const define: SocialNetworkUI.Definition = {
         userAvatar: injectUserNFTAvatarAtInstagram,
         profileTab: injectProfileTabAtInstagram,
         profileTabContent: injectProfileTabContentAtInstagram,
+        openNFTAvatarSettingDialog,
         /* newPostComposition: {
             start: newPostCompositionInstagram,
             supportedInputTypes: { text: true, image: true },

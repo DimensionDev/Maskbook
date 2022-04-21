@@ -33,7 +33,7 @@ import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
 import { injectOpenTipButtonOnProfile } from './injection/Tip/index'
 import { injectProfileNFTAvatarInTwitter } from './injection/NFT/ProfileNFTAvatar'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
-import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
+import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from './injection/NFT/NFTAvatarEditProfile'
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
 import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
 import { TwitterRenderFragments } from './customization/render-fragments'
@@ -183,6 +183,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         postAndReplyNFTAvatar: injectUserNFTAvatarAtTweet,
         avatarClipNFT: injectNFTAvatarClipInTwitter,
+        openNFTAvatarSettingDialog,
     },
     configuration: {
         nextIDConfig: {

@@ -1,5 +1,6 @@
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { base } from '../base'
+import { CyberConnectIcon } from '@masknet/icons'
 import { useMemo } from 'react'
 import { parseURL } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
@@ -29,6 +30,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    ApplicationEntries: [
+        {
+            ApplicationEntryID: base.ID,
+            category: 'dapp',
+            marketListSortingPriority: 17,
+            description: {
+                i18nKey: '__plugin_description',
+                fallback: 'Decentralized social graph protocol for user-centric Web3.',
+            },
+            name: { i18nKey: '__plugin_name', fallback: 'CyberConnect' },
+            icon: <CyberConnectIcon />,
+            tutorialLink: 'https://cyberconnect.me/',
+        },
+    ],
 }
 
 export default sns
