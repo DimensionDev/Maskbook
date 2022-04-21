@@ -5,7 +5,6 @@ import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import { instagramBase } from '../base'
 import { searchInstagramAvatarSelector } from '../utils/selector'
 import { getAvatar, getBioDescription, getNickname, getPersonalHomepage, getUserId } from '../utils/user'
-import Services from '../../../extension/service'
 
 function resolveCurrentVisitingIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
@@ -19,16 +18,6 @@ function resolveCurrentVisitingIdentityInner(
         const nickname = getNickname()
         const handle = getUserId()
         const avatar = getAvatar()
-
-        if (handle && avatar) {
-            const identifier = new ProfileIdentifier(instagramBase.networkIdentifier, handle)
-
-            if (avatar) {
-                Services.Identity.updateProfileInfo(identifier, {
-                    avatarURL: avatar,
-                })
-            }
-        }
 
         ref.value = {
             identifier: new ProfileIdentifier(instagramBase.networkIdentifier, handle),

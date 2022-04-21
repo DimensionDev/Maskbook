@@ -36,11 +36,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         marginLeft: 6,
         verticalAlign: 'middle',
     },
-    dialogTitleBadgeAction: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row-reverse',
-    },
     dialogCloseButton: {
         color: theme.palette.text.primary,
     },
@@ -64,7 +59,6 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
-    badgeAction?: React.ReactChild
 }
 
 export function InjectedDialog(props: InjectedDialogProps) {
@@ -78,7 +72,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogContent,
         dialogTitle,
         dialogTitleTypography,
-        dialogTitleBadgeAction,
         dialogBackdropRoot,
         container,
         ...dialogClasses
