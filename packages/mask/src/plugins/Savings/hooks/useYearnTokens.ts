@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 
-import { EthereumTokenType, useFungibleTokensDetailed } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumTokenType, useFungibleTokensDetailed } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { VaultInterface, Yearn } from '@yfi/sdk'
 
@@ -10,7 +10,7 @@ import type Web3 from 'web3'
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers'
 import type { ChainIdYearn } from '../types'
 
-export function useYearnTokens(chainId: ChainIdYearn, web3: Web3) {
+export function useYearnTokens(chainId: ChainId, web3: Web3): chainId is ChainIdYearn {
     const {
         value: yfiTokens,
         loading,
@@ -42,7 +42,7 @@ export function useYearnTokens(chainId: ChainIdYearn, web3: Web3) {
 
     const { value: detailedYFITokens, loading: loadingTokenDetails } = useFungibleTokensDetailed(
         compact(flatten(yfiTokens ?? [])).map((address: string) => ({ address, type: EthereumTokenType.ERC20 })) ?? [],
-        chainId,
+        chainId
     )
 
     return useMemo(
