@@ -54,18 +54,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         CrossIsolationMessages.events.triggerSetupGuideVerifyOnNextIDStep.sendToAll({})
                     }, [])
 
-                    return isBound !== undefined ? (
+                    return (
                         <>
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                disabled={disabled}
+                                disabled={isBound === undefined ? true : disabled}
                                 icon={icon}
                                 onClick={() => (!isBound ? onNextIDVerify() : setOpen(true))}
                             />
                             <TipsEntranceDialog open={open} onClose={() => setOpen(false)} />
                         </>
-                    ) : (
-                        <></>
                     )
                 },
                 ApplicationEntryID: base.ID,
