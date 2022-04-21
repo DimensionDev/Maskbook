@@ -104,6 +104,10 @@ export async function getComputedPayload(payload: JsonRpcPayload): Promise<Ether
             return
     }
 }
+export function getContractFunctionName(signature: string) {
+    const abi = readABI(signature)
+    return abi?.name
+}
 
 export type ComputedPayload =
     | undefined

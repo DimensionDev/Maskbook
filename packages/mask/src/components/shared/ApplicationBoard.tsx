@@ -128,7 +128,7 @@ export function ApplicationBoard() {
                 <section className={classes.applicationWrapper}>
                     {listedAppList.map((application) => {
                         return (
-                            <Fragment key={application.pluginId}>
+                            <Fragment key={application.entry.ApplicationEntryID}>
                                 <RenderEntryComponentWrapper application={application} />
                             </Fragment>
                         )
