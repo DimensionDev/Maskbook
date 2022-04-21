@@ -10,7 +10,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         backgroundColor: theme.palette.background.default,
         borderRadius: '8px',
-
         height: 100,
     },
     applicationBoxHover: {
@@ -45,6 +44,7 @@ interface Props {
     icon: React.ReactNode
     title: React.ReactNode
     disabled?: boolean
+    toolTip?: string
     onClick: () => void
     tooltipProps?: Partial<TooltipProps>
     hint?: string | React.ReactElement
@@ -52,7 +52,21 @@ interface Props {
 }
 
 export function ApplicationEntry(props: Props) {
-    const { icon, title, onClick, disabled = false, tooltipProps, hint = '', nextIdVerifyToolTipHint } = props
+    const {
+        icon,
+        title,
+        onClick,
+        disabled = false,
+        tooltipProps = {
+            PopperProps: {
+                disablePortal: true,
+            },
+            placement: 'top',
+            arrow: true,
+        },
+        hint = '',
+        nextIdVerifyToolTipHint,
+    } = props
     const { classes } = useStyles()
     const jsx = (
         <div
@@ -67,7 +81,10 @@ export function ApplicationEntry(props: Props) {
     return (
         <>
             {hint || nextIdVerifyToolTipHint ? (
-                <ShadowRootTooltip title={nextIdVerifyToolTipHint ?? hint} {...tooltipProps}>
+                <ShadowRootTooltip
+                    title={nextIdVerifyToolTipHint ?? hint}
+                    {...tooltipProps}
+                    disableHoverListener={!nextIdVerifyToolTipHint}>
                     {jsx}
                 </ShadowRootTooltip>
             ) : (
