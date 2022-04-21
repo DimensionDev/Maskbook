@@ -76,7 +76,7 @@ export enum ZrxTradePool {
     Trisolaris = 'Trisolaris',
     WannaSwap = 'WannaSwap',
     Mdex = 'Mdex',
-    Woofi = 'Woofi',
+    Woofi = 'WooFi',
 }
 
 export interface TradeComputed<T = unknown> {
