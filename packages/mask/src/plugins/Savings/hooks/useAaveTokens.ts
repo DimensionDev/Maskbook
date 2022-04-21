@@ -15,6 +15,7 @@ import type Web3 from 'web3'
 import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider'
 import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
 import { splitToPair } from '../utils'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 export function useAaveTokens(chainId: ChainId, web3: Web3) {
     const {
@@ -23,9 +24,7 @@ export function useAaveTokens(chainId: ChainId, web3: Web3) {
         error,
         retry,
     } = useAsyncRetry(async () => {
-        if (chainId !== ChainId.Mainnet) {
-            return []
-        }
+        if (chainId !== ChainId.Mainnet) return EMPTY_LIST
 
         const address = getAaveConstants(chainId).AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
 

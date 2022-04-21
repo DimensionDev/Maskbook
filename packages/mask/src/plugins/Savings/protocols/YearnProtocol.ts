@@ -2,7 +2,7 @@ import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { ZERO } from '@masknet/web3-shared-base'
-import { ChainId, createContract } from '@masknet/web3-shared-evm'
+import { ChainId, createContract, TransactionState } from '@masknet/web3-shared-evm'
 
 import { ChainIdYearn, FungibleTokenPair, ProtocolType, SavingsProtocol } from '../types'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
@@ -82,7 +82,13 @@ export class YearnProtocol implements SavingsProtocol {
         return new BigNumber(gasEstimate)
     }
 
-    public async deposit(account: string, chainId: ChainIdYearn, web3: Web3, value: BigNumber.Value) {
+    public async deposit(
+        account: string,
+        chainId: ChainIdYearn,
+        web3: Web3,
+        value: BigNumber.Value,
+        onChange: (state: TransactionState) => void,
+    ) {
         try {
             const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
 
