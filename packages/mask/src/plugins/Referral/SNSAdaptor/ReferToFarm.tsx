@@ -107,7 +107,7 @@ export function ReferToFarm(props: PageInterface) {
 
     // fetch all farms
     const { value: farms = [], loading: loadingAllFarms } = useAsync(
-        async () => farmsService.getAllFarms(web3, currentChainId, ERC20),
+        async () => farmsService.getAllFarms(currentChainId, ERC20),
         [currentChainId, ERC20],
     )
 

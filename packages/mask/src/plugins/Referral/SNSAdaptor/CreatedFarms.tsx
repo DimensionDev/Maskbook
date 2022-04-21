@@ -2,7 +2,6 @@ import { useAsync } from 'react-use'
 import {
     useAccount,
     useChainId,
-    useWeb3,
     useTokenListConstants,
     useNativeTokenDetailed,
     ERC20TokenDetailed,
@@ -178,7 +177,6 @@ export function CreatedFarms(props: PageInterface) {
     const currentChainId = useChainId()
     const requiredChainId = useRequiredChainId(currentChainId)
     const account = useAccount()
-    const web3 = useWeb3()
     const { ERC20 } = useTokenListConstants()
     const { value: allTokens = [], loading: loadingAllTokens } = useAsync(
         async () =>
@@ -189,14 +187,14 @@ export function CreatedFarms(props: PageInterface) {
 
     // fetch my farms
     const { value: myFarms = [], loading: loadingMyFarms } = useAsync(
-        async () => farmsService.getMyFarms(web3, account, currentChainId),
-        [web3, account],
+        async () => farmsService.getMyFarms(account, currentChainId),
+        [currentChainId, account],
     )
 
     // fetch all deposits
     const { value: farmsDeposits = [], loading: loadingFarmsDeposits } = useAsync(
-        async () => farmsService.getFarmsDeposits(web3, currentChainId),
-        [web3],
+        async () => farmsService.getFarmsDeposits(currentChainId),
+        [currentChainId],
     )
 
     const allTokensMap = new Map(allTokens.map((token) => [token.address.toLowerCase(), token]))

@@ -1,15 +1,12 @@
-import {
+import type {
     ChainAddress,
     FarmExistsEvent,
-    ReferralFarmsV1,
     FarmDepositChange,
     ChainId,
     Farm,
-    FarmDepositAndMetastate,
     FarmHash,
     RewardsHarvestedEvent,
 } from '../../types'
-import type Web3 from 'web3'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { keccak256, fromWei, asciiToHex, padRight } from 'web3-utils'
 import { defaultAbiCoder, Interface } from '@ethersproject/abi'
@@ -18,11 +15,9 @@ import { TokenList } from '@masknet/web3-providers'
 import { formatUnits } from '@ethersproject/units'
 
 import { expandBytes24ToBytes32, expandEvmAddressToBytes32, parseChainAddress } from '../../helpers'
-import { getDaoAddress } from './discovery'
 import { queryIndexersWithNearestQuorum } from './indexers'
 import { REFERRAL_FARMS_V1_ABI } from './abis'
-
-import BigNumber from 'bignumber.js'
+import { REFERRAL_FARMS_V1_ADDR } from '../../constants'
 
 const REFERRAL_FARMS_V1_IFACE = new Interface(REFERRAL_FARMS_V1_ABI)
 
@@ -40,7 +35,6 @@ function parseEvents(items: Array<any>): Array<any> {
     })
     return parsed
 }
-
 function parseFarmExistsEvents(unparsed: any) {
     const parsed = parseEvents(unparsed)
 
@@ -56,7 +50,6 @@ function parseFarmExistsEvents(unparsed: any) {
 
     return uniqueFarms
 }
-
 function parseFarmDepositChangeEvents(unparsed: any) {
     const parsed = parseEvents(unparsed)
 
@@ -67,43 +60,6 @@ function parseFarmDepositChangeEvents(unparsed: any) {
 
     return farms
 }
-function parseFarmDepositAndMetaStateChangeEvents(unparsed: any) {
-    const parsed = parseEvents(unparsed)
-
-    const farms: Array<FarmDepositAndMetastate> = []
-    const farmMap = new Map<string, { totalFarmRewards?: number; dailyFarmReward?: number }>()
-    parsed.forEach((e) => {
-        const { farmHash } = e.args
-        const prevFarmState = farmMap.get(farmHash)
-
-        if (e.topic === eventIds.FarmDepositChange) {
-            const { delta: totalFarmRewards } = e.args
-            farmMap.set(farmHash, { ...prevFarmState, totalFarmRewards })
-        }
-        if (e.topic === eventIds.FarmMetastate) {
-            const { key, value } = e.args
-
-            const periodRewardKey = padRight(asciiToHex('periodReward'), 64)
-            if (key === periodRewardKey) {
-                const periodReward = defaultAbiCoder.decode(['uint128', 'int128'], value)[0]
-
-                farmMap.set(farmHash, {
-                    ...prevFarmState,
-                    dailyFarmReward: Number(fromWei(periodReward.toString())),
-                })
-            }
-        }
-    })
-    farmMap.forEach((value: { totalFarmRewards?: number; dailyFarmReward?: number }, key: string) => {
-        farms.push({
-            farmHash: key,
-            delta: new BigNumber(value.totalFarmRewards ?? 0),
-            dailyFarmReward: new BigNumber(value.dailyFarmReward ?? 0),
-        })
-    })
-    return farms
-}
-
 function parseFarmMetaStateChangeEvents(unparsed: any) {
     const parsed = parseEvents(unparsed)
 
@@ -125,85 +81,6 @@ function parseFarmMetaStateChangeEvents(unparsed: any) {
     })
 
     return farmMetastateMap
-}
-export async function getMyFarms(
-    web3: Web3,
-    account: string,
-    chainId: ChainId,
-    filter?: TokenFilter,
-): Promise<Array<FarmExistsEvent>> {
-    const farmsAddr = await getDaoAddress(web3, ReferralFarmsV1, chainId)
-
-    // Allow filtering your own tokens
-    let topic3, topic4
-    if (filter?.rewardTokens) {
-        topic3 = filter.rewardTokens.map((t) => expandBytes24ToBytes32(t))
-    }
-    if (filter?.referredTokens) {
-        topic4 = filter.referredTokens.map((t) => expandBytes24ToBytes32(t))
-    }
-
-    // Query indexers
-    const res = await queryIndexersWithNearestQuorum({
-        addresses: [farmsAddr],
-        topic1: [eventIds.FarmExists],
-        topic2: [expandEvmAddressToBytes32(account)],
-        topic3,
-        topic4,
-        chainId: [chainId],
-    })
-
-    return parseFarmExistsEvents(res.items)
-}
-
-export async function getFarmsDeposits(web3: Web3, chainId: ChainId): Promise<Array<FarmDepositChange>> {
-    const farmsAddr = await getDaoAddress(web3, ReferralFarmsV1, chainId)
-
-    const res = await queryIndexersWithNearestQuorum({
-        addresses: [farmsAddr],
-        topics: [eventIds.FarmDepositChange],
-        chainId: [chainId],
-    })
-
-    return parseFarmDepositChangeEvents(res.items)
-}
-
-type FarmsMetaStateMap = Map<string, { dailyFarmReward: string }>
-export async function getFarmsMetaState(
-    web3: Web3,
-    chainId: ChainId,
-    farmHashes?: FarmHash[],
-): Promise<FarmsMetaStateMap | undefined> {
-    const farmsAddr = await getDaoAddress(web3, ReferralFarmsV1, chainId)
-
-    // Allow filter by farmHash
-    let topic2
-    if (farmHashes?.length) {
-        topic2 = farmHashes.map((farmHash) => farmHash)
-    }
-
-    const res = await queryIndexersWithNearestQuorum({
-        addresses: [farmsAddr],
-        topic1: [eventIds.FarmMetastate],
-        topic2,
-        chainId: [chainId],
-    })
-
-    return parseFarmMetaStateChangeEvents(res.items)
-}
-export async function getFarmsDepositAndMetaState(
-    web3: Web3,
-    chainId: ChainId,
-): Promise<Array<FarmDepositAndMetastate>> {
-    const farmsAddr = await getDaoAddress(web3, ReferralFarmsV1, chainId)
-
-    const res = await queryIndexersWithNearestQuorum({
-        addresses: [farmsAddr],
-        topics: [eventIds.FarmDepositChange, eventIds.FarmMetastate],
-        chainId: [chainId],
-    })
-
-    return parseFarmDepositAndMetaStateChangeEvents(res.items)
 }
 function parseBasicFarmEvents(unparsed: any, tokens: ERC20TokenDetailed[]) {
     const allTokensMap = new Map(tokens.map((token) => [token.address.toLowerCase(), token]))
@@ -264,9 +141,87 @@ function parseBasicFarmEvents(unparsed: any, tokens: ERC20TokenDetailed[]) {
 
     return farms
 }
+function parseRewardsHarvestedEvents(unparsed: any) {
+    const parsed = parseEvents(unparsed)
 
-export async function getAllFarms(web3: Web3, chainId: ChainId, tokenLists?: string[]): Promise<Array<Farm>> {
-    const farmsAddr = await getDaoAddress(web3, ReferralFarmsV1, chainId)
+    const rewards: Array<RewardsHarvestedEvent> = parsed.map((e) => {
+        const { farmHash, caller, rewardTokenDefn, leafHash, value } = e.args
+        return { farmHash, caller, rewardTokenDefn, leafHash, value: Number(fromWei(value.toString())) }
+    })
+
+    return rewards
+}
+
+interface TokenFilter {
+    rewardTokens?: ChainAddress[]
+    referredTokens?: ChainAddress[]
+}
+export async function getMyFarms(
+    account: string,
+    chainId: ChainId,
+    filter?: TokenFilter,
+): Promise<Array<FarmExistsEvent>> {
+    const farmsAddr = REFERRAL_FARMS_V1_ADDR
+
+    // Allow filtering your own tokens
+    let topic3, topic4
+    if (filter?.rewardTokens) {
+        topic3 = filter.rewardTokens.map((t) => expandBytes24ToBytes32(t))
+    }
+    if (filter?.referredTokens) {
+        topic4 = filter.referredTokens.map((t) => expandBytes24ToBytes32(t))
+    }
+
+    // Query indexers
+    const res = await queryIndexersWithNearestQuorum({
+        addresses: [farmsAddr],
+        topic1: [eventIds.FarmExists],
+        topic2: [expandEvmAddressToBytes32(account)],
+        topic3,
+        topic4,
+        chainId: [chainId],
+    })
+
+    return parseFarmExistsEvents(res.items)
+}
+
+export async function getFarmsDeposits(chainId: ChainId): Promise<Array<FarmDepositChange>> {
+    const farmsAddr = REFERRAL_FARMS_V1_ADDR
+
+    const res = await queryIndexersWithNearestQuorum({
+        addresses: [farmsAddr],
+        topics: [eventIds.FarmDepositChange],
+        chainId: [chainId],
+    })
+
+    return parseFarmDepositChangeEvents(res.items)
+}
+
+type FarmsMetaStateMap = Map<string, { dailyFarmReward: string }>
+export async function getFarmsMetaState(
+    chainId: ChainId,
+    farmHashes?: FarmHash[],
+): Promise<FarmsMetaStateMap | undefined> {
+    const farmsAddr = REFERRAL_FARMS_V1_ADDR
+
+    // Allow filter by farmHash
+    let topic2
+    if (farmHashes?.length) {
+        topic2 = farmHashes.map((farmHash) => farmHash)
+    }
+
+    const res = await queryIndexersWithNearestQuorum({
+        addresses: [farmsAddr],
+        topic1: [eventIds.FarmMetastate],
+        topic2,
+        chainId: [chainId],
+    })
+
+    return parseFarmMetaStateChangeEvents(res.items)
+}
+
+export async function getAllFarms(chainId: ChainId, tokenLists?: string[]): Promise<Array<Farm>> {
+    const farmsAddr = REFERRAL_FARMS_V1_ADDR
 
     // Query indexers
     const farmEvents = await queryIndexersWithNearestQuorum({
@@ -279,64 +234,12 @@ export async function getAllFarms(web3: Web3, chainId: ChainId, tokenLists?: str
 
     return parseBasicFarmEvents(farmEvents.items, tokens)
 }
-
-interface TokenFilter {
-    rewardTokens?: ChainAddress[]
-    referredTokens?: ChainAddress[]
-}
-
-export async function getFarmsForReferredToken(
-    web3: Web3,
-    chainAddress: ChainAddress,
-    chainId: ChainId,
-): Promise<Array<FarmExistsEvent>> {
-    const farmsAddr = await getDaoAddress(web3, ReferralFarmsV1, chainId)
-
-    const res = await queryIndexersWithNearestQuorum({
-        addresses: [farmsAddr],
-        topic1: [eventIds.FarmExists],
-        topic4: [expandBytes24ToBytes32(chainAddress)],
-        chainId: [chainId],
-    })
-
-    return parseFarmExistsEvents(res.items)
-}
-
-export async function getFarmsForRewardToken(
-    web3: Web3,
-    chainAddress: ChainAddress,
-    chainId: ChainId,
-): Promise<Array<FarmExistsEvent>> {
-    const farmsAddr = await getDaoAddress(web3, ReferralFarmsV1, chainId)
-
-    const res = await queryIndexersWithNearestQuorum({
-        addresses: [farmsAddr],
-        topic1: [eventIds.FarmExists],
-        topic3: [expandBytes24ToBytes32(chainAddress)],
-        chainId: [chainId],
-    })
-
-    return parseFarmExistsEvents(res.items)
-}
-
-function parseRewardsHarvestedEvents(unparsed: any) {
-    const parsed = parseEvents(unparsed)
-
-    const rewards: Array<RewardsHarvestedEvent> = parsed.map((e) => {
-        const { farmHash, caller, rewardTokenDefn, leafHash, value } = e.args
-        return { farmHash, caller, rewardTokenDefn, leafHash, value: Number(fromWei(value.toString())) }
-    })
-
-    return rewards
-}
-
 export async function getMyRewardsHarvested(
-    web3: Web3,
     account: string,
     chainId: ChainId,
     filter?: { rewardTokens?: ChainAddress[] },
 ): Promise<Array<RewardsHarvestedEvent>> {
-    const farmsAddr = await getDaoAddress(web3, ReferralFarmsV1, chainId)
+    const farmsAddr = REFERRAL_FARMS_V1_ADDR
 
     // Allow filtering by reward tokens
     let topic3

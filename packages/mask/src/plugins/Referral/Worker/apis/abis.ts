@@ -517,25 +517,3 @@ export const ERC20_ABI = [
         type: 'function',
     },
 ]
-
-export const DAO_ABI = [
-    {
-        inputs: [
-            {
-                internalType: 'string',
-                name: 'key',
-                type: 'string',
-            },
-        ],
-        name: 'addresses',
-        outputs: [
-            {
-                internalType: 'address',
-                name: 'addr',
-                type: 'address',
-            },
-        ],
-        stateMutability: 'view',
-        type: 'function',
-    },
-]

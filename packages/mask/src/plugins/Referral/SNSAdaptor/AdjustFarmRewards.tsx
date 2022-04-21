@@ -79,8 +79,8 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     const [totalFarmReward, setTotalFarmReward] = useState<string>('')
 
     const { value: farmsMetaState } = useAsync(
-        async () => (farm?.farmHash ? farmsService.getFarmsMetaState(web3, chainId, [farm.farmHash]) : undefined),
-        [web3, farm, chainId],
+        async () => (farm?.farmHash ? farmsService.getFarmsMetaState(chainId, [farm.farmHash]) : undefined),
+        [farm, chainId],
     )
 
     const onChangeTotalFarmReward = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

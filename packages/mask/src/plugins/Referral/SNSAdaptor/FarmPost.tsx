@@ -54,7 +54,7 @@ export function FarmPost(props: FarmPostProps) {
     const { ERC20 } = useTokenListConstants()
 
     const { value: farms = [] } = useAsync(
-        async () => (chainId ? farmsService.getAllFarms(web3, chainId, ERC20) : []),
+        async () => (chainId ? farmsService.getAllFarms(chainId, ERC20) : []),
         [ERC20, chainId],
     )
     const openComposeBox = useCallback(

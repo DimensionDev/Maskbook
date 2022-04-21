@@ -257,7 +257,6 @@ export function MyFarms(props: PageInterface) {
     const currentChainId = useChainId()
     const requiredChainId = useRequiredChainId(currentChainId)
     const account = useAccount()
-    const web3 = useWeb3({ chainId: currentChainId })
     const { ERC20 } = useTokenListConstants()
 
     const { value: entitlements = [], loading: loadingEntitlements } = useAsync(
@@ -265,14 +264,14 @@ export function MyFarms(props: PageInterface) {
         [account],
     )
     const { value: rewardsHarvested = [], loading: loadingRewardsHarvested } = useAsync(
-        async () => (account ? farmsService.getMyRewardsHarvested(web3, account, currentChainId) : []),
+        async () => (account ? farmsService.getMyRewardsHarvested(account, currentChainId) : []),
         [account, currentChainId],
     )
 
     // fetch farm for referred tokens
     const { value: farms = [], loading: loadingFarms } = useAsync(
-        async () => farmsService.getAllFarms(web3, currentChainId),
-        [],
+        async () => farmsService.getAllFarms(currentChainId),
+        [currentChainId],
     )
 
     // fetch tokens data

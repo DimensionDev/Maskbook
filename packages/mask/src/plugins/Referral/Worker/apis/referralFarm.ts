@@ -7,9 +7,9 @@ import type Web3 from 'web3'
 import { AbiItem, asciiToHex, padRight, toWei } from 'web3-utils'
 
 import { roundValue, toChainAddressEthers } from '../../helpers'
-import { ReferralFarmsV1, EntitlementLog } from '../../types'
-import { getDaoAddress } from './discovery'
+import type { EntitlementLog } from '../../types'
 import { ERC20_ABI, REFERRAL_FARMS_V1_ABI } from './abis'
+import { REFERRAL_FARMS_V1_ADDR } from '../../constants'
 
 export async function runCreateERC20PairFarm(
     onStart: (type: boolean) => void,
@@ -28,7 +28,7 @@ export async function runCreateERC20PairFarm(
         let tx: any
         const referredTokenDefn = toChainAddressEthers(chainId, referredToken.address)
         const rewardTokenDefn = toChainAddressEthers(chainId, rewardToken.address)
-        const farmsAddr = await getDaoAddress(web3, ReferralFarmsV1, chainId)
+        const farmsAddr = REFERRAL_FARMS_V1_ADDR
         const farms = createContract(web3, farmsAddr, REFERRAL_FARMS_V1_ABI as AbiItem[])
 
         const rewardTokenDecimals = rewardToken.decimals
@@ -131,7 +131,7 @@ export async function adjustFarmRewards(
                 from: account,
             }
 
-            const farmsAddr = await getDaoAddress(web3, ReferralFarmsV1, chainId)
+            const farmsAddr = REFERRAL_FARMS_V1_ADDR
             const farms = createContract(web3, farmsAddr, REFERRAL_FARMS_V1_ABI as AbiItem[])
             const rewardTokenDefn = toChainAddressEthers(chainId, rewardToken.address)
             const referredTokenDefn = toChainAddressEthers(chainId, referredToken.address)
@@ -203,7 +203,7 @@ export async function harvestRewards(
 
         const proofs = entitlements.map((entitlement) => entitlement.args.proof)
 
-        const farmsAddr = await getDaoAddress(web3, ReferralFarmsV1, chainId)
+        const farmsAddr = REFERRAL_FARMS_V1_ADDR
         const farms = createContract(web3, farmsAddr, REFERRAL_FARMS_V1_ABI as AbiItem[])
 
         const estimatedGas = await farms?.methods.harvestRewards(requests, proofs, []).estimateGas(config)

@@ -72,8 +72,6 @@ export interface DepositProps {
     onDeposit: () => Promise<void>
 }
 
-export const ReferralFarmsV1 = 'ReferralFarmsV1'
-
 // uint32 integer which represents the network the token is on.
 // Eg: 1 for eth-mainnet, 4 for eth-rinkeby, 137 for polygon-mainnet, ...
 // Find more on https://chainlist.org/

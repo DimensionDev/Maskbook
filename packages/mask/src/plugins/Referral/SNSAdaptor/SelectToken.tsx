@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
 import { delay } from '@dimensiondev/kit'
-import { FungibleTokenDetailed, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, useChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogContent } from '@mui/material'
 
@@ -17,7 +17,6 @@ const DISABLED_NATIVE_TOKEN = true
 
 export function SelectToken() {
     const currentChainId = useChainId()
-    const web3 = useWeb3({ chainId: currentChainId })
 
     const [title, setTitle] = useState('')
     const [id, setId] = useState('')
@@ -30,7 +29,7 @@ export function SelectToken() {
         setOnlyFarmTokens(!!ev.onlyFarmTokens)
     })
     const { value: farms = [], loading: loadingAllFarms } = useAsync(
-        async () => farmsService.getAllFarms(web3, currentChainId),
+        async () => farmsService.getAllFarms(currentChainId),
         [currentChainId],
     )
 

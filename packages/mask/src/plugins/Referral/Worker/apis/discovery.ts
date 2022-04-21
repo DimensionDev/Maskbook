@@ -1,8 +1,4 @@
 import type { Discovery } from '../../types'
-import { createContract } from '@masknet/web3-shared-evm'
-import type Web3 from 'web3'
-import type { AbiItem } from 'web3-utils'
-import { DAO_ABI } from './abis'
 
 export async function getDiscovery(): Promise<{
     discovery: Discovery
@@ -16,16 +12,4 @@ export async function getDiscovery(): Promise<{
         discovery,
         pop,
     }
-}
-export async function getDaoAddress(web3: Web3, key: string, chainId: number) {
-    const {
-        discovery: { daoList },
-    } = await getDiscovery()
-
-    const daoConfig = daoList.filter((d) => d.chainId === chainId)[0]
-    const dao = createContract(web3, daoConfig?.address ?? '', DAO_ABI as AbiItem[])
-
-    const val = await dao?.methods.addresses(key).call()
-
-    return val
 }

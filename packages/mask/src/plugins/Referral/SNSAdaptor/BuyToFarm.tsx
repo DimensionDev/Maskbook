@@ -81,7 +81,7 @@ export function BuyToFarm(props: PageInterface) {
 
     // fetch all farms
     const { value: farms = [] } = useAsync(
-        async () => farmsService.getAllFarms(web3, currentChainId, ERC20),
+        async () => farmsService.getAllFarms(currentChainId, ERC20),
         [ERC20, currentChainId],
     )
 
