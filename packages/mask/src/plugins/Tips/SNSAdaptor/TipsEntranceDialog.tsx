@@ -128,7 +128,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     isSameAddress(x.identity, i.identity),
                 )
                 if (temp && temp.length > 0) {
-                    x = temp[0]
+                    x.isDefault = temp[0].isDefault
+                    x.isPublic = temp[0].isPublic
                 }
                 res.push(x)
                 return res
@@ -292,6 +293,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         },
         [currentPersona],
     )
+    console.log(rawPatchData, 'ffff')
+
     return (
         <InjectedDialog open={open} onClose={clickBack} title={bodyView} titleTail={WalletButton()}>
             {loading ? (

@@ -26,6 +26,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { PersonaInformation } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -136,6 +137,8 @@ export function Steps(props: StepsProps) {
     const walletName = useWallets(wallet.providerType ?? curProviderType).find((x) =>
         isSameAddress(x.address, wallet.account),
     )?.name
+    const { value: domain } = useReverseAddress(wallet.account)
+    const { Utils } = useWeb3State() ?? {}
     const stepIconMap = {
         [SignSteps.Ready]: {
             step1: step1ActiveIcon,
@@ -169,6 +172,7 @@ export function Steps(props: StepsProps) {
     }
     const getWaleltName = () => {
         if (notEvm) return `${curProviderType} Wallet`
+        if (notInPop && domain && Utils?.formatDomainName) return Utils.formatDomainName(domain)
         if (![wallet.providerType, curProviderType].includes(ProviderType.MaskWallet))
             return `${wallet.providerType ?? curProviderType} Wallet`
         return walletName ?? 'Wallet'

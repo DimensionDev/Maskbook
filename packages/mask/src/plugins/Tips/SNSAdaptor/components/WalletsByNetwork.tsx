@@ -73,7 +73,7 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
                                     <WalletCom
                                         setAsDefault={setAsDefault}
                                         key={idx}
-                                        index={idx}
+                                        index={x.rawIdx}
                                         address={x.identity}
                                         isDefault={!!x.isDefault}
                                     />
