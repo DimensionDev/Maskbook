@@ -59,11 +59,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         </>
                     )
                 },
-                appBoardSortingDefaultPriority: 14,
-                marketListSortingPriority: 14,
+                appBoardSortingDefaultPriority: 13,
+                marketListSortingPriority: 18,
                 icon,
                 description: 'A plugin for Referral Farms.',
                 name,
+                category: 'dapp',
             }
         })(),
     ],

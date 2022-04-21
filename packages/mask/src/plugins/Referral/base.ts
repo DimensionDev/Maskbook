@@ -1,9 +1,8 @@
-import type { Plugin } from '@masknet/plugin-infra'
-
-import { META_KEY, PLUGIN_ID } from './constants'
+import { type Plugin, PluginId } from '@masknet/plugin-infra'
+import { META_KEY } from './constants'
 
 export const base: Plugin.Shared.Definition = {
-    ID: PLUGIN_ID,
+    ID: PluginId.Referral,
     name: { fallback: 'Referral Farms' },
     description: { fallback: 'A plugin for Referral Farms.' },
     publisher: { name: { fallback: 'Attrace Protocol' }, link: 'http://attrace.com/' },
