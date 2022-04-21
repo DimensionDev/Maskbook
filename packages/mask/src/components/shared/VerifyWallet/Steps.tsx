@@ -170,7 +170,7 @@ export function Steps(props: StepsProps) {
         }
         navigate(-1)
     }
-    const getWaleltName = () => {
+    const getWalletName = () => {
         if (notEvm) return `${curProviderType} Wallet`
         if (notInPop && domain && Utils?.formatDomainName) return Utils.formatDomainName(domain)
         if (![wallet.providerType, curProviderType].includes(ProviderType.MaskWallet))
@@ -207,7 +207,7 @@ export function Steps(props: StepsProps) {
                             </Typography>
                         </div>
                         <div className={classes.stepRow}>
-                            <Typography className={classes.stepTitle}>{getWaleltName()} Sign</Typography>
+                            <Typography className={classes.stepTitle}>{getWalletName()} Sign</Typography>
                             <Typography className={classes.stepIntro}>
                                 {t('waller_verify_wallet_sign_intro')}
                             </Typography>
