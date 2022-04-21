@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
-import type { Recipient } from '../../../background/services/crypto'
+import type { ProfileInformation } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 import type { LazyRecipients } from './CompositionUI'
@@ -11,7 +11,7 @@ export function useRecipientsList(): LazyRecipients {
         async () => (current ? Services.Crypto.hasRecipientAvailable(current) : undefined),
         [current],
     )
-    const [recipients, setRecipients] = useState<Recipient[] | undefined>(undefined)
+    const [recipients, setRecipients] = useState<ProfileInformation[] | undefined>(undefined)
     const request = useCallback(() => {
         if (!current) return
         if (recipients) return

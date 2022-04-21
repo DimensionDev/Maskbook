@@ -14,7 +14,6 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
-import type { PersonaInformation } from '@masknet/shared-base'
 import type { MobileProfiles } from '../../../background/services/identity/profile/query'
 import type { MobilePersona } from '../../../background/services/identity/persona/mobile'
 
@@ -59,22 +58,6 @@ function profileRelationFormatter(p: Profile, personaIdentifier: string | undefi
         updatedAt: p.updatedAt.getTime(),
         personaIdentifier: personaIdentifier,
         favor: favor,
-    }
-}
-
-const personaInformationFormatter = (p: PersonaInformation) => {
-    const profiles = p.linkedProfiles.map((profileInformation) => {
-        return {
-            nickname: profileInformation.nickname,
-            identifier: profileInformation.identifier.toText(),
-            avatar: profileInformation.avatar,
-        }
-    })
-
-    return {
-        identifier: p.identifier.toText(),
-        nickname: p.nickname,
-        linkedProfiles: profiles,
     }
 }
 

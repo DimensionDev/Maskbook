@@ -1,1 +1,1 @@
-export { queryAvatarDataURL } from '../../../database/avatar-cache/avatar'
+export { queryAvatarsDataURL } from '../../../database/avatar-cache/avatar'

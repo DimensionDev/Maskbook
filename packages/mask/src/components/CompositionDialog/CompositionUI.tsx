@@ -12,7 +12,7 @@ import { useI18N } from '../../utils'
 import { Flags, PersistentStorages } from '../../../shared'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
-import type { Recipient } from '../../../background/services/crypto'
+import type { ProfileInformation } from '@masknet/shared-base'
 import { CompositionContext } from '@masknet/plugin-infra/content-script'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { Trans } from 'react-i18next'
@@ -43,7 +43,7 @@ const useStyles = makeStyles()({
 
 export interface LazyRecipients {
     request(): void
-    recipients?: Recipient[]
+    recipients?: ProfileInformation[]
     hasRecipients: boolean
 }
 export interface CompositionProps {
@@ -249,7 +249,7 @@ function useSetEncryptionKind(props: Pick<CompositionProps, 'disabledRecipients'
         props.disabledRecipients === 'Everyone' ? 'E2E' : 'Everyone',
     )
     // TODO: Change to ProfileIdentifier
-    const [recipients, setRecipients] = useState<Recipient[]>([])
+    const [recipients, setRecipients] = useState<ProfileInformation[]>([])
 
     const everyoneDisabled = props.disabledRecipients === 'Everyone'
     const E2EDisabled = props.disabledRecipients === 'E2E'

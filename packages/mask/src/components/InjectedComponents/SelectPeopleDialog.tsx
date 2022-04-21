@@ -4,7 +4,7 @@ import { Button, CircularProgress, DialogActions, DialogContent } from '@mui/mat
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../utils'
 import { SelectProfileUI } from '../shared/SelectProfileUI'
-import type { Recipient as Profile } from '../../../background/services/crypto'
+import type { ProfileInformation as Profile } from '@masknet/shared-base'
 
 export interface SelectProfileDialogProps {
     open: boolean

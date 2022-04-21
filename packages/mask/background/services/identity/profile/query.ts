@@ -1,7 +1,8 @@
-import type { ProfileIdentifier } from '@masknet/shared-base'
+import type { ProfileIdentifier, ProfileInformation } from '@masknet/shared-base'
 import { queryProfilesDB } from '../../../database/persona/db'
 import { hasLocalKeyOf } from '../../../database/persona/helper'
 import { queryProfilesDB as queryProfilesFromIndexedDB } from '../../../database/persona/web'
+import { toProfileInformation } from '../../__utils__/convert'
 
 export interface MobileProfiles {
     identifier: ProfileIdentifier
@@ -30,6 +31,10 @@ export async function mobile_queryProfileRecordFromIndexedDB() {
     return queryProfilesFromIndexedDB({})
 }
 
+export async function queryProfilesInformation(identifiers: ProfileIdentifier[]): Promise<ProfileInformation[]> {
+    const profiles = await queryProfilesDB({ identifiers })
+    return toProfileInformation(profiles)
+}
 /** @deprecated */
 export async function hasLocalKey(identifier: ProfileIdentifier) {
     return hasLocalKeyOf(identifier)

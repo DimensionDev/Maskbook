@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import type { Recipient as Profile } from '../../../../background/services/crypto'
+import type { ProfileInformation as Profile } from '@masknet/shared-base'
 import { ProfileInList } from './ProfileInList'
 import { ProfileInChip } from './ProfileInChip'
 import { FixedSizeList } from 'react-window'
@@ -40,7 +40,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
         if (search === '') return true
         return (
             !!x.identifier.userId.toLowerCase().match(search.toLowerCase()) ||
-            !!x.fingerprint.toLowerCase().match(search.toLowerCase()) ||
+            !!x.fingerprint?.toLowerCase().match(search.toLowerCase()) ||
             !!(x.nickname || '').toLowerCase().match(search.toLowerCase())
         )
     })

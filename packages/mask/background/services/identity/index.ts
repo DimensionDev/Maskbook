@@ -22,7 +22,12 @@ export {
 export { signWithPersona, type SignRequest, type SignRequestResult, generateSignResult } from './persona/sign'
 export { getPersonaAvatar, updatePersonaAvatar } from './persona/avatar'
 
-export { mobile_queryProfiles, mobile_queryProfileRecordFromIndexedDB, hasLocalKey } from './profile/query'
+export {
+    mobile_queryProfiles,
+    mobile_queryProfileRecordFromIndexedDB,
+    hasLocalKey,
+    queryProfilesInformation,
+} from './profile/query'
 export {
     updateProfileInfo,
     type UpdateProfileInfo,
@@ -42,4 +47,4 @@ export {
 export { updateRelation } from './relation/update'
 
 export { validateMnemonic } from './persona/utils'
-export { queryAvatarDataURL } from './avatar/query'
+export { queryAvatarsDataURL } from './avatar/query'

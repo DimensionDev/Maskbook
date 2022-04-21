@@ -3,7 +3,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { Button, DialogActions, DialogContent, InputBase, List, ListItem, ListItemText } from '@mui/material'
 import Fuse from 'fuse.js'
 import { useMemo, useState } from 'react'
-import type { Recipient as Profile } from '../../../../background/services/crypto'
+import type { ProfileInformation as Profile } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
 

@@ -7,7 +7,7 @@ import {
     queryPersonaDB,
     queryPersonasDB,
 } from '../../../background/database/persona/db'
-import { queryAvatarDataURL } from '../../../background/database/avatar-cache/avatar'
+import { queryAvatarsDataURL } from '../../../background/database/avatar-cache/avatar'
 import * as bip39 from 'bip39'
 import { ProfileIdentifier, type PersonaIdentifier, IdentifierMap } from '@masknet/shared-base'
 import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
@@ -22,7 +22,7 @@ export async function profileRecordToProfile(record: ProfileRecord): Promise<Pro
     delete rec.linkedPersona
     delete rec.localKey
     const _ = persona ? queryPersona(persona) : undefined
-    const _2 = queryAvatarDataURL(rec.identifier).catch(() => undefined)
+    const _2 = queryAvatarsDataURL([rec.identifier]).then((x) => x.get(rec.identifier))
     return {
         ...rec,
         linkedPersona: await _,
