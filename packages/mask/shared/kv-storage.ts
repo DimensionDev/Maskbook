@@ -43,6 +43,7 @@ export const PersistentStorages = {
             [PluginId.Pets]: false,
             [PluginId.FindTruman]: false,
             [PluginId.GoPlusSecurity]: false,
+            [PluginId.Referral]: false,
         },
     ),
 }
