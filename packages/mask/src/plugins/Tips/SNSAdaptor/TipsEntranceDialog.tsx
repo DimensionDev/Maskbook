@@ -123,16 +123,15 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 (x) => x.identity === currentPersona?.publicHexKey,
             )
             const result = walletsList.reduce((res: WalletProof[], x) => {
-                const item = x as WalletProof
-                item.isDefault = 0
-                item.isPublic = 1
+                ;(x as WalletProof).isDefault = 0
+                ;(x as WalletProof).isPublic = 1
                 const temp = (kvCache?.content[PluginId.Tip] as WalletProof[]).filter((i) =>
                     isSameAddress(x.identity, i.identity),
                 )
                 if (temp && temp.length > 0) {
                     x = temp[0]
                 }
-                res.push(item)
+                res.push(x)
                 return res
             }, [])
             const idx = result.findIndex((i) => i.isDefault)
@@ -156,7 +155,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         })
         setRawWalletList(JSON.parse(JSON.stringify(walletsList)))
         setRawPatchData(JSON.parse(JSON.stringify(walletsList)))
-    }, [proofRes, kv, open, bodyView])
+    }, [proofRes, kv, bodyView])
 
     const onCancel = () => {
         setRawPatchData(JSON.parse(JSON.stringify(rawWalletList)))
@@ -196,6 +195,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         changed.forEach((x: any) => (x.isDefault = 0))
         changed[idx].isDefault = 1
         changed.unshift(changed.splice(idx, 1)[0])
+        console.log(changed, 'hhh')
         setRawPatchData(changed)
         setHasChanged(true)
     }
@@ -208,6 +208,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     }
 
     const [kvFetchState, onConfirm] = useAsyncFn(async () => {
+        console.log(rawPatchData, 'raw')
         try {
             const payload = await getKvPayload(rawPatchData)
             if (!payload || !payload.val) throw new Error('payload error')
@@ -232,7 +233,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             console.error(error)
             return false
         }
-    }, [hasChanged])
+    }, [hasChanged, rawPatchData])
     const { setDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const onConnectWalletClick = useCallback(() => {
         if (account) {
@@ -283,7 +284,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     variant: 'error',
                     message: nowTime,
                 })
-                console.error(error, 'sss')
                 return false
             }
         },
