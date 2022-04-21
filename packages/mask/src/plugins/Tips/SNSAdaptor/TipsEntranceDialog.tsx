@@ -114,9 +114,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         const walletsList = proofRes
             ? (proofRes as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
             : []
-        JSON.parse(JSON.stringify(walletsList))
-            .reverse()
-            .forEach((i: BindingProof, idx: number) => (i.rawIdx = idx))
+        walletsList.reverse().forEach((i: BindingProof, idx: number) => (i.rawIdx = idx))
         walletsList.sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
         if (kv?.ok && kv.val.proofs.length > 0 && walletsList.length > 0) {
             const kvCache = (kv.val as NextIdStorageInfo).proofs.find(
