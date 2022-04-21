@@ -191,11 +191,13 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         )
     }
     const setAsDefault = (idx: number) => {
-        const changed = JSON.parse(JSON.stringify(rawPatchData))
+        const changed: WalletProof[] = JSON.parse(JSON.stringify(rawPatchData))
         changed.forEach((x: any) => (x.isDefault = 0))
         changed[idx].isDefault = 1
-        changed.unshift(changed.splice(idx, 1)[0])
-        console.log(changed, 'hhh')
+        const defaultItem = JSON.parse(JSON.stringify(changed[idx]))
+        changed.splice(idx, 1)
+        changed.sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
+        changed.unshift(defaultItem)
         setRawPatchData(changed)
         setHasChanged(true)
     }
@@ -208,7 +210,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     }
 
     const [kvFetchState, onConfirm] = useAsyncFn(async () => {
-        console.log(rawPatchData, 'raw')
         try {
             const payload = await getKvPayload(rawPatchData)
             if (!payload || !payload.val) throw new Error('payload error')

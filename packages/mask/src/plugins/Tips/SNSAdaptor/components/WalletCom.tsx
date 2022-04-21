@@ -103,6 +103,7 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
         t('copy_success_of_wallet_addr'),
     )
     const walletName = useWallets().find((x) => isSameAddress(x.address, address))?.name
+
     const getActionRender = () => {
         if (!canDelete && !isDefault)
             return (
@@ -132,7 +133,7 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
                     <Typography className={classes.accountName}>
                         {domain && Utils?.formatDomainName
                             ? Utils.formatDomainName(domain)
-                            : walletName ?? 'Wallet ' + index}
+                            : walletName ?? providerDescriptor?.name}
                     </Typography>
                     {isDefault && <Typography className={classes.defaultBadge}>Default</Typography>}
                 </div>
