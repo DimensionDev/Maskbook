@@ -1,6 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../../base'
-import { Web3UI } from '../Web3UI'
 import { createWeb3State } from '../../state'
 import { SharedContextSettings, Web3StateSettings } from '../../settings'
 
@@ -13,7 +12,6 @@ const sns: Plugin.Dashboard.Definition = {
         // @ts-ignore
         sns.Web3State = Web3StateSettings.value
     },
-    Web3UI,
 }
 
 export default sns

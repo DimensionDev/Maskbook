@@ -69,7 +69,7 @@ export declare namespace Web3Plugin {
         /** An unique ID for each network */
         ID: string
         /** The ID of a plugin that provides the functionality of this network. */
-        networkSupporterPluginID: string
+        networkSupporterPluginID: NetworkPluginID
         /** The chain id */
         chainId: ChainId
         /** The network type */
@@ -88,7 +88,7 @@ export declare namespace Web3Plugin {
         /** An unique ID for each wallet provider */
         ID: string
         /** The ID of a plugin that provides the adoption of this provider. */
-        providerAdaptorPluginID: string
+        providerAdaptorPluginID: NetworkPluginID
         /** The provider type */
         type: ProviderType
         /** The provider icon */
@@ -542,6 +542,10 @@ export declare namespace Web3Plugin {
             /** The provider type of the currently visiting site. */
             providerType?: Subscription<ProviderType>
 
+            /** Detect if a provider is ready */
+            isReady: (providerType: ProviderType) => boolean
+            /** Wait until a provider ready */
+            untilReady: (providerType: ProviderType) => Promise<void>
             /** Connect with the provider and set chain id. */
             connect: (chainId: ChainId, providerType: ProviderType) => Promise<Account<ChainId>>
             /** Discconect with the provider. */
@@ -617,37 +621,46 @@ export declare namespace Web3Plugin {
             removeWallet?: (id: string) => Promise<void>
             getAllWallets?: () => Promise<Wallet[]>
         }
-        export interface Others<ChainId> {
+        export interface Others<ChainId, ProviderType, NetworkType> {
             /** detect if a chain id is supported  */
-            isChainIdValid?: (chainId: ChainId, allowTestnet: boolean) => boolean
+            isChainIdValid(chainId: ChainId, allowTestnet: boolean): boolean
             /** detect if a domain is valid */
-            isValidDomain?: (domain: string) => boolean
+            isValidDomain(domain: string): boolean
             /** detect if an address is valid */
-            isValidAddress?: (address: string) => boolean
+            isValidAddress(address: string): boolean
             /** compare two addresses */
-            isSameAddress?: (address?: string, otherAddress?: string) => boolean
+            isSameAddress(address?: string, otherAddress?: string): boolean
 
             /** data formatting */
-            formatAddress?: (address: string, size?: number) => string
-            formatCurrency?: (value: BigNumber.Value, sign?: string, symbol?: string) => string
-            formatBalance?: (value: BigNumber.Value, decimals?: number, significant?: number) => string
-            formatDomainName?: (domain?: string, size?: number) => string | undefined
+            formatAddress(address: string, size?: number): string
+            formatCurrency(value: BigNumber.Value, sign?: string, symbol?: string): string
+            formatBalance(value: BigNumber.Value, decimals?: number, significant?: number): string
+            formatDomainName(domain?: string, size?: number): string | undefined
 
             /** chain customization */
-            getChainDetailed?: (chainId: ChainId) => ChainDetailed | undefined
-            getAverageBlockDelay?: (chainId: ChainId, scale?: number) => number
+            getDefaultChainId(): ChainId
+            getChainDetailed(chainId: ChainId): ChainDetailed | undefined
+            getAverageBlockDelay(chainId: ChainId, scale?: number): number
 
-            resolveChainName?: (chainId: ChainId) => string
-            resolveChainColor?: (chainId: ChainId) => string
-            resolveChainFullName?: (chainId: ChainId) => string
+            resolveChainName(chainId: ChainId): string
+            resolveChainColor(chainId: ChainId): string
+            resolveChainFullName(chainId: ChainId): string
+            resolveProviderName(providerType: ProviderType): string
+            resolveProviderHomeLink(providerType: ProviderType): string
+            resolveProviderShortenLink(providerType: ProviderType): string
+            resolveNetworkName(networkType: NetworkType): string
+
+            /** convert */
+            getNetworkTypeFromChainId(chainId: ChainId): NetworkType
+            getChainIdFromNetworkType(networkType: NetworkType): ChainId
 
             /** explorer */
-            resolveTransactionLink?: (chainId: ChainId, id: string) => string
-            resolveAddressLink?: (chainId: ChainId, address: string) => string
-            resolveBlockLink?: (chainId: ChainId, blockNumber: string) => string
-            resolveDomainLink?: (domain: string) => string
-            resolveFungibleTokenLink?: (chainId: ChainId, address: string) => string
-            resolveNonFungibleTokenLink?: (chainId: ChainId, address: string, tokenId: string) => string
+            resolveTransactionLink(chainId: ChainId, id: string): string
+            resolveAddressLink(chainId: ChainId, address: string): string
+            resolveBlockLink(chainId: ChainId, blockNumber: string): string
+            resolveDomainLink(domain: string): string
+            resolveFungibleTokenLink(chainId: ChainId, address: string): string
+            resolveNonFungibleTokenLink(chainId: ChainId, address: string, tokenId: string): string
         }
         export interface Capabilities<
             ChainId = number,
@@ -678,7 +691,7 @@ export declare namespace Web3Plugin {
             >
             Provider?: ProviderState<ChainId, NetworkType, ProviderType>
             Wallet?: WalletState
-            Utils?: Others<ChainId>
+            Utils?: Others<ChainId, ProviderType, NetworkType>
         }
     }
     export namespace UI {
@@ -690,20 +703,12 @@ export declare namespace Web3Plugin {
                 network: NetworkDescriptor<ChainId, NetworkType>,
                 provider?: ProviderDescriptor<ChainId, ProviderType>,
             ) => void
-            onSubmit?: (
-                network: NetworkDescriptor<ChainId, NetworkType>,
-                provider?: ProviderDescriptor<ChainId, ProviderType>,
-            ) => void
         }
         export interface ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType> {
             network: NetworkDescriptor<ChainId, NetworkType>
             provider: ProviderDescriptor<ChainId, ProviderType>
             children?: React.ReactNode
             onClick?: (
-                network: NetworkDescriptor<ChainId, NetworkType>,
-                provider: ProviderDescriptor<ChainId, ProviderType>,
-            ) => void
-            onSubmit?: (
                 network: NetworkDescriptor<ChainId, NetworkType>,
                 provider: ProviderDescriptor<ChainId, ProviderType>,
             ) => void

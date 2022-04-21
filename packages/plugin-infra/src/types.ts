@@ -1,5 +1,6 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
+import type { Transaction } from 'web3-core'
 import type { Option, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
@@ -7,7 +8,6 @@ import type { TypedMessage } from '@masknet/typed-message'
 import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier, PopupRoutes } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
-import type { EthereumTransactionConfig } from '../../web3-providers/node_modules/@masknet/web3-shared-evm'
 
 export declare namespace Plugin {
     /**
@@ -105,7 +105,7 @@ export namespace Plugin.Shared {
         personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
 
         /** Sign transaction */
-        signTransaction(address: string, transaction: EthereumTransactionConfig): Promise<string>
+        signTransaction(address: string, transaction: Transaction): Promise<string>
         /** Sign personal message, aka. eth.personal.sign() */
         signPersonalMessage(address: string, message: string): Promise<string>
         /** Sign typed data */
@@ -123,7 +123,7 @@ export namespace Plugin.Shared {
         /** add an unconfirmed request */
         pushUnconfirmedRequest(payload: JsonRpcPayload): Promise<JsonRpcPayload>
     }
-    export interface Definition {
+    export interface Definition<ChainId = number, ProviderType = string, NetworkType = string> {
         /**
          * ID of the plugin. It should be unique.
          * @example "com.mask.wallet"
@@ -159,9 +159,9 @@ export namespace Plugin.Shared {
         /** i18n resources of this plugin */
         i18n?: I18NResource
         /** Introduce networks information. */
-        declareWeb3Networks?: Web3Plugin.NetworkDescriptor[]
+        declareWeb3Networks?: Web3Plugin.NetworkDescriptor<ChainId, NetworkType>[]
         /** Introduce wallet providers information. */
-        declareWeb3Providers?: Web3Plugin.ProviderDescriptor[]
+        declareWeb3Providers?: Web3Plugin.ProviderDescriptor<ChainId, ProviderType>[]
         /** Introduce application category information. */
         declareApplicationCategories?: Web3Plugin.ApplicationCategoryDescriptor[]
         /**
@@ -283,7 +283,7 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Web3Plugin.UI.UI
+        Web3UI?: Web3Plugin.UI.UI<number, string, string>
         /** This is the context of the currently chosen network. */
         Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<
             number,
@@ -453,7 +453,7 @@ export namespace Plugin.Dashboard {
         /**
          * This is a chunk of web3 UIs to be rendered into various places of Mask UI.
          */
-        Web3UI?: Web3Plugin.UI.UI
+        Web3UI?: Web3Plugin.UI.UI<number, string, string>
         /** This is the context of the currently chosen network. */
         Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<
             number,

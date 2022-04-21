@@ -5,7 +5,7 @@ import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 export const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
 export const PLUGIN_NAME = 'EVM'
 export const PLUGIN_DESCRIPTION = ''
-export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
+export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor<ChainId, NetworkType>[] = [
     {
         ID: `${PLUGIN_ID}_ethereum`,
         networkSupporterPluginID: PLUGIN_ID,
@@ -177,7 +177,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         isMainnet: true,
     },
 ]
-export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
+export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor<ChainId, ProviderType>[] = [
     {
         ID: `${PLUGIN_ID}_maskwallet`,
         providerAdaptorPluginID: PLUGIN_ID,

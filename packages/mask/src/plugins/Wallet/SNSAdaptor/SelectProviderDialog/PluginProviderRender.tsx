@@ -1,9 +1,9 @@
+import { first } from 'lodash-unified'
 import { SelectedIcon } from '@masknet/icons'
-import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ImageIcon } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'
-import { first } from 'lodash-unified'
 import { useI18N } from '../../../../utils'
 import { ProviderIcon } from './ProviderIcon'
 
@@ -93,11 +93,13 @@ export interface PluginProviderRenderProps {
     providers: Web3Plugin.ProviderDescriptor<number, string>[]
     undeterminedPluginID?: string
     undeterminedNetworkID?: string
-    setUndeterminedPluginID: (id: NetworkPluginID) => void
-    setUndeterminedNetworkID: (id: string) => void
+    onNetworkIconClicked: (network: Web3Plugin.NetworkDescriptor<number, string>) => void
+    onProviderIconClicked: (
+        network: Web3Plugin.NetworkDescriptor<number, string>,
+        provider: Web3Plugin.ProviderDescriptor<number, string>,
+    ) => void
     NetworkIconClickBait?: React.ComponentType<Web3Plugin.UI.NetworkIconClickBaitProps<number, string, string>>
     ProviderIconClickBait?: React.ComponentType<Web3Plugin.UI.ProviderIconClickBaitProps<number, string, string>>
-    onSubmit: () => void
 }
 
 export function PluginProviderRender({
@@ -105,14 +107,15 @@ export function PluginProviderRender({
     providers,
     undeterminedPluginID,
     undeterminedNetworkID,
-    setUndeterminedPluginID,
-    setUndeterminedNetworkID,
     NetworkIconClickBait,
     ProviderIconClickBait,
-    onSubmit,
+    onNetworkIconClicked,
+    onProviderIconClicked,
 }: PluginProviderRenderProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
+
+    const selectedNetwork = networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
 
     return (
         <>
@@ -129,8 +132,7 @@ export function PluginProviderRender({
                                     className={classes.networkItem}
                                     key={network.ID}
                                     onClick={() => {
-                                        setUndeterminedPluginID(network.networkSupporterPluginID as NetworkPluginID)
-                                        setUndeterminedNetworkID(network.ID)
+                                        onNetworkIconClicked(network)
                                     }}>
                                     <ShadowRootTooltip title={network.name} placement="top">
                                         <div className={classes.iconWrapper}>
@@ -157,33 +159,35 @@ export function PluginProviderRender({
                     <List className={classes.wallets}>
                         {providers
                             .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)
-                            .map((provider) =>
-                                ProviderIconClickBait ? (
-                                    <ProviderIconClickBait
-                                        key={provider.ID}
-                                        network={
-                                            networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
-                                        }
-                                        provider={provider}
-                                        onSubmit={onSubmit}>
-                                        <ListItem className={classes.walletItem} key={provider.ID}>
-                                            <ProviderIcon
-                                                className={classes.providerIcon}
-                                                icon={provider.icon}
-                                                name={provider.name}
-                                            />
-                                        </ListItem>
-                                    </ProviderIconClickBait>
-                                ) : (
-                                    <ListItem className={classes.walletItem} key={provider.ID}>
+                            .map((provider) => (
+                                <ListItem
+                                    className={classes.walletItem}
+                                    key={provider.ID}
+                                    onClick={() => {
+                                        onProviderIconClicked(selectedNetwork, provider)
+                                    }}>
+                                    {ProviderIconClickBait ? (
+                                        <ProviderIconClickBait
+                                            key={provider.ID}
+                                            network={selectedNetwork}
+                                            provider={provider}>
+                                            <ListItem className={classes.walletItem} key={provider.ID}>
+                                                <ProviderIcon
+                                                    className={classes.providerIcon}
+                                                    icon={provider.icon}
+                                                    name={provider.name}
+                                                />
+                                            </ListItem>
+                                        </ProviderIconClickBait>
+                                    ) : (
                                         <ProviderIcon
                                             className={classes.providerIcon}
                                             icon={provider.icon}
                                             name={provider.name}
                                         />
-                                    </ListItem>
-                                ),
-                            )}
+                                    )}
+                                </ListItem>
+                            ))}
                     </List>
                 </section>
             </Box>

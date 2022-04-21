@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
+import { openWindow, useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
     NetworkPluginID,
     useNetworkDescriptor,
-    useNetworkType,
+    useWeb3State,
     useWeb3UI,
+    Web3Plugin,
 } from '@masknet/plugin-infra/web3'
-import { isDashboardPage } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { WalletMessages } from '../../messages'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
@@ -36,6 +36,9 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
 
     // #region remote controlled dialog logic
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.connectWalletDialogUpdated,
+    )
     // #endregion
 
     // #region native app
@@ -45,27 +48,46 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     }, [open])
     // #endregion
 
-    const isDashboard = isDashboardPage()
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
     const pluginID = useValueRef(pluginIDSettings) as NetworkPluginID
     const network = useNetworkDescriptor()
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
-    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID ?? NetworkPluginID.PLUGIN_EVM)
-    const undeterminedNetwork = useNetworkDescriptor(undeterminedNetworkID, undeterminedPluginID)
+    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
 
-    const networkType = useNetworkType(undeterminedPluginID)
-
+    const { Utils, Provider } = useWeb3State(undeterminedPluginID)
     const { NetworkIconClickBait, ProviderIconClickBait } = useWeb3UI(undeterminedPluginID).SelectProviderDialog ?? {}
 
-    const onSubmit = useCallback(() => {
-        if (undeterminedNetwork?.type === networkType) {
-            pluginIDSettings.value = undeterminedPluginID
-        }
-        closeDialog()
+    const onNetworkIconClicked = useCallback((network: Web3Plugin.NetworkDescriptor<number, string>) => {
+        setUndeterminedPluginID(network.networkSupporterPluginID)
+        setUndeterminedNetworkID(network.ID)
+    }, [])
 
-        if (isDashboard) WalletMessages.events.walletStatusDialogUpdated.sendToLocal({ open: false })
-    }, [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog, isDashboard])
+    const onProviderIconClicked = useCallback(
+        async (
+            network: Web3Plugin.NetworkDescriptor<number, string>,
+            provider: Web3Plugin.ProviderDescriptor<number, string>,
+        ) => {
+            closeDialog()
+
+            const isReady = await Provider?.isReady(provider.type)
+
+            if (!isReady) {
+                const downloadLink = Utils?.resolveProviderHomeLink(provider.type)
+                if (downloadLink) openWindow(downloadLink)
+                return
+            }
+
+            // TODO:
+            // refactor to use react-router-dom
+            setConnectWalletDialog({
+                open: true,
+                network,
+                provider,
+            })
+        },
+        [Utils, Provider, closeDialog],
+    )
 
     // not available for the native app
     if (hasNativeAPI) return null
@@ -78,11 +100,10 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
                     providers={providers}
                     undeterminedPluginID={undeterminedPluginID}
                     undeterminedNetworkID={undeterminedNetworkID}
-                    setUndeterminedPluginID={setUndeterminedPluginID}
-                    setUndeterminedNetworkID={setUndeterminedNetworkID}
+                    onNetworkIconClicked={onNetworkIconClicked}
+                    onProviderIconClicked={onProviderIconClicked}
                     NetworkIconClickBait={NetworkIconClickBait}
                     ProviderIconClickBait={ProviderIconClickBait}
-                    onSubmit={onSubmit}
                 />
             </DialogContent>
         </InjectedDialog>

@@ -1,11 +1,10 @@
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import type {
     ChainId,
     ERC721ContractDetailed,
     GasOption,
     GasOptions,
-    NetworkType,
-    ProviderType,
     TransactionState,
     Wallet,
 } from '@masknet/web3-shared-evm'
@@ -42,18 +41,8 @@ export type SelectProviderDialogEvent =
 export type ConnectWalletDialogEvent =
     | {
           open: true
-          providerType: ProviderType
-          networkType: NetworkType
-      }
-    | {
-          open: false
-          result: boolean
-      }
-
-export type SelectWalletDialogEvent =
-    | {
-          open: true
-          networkType: NetworkType
+          network: Web3Plugin.NetworkDescriptor<number, string>
+          provider: Web3Plugin.ProviderDescriptor<number, string>
       }
     | {
           open: false
@@ -73,11 +62,6 @@ export type GasSettingDialogEvent = {
     gasOption?: GasOption | null
 }
 
-export type WalletRenameDialogEvent = {
-    open: boolean
-    wallet: Wallet | null
-}
-
 export type WalletRiskWarningDialogEvent =
     | {
           open: true
@@ -86,19 +70,6 @@ export type WalletRiskWarningDialogEvent =
     | {
           open: false
           type: 'cancel' | 'confirm'
-      }
-
-export type RestoreLegacyWalletDialogEvent = {
-    open: boolean
-}
-
-export type WalletConnectQRCodeDialogEvent =
-    | {
-          open: true
-          uri: string
-      }
-    | {
-          open: false
       }
 
 export type SelectNftContractDialogEvent = {

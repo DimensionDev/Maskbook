@@ -1,6 +1,6 @@
+import classnames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { Typography, Card, ButtonBase, ButtonBaseProps, CardProps } from '@mui/material'
-import classnames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

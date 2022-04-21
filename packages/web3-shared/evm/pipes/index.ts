@@ -1,5 +1,6 @@
 import urlcat from 'urlcat'
 import { unreachable } from '@dimensiondev/kit'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
 import {
     ChainId,
     ERC20Token,
@@ -10,7 +11,7 @@ import {
     NonFungibleAssetProvider,
     ERC721TokenDetailed,
 } from '../types'
-import { getChainDetailed, createLookupTableResolver } from '../utils'
+import { getChainDetailed } from '../utils'
 
 export const resolveProviderName = createLookupTableResolver<ProviderType, string>(
     {
@@ -96,6 +97,10 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Celo]: 'celo',
         [NetworkType.Fantom]: 'fantom',
         [NetworkType.Aurora]: 'Aurora',
+        [NetworkType.Boba]: 'boba',
+        [NetworkType.Fuse]: 'fuse',
+        [NetworkType.Metis]: 'metis',
+        [NetworkType.Optimistic]: 'optimistic',
         [NetworkType.Conflux]: 'conflux',
     },
     'ethereum',
@@ -112,6 +117,10 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Celo]: 'Celo',
         [NetworkType.Fantom]: 'Fantom',
         [NetworkType.Aurora]: 'Aurora',
+        [NetworkType.Boba]: 'Boba',
+        [NetworkType.Fuse]: 'Fuse',
+        [NetworkType.Metis]: 'Metis',
+        [NetworkType.Optimistic]: 'Metis',
         [NetworkType.Conflux]: 'Conflux',
     },
     'Unknown',
@@ -146,8 +155,12 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Celo]: 'rgb(53, 208, 127)',
         [ChainId.Fantom]: 'rgb(19, 181, 236)',
         [ChainId.Aurora]: 'rgb(112, 212, 74)',
-        [ChainId.Conflux]: 'rgb(24, 163, 138)',
         [ChainId.Aurora_Testnet]: 'rgb(112, 212, 74)',
+        [ChainId.Fuse]: 'rgb(24, 163, 138)',
+        [ChainId.Boba]: 'rgb(24, 163, 138)',
+        [ChainId.Metis]: 'rgb(24, 163, 138)',
+        [ChainId.Optimistic]: 'rgb(24, 163, 138)',
+        [ChainId.Conflux]: 'rgb(24, 163, 138)',
     },
     'rgb(214, 217, 220)',
 )
