@@ -94,8 +94,6 @@ export interface NFTAvatarSettingDialogEvent {
     open: boolean
 }
 
-export interface TriggerSetupGuideVerifyOnNextIDStepEvent {}
-
 export interface SettingsUpdateEvent {
     id: number
     key: string

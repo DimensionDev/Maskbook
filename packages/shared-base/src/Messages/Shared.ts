@@ -1,5 +1,5 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import type { CompositionRequest, TriggerSetupGuideVerifyOnNextIDStepEvent } from './Mask'
+import type { CompositionRequest } from './Mask'
 
 /**
  * @deprecated
@@ -17,5 +17,5 @@ export const CrossIsolationMessages = new WebExtensionMessage<CrossIsolationEven
 
 export interface CrossIsolationEvents {
     requestComposition: CompositionRequest
-    triggerSetupGuideVerifyOnNextIDStep: TriggerSetupGuideVerifyOnNextIDStepEvent
+    triggerSetupGuideVerifyOnNextIDStep: void
 }

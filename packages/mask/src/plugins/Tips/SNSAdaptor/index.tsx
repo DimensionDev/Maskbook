@@ -51,7 +51,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
                     const onNextIDVerify = useCallback(() => {
                         closeDialog()
-                        CrossIsolationMessages.events.triggerSetupGuideVerifyOnNextIDStep.sendToAll({})
+                        CrossIsolationMessages.events.triggerSetupGuideVerifyOnNextIDStep.sendToAll(undefined)
                     }, [])
 
                     return (
