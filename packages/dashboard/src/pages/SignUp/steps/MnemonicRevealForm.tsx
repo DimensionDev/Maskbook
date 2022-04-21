@@ -47,7 +47,7 @@ export const MnemonicRevealForm = memo(() => {
         try {
             const identifier = await createPersona(words.join(' '), state.personaName)
             setId(identifier)
-            const privateKey = await Services.Identity.exportPersonaPrivateKey(identifier)
+            const privateKey = await Services.Backup.backupPersonaPrivateKey(identifier)
             setPrivateKey(privateKey)
 
             await changeCurrentPersona(identifier)

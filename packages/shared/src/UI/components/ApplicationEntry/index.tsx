@@ -33,11 +33,17 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'default',
         pointerEvent: 'none',
     },
+    iconWrapper: {
+        '> *': {
+            width: 36,
+            height: 36,
+        },
+    },
 }))
 
 interface Props {
-    icon: string
-    title: string
+    icon: React.ReactNode
+    title: React.ReactNode
     disabled?: boolean
     onClick: () => void
     tooltipProps?: Partial<TooltipProps>
@@ -51,7 +57,7 @@ export function ApplicationEntry(props: Props) {
         <div
             className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
             onClick={disabled ? () => {} : onClick}>
-            <img src={icon} className={classes.applicationImg} />
+            <div className={classes.iconWrapper}>{icon}</div>
             <Typography className={classes.title} color="textPrimary">
                 {title}
             </Typography>

@@ -10,6 +10,7 @@ import { PersonaContext } from '../hooks/usePersonaContext'
 import { MethodAfterPersonaSign } from '../../Wallet/type'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../service'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -87,7 +88,7 @@ const PersonaSignRequest = memo(() => {
     const { classes } = useStyles()
     const [requestID, setRequestID] = useState<string>()
     const [message, setMessage] = useState<string>()
-    const [selected, setSelected] = useState<Persona>()
+    const [selected, setSelected] = useState<Pick<Persona, 'nickname' | 'identifier' | 'fingerprint'>>()
     const personas = useMyPersonas()
     const { currentPersona } = PersonaContext.useContainer()
     useEffect(() => {
@@ -175,31 +176,35 @@ const PersonaSignRequest = memo(() => {
         navigate(-1)
     }
 
+    useTitle('')
+
     return (
-        <main className={classes.container}>
-            <div className={classes.info}>
-                <Typography className={classes.title}>{t('popups_persona_sign_request_title')}</Typography>
-                <Typography className={classes.personaName}>{selected?.nickname}</Typography>
-                <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
-                    {selected?.fingerprint}
+        <>
+            <main className={classes.container}>
+                <div className={classes.info}>
+                    <Typography className={classes.title}>{t('popups_persona_sign_request_title')}</Typography>
+                    <Typography className={classes.personaName}>{selected?.nickname}</Typography>
+                    <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
+                        {selected?.fingerprint}
+                    </Typography>
+                </div>
+                <Typography className={classes.secondary} style={{ marginTop: 20 }}>
+                    {t('popups_persona_sign_request_message')}:
                 </Typography>
-            </div>
-            <Typography className={classes.secondary} style={{ marginTop: 20 }}>
-                {t('popups_persona_sign_request_message')}:
-            </Typography>
-            <Typography className={classes.message}>{message}</Typography>
-            <div className={classes.controller}>
-                <Button
-                    className={classes.button}
-                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
-                    onClick={onCancel}>
-                    {t('cancel')}
-                </Button>
-                <Button className={classes.button} onClick={onSign} variant="contained">
-                    {t('sign')}
-                </Button>
-            </div>
-        </main>
+                <Typography className={classes.message}>{message}</Typography>
+                <div className={classes.controller}>
+                    <Button
+                        className={classes.button}
+                        style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
+                        onClick={onCancel}>
+                        {t('cancel')}
+                    </Button>
+                    <Button className={classes.button} onClick={onSign} variant="contained">
+                        {t('sign')}
+                    </Button>
+                </div>
+            </main>
+        </>
     )
 })
 

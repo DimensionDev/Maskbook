@@ -21,8 +21,7 @@ import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { INTERNAL_nativeSend, INTERNAL_send } from './send'
 import { defer } from '@dimensiondev/kit'
 import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
-import { openPopupWindow } from '../../../../background/services/helper'
-import Services from '../../service'
+import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper'
 import { toHex } from 'web3-utils'
 import { isLessThan } from '@masknet/web3-shared-base'
 
@@ -184,7 +183,7 @@ export async function request<T extends unknown>(
     })
 }
 
-export async function confirmRequest(payload: JsonRpcPayload) {
+export async function confirmRequest(payload: JsonRpcPayload, disableClose?: boolean) {
     const pid = getPayloadId(payload)
     if (!pid) return
     const [deferred, resolve, reject] = defer<JsonRpcResponse | undefined, Error>()
@@ -192,12 +191,14 @@ export async function confirmRequest(payload: JsonRpcPayload) {
         payload,
         (error, response) => {
             UNCONFIRMED_CALLBACK_MAP.get(pid)?.(error, response)
-
             if (error) reject(error)
             else if (response?.error) reject(new Error(`Failed to send transaction: ${response.error}`))
             else {
                 WalletRPC.deleteUnconfirmedRequest(payload)
-                    .then(Services.Helper.removePopupWindow)
+                    .then(() => {
+                        if (disableClose) return
+                        return removePopupWindow()
+                    })
                     .then(() => {
                         UNCONFIRMED_CALLBACK_MAP.delete(pid)
                     })
@@ -218,7 +219,7 @@ export async function rejectRequest(payload: JsonRpcPayload) {
     if (!pid) return
     UNCONFIRMED_CALLBACK_MAP.get(pid)?.(new Error('User rejected!'))
     await WalletRPC.deleteUnconfirmedRequest(payload)
-    await Services.Helper.removePopupWindow()
+    await removePopupWindow()
     UNCONFIRMED_CALLBACK_MAP.delete(pid)
 }
 

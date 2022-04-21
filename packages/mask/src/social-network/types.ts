@@ -88,7 +88,6 @@ export namespace SocialNetworkUI {
         customization: Customization.Define
         configuration: Configuration.Define
     }
-    export type State = AutonomousState & ManagedState
     /** The init() should setup watcher for those states */
     export interface AutonomousState {
         /** @deprecated Performance. Don't use it. */
@@ -96,7 +95,6 @@ export namespace SocialNetworkUI {
         /** My profiles at current network */
         readonly profiles: ValueRef<readonly Profile[]>
     }
-    export interface ManagedState {}
     export interface RuntimePermission {
         /** This function should check if Mask has the permission to the site */
         has(): Promise<boolean>
@@ -135,6 +133,7 @@ export namespace SocialNetworkUI {
             /** Inject UI to the profile page */
             profileTabContent?(signal: AbortSignal): void
             setupWizard?(signal: AbortSignal, for_: PersonaIdentifier): void
+            openNFTAvatarSettingDialog?(): void
 
             /**
              * @deprecated
@@ -292,7 +291,6 @@ export namespace SocialNetworkUI {
         export interface Define {
             nextIDConfig?: NextIDConfig
             steganography?: SteganographyConfig
-            setupWizard?: SetupWizardConfig
         }
         export interface SteganographyConfig {
             grayscaleAlgorithm?: GrayscaleAlgorithm
@@ -301,9 +299,6 @@ export namespace SocialNetworkUI {
              * !!! Any observable change might cause a breaking change on steganography !!!
              */
             password?(): string
-        }
-        export interface SetupWizardConfig {
-            disableSayHello?: boolean
         }
         export interface NextIDConfig {
             enable?: boolean
@@ -336,8 +331,5 @@ export namespace SocialNetworkWorker {
     /**
      * A SocialNetworkWorker is running in the background page
      */
-    export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared, WorkerBase {
-        tasks: Tasks
-    }
-    export interface Tasks {}
+    export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared, WorkerBase {}
 }

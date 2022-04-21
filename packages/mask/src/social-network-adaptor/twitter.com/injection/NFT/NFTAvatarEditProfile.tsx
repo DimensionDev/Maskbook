@@ -29,6 +29,11 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
 }))
 
+export function openNFTAvatarSettingDialog() {
+    const editDom = searchEditProfileSelector().evaluate()
+    editDom?.click()
+}
+
 function OpenNFTAvatarEditProfileButtonInTwitter() {
     const [style, setStyle] = useState<StyleProps>({ minHeight: 32, fontSize: 14, marginBottom: 11 })
     const [open, setOpen] = useState(false)

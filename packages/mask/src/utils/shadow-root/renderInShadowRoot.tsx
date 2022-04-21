@@ -1,5 +1,4 @@
 import { createReactRootShadowedPartial, setupPortalShadowRoot, CSSVariableInjector } from '@masknet/theme'
-import { Flags } from '../../../shared'
 import { MaskUIRoot } from '../../UIRoot'
 import { useClassicMaskSNSTheme } from '../theme'
 
@@ -17,7 +16,7 @@ const captureEvents: (keyof HTMLElementEventMap)[] = [
     'change',
 ]
 export const setupShadowRootPortal = () => {
-    const shadow = setupPortalShadowRoot({ mode: Flags.using_ShadowDOM_attach_mode })
+    const shadow = setupPortalShadowRoot({ mode: 'closed' })
     createReactRootShadowed(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
 }
 
