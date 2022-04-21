@@ -42,7 +42,7 @@ export function PersonaItem(props: PersonaItemProps) {
     const currentIdentity = context.lastRecognizedProfile.getCurrentValue()
     const { userId, onSelect, owner = false, proof } = props
     const { classes } = useStyles({ disabled: !owner })
-    const { value: _avatar, loading } = usePersonaNFTAvatar(userId, RSS3_KEY_SNS.TWITTER, proof.platform)
+    const { value: _avatar, loading } = usePersonaNFTAvatar(userId, RSS3_KEY_SNS.TWITTER)
     const { value: token, loading: loadingToken } = useTokenOwner(_avatar?.address ?? '', _avatar?.tokenId ?? '')
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(token?.owner)
     const [haveNFT, setHaveNFT] = useState(false)

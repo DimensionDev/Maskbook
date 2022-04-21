@@ -1,10 +1,13 @@
-import { isNull } from 'lodash-unified'
+import { first, isNull } from 'lodash-unified'
 import { ChainId, NonFungibleAssetProvider, formatBalance } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../../EVM/messages'
 import Services from '../../../extension/service'
-import { getOrderUnitPrice, NonFungibleTokenAPI } from '@masknet/web3-providers'
+import { getOrderUnitPrice, NextIDProof, NextIDStorage, NonFungibleTokenAPI } from '@masknet/web3-providers'
 import { ZERO } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import type { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
+import type { NextIDAvatarMeta } from '../types'
 
 function getLastSalePrice(lastSale?: NonFungibleTokenAPI.AssetEvent | null) {
     if (!lastSale?.total_price || !lastSale?.payment_token?.decimals) return
@@ -95,4 +98,24 @@ export function formatText(name: string, tokenId: string) {
 export function formatTokenId(symbol: string, tokenId: string) {
     const name = `${symbol} #${tokenId}`
     return name.length > 18 ? name.slice(0, 18) + '...' : name
+}
+
+export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBindings, userId: string): number => {
+    const p_a = first(a.proofs.filter((x) => x.identity === userId.toLowerCase()))
+    const p_b = first(b.proofs.filter((x) => x.identity === userId.toLowerCase()))
+
+    if (!p_a || !p_b) return 0
+    if (p_a.created_at > p_b.created_at) return -1
+    return 1
+}
+
+export async function getNFTAvatarByUserId(userId: string): Promise<NextIDAvatarMeta | undefined> {
+    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
+    const bindings = await NextIDProof.queryExistedBindingByPlatform(platform, userId.toLowerCase())
+
+    for (const binding of bindings.sort((a, b) => sortPersonaBindings(a, b, userId))) {
+        const response = await NextIDStorage.get<NextIDAvatarMeta>(binding.persona, platform, userId.toLowerCase())
+        if (response.ok) return response.val
+    }
+    return
 }
