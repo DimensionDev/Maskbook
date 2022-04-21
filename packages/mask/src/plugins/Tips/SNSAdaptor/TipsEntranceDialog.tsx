@@ -131,7 +131,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 if (temp && temp.length > 0) {
                     x = temp[0]
                 }
-                res.push(x)
+                res.push(x as WalletProof)
                 return res
             }, [])
             const idx = result.findIndex((i) => i.isDefault)
