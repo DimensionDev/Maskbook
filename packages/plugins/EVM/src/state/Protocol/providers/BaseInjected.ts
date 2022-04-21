@@ -3,10 +3,12 @@ import type { RequestArguments } from 'web3-core'
 import { delay } from '@dimensiondev/kit'
 import { isExtensionSiteType } from '@masknet/shared-base'
 import { ChainId, EIP1193Provider, EthereumMethodType } from '@masknet/web3-shared-evm'
-import type { Provider } from '../types'
+import type { EVM_Provider } from '../types'
 import { BaseProvider } from './Base'
 
-export class BaseInjectedProvider extends BaseProvider implements Provider {
+export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
+    private provider: EIP1193Provider | null = null
+
     constructor(protected path = ['ethereum']) {
         super()
     }

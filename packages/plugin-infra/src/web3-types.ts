@@ -356,14 +356,12 @@ export declare namespace Web3Plugin {
 
     export interface Provider<ChainId, Web3Provider, Web3> {
         emitter: Emitter<ProviderEvents<ChainId>>
-        /** The web3 instance. */
-        web3: Web3 | null
-        /** The web3 provider instance. */
-        provider: Web3Provider | null
         /** Get to know whether the provider is ready. */
         readonly ready: boolean
         /** Keep waiting until the provider is ready. */
         readonly readyPromise: Promise<void>
+        /** Switch to the designate chain. */
+        switchChain(chainId?: ChainId): Promise<void>
         /** Create an web3 instance. */
         createWeb3(chainId?: ChainId): Promise<Web3>
         /** Create an provider instance. */
@@ -393,49 +391,47 @@ export declare namespace Web3Plugin {
         TransactionDetailed,
         TransactionSignature,
         Web3,
-        Web3Options = ConnectionOptions<ChainId, ProviderType, Transaction>,
+        Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
     > {
         /** Get web3 client instance. */
-        getWeb3(options?: Web3Options): Promise<Web3>
+        getWeb3(options?: Web3ConnectionOptions): Promise<Web3>
         /** Get the currently connected account. */
-        getAccount(options?: Web3Options): Promise<string>
+        getAccount(options?: Web3ConnectionOptions): Promise<string>
         /** Get the currently chain id. */
-        getChainId(options?: Web3Options): Promise<ChainId>
+        getChainId(options?: Web3ConnectionOptions): Promise<ChainId>
         /** Get the latest block number. */
-        getBlockNumber(options?: Web3Options): Promise<number>
+        getBlockNumber(options?: Web3ConnectionOptions): Promise<number>
         /** Get the latest balance of the account. */
-        getBalance(address: string, options?: Web3Options): Promise<string>
+        getBalance(address: string, options?: Web3ConnectionOptions): Promise<string>
         /** Get the detailed of transaction by id. */
-        getTransaction(id: string, options?: Web3Options): Promise<TransactionDetailed | null>
+        getTransaction(id: string, options?: Web3ConnectionOptions): Promise<TransactionDetailed | null>
         /** Get the latest transaction status. */
-        getTransactionStatus(id: string, options?: Web3Options): Promise<TransactionStatusType>
+        getTransactionStatus(id: string, options?: Web3ConnectionOptions): Promise<TransactionStatusType>
         /** Get the latest transaction nonce. */
-        getTransactionNonce(address: string, options?: Web3Options): Promise<number>
+        getTransactionNonce(address: string, options?: Web3ConnectionOptions): Promise<number>
         /** Sign message */
-        signMessage(dataToSign: string, signType?: string, options?: Web3Options): Promise<Signature>
+        signMessage(dataToSign: string, signType?: string, options?: Web3ConnectionOptions): Promise<Signature>
         /** Verify message */
         verifyMessage(
             dataToVerify: string,
             signature: Signature,
             signType?: string,
-            options?: Web3Options,
+            options?: Web3ConnectionOptions,
         ): Promise<boolean>
-        /** Watch a transaction */
-        watchTransaction(id: string, transaction: Transaction, options?: Web3Options): Promise<void>
-        /** Unwatch a transaction */
-        unwatchTransaction(id: string, options?: Web3Options): Promise<void>
         /** Sign a transaction */
-        signTransaction(transaction: Transaction, options?: Web3Options): Promise<TransactionSignature>
+        signTransaction(transaction: Transaction, options?: Web3ConnectionOptions): Promise<TransactionSignature>
         /** Sign multiple transactions */
-        signTransactions(transactions: Transaction[], options?: Web3Options): Promise<TransactionSignature[]>
+        signTransactions(transactions: Transaction[], options?: Web3ConnectionOptions): Promise<TransactionSignature[]>
+        /** Query a transaction */
+        callTransaction(transaction: Transaction, options?: Web3ConnectionOptions): Promise<string>
         /** Send a tranaction */
-        sendTransaction(transaction: Transaction, options?: Web3Options): Promise<string>
+        sendTransaction(transaction: Transaction, options?: Web3ConnectionOptions): Promise<string>
         /** Send a signed transaction */
-        sendSignedTransaction(signature: TransactionSignature, options?: Web3Options): Promise<string>
-        /** Add a chain. */
-        addChain(chainId: ChainId, options?: Web3Options): Promise<void>
-        /** Switch to a chain. */
-        switchChain(chainId: ChainId, options?: Web3Options): Promise<void>
+        sendSignedTransaction(signature: TransactionSignature, options?: Web3ConnectionOptions): Promise<string>
+        /** Watch a transaction */
+        watchTransaction(id: string, transaction: Transaction, options?: Web3ConnectionOptions): Promise<void>
+        /** Unwatch a transaction */
+        unwatchTransaction(id: string, options?: Web3ConnectionOptions): Promise<void>
     }
 
     export namespace ObjectCapabilities {
@@ -545,13 +541,9 @@ export declare namespace Web3Plugin {
             providerType?: Subscription<ProviderType>
 
             /** Connect with the provider and set chain id. */
-            connect?: (chainId: ChainId, providerType: ProviderType) => Promise<Account<ChainId>>
+            connect: (chainId: ChainId, providerType: ProviderType) => Promise<Account<ChainId>>
             /** Discconect with the provider. */
-            disconect?: (providerType: ProviderType) => Promise<void>
-            /** Invoke it when selected chain id of provider changed. */
-            setChainId?: (providerType: ProviderType, chainId: ChainId) => Promise<void>
-            /** Invoke it when selected account of provider changed. */
-            setAccount?: (providerType: ProviderType, account: string) => Promise<void>
+            disconect: (providerType: ProviderType) => Promise<void>
         }
         export interface ProtocolState<
             ChainId,
@@ -561,7 +553,7 @@ export declare namespace Web3Plugin {
             TransactionDetailed,
             TransactionSignature,
             Web3,
-            Web3Options = ConnectionOptions<ChainId, ProviderType, Transaction>,
+            Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
             Web3Connection = Connection<
                 ChainId,
                 ProviderType,
@@ -570,42 +562,48 @@ export declare namespace Web3Plugin {
                 TransactionDetailed,
                 TransactionSignature,
                 Web3,
-                Web3Options
+                Web3ConnectionOptions
             >,
         > {
             /** Get connection */
-            getConnection?: (options?: Web3Options) => Web3Connection | null
+            getConnection?: (options?: Web3ConnectionOptions) => Web3Connection | null
             /** Get web3 client */
-            getWeb3?: (options?: Web3Options) => Promise<Web3>
+            getWeb3?: (options?: Web3ConnectionOptions) => Promise<Web3>
             /** Get the current account */
-            getAccont?: (options?: Web3Options) => Promise<string>
+            getAccont?: (options?: Web3ConnectionOptions) => Promise<string>
             /** Get the current chain id */
-            getChainId?: (options?: Web3Options) => Promise<ChainId>
+            getChainId?: (options?: Web3ConnectionOptions) => Promise<ChainId>
             /** Get the latest balance of account */
-            getLatestBalance?: (account: string, options?: Web3Options) => Promise<string>
+            getLatestBalance?: (account: string, options?: Web3ConnectionOptions) => Promise<string>
             /** Get the latest block height of chain */
-            getLatestBlockNumber?: (options?: Web3Options) => Promise<number>
+            getLatestBlockNumber?: (options?: Web3ConnectionOptions) => Promise<number>
             /** Get transaction status */
-            getTransactionStatus?: (id: string, options?: Web3Options) => Promise<TransactionStatusType>
+            getTransactionStatus?: (id: string, options?: Web3ConnectionOptions) => Promise<TransactionStatusType>
             /** Sign a plain message, some chain support multiple sign methods */
-            signMessage?: (dataToSign: string, signType?: string, options?: Web3Options) => Promise<Signature>
+            signMessage?: (dataToSign: string, signType?: string, options?: Web3ConnectionOptions) => Promise<Signature>
             /** Verify a signed message */
             verifyMessage?: (
                 dataToVerify: string,
                 signature: Signature,
                 signType?: string,
-                options?: Web3Options,
+                options?: Web3ConnectionOptions,
             ) => Promise<boolean>
             /** Sign a transaction, and the result could send as a raw transaction */
-            signTransaction?: (transaction: Transaction, options?: Web3Options) => Promise<TransactionSignature>
+            signTransaction?: (
+                transaction: Transaction,
+                options?: Web3ConnectionOptions,
+            ) => Promise<TransactionSignature>
             /** Send transaction and get tx id */
-            sendTransaction?: (transaction: Transaction, options?: Web3Options) => Promise<string>
+            sendTransaction?: (transaction: Transaction, options?: Web3ConnectionOptions) => Promise<string>
             /** Send raw transaction and get tx id */
-            sendSignedTransaction?: (transaction: TransactionSignature, options?: Web3Options) => Promise<string>
+            sendSignedTransaction?: (
+                transaction: TransactionSignature,
+                options?: Web3ConnectionOptions,
+            ) => Promise<string>
             /** Add a sub-network */
-            addChain?: (options?: Web3Options) => Promise<void>
+            addChain?: (options?: Web3ConnectionOptions) => Promise<void>
             /** Switch to sub network */
-            switchChain?: (options?: Web3Options) => Promise<void>
+            switchChain?: (options?: Web3ConnectionOptions) => Promise<void>
         }
         export interface WalletState {
             /** The currently stored wallet by MaskWallet. */

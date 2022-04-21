@@ -114,10 +114,11 @@ export class TransactionNotifier implements Middleware<Context> {
                         const state = getTransactionState(receipt)
                         const transaction = await context.connection.getTransaction(
                             receipt.transactionHash,
-                            context.sendOverrides,
                             context.requestOptions,
                         )
-                        this.progressManager.notifyTransactionProgress(transaction, state)
+                        if (transaction) {
+                            this.progressManager.notifyTransactionProgress(transaction, state)
+                        }
                     }
                     break
             }

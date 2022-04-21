@@ -1,10 +1,10 @@
 import bs58 from 'bs58'
 import { PhantomMethodType } from '@masknet/web3-shared-solana'
 import type { Transaction } from '@solana/web3.js'
-import type { Provider } from '../types'
+import type { SolanaProvider } from '../types'
 import { BaseInjectedProvider } from './BaseInjected'
 
-export class PhantomProvider extends BaseInjectedProvider implements Provider {
+export class PhantomProvider extends BaseInjectedProvider implements SolanaProvider {
     private get phantomProvider() {
         if (!this.provider) throw new Error('No connection.')
         return this.provider

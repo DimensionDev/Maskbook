@@ -4,7 +4,7 @@ import { first } from 'lodash-unified'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider'
 import { ChainId, getRPCConstants } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/web3-shared-base'
-import type { Provider } from '../types'
+import type { EVM_Provider } from '../types'
 import { BaseProvider } from './Base'
 
 // #region create in-page fortmatic provider
@@ -39,7 +39,7 @@ export type ChainIdFortmatic =
     | ChainId.Ropsten
     | ChainId.Kovan
 
-export default class FortmaticProvider extends BaseProvider implements Provider {
+export default class FortmaticProvider extends BaseProvider implements EVM_Provider {
     /**
      * If the internal chain id exists, it means the connection was created.
      * Otherwise, no connection was created before.

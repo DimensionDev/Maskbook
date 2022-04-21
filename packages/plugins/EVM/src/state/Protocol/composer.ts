@@ -9,7 +9,7 @@ import {
     ChainId,
 } from '@masknet/web3-shared-evm'
 import { getError, hasError } from './error'
-import type { Context, Connection, Middleware, RequestOptions } from './types'
+import type { Context, EVM_Connection, Middleware, EVM_ConnectionOptions } from './types'
 import { SharedContextSettings, Web3StateSettings } from '../../settings'
 
 class Composer<T> {
@@ -57,9 +57,9 @@ class RequestContext implements Context {
     private _providerType = Web3StateSettings.value.Provider?.providerType?.getCurrentValue() ?? ProviderType.MaskWallet
 
     constructor(
-        private _connection: Connection,
+        private _connection: EVM_Connection,
         private _requestArguments: RequestArguments,
-        private _options?: RequestOptions,
+        private _options?: EVM_ConnectionOptions,
     ) {
         // increase pid
         pid += 1
@@ -187,6 +187,10 @@ export function dispatch(context: Context, next: () => Promise<void>) {
     return composer.dispatch(context, next)
 }
 
-export function createContext(connection: Connection, requestArguments: RequestArguments, options?: RequestOptions) {
+export function createContext(
+    connection: EVM_Connection,
+    requestArguments: RequestArguments,
+    options?: EVM_ConnectionOptions,
+) {
     return new RequestContext(connection, requestArguments, options)
 }

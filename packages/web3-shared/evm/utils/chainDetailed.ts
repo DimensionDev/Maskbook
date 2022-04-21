@@ -1,6 +1,6 @@
-import { upperFirst } from 'lodash-unified'
 import { toHex } from 'web3-utils'
-import { createLookupTableResolver } from './enum'
+import { upperFirst } from 'lodash-unified'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
 import CHAINS from '../assets/chains.json'
 import { getRPCConstants, getCoinGeckoConstants } from '../constants'
 import { ChainId, NetworkType, ProviderType } from '../types'
@@ -89,14 +89,18 @@ export function getChainIdFromName(name: string) {
 export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, ChainId>(
     {
         [NetworkType.Ethereum]: ChainId.Mainnet,
-        [NetworkType.Arbitrum]: ChainId.Arbitrum,
-        [NetworkType.Avalanche]: ChainId.Avalanche,
         [NetworkType.Binance]: ChainId.BSC,
+        [NetworkType.Polygon]: ChainId.Matic,
+        [NetworkType.Arbitrum]: ChainId.Arbitrum,
+        [NetworkType.xDai]: ChainId.xDai,
         [NetworkType.Celo]: ChainId.Celo,
         [NetworkType.Fantom]: ChainId.Fantom,
-        [NetworkType.Polygon]: ChainId.Matic,
-        [NetworkType.xDai]: ChainId.xDai,
         [NetworkType.Aurora]: ChainId.Aurora,
+        [NetworkType.Avalanche]: ChainId.Avalanche,
+        [NetworkType.Boba]: ChainId.Boba,
+        [NetworkType.Fuse]: ChainId.Fuse,
+        [NetworkType.Metis]: ChainId.Metis,
+        [NetworkType.Optimistic]: ChainId.Optimistic,
         [NetworkType.Conflux]: ChainId.Conflux,
     },
     ChainId.Mainnet,

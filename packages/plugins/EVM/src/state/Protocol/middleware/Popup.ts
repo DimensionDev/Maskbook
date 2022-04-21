@@ -56,7 +56,7 @@ export class Popup implements Middleware<Context> {
                         }
 
                         // re-send the previous request
-                        await context.connection.sendTransaction(config, context.sendOverrides, context.requestOptions)
+                        await context.connection.sendTransaction(config, context.requestOptions)
                     }
                 } else {
                     if (previousRequest) {

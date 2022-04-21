@@ -1,11 +1,11 @@
 import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
 import { EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
-import type { Context, Connection, Middleware } from '../types'
+import type { Context, EVM_Connection, Middleware } from '../types'
 import { SharedContextSettings } from '../../../settings'
 
 class NonceManager {
-    constructor(private address: string, private connection: Connection) {}
+    constructor(private address: string, private connection: EVM_Connection) {}
 
     private nonce = NonceManager.INITIAL_NONCE
     private locked = false
@@ -35,16 +35,11 @@ class NonceManager {
                     this.lock()
                     callback(
                         null,
-                        await this.connection.getTransactionNonce(
-                            this.address,
-                            {
-                                chainId: chainId.getCurrentValue(),
-                            },
-                            {
-                                // Only mask wallets need to use Nonce
-                                providerType: ProviderType.MaskWallet,
-                            },
-                        ),
+                        await this.connection.getTransactionNonce(this.address, {
+                            chainId: chainId.getCurrentValue(),
+                            // Only mask wallets need to use Nonce
+                            providerType: ProviderType.MaskWallet,
+                        }),
                     )
                 } catch (error: unknown) {
                     callback(error instanceof Error ? error : new Error('Failed to get remote nonce.'))
@@ -99,22 +94,22 @@ export class Nonce implements Middleware<Context> {
         })
     }
 
-    private getManager(address: string, connection: Connection) {
+    private getManager(address: string, connection: EVM_Connection) {
         const address_ = EthereumAddress.checksumAddress(address)
         if (!this.cache.has(address_)) this.cache.set(address_, new NonceManager(address_, connection))
         return this.cache.get(address_)!
     }
 
-    private getNonce(address: string, connection: Connection) {
+    private getNonce(address: string, connection: EVM_Connection) {
         return this.getManager(address, connection).getNonce()
     }
 
-    private async commitNonce(address: string, connection: Connection) {
+    private async commitNonce(address: string, connection: EVM_Connection) {
         const manager = this.getManager(address, connection)
         return manager.setNonce((await manager.getNonce()) + 1)
     }
 
-    private resetNonce(address: string, connection: Connection) {
+    private resetNonce(address: string, connection: EVM_Connection) {
         const manager = this.getManager(address, connection)
         return manager.resetNonce()
     }

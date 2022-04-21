@@ -11,7 +11,9 @@ import type {
     EthereumTransactionConfig,
 } from '@masknet/web3-shared-evm'
 
-export type Web3State = Web3Plugin.ObjectCapabilities.Capabilities<
+export type EVM_Web3 = Web3
+
+export type EVM_Web3State = Web3Plugin.ObjectCapabilities.Capabilities<
     ChainId,
     ProviderType,
     NetworkType,
@@ -19,28 +21,35 @@ export type Web3State = Web3Plugin.ObjectCapabilities.Capabilities<
     EthereumTransactionConfig,
     Transaction,
     string,
-    Web3
+    EVM_Web3
 >
 
-export type RequestOptions = Web3Plugin.ConnectionOptions<ChainId, ProviderType, EthereumTransactionConfig> & {
-    popupsWindow?: boolean
-}
-
-export interface Provider extends Web3Plugin.Provider<ChainId, EIP1193Provider, Web3> {
+export interface EVM_Provider extends Web3Plugin.Provider<ChainId, EIP1193Provider, EVM_Web3> {
     /** The basic RPC request method. */
     request<T extends unknown>(requestArguments: RequestArguments): Promise<T>
 }
 
-export interface Connection
-    extends Web3Plugin.Connection<ChainId, ProviderType, string, EthereumTransactionConfig, Transaction, string, Web3> {
-    getCode(address: string, options?: RequestOptions): Promise<string>
-    getTransactionReceiptHijacked(hash: string, options?: RequestOptions): Promise<TransactionReceipt | null>
-    getTransactionReceipt(hash: string, options?: RequestOptions): Promise<TransactionReceipt | null>
-    call(config: EthereumTransactionConfig, options?: RequestOptions): Promise<string>
-    confirmRequest(options?: RequestOptions): Promise<void>
-    rejectRequest(options?: RequestOptions): Promise<void>
-    replaceRequest(hash: string, config: EthereumTransactionConfig, options?: RequestOptions): Promise<void>
-    cancelRequest(hash: string, config: EthereumTransactionConfig, options?: RequestOptions): Promise<void>
+export type EVM_ConnectionOptions = Web3Plugin.ConnectionOptions<ChainId, ProviderType, EthereumTransactionConfig> & {
+    popupsWindow?: boolean
+}
+
+export interface EVM_Connection
+    extends Web3Plugin.Connection<
+        ChainId,
+        ProviderType,
+        string,
+        EthereumTransactionConfig,
+        Transaction,
+        string,
+        EVM_Web3
+    > {
+    getCode(address: string, options?: EVM_ConnectionOptions): Promise<string>
+    getTransactionReceiptHijacked(hash: string, options?: EVM_ConnectionOptions): Promise<TransactionReceipt | null>
+    getTransactionReceipt(hash: string, options?: EVM_ConnectionOptions): Promise<TransactionReceipt | null>
+    confirmRequest(options?: EVM_ConnectionOptions): Promise<void>
+    rejectRequest(options?: EVM_ConnectionOptions): Promise<void>
+    replaceRequest(hash: string, config: EthereumTransactionConfig, options?: EVM_ConnectionOptions): Promise<void>
+    cancelRequest(hash: string, config: EthereumTransactionConfig, options?: EVM_ConnectionOptions): Promise<void>
 }
 
 export interface Context {
@@ -50,8 +59,8 @@ export interface Context {
     readonly writeable: boolean
     readonly providerType: ProviderType
     readonly method: EthereumMethodType
-    readonly connection: Connection
-    readonly requestOptions: RequestOptions | undefined
+    readonly connection: EVM_Connection
+    readonly requestOptions: EVM_ConnectionOptions | undefined
 
     /**
      * JSON RPC request payload

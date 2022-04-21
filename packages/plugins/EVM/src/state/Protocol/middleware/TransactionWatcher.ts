@@ -11,7 +11,7 @@ import {
 import type { TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { Explorer } from '@masknet/web3-providers'
-import type { Context, Connection, Middleware } from '../types'
+import type { Context, EVM_Connection, Middleware } from '../types'
 
 interface StorageItem {
     at: number
@@ -84,7 +84,7 @@ class Watcher {
     private timer: NodeJS.Timeout | null = null
     private storage = new Storage()
 
-    constructor(private connection: Connection) {}
+    constructor(private connection: EVM_Connection) {}
 
     public async getReceiptFromCache(chainId: ChainId, hash: string) {
         return this.storage.getItem(chainId, hash)?.receipt ?? null

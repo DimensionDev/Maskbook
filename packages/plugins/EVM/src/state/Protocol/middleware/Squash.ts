@@ -1,8 +1,8 @@
 import { sha3 } from 'web3-utils'
 import type { RequestArguments, TransactionConfig } from 'web3-core'
 import { defer } from '@dimensiondev/kit'
-import { EthereumMethodType, SendOverrides } from '@masknet/web3-shared-evm'
-import type { Context, Middleware } from '../types'
+import { EthereumMethodType } from '@masknet/web3-shared-evm'
+import type { Context, Middleware, EVM_ConnectionOptions } from '../types'
 
 /**
  * Squash multiple RPC requests into a single one.
@@ -15,7 +15,7 @@ export class Squash implements Middleware<Context> {
      * @param requestArguments
      * @returns
      */
-    private createRequestID(requestArguments: RequestArguments, overrides: SendOverrides | undefined) {
+    private createRequestID(requestArguments: RequestArguments, overrides?: EVM_ConnectionOptions) {
         // The -1 is not a valid chain id, only used for distinguishing with other explicit chain id.
         const chainId = overrides?.chainId ?? -1
         const { method, params } = requestArguments
@@ -45,7 +45,7 @@ export class Squash implements Middleware<Context> {
     }
 
     async fn(context: Context, next: () => Promise<void>) {
-        const id = this.createRequestID(context.request, context.sendOverrides)
+        const id = this.createRequestID(context.request, context.requestOptions)
 
         // unable to cache the request
         if (!id) {

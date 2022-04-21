@@ -20,9 +20,7 @@ export class RecentTransaction implements Middleware<Context> {
 
                     // remember the hash of the replaced tx
                     replacedHash = hash
-                    context.write(
-                        await context.connection.sendTransaction(config, context.sendOverrides, context.requestOptions),
-                    )
+                    context.write(await context.connection.sendTransaction(config, context.requestOptions))
                 } catch (error) {
                     context.abort(error)
                 }

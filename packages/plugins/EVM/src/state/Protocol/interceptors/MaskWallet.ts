@@ -44,7 +44,9 @@ export class MaskWallet implements Middleware<Context> {
                         break
                     }
 
-                    const tx = await Protocol?.sendSignedTransaction?.(context.chainId, rawTransaction)
+                    const tx = await Protocol?.sendSignedTransaction?.(rawTransaction, {
+                        chainId: context.chainId,
+                    })
                     context.write(tx)
                 } catch (error) {
                     context.abort(error, 'Failed to send transaction.')

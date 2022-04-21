@@ -40,7 +40,7 @@ export interface Payload {
     params?: any
 }
 
-export interface SolanaProvider {
+export interface SolProvider {
     on(name: string, callback: () => void): void
     request: <T>(payload: Payload) => Promise<T>
     connect(): Promise<{

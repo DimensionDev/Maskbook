@@ -7,7 +7,7 @@ import type { ITxData } from '@walletconnect/types'
 import QRCodeModal from '@walletconnect/qrcode-modal'
 import { ChainId, EthereumMethodType } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
-import type { Provider } from '../types'
+import type { EVM_Provider } from '../types'
 
 interface SessionPayload {
     event: 'connect' | 'session_update'
@@ -29,7 +29,7 @@ interface ModalClosePayload {
     params: []
 }
 
-export default class WalletConnectProvider extends BaseProvider implements Provider {
+export default class WalletConnectProvider extends BaseProvider implements EVM_Provider {
     private connector = this.createConnector()
 
     /**

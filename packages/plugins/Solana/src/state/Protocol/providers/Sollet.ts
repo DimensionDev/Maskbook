@@ -1,10 +1,10 @@
 import type { Transaction } from '@solana/web3.js'
 import Wallet from '@project-serum/sol-wallet-adapter'
 import type { ChainId } from '@masknet/web3-shared-solana'
-import type { Provider } from '../types'
+import type { SolanaProvider } from '../types'
 import { BaseProvider } from './Base'
 
-export class SolanaProvider extends BaseProvider implements Provider {
+export class SolletProvider extends BaseProvider implements SolanaProvider {
     private wallet: Wallet | null = null
 
     private get solanaProvider() {
@@ -18,10 +18,6 @@ export class SolanaProvider extends BaseProvider implements Provider {
 
     constructor(private providerURL = 'https://www.sollet.io') {
         super()
-    }
-
-    override get account() {
-        return this?.wallet?.publicKey?.toBase58() ?? ''
     }
 
     override async signMessage(dataToSign: string) {

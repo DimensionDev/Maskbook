@@ -1,4 +1,4 @@
-import type { Provider } from '../types'
+import type { FlowProvider } from '../types'
 import { BaseProvider } from './Base'
 
-export class DapperProvider extends BaseProvider implements Provider {}
+export class DapperProvider extends BaseProvider implements FlowProvider {}

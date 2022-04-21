@@ -1,11 +1,11 @@
 import { delay } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { isExtensionSiteType } from '@masknet/shared-base'
-import { ChainId, SolanaProvider } from '@masknet/web3-shared-solana'
-import type { Provider } from '../types'
+import { ChainId, SolProvider } from '@masknet/web3-shared-solana'
+import type { SolanaProvider } from '../types'
 import { BaseProvider } from './Base'
 
-export class BaseInjectedProvider extends BaseProvider implements Provider {
+export class BaseInjectedProvider extends BaseProvider implements SolanaProvider {
     constructor(protected path = ['solana']) {
         super()
     }
@@ -21,7 +21,7 @@ export class BaseInjectedProvider extends BaseProvider implements Provider {
             result = Reflect.has(result, name)
             if (!result) return null
         }
-        return result as SolanaProvider
+        return result as SolProvider
     }
 
     override get ready() {

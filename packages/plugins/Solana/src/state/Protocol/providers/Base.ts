@@ -1,13 +1,14 @@
-import type Web3 from '@solana/web3.js'
 import { Emitter } from '@servie/events'
 import type { Web3Plugin } from '@masknet/plugin-infra/web3'
-import type { ChainId, SolanaProvider } from '@masknet/web3-shared-solana'
-import type { Provider } from '../types'
+import type { ChainId, SolProvider } from '@masknet/web3-shared-solana'
+import type { SolanaProvider, SolanaWeb3 } from '../types'
 import type { Transaction } from '@solana/web3.js'
 
-export class BaseProvider implements Provider {
-    web3: typeof Web3 | null = null
-    provider: SolanaProvider | null = null
+export class BaseProvider implements SolanaProvider {
+    web3: SolanaWeb3 | null = null
+
+    provider: SolProvider | null = null
+
     emitter = new Emitter<Web3Plugin.ProviderEvents<ChainId>>()
 
     // No need to wait by default
@@ -20,8 +21,8 @@ export class BaseProvider implements Provider {
         return Promise.resolve()
     }
 
-    get account() {
-        return ''
+    switchChain(chainId?: ChainId): Promise<void> {
+        throw new Error('Method not implemented.')
     }
 
     signMessage(dataToSign: string): Promise<string> {
@@ -36,10 +37,10 @@ export class BaseProvider implements Provider {
     signTransactions(transactions: Transaction[]): Promise<Transaction[]> {
         return Promise.all(transactions.map((x) => this.signTransaction(x)))
     }
-    createWeb3(chainId?: ChainId): Promise<typeof Web3> {
+    createWeb3(chainId?: ChainId): Promise<SolanaWeb3> {
         throw new Error('Method not implemented.')
     }
-    createWeb3Provider(chainId?: ChainId): Promise<SolanaProvider> {
+    createWeb3Provider(chainId?: ChainId): Promise<SolProvider> {
         throw new Error('Method not implemented.')
     }
     connect(chainId: ChainId): Promise<Web3Plugin.Account<ChainId>> {

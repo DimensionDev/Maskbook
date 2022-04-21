@@ -1,11 +1,11 @@
 import { first } from 'lodash-unified'
 import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ChainId, Coin98MethodType } from '@masknet/web3-shared-solana'
-import type { Provider } from '../types'
+import type { SolanaProvider } from '../types'
 import { BaseInjectedProvider } from './BaseInjected'
 import type { PublicKey, Transaction } from '@solana/web3.js'
 
-export class Coin98Provider extends BaseInjectedProvider implements Provider {
+export class Coin98Provider extends BaseInjectedProvider implements SolanaProvider {
     constructor() {
         super(['coin98', 'sol'])
     }

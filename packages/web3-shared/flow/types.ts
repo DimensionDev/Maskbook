@@ -16,3 +16,5 @@ export enum ProviderType {
 export enum AssetProviderType {
     Default = 'Default',
 }
+
+export enum FclProvider {}

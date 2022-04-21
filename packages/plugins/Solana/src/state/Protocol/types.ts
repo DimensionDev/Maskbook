@@ -1,8 +1,10 @@
 import type { default as Web3, AccountInfo, Transaction, TransactionResponse } from '@solana/web3.js'
 import type { Web3Plugin } from '@masknet/plugin-infra/web3'
-import type { ChainId, NetworkType, ProviderType, SolanaProvider } from '@masknet/web3-shared-solana'
+import type { ChainId, NetworkType, ProviderType, SolProvider } from '@masknet/web3-shared-solana'
 
-export type Web3State = Web3Plugin.ObjectCapabilities.Capabilities<
+export type SolanaWeb3 = typeof Web3
+
+export type SolanaWeb3State = Web3Plugin.ObjectCapabilities.Capabilities<
     ChainId,
     ProviderType,
     NetworkType,
@@ -10,13 +12,10 @@ export type Web3State = Web3Plugin.ObjectCapabilities.Capabilities<
     Transaction,
     TransactionResponse,
     Transaction,
-    typeof Web3
+    SolanaWeb3
 >
 
-export type ConnectionOptions = Web3Plugin.ConnectionOptions<ChainId, ProviderType, Transaction>
-
-export interface Provider extends Web3Plugin.Provider<ChainId, SolanaProvider, typeof Web3> {
-    readonly account: string
+export interface SolanaProvider extends Web3Plugin.Provider<ChainId, SolProvider, SolanaWeb3> {
     /** Sign message. */
     signMessage(dataToSign: string): Promise<string>
     /** Sign a transaction. */
@@ -25,7 +24,7 @@ export interface Provider extends Web3Plugin.Provider<ChainId, SolanaProvider, t
     signTransactions(transactions: Transaction[]): Promise<Transaction[]>
 }
 
-export interface Connection
+export interface SolanaConnection
     extends Web3Plugin.Connection<
         ChainId,
         ProviderType,
@@ -33,7 +32,9 @@ export interface Connection
         Transaction,
         TransactionResponse,
         Transaction,
-        typeof Web3
+        SolanaWeb3
     > {
     getAccountInfo(account: string): Promise<AccountInfo<Buffer> | null>
 }
+
+export type SolanaConnectionOptions = Web3Plugin.ConnectionOptions<ChainId, ProviderType, Transaction>

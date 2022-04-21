@@ -17,7 +17,7 @@ import {
     getFunctionParameters,
 } from '@masknet/web3-shared-evm'
 import { isZero } from '@masknet/web3-shared-base'
-import type { Connection } from './types'
+import type { EVM_Connection } from './types'
 
 // built-in abis
 import BulkCheckout from '@masknet/web3-contracts/abis/BulkCheckout.json'
@@ -79,7 +79,7 @@ export class PayloadComputer {
     private abi = new ABI()
     private coder = ABICoder as unknown as ABICoder.AbiCoder
 
-    constructor(private connection: Connection) {
+    constructor(private connection: EVM_Connection) {
         this.abi.construct(BulkCheckout as AbiItem[]) // donate gitcoin grants
         this.abi.construct(ITO2 as AbiItem[])
         this.abi.construct(NftHappyRedPacket as AbiItem[])

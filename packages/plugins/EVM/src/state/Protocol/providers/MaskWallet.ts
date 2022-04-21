@@ -5,12 +5,12 @@ import type { HttpProvider, RequestArguments } from 'web3-core'
 import type { JsonRpcResponse } from 'web3-core-helpers'
 import { ChainId, createEIP1193Provider, createPayload, getChainRPC, getRPCConstants } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
-import type { Provider } from '../types'
+import type { EVM_Provider } from '../types'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings'
 
 const WEIGHTS_LENGTH = getRPCConstants(ChainId.Mainnet).RPC_WEIGHTS?.length ?? 4
 
-export class MaskWalletProvider extends BaseProvider implements Provider {
+export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     private id = 0
     private seed = Math.floor(Math.random() * WEIGHTS_LENGTH)
     private providerPool = new Map<string, HttpProvider>()
@@ -35,6 +35,12 @@ export class MaskWalletProvider extends BaseProvider implements Provider {
      */
     override get readyPromise() {
         return Web3StateSettings.readyPromise.then(() => {})
+    }
+
+    override async switchChain(chainId?: ChainId) {
+        await SharedContextSettings.value.updateAccount({
+            chainId,
+        })
     }
 
     private addShareContextListeners() {

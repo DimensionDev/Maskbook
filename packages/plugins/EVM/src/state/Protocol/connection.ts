@@ -1,10 +1,8 @@
 import { first } from 'lodash-unified'
-import { toHex } from 'web3-utils'
 import type { RequestArguments, SignedTransaction, Transaction, TransactionReceipt } from 'web3-core'
 import {
     ChainId,
     EthereumMethodType,
-    getChainDetailedCAIP,
     ProviderType,
     getReceiptStatus,
     EthereumTransactionConfig,
@@ -12,7 +10,7 @@ import {
 import type { TransactionStatusType, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { createContext, dispatch } from './composer'
 import { Providers } from './provider'
-import type { Connection as BaseConnection, RequestOptions } from './types'
+import type { EVM_Connection as BaseConnection, EVM_ConnectionOptions } from './types'
 
 function isUniversalMethod(method: EthereumMethodType) {
     return [
@@ -37,7 +35,7 @@ class Connection implements BaseConnection {
 
     // Hijack RPC requests and process them with koa like middlewares
     private get hijackedRequest() {
-        return <T extends unknown>(requestArguments: RequestArguments, options?: RequestOptions) => {
+        return <T extends unknown>(requestArguments: RequestArguments, options?: EVM_ConnectionOptions) => {
             return new Promise<T>(async (resolve, reject) => {
                 const context = createContext(this, requestArguments, {
                     account: this.account,
@@ -71,11 +69,11 @@ class Connection implements BaseConnection {
         }
     }
 
-    getWeb3(options?: RequestOptions) {
+    getWeb3(options?: EVM_ConnectionOptions) {
         return Providers[options?.providerType ?? this.providerType].createWeb3(options?.chainId ?? this.chainId)
     }
 
-    async getAccount(options?: RequestOptions) {
+    async getAccount(options?: EVM_ConnectionOptions) {
         const accounts = await this.hijackedRequest<string[]>(
             {
                 method: EthereumMethodType.ETH_ACCOUNTS,
@@ -85,7 +83,7 @@ class Connection implements BaseConnection {
         return first(accounts) ?? ''
     }
 
-    async getChainId(options?: RequestOptions) {
+    async getChainId(options?: EVM_ConnectionOptions) {
         const chainId = await this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CHAIN_ID,
@@ -95,7 +93,7 @@ class Connection implements BaseConnection {
         return Number.parseInt(chainId, 16)
     }
 
-    getBlockNumber(options?: RequestOptions) {
+    getBlockNumber(options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<number>(
             {
                 method: EthereumMethodType.ETH_BLOCK_NUMBER,
@@ -104,7 +102,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    getBalance(address: string, options?: RequestOptions) {
+    getBalance(address: string, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_GET_BALANCE,
@@ -114,7 +112,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    getCode(address: string, options?: RequestOptions) {
+    getCode(address: string, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_GET_CODE,
@@ -124,7 +122,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    async getTransaction(hash: string, options?: RequestOptions) {
+    async getTransaction(hash: string, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<Transaction>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
@@ -134,7 +132,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    getTransactionReceiptHijacked(hash: string, options?: RequestOptions) {
+    getTransactionReceiptHijacked(hash: string, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<TransactionReceipt | null>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
@@ -144,7 +142,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    getTransactionReceipt(hash: string, options?: RequestOptions) {
+    getTransactionReceipt(hash: string, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<TransactionReceipt | null>(
             {
                 method: EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT,
@@ -154,12 +152,12 @@ class Connection implements BaseConnection {
         )
     }
 
-    async getTransactionStatus(id: string, options?: RequestOptions): Promise<TransactionStatusType> {
+    async getTransactionStatus(id: string, options?: EVM_ConnectionOptions): Promise<TransactionStatusType> {
         const receipt = await this.getTransactionReceiptHijacked(id, options)
         return getReceiptStatus(receipt)
     }
 
-    async getTransactionNonce(address: string, options?: RequestOptions) {
+    async getTransactionNonce(address: string, options?: EVM_ConnectionOptions) {
         const count = await this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
@@ -170,20 +168,10 @@ class Connection implements BaseConnection {
         return Number.parseInt(count, 16) || 0
     }
 
-    call(transaction: EthereumTransactionConfig, options?: RequestOptions) {
-        return this.hijackedRequest<string>(
-            {
-                method: EthereumMethodType.ETH_CALL,
-                params: [transaction, 'latest'],
-            },
-            options,
-        )
-    }
-
     signMessage(
         dataToSign: string,
         signType?: 'personaSign' | 'typedDataSign' | Omit<string, 'personaSign' | 'typedDataSign'>,
-        options?: RequestOptions,
+        options?: EVM_ConnectionOptions,
     ) {
         if (!options?.account) throw new Error('Unknown account.')
 
@@ -220,32 +208,7 @@ class Connection implements BaseConnection {
         return dataToSign === dataToVerify
     }
 
-    addChain(chainId: ChainId, options?: RequestOptions) {
-        const chainDetailed = getChainDetailedCAIP(chainId)
-        return this.hijackedRequest<void>(
-            {
-                method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
-                params: [chainDetailed].filter(Boolean),
-            },
-            options,
-        )
-    }
-
-    switchChain(chainId: ChainId, options?: RequestOptions) {
-        return this.hijackedRequest<void>(
-            {
-                method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
-                params: [
-                    {
-                        chainId: toHex(chainId),
-                    },
-                ],
-            },
-            options,
-        )
-    }
-
-    async signTransaction(transaction: EthereumTransactionConfig, options?: RequestOptions) {
+    async signTransaction(transaction: EthereumTransactionConfig, options?: EVM_ConnectionOptions) {
         const signed = await this.hijackedRequest<SignedTransaction>(
             {
                 method: EthereumMethodType.ETH_SIGN_TRANSACTION,
@@ -256,11 +219,20 @@ class Connection implements BaseConnection {
         return signed.rawTransaction ?? ''
     }
 
-    signTransactions(transactions: EthereumTransactionConfig[], options?: RequestOptions) {
+    signTransactions(transactions: EthereumTransactionConfig[], options?: EVM_ConnectionOptions) {
         return Promise.all(transactions.map((x) => this.signTransaction(x)))
     }
 
-    sendTransaction(transaction: EthereumTransactionConfig, options?: RequestOptions) {
+    callTransaction(transaction: EthereumTransactionConfig, options?: EVM_ConnectionOptions) {
+        return this.hijackedRequest<string>(
+            {
+                method: EthereumMethodType.ETH_CALL,
+                params: [transaction, 'latest'],
+            },
+            options,
+        )
+    }
+    sendTransaction(transaction: EthereumTransactionConfig, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
@@ -270,7 +242,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    sendSignedTransaction(signature: string, options?: RequestOptions) {
+    sendSignedTransaction(signature: string, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
@@ -280,7 +252,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    watchTransaction(hash: string, transaction: EthereumTransactionConfig, options?: RequestOptions) {
+    watchTransaction(hash: string, transaction: EthereumTransactionConfig, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_WATCH_TRANSACTION,
@@ -290,7 +262,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    unwatchTransaction(hash: string, options?: RequestOptions) {
+    unwatchTransaction(hash: string, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_UNWATCH_TRANSACTION,
@@ -300,7 +272,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    confirmRequest(options?: RequestOptions) {
+    confirmRequest(options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_CONFIRM_TRANSACTION,
@@ -310,7 +282,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    rejectRequest(options?: RequestOptions) {
+    rejectRequest(options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_REJECT_TRANSACTION,
@@ -320,7 +292,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    replaceRequest(hash: string, transaction: EthereumTransactionConfig, options?: RequestOptions) {
+    replaceRequest(hash: string, transaction: EthereumTransactionConfig, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
@@ -330,7 +302,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    cancelRequest(hash: string, transaction: EthereumTransactionConfig, options?: RequestOptions) {
+    cancelRequest(hash: string, transaction: EthereumTransactionConfig, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,

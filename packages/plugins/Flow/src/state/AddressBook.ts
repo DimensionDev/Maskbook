@@ -1,6 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { AddressBookState, Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
+import { AddressBookState } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-flow'
 import { isSameAddress, isValidAddress, formatAddress } from '../helpers'
 

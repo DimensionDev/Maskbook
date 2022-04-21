@@ -2,9 +2,19 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ProviderState, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
-import { ChainId, getNetworkTypeFromChainId, isSameAddress, NetworkType, ProviderType } from '@masknet/web3-shared-flow'
+import {
+    ChainId,
+    FclProvider,
+    getNetworkTypeFromChainId,
+    isSameAddress,
+    isValidAddress,
+    NetworkType,
+    ProviderType,
+} from '@masknet/web3-shared-flow'
+import { Providers } from './Protocol/provider'
+import type { FlowWeb3 } from './Protocol/types'
 
-export class Provider extends ProviderState<ChainId, NetworkType, ProviderType> {
+export class Provider extends ProviderState<ChainId, NetworkType, ProviderType, FclProvider, FlowWeb3> {
     constructor(override context: Plugin.Shared.SharedContext) {
         const defaultValue = {
             accounts: getEnumAsArray(ProviderType).reduce((accumulator, providerType) => {
@@ -23,8 +33,10 @@ export class Provider extends ProviderState<ChainId, NetworkType, ProviderType> 
             ),
         }
 
-        super(context, defaultValue, {
+        super(context, Providers, defaultValue, {
             isSameAddress,
+            isValidAddress,
+            getDefaultChainId: () => ChainId.Mainnet,
             getNetworkTypeFromChainId,
         })
     }
