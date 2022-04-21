@@ -6,7 +6,7 @@ import { createTypedMessageMetadataReader } from '@masknet/typed-message'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { keccak256 } from 'web3-utils'
 
-import { META_KEY, REFERRAL_FRAMS_V1_ADDR, CONFIRMATION_V1_ADDR } from './constants'
+import { META_KEY, REFERRAL_FARMS_V1_ADDR, CONFIRMATION_V1_ADDR } from './constants'
 import type {
     ReferralMetaData,
     RewardData,
@@ -154,7 +154,7 @@ export function makeLeafHash(chainId: number, entitlement: Entitlement, rewardTo
             ],
             [
                 toChainAddressEthers(chainId, CONFIRMATION_V1_ADDR),
-                toChainAddressEthers(chainId, REFERRAL_FRAMS_V1_ADDR),
+                toChainAddressEthers(chainId, REFERRAL_FARMS_V1_ADDR),
                 entitlement.entitlee,
                 {
                     farmHash: entitlement.farmHash,
