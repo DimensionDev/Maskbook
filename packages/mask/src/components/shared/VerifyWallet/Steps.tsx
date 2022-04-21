@@ -16,7 +16,14 @@ import classNames from 'classnames'
 import { useEffect } from 'react'
 import { useI18N } from '../../../utils'
 import type { Web3Plugin } from '@masknet/plugin-infra/src/web3-types'
-import { ChainId, isSameAddress, NetworkType, ProviderType, useWallets } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    isSameAddress,
+    NetworkType,
+    ProviderType,
+    useProviderType,
+    useWallets,
+} from '@masknet/web3-shared-evm'
 import type { PersonaInformation } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 
@@ -125,8 +132,10 @@ export function Steps(props: StepsProps) {
         onCustomCancel,
     } = props
     const { showSnackbar } = usePopupCustomSnackbar()
-    const walletName = useWallets(wallet.providerType).find((x) => isSameAddress(x.address, wallet.account))?.name
-
+    const curProviderType = useProviderType()
+    const walletName = useWallets(wallet.providerType ?? curProviderType).find((x) =>
+        isSameAddress(x.address, wallet.account),
+    )?.name
     const stepIconMap = {
         [SignSteps.Ready]: {
             step1: step1ActiveIcon,
@@ -158,6 +167,12 @@ export function Steps(props: StepsProps) {
         }
         navigate(-1)
     }
+    const getWaleltName = () => {
+        if (notEvm) return `${curProviderType} Wallet`
+        if (![wallet.providerType, curProviderType].includes(ProviderType.MaskWallet))
+            return `${wallet.providerType ?? curProviderType} Wallet`
+        return walletName ?? 'Wallet'
+    }
 
     return (
         <div className={classes.container}>
@@ -188,14 +203,7 @@ export function Steps(props: StepsProps) {
                             </Typography>
                         </div>
                         <div className={classes.stepRow}>
-                            <Typography className={classes.stepTitle}>
-                                {notEvm
-                                    ? `${wallet.providerType} Wallet`
-                                    : walletName
-                                    ? walletName
-                                    : `${wallet.providerType} Wallet`}{' '}
-                                Sign
-                            </Typography>
+                            <Typography className={classes.stepTitle}>{getWaleltName()} Sign</Typography>
                             <Typography className={classes.stepIntro}>
                                 {t('waller_verify_wallet_sign_intro')}
                             </Typography>
