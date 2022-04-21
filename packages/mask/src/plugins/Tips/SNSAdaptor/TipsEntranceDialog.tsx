@@ -294,7 +294,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         },
         [currentPersona],
     )
-    console.log(rawPatchData, 'ffff')
 
     return (
         <InjectedDialog open={open} onClose={clickBack} title={bodyView} titleTail={WalletButton()}>

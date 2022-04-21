@@ -71,6 +71,7 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
                             return (
                                 (x.isPublic && (
                                     <WalletCom
+                                        nowIdx={idx}
                                         setAsDefault={setAsDefault}
                                         key={idx}
                                         index={x.rawIdx}

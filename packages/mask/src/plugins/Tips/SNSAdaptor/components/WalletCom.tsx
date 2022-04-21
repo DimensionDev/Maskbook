@@ -81,10 +81,11 @@ interface WalletComProps {
     canDelete?: boolean
     onDelete?: any
     index?: number
+    nowIdx: number
     setAsDefault?: (idx: number) => void
 }
 
-export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, onDelete }: WalletComProps) {
+export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, onDelete, nowIdx }: WalletComProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
@@ -109,7 +110,7 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
                     className={classes.defaultBtn}
                     onClick={() => {
                         if (!setAsDefault) return
-                        setAsDefault(index ?? 0)
+                        setAsDefault(nowIdx ?? 0)
                     }}>
                     Set as default
                 </Typography>
@@ -131,7 +132,7 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
                     <Typography className={classes.accountName}>
                         {domain && Utils?.formatDomainName
                             ? Utils.formatDomainName(domain)
-                            : 'Wallet ' + (index !== undefined ? index + 1 : 0)}
+                            : walletName ?? 'Wallet ' + (index !== undefined ? index + 1 : 0)}
                     </Typography>
                     {isDefault && <Typography className={classes.defaultBadge}>Default</Typography>}
                 </div>

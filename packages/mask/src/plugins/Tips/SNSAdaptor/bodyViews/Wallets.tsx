@@ -43,6 +43,7 @@ const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: W
             {wallets.map((x, idx) => {
                 return (
                     <WalletCom
+                        nowIdx={idx}
                         onDelete={() => deleteWallet(x)}
                         canDelete
                         key={idx}
