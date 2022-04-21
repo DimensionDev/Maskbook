@@ -32,9 +32,9 @@ declare module '@mui/material/styles/createPalette.d' {
 
 declare module '@mui/material/index.d' {
     export interface Color {
-        main: string
-        main2: string
-        main3: string
+        primary: string
+        second: string
+        third: string
     }
 }
 export {}

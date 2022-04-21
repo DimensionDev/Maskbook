@@ -5,9 +5,9 @@
             "300": "#b9cad3",
             "200": "#cfd9de",
             "50": "#eff3f4",
-            "main": "linear-gradient(0deg, rgba(7, 16, 27, 0.3), rgba(7, 16, 27, 0.3)), #FFFFFF",
-            "main2": "linear-gradient(0deg, rgba(7, 16, 27, 0.2), rgba(7, 16, 27, 0.2)), #FFFFFF",
-            "main3": "linear-gradient(0deg, rgba(7, 16, 27, 0.05), rgba(7, 16, 27, 0.05)), #FFFFFF"
+            "primary": "linear-gradient(0deg, rgba(7, 16, 27, 0.3), rgba(7, 16, 27, 0.3)), #FFFFFF",
+            "secondary": "linear-gradient(0deg, rgba(7, 16, 27, 0.2), rgba(7, 16, 27, 0.2)), #FFFFFF",
+            "third": "linear-gradient(0deg, rgba(7, 16, 27, 0.05), rgba(7, 16, 27, 0.05)), #FFFFFF"
         },
         "public": {
             "primary": "#1C68F3",
@@ -50,9 +50,9 @@
             "300": "#697987",
             "200": "#697987",
             "50": "#cfd9de",
-            "main": "linear-gradient(0deg, rgba(7, 16, 27, 0.3), rgba(7, 16, 27, 0.3)), #FFFFFF",
-            "main2": "linear-gradient(0deg, rgba(7, 16, 27, 0.2), rgba(7, 16, 27, 0.2)), #FFFFFF",
-            "main3": "linear-gradient(0deg, rgba(7, 16, 27, 0.05), rgba(7, 16, 27, 0.05)), #FFFFFF"
+            "primary": "linear-gradient(0deg, rgba(7, 16, 27, 0.3), rgba(7, 16, 27, 0.3)), #FFFFFF",
+            "secondary": "linear-gradient(0deg, rgba(7, 16, 27, 0.2), rgba(7, 16, 27, 0.2)), #FFFFFF",
+            "third": "linear-gradient(0deg, rgba(7, 16, 27, 0.05), rgba(7, 16, 27, 0.05)), #FFFFFF"
         },
         "text": {
             "primary": "#07101B",
@@ -95,9 +95,9 @@
             "300": "#6b7d8c",
             "200": "#3d5466",
             "50": "#253341",
-            "main": "linear-gradient(0deg, rgba(245, 245, 245, 0.3), rgba(245, 245, 245, 0.3)), #000000",
-            "main2": "linear-gradient(0deg, rgba(245, 245, 245, 0.1), rgba(245, 245, 245, 0.1)), #000000",
-            "main3": "linear-gradient(0deg, rgba(245, 245, 245, 0.1), rgba(245, 245, 245, 0.1)), #000000"
+            "primary": "linear-gradient(0deg, rgba(245, 245, 245, 0.3), rgba(245, 245, 245, 0.3)), #000000",
+            "secondary": "linear-gradient(0deg, rgba(245, 245, 245, 0.1), rgba(245, 245, 245, 0.1)), #000000",
+            "third": "linear-gradient(0deg, rgba(245, 245, 245, 0.1), rgba(245, 245, 245, 0.1)), #000000"
         },
         "public": {
             "primary": "#1C68F3",
@@ -140,9 +140,9 @@
             "300": "#92a4b3",
             "200": "#697987",
             "50": "#10171e",
-            "main": "linear-gradient(0deg, rgba(245, 245, 245, 0.3), rgba(245, 245, 245, 0.3)), #000000",
-            "main2": "linear-gradient(0deg, rgba(245, 245, 245, 0.1), rgba(245, 245, 245, 0.1)), #000000",
-            "main3": "linear-gradient(0deg, rgba(245, 245, 245, 0.1), rgba(245, 245, 245, 0.1)), #000000"
+            "primary": "linear-gradient(0deg, rgba(245, 245, 245, 0.3), rgba(245, 245, 245, 0.3)), #000000",
+            "secondary": "linear-gradient(0deg, rgba(245, 245, 245, 0.1), rgba(245, 245, 245, 0.1)), #000000",
+            "third": "linear-gradient(0deg, rgba(245, 245, 245, 0.1), rgba(245, 245, 245, 0.1)), #000000"
         },
         "public": {
             "primary": "#1C68F3",

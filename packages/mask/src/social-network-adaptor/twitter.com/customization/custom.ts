@@ -158,7 +158,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             variant: 'flat',
                         },
                         style: {
-                            background: theme.palette.grey.main3,
+                            background: theme.palette.grey.primary,
                             color: theme.palette.text.primary,
                             ['&:hover']: {
                                 backgroundColor: theme.palette.background.paper,
@@ -186,7 +186,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                                     .toRgbString()}`,
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                background: theme.palette.grey.main,
+                                background: theme.palette.grey.primary,
                                 opacity: 0.6,
                                 color: theme.palette.background.paper,
                             },
@@ -199,7 +199,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                         style: {
                             color: theme.palette.text.primary,
                             ['&:hover']: {
-                                background: theme.palette.grey.main3,
+                                background: theme.palette.grey.primary,
                             },
                             [`&.${buttonClasses.disabled}`]: {
                                 opacity: 0.4,
@@ -461,7 +461,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                         },
                         style: {
                             borderRadius: 99,
-                            background: theme.palette.grey.main3,
+                            background: theme.palette.grey.primary,
                             color: theme.palette.text.primary,
                             ['&:hover']: {
                                 backgroundColor: theme.palette.background.paper,
@@ -490,7 +490,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                                     .toRgbString()}`,
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                background: theme.palette.grey.main,
+                                background: theme.palette.grey.primary,
                                 opacity: 0.6,
                                 color: theme.palette.background.paper,
                             },
@@ -504,7 +504,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: theme.palette.text.primary,
                             borderRadius: 99,
                             ['&:hover']: {
-                                background: theme.palette.grey.main3,
+                                background: theme.palette.grey.primary,
                             },
                             [`&.${buttonClasses.disabled}`]: {
                                 opacity: 0.4,
