@@ -2,7 +2,9 @@ import { Component } from 'react'
 import { FindTrumanCard } from './FindTrumanCard'
 import { Typography, Button } from '@mui/material'
 
-export class LoadingFailCard extends Component<{ title: string; retry: () => void; isFullPluginDown?: boolean }> {
+export class LoadingFailCard extends Component<
+    React.PropsWithChildren<{ title: string; retry: () => void; isFullPluginDown?: boolean }>
+> {
     static getDerivedStateFromError(error: unknown) {
         return { error }
     }

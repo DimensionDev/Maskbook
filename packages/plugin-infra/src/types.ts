@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type { TypedMessage } from '@masknet/typed-message'
@@ -69,6 +69,7 @@ export namespace Plugin.Shared {
         personaSign(payload: PersonaSignRequest): Promise<PersonaSignResult>
         /** Sign a message with wallet */
         walletSign(message: string, address: string): Promise<string>
+        currentPersona: Subscription<PersonaIdentifier | undefined>
     }
     export interface Definition {
         /**
@@ -215,8 +216,8 @@ export namespace Plugin.Shared {
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedContext {
-        /** Get current persona */
-        currentPersona: Subscription<PersonaIdentifier | undefined>
+        lastRecognizedProfile: Subscription<IdentityResolved | undefined>
+        currentVisitingProfile: Subscription<IdentityResolved | undefined>
     }
     export interface Definition extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
@@ -646,6 +647,14 @@ export enum CurrentSNSNetwork {
     Minds = 4,
 }
 
+export interface IdentityResolved {
+    identifier: ProfileIdentifier
+    nickname?: string
+    avatar?: string
+    bio?: string
+    homepage?: string
+}
+
 /**
  * All integrated Plugin IDs
  */
@@ -684,20 +693,8 @@ export enum PluginId {
     FileService = 'com.maskbook.fileservice',
     CyberConnect = 'me.cyberconnect.app',
     GoPlusSecurity = 'io.gopluslabs.security',
+    CrossChainBridge = 'io.mask.cross-chain-bridge',
     // @masknet/scripts: insert-here
-}
-
-export interface Pagination {
-    /** The item size of each page. */
-    size?: number
-    /** The page index. */
-    page?: number
-}
-
-export interface Pageable<T> {
-    currentPage: number
-    hasNextPage: boolean
-    data: T[]
 }
 /**
  * This namespace is not related to the plugin authors

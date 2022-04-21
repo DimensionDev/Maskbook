@@ -13,9 +13,6 @@ const useStyles = makeStyles()((theme) => ({
         width: 120,
         overflow: 'hidden',
     },
-    loadingNftImg: {
-        marginTop: 20,
-    },
     loadingPlaceholder: {
         height: 160,
         width: 120,
@@ -45,6 +42,10 @@ interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
 }
+
+const assetPlayerFallbackImageDark = new URL('./nft_token_fallback_dark.png', import.meta.url)
+const assetPlayerFallbackImageLight = new URL('./nft_token_fallback.png', import.meta.url)
+
 export function NFTCardStyledAssetPlayer(props: Props) {
     const {
         chainId = ChainId.Mainnet,
@@ -67,9 +68,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     const { value: isImageToken } = useImageChecker(url || tokenDetailed?.info.imageURL || tokenDetailed?.info.mediaUrl)
 
     const fallbackImageURL =
-        theme.palette.mode === 'dark'
-            ? new URL('./nft_token_fallback_dark.png', import.meta.url)
-            : new URL('./nft_token_fallback.png', import.meta.url)
+        theme.palette.mode === 'dark' ? assetPlayerFallbackImageDark : assetPlayerFallbackImageLight
 
     return isImageToken || isNative ? (
         <div className={classes.imgWrapper}>
@@ -86,6 +85,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         </div>
     ) : (
         <AssetPlayer
+            showIframeFromInit
             erc721Token={{
                 chainId,
                 contractAddress,
@@ -102,7 +102,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
             // It would fail to render as loading too many(>200) iframe at once.
             renderTimeout={renderOrder ? 20000 * Math.floor(renderOrder / 100) : undefined}
             fallbackImage={fallbackImage ?? fallbackImageURL}
-            loadingIcon={<CircularProgress size={20} className={classes.loadingNftImg} />}
+            loadingIcon={<CircularProgress size={20} />}
             classes={{
                 iframe: classNames(classes.wrapper, classes.iframe),
                 errorPlaceholder: classes.wrapper,

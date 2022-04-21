@@ -140,7 +140,7 @@ const ReplaceTransaction = memo(() => {
         async (data: zod.infer<typeof schema>) => {
             try {
                 if (transaction?.payload) {
-                    const config = transaction.payload.params.map((param) => ({
+                    const config = transaction.payload.params!.map((param) => ({
                         ...param,
                         gas: toHex(new BigNumber(data.gas).toString()),
                         ...(is1559

@@ -9,7 +9,7 @@ import { Entry } from './components'
 import { META_KEY_2 } from '../constants'
 import { Exchange } from './hooks/Exchange'
 import type { FileInfo, DialogCloseCallback } from '../types'
-import { useCompositionContext } from '@masknet/plugin-infra'
+import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 
 interface Props {
     onClose: () => void

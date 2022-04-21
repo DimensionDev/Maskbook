@@ -1,5 +1,5 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
-import { AESKey, AESAlgorithmEnum, EC_Key, PayloadParseResult, EC_KeyCurveEnum, Signature } from '../payload'
+/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
+import { EC_Key, PayloadParseResult, EC_KeyCurveEnum, Signature } from '../payload'
 import { CryptoException, PayloadException } from '../types'
 import { Result, Ok, Some } from 'ts-results'
 import {
@@ -7,7 +7,7 @@ import {
     decodeTextF,
     decryptWithAES,
     assertIVLengthEq16,
-    importAESFromJWK,
+    importAES,
     importEC_Key,
     JSONParseF,
 } from '../utils'
@@ -114,15 +114,15 @@ async function decodePublicSharedAESKey(
     const publicSharedKey = await get_v38PublicSharedCryptoKey()
     if (publicSharedKey.err) return publicSharedKey
 
-    const import_AES_GCM_256 = CheckedError.withErr(importAESFromJWK.AES_GCM_256, CryptoException.InvalidCryptoKey)
+    const import_AES_GCM_256 = CheckedError.withErr(importAES, CryptoException.InvalidCryptoKey)
     const decrypt = CheckedError.withErr(decryptWithAES, CryptoException.InvalidCryptoKey)
 
-    const jwk_in_u8arr = await decrypt(AESAlgorithmEnum.A256GCM, publicSharedKey.val, iv.val, encryptedKey.val)
+    const jwk_in_u8arr = await decrypt(publicSharedKey.val, iv.val, encryptedKey.val)
     const jwk_in_text = await andThenAsync(jwk_in_u8arr, decodeTextCrypto)
     const jwk = await andThenAsync(jwk_in_text, JSONParse)
     const aes = await andThenAsync(jwk, import_AES_GCM_256)
 
-    return aes.map<AESKey>((key) => ({ algr: AESAlgorithmEnum.A256GCM, key }))
+    return aes
 }
 
 async function decodeECDHPublicKey(compressedPublic: string): Promise<OptionalResult<EC_Key, CryptoException>> {

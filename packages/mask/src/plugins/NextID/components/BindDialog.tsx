@@ -6,13 +6,14 @@ import type { Persona } from '../../../database'
 import type { Binding } from '@masknet/shared-base'
 import { NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { BindPanelUI } from './BindPanelUI'
-import { useAccount } from '@masknet/plugin-infra'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import { useCustomSnackbar } from '@masknet/theme'
 import { delay } from '@dimensiondev/kit'
 import { useBindPayload } from '../hooks/useBindPayload'
 import { usePersonaSign } from '../hooks/usePersonaSign'
 import { useWalletSign } from '../hooks/useWalletSign'
 import { NextIDProof } from '@masknet/web3-providers'
+import { MaskMessages } from '../../../../shared'
 
 interface BindDialogProps {
     open: boolean
@@ -52,6 +53,9 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBou
                 variant: 'success',
                 message: t.notify_wallet_sign_request_success(),
             })
+
+            MaskMessages.events.ownProofChanged.sendToAll()
+
             await delay(2000)
             onBound()
             onClose()

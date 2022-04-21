@@ -21,7 +21,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
-      - run: npx prettier@2.6.0 --check .
+      - run: npx prettier@2.6.2 --check .
   markdownlint:
     runs-on: ubuntu-20.04
     steps:
@@ -55,7 +55,7 @@ jobs:
       - uses: pnpm/action-setup@v2.2.1
       - uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: "17"
           cache: "pnpm"
       - run: pnpm install
       - run: npx gulp locale-kit
@@ -72,7 +72,7 @@ jobs:
       - uses: pnpm/action-setup@v2.2.1
       - uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: "17"
           cache: "pnpm"
       - run: pnpm install
       - run: npx gulp codegen
@@ -87,7 +87,7 @@ jobs:
       - uses: pnpm/action-setup@v2.2.1
       - uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: "17"
           cache: "pnpm"
       - run: pnpm install
       - name: Run Eslint

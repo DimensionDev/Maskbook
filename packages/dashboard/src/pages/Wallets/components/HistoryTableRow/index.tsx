@@ -12,7 +12,7 @@ import {
 import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
 import classNames from 'classnames'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     type: {

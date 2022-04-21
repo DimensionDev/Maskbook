@@ -1,6 +1,6 @@
 import { lazy } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
-import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
+import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { PopupRoutes } from '@masknet/shared-base'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme'
 import '../../social-network-adaptor/browser-action'

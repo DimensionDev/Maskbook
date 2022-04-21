@@ -86,7 +86,6 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                             lineHeight="14px"
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
-                            title={t.more_details()}
                             rel="noopener noreferrer">
                             <ExternalLink color={theme.palette.text.strong} size={14} />
                         </Link>
@@ -106,7 +105,9 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                             <Stack direction="row" alignItems="center" spacing={0.5}>
                                 {DefineMapping[SecurityMessageLevel.High].icon(14)}
                                 <Typography component="span">
-                                    {t.risky_factors({ quantity: riskyFactors.toString() })}
+                                    {riskyFactors > 1
+                                        ? t.risky_factors({ quantity: riskyFactors.toString() })
+                                        : t.risky_factor({ quantity: riskyFactors.toString() })}
                                 </Typography>
                             </Stack>
                         )}
@@ -114,7 +115,9 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                             <Stack direction="row" alignItems="center" spacing={0.5}>
                                 {DefineMapping[SecurityMessageLevel.Medium].icon(14)}
                                 <Typography component="span">
-                                    {t.attention_factors({ quantity: attentionFactors.toString() })}
+                                    {attentionFactors > 1
+                                        ? t.attention_factors({ quantity: attentionFactors.toString() })
+                                        : t.attention_factor({ quantity: attentionFactors.toString() })}
                                 </Typography>
                             </Stack>
                         )}

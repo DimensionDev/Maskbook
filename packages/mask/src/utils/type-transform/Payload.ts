@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type { SocialNetwork } from '../../social-network'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { i18n } from '../../../shared-ui/locales_legacy'

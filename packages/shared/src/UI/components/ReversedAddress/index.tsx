@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 interface ReverseAddressProps {
     address: string

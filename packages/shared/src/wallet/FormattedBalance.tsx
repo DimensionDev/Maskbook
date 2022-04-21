@@ -29,9 +29,9 @@ export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
     if (symbol)
         return (
             <Fragment>
-                <span className={classes.balance}>{formatted}</span>
+                <span className={classes.balance}>{String(formatted)}</span>
                 <span className={classes?.symbol}>{symbol}</span>
             </Fragment>
         )
-    return <Fragment>{formatted}</Fragment>
+    return <Fragment>{String(formatted)}</Fragment>
 }

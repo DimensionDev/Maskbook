@@ -1,5 +1,5 @@
 import { TokenIcon } from '@masknet/shared'
-import { DarkColor } from '@masknet/theme/constants'
+import { DarkColor } from '@masknet/theme/base'
 import { formatBalance, useChainId } from '@masknet/web3-shared-evm'
 import { Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'

@@ -1,11 +1,11 @@
 import {
-    useCurrentWeb3NetworkPluginID,
     useActivatedPluginSNSAdaptor_Web3Supported,
     useActivatedPluginsSNSAdaptor,
     Plugin,
     PluginI18NFieldRender,
     usePluginI18NField,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/content-script'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Result } from 'ts-results'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'

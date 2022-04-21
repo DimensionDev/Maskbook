@@ -1,7 +1,7 @@
 import { encodeArrayBuffer, decodeText, decodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 import type { AESCryptoKey } from '@masknet/shared-base'
 
-// eslint-disable-next-line @dimensiondev/unicode-specific-set
+// eslint-disable-next-line @dimensiondev/unicode/specific-set
 // * Payload format: 🎶2/4|encrypted_comment:||
 export async function encryptComment(postIV: Uint8Array, postContent: string, comment: string): Promise<string> {
     const key = await getCommentKey(postIV, postContent)

@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
+import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import VCentDialog from './TweetDialog'
 import { base } from '../base'
 

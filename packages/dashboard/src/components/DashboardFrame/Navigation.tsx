@@ -32,7 +32,7 @@ import {
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
+import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
     const navigate = useNavigate()

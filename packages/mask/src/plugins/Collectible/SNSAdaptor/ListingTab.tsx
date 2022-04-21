@@ -7,9 +7,9 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
-import { LoadingTable } from './LoadingTable'
 import { NonFungibleAssetProvider, useAccount } from '@masknet/web3-shared-evm'
 import { isOne, isZero } from '@masknet/web3-shared-base'
+import { LoadingAnimation } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -69,7 +69,12 @@ export function ListingTab() {
         })
     }, [orders, asset.value])
 
-    if (asset.loading) return <LoadingTable />
+    if (asset.loading || orders.loading)
+        return (
+            <div className={classes.empty}>
+                <LoadingAnimation />
+            </div>
+        )
     if (!asset.value || asset.error || !dataSource.length)
         return (
             <>

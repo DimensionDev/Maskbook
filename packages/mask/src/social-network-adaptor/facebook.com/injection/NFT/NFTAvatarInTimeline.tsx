@@ -2,7 +2,6 @@ import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/h
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { getInjectNodeInfo } from '../../utils/avatar'
 import { searchFaceBookPostAvatarOnMobileSelector, searchFaceBookPostAvatarSelector } from '../../utils/selector'
-import { Flags } from '../../../../../shared'
 import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
 import { isMobileFacebook } from '../../utils/isMobile'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
@@ -71,7 +70,7 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal
 
                 if (!info) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
+                const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
                 proxy.realCurrent = info.element
 
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })

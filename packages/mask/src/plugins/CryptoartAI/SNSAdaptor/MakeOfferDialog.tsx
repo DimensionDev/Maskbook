@@ -131,7 +131,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     if (placeBidState.type === TransactionStateType.HASH) onClose()
                     if (placeBidState.type === TransactionStateType.CONFIRMED) {

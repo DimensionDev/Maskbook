@@ -20,7 +20,7 @@ let polyfillVersion = '__'
     const lockfile = await readFile(lockfilePath)
     const hash = createHash('sha256')
     hash.update(lockfile)
-    polyfillVersion = 'v4' + hash.digest('hex')
+    polyfillVersion = 'v5' + hash.digest('hex')
 }
 
 const versionFilePath = fileURLToPath(new URL('./dist/version.txt', import.meta.url))
@@ -31,7 +31,7 @@ await builder({
     targets: [
         'iOS >= 14.0',
         // Android
-        'Firefox >= 91',
+        'Firefox >= 99',
         'last 2 Chrome versions',
         'last 2 Firefox versions',
     ],
@@ -39,6 +39,7 @@ await builder({
         comment: { size: false, modules: true },
     },
     filename: fileURLToPath(new URL('./dist/ecmascript.js', import.meta.url)),
+    blacklist: undefined,
 })
 
 process.chdir(fileURLToPath(new URL('./dist/', import.meta.url)))
@@ -52,18 +53,17 @@ for (const optionsObj of options) {
     await Promise.all(optionsObj.output.map(bundle.write))
 }
 
-const elliptic = await readFile(fileURLToPath(new URL('./dist/internal_elliptic.js', import.meta.url)), 'utf-8')
-const liner = await readFile(require.resolve('webcrypto-liner/build/webcrypto-liner.shim.min.mjs'), 'utf-8')
-await writeFile(
-    fileURLToPath(new URL('./dist/secp256k1.js', import.meta.url)),
-    `${elliptic};
-${liner};`,
-)
+{
+    const polyfill = fileURLToPath(new URL('./dist/ecmascript.js', import.meta.url))
+    const ecmascript = await readFile(polyfill, 'utf-8')
+    const regenerator = await readFile(fileURLToPath(new URL('./dist/regenerator.js', import.meta.url)), 'utf-8')
+
+    await writeFile(polyfill, `${ecmascript};${regenerator};`)
+}
 
 await normalize(new URL('./dist/dom.js', import.meta.url))
 await normalize(new URL('./dist/ecmascript.js', import.meta.url))
 await normalize(new URL('./dist/intl.js', import.meta.url))
-await normalize(new URL('./dist/secp256k1.js', import.meta.url))
 await normalize(new URL('./dist/worker.js', import.meta.url))
 
 await writeFile(versionFilePath, polyfillVersion)
@@ -76,7 +76,7 @@ await writeFile(versionFilePath, polyfillVersion)
  * By adding a ";null;" in the end to fix this problem.
  *
  * This function also wraps the polyfill in an IIFE to avoid variable leaking
- * @param {string} fileName
+ * @param {string | URL} fileName
  */
 async function normalize(fileName) {
     const file = await readFile(fileName, 'utf-8')

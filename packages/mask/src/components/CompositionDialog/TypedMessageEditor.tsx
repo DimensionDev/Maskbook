@@ -76,7 +76,7 @@ export const TypedMessageEditor = memo(
             [setMessage],
         )
         const deleteMetaID = useCallback(
-            (meta) => {
+            (meta: string) => {
                 setMessage(editTypedMessageMeta(currentValue.current, (map) => map.delete(meta)))
             },
             [setMessage],

@@ -1,14 +1,15 @@
 {
   "name": "@masknet/plugin-wallet",
   "private": true,
-  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js"
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
     },
     "./components": {
-      "import": "./dist/components.js"
+      "webpack": "./src/components.ts",
+      "default": "./dist/components.js"
     }
   },
   "typesVersions": {
@@ -25,6 +26,6 @@
     "@masknet/web3-shared-evm": "workspace:*",
     "bignumber.js": "^9.0.2",
     "react-use": "^17.3.2",
-    "web3-core-helpers": "1.5.2"
+    "web3-core-helpers": "1.7.3"
   }
 }

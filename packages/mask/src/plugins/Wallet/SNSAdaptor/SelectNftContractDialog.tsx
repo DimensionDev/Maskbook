@@ -103,6 +103,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     contractName: {
         marginBottom: 20,
+        paddingRight: 30,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     balance: {
         position: 'absolute',

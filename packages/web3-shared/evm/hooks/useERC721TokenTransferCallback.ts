@@ -14,10 +14,10 @@ export function useERC721TokenTransferCallback(address?: string) {
 
     const transferCallback = useCallback(
         async (tokenId?: string, recipient?: string, gasConfig?: GasConfig) => {
+            setTransferState({
+                type: TransactionStateType.UNKNOWN,
+            })
             if (!account || !recipient || !tokenId || !erc721Contract) {
-                setTransferState({
-                    type: TransactionStateType.UNKNOWN,
-                })
                 return
             }
 

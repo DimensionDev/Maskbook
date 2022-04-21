@@ -49,7 +49,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
 }))
 
 export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly [number, (next: number) => void] }) {
-    const { origin, onNext, onChange, onClose, SelectMenuProps, state } = props
+    const { origin, onNext, onChange, onClose, state } = props
     const { t } = useI18N()
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const chainId = useChainId()
@@ -63,15 +63,7 @@ export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly
                         <span>{t('plugin_red_packet_erc20_tab_title')}</span>
                     </div>
                 ),
-                children: (
-                    <RedPacketERC20Form
-                        origin={origin}
-                        onClose={onClose}
-                        onNext={onNext}
-                        onChange={onChange}
-                        SelectMenuProps={SelectMenuProps}
-                    />
-                ),
+                children: <RedPacketERC20Form origin={origin} onClose={onClose} onNext={onNext} onChange={onChange} />,
                 sx: { p: 0 },
             },
             {

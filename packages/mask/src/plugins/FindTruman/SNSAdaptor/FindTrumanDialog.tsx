@@ -9,7 +9,7 @@ import ParticipatePanel from './ParticipatePanel'
 import { useContext } from 'react'
 import type { FindTrumanI18nFunction } from '../types'
 import { FindTrumanContext } from '../context'
-import { useAccount } from '@masknet/plugin-infra'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import { useConst } from './hooks/useConst'
 import IntroductionPanel from './IntroductionPanel'
 

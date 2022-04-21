@@ -1,4 +1,4 @@
-import { Plugin, PluginId } from '@masknet/plugin-infra'
+import { type Plugin, PluginId } from '@masknet/plugin-infra'
 import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {

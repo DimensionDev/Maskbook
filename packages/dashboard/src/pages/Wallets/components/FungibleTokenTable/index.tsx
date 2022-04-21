@@ -19,7 +19,7 @@ import {
     useAccount,
     NetworkPluginID,
     useCurrentWeb3NetworkPluginID,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
