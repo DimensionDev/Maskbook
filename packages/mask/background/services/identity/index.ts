@@ -27,6 +27,7 @@ export {
     mobile_queryProfileRecordFromIndexedDB,
     hasLocalKey,
     queryProfilesInformation,
+    queryOwnedProfilesInformation,
 } from './profile/query'
 export {
     updateProfileInfo,

@@ -154,7 +154,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return result?.map(profileFormatter)
     },
     profile_queryMyProfiles: async ({ network }) => {
-        const result = await Services.Identity.queryMyProfiles(network)
+        const result = await Services.Identity.mobile_queryMyProfiles(network)
 
         return result?.map(profileFormatter)
     },

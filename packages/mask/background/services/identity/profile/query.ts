@@ -1,5 +1,11 @@
 import type { ProfileIdentifier, ProfileInformation } from '@masknet/shared-base'
-import { queryProfilesDB } from '../../../database/persona/db'
+import { uniqBy } from 'lodash-unified'
+import {
+    createPersonaDBReadonlyAccess,
+    ProfileRecord,
+    queryPersonasDB,
+    queryProfilesDB,
+} from '../../../database/persona/db'
 import { hasLocalKeyOf } from '../../../database/persona/helper'
 import { queryProfilesDB as queryProfilesFromIndexedDB } from '../../../database/persona/web'
 import { toProfileInformation } from '../../__utils__/convert'
@@ -38,4 +44,19 @@ export async function queryProfilesInformation(identifiers: ProfileIdentifier[])
 /** @deprecated */
 export async function hasLocalKey(identifier: ProfileIdentifier) {
     return hasLocalKeyOf(identifier)
+}
+
+export async function queryOwnedProfilesInformation(network?: string): Promise<ProfileInformation[]> {
+    let profiles: ProfileRecord[]
+    await createPersonaDBReadonlyAccess(async (t) => {
+        const personas = (await queryPersonasDB({ hasPrivateKey: true }, t)).sort((a, b) =>
+            a.updatedAt > b.updatedAt ? 1 : -1,
+        )
+        const ids = uniqBy(
+            personas.flatMap((x) => [...x.linkedProfiles.keys()]),
+            (x) => x.toText(),
+        )
+        profiles = await queryProfilesDB({ identifiers: ids, network }, t)
+    })
+    return toProfileInformation(profiles!.filter((x) => x.identifier.network === network))
 }

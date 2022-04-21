@@ -1,20 +1,7 @@
 import type { Profile, Persona } from './types'
-import {
-    ProfileRecord,
-    queryProfilesDB,
-    PersonaRecord,
-    queryProfileDB,
-    queryPersonaDB,
-    queryPersonasDB,
-} from '../../../background/database/persona/db'
+import { ProfileRecord, PersonaRecord, queryProfileDB, queryPersonaDB } from '../../../background/database/persona/db'
 import { queryAvatarsDataURL } from '../../../background/database/avatar-cache/avatar'
-import * as bip39 from 'bip39'
 import { ProfileIdentifier, type PersonaIdentifier, IdentifierMap } from '@masknet/shared-base'
-import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
-import {
-    deriveLocalKeyFromECDHKey,
-    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
-} from '../../../background/services/identity/persona/utils'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -75,42 +62,6 @@ export async function queryPersona(identifier: PersonaIdentifier): Promise<Perso
     }
 }
 
-/**
- * Select a set of Profiles
- */
-export async function queryProfilesWithQuery(query: Parameters<typeof queryProfilesDB>[0]): Promise<Profile[]> {
-    const _ = await queryProfilesDB(query)
-    return Promise.all(_.map(profileRecordToProfile))
-}
-
-/**
- * Select a set of Personas
- */
-export async function queryPersonasWithQuery(query?: Parameters<typeof queryPersonasDB>[0]): Promise<Persona[]> {
-    const _ = await queryPersonasDB(query)
-    return _.map(personaRecordToPersona)
-}
-
 export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
-}
-
-export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: string | undefined, password: string) {
-    const personas = await queryPersonasWithQuery({ nameContains: nickname })
-    if (personas.length > 0) throw new Error('Nickname already exists')
-
-    const verify = bip39.validateMnemonic(mnemonicWord)
-    if (!verify) throw new Error('Verify error')
-
-    const { key, mnemonicRecord: mnemonic } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWord, password)
-    const { privateKey, publicKey } = key
-    const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
-    return createPersonaByJsonWebKey({
-        privateKey,
-        publicKey,
-        localKey,
-        mnemonic,
-        nickname,
-        uninitialized: false,
-    })
 }

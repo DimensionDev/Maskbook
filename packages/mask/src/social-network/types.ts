@@ -7,13 +7,13 @@ import type {
     PersonaIdentifier,
     PostIdentifier,
     ProfileIdentifier,
+    ProfileInformation,
 } from '@masknet/shared-base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import type { SharedComponentOverwrite } from '@masknet/shared'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { Subscription } from 'use-subscription'
-import type { Profile } from '../database'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
 
 // Don't define values in namespaces
@@ -90,7 +90,7 @@ export namespace SocialNetworkUI {
     /** The init() should setup watcher for those states */
     export interface AutonomousState {
         /** My profiles at current network */
-        readonly profiles: ValueRef<readonly Profile[]>
+        readonly profiles: ValueRef<readonly ProfileInformation[]>
     }
     export interface RuntimePermission {
         /** This function should check if Mask has the permission to the site */
