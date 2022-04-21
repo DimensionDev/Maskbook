@@ -4,7 +4,7 @@ import { useCopyToClipboard } from 'react-use'
 import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { useProviderDescriptor, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import { isSameAddress, useWallets } from '@masknet/web3-shared-evm'
+import { isSameAddress, useProviderType, useWallets } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -90,6 +90,7 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
     const [, copyToClipboard] = useCopyToClipboard()
     const { value: domain } = useReverseAddress(address)
     const providerDescriptor = useProviderDescriptor()
+    const providerType = useProviderType()
     const { Utils } = useWeb3State() ?? {}
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
@@ -103,7 +104,7 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
         t('copy_success_of_wallet_addr'),
     )
     const walletName = useWallets().find((x) => isSameAddress(x.address, address))?.name
-
+    console.log(useWallets(), 'debug')
     const getActionRender = () => {
         if (!canDelete && !isDefault)
             return (
