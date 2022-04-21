@@ -8,9 +8,8 @@ import { isValidYearnChain, splitToPair } from '../utils'
 import { flatten, compact, orderBy, sortedUniqBy } from 'lodash-unified'
 import type Web3 from 'web3'
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers'
-import type { ChainIdYearn } from '../types'
 
-export function useYearnTokens(chainId: ChainId, web3: Web3): chainId is ChainIdYearn {
+export function useYearnTokens(chainId: ChainId, web3: Web3) {
     const {
         value: yfiTokens,
         loading,
@@ -42,15 +41,15 @@ export function useYearnTokens(chainId: ChainId, web3: Web3): chainId is ChainId
 
     const { value: detailedYFITokens, loading: loadingTokenDetails } = useFungibleTokensDetailed(
         compact(flatten(yfiTokens ?? [])).map((address: string) => ({ address, type: EthereumTokenType.ERC20 })) ?? [],
-        chainId
+        chainId,
     )
 
     return useMemo(
         () => ({
             tokenPairs: splitToPair(detailedYFITokens),
             loading: loading || loadingTokenDetails,
-            error,
-            retry,
+            error: error,
+            retry: retry,
         }),
         [chainId, detailedYFITokens, loadingTokenDetails],
     )
