@@ -5,6 +5,7 @@ import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 import { isSameAddress, useWallets } from '@masknet/web3-shared-evm'
+import { useEffect, useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -91,6 +92,7 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
     const [, copyToClipboard] = useCopyToClipboard()
     const { value: domain } = useReverseAddress(address)
     const { Utils } = useWeb3State() ?? {}
+    const [wltName, setWltName] = useState<string>('')
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
             ev.stopPropagation()
@@ -102,7 +104,18 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
         undefined,
         t('copy_success_of_wallet_addr'),
     )
-    const walletName = useWallets().find((x) => isSameAddress(x.address, address))?.name
+    const wallets = useWallets()
+
+    useEffect(() => {
+        const name = wallets.find((x) => isSameAddress(x.address, address))?.name
+        const res =
+            domain && Utils?.formatDomainName
+                ? Utils.formatDomainName(domain)
+                : name !== undefined
+                ? name
+                : 'Wallet' + (index !== undefined ? index + 1 : 0)
+        setWltName(res as string)
+    }, [address, domain])
     const getActionRender = () => {
         if (!canDelete && !isDefault)
             return (
@@ -129,11 +142,7 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
         <div className={classes.currentAccount}>
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.accountName}>
-                        {domain && Utils?.formatDomainName
-                            ? Utils.formatDomainName(domain)
-                            : walletName ?? 'Wallet ' + (index !== undefined ? index + 1 : 0)}
-                    </Typography>
+                    <Typography className={classes.accountName}>{wltName}</Typography>
                     {isDefault && <Typography className={classes.defaultBadge}>Default</Typography>}
                 </div>
                 <div className={classes.infoRow}>

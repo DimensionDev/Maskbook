@@ -196,7 +196,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         const changed = cloneDeep(rawPatchData)
         changed.forEach((x: any) => (x.isDefault = 0))
         changed[idx].isDefault = 1
-        const defaultItem = cloneDeep(changed[idx])
+        const defaultItem = changed[idx]
         changed.splice(idx, 1)
         changed.sort(
             (a: BindingProof, b: BindingProof) =>
