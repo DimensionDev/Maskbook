@@ -5,7 +5,6 @@ import { pow10, ZERO } from '@masknet/web3-shared-base'
 import {
     ChainId,
     createContract,
-    FungibleTokenDetailed,
     getAaveConstants,
     TransactionEventType,
     TransactionState,

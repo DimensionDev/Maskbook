@@ -1,14 +1,16 @@
 import { useAsyncRetry } from 'react-use'
 
-import { ChainId, EthereumTokenType, useFungibleTokensDetailed } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, useFungibleTokensDetailed } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { VaultInterface, Yearn } from '@yfi/sdk'
 
 import { isValidYearnChain, splitToPair } from '../utils'
 import { flatten, compact, orderBy, sortedUniqBy } from 'lodash-unified'
 import type Web3 from 'web3'
+import { ExternalProvider, Web3Provider } from '@ethersproject/providers'
+import type { ChainIdYearn } from '../types'
 
-export function useYearnTokens(chainId: ChainId, web3: Web3) {
+export function useYearnTokens(chainId: ChainIdYearn, web3: Web3) {
     const {
         value: yfiTokens,
         loading,
@@ -19,14 +21,13 @@ export function useYearnTokens(chainId: ChainId, web3: Web3) {
             return []
         }
 
-        // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
+        const web3Provider = new Web3Provider(web3.currentProvider as ExternalProvider)
         const yearn = new Yearn(chainId, {
-            provider: web3.currentProvider,
+            provider: web3Provider,
         })
         await yearn.ready
 
-        // @ts-ignore: type is not assignable to parameter of type '1 | 250 | 1337 | 42161'
-        const vaultInterface = new VaultInterface(yearn, +chainId, yearn.context)
+        const vaultInterface = new VaultInterface(yearn, chainId, yearn.context)
 
         const allVaults = await vaultInterface.get()
         const currentVaults = sortedUniqBy(
