@@ -7,11 +7,13 @@ import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import Services from '../../../extension/service'
-import { BindingProof, ECKeyIdentifier, fromHex, toBase64 } from '@masknet/shared-base'
+import { BindingProof, fromHex, ProfileIdentifier, toBase64 } from '@masknet/shared-base'
 import type { Persona } from '../../../database'
 import type { NextIDAvatarMeta } from '../types'
 import { useI18N } from '../locales/i18n_generated'
 import { context } from '../context'
+import { PluginNFTAvatarRPC } from '../messages'
+import { RSS3_KEY_SNS } from '../constants'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -36,59 +38,83 @@ interface UploadAvatarDialogProps {
     onClose: () => void
 }
 
-async function personaSign(account: string, haveBindAccount: boolean, message: string, identifier: ECKeyIdentifier) {
-    try {
-        if (haveBindAccount) {
-            const result = await Services.Identity.generateSignResult(identifier, message)
-            return result.signature.signature
-        } else {
-            return context.walletSign(message, account)
-        }
-    } catch {
+type AvatarInfo = TwitterBaseAPI.AvatarInfo & { avatarId: string }
+
+async function saveToRSS3(info: NextIDAvatarMeta, account: string, identifier: ProfileIdentifier) {
+    const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
+        account,
+        info,
+        identifier.network,
+        RSS3_KEY_SNS.TWITTER,
+    ).catch((error) => {
+        return
+    })
+    if (!avatar) {
         return
     }
+}
+
+async function saveToNextID(info: NextIDAvatarMeta, persona?: Persona, proof?: BindingProof) {
+    if (!proof?.identity || !persona?.publicHexKey || !persona.identifier) return
+    const payload = await NextIDStorage.getPayload(persona.publicHexKey, proof?.platform, proof?.identity, info)
+    if (!payload.ok) {
+        return
+    }
+
+    const result = await Services.Identity.generateSignResult(persona.identifier, payload.val.signPayload)
+    if (!result) return
+
+    const response = await NextIDStorage.set(
+        payload.val.uuid,
+        persona.publicHexKey,
+        toBase64(fromHex(result.signature.signature)),
+        proof.platform,
+        proof.identity,
+        payload.val.createdAt,
+        info,
+    )
+    return response.ok
 }
 
 async function Save(
     account: string,
     isBindAccount: boolean,
     token: ERC721TokenDetailed,
-    avatarId: string,
-    data: TwitterBaseAPI.AvatarInfo,
+    data: AvatarInfo,
     persona: Persona,
     proof: BindingProof,
+    identifier: ProfileIdentifier,
 ) {
-    if (!data || !proof || !persona?.publicHexKey) return false
+    if (!data) return false
 
     const info: NextIDAvatarMeta = {
-        nickname: data?.nickname,
-        userId: data?.userId,
-        imageUrl: data?.imageUrl,
-        avatarId,
+        nickname: data.nickname,
+        userId: data.userId,
+        imageUrl: data.imageUrl,
+        avatarId: data.avatarId,
         address: token.contractDetailed.address,
         tokenId: token.tokenId,
     }
 
-    const response = await NextIDStorage.getPayload(persona.publicHexKey, proof?.platform, proof?.identity, info)
-    if (!response.ok) {
-        return false
+    if (isBindAccount) {
+        return saveToNextID(info, persona, proof)
     }
-
-    const sign = await personaSign(account, isBindAccount, response.val.signPayload, persona.identifier)
-    if (!sign) return false
-
-    const setResponse = await NextIDStorage.set(
-        response.val.uuid,
-        persona.publicHexKey,
-        toBase64(fromHex(sign)),
-        proof.platform,
-        proof.identity,
-        response.val.createdAt,
-        info,
-    )
-    return setResponse.ok
+    return saveToRSS3(info, account, identifier)
 }
 
+async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | undefined> {
+    try {
+        const media = await Twitter.uploadUserAvatar(userId, blob)
+        const data = await Twitter.updateProfileImage(userId, media.media_id_string)
+        if (!data) {
+            return
+        }
+        const avatarId = getAvatarId(data?.imageUrl ?? '')
+        return { ...data, avatarId }
+    } catch (err) {
+        return
+    }
+}
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { image, account, token, onClose, onBack, proof, isBindAccount = false } = props
     const { classes } = useStyles()
@@ -107,15 +133,21 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             if (!blob) return
             setDisabled(true)
 
-            const media = await Twitter.uploadUserAvatar(identifier.userId, blob)
-            const data = await Twitter.updateProfileImage(identifier.userId, media.media_id_string)
-            if (!data) {
+            const avatarData = await uploadAvatar(blob, identifier.userId)
+            if (!avatarData) {
                 setDisabled(false)
                 return
             }
-            const avatarId = getAvatarId(data?.imageUrl ?? '')
 
-            const response = await Save(account, isBindAccount, token, avatarId, data, currentConnectedPersona, proof)
+            const response = await Save(
+                account,
+                isBindAccount,
+                token,
+                avatarData,
+                currentConnectedPersona,
+                proof,
+                identifier,
+            )
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
                 setDisabled(false)
