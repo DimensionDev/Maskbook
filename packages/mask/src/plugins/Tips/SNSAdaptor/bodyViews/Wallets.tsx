@@ -46,7 +46,7 @@ const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: W
                         onDelete={() => deleteWallet(x)}
                         canDelete
                         key={idx}
-                        index={idx}
+                        index={x.rawIdx}
                         address={x.identity}
                         isDefault={!!x.isDefault}
                     />

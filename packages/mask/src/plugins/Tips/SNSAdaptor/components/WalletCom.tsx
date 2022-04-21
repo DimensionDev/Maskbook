@@ -129,7 +129,9 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
                     <Typography className={classes.accountName}>
-                        {domain && Utils?.formatDomainName ? Utils.formatDomainName(domain) : walletName ?? 'Wallet'}
+                        {domain && Utils?.formatDomainName
+                            ? Utils.formatDomainName(domain)
+                            : walletName ?? 'Wallet ' + index}
                     </Typography>
                     {isDefault && <Typography className={classes.defaultBadge}>Default</Typography>}
                 </div>

@@ -78,6 +78,7 @@ enum BodyViewSteps {
 export interface WalletProof extends BindingProof {
     isDefault: number
     isPublic: number
+    rawIdx: number
 }
 export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { t } = useI18N()
@@ -122,9 +123,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             const kvCache = (kv.val as NextIdStorageInfo).proofs.find(
                 (x) => x.identity === currentPersona?.publicHexKey,
             )
-            const result = walletsList.reduce((res: WalletProof[], x) => {
+            const result = walletsList.reduce((res: WalletProof[], x, idx) => {
                 ;(x as WalletProof).isDefault = 0
                 ;(x as WalletProof).isPublic = 1
+                ;(x as WalletProof).rawIdx = idx
                 const temp = (kvCache?.content[PluginId.Tip] as WalletProof[]).filter((i) =>
                     isSameAddress(x.identity, i.identity),
                 )
@@ -148,6 +150,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         ;(walletsList as WalletProof[]).forEach((x, idx) => {
             x.isPublic = 1
             x.isDefault = 0
+            x.rawIdx = idx
             if (idx === 0) {
                 x.isDefault = 1
                 return
