@@ -13,6 +13,7 @@ export enum ProtocolType {
     YEARN = 2,
 }
 
+/** Collection of ChainId supported by Yearn network */
 export type ChainIdYearn = ChainId.Mainnet | ChainId.Fantom | ChainId.Arbitrum
 
 export type FungibleTokenPair = [FungibleTokenDetailed, FungibleTokenDetailed]
