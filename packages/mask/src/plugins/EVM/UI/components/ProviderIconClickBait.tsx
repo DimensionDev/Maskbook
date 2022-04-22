@@ -83,7 +83,7 @@ export function ProviderIconClickBait({
         onClick?.(network, provider)
     }, [network, provider, injectedEthereumProviderType, injectedCoin98ProviderType, onClick])
 
-    // hide injected provider in dashboard
+    // hide injected provider on dashboard
     if (isInjectedProvider(providerType) && isDashboardPage()) return null
 
     // hide fortmatic for some networks because of incomplete supporting
@@ -92,6 +92,9 @@ export function ProviderIconClickBait({
 
     // hide coin98
     if (providerType === ProviderType.Coin98) return null
+
+    // hide fortmatic on dashboard
+    if (providerType === ProviderType.Fortmatic && isDashboardPage()) return null
 
     // coinbase and mathwallet are blocked by CSP
     if ([ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) return null
