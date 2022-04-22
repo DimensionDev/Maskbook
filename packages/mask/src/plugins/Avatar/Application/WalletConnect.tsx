@@ -7,6 +7,7 @@ import { ApplicationIcon } from '../assets/application'
 import { WalletIcon } from '../assets/wallet'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N } from '../locales/i18n_generated'
+import type { HTMLProps } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -74,7 +75,7 @@ export function NFTWalletConnect(props: NFTWalletConnectProps) {
                     <LaunchIcon fontSize="small" />
                 </Link>
             </Box>
-            <Rectangle classes={{ root: classes.rectangle }} />
+            <Rectangle className={classes.rectangle} />
             <Box className={classes.button}>
                 <Button
                     onClick={openSelectProviderDialog}
@@ -88,19 +89,18 @@ export function NFTWalletConnect(props: NFTWalletConnectProps) {
 }
 
 const useRectangleStyles = makeStyles()(() => ({
-    root: {},
     rectangle: {
         height: 8,
         background: 'rgba(255, 255, 255, 0.5)',
         borderRadius: 8,
     },
 }))
-interface RectangleProps extends withClasses<'root'> {}
+interface RectangleProps extends HTMLProps<HTMLDivElement> {}
 
 export function Rectangle(props: RectangleProps) {
-    const classes = useStylesExtends(useRectangleStyles(), props)
+    const { classes } = useRectangleStyles()
     return (
-        <div className={classes.root}>
+        <div {...props}>
             <div className={classes.rectangle} style={{ width: 103 }} />
             <div className={classes.rectangle} style={{ width: 68, marginTop: 4 }} />
             <div className={classes.rectangle} style={{ width: 48, marginTop: 4 }} />

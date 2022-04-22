@@ -9,7 +9,7 @@ import {
     useImageChecker,
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
-import { uniqBy } from 'lodash-unified'
+import { range, uniqBy } from 'lodash-unified'
 import { useCallback, useState } from 'react'
 import { useI18N } from '../locales'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
@@ -91,13 +91,11 @@ export function NFTListPage(props: NFTListPageProps) {
         onSelect?.(token)
     }
 
-    const LoadStatus = Array.from({ length: 8 })
-        .fill(0)
-        .map((_, i) => (
-            <div key={i} className={classes.skeletonBox}>
-                <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
-            </div>
-        ))
+    const LoadStatus = range(8).map((i) => (
+        <div key={i} className={classes.skeletonBox}>
+            <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
+        </div>
+    ))
     const Retry = (
         <Box className={classes.error}>
             <Typography color="textSecondary">{t.no_collectible_found()}</Typography>
@@ -159,7 +157,7 @@ export function NFTListPagePolygon(props: NFTListPageProps) {
     const onAddClick = useCallback(
         (token: ERC721TokenDetailed) =>
             setTokens_((tokens) => uniqBy([token, ...tokens], (x) => x.contractDetailed.address && x.tokenId)),
-        [tokens_],
+        [],
     )
 
     const AddCollectible = (

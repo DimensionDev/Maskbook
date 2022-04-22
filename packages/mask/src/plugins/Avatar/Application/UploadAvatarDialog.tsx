@@ -6,7 +6,6 @@ import { NextIDStorage, Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
-import Services from '../../../extension/service'
 import { BindingProof, fromHex, ProfileIdentifier, toBase64 } from '@masknet/shared-base'
 import type { Persona } from '../../../database'
 import type { NextIDAvatarMeta } from '../types'
@@ -64,7 +63,7 @@ async function saveToNextID(
     if (!payload.ok) {
         return
     }
-    const result = await Services.Identity.generateSignResult(persona.identifier, payload.val.signPayload)
+    const result = await context.personaSign({ message: payload.val.signPayload, method: 'eth' })
     if (!result) return
     const response = await NextIDStorage.set(
         payload.val.uuid,

@@ -1,4 +1,3 @@
-import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { NFTListDialog } from './NFTListDialog'
 import { InjectedDialog } from '@masknet/shared'
@@ -10,23 +9,18 @@ import { DialogContent } from '@mui/material'
 import { useI18N } from '../locales/i18n_generated'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 
-const useStyles = makeStyles()((theme) => ({
-    root: {},
-}))
-
 enum CreateNFTAvatarStep {
     Persona = 'persona',
     NFTList = 'NFTList',
     UploadAvatar = 'UploadAvatar',
 }
 
-interface NFTAvatarsDialogProps extends withClasses<never> {
+interface NFTAvatarsDialogProps {
     open: boolean
     onClose: () => void
 }
 
 export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
-    const { classes } = useStyles()
     const [step, setStep] = useState(CreateNFTAvatarStep.Persona)
     const [wallets, setWallets] = useState<BindingProof[]>()
     const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()

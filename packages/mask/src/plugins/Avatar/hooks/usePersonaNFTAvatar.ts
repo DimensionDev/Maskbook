@@ -2,7 +2,6 @@ import { useAsyncRetry } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { RSS3_KEY_SNS } from '../constants'
 import { PluginNFTAvatarRPC } from '../messages'
-import type { NextIDAvatarMeta } from '../types'
 import { getNFTAvatarByUserId } from '../utils'
 
 export function usePersonaNFTAvatar(userId: string, avatarId: string, snsKey: RSS3_KEY_SNS) {
@@ -17,11 +16,7 @@ export function usePersonaNFTAvatar(userId: string, avatarId: string, snsKey: RS
         )
 
         if (!avatarMeta) return
-        const info: NextIDAvatarMeta = {
-            ...avatarMeta,
-            imageUrl: avatarMeta.imageUrl ?? '',
-            nickname: avatarMeta.nickname ?? '',
-        }
-        return info
+
+        return { ...avatarMeta, imageUrl: '', nickname: '' }
     }, [userId])
 }
