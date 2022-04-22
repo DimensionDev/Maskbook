@@ -33,7 +33,7 @@ export async function runCreateERC20PairFarm(
 
         const rewardTokenDecimals = rewardToken.decimals
         const totalFarmRewardStr = roundValue(totalFarmReward, rewardTokenDecimals).toString()
-        const dailyFarmRewardStr = roundValue(totalFarmReward, rewardTokenDecimals).toString()
+        const dailyFarmRewardStr = roundValue(dailyFarmReward, rewardTokenDecimals).toString()
         const totalFarmRewardUint128 = parseUnits(totalFarmRewardStr, rewardTokenDecimals)
 
         const config = {
