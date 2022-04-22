@@ -921,6 +921,7 @@ importers:
       bignumber.js: ^9.0.2
       clsx: ^1.1.1
       react-use: ^17.3.2
+      urlcat: ^2.0.4
       use-subscription: ^1.6.0
       web3: 1.7.3
     dependencies:
@@ -940,6 +941,7 @@ importers:
       bignumber.js: 9.0.2
       clsx: 1.1.1
       react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
+      urlcat: 2.0.4
       use-subscription: 1.6.0_react@18.0.0
       web3: 1.7.3
 

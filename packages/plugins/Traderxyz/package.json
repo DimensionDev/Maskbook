@@ -25,6 +25,7 @@
         "bignumber.js": "^9.0.2",
         "clsx": "^1.1.1",
         "react-use": "^17.3.2",
+        "urlcat": "^2.0.4",
         "use-subscription": "^1.6.0",
         "web3": "1.7.3"
     }

@@ -1,11 +1,13 @@
-import { Box, Button, Chip, Grid, Typography, useTheme } from '@mui/material'
+import { Box, Chip, Grid, Typography, useTheme } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useI18N } from '../locales/i18n_generated'
-import { usePluginWrapper, usePostInfo } from '@masknet/plugin-infra/content-script'
+import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { useAccount, useChainId, useGasLimit, useGasPrice } from '@masknet/web3-shared-evm'
 import { getTraderApi } from '../apis/nftswap'
 import type { TradeMetaData, nftData } from '../types'
 import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
+import { ActionButtonPromise } from '../../../../mask/src/extension/options-page/DashboardComponents/ActionButton'
+import { useCallback, useMemo } from 'react'
 
 const useStyles = makeStyles()((theme, props) => ({
     actions: {
@@ -122,36 +124,7 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
     const gasLimit = useGasLimit()
     const gasPrice = useGasPrice()
 
-    const p = usePostInfo()
-    // const l = usePostLink()
-
-    const sharePost = () => {
-        // console.log('usePostInfo=', p)
-        // console.log('usePostLink=', l)
-        // console.log('postBy=', p?.url.getCurrentValue())
-        // showSnackbar('Order is Signed', { variant: 'success' })
-        // // activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.('text' + l, {
-        // //     recover: true,
-        // // })
-        // const shareLink = activatedSocialNetworkUI.utils
-        //     .getShareLinkURL?.(
-        //         [
-        //             `I just claimed.${
-        //                 isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-        //                     ? `Follow @${
-        //                           isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-        //                       } (mask.io) to claim airdrop.`
-        //                     : ''
-        //             }`,
-        //             '#mask_io',
-        //             l,
-        //         ].join('\n'),
-        //     )
-        //     .toString()
-        // console.log('use-Post-shareLink=', shareLink)
-    }
-
-    const signOrder = async () => {
+    const signOrder = useCallback(async () => {
         // WE CAN SET GAS LIMIT IF WE WANT
 
         console.log(gasLimit, gasPrice)
@@ -162,11 +135,6 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
         }
 
         const normalizeSignedOrder = nftSwapSdk.normalizeSignedOrder(info.signedOrder)
-
-        // User A Trade Data
-        // const walletAddressUserA = '0x3e4000C9e0f2F9CA5F26710360C06eC64E7a5Fd7'
-        // const assetsToSwapUserA = [RECEIVING_TOKEN, MY_NFT, MY_NFT1]
-
         const walletAddressUserA = account
         const assetsToSwapUserA = [info.assetsInfo.receiving_token, ...info.assetsInfo.nfts]
 
@@ -270,42 +238,43 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
             // Invalid
             showSnackbar(t.order_invalid_taker(), { variant: 'error' })
         }
-    }
+    }, [])
 
-    const s = info.assetsInfo.preview_info
-
-    const nftList = s.nftMediaUrls
-    const previewImages = nftList.map((item: nftData) => {
+    const nftList = info.assetsInfo.preview_info.nftMediaUrls
+    const previewImages = nftList.map((item: nftData, index: number) => {
         return (
-            <>
-                <Grid className={classes.previewBoxInnerGridContainerItem} padding={1}>
-                    <img
-                        className={classes.previewBoxInnerGridContainerItemImg}
-                        alt={item.nft_name}
-                        src={item.image_preview_url}
-                    />
-                </Grid>
-            </>
+            <Grid key={index} className={classes.previewBoxInnerGridContainerItem} padding={1}>
+                <img
+                    className={classes.previewBoxInnerGridContainerItemImg}
+                    alt={item.nft_name}
+                    src={item.image_preview_url}
+                />
+            </Grid>
         )
     })
 
-    const chipTitle = s.receivingSymbol.amount + ' ' + s.receivingSymbol.symbol
+    const chipTitle =
+        info.assetsInfo.preview_info.receivingSymbol.amount + ' ' + info.assetsInfo.preview_info.receivingSymbol.symbol
 
-    let labelString = ''
+    const labelString = useMemo(() => {
+        let labelString = ''
 
-    if (nftList.length > 0) {
-        labelString = `Buy ${nftList[0]?.nft_name} (#${nftList[0]?.nft_id})`
+        if (nftList.length > 0) {
+            labelString = `Buy ${nftList[0]?.nft_name} (#${nftList[0]?.nft_id})`
 
-        if (nftList.length > 1) {
-            labelString += ` and ${nftList[1]?.nft_name} (#${nftList[1]?.nft_id})`
+            if (nftList.length > 1) {
+                labelString += ` and ${nftList[1]?.nft_name} (#${nftList[1]?.nft_id})`
+            }
+
+            if (nftList.length > 2) {
+                labelString += ' and Others'
+            }
+
+            labelString += ' for ' + chipTitle
         }
+        return labelString
+    }, [nftList])
 
-        if (nftList.length > 2) {
-            labelString += ' and Others'
-        }
-
-        labelString += ' for ' + chipTitle
-    }
     usePluginWrapper(true)
     return (
         <Box className={classes.previewBoxOuter} padding={1}>
@@ -323,15 +292,20 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
                 </Grid>
             </Grid>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className={classes.buttonWrapper}>
-                <Grid item xs={6}>
-                    <Button className={classes.button} onClick={sharePost} fullWidth size="small" variant="contained">
-                        Share
-                    </Button>
-                </Grid>
-                <Grid item xs={6}>
-                    <Button className={classes.button} onClick={signOrder} fullWidth size="small" variant="contained">
-                        Swap
-                    </Button>
+                <Grid item xs={12}>
+                    <ActionButtonPromise
+                        className={classes.button}
+                        variant="contained"
+                        init={t.post_preview_swap_btn()}
+                        waiting={t.post_preview_swap_btn()}
+                        complete={t.post_preview_swap_btn()}
+                        failed={t.post_preview_swap_btn()}
+                        fullWidth
+                        executor={signOrder}
+                        completeIcon={null}
+                        failIcon={null}
+                        data-testid="submit_btn"
+                    />
                 </Grid>
             </Grid>
         </Box>

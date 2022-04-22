@@ -17,7 +17,7 @@ import {
 import { Grid, IconButton, Typography } from '@mui/material'
 import { ArrowBack } from '@mui/icons-material'
 
-interface SelectTokenView {
+interface SelectTokenViewProps {
     chainId: ChainId
     onAmountChange: Function
     setDisplaySection: Function
@@ -26,16 +26,16 @@ interface SelectTokenView {
     inputTokenAmount: string
 }
 
-export const SelectTokenView = (props: SelectTokenView): JSX.Element => {
+export const SelectTokenView = (props: SelectTokenViewProps): JSX.Element => {
     const t = useI18N()
 
-    const { inputToken } = props
+    const { chainId, inputToken } = props
+
     const [inputTokenBalance, setInputTokenBalance] = useState<string>('0')
 
-    const chainId = props.chainId
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
-    const excludeTokens = [inputToken].filter(Boolean).map((x) => x?.address) as string[]
+    const excludeTokens = inputToken ? [inputToken.address] : []
 
     // #region update balance
     const { value: inputTokenBalance_, loading: loadingInputTokenBalance } = useFungibleTokenBalance(

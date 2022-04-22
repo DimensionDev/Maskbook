@@ -22,5 +22,9 @@
     "order_cancelled": "Order is Cancelled",
     "order_invalid": "Invalid Order",
     "order_invalid_maker": "Invalid Maker Asset Amount",
-    "order_invalid_taker": "Invalid Taker Asset Amount"
+    "order_invalid_taker": "Invalid Taker Asset Amount",
+    "post_preview_swap_btn": "Swap",
+    "continue_btn": "Continue",
+    "preview_btn": "Preview",
+    "approve_nft_btn": "Approve your NFT"
 }

@@ -6,7 +6,8 @@ import { META_KEY } from '../constants'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useChainId, useAccount } from '@masknet/plugin-infra/web3'
 import { type FungibleTokenDetailed, ChainId } from '@masknet/web3-shared-evm'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useAsync } from 'react-use'
 import { amountToWei } from '../helpers'
 import { getTraderApi } from '../apis/nftswap'
 import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
@@ -14,7 +15,7 @@ import { SelectTokenView } from './SelectTokenView'
 import { PreviewOrderView } from './PreviewOrderView'
 import NftListView from './components/NftListView'
 import { useI18N } from '../locales/i18n_generated'
-
+import urlcat from 'urlcat'
 import { OPENSEA_API_KEY, isProxyENV } from '@masknet/web3-providers'
 
 import type { OpenSeaToken, OpenSeaCollection, Token, AssetContract, PreviewNftList, nftData } from '../types'
@@ -160,8 +161,6 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
     }
 })
 
-// const { onClose, open } = props
-// const { onClose, open } = props
 const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     const t = useI18N()
 
@@ -191,25 +190,29 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     )
     // #endregion
 
-    useEffect(() => {
-        // // declare the data fetching function
+    useAsync(async () => {
+        // declare the data fetching function
         const fetchNftData = async () => {
             const headers: HeadersInit =
                 ChainId.Rinkeby === selectedChainId
                     ? { Accept: 'application/json' }
                     : { 'x-api-key': OPENSEA_API_KEY, Accept: 'application/json' }
 
-            // eslint-disable-next-line no-return-await
-            return await fetch(
-                `https://${
-                    selectedChainId === ChainId.Rinkeby ? 'rinkeby-' : ''
-                }api.opensea.io/api/v1/assets?format=json&limit=50&offset=0&owner=${account}`,
+            const url = urlcat(
+                `https://${selectedChainId === ChainId.Rinkeby ? 'testnets-' : ''}api.opensea.io/api/v1/assets`,
                 {
-                    method: 'GET',
-                    headers: headers,
-                    ...(!isProxyENV() && { mode: 'cors' }),
+                    format: 'json',
+                    limit: '50',
+                    offset: 0,
+                    owner: account,
                 },
             )
+
+            return fetch(url, {
+                method: 'GET',
+                headers: headers,
+                ...(!isProxyENV() && { mode: 'cors' }),
+            })
         }
 
         // call the function
@@ -290,27 +293,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
 
     //  Submit order to traderXYZ sdk
     const submitOrder = async () => {
-        // SAMPLE TO TEST SDK
-        // const MY_NFT = {
-        //     tokenAddress: '0xeE897A2c8637f27F9B8FB324E36361ef03ec7Ae4', // MEO CAT2 NFT ON rinkeby
-        //     tokenId: '2',
-        //     type: 'ERC721',
-        // }
-
-        // const MY_NFT1 = {
-        //     tokenAddress: '0xee897a2c8637f27f9b8fb324e36361ef03ec7ae4', // MEO CAT2 NFT ON rinkeby
-        //     tokenId: '3',
-        //     type: 'ERC721',
-        // }
-
-        // const SIXTY_NINE_USDC = {
-        //     tokenAddress: '0xc778417e063141139fce010982780140aa0cd5ab', // WETH contract address
-        //     amount: '100000000000000', // 0.0001 WETH (WETH is 6 digits)
-        //     type: 'ERC20',
-        // }
-
         const assetsToSwapUserA = [orderInfo?.nfts, orderInfo?.receiving_token].flat(1)
-        // const assetsToSwapUserA = [MY_NFT, MY_NFT1, SIXTY_NINE_USDC]
 
         // Check if we need to approve the NFT for swapping
         const approvalStatusForUserA = await nftSwapSdk
@@ -427,7 +410,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                         setDisplaySection(false, true, false)
                     }}
                     disabled={c === 0}>
-                    Continue
+                    {t.continue_btn()}
                 </Button>
             )
         }
@@ -441,7 +424,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                         setDisplaySection(false, false, true), setPreviewOrderData()
                     }}
                     disabled={inputAmount === '0' || token?.address === null}>
-                    Preview
+                    {t.preview_btn()}
                 </Button>
             )
         }
@@ -456,7 +439,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                     }}
                     // disabled={tokenValueUSD == '0.00' || chainId == 4}
                 >
-                    Approve your NFT
+                    {t.approve_nft_btn()}
                 </Button>
             )
         }
