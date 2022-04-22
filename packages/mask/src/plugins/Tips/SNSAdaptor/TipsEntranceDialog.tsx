@@ -169,21 +169,19 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         const { classes } = useStyles()
         if (bodyView === BodyViewSteps.addWallet) return null
         return (
-                <div className={classes.btnContainer}>
-                    <Button
-                        onClick={() => {
-                            setBodyView(
-                                bodyView === BodyViewSteps.wallets ? BodyViewSteps.addWallet : BodyViewSteps.wallets,
-                            )
-                        }}
-                        className={classes.walletBtn}
-                        variant="contained"
-                        size="small">
-                        {bodyView === BodyViewSteps.wallets ? BodyViewSteps.addWallet : BodyViewSteps.wallets}
-                    </Button>
-                </div>
-            )) ||
-            null
+            <div className={classes.btnContainer}>
+                <Button
+                    onClick={() => {
+                        setBodyView(
+                            bodyView === BodyViewSteps.wallets ? BodyViewSteps.addWallet : BodyViewSteps.wallets,
+                        )
+                    }}
+                    className={classes.walletBtn}
+                    variant="contained"
+                    size="small">
+                    {bodyView === BodyViewSteps.wallets ? BodyViewSteps.addWallet : BodyViewSteps.wallets}
+                </Button>
+            </div>
         )
     }
     const setAsDefault = (idx: number) => {
