@@ -34,6 +34,8 @@
     "@masknet/web3-shared-evm": "workspace:*",
     "@msgpack/msgpack": "^2.7.2",
     "@servie/events": "^3.0.0",
+    "react-dnd": "^16.0.0",
+    "react-dnd-html5-backend": "^16.0.0",
     "@types/color": "^3.0.3",
     "@types/react-avatar-editor": "^10.3.6",
     "async-call-rpc": "^6.0.2",
