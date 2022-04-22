@@ -72,7 +72,7 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
                                 key={x.identity}
                                 nowIdx={idx}
                                 setAsDefault={setAsDefault}
-                                fallbackName={`Wallet ${idx}`}
+                                fallbackName={`Wallet ${x.rawIdx}`}
                                 address={x.identity}
                                 isDefault={!!x.isDefault}
                             />

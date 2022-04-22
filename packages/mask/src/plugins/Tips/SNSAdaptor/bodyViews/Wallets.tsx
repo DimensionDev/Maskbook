@@ -49,7 +49,7 @@ const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: W
                         nowIdx={idx}
                         onDelete={() => deleteWallet(x)}
                         canDelete
-                        fallbackName={`Wallet ${idx + 1}`}
+                        fallbackName={`Wallet ${x.rawIdx ?? 0 + 1}`}
                         address={x.identity}
                         isDefault={!!x.isDefault}
                     />
