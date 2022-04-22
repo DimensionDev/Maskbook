@@ -1,8 +1,15 @@
 import type { ChildProcess } from 'child_process'
 
 export function awaitChildProcess(child: ChildProcess) {
-    return new Promise<number>((resolve) => {
-        child.on('error', () => resolve(child.exitCode || 0))
-        child.on('exit', (code) => resolve(code || 0))
+    return new Promise<number>((resolve, reject) => {
+        const handleExitCode = (code: number | null) => {
+            if (code) {
+                reject(new Error(`Child process fails: ${child.spawnargs.join(' ')}`))
+            } else {
+                resolve(0)
+            }
+        }
+        child.on('error', () => handleExitCode(child.exitCode))
+        child.on('exit', (code) => handleExitCode(code))
     })
 }

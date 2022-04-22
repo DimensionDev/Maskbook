@@ -43,7 +43,7 @@ export const StyledInput = memo(
                         ...props.InputProps?.classes,
                     },
                 }}
-                FormHelperTextProps={{ ...props.FormHelperTextProps, style: { marginLeft: 0 } }}
+                FormHelperTextProps={{ ...props.FormHelperTextProps, style: { marginLeft: 0, color: '#ff5f5f' } }}
             />
         )
     }),

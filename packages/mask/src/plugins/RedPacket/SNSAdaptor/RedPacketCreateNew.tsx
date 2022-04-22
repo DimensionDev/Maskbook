@@ -6,7 +6,6 @@ import { RedPacketERC721Form } from './RedPacketERC721Form'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../../../utils'
 import { activatedSocialNetworkUI } from '../../../social-network'
-
 import { IconURLs } from './IconURL'
 
 interface StyleProps {

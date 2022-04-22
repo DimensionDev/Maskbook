@@ -5,6 +5,6 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
 export function useExportMnemonicWords(identifier: PersonaIdentifier): AsyncState<string> {
     return useAsync(async () => {
-        return Services.Identity.exportPersonaMnemonicWords(identifier)
+        return Services.Backup.backupPersonaPrivateKey(identifier)
     }, [identifier])
 }

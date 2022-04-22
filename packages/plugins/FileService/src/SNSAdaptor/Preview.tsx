@@ -8,6 +8,7 @@ import type { FileInfo } from '../types'
 import { resolveGatewayAPI } from '../helpers'
 import urlcat from 'urlcat'
 import { openWindow } from '@masknet/shared-base-ui'
+import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -47,6 +48,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function Preview({ info }: { info: FileInfo }) {
+    usePluginWrapper(true)
     const t = useI18N()
     const { classes } = useStyles()
     const fileKey = info.key ? (

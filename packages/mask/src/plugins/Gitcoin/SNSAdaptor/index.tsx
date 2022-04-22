@@ -4,7 +4,9 @@ import { usePostInfoDetails, Plugin, usePluginWrapper } from '@masknet/plugin-in
 import { NetworkPluginID, useChainId } from '@masknet/plugin-infra/web3'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
+import { GitcoinIcon } from '@masknet/icons'
 import { PreviewCard } from './PreviewCard'
+import { Trans } from 'react-i18next'
 import { base } from '../base'
 import { PLUGIN_NAME, PLUGIN_META_KEY } from '../constants'
 import { DonateDialog } from './DonateDialog'
@@ -36,6 +38,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    ApplicationEntries: [
+        {
+            ApplicationEntryID: base.ID,
+            category: 'dapp',
+            description: <Trans i18nKey="plugin_gitcoin_description" />,
+            name: <Trans i18nKey="plugin_gitcoin_name" />,
+            icon: <GitcoinIcon />,
+            marketListSortingPriority: 9,
+            tutorialLink:
+                'https://realmasknetwork.notion.site/Make-a-quick-Gitcoin-Grant-donation-98ed83784ed4446a8a13fa685c7bddfb',
+        },
+    ],
 }
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
