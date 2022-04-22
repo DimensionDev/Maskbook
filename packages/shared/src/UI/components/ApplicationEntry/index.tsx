@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
@@ -10,7 +10,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         backgroundColor: theme.palette.background.default,
         borderRadius: '8px',
-
         height: 100,
     },
     applicationBoxHover: {
@@ -45,13 +44,14 @@ interface Props {
     icon: React.ReactNode
     title: React.ReactNode
     disabled?: boolean
+    nextIdVerifyToolTipHint?: string
     onClick: () => void
 }
 
 export function ApplicationEntry(props: Props) {
-    const { title, onClick, disabled = false, icon } = props
+    const { title, onClick, disabled = false, icon, nextIdVerifyToolTipHint } = props
     const { classes } = useStyles()
-    return (
+    const jsx = (
         <div
             className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
             onClick={disabled ? () => {} : onClick}>
@@ -60,5 +60,19 @@ export function ApplicationEntry(props: Props) {
                 {title}
             </Typography>
         </div>
+    )
+    return nextIdVerifyToolTipHint ? (
+        <ShadowRootTooltip
+            PopperProps={{
+                disablePortal: true,
+            }}
+            placement="top"
+            arrow
+            disableHoverListener={!nextIdVerifyToolTipHint}
+            title={<Typography>{nextIdVerifyToolTipHint}</Typography>}>
+            {jsx}
+        </ShadowRootTooltip>
+    ) : (
+        jsx
     )
 }
