@@ -28,6 +28,7 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
 
     const {
         AddressBook,
+        RiskWarning,
         Token,
         TokenList,
         TokenPrice,
@@ -40,14 +41,15 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
         Utils,
     } = pluginContext ?? {}
     const allowTestnet = useSubscription(Settings?.allowTestnet ?? FALSE)
+    const addressBook = useSubscription(AddressBook?.addressBook ?? EMPTY_ARRAY)
     const currencyType = useSubscription(Settings?.currencyType ?? USD_CURRENCY)
     const chainId = useSubscription(Provider?.chainId ?? ZERO)
     const account = useSubscription(Provider?.account ?? EMPTY_STRING)
     const networkType = useSubscription(Provider?.networkType ?? EMPTY_STRING)
     const providerType = useSubscription(Provider?.providerType ?? EMPTY_STRING)
     const tokenPrices = useSubscription(TokenPrice?.tokenPrices ?? NULL)
-    const addressBook = useSubscription(AddressBook?.addressBook ?? EMPTY_ARRAY)
     const domainBook = useSubscription(NameService?.domainBook ?? EMPTY_OBJECT)
+    const confirmationBook = useSubscription(RiskWarning?.confirmationBook ?? EMPTY_OBJECT)
     const transactions = useSubscription(Transaction?.transactions ?? EMPTY_ARRAY)
     const walletPrimary = useSubscription(Wallet?.walletPrimary ?? NULL)
     const wallets = useSubscription(Wallet?.wallets ?? EMPTY_ARRAY)
@@ -58,10 +60,11 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
 
     return {
         allowTestnet,
+        account,
         addressBook,
         domainBook,
         chainId,
-        account,
+        confirmationBook,
         networkType,
         providerType,
         currencyType,

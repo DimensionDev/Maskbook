@@ -1,5 +1,5 @@
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
 import type {
     ChainId,
     ERC721ContractDetailed,
@@ -65,11 +65,11 @@ export type GasSettingDialogEvent = {
 export type WalletRiskWarningDialogEvent =
     | {
           open: true
-          wallet?: Wallet
+          account: string
+          pluginID: NetworkPluginID
       }
     | {
           open: false
-          type: 'cancel' | 'confirm'
       }
 
 export type SelectNftContractDialogEvent = {

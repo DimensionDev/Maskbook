@@ -1,13 +1,12 @@
 import { Grid } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import classNames from 'classnames'
+import { isZero } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { NetworkPluginID, useAccount, useBalance, useChainIdValid, useWeb3State } from '@masknet/plugin-infra/web3'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared-evm'
-import { isZero } from '@masknet/web3-shared-base'
-import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -29,15 +28,15 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const account = useAccount()
-    const chainIdValid = useChainIdValid()
-    const nativeTokenBalance = useNativeTokenBalance()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
+    const balance = useBalance(NetworkPluginID.PLUGIN_EVM)
+    const { RiskWarning } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
-    // #region remote controlled confirm risk warning
-    const { isConfirmed: isRiskWarningConfirmed, openDialog: openRiskWarningDialog } = useWalletRiskWarningDialog()
-    // #endregion
+    const { setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletRiskWarningDialogUpdated,
+    )
 
-    // #region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
@@ -58,7 +57,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    if (!isRiskWarningConfirmed && !hideRiskWarningConfirmed)
+    if (!RiskWarning?.isApproved?.(account) && !hideRiskWarningConfirmed)
         return (
             <Grid container>
                 <ActionButton
@@ -66,25 +65,31 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                     fullWidth
                     variant="contained"
                     size="large"
-                    onClick={openRiskWarningDialog}
+                    onClick={() => {
+                        setRiskWarningDialog({
+                            open: true,
+                            account,
+                            pluginID: NetworkPluginID.PLUGIN_EVM,
+                        })
+                    }}
                     {...props.ActionButtonProps}>
                     {t('plugin_wallet_confirm_risk_warning')}
                 </ActionButton>
             </Grid>
         )
 
-    if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
+    if (isZero(balance.value ?? '0') && !offChain)
         return (
             <Grid container>
                 <ActionButton
                     className={classNames(classes.button, classes.gasFeeButton)}
-                    disabled={!nativeTokenBalance.error}
+                    disabled={!balance.error}
                     fullWidth
                     variant="contained"
                     size="large"
-                    onClick={nativeTokenBalance.retry}
+                    onClick={balance.retry}
                     {...props.ActionButtonProps}>
-                    {t(nativeTokenBalance.loading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee')}
+                    {t(balance.loading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee')}
                 </ActionButton>
             </Grid>
         )

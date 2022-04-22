@@ -1,6 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { AddressBook } from './AddressBook'
 import { Asset } from './Asset'
+import { RiskWarning } from './RiskWarning'
 import { Token } from './Token'
 import { TokenList } from './TokenList'
 import { Transaction } from './Transaction'
@@ -22,6 +23,7 @@ export function createWeb3State(context: Plugin.Shared.SharedContext) {
         NameService: new NameService(context, {
             chainId: Provider_.chainId,
         }),
+        RiskWanring: new RiskWarning(context),
         Settings: new Settings(context),
         Token: new Token(context, {
             account: Provider_.account,

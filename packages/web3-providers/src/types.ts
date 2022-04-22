@@ -154,6 +154,12 @@ export namespace NonFungibleTokenAPI {
     }
 }
 
+export namespace RiskWanringBaseAPI {
+    export interface Provider {
+        approve(address: string, pluginID?: string): Promise<void>
+    }
+}
+
 export namespace StorageAPI {
     export interface Storage {
         set(key: string, value: any): Promise<void>

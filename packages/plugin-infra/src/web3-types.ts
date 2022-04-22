@@ -452,6 +452,17 @@ export declare namespace Web3Plugin {
             /** Remove an address from address book. */
             removeAddress: (chainId: ChainId, address: string) => Promise<void>
         }
+        export interface RiskWarningState {
+            /** The tracked confirmation book. */
+            confirmationBook?: Subscription<Record<string, boolean>>
+
+            /** Detect if an account is approved the statement */
+            isApproved?: (address: string) => Promise<boolean>
+            /** Approve statement of designate account */
+            approve?: (address: string, pluginID?: string) => Promise<void>
+            /** Revoke statement of designate account */
+            revoke?: (address: string, pluginID?: string) => Promise<void>
+        }
         export interface AssetState<ChainId> {
             /** Get fungible assets of given account. */
             getFungibleAssets?: (
@@ -675,6 +686,7 @@ export declare namespace Web3Plugin {
             AddressBook?: AddressBookState<ChainId>
             Asset?: AssetState<ChainId>
             NameService?: NameServiceState<ChainId>
+            RiskWarning?: RiskWarningState
             Settings?: SettingsState
             Token?: TokenState
             TokenPrice?: TokenPriceState<ChainId>

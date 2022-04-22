@@ -1,6 +1,7 @@
 export * from './Asset'
 export * from './AddressBook'
 export * from './NameService'
+export * from './RiskWarning'
 export * from './Settings'
 export * from './Token'
 export * from './TokenList'
