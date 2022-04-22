@@ -14,6 +14,7 @@ import { useI18N } from '../locales/i18n_generated'
 import { context } from '../context'
 import { PluginNFTAvatarRPC } from '../messages'
 import { RSS3_KEY_SNS } from '../constants'
+import { useSubscription } from 'use-subscription'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -54,7 +55,11 @@ async function saveToRSS3(info: NextIDAvatarMeta, account: string, identifier: P
     }
 }
 
-async function saveToNextID(info: NextIDAvatarMeta, persona?: Persona, proof?: BindingProof) {
+async function saveToNextID(
+    info: NextIDAvatarMeta,
+    persona?: Pick<Persona, 'identifier' | 'publicHexKey'>,
+    proof?: BindingProof,
+) {
     if (!proof?.identity || !persona?.publicHexKey || !persona.identifier) return
     const payload = await NextIDStorage.getPayload(persona.publicHexKey, proof?.platform, proof?.identity, info)
     if (!payload.ok) {
@@ -81,7 +86,7 @@ async function Save(
     isBindAccount: boolean,
     token: ERC721TokenDetailed,
     data: AvatarInfo,
-    persona: Persona,
+    persona: Pick<Persona, 'identifier' | 'publicHexKey'>,
     proof: BindingProof,
     identifier: ProfileIdentifier,
 ) {
@@ -118,7 +123,7 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { image, account, token, onClose, onBack, proof, isBindAccount = false } = props
     const { classes } = useStyles()
-    const identifier = context.currentVisitingProfile.getCurrentValue()?.identifier
+    const identifier = useSubscription(context.currentVisitingProfile)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
     const [scale, setScale] = useState(1)
     const { showSnackbar } = useCustomSnackbar()
@@ -133,7 +138,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             if (!blob) return
             setDisabled(true)
 
-            const avatarData = await uploadAvatar(blob, identifier.userId)
+            const avatarData = await uploadAvatar(blob, identifier.identifier.userId)
             if (!avatarData) {
                 setDisabled(false)
                 return
@@ -146,7 +151,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 avatarData,
                 currentConnectedPersona,
                 proof,
-                identifier,
+                identifier.identifier,
             )
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })

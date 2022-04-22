@@ -1,6 +1,6 @@
 import classNames from 'classnames'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { TooltipProps, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     applicationBox: {
@@ -46,14 +46,12 @@ interface Props {
     title: React.ReactNode
     disabled?: boolean
     onClick: () => void
-    tooltipProps?: Partial<TooltipProps>
-    hint?: string | React.ReactElement
 }
 
 export function ApplicationEntry(props: Props) {
-    const { icon, title, onClick, disabled = false, tooltipProps, hint = '' } = props
+    const { icon, title, onClick, disabled = false } = props
     const { classes } = useStyles()
-    const jsx = (
+    return (
         <div
             className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
             onClick={disabled ? () => {} : onClick}>
@@ -62,16 +60,5 @@ export function ApplicationEntry(props: Props) {
                 {title}
             </Typography>
         </div>
-    )
-    return (
-        <>
-            {hint ? (
-                <ShadowRootTooltip title={hint} {...tooltipProps}>
-                    {jsx}
-                </ShadowRootTooltip>
-            ) : (
-                jsx
-            )}
-        </>
     )
 }

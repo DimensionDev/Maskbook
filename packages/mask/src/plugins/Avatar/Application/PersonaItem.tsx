@@ -11,6 +11,7 @@ import { useCallback, useEffect, useState } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
 import { context } from '../context'
+import { useSubscription } from 'use-subscription'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
@@ -39,7 +40,7 @@ interface PersonaItemProps {
 }
 
 export function PersonaItem(props: PersonaItemProps) {
-    const currentIdentity = context.lastRecognizedProfile.getCurrentValue()
+    const currentIdentity = useSubscription(context.lastRecognizedProfile)
     const { userId, onSelect, owner = false, proof } = props
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = usePersonaNFTAvatar(userId, RSS3_KEY_SNS.TWITTER)

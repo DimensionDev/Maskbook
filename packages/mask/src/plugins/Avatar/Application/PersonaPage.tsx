@@ -2,6 +2,7 @@ import { BindingProof, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, CircularProgress, DialogContent, Stack, Typography } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
+import { useSubscription } from 'use-subscription'
 import { useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
 import { CloseIcon } from '../assets/close'
 import { context } from '../context'
@@ -31,7 +32,7 @@ interface PersonaPageProps {
 export function PersonaPage(props: PersonaPageProps) {
     const { onNext, onChange, onClose } = props
     const [visible, setVisible] = useState(true)
-    const currentIdentity = context.lastRecognizedProfile.getCurrentValue()
+    const currentIdentity = useSubscription(context.lastRecognizedProfile)
     const { classes } = useStyles()
     const { loading, value: persona } = usePersonas()
     const { loading: loadingPersonaVerified, value: personaVerifiedStatus } = usePersonaVerify()
