@@ -6,7 +6,7 @@ import type { NextIDStoragePayload, NextIDPlatform, NextIdStorageInfo } from '@m
 import { fetchJSON } from './helper'
 import type { Result } from 'ts-results'
 import type { NextIDBaseAPI } from '../types'
-import { KV_BASE_URL_DEV, KV_BASE_URL_PROD, MASK_STORAGE_KEY } from './constants'
+import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants'
 
 interface CreatePayloadResponse {
     uuid: string
@@ -29,11 +29,9 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
      * @param personaPublicKey
      *
      */
-    async get<T>(personaPublicKey: string): Promise<Result<NextIdStorageInfo, string>> {
-        const full = await fetchJSON<{ [MASK_STORAGE_KEY]: T }>(
-            urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
-        )
-        return full as any
+    async get(personaPublicKey: string): Promise<Result<NextIdStorageInfo, string>> {
+        const full = await fetchJSON<NextIdStorageInfo>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+        return full
     }
 
     /**

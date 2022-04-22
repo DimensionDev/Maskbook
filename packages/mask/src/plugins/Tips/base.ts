@@ -29,6 +29,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Aurora,
                     ChainId.Conflux,
                 ],
+                tipsSupportedChains: [{ name: 'Evm Chain', icon: new URL('./assets/Tip.png', import.meta.url) }],
             },
         },
     },

@@ -3,7 +3,6 @@ import { useI18N } from '../../../utils'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { useCallback, useMemo, useState } from 'react'
-import { enableRequirement } from '../constants'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import SettingView from './bodyViews/Setting'
@@ -32,6 +31,7 @@ import { LoadingButton } from '@mui/lab'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { cloneDeep } from 'lodash-unified'
+import { useActivatedPlugin } from '@masknet/plugin-infra/src/hooks'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -85,6 +85,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const [hasChanged, setHasChanged] = useState(false)
     const [rawPatchData, setRawPatchData] = useState<BindingProof[]>([])
     const [rawWalletList, setRawWalletList] = useState<BindingProof[]>([])
+    const supportedNetworks = useActivatedPlugin(PluginId.Tip, 'any')?.enableRequirement?.web3?.['com.mask.evm']
+        ?.tipsSupportedChains
     const { showSnackbar } = useCustomSnackbar()
     const account = useAccount()
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
@@ -302,7 +304,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
                     {bodyViewStep === BodyViewStep.Main && rawPatchData.length > 0 ? (
                         <div>
-                            {enableRequirement.map((x, idx) => {
+                            {supportedNetworks?.map((x, idx) => {
                                 return (
                                     <WalletsByNetwork
                                         wallets={rawPatchData}
