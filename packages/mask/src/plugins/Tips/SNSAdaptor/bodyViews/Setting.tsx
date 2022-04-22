@@ -1,7 +1,7 @@
 import type { BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { memo, useEffect, useState } from 'react'
+import { memo } from 'react'
 import { WalletSwitch } from '../components/WalletSwitch'
 
 const useStyles = makeStyles()((theme) => ({
@@ -31,26 +31,17 @@ interface SettingPageProp {
 
 const SettingPage = memo(({ wallets, onSwitchChange }: SettingPageProp) => {
     const { classes } = useStyles()
-    const [data, setData] = useState<BindingProof[]>([])
-    useEffect(() => {
-        setData(wallets)
-    }, [wallets])
-    const publicNum = wallets.reduce((num, x) => {
-        if (x.isPublic === 1) {
-            num += 1
-        }
-        return num
-    }, 0)
+
     return (
         <div className={classes.container}>
             <div className={classes.titleBox}>
                 <Typography sx={{ fontWeight: 'bold', fontSize: 16 }}>Tips</Typography>
                 <Typography>
-                    ({publicNum}/{wallets.length})
+                    ({wallets.filter((x) => x.isPublic === 1).length}/{wallets.length})
                 </Typography>
             </div>
             <div className={classes.walletSwitchBox}>
-                {data.map((x, idx) => {
+                {wallets.map((x, idx) => {
                     return (
                         <div key={idx} className={classes.switchContainer}>
                             <WalletSwitch

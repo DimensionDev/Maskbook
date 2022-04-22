@@ -4,6 +4,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     isSameAddress,
     ProviderType,
+    resolveProviderName,
     useAccount,
     useChainId,
     useNetworkType,
@@ -32,12 +33,12 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     const [isBound, setIsBound] = useState(false)
     const [signed, setSigned] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
-    const curProviderType = useProviderType()
+    const providerType = useProviderType()
     const wallet = {
         ...useWallet(),
         account: useAccount(),
         networkType: useNetworkType(),
-        providerType: curProviderType,
+        providerType: providerType,
         chainId: useChainId(),
     }
     const { value: domain } = useReverseAddress(wallet.account)
@@ -46,10 +47,10 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
 
     const walletName = () => {
-        if (isNotEvm) return `${curProviderType} Wallet`
+        if (isNotEvm) return `${resolveProviderName(providerType)} Wallet`
         if (domain && Utils?.formatDomainName) return Utils.formatDomainName(domain)
-        if (![wallet.providerType, curProviderType].includes(ProviderType.MaskWallet))
-            return `${wallet.providerType ?? curProviderType} Wallet`
+        if (![wallet.providerType, providerType].includes(ProviderType.MaskWallet))
+            return `${resolveProviderName(wallet.providerType ?? providerType)} Wallet`
         return wallet.name ?? 'Wallet'
     }
 
@@ -117,7 +118,10 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     }, [currentPersona?.publicHexKey, payload, wallet, signature])
     const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {
         try {
-            if (signed) onCancel()
+            if (signed) {
+                onCancel()
+                return SignSteps.SecondStepDone
+            }
             if (!signature && !walletSignState) {
                 await personaSilentSign()
                 return SignSteps.FirstStepDone
@@ -125,13 +129,14 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                 const res = await walletSign()
                 return res ? SignSteps.SecondStepDone : SignSteps.FirstStepDone
             } else {
-                return onCancel()
+                onCancel()
+                return SignSteps.SecondStepDone
             }
         } catch {
             showSnackbar('Connect error', { variant: 'error', message: nowTime })
             return SignSteps.Ready
         }
-    }, [signature, walletSignState, walletSign, personaSilentSign])
+    }, [signed, signature, walletSignState, walletSign, personaSilentSign])
     const { setDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const changeWallet = useCallback(() => {
         setDialog({
