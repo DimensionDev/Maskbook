@@ -1,4 +1,4 @@
-import { Fragment, useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography, useTheme } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
@@ -142,13 +142,12 @@ export function ApplicationBoard() {
 
             {listedAppList.length > 0 ? (
                 <section className={classes.applicationWrapper}>
-                    {listedAppList.map((application) => {
-                        return (
-                            <Fragment key={application.entry.ApplicationEntryID}>
-                                <RenderEntryComponentWrapper application={application} />
-                            </Fragment>
-                        )
-                    })}
+                    {listedAppList.map((application) => (
+                        <RenderEntryComponentWrapper
+                            key={application.entry.ApplicationEntryID}
+                            application={application}
+                        />
+                    ))}
                 </section>
             ) : (
                 <div className={classes.placeholderWrapper}>
@@ -181,8 +180,7 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
     const ui = activatedSocialNetworkUI
     const { t } = useI18N()
     const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
-    const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
-    const lastState_ = useValueRef(lastStateRef)
+    const lastState_ = useValueRef(currentSetupGuideStatus[ui.networkIdentifier])
     const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
         try {
             return JSON.parse(lastState_)
@@ -192,16 +190,16 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
     }, [lastState_])
     const lastRecognized = useLastRecognizedIdentity()
     const getUsername = () =>
-        lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
-    const [username] = useState(getUsername)
+        lastState.username || (!lastRecognized.identifier.isUnknown ? lastRecognized.identifier.userId : '')
+    const username = useMemo(getUsername, [lastState, lastRecognized])
     const personas = useMyPersonas()
 
-    function checkSNSConnectToCurrentPersona(persona: Persona) {
+    const checkSNSConnectToCurrentPersona = useCallback((persona: Persona) => {
         return (
             persona?.linkedProfiles.get(new ProfileIdentifier(ui.networkIdentifier, username))
                 ?.connectionConfirmState === 'confirmed'
         )
-    }
+    }, [])
 
     const {
         value = {
@@ -219,12 +217,8 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
         return {
             isSNSConnectToCurrentPersona: checkSNSConnectToCurrentPersona(currentPersona),
             isNextIdVerify: await NextIDProof.queryIsBound(currentPersona.publicHexKey ?? '', platform, username),
-            currentPersonaPublicKey: currentPersona
-                ? formatPersonaPublicKey(currentPersona.fingerprint ?? '', 4)
-                : undefined,
-            currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona
-                ? formatPersonaPublicKey(currentSNSConnectedPersona.fingerprint ?? '', 4)
-                : undefined,
+            currentPersonaPublicKey: currentPersona?.fingerprint,
+            currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.fingerprint,
         }
     }, [platform, username, ui, personas])
     const {
@@ -240,7 +234,10 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
         CrossIsolationMessages.events.triggerSetupGuideVerifyOnNextIDStep.sendToAll(undefined)
     }, [])
 
-    const RenderEntryComponent = application.entry.RenderEntryComponent!
+    if (!application.entry.RenderEntryComponent) return null
+
+    const RenderEntryComponent = application.entry.RenderEntryComponent
+
     return (
         <RenderEntryComponent
             disabled={!application.enabled || isNextIdVerify === undefined || !isSNSConnectToCurrentPersona}
@@ -248,8 +245,11 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
                 isNextIdVerify,
                 isSNSConnectToCurrentPersona,
                 toolTipHint: t('plugin_tips_sns_persona_unmatched', {
-                    currentPersonaPublicKey,
-                    currentSNSConnectedPersonaPublicKey,
+                    currentPersonaPublicKey: formatPersonaPublicKey(currentPersonaPublicKey ?? '', 4),
+                    currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
+                        currentSNSConnectedPersonaPublicKey ?? '',
+                        4,
+                    ),
                 }),
                 onNextIDVerify,
             }}
