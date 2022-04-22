@@ -48,10 +48,11 @@ interface Props {
     onClick: () => void
     tooltipProps?: Partial<TooltipProps>
     hint?: string | React.ReactElement
+    nextIdVerifyToolTipHint?: string
 }
 
 export function ApplicationEntry(props: Props) {
-    const { icon, title, onClick, disabled = false, tooltipProps, hint = '' } = props
+    const { icon, title, onClick, disabled = false, tooltipProps, hint = '', nextIdVerifyToolTipHint } = props
     const { classes } = useStyles()
     const jsx = (
         <div
@@ -65,8 +66,8 @@ export function ApplicationEntry(props: Props) {
     )
     return (
         <>
-            {hint ? (
-                <ShadowRootTooltip title={hint} {...tooltipProps}>
+            {hint || nextIdVerifyToolTipHint ? (
+                <ShadowRootTooltip title={nextIdVerifyToolTipHint ?? hint} {...tooltipProps}>
                     {jsx}
                 </ShadowRootTooltip>
             ) : (
