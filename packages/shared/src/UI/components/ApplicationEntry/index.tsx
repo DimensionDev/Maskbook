@@ -79,7 +79,7 @@ export function ApplicationEntry(props: Props) {
         <>
             {(hint && !disabled) || nextIdVerifyToolTipHint ? (
                 <ShadowRootTooltip
-                    title={nextIdVerifyToolTipHint ?? hint}
+                    title={<Typography>{nextIdVerifyToolTipHint ?? hint}</Typography>}
                     {...tooltipProps}
                     disableHoverListener={!nextIdVerifyToolTipHint}>
                     {jsx}
