@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Button, CircularProgress, DialogActions, DialogContent } from '@mui/material'
+import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../utils'
 import { SelectProfileUI } from '../shared/SelectProfileUI'
 import type { Profile } from '../../database'
-import { InjectedDialog } from '../shared/InjectedDialog'
 
 export interface SelectProfileDialogProps extends withClasses<never> {
     open: boolean
@@ -49,7 +49,9 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
             </DialogContent>
             {rejection && (
                 <DialogContent className={classes.content}>
-                    Error: {rejection.message} {console.error(rejection)}
+                    <>
+                        Error: {rejection.message} {console.error(rejection)}
+                    </>
                 </DialogContent>
             )}
             <DialogActions>

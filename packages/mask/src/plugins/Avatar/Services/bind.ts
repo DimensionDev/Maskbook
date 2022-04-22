@@ -1,5 +1,5 @@
 import { ChainId, isSameAddress } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import addSeconds from 'date-fns/addSeconds'
 import { KeyValue } from '@masknet/web3-providers'
 import { NFT_AVATAR_DB_NAME, NFT_AVATAR_DB_NAME_STORAGE } from '../constants'
@@ -86,11 +86,11 @@ export async function setUserAddress(
     chainId?: number,
 ) {
     try {
-        await NFTAvatarDBStorage(network).set<Record<string, string>>(userId, {
+        await NFTAvatarDBStorage(network).set(userId, {
             [getKey(networkPluginId, chainId)]: address,
         })
 
-        await NFTAvatarDB(network).set<{ networkPluginId: string; chainId: number; address: string }>(userId, {
+        await NFTAvatarDB(network).set(userId, {
             networkPluginId: networkPluginId ?? NetworkPluginID.PLUGIN_EVM,
             chainId: chainId ?? ChainId.Mainnet,
             address,

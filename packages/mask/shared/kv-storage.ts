@@ -21,4 +21,7 @@ export const InMemoryStorages = {
 }
 export const PersistentStorages = {
     Plugin: createPersistentKVStorage('plugin', {}),
+    Settings: createPersistentKVStorage('settings', {
+        debugging: false,
+    }),
 }

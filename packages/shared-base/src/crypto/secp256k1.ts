@@ -49,6 +49,17 @@ export function decompressSecp256k1Point(point: Uint8Array): { x: string; y: str
     return { x: toBase64URL(x), y: toBase64URL(y) }
 }
 
+export function compressSecp256k1KeyRaw(point: Uint8Array) {
+    if (!secp256k1.isPoint(point)) throw new TypeError('Not a point on secp256k1!')
+    if (secp256k1.isPointCompressed(point)) return point
+    return secp256k1.pointCompress(point, true)
+}
+export function decompressSecp256k1KeyRaw(point: Uint8Array) {
+    if (!secp256k1.isPoint(point)) throw new TypeError('Not a point on secp256k1!')
+    if (!secp256k1.isPointCompressed(point)) return point
+    return secp256k1.pointCompress(point, false)
+}
+
 export function compressSecp256k1Key(key: EC_JsonWebKey): string {
     const arr = compressSecp256k1Point(key.x!, key.y!)
     return encodeArrayBuffer(arr)

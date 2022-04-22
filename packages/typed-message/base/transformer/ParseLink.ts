@@ -1,9 +1,9 @@
-import type { TypedMessage } from '../base'
-import { isTypedMessageText, makeTypedMessageTupleSerializable, makeTypedMessageText } from '../core'
-import { makeTypedMessageAnchor } from '../extension'
-import { parseLink } from '../utils/parseLink'
-import { visitEachTypedMessageChild } from '../visitor'
-import type { TransformationContext } from './context'
+import type { TypedMessage } from '../base.js'
+import { isTypedMessageText, makeTypedMessageTupleSerializable, makeTypedMessageText } from '../core/index.js'
+import { makeTypedMessageAnchor } from '../extension/index.js'
+import { parseLink } from '../utils/parseLink.js'
+import { visitEachTypedMessageChild } from '../visitor/index.js'
+import type { TransformationContext } from './context.js'
 
 export function ParseLinkTransformer(message: TypedMessage, context: TransformationContext): TypedMessage {
     if (isTypedMessageText(message)) {

@@ -1,5 +1,6 @@
 import { Result, Ok, Err, Some, Option, None } from 'ts-results'
-import type { TypedMessage } from '../base'
+import type { ReactElement, ReactNode } from 'react'
+import type { TypedMessage } from '../base.js'
 import z_schema from 'z-schema'
 import draft, { enableMapSet, Draft } from 'immer'
 enableMapSet()
@@ -72,10 +73,7 @@ export function isDataMatchJSONSchema(data: any, jsonSchema: object) {
  * @param metadataReader A metadata reader (can be return value of createTypedMessageMetadataReader)
  */
 export function createRenderWithMetadata<T>(metadataReader: (meta: TypedMessage['meta']) => Result<T, void>) {
-    return (
-        metadata: TypedMessage['meta'],
-        render: (data: T) => React.ReactElement | null,
-    ): React.ReactElement | null => {
+    return (metadata: TypedMessage['meta'], render: (data: T) => ReactElement | null): ReactElement | null => {
         const message = metadataReader(metadata)
         if (message.ok) return render(message.val)
         return null
@@ -86,7 +84,7 @@ export function editMetadata(
     metadata: TypedMessage['meta'],
     edit: (meta: NonNullable<Draft<TypedMessage['meta']>>) => void,
 ): NonNullable<TypedMessage['meta']> {
-    return draft(metadata || new Map(), (e) => void edit(e))
+    return (draft as any as typeof draft.default)(metadata || new Map(), (e) => void edit(e))
 }
 export function editTypedMessageMeta<T extends TypedMessage>(
     typedMessage: T,
@@ -106,9 +104,9 @@ export function editTypedMessageMeta<T extends TypedMessage>(
 export function renderWithMetadataUntyped(
     metadata: TypedMessage['meta'],
     key: string,
-    render: (data: unknown) => React.ReactNode,
+    render: (data: unknown) => ReactNode,
     jsonSchema?: object,
-): React.ReactNode | null {
+): ReactNode | null {
     const message = readTypedMessageMetadataUntyped(metadata, key, jsonSchema)
     if (message.ok) return render(message.val)
     return null

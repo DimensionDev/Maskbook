@@ -13,10 +13,10 @@ import {
     useERC721ContractDetailed,
     useERC721Tokens,
 } from '@masknet/web3-shared-evm'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { EthereumAddress } from 'wallet.ts'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
@@ -103,6 +103,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     contractName: {
         marginBottom: 20,
+        paddingRight: 30,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     balance: {
         position: 'absolute',

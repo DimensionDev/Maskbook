@@ -1,7 +1,12 @@
 {
   "name": "@masknet/plugin-flow",
   "private": true,
-  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@blocto/fcl": "^0.0.78-alpha.8",

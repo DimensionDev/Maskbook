@@ -1,8 +1,8 @@
 import { Fragment } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { useActivatedPluginsSNSAdaptor, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
-import type { Plugin } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
+import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 
@@ -32,6 +32,7 @@ export function ApplicationBoard() {
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId()
+    const account = useAccount()
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
 
     return (
@@ -46,7 +47,7 @@ export function ApplicationBoard() {
                                 currentWeb3NetworkSupportedChainIds === undefined ||
                                     currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
                             )
-
+                            const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
                             const currentSNSIsSupportedNetwork =
                                 cur.enableRequirement.networks.networks[currentSNSNetwork]
                             const isSNSEnabled =
@@ -56,7 +57,7 @@ export function ApplicationBoard() {
                                 cur.ApplicationEntries.map((x) => {
                                     return {
                                         entry: x,
-                                        enabled: isWeb3Enabled && isSNSEnabled,
+                                        enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
                                         pluginId: cur.ID,
                                     }
                                 }) ?? [],
@@ -65,13 +66,11 @@ export function ApplicationBoard() {
                         [],
                     )
                     .sort((a, b) => a.entry.defaultSortingPriority - b.entry.defaultSortingPriority)
-                    .map((X, i) => {
-                        return (
-                            <Fragment key={i + X.pluginId}>
-                                <X.entry.RenderEntryComponent disabled={!X.enabled} />
-                            </Fragment>
-                        )
-                    })}
+                    .map(({ entry, enabled }, index) => (
+                        <Fragment key={index}>
+                            <entry.RenderEntryComponent disabled={!enabled} />
+                        </Fragment>
+                    ))}
             </section>
         </>
     )

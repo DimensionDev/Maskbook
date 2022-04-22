@@ -1,7 +1,6 @@
 import { PluginId } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
 
-export const pluginIcon = '\u{1F513}'
 export const pluginName = 'Unlock Protocol'
 export const pluginDescription = 'Post content behind a secure paywall'
 export const pluginId = PluginId.UnlockProtocol

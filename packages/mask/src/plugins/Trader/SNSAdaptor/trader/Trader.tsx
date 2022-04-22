@@ -17,6 +17,7 @@ import {
     UST,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { usePickToken } from '@masknet/shared'
 import { delay } from '@dimensiondev/kit'
 import { useGasConfig } from './hooks/useGasConfig'
 import type { Coin } from '../../types'
@@ -24,7 +25,7 @@ import { TokenPanelType, TradeInfo } from '../../types'
 import { useI18N } from '../../../../utils'
 import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -204,43 +205,24 @@ export function Trader(props: TraderProps) {
 
     // #region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
-    const [focusedTokenPanelType, setFocusedTokenPanelType] = useState(TokenPanelType.Input)
 
-    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== String(focusedTokenPanelType)) return
+    const pickToken = usePickToken()
+    const onTokenChipClick = useCallback(
+        async (panelType: TokenPanelType) => {
+            const picked = await pickToken({
+                chainId,
+                disableNativeToken: false,
+                selectedTokens: excludeTokens,
+            })
+            if (picked) {
                 dispatchTradeStore({
                     type:
-                        focusedTokenPanelType === TokenPanelType.Input
+                        panelType === TokenPanelType.Input
                             ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
                             : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                    token: ev.token,
+                    token: picked,
                 })
-                if (focusedTokenPanelType === TokenPanelType.Input) {
-                    dispatchTradeStore({
-                        type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
-                        amount: '',
-                    })
-                }
-            },
-            [dispatchTradeStore, focusedTokenPanelType],
-        ),
-    )
-
-    const onTokenChipClick = useCallback(
-        (type: TokenPanelType) => {
-            setFocusedTokenPanelType(type)
-            setSelectTokenDialog({
-                chainId,
-                open: true,
-                uuid: String(type),
-                disableNativeToken: false,
-                FungibleTokenListProps: {
-                    selectedTokens: excludeTokens,
-                },
-            })
+            }
         },
         [excludeTokens.join(), chainId],
     )

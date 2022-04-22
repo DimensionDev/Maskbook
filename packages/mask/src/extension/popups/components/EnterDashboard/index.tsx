@@ -1,7 +1,8 @@
+// ! We're going to SSR this UI, so DO NOT import anything new!
 import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { useEnterDashboard } from '../../hook/useEnterDashboard'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 
 export const EnterDashboard = memo(() => {
     const { t } = useI18N()

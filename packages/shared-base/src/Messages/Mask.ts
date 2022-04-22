@@ -15,7 +15,6 @@ import type { RelationFavor } from '../Persona/type'
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
     languageSettings: LanguageOptions
-    debugModeSetting: boolean
     pluginIDSettings: string
     currentChainIdSettings: number
     currentTokenPricesSettings: CryptoPrice

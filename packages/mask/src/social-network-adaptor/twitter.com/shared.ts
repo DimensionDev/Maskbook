@@ -5,7 +5,7 @@ import type { SocialNetwork } from '../../social-network/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
 import { deconstructPayload } from '../../utils'
 import { twitterBase } from './base'
-import { twitterEncoding } from './encoding'
+import { TwitterDecoder, __TwitterEncoder } from '@masknet/encryption'
 import { usernameValidator } from './utils/user'
 
 const getPostURL = (post: PostIdentifier): URL | null => {
@@ -19,11 +19,11 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
         getProfilePage: (userId) => `https://twitter.com/${userId}`,
         isValidUsername: usernameValidator,
         textPayloadPostProcessor: {
-            encoder(text) {
-                return twitterEncoding.payloadEncoder(text)
-            },
+            encoder: __TwitterEncoder,
             decoder(text) {
-                return twitterEncoding.payloadDecoder(text)
+                return TwitterDecoder(text)
+                    .map((x) => [x])
+                    .unwrapOr([])
             },
         },
         getPostURL,
@@ -36,7 +36,14 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
                 height,
                 screenX: window.screenX + (window.innerWidth - width) / 2,
                 screenY: window.screenY + (window.innerHeight - height) / 2,
-                behaviors: { toolbar: true, status: true, resizable: true, scrollbars: true },
+                opener: true,
+                referrer: true,
+                behaviors: {
+                    toolbar: true,
+                    status: true,
+                    resizable: true,
+                    scrollbars: true,
+                },
             })
             if (openedWindow === null) {
                 location.assign(url)
@@ -48,7 +55,10 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
             payloadParser: deconstructPayload,
-            payloadDecoder: twitterEncoding.payloadDecoder,
+            payloadDecoder: (x) =>
+                TwitterDecoder(x)
+                    .map((x) => [x])
+                    .unwrapOr([]),
             getURLFromPostIdentifier: getPostURL,
         }),
     },

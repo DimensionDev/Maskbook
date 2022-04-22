@@ -14,12 +14,11 @@ import type {
 } from 'idb/with-async-ittr'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { MaskMessages } from '../../../shared'
+import fixSafari from 'safari-14-idb-fix'
 
-const iOSFix =
-    process.env.engine === 'safari' ? import('safari-14-idb-fix').then(({ default: ready }) => ready()) : undefined
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined
-    if (process.env.engine === 'safari') {
+    if (process.env.engine === 'safari' && process.env.architecture === 'app') {
         // iOS bug: indexedDB dies randomly
         MaskMessages.events.mobile_app_suspended.on(clean)
         setInterval(clean, /** 1 min */ 1000 * 60)
@@ -32,7 +31,9 @@ export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSc
         db = undefined
     }
     return async () => {
-        await iOSFix
+        if (process.env.engine === 'safari' && process.env.architecture === 'app') {
+            await fixSafari()
+        }
         assertEnvironment(Environment.ManifestBackground)
         if (db) {
             try {
@@ -71,7 +72,9 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     }
     let pendingOpen: Promise<IDBPDatabase<DBSchema>> | undefined
     async function open(): Promise<IDBPDatabase<DBSchema>> {
-        await iOSFix
+        if (process.env.engine === 'safari' && process.env.architecture === 'app') {
+            await fixSafari()
+        }
         assertEnvironment(Environment.ManifestBackground)
         if (db?.version === latestVersion) return db
         let currentVersion = firstVersionThatRequiresAsyncUpgrade

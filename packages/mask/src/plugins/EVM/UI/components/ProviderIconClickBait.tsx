@@ -1,6 +1,6 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
 import { unreachable } from '@dimensiondev/kit'
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { isDashboardPage } from '@masknet/shared-base'
 import {

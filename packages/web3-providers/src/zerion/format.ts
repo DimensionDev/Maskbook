@@ -15,8 +15,7 @@ import type {
     ZerionAsset,
     ZerionCovalentAsset,
 } from './type'
-import type { Web3Plugin } from '@masknet/plugin-infra'
-import { TokenType } from '@masknet/plugin-infra'
+import { type Web3Plugin, TokenType } from '@masknet/plugin-infra/web3'
 
 type Asset = Web3Plugin.Asset<Web3Plugin.FungibleToken>
 

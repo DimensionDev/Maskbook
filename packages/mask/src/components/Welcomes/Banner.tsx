@@ -1,14 +1,15 @@
 import { useState, useCallback } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { IconButton } from '@mui/material'
-import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { MaskSharpIcon } from '../../resources/MaskIcon'
+import { MaskIconInMinds, MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
+import { useValueRef } from '@masknet/shared-base-ui'
 
 interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'buttonText'> {
     description?: string
@@ -21,6 +22,12 @@ interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'acti
               defaultValue: string
               onChange(nextValue: string): void
           }
+    iconType?: string
+}
+
+const ICON_MAP: Record<string, JSX.Element> = {
+    minds: <MaskIconInMinds />,
+    default: <MaskSharpIcon color="primary" />,
 }
 const useStyles = makeStyles()({
     buttonText: {
@@ -38,7 +45,7 @@ export function BannerUI(props: BannerUIProps) {
 
     return props.nextStep === 'hidden' ? null : (
         <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
-            <MaskSharpIcon color="primary" />
+            {ICON_MAP?.[props?.iconType ?? 'default']}
         </IconButton>
     )
 }
@@ -50,7 +57,7 @@ export function Banner(props: BannerProps) {
     const personaConnectStatus = usePersonaConnectStatus()
     const { nextStep } = props
     const networkIdentifier = activatedSocialNetworkUI.networkIdentifier
-    const identities = useMyIdentities()
+    const identities = useValueRef(globalUIState.profiles)
     const [value, onChange] = useState('')
     const defaultNextStep = useCallback(() => {
         if (nextStep === 'hidden') return
@@ -62,7 +69,7 @@ export function Banner(props: BannerProps) {
 
         hasNativeAPI
             ? nativeAPI?.api.misc_openDashboardView()
-            : Services.Welcome.openOptionsPage(
+            : Services.Helper.openDashboard(
                   personaConnectStatus.hasPersona ? DashboardRoutes.Personas : DashboardRoutes.Setup,
               )
     }, [networkIdentifier, nextStep])

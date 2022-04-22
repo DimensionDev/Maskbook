@@ -3,15 +3,18 @@ import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import {
     ChainId,
-    getLidoConstants,
     createContract,
     FungibleTokenDetailed,
+    getLidoConstants,
+    TransactionEventType,
+    TransactionState,
+    TransactionStateType,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { ZERO } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
-import { SavingsProtocol, ProtocolType } from '../types'
+import { ProtocolType, SavingsProtocol } from '../types'
 
 export class LidoProtocol implements SavingsProtocol {
     private _apr = '0.00'
@@ -80,21 +83,45 @@ export class LidoProtocol implements SavingsProtocol {
         }
     }
 
-    public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+    public async deposit(
+        account: string,
+        chainId: ChainId,
+        web3: Web3,
+        value: BigNumber.Value,
+        onChange: (state: TransactionState) => void,
+    ) {
         try {
             const contract = createContract<Lido>(
                 web3,
                 getLidoConstants(chainId).LIDO_stETH_ADDRESS || ZERO_ADDRESS,
                 LidoABI as AbiItem[],
             )
-            await contract?.methods.submit(getLidoConstants(chainId).LIDO_REFERRAL_ADDRESS || ZERO_ADDRESS).send({
-                from: account,
-                value: value.toString(),
-                gas: 300000,
-            })
-
+            await contract?.methods
+                .submit(getLidoConstants(chainId).LIDO_REFERRAL_ADDRESS || ZERO_ADDRESS)
+                .send({
+                    from: account,
+                    value: value.toString(),
+                    gas: 300000,
+                })
+                .on(TransactionEventType.ERROR, (error) => {
+                    onChange({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                })
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                    onChange({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                })
             return true
         } catch (error) {
+            onChange({
+                type: TransactionStateType.FAILED,
+                error: new Error('deposit failed'),
+            })
             console.error('LDO `deposit()` Error', error)
             return false
         }

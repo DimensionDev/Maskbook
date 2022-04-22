@@ -16,7 +16,7 @@ import {
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
 import { TargetChainIdContext } from '../../Trader/trader/useTargetChainIdContext'

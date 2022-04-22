@@ -1,4 +1,5 @@
 import { decodeArrayBuffer } from '@dimensiondev/kit'
+import { Convert } from 'pvtsutils'
 import { Result, Ok, Err } from 'ts-results'
 import { EnhanceableSite } from '../Site/type'
 
@@ -74,6 +75,7 @@ export abstract class Identifier {
     static IdentifiersToString(a: Identifier[], isOrderImportant = false) {
         const ax = a.map((x) => x.toText())
         if (!isOrderImportant) {
+            // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
             ax.sort()
         }
         return ax.join(',')
@@ -188,6 +190,7 @@ export class PostIVIdentifier extends Identifier {
     }
 }
 
+const secp256k1ToHex = new Map<string, string>()
 /**
  * This class identify the point on an EC curve.
  * ec_key:secp256k1/CompressedPoint
@@ -202,6 +205,14 @@ export class ECKeyIdentifier extends Identifier {
     toText() {
         const normalized = this.encodedCompressedKey ?? this.compressedPoint.replace(/\//g, '|')
         return `ec_key:${this.curve}/${normalized}`
+    }
+    get publicKeyAsHex() {
+        const realPoint = this.encodedCompressedKey ?? this.compressedPoint.replace(/\|/g, '/')
+        if (secp256k1ToHex.has(realPoint)) return secp256k1ToHex.get(realPoint)!
+
+        const hex = '0x' + Convert.ToHex(decodeArrayBuffer(realPoint))
+        secp256k1ToHex.set(realPoint, hex)
+        return hex
     }
     static [$fromString](str: string) {
         const [curve, point] = str.split('/')

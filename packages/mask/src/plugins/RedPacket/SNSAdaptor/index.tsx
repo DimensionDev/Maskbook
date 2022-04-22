@@ -1,4 +1,4 @@
-import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
+import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import {
     ChainId,
     EthereumTokenType,
@@ -83,14 +83,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ]),
     CompositionDialogEntry: {
         dialog: RedPacketDialog,
-        label: {
-            fallback: (
-                <>
-                    <RedPacketIcon style={badgeSvgIconSize} />
-                    Luck drop
-                </>
-            ),
-        },
+        label: (
+            <>
+                <RedPacketIcon style={badgeSvgIconSize} />
+                Lucky Drop
+            </>
+        ),
     },
     ApplicationEntries: [
         {

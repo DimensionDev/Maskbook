@@ -99,8 +99,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
         if (parse.val.encryption.ok) {
             const val = parse.val.encryption.val
             info.publicShared = val.type === 'public'
-            if (val.type === 'E2E' && val.ownersAESKeyEncrypted.ok)
-                info.ownersKeyEncrypted = val.ownersAESKeyEncrypted.val
+            if (val.type === 'E2E') info.isAuthorOfPost = val.ownersAESKeyEncrypted.ok
         }
         yield info
     }

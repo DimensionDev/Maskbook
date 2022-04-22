@@ -2,9 +2,7 @@ import '../utils/debug/general'
 import '../utils/debug/ui'
 import Services from '../extension/service'
 import { Flags, InMemoryStorages, PersistentStorages } from '../../shared'
-import i18nNextInstance from '../../shared-ui/locales_legacy'
 import type { SocialNetworkUI } from './types'
-import { managedStateCreator } from './utils'
 import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
 import {
@@ -13,14 +11,17 @@ import {
     createSubscriptionFromAsync,
     PersonaIdentifier,
     EnhanceableSite,
+    i18NextInstance,
+    createSubscriptionFromValueRef,
 } from '@masknet/shared-base'
-import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
-import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
+import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
+import { IdentityResolved, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
+import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
 import { SocialNetworkEnum } from '@masknet/encryption'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
@@ -44,13 +45,19 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     notReadyForProduction: true,
     declarativePermissions: { origins: [] },
 }
-export let globalUIState: Readonly<SocialNetworkUI.State> = {} as any
+export let globalUIState: Readonly<SocialNetworkUI.AutonomousState> = {} as any
 
 export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.DeferredDefinition): Promise<void> {
     assertNotEnvironment(Environment.ManifestBackground)
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
     const ui = (activatedSocialNetworkUI = await loadSocialNetworkUI(ui_deferred.networkIdentifier))
+
+    sharedUINetworkIdentifier.value = ui_deferred.networkIdentifier
+    if (ui.customization.sharedComponentOverwrite) {
+        sharedUIComponentOverwrite.value = ui.customization.sharedComponentOverwrite
+    }
+
     console.log('Provider activated. You can access it by globalThis.ui', ui)
     Object.assign(globalThis, { ui })
 
@@ -69,8 +76,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     await waitDocumentReadyState('interactive')
 
     i18nOverwrite()
-    const state = await ui.init(signal)
-    globalUIState = { ...state, ...managedStateCreator() }
+    globalUIState = await ui.init(signal)
 
     ui.customization.paletteMode?.start(signal)
     startIntermediateSetupGuide()
@@ -101,6 +107,21 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),
         createPluginHost(signal, (pluginID, signal) => {
+            const personaSub = createSubscriptionFromAsync(
+                Services.Settings.getCurrentPersonaIdentifier,
+                undefined as PersonaIdentifier | undefined,
+                MaskMessages.events.currentPersonaIdentifier.on,
+                signal,
+            )
+            const empty = new ValueRef<IdentityResolved | undefined>(undefined)
+            const lastRecognizedSub = createSubscriptionFromValueRef(
+                ui.collecting.identityProvider?.recognized || empty,
+                signal,
+            )
+            const currentVisitingSub = createSubscriptionFromValueRef(
+                ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
+                signal,
+            )
             return {
                 createKVStorage(type, defaultValues) {
                     if (type === 'memory')
@@ -109,11 +130,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 },
                 personaSign: Services.Identity.signWithPersona,
                 walletSign: Services.Ethereum.personalSign,
-                currentPersona: createSubscriptionFromAsync(
-                    Services.Settings.getCurrentPersonaIdentifier,
-                    undefined as PersonaIdentifier | undefined,
-                    MaskMessages.events.currentPersonaIdentifier.on,
-                ),
+                currentPersona: personaSub,
+                lastRecognizedProfile: lastRecognizedSub,
+                currentVisitingProfile: currentVisitingSub,
             }
         }),
     )
@@ -128,7 +147,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 const pair = i18n[namespace][i18nKey]
                 for (const language in pair) {
                     const value = pair[language]
-                    i18nNextInstance.addResource(language, namespace, i18nKey, value)
+                    i18NextInstance.addResource(language, namespace, i18nKey, value)
                 }
             }
         }
@@ -151,7 +170,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             provider.recognized.addListener((id) => {
                 if (signal.aborted) return
                 if (id.identifier.isUnknown) return
-                Services.Identity.resolveIdentity(id.identifier)
+                Services.Identity.resolveUnknownLegacyIdentity(id.identifier)
             })
         }
     }

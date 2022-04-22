@@ -1,6 +1,6 @@
 import type { WalletTokenRecord } from './type'
 import { createNativeToken, getChainIdFromName } from '@masknet/web3-shared-evm'
-import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra'
+import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { multipliedBy, rightShift, toFixed } from '@masknet/web3-shared-base'
 import DeBank from '@masknet/web3-constants/evm/debank.json'
 

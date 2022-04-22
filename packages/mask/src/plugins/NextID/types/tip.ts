@@ -8,3 +8,5 @@ export interface TipTask {
     recipientSnsId?: string
     addresses: string[]
 }
+
+export type TipNFTKeyPair = [address: string, tokenId: string]

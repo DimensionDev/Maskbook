@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { I18nextProvider, type I18nextProviderProps } from 'react-i18next'
+import { I18nextProvider, initReactI18next, type I18nextProviderProps } from 'react-i18next'
+import { i18NextInstance } from '@masknet/shared-base'
 
+initReactI18next.init(i18NextInstance)
 export const I18NextProviderHMR =
     process.env.NODE_ENV === 'development'
         ? function I18NextProviderHMR({ i18n, defaultNS, children }: React.PropsWithChildren<I18nextProviderProps>) {

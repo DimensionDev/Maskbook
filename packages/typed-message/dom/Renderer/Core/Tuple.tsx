@@ -1,8 +1,8 @@
 import { memo, useMemo } from 'react'
-import type { TypedMessageTuple } from '../../../base'
-import { hasCircular } from '../utils/circularDetect'
-import { TypedMessageRenderInline } from '../Entry'
-import { useMetadataRender } from '../MetadataRender'
+import type { TypedMessageTuple } from '../../../base/index.js'
+import { hasCircular } from '../utils/circularDetect.js'
+import { TypedMessageRenderInline } from '../Entry.js'
+import { useMetadataRender } from '../MetadataRender.js'
 
 // TODO: remove this after we switch to inline rendering of Mask payload.
 export const TUPLE_RENDER_STYLE = 'TUPLE_RENDER_STYLE'

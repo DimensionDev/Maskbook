@@ -9,7 +9,7 @@ import { openPopupWindow } from '../../../../../background/services/helper'
 // #region providers
 const providerPool = new Map<string, HttpProvider>()
 
-export function createProvider(url: string) {
+export function createProvider(url: string): HttpProvider {
     const provider =
         providerPool.get(url) ??
         new MaskWallet.providers.HttpProvider(url, {

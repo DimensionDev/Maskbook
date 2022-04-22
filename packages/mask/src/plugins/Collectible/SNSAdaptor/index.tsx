@@ -1,5 +1,5 @@
 import { uniq } from 'lodash-unified'
-import { Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra'
+import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'

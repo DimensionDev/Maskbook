@@ -10,7 +10,7 @@ import { useLastRecognizedIdentity } from './useActivatedUI'
 import { useMyPersonas } from './useMyPersonas'
 
 const createPersona = () => {
-    Services.Welcome.openOptionsPage(DashboardRoutes.Setup)
+    Services.Helper.openDashboard(DashboardRoutes.Setup)
 }
 
 const connectPersona = async () => {
@@ -28,7 +28,7 @@ export function usePersonaConnectStatus() {
     return useMemo(() => {
         const id = new ProfileIdentifier(activatedSocialNetworkUI.networkIdentifier, lastRecognized.identifier.userId)
         let connected = false
-        let currentConnectedPersona: Persona | undefined
+        let currentConnectedPersona: Pick<Persona, 'identifier' | 'publicHexKey'> | undefined
         personas.forEach((p) => {
             if (!p.linkedProfiles.get(id)) return
             connected = true

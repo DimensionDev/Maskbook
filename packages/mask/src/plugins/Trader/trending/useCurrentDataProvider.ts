@@ -13,6 +13,10 @@ export function useCurrentDataProvider(availableDataProviders: DataProvider[]) {
         setDataProvider(
             availableDataProviders.includes(currentDataProvider) ? currentDataProvider : availableDataProviders[0],
         )
-    }, [availableDataProviders.sort().join(), currentDataProvider])
+    }, [
+        // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
+        availableDataProviders.sort().join(),
+        currentDataProvider,
+    ])
     return dataProvider
 }

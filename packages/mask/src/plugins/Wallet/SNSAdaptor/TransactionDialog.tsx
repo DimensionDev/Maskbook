@@ -9,9 +9,9 @@ import {
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
+import { useI18N } from '../../../utils'
 import { WalletMessages } from '../messages'
 import { activatedSocialNetworkUI } from '../../../social-network'
 

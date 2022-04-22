@@ -1,15 +1,14 @@
-import { EthereumTokenType, FungibleTokenDetailed, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
-import { IconButton, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { EthereumTokenType, FungibleTokenDetailed, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import AddIcon from '@mui/icons-material/AddOutlined'
 import RemoveIcon from '@mui/icons-material/RemoveOutlined'
+import { IconButton, Paper } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
-import { v4 as uuid } from 'uuid'
+import { usePickToken } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+
 const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
@@ -80,28 +79,23 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     // #region select token dialog
-    const [id] = useState(uuid())
-    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                onExchangeTokenChange(ev.token, dataIndex)
-            },
-            [id, dataIndex],
-        ),
-    )
-    const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialog({
-            open: true,
-            uuid: id,
+    const pickToken = usePickToken()
+    const onSelectTokenChipClick = useCallback(async () => {
+        const picked = await pickToken({
             disableNativeToken: isSell,
-            FungibleTokenListProps: {
-                blacklist: excludeTokensAddress,
-                selectedTokens: [exchangeToken?.address ?? '', ...selectedTokensAddress],
-            },
+            blacklist: excludeTokensAddress,
+            selectedTokens: [exchangeToken?.address || '', ...selectedTokensAddress],
         })
-    }, [id, isSell, exchangeToken, excludeTokensAddress.sort().join(), selectedTokensAddress.sort().join()])
+        if (picked) onExchangeTokenChange(picked, dataIndex)
+    }, [
+        isSell,
+        dataIndex,
+        exchangeToken?.address,
+        // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
+        excludeTokensAddress.sort().join(),
+        // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
+        selectedTokensAddress.sort().join(),
+    ])
     // #endregion
 
     // #region balance

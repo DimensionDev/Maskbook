@@ -1,7 +1,7 @@
-import { isTypedMessagePromise, isTypedMessageTuple } from '../core'
-import { isNonSerializableTypedMessageWithAlt } from '../utils'
-import type { TypedMessage } from '../base'
-import { isTypedMessageMaskPayload } from '../extension'
+import { isTypedMessagePromise, isTypedMessageTuple } from '../core/index.js'
+import { isNonSerializableTypedMessageWithAlt } from '../utils/index.js'
+import type { TypedMessage } from '../base.js'
+import { isTypedMessageMaskPayload } from '../extension/index.js'
 
 export function forEachTypedMessageChild(node: TypedMessage, visitor: (x: TypedMessage) => void | 'stop') {
     let stop: void | 'stop'

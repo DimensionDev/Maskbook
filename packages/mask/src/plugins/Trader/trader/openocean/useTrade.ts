@@ -12,7 +12,7 @@ import type { SwapOOData, TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { OPENOCEAN_SUPPORTED_CHAINS } from './constants'
-import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export function useTrade(

@@ -11,12 +11,12 @@ import {
     formatBalance,
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../Wallet/messages'
 import type { useAsset } from '../hooks/useAsset'
 import { resolvePaymentTokensOnCryptoartAI, resolveAssetLinkOnCryptoartAI } from '../pipes'
@@ -131,7 +131,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     if (placeBidState.type === TransactionStateType.HASH) onClose()
                     if (placeBidState.type === TransactionStateType.CONFIRMED) {

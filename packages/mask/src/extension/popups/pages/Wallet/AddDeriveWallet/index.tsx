@@ -104,7 +104,7 @@ const AddDeriveWallet = memo(() => {
     }, [mnemonic, wallets.length, page])
 
     const onCheck = useCallback(
-        async (checked, index) => {
+        async (checked: boolean, index: number) => {
             if (checked) {
                 indexes.current.add(page * 10 + index)
             } else {

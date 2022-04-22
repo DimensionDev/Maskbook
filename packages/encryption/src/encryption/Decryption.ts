@@ -2,8 +2,8 @@ import { unreachable } from '@dimensiondev/kit'
 import { decodeTypedMessageFromDocument, decodeTypedMessageV38ToV40Format, TypedMessage } from '@masknet/typed-message'
 import { AESCryptoKey, EC_Public_CryptoKey, andThenAsync } from '@masknet/shared-base'
 import { None, Result } from 'ts-results'
-import { AESAlgorithmEnum, PayloadParseResult } from '../payload'
-import { decryptWithAES, importAESFromJWK } from '../utils'
+import type { PayloadParseResult } from '../payload'
+import { decryptWithAES, importAES } from '../utils'
 import {
     DecryptOptions,
     DecryptIO,
@@ -40,13 +40,7 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
         if (AESKey.err) return yield new DecryptError(ErrorReasons.PayloadBroken, AESKey.val)
         if (iv.err) return yield new DecryptError(ErrorReasons.PayloadBroken, iv.val)
         // Not calling setPostCache here. It's public post and saving key is wasting storage space.
-        return yield* decryptWithPostAESKey(
-            version,
-            AESKey.val.key as AESCryptoKey,
-            iv.val,
-            encrypted,
-            options.onDecrypted,
-        )
+        return yield* decryptWithPostAESKey(version, AESKey.val, iv.val, encrypted, options.onDecrypted)
     } else if (encryption.type === 'E2E') {
         const { iv: _iv, ownersAESKeyEncrypted } = encryption
         if (_iv.err) return yield new DecryptError(ErrorReasons.PayloadBroken, _iv.val)
@@ -202,11 +196,11 @@ async function* decryptByECDH(
                 : await derive(ephemeralPublicKey).then((aesArr) => aesArr.map((aes) => [aes, iv] as const))
         for (const [derivedKey, derivedKeyNewIV] of derivedKeys) {
             const possiblePostKey = await andThenAsync(
-                decryptWithAES(AESAlgorithmEnum.A256GCM, derivedKey, derivedKeyNewIV, encryptedPostKey),
+                decryptWithAES(derivedKey, derivedKeyNewIV, encryptedPostKey),
                 postKeyDecoder,
             )
             if (possiblePostKey.err) continue
-            const decrypted = await decryptWithAES(AESAlgorithmEnum.A256GCM, possiblePostKey.val, iv, encrypted)
+            const decrypted = await decryptWithAES(possiblePostKey.val, iv, encrypted)
             if (decrypted.err) continue
 
             io.setPostKeyCache(possiblePostKey.val).catch(() => {})
@@ -225,7 +219,7 @@ async function* decryptWithPostAESKey(
     encrypted: Uint8Array,
     report: ((message: TypedMessage) => void) | undefined,
 ): AsyncIterableIterator<DecryptProgress> {
-    const { err, val } = await decryptWithAES(AESAlgorithmEnum.A256GCM, postAESKey, iv, encrypted)
+    const { err, val } = await decryptWithAES(postAESKey, iv, encrypted)
     if (err) return yield new DecryptError(ErrorReasons.DecryptFailed, val)
     return yield* parseTypedMessage(version, val, report)
 }
@@ -250,7 +244,7 @@ function importAESKeyFromJWKFromTextEncoder(aes_raw: Uint8Array) {
         const aes_text = new TextDecoder().decode(aes_raw)
         const aes_jwk = JSON.parse(aes_text) as JsonWebKey
         if (!aes_jwk.key_ops!.includes('decrypt')) aes_jwk.key_ops!.push('decrypt')
-        return (await importAESFromJWK.AES_GCM_256(aes_jwk)).unwrap()
+        return (await importAES(aes_jwk)).unwrap()
     })
 }
 
