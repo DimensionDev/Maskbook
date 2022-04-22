@@ -1,9 +1,9 @@
-import { makeStyles } from '@masknet/theme'
 import { SettingsIcon } from '@masknet/icons'
-import { Typography } from '@mui/material'
-import { WalletCom } from './WalletCom'
 import type { BindingProof } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { Typography } from '@mui/material'
 import { useI18N } from '../../../../utils'
+import { WalletItem } from './WalletItem'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -42,8 +42,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface WalletsByNetworkProps {
-    network: any
-    toSetting: any
+    network: { name: string; icon: URL }
+    toSetting: () => void
     wallets: BindingProof[]
     setAsDefault: (idx: number) => void
 }
@@ -51,7 +51,7 @@ interface WalletsByNetworkProps {
 export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: WalletsByNetworkProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const isAllHide = wallets.every((x) => !x.isPublic)
+    const isAllHid = wallets.every((x) => !x.isPublic)
     return (
         <div className={classes.container}>
             <div className={classes.topBox}>
@@ -62,24 +62,22 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
                 <SettingsIcon onClick={toSetting} className={classes.settingIcon} />
             </div>
             <div className={classes.content}>
-                <>
-                    {(!isAllHide &&
-                        wallets.map((x, idx) => {
-                            return (
-                                (x.isPublic && (
-                                    <WalletCom
-                                        key={x.identity}
-                                        nowIdx={idx}
-                                        setAsDefault={setAsDefault}
-                                        index={x.rawIdx}
-                                        address={x.identity}
-                                        isDefault={!!x.isDefault}
-                                    />
-                                )) ||
-                                null
-                            )
-                        })) || <Typography className={classes.empty}>{t('plugin_tips_empty_list')}</Typography>}
-                </>
+                {isAllHid ? (
+                    <Typography className={classes.empty}>{t('plugin_tips_empty_list')}</Typography>
+                ) : (
+                    wallets
+                        .filter((x) => x.isPublic)
+                        .map((x, idx) => (
+                            <WalletItem
+                                key={x.identity}
+                                nowIdx={idx}
+                                setAsDefault={setAsDefault}
+                                fallbackName={`Wallet ${idx}`}
+                                address={x.identity}
+                                isDefault={!!x.isDefault}
+                            />
+                        ))
+                )}
             </div>
         </div>
     )

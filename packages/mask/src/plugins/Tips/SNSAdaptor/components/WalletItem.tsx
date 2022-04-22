@@ -1,11 +1,11 @@
-import { makeStyles } from '@masknet/theme'
-import { Link, Typography } from '@mui/material'
-import { useCopyToClipboard } from 'react-use'
-import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
-import { useI18N } from '../../../../utils'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { FormattedAddress, useSnackbarCallback } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import { isSameAddress, useWallets } from '@masknet/web3-shared-evm'
-import { useEffect, useState } from 'react'
+import { Link, Typography } from '@mui/material'
+import { useMemo } from 'react'
+import { useCopyToClipboard } from 'react-use'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -76,23 +76,30 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface WalletComProps {
+interface WalletItemProps {
     address: string
     isDefault?: boolean
     canDelete?: boolean
     onDelete?: any
-    index?: number
+    fallbackName?: string
     nowIdx: number
     setAsDefault?: (idx: number) => void
 }
 
-export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, onDelete, nowIdx }: WalletComProps) {
+export function WalletItem({
+    address,
+    isDefault,
+    canDelete,
+    fallbackName,
+    setAsDefault,
+    onDelete,
+    nowIdx,
+}: WalletItemProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
     const { value: domain } = useReverseAddress(address)
     const { Utils } = useWeb3State() ?? {}
-    const [walletName, setWalletName] = useState<string>('')
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
             ev.stopPropagation()
@@ -106,17 +113,15 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
     )
     const wallets = useWallets()
 
-    useEffect(() => {
-        const nowItem = wallets.find((x) => isSameAddress(x.address, address))
-        const name = nowItem?.name
-        const res =
-            domain && Utils?.formatDomainName
-                ? Utils.formatDomainName(domain)
-                : name !== undefined && nowItem?.hasStoredKeyInfo
-                ? name
-                : `Wallet ${index !== undefined ? index + 1 : 0}`
-        setWalletName(res as string)
-    }, [address, domain])
+    const walletName = useMemo(() => {
+        const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
+        const name = currentWallet?.name
+        if (domain && Utils?.formatDomainName) {
+            return Utils.formatDomainName(domain)
+        }
+        return name !== undefined && currentWallet?.hasStoredKeyInfo ? name : fallbackName
+    }, [address, domain, fallbackName])
+
     const getActionRender = () => {
         if (!canDelete && !isDefault)
             return (
