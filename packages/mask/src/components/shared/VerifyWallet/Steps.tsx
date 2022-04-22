@@ -16,17 +16,9 @@ import classNames from 'classnames'
 import { useEffect } from 'react'
 import { useI18N } from '../../../utils'
 import type { Web3Plugin } from '@masknet/plugin-infra/src/web3-types'
-import {
-    ChainId,
-    isSameAddress,
-    NetworkType,
-    ProviderType,
-    useProviderType,
-    useWallets,
-} from '@masknet/web3-shared-evm'
+import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import type { PersonaInformation } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -106,12 +98,13 @@ interface StepsProps {
     confirmLoading: boolean
     notInPop?: boolean
     notEvm?: boolean
-    changeWallet: () => void
-    onConfirm: () => void
-    onCustomCancel?: () => void
     account?: string
     notConnected?: boolean
     isBound?: boolean
+    walletName?: string
+    changeWallet: () => void
+    onConfirm: () => void
+    onCustomCancel?: () => void
 }
 
 export function Steps(props: StepsProps) {
@@ -130,15 +123,11 @@ export function Steps(props: StepsProps) {
         notEvm,
         isBound,
         notConnected,
+        walletName,
         onCustomCancel,
     } = props
     const { showSnackbar } = usePopupCustomSnackbar()
-    const curProviderType = useProviderType()
-    const walletName = useWallets(wallet.providerType ?? curProviderType).find((x) =>
-        isSameAddress(x.address, wallet.account),
-    )?.name
-    const { value: domain } = useReverseAddress(wallet.account)
-    const { Utils } = useWeb3State() ?? {}
+
     const stepIconMap = {
         [SignSteps.Ready]: {
             step1: step1ActiveIcon,
@@ -170,13 +159,6 @@ export function Steps(props: StepsProps) {
         }
         navigate(-1)
     }
-    const getWalletName = () => {
-        if (notEvm) return `${curProviderType} Wallet`
-        if (notInPop && domain && Utils?.formatDomainName) return Utils.formatDomainName(domain)
-        if (![wallet.providerType, curProviderType].includes(ProviderType.MaskWallet))
-            return `${wallet.providerType ?? curProviderType} Wallet`
-        return walletName ?? 'Wallet'
-    }
 
     return (
         <div className={classes.container}>
@@ -185,7 +167,7 @@ export function Steps(props: StepsProps) {
             {isBound && <Typography className={classes.hasBound}>{t('wallet_verify_has_bound')}</Typography>}
             {notConnected && (
                 <Typography className={classes.hasBound} style={{ textAlign: 'center' }}>
-                    Please connect your wallet first.
+                    {t('wallet_verify_empty_alert')}
                 </Typography>
             )}
             {!notConnected && (
@@ -207,7 +189,7 @@ export function Steps(props: StepsProps) {
                             </Typography>
                         </div>
                         <div className={classes.stepRow}>
-                            <Typography className={classes.stepTitle}>{getWalletName()} Sign</Typography>
+                            <Typography className={classes.stepTitle}>{walletName ?? 'Wallet'} Sign</Typography>
                             <Typography className={classes.stepIntro}>
                                 {t('waller_verify_wallet_sign_intro')}
                             </Typography>

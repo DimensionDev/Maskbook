@@ -3,6 +3,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     isSameAddress,
+    ProviderType,
     useAccount,
     useChainId,
     useNetworkType,
@@ -16,7 +17,7 @@ import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../../../extension/service'
 import { useCustomSnackbar } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
-import { useProviderDescriptor } from '@masknet/plugin-infra/web3'
+import { useProviderDescriptor, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../../utils'
 import { PluginId } from '@masknet/plugin-infra'
 
@@ -31,15 +32,27 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     const [isBound, setIsBound] = useState(false)
     const [signed, setSigned] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
+    const curProviderType = useProviderType()
     const wallet = {
         ...useWallet(),
         account: useAccount(),
         networkType: useNetworkType(),
-        providerType: useProviderType(),
+        providerType: curProviderType,
         chainId: useChainId(),
     }
+    const { value: domain } = useReverseAddress(wallet.account)
+    const { Utils } = useWeb3State() ?? {}
     const isNotEvm = !useProviderDescriptor()?.providerAdaptorPluginID.includes('evm')
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
+
+    const walletName = () => {
+        if (isNotEvm) return `${curProviderType} Wallet`
+        if (domain && Utils?.formatDomainName) return Utils.formatDomainName(domain)
+        if (![wallet.providerType, curProviderType].includes(ProviderType.MaskWallet))
+            return `${wallet.providerType ?? curProviderType} Wallet`
+        return wallet.name ?? 'Wallet'
+    }
+
     useEffect(() => {
         const res = bounds.filter((x) => isSameAddress(x.identity, wallet.account))
         setIsBound(res.length > 0)
@@ -73,7 +86,6 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                 variant: 'error',
                 message: nowTime,
             })
-            console.error(error)
             return
         }
     }, [currentPersona?.identifier, payload])
@@ -100,7 +112,6 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
             return true
         } catch (error) {
             showSnackbar(t('plugin_tips_wallet_sign_error'), { variant: 'error', message: nowTime })
-            console.error(error)
             return false
         }
     }, [currentPersona?.publicHexKey, payload, wallet, signature])
@@ -142,6 +153,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                     networkType: wallet.networkType,
                     providerType: wallet.providerType,
                 }}
+                walletName={walletName()}
                 persona={currentPersona}
                 step={step}
                 confirmLoading={confirmLoading || payloadLoading}

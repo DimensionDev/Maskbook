@@ -1,5 +1,4 @@
 import { ExternalLink } from 'react-feather'
-import classNames from 'classnames'
 import { ChainId, ProviderType, NetworkType, useAccount, useProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -110,7 +109,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const { Utils } = useWeb3State() ?? {}
     const { value: domain } = useReverseAddress(wallet.account)
     return account ? (
-        <section className={classNames(classes.currentAccount)}>
+        <section className={classes.currentAccount}>
             <WalletIcon
                 size={30}
                 badgeSize={12}
@@ -151,18 +150,14 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                     </Link>
                 </div>
             </div>
-            <Button
-                className={classNames(classes.actionButton)}
-                variant="contained"
-                size="small"
-                onClick={changeWallet}>
+            <Button className={classes.actionButton} variant="contained" size="small" onClick={changeWallet}>
                 {t('wallet_status_button_change')}
             </Button>
         </section>
     ) : (
         <section className={classes.connectButtonWrapper}>
             <Button
-                className={classNames(classes.connectButton)}
+                className={classes.connectButton}
                 color="primary"
                 variant="contained"
                 size="small"
