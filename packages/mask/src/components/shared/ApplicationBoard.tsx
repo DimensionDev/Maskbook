@@ -201,9 +201,7 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
         )
     }, [])
 
-    const {
-        value: something,
-    } = useAsync(async () => {
+    const { value: something } = useAsync(async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
         const currentPersona = (await Services.Identity.queryPersona(currentPersonaIdentifier!)) as Persona
         const currentSNSConnectedPersona = personas.find((persona) =>
