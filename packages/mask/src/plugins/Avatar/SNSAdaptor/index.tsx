@@ -7,7 +7,7 @@ import { base } from '../base'
 import { setupContext } from '../context'
 import { Translate } from '../locales'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { CollectiblesIcon } from '@masknet/icons'
+import { NFTAvatarIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -17,7 +17,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const name = { i18nKey: 'application_dialog_title', fallback: 'NFT PFP' }
-            const icon = <CollectiblesIcon />
+            const icon = <NFTAvatarIcon />
             return {
                 RenderEntryComponent({ disabled, nextIdVerification }) {
                     const [open, setOpen] = useState(false)
