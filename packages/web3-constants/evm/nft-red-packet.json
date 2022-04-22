@@ -19,7 +19,7 @@
         "Aurora": "0x05ee315E407C21a594f807D61d6CC11306D1F149",
         "Aurora_Testnet": "0x97369fEE7db34E0BfE47861f2ec44b4378d13eB4",
         "Conflux": "0x5b966f3a32db9c180843bcb40267a66b73e4f022",
-        "KardiaChain": ""
+        "KardiaChain": "0xc3e62b2CC70439C32a381Bfc056aCEd1d7162cef"
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-mainnet",
