@@ -2,6 +2,7 @@ import { memo, useCallback, useMemo } from 'react'
 import { PersonaHomeUI } from './UI'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { DashboardRoutes, NextIDPlatform } from '@masknet/shared-base'
+import { useTitle } from '../../../hook/useTitle'
 
 const PersonaHome = memo(() => {
     const { avatar, currentPersona, proofs, setSelectedPersona, fetchProofsLoading, personas } =
@@ -29,6 +30,8 @@ const PersonaHome = memo(() => {
             url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.SignIn}`),
         })
     }, [])
+
+    useTitle('')
 
     return (
         <PersonaHomeUI
