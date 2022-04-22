@@ -5,8 +5,8 @@ import {
     formatBalance,
     isNativeTokenAddress,
     useNativeTokenDetailed,
+    ComputedPayload,
 } from '@masknet/web3-shared-evm'
-import type { ComputedPayload } from '../../../../../extension/background-script/EthereumServices/rpc'
 import { useI18N } from '../../../../../utils'
 import type { ContractMethodInfo } from '../type'
 

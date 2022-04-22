@@ -8,6 +8,7 @@ import {
     ERC20TokenDetailed,
     FungibleTokenDetailed,
     useERC20TokenDetailed,
+    ComputedPayload,
 } from '@masknet/web3-shared-evm'
 import { scale10 } from '@masknet/web3-shared-base'
 import { getContractMethodDescription } from './contractMethodDescription'

@@ -70,9 +70,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         ) => {
             closeDialog()
 
-            const isReady = await Provider?.isReady(provider.type)
-
-            if (!isReady) {
+            if (!(await Provider?.isReady(provider.type))) {
                 const downloadLink = Utils?.resolveProviderHomeLink(provider.type)
                 if (downloadLink) openWindow(downloadLink)
                 return

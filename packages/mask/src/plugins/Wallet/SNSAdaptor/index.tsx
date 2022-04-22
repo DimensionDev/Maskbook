@@ -2,15 +2,12 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
 import { SelectNftContractDialog } from './SelectNftContractDialog'
 import { SelectProviderDialog } from './SelectProviderDialog'
-import { SelectWalletDialog } from './SelectWalletDialog'
 import { WalletStatusDialog } from './WalletStatusDialog'
-import { WalletRenameWalletDialog } from './RenameWalletDialog'
 import { TransactionDialog } from './TransactionDialog'
 import { ConnectWalletDialog } from './ConnectWalletDialog'
 import { WalletRiskWarningDialog } from './RiskWarningDialog'
 import { GasSettingDialog } from './GasSettingDialog'
 import { TransactionSnackbar } from './TransactionSnackbar'
-import { RestoreLegacyWalletDialog } from './RestoreLegacyWalletDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -19,14 +16,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return (
             <>
                 <TransactionDialog />
-                <SelectWalletDialog />
                 <SelectProviderDialog />
                 <SelectNftContractDialog />
                 <WalletStatusDialog />
                 <ConnectWalletDialog />
-                <WalletRenameWalletDialog />
                 <WalletRiskWarningDialog />
-                <RestoreLegacyWalletDialog />
                 <GasSettingDialog />
                 <TransactionSnackbar />
             </>

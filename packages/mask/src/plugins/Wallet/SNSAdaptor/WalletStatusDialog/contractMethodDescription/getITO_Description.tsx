@@ -1,5 +1,10 @@
-import { getITOConstants, isSameAddress, useERC20TokenDetailed, formatBalance } from '@masknet/web3-shared-evm'
-import type { ComputedPayload } from '../../../../../extension/background-script/EthereumServices/rpc'
+import {
+    getITOConstants,
+    isSameAddress,
+    useERC20TokenDetailed,
+    formatBalance,
+    ComputedPayload,
+} from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
 import type { ContractMethodInfo } from '../type'
 
