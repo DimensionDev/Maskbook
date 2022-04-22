@@ -113,10 +113,10 @@ Here is the chain abilities checklist. If you are working on a bounty task, plea
 ## Examples
 
 | Chain     | Pull Request Link                                    |
-| --------- | ---------------------------------------------------- |
+| --------- | ---------------------------------------------------- | --- |
 | CELO      | <https://github.com/DimensionDev/Maskbook/pull/5052> |
 | Fantom    | <https://github.com/DimensionDev/Maskbook/pull/5036> |
 | xDai      | <https://github.com/DimensionDev/Maskbook/pull/4140> |
 | Arbitrum  | <https://github.com/DimensionDev/Maskbook/pull/3558> |
 | Avalanche | <https://github.com/DimensionDev/Maskbook/pull/5289> |
-| Moonbeam  | <#>                                                  |
+| Moonbeam  | <https://github.com/DimensionDev/Maskbook/pull/5842> |     |

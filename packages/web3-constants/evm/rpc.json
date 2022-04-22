@@ -61,7 +61,7 @@
         "Aurora": ["https://mainnet.aurora.dev"],
         "Aurora_Testnet": ["https://testnet.aurora.dev"],
         "Conflux": ["https://evm.confluxrpc.com"],
-        "Moonbeam": ["https://testnet.aurora.dev"]
+        "Moonbeam": ["https://rpc.api.moonbeam.network", "wss://wss.api.moonbeam.network"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 1, 2, 3, 4],
