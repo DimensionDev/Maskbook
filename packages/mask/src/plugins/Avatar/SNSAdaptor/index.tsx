@@ -46,6 +46,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                         />
                                     </Typography>
                                 }
+                                nextIdVerifyToolTipHint={nextIdVerification?.toolTipHint}
                             />
 
                             <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />

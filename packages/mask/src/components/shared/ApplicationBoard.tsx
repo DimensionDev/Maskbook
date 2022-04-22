@@ -247,7 +247,7 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
             nextIdVerification={{
                 isNextIdVerify,
                 isSNSConnectToCurrentPersona,
-                toolTip: t('plugin_tips_sns_persona_unmatched', {
+                toolTipHint: t('plugin_tips_sns_persona_unmatched', {
                     currentPersonaPublicKey,
                     currentSNSConnectedPersonaPublicKey,
                 }),
