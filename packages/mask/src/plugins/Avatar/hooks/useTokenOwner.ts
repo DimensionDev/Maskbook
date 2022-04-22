@@ -12,11 +12,13 @@ export function useTokenOwner(address: string, tokenId: string) {
     const ERC721Contract = useERC721TokenContract(address)
     return useAsyncRetry(async () => {
         if (!ERC721Contract || !tokenId) return
-        const owner = await safeNonPayableTransactionCall(ERC721Contract?.methods.ownerOf(tokenId))
-        const name = await safeNonPayableTransactionCall(ERC721Contract.methods.name())
-        const symbol = await safeNonPayableTransactionCall(ERC721Contract.methods.symbol())
-
-        return { owner, name, symbol }
+        const allSettled = await Promise.allSettled([
+            safeNonPayableTransactionCall(ERC721Contract?.methods.ownerOf(tokenId)),
+            safeNonPayableTransactionCall(ERC721Contract.methods.name()),
+            safeNonPayableTransactionCall(ERC721Contract.methods.symbol()),
+        ])
+        const result = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined))
+        return { owner: result[0], name: result[1], symbol: result[2] }
     }, [ERC721Contract, tokenId])
 }
 
