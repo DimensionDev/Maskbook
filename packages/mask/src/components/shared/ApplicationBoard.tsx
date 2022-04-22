@@ -1,4 +1,4 @@
-import { Fragment, useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography, useTheme } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
@@ -142,13 +142,12 @@ export function ApplicationBoard() {
 
             {listedAppList.length > 0 ? (
                 <section className={classes.applicationWrapper}>
-                    {listedAppList.map((application) => {
-                        return (
-                            <Fragment key={application.entry.ApplicationEntryID}>
-                                <RenderEntryComponentWrapper application={application} />
-                            </Fragment>
-                        )
-                    })}
+                    {listedAppList.map((application) => (
+                        <RenderEntryComponentWrapper
+                            key={application.entry.ApplicationEntryID}
+                            application={application}
+                        />
+                    ))}
                 </section>
             ) : (
                 <div className={classes.placeholderWrapper}>
