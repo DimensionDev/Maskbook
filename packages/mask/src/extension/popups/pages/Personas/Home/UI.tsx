@@ -8,14 +8,7 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Navigator } from '../../../components/Navigator'
 import { Avatar, Button, Typography } from '@mui/material'
-import {
-    AddUserIcon,
-    ArrowRightIosIcon,
-    EmptyIcon,
-    MenuPersonasActiveIcon,
-    PopupRestoreIcon,
-    RestoreIcon,
-} from '@masknet/icons'
+import { AddUserIcon, ArrowRightIosIcon, EmptyIcon, MenuPersonasActiveIcon, PopupRestoreIcon } from '@masknet/icons'
 import { formatPersonaFingerprint, PopupRoutes, formatPersonaName } from '@masknet/shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useI18N } from '../../../../../utils'
