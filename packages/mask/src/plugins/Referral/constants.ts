@@ -21,3 +21,6 @@ export const REFERRAL_FARMS_V1_ADDR = '0xae450b836C61AcE60e5017f6ba48d468115b349
 export const CONFIRMATION_V1_ADDR = '0x28D2C20Dd2A8ad4E299C77Dc722e3bA919BAEE05'
 
 export const APR = 'N/A'
+
+// set DISABLE_PLUGIN = false to test it
+export const DISABLE_PLUGIN = true

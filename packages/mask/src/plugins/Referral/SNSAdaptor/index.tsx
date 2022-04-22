@@ -5,7 +5,7 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 
 import type { ReferralMetaData } from '../types'
 import { base } from '../base'
-import { META_KEY } from '../constants'
+import { META_KEY, DISABLE_PLUGIN } from '../constants'
 import { referralMetadataReader } from '../helpers'
 
 import { FarmPost } from './FarmPost'
@@ -24,10 +24,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     CompositionDialogMetadataBadgeRender: new Map([
         [META_KEY, (meta: ReferralMetaData) => `Refer Farm of '${meta.referral_token_name}' from ${meta.sender}`],
     ]),
-    CompositionDialogEntry: {
-        label: <>Referral Farms</>,
-        dialog: ReferralDialog,
-    },
+    CompositionDialogEntry: !DISABLE_PLUGIN
+        ? {
+              label: <>Referral Farms</>,
+              dialog: ReferralDialog,
+          }
+        : undefined,
     GlobalInjection: function Component() {
         return <SelectToken />
     },
@@ -42,7 +44,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     return (
                         <>
                             <ApplicationEntry
-                                disabled={disabled}
+                                disabled={DISABLE_PLUGIN || disabled}
                                 icon={icon}
                                 title={name}
                                 onClick={() =>
