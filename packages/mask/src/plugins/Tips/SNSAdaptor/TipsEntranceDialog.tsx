@@ -116,8 +116,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             ? (proofRes as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
             : []
         walletsList.sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
-        walletsList.reverse().forEach((i: BindingProof, idx: number) => (i.rawIdx = idx))
-        walletsList.reverse()
+        walletsList.forEach((wallet, idx) => (wallet.rawIdx = walletsList.length - idx))
         if (kv?.ok && kv.val.proofs.length > 0 && walletsList.length > 0) {
             const kvCache = (kv.val as NextIdStorageInfo).proofs.find(
                 (x) => x.identity === currentPersona?.publicHexKey,
@@ -176,11 +175,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 <div className={classes.btnContainer}>
                     <Button
                         onClick={() => {
-                            if (bodyView === BodyViewSteps.wallets) {
-                                setBodyView(BodyViewSteps.addWallet)
-                            } else {
-                                setBodyView(BodyViewSteps.wallets)
-                            }
+                            setBodyView(
+                                bodyView === BodyViewSteps.wallets ? BodyViewSteps.addWallet : BodyViewSteps.wallets,
+                            )
                         }}
                         className={classes.walletBtn}
                         variant="contained"
@@ -198,10 +195,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         changed[idx].isDefault = 1
         const defaultItem = changed[idx]
         changed.splice(idx, 1)
-        changed.sort(
-            (a: BindingProof, b: BindingProof) =>
-                Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10),
-        )
+        changed.sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
         changed.unshift(defaultItem)
         setRawPatchData(changed)
         setHasChanged(true)
