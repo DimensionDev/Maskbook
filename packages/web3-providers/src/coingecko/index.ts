@@ -1,4 +1,4 @@
-import type { CurrencyType } from '@masknet/plugin-infra'
+import type { CurrencyType } from '@masknet/plugin-infra/web3'
 import { COINGECKO_URL_BASE } from './constants'
 import type { PriceAPI } from '..'
 

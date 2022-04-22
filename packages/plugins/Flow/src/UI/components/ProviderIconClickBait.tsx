@@ -1,5 +1,5 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
-import { NetworkPluginID, useChainId, Web3Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID, useChainId, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { useFCL } from '@masknet/web3-shared-flow'
 import { getStorage } from '../../storage'
 

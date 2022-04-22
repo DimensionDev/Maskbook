@@ -18,6 +18,7 @@ export const useContacts = (network: string, page: number, size = 20) => {
         const lastValue = cache.current.get(page - 1)
 
         const values = await Services.Identity.queryRelationPaged(
+            currentPersona?.identifier,
             {
                 network,
                 after: lastValue,
@@ -28,6 +29,8 @@ export const useContacts = (network: string, page: number, size = 20) => {
 
         // Cache the last record of  each page
         cache.current.set(page, last(values))
+
+        if (values.length === 0) return []
 
         const profiles = await Services.Identity.queryProfilesWithIdentifiers(values.map((x) => x.profile))
         return profiles.map((profile) => {

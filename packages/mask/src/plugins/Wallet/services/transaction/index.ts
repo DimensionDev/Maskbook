@@ -1,7 +1,10 @@
 import type { TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { ChainId, TransactionStatusType } from '@masknet/web3-shared-evm'
-import { getSendTransactionComputedPayload } from '../../../../extension/background-script/EthereumService'
+import {
+    getSendTransactionComputedPayload,
+    ComputedPayload,
+} from '../../../../extension/background-script/EthereumService'
 import * as database from './database'
 import * as watcher from './watcher'
 import * as helpers from './helpers'
@@ -23,7 +26,7 @@ export interface RecentTransaction {
     receipt?: TransactionReceipt | null
     payload?: JsonRpcPayload
     payloadReplacement?: JsonRpcPayload
-    computedPayload?: UnboxPromise<ReturnType<typeof getSendTransactionComputedPayload>>
+    computedPayload?: ComputedPayload
 }
 
 export async function addRecentTransaction(chainId: ChainId, address: string, hash: string, payload: JsonRpcPayload) {

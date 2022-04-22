@@ -49,7 +49,7 @@ export const RestoreBlueLogo = styled(RestoreBlueIcon)(({ theme }) => ({
 
 interface PersonaLogoBoxProps {}
 
-export const PersonaLogoBox = memo<PersonaLogoBoxProps>(({ children }) => {
+export const PersonaLogoBox = memo<React.PropsWithChildren<PersonaLogoBoxProps>>(({ children }) => {
     const t = useDashboardI18N()
     return (
         <LogoBoxStyled>

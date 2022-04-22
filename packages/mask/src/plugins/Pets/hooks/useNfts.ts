@@ -9,8 +9,9 @@ import {
     ERC721ContractDetailed,
     SocketState,
     resolveIPFSLink,
+    Constant,
+    transform,
 } from '@masknet/web3-shared-evm'
-import { Constant, transform } from '@masknet/web3-shared-evm/constants/utils'
 import { cloneDeep, findLastIndex } from 'lodash-unified'
 import { delay } from '@dimensiondev/kit'
 import type { User, FilterContract } from '../types'

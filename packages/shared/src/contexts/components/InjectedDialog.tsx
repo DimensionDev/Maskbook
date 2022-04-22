@@ -161,7 +161,7 @@ function CopyElementWithNewProps<T>(
         Children.map(children, (child: any) =>
             child?.type === Target
                 ? cloneElement(child, {
-                      classes: mergeClasses(extraClasses, child.props.classes),
+                      classes: mergeClasses(extraClasses as any, child.props.classes),
                   } as DialogContentProps)
                 : null,
         ) || []

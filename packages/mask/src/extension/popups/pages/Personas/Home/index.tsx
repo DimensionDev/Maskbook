@@ -1,26 +1,50 @@
-import { memo, useCallback } from 'react'
-import { PersonaContext } from '../hooks/usePersonaContext'
-import { useNavigate } from 'react-router-dom'
+import { memo, useCallback, useMemo } from 'react'
 import { PersonaHomeUI } from './UI'
-import type { ECKeyIdentifier } from '@masknet/shared-base'
-import Services from '../../../../service'
+import { PersonaContext } from '../hooks/usePersonaContext'
+import { DashboardRoutes, NextIDPlatform } from '@masknet/shared-base'
+import { useTitle } from '../../../hook/useTitle'
 
 const PersonaHome = memo(() => {
-    const { currentPersona, setDeletingPersona, personas } = PersonaContext.useContainer()
-    const navigate = useNavigate()
+    const { avatar, currentPersona, proofs, setSelectedPersona, fetchProofsLoading, personas } =
+        PersonaContext.useContainer()
 
-    const onChangeCurrentPersona = useCallback(
-        (identifier: ECKeyIdentifier) => Services.Settings.setCurrentPersonaIdentifier(identifier),
-        [],
-    )
+    const wallets = useMemo(() => {
+        if (!proofs) return []
+        return proofs.filter(({ platform }) => platform === NextIDPlatform.Ethereum)
+    }, [proofs])
+
+    const onEdit = useCallback(() => {
+        setSelectedPersona(currentPersona)
+    }, [currentPersona])
+
+    const onCreatePersona = useCallback(() => {
+        browser.tabs.create({
+            active: true,
+            url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.SignUp}`),
+        })
+    }, [])
+
+    const onRestore = useCallback(() => {
+        browser.tabs.create({
+            active: true,
+            url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.SignIn}`),
+        })
+    }, [])
+
+    useTitle('')
 
     return (
         <PersonaHomeUI
-            currentPersona={currentPersona}
-            navigate={navigate}
-            personas={personas}
-            onDeletePersona={setDeletingPersona}
-            onChangeCurrentPersona={onChangeCurrentPersona}
+            isEmpty={!personas?.length}
+            avatar={avatar}
+            fingerprint={currentPersona?.identifier.compressedPoint}
+            nickname={currentPersona?.nickname}
+            accountsCount={currentPersona?.linkedProfiles.length ?? 0}
+            walletsCount={wallets.length}
+            onEdit={onEdit}
+            fetchProofsLoading={fetchProofsLoading}
+            onCreatePersona={onCreatePersona}
+            onRestore={onRestore}
         />
     )
 })

@@ -2,7 +2,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, CircularProgress, Typography, Paper, Link } from '@mui/material'
 import { useStylesExtends, makeStyles, MaskColorVar } from '@masknet/theme'
 import { ImageIcon } from '@masknet/shared'
-import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra'
+import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra/web3'
 import {
     ProviderType,
     resolveProviderName,

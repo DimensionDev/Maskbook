@@ -22,7 +22,7 @@ jobs:
       - restore_cache:
           name: Restore PNPM Package Cache
           keys:
-            - v3-mask-cache-pnpm
+            - v4-mask-cache-pnpm
       - run:
           name: Enable corepack
           command: sudo corepack enable
@@ -31,7 +31,7 @@ jobs:
           command: pnpm install --frozen-lockfile --store-dir ~/.pnpm/
       - save_cache:
           name: Save NPM Package Cache
-          key: v3-mask-cache-npm
+          key: v4-mask-cache-pnpm
           paths:
             - ~/.pnpm/
       - persist_to_workspace:

@@ -55,7 +55,7 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (ev.open) return
                 resetTransferCallback()
                 if (transferState.type !== TransactionStateType.HASH) return

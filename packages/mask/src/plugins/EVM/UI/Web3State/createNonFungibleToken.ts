@@ -1,4 +1,4 @@
-import { TokenType, Web3Plugin } from '@masknet/plugin-infra'
+import { TokenType, Web3Plugin } from '@masknet/plugin-infra/web3'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 
 export function createNonFungibleToken(token: ERC721TokenDetailed) {

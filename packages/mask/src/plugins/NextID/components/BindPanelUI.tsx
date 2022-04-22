@@ -8,7 +8,7 @@ import { useI18N } from '../locales'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Persona } from '../../../database'
 import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
-import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
+import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { formatPersonaFingerprint } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({

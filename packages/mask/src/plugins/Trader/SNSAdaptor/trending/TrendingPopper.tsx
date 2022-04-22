@@ -13,8 +13,6 @@ export interface TrendingPopperProps {
     PopperProps?: Partial<PopperProps>
 }
 
-const TIMEOUT = 1500
-
 export function TrendingPopper(props: TrendingPopperProps) {
     const popperRef = useRef<{ update(): void } | null>(null)
     const [freezed, setFreezed] = useState(false) // disable any click
@@ -24,10 +22,9 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [availableDataProviders, setAvailableDataProviders] = useState<DataProvider[]>([])
     const popper = useRef<HTMLDivElement | null>(null)
-    const [mouseIn, setMouseIn] = useState(false)
 
     // #region select token and provider dialog could be open by trending view
-    const onFreezed = useCallback((ev) => setFreezed(ev.open), [])
+    const onFreezed = useCallback((ev: { open: boolean }) => setFreezed(ev.open), [])
     useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, onFreezed)

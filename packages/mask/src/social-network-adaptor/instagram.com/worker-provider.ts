@@ -4,6 +4,5 @@ import { instagramShared } from './shared'
 const define: SocialNetworkWorker.Definition = {
     ...instagramWorkerBase,
     ...instagramShared,
-    tasks: {},
 }
 export default define

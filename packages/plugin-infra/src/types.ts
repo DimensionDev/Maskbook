@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type { TypedMessage } from '@masknet/typed-message'
@@ -69,6 +69,7 @@ export namespace Plugin.Shared {
         personaSign(payload: PersonaSignRequest): Promise<PersonaSignResult>
         /** Sign a message with wallet */
         walletSign(message: string, address: string): Promise<string>
+        currentPersona: Subscription<PersonaIdentifier | undefined>
     }
     export interface Definition {
         /**
@@ -215,8 +216,8 @@ export namespace Plugin.Shared {
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedContext {
-        /** Get current persona */
-        currentPersona: Subscription<PersonaIdentifier | undefined>
+        lastRecognizedProfile: Subscription<IdentityResolved | undefined>
+        currentVisitingProfile: Subscription<IdentityResolved | undefined>
     }
     export interface Definition extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
@@ -305,13 +306,34 @@ export namespace Plugin.SNSAdaptor {
 
     export interface ApplicationEntry {
         /**
+         * The contrast between ApplicationEntryID and PluginID is that one plugin may contains multiple entries.
+         */
+        ApplicationEntryID: string
+        /**
          * Render entry component
          */
-        RenderEntryComponent: (props: { disabled: boolean }) => JSX.Element
+        RenderEntryComponent?: (props: { disabled: boolean }) => JSX.Element | null
         /**
          * Used to order the applications on the board
          */
-        defaultSortingPriority: number
+        appBoardSortingDefaultPriority?: number
+
+        /**
+         * Used to order the applications on the market list
+         */
+        marketListSortingPriority?: number
+
+        icon: React.ReactNode
+
+        name: I18NFieldOrReactNode
+
+        description?: I18NFieldOrReactNode
+
+        tutorialLink?: string
+        /**
+         * Does the application listed in the DAPP list
+         */
+        category?: 'dapp' | 'other'
     }
 
     export interface ProfileIdentity {
@@ -646,6 +668,14 @@ export enum CurrentSNSNetwork {
     Minds = 4,
 }
 
+export interface IdentityResolved {
+    identifier: ProfileIdentifier
+    nickname?: string
+    avatar?: string
+    bio?: string
+    homepage?: string
+}
+
 /**
  * All integrated Plugin IDs
  */
@@ -659,6 +689,7 @@ export enum PluginId {
     NextID = 'com.mask.next_id',
     External = 'io.mask.external',
     Furucombo = 'app.furucombo',
+    FindTruman = 'org.findtruman',
     Gitcoin = 'co.gitcoin',
     GoodGhosting = 'co.good_ghosting',
     MaskBox = 'com.maskbook.box',
@@ -677,6 +708,7 @@ export enum PluginId {
     RedPacketNFT = 'com.maskbook.red_packet_nft',
     Pets = 'com.maskbook.pets',
     Snapshot = 'org.snapshot',
+    Savings = 'com.savings',
     ITO = 'com.maskbook.ito',
     Wallet = 'com.maskbook.wallet',
     PoolTogether = 'com.pooltogether',
@@ -686,19 +718,6 @@ export enum PluginId {
     GoPlusSecurity = 'io.gopluslabs.security',
     CrossChainBridge = 'io.mask.cross-chain-bridge',
     // @masknet/scripts: insert-here
-}
-
-export interface Pagination {
-    /** The item size of each page. */
-    size?: number
-    /** The page index. */
-    page?: number
-}
-
-export interface Pageable<T> {
-    currentPage: number
-    hasNextPage: boolean
-    data: T[]
 }
 /**
  * This namespace is not related to the plugin authors

@@ -8,20 +8,16 @@ import { debounce } from 'lodash-unified'
 
 let isLoading: Promise<void> | null
 
-const independentRef = {
-    myPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),
-}
+const personas = new ValueRef<
+    Pick<Persona, 'nickname' | 'identifier' | 'fingerprint' | 'publicHexKey' | 'linkedProfiles'>[]
+>([], PersonaArrayComparer as any)
 
 {
-    const query = () => {
-        return Services.Identity.queryMyPersonas().then((p) => {
-            independentRef.myPersonasRef.value = p.filter((x) => !x.uninitialized)
-            isLoading = null
-            Services.Helper.__deprecated__setStorage<boolean>(
-                'mobileIsMyPersonasInitialized',
-                independentRef.myPersonasRef.value.length > 0,
-            )
-        })
+    async function query() {
+        const p = await Services.Identity.queryMyPersonas()
+        personas.value = p.filter((x) => !x.uninitialized)
+        isLoading = null
+        Services.Helper.__deprecated__setStorage<boolean>('mobileIsMyPersonasInitialized', personas.value.length > 0)
     }
 
     const debounceQuery = debounce(query, 500, { trailing: true })
@@ -32,5 +28,5 @@ const independentRef = {
 
 export function useMyPersonas() {
     if (isLoading) throw isLoading
-    return useValueRef(independentRef.myPersonasRef)
+    return useValueRef(personas)
 }

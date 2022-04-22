@@ -1,6 +1,7 @@
 export {}
 // A simple polyfill. Enough for us.
 if (!Intl.ListFormat) {
+    // @ts-ignore
     Intl.ListFormat = class {
         constructor(public locales?: string | Partial<Intl.ListFormatOptions>, options?: Intl.ListFormatOptions) {}
         format(string: string[]) {

@@ -28,9 +28,10 @@ import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { toHex } from 'web3-utils'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 import { isGreaterThan, leftShift, pow10 } from '@masknet/web3-shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -133,7 +134,7 @@ const useStyles = makeStyles()(() => ({
     },
     copy: {
         fontSize: 12,
-        stroke: '#7B8192',
+        fill: '#7B8192',
         cursor: 'pointer',
     },
 }))
@@ -314,6 +315,8 @@ const ContractInteraction = memo(() => {
             navigate(PopupRoutes.Wallet, { replace: true })
         }
     }, [request, requestLoading])
+
+    useTitle(typeName ?? t('popups_wallet_contract_interaction'))
 
     const { value: domain } = useReverseAddress(to, NetworkPluginID.PLUGIN_EVM)
     const { Utils } = useWeb3State()

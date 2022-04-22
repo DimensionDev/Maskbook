@@ -5,6 +5,6 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
 export function useExportPrivateKey(identifier: PersonaIdentifier): AsyncState<string> {
     return useAsync(async () => {
-        return Services.Identity.exportPersonaPrivateKey(identifier)
+        return Services.Backup.backupPersonaPrivateKey(identifier)
     }, [identifier])
 }

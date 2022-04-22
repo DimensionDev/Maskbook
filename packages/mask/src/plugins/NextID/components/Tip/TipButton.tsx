@@ -1,5 +1,5 @@
 import { TipCoin } from '@masknet/icons'
-import { usePostInfoDetails } from '@masknet/plugin-infra'
+import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'

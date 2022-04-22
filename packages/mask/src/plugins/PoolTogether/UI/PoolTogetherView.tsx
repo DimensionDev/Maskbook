@@ -1,5 +1,5 @@
 import { RefreshIcon } from '@masknet/icons'
-import { DarkColor } from '@masknet/theme/constants'
+import { DarkColor } from '@masknet/theme/base'
 import { usePoolTogetherConstants } from '@masknet/web3-shared-evm'
 import { Card, CardContent, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'

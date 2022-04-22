@@ -5,6 +5,5 @@ import { openseaShared } from './shared'
 const openseaWorker: SocialNetworkWorker.Definition = {
     ...openseaWorkerBase,
     ...openseaShared,
-    tasks: {},
 }
 export default openseaWorker

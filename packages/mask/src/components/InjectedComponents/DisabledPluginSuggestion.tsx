@@ -1,11 +1,11 @@
+import type { Option } from 'ts-results'
 import {
     useActivatedPluginsSNSAdaptor,
     registeredPlugins,
     usePostInfoDetails,
-    Option,
     Plugin,
     usePluginI18NField,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Switch } from '@mui/material'
 import Services from '../../extension/service'

@@ -26,10 +26,11 @@ export const [useCurrentPersonaIdentifier] = createGlobalState(Services.Settings
     Messages.events.currentPersonaIdentifier.on(x),
 )
 
-export const [usePersonaAvatar] = createGlobalState(Services.Identity.getCurrentPersonaAvatar, (x) => {
-    const a = Messages.events.currentPersonaIdentifier.on(x)
-    const b = Messages.events.ownPersonaChanged.on(x)
-    return () => void [a(), b()]
-})
-
-export const updatePersonaAvatar = Services.Identity.updateCurrentPersonaAvatar
+export const [usePersonaAvatar] = createGlobalState(
+    () => Services.Settings.getCurrentPersonaIdentifier().then(Services.Identity.getPersonaAvatar),
+    (x) => {
+        const a = Messages.events.currentPersonaIdentifier.on(x)
+        const b = Messages.events.ownPersonaChanged.on(x)
+        return () => void [a(), b()]
+    },
+)
