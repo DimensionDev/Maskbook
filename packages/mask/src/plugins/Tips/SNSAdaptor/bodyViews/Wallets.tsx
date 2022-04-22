@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { useI18N } from '../../../../utils'
 import { DisconnectWalletDialog } from '../components/DisconnectDialog'
-import { WalletCom } from '../components/WalletCom'
+import { WalletItem } from '../components/WalletItem'
 
 const useStyles = makeStyles()((theme) => ({
     emptyBox: {
@@ -44,12 +44,12 @@ const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: W
         <>
             {wallets.map((x, idx) => {
                 return (
-                    <WalletCom
+                    <WalletItem
+                        key={idx}
                         nowIdx={idx}
                         onDelete={() => deleteWallet(x)}
                         canDelete
-                        key={idx}
-                        index={x.rawIdx}
+                        fallbackName={`Wallet ${idx + 1}`}
                         address={x.identity}
                         isDefault={!!x.isDefault}
                     />

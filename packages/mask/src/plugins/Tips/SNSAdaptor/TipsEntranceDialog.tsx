@@ -1,37 +1,30 @@
-import { DialogContent, Button } from '@mui/material'
-import { useI18N } from '../../../utils'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { VerifyAlertLine } from './components/VerifyAlertLine'
-import { useCallback, useMemo, useState } from 'react'
-import { WalletsByNetwork } from './components/WalletsByNetwork'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import SettingView from './bodyViews/Setting'
-import WalletsView from './bodyViews/Wallets'
-import AddWalletView from './bodyViews/AddWallet'
-import { useProvedWallets } from '../hooks/useProvedWallets'
-import {
-    BindingProof,
-    ECKeyIdentifier,
-    NextIDAction,
-    NextIDPersonaBindings,
-    NextIDPlatform,
-    NextIdStorageInfo,
-    NextIDStoragePayload,
-} from '@masknet/shared-base'
-import Empty from './components/empty'
-import { getKvPayload, kvSet, useKvGet } from '../hooks/useKv'
-import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
-import Services from '../../../extension/service'
 import { PluginId } from '@masknet/plugin-infra'
+import { useActivatedPlugin } from '@masknet/plugin-infra/content-script'
+import { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
+import { BindingProof, ECKeyIdentifier, NextIDAction, NextIDPlatform, NextIDStoragePayload } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
-import formatDateTime from 'date-fns/format'
 import { LoadingButton } from '@mui/lab'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { WalletMessages } from '@masknet/plugin-wallet'
+import { Button, ButtonProps, DialogContent } from '@mui/material'
+import formatDateTime from 'date-fns/format'
 import { cloneDeep } from 'lodash-unified'
-import { useActivatedPlugin } from '@masknet/plugin-infra/src/hooks'
+import { FC, useCallback, useEffect, useState } from 'react'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import Services from '../../../extension/service'
+import { useI18N } from '../../../utils'
+import { getKvPayload, kvSet, useKvGet } from '../hooks/useKv'
+import { useProvedWallets } from '../hooks/useProvedWallets'
+import AddWalletView from './bodyViews/AddWallet'
+import SettingView from './bodyViews/Setting'
+import WalletsView from './bodyViews/Wallets'
+import Empty from './components/empty'
+import { VerifyAlertLine } from './components/VerifyAlertLine'
+import { WalletsByNetwork } from './components/WalletsByNetwork'
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -77,6 +70,22 @@ enum BodyViewStep {
     AddWallet = 'Add Wallet',
 }
 
+interface WalletButtonProps extends ButtonProps {
+    step: BodyViewStep
+}
+
+const WalletButton: FC<WalletButtonProps> = ({ step, onClick }) => {
+    const { classes } = useStyles()
+    if (step === BodyViewStep.AddWallet) return null
+    return (
+        <div className={classes.btnContainer}>
+            <Button onClick={onClick} className={classes.walletBtn} variant="contained" size="small">
+                {step === BodyViewStep.Wallets ? BodyViewStep.AddWallet : BodyViewStep.Wallets}
+            </Button>
+        </div>
+    )
+}
+
 export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -85,8 +94,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const [hasChanged, setHasChanged] = useState(false)
     const [rawPatchData, setRawPatchData] = useState<BindingProof[]>([])
     const [rawWalletList, setRawWalletList] = useState<BindingProof[]>([])
-    const supportedNetworks = useActivatedPlugin(PluginId.Tip, 'any')?.enableRequirement?.web3?.['com.mask.evm']
-        ?.tipsSupportedChains
+    const supportedNetworks = useActivatedPlugin(PluginId.Tip, 'any')?.enableRequirement?.web3?.[
+        NetworkPluginID.PLUGIN_EVM
+    ]?.tipsSupportedChains
     const { showSnackbar } = useCustomSnackbar()
     const account = useAccount()
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
@@ -109,17 +119,13 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { value: kv, retry: retryKv } = useKvGet()
     const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
 
-    useMemo(() => {
+    useEffect(() => {
         setHasChanged(false)
-        const walletsList = proofRes
-            ? (proofRes as NextIDPersonaBindings).proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
-            : []
+        const walletsList = proofRes ? proofRes.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum) : []
         walletsList.sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
         walletsList.forEach((wallet, idx) => (wallet.rawIdx = walletsList.length - idx - 1))
         if (kv?.ok && kv.val.proofs.length > 0 && walletsList.length > 0) {
-            const kvCache = (kv.val as NextIdStorageInfo).proofs.find(
-                (x) => x.identity === currentPersona?.publicHexKey,
-            )
+            const kvCache = kv.val.proofs.find((x) => x.identity === currentPersona?.publicHexKey)
             if (!kvCache) return
             const result: BindingProof[] = walletsList.reduce<BindingProof[]>((res, x) => {
                 x.isDefault = 0
@@ -167,25 +173,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         retryProof()
         retryKv()
     }
-    const WalletButton = () => {
-        const { classes } = useStyles()
-        if (bodyViewStep === BodyViewStep.AddWallet) return null
-        return (
-            <div className={classes.btnContainer}>
-                <Button
-                    onClick={() => {
-                        setBodyViewStep(
-                            bodyViewStep === BodyViewStep.Wallets ? BodyViewStep.AddWallet : BodyViewStep.Wallets,
-                        )
-                    }}
-                    className={classes.walletBtn}
-                    variant="contained"
-                    size="small">
-                    {bodyViewStep === BodyViewStep.Wallets ? BodyViewStep.AddWallet : BodyViewStep.Wallets}
-                </Button>
-            </div>
-        )
-    }
+    const titleTail = (
+        <WalletButton
+            step={bodyViewStep}
+            onClick={() => {
+                setBodyViewStep(bodyViewStep === BodyViewStep.Wallets ? BodyViewStep.AddWallet : BodyViewStep.Wallets)
+            }}
+        />
+    )
     const setAsDefault = (idx: number) => {
         const changed = cloneDeep(rawPatchData)
         changed.forEach((x: any) => (x.isDefault = 0))
@@ -287,7 +282,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     )
 
     return (
-        <InjectedDialog open={open} onClose={clickBack} title={bodyViewStep} titleTail={WalletButton()}>
+        <InjectedDialog open={open} onClose={clickBack} title={bodyViewStep} titleTail={titleTail}>
             {loading ? (
                 <DialogContent className={classes.dContent}>
                     <div className={classes.loading}>
