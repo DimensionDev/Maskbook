@@ -246,7 +246,10 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
                 isSNSConnectToCurrentPersona,
                 toolTipHint: t('plugin_tips_sns_persona_unmatched', {
                     currentPersonaPublicKey: formatPersonaPublicKey(currentPersonaPublicKey ?? '', 4),
-                    formatPersonaPublicKey: formatPersonaPublicKey(currentSNSConnectedPersonaPublicKey ?? '', 4),
+                    currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
+                        currentSNSConnectedPersonaPublicKey ?? '',
+                        4,
+                    ),
                 }),
                 onNextIDVerify,
             }}
