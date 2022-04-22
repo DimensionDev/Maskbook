@@ -191,8 +191,11 @@ export async function harvestRewards(
         const config = {
             from: account,
         }
+        const entitlementsSorted = entitlements.sort(
+            (entitlementA, entitlementB) => entitlementA.args.nonce.toNumber() - entitlementB.args.nonce.toNumber(),
+        )
 
-        const requests = entitlements.map((entitlement) => {
+        const requests = entitlementsSorted.map((entitlement) => {
             return {
                 farmHash: entitlement.args.farmHash,
                 value: entitlement.args.rewardValue,
@@ -201,7 +204,7 @@ export async function harvestRewards(
             }
         })
 
-        const proofs = entitlements.map((entitlement) => entitlement.args.proof)
+        const proofs = entitlementsSorted.map((entitlement) => entitlement.args.proof)
 
         const farmsAddr = REFERRAL_FARMS_V1_ADDR
         const farms = createContract(web3, farmsAddr, REFERRAL_FARMS_V1_ABI as AbiItem[])
