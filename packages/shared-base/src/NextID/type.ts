@@ -63,10 +63,10 @@ export interface NextIdStorageInfo {
     persona: string
     proofs: NextIdKvStorageProofs[]
 }
-export interface NextIdKvStorageProofs {
+export interface NextIdKvStorageProofs<T> {
     content: {
         // pluginId
-        [index: string]: unknown
+        [index: string]: T
     }
     identity: string
     platform: NextIDPlatform
