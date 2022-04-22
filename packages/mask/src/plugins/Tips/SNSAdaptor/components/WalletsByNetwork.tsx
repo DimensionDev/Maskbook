@@ -62,22 +62,24 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
                 <SettingsIcon onClick={toSetting} className={classes.settingIcon} />
             </div>
             <div className={classes.content}>
-                {(!isAllHide &&
-                    wallets.map((x, idx) => {
-                        return (
-                            (x.isPublic && (
-                                <WalletCom
-                                    key={x.identity}
-                                    nowIdx={idx}
-                                    setAsDefault={setAsDefault}
-                                    index={x.rawIdx}
-                                    address={x.identity}
-                                    isDefault={!!x.isDefault}
-                                />
-                            )) ||
-                            null
-                        )
-                    })) || <Typography className={classes.empty}>{t('plugin_tips_empty_list')}</Typography>}
+                <>
+                    {(!isAllHide &&
+                        wallets.map((x, idx) => {
+                            return (
+                                (x.isPublic && (
+                                    <WalletCom
+                                        key={x.identity}
+                                        nowIdx={idx}
+                                        setAsDefault={setAsDefault}
+                                        index={x.rawIdx}
+                                        address={x.identity}
+                                        isDefault={!!x.isDefault}
+                                    />
+                                )) ||
+                                null
+                            )
+                        })) || <Typography className={classes.empty}>{t('plugin_tips_empty_list')}</Typography>}
+                </>
             </div>
         </div>
     )
