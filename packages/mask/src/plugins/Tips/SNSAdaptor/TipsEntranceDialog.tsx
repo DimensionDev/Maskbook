@@ -171,8 +171,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     }
     const WalletButton = () => {
         const { classes } = useStyles()
+        if (bodyView === BodyViewSteps.addWallet) return null
         return (
-            (bodyView !== BodyViewSteps.addWallet && (
                 <div className={classes.btnContainer}>
                     <Button
                         onClick={() => {
