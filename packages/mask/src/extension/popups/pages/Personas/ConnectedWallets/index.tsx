@@ -54,7 +54,6 @@ const ConnectedWallets = memo(() => {
         )
 
         return sortBy(compact(results), (x) => Number(x.created_at))
-            .reverse()
             .map((x, index) => {
                 if (!x.name)
                     return {
@@ -64,6 +63,7 @@ const ConnectedWallets = memo(() => {
 
                 return x
             })
+            .reverse()
     }, [wallets, NameService, proofs])
 
     const [confirmState, onConfirmRelease] = useAsyncFn(
