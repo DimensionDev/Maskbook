@@ -58,9 +58,6 @@ export function ApplicationEntry(props: Props) {
         onClick,
         disabled = false,
         tooltipProps = {
-            PopperProps: {
-                disablePortal: true,
-            },
             placement: 'top',
             arrow: true,
         },
@@ -80,7 +77,7 @@ export function ApplicationEntry(props: Props) {
     )
     return (
         <>
-            {hint || nextIdVerifyToolTipHint ? (
+            {(hint && !disabled) || nextIdVerifyToolTipHint ? (
                 <ShadowRootTooltip
                     title={nextIdVerifyToolTipHint ?? hint}
                     {...tooltipProps}
