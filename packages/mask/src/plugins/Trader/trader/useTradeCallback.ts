@@ -122,6 +122,10 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.PADSWAP:
             return uniswapV2Like
+        case TradeProvider.SOLFLARE:
+            return uniswapV2Like
+        case TradeProvider.ZENLINK:
+            return uniswapV2Like
         default:
             if (provider) unreachable(provider)
             return []

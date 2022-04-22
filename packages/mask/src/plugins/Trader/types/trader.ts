@@ -79,6 +79,8 @@ export enum ZrxTradePool {
     BeamSwap = 'BeamSwap',
     PADSwap = 'PADSwap',
     Mdex = 'Mdex',
+    ZenLink = 'ZenLink',
+    SolFlare = 'SolFlare',
 }
 
 export interface TradeComputed<T = unknown> {

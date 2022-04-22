@@ -186,6 +186,8 @@ export enum TradeProvider {
     BEAMSWAP = 16,
     STELLASWAP = 17,
     PADSWAP = 18,
+    SOLFLARE = 19,
+    ZENLINK = 20,
 }
 
 /** Supported language settings */

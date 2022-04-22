@@ -54,7 +54,14 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
         case NetworkType.Aurora:
             return [TradeProvider.DODO, TradeProvider.WANNASWAP, TradeProvider.TRISOLARIS]
         case NetworkType.Moonbeam:
-            return [TradeProvider.SUSHISWAP, TradeProvider.BEAMSWAP, TradeProvider.STELLASWAP, TradeProvider.PADSWAP]
+            return [
+                TradeProvider.SUSHISWAP,
+                TradeProvider.BEAMSWAP,
+                TradeProvider.STELLASWAP,
+                TradeProvider.PADSWAP,
+                TradeProvider.ZENLINK,
+                TradeProvider.SOLFLARE,
+            ]
         case NetworkType.Boba:
         case NetworkType.Fuse:
         case NetworkType.Metis:

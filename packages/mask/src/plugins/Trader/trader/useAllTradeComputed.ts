@@ -227,6 +227,20 @@ export function useAllTradeComputed(
         traderEstimateGas: padswapEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.PADSWAP, inputAmount_, inputToken, outputToken)
 
+    // SolFlare
+    const {
+        trader_: solflare_,
+        trader: solflare,
+        traderEstimateGas: solflareEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.SOLFLARE, inputAmount_, inputToken, outputToken)
+
+    // ZenLink
+    const {
+        trader_: zenlink_,
+        trader: zenlink,
+        traderEstimateGas: zenlinkEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.ZENLINK, inputAmount_, inputToken, outputToken)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -247,6 +261,8 @@ export function useAllTradeComputed(
         { provider: TradeProvider.BEAMSWAP, ...beamswap_, value: beamswap, gas: beamswapEstimateGas },
         { provider: TradeProvider.PADSWAP, ...padswap_, value: padswap, gas: padswapEstimateGas },
         { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
+        { provider: TradeProvider.SOLFLARE, ...solflare_, value: solflare, gas: solflareEstimateGas },
+        { provider: TradeProvider.ZENLINK, ...zenlink_, value: zenlink, gas: zenlinkEstimateGas },
     ]
 
     return nativeToken_.value

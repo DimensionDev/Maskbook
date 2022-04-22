@@ -48,6 +48,8 @@ export const PNG = createERC20Tokens('PNG_ADDRESS', 'Pangolin', 'PNG', 18)
 export const SHARE = createERC20Tokens('SHARE_ADDRESS', 'Beamshare Token', 'SHARE', 18)
 export const STELLA = createERC20Tokens('STELLA_ADDRESS', 'StellaSwap', 'STELLA', 18)
 export const PAD = createERC20Tokens('PAD_ADDRESS', 'Glmr Pad', 'PAD', 18)
+export const FLARE = createERC20Tokens('FLARE_ADDRESS', 'Flare Token', 'FLARE', 18)
+export const ZLK = createERC20Tokens('ZLK_ADDRESS', 'Zenlink Network Token ', 'ZLK', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
