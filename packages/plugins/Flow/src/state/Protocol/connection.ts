@@ -2,7 +2,7 @@ import { first } from 'lodash-unified'
 import { unreachable } from '@dimensiondev/kit'
 import { CompositeSignature, TransactionStatusCode, MutateOptions, QueryOptions } from '@blocto/fcl'
 import { ChainId, ProviderType } from '@masknet/web3-shared-flow'
-import { TransactionStatusType } from '@masknet/plugin-infra/src/entry-web3'
+import { TransactionStatusType } from '@masknet/plugin-infra/web3'
 import { Providers } from './provider'
 import type { FlowConnection as BaseConnection, FlowConnectionOptions } from './types'
 

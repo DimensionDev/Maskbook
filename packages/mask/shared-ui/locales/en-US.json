@@ -250,6 +250,7 @@
     "plugin_wallet_snackbar_confirmed": "Transaction Confirmed",
     "plugin_wallet_snackbar_success": "Transaction Succeed",
     "plugin_wallet_snackbar_failed": "Transaction Failed",
+    "plugin_wallet_snackbar_canceled": "Transaction Canceled",
     "plugin_wallet_snackbar_swap_successful": "Successfully swapped Token",
     "plugin_wallet_snackbar_swap_token": "Swap Token",
     "plugin_wallet_guiding_step_1": "1. Choose Network",

@@ -6,6 +6,7 @@ import {
     ProviderType,
     getReceiptStatus,
     EthereumTransactionConfig,
+    EthereumTokenType,
 } from '@masknet/web3-shared-evm'
 import type { TransactionStatusType, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { createContext, dispatch } from './composer'
@@ -252,6 +253,33 @@ class Connection implements BaseConnection {
         )
     }
 
+    getERC20Token(
+        address: string,
+        options?: EVM_ConnectionOptions | undefined,
+    ): Promise<Web3Plugin.FungibleToken<EthereumTokenType.ERC20>> {
+        throw new Error('Method not implemented.')
+    }
+    getNativeToken(
+        address: string,
+        options?: EVM_ConnectionOptions | undefined,
+    ): Promise<Web3Plugin.FungibleToken<EthereumTokenType.Native>> {
+        throw new Error('Method not implemented.')
+    }
+    getERC721Token(
+        address: string,
+        tokenId: string,
+        options?: EVM_ConnectionOptions | undefined,
+    ): Promise<Web3Plugin.NonFungibleToken<EthereumTokenType.ERC721>> {
+        throw new Error('Method not implemented.')
+    }
+    getERC1155Token(
+        address: string,
+        tokenId: string,
+        options?: EVM_ConnectionOptions | undefined,
+    ): Promise<Web3Plugin.NonFungibleToken<EthereumTokenType.ERC1155>> {
+        throw new Error('Method not implemented.')
+    }
+
     watchTransaction(hash: string, transaction: EthereumTransactionConfig, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<void>(
             {
@@ -326,6 +354,6 @@ class Connection implements BaseConnection {
  * @param providerType
  * @returns
  */
-export function createConnection(account = '', chainId = ChainId.Mainnet, providerType = ProviderType.MaskWallet) {
+export function createConnection(chainId = ChainId.Mainnet, account = '', providerType = ProviderType.MaskWallet) {
     return new Connection(account, chainId, providerType)
 }

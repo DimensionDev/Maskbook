@@ -57,6 +57,10 @@ export class TransactionState<ChainId extends number, Transaction>
         }
     }
 
+    formatTransaction(transaction: Transaction): Promise<Web3Plugin.TransactionDescriptor<Transaction>> {
+        throw new Error('Method not impelemented.')
+    }
+
     async addTransaction(chainId: ChainId, address: string, id: string, transaction: Transaction) {
         const now = new Date()
         const all = this.storage.value

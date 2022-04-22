@@ -1,4 +1,4 @@
-import type {RiskWanringBaseAPI } from '../types'
+import type { RiskWanringBaseAPI } from '../types'
 
 const BASE_URL_MAP: Record<typeof process.env.NODE_ENV, string> = {
     production: 'https://backup.mask.io/api',
@@ -15,8 +15,8 @@ export class RiskWanringAPI implements RiskWanringBaseAPI.Provider {
             method: 'POST',
             body: JSON.stringify({
                 address,
-                plugin_id: pluginID
-            })
+                plugin_id: pluginID,
+            }),
         })
     }
 }

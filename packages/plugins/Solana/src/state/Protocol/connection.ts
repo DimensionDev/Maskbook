@@ -1,5 +1,5 @@
 import { Connection as SolanaConnection, sendAndConfirmRawTransaction, Transaction } from '@solana/web3.js'
-import { TransactionStatusType } from '@masknet/plugin-infra/src/entry-web3'
+import { TransactionStatusType } from '@masknet/plugin-infra/web3'
 import { ChainId, deocdeAddress, ProviderType } from '@masknet/web3-shared-solana'
 import { Providers } from './provider'
 import type { SolanaConnection as BaseConnection, SolanaConnectionOptions } from './types'

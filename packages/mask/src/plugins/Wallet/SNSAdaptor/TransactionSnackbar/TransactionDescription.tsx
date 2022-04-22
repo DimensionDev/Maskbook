@@ -11,7 +11,7 @@ import {
     ComputedPayload,
 } from '@masknet/web3-shared-evm'
 import { scale10 } from '@masknet/web3-shared-base'
-import { getContractMethodDescription } from './contractMethodDescription'
+import { getContractMethodDescription } from '../WalletStatusDialog/contractMethodDescription'
 import { NetworkPluginID, useChainId } from '@masknet/plugin-infra/web3'
 
 function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {

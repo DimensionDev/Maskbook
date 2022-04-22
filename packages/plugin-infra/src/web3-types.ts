@@ -51,6 +51,19 @@ export type Color =
     | `#${string}${string}${string}`
     | `hsl(${number}, ${number}%, ${number}%)`
 
+export enum TransactionDescriptorType {
+    /** Transfer on chain value. */
+    TRANSFER = 'transfer',
+    /** A transaction to operate state mutations. */
+    INTERACTION = 'interaction',
+    /** A transaction to depoly programs. */
+    DEPLOYMENT = 'deployment',
+    /** A transaction to cancel a previous transaction. */
+    CANCEL = 'cancel',
+    /** A transaction to modify a previous trasnaction. */
+    RETRY = 'retry', // speed up
+}
+
 export declare namespace Web3Plugin {
     /**
      * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
@@ -134,7 +147,44 @@ export declare namespace Web3Plugin {
         /** network name */
         network?: 'mainnet' | Omit<string, 'mainnet'>
     }
-
+    export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
+        /** Designate the sub-network id of the transaction. */
+        chainId?: ChainId
+        /** Designate the signer of the transaction. */
+        account?: string
+        /** Designate the provider to handle the transaction. */
+        providerType?: ProviderType
+        /** Fragments to merge into the transaction. */
+        overrides?: Partial<Transaction>
+    }
+    export interface TransactionDescriptor<Transaction> {
+        type: TransactionDescriptorType
+        /** a transaction title. */
+        title: string
+        /** a human-readable description. */
+        description?: string
+        _tx: Transaction
+    }
+    export interface TransactionContext<ChainId, Parameter = string | undefined> {
+        /** the descriptor type */
+        type: TransactionDescriptorType
+        /** chain id */
+        chainId: ChainId
+        /** the from address. */
+        from: string
+        /** the to address */
+        to: string
+        /** the value amount (polyfill to 0x0 if absent in the original transaction) */
+        value: string
+        /** code to depoly */
+        code?: string
+        /** method name */
+        name?: string
+        /** acutal parameters */
+        parameters?: {
+            [key: string]: Parameter
+        }
+    }
     export interface Wallet {
         id: string
         /** User define wallet name. Default address.prefix(6) */
@@ -208,23 +258,23 @@ export declare namespace Web3Plugin {
         link?: string
     }
 
-    export interface Token {
+    export interface Token<SubTokenType = string | number> {
         id: string
         chainId: number
         type: TokenType
         /** a sub type for casting later */
-        subType: string | number
+        subType: SubTokenType
         address: string
     }
 
-    export interface FungibleToken extends Token {
+    export interface FungibleToken<SubTokenType = string | number> extends Token<SubTokenType> {
         decimals?: number
         name: string
         symbol: string
         logoURI?: string | string[]
     }
 
-    export interface NonFungibleToken extends Token {
+    export interface NonFungibleToken<SubTokenType = string | number> extends Token<SubTokenType> {
         tokenId: string
         metadata?: {
             name?: string
@@ -373,18 +423,6 @@ export declare namespace Web3Plugin {
         /** Dismiss the connection. */
         disconnect(): Promise<void>
     }
-
-    export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
-        /** Designate the sub-network id of the transaction. */
-        chainId?: ChainId
-        /** Designate the signer of the transaction. */
-        account?: string
-        /** Designate the provider to handle the transaction. */
-        providerType?: ProviderType
-        /** Fragments to merge into the transaction. */
-        overrides?: Partial<Transaction>
-    }
-
     export interface Connection<
         ChainId,
         ProviderType,
@@ -435,7 +473,6 @@ export declare namespace Web3Plugin {
         /** Unwatch a transaction */
         unwatchTransaction(id: string, options?: Web3ConnectionOptions): Promise<void>
     }
-
     export namespace ObjectCapabilities {
         export interface SettingsState {
             /** Is testnets valid */
@@ -525,7 +562,9 @@ export declare namespace Web3Plugin {
             /** The tracked transactions of currently chosen sub-network */
             transactions?: Subscription<RecentTransaction[]>
 
+            /** Add a transaction record. */
             addTransaction?: (chainId: ChainId, address: string, id: string, transaction: Transaction) => Promise<void>
+            /** Repalce a transaction with new record. */
             replaceTransaction?: (
                 chainId: ChainId,
                 address: string,
@@ -533,15 +572,32 @@ export declare namespace Web3Plugin {
                 newId: string,
                 transaction: Transaction,
             ) => Promise<void>
+            /** Update transaction status. */
             updateTransaction?: (
                 chainId: ChainId,
                 address: string,
                 id: string,
                 status: Exclude<TransactionStatusType, TransactionStatusType.NOT_DEPEND>,
             ) => Promise<void>
+            /** Remove a transaction record. */
             removeTransaction?: (chainId: ChainId, address: string, id: string) => Promise<void>
-            /** clear all transactions relate to account under given chain */
+            /** Clear all transactions of the account under given chain */
             clearTransactions?: (chainId: ChainId, address: string) => Promise<void>
+        }
+        export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
+            /** Elaborate a transaction in a human-readable format. */
+            format: (chainId: ChainId, transaction: Transaction) => Promise<TransactionDescriptor<Transaction>>
+            /** Step 1: Create a transaction formatting context. */
+            createContext: (
+                chainId: ChainId,
+                transaction: Transaction,
+            ) => Promise<TransactionContext<ChainId, Parameters>>
+            /** Step 2: Create a transaction descriptor */
+            createDescriptor: (
+                chainId: ChainId,
+                transaction: Transaction,
+                context: TransactionContext<ChainId, Parameters>,
+            ) => Promise<TransactionDescriptor<Transaction>>
         }
         export interface ProviderState<ChainId, NetworkType, ProviderType> {
             /** The account of the currently visiting site. */
@@ -681,6 +737,7 @@ export declare namespace Web3Plugin {
             Transaction = unknown,
             TransactionDetailed = unknown,
             TransactionSignature = string,
+            TransactionParameter = string | undefined,
             Web3 = unknown,
         > {
             AddressBook?: AddressBookState<ChainId>
@@ -692,6 +749,7 @@ export declare namespace Web3Plugin {
             TokenPrice?: TokenPriceState<ChainId>
             TokenList?: TokenListState<ChainId>
             Transaction?: TransactionState<ChainId, Transaction>
+            TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
             Protocol?: ProtocolState<
                 ChainId,
                 ProviderType,

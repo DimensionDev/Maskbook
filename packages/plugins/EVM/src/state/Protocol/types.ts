@@ -9,6 +9,7 @@ import type {
     EIP1193Provider,
     EthereumMethodType,
     EthereumTransactionConfig,
+    EthereumTokenType,
 } from '@masknet/web3-shared-evm'
 
 export type EVM_Web3 = Web3
@@ -43,6 +44,24 @@ export interface EVM_Connection
         string,
         EVM_Web3
     > {
+    getERC20Token(
+        address: string,
+        options?: EVM_ConnectionOptions,
+    ): Promise<Web3Plugin.FungibleToken<EthereumTokenType.ERC20>>
+    getNativeToken(
+        address: string,
+        options?: EVM_ConnectionOptions,
+    ): Promise<Web3Plugin.FungibleToken<EthereumTokenType.Native>>
+    getERC721Token(
+        address: string,
+        tokenId: string,
+        options?: EVM_ConnectionOptions,
+    ): Promise<Web3Plugin.NonFungibleToken<EthereumTokenType.ERC721>>
+    getERC1155Token(
+        address: string,
+        tokenId: string,
+        options?: EVM_ConnectionOptions,
+    ): Promise<Web3Plugin.NonFungibleToken<EthereumTokenType.ERC1155>>
     getCode(address: string, options?: EVM_ConnectionOptions): Promise<string>
     getTransactionReceiptHijacked(hash: string, options?: EVM_ConnectionOptions): Promise<TransactionReceipt | null>
     getTransactionReceipt(hash: string, options?: EVM_ConnectionOptions): Promise<TransactionReceipt | null>

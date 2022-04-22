@@ -1,15 +1,7 @@
-import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
-import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
-import type {
-    ChainId,
-    ERC721ContractDetailed,
-    GasOption,
-    GasOptions,
-    TransactionState,
-    Wallet,
-} from '@masknet/web3-shared-evm'
 import type BigNumber from 'bignumber.js'
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import type { NetworkPluginID, TransactionStatusType, Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { ChainId, ERC721ContractDetailed, GasOption, GasOptions, TransactionState } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants'
 
 export type TransactionDialogEvent =
@@ -83,14 +75,22 @@ export type SelectNftContractDialogEvent = {
     contract?: ERC721ContractDetailed
 }
 
-export type SocketMessageUpdatedEvent = {
+export interface SocketMessageUpdatedEvent {
     id: string
     done: boolean
     error?: unknown
     from: 'cache' | 'remote'
 }
 
-export interface WalletMessage {
+export interface TransactionProgressEvent<ChainId, Transaction> {
+    pluginID: NetworkPluginID
+    chainId: ChainId
+    status: TransactionStatusType
+    transactionId: string
+    transaction: Transaction
+}
+
+export interface WalletMessage<ChainId, Transaction> {
     /**
      * Transaction dialog
      */
@@ -135,10 +135,7 @@ export interface WalletMessage {
     phrasesUpdated: void
     addressBookUpdated: void
     transactionsUpdated: void
-    transactionProgressUpdated: {
-        state: TransactionState
-        payload: JsonRpcPayload
-    }
+    transactionProgressUpdated: TransactionProgressEvent<ChainId, Transaction>
     requestsUpdated: { hasRequest: boolean }
     erc20TokensUpdated: void
     erc721TokensUpdated: void
@@ -151,6 +148,7 @@ export interface WalletMessage {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const WalletMessages: { events: PluginMessageEmitter<WalletMessage> } = {
-    events: createPluginMessage<WalletMessage>(PLUGIN_ID),
+
+export const WalletMessages: { events: PluginMessageEmitter<WalletMessage<number, unknown>> } = {
+    events: createPluginMessage<WalletMessage<number, unknown>>(PLUGIN_ID),
 }

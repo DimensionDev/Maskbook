@@ -79,10 +79,10 @@ export function getFunctionParameters(tx: EthereumTransactionConfig) {
     return data?.slice(10)
 }
 
-export function getTransactionSignature(transaction: Transaction | null) {
+export function getTransactionSignature(transaction: EthereumTransactionConfig | null) {
     if (!transaction) return
-    const { from, to, input, value } = transaction
-    return sha3([from, to, input || '0x0', toHex(value || '0x0') || '0x0'].join('_')) ?? undefined
+    const { from, to, data, value } = transaction
+    return sha3([from, to, data || '0x0', toHex(value || '0x0') || '0x0'].join('_')) ?? undefined
 }
 
 export function getTransactionState(receipt: TransactionReceipt): TransactionState {
