@@ -1,5 +1,5 @@
 import { Plugin, PluginId } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/plugin-infra/src/web3-types'
+import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 export const base: Plugin.Shared.Definition = {

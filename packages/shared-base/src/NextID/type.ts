@@ -61,7 +61,7 @@ export interface NextIDStoragePayload {
 }
 export interface NextIdStorageInfo {
     persona: string
-    proofs: NextIdKvStorageProofs[]
+    proofs: NextIdKvStorageProofs<unknown>[]
 }
 export interface NextIdKvStorageProofs<T> {
     content: {
