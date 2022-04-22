@@ -1,4 +1,4 @@
-import { Fragment, useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { Close as CloseIcon } from '@mui/icons-material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography, useTheme } from '@mui/material'
@@ -136,13 +136,12 @@ export function ApplicationBoard(props: Props) {
 
             {listedAppList.length > 0 ? (
                 <section className={classes.applicationWrapper}>
-                    {listedAppList.map((application) => {
-                        return (
-                            <Fragment key={application.pluginId}>
-                                <RenderEntryComponentWrapper application={application} />
-                            </Fragment>
-                        )
-                    })}
+                    {listedAppList.map((application) => (
+                        <RenderEntryComponentWrapper
+                            key={application.entry.ApplicationEntryID}
+                            application={application}
+                        />
+                    ))}
                 </section>
             ) : (
                 <div className={classes.placeholderWrapper}>
