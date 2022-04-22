@@ -202,12 +202,7 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
     }, [])
 
     const {
-        value = {
-            isNextIdVerify: undefined,
-            isSNSConnectToCurrentPersona: undefined,
-            currentPersonaPublicKey: undefined,
-            currentSNSConnectedPersonaPublicKey: undefined,
-        },
+        value: something,
     } = useAsync(async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
         const currentPersona = (await Services.Identity.queryPersona(currentPersonaIdentifier!)) as Persona
@@ -226,7 +221,7 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
         isSNSConnectToCurrentPersona,
         currentPersonaPublicKey,
         currentSNSConnectedPersonaPublicKey,
-    } = value
+    } = something ?? {}
     const { closeDialog } = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
 
     const onNextIDVerify = useCallback(() => {
