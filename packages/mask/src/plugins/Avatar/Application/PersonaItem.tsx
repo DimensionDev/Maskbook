@@ -33,7 +33,7 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
 
 interface PersonaItemProps {
     owner?: boolean
-
+    avatar: string
     userId: string
     proof: BindingProof
     onSelect?: (proof: BindingProof, tokenInfo?: TokenInfo) => void

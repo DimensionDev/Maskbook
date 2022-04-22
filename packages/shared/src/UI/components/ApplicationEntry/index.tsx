@@ -1,6 +1,6 @@
 import classNames from 'classnames'
-import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { TooltipProps, Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     applicationBox: {
@@ -10,7 +10,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         backgroundColor: theme.palette.background.default,
         borderRadius: '8px',
-
         height: 100,
     },
     applicationBoxHover: {
@@ -45,13 +44,28 @@ interface Props {
     icon: React.ReactNode
     title: React.ReactNode
     disabled?: boolean
+    toolTip?: string
     onClick: () => void
+    tooltipProps?: Partial<TooltipProps>
+    hint?: string | React.ReactElement
+    nextIdVerifyToolTipHint?: string
 }
 
 export function ApplicationEntry(props: Props) {
-    const { icon, title, onClick, disabled = false } = props
+    const {
+        icon,
+        title,
+        onClick,
+        disabled = false,
+        tooltipProps = {
+            placement: 'top',
+            arrow: true,
+        },
+        hint = '',
+        nextIdVerifyToolTipHint,
+    } = props
     const { classes } = useStyles()
-    return (
+    const jsx = (
         <div
             className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
             onClick={disabled ? () => {} : onClick}>
@@ -60,5 +74,19 @@ export function ApplicationEntry(props: Props) {
                 {title}
             </Typography>
         </div>
+    )
+    return (
+        <>
+            {(hint && !disabled) || nextIdVerifyToolTipHint ? (
+                <ShadowRootTooltip
+                    title={<Typography>{hint ?? nextIdVerifyToolTipHint}</Typography>}
+                    {...tooltipProps}
+                    disableHoverListener={!nextIdVerifyToolTipHint}>
+                    {jsx}
+                </ShadowRootTooltip>
+            ) : (
+                jsx
+            )}
+        </>
     )
 }

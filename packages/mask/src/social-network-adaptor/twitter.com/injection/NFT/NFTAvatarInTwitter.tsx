@@ -52,7 +52,11 @@ function NFTAvatarInTwitter() {
     const borderElement = useRef<Element | null>()
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet()
-    const { value: _avatar } = usePersonaNFTAvatar(identity.identifier.userId, RSS3_KEY_SNS.TWITTER)
+    const { value: _avatar } = usePersonaNFTAvatar(
+        identity.identifier.userId,
+        getAvatarId(identity.avatar ?? ''),
+        RSS3_KEY_SNS.TWITTER,
+    )
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const windowSize = useWindowSize()
     const location = useLocation()

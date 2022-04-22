@@ -1,4 +1,4 @@
-import { Button, DialogActions, DialogContent, Slider, useTheme } from '@mui/material'
+import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
 import AvatarEditor from 'react-avatar-editor'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
@@ -48,11 +48,10 @@ async function saveToRSS3(info: NextIDAvatarMeta, account: string, identifier: P
         identifier.network,
         RSS3_KEY_SNS.TWITTER,
     ).catch((error) => {
+        console.log(error)
         return
     })
-    if (!avatar) {
-        return
-    }
+    return avatar
 }
 
 async function saveToNextID(
@@ -65,10 +64,8 @@ async function saveToNextID(
     if (!payload.ok) {
         return
     }
-
     const result = await Services.Identity.generateSignResult(persona.identifier, payload.val.signPayload)
     if (!result) return
-
     const response = await NextIDStorage.set(
         payload.val.uuid,
         persona.publicHexKey,
@@ -130,7 +127,6 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const t = useI18N()
-    const theme = useTheme()
 
     const onSave = useCallback(() => {
         if (!editor || !account || !token || !currentConnectedPersona || !proof || !identifier) return
@@ -153,6 +149,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 proof,
                 identifier.identifier,
             )
+
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
                 setDisabled(false)

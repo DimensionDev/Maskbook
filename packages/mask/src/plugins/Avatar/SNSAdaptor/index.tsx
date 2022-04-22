@@ -3,10 +3,11 @@ import { ApplicationEntry } from '@masknet/shared'
 import { Typography } from '@mui/material'
 import { useState } from 'react'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
-import { ApplicationIcon } from '../assets/application'
 import { base } from '../base'
 import { setupContext } from '../context'
-import { Translate, useI18N } from '../locales'
+import { Translate } from '../locales'
+import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { ApplicationIcon } from '../assets/application'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -15,41 +16,48 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const [open, setOpen] = useState(false)
-            const t = useI18N()
+            const name = { i18nKey: 'application_dialog_title', fallback: 'NFT PFP' }
             const icon = <ApplicationIcon />
-            const name = t.application_dialog_title()
             return {
-                ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent({ disabled, nextIdVerification }) {
+                    const [open, setOpen] = useState(false)
                     return (
                         <>
                             <ApplicationEntry
-                                title={name}
-                                disabled={disabled}
+                                title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
+                                disabled={
+                                    nextIdVerification?.isNextIdVerify === undefined ||
+                                    !nextIdVerification?.isSNSConnectToCurrentPersona
+                                        ? true
+                                        : disabled
+                                }
                                 icon={icon}
                                 onClick={() => setOpen(true)}
+                                tooltipProps={{
+                                    arrow: true,
+                                    placement: 'top',
+                                }}
+                                hint={
+                                    <Typography fontSize={12} style={{ whiteSpace: 'nowrap' }}>
+                                        <Translate.application_hint
+                                            components={{
+                                                br: <br />,
+                                            }}
+                                        />
+                                    </Typography>
+                                }
+                                nextIdVerifyToolTipHint={nextIdVerification?.toolTipHint}
                             />
 
                             <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
                         </>
                     )
                 },
-                appBoardSortingDefaultPriority: 1,
-                marketListSortingPriority: 1,
-                icon,
-                description: (
-                    <Typography fontSize={12} style={{ whiteSpace: 'nowrap' }}>
-                        <Translate.application_hint
-                            components={{
-                                br: <br />,
-                            }}
-                        />
-                    </Typography>
-                ),
+                defaultSortingPriority: 3,
                 name,
-                tutorialLink: '',
-                category: 'dapp',
+                icon,
+                ApplicationEntryID: base.ID,
+                nextIdRequired: true,
             }
         })(),
     ],

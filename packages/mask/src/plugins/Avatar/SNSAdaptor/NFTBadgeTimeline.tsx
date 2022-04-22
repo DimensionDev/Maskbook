@@ -23,7 +23,7 @@ const useStyles = makeStyles()(() => ({
 
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     const { userId, avatarId, width, height, snsKey } = props
-    const { loading, value: _avatar } = usePersonaNFTAvatar(userId, snsKey)
+    const { loading, value: _avatar } = usePersonaNFTAvatar(userId, avatarId, snsKey)
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
     const classes = useStylesExtends(useStyles(), props)

@@ -78,13 +78,14 @@ export function PersonaPage(props: PersonaPageProps) {
                             x.identity.toLowerCase() === currentIdentity?.identifier.userId.toLowerCase() ? (
                                 <PersonaItem
                                     key={i}
+                                    avatar={currentIdentity.avatar ?? ''}
                                     owner
                                     proof={x}
                                     userId={currentIdentity.identifier.userId}
                                     onSelect={onSelect}
                                 />
                             ) : (
-                                <PersonaItem key={i} owner={false} userId={x.identity} proof={x} />
+                                <PersonaItem avatar="" key={i} owner={false} userId={x.identity} proof={x} />
                             ),
                         )}
                 </>
