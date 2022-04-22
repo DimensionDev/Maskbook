@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { useNavigate } from 'react-router-dom'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { safeUnreachable, delay } from '@dimensiondev/kit'
@@ -13,13 +12,11 @@ import {
     resolveNetworkName,
     resolveProviderName,
 } from '@masknet/web3-shared-evm'
-import { isPopupPage } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
-import { useSelectAccount } from '../../hooks/useSelectAccount'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -31,10 +28,6 @@ export interface ConnectWalletDialogProps {}
 
 export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const { classes } = useStyles()
-
-    const navigate = useNavigate()
-    const [onSelectAccountPrepare] = useSelectAccount()
-
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
 
@@ -161,9 +154,6 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     }, [open, connectTo, setConnectWalletDialog])
 
     if (!providerType) return null
-
-    // The connection state is transferring between pages when we connect Mask Wallet on the popup page
-    if (isPopupPage() && providerType === ProviderType.MaskWallet) return null
 
     return (
         <InjectedDialog title={`Connect to ${resolveProviderName(providerType)}`} open={open} onClose={onClose}>

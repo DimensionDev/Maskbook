@@ -1,7 +1,14 @@
 import { BindingProof, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { isSameAddress, useAccount, useWallet } from '@masknet/web3-shared-evm'
+import {
+    isSameAddress,
+    useAccount,
+    useChainId,
+    useNetworkType,
+    useProviderType,
+    useWallet,
+} from '@masknet/web3-shared-evm'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { SignSteps, Steps } from '../../../../components/shared/VerifyWallet/Steps'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -11,6 +18,7 @@ import { useCustomSnackbar } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import { useProviderDescriptor } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../../utils'
+import { PluginId } from '@masknet/plugin-infra'
 
 interface AddWalletViewProps {
     currentPersona: any
@@ -26,17 +34,15 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     const wallet = {
         ...useWallet(),
         account: useAccount(),
+        networkType: useNetworkType(),
+        providerType: useProviderType(),
+        chainId: useChainId(),
     }
     const isNotEvm = !useProviderDescriptor()?.providerAdaptorPluginID.includes('evm')
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
     useEffect(() => {
-        if (bounds === []) return
         const res = bounds.filter((x) => isSameAddress(x.identity, wallet.account))
-        if (res.length > 0) {
-            setIsBound(true)
-        } else {
-            setIsBound(false)
-        }
+        setIsBound(res.length > 0)
     }, [wallet, currentPersona, bounds])
 
     const { value: payload, loading: payloadLoading } = useAsync(async () => {
@@ -119,7 +125,7 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
     const changeWallet = useCallback(() => {
         setDialog({
             open: true,
-            onlyEvm: true,
+            pluginId: PluginId.Tip,
         })
     }, [])
     if (!currentPersona || !wallet) return null
@@ -130,7 +136,12 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                 isBound={isBound}
                 notEvm={isNotEvm}
                 notConnected={!wallet.account}
-                wallet={wallet as any}
+                wallet={{
+                    account: wallet.account,
+                    chainId: wallet.chainId,
+                    networkType: wallet.networkType,
+                    providerType: wallet.providerType,
+                }}
                 persona={currentPersona}
                 step={step}
                 confirmLoading={confirmLoading || payloadLoading}

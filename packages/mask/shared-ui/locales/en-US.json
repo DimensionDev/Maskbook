@@ -1094,6 +1094,7 @@
     "plugin_tips_connect_wallet": "Connect your wallet",
     "plugin_tips_verify_line_intro": "Please add and verify your wallet to set the address for receiving tips.",
     "plugin_tips_empty_list": "Please set wallets to receive tips.",
+    "plugin_tips_set_as_default": "Set as default",
     "plugin_artblocks_description": "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account.",
     "plugin_artblocks_name": "Artblocks",
     "plugin_dhedge_description": "Decentralized hedge funds on Ethereum and Polygon (Matic).",

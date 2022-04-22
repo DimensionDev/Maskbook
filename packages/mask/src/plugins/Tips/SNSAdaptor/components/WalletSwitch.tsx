@@ -61,7 +61,7 @@ export function WalletSwitch({ type, address, isPublic, onChange, index }: Walle
     useEffect(() => {
         setChecked(!!isPublic)
     }, [isPublic])
-    const getWalletName = () => {
+    const resolveNetworkName = () => {
         return ['EVM wallet', 'Solana wallet', 'Flow wallet'][type]
     }
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,7 +73,7 @@ export function WalletSwitch({ type, address, isPublic, onChange, index }: Walle
         <div className={classes.currentAccount}>
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.accountName}>{getWalletName()}</Typography>
+                    <Typography className={classes.accountName}>{resolveNetworkName()}</Typography>
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={address}>

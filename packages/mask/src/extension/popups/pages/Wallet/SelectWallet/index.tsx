@@ -15,7 +15,6 @@ import {
 import { Button, List, Typography } from '@mui/material'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
-import { useSelectAccount } from '../../../../../plugins/Wallet/hooks/useSelectAccount'
 import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
 import { WalletItem } from './WalletItem'
@@ -101,7 +100,6 @@ const SelectWallet = memo(() => {
     const wallets = useWallets(ProviderType.MaskWallet)
 
     const [selected, setSelected] = useState(wallet)
-    const [, onSelectAccount] = useSelectAccount()
 
     const search = new URLSearchParams(location.search)
 

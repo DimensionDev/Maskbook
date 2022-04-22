@@ -3,7 +3,7 @@ import { useI18N } from '../../../utils'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { useCallback, useEffect, useState } from 'react'
-import { TipsSupportedChains } from '../constants'
+import { enableRequirement } from '../constants'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import SettingView from './bodyViews/Setting'
@@ -81,7 +81,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [showAlert, setShowAlert] = useState(true)
-    const supportedNetworks = TipsSupportedChains
     const [bodyView, setBodyView] = useState<BodyViewSteps>(BodyViewSteps.main)
     const [hasChanged, setHasChanged] = useState(false)
     const [rawPatchData, setRawPatchData] = useState<BindingProof[]>([])
@@ -90,10 +89,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const account = useAccount()
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
 
-    const { value: currentPersonaIdentifier } = useAsyncRetry(
-        () => Services.Settings.getCurrentPersonaIdentifier(),
-        [open],
-    )
+    const { value: currentPersonaIdentifier } = useAsyncRetry(() => {
+        setShowAlert(true)
+        return Services.Settings.getCurrentPersonaIdentifier()
+    }, [open])
     const { value: currentPersona } = useAsyncRetry(
         () => Services.Identity.queryPersona(currentPersonaIdentifier as ECKeyIdentifier),
         [currentPersonaIdentifier],
@@ -107,9 +106,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     }
     const { value: kv, retry: retryKv } = useKvGet()
     const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
-    useEffect(() => {
-        setShowAlert(true)
-    }, [open])
+
     useEffect(() => {
         setHasChanged(false)
         const walletsList = proofRes
@@ -241,7 +238,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         } else {
             setDialog({
                 open: true,
-                onlyEvm: true,
+                pluginId: PluginId.Tip,
             })
             WalletMessages.events.walletsUpdated.on(() => {
                 setBodyView(BodyViewSteps.addWallet)
@@ -308,7 +305,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
                     {bodyView === BodyViewSteps.main && rawPatchData.length > 0 ? (
                         <div>
-                            {supportedNetworks.map((x, idx) => {
+                            {enableRequirement.map((x, idx) => {
                                 return (
                                     <WalletsByNetwork
                                         wallets={rawPatchData}

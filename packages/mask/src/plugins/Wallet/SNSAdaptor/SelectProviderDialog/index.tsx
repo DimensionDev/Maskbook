@@ -35,7 +35,7 @@ export interface SelectProviderDialogProps {}
 export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [onlyEvm, setOnlyEvm] = useState(false)
+    const [plugin, setPluginId] = useState('')
     // #region remote controlled dialog logic
     // #endregion
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
@@ -43,18 +43,22 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     useEffect(() => {
         if (!open) return
         WalletMessages.events.selectProviderDialogUpdated.on((ev?) => {
-            if ((ev as { onlyEvm: boolean }).onlyEvm) {
-                setOnlyEvm(true)
-            } else {
-                setOnlyEvm(false)
-            }
+            setPluginId(ev.pluginId ?? '')
         })
         if (hasNativeAPI) nativeAPI?.api.misc_openCreateWalletView()
-    }, [open, onlyEvm])
+    }, [open, plugin])
     // #endregion
 
     const isDashboard = isDashboardPage()
     const networks = getRegisteredWeb3Networks()
+    const showNetworks = plugin
+        ? networks.reduce((sum: Web3Plugin.NetworkDescriptor[], x) => {
+              if (x.networkSupporterPluginID === 'com.mask.evm') {
+                  sum.push(x)
+              }
+              return sum
+          }, [])
+        : networks
     const providers = getRegisteredWeb3Providers()
     const pluginID = useValueRef(pluginIDSettings) as NetworkPluginID
     const network = useNetworkDescriptor()
@@ -87,8 +91,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <PluginProviderRender
-                    onlyEvm={onlyEvm}
-                    networks={networks}
+                    networks={showNetworks}
                     providers={providers}
                     undeterminedPluginID={undeterminedPluginID}
                     undeterminedNetworkID={undeterminedNetworkID}

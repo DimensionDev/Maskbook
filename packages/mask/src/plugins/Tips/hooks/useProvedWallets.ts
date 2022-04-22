@@ -10,6 +10,5 @@ export function useProvedWallets() {
         return NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey)
     }, [])
 
-    // useEffect(() => Messages.events.ownProofChanged.on(res.retry), [res.retry])
     return res
 }

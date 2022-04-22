@@ -92,7 +92,7 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
     const [, copyToClipboard] = useCopyToClipboard()
     const { value: domain } = useReverseAddress(address)
     const { Utils } = useWeb3State() ?? {}
-    const [wltName, setWltName] = useState<string>('')
+    const [walletName, setWalletName] = useState<string>('')
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
             ev.stopPropagation()
@@ -114,7 +114,7 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
                 : name !== undefined
                 ? name
                 : 'Wallet' + (index !== undefined ? index + 1 : 0)
-        setWltName(res as string)
+        setWalletName(res as string)
     }, [address, domain])
     const getActionRender = () => {
         if (!canDelete && !isDefault)
@@ -125,7 +125,7 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
                         if (!setAsDefault) return
                         setAsDefault(nowIdx ?? 0)
                     }}>
-                    Set as default
+                    {t('plugin_tips_set_as_default')}
                 </Typography>
             )
         if (canDelete)
@@ -142,7 +142,7 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
         <div className={classes.currentAccount}>
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.accountName}>{wltName}</Typography>
+                    <Typography className={classes.accountName}>{walletName}</Typography>
                     {isDefault && <Typography className={classes.defaultBadge}>Default</Typography>}
                 </div>
                 <div className={classes.infoRow}>

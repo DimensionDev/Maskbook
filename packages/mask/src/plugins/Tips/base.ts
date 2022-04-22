@@ -1,8 +1,7 @@
-import type { Plugin } from '@masknet/plugin-infra'
-import { TipsEntrancePluginId } from './constants'
+import { Plugin, PluginId } from '@masknet/plugin-infra'
 
 export const base: Plugin.Shared.Definition = {
-    ID: TipsEntrancePluginId,
+    ID: PluginId.Tip,
     name: { fallback: 'Tips' },
     description: {
         fallback: 'Tips Entrance',

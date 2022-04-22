@@ -33,14 +33,12 @@ export type GasPriceDialogEvent = {
 export type SelectProviderDialogEvent =
     | {
           open: true
+          pluginId?: string
       }
     | {
           open: false
           address?: string
-      }
-    | {
-          open: boolean
-          onlyEvm?: boolean
+          pluginId?: string
       }
 
 export type ConnectWalletDialogEvent =

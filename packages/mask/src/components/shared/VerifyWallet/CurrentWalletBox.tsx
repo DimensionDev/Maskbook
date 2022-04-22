@@ -106,7 +106,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const providerDescriptor = useProviderDescriptor(wallet.providerType ?? providerType)
     const networkDescriptor = useNetworkDescriptor(wallet.networkType)
     const frontAccount = useAccount()
-    const account = notInPop ? frontAccount : wallet.account ?? (wallet as any).address
+    const account = notInPop ? frontAccount : wallet.account
     const { Utils } = useWeb3State() ?? {}
     const { value: domain } = useReverseAddress(wallet.account)
     return account ? (

@@ -51,12 +51,7 @@ interface WalletsByNetworkProps {
 export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: WalletsByNetworkProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const isAllHide = wallets.reduce((res, x) => {
-        if (x.isPublic) {
-            res = false
-        }
-        return res
-    }, true)
+    const isAllHide = wallets.every((x) => !x.isPublic)
     return (
         <div className={classes.container}>
             <div className={classes.topBox}>
@@ -66,26 +61,24 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
                 </Typography>
                 <SettingsIcon onClick={toSetting} className={classes.settingIcon} />
             </div>
-            {network.isEvm && (
-                <div className={classes.content}>
-                    {(!isAllHide &&
-                        wallets.map((x, idx) => {
-                            return (
-                                (x.isPublic && (
-                                    <WalletCom
-                                        key={x.identity}
-                                        nowIdx={idx}
-                                        setAsDefault={setAsDefault}
-                                        index={x.rawIdx}
-                                        address={x.identity}
-                                        isDefault={!!x.isDefault}
-                                    />
-                                )) ||
-                                null
-                            )
-                        })) || <Typography className={classes.empty}>{t('plugin_tips_empty_list')}</Typography>}
-                </div>
-            )}
+            <div className={classes.content}>
+                {(!isAllHide &&
+                    wallets.map((x, idx) => {
+                        return (
+                            (x.isPublic && (
+                                <WalletCom
+                                    key={x.identity}
+                                    nowIdx={idx}
+                                    setAsDefault={setAsDefault}
+                                    index={x.rawIdx}
+                                    address={x.identity}
+                                    isDefault={!!x.isDefault}
+                                />
+                            )) ||
+                            null
+                        )
+                    })) || <Typography className={classes.empty}>{t('plugin_tips_empty_list')}</Typography>}
+            </div>
         </div>
     )
 }
