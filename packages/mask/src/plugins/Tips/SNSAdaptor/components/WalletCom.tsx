@@ -107,13 +107,14 @@ export function WalletCom({ address, isDefault, canDelete, index, setAsDefault, 
     const wallets = useWallets()
 
     useEffect(() => {
-        const name = wallets.find((x) => isSameAddress(x.address, address))?.name
+        const nowItem = wallets.find((x) => isSameAddress(x.address, address))
+        const name = nowItem?.name
         const res =
             domain && Utils?.formatDomainName
                 ? Utils.formatDomainName(domain)
-                : name !== undefined
+                : name !== undefined && nowItem?.hasStoredKeyInfo
                 ? name
-                : 'Wallet' + (index !== undefined ? index + 1 : 0)
+                : `Wallet ${index !== undefined ? index + 1 : 0}`
         setWalletName(res as string)
     }, [address, domain])
     const getActionRender = () => {
