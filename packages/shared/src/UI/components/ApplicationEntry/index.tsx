@@ -44,33 +44,35 @@ interface Props {
     icon: React.ReactNode
     title: React.ReactNode
     disabled?: boolean
-    toolTip?: string
+    nextIdVerifyToolTipHint?: string
     onClick: () => void
 }
 
 export function ApplicationEntry(props: Props) {
-    const { title, onClick, disabled = false, icon, toolTip } = props
+    const { title, onClick, disabled = false, icon, nextIdVerifyToolTipHint } = props
     const { classes } = useStyles()
-    return (
+    const jsx = (
+        <div
+            className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
+            onClick={disabled ? () => {} : onClick}>
+            <div className={classes.iconWrapper}>{icon}</div>
+            <Typography className={classes.title} color="textPrimary">
+                {title}
+            </Typography>
+        </div>
+    )
+    return nextIdVerifyToolTipHint ? (
         <ShadowRootTooltip
             PopperProps={{
                 disablePortal: true,
             }}
             placement="top"
             arrow
-            disableHoverListener={!toolTip}
-            title={<Typography>{toolTip}</Typography>}>
-            <div
-                className={classNames(
-                    classes.applicationBox,
-                    disabled ? classes.disabled : classes.applicationBoxHover,
-                )}
-                onClick={disabled ? () => {} : onClick}>
-                <div className={classes.iconWrapper}>{icon}</div>
-                <Typography className={classes.title} color="textPrimary">
-                    {title}
-                </Typography>
-            </div>
+            disableHoverListener={!nextIdVerifyToolTipHint}
+            title={<Typography>{nextIdVerifyToolTipHint}</Typography>}>
+            {jsx}
         </ShadowRootTooltip>
+    ) : (
+        jsx
     )
 }

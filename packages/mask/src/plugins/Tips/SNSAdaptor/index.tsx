@@ -33,9 +33,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                         ? nextIdVerification?.onNextIDVerify()
                                         : setOpen(true)
                                 }
-                                toolTip={
+                                nextIdVerifyToolTipHint={
                                     nextIdVerification?.isSNSConnectToCurrentPersona === false
-                                        ? nextIdVerification?.toolTip
+                                        ? nextIdVerification?.toolTipHint
                                         : undefined
                                 }
                             />
