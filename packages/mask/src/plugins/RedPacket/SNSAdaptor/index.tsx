@@ -126,6 +126,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
+    wrapperEntry: {
+        icon: <RedPacketIcon />,
+        style: {
+            background:
+                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(249, 55, 55, 0.2) 100%), #FFFFFF',
+        },
+    },
 }
 interface ERC20RedpacketBadgeProps {
     payload: RedPacketJSONPayload

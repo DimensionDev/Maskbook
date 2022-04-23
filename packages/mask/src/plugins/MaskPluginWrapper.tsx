@@ -14,6 +14,8 @@ import {
     Plugin,
     PluginWrapperMethods,
 } from '@masknet/plugin-infra/content-script'
+import { ProviderByIcon } from '@masknet/icons'
+import type { CSSProperties } from '@emotion/serialize'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     open?: boolean
@@ -21,16 +23,19 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     width?: number
     action?: ReactNode
     publisher?: JSX.Element
+    wrapperEntry?: Plugin.SNSAdaptor.WrapperEntry
     publisherLink?: string
 }
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ style?: CSSProperties }>()((theme, props) => {
     return {
         card: {
+            background:
+                props?.style?.background ??
+                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
             margin: theme.spacing(2, 0),
             width: '100%',
             boxSizing: 'border-box',
-            border: `1px solid ${theme.palette.secondaryDivider}`,
             cursor: 'default',
             ...(isTwitter(activatedSocialNetworkUI)
                 ? {
@@ -44,12 +49,19 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.text.primary,
             display: 'flex',
             alignItems: 'center',
-            padding: theme.spacing(2),
+            padding: theme.spacing(1),
         },
         title: {
             display: 'flex',
             flexDirection: 'column',
             paddingLeft: theme.spacing(1.5),
+        },
+        provider: {
+            display: 'flex',
+            alignItems: 'center',
+            '& > a': {
+                lineHeight: 0,
+            },
         },
         action: {
             flex: 1,
@@ -58,8 +70,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'flex-end',
         },
         body: {
-            borderTop: `1px solid ${theme.palette.secondaryDivider}`,
-            padding: theme.spacing(2),
+            padding: theme.spacing(0),
         },
         button: {
             color: MaskColorVar.twitterButtonText,
@@ -71,8 +82,9 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
-    const { classes } = useStyles()
-    const { open, title, children, action, publisher, publisherLink } = props
+    const { open, title, children, action, publisher, publisherLink, wrapperEntry } = props
+    const { classes } = useStyles({ style: wrapperEntry?.style })
+
     const personaConnectStatus = usePersonaConnectStatus()
     const { t } = useI18N()
 
@@ -96,22 +108,22 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const publisherInfo = useMemo(() => {
         if (!publisher) return null
         const main = (
-            <Typography variant="h6" fontSize="1.1rem" fontWeight="400" color={MaskColorVar.textPrimary}>
+            <Typography variant="body1" fontSize={14} fontWeight="500" color={MaskColorVar.textPrimary}>
                 {publisher}
             </Typography>
         )
         return (
-            <Box>
-                <Typography variant="h6" fontSize="1.1rem" fontWeight="400" color={MaskColorVar.textSecondary}>
-                    Provided by
+            <Box className={classes.provider}>
+                <Typography variant="body1" fontSize={14} fontWeight="400" color={MaskColorVar.textSecondary}>
+                    {t('plugin_provider_by')}
                 </Typography>
+                {'  '}
+                {main}
                 {publisherLink ? (
                     <Link href={publisherLink} underline="none" target="_blank" rel="noopener">
-                        {main}
+                        <ProviderByIcon />
                     </Link>
-                ) : (
-                    main
-                )}
+                ) : null}
             </Box>
         )
     }, [publisher, publisherLink])
@@ -122,15 +134,11 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
             style={{ display: open ? 'block' : 'none' }}
             onClick={(ev) => ev.stopPropagation()}>
             <div className={classes.header}>
-                <MaskIcon size={45} />
-                <div className={classes.title}>
-                    <Typography variant="h6" fontSize="1.1rem" fontWeight="400">
-                        Mask Plugin {!personaConnectStatus.connected && title ? `(${title})` : ''}
-                    </Typography>
-                    <Typography variant="h6" fontSize="1.1rem" fontWeight="400">
-                        {name}
-                    </Typography>
-                </div>
+                {wrapperEntry?.icon ?? <MaskIcon size={16} />}
+                <Typography variant="body1" fontSize={15} fontWeight="700">
+                    {title ?? t('plugin_default_title')}
+                </Typography>
+
                 <div className={classes.action}>{actionButton || action || publisherInfo}</div>
             </div>
             {personaConnectStatus.connected && children ? <div className={classes.body}>{children}</div> : null}
@@ -141,7 +149,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
 
 export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdaptor.Definition> = forwardRef(
     (props, ref) => {
-        const { ID, name, publisher } = props.definition
+        const { ID, name, publisher, wrapperEntry } = props.definition
         const t = usePluginI18NField()
         const [width, setWidth] = useState<undefined | number>(undefined)
         const [open, setOpen] = useState<boolean>(false)
@@ -159,6 +167,7 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
 
         return (
             <MaskPostExtraInfoWrapper
+                wrapperEntry={wrapperEntry}
                 open={open}
                 title={title || t(ID, name)}
                 width={width}

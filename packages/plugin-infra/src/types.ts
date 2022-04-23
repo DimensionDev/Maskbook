@@ -6,6 +6,7 @@ import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@maskn
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
+import type { CSSProperties } from '@emotion/serialize'
 
 export declare namespace Plugin {
     /**
@@ -244,6 +245,8 @@ export namespace Plugin.SNSAdaptor {
         ProfileSliders?: ProfileSlider[]
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
+        /** This UI will be rendered as plugin wrapper page */
+        wrapperEntry?: WrapperEntry
         /**
          * A hook for if this plugin can enhance the #hash or $cash tag.
          */
@@ -334,6 +337,11 @@ export namespace Plugin.SNSAdaptor {
          * Does the application listed in the DAPP list
          */
         category?: 'dapp' | 'other'
+    }
+
+    export interface WrapperEntry {
+        icon?: React.ReactNode
+        style?: CSSProperties
     }
 
     export interface ProfileIdentity {

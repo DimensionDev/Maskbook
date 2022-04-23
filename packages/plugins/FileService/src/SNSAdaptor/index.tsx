@@ -72,6 +72,13 @@ const definition: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
+    wrapperEntry: {
+        icon: <FileServiceIcon />,
+        style: {
+            background:
+                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(255, 177, 16, 0.2) 100%), #FFFFFF;',
+        },
+    },
 }
 
 export default definition

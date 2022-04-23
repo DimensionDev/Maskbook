@@ -119,6 +119,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
+    wrapperEntry: {
+        icon: <MarketsClaimIcon />,
+        style: {
+            background:
+                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(41, 228, 253, 0.2) 100%), #FFFFFF;',
+        },
+    },
 }
 
 function onAttached_ITO(payload: JSON_PayloadComposeMask) {

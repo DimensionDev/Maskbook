@@ -1097,5 +1097,7 @@
     "plugin_transak_name": "Fiat On-Ramp",
     "plugin_transak_description": "Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support.",
     "plugin_valuables_name": "Valuables",
-    "plugin_valuables_description": "Buy & sell tweets autographed by their original creators."
+    "plugin_valuables_description": "Buy & sell tweets autographed by their original creators.",
+    "plugin_default_title": "Default",
+    "plugin_provider_by": "provider by "
 }
