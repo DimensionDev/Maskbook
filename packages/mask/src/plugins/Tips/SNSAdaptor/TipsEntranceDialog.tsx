@@ -3,21 +3,28 @@ import { useActivatedPlugin } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
-import { BindingProof, ECKeyIdentifier, NextIDAction, NextIDStoragePayload } from '@masknet/shared-base'
+import {
+    BindingProof,
+    ECKeyIdentifier,
+    NextIDAction,
+    NextIDStorageInfo,
+    NextIDStoragePayload,
+} from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
 import { Button, ButtonProps, DialogContent } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import { cloneDeep } from 'lodash-unified'
-import { FC, useCallback, useEffect, useState } from 'react'
+import { FC, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import Services from '../../../extension/service'
 import { useI18N } from '../../../utils'
 import { getKvPayload, setKvPatchData, useKvGet } from '../hooks/useKv'
+import { useTipsWalletsList } from '../hooks/useTipsWalletsList'
 import { useProvedWallets } from '../hooks/useProvedWallets'
 import AddWalletView from './bodyViews/AddWallet'
 import SettingView from './bodyViews/Setting'
@@ -118,48 +125,11 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     }
     const { value: kv, retry: retryKv } = useKvGet()
     const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
-    useEffect(() => {
+    const list = useTipsWalletsList(proofRes, currentPersona?.publicHexKey, kv?.val as NextIDStorageInfo)
+    useMemo(() => {
         setHasChanged(false)
-        const walletsList = JSON.parse(JSON.stringify(proofRes))
-        walletsList.sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
-        walletsList.forEach((wallet, idx) => (wallet.rawIdx = walletsList.length - idx - 1))
-        if (kv?.ok && kv.val.proofs.length > 0 && walletsList.length > 0) {
-            const kvCache = kv.val.proofs.find((x) => x.identity === currentPersona?.publicHexKey)
-            if (!kvCache) return
-            const result: BindingProof[] = walletsList.reduce<BindingProof[]>((res, x) => {
-                x.isDefault = 0
-                x.isPublic = 1
-                const temp = (kvCache?.content[PluginId.Tips] as BindingProof[]).filter((i) =>
-                    isSameAddress(x.identity, i.identity),
-                )
-                if (temp && temp.length > 0) {
-                    x.isDefault = temp[0].isDefault
-                    x.isPublic = temp[0].isPublic
-                }
-                res.push(x)
-                return res
-            }, [])
-            const idx = result.findIndex((i) => i.isDefault)
-            if (idx !== -1) {
-                result.unshift(result.splice(idx, 1)[0])
-            } else {
-                result[0].isDefault = 1
-            }
-
-            setRawWalletList(result)
-            setRawPatchData(result)
-            return
-        }
-        walletsList.forEach((x, idx) => {
-            x.isPublic = 1
-            x.isDefault = 0
-            if (idx === 0) {
-                x.isDefault = 1
-                return
-            }
-        })
-        setRawWalletList(cloneDeep(walletsList))
-        setRawPatchData(cloneDeep(walletsList))
+        setRawPatchData(list)
+        setRawWalletList(list)
     }, [proofRes, kv, bodyViewStep])
 
     const onCancel = () => {

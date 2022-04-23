@@ -43,7 +43,6 @@ const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: W
     return (
         <>
             {wallets.map((x, idx) => {
-                console.log(x, 'ggg')
                 return (
                     <WalletItem
                         key={idx}
@@ -61,7 +60,6 @@ const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: W
                     <img
                         className={classes.emptyIcon}
                         src={new URL('../../assets/empty.png', import.meta.url).toString()}
-                        alt=""
                     />
                     <Typography>{t('plugin_tips_wallet_add')}</Typography>
                 </div>
