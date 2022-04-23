@@ -74,10 +74,10 @@ const useStyles = makeStyles()((theme) => ({
         width: 18,
     },
 }))
-interface EmptyProps {
+interface EmptyStatusProps {
     toAdd: () => void
 }
-const Empty = memo(({ toAdd }: EmptyProps) => {
+export const EmptyStatus = memo(({ toAdd }: EmptyStatusProps) => {
     const { t } = useI18N()
     const { classes } = useStyles()
     return (
@@ -117,4 +117,3 @@ const Empty = memo(({ toAdd }: EmptyProps) => {
         </div>
     )
 })
-export default Empty

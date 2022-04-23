@@ -29,7 +29,7 @@ import { useProvedWallets } from '../hooks/useProvedWallets'
 import AddWalletView from './bodyViews/AddWallet'
 import SettingView from './bodyViews/Setting'
 import WalletsView from './bodyViews/Wallets'
-import Empty from './components/Empty'
+import { EmptyStatus } from './components/EmptyStatus'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
 export interface TipsEntranceDialogProps {
@@ -285,7 +285,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                             })}
                         </div>
                     ) : bodyViewStep === BodyViewStep.Main && rawPatchData.length === 0 ? (
-                        <Empty toAdd={onConnectWalletClick} />
+                        <EmptyStatus toAdd={onConnectWalletClick} />
                     ) : null}
 
                     {bodyViewStep === BodyViewStep.Setting && (
