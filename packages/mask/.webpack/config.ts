@@ -15,12 +15,13 @@ import { isAbsolute, join } from 'path'
 import { readFileSync } from 'fs'
 import { nonNullable, EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils'
 import { BuildFlags, normalizeBuildFlags, computedBuildFlags } from './flags'
+import ResolveTypeScriptPlugin from 'resolve-typescript-plugin'
 
 import './clean-hmr'
 
 export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const normalizedFlags = normalizeBuildFlags(rawFlags)
-    const { sourceMapKind } = computedBuildFlags(normalizedFlags)
+    const { sourceMapKind, supportWebAssembly, lockdown } = computedBuildFlags(normalizedFlags)
     const { hmr, mode, profiling, reactRefresh, readonlyCache, reproducibleBuild, runtime, outputPath } =
         normalizedFlags
 
@@ -37,9 +38,9 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         name: 'mask',
         mode,
         devtool: sourceMapKind,
-        target: ['web', 'es2019'],
+        target: ['web', 'es2021'],
         entry: {},
-        experiments: { backCompat: false, asyncWebAssembly: true },
+        experiments: { backCompat: false, asyncWebAssembly: supportWebAssembly },
         cache: {
             type: 'filesystem',
             buildDependencies: { config: [__filename] },
@@ -52,6 +53,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             })(),
         },
         resolve: {
+            plugins: [new ResolveTypeScriptPlugin()],
             extensions: ['.js', '.ts', '.tsx'],
             alias: (() => {
                 const alias = {
@@ -60,42 +62,12 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
                     // It's a Node impl for xhr which is unnecessary
                     'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.js'),
-                    // Monorepo building speed optimization
-                    // Those packages are also installed as dependencies so they appears in node_modules
-                    // By aliasing them to the original position,
-                    // we can speed up the compile because there is no need to wait tsc build them to the dist folder.
-                    '@masknet/configuration': join(__dirname, '../../configuration/src/'),
-                    '@masknet/dashboard$': require.resolve('../../dashboard/src/entry.tsx'),
-                    '@masknet/injected-script': join(__dirname, '../../injected-script/sdk'),
-                    '@masknet/gun-utils': join(__dirname, '../../gun-utils/src/'),
-                    '@masknet/shared': join(__dirname, '../../shared/src/'),
-                    '@masknet/shared-base': join(__dirname, '../../shared-base/src/'),
-                    '@masknet/theme': join(__dirname, '../../theme/src/'),
-                    '@masknet/icons': join(__dirname, '../../icons/index.ts'),
-                    '@masknet/web3-providers': join(__dirname, '../../web3-providers/src'),
-                    '@masknet/web3-shared-base': join(__dirname, '../../web3-shared/base/src'),
-                    '@masknet/web3-shared-evm': join(__dirname, '../../web3-shared/evm/'),
-                    '@masknet/web3-shared-flow': join(__dirname, '../../web3-shared/flow/'),
-                    '@masknet/web3-shared-solana': join(__dirname, '../../web3-shared/solana/'),
-                    '@masknet/plugin-infra': join(__dirname, '../../plugin-infra/src/'),
-                    '@masknet/plugin-example': join(__dirname, '../../plugins/example/src/'),
-                    '@masknet/plugin-debugger': join(__dirname, '../../plugins/Debugger/src/'),
-                    '@masknet/plugin-flow': join(__dirname, '../../plugins/Flow/src/'),
-                    '@masknet/plugin-rss3': join(__dirname, '../../plugins/RSS3/src/'),
-                    '@masknet/plugin-dao': join(__dirname, '../../plugins/DAO/src/'),
-                    '@masknet/plugin-solana': join(__dirname, '../../plugins/Solana/src/'),
-                    '@masknet/plugin-wallet': join(__dirname, '../../plugins/Wallet/src/'),
-                    '@masknet/plugin-file-service': join(__dirname, '../../plugins/FileService/src/'),
-                    '@masknet/plugin-cyberconnect': join(__dirname, '../../plugins/CyberConnect/src/'),
-                    '@masknet/external-plugin-previewer': join(__dirname, '../../external-plugin-previewer/src/'),
-                    '@masknet/public-api': join(__dirname, '../../public-api/src/'),
-                    '@masknet/sdk': join(__dirname, '../../mask-sdk/server/'),
-                    '@masknet/backup-format': join(__dirname, '../../backup-format/src/'),
-                    '@masknet/encryption': join(__dirname, '../../encryption/src'),
-                    '@masknet/typed-message/dom$': require.resolve('../../typed-message/dom/index.ts'),
-                    '@masknet/typed-message$': require.resolve('../../typed-message/base/index.ts'),
-                    // @masknet/scripts: insert-here
+                    // fake esm
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
+                }
+                if (lockdown) {
+                    // https://github.com/near/near-api-js/issues/833
+                    alias['error-polyfill'] = require.resolve('./package-overrides/null.js')
                 }
                 if (profiling) {
                     alias['scheduler/tracing'] = 'scheduler/tracing-profiling'
@@ -117,13 +89,26 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 javascript: {
                     // Treat as missing export as error
                     strictExportPresence: true,
-                    // gun and @unstoppabledomains/resolution
-                    exprContextCritical: false,
                 },
             },
             rules: [
                 // Opt in source map
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
+                // Manifest v3 does not support
+                !supportWebAssembly
+                    ? {
+                          test: /\.wasm?$/,
+                          loader: require.resolve('./wasm-to-asm.ts'),
+                          type: 'javascript/auto',
+                      }
+                    : undefined!,
+                // Patch regenerator-runtime
+                lockdown
+                    ? {
+                          test: /\..?js$/,
+                          loader: require.resolve('./fix-regenerator-runtime.ts'),
+                      }
+                    : undefined!,
                 // TypeScript
                 {
                     test: /\.tsx?$/,
@@ -138,20 +123,21 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                                 syntax: 'typescript',
                                 dynamicImport: true,
                                 tsx: true,
-                                importAssertions: true,
                             },
-                            target: 'es2019',
+                            target: 'es2021',
                             externalHelpers: true,
                             transform: {
                                 react: {
                                     runtime: 'automatic',
-                                    useBuiltins: true,
                                     refresh: reactRefresh && {
                                         refreshReg: '$RefreshReg$',
                                         refreshSig: '$RefreshSig$',
                                         emitFullSignatures: true,
                                     },
                                 },
+                            },
+                            experimental: {
+                                keepImportAssertions: true,
                             },
                         },
                     },
@@ -195,6 +181,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 patterns: [
                     { from: join(__dirname, '../public/'), to: distFolder },
                     { from: join(__dirname, '../../injected-script/dist/injected-script.js'), to: distFolder },
+                    { from: join(__dirname, '../../gun-utils/gun.js'), to: distFolder },
                     { from: join(__dirname, '../../mask-sdk/dist/mask-sdk.js'), to: distFolder },
                     {
                         context: join(__dirname, '../../polyfills/dist/'),
@@ -202,6 +189,13 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                         to: polyfillFolder,
                     },
                     { from: require.resolve('webextension-polyfill/dist/browser-polyfill.js'), to: polyfillFolder },
+                    {
+                        from:
+                            mode === 'development'
+                                ? require.resolve('../../../node_modules/ses/dist/lockdown.umd.js')
+                                : require.resolve('../../../node_modules/ses/dist/lockdown.umd.min.js'),
+                        to: join(polyfillFolder, 'lockdown.js'),
+                    },
                 ],
             }),
             emitManifestFile(normalizedFlags),
@@ -233,12 +227,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         },
         output: {
             environment: {
-                arrowFunction: true,
-                const: true,
-                destructuring: true,
-                forOf: true,
                 module: false,
-                bigIntLiteral: true,
                 // Our iOS App doesn't support dynamic import (it requires a heavy post-build time transform).
                 dynamicImport: !(runtime.architecture === 'app' && runtime.engine === 'safari'),
             },
@@ -265,6 +254,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         } as DevServerConfiguration,
         stats: process.env.CI ? 'errors-warnings' : undefined,
     }
+    baseConfig.module!.rules = baseConfig.module!.rules!.filter(Boolean)
 
     const plugins = baseConfig.plugins!
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
@@ -274,14 +264,15 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })
     baseConfig.plugins!.push(
-        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', sourceMap: !!sourceMapKind }),
-        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', sourceMap: !!sourceMapKind }),
+        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', sourceMap: !!sourceMapKind, lockdown }),
+        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', sourceMap: !!sourceMapKind, lockdown }),
         addHTMLEntry({
             chunks: ['contentScript'],
             filename: 'generated__content__script.html',
             sourceMap: !!sourceMapKind,
+            lockdown,
         }),
-        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', sourceMap: !!sourceMapKind }),
+        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', sourceMap: !!sourceMapKind, lockdown }),
     )
     // background
     if (runtime.manifest === 3) {
@@ -297,8 +288,9 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             addHTMLEntry({
                 chunks: ['background'],
                 filename: 'background.html',
-                secp256k1: true,
+                gun: true,
                 sourceMap: !!sourceMapKind,
+                lockdown,
             }),
         )
     }
@@ -322,18 +314,28 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
     }
 }
-function addHTMLEntry(options: HTMLPlugin.Options & { secp256k1?: boolean; sourceMap: boolean }) {
+function addHTMLEntry(
+    options: HTMLPlugin.Options & {
+        sourceMap: boolean
+        gun?: boolean
+        lockdown: boolean
+    },
+) {
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
-    if (options.secp256k1) {
-        templateContent = templateContent.replace(
-            `<!-- secp256k1 -->`,
-            '<script src="/polyfill/secp256k1.js"></script>',
-        )
+    if (options.gun) {
+        templateContent = templateContent.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
     }
     if (options.sourceMap) {
         templateContent = templateContent.replace(
             `<!-- CSP -->`,
             `<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; require-trusted-types-for 'script'; trusted-types default webpack">`,
+        )
+    }
+    if (options.lockdown) {
+        templateContent = templateContent.replace(
+            `<!-- lockdown -->`,
+            `<script src="/polyfill/lockdown.js"></script>
+        <script src="/lockdown.js"></script>`,
         )
     }
     return new HTMLPlugin({

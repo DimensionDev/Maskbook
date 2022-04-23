@@ -3,7 +3,7 @@ import { Box, IconButton, Stack, Typography } from '@mui/material'
 import { MaskAvatar } from '../../../../components/MaskAvatar'
 import { ArrowDownRound, ArrowUpRound } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { formatFingerprint } from '@masknet/shared'
+import { formatPersonaFingerprint } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     iconButton: {
@@ -43,7 +43,7 @@ export const PersonaStateBar = memo<PersonaStateBarProps>(({ nickname, toggleDra
                     {nickname}
                 </Typography>
                 <Typography variant="caption" lineHeight={1.2}>
-                    {formatFingerprint(fingerprint ?? '', 6)}
+                    {formatPersonaFingerprint(fingerprint ?? '', 6)}
                 </Typography>
             </Stack>
             <IconButton onClick={toggleDrawer} size="small" className={classes.iconButton}>

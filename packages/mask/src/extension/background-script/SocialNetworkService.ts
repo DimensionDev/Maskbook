@@ -1,12 +1,12 @@
-import { definedSocialNetworkUIs, getNetworkWorker, loadSocialNetworkUI } from '../../social-network'
+import { definedSocialNetworkUIs, getNetworkWorker, loadSocialNetworkUI, SocialNetworkUI } from '../../social-network'
 import { Flags } from '../../../shared'
-import { requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
 
 import { currentSetupGuideStatus } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
 import { SetupGuideStep } from '../../components/InjectedComponents/SetupGuide/types'
-import type { PersonaIdentifier } from '@masknet/shared-base'
+import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { delay } from '@dimensiondev/kit'
+import { requestExtensionPermission } from '../../../background/services/helper'
 
 export async function getDefinedSocialNetworkUIs() {
     return [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {
@@ -15,15 +15,28 @@ export async function getDefinedSocialNetworkUIs() {
         }
     })
 }
-export async function connectSocialNetwork(identifier: PersonaIdentifier, network: string) {
+
+function requestSNSAdaptorPermission(ui: SocialNetworkUI.Definition) {
+    const req = ui.permission?.request()
+    if (req) return req
+    return requestExtensionPermission({ origins: [...ui.declarativePermissions.origins] })
+}
+
+export async function connectSocialNetwork(
+    identifier: PersonaIdentifier,
+    network: string,
+    type?: 'local' | 'nextID',
+    profile?: ProfileIdentifier,
+) {
     const ui = await loadSocialNetworkUI(network)
     const home = ui.utils.getHomePage?.()
     if (!Flags.no_web_extension_dynamic_permission_request) {
         if (!(await requestSNSAdaptorPermission(ui))) return
     }
     currentSetupGuideStatus[network].value = stringify({
-        status: SetupGuideStep.FindUsername,
+        status: type === 'nextID' ? SetupGuideStep.VerifyOnNextID : SetupGuideStep.FindUsername,
         persona: identifier.toText(),
+        username: profile?.userId,
     })
     await delay(100)
     home && browser.tabs.create({ active: true, url: home })
@@ -42,7 +55,16 @@ export async function openProfilePage(network: string, userId?: string) {
 export async function openShareLink(SNSIdentifier: string, post: string) {
     const url = (await getNetworkWorker(SNSIdentifier)).utils.getShareLinkURL?.(post)
     if (!url) return
-    browser.tabs.create({ active: true, url: url.toString() })
+    const width = 700
+    const height = 520
+    browser.windows.create({
+        url: url.toString(),
+        width,
+        height,
+        type: 'popup',
+        left: (screen.width - width) / 2,
+        top: (screen.height - height) / 2,
+    })
 }
 
 const key = 'openSNSAndActivatePlugin'

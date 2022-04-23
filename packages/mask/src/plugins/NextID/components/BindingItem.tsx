@@ -1,14 +1,16 @@
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
-import { Platform } from '../types'
+import { NextIDPlatform } from '@masknet/shared-base'
 import { DeleteIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { CopyIconButton } from './CopyIconButton'
 import { ExternalLink } from 'react-feather'
-import { NetworkPluginID, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../locales'
 import { ImageIcon } from '@masknet/shared'
+import { TipButton } from './Tip'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -17,11 +19,6 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.background.default,
         borderRadius: 8,
         alignItems: 'center',
-    },
-    trashIcon: {
-        fontSize: 20,
-        stroke: theme.palette.text.primary,
-        cursor: 'pointer',
     },
     copy: {
         fontSize: 16,
@@ -40,29 +37,43 @@ const useStyles = makeStyles()((theme) => ({
     linkIcon: {
         marginRight: theme.spacing(1),
     },
+    tipButton: {
+        display: 'inline-flex',
+        alignItems: 'center',
+        color: theme.palette.text.primary,
+        marginRight: theme.spacing(0.5),
+    },
+    tipButtonLabel: {
+        color: theme.palette.text.primary,
+        fontSize: 14,
+        marginLeft: theme.spacing(0.5),
+    },
+    delButton: {
+        fontSize: 20,
+        stroke: theme.palette.text.primary,
+        cursor: 'pointer',
+        marginLeft: theme.spacing(1),
+    },
 }))
+
 interface Item {
-    platform: Platform
+    platform: NextIDPlatform
     identity: string
-    enableAction: boolean
+    tipable?: boolean
+    deletable?: boolean
     onUnBind(address: string): void
 }
 
-export const BindingItem = memo<Item>(({ platform, identity, enableAction, onUnBind }) => {
+export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable, onUnBind }) => {
     const t = useI18N()
     const { Utils } = useWeb3State() ?? {}
     const { classes } = useStyles()
     const networkDescriptor = useNetworkDescriptor(ChainId.Mainnet, NetworkPluginID.PLUGIN_EVM)
+    const visitingPersona = useCurrentVisitingIdentity()
 
-    if (platform === Platform.ethereum) {
+    if (platform === NextIDPlatform.Ethereum) {
         return (
-            <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                mx={1}
-                mb={4}
-                className={classes.item}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" className={classes.item}>
                 <Stack direction="row" alignItems="center" gap="12px">
                     <ImageIcon size={18} icon={networkDescriptor?.icon} />
                     <Typography className={classes.address}>{formatEthereumAddress(identity, 4)}</Typography>
@@ -77,7 +88,15 @@ export const BindingItem = memo<Item>(({ platform, identity, enableAction, onUnB
                     </Link>
                 </Stack>
                 <Box>
-                    {enableAction && <DeleteIcon className={classes.trashIcon} onClick={() => onUnBind(identity)} />}
+                    {tipable ? (
+                        <TipButton
+                            addresses={[identity]}
+                            receiver={visitingPersona.identifier}
+                            className={classes.tipButton}>
+                            <span className={classes.tipButtonLabel}>{t.tips()}</span>
+                        </TipButton>
+                    ) : null}
+                    {deletable ? <DeleteIcon className={classes.delButton} onClick={() => onUnBind(identity)} /> : null}
                 </Box>
             </Stack>
         )

@@ -1,6 +1,6 @@
-import { FC, memo } from 'react'
+import React, { FC, memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
-import { EMPTY_LIST, ProviderType, TransactionStatusType } from '@masknet/web3-shared-evm'
+import { ProviderType, TransactionStatusType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { FormattedAddress, LoadingAnimation, WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -11,7 +11,8 @@ import {
     useWeb3State,
     Web3Plugin,
     useReverseAddress,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/web3'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginMessages } from '../../../../API'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useDashboardI18N } from '../../../../locales'
@@ -108,7 +109,7 @@ interface WalletStateBarUIProps {
     openMenu: ReturnType<typeof useNetworkSelector>[1]
 }
 
-export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
+export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>> = ({
     isPending,
     network,
     provider,

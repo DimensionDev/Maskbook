@@ -102,6 +102,8 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.JUGGLERRED:
             return uniswapV2Like
+        case TradeProvider.MDEX:
+            return uniswapV2Like
         case TradeProvider.ZRX:
             return zrx
         case TradeProvider.BALANCER:

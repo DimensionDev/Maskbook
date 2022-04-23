@@ -1,1 +1,1 @@
-export { decryptionWithSocialNetworkDecoding } from '../../background/services/crypto'
+export { decryptionWithSocialNetworkDecoding } from '../../background/services/crypto/decryption'

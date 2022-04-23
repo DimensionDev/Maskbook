@@ -22,6 +22,7 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -252,7 +253,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         retry: retryAvailability,
         error: availabilityError,
     } = useAvailabilityNftRedPacket(payload.id, account)
-
     const [claimState, claimCallback, resetCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
@@ -262,11 +262,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const isClaiming = claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING
 
     const openAddressLinkOnExplorer = useCallback(() => {
-        window.open(
-            resolveAddressLinkOnExplorer(payload.chainId, payload.contractAddress),
-            '_blank',
-            'noopener noreferrer',
-        )
+        openWindow(resolveAddressLinkOnExplorer(payload.chainId, payload.contractAddress))
     }, [payload])
 
     const [sourceType, setSourceType] = useState('')
@@ -292,37 +288,33 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     // #region on share
     const postLink = usePostLink()
     const networkType = useNetworkType()
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            availability?.isClaimed
-                ? t(
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? 'plugin_red_packet_nft_share_claimed_message'
-                          : 'plugin_red_packet_nft_share_claimed_message_not_twitter',
-                      {
-                          sender: payload.senderName,
-                          payload: postLink,
-                          network: resolveNetworkName(networkType),
-                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-                      },
-                  ).trim()
-                : t(
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? 'plugin_red_packet_nft_share_foreshow_message'
-                          : 'plugin_red_packet_nft_share_foreshow_message_not_twitter',
-                      {
-                          sender: payload.senderName,
-                          payload: postLink,
-                          network: resolveNetworkName(networkType),
-                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-                      },
-                  ).trim(),
-        )
-        .toString()
+    const shareText = availability?.isClaimed
+        ? t(
+              isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                  ? 'plugin_red_packet_nft_share_claimed_message'
+                  : 'plugin_red_packet_nft_share_claimed_message_not_twitter',
+              {
+                  sender: payload.senderName,
+                  payload: postLink,
+                  network: resolveNetworkName(networkType),
+                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+              },
+          ).trim()
+        : t(
+              isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                  ? 'plugin_red_packet_nft_share_foreshow_message'
+                  : 'plugin_red_packet_nft_share_foreshow_message_not_twitter',
+              {
+                  sender: payload.senderName,
+                  payload: postLink,
+                  network: resolveNetworkName(networkType),
+                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+              },
+          ).trim()
 
     const onShare = useCallback(() => {
-        if (shareLink) window.open(shareLink, '_blank', 'noopener noreferrer')
-    }, [shareLink])
+        if (shareText) activatedSocialNetworkUI.utils.share?.(shareText)
+    }, [shareText])
     // #endregion
 
     if (availabilityError)
@@ -390,7 +382,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 ) : (
                     <CardMedia className={classes.image} component="div" image={rpNftImg}>
                         <Typography className={classes.remain}>
-                            {availability.claimedAmount}/{availability.totalAmount} {t('dashboard_tab_collectibles')}
+                            {availability.claimedAmount}/{availability.totalAmount} {t('collectibles_name')}
                         </Typography>
                     </CardMedia>
                 )}

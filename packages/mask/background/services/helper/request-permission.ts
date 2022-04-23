@@ -1,5 +1,5 @@
 import { getPermissionRequestURL } from '../../../shared/definitions/routes'
-export async function requestExtensionPermission(permission: browser.permissions.Permissions) {
+export async function requestExtensionPermission(permission: browser.permissions.Permissions): Promise<boolean> {
     if (await browser.permissions.contains(permission)) return true
     try {
         return await browser.permissions.request(permission)
@@ -21,6 +21,14 @@ export async function requestExtensionPermission(permission: browser.permissions
         })
     })
 }
-export function queryExtensionPermission(permission: browser.permissions.Permissions) {
+
+export async function requestHostPermission(origins: string[]) {
+    const currentOrigins = (await browser.permissions.getAll()).origins || []
+    const extra = origins.filter((i) => !currentOrigins?.includes(i))
+    if (!extra.length) return true
+    return requestExtensionPermission({ origins: extra })
+}
+
+export function queryExtensionPermission(permission: browser.permissions.Permissions): Promise<boolean> {
     return browser.permissions.contains(permission)
 }

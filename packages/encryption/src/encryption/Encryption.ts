@@ -7,7 +7,7 @@ import {
     SerializableTypedMessages,
 } from '@masknet/typed-message'
 import { None, Option, Some } from 'ts-results'
-import { AESAlgorithmEnum, EC_Key, encodePayload, PayloadWellFormed } from '../payload'
+import { EC_Key, encodePayload, PayloadWellFormed } from '../payload'
 import { encryptWithAES } from '../utils'
 
 import {
@@ -33,7 +33,7 @@ export async function encrypt(options: EncryptOptions, io: EncryptIO): Promise<E
 
     const encodedMessage = encodeMessage(options.version, options.message)
     const encryptedMessage = encodedMessage
-        .then((message) => encryptWithAES(AESAlgorithmEnum.A256GCM, postKey, postIV, message))
+        .then((message) => encryptWithAES(postKey, postIV, message))
         .then((x) => x.unwrap())
 
     let encryption: PayloadWellFormed.PublicEncryption | PayloadWellFormed.EndToEndEncryption
@@ -43,7 +43,7 @@ export async function encrypt(options: EncryptOptions, io: EncryptIO): Promise<E
         encryption = {
             iv: postIV,
             type: 'public',
-            AESKey: { algr: AESAlgorithmEnum.A256GCM, key: postKey },
+            AESKey: postKey,
         }
     } else {
         const postKeyEncoded = encodePostKey(options.version, postKey)
@@ -113,7 +113,7 @@ async function e2e_v37(
             ['encrypt'],
         )
         // Note: we're reusing iv in the post encryption.
-        const encryptedPostKey = await encryptWithAES(AESAlgorithmEnum.A256GCM, aes, postIV, await postKeyEncoded)
+        const encryptedPostKey = await encryptWithAES(aes, postIV, await postKeyEncoded)
         return encryptedPostKey.unwrap()
     })
 

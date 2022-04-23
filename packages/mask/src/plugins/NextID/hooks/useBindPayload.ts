@@ -1,11 +1,11 @@
 import { useAsyncRetry } from 'react-use'
-import Services from '../../../extension/service'
-import type { ECKeyIdentifier } from '@masknet/shared-base'
+import { NextIDProof } from '@masknet/web3-providers'
+import { NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 
-export const useBindPayload = (action: 'delete' | 'create', address?: string, currentIdentifier?: ECKeyIdentifier) => {
+export const useBindPayload = (action: NextIDAction, address?: string, currentIdentifier?: string) => {
     return useAsyncRetry(() => {
         if (!address) return Promise.resolve(undefined)
         if (!currentIdentifier || !address) return Promise.resolve(undefined)
-        return Services.Helper.createPersonaPayload(currentIdentifier, action, address, 'ethereum')
+        return NextIDProof.createPersonaPayload(currentIdentifier, action, address, NextIDPlatform.Ethereum)
     }, [currentIdentifier, address])
 }

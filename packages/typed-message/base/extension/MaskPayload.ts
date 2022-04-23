@@ -1,5 +1,5 @@
-import type { Meta, TypedMessage } from '../base'
-import { createIsType } from '../utils/internal'
+import type { Meta, TypedMessage } from '../base.js'
+import { createIsType } from '../utils/internal.js'
 
 /**
  * This TypedMessage represents an encrypted TypedMessage.

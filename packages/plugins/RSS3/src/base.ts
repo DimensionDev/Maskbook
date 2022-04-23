@@ -4,7 +4,6 @@ import { PLUGIN_NAME, PLUGIN_ID, PLUGIN_DESCRIPTION } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
-    icon: '\u{1F914}',
     name: { fallback: PLUGIN_NAME },
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: PLUGIN_NAME }, link: 'https://rss3.bio/' },

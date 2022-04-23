@@ -99,6 +99,8 @@
       "@masknet/plugin-solana": ["./packages/plugins/Solana/src"],
       "@masknet/plugin-template": ["./packages/plugins/template/src"],
       "@masknet/plugin-cyberconnect": ["./packages/plugins/CyberConnect/src"],
+      "@masknet/plugin-go-plus-security": ["./packages/plugins/GoPlusSecurity/src"],
+      "@masknet/plugin-cross-chain-bridge": ["./packages/plugins/CrossChainBridge/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     },
@@ -146,7 +148,7 @@
     // Language and Environment
     "jsx": "react-jsx",
     "lib": ["ES2022"], // don't add "DOM", we use @types/web
-    "target": "ES2019",
+    "target": "ES2021",
     "useDefineForClassFields": true,
 
     // Projects

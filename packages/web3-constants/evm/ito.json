@@ -20,7 +20,8 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     },
     "MASK_ITO_CONTRACT_ADDRESS": {
         "Mainnet": "0x86812da3A623ab9606976078588b80C315E55FA3",
@@ -43,7 +44,8 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     },
     "ITO2_CONTRACT_ADDRESS": {
         "Mainnet": "0xc2CFbF22d6Dc87D0eE18d38d73733524c109Ff46",
@@ -66,7 +68,8 @@
         "Celo": "0xaA5bfd7355637eA7405CB194a55303e821c4c569",
         "Fantom": "0x981be454a930479d92C91a0092D204b64845A5D6",
         "Aurora": "0x2cf91AD8C175305EBe6970Bd8f81231585EFbd77",
-        "Aurora_Testnet": "0xdcA6F476EebCDE8FE8b072e3fC80dBC28dC209b3"
+        "Aurora_Testnet": "0xdcA6F476EebCDE8FE8b072e3fC80dBC28dC209b3",
+        "Conflux": "0x066804d9123bf2609ed4a4a40b1177a9c5a9ed51"
     },
     "ITO2_CONTRACT_CREATION_BLOCK_HEIGHT": {
         "Mainnet": 12766513,
@@ -89,7 +92,8 @@
         "Celo": 10278776,
         "Fantom": 25071597,
         "Aurora": 57350598,
-        "Aurora_Testnet": 77919102
+        "Aurora_Testnet": 77919102,
+        "Conflux": 37722805
     },
     "DEFAULT_QUALIFICATION_ADDRESS": {
         "Mainnet": "0x81b6ae377e360dcad63611846a2516f4ba8c88ac",
@@ -112,7 +116,8 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     },
     "DEFAULT_QUALIFICATION2_ADDRESS": {
         "Mainnet": "0x4dC5f343Fe57E4fbDA1B454d125D396A3181272c",
@@ -135,7 +140,8 @@
         "Celo": "0x2cB220F925E603A04BEE05F210252120deBA29d7",
         "Fantom": "0x83D6b366f21e413f214EB077D5378478e71a5eD2",
         "Aurora": "0x578a7Fee5f0D8CEc7d00578Bf37374C5b95C4b98",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": "0x05ee315e407c21a594f807d61d6cc11306d1f149"
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-mainnet",
@@ -158,6 +164,7 @@
         "Celo": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-celo",
         "Fantom": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-fantom",
         "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-aurora",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     }
 }

@@ -1,12 +1,16 @@
 import { apply, dispatchEvent, no_xray_Event, no_xray_Proxy } from './intrinsic'
 
 function setupChromium() {
+    let currentLocationHref = window.location.href
     // Learn more about this hack from https://stackoverflow.com/a/52809105/1986338
     window.history.pushState = new no_xray_Proxy(history.pushState, {
         apply(target, thisArg, params: any) {
             const val = apply(target, thisArg, params)
             apply(dispatchEvent, window, [new no_xray_Event('pushstate')])
-            apply(dispatchEvent, window, [new no_xray_Event('locationchange')])
+            if (currentLocationHref !== window.location.href) {
+                currentLocationHref = window.location.href
+                apply(dispatchEvent, window, [new no_xray_Event('locationchange')])
+            }
             return val
         },
     })
@@ -14,12 +18,17 @@ function setupChromium() {
         apply(target, thisArg, params: any) {
             const val = apply(target, thisArg, params)
             apply(dispatchEvent, window, [new no_xray_Event('replacestate')])
-            apply(dispatchEvent, window, [new no_xray_Event('locationchange')])
+            if (currentLocationHref !== window.location.href) {
+                currentLocationHref = window.location.href
+                apply(dispatchEvent, window, [new no_xray_Event('locationchange')])
+            }
             return val
         },
     })
 
     window.addEventListener('popstate', () => {
+        if (currentLocationHref === window.location.href) return
+        currentLocationHref = window.location.href
         apply(dispatchEvent, window, [new no_xray_Event('locationchange')])
     })
 }

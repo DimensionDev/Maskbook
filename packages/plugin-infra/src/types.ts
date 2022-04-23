@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type { TypedMessage } from '@masknet/typed-message'
@@ -69,6 +69,7 @@ export namespace Plugin.Shared {
         personaSign(payload: PersonaSignRequest): Promise<PersonaSignResult>
         /** Sign a message with wallet */
         walletSign(message: string, address: string): Promise<string>
+        currentPersona: Subscription<PersonaIdentifier | undefined>
     }
     export interface Definition {
         /**
@@ -81,11 +82,6 @@ export namespace Plugin.Shared {
          * @example { i18nKey: "name", fallback: "Never gonna give you up" }
          */
         name: I18NStringField
-        /**
-         * Emoji icon of this plugin, used to display the plugin with a fancy shape.
-         * @example "🎶"
-         */
-        icon?: string | React.ReactNode
         /**
          * A brief description of this plugin.
          * @example { i18nKey: "description", fallback: "This plugin is going to replace every link in the page to https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
@@ -220,8 +216,8 @@ export namespace Plugin.Shared {
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedContext {
-        /** Get current persona */
-        currentPersona: Subscription<PersonaIdentifier | undefined>
+        lastRecognizedProfile: Subscription<IdentityResolved | undefined>
+        currentVisitingProfile: Subscription<IdentityResolved | undefined>
     }
     export interface Definition extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
@@ -242,10 +238,8 @@ export namespace Plugin.SNSAdaptor {
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
-        /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
-        ToolbarEntry?: ToolbarEntry
         /** This UI will be rendered as an entry in the wallet status dialog */
-        ApplicationEntry?: ApplicationEntry
+        ApplicationEntries?: ApplicationEntry[]
         /** This UI will be rendered as sliders on the profile page */
         ProfileSliders?: ProfileSlider[]
         /** This UI will be rendered as tabs on the profile page */
@@ -310,51 +304,36 @@ export namespace Plugin.SNSAdaptor {
     }
     // #endregion
 
-    // #region Toolbar entry
-    export interface ToolbarEntry {
-        image: string
-        // TODO: remove string
-        label: I18NStringField | string
-        /**
-         * Used to order the toolbars
-         *
-         * TODO: can we make them unordered?
-         */
-        priority: number
-        /**
-         * This is a React hook. If it returns false, this entry will not be displayed.
-         */
-        useShouldDisplay?(): boolean
-        /**
-         * What to do if the entry is clicked.
-         */
-        // TODO: add support for DialogEntry.
-        // TODO: add support for onClick event.
-        onClick: 'openCompositionEntry'
-    }
-    // #endregion
-
     export interface ApplicationEntry {
         /**
-         * The icon image URL
+         * The contrast between ApplicationEntryID and PluginID is that one plugin may contains multiple entries.
          */
-        icon: URL
+        ApplicationEntryID: string
         /**
-         * The name of the application
+         * Render entry component
          */
-        label: I18NStringField | string
-        /**
-         * Also an entrance in a sub-folder
-         */
-        categoryID?: string
+        RenderEntryComponent?: (props: { disabled: boolean }) => JSX.Element | null
         /**
          * Used to order the applications on the board
          */
-        priority: number
+        appBoardSortingDefaultPriority?: number
+
         /**
-         * What to do if the application icon is clicked.
+         * Used to order the applications on the market list
          */
-        onClick(): void
+        marketListSortingPriority?: number
+
+        icon: React.ReactNode
+
+        name: I18NFieldOrReactNode
+
+        description?: I18NFieldOrReactNode
+
+        tutorialLink?: string
+        /**
+         * Does the application listed in the DAPP list
+         */
+        category?: 'dapp' | 'other'
     }
 
     export interface ProfileIdentity {
@@ -404,7 +383,11 @@ export namespace Plugin.SNSAdaptor {
             /**
              * The injected tab content
              */
-            TabContent: InjectUI<{ identity?: ProfileIdentity; addressNames?: ProfileAddress[] }>
+            TabContent: InjectUI<{
+                identity?: ProfileIdentity
+                addressNames?: ProfileAddress[]
+                personaList?: string[]
+            }>
         }
         Utils?: {
             /**
@@ -685,6 +668,14 @@ export enum CurrentSNSNetwork {
     Minds = 4,
 }
 
+export interface IdentityResolved {
+    identifier: ProfileIdentifier
+    nickname?: string
+    avatar?: string
+    bio?: string
+    homepage?: string
+}
+
 /**
  * All integrated Plugin IDs
  */
@@ -698,6 +689,7 @@ export enum PluginId {
     NextID = 'com.mask.next_id',
     External = 'io.mask.external',
     Furucombo = 'app.furucombo',
+    FindTruman = 'org.findtruman',
     Gitcoin = 'co.gitcoin',
     GoodGhosting = 'co.good_ghosting',
     MaskBox = 'com.maskbook.box',
@@ -716,26 +708,16 @@ export enum PluginId {
     RedPacketNFT = 'com.maskbook.red_packet_nft',
     Pets = 'com.maskbook.pets',
     Snapshot = 'org.snapshot',
+    Savings = 'com.savings',
     ITO = 'com.maskbook.ito',
     Wallet = 'com.maskbook.wallet',
     PoolTogether = 'com.pooltogether',
     UnlockProtocol = 'com.maskbook.unlockprotocol',
     FileService = 'com.maskbook.fileservice',
     CyberConnect = 'me.cyberconnect.app',
+    GoPlusSecurity = 'io.gopluslabs.security',
+    CrossChainBridge = 'io.mask.cross-chain-bridge',
     // @masknet/scripts: insert-here
-}
-
-export interface Pagination {
-    /** The item size of each page. */
-    size?: number
-    /** The page index. */
-    page?: number
-}
-
-export interface Pageable<T> {
-    currentPage: number
-    hasNextPage: boolean
-    data: T[]
 }
 /**
  * This namespace is not related to the plugin authors

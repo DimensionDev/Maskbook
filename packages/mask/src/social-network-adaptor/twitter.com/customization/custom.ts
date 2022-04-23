@@ -1,11 +1,11 @@
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { SubscriptionFromValueRef } from '@masknet/shared-base'
+import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
 import type { SocialNetworkUI } from '../../../social-network'
-import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme-tools'
+import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme'
 import { isMobileTwitter } from '../utils/isMobile'
 import { composeAnchorSelector, composeAnchorTextSelector, headingTextSelector } from '../utils/selector'
 import twitterColorSchema from './twitter-color-schema.json'
@@ -18,7 +18,7 @@ const backgroundColorRef = new ValueRef('rgb(255, 255, 255)')
 
 const currentTheme = new ValueRef<PaletteMode>('light')
 export const PaletteModeProviderTwitter: SocialNetworkUI.Customization.PaletteModeProvider = {
-    current: SubscriptionFromValueRef(currentTheme),
+    current: createSubscriptionFromValueRef(currentTheme),
     start: startWatchThemeColor,
 }
 
@@ -248,7 +248,8 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                         backgroundColor: theme.palette.primary.main,
                         color: theme.palette.common.white,
                         '&:hover': {
-                            backgroundColor: parseColor(theme.palette.text.primary).setAlpha(0.1).toRgbString(),
+                            backgroundColor: `${theme.palette.primary.main} !important`,
+                            opacity: 0.9,
                         },
                     },
                 },
@@ -257,6 +258,9 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                 styleOverrides: {
                     root: {
                         backgroundColor: theme.palette.action.mask,
+                    },
+                    invisible: {
+                        opacity: '0 !important',
                     },
                 },
             }

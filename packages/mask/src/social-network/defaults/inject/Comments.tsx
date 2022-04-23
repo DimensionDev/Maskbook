@@ -1,10 +1,9 @@
 import { memo } from 'react'
-import type { PostInfo } from '../../PostInfo'
+import { type PostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostComment, PostCommentProps } from '../../../components/InjectedComponents/PostComments'
 import { makeStyles } from '@masknet/theme'
-import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-unified'
 import { collectNodeText } from '../../../utils'
 import { startWatch } from '../../../utils/watcher'
@@ -47,7 +46,7 @@ export function injectPostCommentsDefault<T extends string>(
                         commentRef.value = collectNodeText(commentNode)
                     },
                     onRemove() {
-                        root.destory()
+                        root.destroy()
                     },
                 }
             },

@@ -1,6 +1,13 @@
 // This file contains normalized Payload.
 // Internal payload should not be exported
-import { ProfileIdentifier, CheckedError, OptionalResult, EC_CryptoKey, EnhanceableSite } from '@masknet/shared-base'
+import {
+    ProfileIdentifier,
+    CheckedError,
+    OptionalResult,
+    EC_CryptoKey,
+    EnhanceableSite,
+    AESCryptoKey,
+} from '@masknet/shared-base'
 import type { Result, Option } from 'ts-results'
 import type { CryptoException, PayloadException } from '../types'
 
@@ -35,7 +42,7 @@ export declare namespace PayloadParseResult {
      */
     export interface PublicEncryption {
         readonly type: 'public'
-        readonly AESKey: RequiredField<AESKey, CryptoException>
+        readonly AESKey: RequiredField<AESCryptoKey, CryptoException>
         readonly iv: RequiredField<Uint8Array>
     }
     /**
@@ -71,8 +78,8 @@ export declare namespace PayloadWellFormed {
      */
     export interface PublicEncryption {
         readonly type: 'public'
-        /** The key used to encrypt the payload. */
-        readonly AESKey: AESKey
+        /** The key used to encrypt the payload. It should be AES-256-GCM */
+        readonly AESKey: AESCryptoKey
         readonly iv: Uint8Array
     }
     /**
@@ -93,17 +100,10 @@ export interface EC_Key<K extends EC_CryptoKey = EC_CryptoKey> {
     readonly algr: EC_KeyCurveEnum
     readonly key: K
 }
-export interface AESKey {
-    readonly algr: AESAlgorithmEnum
-    readonly key: CryptoKey
-}
 export enum EC_KeyCurveEnum {
     ed25519 = 0,
     secp256p1 = 1, // P-256
     secp256k1 = 2, // K-256
-}
-export enum AESAlgorithmEnum {
-    A256GCM = 'A256GCM',
 }
 export enum SocialNetworkEnum {
     Unknown = -1,

@@ -1,10 +1,8 @@
-import { PluginId, Web3Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 
-export const PLUGIN_ID = PluginId.EVM
-export const PLUGIN_META_KEY = `${PluginId.EVM}:1`
+export const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
 export const PLUGIN_NAME = 'EVM'
-export const PLUGIN_ICON = '\u039E'
 export const PLUGIN_DESCRIPTION = ''
 export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
     {
@@ -174,6 +172,16 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         type: NetworkType.Aurora,
         name: 'Aurora',
         icon: new URL('./assets/aurora.png', import.meta.url),
+        iconColor: 'rgb(112, 212, 74)',
+        isMainnet: true,
+    },
+    {
+        ID: `${PLUGIN_ID}_conflux`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Conflux,
+        type: NetworkType.Conflux,
+        name: 'Conflux',
+        icon: new URL('./assets/conflux.png', import.meta.url),
         iconColor: 'rgb(112, 212, 74)',
         isMainnet: true,
     },

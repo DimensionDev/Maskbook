@@ -7,7 +7,6 @@ import {
     searchUserIdInEditPageSelector,
     searchUserIdSelector,
 } from './selector'
-import { InMemoryStorages } from '../../../../shared'
 
 export function getBioDescription() {
     const bio = bioDescriptionSelector().evaluate()
@@ -38,12 +37,6 @@ export const getAvatar = () => {
 
     const imageURL = node.getAttribute('src') ?? ''
     return imageURL.trim()
-}
-
-export const clearStorages = () => {
-    InMemoryStorages.InstagramNFTEvent.storage.userId.setValue('')
-    InMemoryStorages.InstagramNFTEvent.storage.address.setValue('')
-    InMemoryStorages.InstagramNFTEvent.storage.tokenId.setValue('')
 }
 
 const INSTAGRAM_AVATAR_ID_MATCH = /(\w+).(?:png|jpg|gif|bmp)/

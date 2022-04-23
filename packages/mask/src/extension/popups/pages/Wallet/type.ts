@@ -9,3 +9,7 @@ export enum TransferAddressError {
     RESOLVE_FAILED = 'RESOLVE_FAILED',
     NETWORK_NOT_SUPPORT = 'NETWORK_NOT_SUPPORT',
 }
+
+export enum MethodAfterPersonaSign {
+    DISCONNECT_NEXT_ID = 'DISCONNECT_NEXT_ID',
+}

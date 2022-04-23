@@ -1,7 +1,8 @@
 import Color from 'color'
+import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
+import { createReactRootShadowed, startWatch, untilElementAvailable, MaskMessages } from '../../../utils'
 import {
     searchAppBarBackSelector,
     searchNewTweetButtonSelector,
@@ -10,6 +11,7 @@ import {
     searchProfileTabListSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
+    searchProfileTabLoseConnectionPageSelector,
 } from '../utils/selector'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
 
@@ -80,6 +82,7 @@ const useStyles = makeStyles()((theme) => {
 
 async function hideTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+    const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
     const style = window.getComputedStyle(eleTab)
 
@@ -91,6 +94,8 @@ async function hideTwitterActivatedContent() {
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = 'none'
     })
+
+    if (loseConnectionEle) return
 
     // hide the empty list indicator on the page
     const eleEmpty = searchProfileEmptySelector().evaluate()
@@ -108,7 +113,18 @@ async function hideTwitterActivatedContent() {
 
 function resetTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+    const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
+
+    const tabList = searchProfileTabListSelector().evaluate()
+    tabList.map((v) => {
+        const _v = v.querySelector('div') as HTMLDivElement
+        _v.style.color = ''
+        const line = v.querySelector('div > div') as HTMLDivElement
+        line.style.display = ''
+    })
+
+    if (loseConnectionEle) return
 
     const eleEmpty = searchProfileEmptySelector().evaluate()
     if (eleEmpty) eleEmpty.style.display = ''
@@ -118,19 +134,18 @@ function resetTwitterActivatedContent() {
         elePage.style.visibility = 'visible'
         elePage.style.height = 'auto'
     }
-    const tabList = searchProfileTabListSelector().evaluate()
-    tabList.map((v) => {
-        const _v = v.querySelector('div') as HTMLDivElement
-        _v.style.color = ''
-        const line = v.querySelector('div > div') as HTMLDivElement
-        line.style.display = ''
-    })
 }
 
 export function ProfileTabAtTwitter() {
     const { classes } = useStyles()
+    const [hidden, setHidden] = useState(false)
+    useEffect(() => {
+        return MaskMessages.events.profileTabHidden.on((data) => {
+            setHidden(data.hidden)
+        })
+    }, [])
 
-    return (
+    return hidden ? null : (
         <ProfileTab
             title="Web3"
             classes={classes}

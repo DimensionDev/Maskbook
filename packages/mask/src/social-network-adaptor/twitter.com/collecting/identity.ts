@@ -5,7 +5,7 @@ import { ProfileIdentifier } from '@masknet/shared-base'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import Services from '../../../extension/service'
 import { twitterBase } from '../base'
-import { getAvatar, getBioDescription, getNickname, getTwitterId, getPersonalHomepage } from '../utils/user'
+import { getAvatar, getBio, getNickname, getTwitterId, getPersonalHomepage } from '../utils/user'
 import { delay } from '@dimensiondev/kit'
 
 function resolveLastRecognizedIdentityInner(
@@ -43,11 +43,12 @@ function resolveCurrentVisitingIdentityInner(
     const avatarMetaSelector = searchAvatarMetaSelector()
     const assign = async () => {
         await delay(500)
-        const bio = getBioDescription()
+        const bio = getBio()
         const homepage = getPersonalHomepage()
         const nickname = getNickname()
         const handle = getTwitterId()
         const avatar = getAvatar()
+
         ref.value = {
             identifier: new ProfileIdentifier(twitterBase.networkIdentifier, handle),
             nickname,

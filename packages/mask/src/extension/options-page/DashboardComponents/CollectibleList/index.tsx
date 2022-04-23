@@ -5,7 +5,6 @@ import {
     ChainId,
     ERC721ContractDetailed,
     ERC721TokenDetailed,
-    formatEthereumAddress,
     isSameAddress,
     NonFungibleAssetProvider,
     SocketState,
@@ -22,6 +21,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { ReversedAddress } from '@masknet/shared'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -190,14 +190,14 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                     </Box>
                 ) : (
                     <Box className={classes.root}>
-                        {collectibles.map((x, i) => (
+                        {collectibles.map((token, index) => (
                             <CollectibleItem
-                                renderOrder={i}
-                                token={x}
+                                renderOrder={index}
+                                token={token}
                                 provider={provider}
                                 wallet={wallet}
                                 readonly={readonly}
-                                key={x.tokenId + x.contractDetailed.address}
+                                key={index}
                             />
                         ))}
                     </Box>
@@ -247,8 +247,11 @@ export function CollectionList({
     const [selectedCollection, setSelectedCollection] = useState<ERC721ContractDetailed | 'all' | undefined>('all')
     const { resolvedAddress: address } = addressName
 
-    const { data: collectionsFormRemote } = useCollections(address, chainId)
+    useEffect(() => {
+        setSelectedCollection('all')
+    }, [address])
 
+    const { data: collectionsFormRemote } = useCollections(address, chainId)
     const {
         data: collectibles,
         state: loadingCollectibleDone,
@@ -301,7 +304,7 @@ export function CollectionList({
                                 className={classes.button}
                                 variant="outlined"
                                 size="small">
-                                {formatEthereumAddress(addressName.label, 5)}
+                                <ReversedAddress address={addressName.resolvedAddress} />
                                 <KeyboardArrowDownIcon />
                             </Button>
                         </Box>
@@ -330,7 +333,7 @@ export function CollectionList({
                 </Stack>
                 <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
                     <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
-                        {formatEthereumAddress(addressName.label, 5)}
+                        <ReversedAddress address={addressName.resolvedAddress} />
                         <KeyboardArrowDownIcon />
                     </Button>
                 </Box>

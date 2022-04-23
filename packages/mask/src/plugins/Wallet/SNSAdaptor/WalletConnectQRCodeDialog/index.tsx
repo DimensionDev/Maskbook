@@ -1,11 +1,12 @@
 import { useState } from 'react'
+import { useAsync } from 'react-use'
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
+import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import Services from '../../../../extension/service'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { SafariPlatform } from './SafariPlatform'
 import { FirefoxPlatform } from './FirefoxPlatform'
 import { QRCodeModel } from './QRCodeModel'
@@ -34,6 +35,12 @@ export const WalletConnectQRCodeDialog: React.FC = () => {
         (ev) => ev.open && setURI(ev.uri),
     )
     // #endregion
+
+    useAsync(async () => {
+        if (!open) return
+        await Services.Ethereum.connectWalletConnect()
+        closeDialog()
+    }, [open])
 
     let mode: QRCodeDialogProps['mode'] = 'qrcode'
     if (process.env.architecture === 'app' && process.env.engine === 'firefox') {

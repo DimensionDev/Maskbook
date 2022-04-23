@@ -11,21 +11,6 @@ export type PersonaIdentifier_string = string
 export interface MaskNetworkAPIs {
     app_suspended(): Promise<void>
     app_resume(): Promise<void>
-    /**
-     * Echo the message back.
-     */
-    web_echo<T>(params: { echo: T }): Promise<T>
-    /**
-     * @returns A fully quantified URL in forms of
-     * "holoflows-extension://...." or "moz-extension://...." (based on the platform)
-     */
-    getDashboardURL(): Promise<string>
-
-    /**
-     * @returns A stringified JSON string.
-     * @example [[{ network: "twitter.com", connected: false } ]]
-     */
-    getConnectedPersonas(): Promise<string>
     app_isPluginEnabled(params: { pluginID: string }): Promise<boolean>
     app_setPluginStatus(params: { pluginID: string; enabled: boolean }): Promise<void>
     settings_getTrendingDataSource(): Promise<DataProvider>
@@ -36,7 +21,7 @@ export interface MaskNetworkAPIs {
     settings_getLanguage(): Promise<LanguageOptions>
     settings_setLanguage(params: { language: LanguageOptions }): Promise<void>
     settings_createBackupJson(params: Partial<BackupOptions>): Promise<unknown>
-    settings_getBackupPreviewInfo(params: { backupInfo: string }): Promise<BackupPreview | undefined>
+    settings_getBackupPreviewInfo(params: { backupInfo: string }): Promise<BackupPreview>
     settings_restoreBackup(params: { backupInfo: string }): Promise<void>
     persona_createPersonaByMnemonic(params: { mnemonic: string; nickname: string; password: string }): Promise<Persona>
     persona_queryPersonas(params: { identifier?: PersonaIdentifier_string; hasPrivateKey: boolean }): Promise<Persona[]>
@@ -46,22 +31,18 @@ export interface MaskNetworkAPIs {
         data: { nickname: string }
     }): Promise<void>
     persona_removePersona(params: { identifier: PersonaIdentifier_string }): Promise<void>
+    /** @deprecated It's an alias of settings_restoreBackup */
     persona_restoreFromJson(params: { backup: string }): Promise<void>
-    persona_restoreFromBase64(params: { backup: string }): Promise<void>
     persona_restoreFromPrivateKey(params: { privateKey: string; nickname: string }): Promise<Persona>
     persona_connectProfile(params: {
         profileIdentifier: ProfileIdentifier_string
         personaIdentifier: PersonaIdentifier_string
     }): Promise<void>
     persona_disconnectProfile(params: { identifier: ProfileIdentifier_string }): Promise<void>
-    persona_backupMnemonic(params: { identifier: PersonaIdentifier_string }): Promise<string | undefined>
-    persona_backupBase64(params: { identifier: PersonaIdentifier_string }): Promise<string>
-    persona_backupJson(params: { identifier: PersonaIdentifier_string }): Promise<unknown>
     persona_backupPrivateKey(params: { identifier: PersonaIdentifier_string }): Promise<string | undefined>
     persona_queryPersonaByPrivateKey(params: { privateKey: string }): Promise<Persona | undefined>
     persona_getCurrentPersonaIdentifier(): Promise<string | undefined>
     persona_setCurrentPersonaIdentifier(params: { identifier: PersonaIdentifier_string }): Promise<void>
-    persona_getOwnedPersonaInformation(params: { identifier: PersonaIdentifier_string }): Promise<PersonaInformation>
     persona_logout(params: { identifier: PersonaIdentifier_string }): Promise<void>
     profile_queryProfiles(params: { network: string }): Promise<Profile[]>
     profile_queryMyProfiles(params: { network: string }): Promise<Profile[]>
@@ -161,8 +142,10 @@ export interface BackupPreview {
     accounts: number
     posts: number
     contacts: number
+    relations: number
     files: number
     wallets: number
+    createdAt: number
 }
 
 export enum Appearance {
@@ -175,23 +158,6 @@ export enum LaunchPage {
     facebook = 'facebook',
     twitter = 'twitter',
     dashboard = 'dashboard',
-}
-
-// This type MUST be sync with NetworkType in packages/web3-shared/src/types/index.ts
-export enum NetworkType {
-    Ethereum = 'Ethereum',
-    Binance = 'Binance',
-    Polygon = 'Polygon',
-    Arbitrum = 'Arbitrum',
-    xDai = 'xDai',
-    Celo = 'Celo',
-    Fantom = 'Fantom',
-    Aurora = 'Aurora',
-    Avalanche = 'Avalanche',
-    Boba = 'Boba',
-    Fuse = 'Fuse',
-    Metis = 'Metis',
-    Optimistic = 'Optimistic',
 }
 
 export enum DataProvider {
@@ -216,8 +182,10 @@ export enum TradeProvider {
     TRISOLARIS = 12,
     TRADERJOE = 13,
     PANGOLIN = 14,
-    JUGGLERRED = 15,
+    MDEX = 15,
+    JUGGLERRED = 16,
 }
+
 /** Supported language settings */
 export enum LanguageOptions {
     __auto__ = 'auto',
@@ -235,4 +203,56 @@ export enum SupportedLanguages {
     zhTW = 'zh-TW',
     koKR = 'ko-KR',
     jaJP = 'ja-JP',
+}
+
+/**
+ * Keep updating to packages/web3-shared/evm/types/index.ts
+ */
+export enum NetworkType {
+    Ethereum = 'Ethereum',
+    Binance = 'Binance',
+    Polygon = 'Polygon',
+    Arbitrum = 'Arbitrum',
+    xDai = 'xDai',
+    Celo = 'Celo',
+    Fantom = 'Fantom',
+    Aurora = 'Aurora',
+    Avalanche = 'Avalanche',
+    Boba = 'Boba',
+    Fuse = 'Fuse',
+    Metis = 'Metis',
+    Optimistic = 'Optimistic',
+    Conflux = 'Conflux',
+}
+
+export enum ProviderType {
+    MaskWallet = 'Maskbook',
+    MetaMask = 'MetaMask',
+    WalletConnect = 'WalletConnect',
+    Fortmatic = 'Fortmatic',
+    Coin98 = 'Coin98',
+    MathWallet = 'MathWallet',
+    WalletLink = 'WalletLink',
+    CustomNetwork = 'CustomNetwork',
+}
+
+export enum FungibleAssetProvider {
+    ZERION = 'Zerion',
+    DEBANK = 'Debank',
+}
+
+export enum NonFungibleAssetProvider {
+    OPENSEA = 'OpenSea',
+    RARIBLE = 'Rarible',
+    NFTSCAN = 'NFTScan',
+    ZORA = 'Zora',
+}
+
+export interface PriceRecord {
+    [currency: string]: number
+}
+
+/** Base on response of coingecko's token price API */
+export interface CryptoPrice {
+    [token: string]: PriceRecord
 }

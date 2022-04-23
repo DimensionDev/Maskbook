@@ -1,3 +1,4 @@
+// ! We're going to SSR this UI, so DO NOT import anything new!
 import { useCallback } from 'react'
 
 export const useEnterDashboard = () => {

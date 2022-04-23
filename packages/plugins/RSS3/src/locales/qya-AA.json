@@ -3,5 +3,7 @@
     "no_activity_time": "crwdns10777:0crwdne10777:0",
     "attended": "crwdns10779:0crwdne10779:0",
     "no_data": "crwdns14472:0crwdne14472:0",
-    "total_grants": "crwdns14474:0{{count}}crwdne14474:0"
+    "total_grants": "crwdns14474:0{{count}}crwdne14474:0",
+    "contribution": "crwdns14618:0crwdne14618:0",
+    "contribution_other": "crwdns14620:0crwdne14620:0"
 }

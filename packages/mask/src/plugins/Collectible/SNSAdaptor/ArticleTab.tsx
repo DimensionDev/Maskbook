@@ -1,7 +1,8 @@
 import { makeStyles } from '@masknet/theme'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
-import { AssetPlayer } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { hasNativeAPI } from '../../../../shared/native-rpc'
 import { useMemo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -43,6 +44,9 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 300,
         minHeight: 300,
     },
+    imgWrapper: {
+        maxWidth: 300,
+    },
 }))
 
 export interface ArticleTabProps {}
@@ -53,18 +57,14 @@ export function ArticleTab(props: ArticleTabProps) {
 
     return useMemo(() => {
         if (!asset.value) return null
-        const resourceUrl = asset.value.animation_url || asset.value.image_url
+        const resourceUrl = hasNativeAPI
+            ? asset.value.image_url || asset.value.animation_url
+            : asset.value.animation_url || asset.value.image_url
         return (
             <CollectibleTab>
                 <div className={classes.body}>
-                    <AssetPlayer
-                        url={resourceUrl}
-                        options={{
-                            playsInline: true,
-                        }}
-                        classes={classes}
-                        isFixedIframeSize={false}
-                    />
+                    {/* Todo: Migrate `hasNativeAPI` to `@masknet/shared` to use it in <NFTCardStyledAssetPlayer /> directly.  */}
+                    <NFTCardStyledAssetPlayer url={resourceUrl} classes={classes} isNative={hasNativeAPI} />
                 </div>
             </CollectibleTab>
         )

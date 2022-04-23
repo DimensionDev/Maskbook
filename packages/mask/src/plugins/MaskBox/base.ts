@@ -4,7 +4,6 @@ import { PLUGIN_ID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
-    icon: '\u{1F381}',
     name: { fallback: 'MaskBox' },
     description: { fallback: 'The mystery box with NFT inside which is provided by Mask Network.' },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },

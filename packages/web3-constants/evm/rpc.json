@@ -62,7 +62,8 @@
         "Celo": ["https://forno.celo.org"],
         "Fantom": ["https://rpc.ftm.tools/"],
         "Aurora": ["https://mainnet.aurora.dev"],
-        "Aurora_Testnet": ["https://testnet.aurora.dev"]
+        "Aurora_Testnet": ["https://testnet.aurora.dev"],
+        "Conflux": ["https://evm.confluxrpc.com"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 1, 2, 3, 4],
@@ -85,6 +86,7 @@
         "Celo": [0, 0, 0, 0, 0],
         "Fantom": [0, 0, 0, 0, 0],
         "Aurora": [0, 0, 0, 0, 0],
-        "Aurora_Testnet": [0, 0, 0, 0, 0]
+        "Aurora_Testnet": [0, 0, 0, 0, 0],
+        "Conflux": [0, 0, 0, 0, 0]
     }
 }

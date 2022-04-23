@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { toHex } from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
 import { useAccount } from './useAccount'
@@ -6,7 +6,7 @@ import { useChainId } from './useChainId'
 import { useTransactionState } from './useTransactionState'
 import { useWeb3 } from './useWeb3'
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
-import { TransactionStateType, GasConfig } from '../types'
+import { TransactionStateType, GasConfig, TransactionEventType } from '../types'
 
 export function useNativeTransferCallback() {
     const web3 = useWeb3()
@@ -73,21 +73,23 @@ export function useNativeTransferCallback() {
 
             // send transaction and wait for hash
             return new Promise<string>((resolve, reject) => {
-                web3.eth.sendTransaction(config, (error, hash) => {
-                    if (error) {
+                web3.eth
+                    .sendTransaction(config, (error) => {
+                        if (!error) return
                         setTransferState({
                             type: TransactionStateType.FAILED,
                             error,
                         })
                         reject(error)
-                    } else {
+                    })
+                    .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                         setTransferState({
-                            type: TransactionStateType.HASH,
-                            hash,
+                            type: TransactionStateType.CONFIRMED,
+                            no,
+                            receipt,
                         })
-                        resolve(hash)
-                    }
-                })
+                        resolve(receipt.transactionHash)
+                    })
             })
         },
         [web3, account, chainId],
@@ -98,6 +100,11 @@ export function useNativeTransferCallback() {
             type: TransactionStateType.UNKNOWN,
         })
     }, [])
+
+    useEffect(() => {
+        if (transferState.type !== TransactionStateType.CONFIRMED) return
+        resetCallback()
+    }, [transferState.type])
 
     return [transferState, transferCallback, resetCallback] as const
 }

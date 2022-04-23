@@ -12,7 +12,7 @@ import { unreachable } from '@dimensiondev/kit'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base'
 
-export function useSubmit(onClose: () => void) {
+export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
     const { t } = useI18N()
     const whoAmI = useLastRecognizedIdentity()
 
@@ -45,32 +45,40 @@ export function useSubmit(onClose: () => void) {
                     random: new Date().toLocaleString(),
                 })
                 if (redPacketMetadata.ok) {
-                    await pasteImage(redPacketPreText.replace(encrypted, '') ?? defaultText, encrypted, 'eth')
+                    await pasteImage(redPacketPreText.replace(encrypted, '') ?? defaultText, encrypted, 'eth', reason)
                 } else {
-                    await pasteImage(defaultText, encrypted, 'v2')
+                    await pasteImage(defaultText, encrypted, 'v2', reason)
                 }
             } else {
                 pasteTextEncode(
                     (redPacketMetadata.ok ? redPacketPreText : null) ??
                         t('additional_post_box__encrypted_post_pre', { encrypted }),
+                    reason,
                 )
             }
             onClose()
         },
-        [t, whoAmI, onClose],
+        [t, whoAmI, onClose, reason],
     )
 }
 
-function pasteTextEncode(text: string) {
+function pasteTextEncode(text: string, reason: 'timeline' | 'popup' | 'reply') {
     activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.(text, {
         recover: true,
+        reason,
     })
 }
-async function pasteImage(relatedTextPayload: string, encrypted: string, template: ImageTemplateTypes) {
+async function pasteImage(
+    relatedTextPayload: string,
+    encrypted: string,
+    template: ImageTemplateTypes,
+    reason: 'timeline' | 'popup' | 'reply',
+) {
     const img = await SteganographyTextPayload(template, encrypted)
     // Don't await this, otherwise the dialog won't disappear
     activatedSocialNetworkUI.automation.nativeCompositionDialog!.attachImage!(img, {
         recover: true,
         relatedTextPayload,
+        reason,
     })
 }

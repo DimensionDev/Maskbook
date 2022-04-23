@@ -1,16 +1,12 @@
 import { memo, useCallback } from 'react'
-import type { PostInfo } from '../../PostInfo'
+import { type PostInfo, usePostInfoDetails, usePostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CommentBox, CommentBoxProps } from '../../../components/InjectedComponents/CommentBox'
-import Services from '../../../extension/service'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { makeStyles } from '@masknet/theme'
-import { usePostInfoDetails, usePostInfo, PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-unified'
 import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
-import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { decodeArrayBuffer } from '@dimensiondev/kit'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,
@@ -30,25 +26,19 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
         const info = usePostInfo()
-        const postContent = usePostInfoDetails.rawMessagePiped()
+        const encryptComment = usePostInfoDetails.encryptComment()
         const { classes } = useCustomStyles()
-        const iv = usePostInfoDetails.iv()
         const props = additionPropsToCommentBox(classes)
         const onCallback = useCallback(
-            async (content) => {
-                const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
-                const encryptedComment = await Services.Crypto.encryptComment(
-                    new Uint8Array(decodeArrayBuffer(iv!)),
-                    decryptedText,
-                    content,
-                )
-                onPasteToCommentBox(encryptedComment, info!, dom).catch(console.error)
+            async (content: string) => {
+                if (!encryptComment) return
+                const encryptedComment = await encryptComment(content)
+                onPasteToCommentBox(encryptedComment, info!, dom)
             },
-            [postContent, info, dom, iv],
+            [encryptComment, info, dom],
         )
 
-        if (!iv) return null
-        if (!postContent.items.length) return null
+        if (!encryptComment) return null
         return <CommentBox onSubmit={onCallback} {...props} />
     })
     return (signal: AbortSignal, current: PostInfo) => {
@@ -66,7 +56,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
                     <CommentBoxUI {...{ ...current, dom: meta.realCurrent }} />
                 </PostInfoProvider>,
             )
-            return root.destory
+            return root.destroy
         })
         startWatch(commentBoxWatcher, signal)
         return () => commentBoxWatcher.stopWatch()

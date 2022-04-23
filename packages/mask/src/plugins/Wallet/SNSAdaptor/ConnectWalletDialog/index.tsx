@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { DialogContent } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { safeUnreachable, delay } from '@dimensiondev/kit'
 import {
     ChainId,
@@ -13,8 +13,8 @@ import {
     resolveProviderName,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { WalletMessages, WalletRPC } from '../../messages'
+import { InjectedDialog } from '@masknet/shared'
+import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
 
@@ -27,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface ConnectWalletDialogProps {}
 
 export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
 
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
@@ -41,6 +41,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             setNetworkType(ev.networkType)
         },
     )
+    const onClose = useCallback(() => {
+        setConnectWalletDialog({ open: false })
+    }, [])
     // #endregion
 
     // #region walletconnect
@@ -65,7 +68,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
         switch (providerType) {
             case ProviderType.MaskWallet:
-                ;({ account, chainId } = await Services.Ethereum.connectMaskWallet(networkType))
+                ;({ account, chainId } = await Services.Ethereum.connectMaskWallet(expectedChainId))
                 break
             case ProviderType.MetaMask:
                 ;({ account, chainId } = await Services.Ethereum.connectMetaMask())
@@ -132,25 +135,20 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             }
         }
 
-        // update account
-        await WalletRPC.updateAccount({
+        return {
             account,
             chainId: expectedChainId,
             networkType,
             providerType,
-        })
-        return true as const
+        }
     }, [networkType, providerType])
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
 
-        await connectTo()
-        // sync settings
-        await delay(1000)
         setConnectWalletDialog({
             open: false,
-            result: true,
+            result: await connectTo(),
         })
 
         return true
@@ -159,10 +157,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     if (!providerType) return null
 
     return (
-        <InjectedDialog
-            title={`Connect to ${resolveProviderName(providerType)}`}
-            open={open}
-            onClose={() => setConnectWalletDialog({ open: false, result: false })}>
+        <InjectedDialog title={`Connect to ${resolveProviderName(providerType)}`} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <ConnectionProgress providerType={providerType} connection={connection} />
             </DialogContent>

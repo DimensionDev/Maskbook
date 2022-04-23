@@ -23,6 +23,8 @@ import Services from '../../../../service'
 import { compact, intersectionWith } from 'lodash-unified'
 import urlcat from 'urlcat'
 import { ActivityList } from '../components/ActivityList'
+import { openWindow } from '@masknet/shared-base-ui'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     content: {
@@ -93,31 +95,28 @@ const TokenDetail = memo(() => {
                 open: 'Transak',
                 code: currentToken?.token.symbol ?? currentToken?.token.name,
             })
-            window.open(browser.runtime.getURL(url), 'BUY_DIALOG', 'noopener noreferrer')
+            openWindow(browser.runtime.getURL(url), 'BUY_DIALOG')
         }
     }, [wallet?.address, isActiveSocialNetwork, currentToken])
 
     const openSwapDialog = useCallback(async () => {
-        window.open(
-            browser.runtime.getURL(
-                urlcat(
-                    'popups.html#/',
-                    PopupRoutes.Swap,
-                    !isSameAddress(nativeToken?.address, currentToken?.token.address)
-                        ? {
-                              id: currentToken?.token.address,
-                              name: currentToken?.token.name,
-                              symbol: currentToken?.token.symbol,
-                              contract_address: currentToken?.token.address,
-                              decimals: currentToken?.token.decimals,
-                          }
-                        : {},
-                ),
-            ),
-            'SWAP_DIALOG',
-            'noopener noreferrer',
+        const url = urlcat(
+            'popups.html#/',
+            PopupRoutes.Swap,
+            !isSameAddress(nativeToken?.address, currentToken?.token.address)
+                ? {
+                      id: currentToken?.token.address,
+                      name: currentToken?.token.name,
+                      symbol: currentToken?.token.symbol,
+                      contract_address: currentToken?.token.address,
+                      decimals: currentToken?.token.decimals,
+                  }
+                : {},
         )
+        openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
     }, [currentToken, nativeToken])
+
+    useTitle(t('popups_assets'))
 
     if (!currentToken) return null
 

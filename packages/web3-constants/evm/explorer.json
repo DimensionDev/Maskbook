@@ -20,7 +20,8 @@
         "Celo": [],
         "Fantom": ["AST4WWPNEYDURUXG2GH32JZMYWEFDP999S"],
         "Aurora": [],
-        "Aurora_Testnet": []
+        "Aurora_Testnet": [],
+        "Conflux": []
     },
     "EXPLORER_API": {
         "Mainnet": "https://api.etherscan.io/api",
@@ -43,6 +44,7 @@
         "Celo": "https://explorer.celo.org/api",
         "Fantom": "https://api.ftmscan.com/api",
         "Aurora": "https://explorer.mainnet.aurora.dev/api",
-        "Aurora_Testnet": "https://explorer.testnet.aurora.dev/api"
+        "Aurora_Testnet": "https://explorer.testnet.aurora.dev/api",
+        "Conflux": "https://evmapi.confluxscan.net/api"
     }
 }

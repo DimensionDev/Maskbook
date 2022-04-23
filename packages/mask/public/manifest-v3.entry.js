@@ -26,4 +26,4 @@
         },
     })
 }
-importScripts('./worker_env.js', './polyfill/browser-polyfill.js', './js/background.js')
+importScripts('./worker_env.js', './gun.js', './polyfill/browser-polyfill.js', './js/background.js')

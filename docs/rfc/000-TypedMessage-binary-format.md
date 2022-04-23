@@ -62,7 +62,7 @@ type TypedMessageBase = [
   type: TypedMessageTypeEnum | String,
   version: Integer,
   metadata: Map | Nil,
-  ...rest: Array<Any>
+  ...rest: Array<Any>,
 ]
 enum TypedMessageTypeEnum {
   Tuple = 0,

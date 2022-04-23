@@ -10,7 +10,7 @@ import {
 import { TextResizeContext, TypedMessageRender, useTransformedValue } from '@masknet/typed-message/dom'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
-import { usePostInfoDetails } from '../DataSource/usePostInfo'
+import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { activatedSocialNetworkUI } from '../../social-network/ui'

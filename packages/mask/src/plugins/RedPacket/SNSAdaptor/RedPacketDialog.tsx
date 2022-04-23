@@ -1,17 +1,7 @@
-import { useState, useCallback, useRef, useMemo, useEffect } from 'react'
-import { DialogContent } from '@mui/material'
-import { usePortalShadowRoot, makeStyles } from '@masknet/theme'
+import { useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useI18N } from '../../../utils'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { RedPacketJSONPayload, DialogTabs, RedPacketRecord, RpTypeTabs } from '../types'
-import { RedPacketRPC } from '../messages'
-import { RedPacketMetaKey } from '../constants'
-import { RedPacketCreateNew } from './RedPacketCreateNew'
-import { RedPacketPast } from './RedPacketPast'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import Services from '../../../extension/service'
-import Web3Utils from 'web3-utils'
+import { makeStyles } from '@masknet/theme'
 import {
     formatBalance,
     getChainName,
@@ -22,11 +12,21 @@ import {
     useRedPacketConstants,
     useWeb3,
 } from '@masknet/web3-shared-evm'
-import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
+import { DialogContent } from '@mui/material'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import Web3Utils from 'web3-utils'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
+import Services from '../../../extension/service'
+import { useI18N } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'
+import { RedPacketMetaKey } from '../constants'
+import { RedPacketRPC } from '../messages'
+import { DialogTabs, RedPacketJSONPayload, RedPacketRecord, RpTypeTabs } from '../types'
+import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
-import { useCompositionContext } from '@masknet/plugin-infra'
+import { RedPacketCreateNew } from './RedPacketCreateNew'
+import { RedPacketPast } from './RedPacketPast'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -75,7 +75,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { classes } = useStyles()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
     const { attachMetadata, dropMetadata } = useCompositionContext()
-
     const state = useState(DialogTabs.create)
 
     const networkType = useNetworkType()
@@ -245,16 +244,15 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         tabs: [
             {
                 label: t('plugin_red_packet_create_new'),
-                children: usePortalShadowRoot((container) => (
+                children: (
                     <RedPacketCreateNew
                         origin={settings}
                         onNext={onNext}
                         state={tokenState}
                         onClose={onClose}
                         onChange={onChange}
-                        SelectMenuProps={{ container }}
                     />
-                )),
+                ),
                 sx: { p: 0 },
             },
             {

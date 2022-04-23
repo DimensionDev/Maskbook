@@ -100,7 +100,7 @@ export interface RaribleNFTItemMapResponse {
     deleted: boolean
     id: string
     lazySupply: string
-    meta: Meta
+    meta?: Meta
     owners: string[]
     royalties: Royalty[]
     pending: RaribleTransferItem[]

@@ -1,7 +1,6 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { getInjectNodeInfo } from '../../utils/avatar'
-import { Flags } from '../../../../../shared'
 import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { searchInstagramPostAvatarSelector } from '../../utils/selector'
@@ -56,7 +55,7 @@ function _(selector: () => LiveSelector<HTMLImageElement, false>, signal: AbortS
 
                 if (!info) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
+                const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
                 proxy.realCurrent = info.element
 
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
@@ -70,7 +69,7 @@ function _(selector: () => LiveSelector<HTMLImageElement, false>, signal: AbortS
                     />,
                 )
 
-                remove = root.destory
+                remove = root.destroy
             }
 
             run()

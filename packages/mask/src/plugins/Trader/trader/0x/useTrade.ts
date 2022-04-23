@@ -13,7 +13,7 @@ import { SwapQuoteResponse, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
-import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
@@ -34,6 +34,7 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Metis:
         case NetworkType.Avalanche:
         case NetworkType.Optimistic:
+        case NetworkType.Conflux:
             return NATIVE_TOKEN_ADDRESS
         default:
             safeUnreachable(networkType)

@@ -6,13 +6,14 @@ import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { CopyIconButton } from '../../../components/CopyIconButton'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     item: {
         padding: 10,
         borderBottom: '1px solid #F7F9FA',
         cursor: 'pointer',
+        backgroundColor: '#ffffff',
     },
     address: {
         fontSize: 12,
@@ -22,7 +23,7 @@ const useStyles = makeStyles()({
     },
     copy: {
         fontSize: 12,
-        stroke: '#1C68F3',
+        fill: '#1C68F3',
         marginLeft: 4,
         cursor: 'pointer',
     },
@@ -59,22 +60,18 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
         <ListItem className={classes.item} onClick={onClick}>
             <MaskWalletIcon />
             <ListItemText className={classes.text}>
-                <div className={classes.listItem}>
-                    <div>
-                        <Typography className={classes.name}>
-                            <Typography component="span"> {wallet.name}</Typography>
-                            {domain && Utils?.formatDomainName ? (
-                                <Typography component="span">{Utils.formatDomainName(domain)}</Typography>
-                            ) : null}
-                        </Typography>
-                        <Typography className={classes.address}>
-                            <FormattedAddress address={wallet.address} size={12} formatter={formatEthereumAddress} />
-                            <CopyIconButton className={classes.copy} text={wallet.address} />
-                        </Typography>
-                    </div>
-                    {isSelected ? <SuccessIcon /> : null}
-                </div>
+                <Typography className={classes.name}>
+                    <Typography component="span"> {wallet.name}</Typography>
+                    {domain && Utils?.formatDomainName ? (
+                        <Typography component="span">({Utils.formatDomainName(domain)})</Typography>
+                    ) : null}
+                </Typography>
+                <Typography className={classes.address}>
+                    <FormattedAddress address={wallet.address} size={4} formatter={formatEthereumAddress} />
+                    <CopyIconButton className={classes.copy} text={wallet.address} />
+                </Typography>
             </ListItemText>
+            {isSelected ? <SuccessIcon style={{ marginLeft: 8, fontSize: 18 }} /> : null}
         </ListItem>
     )
 })

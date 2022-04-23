@@ -1,7 +1,7 @@
 import { memo, Fragment, createElement, useContext } from 'react'
-import { RenderFragmentsContext, RenderFragmentsContextType, DefaultRenderFragments } from './RenderFragments'
-import type { TypedMessageAnchor } from '../../../base'
-import { parseLink } from '../../../base/utils/parseLink'
+import { RenderFragmentsContext, RenderFragmentsContextType, DefaultRenderFragments } from './RenderFragments.js'
+import type { TypedMessageAnchor } from '../../../base/index.js'
+import { parseLink } from '../../../base/utils/parseLink.js'
 
 /** @internal */
 export interface RenderTextProps {
@@ -36,10 +36,26 @@ export const RenderLinkFragment = memo(function RenderLink(
 function parseText(string: string, Text: NonNullable<RenderFragmentsContextType['Text']>) {
     const links = parseLink(string).flatMap((x) => {
         if (x.type === 'text') {
-            return x.content.split(/(\n)/g).map((x) => (x === '\n' ? <br /> : <Text children={x} />))
+            return sliceString(x.content).map((x) => (x === '\n' ? <br /> : <Text children={x} />))
         }
         if (x.category === 'normal' && !x.content.match(/^https?:\/\//gi)) x.content = 'http://' + x.content
         return <RenderLinkFragment category={x.category} href={x.content} children={x.content} />
     })
     return links
+}
+
+function sliceString(x: string): string[] {
+    const result: string[] = []
+
+    let pos = 0
+    let index = x.indexOf('\n')
+
+    if (index === -1) return [x]
+    while (index !== -1) {
+        result.push(x.slice(pos, index), '\n')
+        pos = index + 1
+        index = x.indexOf('\n', pos)
+    }
+    result.push(x.slice(pos))
+    return result.filter(Boolean)
 }

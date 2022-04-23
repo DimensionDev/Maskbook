@@ -151,7 +151,7 @@
         "chainId": 97,
         "fullName": "Binance",
         "shortName": "bnbt",
-        "chain": "BSC",
+        "chain": "BNB Chain",
         "network": "chapel",
         "networkId": 97,
         "nativeCurrency": {
@@ -325,7 +325,7 @@
     },
     {
         "name": "Optimistic Ethereum",
-        "chain": "OP",
+        "chain": "Optimistic",
         "fullName": "Optimism",
         "network": "mainnet",
         "rpc": ["https://mainnet.optimism.io/"],
@@ -2870,5 +2870,36 @@
         "shortName": "palm",
         "chainId": 11297108109,
         "networkId": 11297108109
+    },
+    {
+        "name": "Conflux eSpace Testnet",
+        "chain": "Conflux",
+        "network": "testnet",
+        "rpc": ["https://evmtestnet.confluxrpc.com"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": { "name": "CFX", "symbol": "CFX", "decimals": 18 },
+        "infoURL": "https://confluxnetwork.org",
+        "shortName": "Conflux",
+        "chainId": 71,
+        "networkId": 71
+    },
+    {
+        "name": "Conflux eSpace",
+        "chain": "Conflux",
+        "network": "mainnet",
+        "rpc": ["https://evm.confluxrpc.com"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": {
+            "name": "CFX",
+            "symbol": "CFX",
+            "decimals": 18,
+            "logoURI": "https://raw.githubusercontent.com/DimensionDev/Maskbook/e434014b17bd4622e28e21c9d4cd9ffec875889e/packages/mask/src/plugins/EVM/assets/conflux.png"
+        },
+        "infoURL": "https://evm.confluxscan.net",
+        "shortName": "Conflux",
+        "chainId": 1030,
+        "networkId": 1030
     }
 ]

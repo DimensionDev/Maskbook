@@ -1,4 +1,6 @@
 import type { PostIdentifier } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
+import urlcat from 'urlcat'
 import type { SocialNetwork } from '../../social-network/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
 import { deconstructPayload } from '../../utils'
@@ -16,8 +18,14 @@ export const mindsShared: SocialNetwork.Shared & SocialNetwork.Base = {
         isValidUsername: usernameValidator,
         textPayloadPostProcessor: undefined,
         getPostURL,
+        share(message) {
+            openWindow(this.getShareLinkURL?.(message))
+        },
         getShareLinkURL(message) {
-            return new URL(`https://www.minds.com/newsfeed/subscriptions?intentUrl=${encodeURIComponent(message)}`)
+            const url = urlcat('https://www.minds.com/newsfeed/subscriptions', {
+                intentUrl: message,
+            })
+            return new URL(url)
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
             payloadParser: deconstructPayload,

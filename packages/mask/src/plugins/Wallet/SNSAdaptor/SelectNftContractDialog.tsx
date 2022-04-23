@@ -2,7 +2,6 @@ import { useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, CircularProgress, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
 import {
-    ChainId,
     ERC721ContractDetailed,
     EthereumTokenType,
     formatEthereumAddress,
@@ -14,10 +13,10 @@ import {
     useERC721ContractDetailed,
     useERC721Tokens,
 } from '@masknet/web3-shared-evm'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { EthereumAddress } from 'wallet.ts'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
@@ -104,6 +103,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     contractName: {
         marginBottom: 20,
+        paddingRight: 30,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     balance: {
         position: 'absolute',
@@ -151,7 +154,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     // #endregion
 
-    const { data: assets, state: loadingCollectionState } = useCollections(account, ChainId.Mainnet, open)
+    const { data: assets, state: loadingCollectionState } = useCollections(account, chainId, open)
 
     const erc721InDb = useERC721Tokens()
     const allContractsInDb = unionBy(
@@ -163,7 +166,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         contractDetailed: {
             type: EthereumTokenType.ERC721,
             address: x.address,
-            chainId: ChainId.Mainnet,
+            chainId,
             name: x.name,
             symbol: x.symbol,
             baseURI: x.iconURL,
@@ -172,10 +175,9 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         balance: x.balance,
     }))
 
-    const contractList =
-        chainId === ChainId.Mainnet && renderAssets
-            ? unionBy([...renderAssets, ...allContractsInDb], 'contractDetailed.address')
-            : allContractsInDb
+    const contractList = renderAssets
+        ? unionBy([...renderAssets, ...allContractsInDb], 'contractDetailed.address')
+        : allContractsInDb
 
     // #region fuse
     const fuse = useMemo(
@@ -282,7 +284,7 @@ interface ContractListItemProps {
 function ContractListItem(props: ContractListItemProps) {
     const { onSubmit, contract } = props
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = contract.contractDetailed.chainId
 
     return (
         <div style={{ position: 'relative' }}>

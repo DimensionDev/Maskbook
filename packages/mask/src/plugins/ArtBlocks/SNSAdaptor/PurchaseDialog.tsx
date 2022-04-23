@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useMemo, useState, useEffect } from 'react'
+import { useCallback, useMemo, useState, useEffect } from 'react'
 import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -12,7 +12,6 @@ import {
     Typography,
 } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import {
     ERC20TokenDetailed,
@@ -23,13 +22,12 @@ import {
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
-import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
-import { TokenAmountPanel } from '@masknet/shared'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { leftShift } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog, TokenAmountPanel } from '@masknet/shared'
+import { leftShift } from '@masknet/web3-shared-base'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
 import { WalletMessages } from '../../Wallet/messages'
-
 import type { Project } from '../types'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
@@ -69,51 +67,42 @@ export function PurchaseDialog(props: ActionBarProps) {
     })
 
     const [ToS_Checked, setToS_Checked] = useState(false)
-    const [purchaseState, purchaseCallback, resetCallback] = usePurchaseCallback(
+    const [purchaseState, onCheckout, resetCallback] = usePurchaseCallback(
         project.projectId,
         project.pricePerTokenInWei,
         token.value?.type,
     )
     const { GEN_ART_721_MINTER: spender } = useArtBlocksConstants()
 
-    const onCheckout = useCallback(() => {
-        purchaseCallback()
-    }, [usePurchaseCallback])
-
-    const price = useMemo(() => {
-        return leftShift(project.pricePerTokenInWei, token.value?.decimals)
-    }, [project.pricePerTokenInWei, token.value?.decimals])
+    const price = useMemo(
+        () => leftShift(project.pricePerTokenInWei, token.value?.decimals),
+        [project.pricePerTokenInWei, token.value?.decimals],
+    )
 
     const postLink = usePostLink()
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            [
-                t(
-                    isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                        ? 'plugin_artblocks_share'
-                        : 'plugin_artblocks_share_no_official_account',
-                    {
-                        name: project.name,
-                        price: price,
-                        symbol: token.value?.symbol,
-                    },
-                ),
-                '#mask_io #artblocks_io #nft',
-                postLink,
-            ].join('\n'),
-        )
-        .toString()
+    const shareText = [
+        t(
+            isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                ? 'plugin_artblocks_share'
+                : 'plugin_artblocks_share_no_official_account',
+            {
+                name: project.name,
+                price: price,
+                symbol: token.value?.symbol,
+            },
+        ),
+        '#mask_io #artblocks_io #nft',
+        postLink,
+    ].join('\n')
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
-                    if (
-                        purchaseState.type === TransactionStateType.HASH ||
-                        purchaseState.type === TransactionStateType.CONFIRMED
-                    )
-                        onClose()
+                    const allowedTypes = [TransactionStateType.HASH, TransactionStateType.CONFIRMED]
+                    if (!allowedTypes.includes(purchaseState.type)) return
+                    onClose()
                 }
                 resetCallback()
             },
@@ -130,7 +119,7 @@ export function PurchaseDialog(props: ActionBarProps) {
         if (purchaseState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareText,
             state: purchaseState,
             summary: `Minting a new collectible from '${project.name}' collection.`,
         })
@@ -155,16 +144,14 @@ export function PurchaseDialog(props: ActionBarProps) {
                             amount={price.toString()}
                             balance={balance.value ?? '0'}
                             token={token.value as FungibleTokenDetailed}
-                            onAmountChange={() => {
-                                return
-                            }}
+                            onAmountChange={() => {}}
                         />
                         <FormControlLabel
                             control={
                                 <Checkbox
                                     color="primary"
                                     checked={ToS_Checked}
-                                    onChange={(ev: ChangeEvent<HTMLInputElement>) => setToS_Checked(ev.target.checked)}
+                                    onChange={(event) => setToS_Checked(event.target.checked)}
                                 />
                             }
                             label={
@@ -194,7 +181,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                                     disabled={!!validationMessage}
                                     color="primary"
                                     variant="contained"
-                                    onClick={purchaseCallback}
+                                    onClick={onCheckout}
                                     fullWidth>
                                     {validationMessage || isTransaction
                                         ? t('plugin_artblocks_purchase')

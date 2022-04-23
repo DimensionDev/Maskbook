@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
+import { omit } from 'lodash-unified'
 import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } from '../types'
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -14,8 +15,11 @@ import {
     useAccount,
     isSameAddress,
     EthereumTokenType,
+    FungibleTokenDetailed,
     useFungibleTokenDetailed,
     useTokenConstants,
+    ERC20TokenDetailed,
+    NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -140,20 +144,20 @@ const useStyles = makeStyles()((theme) => {
         popper: {
             overflow: 'visible',
             backgroundColor: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff',
-            transform: 'translate(183px, -32px)',
+            transform: 'translate(134px, 66px)',
             borderRadius: 8,
             width: 328,
             padding: 10,
         },
         arrow: {
             position: 'absolute',
-            bottom: 0,
-            right: 80,
+            top: -12,
+            right: 40,
             width: 0,
             height: 0,
             borderLeft: '6px solid transparent',
             borderRight: '6px solid transparent',
-            borderTop: `6px solid ${theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff'}`,
+            borderBottom: `6px solid ${theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff'}`,
             transform: 'translateY(6px)',
         },
         popperText: {
@@ -206,7 +210,10 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         tokenAddress ?? '',
     )
 
-    const historyToken = (history as RedPacketJSONPayload).token ?? tokenDetailed
+    const historyToken =
+        (history as RedPacketJSONPayload).token ??
+        tokenDetailed ??
+        ({ address: history.token_address } as ERC20TokenDetailed | NativeTokenDetailed)
 
     // #region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -236,7 +243,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) await refundCallback()
-        if (canSend) onSelect({ ...history, token: historyToken })
+        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken as FungibleTokenDetailed }))
     }, [onSelect, refundCallback, canRefund, canSend, history])
 
     // #region password lost tips
@@ -378,4 +385,11 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             </Box>
         </ListItem>
     )
+}
+
+function removeUselessSendParams(payload: RedPacketJSONPayload): RedPacketJSONPayload {
+    return {
+        ...omit(payload, ['block_number', 'claimers']),
+        token: omit(payload.token, ['logoURI']) as FungibleTokenDetailed,
+    }
 }

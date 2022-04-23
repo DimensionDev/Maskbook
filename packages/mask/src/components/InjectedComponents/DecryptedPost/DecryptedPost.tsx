@@ -1,29 +1,19 @@
 import { Fragment, useEffect, useMemo, useReducer } from 'react'
-import {
-    extractTextFromTypedMessage,
-    makeTypedMessageTuple,
-    TypedMessage,
-    TypedMessageTuple,
-} from '@masknet/typed-message'
+import { extractTextFromTypedMessage, TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import { or } from '@masknet/theme'
 
-import { ServicesWithProgress } from '../../../extension/service'
+import Services, { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
-import type {
-    DecryptionProgress,
-    FailureDecryption,
-    SuccessDecryption,
-} from '../../../extension/background-script/CryptoServices/decryptFrom'
-import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
-import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
-import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
-import { usePostClaimedAuthor, usePostInfoDetails, usePostInfo } from '../../DataSource/usePostInfo'
+import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from './types'
+import { DecryptPostSuccess } from './DecryptedPostSuccess'
+import { DecryptPostAwaiting } from './DecryptPostAwaiting'
+import { DecryptPostFailed } from './DecryptPostFailed'
+import { usePostClaimedAuthor } from '../../DataSource/usePostInfo'
 import { delay, encodeArrayBuffer, safeUnreachable } from '@dimensiondev/kit'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { DecryptionContext, SocialNetworkEncodedPayload } from '../../../../background/services/crypto/decryption'
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
-import type { PostContext } from '@masknet/plugin-infra'
+import { type PostContext, usePostInfoDetails, usePostInfo } from '@masknet/plugin-infra/content-script'
 import { Some } from 'ts-results'
 
 function progressReducer(
@@ -55,30 +45,21 @@ function progressReducer(
 }
 
 export interface DecryptPostProps {
-    onDecrypted: (post: TypedMessageTuple) => void
     whoAmI: ProfileIdentifier
     profiles: Profile[]
     alreadySelectedPreviously: Profile[]
     requestAppendRecipients?(to: Profile[]): Promise<void>
-    successComponent?: React.ComponentType<DecryptPostSuccessProps>
-    successComponentProps?: Partial<DecryptPostSuccessProps>
-    waitingComponent?: React.ComponentType<DecryptPostAwaitingProps>
-    waitingComponentProps?: Partial<DecryptPostAwaitingProps>
-    failedComponent?: React.ComponentType<DecryptPostFailedProps>
-    failedComponentProps?: Partial<DecryptPostFailedProps>
 }
 export function DecryptPost(props: DecryptPostProps) {
-    const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
+    const { whoAmI, profiles, alreadySelectedPreviously } = props
     const deconstructedPayload = usePostInfoDetails.containingMaskPayload()
     const authorInPayload = usePostClaimedAuthor()
     const current = usePostInfo()!
     const currentPostBy = usePostInfoDetails.author()
-    const postBy = or(authorInPayload, currentPostBy)
+    const postBy = authorInPayload || currentPostBy
     const postMetadataImages = usePostInfoDetails.postMetadataImages()
     const mentionedLinks = usePostInfoDetails.mentionedLinks()
-    const Success = props.successComponent || DecryptPostSuccess
-    const Awaiting = props.waitingComponent || DecryptPostAwaiting
-    const Failed = props.failedComponent || DecryptPostFailed
+    const postInfo = usePostInfo()
 
     const requestAppendRecipientsWrapped = useMemo(() => {
         if (!postBy.equals(whoAmI)) return undefined
@@ -100,6 +81,12 @@ export function DecryptPost(props: DecryptPostProps) {
     const sharedPublic = usePostInfoDetails.publicShared()
 
     useEffect(() => {
+        function setCommentFns(iv: Uint8Array, message: TypedMessage) {
+            postInfo!.encryptComment.value = async (comment) =>
+                Services.Crypto.encryptComment(iv, extractTextFromTypedMessage(message).unwrap(), comment)
+            postInfo!.decryptComment.value = async (encryptedComment) =>
+                Services.Crypto.decryptComment(iv, extractTextFromTypedMessage(message).unwrap(), encryptedComment)
+        }
         const signal = new AbortController()
         const postURL = current.url.getCurrentValue()?.toString()
         const report =
@@ -132,6 +119,7 @@ export function DecryptPost(props: DecryptPostProps) {
                         mentionedLinks.join(' '),
                 },
                 (message, iv) => {
+                    setCommentFns(iv, message)
                     dispatch({
                         type: 'refresh',
                         key: 'text',
@@ -156,6 +144,7 @@ export function DecryptPost(props: DecryptPostProps) {
                 whoAmI,
                 { type: 'image-url', image: url },
                 (message, iv) => {
+                    setCommentFns(iv, message)
                     dispatch({
                         type: 'refresh',
                         key: url,
@@ -175,15 +164,6 @@ export function DecryptPost(props: DecryptPostProps) {
         return () => signal.abort()
     }, [deconstructedPayload.ok, postBy.toText(), postMetadataImages.join(), whoAmI.toText(), mentionedLinks.join()])
 
-    // pass 3:
-    // invoke callback
-    const firstSucceedDecrypted = progress.find((p) => p.progress.type === 'success')
-    useEffect(() => {
-        if (firstSucceedDecrypted?.progress.type !== 'success') return
-        onDecrypted(makeTypedMessageTuple([firstSucceedDecrypted.progress.content]))
-    }, [firstSucceedDecrypted, onDecrypted])
-    // #endregion
-
     // it's not a secret post
     if (!deconstructedPayload.ok && progress.every((x) => x.progress.internal)) return null
     return (
@@ -201,7 +181,7 @@ export function DecryptPost(props: DecryptPostProps) {
         switch (progress.type) {
             case 'success':
                 return (
-                    <Success
+                    <DecryptPostSuccess
                         data={progress}
                         alreadySelectedPreviously={alreadySelectedPreviously}
                         requestAppendRecipients={requestAppendRecipientsWrapped}
@@ -209,27 +189,18 @@ export function DecryptPost(props: DecryptPostProps) {
                         sharedPublic={sharedPublic}
                         author={authorInPayload}
                         postedBy={currentPostBy}
-                        {...props.successComponentProps}
                     />
                 )
             case 'error':
                 return (
-                    <Failed
+                    <DecryptPostFailed
                         error={new Error(progress.error)}
                         author={authorInPayload}
                         postedBy={currentPostBy}
-                        {...props.failedComponentProps}
                     />
                 )
             case 'progress':
-                return (
-                    <Awaiting
-                        type={progress}
-                        author={authorInPayload}
-                        postedBy={currentPostBy}
-                        {...props.waitingComponentProps}
-                    />
-                )
+                return <DecryptPostAwaiting type={progress} author={authorInPayload} postedBy={currentPostBy} />
             default:
                 return null
         }
@@ -260,8 +231,8 @@ async function makeProgress(
             done(progress.content, iv || new Uint8Array())
         } else if (progress.type === DecryptProgressKind.Info) {
             iv ??= progress.iv
-            if (progress.ownersKeyEncrypted)
-                reporter({ ownersAESKeyEncrypted: encodeArrayBuffer(progress.ownersKeyEncrypted) })
+            if (typeof progress.isAuthorOfPost === 'boolean')
+                reporter({ isAuthorOfPost: Some(progress.isAuthorOfPost) })
             if (progress.iv) reporter({ iv: encodeArrayBuffer(progress.iv) })
             if (progress.version) reporter({ version: progress.version })
             if (typeof progress.publicShared === 'boolean') reporter({ sharedPublic: Some(progress.publicShared) })

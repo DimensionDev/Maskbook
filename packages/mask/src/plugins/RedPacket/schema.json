@@ -87,7 +87,7 @@
                     "title": "symbol"
                 }
             },
-            "required": ["address", "decimals", "name", "symbol"],
+            "required": ["address"],
             "title": "token"
         }
     },

@@ -31,7 +31,7 @@ export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
             (node, key, proxy) => {
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
                 root.render(<NFTAvatarInFacebookSecondStep />)
-                return () => root.destory()
+                return () => root.destroy()
             },
         )
 

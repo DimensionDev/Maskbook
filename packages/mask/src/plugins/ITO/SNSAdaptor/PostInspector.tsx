@@ -4,7 +4,7 @@ import {
     useFungibleTokenDetailed,
     EthereumTokenType,
     FungibleTokenDetailed,
-    FungibleToken,
+    FungibleTokenInitial,
     useFungibleTokensDetailed,
     isSameAddress,
     useTokenConstants,
@@ -54,7 +54,7 @@ export function PostInspector(props: PostInspectorProps) {
                         type: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS)
                             ? EthereumTokenType.Native
                             : EthereumTokenType.ERC20,
-                    } as Pick<FungibleToken, 'address' | 'type'>),
+                    } as Pick<FungibleTokenInitial, 'address' | 'type'>),
             ),
         [JSON.stringify(_payload.exchange_tokens)],
     )

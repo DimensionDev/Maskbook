@@ -1,6 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
 import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
-import { i18n } from '../../../shared-ui/locales_legacy'
 import { PLUGIN_ID, SLIPPAGE_DEFAULT } from './constants'
 import type { ZrxTradePool } from './types'
 import { DataProvider } from '@masknet/public-api'
@@ -8,20 +7,12 @@ import { DataProvider } from '@masknet/public-api'
 /**
  * The slippage tolerance of trader
  */
-export const currentSlippageSettings = createGlobalSettings<number>(
-    `${PLUGIN_ID}+slippageTolerance`,
-    SLIPPAGE_DEFAULT,
-    {
-        primary: () => '',
-    },
-)
+export const currentSlippageSettings = createGlobalSettings(`${PLUGIN_ID}+slippageTolerance`, SLIPPAGE_DEFAULT)
 
 /**
  * Single Hop
  */
-export const currentSingleHopOnlySettings = createGlobalSettings<boolean>(`${PLUGIN_ID}+singleHopOnly`, false, {
-    primary: () => '',
-})
+export const currentSingleHopOnlySettings = createGlobalSettings(`${PLUGIN_ID}+singleHopOnly`, false)
 
 /**
  * The default data provider
@@ -29,10 +20,6 @@ export const currentSingleHopOnlySettings = createGlobalSettings<boolean>(`${PLU
 export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
     `${PLUGIN_ID}+dataProvider`,
     DataProvider.COIN_GECKO,
-    {
-        primary: () => i18n.t('plugin_trader_settings_data_source_primary'),
-        secondary: () => i18n.t('plugin_trader_settings_data_source_secondary'),
-    },
 )
 
 // #region trade provider general settings
@@ -41,15 +28,9 @@ export interface TradeProviderSettings {
 }
 
 // #region the user preferred coin id
-const coinGeckoPreferredCoinId = createInternalSettings<string>(`${PLUGIN_ID}+currentCoinGeckoPreferredCoinId`, '{}')
-const coinMarketCapPreferredCoinId = createInternalSettings<string>(
-    `${PLUGIN_ID}+currentCoinMarketCapPreferredCoinId`,
-    '{}',
-)
-const coinUniswapPreferredCoinId = createInternalSettings<string>(
-    `${PLUGIN_ID}+currentCoinUniswapPreferredCoinId`,
-    '{}',
-)
+const coinGeckoPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinGeckoPreferredCoinId`, '{}')
+const coinMarketCapPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinMarketCapPreferredCoinId`, '{}')
+const coinUniswapPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinUniswapPreferredCoinId`, '{}')
 
 export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
     switch (dataProvider) {
@@ -68,4 +49,4 @@ export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
 /**
  * The approved tokens from uniswap
  */
-export const approvedTokensFromUniswap = createInternalSettings<string>(`${PLUGIN_ID}+approvedTokens`, '[]')
+export const approvedTokensFromUniswap = createInternalSettings(`${PLUGIN_ID}+approvedTokens`, '[]')

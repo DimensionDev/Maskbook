@@ -9,17 +9,8 @@ const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
 
 // TODO: In future, we can turn this object into a Proxy to receive flags from remote
 export const Flags = {
-    __raw__: {
-        target: process.env.engine,
-        architecture: process.env.architecture,
-    },
     isolated_dashboard_bridge_enabled: false,
     mask_SDK_ready: betaOrInsiderOnly,
-    /** There is no "tabs" to navigate to. We must be careful with this. */
-    has_no_browser_tab_ui: appOnly,
-    has_no_connected_user_link: appOnly,
-    has_native_nav_bar: appOnly,
-    using_ShadowDOM_attach_mode: 'closed' as ShadowRootMode,
     /** Don't inject injected script in this mode. Native side will do the job. */
     support_declarative_user_script: is_iOSApp,
     /** Don't show welcome page in this mode. Native side will do the job. */
@@ -29,21 +20,11 @@ export const Flags = {
     support_testnet_switch: betaOrInsiderOnly,
     // #region Experimental features
     image_payload_marked_as_beta: appOnly,
-    transak_enabled: webOnly,
-    trader_zrx_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
-    metamask_enabled: webOnly,
-    injected_web3_enabled: webOnly,
     toolbox_enabled: webOnly,
     /** Prohibit the use of test networks in production */
     wallet_allow_testnet: betaOrInsiderOnly || process.env.NODE_ENV !== 'production',
-    wallet_mnemonic_words_backup_enabled: false,
-    wallet_private_key_backup_enabled: true,
-    wallet_gas_price_dialog_enable: true,
-    /* construct LBP for all ERC20 tokens */
-    LBP_enabled: false,
     LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
-    plugin_switch_enabled: betaOrInsiderOnly,
     // #endregion
 
     EIP1559_enabled: true,
@@ -55,12 +36,11 @@ export const Flags = {
     optimistic_enabled: true,
     avalanche_enabled: true,
     fantom_enabled: true,
-    flow_enabled: true,
     celo_enabled: true,
     aurora_enabled: true,
     nft_airdrop_enabled: false,
-    post_actions_enabled: false,
-    next_id_tip_enabled: false,
+    post_actions_enabled: true,
+    next_id_tip_enabled: true,
 
     // #region Functionality missing / broken
     /**

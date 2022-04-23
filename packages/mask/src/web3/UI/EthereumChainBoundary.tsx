@@ -2,17 +2,18 @@ import React, { useCallback } from 'react'
 import { Box, Typography, Theme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
-import { NetworkPluginID, useActivatedPlugin, usePluginIDContext } from '@masknet/plugin-infra'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { NetworkPluginID, useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
 import {
     ChainId,
     getChainDetailedCAIP,
     getChainName,
     getNetworkTypeFromChainId,
     isChainIdValid,
+    isValidAddress as isValidEthereumAddress,
     NetworkType,
     ProviderType,
     resolveNetworkName,
-    useAccount,
     useAllowTestnet,
     useChainId,
 } from '@masknet/web3-shared-evm'
@@ -45,7 +46,7 @@ export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> 
 export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const { t } = useI18N()
 
-    const pluginID = usePluginIDContext()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const plugin = useActivatedPlugin(pluginID, 'any')
 
     const account = useAccount()
@@ -62,7 +63,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const actualNetwork = getChainName(actualChainId)
 
     // if false then it will not guide the user to switch the network
-    const isAllowed = isChainIdValid(expectedChainId, allowTestnet) && !!account && providerType !== ProviderType.Coin98
+    const isAllowed =
+        isChainIdValid(expectedChainId, allowTestnet) &&
+        !!account &&
+        providerType !== ProviderType.Coin98 &&
+        providerType !== ProviderType.Fortmatic
 
     // is the actual chain id matched with the expected one?
     const isChainMatched = actualChainId === expectedChainId
@@ -70,6 +75,19 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     // is the actual chain id a valid one even if it does not match with the expected one?
     const isValid = props?.isValidChainId?.(actualChainId, expectedChainId) ?? false
+
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
+
+    // #region connect wallet dialog
+    const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.connectWalletDialogUpdated,
+    )
+    // #endregion
+
+    // request ethereum-compatible network
+    const networkType = getNetworkTypeFromChainId(expectedChainId)
 
     const onSwitchChain = useCallback(async () => {
         // a short time loading makes the user fells better
@@ -90,8 +108,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 return
             }
 
-            // request ethereum-compatible network
-            const networkType = getNetworkTypeFromChainId(expectedChainId)
             if (!networkType) return
             try {
                 const overrides = {
@@ -123,12 +139,16 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         }
 
         if (!isChainMatched) await switchToChain()
-        if (!isPluginMatched) await switchToPlugin()
+        if (!isPluginMatched) {
+            await switchToPlugin()
+            if (!networkType || networkType !== NetworkType.Ethereum || isValidEthereumAddress(account)) return
+            setConnectWalletDialog({
+                open: true,
+                providerType: ProviderType.MetaMask,
+                networkType,
+            })
+        }
     }, [account, isAllowed, isChainMatched, isPluginMatched, providerType, expectedChainId])
-
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
 
     const renderBox = (children?: React.ReactNode) => {
         return (

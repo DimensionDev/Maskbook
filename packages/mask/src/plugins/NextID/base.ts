@@ -1,4 +1,5 @@
-import { CurrentSNSNetwork, NetworkPluginID, Plugin } from '@masknet/plugin-infra'
+import { CurrentSNSNetwork, Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants'
 import { languages } from './locales/languages'
@@ -28,8 +29,12 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Aurora,
                     ChainId.Avalanche,
                     ChainId.Fantom,
+                    ChainId.Conflux,
+                    ChainId.Optimistic,
                 ],
             },
+            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
+            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
     },
     experimentalMark: true,

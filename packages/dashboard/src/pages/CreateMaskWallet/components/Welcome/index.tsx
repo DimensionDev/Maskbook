@@ -6,6 +6,7 @@ import { useDashboardI18N } from '../../../../locales'
 import { Button } from '@mui/material'
 import { MaskNotSquareIcon } from '@masknet/icons'
 import urlcat from 'urlcat'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const Content = styled('div')`
     width: 100%;
@@ -98,9 +99,7 @@ const Welcome = memo(() => {
         link?.addEventListener('click', handleLinkClick)
     }
 
-    const handleLinkClick = () => {
-        window.open(MASK_PRIVACY_POLICY)
-    }
+    const handleLinkClick = () => openWindow(MASK_PRIVACY_POLICY)
 
     useEffect(
         () => () => {

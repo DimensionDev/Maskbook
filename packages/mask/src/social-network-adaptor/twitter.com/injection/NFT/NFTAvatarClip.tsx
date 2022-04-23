@@ -49,16 +49,20 @@ function NFTAvatarClipInTwitter() {
     }, [location])
 
     useEffect(() => {
-        setTimeout(() => {
+        const timer = setTimeout(() => {
             linkDom.current = searchTwitterAvatarNFTLinkSelector().evaluate()
             if (linkDom.current?.firstElementChild && linkDom.current?.childNodes.length === 4) {
                 borderElement.current = linkDom.current.firstElementChild
                 // remove useless border
                 linkDom.current.removeChild(linkDom.current?.firstElementChild)
             }
+            const link = linkDom.current as HTMLElement
+            link.style.backgroundColor = 'transparent'
+            link.style.boxShadow = 'none'
         }, 5000)
 
         return () => {
+            clearTimeout(timer)
             if (
                 borderElement.current &&
                 borderElement.current !== linkDom.current?.firstElementChild &&

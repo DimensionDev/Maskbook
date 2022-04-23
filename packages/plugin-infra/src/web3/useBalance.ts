@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount, useChainId } from '.'
-import { NetworkPluginID, useWeb3State } from '..'
+import { useAccount, useChainId, useWeb3State } from '.'
+import type { NetworkPluginID } from '../web3-types'
 
 export function useBalance(expectedChainId?: number, expectedAccount?: string, pluginID?: NetworkPluginID) {
     const { Utils } = useWeb3State()

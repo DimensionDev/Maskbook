@@ -160,7 +160,7 @@ export class ProviderProxy {
 const SOCKET_POINT =
     // workaround, should create a stage env for QA testing
     process.env.NODE_ENV === 'production' && process.env.channel === 'stable'
-        ? 'wss://hyper-proxy.r2d2.to'
+        ? 'wss://hyper-proxy-production.mask-reverse-proxy.workers.dev'
         : 'wss://hyper-proxy-development.mask-reverse-proxy.workers.dev'
 
 enum SocketState {

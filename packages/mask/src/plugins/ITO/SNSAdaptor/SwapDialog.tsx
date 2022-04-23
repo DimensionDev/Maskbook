@@ -1,35 +1,35 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import BigNumber from 'bignumber.js'
-import { v4 as uuid } from 'uuid'
-import { CircularProgress, Slider, Typography } from '@mui/material'
+import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { usePickToken } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
 import {
     ChainId,
     currySameAddress,
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
+    isNativeTokenAddress,
+    isSameAddress,
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
     useFungibleTokenBalance,
     useFungibleTokenDetailed,
-    isSameAddress,
     useTokenConstants,
-    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
-import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { useSwapCallback } from './hooks/useSwapCallback'
-import type { JSON_PayloadInMask } from '../types'
-import { SwapStatus } from './SwapGuide'
+import { CircularProgress, Slider, Typography } from '@mui/material'
+import BigNumber from 'bignumber.js'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { WalletMessages, WalletRPC } from '../../Wallet/messages'
+import type { JSON_PayloadInMask } from '../types'
 import { useQualificationVerify } from './hooks/useQualificationVerify'
+import { useSwapCallback } from './hooks/useSwapCallback'
+import { SwapStatus } from './SwapGuide'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -138,48 +138,28 @@ export function SwapDialog(props: SwapDialogProps) {
         swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken?.decimals),
     )
     // #region select token
-    const [id] = useState(uuid())
-    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                const at = exchangeTokens.findIndex(currySameAddress(ev.token!.address))
-                const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(
-                    payload.exchange_amounts[at * 2 + 1],
-                )
-                setRatio(ratio)
-                setSwapToken(ev.token)
-                setTokenAmount(initAmount)
-                setSwapAmount(initAmount.multipliedBy(ratio))
-                setInputAmountForUI(
-                    initAmount.isZero() ? '' : formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals),
-                )
-            },
-            [
-                id,
-                payload,
-                initAmount,
-                exchangeTokens
-                    .map((x) => x.address)
-                    .sort()
-                    .join(),
-            ],
-        ),
-    )
-    const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialog({
-            open: true,
-            uuid: id,
+    const pickToken = usePickToken()
+    const onSelectTokenChipClick = useCallback(async () => {
+        const picked = await pickToken({
             disableNativeToken: !exchangeTokens.some(isNativeTokenAddress),
             disableSearchBar: true,
-            FungibleTokenListProps: {
-                whitelist: exchangeTokens.map((x) => x.address),
-            },
+            whitelist: exchangeTokens.map((x) => x.address),
         })
+        if (!picked) return
+        const at = exchangeTokens.findIndex(currySameAddress(picked.address))
+        const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(payload.exchange_amounts[at * 2 + 1])
+        setRatio(ratio)
+        setSwapToken(picked)
+        setTokenAmount(initAmount)
+        setSwapAmount(initAmount.multipliedBy(ratio))
+        setInputAmountForUI(initAmount.isZero() ? '' : formatBalance(initAmount.multipliedBy(ratio), picked.decimals))
     }, [
+        initAmount,
+        payload,
+        pickToken,
         exchangeTokens
             .map((x) => x.address)
+            // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
             .sort()
             .join(),
     ])
@@ -239,7 +219,7 @@ export function SwapDialog(props: SwapDialogProps) {
         if (swapState.type === TransactionStateType.HASH) {
             const { hash } = swapState
             setTimeout(() => {
-                window.open(resolveTransactionLinkOnExplorer(chainId, hash), '_blank', 'noopener noreferrer')
+                openWindow(resolveTransactionLinkOnExplorer(chainId, hash))
             }, 2000)
             return
         }

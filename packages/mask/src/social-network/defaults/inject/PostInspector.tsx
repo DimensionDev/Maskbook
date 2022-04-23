@@ -1,10 +1,9 @@
 import { memo } from 'react'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
-import type { PostInfo } from '../../PostInfo'
+import { type PostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostInspector, PostInspectorProps } from '../../../components/InjectedComponents/PostInspector'
 import { makeStyles } from '@masknet/theme'
-import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-unified'
 
 export function injectPostInspectorDefault<T extends string>(
@@ -12,14 +11,11 @@ export function injectPostInspectorDefault<T extends string>(
     additionalPropsToPostInspector: (classes: Record<T, string>) => Partial<PostInspectorProps> = () => ({}),
     useCustomStyles: (props?: any) => { classes: Record<T, string> } = makeStyles()({}) as any,
 ) {
-    const PostInspectorDefault = memo(function PostInspectorDefault(props: {
-        onDecrypted: PostInspectorProps['onDecrypted']
-        zipPost: PostInspectorProps['needZip']
-    }) {
-        const { onDecrypted, zipPost } = props
+    const PostInspectorDefault = memo(function PostInspectorDefault(props: Pick<PostInspectorProps, 'zipPost'>) {
+        const { zipPost } = props
         const { classes } = useCustomStyles()
         const additionalProps = additionalPropsToPostInspector(classes)
-        return <PostInspector onDecrypted={onDecrypted} needZip={zipPost} {...additionalProps} />
+        return <PostInspector zipPost={zipPost} {...additionalProps} />
     })
 
     const { zipPost, injectionPoint } = config
@@ -27,13 +23,7 @@ export function injectPostInspectorDefault<T extends string>(
     return function injectPostInspector(current: PostInfo, signal: AbortSignal) {
         const jsx = (
             <PostInfoProvider post={current}>
-                <PostInspectorDefault
-                    onDecrypted={(typed) => {
-                        current.rawMessagePiped.value = typed
-                    }}
-                    zipPost={() => zipPostF(current.rootElement)}
-                    {...current}
-                />
+                <PostInspectorDefault zipPost={() => zipPostF(current.rootElement)} />
             </PostInfoProvider>
         )
         const root = createReactRootShadowed(injectionPoint?.(current) ?? current.rootElement.afterShadow, {
@@ -41,7 +31,7 @@ export function injectPostInspectorDefault<T extends string>(
             signal,
         })
         root.render(jsx)
-        return root.destory
+        return root.destroy
     }
 }
 

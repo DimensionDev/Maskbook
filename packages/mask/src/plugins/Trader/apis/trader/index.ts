@@ -17,6 +17,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.DODO,
                 TradeProvider.BANCOR,
                 TradeProvider.OPENOCEAN,
+                TradeProvider.MDEX,
             ]
         case NetworkType.Polygon:
             return [
@@ -35,6 +36,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.DODO,
                 TradeProvider.ZRX,
                 TradeProvider.OPENOCEAN,
+                TradeProvider.MDEX,
             ]
         case NetworkType.Arbitrum:
             return [TradeProvider.UNISWAP_V3, TradeProvider.OPENOCEAN, TradeProvider.DODO]
@@ -55,6 +57,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
         case NetworkType.Boba:
         case NetworkType.Fuse:
         case NetworkType.Metis:
+        case NetworkType.Conflux:
             console.error('To be implement network: ', networkType)
             return []
         default:

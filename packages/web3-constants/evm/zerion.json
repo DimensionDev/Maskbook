@@ -20,7 +20,8 @@
         "Celo": "celo-assets",
         "Fantom": "fantom-assets",
         "Aurora": "aurora-assets",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -43,6 +44,7 @@
         "Celo": "celo-transactions",
         "Fantom": "fantom-transactions",
         "Aurora": "aurora-transactions",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Conflux": ""
     }
 }

@@ -1,8 +1,7 @@
 import { noop } from 'lodash-unified'
-import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
+import { PostInfoProvider, type PostInfo } from '@masknet/plugin-infra/content-script'
 import { PostActions } from '../../../components/InjectedComponents/PostActions'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import type { PostInfo } from '../../PostInfo'
 
 export function createPostActionsInjector() {
     return function injectPostActions(current: PostInfo, signal: AbortSignal) {
@@ -17,7 +16,7 @@ export function createPostActionsInjector() {
                 signal,
             })
             root.render(jsx)
-            return root.destory
+            return root.destroy
         }
         return noop
     }

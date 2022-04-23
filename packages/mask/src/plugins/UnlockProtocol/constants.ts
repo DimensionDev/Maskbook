@@ -1,7 +1,6 @@
 import { PluginId } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
 
-export const pluginIcon = '\u{1F513}'
 export const pluginName = 'Unlock Protocol'
 export const pluginDescription = 'Post content behind a secure paywall'
 export const pluginId = PluginId.UnlockProtocol
@@ -13,6 +12,7 @@ export const graphEndpointKeyVal = {
     [ChainId.xDai]: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/xdai',
     [ChainId.Matic]: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/polygon',
     [ChainId.Avalanche]: '',
+    [ChainId.Optimistic]: '',
 }
 
 export const keyServerEndpoint = 'https://unlock.r2d2.to/'

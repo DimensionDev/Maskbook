@@ -9,10 +9,10 @@ import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
 import {
     NetworkPluginID,
     useNetworkDescriptor,
-    usePluginIDContext,
+    useCurrentWeb3NetworkPluginID,
     useWeb3State,
     Web3Plugin,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -109,7 +109,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
     const isHovering = useHoverDirty(ref)
     const networkDescriptor = useNetworkDescriptor(token.contract?.chainId)
     const isOnCurrentChain = useMemo(() => chainId === token.contract?.chainId, [chainId, token])
-    const currentPluginId = usePluginIDContext()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
 
     useEffect(() => {
         setHoveringTooltip(false)

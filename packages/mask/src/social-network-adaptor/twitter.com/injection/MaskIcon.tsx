@@ -1,12 +1,11 @@
 import { MutationObserverWatcher, DOMProxy, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSelector } from '../utils/selector'
-import type { PostInfo } from '../../../social-network/PostInfo'
+import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import Services from '../../../extension/service'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { memoizePromise } from '@dimensiondev/kit'
-import { Flags } from '../../../../shared'
 import { startWatch } from '../../../utils/watcher'
 
 function Icon(props: { size: number }) {
@@ -32,7 +31,7 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal: Ab
                     () => {
                         const root = createReactRootShadowed(meta.afterShadow, { signal })
                         root.render(<Icon size={size} />)
-                        remover = root.destory
+                        remover = root.destroy
                     },
                     remove,
                 )
@@ -69,11 +68,11 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         if (signal?.aborted) return
         const node = ls.evaluate()
         if (!node) return
-        const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
+        const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
         proxy.realCurrent = node
         const root = createReactRootShadowed(proxy.afterShadow, { signal })
         root.render(<Icon size={24} />)
-        remover = root.destory
+        remover = root.destroy
     }
     function remove() {
         remover()

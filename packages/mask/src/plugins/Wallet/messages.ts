@@ -3,7 +3,7 @@ import { PLUGIN_ID, WalletMessages } from '@masknet/plugin-wallet'
 import type { _AsyncVersionOf } from 'async-call-rpc'
 
 export { WalletMessages } from '@masknet/plugin-wallet'
-export type { SelectTokenDialogEvent, SelectNftContractDialogEvent } from '@masknet/plugin-wallet'
+export type { SelectNftContractDialogEvent } from '@masknet/plugin-wallet'
 export const WalletRPC: _AsyncVersionOf<typeof import('./services')> = createPluginRPC(
     PLUGIN_ID,
     () => import('./services') as any,

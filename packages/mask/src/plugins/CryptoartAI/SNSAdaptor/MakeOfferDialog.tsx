@@ -11,12 +11,12 @@ import {
     formatBalance,
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../Wallet/messages'
 import type { useAsset } from '../hooks/useAsset'
 import { resolvePaymentTokensOnCryptoartAI, resolveAssetLinkOnCryptoartAI } from '../pipes'
@@ -113,29 +113,25 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     }, [placeBidCallback, amount])
 
     const assetLink = resolveAssetLinkOnCryptoartAI(assetSource?.creator?.username, assetSource?.token_id, chainId)
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            token
-                ? t(
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? 'plugin_cryptoartai_offer_share'
-                          : 'plugin_cryptoartai_offer_share_no_official_account',
-                      {
-                          amount: amount,
-                          symbol: token?.value?.symbol,
-                          title: assetSource?.title,
-                          assetLink: assetLink,
-                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-                      },
-                  )
-                : '',
-        )
-        .toString()
+    const shareText = token
+        ? t(
+              isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                  ? 'plugin_cryptoartai_offer_share'
+                  : 'plugin_cryptoartai_offer_share_no_official_account',
+              {
+                  amount: amount,
+                  symbol: token?.value?.symbol,
+                  title: assetSource?.title,
+                  assetLink: assetLink,
+                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+              },
+          )
+        : ''
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     if (placeBidState.type === TransactionStateType.HASH) onClose()
                     if (placeBidState.type === TransactionStateType.CONFIRMED) {
@@ -152,7 +148,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (placeBidState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareText,
             state: placeBidState,
             summary:
                 (assetSource?.is24Auction

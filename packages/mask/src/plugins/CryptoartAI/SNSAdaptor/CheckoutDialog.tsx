@@ -4,11 +4,11 @@ import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { useChainId, useFungibleTokenWatched, TransactionStateType, formatBalance } from '@masknet/web3-shared-evm'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../Wallet/messages'
 import type { useAsset } from '../hooks/useAsset'
 import { resolvePaymentTokensOnCryptoartAI, resolveAssetLinkOnCryptoartAI } from '../pipes'
@@ -91,41 +91,33 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const selectedPaymentToken = first(paymentTokens)
     const { token, balance } = useFungibleTokenWatched(selectedPaymentToken)
 
-    const [purchaseState, purchaseCallback, resetCallback] = usePurchaseCallback(
+    const [purchaseState, onCheckout, resetCallback] = usePurchaseCallback(
         asset?.value?.editionNumber ?? '0',
         asset?.value?.priceInWei > 0
             ? asset?.value?.priceInWei
             : new BigNumber(0.01).shiftedBy(selectedPaymentToken?.decimals ?? 18).toNumber(),
     )
 
-    const onCheckout = useCallback(() => {
-        purchaseCallback()
-    }, [purchaseCallback])
-
     const assetLink = resolveAssetLinkOnCryptoartAI(asset?.value?.creator?.username, asset?.value?.token_id, chainId)
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            token
-                ? t(
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? 'plugin_cryptoartai_share'
-                          : 'plugin_cryptoartai_share_no_official_account',
-                      {
-                          amount: asset?.value?.priceInEth,
-                          symbol: token?.value?.symbol,
-                          title: asset?.value?.title,
-                          assetLink: assetLink,
-                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-                      },
-                  )
-                : '',
-        )
-        .toString()
+    const shareText = token
+        ? t(
+              isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                  ? 'plugin_cryptoartai_share'
+                  : 'plugin_cryptoartai_share_no_official_account',
+              {
+                  amount: asset?.value?.priceInEth,
+                  symbol: token?.value?.symbol,
+                  title: asset?.value?.title,
+                  assetLink: assetLink,
+                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+              },
+          )
+        : ''
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
-            (ev) => {
+            (ev: { open: boolean }) => {
                 if (!ev.open) {
                     if (purchaseState.type === TransactionStateType.HASH) onClose()
                 }
@@ -139,7 +131,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         if (purchaseState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareText,
             state: purchaseState,
             summary: t('plugin_cryptoartai_buy') + ' ' + asset?.value?.title,
         })

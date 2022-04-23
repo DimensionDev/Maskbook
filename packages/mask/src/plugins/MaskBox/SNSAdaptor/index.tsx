@@ -1,11 +1,15 @@
 import { useMemo } from 'react'
-import { Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra'
+import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { base } from '../base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { Trans } from 'react-i18next'
 import { parseURL } from '@masknet/shared-base'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { PreviewCard } from './components/PreviewCard'
 import { Context } from '../hooks/useContext'
+import { ApplicationEntry } from '@masknet/shared'
+import { openWindow } from '@masknet/shared-base-ui'
+import { MaskBoxIcon } from '@masknet/icons'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
@@ -26,6 +30,33 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    ApplicationEntries: [
+        (() => {
+            const icon = <MaskBoxIcon />
+            const name = <Trans i18nKey="plugin_mask_box_name" />
+            return {
+                ApplicationEntryID: base.ID,
+                RenderEntryComponent({ disabled }) {
+                    return (
+                        <ApplicationEntry
+                            title={name}
+                            disabled={disabled}
+                            icon={icon}
+                            onClick={() => openWindow('https://box.mask.io/#/')}
+                        />
+                    )
+                },
+                appBoardSortingDefaultPriority: 6,
+                marketListSortingPriority: 4,
+                icon,
+                tutorialLink:
+                    'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
+                description: <Trans i18nKey="plugin_mask_box_description" />,
+                category: 'dapp',
+                name,
+            }
+        })(),
+    ],
 }
 
 export default sns

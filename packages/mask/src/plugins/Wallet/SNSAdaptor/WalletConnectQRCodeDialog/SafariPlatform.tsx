@@ -5,6 +5,8 @@ import { createElement } from 'react'
 import { useI18N } from '../../../../utils'
 import { Provider } from '../Provider'
 import { IMTokenIcon, MetaMaskIcon, RainbowIcon, TrustIcon } from './Icons'
+import urlcat from 'urlcat'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()({
     container: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' },
@@ -27,11 +29,7 @@ const providers: WalletProvider[] = [
 export const SafariPlatform: React.FC<{ uri: string }> = ({ uri }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const makeConnect = (link: string) => () => {
-        const url = new URL(link)
-        url.searchParams.set('uri', uri)
-        open(url.toString())
-    }
+    const makeConnect = (link: string) => () => openWindow(urlcat(link, { uri }))
     const descriptionMapping: Record<string, string> = {
         MetaMask: t('plugin_wallet_connect_safari_metamask'),
         Rainbow: t('plugin_wallet_connect_safari_rainbow'),

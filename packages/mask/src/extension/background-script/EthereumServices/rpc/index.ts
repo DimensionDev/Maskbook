@@ -53,27 +53,27 @@ export async function getComputedPayload(payload: JsonRpcPayload): Promise<Ether
         case EthereumMethodType.PERSONAL_SIGN:
             return {
                 type: EthereumRpcType.SIGN,
-                to: payload.params[1],
-                data: payload.params[0],
+                to: payload.params![1],
+                data: payload.params![0],
             }
         case EthereumMethodType.ETH_SIGN_TYPED_DATA:
             return {
                 type: EthereumRpcType.SIGN_TYPED_DATA,
-                to: payload.params[0],
-                data: payload.params[1],
+                to: payload.params![0],
+                data: payload.params![1],
             }
 
         // decrypt
         case EthereumMethodType.ETH_DECRYPT:
             return {
                 type: EthereumRpcType.ETH_DECRYPT,
-                to: payload.params[1],
-                secret: payload.params[0],
+                to: payload.params![1],
+                secret: payload.params![0],
             }
         case EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY:
             return {
                 type: EthereumRpcType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
-                account: payload.params[0],
+                account: payload.params![0],
             }
 
         // asset
@@ -81,19 +81,19 @@ export async function getComputedPayload(payload: JsonRpcPayload): Promise<Ether
         case EthereumMethodType.WATCH_ASSET_LEGACY:
             return {
                 type: EthereumRpcType.WATCH_ASSET,
-                asset: payload.params[0],
+                asset: payload.params![0],
             }
 
         // wallet
         case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
             return {
                 type: EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN,
-                chain: getChainDetailedCAIP(Number.parseInt(payload.params[0], 16)),
+                chain: getChainDetailedCAIP(Number.parseInt(payload.params![0], 16)),
             }
         case EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN:
             return {
                 type: EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN,
-                chain: payload.params[0],
+                chain: payload.params![0],
             }
 
         // contract interaction
@@ -104,10 +104,31 @@ export async function getComputedPayload(payload: JsonRpcPayload): Promise<Ether
             return
     }
 }
+export function getContractFunctionName(signature: string) {
+    const abi = readABI(signature)
+    return abi?.name
+}
 
-export async function getSendTransactionComputedPayload(payload: JsonRpcPayload) {
+export type ComputedPayload =
+    | undefined
+    | {
+          type: EthereumRpcType.CONTRACT_INTERACTION
+          name?: string
+          parameters?: Record<string, string | undefined>
+          _tx: any
+      }
+    | {
+          type: EthereumRpcType.CONTRACT_DEPLOYMENT
+          code: string
+          _tx: any
+      }
+    | {
+          type: EthereumRpcType.SEND_ETHER | EthereumRpcType.CANCEL
+          _tx: any
+      }
+export async function getSendTransactionComputedPayload(payload: JsonRpcPayload): Promise<ComputedPayload | undefined> {
     const config =
-        payload.method === EthereumMethodType.MASK_REPLACE_TRANSACTION ? payload.params[1] : payload.params[0]
+        payload.method === EthereumMethodType.MASK_REPLACE_TRANSACTION ? payload.params![1] : payload.params![0]
     const from = (config.from as string | undefined) ?? ''
     const value = (config.value as string | undefined) ?? '0x0'
     const data = getData(config)

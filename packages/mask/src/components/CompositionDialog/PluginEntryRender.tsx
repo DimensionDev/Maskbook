@@ -1,18 +1,18 @@
 import {
-    usePluginIDContext,
     useActivatedPluginSNSAdaptor_Web3Supported,
     useActivatedPluginsSNSAdaptor,
     Plugin,
     PluginI18NFieldRender,
     usePluginI18NField,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/content-script'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Result } from 'ts-results'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { makeStyles } from '@masknet/theme'
-import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle } from 'react'
+import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
 const useStyles = makeStyles()({
@@ -28,7 +28,7 @@ export const PluginEntryRender = memo(
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
         const pluginField = usePluginI18NField()
         const chainId = useChainId()
-        const pluginID = usePluginIDContext()
+        const pluginID = useCurrentWeb3NetworkPluginID()
         const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_Web3Supported(chainId, pluginID)
         const result = [...useActivatedPluginsSNSAdaptor('any')]
             .sort((plugin) => {
@@ -60,8 +60,7 @@ export const PluginEntryRender = memo(
 
 function useSetPluginEntryRenderRef(ref: React.ForwardedRef<PluginEntryRenderRef>) {
     const pluginRefs = useRef<Record<string, PluginRef | undefined | null>>({})
-    useImperativeHandle(
-        ref,
+    const refItem: PluginEntryRenderRef = useMemo(
         () => ({
             openPlugin: function openPlugin(id: string, tryTimes = 4) {
                 const ref = pluginRefs.current[id]
@@ -74,13 +73,15 @@ function useSetPluginEntryRenderRef(ref: React.ForwardedRef<PluginEntryRenderRef
         }),
         [],
     )
+    useImperativeHandle(ref, () => refItem, [refItem])
     const trackPluginRef = (pluginID: string) => (ref: PluginRef | null) => {
         pluginRefs.current = { ...pluginRefs.current, [pluginID]: ref }
     }
     return [trackPluginRef]
 }
 function useSetPluginRef(ref: React.ForwardedRef<PluginRef>, onClick: () => void) {
-    useImperativeHandle(ref, () => ({ open: onClick }), [onClick])
+    const refItem = useMemo(() => ({ open: onClick }), [onClick])
+    useImperativeHandle(ref, () => refItem, [refItem])
 }
 
 type PluginRef = { open(): void }

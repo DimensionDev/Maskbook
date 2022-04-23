@@ -17,6 +17,7 @@ interface VerifyNextIDProps extends Partial<WizardDialogProps> {
     personaIdentifier?: PersonaIdentifier
     network: string
     avatar?: string
+    disableVerify: boolean
     onUsernameChange?: (username: string) => void
     onVerify: () => Promise<void>
     onDone?: () => void
@@ -31,6 +32,7 @@ export const VerifyNextID = ({
     onDone,
     onClose,
     network,
+    disableVerify,
 }: VerifyNextIDProps) => {
     const { t } = useI18N()
 
@@ -86,13 +88,13 @@ export const VerifyNextID = ({
                     <ActionButtonPromise
                         className={classes.button}
                         variant="contained"
-                        init={t('setup_guide_verify')}
+                        init={disableVerify ? t('setup_guide_verify_should_change_profile') : t('setup_guide_verify')}
                         waiting={t('setup_guide_verifying')}
-                        complete={t('setup_guide_verify')}
+                        complete={t('ok')}
                         failed={t('setup_guide_verifying_failed')}
                         executor={onVerify}
-                        onComplete={onDone}
-                        disabled={!username || !personaName}
+                        completeOnClick={onDone}
+                        disabled={!username || !personaName || disableVerify}
                         completeIcon={null}
                         failIcon={null}
                         failedOnClick="use executor"

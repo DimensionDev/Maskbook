@@ -112,10 +112,10 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(8, 0),
         },
         markdown: {
-            'text-overflow': 'ellipsis',
+            textOverflow: 'ellipsis',
             display: '-webkit-box',
-            '-webkit-box-orient': 'vertical',
-            '-webkit-line-clamp': '3',
+            webkitBoxOrient: 'vertical',
+            webkitLineClamp: '3',
         },
     }
 })

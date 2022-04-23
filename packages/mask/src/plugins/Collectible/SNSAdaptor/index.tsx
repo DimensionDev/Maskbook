@@ -1,5 +1,5 @@
 import { uniq } from 'lodash-unified'
-import { Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra'
+import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
@@ -7,6 +7,8 @@ import { PLUGIN_ID } from '../constants'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { NFTPage } from './NFTPage'
 import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
+import { Trans } from 'react-i18next'
+import { CollectiblesIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -63,6 +65,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     return !!addressNames?.length
                 },
             },
+        },
+    ],
+    ApplicationEntries: [
+        {
+            ApplicationEntryID: base.ID,
+            category: 'dapp',
+            description: <Trans i18nKey="plugin_collectibles_description" />,
+            name: <Trans i18nKey="plugin_collectibles_name" />,
+            icon: <CollectiblesIcon />,
+            marketListSortingPriority: 7,
+            tutorialLink:
+                'https://realmasknetwork.notion.site/Purchase-or-bid-for-NFTs-via-OpenSea-or-Rarible-on-Twitter-c388746f11774ecfa17914c900d3ed97',
         },
     ],
 }

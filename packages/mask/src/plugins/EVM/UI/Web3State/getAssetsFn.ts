@@ -1,93 +1,113 @@
-import Web3 from 'web3'
 import {
-    createContract,
-    createNativeToken,
-    ERC721TokenDetailed,
-    formatEthereumAddress,
-    getERC721TokenDetailedFromChain,
-    getERC721TokenAssetFromChain,
-    getEthereumConstants,
-    isSameAddress,
-    Web3ProviderType,
-    FungibleAssetProvider,
-    createExternalProvider,
-} from '@masknet/web3-shared-evm'
-import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
+    getRegisteredWeb3Networks,
+    NetworkPluginID,
+    Pageable,
+    Pagination,
+    TokenType,
+    Web3Plugin,
+} from '@masknet/plugin-infra/web3'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
-import type { AbiItem } from 'web3-utils'
-import { uniqBy } from 'lodash-unified'
-import { PLUGIN_NETWORKS } from '../../constants'
-import { makeSortAssertWithoutChainFn } from '../../utils/token'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
+import { TokenPrice } from '@masknet/web3-providers'
+import { pow10 } from '@masknet/web3-shared-base'
+import {
+    ChainId,
+    createContract,
+    createExternalProvider,
+    createNativeToken,
+    CurrencyType,
+    ERC721TokenDetailed,
+    formatEthereumAddress,
+    FungibleAssetProvider,
+    getCoinGeckoCoinId,
+    getERC721TokenAssetFromChain,
+    getERC721TokenDetailedFromChain,
+    getEthereumConstants,
+    isSameAddress,
+    PriceRecord,
+    Web3ProviderType,
+} from '@masknet/web3-shared-evm'
+import BigNumber from 'bignumber.js'
+import { uniqBy } from 'lodash-unified'
+import Web3 from 'web3'
+import type { AbiItem } from 'web3-utils'
+import { makeSortAssertWithoutChainFn } from '../../utils/token'
+import { createGetLatestBalance } from './createGetLatestBalance'
+import { createNonFungibleToken } from './createNonFungibleToken'
+
+// tokens unavailable neither from api or balance checker.
+// https://forum.conflux.fun/t/how-to-upvote-debank-proposal-for-conflux-espace-integration/13935
+const TokenUnavailableFromDebankList = [ChainId.Conflux]
 
 export const getFungibleAssetsFn =
     (context: Web3ProviderType) =>
     async (address: string, providerType: string, network: Web3Plugin.NetworkDescriptor, pagination?: Pagination) => {
         const chainId = context.chainId.getCurrentValue()
         const wallet = context.wallets.getCurrentValue().find((x) => isSameAddress(x.address, address))
-        const socket = await context.providerSocket
-        const networks = PLUGIN_NETWORKS
-        const trustedTokens = context.erc20Tokens
-            .getCurrentValue()
-            .filter((x) => wallet?.erc20_token_whitelist.has(formatEthereumAddress(x.address)))
+        const networks = getRegisteredWeb3Networks().filter(
+            (x) => NetworkPluginID.PLUGIN_EVM === x.networkSupporterPluginID && x.isMainnet,
+        )
+        const supportedNetworkIds = networks.map((x) => x.chainId)
+        const trustedTokens = uniqBy(
+            context.erc20Tokens
+                .getCurrentValue()
+                .filter((x) => wallet?.erc20_token_whitelist.has(formatEthereumAddress(x.address))),
+            (x) => `${x.chainId}_${formatEthereumAddress(x.address)}`,
+        )
 
         const web3 = new Web3(
             createExternalProvider(context.request, context.getSendOverrides, context.getRequestOptions),
         )
         const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
-        const socketId = `mask.fetchFungibleTokenAsset_${address}`
-        let dataFromProvider = await socket.sendAsync<Web3Plugin.Asset<Web3Plugin.FungibleToken>>({
-            id: socketId,
-            method: 'mask.fetchFungibleTokenAsset',
-            params: {
-                address: address,
-                pageSize: 10000,
-            },
-        })
-        if (!dataFromProvider.length) {
-            // @ts-ignore getAssetList Asset[]
-            dataFromProvider = await context.getAssetsList(address, FungibleAssetProvider.DEBANK)
-        }
-        const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x) => ({
-            id: x.token.address,
-            chainId: x.token.chainId,
-            balance: x.balance,
-            price: x.price,
-            value: x.value,
-            logoURI: x.logoURI,
-            token: {
-                ...x.token,
-                type: TokenType.Fungible,
-                name: x.token.name ?? 'Unknown Token',
-                symbol: x.token.symbol ?? 'Unknown',
+        const dataFromProvider = await context.getAssetsList(address, FungibleAssetProvider.DEBANK)
+        const assetsFromProvider = dataFromProvider
+            .map<Web3Plugin.Asset<Web3Plugin.FungibleToken>>((x) => ({
                 id: x.token.address,
                 chainId: x.token.chainId,
-            },
-        }))
+                balance: x.balance,
+                price: x.price,
+                value: x.value,
+                logoURI: x.logoURI,
+                token: {
+                    ...x.token,
+                    name: x.token.name ?? 'Unknown Token',
+                    symbol: x.token.symbol ?? 'Unknown',
+                    id: x.token.address,
+                    chainId: x.token.chainId,
+                    type: TokenType.Fungible,
+                },
+            }))
+            .filter((x) => supportedNetworkIds.includes(x.chainId))
 
-        if (!BALANCE_CHECKER_ADDRESS) return assetsFromProvider
-        const balanceCheckerContract = createContract(web3, BALANCE_CHECKER_ADDRESS, BalanceCheckerABI as AbiItem[])
-        if (!balanceCheckerContract) return assetsFromProvider
-        let balanceList: string[]
-        try {
-            balanceList = await balanceCheckerContract?.methods
-                .balances(
-                    [address],
-                    trustedTokens.map((x) => x.address),
-                )
-                .call({
-                    from: undefined,
-                })
-            if (balanceList.length !== trustedTokens?.length) return assetsFromProvider
-        } catch {
-            balanceList = []
+        const balanceCheckerContract = createContract(
+            web3,
+            BALANCE_CHECKER_ADDRESS ?? '',
+            BalanceCheckerABI as AbiItem[],
+        )
+
+        let balanceList: string[] = []
+
+        if (BALANCE_CHECKER_ADDRESS && balanceCheckerContract) {
+            try {
+                balanceList = await balanceCheckerContract?.methods
+                    .balances(
+                        [address],
+                        trustedTokens.map((x) => x.address),
+                    )
+                    .call({
+                        from: address,
+                    })
+                if (balanceList.length !== trustedTokens?.length) return assetsFromProvider
+            } catch {
+                balanceList = []
+            }
         }
 
         const assetFromChain = balanceList.map(
             (balance, idx): Web3Plugin.Asset<Web3Plugin.FungibleToken> => ({
                 id: trustedTokens[idx].address,
-                chainId: chainId,
+                chainId,
                 token: {
                     ...trustedTokens[idx],
                     id: trustedTokens[idx].address,
@@ -101,6 +121,27 @@ export const getFungibleAssetsFn =
 
         const allTokens = [...assetsFromProvider, ...assetFromChain]
 
+        const getBalance = createGetLatestBalance(context)
+        const allRequest = TokenUnavailableFromDebankList.map(async (x) => {
+            const balance = await getBalance(x, address)
+            const coinId = getCoinGeckoCoinId(x)
+            const price = (await TokenPrice.getNativeTokenPrice([coinId], CurrencyType.USD))[coinId]
+
+            return {
+                chainId: x,
+                price: price,
+                balance,
+            }
+        })
+
+        const tokenUnavailableFromDebankResults = (await Promise.allSettled(allRequest))
+            .map((x) => (x.status === 'fulfilled' ? x.value : null))
+            .filter((x) => Boolean(x)) as {
+            chainId: ChainId
+            balance: string
+            price: PriceRecord
+        }[]
+
         const nativeTokens: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = networks
             .filter(
                 (t) =>
@@ -113,11 +154,19 @@ export const getFungibleAssetsFn =
             )
             .map((x) => {
                 const nativeToken = createNativeToken(x.chainId)
+                const result = tokenUnavailableFromDebankResults.find((y) => y.chainId === x.chainId)
                 return {
                     id: nativeToken.address,
                     chainId: x.chainId,
                     token: { ...nativeToken, id: nativeToken.address!, type: TokenType.Fungible },
-                    balance: '0',
+                    balance: result?.balance ?? '0',
+                    price: result?.price,
+                    value: {
+                        [CurrencyType.USD]: new BigNumber(result?.balance ?? '0')
+                            .dividedBy(pow10(nativeToken.decimals))
+                            .multipliedBy(result ? result.price[CurrencyType.USD] : '0')
+                            .toFixed(),
+                    },
                 }
             })
 
@@ -178,31 +227,7 @@ export const getNonFungibleTokenFn =
 
         const tokenFromProvider = socket.getResult<ERC721TokenDetailed>(socketId)
         const allData: Web3Plugin.NonFungibleToken[] = [...tokenInDb, ...tokenFromProvider]
-            .map(
-                (x) =>
-                    ({
-                        ...x,
-                        id: `${x.contractDetailed.address}_${x.tokenId}`,
-                        tokenId: x.tokenId,
-                        chainId: x.contractDetailed.chainId,
-                        type: TokenType.NonFungible,
-                        name: x.info.name ?? `${x.contractDetailed.name} ${x.tokenId}`,
-                        description: x.info.description ?? '',
-                        owner: x.info.owner,
-                        contract: {
-                            ...x.contractDetailed,
-                            type: TokenType.NonFungible,
-                            id: x.contractDetailed.address,
-                        },
-                        metadata: {
-                            name: x.info.name ?? `${x.contractDetailed.name} ${x.tokenId}`,
-                            description: x.info.description ?? '',
-                            mediaType: 'Unknown',
-                            iconURL: x.contractDetailed.iconURL,
-                            assetURL: x.info.mediaUrl,
-                        },
-                    } as Web3Plugin.NonFungibleToken),
-            )
+            .map(createNonFungibleToken)
             .filter((x) => isSameAddress(x.owner, address))
             .filter((x) => !network || x.chainId === network.chainId)
 

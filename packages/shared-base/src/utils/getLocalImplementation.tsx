@@ -31,7 +31,6 @@ export async function getLocalImplementation<T extends object>(
         }
     }
     for (const key in result) {
-        if (key === 'then') console.error('!!! Do not use "then" as your method name !!!')
         if (!Reflect.has(localImpl, key)) isUpdate && console.log(`[HMR] ${name}.${key} added.`)
         Object.defineProperty(localImpl, key, { configurable: true, enumerable: true, value: result[key] })
     }

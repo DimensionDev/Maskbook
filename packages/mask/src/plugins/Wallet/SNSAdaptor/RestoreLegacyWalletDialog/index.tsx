@@ -1,12 +1,12 @@
 import { useCallback, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { Box } from '@mui/system'
 import { makeStyles } from '@masknet/theme'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, Typography } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { useI18N } from '../../../../utils'
 

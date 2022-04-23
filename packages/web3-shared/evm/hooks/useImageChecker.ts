@@ -1,7 +1,8 @@
 import { useAsync } from 'react-use'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
 // filter out nft with image resource
-export function useImageChecker(url: string | undefined) {
+export function useImageChecker(url: string | undefined): AsyncState<boolean> {
     return useAsync(async () => {
         if (!url) return false
         const { pathname } = new URL(url)

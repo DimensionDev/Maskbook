@@ -6,13 +6,13 @@ import type {
     TypedMessageAnchor,
     TypedMessageTuple,
     TypedMessagePromise,
-} from '../../base'
-import { TypedMessageTextRenderer } from './Core/Text'
-import { TypedMessageImageRenderer } from './Core/Image'
-import { TypedMessageTupleRenderer } from './Core/Tuple'
-import { TypedMessagePromiseRenderer } from './Core/Promise'
-import { TypedMessageUnknownRenderer } from './Core/Unknown'
-import { TypedMessageAnchorRenderer } from './Extension/Anchor'
+} from '../../base/index.js'
+import { TypedMessageTextRenderer } from './Core/Text.js'
+import { TypedMessageImageRenderer } from './Core/Image.js'
+import { TypedMessageTupleRenderer } from './Core/Tuple.js'
+import { TypedMessagePromiseRenderer } from './Core/Promise.js'
+import { TypedMessageUnknownRenderer } from './Core/Unknown.js'
+import { TypedMessageAnchorRenderer } from './Extension/Anchor.js'
 
 export interface RenderConfig<T extends TypedMessage = TypedMessage> {
     component: React.ComponentType<T>

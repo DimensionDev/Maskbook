@@ -123,27 +123,25 @@ export function TokenTab(props: TokenTabProps) {
                     </Typography>
 
                     <Box className={classes.trait_content}>
-                        {asset.value.traits.map(({ trait_type, value }) => {
-                            return (
-                                <Link
-                                    underline="none"
-                                    key={trait_type + value}
-                                    href={
-                                        asset.value?.slug
-                                            ? resolveTraitLinkOnOpenSea(chainId, asset.value.slug, trait_type, value)
-                                            : ''
-                                    }
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <Paper className={classes.trait} variant="outlined">
-                                        <Typography variant="body2" color="primary">
-                                            {trait_type}
-                                        </Typography>
-                                        <Typography variant="body2">{value}</Typography>
-                                    </Paper>
-                                </Link>
-                            )
-                        })}
+                        {asset.value.traits.map(({ trait_type, value }, key) => (
+                            <Link
+                                underline="none"
+                                key={key}
+                                href={
+                                    asset.value?.slug
+                                        ? resolveTraitLinkOnOpenSea(chainId, asset.value.slug, trait_type, value)
+                                        : ''
+                                }
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                <Paper className={classes.trait} variant="outlined">
+                                    <Typography variant="body2" color="primary">
+                                        {trait_type}
+                                    </Typography>
+                                    <Typography variant="body2">{value}</Typography>
+                                </Paper>
+                            </Link>
+                        ))}
                     </Box>
                 </Box>
             ) : null}

@@ -1,6 +1,6 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
 import { unreachable } from '@dimensiondev/kit'
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getChainIdFromNetworkType, isFortmaticSupported, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../../Wallet/messages'
@@ -9,15 +9,16 @@ export function NetworkIconClickBait({
     network,
     provider,
     children,
-    onSubmit,
     onClick,
+    onSubmit,
 }: Web3Plugin.UI.NetworkIconClickBaitProps) {
     // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
         (ev) => {
             if (ev.open) return
-            if (ev.result) onSubmit?.(network, provider)
+            if (ev.result?.providerType === providerType && ev.result?.networkType === networkType)
+                onSubmit?.(network, provider, ev.result)
         },
     )
     // #endregion

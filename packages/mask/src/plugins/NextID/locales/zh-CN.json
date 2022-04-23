@@ -3,7 +3,6 @@
     "persona": "身份",
     "unsupported_network": "此网络尚不支持",
     "connect_wallet__other_user_tip_intro": "目前此账号未绑定任何钱包。",
-    "connect_wallet_tip_intro": "在此绑定您的钱包。",
     "connect_wallet_tip": "在 Web3 选项卡中，您可以向已安装 Mask Network 的好友展示接收打赏的地址、NFT 收藏品、捐赠记录和其他链上信息。",
     "verify_wallet_button": "验证您的钱包",
     "add_wallet_button": "添加钱包",

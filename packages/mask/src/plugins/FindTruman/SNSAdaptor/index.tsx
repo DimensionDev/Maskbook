@@ -1,11 +1,15 @@
 import { base } from '../base'
-import { useMemo, Suspense } from 'react'
+import { useMemo, Suspense, useState } from 'react'
 import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra'
+import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
+import { Trans } from 'react-i18next'
+import { FindTrumanIcon } from '@masknet/icons'
 import { PostInspector } from './PostInspector'
+import { ApplicationEntry } from '@masknet/shared'
+import { FindTrumanDialog } from './FindTrumanDialog'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -84,6 +88,32 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    ApplicationEntries: [
+        (() => {
+            const icon = <FindTrumanIcon />
+            const name = <Trans i18nKey="plugin_find_truman_name" />
+            return {
+                ApplicationEntryID: base.ID,
+                RenderEntryComponent({ disabled }) {
+                    const [open, setOpen] = useState(false)
+                    return (
+                        <>
+                            <ApplicationEntry
+                                disabled={disabled}
+                                title={name}
+                                icon={icon}
+                                onClick={() => setOpen(true)}
+                            />
+                            <FindTrumanDialog open={open} onClose={() => setOpen(false)} />
+                        </>
+                    )
+                },
+                appBoardSortingDefaultPriority: 12,
+                icon,
+                name: <Trans i18nKey="plugin_find_truman_name" />,
+            }
+        })(),
+    ],
 }
 
 export default sns

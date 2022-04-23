@@ -10,7 +10,7 @@ import type { AssetOrder, CollectibleToken } from '../types'
 
 export function useAssetOrder(provider: NonFungibleAssetProvider, token?: CollectibleToken) {
     return useAsyncRetry(async () => {
-        if (!token) return
+        if (!token?.contractAddress || !token?.tokenId) return
         switch (provider) {
             case NonFungibleAssetProvider.OPENSEA:
                 const openSeaResponse = await PluginCollectibleRPC.getAssetFromSDK(token.contractAddress, token.tokenId)
@@ -37,5 +37,5 @@ export function useAssetOrder(provider: NonFungibleAssetProvider, token?: Collec
             default:
                 unreachable(provider)
         }
-    }, [provider, token])
+    }, [provider, token?.contractAddress, token?.tokenId])
 }

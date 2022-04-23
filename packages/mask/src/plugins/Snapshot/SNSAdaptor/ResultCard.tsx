@@ -107,7 +107,7 @@ function Content() {
                                 PopperProps={{
                                     disablePortal: true,
                                 }}
-                                title={<Typography color="textPrimary">{result.choice}</Typography>}
+                                title={<Typography>{result.choice}</Typography>}
                                 placement="top"
                                 disableHoverListener={!tooltipsVisible[i]}
                                 arrow>

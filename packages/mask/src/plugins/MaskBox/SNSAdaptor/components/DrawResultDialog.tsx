@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import { difference } from 'lodash-unified'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
@@ -6,7 +5,7 @@ import { Box, DialogContent } from '@mui/material'
 import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import type { BoxInfo } from '../../type'
 import { TokenCard } from './TokenCard'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/shared'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
@@ -37,17 +36,15 @@ export function DrawResultDialog(props: DrawResultDialogProps) {
     const { open, onClose, boxInfo, contractDetailed } = props
     const { classes } = useStyles()
 
-    const { lastPurchasedTokenIds, setLastPurchasedTokenIds } = useContainer(Context)
+    const { lastPurchasedTokenIds } = useContainer(Context)
 
     const postLink = usePostLink()
-    const shareSuccessLink = activatedSocialNetworkUI.utils.getShareLinkURL?.(
-        `I just claimed a #MaskBox with @realMaskNetwork. Install mask.io and create your own NFT mystery box! \n ${postLink}`,
-    )
+    const shareText = `I just claimed a #MaskBox with @realMaskNetwork. Install mask.io and create your own NFT mystery box! \n ${postLink}`
 
-    const onShare = useCallback(() => {
+    const onShare = () => {
         onClose()
-        window.open(shareSuccessLink, '_blank', 'noopener noreferrer')
-    }, [shareSuccessLink])
+        activatedSocialNetworkUI.utils.share?.(shareText)
+    }
 
     if (!contractDetailed) return null
 

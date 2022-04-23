@@ -8,7 +8,7 @@ import {
 } from '@masknet/typed-message'
 import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button } from '@mui/material'
-import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo } from 'react'
+import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo, useMemo } from 'react'
 import { useI18N } from '../../utils'
 import { BadgeRenderer } from './BadgeRenderer'
 
@@ -76,35 +76,32 @@ export const TypedMessageEditor = memo(
             [setMessage],
         )
         const deleteMetaID = useCallback(
-            (meta) => {
+            (meta: string) => {
                 setMessage(editTypedMessageMeta(currentValue.current, (map) => map.delete(meta)))
             },
             [setMessage],
         )
-        useImperativeHandle(
-            ref,
-            (): TypedMessageEditorRef => {
-                return {
-                    get estimatedLength() {
-                        // TODO: we should count metadata into the estimated size
-                        if (isTypedMessageText(currentValue.current)) return currentValue.current.content.length
-                        return 0
-                    },
-                    get value() {
-                        return currentValue.current
-                    },
-                    set value(val) {
-                        setMessage(val)
-                    },
-                    reset: () => setMessage(emptyMessage),
-                    attachMetadata(meta, data) {
-                        setMessage(editTypedMessageMeta(currentValue.current, (map) => map.set(meta, data)))
-                    },
-                    dropMetadata: deleteMetaID,
-                }
-            },
-            [setMessage, deleteMetaID],
-        )
+        const refItem = useMemo((): TypedMessageEditorRef => {
+            return {
+                get estimatedLength() {
+                    // TODO: we should count metadata into the estimated size
+                    if (isTypedMessageText(currentValue.current)) return currentValue.current.content.length
+                    return 0
+                },
+                get value() {
+                    return currentValue.current
+                },
+                set value(val) {
+                    setMessage(val)
+                },
+                reset: () => setMessage(emptyMessage),
+                attachMetadata(meta, data) {
+                    setMessage(editTypedMessageMeta(currentValue.current, (map) => map.set(meta, data)))
+                },
+                dropMetadata: deleteMetaID,
+            }
+        }, [setMessage, deleteMetaID])
+        useImperativeHandle(ref, () => refItem, [refItem])
 
         if (!isTypedMessageText(value)) {
             const reset = () => setAsText('')

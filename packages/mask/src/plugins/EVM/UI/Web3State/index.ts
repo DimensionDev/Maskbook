@@ -1,5 +1,5 @@
 import Ens from 'ethjs-ens'
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import {
     ChainId,
     formatBalance,
@@ -27,8 +27,9 @@ import {
     createExternalProvider,
 } from '@masknet/web3-shared-evm'
 import { getStorage } from '../../storage'
-import { getFungibleAssetsFn, getNonFungibleTokenFn } from './getAssetsFn'
 
+import { getFungibleAssetsFn, getNonFungibleTokenFn } from './getAssetsFn'
+import { createGetLatestBalance } from './createGetLatestBalance'
 const ZERO_X_ERROR_ADDRESS = '0x'
 
 export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities, context?: Web3ProviderType) {
@@ -92,34 +93,37 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             const cacheDomain = domainAddressBook[chainId]?.[address]
             if (cacheDomain) return cacheDomain
 
-            const domain = await new Ens({
-                provider: createExternalProvider(context.request, context.getSendOverrides, context.getRequestOptions),
-                network: chainId,
-            }).reverse(address)
+            try {
+                const domain = await new Ens({
+                    provider: createExternalProvider(
+                        context.request,
+                        context.getSendOverrides,
+                        context.getRequestOptions,
+                    ),
+                    network: chainId,
+                }).reverse(address)
 
-            if (isZeroAddress(domain) || isSameAddress(domain, ZERO_X_ERROR_ADDRESS)) {
+                if (isZeroAddress(domain) || isSameAddress(domain, ZERO_X_ERROR_ADDRESS)) {
+                    return undefined
+                }
+
+                if (domain)
+                    await getStorage().domainAddressBook.setValue({
+                        ...domainAddressBook,
+                        [chainId]: {
+                            ...domainAddressBook[chainId],
+                            ...{ [address]: domain, [domain]: address },
+                        },
+                    })
+
+                return domain
+            } catch {
                 return undefined
             }
-
-            if (domain)
-                await getStorage().domainAddressBook.setValue({
-                    ...domainAddressBook,
-                    [chainId]: {
-                        ...domainAddressBook[chainId],
-                        ...{ [address]: domain, [domain]: address },
-                    },
-                })
-
-            return domain
         },
     }
     state.Utils = state.Utils ?? {
-        getLatestBalance: (chainId: ChainId, account: string) => {
-            const web3 = createWeb3(context.request, () => ({
-                chainId,
-            }))
-            return web3.eth.getBalance(account)
-        },
+        getLatestBalance: createGetLatestBalance(context),
         getLatestBlockNumber: (chainId: ChainId) => {
             const web3 = createWeb3(context.request, () => ({
                 chainId,
