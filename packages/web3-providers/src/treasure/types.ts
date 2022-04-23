@@ -1,63 +1,15 @@
-export interface ZoraHistory {
-    blockTimestamp: string
-    transaction: ZoraTransactionEvent
+/* eslint-disable @typescript-eslint/prefer-enum-initializers */
+
+enum TokenStandard {
+    ERC721,
+    ERC1155,
 }
 
-export interface ZoraTransactionEvent {
-    mediaMints?: MediaMint[]
-    auctionCreatedEvents?: AuctionCreatedEvent[]
-    marketBidEvents?: MarketBidEvent[]
-    auctionEndedEvents?: AuctionEndedEvent[]
+enum TreasureStatus {
+    Active,
+    Hidden,
+    Sold,
 }
-
-export interface MediaMint {
-    id: string
-    blockTimestamp: string
-    creator: string
-    address: string
-}
-
-export interface AuctionCreatedEvent {
-    id: string
-    blockTimestamp: string
-    reservePrice: string
-    auctionCurrency: string
-    tokenOwner: string
-    transactionHash: string
-}
-
-export interface MarketBidEvent {
-    id: string
-    blockTimestamp: string
-    amount: string
-    currencyAddress: string
-    bidder: string
-    recipient: string
-    transactionHash: string
-}
-
-export interface AuctionEndedEvent {
-    id: string
-    tokenOwner: string
-    winner: string
-    blockTimestamp: string
-    auction: AuctionInfo
-}
-
-export interface AuctionInfo {
-    lastBidAmount: string
-    auctionCurrency: string
-    expiresAt: string
-}
-
-export interface ZoraBid {
-    transaction: ZoraTransactionEvent
-}
-
-export interface ZoraAsk {
-    transaction: ZoraTransactionEvent
-}
-
 export interface TreasureToken {
     id: string
     tokenId: string
@@ -65,20 +17,116 @@ export interface TreasureToken {
     metadata: TreasureTokenMetadata
     owner: TreasureOwner | null
     lowestPrice: ListingFieldsWithToken[]
-    listings: {
-        id: string
-        status: 'Active' | 'Sold' // TODO: Are there other status?
-        buyer: {
-            id: string
-        } | null
-        pricePerItem: string
-        seller: {
-            id: string
-        }
-        blockTimestamp: string
-    }[]
+    listings: [Listing]
 }
 
+export interface TreasureUser {
+    id: string
+    listings: [Listing]
+    tokens: [UserToken]
+}
+
+export interface Token {
+    id: string
+    collection: Collection
+    _owners: [string]
+    filters: [string]
+    floorPrice: number
+    listings: Listing
+    metadata: Metadata
+    metaUri: string
+    name: string
+
+    owner: TreasureUser
+    owners: [UserToken]
+    rank: number
+    rarity: number
+    tokenId: string
+    totalItems: number
+    totalOwners: number
+}
+
+export interface UserToken {
+    id: string
+    quantity: number
+    token: Token
+    user: TreasureUser
+}
+export interface Metadata {
+    id: string
+    attribute: [MetadataAttribute]
+    description: string
+    image: string
+    name: string
+    token: Token
+}
+
+export interface MetadataAttribute {
+    id: string
+    attribute: Attribute
+    metadata: Metadata
+}
+export interface Attribute {
+    id: string
+    _tokenIds: [string]
+    collection: Collection
+    metadata: [MetadataAttribute]
+}
+export interface Collection {
+    id: string
+    _attributeIds: [string]
+    _listingIds: [string]
+    _owners: [string]
+    _tokenIds: [string]
+    address: string
+    attributes: Attribute
+    creator: Creator
+    floorPrice: number
+    listings: [Listing]
+    name: string
+    standard: TokenStandard
+    symbol: string
+    tokens: [Token]
+    totalItems: number
+    totalListings: number
+    totalOwners: number
+    totalSales: number
+    totalVolume: number
+}
+
+export interface Listing {
+    id: string
+    _listedQuantity: number
+    blockTimestamp: number
+    buyer: TreasureUser
+    collection: Collection
+    collectionName: string
+    expires: number
+    filters: [string]
+    nicePrice: string
+    pricePerItem: number
+    quantity: number
+    seller: TreasureUser
+    status: TreasureStatus
+    token: Token
+    tokenName: string
+    totalPrice: string
+    transactionLink: string
+    user: TreasureUser
+}
+export interface Exerciser {
+    id: string
+}
+export interface Student {
+    id: string
+}
+
+export interface Creator {
+    id: string
+    collections: Collection
+    fee: number
+    name: string
+}
 export interface ListingFieldsWithToken {
     seller: {
         id: string
@@ -114,10 +162,6 @@ export interface TokenContract {
     name: string
 }
 
-export interface V3TokenAsk {
-    askPrice: string
-}
-
 export interface TokenAttributes {
     trait_type: string
     value: string
@@ -148,6 +192,12 @@ export interface TreasureCreator {
 
 export interface TreasureOwner {
     id: string
+    address: string
+    profile_img_url?: string
+    user?: {
+        username: string
+    }
+    link: string
 }
 
 export interface TreasureAttribute {
@@ -169,27 +219,4 @@ interface TreasureTokenMetadata {
 
 export interface TreasureTokenWithMetadata {
     token: TreasureTokenMetadata
-}
-
-export interface Asset {
-    id: string
-    collection: Collection
-    _owners: ![!string]
-    filters: ![!string]
-    floorPrice: bigint
-    listings: [!Listing]
-    metadata: Metadata
-    metadataUri: string
-    name: string
-
-    owner: User
-
-    owners: [!UserToken]
-    rank: number
-    rarity: number
-    tokenId: number
-
-    totalItems: number
-
-    totalOwners: number
 }
