@@ -10,6 +10,7 @@ import type {
 import type { CurrencyType } from '@masknet/plugin-infra/web3'
 import type { Result } from 'ts-results'
 import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
+import type { TreasureUser, Creator } from './treasure/types'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -193,8 +194,8 @@ export namespace NonFungibleTokenAPI {
         asset_contract: { name: string; description: string; schemaName: string } | null
         current_price: number | null
         current_symbol: string
-        owner: AssetOwner | null
-        creator: AssetOwner | null
+        owner: AssetOwner | TreasureUser | null
+        creator: AssetOwner | Creator | null
         token_id: string
         token_address: string
         traits: AssetTrait[]

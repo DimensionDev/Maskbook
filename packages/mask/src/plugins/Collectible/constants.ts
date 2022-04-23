@@ -16,6 +16,7 @@ export const zoraPathnameRegexMatcher = /^\/collections\/(0x[\dA-Fa-f]{40})\/(\d
 
 export const treasureHostnames = ['marketplace.treasure.lol']
 export const treasurePathnameRegexMatcher = /^\/collection\/[\dA-Fa-f]\/(\d+)$/
+export const treasureHumanPathnameRegexMatcher = /^\/collection\/([\w\-]+)\/(\d+)$/
 
 export const OpenSeaAPI_Key = 'c38fe2446ee34f919436c32db480a2e3'
 export const NullAddress = 'NullAddress'

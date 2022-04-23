@@ -13,7 +13,7 @@ enum TreasureStatus {
 export interface TreasureToken {
     id: string
     tokenId: string
-    floorPrice: number | null
+    floorPrice: string | null
     metadata: TreasureTokenMetadata
     owner: TreasureOwner | null
     lowestPrice: ListingFieldsWithToken[]
@@ -24,6 +24,12 @@ export interface TreasureUser {
     id: string
     listings: [Listing]
     tokens: [UserToken]
+    address: string
+    profile_img_url?: string
+    user?: {
+        username: string
+    }
+    link: string
 }
 
 export interface Token {
@@ -31,7 +37,7 @@ export interface Token {
     collection: Collection
     _owners: [string]
     filters: [string]
-    floorPrice: number
+    floorPrice: string
     listings: Listing
     metadata: Metadata
     metaUri: string
@@ -39,16 +45,16 @@ export interface Token {
 
     owner: TreasureUser
     owners: [UserToken]
-    rank: number
-    rarity: number
+    rank: string
+    rarity: string
     tokenId: string
-    totalItems: number
-    totalOwners: number
+    totalItems: string
+    totalOwners: string
 }
 
 export interface UserToken {
     id: string
-    quantity: number
+    quantity: string
     token: Token
     user: TreasureUser
 }
@@ -81,31 +87,31 @@ export interface Collection {
     address: string
     attributes: Attribute
     creator: Creator
-    floorPrice: number
+    floorPrice: string
     listings: [Listing]
     name: string
     standard: TokenStandard
     symbol: string
     tokens: [Token]
-    totalItems: number
-    totalListings: number
-    totalOwners: number
-    totalSales: number
-    totalVolume: number
+    totalItems: string
+    totalListings: string
+    totalOwners: string
+    totalSales: string
+    totalVolume: string
 }
 
 export interface Listing {
     id: string
-    _listedQuantity: number
-    blockTimestamp: number
+    _listedQuantity: string
+    blockTimestamp: string
     buyer: TreasureUser
     collection: Collection
     collectionName: string
-    expires: number
+    expires: string
     filters: [string]
     nicePrice: string
-    pricePerItem: number
-    quantity: number
+    pricePerItem: string
+    quantity: string
     seller: TreasureUser
     status: TreasureStatus
     token: Token
@@ -124,8 +130,14 @@ export interface Student {
 export interface Creator {
     id: string
     collections: Collection
-    fee: number
+    fee: string
     name: string
+    profile_img_url?: string
+    address: string
+    user?: {
+        username: string
+    }
+    link: string
 }
 export interface ListingFieldsWithToken {
     seller: {
@@ -134,7 +146,7 @@ export interface ListingFieldsWithToken {
     expires: string
     id: string
     pricePerItem: string
-    quantity: number
+    quantity: string
 }
 
 export interface Collections {
@@ -143,31 +155,6 @@ export interface Collections {
         name: string
     }[]
 }
-
-export interface TokenMetadata {
-    json: MetadataInfo
-}
-
-export interface MetadataInfo {
-    animation_url: string
-    image_url: string
-    created_by: string
-    attributes: TokenAttributes[]
-    name: string
-    description: string
-    image: string
-}
-
-export interface TokenContract {
-    name: string
-}
-
-export interface TokenAttributes {
-    trait_type: string
-    value: string
-}
-
-// Treasure Types
 
 export type CollectionItem = {
     name: string
@@ -187,7 +174,7 @@ export interface TreasureTokenDetail {
 export interface TreasureCreator {
     id: string
     name: string
-    fee: number
+    fee: string
 }
 
 export interface TreasureOwner {
@@ -204,7 +191,7 @@ export interface TreasureAttribute {
     attribute: {
         id?: string
         name: string
-        percentage?: number
+        percentage?: string
         value: string
     }
 }

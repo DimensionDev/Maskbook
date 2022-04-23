@@ -2,23 +2,21 @@ import { gql } from 'graphql-request'
 
 export const getAssetQuery = gql`
     query getAsset($address: String!, $tokenId: String!) {
-        Token(where: { address: { _eq: $address }, tokenId: { _eq: $tokenId } }) {
+        Token(where: { id: { _eq: $address }, tokenId: { _eq: $tokenId } }) {
             tokenId
-            name
-            address
-            owner
-            metadata {
-                json
-            }
-            v3Ask {
-                askPrice
-            }
-            currentAuction {
-                expiresAt
-            }
-            symbol
-            tokenContract {
+            id
+            collection {
                 name
+                states {
+                    floorPrice
+                    items
+                    listings
+                    sales
+                    volume
+                }
+            }
+            owners {
+                id
             }
         }
     }
@@ -26,45 +24,28 @@ export const getAssetQuery = gql`
 
 export const getTokenHistoryQuery = gql`
     query getTokenHistory($address: String!, $tokenId: String!) {
-        Token(where: { address: { _eq: $address }, tokenId: { _eq: $tokenId } }) {
-            transferEvents {
+        Token(where: { id: { _eq: $address }, tokenId: { _eq: $tokenId } }) {
+            listings{
+                id
                 blockTimestamp
-                transaction {
-                    mediaMints {
+                buyer {
+                    id
+                    quantity
+                    token
+                    user
+                }
+                collection {
+                    id
+                    stats{
                         id
-                        blockTimestamp
-                        creator
-                        address
-                    }
-                    auctionCreatedEvents {
-                        id
-                        reservePrice
-                        tokenOwner
-                        blockTimestamp
-                        auctionCurrency
-                    }
-                    marketBidEvents(where: { status: { _eq: "FINALIZED" } }) {
-                        id
-                        blockTimestamp
-                        amount
-                        currencyAddress
-                        bidder
-                        recipient
-                    }
-                    auctionEndedEvents {
-                        id
-                        transaction {
-                            blockTimestamp
-                        }
-                        tokenOwner
-                        winner
-                        auction {
-                            lastBidAmount
-                            auctionCurrency
-                        }
+                        floorPrice
+                        items
+                        listings
+                        sales
+                        volume
                     }
                 }
-            }
+
         }
     }
 `
