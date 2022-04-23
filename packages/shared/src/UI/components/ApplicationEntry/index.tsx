@@ -44,12 +44,12 @@ interface Props {
     icon: React.ReactNode
     title: React.ReactNode
     disabled?: boolean
-    nextIdVerifyToolTipHint?: string
+    tooltip?: string
     onClick: () => void
 }
 
 export function ApplicationEntry(props: Props) {
-    const { title, onClick, disabled = false, icon, nextIdVerifyToolTipHint } = props
+    const { title, onClick, disabled = false, icon, tooltip } = props
     const { classes } = useStyles()
     const jsx = (
         <div
@@ -61,15 +61,15 @@ export function ApplicationEntry(props: Props) {
             </Typography>
         </div>
     )
-    return nextIdVerifyToolTipHint ? (
+    return tooltip ? (
         <ShadowRootTooltip
             PopperProps={{
                 disablePortal: true,
             }}
             placement="top"
             arrow
-            disableHoverListener={!nextIdVerifyToolTipHint}
-            title={<Typography>{nextIdVerifyToolTipHint}</Typography>}>
+            disableHoverListener={!tooltip}
+            title={<Typography>{tooltip}</Typography>}>
             {jsx}
         </ShadowRootTooltip>
     ) : (

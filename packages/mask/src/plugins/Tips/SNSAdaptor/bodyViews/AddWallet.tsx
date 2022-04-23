@@ -11,40 +11,38 @@ import {
     useProviderType,
     useWallet,
 } from '@masknet/web3-shared-evm'
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback } from 'react'
 import { SignSteps, Steps } from '../../../../components/shared/VerifyWallet/Steps'
 import { useAsync, useAsyncFn } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../../../extension/service'
 import { useCustomSnackbar } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
-import { useProviderDescriptor, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, useProviderDescriptor, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../../utils'
-import { PluginId } from '@masknet/plugin-infra'
 
 interface AddWalletViewProps {
     currentPersona: any
-    bounds: BindingProof[]
+    bindings: BindingProof[]
     onCancel: () => void
 }
 
-const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewProps) => {
+const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletViewProps) => {
     const { t } = useI18N()
-    const [isBound, setIsBound] = useState(false)
-    const [signed, setSigned] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
     const providerType = useProviderType()
     const wallet = {
         ...useWallet(),
         account: useAccount(),
         networkType: useNetworkType(),
-        providerType: providerType,
         chainId: useChainId(),
+        providerType,
     }
     const { value: domain } = useReverseAddress(wallet.account)
     const { Utils } = useWeb3State() ?? {}
-    const isNotEvm = !useProviderDescriptor()?.providerAdaptorPluginID.includes('evm')
+    const isNotEvm = useProviderDescriptor()?.providerAdaptorPluginID !== NetworkPluginID.PLUGIN_EVM
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
+    const isBound = bindings.filter((x) => isSameAddress(x.identity, wallet.account)).length > 0
 
     const walletName = () => {
         if (isNotEvm) return `${resolveProviderName(providerType)} Wallet`
@@ -53,11 +51,6 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
             return `${resolveProviderName(wallet.providerType ?? providerType)} Wallet`
         return wallet.name ?? 'Wallet'
     }
-
-    useEffect(() => {
-        const res = bounds.filter((x) => isSameAddress(x.identity, wallet.account))
-        setIsBound(res.length > 0)
-    }, [wallet, currentPersona, bounds])
 
     const { value: payload, loading: payloadLoading } = useAsync(async () => {
         if (!currentPersona?.publicHexKey || !wallet.account) return
@@ -108,17 +101,16 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
                     signature: signature,
                 },
             )
-            setSigned(true)
             showSnackbar(t('plugin_tips_wallet_sign_success'), { variant: 'success', message: nowTime })
             return true
         } catch (error) {
             showSnackbar(t('plugin_tips_wallet_sign_error'), { variant: 'error', message: nowTime })
             return false
         }
-    }, [currentPersona?.publicHexKey, payload, wallet, signature])
+    }, [currentPersona?.publicHexKey, payload, signature])
     const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {
         try {
-            if (signed) {
+            if (walletSignState) {
                 onCancel()
                 return SignSteps.SecondStepDone
             }
@@ -136,12 +128,12 @@ const AddWalletView = memo(({ currentPersona, bounds, onCancel }: AddWalletViewP
             showSnackbar('Connect error', { variant: 'error', message: nowTime })
             return SignSteps.Ready
         }
-    }, [signed, signature, walletSignState, walletSign, personaSilentSign])
+    }, [signature, walletSignState, walletSign, personaSilentSign])
     const { setDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const changeWallet = useCallback(() => {
         setDialog({
             open: true,
-            pluginId: PluginId.Tip,
+            pluginID: NetworkPluginID.PLUGIN_EVM,
         })
     }, [])
     if (!currentPersona || !wallet) return null

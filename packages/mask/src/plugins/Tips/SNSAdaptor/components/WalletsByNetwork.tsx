@@ -51,7 +51,7 @@ interface WalletsByNetworkProps {
 export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: WalletsByNetworkProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const isAllHid = wallets.every((x) => !x.isPublic)
+    const isAllHide = wallets.every((x) => !x.isPublic)
     return (
         <div className={classes.container}>
             <div className={classes.topBox}>
@@ -62,7 +62,7 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
                 <SettingsIcon onClick={toSetting} className={classes.settingIcon} />
             </div>
             <div className={classes.content}>
-                {isAllHid ? (
+                {isAllHide ? (
                     <Typography className={classes.empty}>{t('plugin_tips_empty_list')}</Typography>
                 ) : (
                     wallets

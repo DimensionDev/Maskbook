@@ -1,7 +1,7 @@
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, useWallets } from '@masknet/web3-shared-evm'
+import { ChainId, isSameAddress, useWallets } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { useMemo } from 'react'
 import { useCopyToClipboard } from 'react-use'
@@ -114,11 +114,11 @@ export function WalletItem({
     const wallets = useWallets()
 
     const walletName = useMemo(() => {
-        const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
-        const name = currentWallet?.name
         if (domain && Utils?.formatDomainName) {
             return Utils.formatDomainName(domain)
         }
+        const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
+        const name = currentWallet?.name
         return name !== undefined && currentWallet?.hasStoredKeyInfo ? name : fallbackName
     }, [address, domain, fallbackName])
 
@@ -149,7 +149,7 @@ export function WalletItem({
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
                     <Typography className={classes.accountName}>{walletName}</Typography>
-                    {isDefault && <Typography className={classes.defaultBadge}>Default</Typography>}
+                    {isDefault && <Typography className={classes.defaultBadge}>{t('default')}</Typography>}
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={address}>
@@ -168,7 +168,7 @@ export function WalletItem({
                     </Link>
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(1, address) ?? ''}
+                        href={Utils?.resolveAddressLink?.(ChainId.Mainnet, address) ?? ''}
                         target="_blank"
                         title={t('plugin_wallet_view_on_explorer')}
                         rel="noopener noreferrer">

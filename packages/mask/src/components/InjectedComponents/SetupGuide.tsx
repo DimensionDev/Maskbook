@@ -109,7 +109,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }, [persona])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.triggerSetupGuideVerifyOnNextIDStep.on(() => {
+        return CrossIsolationMessages.events.verifyNextID.on(() => {
             setStep(SetupGuideStep.VerifyOnNextID)
         })
     }, [])

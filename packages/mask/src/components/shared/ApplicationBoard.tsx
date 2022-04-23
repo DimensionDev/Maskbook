@@ -170,13 +170,13 @@ interface RenderEntryComponentWrapperProps {
 function RenderEntryComponentWrapper({ application }: RenderEntryComponentWrapperProps) {
     const RenderEntryComponent = application.entry.RenderEntryComponent!
     return application.entry.nextIdRequired ? (
-        <RenderEntryComponentWithNextIdRequired application={application} />
+        <RenderEntryComponentWithNextIDRequired application={application} />
     ) : (
         <RenderEntryComponent disabled={!application.enabled} />
     )
 }
 
-function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComponentWrapperProps) {
+function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComponentWrapperProps) {
     const ui = activatedSocialNetworkUI
     const { t } = useI18N()
     const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
@@ -189,9 +189,9 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
         }
     }, [lastState_])
     const lastRecognized = useLastRecognizedIdentity()
-    const getUsername = () =>
-        lastState.username || (!lastRecognized.identifier.isUnknown ? lastRecognized.identifier.userId : '')
-    const username = useMemo(getUsername, [lastState, lastRecognized])
+    const username = useMemo(() => {
+        return lastState.username || (!lastRecognized.identifier.isUnknown ? lastRecognized.identifier.userId : '')
+    }, [lastState, lastRecognized])
     const personas = useMyPersonas()
 
     const checkSNSConnectToCurrentPersona = useCallback((persona: Persona) => {
@@ -201,7 +201,7 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
         )
     }, [])
 
-    const { value: something } = useAsync(async () => {
+    const { value: ApplicationCurrentStatus } = useAsync(async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
         const currentPersona = (await Services.Identity.queryPersona(currentPersonaIdentifier!)) as Persona
         const currentSNSConnectedPersona = personas.find((persona) =>
@@ -209,22 +209,22 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
         )
         return {
             isSNSConnectToCurrentPersona: checkSNSConnectToCurrentPersona(currentPersona),
-            isNextIdVerify: await NextIDProof.queryIsBound(currentPersona.publicHexKey ?? '', platform, username),
+            isNextIDVerify: await NextIDProof.queryIsBound(currentPersona.publicHexKey ?? '', platform, username),
             currentPersonaPublicKey: currentPersona?.fingerprint,
             currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.fingerprint,
         }
     }, [platform, username, ui, personas])
     const {
-        isNextIdVerify,
+        isNextIDVerify,
         isSNSConnectToCurrentPersona,
         currentPersonaPublicKey,
         currentSNSConnectedPersonaPublicKey,
-    } = something ?? {}
+    } = ApplicationCurrentStatus ?? {}
     const { closeDialog } = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
 
     const onNextIDVerify = useCallback(() => {
         closeDialog()
-        CrossIsolationMessages.events.triggerSetupGuideVerifyOnNextIDStep.sendToAll(undefined)
+        CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
     }, [])
 
     if (!application.entry.RenderEntryComponent) return null
@@ -233,9 +233,9 @@ function RenderEntryComponentWithNextIdRequired({ application }: RenderEntryComp
 
     return (
         <RenderEntryComponent
-            disabled={!application.enabled || isNextIdVerify === undefined || !isSNSConnectToCurrentPersona}
+            disabled={!application.enabled || isNextIDVerify === undefined || !isSNSConnectToCurrentPersona}
             nextIdVerification={{
-                isNextIdVerify,
+                isNextIDVerify,
                 isSNSConnectToCurrentPersona,
                 toolTipHint: t('plugin_tips_sns_persona_unmatched', {
                     currentPersonaPublicKey: formatPersonaPublicKey(currentPersonaPublicKey ?? '', 4),

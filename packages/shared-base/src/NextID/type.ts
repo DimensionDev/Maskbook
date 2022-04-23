@@ -4,7 +4,7 @@ export enum NextIDAction {
 }
 
 export enum NextIDPlatform {
-    NextId = 'nextid',
+    NextID = 'nextid',
     Twitter = 'twitter',
     Keybase = 'keybase',
     Ethereum = 'ethereum',
@@ -59,11 +59,11 @@ export interface NextIDStoragePayload {
     signPayload: string
     createdAt: string
 }
-export interface NextIdStorageInfo {
+export interface NextIDStorageInfo {
     persona: string
-    proofs: NextIdKvStorageProofs<unknown>[]
+    proofs: NextIDStorageProofs<unknown>[]
 }
-export interface NextIdKvStorageProofs<T> {
+export interface NextIDStorageProofs<T> {
     content: {
         // pluginId
         [index: string]: T

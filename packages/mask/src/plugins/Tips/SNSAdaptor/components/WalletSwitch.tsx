@@ -3,7 +3,8 @@ import { Link, Switch, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { ExternalLink } from 'react-feather'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -45,24 +46,29 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface WalletSwitchProps {
-    type: number
+    chainId: ChainId
+    type: NetworkPluginID
     address: string
     isPublic: boolean
-    onChange: any
+    onChange: (idx: number, v: boolean) => void
     index: number
 }
 
-export function WalletSwitch({ type, address, isPublic, onChange, index }: WalletSwitchProps) {
+export function WalletSwitch({ type, address, isPublic, chainId, index, onChange }: WalletSwitchProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { Utils } = useWeb3State() ?? {}
 
     const resolveNetworkName = () => {
-        return ['EVM wallet', 'Solana wallet', 'Flow wallet'][type]
+        const walletNameByNetwork = {
+            [NetworkPluginID.PLUGIN_EVM]: 'EVM wallet',
+            [NetworkPluginID.PLUGIN_SOLANA]: 'Solana wallet',
+            [NetworkPluginID.PLUGIN_FLOW]: 'Flow wallet',
+        }
+        return walletNameByNetwork[type]
     }
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const v = e.target.checked
-        onChange(index, v)
+        onChange(index, e.target.checked)
     }
     return (
         <div className={classes.currentAccount}>
@@ -77,7 +83,7 @@ export function WalletSwitch({ type, address, isPublic, onChange, index }: Walle
 
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(1, address) ?? ''}
+                        href={Utils?.resolveAddressLink?.(chainId, address) ?? ''}
                         target="_blank"
                         title={t('plugin_wallet_view_on_explorer')}
                         rel="noopener noreferrer">

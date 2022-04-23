@@ -189,7 +189,7 @@ export function Steps(props: StepsProps) {
                             </Typography>
                         </div>
                         <div className={classes.stepRow}>
-                            <Typography className={classes.stepTitle}>{walletName ?? 'Wallet'} Sign</Typography>
+                            <Typography className={classes.stepTitle}>{walletName ?? t('wallet')} Sign</Typography>
                             <Typography className={classes.stepIntro}>
                                 {t('waller_verify_wallet_sign_intro')}
                             </Typography>

@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Flags } from '../../../../shared'
 import { base } from '../base'
-import { NextIdPage } from '../components/NextIdPage'
+import { NextIDPage } from '../components/NextIDPage'
 import { PostTipButton, TipTaskManager } from '../components/Tip'
 import { PLUGIN_ID } from '../constants'
 import { RootContext } from '../contexts'
@@ -19,7 +19,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Wallet',
             priority: 10,
             UI: {
-                TabContent: ({ personaList = EMPTY_LIST }) => <NextIdPage personaList={personaList} />,
+                TabContent: ({ personaList = EMPTY_LIST }) => <NextIDPage personaList={personaList} />,
             },
         },
     ],

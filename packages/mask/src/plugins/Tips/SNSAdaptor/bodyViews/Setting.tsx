@@ -1,8 +1,10 @@
+import { memo } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { memo } from 'react'
 import { WalletSwitch } from '../components/WalletSwitch'
+import { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -31,7 +33,6 @@ interface SettingPageProp {
 
 const SettingPage = memo(({ wallets, onSwitchChange }: SettingPageProp) => {
     const { classes } = useStyles()
-
     return (
         <div className={classes.container}>
             <div className={classes.titleBox}>
@@ -45,11 +46,12 @@ const SettingPage = memo(({ wallets, onSwitchChange }: SettingPageProp) => {
                     return (
                         <div key={idx} className={classes.switchContainer}>
                             <WalletSwitch
+                                chainId={ChainId.Mainnet}
+                                type={NetworkPluginID.PLUGIN_EVM}
                                 index={idx}
-                                onChange={onSwitchChange}
-                                type={0}
                                 address={x.identity}
                                 isPublic={!!x.isPublic}
+                                onChange={onSwitchChange}
                             />
                         </div>
                     )

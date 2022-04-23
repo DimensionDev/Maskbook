@@ -22,18 +22,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 disabled={
-                                    nextIdVerification?.isNextIdVerify === undefined ||
+                                    nextIdVerification?.isNextIDVerify === undefined ||
                                     !nextIdVerification?.isSNSConnectToCurrentPersona
                                         ? true
                                         : disabled
                                 }
                                 icon={icon}
                                 onClick={() =>
-                                    !nextIdVerification?.isNextIdVerify
+                                    !nextIdVerification?.isNextIDVerify
                                         ? nextIdVerification?.onNextIDVerify()
                                         : setOpen(true)
                                 }
-                                nextIdVerifyToolTipHint={
+                                tooltip={
                                     nextIdVerification?.isSNSConnectToCurrentPersona === false
                                         ? nextIdVerification?.toolTipHint
                                         : undefined

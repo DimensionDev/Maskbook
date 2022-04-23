@@ -14,7 +14,7 @@ import type {
     NextIDStoragePayload,
     NextIDPayload,
     NextIDPlatform,
-    NextIdStorageInfo,
+    NextIDStorageInfo,
 } from '@masknet/shared-base'
 
 export namespace ExplorerAPI {
@@ -328,7 +328,7 @@ export namespace NextIDBaseAPI {
             patchData: unknown,
             pluginId: string,
         ): Promise<Result<T, string>>
-        get<T>(key: string): Promise<Result<NextIdStorageInfo, string>>
+        get(key: string): Promise<Result<NextIDStorageInfo, string>>
         getPayload(
             personaPublicKey: string,
             platform: NextIDPlatform,

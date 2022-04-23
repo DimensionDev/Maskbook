@@ -4,13 +4,13 @@ import { NextIDStorage } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
 
-const pluginId = PluginId.Tip
+const pluginId = PluginId.Tips
 
 const getCurrentPersonaPublicKey = async () => {
     const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
     if (!currentPersonaIdentifier) return ''
     const currentPersona = await Services.Identity.queryPersona(currentPersonaIdentifier)
-    if (!currentPersona || !currentPersona.publicHexKey) return ''
+    if (!currentPersona?.publicHexKey) return ''
     return currentPersona.publicHexKey
 }
 export function useKvGet() {
@@ -26,7 +26,7 @@ export const getKvPayload = async (patchData: unknown) => {
         const publicHexKey = await getCurrentPersonaPublicKey()
         const payload = await NextIDStorage.getPayload(
             publicHexKey,
-            NextIDPlatform.NextId,
+            NextIDPlatform.NextID,
             publicHexKey,
             data,
             pluginId,
@@ -38,7 +38,7 @@ export const getKvPayload = async (patchData: unknown) => {
     }
 }
 
-export const kvSet = async (payload: any, signature: string, patchData: unknown) => {
+export const setKvPatchData = async (payload: any, signature: string, patchData: unknown) => {
     try {
         const publicHexKey = await getCurrentPersonaPublicKey()
         const base64Sig = toBase64(fromHex(signature))
@@ -46,7 +46,7 @@ export const kvSet = async (payload: any, signature: string, patchData: unknown)
             payload.uuid,
             publicHexKey,
             base64Sig,
-            NextIDPlatform.NextId,
+            NextIDPlatform.NextID,
             publicHexKey,
             payload.createdAt,
             patchData,

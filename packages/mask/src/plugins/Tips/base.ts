@@ -3,7 +3,7 @@ import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 export const base: Plugin.Shared.Definition = {
-    ID: PluginId.Tip,
+    ID: PluginId.Tips,
     name: { fallback: 'Tips' },
     description: {
         fallback: 'Tips Entrance',

@@ -52,7 +52,7 @@ interface NextIDPageProps {
     personaList: string[]
 }
 
-export function NextIdPage({ personaList }: NextIDPageProps) {
+export function NextIDPage({ personaList }: NextIDPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const currentProfileIdentifier = useLastRecognizedIdentity()

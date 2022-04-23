@@ -1,4 +1,5 @@
-import { createPluginMessage, PluginId, PluginMessageEmitter } from '@masknet/plugin-infra'
+import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import type { NetworkPluginID } from '@masknet/plugin-infra/src/web3-types'
 import type {
     ChainId,
     ERC721ContractDetailed,
@@ -33,7 +34,7 @@ export type GasPriceDialogEvent = {
 export type SelectProviderDialogEvent =
     | {
           open: true
-          pluginId?: PluginId
+          pluginID?: NetworkPluginID
       }
     | {
           open: false

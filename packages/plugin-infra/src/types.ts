@@ -316,7 +316,7 @@ export namespace Plugin.SNSAdaptor {
             disabled: boolean
             nextIdVerification?: {
                 toolTipHint: string
-                isNextIdVerify: boolean | undefined
+                isNextIDVerify: boolean | undefined
                 isSNSConnectToCurrentPersona: boolean | undefined
                 onNextIDVerify(): void
             }
@@ -706,7 +706,7 @@ export enum PluginId {
     Poll = 'com.maskbook.poll',
     Profile = 'com.mask.profile',
     Trader = 'com.maskbook.trader',
-    Tip = 'com.maskbook.tip',
+    Tips = 'com.maskbook.tip',
     Transak = 'com.maskbook.transak',
     Valuables = 'com.maskbook.tweet',
     DAO = 'money.juicebox',

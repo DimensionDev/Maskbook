@@ -3,7 +3,7 @@ import { useActivatedPlugin } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
-import { BindingProof, ECKeyIdentifier, NextIDAction, NextIDPlatform, NextIDStoragePayload } from '@masknet/shared-base'
+import { BindingProof, ECKeyIdentifier, NextIDAction, NextIDStoragePayload } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -17,12 +17,12 @@ import { useAsyncFn, useAsyncRetry } from 'react-use'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import Services from '../../../extension/service'
 import { useI18N } from '../../../utils'
-import { getKvPayload, kvSet, useKvGet } from '../hooks/useKv'
+import { getKvPayload, setKvPatchData, useKvGet } from '../hooks/useKv'
 import { useProvedWallets } from '../hooks/useProvedWallets'
 import AddWalletView from './bodyViews/AddWallet'
 import SettingView from './bodyViews/Setting'
 import WalletsView from './bodyViews/Wallets'
-import Empty from './components/empty'
+import Empty from './components/Empty'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
 export interface TipsEntranceDialogProps {
@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         gap: theme.spacing(1.5),
     },
-    dContent: {
+    dialogContent: {
         height: 600,
         position: 'relative',
         boxSizing: 'border-box',
@@ -94,7 +94,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const [hasChanged, setHasChanged] = useState(false)
     const [rawPatchData, setRawPatchData] = useState<BindingProof[]>([])
     const [rawWalletList, setRawWalletList] = useState<BindingProof[]>([])
-    const supportedNetworks = useActivatedPlugin(PluginId.Tip, 'any')?.enableRequirement?.web3?.[
+    const supportedNetworks = useActivatedPlugin(PluginId.Tips, 'any')?.enableRequirement?.web3?.[
         NetworkPluginID.PLUGIN_EVM
     ]?.tipsSupportedChains
     const { showSnackbar } = useCustomSnackbar()
@@ -118,10 +118,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     }
     const { value: kv, retry: retryKv } = useKvGet()
     const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
-
     useEffect(() => {
         setHasChanged(false)
-        const walletsList = proofRes ? proofRes.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum) : []
+        const walletsList = JSON.parse(JSON.stringify(proofRes))
         walletsList.sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
         walletsList.forEach((wallet, idx) => (wallet.rawIdx = walletsList.length - idx - 1))
         if (kv?.ok && kv.val.proofs.length > 0 && walletsList.length > 0) {
@@ -130,7 +129,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             const result: BindingProof[] = walletsList.reduce<BindingProof[]>((res, x) => {
                 x.isDefault = 0
                 x.isPublic = 1
-                const temp = (kvCache?.content[PluginId.Tip] as BindingProof[]).filter((i) =>
+                const temp = (kvCache?.content[PluginId.Tips] as BindingProof[]).filter((i) =>
                     isSameAddress(x.identity, i.identity),
                 )
                 if (temp && temp.length > 0) {
@@ -209,7 +208,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 (payload.val as NextIDStoragePayload).signPayload,
             )
             if (!signResult) throw new Error('sign error')
-            await kvSet(payload.val, signResult.signature.signature, rawPatchData)
+            await setKvPatchData(payload.val, signResult.signature.signature, rawPatchData)
             showSnackbar('Persona signed successfully.', {
                 variant: 'success',
                 message: nowTime,
@@ -232,7 +231,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         } else {
             setDialog({
                 open: true,
-                pluginId: PluginId.Tip,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
             })
             WalletMessages.events.walletsUpdated.on(() => {
                 setBodyViewStep(BodyViewStep.AddWallet)
@@ -240,7 +239,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         }
     }, [account])
     const [confirmState, onConfirmRelease] = useAsyncFn(
-        async (wallet) => {
+        async (wallet: BindingProof | undefined) => {
             try {
                 if (!currentPersona?.publicHexKey || !wallet) throw new Error('create payload error')
 
@@ -284,13 +283,13 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     return (
         <InjectedDialog open={open} onClose={clickBack} title={bodyViewStep} titleTail={titleTail}>
             {loading ? (
-                <DialogContent className={classes.dContent}>
+                <DialogContent className={classes.dialogContent}>
                     <div className={classes.loading}>
                         <LoadingAnimation />
                     </div>
                 </DialogContent>
             ) : (
-                <DialogContent className={classes.dContent}>
+                <DialogContent className={classes.dialogContent}>
                     {showAlert && bodyViewStep === BodyViewStep.Main && (
                         <div className={classes.alertBox}>
                             <VerifyAlertLine onClose={() => setShowAlert(false)} />
@@ -327,7 +326,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         />
                     )}
                     {bodyViewStep === BodyViewStep.AddWallet && (
-                        <AddWalletView onCancel={refresh} bounds={rawWalletList} currentPersona={currentPersona} />
+                        <AddWalletView onCancel={refresh} bindings={rawWalletList} currentPersona={currentPersona} />
                     )}
 
                     {![BodyViewStep.AddWallet, BodyViewStep.Wallets].includes(bodyViewStep) && rawPatchData.length > 0 && (

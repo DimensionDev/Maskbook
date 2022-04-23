@@ -90,10 +90,10 @@ export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
         return (
             <InjectedDialog open={open}>
                 <DialogContent className={classes.content}>
-                    <div className={classes.title}>{t('plugin_tips_disconnect_dialog_title')}</div>
+                    <Typography className={classes.title}>{t('plugin_tips_disconnect_dialog_title')}</Typography>
                     <Typography>
                         <Trans
-                            i18nKey="plugin_tips_disconnect_intro"
+                            i18nKey="plugin_tips_disconnect_introduction"
                             components={{ strong: <span className={classes.strong} /> }}
                             values={{
                                 persona: personaName,

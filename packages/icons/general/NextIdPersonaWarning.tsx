@@ -1,8 +1,8 @@
 import { createIcon } from '../utils'
 import type { SvgIcon } from '@mui/material'
 
-export const NextIdPersonaWarningIcon: typeof SvgIcon = createIcon(
-    'NextIdPersonaWarning',
+export const NextIDPersonaWarningIcon: typeof SvgIcon = createIcon(
+    'NextIDPersonaWarning',
     <g>
         <path
             opacity="0.2"

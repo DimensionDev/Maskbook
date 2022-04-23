@@ -43,6 +43,7 @@ const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: W
     return (
         <>
             {wallets.map((x, idx) => {
+                console.log(x, 'ggg')
                 return (
                     <WalletItem
                         key={idx}
