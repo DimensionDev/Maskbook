@@ -125,7 +125,11 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     }
     const { value: kv, retry: retryKv } = useKvGet()
     const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
-    const list = useTipsWalletsList(proofRes, currentPersona?.publicHexKey, kv?.val as NextIDStorageInfo)
+    const list = useTipsWalletsList(
+        proofRes as BindingProof[],
+        currentPersona?.publicHexKey,
+        kv?.val as NextIDStorageInfo,
+    )
     useMemo(() => {
         setHasChanged(false)
         setRawPatchData(list)
