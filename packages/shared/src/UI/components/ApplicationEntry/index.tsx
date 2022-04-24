@@ -67,7 +67,11 @@ export function ApplicationEntry(props: Props) {
         <div
             className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
             onClick={
-                disabled ? () => {} : !nextIdVerification?.isNextIDVerify ? nextIdVerification?.onNextIDVerify : onClick
+                disabled
+                    ? () => {}
+                    : !nextIdVerification?.isNextIDVerify && nextIdVerification
+                    ? nextIdVerification?.onNextIDVerify
+                    : onClick
             }>
             <div className={classes.iconWrapper}>{icon}</div>
             <Typography className={classes.title} color="textPrimary">
