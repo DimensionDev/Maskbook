@@ -1,15 +1,18 @@
 import { BindingProof, EMPTY_LIST, NextIDStorageInfo } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { PluginId } from '@masknet/plugin-infra'
+import { cloneDeep } from 'lodash-unified'
 export function useTipsWalletsList(proofList: BindingProof[], identity?: string, kv?: NextIDStorageInfo) {
-    if (!proofList || !proofList.length) return EMPTY_LIST
-    proofList
+    const _proofList = cloneDeep(proofList)
+    const _kv = cloneDeep(kv)
+    if (!_proofList || !_proofList.length) return EMPTY_LIST
+    _proofList
         .sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
-        .forEach((wallet, idx) => (wallet.rawIdx = proofList.length - idx - 1))
-    if (kv && kv.proofs.length > 0 && proofList.length > 0) {
-        const kvCache = kv.proofs.find((x) => x.identity === identity)
+        .forEach((wallet, idx) => (wallet.rawIdx = _proofList.length - idx - 1))
+    if (_kv && _kv.proofs.length > 0 && _proofList.length > 0) {
+        const kvCache = _kv.proofs.find((x) => x.identity === identity)
         if (!kvCache) return EMPTY_LIST
-        const result: BindingProof[] = proofList.reduce<BindingProof[]>((res, x) => {
+        const result: BindingProof[] = _proofList.reduce<BindingProof[]>((res, x) => {
             x.isDefault = 0
             x.isPublic = 1
             const temp = (kvCache?.content[PluginId.Tips] as BindingProof[]).filter((i) =>
@@ -30,7 +33,7 @@ export function useTipsWalletsList(proofList: BindingProof[], identity?: string,
         }
         return result
     }
-    proofList.forEach((x, idx) => {
+    _proofList.forEach((x, idx) => {
         x.isPublic = 1
         x.isDefault = 0
         if (idx === 0) {
@@ -38,5 +41,5 @@ export function useTipsWalletsList(proofList: BindingProof[], identity?: string,
             return
         }
     })
-    return proofList
+    return _proofList
 }

@@ -146,14 +146,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         retryProof()
         retryKv()
     }
-    const titleTail = (
-        <WalletButton
-            step={bodyViewStep}
-            onClick={() => {
-                setBodyViewStep(bodyViewStep === BodyViewStep.Wallets ? BodyViewStep.AddWallet : BodyViewStep.Wallets)
-            }}
-        />
-    )
+
     const setAsDefault = (idx: number) => {
         const changed = cloneDeep(rawPatchData)
         changed.forEach((x: any) => (x.isDefault = 0))
@@ -255,7 +248,20 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     )
 
     return (
-        <InjectedDialog open={open} onClose={clickBack} title={bodyViewStep} titleTail={titleTail}>
+        <InjectedDialog
+            open={open}
+            onClose={clickBack}
+            title={bodyViewStep}
+            titleTail={
+                <WalletButton
+                    step={bodyViewStep}
+                    onClick={() => {
+                        setBodyViewStep(
+                            bodyViewStep === BodyViewStep.Wallets ? BodyViewStep.AddWallet : BodyViewStep.Wallets,
+                        )
+                    }}
+                />
+            }>
             {loading ? (
                 <DialogContent className={classes.dialogContent}>
                     <div className={classes.loading}>

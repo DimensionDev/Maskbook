@@ -1,7 +1,7 @@
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, isSameAddress, useWallets } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, isSameAddress, useWallets } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { useMemo } from 'react'
 import { useCopyToClipboard } from 'react-use'
@@ -103,7 +103,7 @@ export function WalletItem({
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
             ev.stopPropagation()
-            copyToClipboard(address)
+            copyToClipboard(formatEthereumAddress(address))
         },
         [],
         undefined,
