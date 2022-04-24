@@ -57,7 +57,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 'https://realmasknetwork.notion.site/Invest-in-your-favourite-fund-manager-via-dHEDGE-on-Twitter-ETH-and-Polygon-fb00ff2e626949279c83b59ed9207b9a',
         },
     ],
-    wrapperEntry: {
+    wrapperProps: {
         icon: <DHEDGEIcon />,
         style: {
             background:

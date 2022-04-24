@@ -159,7 +159,6 @@
     "wallet_search_no_result": "没有任何结果。",
     "wallet_confirm_with_password": "使用密码确认",
     "wallet_airdrop_nft_unclaimed_title": "未认领的NFT Airdrop：",
-    "plugin_not_enabled": "{{plugin}} (未启用)",
     "plugin_external_unknown_plugin": "发现新的未知Mask插件，您想要加载它们吗？",
     "plugin_external_loader_search_holder": "查找外部插件",
     "plugin_external_loader_search_button": "查找插件",

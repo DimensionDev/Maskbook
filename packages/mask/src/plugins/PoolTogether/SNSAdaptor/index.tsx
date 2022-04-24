@@ -47,7 +47,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             icon: <PoolTogetherIcon />,
         },
     ],
-    wrapperEntry: {
+    wrapperProps: {
         icon: <PoolTogetherIcon />,
         style: {
             background:

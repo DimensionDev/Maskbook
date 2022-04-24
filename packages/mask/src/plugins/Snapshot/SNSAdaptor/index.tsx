@@ -75,7 +75,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             icon: <SnapshotIcon />,
         },
     ],
-    wrapperEntry: {
+    wrapperProps: {
         icon: <SnapshotIcon />,
         style: {
             background:

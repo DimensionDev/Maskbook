@@ -45,7 +45,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
-    wrapperEntry: {
+    wrapperProps: {
         icon: <SwapIcon />,
         style: {
             background:

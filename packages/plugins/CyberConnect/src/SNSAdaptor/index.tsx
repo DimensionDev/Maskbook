@@ -44,7 +44,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             tutorialLink: 'https://cyberconnect.me/',
         },
     ],
-    wrapperEntry: {
+    wrapperProps: {
         icon: <CyberConnectIcon />,
         style: {
             background:

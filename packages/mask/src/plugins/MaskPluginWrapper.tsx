@@ -24,7 +24,7 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     content?: ReactNode
     action?: ReactNode
     publisher?: JSX.Element
-    wrapperEntry?: Plugin.SNSAdaptor.WrapperEntry
+    wrapperProps?: Plugin.SNSAdaptor.PluginWrapperProps
     publisherLink?: string
 }
 
@@ -89,8 +89,8 @@ const useStyles = makeStyles<{ style?: CSSProperties }>()((theme, props) => {
 })
 
 export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
-    const { open, title, children, action, publisher, publisherLink, content, wrapperEntry } = props
-    const { classes } = useStyles({ style: wrapperEntry?.style })
+    const { open, title, children, action, publisher, publisherLink, content, wrapperProps } = props
+    const { classes } = useStyles({ style: wrapperProps?.style })
 
     const personaConnectStatus = usePersonaConnectStatus()
     const { t } = useI18N()
@@ -140,7 +140,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
             style={{ display: open ? 'block' : 'none' }}
             onClick={(ev) => ev.stopPropagation()}>
             <div className={classes.header}>
-                {wrapperEntry?.icon ?? <MaskIcon size={16} />}
+                {wrapperProps?.icon ?? <MaskIcon size={16} />}
                 <Typography sx={{ marginLeft: 0.5 }} variant="body1" fontSize={15} fontWeight="700" color="#07101B">
                     {title ?? t('plugin_default_title')}
                 </Typography>
@@ -164,7 +164,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
 
 export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdaptor.Definition> = forwardRef(
     (props, ref) => {
-        const { ID, name, publisher, wrapperEntry } = props.definition
+        const { ID, name, publisher, wrapperProps } = props.definition
         const t = usePluginI18NField()
         const [width, setWidth] = useState<undefined | number>(undefined)
         const [open, setOpen] = useState<boolean>(false)
@@ -182,7 +182,7 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
 
         return (
             <MaskPostExtraInfoWrapper
-                wrapperEntry={wrapperEntry}
+                wrapperProps={wrapperProps}
                 open={open}
                 title={title || t(ID, name)}
                 width={width}

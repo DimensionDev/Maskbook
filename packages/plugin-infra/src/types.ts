@@ -246,7 +246,7 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
         /** This UI will be rendered as plugin wrapper page */
-        wrapperEntry?: WrapperEntry
+        wrapperProps?: PluginWrapperProps
         /**
          * A hook for if this plugin can enhance the #hash or $cash tag.
          */
@@ -339,7 +339,7 @@ export namespace Plugin.SNSAdaptor {
         category?: 'dapp' | 'other'
     }
 
-    export interface WrapperEntry {
+    export interface PluginWrapperProps {
         icon?: React.ReactNode
         style?: CSSProperties
     }

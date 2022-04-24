@@ -72,7 +72,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
-    wrapperEntry: {
+    wrapperProps: {
         icon: <FileServiceIcon />,
         style: {
             background:

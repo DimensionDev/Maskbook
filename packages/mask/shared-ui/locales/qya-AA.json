@@ -181,7 +181,6 @@
     "wallet_search_no_result": "crwdns8139:0crwdne8139:0",
     "wallet_confirm_with_password": "crwdns10141:0crwdne10141:0",
     "wallet_airdrop_nft_unclaimed_title": "crwdns8093:0crwdne8093:0",
-    "plugin_not_enabled": "crwdns10811:0{{plugin}}crwdne10811:0",
     "plugin_external_unknown_plugin": "crwdns10143:0crwdne10143:0",
     "plugin_external_loader_search_holder": "crwdns10145:0crwdne10145:0",
     "plugin_external_loader_search_button": "crwdns10147:0crwdne10147:0",

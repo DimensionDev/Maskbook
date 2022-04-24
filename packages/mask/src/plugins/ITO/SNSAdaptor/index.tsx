@@ -119,7 +119,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
-    wrapperEntry: {
+    wrapperProps: {
         icon: <MarketsClaimIcon />,
         style: {
             background:

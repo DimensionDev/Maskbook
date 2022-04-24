@@ -126,7 +126,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
-    wrapperEntry: {
+    wrapperProps: {
         icon: <RedPacketIcon />,
         style: {
             background:

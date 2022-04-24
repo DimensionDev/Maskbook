@@ -114,7 +114,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
-    wrapperEntry: {
+    wrapperProps: {
         icon: <FindTrumanIcon />,
         style: {
             background:
