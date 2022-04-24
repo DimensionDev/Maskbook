@@ -315,10 +315,8 @@ export namespace Plugin.SNSAdaptor {
         RenderEntryComponent?: (props: {
             disabled: boolean
             nextIdVerification?: {
-                toolTipHint: string
-                isNextIDVerify: boolean | undefined
-                isSNSConnectToCurrentPersona: boolean | undefined
-                onNextIDVerify(): void
+                toolTipHint?: string
+                onClick?: () => void
             }
         }) => JSX.Element | null
         /**

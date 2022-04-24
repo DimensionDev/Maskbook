@@ -214,7 +214,7 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
     } = ApplicationCurrentStatus ?? {}
     const { closeDialog } = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
 
-    const onNextIDVerify = useCallback(() => {
+    const onClick = useCallback(() => {
         closeDialog()
         CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
     }, [])
@@ -222,21 +222,22 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
     if (!application.entry.RenderEntryComponent) return null
 
     const RenderEntryComponent = application.entry.RenderEntryComponent
-
+    const shouldVerifyNextId = Boolean(!isNextIDVerify && ApplicationCurrentStatus)
+    const shouldDisplayToolTipHint = ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false
     return (
         <RenderEntryComponent
             disabled={!application.enabled || isNextIDVerify === undefined || !isSNSConnectToCurrentPersona}
             nextIdVerification={{
-                isNextIDVerify,
-                isSNSConnectToCurrentPersona,
-                toolTipHint: t('plugin_tips_sns_persona_unmatched', {
-                    currentPersonaPublicKey: formatPersonaPublicKey(currentPersonaPublicKey ?? '', 4),
-                    currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
-                        currentSNSConnectedPersonaPublicKey ?? '',
-                        4,
-                    ),
-                }),
-                onNextIDVerify,
+                toolTipHint: shouldDisplayToolTipHint
+                    ? t('plugin_tips_sns_persona_unmatched', {
+                          currentPersonaPublicKey: formatPersonaPublicKey(currentPersonaPublicKey ?? '', 4),
+                          currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
+                              currentSNSConnectedPersonaPublicKey ?? '',
+                              4,
+                          ),
+                      })
+                    : undefined,
+                onClick: shouldVerifyNextId ? onClick : undefined,
             }}
         />
     )
