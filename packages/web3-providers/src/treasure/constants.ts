@@ -1,3 +1,5 @@
+import { NetworkType } from '@masknet/web3-shared-evm'
+
 export const TREASURE_ARBITRUM_GRAPHQL_URL = 'https://api.thegraph.com/subgraphs/name/treasureproject/marketplace'
 export const TREASURE_BRIDGEWORLD_GRAPHQL_URL = 'https://api.thegraph.com/subgraphs/name/treasureproject/bridgeworld'
 export const TREASURE_METADATA_GRAPHQL_URL = 'https://api.thegraph.com/subgraphs/name/treasureproject/metadata'
@@ -23,3 +25,20 @@ export const SMOLVERSE_SUPPORT = [
 ]
 
 export const REALM_SUPPORT = ['0x4de95c1E202102E22E801590C51D7B979f167FBB']
+
+export const MARKETPLACE_CONTRACT_ADDRESS: Record<NetworkType, string> = {
+    [NetworkType.Ethereum]: '',
+    [NetworkType.Binance]: '',
+    [NetworkType.Polygon]: '',
+    [NetworkType.Arbitrum]: '0x09986B4e255B3c548041a30A2Ee312Fe176731c2',
+    [NetworkType.xDai]: '',
+    [NetworkType.Avalanche]: '',
+    [NetworkType.Celo]: '',
+    [NetworkType.Fantom]: '',
+    [NetworkType.Aurora]: '',
+    [NetworkType.Boba]: '',
+    [NetworkType.Fuse]: '',
+    [NetworkType.Metis]: '',
+    [NetworkType.Optimistic]: '',
+    [NetworkType.Conflux]: '',
+}
