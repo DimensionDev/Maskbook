@@ -18,7 +18,7 @@ import { LoadingButton } from '@mui/lab'
 import { Button, ButtonProps, DialogContent } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import { cloneDeep } from 'lodash-unified'
-import { FC, useCallback, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import Services from '../../../extension/service'
@@ -188,7 +188,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             return false
         }
     }, [hasChanged, rawPatchData])
-    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const { setDialog, open: providerDialogOpen } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     const onConnectWalletClick = useCallback(() => {
         if (account) {
             setBodyViewStep(BodyViewStep.AddWallet)
@@ -197,11 +199,15 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 open: true,
                 pluginID: NetworkPluginID.PLUGIN_EVM,
             })
-            WalletMessages.events.walletsUpdated.on(() => {
-                setBodyViewStep(BodyViewStep.AddWallet)
-            })
         }
     }, [account])
+
+    useEffect(() => {
+        if (!providerDialogOpen) return
+        return WalletMessages.events.walletsUpdated.on(() => {
+            setBodyViewStep(BodyViewStep.AddWallet)
+        })
+    }, [providerDialogOpen])
     const [confirmState, onConfirmRelease] = useAsyncFn(
         async (wallet: BindingProof | undefined) => {
             try {
