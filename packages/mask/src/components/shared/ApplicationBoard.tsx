@@ -226,17 +226,18 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
     return (
         <RenderEntryComponent
             disabled={!application.enabled || isNextIDVerify === undefined || !isSNSConnectToCurrentPersona}
-            nextIdVerification={{
-                isNextIDVerify,
-                isSNSConnectToCurrentPersona,
-                toolTipHint: t('plugin_tips_sns_persona_unmatched', {
-                    currentPersonaPublicKey: formatPersonaPublicKey(currentPersonaPublicKey ?? '', 4),
-                    currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
-                        currentSNSConnectedPersonaPublicKey ?? '',
-                        4,
-                    ),
-                }),
-                onNextIDVerify,
+            ApplicationEntryProps={{
+                disabled: !isNextIDVerify || !isSNSConnectToCurrentPersona,
+                tooltip: !isSNSConnectToCurrentPersona
+                    ? t('plugin_tips_sns_persona_unmatched', {
+                          currentPersonaPublicKey: formatPersonaPublicKey(currentPersonaPublicKey ?? '', 4),
+                          currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
+                              currentSNSConnectedPersonaPublicKey ?? '',
+                              4,
+                          ),
+                      })
+                    : '',
+                onClick: isNextIDVerify ? onNextIDVerify : undefined,
             }}
         />
     )

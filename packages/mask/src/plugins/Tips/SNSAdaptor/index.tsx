@@ -19,16 +19,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = base.name
             const icon = <TipsIcon />
             return {
-                RenderEntryComponent(EntryComponentProps) {
+                RenderEntryComponent({ disabled, ApplicationEntryProps }) {
                     const [open, setOpen] = useState(false)
 
                     return (
                         <>
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                {...EntryComponentProps}
                                 icon={icon}
+                                disabled={disabled}
                                 onClick={() => setOpen(true)}
+                                {...ApplicationEntryProps}
                             />
 
                             <TipsEntranceDialog open={open} onClose={() => setOpen(false)} />
