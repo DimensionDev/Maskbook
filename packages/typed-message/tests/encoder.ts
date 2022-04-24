@@ -1,29 +1,28 @@
-// TODO: move this test to @masknet/typed-message package
 import { test, expect } from '@jest/globals'
 import {
     makeTypedMessageText,
     encodeTypedMessageToDocument,
     makeTypedMessageSerializableTupleFromList,
     decodeTypedMessageFromDocument,
-} from '@masknet/typed-message'
+} from '../dist/base/index.js'
 
 const meta = new Map<string, any>([
     ['com.example.test', 'hi'],
     ['com.example.test2', { a: 1, b: [2], c: new Uint8Array([1, 2, 3, 4]) }],
 ])
 
-test('Serialize Text', () => {
-    const result = encodeTypedMessageToDocument(makeTypedMessageText('Hello world', meta))
+test('Serialize Text', async () => {
+    const result = await encodeTypedMessageToDocument(makeTypedMessageText('Hello world', meta))
     expect(result).toMatchSnapshot()
-    expect(decodeTypedMessageFromDocument(result)).toMatchSnapshot()
+    expect(await decodeTypedMessageFromDocument(result)).toMatchSnapshot()
 })
 
-test('Serialize Tuple', () => {
+test('Serialize Tuple', async () => {
     const msg = makeTypedMessageSerializableTupleFromList(
         makeTypedMessageText('Hello world', meta),
         makeTypedMessageText('another'),
     )
-    const result = encodeTypedMessageToDocument(msg)
+    const result = await encodeTypedMessageToDocument(msg)
     expect(result).toMatchSnapshot()
-    expect(decodeTypedMessageFromDocument(result)).toMatchSnapshot()
+    expect(await decodeTypedMessageFromDocument(result)).toMatchSnapshot()
 })
