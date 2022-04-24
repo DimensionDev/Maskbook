@@ -167,7 +167,7 @@ export function resolveAvatarLinkOnCurrentProvider(chainId: ChainId, asset: any,
         case NonFungibleAssetProvider.ZORA:
             return ''
         case NonFungibleAssetProvider.TREASURE:
-            return ''
+            return urlcat(resolveLinkOnTreasure(chainId), `/collection/${asset.slug ?? ''}`)
         default:
             return ''
     }
