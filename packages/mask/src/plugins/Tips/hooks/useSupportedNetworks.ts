@@ -1,7 +1,7 @@
 import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 export function useSupportedNetworks(keys: NetworkPluginID[]) {
-    // todo support solona flow when NextID supported
+    // todo support solana flow when NextID supported
     const networkMap = {
         [NetworkPluginID.PLUGIN_EVM]: { name: 'Evm Chian', icon: new URL('../assets/evmChains.png', import.meta.url) },
         [NetworkPluginID.PLUGIN_FLOW]: { name: 'Solana Chain', icon: new URL('../assets/solana.png', import.meta.url) },
