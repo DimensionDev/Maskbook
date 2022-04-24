@@ -923,6 +923,8 @@
     "popups_add_wallet": "crwdns16320:0crwdne16320:0",
     "popups_profile_photo": "crwdns16322:0crwdne16322:0",
     "popups_public_key": "crwdns16324:0crwdne16324:0",
+    "popups_create_persona": "crwdns16402:0crwdne16402:0",
+    "popups_restore_and_login": "crwdns16404:0crwdne16404:0",
     "popups_name": "crwdns16326:0crwdne16326:0",
     "popups_social_account": "crwdns16328:0crwdne16328:0",
     "popups_connected_wallets": "crwdns16330:0crwdne16330:0",

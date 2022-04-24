@@ -8,7 +8,6 @@
   "include": ["src", "src/**/*.json"],
   "references": [
     { "path": "../../theme" },
-    { "path": "../../mask/src" },
     { "path": "../../plugin-infra" },
     { "path": "../../shared-base" },
     { "path": "../../shared-base-ui" },
