@@ -28,7 +28,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 {...EntryComponentProps}
                                 icon={icon}
-                                onClick={() => setOpen(true)}
+                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
                             />
 
                             <TipsEntranceDialog open={open} onClose={() => setOpen(false)} />

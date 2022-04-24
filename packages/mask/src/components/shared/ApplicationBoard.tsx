@@ -222,7 +222,7 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
     } = ApplicationCurrentStatus ?? {}
     const { closeDialog } = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
 
-    const onClick = useCallback(() => {
+    const onNextIdVerify = useCallback(() => {
         closeDialog()
         CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
     }, [])
@@ -235,8 +235,8 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
     return (
         <RenderEntryComponent
             disabled={!application.enabled || isNextIDVerify === undefined || !isSNSConnectToCurrentPersona}
-            nextIdVerification={{
-                toolTipHint: shouldDisplayToolTipHint
+            toolTipHint={
+                shouldDisplayToolTipHint
                     ? t('plugin_tips_sns_persona_unmatched', {
                           currentPersonaPublicKey: formatPersonaPublicKey(currentPersonaPublicKey ?? '', 4),
                           currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
@@ -244,9 +244,9 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
                               4,
                           ),
                       })
-                    : undefined,
-                onClick: shouldVerifyNextId ? onClick : undefined,
-            }}
+                    : undefined
+            }
+            onClick={shouldVerifyNextId ? onNextIdVerify : undefined}
         />
     )
 }
