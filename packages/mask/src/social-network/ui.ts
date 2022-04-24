@@ -167,8 +167,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         provider.start(signal)
         provider.recognized.addListener((newValue, oldValue) => {
             if (document.visibilityState === 'hidden') return
-            if (newValue.identifier.equals(oldValue.identifier)) return
-            if (newValue.identifier.isUnknown) return
+            if (newValue.identifier === oldValue.identifier) return
+            if (!newValue.identifier) return
 
             MaskMessages.events.Native_visibleSNS_currentDetectedProfileUpdated.sendToBackgroundPage(
                 newValue.identifier.toText(),
@@ -177,7 +177,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         if (provider.hasDeprecatedPlaceholderName) {
             provider.recognized.addListener((id) => {
                 if (signal.aborted) return
-                if (id.identifier.isUnknown) return
+                if (!id.identifier) return
                 Services.Identity.resolveUnknownLegacyIdentity(id.identifier)
             })
         }

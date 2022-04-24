@@ -49,7 +49,6 @@ export const queryAvatarsDataURL: (
  */
 
 export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: ArrayBuffer | string): Promise<void> {
-    if (identifier instanceof ProfileIdentifier && identifier.isUnknown) return
     try {
         if (hasNativeAPI) {
             // ArrayBuffer is unreachable on Native side.

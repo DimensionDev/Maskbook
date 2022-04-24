@@ -26,7 +26,6 @@ import { pasteImageToCompositionDefault } from '../../social-network/defaults/au
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { injectPostActionsAtTwitter } from './injection/PostActions'
 import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
-import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
 import { injectOpenTipButtonOnProfile } from './injection/Tip/index'
@@ -190,14 +189,13 @@ const twitterUI: SocialNetworkUI.Definition = {
             collectVerificationPost,
         },
         steganography: {
+            // ! Change this might be a breaking change !
             password() {
-                // ! Change this might be a breaking change !
-                return new ProfileIdentifier(
-                    'twitter.com',
-                    ProfileIdentifier.getUserName(IdentityProviderTwitter.recognized.value.identifier) ||
-                        ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
-                        unreachable('Cannot figure out password' as never),
-                ).toText()
+                const id =
+                    IdentityProviderTwitter.recognized.value.identifier?.userId ||
+                    globalUIState.profiles.value?.[0].identifier.userId
+                if (!id) throw new Error('Cannot')
+                return ProfileIdentifier.of('twitter.com', id)!.toText()
             },
         },
     },

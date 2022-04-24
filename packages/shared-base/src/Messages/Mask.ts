@@ -9,7 +9,7 @@ import type {
     NonFungibleAssetProvider,
 } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
-import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
+import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier'
 import type { RelationFavor } from '../Persona/type'
 
 export interface MaskSettingsEvents {

@@ -28,9 +28,10 @@ const publicTarget: EncryptOptions['target'] = {
 }
 const example: EncryptOptions = {
     version: -38,
-    author: new ProfileIdentifier('localhost', 'alice'),
+    author: ProfileIdentifier.of('localhost', 'alice')!,
     message: makeTypedMessageText('hello world'),
     target: publicTarget,
+    network: 'localhost',
 }
 test('v37 public encryption', async () => {
     await testSet('minimal v37', { ...example, version: -37 })
@@ -42,6 +43,7 @@ test('v37 public encryption', async () => {
             target: publicTarget,
             message: complexMessage(),
             author: example.author,
+            network: 'localhost',
         },
         {
             ...minimalEncryptIO,
@@ -60,6 +62,7 @@ test('v38 public encryption', async () => {
             target: publicTarget,
             message: makeTypedMessageText('hello world'),
             author: example.author,
+            network: 'localhost',
         },
         {
             ...minimalEncryptIO,
@@ -70,11 +73,12 @@ test('v38 public encryption', async () => {
 
 test('v37 E2E encryption', async () => {
     const payload: EncryptOptions = {
-        author: new ProfileIdentifier('localhost', 'bob'),
+        network: 'localhost',
+        author: ProfileIdentifier.of('localhost', 'bob')!,
         message: makeTypedMessageText('hello world'),
         target: {
             type: 'E2E',
-            target: [new ProfileIdentifier('localhost', 'jack')],
+            target: [ProfileIdentifier.of('localhost', 'jack')!],
         },
         version: -37,
     }
@@ -129,7 +133,7 @@ test('v37 E2E encryption', async () => {
         {
             iv: encrypted.identifier.toIV(),
             postAESKey: encrypted.postKey,
-            target: [new ProfileIdentifier('localhost', 'joey')],
+            target: [ProfileIdentifier.of('localhost', 'joey')!],
             version: -37,
         },
         {
@@ -162,11 +166,12 @@ test('v37 E2E encryption', async () => {
 })
 test('v38 E2E encryption', async () => {
     const payload: EncryptOptions = {
-        author: new ProfileIdentifier('localhost', 'bob'),
+        network: 'localhost',
+        author: ProfileIdentifier.of('localhost', 'bob')!,
         message: makeTypedMessageText('hello world'),
         target: {
             type: 'E2E',
-            target: [new ProfileIdentifier('localhost', 'jack')],
+            target: [ProfileIdentifier.of('localhost', 'jack')!],
         },
         version: -38,
     }
@@ -224,7 +229,7 @@ test('v38 E2E encryption', async () => {
         {
             iv: encrypted.identifier.toIV(),
             postAESKey: encrypted.postKey,
-            target: [new ProfileIdentifier('localhost', 'joey')],
+            target: [ProfileIdentifier.of('localhost', 'joey')!],
             version: -38,
         },
         {

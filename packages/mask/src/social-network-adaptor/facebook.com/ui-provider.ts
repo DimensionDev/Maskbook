@@ -21,7 +21,6 @@ import { injectPageInspectorDefault } from '../../social-network/defaults/inject
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
 import { GrayscaleAlgorithm } from '@masknet/encryption'
 import { PaletteModeProviderFacebook, useThemeFacebookVariant } from './customization/custom'
-import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
 import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { globalUIState } from '../../social-network'
@@ -207,14 +206,13 @@ const facebookUI: SocialNetworkUI.Definition = {
         steganography: {
             // ! the color image cannot compression resistance in Facebook
             grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
+            // ! Change this might be a breaking change !
             password() {
-                // ! Change this might be a breaking change !
-                return new ProfileIdentifier(
-                    EnhanceableSite.Facebook,
-                    ProfileIdentifier.getUserName(IdentityProviderFacebook.recognized.value.identifier) ||
-                        ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
-                        unreachable('Cannot figure out password' as never),
-                ).toText()
+                const id =
+                    IdentityProviderFacebook.recognized.value.identifier?.userId ||
+                    globalUIState.profiles.value?.[0].identifier.userId
+                if (!id) throw new Error('Cannot')
+                return ProfileIdentifier.of(EnhanceableSite.Facebook, id)!.toText()
             },
         },
     },

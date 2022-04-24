@@ -1,11 +1,9 @@
-import { Identifier } from './type'
+import { Identifier } from './base'
 import { immerable } from 'immer'
+import type { Option } from 'ts-results'
 
 /**
- * The IdentifierMap is like a built-in Map<Identifier, T>.
- *
- * Because Identifier is not a value-type record so to make it behave like a value-type,
- * please use this class instead of Map<Identifier, T>.
+ * @deprecated
  */
 export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<IdentifierType, T> {
     /**
@@ -13,7 +11,10 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
      * @param __raw_map__ The origin data.
      * @param constructor The Identifier constructor. If provided, IdentifierMap will try to do a runtime check to make sure the identifier type is correct.
      */
-    constructor(public readonly __raw_map__: Map<string, T>, ...constructor: (new (...args: any) => IdentifierType)[]) {
+    constructor(
+        public readonly __raw_map__: Map<string, T>,
+        ...constructor: { name: string; from(x: string): Option<IdentifierType> }[]
+    ) {
         if (constructor) {
             this.constructorName = constructor.map((x) => x.name)
         }

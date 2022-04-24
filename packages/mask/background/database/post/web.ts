@@ -29,7 +29,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
         openDB<PostDB>('maskbook-post-v2', currentTryOpen, {
             async upgrade(db, oldVersion, _newVersion, transaction): Promise<void> {
                 type Version2PostRecord = {
-                    postBy: PrototypeLess<ProfileIdentifier>
+                    postBy: { userId: string; network: string } | undefined
                     identifier: string
                     recipientGroups?: unknown
                     recipients?: ProfileIdentifier[]
@@ -112,7 +112,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                         const next: Version3PostRecord = {
                             ...v2record,
                             recipients: newType,
-                            postBy: ProfileIdentifier.unknown,
+                            postBy: undefined,
                             foundAt: new Date(0),
                             recipientGroups: [],
                         }
@@ -214,7 +214,7 @@ export async function updatePostDB(
     const emptyRecord: PostRecord = {
         identifier: updateRecord.identifier,
         recipients: new IdentifierMap(new Map()),
-        postBy: ProfileIdentifier.unknown,
+        postBy: undefined,
         foundAt: new Date(),
     }
     const currentRecord = (await queryPostDB(updateRecord.identifier, t)) || emptyRecord
@@ -293,6 +293,7 @@ export async function queryPostPagedDB(
 
     for await (const cursor of t.objectStore('post').iterate()) {
         if (cursor.value.encryptBy !== linked.toText()) continue
+        if (!cursor.value.postBy) continue
         if (!options.userIds.includes(cursor.value.postBy.userId)) continue
 
         const postIdentifier = Identifier.fromString(cursor.value.identifier, PostIVIdentifier).unwrap()
@@ -319,7 +320,7 @@ function postOutDB(db: PostDBRecord): PostRecord {
     const { identifier, foundAt, postBy, recipients, postCryptoKey, encryptBy, interestedMeta, summary, url } = db
     return {
         identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(),
-        postBy: restorePrototype(postBy, ProfileIdentifier.prototype),
+        postBy: ProfileIdentifier.of(postBy?.network, postBy?.userId) || undefined,
         recipients: recipients === true ? 'everyone' : new IdentifierMap(recipients, ProfileIdentifier),
         foundAt: foundAt,
         postCryptoKey: postCryptoKey,

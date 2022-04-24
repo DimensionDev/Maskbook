@@ -190,15 +190,15 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
     const { currentPersona } = PersonaContext.useContainer()
     const lastRecognized = useLastRecognizedIdentity()
     const username = useMemo(() => {
-        return lastState.username || (!lastRecognized.identifier.isUnknown ? lastRecognized.identifier.userId : '')
+        return lastState.username || lastRecognized.identifier?.userId
     }, [lastState, lastRecognized])
     const personas = useMyPersonas()
 
     const checkSNSConnectToCurrentPersona = useCallback((persona: Persona) => {
-        return (
-            persona?.linkedProfiles.get(new ProfileIdentifier(ui.networkIdentifier, username))
-                ?.connectionConfirmState === 'confirmed'
-        )
+        return username
+            ? persona?.linkedProfiles.get(ProfileIdentifier.of(ui.networkIdentifier, username)!)
+                  ?.connectionConfirmState === 'confirmed'
+            : undefined
     }, [])
 
     const { value: ApplicationCurrentStatus } = useAsync(async () => {
@@ -209,7 +209,9 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
         )
         return {
             isSNSConnectToCurrentPersona: checkSNSConnectToCurrentPersona(currentPersona),
-            isNextIDVerify: await NextIDProof.queryIsBound(currentPersona.publicHexKey ?? '', platform, username),
+            isNextIDVerify: username
+                ? await NextIDProof.queryIsBound(currentPersona.publicHexKey ?? '', platform, username)
+                : false,
             currentPersonaPublicKey: currentPersona?.fingerprint,
             currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.fingerprint,
         }

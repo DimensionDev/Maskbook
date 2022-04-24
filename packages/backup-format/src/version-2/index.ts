@@ -100,7 +100,7 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
         const normalizedPost: NormalizedBackup.PostBackup = {
             identifier: identifier.val,
             foundAt: new Date(post.foundAt),
-            postBy: postBy.unwrapOr(ProfileIdentifier.unknown),
+            postBy: postBy.unwrapOr(undefined),
             interestedMeta,
             encryptBy: encryptBy.toOption(),
             summary: post.summary ? Some(post.summary) : None,
@@ -237,7 +237,7 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
         const item: BackupJSONFileVersion2['posts'][0] = {
             identifier: id.toText(),
             foundAt: Number(data.foundAt),
-            postBy: data.postBy.toText(),
+            postBy: data.postBy?.toText() || 'person:',
             interestedMeta: MetaToJson(data.interestedMeta),
             encryptBy: data.encryptBy.unwrapOr(undefined)?.toText(),
             summary: data.summary.unwrapOr(undefined),

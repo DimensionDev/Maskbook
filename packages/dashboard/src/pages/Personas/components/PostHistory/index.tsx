@@ -3,6 +3,7 @@ import { usePostHistory } from '../../hooks/usePostHistory'
 import { PostHistoryRow } from './PostHistoryRow'
 import { memo, useState } from 'react'
 import { Placeholder } from './Placeholder'
+import type { PostRecord } from '@masknet/shared-base'
 
 interface PostHistoryProps {
     network: string
@@ -20,7 +21,7 @@ export const PostHistory = memo(({ network }: PostHistoryProps) => {
         <Stack justifyContent="space-between" height="100%">
             <Box flex={1} mt={1}>
                 {value?.map((x) => (
-                    <PostHistoryRow network={network} post={x} key={x.url} />
+                    <PostHistoryRow network={network} post={x as PostRecord} key={x.url} />
                 ))}
             </Box>
             {!loading && !error && !!value?.length ? (

@@ -58,15 +58,13 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
             function collectPostInfo() {
                 const { pid, messages, handle, name, avatar } = postParser(activityNode)
                 if (!pid) return
-                const postBy = handle
-                    ? new ProfileIdentifier(mindsBase.networkIdentifier, handle)
-                    : ProfileIdentifier.unknown
+                const postBy = ProfileIdentifier.of(mindsBase.networkIdentifier, handle)
                 info.postID.value = pid
-                if (!info.postBy.value.equals(postBy)) info.postBy.value = postBy
+                info.postBy.value = postBy
                 info.nickname.value = name
                 info.avatarURL.value = avatar || null
 
-                if (name) {
+                if (name && postBy) {
                     const currentProfile = getCurrentIdentifier()
 
                     Services.Identity.updateProfileInfo(postBy, {

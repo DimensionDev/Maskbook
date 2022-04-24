@@ -67,18 +67,17 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     // #region setup username
     const lastRecognized = useLastRecognizedIdentity()
-    const getUsername = () =>
-        lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
+    const getUsername = () => lastState.username || lastRecognized.identifier?.userId || ''
     const [username, setUsername] = useState(getUsername)
 
     const disableVerify =
-        lastRecognized.identifier.isUnknown || !lastState.username
+        !lastRecognized.identifier || !lastState.username
             ? false
             : lastRecognized.identifier.userId !== lastState.username
 
     useEffect(() => {
         const handler = (val: IdentityResolved) => {
-            if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
+            if (username === '' && val.identifier) setUsername(val.identifier.userId)
         }
         ui.collecting.identityProvider?.recognized.addListener(handler)
 
@@ -115,8 +114,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }, [])
 
     const onConnect = async () => {
+        const id = ProfileIdentifier.of(ui.networkIdentifier, username)
+        if (!id) return
         // attach persona with SNS profile
-        await Services.Identity.attachProfile(new ProfileIdentifier(ui.networkIdentifier, username), persona, {
+        await Services.Identity.attachProfile(id, persona, {
             connectionConfirmState: 'confirmed',
         })
 
@@ -126,6 +127,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }
 
     const onVerify = async () => {
+        if (!username) return
         if (!persona_?.publicHexKey) return
         const collectVerificationPost = ui.configuration.nextIDConfig?.collectVerificationPost
 

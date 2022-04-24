@@ -19,13 +19,13 @@ import { delay } from '@dimensiondev/kit'
 export interface DecryptPostSuccessProps {
     message: TypedMessage
     /** The author in the payload */
-    author: ProfileIdentifier | undefined
+    author: ProfileIdentifier | null
     /** The author of the encrypted post */
-    postedBy: ProfileIdentifier | undefined
-    whoAmI: ProfileIdentifier
+    postedBy: ProfileIdentifier | null
+    whoAmI: ProfileIdentifier | null
 }
 
-function useCanAppendShareTarget(whoAmI: ProfileIdentifier) {
+function useCanAppendShareTarget(whoAmI: ProfileIdentifier | null): whoAmI is ProfileIdentifier {
     const version = usePostInfoDetails.version()
     const sharedPublic = usePostInfoDetails.publicShared()
     const authorInPayload = usePostClaimedAuthor()
@@ -34,11 +34,14 @@ function useCanAppendShareTarget(whoAmI: ProfileIdentifier) {
 
     if (sharedPublic) return false
     if (version !== -38) return false
-    if (!whoAmI.equals(postAuthor)) return false
+    if (!whoAmI) return false
+    if (whoAmI !== postAuthor) return false
     return true
 }
 export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
-    if (useCanAppendShareTarget(props.whoAmI)) return <DecryptPostSuccessAppendShare {...props} />
+    const { whoAmI } = props
+    const canShare = useCanAppendShareTarget(whoAmI)
+    if (canShare) return <DecryptPostSuccessAppendShare {...props} whoAmI={whoAmI} />
     return <DecryptPostSuccessBase {...props} />
 })
 const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
@@ -63,7 +66,9 @@ const useStyles = makeStyles()((theme) => {
         addRecipientsLink: { cursor: 'pointer', marginLeft: theme.spacing(1) },
     }
 })
-const DecryptPostSuccessAppendShare = memo(function DecryptPostSuccessAppendShare(props: DecryptPostSuccessProps) {
+const DecryptPostSuccessAppendShare = memo(function DecryptPostSuccessAppendShare(
+    props: DecryptPostSuccessProps & { whoAmI: ProfileIdentifier },
+) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [showDialog, setShowDialog] = useState(false)

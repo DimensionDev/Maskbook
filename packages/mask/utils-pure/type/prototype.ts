@@ -1,5 +1,6 @@
 /**
  * Remove all methods from the type T to make it "prototype-less".
+ * @deprecated
  */
 export type PrototypeLess<T> = {
     [key in keyof T]: T[key] extends (...args: any) => unknown ? unknown : PrototypeLess<T[key]>
@@ -12,6 +13,7 @@ export type PrototypeLess<T> = {
  * @param obj The prototype-less object.
  * @param prototype The prototype object
  * @returns The original object with prototype restored.
+ * @deprecated
  */
 export function restorePrototype<PrototypeLessT extends undefined | PrototypeLess<OriginalT>, OriginalT extends object>(
     obj: PrototypeLessT,
@@ -22,6 +24,9 @@ export function restorePrototype<PrototypeLessT extends undefined | PrototypeLes
     return obj as any
 }
 
+/**
+ * @deprecated
+ */
 export function restorePrototypeArray<
     PrototypeLessT extends undefined | PrototypeLess<OriginalT>[],
     OriginalT extends object,

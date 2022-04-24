@@ -11,7 +11,7 @@ export default meta({
 
 export const ConnectedPersonaLine = of({
     args: {
-        profileIdentifiers: [new ProfileIdentifier(EnhanceableSite.Twitter, 'userId')],
+        profileIdentifiers: [ProfileIdentifier.of(EnhanceableSite.Twitter, 'userId')!],
         onDisconnect: action('onDisconnect'),
     },
 })

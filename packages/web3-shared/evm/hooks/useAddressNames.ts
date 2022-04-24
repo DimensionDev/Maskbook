@@ -4,7 +4,7 @@ import { useWeb3Context } from '../context'
 
 export function useAddressNames(
     identity: {
-        identifier: {
+        identifier?: {
             userId: string
             network: string
         }
@@ -18,7 +18,9 @@ export function useAddressNames(
     const { getAddressNamesList } = useWeb3Context()
 
     return useAsyncRetry(async () => {
-        const addressNames = await getAddressNamesList(identity)
+        const addressNames = identity.identifier
+            ? await getAddressNamesList({ ...identity, identifier: identity.identifier })
+            : []
         return sorter ? addressNames.sort(sorter) : addressNames
     }, [identity, getAddressNamesList])
 }

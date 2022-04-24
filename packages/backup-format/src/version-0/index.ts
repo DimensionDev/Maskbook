@@ -51,7 +51,7 @@ export function normalizeBackupVersion0(file: BackupJSONFileVersion0): Normalize
 
     if (username && username !== '$unknown' && username !== '$local') {
         const profile: NormalizedBackup.ProfileBackup = {
-            identifier: new ProfileIdentifier('facebook.com', username),
+            identifier: ProfileIdentifier.of('facebook.com', username)!,
             linkedPersona: Some(persona.identifier),
             createdAt: None,
             updatedAt: None,

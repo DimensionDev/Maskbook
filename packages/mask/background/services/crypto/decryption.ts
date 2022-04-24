@@ -62,7 +62,7 @@ export async function* decryptionWithSocialNetworkDecoding(
     if (encoded.type === 'text') {
         decoded = socialNetworkDecoder(context.currentSocialNetwork, encoded.text)[0]
     } else {
-        if (!context.authorHint || context.authorHint.isUnknown) {
+        if (!context.authorHint) {
             return yield new DecryptError(DecryptErrorReasons.UnrecognizedAuthor, undefined)
         }
         const result = await steganographyDecodeImage(encoded.image, {
@@ -81,10 +81,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
     const parse = await parsePayload(payload)
     if (parse.err) return null
 
-    const { currentSocialNetwork, postURL } = context
-    let { currentProfile, authorHint } = context
-    if (currentProfile?.isUnknown) currentProfile = null
-    if (authorHint?.isUnknown) authorHint = null
+    const { currentSocialNetwork, postURL, currentProfile, authorHint } = context
 
     // #region Identify the PostIdentifier
     const iv = parse.val.encryption.unwrapOr(null)?.iv.unwrapOr(null)
@@ -139,10 +136,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                     // public post will not call this function.
                     // and recipients only will be set when posting/appending recipients.
                     recipients: new IdentifierMap(new Map()),
-                    postBy:
-                        authorHint ||
-                        parse.safeUnwrap().author.unwrapOr(null)?.unwrapOr(null) ||
-                        ProfileIdentifier.unknown,
+                    postBy: authorHint || parse.safeUnwrap().author.unwrapOr(undefined)?.unwrapOr(undefined),
                     url: postURL,
                 })
             },

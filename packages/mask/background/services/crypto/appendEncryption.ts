@@ -24,7 +24,6 @@ export async function appendShareTarget(
     const postRec = await queryPostDB(post)
     const postBy = postRec?.encryptBy || postRec?.postBy || whoAmI
 
-    if (whoAmI?.isUnknown) throw new Error('Cannot find private key')
     if (!key) throw new Error('No post key found')
 
     const e2e = await appendEncryptionTarget(
