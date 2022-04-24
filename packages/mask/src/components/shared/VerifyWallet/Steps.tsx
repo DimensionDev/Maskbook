@@ -91,7 +91,7 @@ export enum SignSteps {
 
 interface StepsProps {
     step: SignSteps
-    nickName?: string
+    nickname?: string
     wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
     disableConfirm?: boolean
     confirmLoading: boolean
@@ -112,7 +112,7 @@ export function Steps(props: StepsProps) {
     const navigate = useNavigate()
     const {
         changeWallet,
-        nickName,
+        nickname,
         wallet,
         disableConfirm,
         onConfirm,
@@ -180,7 +180,7 @@ export function Steps(props: StepsProps) {
                         <div className={classes.stepRow}>
                             <Typography className={classes.stepTitle}>
                                 {t('wallet_verify_persona_name', {
-                                    personaName: nickName ?? 'Persona Name',
+                                    personaName: nickname ?? 'Persona Name',
                                 })}
                             </Typography>
                             <Typography className={classes.stepIntro}>

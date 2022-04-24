@@ -42,7 +42,6 @@ export function useTipsWalletsList(
         x.isDefault = 0
         if (idx === 0) {
             x.isDefault = 1
-            return
         }
     })
     return proofs

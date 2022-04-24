@@ -63,7 +63,6 @@ export declare namespace Web3Plugin {
             NetworkPluginID,
             {
                 supportedChainIds?: number[]
-                tipsSupportedChains?: Array<{ name: string; icon: URL }>
             }
         >
     >

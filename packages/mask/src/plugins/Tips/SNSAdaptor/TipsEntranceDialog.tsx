@@ -26,6 +26,7 @@ import { useI18N } from '../../../utils'
 import { getKvPayload, setKvPatchData, useKvGet } from '../hooks/useKv'
 import { useTipsWalletsList } from '../hooks/useTipsWalletsList'
 import { useProvedWallets } from '../hooks/useProvedWallets'
+import { useSupportedNetworks } from '../hooks/useSupportedNetworks'
 import AddWalletView from './bodyViews/AddWallet'
 import SettingView from './bodyViews/Setting'
 import WalletsView from './bodyViews/Wallets'
@@ -101,9 +102,11 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const [hasChanged, setHasChanged] = useState(false)
     const [rawPatchData, setRawPatchData] = useState<BindingProof[]>([])
     const [rawWalletList, setRawWalletList] = useState<BindingProof[]>([])
-    const supportedNetworks = useActivatedPlugin(PluginId.Tips, 'any')?.enableRequirement?.web3?.[
-        NetworkPluginID.PLUGIN_EVM
-    ]?.tipsSupportedChains
+    const plugin = useActivatedPlugin(PluginId.Tips, 'any')
+    const supportedNetworks = useSupportedNetworks(
+        Object.keys(plugin?.enableRequirement.web3 ?? {}) as NetworkPluginID[],
+    )
+
     const { showSnackbar } = useCustomSnackbar()
     const account = useAccount()
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
