@@ -16,15 +16,14 @@ import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
 import { ApplicationSettingDialog } from './ApplicationSettingDialog'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
-import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { Persona } from '../../database'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import { useSetupGuideStatusState } from '../DataSource/useNextID'
 import { useMyPersonas } from '../DataSource/useMyPersonas'
-import { currentSetupGuideStatus } from '../../settings/settings'
-import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 
 const useStyles = makeStyles()((theme) => {
@@ -180,14 +179,7 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
     const ui = activatedSocialNetworkUI
     const { t } = useI18N()
     const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
-    const lastState_ = useValueRef(currentSetupGuideStatus[ui.networkIdentifier])
-    const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
-        try {
-            return JSON.parse(lastState_)
-        } catch {
-            return {}
-        }
-    }, [lastState_])
+    const lastState = useSetupGuideStatusState()
     const lastRecognized = useLastRecognizedIdentity()
     const username = useMemo(() => {
         return lastState.username || (!lastRecognized.identifier.isUnknown ? lastRecognized.identifier.userId : '')

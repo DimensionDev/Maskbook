@@ -44,17 +44,31 @@ interface Props {
     icon: React.ReactNode
     title: React.ReactNode
     disabled?: boolean
-    tooltip?: string
+    nextIdVerification?: {
+        toolTipHint: string
+        isNextIDVerify: boolean | undefined
+        isSNSConnectToCurrentPersona: boolean | undefined
+        onNextIDVerify(): void
+    }
     onClick: () => void
 }
 
 export function ApplicationEntry(props: Props) {
-    const { title, onClick, disabled = false, icon, tooltip } = props
+    const { title, onClick, disabled: _disabled = false, icon, nextIdVerification } = props
+    const disabled =
+        nextIdVerification &&
+        (nextIdVerification?.isNextIDVerify === undefined || !nextIdVerification?.isSNSConnectToCurrentPersona)
+            ? true
+            : _disabled
+    const tooltip =
+        nextIdVerification?.isSNSConnectToCurrentPersona === false ? nextIdVerification?.toolTipHint : undefined
     const { classes } = useStyles()
     const jsx = (
         <div
             className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
-            onClick={disabled ? () => {} : onClick}>
+            onClick={
+                disabled ? () => {} : !nextIdVerification?.isNextIDVerify ? nextIdVerification?.onNextIDVerify : onClick
+            }>
             <div className={classes.iconWrapper}>{icon}</div>
             <Typography className={classes.title} color="textPrimary">
                 {title}

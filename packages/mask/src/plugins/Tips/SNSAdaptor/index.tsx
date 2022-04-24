@@ -14,30 +14,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = base.name
             const icon = <TipsIcon />
             return {
-                RenderEntryComponent({ disabled, nextIdVerification }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
 
                     return (
                         <>
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                disabled={
-                                    nextIdVerification?.isNextIDVerify === undefined ||
-                                    !nextIdVerification?.isSNSConnectToCurrentPersona
-                                        ? true
-                                        : disabled
-                                }
+                                {...EntryComponentProps}
                                 icon={icon}
-                                onClick={() =>
-                                    !nextIdVerification?.isNextIDVerify
-                                        ? nextIdVerification?.onNextIDVerify()
-                                        : setOpen(true)
-                                }
-                                tooltip={
-                                    nextIdVerification?.isSNSConnectToCurrentPersona === false
-                                        ? nextIdVerification?.toolTipHint
-                                        : undefined
-                                }
+                                onClick={() => setOpen(true)}
                             />
 
                             <TipsEntranceDialog open={open} onClose={() => setOpen(false)} />
