@@ -2,7 +2,9 @@ import { BindingProof, NextIDAction, NextIDPlatform } from '@masknet/shared-base
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
+    ChainId,
     isSameAddress,
+    NetworkType,
     ProviderType,
     resolveProviderName,
     useAccount,
@@ -18,11 +20,28 @@ import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../../../extension/service'
 import { useCustomSnackbar } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
-import { NetworkPluginID, useProviderDescriptor, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import {
+    NetworkPluginID,
+    useProviderDescriptor,
+    useReverseAddress,
+    useWeb3State,
+    Web3Plugin,
+} from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../../utils'
+import type { Persona } from '../../../../database'
 
 interface AddWalletViewProps {
-    currentPersona: any
+    currentPersona: Pick<
+        Persona,
+        | 'publicHexKey'
+        | 'identifier'
+        | 'hasPrivateKey'
+        | 'mnemonic'
+        | 'createdAt'
+        | 'updatedAt'
+        | 'linkedProfiles'
+        | 'nickname'
+    >
     bindings: BindingProof[]
     onCancel: () => void
 }
@@ -42,7 +61,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
     const { Utils } = useWeb3State() ?? {}
     const isNotEvm = useProviderDescriptor()?.providerAdaptorPluginID !== NetworkPluginID.PLUGIN_EVM
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
-    const isBound = bindings.filter((x) => isSameAddress(x.identity, wallet.account)).length > 0
+    const isBound = bindings.some((x) => isSameAddress(x.identity, wallet.account))
 
     const walletName = () => {
         if (isNotEvm) return `${resolveProviderName(providerType)} Wallet`
@@ -144,14 +163,9 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
                 isBound={isBound}
                 notEvm={isNotEvm}
                 notConnected={!wallet.account}
-                wallet={{
-                    account: wallet.account,
-                    chainId: wallet.chainId,
-                    networkType: wallet.networkType,
-                    providerType: wallet.providerType,
-                }}
+                wallet={wallet as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>}
                 walletName={walletName()}
-                persona={currentPersona}
+                nickname={currentPersona.nickname}
                 step={step}
                 confirmLoading={confirmLoading || payloadLoading}
                 disableConfirm={isBound || isNotEvm || !wallet.account}

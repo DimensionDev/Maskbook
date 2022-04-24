@@ -108,6 +108,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const account = notInPop ? frontAccount : wallet.account
     const { Utils } = useWeb3State() ?? {}
     const { value: domain } = useReverseAddress(wallet.account)
+    const _providerType = wallet.providerType ?? providerType
     return account ? (
         <section className={classes.currentAccount}>
             <WalletIcon
@@ -118,7 +119,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    {wallet.providerType ?? providerType !== ProviderType.MaskWallet ? (
+                    {_providerType !== ProviderType.MaskWallet ? (
                         <Typography className={classes.accountName}>
                             {domain && Utils?.formatDomainName
                                 ? Utils.formatDomainName(domain)

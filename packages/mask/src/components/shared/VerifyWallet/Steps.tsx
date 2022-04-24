@@ -17,7 +17,6 @@ import { useEffect } from 'react'
 import { useI18N } from '../../../utils'
 import type { Web3Plugin } from '@masknet/plugin-infra/src/web3-types'
 import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
-import type { PersonaInformation } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({
@@ -92,7 +91,7 @@ export enum SignSteps {
 
 interface StepsProps {
     step: SignSteps
-    persona: PersonaInformation
+    nickname?: string
     wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
     disableConfirm?: boolean
     confirmLoading: boolean
@@ -113,7 +112,7 @@ export function Steps(props: StepsProps) {
     const navigate = useNavigate()
     const {
         changeWallet,
-        persona,
+        nickname,
         wallet,
         disableConfirm,
         onConfirm,
@@ -181,7 +180,7 @@ export function Steps(props: StepsProps) {
                         <div className={classes.stepRow}>
                             <Typography className={classes.stepTitle}>
                                 {t('wallet_verify_persona_name', {
-                                    personaName: persona.nickname ?? 'Persona Name',
+                                    personaName: nickname ?? 'Persona Name',
                                 })}
                             </Typography>
                             <Typography className={classes.stepIntro}>

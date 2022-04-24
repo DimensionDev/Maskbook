@@ -37,8 +37,8 @@ export interface BindingProof {
     is_valid: boolean
     last_checked_at: string
     rawIdx?: number
-    isDefault?: number
-    isPublic?: number
+    isDefault?: 0 | 1
+    isPublic?: 0 | 1
 }
 
 interface Pagination {
@@ -59,9 +59,9 @@ export interface NextIDStoragePayload {
     signPayload: string
     createdAt: string
 }
-export interface NextIDStorageInfo {
+export interface NextIDStorageInfo<T = unknown> {
     persona: string
-    proofs: NextIDStorageProofs<unknown>[]
+    proofs: NextIDStorageProofs<T>[]
 }
 export interface NextIDStorageProofs<T> {
     content: {

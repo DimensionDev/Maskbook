@@ -40,54 +40,36 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props {
+interface ApplicationEntryProps {
     icon: React.ReactNode
     title: React.ReactNode
     disabled?: boolean
-    nextIdVerification?: {
-        toolTipHint: string
-        isNextIDVerify: boolean | undefined
-        isSNSConnectToCurrentPersona: boolean | undefined
-        onNextIDVerify(): void
-    }
+    tooltipHint?: string
     onClick: () => void
 }
 
-export function ApplicationEntry(props: Props) {
-    const { title, onClick, disabled: _disabled = false, icon, nextIdVerification } = props
-    const disabled =
-        nextIdVerification &&
-        (nextIdVerification?.isNextIDVerify === undefined || !nextIdVerification?.isSNSConnectToCurrentPersona)
-            ? true
-            : _disabled
-    const tooltip =
-        nextIdVerification?.isSNSConnectToCurrentPersona === false ? nextIdVerification?.toolTipHint : undefined
+export function ApplicationEntry(props: ApplicationEntryProps) {
+    const { title, onClick, disabled = false, icon, tooltipHint } = props
     const { classes } = useStyles()
     const jsx = (
         <div
             className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
-            onClick={
-                disabled
-                    ? () => {}
-                    : !nextIdVerification?.isNextIDVerify && nextIdVerification
-                    ? nextIdVerification?.onNextIDVerify
-                    : onClick
-            }>
+            onClick={disabled ? () => {} : onClick}>
             <div className={classes.iconWrapper}>{icon}</div>
             <Typography className={classes.title} color="textPrimary">
                 {title}
             </Typography>
         </div>
     )
-    return tooltip ? (
+    return tooltipHint ? (
         <ShadowRootTooltip
             PopperProps={{
                 disablePortal: true,
             }}
             placement="top"
             arrow
-            disableHoverListener={!tooltip}
-            title={<Typography>{tooltip}</Typography>}>
+            disableHoverListener={!tooltipHint}
+            title={<Typography>{tooltipHint}</Typography>}>
             {jsx}
         </ShadowRootTooltip>
     ) : (

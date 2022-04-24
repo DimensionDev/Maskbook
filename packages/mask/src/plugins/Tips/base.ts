@@ -1,6 +1,7 @@
 import { Plugin, PluginId } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginId.Tips,
@@ -29,8 +30,8 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Aurora,
                     ChainId.Conflux,
                 ],
-                tipsSupportedChains: [{ name: 'Evm Chain', icon: new URL('./assets/Tip.png', import.meta.url) }],
             },
         },
     },
+    i18n: languages,
 }

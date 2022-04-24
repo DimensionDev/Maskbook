@@ -1,20 +1,27 @@
 import { BindingProof, EMPTY_LIST, NextIDStorageInfo } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { PluginId } from '@masknet/plugin-infra'
-export function useTipsWalletsList(proofList: BindingProof[], identity?: string, kv?: NextIDStorageInfo) {
+import { sortBy } from 'lodash-unified'
+
+export function useTipsWalletsList(
+    proofList: BindingProof[] | undefined,
+    identity?: string,
+    kv?: NextIDStorageInfo<BindingProof[]>,
+) {
     if (!proofList || !proofList.length) return EMPTY_LIST
-    proofList
-        .sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
-        .forEach((wallet, idx) => (wallet.rawIdx = proofList.length - idx - 1))
-    if (kv && kv.proofs.length > 0 && proofList.length > 0) {
+    const proofs = sortBy(proofList, (x) => -Number.parseInt(x.last_checked_at, 10)).map(
+        (wallet, index, list): BindingProof => ({
+            ...wallet,
+            rawIdx: list.length - index - 1,
+        }),
+    )
+    if (kv && kv.proofs.length > 0 && proofs.length > 0) {
         const kvCache = kv.proofs.find((x) => x.identity === identity)
         if (!kvCache) return EMPTY_LIST
-        const result: BindingProof[] = proofList.reduce<BindingProof[]>((res, x) => {
+        const result = proofs.reduce<BindingProof[]>((res, x) => {
             x.isDefault = 0
             x.isPublic = 1
-            const temp = (kvCache?.content[PluginId.Tips] as BindingProof[]).filter((i) =>
-                isSameAddress(x.identity, i.identity),
-            )
+            const temp = (kvCache?.content[PluginId.Tips]).filter((i) => isSameAddress(x.identity, i.identity))
             if (temp && temp.length > 0) {
                 x.isDefault = temp[0].isDefault
                 x.isPublic = temp[0].isPublic
@@ -30,13 +37,12 @@ export function useTipsWalletsList(proofList: BindingProof[], identity?: string,
         }
         return result
     }
-    proofList.forEach((x, idx) => {
+    proofs.forEach((x, idx) => {
         x.isPublic = 1
         x.isDefault = 0
         if (idx === 0) {
             x.isDefault = 1
-            return
         }
     })
-    return proofList
+    return proofs
 }

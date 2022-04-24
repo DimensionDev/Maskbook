@@ -18,7 +18,7 @@ import { LoadingButton } from '@mui/lab'
 import { Button, ButtonProps, DialogContent } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import { cloneDeep } from 'lodash-unified'
-import { FC, useCallback, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import Services from '../../../extension/service'
@@ -26,6 +26,7 @@ import { useI18N } from '../../../utils'
 import { getKvPayload, setKvPatchData, useKvGet } from '../hooks/useKv'
 import { useTipsWalletsList } from '../hooks/useTipsWalletsList'
 import { useProvedWallets } from '../hooks/useProvedWallets'
+import { useSupportedNetworks } from '../hooks/useSupportedNetworks'
 import AddWalletView from './bodyViews/AddWallet'
 import SettingView from './bodyViews/Setting'
 import WalletsView from './bodyViews/Wallets'
@@ -101,9 +102,11 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const [hasChanged, setHasChanged] = useState(false)
     const [rawPatchData, setRawPatchData] = useState<BindingProof[]>([])
     const [rawWalletList, setRawWalletList] = useState<BindingProof[]>([])
-    const supportedNetworks = useActivatedPlugin(PluginId.Tips, 'any')?.enableRequirement?.web3?.[
-        NetworkPluginID.PLUGIN_EVM
-    ]?.tipsSupportedChains
+    const plugin = useActivatedPlugin(PluginId.Tips, 'any')
+    const supportedNetworks = useSupportedNetworks(
+        Object.keys(plugin?.enableRequirement.web3 ?? {}) as NetworkPluginID[],
+    )
+
     const { showSnackbar } = useCustomSnackbar()
     const account = useAccount()
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
@@ -112,10 +115,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         setShowAlert(true)
         return Services.Settings.getCurrentPersonaIdentifier()
     }, [open])
-    const { value: currentPersona } = useAsyncRetry(
-        () => Services.Identity.queryPersona(currentPersonaIdentifier as ECKeyIdentifier),
-        [currentPersonaIdentifier],
-    )
+    const { value: currentPersona } = useAsyncRetry(() => {
+        return Services.Identity.queryPersona(currentPersonaIdentifier!)
+    }, [currentPersonaIdentifier])
     const clickBack = () => {
         if (bodyViewStep === BodyViewStep.Main) {
             onClose()
@@ -123,13 +125,11 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             setBodyViewStep(BodyViewStep.Main)
         }
     }
-    const { value: kv, retry: retryKv } = useKvGet()
-    const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
-    const list = useTipsWalletsList(
-        proofRes as BindingProof[],
-        currentPersona?.publicHexKey,
-        kv?.val as NextIDStorageInfo,
+    const { value: kv, retry: retryKv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(
+        currentPersonaIdentifier?.publicKeyAsHex,
     )
+    const { loading, value: proofRes, retry: retryProof } = useProvedWallets(currentPersonaIdentifier)
+    const list = useTipsWalletsList(proofRes, currentPersona?.publicHexKey, kv?.ok ? kv.val : undefined)
     useMemo(() => {
         setHasChanged(false)
         setRawPatchData(list)
@@ -146,14 +146,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         retryProof()
         retryKv()
     }
-    const titleTail = (
-        <WalletButton
-            step={bodyViewStep}
-            onClick={() => {
-                setBodyViewStep(bodyViewStep === BodyViewStep.Wallets ? BodyViewStep.AddWallet : BodyViewStep.Wallets)
-            }}
-        />
-    )
+
     const setAsDefault = (idx: number) => {
         const changed = cloneDeep(rawPatchData)
         changed.forEach((x: any) => (x.isDefault = 0))
@@ -198,7 +191,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             return false
         }
     }, [hasChanged, rawPatchData])
-    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const { setDialog, open: providerDialogOpen } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     const onConnectWalletClick = useCallback(() => {
         if (account) {
             setBodyViewStep(BodyViewStep.AddWallet)
@@ -207,11 +202,15 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 open: true,
                 pluginID: NetworkPluginID.PLUGIN_EVM,
             })
-            WalletMessages.events.walletsUpdated.on(() => {
-                setBodyViewStep(BodyViewStep.AddWallet)
-            })
         }
     }, [account])
+
+    useEffect(() => {
+        if (!providerDialogOpen) return
+        return WalletMessages.events.walletsUpdated.on(() => {
+            setBodyViewStep(BodyViewStep.AddWallet)
+        })
+    }, [providerDialogOpen])
     const [confirmState, onConfirmRelease] = useAsyncFn(
         async (wallet: BindingProof | undefined) => {
             try {
@@ -255,7 +254,20 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     )
 
     return (
-        <InjectedDialog open={open} onClose={clickBack} title={bodyViewStep} titleTail={titleTail}>
+        <InjectedDialog
+            open={open}
+            onClose={clickBack}
+            title={bodyViewStep}
+            titleTail={
+                <WalletButton
+                    step={bodyViewStep}
+                    onClick={() => {
+                        setBodyViewStep(
+                            bodyViewStep === BodyViewStep.Wallets ? BodyViewStep.AddWallet : BodyViewStep.Wallets,
+                        )
+                    }}
+                />
+            }>
             {loading ? (
                 <DialogContent className={classes.dialogContent}>
                     <div className={classes.loading}>
@@ -300,7 +312,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         />
                     )}
                     {bodyViewStep === BodyViewStep.AddWallet && (
-                        <AddWalletView onCancel={refresh} bindings={rawWalletList} currentPersona={currentPersona} />
+                        <AddWalletView onCancel={refresh} bindings={rawWalletList} currentPersona={currentPersona!} />
                     )}
 
                     {![BodyViewStep.AddWallet, BodyViewStep.Wallets].includes(bodyViewStep) && rawPatchData.length > 0 && (

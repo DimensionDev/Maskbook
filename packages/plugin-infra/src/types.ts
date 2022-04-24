@@ -314,12 +314,8 @@ export namespace Plugin.SNSAdaptor {
          */
         RenderEntryComponent?: (props: {
             disabled: boolean
-            nextIdVerification?: {
-                toolTipHint: string
-                isNextIDVerify: boolean | undefined
-                isSNSConnectToCurrentPersona: boolean | undefined
-                onNextIDVerify(): void
-            }
+            tooltipHint?: string
+            onClick?: () => void
         }) => JSX.Element | null
         /**
          * Used to order the applications on the board
