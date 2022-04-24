@@ -92,7 +92,6 @@ export const SelectTokenView = (props: SelectTokenViewProps): JSX.Element => {
                     balance={inputTokenBalance}
                     token={inputToken}
                     onAmountChange={(a: string) => {
-                        /// setInputAmount(a)
                         props.onAmountChange(inputToken, a)
                     }}
                     SelectTokenChip={{
