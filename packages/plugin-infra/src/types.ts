@@ -314,7 +314,7 @@ export namespace Plugin.SNSAdaptor {
          */
         RenderEntryComponent?: (props: {
             disabled: boolean
-            toolTipHint?: string
+            tooltipHint?: string
             onClick?: () => void
         }) => JSX.Element | null
         /**

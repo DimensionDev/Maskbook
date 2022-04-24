@@ -40,16 +40,16 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props {
+interface ApplicationEntryProps {
     icon: React.ReactNode
     title: React.ReactNode
     disabled?: boolean
-    toolTipHint?: string
+    tooltipHint?: string
     onClick: () => void
 }
 
-export function ApplicationEntry(props: Props) {
-    const { title, onClick, disabled = false, icon, toolTipHint } = props
+export function ApplicationEntry(props: ApplicationEntryProps) {
+    const { title, onClick, disabled = false, icon, tooltipHint } = props
     const { classes } = useStyles()
     const jsx = (
         <div
@@ -61,15 +61,15 @@ export function ApplicationEntry(props: Props) {
             </Typography>
         </div>
     )
-    return toolTipHint ? (
+    return tooltipHint ? (
         <ShadowRootTooltip
             PopperProps={{
                 disablePortal: true,
             }}
             placement="top"
             arrow
-            disableHoverListener={!toolTipHint}
-            title={<Typography>{toolTipHint}</Typography>}>
+            disableHoverListener={!tooltipHint}
+            title={<Typography>{tooltipHint}</Typography>}>
             {jsx}
         </ShadowRootTooltip>
     ) : (

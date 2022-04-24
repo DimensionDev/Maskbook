@@ -231,12 +231,12 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
 
     const RenderEntryComponent = application.entry.RenderEntryComponent
     const shouldVerifyNextId = Boolean(!isNextIDVerify && ApplicationCurrentStatus)
-    const shouldDisplayToolTipHint = ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false
+    const shouldDisplayTooltipHint = ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false
     return (
         <RenderEntryComponent
             disabled={!application.enabled || isNextIDVerify === undefined || !isSNSConnectToCurrentPersona}
-            toolTipHint={
-                shouldDisplayToolTipHint
+            tooltipHint={
+                shouldDisplayTooltipHint
                     ? t('plugin_tips_sns_persona_unmatched', {
                           currentPersonaPublicKey: formatPersonaPublicKey(currentPersonaPublicKey ?? '', 4),
                           currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
