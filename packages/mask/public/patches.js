@@ -77,9 +77,7 @@ globalThis.regeneratorRuntime = undefined
     }
     try {
         fix()
-    } catch {
-        // ignore
-    }
+    } catch {}
 }
 
 {
