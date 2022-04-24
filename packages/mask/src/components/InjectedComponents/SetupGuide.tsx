@@ -16,10 +16,11 @@ import {
     fromHex,
     NextIDAction,
     EnhanceableSite,
+    CrossIsolationMessages,
 } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import { useAsync, useCopyToClipboard } from 'react-use'
+import { useAsync } from 'react-use'
 import stringify from 'json-stable-stringify'
 import type { NextIDPayload } from '@masknet/shared-base'
 import { SetupGuideStep } from './SetupGuide/types'
@@ -45,12 +46,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const { t } = useI18N()
     const { persona } = props
     const ui = activatedSocialNetworkUI
-    const [, copyToClipboard] = useCopyToClipboard()
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
     const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
     const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
-
     // #region parse setup status
     const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
     const lastState_ = useValueRef(lastStateRef)
@@ -108,6 +107,12 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const { value: persona_ } = useAsync(async () => {
         return Services.Identity.queryPersona(Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap())
     }, [persona])
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.verifyNextID.on(() => {
+            setStep(SetupGuideStep.VerifyOnNextID)
+        })
+    }, [])
 
     const onConnect = async () => {
         // attach persona with SNS profile

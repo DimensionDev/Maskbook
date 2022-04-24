@@ -340,7 +340,7 @@ interface BackupJSONFileVersion2 {
         postCryptoKey?: JsonWebKey
         recipients: 'everyone' | [/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }][]
         /** @deprecated */
-        recipientGroups: never[] // Array<GroupIdentifier.toText()>
+        recipientGroups: never[]
         foundAt: number // Unix timestamp
         encryptBy?: string // PersonaIdentifier.toText()
         url?: string
@@ -371,7 +371,7 @@ interface LinkedProfileDetails {
 type RecipientReasonJSON = (
     | { type: 'auto-share' }
     | { type: 'direct' }
-    | { type: 'group'; /** GroupIdentifier */ group: string }
+    | { type: 'group'; /** @deprecated */ group: unknown }
 ) & {
     at: number
 }

@@ -9,7 +9,14 @@ import type {
 } from '@masknet/web3-shared-evm'
 import type { CurrencyType } from '@masknet/plugin-infra/web3'
 import type { Result } from 'ts-results'
-import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
+import type {
+    NextIDAction,
+    NextIDStoragePayload,
+    NextIDPayload,
+    NextIDPlatform,
+    NextIDStorageInfo,
+} from '@masknet/shared-base'
+
 import type { TreasureUser, Creator } from './treasure/types'
 
 export namespace ExplorerAPI {
@@ -321,13 +328,15 @@ export namespace NextIDBaseAPI {
             identity: string,
             createdAt: string,
             patchData: unknown,
+            pluginId: string,
         ): Promise<Result<T, string>>
-        get<T>(key: string): Promise<Result<T, string>>
+        get(key: string): Promise<Result<NextIDStorageInfo, string>>
         getPayload(
             personaPublicKey: string,
             platform: NextIDPlatform,
             identity: string,
             patchData: unknown,
+            pluginId: string,
         ): Promise<Result<NextIDStoragePayload, string>>
     }
     export interface Proof {
