@@ -7,7 +7,7 @@ import { NextIDProof } from '@masknet/web3-providers'
 import type { TooltipProps } from '@mui/material'
 import classnames from 'classnames'
 import { uniq } from 'lodash-unified'
-import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo, useState } from 'react'
+import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
 import { MaskMessages } from '../../../../shared'
 import Services from '../../../extension/service'
@@ -57,6 +57,15 @@ const useStyles = makeStyles()({
     },
 })
 
+function useReceiverPublicKey(receiver: ProfileIdentifier | undefined) {
+    const { value: publicKey } = useAsync(async () => {
+        if (!receiver) return
+        const persona = await Services.Identity.queryPersonaByProfile(receiver)
+        return persona?.publicHexKey
+    }, [receiver])
+    return publicKey
+}
+
 export const TipButton: FC<Props> = ({
     className,
     receiver,
@@ -83,22 +92,18 @@ export const TipButton: FC<Props> = ({
         return NextIDProof.queryIsBound(receiverPersona.publicHexKey, platform, receiver.userId, true)
     }, [receiverPersona?.publicHexKey, platform, receiver?.userId])
 
-    const [publicKey, setPublicKey] = useState<string | null>(null)
+    const publicKey = useReceiverPublicKey(receiver)
     const { value: kv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(publicKey)
 
-    const [NextIDWalletsState, queryBindings] = useAsyncFn(async () => {
-        if (!receiver) return EMPTY_LIST
+    const [NextIDWalletsState, queryWallets] = useAsyncFn(async () => {
+        if (!publicKey) return EMPTY_LIST
 
-        const persona = await Services.Identity.queryPersonaByProfile(receiver)
-        if (!persona?.publicHexKey) return EMPTY_LIST
-        setPublicKey(persona.publicHexKey)
-
-        const bindings = await NextIDProof.queryExistedBindingByPersona(persona.publicHexKey, true)
+        const bindings = await NextIDProof.queryExistedBindingByPersona(publicKey, true)
         if (!bindings) return EMPTY_LIST
 
         const wallets = bindings.proofs.filter((p) => p.platform === NextIDPlatform.Ethereum).map((p) => p.identity)
         return wallets
-    }, [receiver])
+    }, [publicKey])
 
     const walletsFromCloud = useMemo(() => {
         if (kv?.ok) {
@@ -106,7 +111,7 @@ export const TipButton: FC<Props> = ({
             const tipWallets = kv.val.proofs.map((x) =>
                 x.content[PluginId.Tips].filter((y) => y.platform === NextIDPlatform.Ethereum),
             )[0]
-            if (!tipWallets) return []
+            if (!tipWallets) return EMPTY_LIST
             return tipWallets
                 .filter((x) => {
                     if (NextIDWalletsState.value) {
@@ -121,12 +126,12 @@ export const TipButton: FC<Props> = ({
         return null
     }, [kv, NextIDWalletsState.value])
 
-    useAsync(queryBindings, [queryBindings])
+    useAsync(queryWallets, [queryWallets])
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
             retryLoadVerifyInfo()
-            queryBindings()
+            queryWallets()
         })
     }, [])
 
@@ -145,7 +150,7 @@ export const TipButton: FC<Props> = ({
             evt.preventDefault()
             if (disabled) return
             if (NextIDWalletsState.loading || !NextIDWalletsState.value) {
-                await queryBindings()
+                await queryWallets()
             }
             if (!allAddresses.length || !receiver?.userId) return
             PluginNextIDMessages.tipTask.sendToLocal({
@@ -153,7 +158,7 @@ export const TipButton: FC<Props> = ({
                 addresses: allAddresses,
             })
         },
-        [disabled, NextIDWalletsState, allAddresses, receiver?.userId, queryBindings],
+        [disabled, NextIDWalletsState, allAddresses, receiver?.userId, queryWallets],
     )
     const dom = (
         <div
