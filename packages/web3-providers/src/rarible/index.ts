@@ -4,7 +4,7 @@ import {
     ChainId,
     createLookupTableResolver,
     ERC721TokenDetailed,
-    EthereumTokenType,
+    SchemaType,
     FungibleTokenDetailed,
     resolveIPFSLinkFromURL,
 } from '@masknet/web3-shared-evm'
@@ -54,7 +54,7 @@ function createERC721TokenFromAsset(
     const imageURL = resolveIPFSLinkFromURL(asset?.meta?.image?.url.ORIGINAL ?? asset?.meta?.image?.url.PREVIEW ?? '')
     return {
         contractDetailed: {
-            type: EthereumTokenType.ERC721,
+            type: SchemaType.ERC721,
             chainId: ChainId.Mainnet,
             address: tokenAddress,
             name: asset?.meta?.name ?? '',

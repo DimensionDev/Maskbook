@@ -1,7 +1,6 @@
 import urlcat from 'urlcat'
-import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra/web3'
-import { leftShift, multipliedBy, createLookupTableResolver } from '@masknet/web3-shared-base'
-import { ChainId, NetworkType, ProviderType } from '../types'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
+import { ChainId, ProviderType } from '../types'
 import { getChainConstants } from '../constants'
 
 // #formatter
@@ -32,44 +31,6 @@ export function isValidAddress(address: string) {
 export function isSameAddress(a?: string, b?: string) {
     if (!a || !b) return false
     return a.toLowerCase() === b.toLowerCase()
-}
-// #endregion
-
-// #region token
-export function createFungibleToken(
-    chainId: ChainId,
-    address: string,
-    name: string,
-    symbol: string,
-    decimals: number,
-    logoURI?: string,
-): Web3Plugin.FungibleToken {
-    return {
-        id: address,
-        chainId,
-        type: TokenType.Fungible,
-        subType: TokenType.Fungible,
-        address,
-        name,
-        symbol,
-        decimals,
-        logoURI,
-    }
-}
-
-export function createFungibleAsset(
-    token: Web3Plugin.FungibleToken,
-    balance: string,
-    price?: { [key in CurrencyType]?: string },
-): Web3Plugin.FungibleAsset {
-    return {
-        ...token,
-        balance: leftShift(balance, 8).toFixed(),
-        price,
-        value: {
-            [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, 8)).toFixed(),
-        },
-    }
 }
 // #endregion
 
@@ -133,24 +94,4 @@ export const resolveProviderName = createLookupTableResolver<ProviderType, strin
     },
     () => 'Unknown',
 )
-
-// #endregion
-
-// #region chain detailed
-export function getChainDetailed(chainId: ChainId): Web3Plugin.ChainDetailed {
-    const { NAME, FULL_NAME, SHORT_NAME } = getChainConstants(chainId)
-
-    return {
-        name: NAME ?? 'Flow',
-        chainId,
-        fullName: FULL_NAME ?? 'Flow',
-        shortName: SHORT_NAME ?? 'FCL',
-        chainName: 'Flow',
-        network: chainId === ChainId.Mainnet ? 'mainnet' : 'testnet',
-    }
-}
-
-export function getNetworkTypeFromChainId(chainId: ChainId) {
-    return NetworkType.Flow
-}
 // #endregion

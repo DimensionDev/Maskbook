@@ -1,4 +1,4 @@
-import { EthereumTokenType } from '../types'
+import { SchemaType } from '../types'
 import { useERC20TokenContract, useERC721TokenContract } from '../contracts'
 import { useAccount } from './useAccount'
 import { useWeb3 } from './useWeb3'
@@ -7,7 +7,7 @@ import { unreachable } from '@dimensiondev/kit'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
 export function useGasLimit(
-    type?: EthereumTokenType,
+    type?: SchemaType,
     contractAddress?: string,
     amount?: string,
     recipient?: string,
@@ -20,25 +20,25 @@ export function useGasLimit(
 
     return useAsync(async () => {
         if (!recipient || type === undefined) return 0
-        if ((type === EthereumTokenType.ERC20 && !amount) || !contractAddress) return 0
-        if ((type === EthereumTokenType.ERC721 && !tokenId) || !contractAddress) return 0
+        if ((type === SchemaType.ERC20 && !amount) || !contractAddress) return 0
+        if ((type === SchemaType.ERC721 && !tokenId) || !contractAddress) return 0
 
         switch (type) {
-            case EthereumTokenType.Native:
+            case SchemaType.Native:
                 return web3.eth.estimateGas({
                     from: account,
                     to: recipient,
                     value: amount,
                 })
-            case EthereumTokenType.ERC20:
+            case SchemaType.ERC20:
                 return erc20Contract?.methods.transfer(recipient, amount ?? 0).estimateGas({
                     from: account,
                 })
-            case EthereumTokenType.ERC721:
+            case SchemaType.ERC721:
                 return erc721Contract?.methods.transferFrom(account, recipient, tokenId ?? '').estimateGas({
                     from: account,
                 })
-            case EthereumTokenType.ERC1155:
+            case SchemaType.ERC1155:
                 throw new Error('To be implemented')
             default:
                 unreachable(type)

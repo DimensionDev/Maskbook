@@ -4,7 +4,7 @@ import { isGreaterThan, isLessThan, multipliedBy } from '@masknet/web3-shared-ba
 import { MINIMUM_AMOUNT } from '../../../constants'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../Wallet/hooks/useTokenPrice'
-import { ChainId, EthereumTokenType, formatBalance, useNativeTokenDetailed } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, formatBalance, useNativeTokenDetailed } from '@masknet/web3-shared-evm'
 import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 
 export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice?: string) {
@@ -36,7 +36,7 @@ export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice
                         const finalPrice = new BigNumber(
                             formatBalance(trade.value.outputAmount, outputToken.decimals, 2),
                         )
-                            .times(outputToken.type !== EthereumTokenType.Native ? outputTokenPrice : nativeTokenPrice)
+                            .times(outputToken.type !== SchemaType.Native ? outputTokenPrice : nativeTokenPrice)
                             .minus(gasFeeUSD)
 
                         return {

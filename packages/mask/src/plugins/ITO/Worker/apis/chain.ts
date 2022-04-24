@@ -4,7 +4,7 @@ import {
     getITOConstants,
     isSameAddress,
     FungibleTokenDetailed,
-    EthereumTokenType,
+    SchemaType,
 } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
@@ -264,7 +264,7 @@ export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapp
                     amount: new BigNumber(Number(eventParams.to_value)),
                     isClaimable: value.isClaimable,
                     unlockTime: value.unlockTime,
-                    token: { address: eventParams.to_address, type: EthereumTokenType.ERC20 } as FungibleTokenDetailed,
+                    token: { address: eventParams.to_address, type: SchemaType.ERC20 } as FungibleTokenDetailed,
                 }
             }),
         )

@@ -6,7 +6,7 @@ import {
     FungibleAssetProvider,
     ProviderType,
     ERC20TokenDetailed,
-    EthereumTokenType,
+    SchemaType,
     NetworkType,
     Web3ProviderType,
 } from '@masknet/web3-shared-evm'
@@ -55,17 +55,17 @@ export const Web3Context: Web3ProviderType = {
         PluginMessages.Wallet.events.walletsUpdated.on,
     ),
     erc20Tokens: createSubscriptionFromAsync(
-        () => PluginServices.Wallet.getTokens<ERC20TokenDetailed>(EthereumTokenType.ERC20),
+        () => PluginServices.Wallet.getTokens<ERC20TokenDetailed>(SchemaType.ERC20),
         [],
         PluginMessages.Wallet.events.erc20TokensUpdated.on,
     ),
     erc721Tokens: createSubscriptionFromAsync(
-        () => PluginServices.Wallet.getTokens<ERC721TokenDetailed>(EthereumTokenType.ERC721),
+        () => PluginServices.Wallet.getTokens<ERC721TokenDetailed>(SchemaType.ERC721),
         [],
         PluginMessages.Wallet.events.erc721TokensUpdated.on,
     ),
     erc1155Tokens: createSubscriptionFromAsync(
-        () => PluginServices.Wallet.getTokens<ERC1155TokenDetailed>(EthereumTokenType.ERC1155),
+        () => PluginServices.Wallet.getTokens<ERC1155TokenDetailed>(SchemaType.ERC1155),
         [],
         PluginMessages.Wallet.events.erc1155TokensUpdated.on,
     ),

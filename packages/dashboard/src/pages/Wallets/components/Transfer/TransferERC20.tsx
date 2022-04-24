@@ -13,7 +13,7 @@ import { MaskColorVar, MaskTextField } from '@masknet/theme'
 import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import {
     addGasMargin,
-    EthereumTokenType,
+    SchemaType,
     formatWeiToEther,
     FungibleTokenDetailed,
     isEIP1559Supported,
@@ -69,7 +69,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     // workaround: transferERC20 should support non-evm network
     const isNativeToken = isSameAddress(selectedToken?.address, NATIVE_TOKEN_ADDRESS)
-    const tokenType = isNativeToken ? EthereumTokenType.Native : EthereumTokenType.ERC20
+    const tokenType = isNativeToken ? SchemaType.Native : SchemaType.ERC20
 
     // balance
     const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useFungibleTokenBalance(
@@ -92,8 +92,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const erc20GasLimit = useGasLimit(
         selectedToken.type === TokenType.Fungible
             ? selectedToken.symbol === nativeToken.value?.symbol
-                ? EthereumTokenType.Native
-                : EthereumTokenType.ERC20
+                ? SchemaType.Native
+                : SchemaType.ERC20
             : selectedToken.type,
         selectedToken.address,
         transferAmount,
@@ -118,7 +118,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         const gasFee = multipliedBy(addGasMargin(gasLimit), price)
 
         let amount_ = new BigNumber(tokenBalance || '0')
-        amount_ = selectedToken.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
+        amount_ = selectedToken.type === SchemaType.Native ? amount_.minus(gasFee) : amount_
         return BigNumber.max(0, amount_).toFixed()
     }, [tokenBalance, gasPrice, selectedToken?.type, amount, gasLimit, maxFee, is1559Supported])
 

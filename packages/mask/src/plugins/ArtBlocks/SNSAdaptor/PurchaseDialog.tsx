@@ -15,7 +15,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import {
     ERC20TokenDetailed,
-    EthereumTokenType,
+    SchemaType,
     FungibleTokenDetailed,
     useArtBlocksConstants,
     useFungibleTokenWatched,
@@ -175,7 +175,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                     </CardContent>
                     <CardActions>
                         <EthereumWalletConnectedBoundary>
-                            {token.value?.type === EthereumTokenType.Native ? (
+                            {token.value?.type === SchemaType.Native ? (
                                 <ActionButton
                                     className={classes.button}
                                     disabled={!!validationMessage}
@@ -188,7 +188,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                                         : t('plugin_artblocks_purchasing')}
                                 </ActionButton>
                             ) : null}
-                            {token.value?.type === EthereumTokenType.ERC20 ? (
+                            {token.value?.type === SchemaType.ERC20 ? (
                                 <EthereumERC20TokenApprovedBoundary
                                     amount={project.pricePerTokenInWei}
                                     spender={spender}

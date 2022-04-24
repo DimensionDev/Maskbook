@@ -20,7 +20,7 @@ export class RedPacketDescriptor implements TransactionDescriptor {
 
         if (isSameAddress(context.to, HAPPY_RED_PACKET_ADDRESS_V4)) {
             const connection = createConnection(context.chainId, context.from)
-            const token = await connection.getERC20Token(context.parameters?._token_addr ?? '')
+            const token = await connection.getFungileToken(context.parameters?._token_addr ?? '')
             const amount = formatBalance(context.parameters?._total_tokens)
 
             return Promise.resolve({

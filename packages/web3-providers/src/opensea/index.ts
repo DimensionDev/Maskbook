@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import isAfter from 'date-fns/isAfter'
 import {
     ChainId,
-    EthereumTokenType,
+    SchemaType,
     createERC721Contract,
     createNativeToken,
     createERC20Token,
@@ -67,7 +67,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): Web3Plugin.No
         id: asset.token_address,
         chainId,
         type: TokenType.NonFungible,
-        subType: EthereumTokenType.ERC721,
+        subType: SchemaType.ERC721,
         tokenId: asset.token_id,
         address: asset.token_address,
         metadata: {
@@ -81,7 +81,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): Web3Plugin.No
                 toImage(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
         },
         contract: {
-            type: EthereumTokenType.ERC721,
+            type: SchemaType.ERC721,
             chainId,
             address: asset.token_address,
             name: asset.name ?? asset.collection.name,
@@ -159,7 +159,7 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): Web3Plugin.No
                           id: x.payment_token,
                           chainId,
                           type: TokenType.Fungible,
-                          subType: EthereumTokenType.ERC20,
+                          subType: SchemaType.ERC20,
                           name: 'Unknown Token',
                           symbol: 'UNKNOWN',
                           address: x.payment_token,

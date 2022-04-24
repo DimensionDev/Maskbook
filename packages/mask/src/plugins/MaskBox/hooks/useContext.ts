@@ -15,7 +15,7 @@ import {
     useNativeTokenBalance,
     useTokenConstants,
     useFungibleTokensDetailed,
-    EthereumTokenType,
+    SchemaType,
     useChainId,
     useAccount,
     useERC20TokenAllowance,
@@ -79,7 +79,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const { value: paymentTokens = [] } = useFungibleTokensDetailed(
         maskBoxStatus?.payment?.map(([address]) => {
             return {
-                type: isNativeTokenAddress(address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                type: isNativeTokenAddress(address) ? SchemaType.Native : SchemaType.ERC20,
                 address,
             }
         }) ?? [],

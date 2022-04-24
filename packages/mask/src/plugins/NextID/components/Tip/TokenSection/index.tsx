@@ -1,5 +1,5 @@
 import { usePickToken } from '@masknet/shared'
-import { EthereumTokenType, isNativeTokenAddress, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { SchemaType, isNativeTokenAddress, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FC, useCallback, useMemo } from 'react'
 import { TokenAmountPanel } from '../../../../../web3/UI/TokenAmountPanel'
@@ -12,7 +12,7 @@ export const TokenSection: FC = () => {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        token?.type || EthereumTokenType.Native,
+        token?.type || SchemaType.Native,
         token?.address || '',
         chainId,
     )

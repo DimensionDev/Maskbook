@@ -6,7 +6,7 @@ import type { Trade } from '@uniswap/v2-sdk'
 import {
     formatEthereumAddress,
     ChainId,
-    EthereumTokenType,
+    SchemaType,
     FungibleTokenDetailed,
     isSameAddress,
     WNATIVE,
@@ -64,7 +64,7 @@ export function toUniswapCurrency(chainId: ChainId, token?: FungibleTokenDetaile
         const extendedEther = ExtendedEther.onChain(chainId)
         const weth = toUniswapToken(chainId, WNATIVE[chainId])
         if (weth && isSameAddress(token.address, weth.address)) return weth
-        return token.type === EthereumTokenType.Native ? extendedEther : toUniswapToken(chainId, token)
+        return token.type === SchemaType.Native ? extendedEther : toUniswapToken(chainId, token)
     } catch {
         return
     }
@@ -106,9 +106,7 @@ export function uniswapPriceTo(price: Price<Currency, Currency>) {
 
 export function uniswapTokenTo(token: Token) {
     return {
-        type: ['eth', 'matic', 'bnb'].includes(token.name?.toLowerCase() ?? '')
-            ? EthereumTokenType.Native
-            : EthereumTokenType.ERC20,
+        type: ['eth', 'matic', 'bnb'].includes(token.name?.toLowerCase() ?? '') ? SchemaType.Native : SchemaType.ERC20,
         name: token.name,
         symbol: token.symbol,
         decimals: token.decimals,

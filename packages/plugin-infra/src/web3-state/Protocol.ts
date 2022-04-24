@@ -2,7 +2,8 @@ import type { Subscription } from 'use-subscription'
 import type { Web3Plugin } from '../web3-types'
 
 export class ProtocolState<
-    ChainId extends number,
+    ChainId,
+    SchemaType,
     ProviderType,
     Signature,
     Transaction,
@@ -17,6 +18,7 @@ export class ProtocolState<
 > implements
         Web3Plugin.ObjectCapabilities.ProtocolState<
             ChainId,
+            SchemaType,
             ProviderType,
             Signature,
             Transaction,
@@ -28,11 +30,12 @@ export class ProtocolState<
 {
     constructor(
         protected createConnection: (
-            account?: string,
             chainId?: ChainId,
+            account?: string,
             providerType?: ProviderType,
         ) => Web3Plugin.Connection<
             ChainId,
+            SchemaType,
             ProviderType,
             Signature,
             Transaction,
@@ -50,8 +53,8 @@ export class ProtocolState<
 
     getConnection(options?: Web3Options) {
         return this.createConnection(
-            options?.account ?? this.subscription.account?.getCurrentValue(),
             options?.chainId ?? this.subscription.chainId?.getCurrentValue(),
+            options?.account ?? this.subscription.account?.getCurrentValue(),
             options?.providerType ?? this.subscription.providerType?.getCurrentValue(),
         )
     }
@@ -92,6 +95,11 @@ export class ProtocolState<
         return this.getConnection(options).signTransaction(transaction, options)
     }
 
+    async callTransaction(transaction: Transaction, options?: Web3Options) {
+        const connection = this.getConnection(options)
+        return connection.callTransaction(transaction, options)
+    }
+
     async sendTransaction(transaction: Transaction, options?: Web3Options) {
         const connection = this.getConnection(options)
         const signedTransaction = await connection.signTransaction(transaction, options)
@@ -100,15 +108,5 @@ export class ProtocolState<
 
     sendSignedTransaction(signature: TransactionSignature, options?: Web3Options) {
         return this.getConnection(options).sendSignedTransaction(signature, options)
-    }
-
-    addChain(options?: Web3Options) {
-        if (!options?.chainId) throw new Error('Unknown chain Id.')
-        return this.getConnection(options).addChain(options.chainId, options)
-    }
-
-    switchChain(options?: Web3Options) {
-        if (!options?.chainId) throw new Error('Unknown chain Id.')
-        return this.getConnection(options).switchChain(options.chainId, options)
     }
 }

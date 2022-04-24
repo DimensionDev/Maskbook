@@ -11,8 +11,11 @@ import { Provider } from './Provider'
 import { Wallet } from './Wallet'
 import { Utils } from './Utils'
 import { Settings } from './Settings'
+import { TransactionFormatter } from './TransactionFormatter'
+import { TransactionWatcher } from './TransactionWatcher'
+import type { EVM_Web3State } from './Protocol/types'
 
-export function createWeb3State(context: Plugin.Shared.SharedContext) {
+export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3State {
     const Provider_ = new Provider(context)
 
     return {
@@ -23,7 +26,7 @@ export function createWeb3State(context: Plugin.Shared.SharedContext) {
         NameService: new NameService(context, {
             chainId: Provider_.chainId,
         }),
-        RiskWanring: new RiskWarning(context),
+        RiskWarning: new RiskWarning(context),
         Settings: new Settings(context),
         Token: new Token(context, {
             account: Provider_.account,
@@ -35,6 +38,8 @@ export function createWeb3State(context: Plugin.Shared.SharedContext) {
             chainId: Provider_.chainId,
             account: Provider_.account,
         }),
+        TransactionFormatter: new TransactionFormatter(context),
+        TransactionWatcher: new TransactionWatcher(context),
         Provider: Provider_,
         Protocol: new Protocol(context, {
             chainId: Provider_.chainId,

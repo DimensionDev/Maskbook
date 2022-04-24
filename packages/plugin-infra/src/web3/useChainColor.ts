@@ -1,9 +1,13 @@
+import { useWeb3State, useChainId, Web3Helper } from '../entry-web3'
 import type { NetworkPluginID } from '../web3-types'
-import { useChainId } from './useChainId'
-import { useWeb3State } from './useWeb3State'
 
-export function useChainColor(pluginID?: NetworkPluginID) {
-    const chainId = useChainId(pluginID)
+export function useChainColor<T extends NetworkPluginID>(
+    pluginID?: T,
+    expectedChainId?: Web3Helper.Definition[T]['ChainId'],
+) {
+    const chainId = useChainId(pluginID, expectedChainId)
     const { Utils } = useWeb3State(pluginID)
-    return Utils?.resolveChainColor?.(chainId) ?? 'transparent'
+
+    // @ts-ignore
+    return Utils?.resolveChainColor?.(chainId)
 }

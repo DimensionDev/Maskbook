@@ -1,6 +1,6 @@
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import {
-    EthereumTokenType,
+    SchemaType,
     formatBalance,
     FungibleTokenInitial,
     getChainDetailed,
@@ -144,7 +144,7 @@ export function PoolInList(props: PoolInListProps) {
     const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
     // #region Fetch tokens detailed
     const { value: _tokenDetailed } = useFungibleTokenDetailed(
-        EthereumTokenType.ERC20,
+        SchemaType.ERC20,
         (pool as JSON_PayloadFromChain).token_address ?? (pool as JSON_PayloadInMask).token.address,
     )
     const poolToken = (pool as JSON_PayloadInMask).token ?? _tokenDetailed
@@ -154,7 +154,7 @@ export function PoolInList(props: PoolInListProps) {
               (v) =>
                   ({
                       address: v,
-                      type: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                      type: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? SchemaType.Native : SchemaType.ERC20,
                   } as Pick<FungibleTokenInitial, 'address' | 'type'>),
           )
         : []

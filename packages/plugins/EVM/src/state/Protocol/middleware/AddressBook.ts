@@ -1,29 +1,26 @@
 import {
-    ComputedPayload,
+    ChainId,
     EthereumMethodType,
-    EthereumRpcType,
-    EthereumTransactionConfig,
     isSameAddress,
     isZeroAddress,
+    TransactionParameter,
 } from '@masknet/web3-shared-evm'
-import { PayloadComputer } from '../payload'
+import { TransactionDescriptorType, Web3Plugin } from '@masknet/plugin-infra/web3'
 import type { Context, Middleware } from '../types'
 import { Web3StateSettings } from '../../../settings'
 
 export class AddressBook implements Middleware<Context> {
-    private getFrom(computedPayload?: ComputedPayload) {
-        if (!computedPayload) return
-        return (computedPayload as { _tx?: EthereumTransactionConfig })?._tx?.from as string | undefined
+    private getFrom(context?: Web3Plugin.TransactionContext<ChainId, TransactionParameter>) {
+        return context?.from
     }
 
-    private getTo(computedPayload?: ComputedPayload) {
-        if (!computedPayload) return
-        switch (computedPayload.type) {
-            case EthereumRpcType.SEND_ETHER:
-                return computedPayload._tx.to
-            case EthereumRpcType.CONTRACT_INTERACTION:
-                if (['transfer', 'transferFrom'].includes(computedPayload.name ?? ''))
-                    return computedPayload.parameters?.to as string | undefined
+    private getTo(context?: Web3Plugin.TransactionContext<ChainId, TransactionParameter>) {
+        if (!context) return
+        switch (context.type) {
+            case TransactionDescriptorType.TRANSFER:
+                return context.to
+            case TransactionDescriptorType.INTERACTION:
+                if (context.name && ['transfer', 'transferFrom'].includes(context.name)) return context.parameters?.to
         }
         return
     }
@@ -34,12 +31,13 @@ export class AddressBook implements Middleware<Context> {
         await next()
 
         if (context.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
+        if (!context.config) return
 
         try {
-            const computer = new PayloadComputer(context.connection)
-            const computedPayload = await computer.getSendTransactionComputedPayload(context.config)
-            const from = this.getFrom(computedPayload)
-            const to = this.getTo(computedPayload)
+            const { TransactionFormatter } = Web3StateSettings.value
+            const formatContext = await TransactionFormatter?.createContext(context.chainId, context.config)
+            const from = this.getFrom(formatContext)
+            const to = this.getTo(formatContext)
 
             if (!isSameAddress(from, to) && !isZeroAddress(to) && to) await AddressBook?.addAddress(context.chainId, to)
         } catch {

@@ -13,7 +13,7 @@ import {
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
     useFungibleTokensDetailed,
-    EthereumTokenType,
+    SchemaType,
     isSameAddress,
     useITOConstants,
     ChainId,
@@ -246,7 +246,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokensDetailed(
         (_swappedTokens ?? []).map((t) => ({
             address: t.token.address,
-            type: EthereumTokenType.ERC20,
+            type: SchemaType.ERC20,
         })),
         chainId,
     )

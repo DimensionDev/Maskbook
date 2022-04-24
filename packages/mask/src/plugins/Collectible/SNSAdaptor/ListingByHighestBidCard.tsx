@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Card, CardActions, CardContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
-    EthereumTokenType,
+    SchemaType,
     FungibleTokenDetailed,
     FungibleTokenWatched,
     isNativeTokenAddress,
@@ -70,7 +70,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.ERC20) return
+        if (token.value.type !== SchemaType.ERC20) return
         const schemaName = asset.value.asset_contract?.schemaName
         await PluginCollectibleRPC.createSellOrder({
             asset: toAsset({

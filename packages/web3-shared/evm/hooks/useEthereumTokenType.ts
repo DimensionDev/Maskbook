@@ -3,7 +3,7 @@ import { useERC1155TokenContract, useERC721TokenContract } from '../contracts'
 import { useWeb3 } from './useWeb3'
 
 import { useERC165 } from '.'
-import { EthereumTokenType } from '../types'
+import { SchemaType } from '../types'
 
 const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
 const ERC1155_ENUMERABLE_INTERFACE_ID = '0xd9b67a26'
@@ -26,17 +26,11 @@ function useCheckERC1155(address: string) {
     return useERC165(erc1155Contract, address, ERC1155_ENUMERABLE_INTERFACE_ID)
 }
 
-export function useEthereumTokenType(address = ''): EthereumTokenType | undefined {
+export function useEthereumTokenType(address = ''): SchemaType | undefined {
     const { value: isContract, loading: loadingContract } = useCheckContract(address)
     const { value: isERC721, loading: loadingERC721 } = useCheckERC721(address)
     const { value: isERC1155, loading: loadingERC1155 } = useCheckERC1155(address)
 
     if (loadingERC1155 || loadingERC721 || loadingContract) return
-    return isERC1155
-        ? EthereumTokenType.ERC1155
-        : isERC721
-        ? EthereumTokenType.ERC721
-        : isContract
-        ? EthereumTokenType.ERC20
-        : undefined
+    return isERC1155 ? SchemaType.ERC1155 : isERC721 ? SchemaType.ERC721 : isContract ? SchemaType.ERC20 : undefined
 }

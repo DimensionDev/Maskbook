@@ -1,4 +1,5 @@
 import * as ABICoder from 'web3-eth-abi'
+import type { Plugin } from '@masknet/plugin-infra'
 import { TransactionDescriptorType, TransactionFormatterState, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { isZero } from '@masknet/web3-shared-base'
 import {
@@ -45,8 +46,8 @@ export class TransactionFormatter
         [TransactionDescriptorType.CANCEL]: [new CancelDescriptor()],
     }
 
-    constructor() {
-        super()
+    constructor(context: Plugin.Shared.SharedContext) {
+        super(context)
     }
 
     override async createContext(

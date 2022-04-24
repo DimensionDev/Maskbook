@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 import {
     Asset,
-    EthereumTokenType,
+    SchemaType,
     formatBalance,
     formatGweiToWei,
     formatWeiToGwei,
@@ -252,16 +252,14 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     // #endregion
 
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        selectedAsset?.token?.type ?? EthereumTokenType.Native,
+        selectedAsset?.token?.type ?? SchemaType.Native,
         selectedAsset?.token?.address ?? '',
     )
 
     const maxAmount = useMemo(() => {
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ =
-            selectedAsset?.token.type === EthereumTokenType.Native
-                ? amount_.minus(multipliedBy(30000, gasPrice))
-                : amount_
+            selectedAsset?.token.type === SchemaType.Native ? amount_.minus(multipliedBy(30000, gasPrice)) : amount_
 
         return BigNumber.max(0, amount_).toFixed()
     }, [selectedAsset?.balance, gasPrice, selectedAsset?.token.type, tokenBalance])
@@ -275,7 +273,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     // #endregion
 
     const [_, transferCallback] = useTokenTransferCallback(
-        selectedAsset?.token.type ?? EthereumTokenType.Native,
+        selectedAsset?.token.type ?? SchemaType.Native,
         selectedAsset?.token.address ?? '',
     )
 

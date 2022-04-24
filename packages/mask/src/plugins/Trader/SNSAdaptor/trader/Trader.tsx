@@ -4,7 +4,7 @@ import {
     ChainId,
     createERC20Token,
     createNativeToken,
-    EthereumTokenType,
+    SchemaType,
     formatBalance,
     FungibleTokenDetailed,
     isSameAddress,
@@ -120,7 +120,7 @@ export function Trader(props: TraderProps) {
         // if coin be native token and input token also be native token, reset it
         if (
             isSameAddress(coin.contract_address, NATIVE_TOKEN_ADDRESS) &&
-            inputToken?.type === EthereumTokenType.Native &&
+            inputToken?.type === SchemaType.Native &&
             coin.symbol === inputToken.symbol
         ) {
             dispatchTradeStore({
@@ -159,27 +159,22 @@ export function Trader(props: TraderProps) {
     // #region update balance
     const { value: inputTokenBalance_, loading: loadingInputTokenBalance } = useFungibleTokenBalance(
         isSameAddress(inputToken?.address, NATIVE_TOKEN_ADDRESS)
-            ? EthereumTokenType.Native
-            : inputToken?.type ?? EthereumTokenType.Native,
+            ? SchemaType.Native
+            : inputToken?.type ?? SchemaType.Native,
         inputToken?.address ?? '',
         chainId,
     )
 
     const { value: outputTokenBalance_, loading: loadingOutputTokenBalance } = useFungibleTokenBalance(
         isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS)
-            ? EthereumTokenType.Native
-            : outputToken?.type ?? EthereumTokenType.Native,
+            ? SchemaType.Native
+            : outputToken?.type ?? SchemaType.Native,
         outputToken?.address ?? '',
         chainId,
     )
 
     useEffect(() => {
-        if (
-            !inputToken ||
-            inputToken.type === EthereumTokenType.Native ||
-            !inputTokenBalance_ ||
-            loadingInputTokenBalance
-        ) {
+        if (!inputToken || inputToken.type === SchemaType.Native || !inputTokenBalance_ || loadingInputTokenBalance) {
             return
         }
         dispatchTradeStore({
@@ -191,7 +186,7 @@ export function Trader(props: TraderProps) {
     useEffect(() => {
         if (
             !outputToken ||
-            outputToken.type === EthereumTokenType.Native ||
+            outputToken.type === SchemaType.Native ||
             !outputTokenBalance_ ||
             loadingOutputTokenBalance
         ) {

@@ -4,22 +4,22 @@ import { mapSubscription, mergeSubscription, StorageObject } from '@masknet/shar
 import type { Plugin } from '../types'
 import { TokenType, Web3Plugin } from '../web3-types'
 
-export interface TokenStorage {
-    fungibleTokens: Web3Plugin.FungibleToken[]
-    nonFungibleTokens: Web3Plugin.NonFungibleToken[]
+export interface TokenStorage<ChainId, SchemaType> {
+    fungibleTokens: Web3Plugin.FungibleToken<ChainId, SchemaType>[]
+    nonFungibleTokens: Web3Plugin.NonFungibleToken<ChainId, SchemaType>[]
     fungibleTokenBlockedBy: Record<string, string[]>
     nonFungibleTokenBlockedBy: Record<string, string[]>
 }
 
-export class TokenState implements Web3Plugin.ObjectCapabilities.TokenState {
-    protected storage: StorageObject<TokenStorage> = null!
+export class TokenState<ChainId, SchemaType> implements Web3Plugin.ObjectCapabilities.TokenState<ChainId, SchemaType> {
+    protected storage: StorageObject<TokenStorage<ChainId, SchemaType>> = null!
 
-    public fungibleTokens?: Subscription<Web3Plugin.FungibleToken[]>
-    public nonFungibleTokens?: Subscription<Web3Plugin.NonFungibleToken[]>
+    public fungibleTokens?: Subscription<Web3Plugin.FungibleToken<ChainId, SchemaType>[]>
+    public nonFungibleTokens?: Subscription<Web3Plugin.NonFungibleToken<ChainId, SchemaType>[]>
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
-        protected defaultValue: TokenStorage,
+        protected defaultValue: TokenStorage<ChainId, SchemaType>,
         protected subscriptions: {
             account?: Subscription<string>
         },
@@ -34,7 +34,7 @@ export class TokenState implements Web3Plugin.ObjectCapabilities.TokenState {
 
         if (this.subscriptions.account) {
             this.fungibleTokens = mapSubscription(
-                mergeSubscription<[string, Web3Plugin.FungibleToken[], Record<string, string[]>]>(
+                mergeSubscription<[string, Web3Plugin.FungibleToken<ChainId, SchemaType>[], Record<string, string[]>]>(
                     this.subscriptions.account,
                     this.storage.fungibleTokens.subscription,
                     this.storage.fungibleTokenBlockedBy.subscription,
@@ -42,7 +42,9 @@ export class TokenState implements Web3Plugin.ObjectCapabilities.TokenState {
                 ([account, tokens, blockedBy]) => tokens.filter((x) => !blockedBy[account]?.includes(x.address)),
             )
             this.nonFungibleTokens = mapSubscription(
-                mergeSubscription<[string, Web3Plugin.NonFungibleToken[], Record<string, string[]>]>(
+                mergeSubscription<
+                    [string, Web3Plugin.NonFungibleToken<ChainId, SchemaType>[], Record<string, string[]>]
+                >(
                     this.subscriptions.account,
                     this.storage.nonFungibleTokens.subscription,
                     this.storage.nonFungibleTokenBlockedBy.subscription,
@@ -52,11 +54,11 @@ export class TokenState implements Web3Plugin.ObjectCapabilities.TokenState {
         }
     }
 
-    private async addOrRemoveToken(token: Web3Plugin.Token, strategy: 'add' | 'remove') {
+    private async addOrRemoveToken(token: Web3Plugin.Token<ChainId, SchemaType>, strategy: 'add' | 'remove') {
         if (this.options.isValidAddress(token.address)) throw new Error('Not a valid token.')
 
         const address = this.options.formatAddress(token.address)
-        const tokens: Web3Plugin.Token[] =
+        const tokens: Web3Plugin.Token<ChainId, SchemaType>[] =
             token.type === TokenType.Fungible ? this.storage.fungibleTokens.value : this.storage.nonFungibleTokens.value
         const tokensUpdated =
             strategy === 'add'
@@ -74,13 +76,19 @@ export class TokenState implements Web3Plugin.ObjectCapabilities.TokenState {
                 : tokens.filter((x) => !this.options.isSameAddress(x.address, address))
 
         if (token.type === TokenType.Fungible) {
-            await this.storage.fungibleTokens.setValue(tokensUpdated as Web3Plugin.FungibleToken[])
+            await this.storage.fungibleTokens.setValue(tokensUpdated as Web3Plugin.FungibleToken<ChainId, SchemaType>[])
         } else {
-            await this.storage.nonFungibleTokens.setValue(tokensUpdated as Web3Plugin.NonFungibleToken[])
+            await this.storage.nonFungibleTokens.setValue(
+                tokensUpdated as Web3Plugin.NonFungibleToken<ChainId, SchemaType>[],
+            )
         }
     }
 
-    private async blockOrUnblockToken(address: string, token: Web3Plugin.Token, strategy: 'trust' | 'block') {
+    private async blockOrUnblockToken(
+        address: string,
+        token: Web3Plugin.Token<ChainId, SchemaType>,
+        strategy: 'trust' | 'block',
+    ) {
         if (this.options.isValidAddress(token.address)) throw new Error('Not a valid token.')
 
         const address_ = this.options.formatAddress(address)
@@ -105,16 +113,16 @@ export class TokenState implements Web3Plugin.ObjectCapabilities.TokenState {
         }
     }
 
-    async addToken(token: Web3Plugin.Token) {
+    async addToken(token: Web3Plugin.Token<ChainId, SchemaType>) {
         this.addOrRemoveToken(token, 'add')
     }
-    async removeToken(token: Web3Plugin.Token) {
+    async removeToken(token: Web3Plugin.Token<ChainId, SchemaType>) {
         this.addOrRemoveToken(token, 'remove')
     }
-    async trustToken(address: string, token: Web3Plugin.Token) {
+    async trustToken(address: string, token: Web3Plugin.Token<ChainId, SchemaType>) {
         this.blockOrUnblockToken(address, token, 'trust')
     }
-    async blockToken(address: string, token: Web3Plugin.Token) {
+    async blockToken(address: string, token: Web3Plugin.Token<ChainId, SchemaType>) {
         this.blockOrUnblockToken(address, token, 'block')
     }
 }

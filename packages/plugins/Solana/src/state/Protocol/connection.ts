@@ -1,6 +1,6 @@
 import { Connection as SolanaConnection, sendAndConfirmRawTransaction, Transaction } from '@solana/web3.js'
-import { TransactionStatusType } from '@masknet/plugin-infra/web3'
-import { ChainId, deocdeAddress, ProviderType } from '@masknet/web3-shared-solana'
+import { TransactionStatusType, Web3Plugin } from '@masknet/plugin-infra/web3'
+import { ChainId, deocdeAddress, ProviderType, SchemaType } from '@masknet/web3-shared-solana'
 import { Providers } from './provider'
 import type { SolanaConnection as BaseConnection, SolanaConnectionOptions } from './types'
 import { NETWORK_ENDPOINTS } from '../../constants'
@@ -8,7 +8,7 @@ import { NETWORK_ENDPOINTS } from '../../constants'
 class Connection implements BaseConnection {
     private connections: Map<ChainId, SolanaConnection> = new Map()
 
-    constructor(private account: string, private chainId: ChainId, private providerType: ProviderType) {}
+    constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
 
     getWeb3(options?: SolanaConnectionOptions) {
         return this.getWeb3Provider(options).createWeb3(options?.chainId ?? this.chainId)
@@ -79,6 +79,13 @@ class Connection implements BaseConnection {
         return Promise.all(transactions.map((x) => this.signTransaction(x)))
     }
 
+    callTransaction(
+        transaction: Transaction,
+        options?: Web3Plugin.ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+
     async sendTransaction(transaction: Transaction, options?: SolanaConnectionOptions) {
         const signedTransaction = await this.signTransaction(transaction)
         return sendAndConfirmRawTransaction(this.getWeb3Connection(options), signedTransaction.serialize())
@@ -93,23 +100,21 @@ class Connection implements BaseConnection {
         return response?.nonce ? Number.parseInt(response.nonce) : 0
     }
 
-    watchTransaction(id: string, transaction: Transaction, options?: SolanaConnectionOptions): Promise<void> {
+    getFungileToken(
+        address: string,
+        options?: Web3Plugin.ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<Web3Plugin.FungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
-
-    unwatchTransaction(id: string, options?: SolanaConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    addChain(chainId: ChainId): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    switchChain(chainId: ChainId): Promise<void> {
+    getNonFungileToken(
+        address: string,
+        id: string,
+        options?: Web3Plugin.ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<Web3Plugin.FungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
 }
 
-export function createConnection(account = '', chainId = ChainId.Mainnet, providerType = ProviderType.Phantom) {
-    return new Connection(account, chainId, providerType)
+export function createConnection(chainId = ChainId.Mainnet, account = '', providerType = ProviderType.Phantom) {
+    return new Connection(chainId, account, providerType)
 }

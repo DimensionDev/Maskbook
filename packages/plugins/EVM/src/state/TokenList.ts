@@ -3,9 +3,9 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { TokenListState, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { TokenList as TokenListAPI } from '@masknet/web3-providers'
-import { ChainId, getTokenListConstants } from '@masknet/web3-shared-evm'
+import { ChainId, getTokenListConstants, SchemaType } from '@masknet/web3-shared-evm'
 
-export class TokenList extends TokenListState<ChainId> {
+export class TokenList extends TokenListState<ChainId, SchemaType> {
     constructor(
         context: Plugin.Shared.SharedContext,
         subscriptions: {
@@ -22,12 +22,12 @@ export class TokenList extends TokenListState<ChainId> {
                 [chainId.value]: [],
             }
             return accumualtor
-        }, {} as Record<'fungibleTokens' | 'nonFungibleTokens', Record<ChainId, Web3Plugin.Token[]>>)
+        }, {} as Record<'fungibleTokens' | 'nonFungibleTokens', Record<ChainId, Web3Plugin.Token<ChainId, SchemaType>[]>>)
 
         super(context, defaultValue, subscriptions)
     }
 
-    override async getFungibleTokenLists(chainId: ChainId) {
+    async getFungibleTokens(chainId: ChainId) {
         const tokenListCached = await super.getFungibleTokenLists(chainId)
         if (tokenListCached) return tokenListCached
 

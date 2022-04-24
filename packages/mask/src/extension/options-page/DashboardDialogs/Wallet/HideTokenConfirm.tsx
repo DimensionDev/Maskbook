@@ -4,7 +4,7 @@ import { unreachable } from '@dimensiondev/kit'
 import {
     ERC20TokenDetailed,
     ERC721TokenDetailed,
-    EthereumTokenType,
+    SchemaType,
     FungibleTokenDetailed,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
@@ -29,17 +29,17 @@ export function DashboardWalletHideTokenConfirmDialog(
         () => {
             const type = ((token as FungibleTokenDetailed).type ??
                 (token as ERC721TokenDetailed).contractDetailed.type) as
-                | EthereumTokenType.Native
-                | EthereumTokenType.ERC20
-                | EthereumTokenType.ERC721
+                | SchemaType.Native
+                | SchemaType.ERC20
+                | SchemaType.ERC721
             switch (type) {
-                case EthereumTokenType.Native:
+                case SchemaType.Native:
                     throw new Error('Unable to hide the native token.')
-                case EthereumTokenType.ERC20:
+                case SchemaType.ERC20:
                     return WalletRPC.updateWalletToken(wallet.address, token as ERC20TokenDetailed, {
                         strategy: 'block',
                     })
-                case EthereumTokenType.ERC721:
+                case SchemaType.ERC721:
                     return WalletRPC.removeToken(token as ERC721TokenDetailed)
                 default:
                     unreachable(type)

@@ -2,7 +2,7 @@ import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPac
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import { isLessThan, toFixed } from '@masknet/web3-shared-base'
 import {
-    EthereumTokenType,
+    SchemaType,
     FungibleTokenDetailed,
     TransactionEventType,
     TransactionState,
@@ -59,7 +59,7 @@ function checkParams(paramsObj: ParamsObjType, setCreateState?: (value: Transact
         return false
     }
 
-    if (paramsObj.tokenType !== EthereumTokenType.Native && paramsObj.tokenType !== EthereumTokenType.ERC20) {
+    if (paramsObj.tokenType !== SchemaType.Native && paramsObj.tokenType !== SchemaType.ERC20) {
         setCreateState?.({
             type: TransactionStateType.FAILED,
             error: new Error('Token not supported'),
@@ -86,8 +86,8 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
         if (!redPacketSettings || !redPacketContract) return null
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
         const seed = Math.random().toString()
-        const tokenType = token!.type === EthereumTokenType.Native ? 0 : 1
-        const tokenAddress = token!.type === EthereumTokenType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
+        const tokenType = token!.type === SchemaType.Native ? 0 : 1
+        const tokenAddress = token!.type === SchemaType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
         if (!tokenAddress) {
             return null
         }
@@ -113,7 +113,7 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
         const params = Object.values(omit(paramsObj, ['token'])) as MethodParameters
 
         let gasError: Error | null = null
-        const value = toFixed(paramsObj.token?.type === EthereumTokenType.Native ? total : 0)
+        const value = toFixed(paramsObj.token?.type === SchemaType.Native ? total : 0)
 
         const gas = await (redPacketContract as HappyRedPacketV4).methods
             .create_red_packet(...params)
@@ -169,7 +169,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         })
 
         // estimate gas and compose transaction
-        const value = toFixed(token.type === EthereumTokenType.Native ? paramsObj.total : 0)
+        const value = toFixed(token.type === SchemaType.Native ? paramsObj.total : 0)
         const config = {
             from: account,
             value,

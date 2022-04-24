@@ -1,11 +1,10 @@
-import { PluginId } from '@masknet/plugin-infra'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-flow/types'
 
-export const PLUGIN_ID = PluginId.Flow
+export const PLUGIN_ID = NetworkPluginID.PLUGIN_FLOW
 export const PLUGIN_NAME = 'Flow Chain'
 export const PLUGIN_DESCRIPTION = ''
-export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
+export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor<ChainId, NetworkType>[] = [
     {
         ID: `${PLUGIN_ID}_flow`,
         networkSupporterPluginID: PLUGIN_ID,
@@ -27,7 +26,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         isMainnet: false,
     },
 ]
-export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
+export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor<ChainId, ProviderType>[] = [
     {
         ID: `${PLUGIN_ID}_blocto`,
         providerAdaptorPluginID: PLUGIN_ID,

@@ -10,13 +10,13 @@ import {
     isValidAddress,
     NetworkType,
     ProviderType,
+    Web3,
 } from '@masknet/web3-shared-evm'
 import { Providers } from './Protocol/provider'
-import type { EVM_Web3 } from './Protocol/types'
 
 export class Provider
-    extends ProviderState<ChainId, NetworkType, ProviderType, EIP1193Provider, EVM_Web3>
-    implements Web3Plugin.ObjectCapabilities.ProviderState<ChainId, NetworkType, ProviderType>
+    extends ProviderState<ChainId, ProviderType, NetworkType, EIP1193Provider, Web3>
+    implements Web3Plugin.ObjectCapabilities.ProviderState<ChainId, ProviderType, NetworkType>
 {
     constructor(context: Plugin.Shared.SharedContext) {
         const defaultValue: ProviderStorage<Web3Plugin.Account<ChainId>, ProviderType> = {

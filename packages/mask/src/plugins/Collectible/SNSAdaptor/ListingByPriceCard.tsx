@@ -3,7 +3,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
-    EthereumTokenType,
+    SchemaType,
     FungibleTokenDetailed,
     FungibleTokenWatched,
     isNativeTokenAddress,
@@ -99,7 +99,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
+        if (token.value.type !== SchemaType.Native && token.value.type !== SchemaType.ERC20) return
         const schemaName = asset.value.asset_contract?.schemaName
         await PluginCollectibleRPC.createSellOrder({
             asset: toAsset({

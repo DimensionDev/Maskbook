@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid'
 import {
     ERC721ContractDetailed,
     ERC721TokenDetailed,
-    EthereumTokenType,
+    SchemaType,
     formatWeiToEther,
     isSameAddress,
     isValidAddress,
@@ -152,7 +152,7 @@ export const TransferERC721 = memo(() => {
     // #endregion
 
     const erc721GasLimit = useGasLimit(
-        EthereumTokenType.ERC721,
+        SchemaType.ERC721,
         contract?.address,
         undefined,
         EthereumAddress.isValid(allFormFields.recipient) ? allFormFields.recipient : registeredAddress,
@@ -168,7 +168,7 @@ export const TransferERC721 = memo(() => {
     const nativeToken = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice()
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
-        EthereumTokenType.ERC721,
+        SchemaType.ERC721,
         contract?.address ?? '',
     )
 

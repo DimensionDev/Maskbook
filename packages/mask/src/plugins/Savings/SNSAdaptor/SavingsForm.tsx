@@ -8,7 +8,7 @@ import {
     createContract,
     createERC20Token,
     createLookupTableResolver,
-    EthereumTokenType,
+    SchemaType,
     formatBalance,
     formatCurrency,
     getAaveConstants,
@@ -70,7 +70,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     })
     const [open, setOpen] = useState(false)
 
-    const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', chainId)
+    const { value: nativeTokenBalance } = useFungibleTokenBalance(SchemaType.Native, '', chainId)
 
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
@@ -93,8 +93,8 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     // #region form variables
     const { value: inputTokenBalance } = useFungibleTokenBalance(
         isSameAddress(protocol.bareToken.address, NATIVE_TOKEN_ADDRESS)
-            ? EthereumTokenType.Native
-            : protocol.bareToken.type ?? EthereumTokenType.Native,
+            ? SchemaType.Native
+            : protocol.bareToken.type ?? SchemaType.Native,
         protocol.bareToken.address,
         chainId,
     )
@@ -162,7 +162,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
 
         return {
             approveToken:
-                token.type === EthereumTokenType.ERC20
+                token.type === SchemaType.ERC20
                     ? createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
                     : undefined,
             approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),

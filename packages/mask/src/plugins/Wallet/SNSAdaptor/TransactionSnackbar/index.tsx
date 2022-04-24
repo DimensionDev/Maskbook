@@ -76,7 +76,7 @@ export function TransactionSnackbar() {
     useAsync(async () => {
         if (!progress) return
 
-        const computed = await TransactionFormatter?.format?.(progress.chainId, progress.transaction)
+        const computed = await TransactionFormatter?.formatTransaction?.(progress.chainId, progress.transaction)
         if (!computed) return
 
         showSingletonSnackbar(computed.title, {

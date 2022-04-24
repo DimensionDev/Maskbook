@@ -1,4 +1,4 @@
-import type Web3 from 'web3'
+import Web3 from 'web3'
 import { useMemo } from 'react'
 import type { AbiItem } from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
@@ -10,7 +10,7 @@ export function createContract<T extends BaseContract>(web3: Web3, address: stri
     if (!address || !EthereumAddress.isValid(address)) return null
     const contract = new web3.eth.Contract(ABI, address) as unknown as T
     contract.transactionConfirmationBlocks = 0
-    contract.transactionPollingTimeout = 5000
+    contract.transactionPollingTimeout = 10 * 1000
     return contract
 }
 

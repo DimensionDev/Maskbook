@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import { toFixed } from '@masknet/web3-shared-base'
 import {
-    EthereumTokenType,
+    SchemaType,
     FungibleTokenDetailed,
     TransactionEventType,
     TransactionStateType,
@@ -33,12 +33,12 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         const grantAmount = new BigNumber(amount).minus(tipAmount)
         return [
             [
-                token.type === EthereumTokenType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
+                token.type === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
                 tipAmount.toFixed(), // amount
                 address, // dest
             ],
             [
-                token.type === EthereumTokenType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
+                token.type === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
                 grantAmount.toFixed(), // amount
                 address, // dest
             ],
@@ -59,7 +59,7 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         })
 
         // estimate gas and compose transaction
-        const value = toFixed(token.type === EthereumTokenType.Native ? amount : 0)
+        const value = toFixed(token.type === SchemaType.Native ? amount : 0)
         const config = {
             from: account,
             gas: await bulkCheckoutContract.methods

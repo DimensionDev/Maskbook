@@ -1,6 +1,6 @@
 import type { ERC20TokenRecord } from '../Wallet/database/types'
 import type {
-    EthereumTokenType,
+    SchemaType,
     FungibleTokenDetailed,
     ChainId,
     ERC721TokenDetailed,
@@ -59,7 +59,7 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     }
     contract_version: number
     network?: string
-    token_type?: EthereumTokenType.Native | EthereumTokenType.ERC20
+    token_type?: SchemaType.Native | SchemaType.ERC20
     token?: FungibleTokenDetailed
     token_address?: string
     claimers?: { address: string; name: string }[]
@@ -103,7 +103,7 @@ export interface NftRedPacketJSONPayload extends RedPacketBasic {
     }
     contract_version: number
     network?: string
-    token_type: EthereumTokenType.ERC721
+    token_type: SchemaType.ERC721
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }
 

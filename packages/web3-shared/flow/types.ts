@@ -1,6 +1,13 @@
+import type * as fcl from '@blocto/fcl'
+
 export enum ChainId {
     Mainnet = 1,
     Testnet = 2,
+}
+
+export enum SchemaType {
+    Fungible = 1,
+    NonFungile = 2,
 }
 
 export enum NetworkType {
@@ -18,3 +25,10 @@ export enum AssetProviderType {
 }
 
 export enum FclProvider {}
+
+export type Web3 = typeof fcl
+export type Signature = fcl.CompositeSignature[]
+export type Transaction = fcl.MutateOptions
+export type TransactionDetailed = fcl.TransactionObject
+export type TransactionSignature = never
+export type TransactionParameter = string

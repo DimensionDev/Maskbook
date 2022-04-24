@@ -117,6 +117,7 @@ const chainNameMap: Record<NetworkType, string> = {
     [NetworkType.Optimistic]: 'Optimistic',
     [NetworkType.Conflux]: 'Conflux',
 }
+
 export function getNetworkTypeFromChainId(chainId: ChainId, value?: boolean) {
     const chainDetailed = getChainDetailed(chainId)
     const entry = Object.entries(chainNameMap).find(([_, value]) => {
@@ -147,4 +148,8 @@ export function getNetworkName(chainId: ChainId) {
     if (chainDetailed.networkId === ChainId.Matic) return chainDetailed.fullName
     if (chainDetailed.network === 'mainnet') return chainDetailed.chain
     return upperFirst(chainDetailed.network)
+}
+
+export function getAverageBlockDelay(chainId: ChainId, scale = 1) {
+    return 15 * 1000 * scale
 }

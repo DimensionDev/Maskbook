@@ -1,21 +1,16 @@
-import type { default as Web3, AccountInfo, Transaction, TransactionResponse } from '@solana/web3.js'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
-import type { ChainId, NetworkType, ProviderType, SolProvider } from '@masknet/web3-shared-solana'
+import type { AccountInfo } from '@solana/web3.js'
+import type { NetworkPluginID, Web3Helper, Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { ChainId, SolProvider, Transaction, Web3 } from '@masknet/web3-shared-solana'
 
-export type SolanaWeb3 = typeof Web3
+export type SolanaWeb3 = Web3
 
-export type SolanaWeb3State = Web3Plugin.ObjectCapabilities.Capabilities<
-    ChainId,
-    ProviderType,
-    NetworkType,
-    string,
-    Transaction,
-    TransactionResponse,
-    Transaction,
-    SolanaWeb3
->
+export type SolanaWeb3State = Web3Helper.Web3State<NetworkPluginID.PLUGIN_SOLANA>
 
-export interface SolanaProvider extends Web3Plugin.Provider<ChainId, SolProvider, SolanaWeb3> {
+export type SolanaWeb3UI = Web3Helper.Web3UI<NetworkPluginID.PLUGIN_SOLANA>
+
+export type SolanaConnectionOptions = Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_SOLANA>
+
+export interface SolanaProvider extends Web3Plugin.WalletProvider<ChainId, SolProvider, Web3> {
     /** Sign message. */
     signMessage(dataToSign: string): Promise<string>
     /** Sign a transaction. */
@@ -24,17 +19,6 @@ export interface SolanaProvider extends Web3Plugin.Provider<ChainId, SolProvider
     signTransactions(transactions: Transaction[]): Promise<Transaction[]>
 }
 
-export interface SolanaConnection
-    extends Web3Plugin.Connection<
-        ChainId,
-        ProviderType,
-        string,
-        Transaction,
-        TransactionResponse,
-        Transaction,
-        SolanaWeb3
-    > {
+export interface SolanaConnection extends Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_SOLANA> {
     getAccountInfo(account: string): Promise<AccountInfo<Buffer> | null>
 }
-
-export type SolanaConnectionOptions = Web3Plugin.ConnectionOptions<ChainId, ProviderType, Transaction>

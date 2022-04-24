@@ -2,13 +2,16 @@ import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { TokenListState, Web3Plugin } from '@masknet/plugin-infra/web3'
-import { ChainId, getTokenConstants } from '@masknet/web3-shared-flow'
+import { ChainId, getTokenConstants, SchemaType } from '@masknet/web3-shared-flow'
 import { createFungibleToken } from '../helpers'
 
-export class TokenList extends TokenListState<ChainId> {
+export class TokenList
+    extends TokenListState<ChainId, SchemaType>
+    implements Web3Plugin.ObjectCapabilities.TokenListState<ChainId, SchemaType>
+{
     constructor(
-        protected override context: Plugin.Shared.SharedContext,
-        protected override subscriptions: {
+        context: Plugin.Shared.SharedContext,
+        subscriptions: {
             chainId?: Subscription<ChainId>
         },
     ) {
@@ -22,12 +25,12 @@ export class TokenList extends TokenListState<ChainId> {
                 [chainId.value]: [],
             }
             return accumualtor
-        }, {} as Record<'fungibleTokens' | 'nonFungibleTokens', Record<ChainId, Web3Plugin.Token[]>>)
+        }, {} as Record<'fungibleTokens' | 'nonFungibleTokens', Record<ChainId, Web3Plugin.Token<ChainId, SchemaType>[]>>)
 
         super(context, defaultValue, subscriptions)
     }
 
-    private composeFungibleTokenList(chainId: ChainId): Web3Plugin.FungibleToken[] {
+    private composeFungibleTokenList(chainId: ChainId): Web3Plugin.FungibleToken<ChainId, SchemaType>[] {
         const { FLOW_ADDRESS = '', FUSD_ADDRESS = '', TETHER_ADDRESS = '' } = getTokenConstants(chainId)
         return [
             createFungibleToken(
@@ -57,11 +60,15 @@ export class TokenList extends TokenListState<ChainId> {
         ]
     }
 
-    override async getFungibleTokenLists(chainId: ChainId) {
+    async getFungibleTokens(chainId: ChainId) {
         const tokenListCached = await super.getFungibleTokenLists(chainId)
         if (tokenListCached) return tokenListCached
 
-        super.setTokenList(chainId, this.composeFungibleTokenList(chainId) as Web3Plugin.Token[], 'fungible')
+        super.setTokenList(
+            chainId,
+            this.composeFungibleTokenList(chainId) as Web3Plugin.Token<ChainId, SchemaType>[],
+            'fungible',
+        )
         return super.getFungibleTokenLists(chainId)
     }
 }

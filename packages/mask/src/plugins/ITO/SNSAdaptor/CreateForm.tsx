@@ -1,6 +1,6 @@
 import {
     ERC20TokenDetailed,
-    EthereumTokenType,
+    SchemaType,
     formatAmount,
     formatBalance,
     useAccount,
@@ -177,7 +177,7 @@ export function CreateForm(props: CreateFormProps) {
 
     // balance
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        tokenAndAmount?.token?.type ?? EthereumTokenType.Native,
+        tokenAndAmount?.token?.type ?? SchemaType.Native,
         tokenAndAmount?.token?.address ?? '',
     )
 
@@ -469,9 +469,7 @@ export function CreateForm(props: CreateFormProps) {
                     <EthereumERC20TokenApprovedBoundary
                         amount={inputTokenAmount}
                         spender={ITO2_CONTRACT_ADDRESS}
-                        token={
-                            tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined
-                        }>
+                        token={tokenAndAmount?.token?.type === SchemaType.ERC20 ? tokenAndAmount.token : undefined}>
                         <ActionButton
                             className={classes.button}
                             fullWidth

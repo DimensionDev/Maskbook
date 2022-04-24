@@ -1,7 +1,9 @@
-import type { Web3Plugin } from '../web3-types'
-import type { NetworkPluginID } from '../entry-web3'
-import { usePluginWeb3StateContext } from './Context'
+import { useWeb3State, NetworkPluginID } from '../entry-web3'
+import { EMPTY_ARRAY } from '../utils/subscription'
+import { useSubscription } from 'use-subscription'
 
-export function useNonFungibleTokens<T extends Web3Plugin.NonFungibleToken[]>(pluginID?: NetworkPluginID) {
-    return usePluginWeb3StateContext(pluginID).nonFungibleTokens as T
+export function useNonFungibleTokens<T extends NetworkPluginID>(pluginID?: T) {
+    const { Token } = useWeb3State(pluginID)
+    // @ts-ignore
+    return useSubscription(Token?.nonFungibleTokens ?? EMPTY_ARRAY)
 }

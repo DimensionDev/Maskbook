@@ -1,11 +1,12 @@
+import { useMemo } from 'react'
 import { useNetworkType } from './useNetworkType'
 import { useCurrentWeb3NetworkPluginID } from './Context'
 import { getPluginDefine } from '../manager/store'
 import type { NetworkPluginID } from '../web3-types'
 
-export function useNetworkDescriptor(
-    expectedPluginID?: NetworkPluginID,
-    expectedChainIdOrNetworkTypeOrID?: number | string,
+export function useNetworkDescriptor<T extends NetworkPluginID>(
+    expectedPluginID?: T,
+    expectedChainIdOrNetworkTypeOrID?: string,
 ) {
     const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
     const networkType = useNetworkType(pluginID)

@@ -1,9 +1,16 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
 import type { Emitter } from '@servie/events'
-import type { MaskBaseAPI } from '@masknet/web3-providers'
 import type { EnhanceableSite } from '@masknet/shared-base'
+import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type { Plugin } from './types'
+
+export type Color =
+    | `rgb(${number}, ${number}, ${number})`
+    | `rgba(${number}, ${number}, ${number}, ${number})`
+    | `#${string}${string}${string}${string}${string}${string}`
+    | `#${string}${string}${string}`
+    | `hsl(${number}, ${number}%, ${number}%)`
 
 export interface Pagination {
     /** The item size of each page. */
@@ -17,9 +24,7 @@ export interface Pageable<T> {
     hasNextPage: boolean
     data: T[]
 }
-/**
- * A network plugin defines the way to connect to a single chain.
- */
+
 export enum NetworkPluginID {
     PLUGIN_EVM = 'com.mask.evm',
     PLUGIN_FLOW = 'com.mask.flow',
@@ -41,15 +46,7 @@ export enum TransactionStatusType {
     NOT_DEPEND = 0,
     SUCCEED = 1,
     FAILED = 2,
-    CANCELLED = 3,
 }
-
-export type Color =
-    | `rgb(${number}, ${number}, ${number})`
-    | `rgba(${number}, ${number}, ${number}, ${number})`
-    | `#${string}${string}${string}${string}${string}${string}`
-    | `#${string}${string}${string}`
-    | `hsl(${number}, ${number}%, ${number}%)`
 
 export enum TransactionDescriptorType {
     /** Transfer on chain value. */
@@ -138,13 +135,12 @@ export declare namespace Web3Plugin {
         }
     }
 
-    export interface ChainDetailed {
+    export interface ChainDetailed<ChainId> {
         name: string
-        chainId: number
+        chainId: ChainId
         fullName?: string
         shortName?: string
         chainName?: string
-        /** network name */
         network?: 'mainnet' | Omit<string, 'mainnet'>
     }
     export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
@@ -154,6 +150,8 @@ export declare namespace Web3Plugin {
         account?: string
         /** Designate the provider to handle the transaction. */
         providerType?: ProviderType
+        /** Handle on popups page. */
+        popupsWindow?: boolean
         /** Fragments to merge into the transaction. */
         overrides?: Partial<Transaction>
     }
@@ -163,6 +161,7 @@ export declare namespace Web3Plugin {
         title: string
         /** a human-readable description. */
         description?: string
+        /** The original transaction object */
         _tx: Transaction
     }
     export interface TransactionContext<ChainId, Parameter = string | undefined> {
@@ -202,14 +201,13 @@ export declare namespace Web3Plugin {
         /** the derivation path when wallet last was derived */
         latestDerivationPath?: string
         /** the internal presentation of mask wallet sdk */
-        storedKeyInfo?: MaskBaseAPI.StoredKeyInfo
+        storedKeyInfo?: api.IStoredKeyInfo
         /** the Mask SDK stored key info */
         /** record created at */
         createdAt: Date
         /** record updated at */
         updatedAt: Date
     }
-
     export interface AddressName {
         id: string
         /** eg. vitalik.eth */
@@ -219,7 +217,7 @@ export declare namespace Web3Plugin {
         /** eg. 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 */
         resolvedAddress?: string
     }
-    export interface Transaction {
+    export interface Transaction<ChainId, SchemaType> {
         id: string
         type?: string
         filterType?: string
@@ -230,7 +228,7 @@ export declare namespace Web3Plugin {
         /** 0: failed 1: succeed */
         status: 0 | 1
         /** transferred tokens */
-        tokens: (Token & {
+        tokens: (Token<ChainId, SchemaType> & {
             amount: string
             direction: string
         })[]
@@ -239,7 +237,6 @@ export declare namespace Web3Plugin {
             [key in CurrencyType]?: string
         }
     }
-
     export interface RecentTransaction {
         id: string
         chainId: number
@@ -250,31 +247,26 @@ export declare namespace Web3Plugin {
         /** record updated at */
         updatedAt: Date
     }
-
     export interface Identity {
         address: string
         nickname?: string
         avatarURL?: string
         link?: string
     }
-
-    export interface Token<SubTokenType = string | number> {
+    export interface Token<ChainId, SchemaType> {
         id: string
-        chainId: number
+        chainId: ChainId
         type: TokenType
-        /** a sub type for casting later */
-        subType: SubTokenType
+        schema: SchemaType
         address: string
     }
-
-    export interface FungibleToken<SubTokenType = string | number> extends Token<SubTokenType> {
+    export interface FungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
         decimals?: number
         name: string
         symbol: string
         logoURI?: string | string[]
     }
-
-    export interface NonFungibleToken<SubTokenType = string | number> extends Token<SubTokenType> {
+    export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
         tokenId: string
         metadata?: {
             name?: string
@@ -307,11 +299,10 @@ export declare namespace Web3Plugin {
             createdAt?: number
         }
     }
-
     /**
      * A fungible token but with more metadata
      */
-    export interface FungibleAsset extends FungibleToken {
+    export interface FungibleAsset<ChainId, SchemaType> extends FungibleToken<ChainId, SchemaType> {
         /** currently balance */
         balance: string
         /** estimated price */
@@ -327,7 +318,7 @@ export declare namespace Web3Plugin {
     /**
      * A non-fungible token but with more metadata
      */
-    export interface NonFungibleAsset extends NonFungibleToken {
+    export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<ChainId, SchemaType> {
         /** the creator data */
         creator?: Identity
         /** the owner data */
@@ -349,9 +340,9 @@ export declare namespace Web3Plugin {
             /** unix timestamp */
             endAt?: number
             /** tokens available to make an order */
-            orderTokens?: FungibleToken[]
+            orderTokens?: FungibleToken<ChainId, SchemaType>[]
             /** tokens available to make an offer */
-            offerTokens?: FungibleToken[]
+            offerTokens?: FungibleToken<ChainId, SchemaType>[]
         }
         orders?: {
             quantity: number
@@ -369,7 +360,7 @@ export declare namespace Web3Plugin {
             price?: {
                 [key in CurrencyType]?: string
             }
-            paymentToken?: FungibleToken
+            paymentToken?: FungibleToken<ChainId, SchemaType>
         }[]
         events?: {
             type: string
@@ -379,15 +370,15 @@ export declare namespace Web3Plugin {
             price?: {
                 [key in CurrencyType]?: string
             }
-            paymentToken?: FungibleToken
+            paymentToken?: FungibleToken<ChainId, SchemaType>
         }[]
     }
 
-    export interface TokenList {
+    export interface TokenList<ChainId, SchemaType> {
         name: string
         description?: string
         /** fungile or non-fungile tokens */
-        tokens: Token[]
+        tokens: Token<ChainId, SchemaType>[]
     }
 
     export interface Account<ChainId> {
@@ -405,9 +396,13 @@ export declare namespace Web3Plugin {
         /** Emit when the site discconect with a provider. */
         discconect: []
     }
-
-    export interface Provider<ChainId, Web3Provider, Web3> {
+    export interface WatchEvents {
+        /** Emit whne the watched transaction status updated. */
+        progress: [string, TransactionStatusType]
+    }
+    export interface WalletProvider<ChainId, Web3Provider, Web3> {
         emitter: Emitter<ProviderEvents<ChainId>>
+
         /** Get to know whether the provider is ready. */
         readonly ready: boolean
         /** Keep waiting until the provider is ready. */
@@ -423,8 +418,12 @@ export declare namespace Web3Plugin {
         /** Dismiss the connection. */
         disconnect(): Promise<void>
     }
+    export interface TransactionChecker<ChainId> {
+        checkStatus(chainId: ChainId, id: string): Promise<TransactionStatusType>
+    }
     export interface Connection<
         ChainId,
+        SchemaType,
         ProviderType,
         Signature,
         Transaction,
@@ -433,6 +432,14 @@ export declare namespace Web3Plugin {
         Web3,
         Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
     > {
+        /** Get a fungible token. */
+        getFungileToken(address: string, options?: Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>>
+        /** Get an non-fungile token. */
+        getNonFungileToken(
+            address: string,
+            id: string,
+            options?: Web3ConnectionOptions,
+        ): Promise<FungibleToken<ChainId, SchemaType>>
         /** Get web3 client instance. */
         getWeb3(options?: Web3ConnectionOptions): Promise<Web3>
         /** Get the currently connected account. */
@@ -464,14 +471,10 @@ export declare namespace Web3Plugin {
         signTransactions(transactions: Transaction[], options?: Web3ConnectionOptions): Promise<TransactionSignature[]>
         /** Query a transaction */
         callTransaction(transaction: Transaction, options?: Web3ConnectionOptions): Promise<string>
-        /** Send a tranaction */
+        /** Send a transaction and wait for mining */
         sendTransaction(transaction: Transaction, options?: Web3ConnectionOptions): Promise<string>
         /** Send a signed transaction */
         sendSignedTransaction(signature: TransactionSignature, options?: Web3ConnectionOptions): Promise<string>
-        /** Watch a transaction */
-        watchTransaction(id: string, transaction: Transaction, options?: Web3ConnectionOptions): Promise<void>
-        /** Unwatch a transaction */
-        unwatchTransaction(id: string, options?: Web3ConnectionOptions): Promise<void>
     }
     export namespace ObjectCapabilities {
         export interface SettingsState {
@@ -500,23 +503,29 @@ export declare namespace Web3Plugin {
             /** Revoke statement of designate account */
             revoke?: (address: string, pluginID?: string) => Promise<void>
         }
-        export interface AssetState<ChainId> {
+        export interface AssetState<ChainId, SchemaType> {
             /** Get fungible assets of given account. */
             getFungibleAssets?: (
                 chainId: ChainId,
                 address: string,
                 pagination?: Pagination,
-            ) => Promise<Pageable<FungibleAsset>>
+            ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
             /** Get non-fungible assets of given account. */
             getNonFungibleAssets?: (
                 chainId: ChainId,
                 address: string,
                 pagination?: Pagination,
-            ) => Promise<Pageable<NonFungibleAsset>>
+            ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
             /** Get all fungible assets of given account. */
-            getAllFungibleAssets?: (chainId: ChainId, address: string) => AsyncIterableIterator<FungibleAsset[]>
+            getAllFungibleAssets?: (
+                chainId: ChainId,
+                address: string,
+            ) => AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>[]>
             /** Get all non-fungible assets of given account. */
-            getAllNonFungibleAssets?: (chainId: ChainId, address: string) => AsyncIterableIterator<NonFungibleAsset[]>
+            getAllNonFungibleAssets?: (
+                chainId: ChainId,
+                address: string,
+            ) => AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>[]>
         }
         export interface NameServiceState<ChainId, DomainBook = Record<string, string>> {
             /** The tracked domains of currently chosen sub-network */
@@ -527,6 +536,7 @@ export declare namespace Web3Plugin {
             /** get domain name of address */
             reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
         }
+        export interface GasPriceState {}
         export interface TokenPriceState<ChainId> {
             /** The tracked token prices which stored as address and price pairs. */
             tokenPrices?: Subscription<CryptoPrices>
@@ -536,27 +546,31 @@ export declare namespace Web3Plugin {
             /** get prices of tokens */
             getTokenPrices?: (chainId: ChainId, currency: CurrencyType, ids: string[]) => CryptoPrices
         }
-        export interface TokenListState<ChainId> {
+        export interface TokenListState<ChainId, SchemaType> {
             /** The tracked fungible token list of currently chosen sub-network */
-            fungibleTokens?: Subscription<FungibleToken[]>
+            fungibleTokens?: Subscription<FungibleToken<ChainId, SchemaType>[]>
             /** The tracked non-fungible token list of currently chosen sub-network */
-            nonFungibleTokens?: Subscription<NonFungibleToken[]>
+            nonFungibleTokens?: Subscription<NonFungibleToken<ChainId, SchemaType>[]>
 
             /** Get the fungible token list. */
-            getFungibleTokens?: (chainId: ChainId) => Promise<FungibleToken[]>
+            getFungibleTokens?: (chainId: ChainId) => Promise<FungibleToken<ChainId, SchemaType>[]>
             /** Get the non-fungible token list. */
-            getNonFungibleTokens?: (chainId: ChainId) => Promise<NonFungibleToken[]>
+            getNonFungibleTokens?: (chainId: ChainId) => Promise<NonFungibleToken<ChainId, SchemaType>[]>
         }
-        export interface TokenState {
+        export interface TokenState<ChainId, SchemaType> {
             /** The user added fungible tokens. */
-            fungibleTokens?: Subscription<FungibleToken[]>
+            fungibleTokens?: Subscription<FungibleToken<ChainId, SchemaType>[]>
             /** The user added non-fungible tokens. */
-            nonFungibleTokens?: Subscription<NonFungibleToken[]>
+            nonFungibleTokens?: Subscription<NonFungibleToken<ChainId, SchemaType>[]>
 
-            addToken?: (token: Token) => Promise<void>
-            removeToken?: (token: Token) => Promise<void>
-            trustToken?: (address: string, token: Token) => Promise<void>
-            blockToken?: (address: string, token: Token) => Promise<void>
+            /** Add a token */
+            addToken?: (token: Token<ChainId, SchemaType>) => Promise<void>
+            /** Remove a token */
+            removeToken?: (token: Token<ChainId, SchemaType>) => Promise<void>
+            /** Unblock a token */
+            trustToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
+            /** Block a token */
+            blockToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
         }
         export interface TransactionState<ChainId, Transaction> {
             /** The tracked transactions of currently chosen sub-network */
@@ -585,8 +599,6 @@ export declare namespace Web3Plugin {
             clearTransactions?: (chainId: ChainId, address: string) => Promise<void>
         }
         export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
-            /** Elaborate a transaction in a human-readable format. */
-            format: (chainId: ChainId, transaction: Transaction) => Promise<TransactionDescriptor<Transaction>>
             /** Step 1: Create a transaction formatting context. */
             createContext: (
                 chainId: ChainId,
@@ -598,8 +610,26 @@ export declare namespace Web3Plugin {
                 transaction: Transaction,
                 context: TransactionContext<ChainId, Parameters>,
             ) => Promise<TransactionDescriptor<Transaction>>
+            /** Elaborate a transaction in a human-readable format. */
+            formatTransaction: (
+                chainId: ChainId,
+                transaction: Transaction,
+            ) => Promise<TransactionDescriptor<Transaction>>
         }
-        export interface ProviderState<ChainId, NetworkType, ProviderType> {
+        export interface TransactionWatcherState<ChainId, Transaction> {
+            emitter: Emitter<WatchEvents>
+
+            /** Add a transaction into the watch list. */
+            watchTrasnsaction: (chainId: ChainId, id: string, transaction: Transaction) => void
+            /** Remove a transction from the watch list. */
+            unwatchTransaction: (chainId: ChainId, id: string) => void
+            /** Update transaction status */
+            notifyTransaction: (id: string, status: TransactionStatusType) => void
+        }
+        export interface ExplorerState<ChainId, Transaction> {
+            getLatestTransactions: (chainId: ChainId, account: string) => Promise<Transaction[]>
+        }
+        export interface ProviderState<ChainId, ProviderType, NetworkType> {
             /** The account of the currently visiting site. */
             account?: Subscription<string>
             /** The chain id of the currently visiting site. */
@@ -620,6 +650,7 @@ export declare namespace Web3Plugin {
         }
         export interface ProtocolState<
             ChainId,
+            SchemaType,
             ProviderType,
             Signature,
             Transaction,
@@ -629,6 +660,7 @@ export declare namespace Web3Plugin {
             Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
             Web3Connection = Connection<
                 ChainId,
+                SchemaType,
                 ProviderType,
                 Signature,
                 Transaction,
@@ -652,6 +684,8 @@ export declare namespace Web3Plugin {
             getLatestBlockNumber?: (options?: Web3ConnectionOptions) => Promise<number>
             /** Get transaction status */
             getTransactionStatus?: (id: string, options?: Web3ConnectionOptions) => Promise<TransactionStatusType>
+            /** Switch to sub network */
+            switchChain?: (options?: Web3ConnectionOptions) => Promise<void>
             /** Sign a plain message, some chain support multiple sign methods */
             signMessage?: (dataToSign: string, signType?: string, options?: Web3ConnectionOptions) => Promise<Signature>
             /** Verify a signed message */
@@ -661,6 +695,8 @@ export declare namespace Web3Plugin {
                 signType?: string,
                 options?: Web3ConnectionOptions,
             ) => Promise<boolean>
+            /** Query a transaction */
+            callTransaction?: (transction: Transaction, options?: Web3ConnectionOptions) => Promise<string>
             /** Sign a transaction, and the result could send as a raw transaction */
             signTransaction?: (
                 transaction: Transaction,
@@ -673,10 +709,6 @@ export declare namespace Web3Plugin {
                 transaction: TransactionSignature,
                 options?: Web3ConnectionOptions,
             ) => Promise<string>
-            /** Add a sub-network */
-            addChain?: (options?: Web3ConnectionOptions) => Promise<void>
-            /** Switch to sub network */
-            switchChain?: (options?: Web3ConnectionOptions) => Promise<void>
         }
         export interface WalletState {
             /** The currently stored wallet by MaskWallet. */
@@ -706,7 +738,7 @@ export declare namespace Web3Plugin {
 
             /** chain customization */
             getDefaultChainId(): ChainId
-            getChainDetailed(chainId: ChainId): ChainDetailed | undefined
+            getChainDetailed(chainId: ChainId): ChainDetailed<ChainId> | undefined
             getAverageBlockDelay(chainId: ChainId, scale?: number): number
 
             resolveChainName(chainId: ChainId): string
@@ -730,28 +762,31 @@ export declare namespace Web3Plugin {
             resolveNonFungibleTokenLink(chainId: ChainId, address: string, tokenId: string): string
         }
         export interface Capabilities<
-            ChainId = number,
-            ProviderType = string,
-            NetworkType = string,
-            Signature = string,
-            Transaction = unknown,
-            TransactionDetailed = unknown,
-            TransactionSignature = string,
-            TransactionParameter = string | undefined,
-            Web3 = unknown,
+            ChainId,
+            SchemaType,
+            ProviderType,
+            NetworkType,
+            Signature,
+            Transaction,
+            TransactionDetailed,
+            TransactionSignature,
+            TransactionParameter,
+            Web3,
         > {
             AddressBook?: AddressBookState<ChainId>
-            Asset?: AssetState<ChainId>
+            Asset?: AssetState<ChainId, SchemaType>
             NameService?: NameServiceState<ChainId>
             RiskWarning?: RiskWarningState
             Settings?: SettingsState
-            Token?: TokenState
+            Token?: TokenState<ChainId, SchemaType>
             TokenPrice?: TokenPriceState<ChainId>
-            TokenList?: TokenListState<ChainId>
+            TokenList?: TokenListState<ChainId, SchemaType>
             Transaction?: TransactionState<ChainId, Transaction>
             TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
+            TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
             Protocol?: ProtocolState<
                 ChainId,
+                SchemaType,
                 ProviderType,
                 Signature,
                 Transaction,
@@ -759,7 +794,8 @@ export declare namespace Web3Plugin {
                 TransactionSignature,
                 Web3
             >
-            Provider?: ProviderState<ChainId, NetworkType, ProviderType>
+            Explorer?: ExplorerState<ChainId, Transaction>
+            Provider?: ProviderState<ChainId, ProviderType, NetworkType>
             Wallet?: WalletState
             Utils?: Others<ChainId, ProviderType, NetworkType>
         }

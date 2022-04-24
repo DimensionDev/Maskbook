@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, CircularProgress, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
 import {
     ERC721ContractDetailed,
-    EthereumTokenType,
+    SchemaType,
     formatEthereumAddress,
     resolveAddressLinkOnExplorer,
     SocketState,
@@ -164,7 +164,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
     const renderAssets = assets.map((x) => ({
         contractDetailed: {
-            type: EthereumTokenType.ERC721,
+            type: SchemaType.ERC721,
             address: x.address,
             chainId,
             name: x.name,

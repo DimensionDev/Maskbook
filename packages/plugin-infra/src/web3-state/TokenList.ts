@@ -5,16 +5,17 @@ import type { Web3Plugin } from '../web3-types'
 
 export class TokenListState<
     ChainId extends number,
-    TokenLists extends Record<'fungibleTokens' | 'nonFungibleTokens', Record<ChainId, Web3Plugin.Token[]>> = Record<
+    SchemaType extends string | number,
+    TokenLists extends Record<
         'fungibleTokens' | 'nonFungibleTokens',
-        Record<ChainId, Web3Plugin.Token[]>
-    >,
-> implements Web3Plugin.ObjectCapabilities.TokenListState<ChainId>
+        Record<ChainId, Web3Plugin.Token<ChainId, SchemaType>[]>
+    > = Record<'fungibleTokens' | 'nonFungibleTokens', Record<ChainId, Web3Plugin.Token<ChainId, SchemaType>[]>>,
+> implements Web3Plugin.ObjectCapabilities.TokenListState<ChainId, SchemaType>
 {
     protected storage: StorageItem<TokenLists> = null!
 
-    public fungibleTokens?: Subscription<Web3Plugin.FungibleToken[]>
-    public nonFungibleTokens?: Subscription<Web3Plugin.NonFungibleToken[]>
+    public fungibleTokens?: Subscription<Web3Plugin.FungibleToken<ChainId, SchemaType>[]>
+    public nonFungibleTokens?: Subscription<Web3Plugin.NonFungibleToken<ChainId, SchemaType>[]>
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
@@ -31,16 +32,22 @@ export class TokenListState<
         if (this.subscriptions.chainId) {
             this.fungibleTokens = mapSubscription(
                 mergeSubscription<[ChainId, TokenLists]>(this.subscriptions.chainId, this.storage.subscription),
-                ([chainId, tokenLists]) => tokenLists.fungibleTokens[chainId] as Web3Plugin.FungibleToken[],
+                ([chainId, tokenLists]) =>
+                    tokenLists.fungibleTokens[chainId] as Web3Plugin.FungibleToken<ChainId, SchemaType>[],
             )
             this.nonFungibleTokens = mapSubscription(
                 mergeSubscription<[ChainId, TokenLists]>(this.subscriptions.chainId, this.storage.subscription),
-                ([chainId, tokenLists]) => tokenLists.nonFungibleTokens[chainId] as Web3Plugin.NonFungibleToken[],
+                ([chainId, tokenLists]) =>
+                    tokenLists.nonFungibleTokens[chainId] as Web3Plugin.NonFungibleToken<ChainId, SchemaType>[],
             )
         }
     }
 
-    protected setTokenList(chainId: ChainId, tokenList: Web3Plugin.Token[], type: 'fungible' | 'nonFungible') {
+    protected setTokenList(
+        chainId: ChainId,
+        tokenList: Web3Plugin.Token<ChainId, SchemaType>[],
+        type: 'fungible' | 'nonFungible',
+    ) {
         const all = this.storage.value
         this.storage.setValue({
             ...all,
@@ -62,10 +69,10 @@ export class TokenListState<
     }
 
     async getFungibleTokenLists(chainId: ChainId) {
-        return this.storage.value.fungibleTokens[chainId] as Web3Plugin.FungibleToken[]
+        return this.storage.value.fungibleTokens[chainId] as Web3Plugin.FungibleToken<ChainId, SchemaType>[]
     }
 
     async getNonFungibleTokenLists(chainId: ChainId) {
-        return this.storage.value.nonFungibleTokens[chainId] as Web3Plugin.NonFungibleToken[]
+        return this.storage.value.nonFungibleTokens[chainId] as Web3Plugin.NonFungibleToken<ChainId, SchemaType>[]
     }
 }

@@ -3,8 +3,8 @@ import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared
 import type { Plugin } from '../types'
 import { Web3Plugin, TransactionStatusType } from '../web3-types'
 
-export type TransactionStorage<ChainId extends number, Transaction> = Record<
-    // chainId
+export type TransactionStorage<ChainId, Transaction> = Record<
+    // @ts-ignore
     ChainId,
     Partial<
         Record<
@@ -21,7 +21,7 @@ export type TransactionStorage<ChainId extends number, Transaction> = Record<
     >
 >
 
-export class TransactionState<ChainId extends number, Transaction>
+export class TransactionState<ChainId, Transaction>
     implements Web3Plugin.ObjectCapabilities.TransactionState<ChainId, Transaction>
 {
     static MAX_RECORD_SIZE = 20
@@ -57,10 +57,6 @@ export class TransactionState<ChainId extends number, Transaction>
         }
     }
 
-    formatTransaction(transaction: Transaction): Promise<Web3Plugin.TransactionDescriptor<Transaction>> {
-        throw new Error('Method not impelemented.')
-    }
-
     async addTransaction(chainId: ChainId, address: string, id: string, transaction: Transaction) {
         const now = new Date()
         const all = this.storage.value
@@ -72,6 +68,7 @@ export class TransactionState<ChainId extends number, Transaction>
 
         await this.storage.setValue({
             ...all,
+            // @ts-ignore
             [chainId]: {
                 ...all[chainId],
                 [address_]: [
@@ -103,6 +100,7 @@ export class TransactionState<ChainId extends number, Transaction>
 
         await this.storage.setValue({
             ...all,
+            // @ts-ignore
             [chainId]: {
                 ...all[chainId],
                 [address_]: (all[chainId][address] ?? []).map((x) =>
@@ -137,6 +135,7 @@ export class TransactionState<ChainId extends number, Transaction>
 
         await this.storage.setValue({
             ...all,
+            // @ts-ignore
             [chainId]: {
                 ...all[chainId],
                 [address_]: (all[chainId][address] ?? []).map((x) =>
@@ -158,6 +157,7 @@ export class TransactionState<ChainId extends number, Transaction>
 
         await this.storage.setValue({
             ...all,
+            // @ts-ignore
             [chainId]: {
                 ...all[chainId],
                 [address_]: all[chainId][address_]?.filter((x) => !Object.keys(x.candidates).includes(id)),
@@ -171,6 +171,7 @@ export class TransactionState<ChainId extends number, Transaction>
 
         await this.storage.setValue({
             ...all,
+            // @ts-ignore
             [chainId]: {
                 ...all[chainId],
                 [address_]: [],

@@ -119,7 +119,7 @@ const CreateMnemonic = memo(() => {
                 account: address_,
                 providerType: ProviderType.MaskWallet,
             })
-            await PluginServices.Wallet.selectAccount([address_])
+            await PluginServices.Wallet.selectMaskAccount([address_])
         }
 
         return address_

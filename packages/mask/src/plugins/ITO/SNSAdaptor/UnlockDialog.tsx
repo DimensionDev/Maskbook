@@ -3,7 +3,7 @@ import { isGreaterThan, rightShift } from '@masknet/web3-shared-base'
 import { useCallback, useState } from 'react'
 import {
     ERC20TokenDetailed,
-    EthereumTokenType,
+    SchemaType,
     formatBalance,
     formatEthereumAddress,
     resolveAddressLinkOnExplorer,
@@ -64,7 +64,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const [rawAmount, setRawAmount] = useState('')
     const amount = rightShift(rawAmount || '0', token?.decimals)
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        token?.type ?? EthereumTokenType.Native,
+        token?.type ?? SchemaType.Native,
         token?.address ?? '',
     )
     // #endregion

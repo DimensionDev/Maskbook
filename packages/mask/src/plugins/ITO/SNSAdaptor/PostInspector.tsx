@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import {
     useChainId,
     useFungibleTokenDetailed,
-    EthereumTokenType,
+    SchemaType,
     FungibleTokenDetailed,
     FungibleTokenInitial,
     useFungibleTokensDetailed,
@@ -41,7 +41,7 @@ export function PostInspector(props: PostInspectorProps) {
         loading: _loadingToken,
         retry: retryToken,
     } = useFungibleTokenDetailed(
-        EthereumTokenType.ERC20,
+        SchemaType.ERC20,
         typeof token === 'string' ? (token as string) : (token as FungibleTokenDetailed).address,
     )
 
@@ -51,9 +51,7 @@ export function PostInspector(props: PostInspectorProps) {
                 (t) =>
                     ({
                         address: t.address,
-                        type: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS)
-                            ? EthereumTokenType.Native
-                            : EthereumTokenType.ERC20,
+                        type: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS) ? SchemaType.Native : SchemaType.ERC20,
                     } as Pick<FungibleTokenInitial, 'address' | 'type'>),
             ),
         [JSON.stringify(_payload.exchange_tokens)],

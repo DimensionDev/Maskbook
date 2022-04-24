@@ -5,7 +5,7 @@ import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
+import { SchemaType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
@@ -465,7 +465,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     amount={approveAmount.toFixed()}
                                     token={
                                         !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
-                                        approveToken?.type === EthereumTokenType.ERC20 &&
+                                        approveToken?.type === SchemaType.ERC20 &&
                                         !!approveAmount.toNumber()
                                             ? approveToken
                                             : undefined

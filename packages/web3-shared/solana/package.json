@@ -9,7 +9,6 @@
     }
   },
   "dependencies": {
-    "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",

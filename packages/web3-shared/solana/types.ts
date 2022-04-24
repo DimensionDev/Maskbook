@@ -1,9 +1,26 @@
-import type { PublicKey } from '@solana/web3.js'
+import type {
+    default as SolanaWeb3,
+    PublicKey,
+    Transaction as SolanaTransaction,
+    TransactionResponse,
+} from '@solana/web3.js'
+
+export type Web3 = typeof SolanaWeb3
+export type Signature = string
+export type Transaction = SolanaTransaction
+export type TransactionDetailed = TransactionResponse
+export type TransactionSignature = SolanaTransaction
+export type TransactionParameter = string
 
 export enum ChainId {
     Mainnet = 101,
     Testnet = 102,
     Devnet = 103,
+}
+
+export enum SchemaType {
+    Fungible = 1,
+    NonFungile = 2,
 }
 
 export enum NetworkType {

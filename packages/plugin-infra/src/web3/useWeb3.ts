@@ -1,10 +1,13 @@
-import { NetworkPluginID, useWeb3State } from '../entry-web3'
+import { useMemo } from 'react'
+import { NetworkPluginID, useWeb3State, Web3Helper } from '../entry-web3'
 
-export function useWeb3<SendOverrides, RequestOption>(
-    expectedPluginID?: NetworkPluginID,
-    overrides?: SendOverrides,
-    options?: RequestOption,
+export function useWeb3<T extends NetworkPluginID>(
+    expectedPluginID?: T,
+    options?: Web3Helper.Web3ConnectionOptions<T>,
 ) {
-    const web3State = useWeb3State(expectedPluginID)
-    return web3State.Protocol?.getWeb3?.(overrides, options) ?? null
+    const { Protocol } = useWeb3State(expectedPluginID)
+    return useMemo(() => {
+        // @ts-ignore
+        return Protocol?.getWeb3?.(options) ?? null
+    }, [options, Protocol])
 }

@@ -1,10 +1,6 @@
 import type { TransactionReceipt } from 'web3-core'
-import {
-    EthereumMethodType,
-    EthereumTransactionConfig,
-    getReceiptStatus,
-    TransactionStatusType,
-} from '@masknet/web3-shared-evm'
+import { EthereumMethodType, EthereumTransactionConfig, getReceiptStatus } from '@masknet/web3-shared-evm'
+import { TransactionStatusType } from '@masknet/plugin-infra/web3'
 import type { Context, Middleware } from '../types'
 import { Web3StateSettings } from '../../../settings'
 

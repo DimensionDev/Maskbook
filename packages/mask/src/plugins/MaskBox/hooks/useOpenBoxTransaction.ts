@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { EthereumTokenType, FungibleTokenDetailed, useAccount } from '@masknet/web3-shared-evm'
+import { SchemaType, FungibleTokenDetailed, useAccount } from '@masknet/web3-shared-evm'
 import { useMaskBoxContract } from './useMaskBoxContract'
 import { multipliedBy } from '@masknet/web3-shared-base'
 
@@ -22,7 +22,7 @@ export function useOpenBoxTransaction(
                 ...overrides,
                 from: account,
                 value:
-                    paymentTokenDetailed?.type === EthereumTokenType.Native
+                    paymentTokenDetailed?.type === SchemaType.Native
                         ? multipliedBy(paymentTokenPrice, amount).toFixed()
                         : undefined,
             },

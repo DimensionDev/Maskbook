@@ -1,13 +1,27 @@
 import { first } from 'lodash-unified'
 import { unreachable } from '@dimensiondev/kit'
 import { CompositeSignature, TransactionStatusCode, MutateOptions, QueryOptions } from '@blocto/fcl'
-import { ChainId, ProviderType } from '@masknet/web3-shared-flow'
-import { TransactionStatusType } from '@masknet/plugin-infra/web3'
+import { ChainId, ProviderType, SchemaType } from '@masknet/web3-shared-flow'
+import { TransactionStatusType, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { Providers } from './provider'
 import type { FlowConnection as BaseConnection, FlowConnectionOptions } from './types'
 
 class Connection implements BaseConnection {
-    constructor(private account: string, private chainId: ChainId, private providerType: ProviderType) {}
+    constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
+
+    getFungileToken(
+        address: string,
+        options?: FlowConnectionOptions,
+    ): Promise<Web3Plugin.FungibleToken<ChainId, SchemaType>> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungileToken(
+        address: string,
+        id: string,
+        options?: FlowConnectionOptions,
+    ): Promise<Web3Plugin.FungibleToken<ChainId, SchemaType>> {
+        throw new Error('Method not implemented.')
+    }
 
     getWeb3(options?: FlowConnectionOptions) {
         return Providers[options?.providerType ?? this.providerType].createWeb3(options?.chainId ?? this.chainId)
@@ -57,6 +71,9 @@ class Connection implements BaseConnection {
         const key = first(account.keys)
         return key?.sequenceNumber ?? 0
     }
+    switchChain(chainId: ChainId, options?: FlowConnectionOptions): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
     async signMessage(dataToSign: string, signType?: string, options?: FlowConnectionOptions) {
         const web3 = await this.getWeb3(options)
         return web3.currentUser.signUserMessage(dataToSign)
@@ -89,18 +106,6 @@ class Connection implements BaseConnection {
     sendSignedTransaction(signature: never, options?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    watchTransaction(id: string, mutation: MutateOptions, options?: FlowConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    unwatchTransaction(id: string, options?: FlowConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    addChain(chainId: ChainId, options?: FlowConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    switchChain(chainId: ChainId, options?: FlowConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
 }
 
 /**
@@ -108,6 +113,6 @@ class Connection implements BaseConnection {
  * @param providerType
  * @returns
  */
-export function createConnection(account = '', chainId = ChainId.Mainnet, providerType = ProviderType.Blocto) {
-    return new Connection(account, chainId, providerType)
+export function createConnection(chainId = ChainId.Mainnet, account = '', providerType = ProviderType.Blocto) {
+    return new Connection(chainId, account, providerType)
 }

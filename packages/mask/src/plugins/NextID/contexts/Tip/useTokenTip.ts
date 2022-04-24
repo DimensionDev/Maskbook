@@ -1,6 +1,6 @@
 import { rightShift } from '@masknet/web3-shared-base'
 import {
-    EthereumTokenType,
+    SchemaType,
     FungibleTokenDetailed,
     isSameAddress,
     useTokenConstants,
@@ -14,7 +14,7 @@ export function useTokenTip(recipient: string, token: FungibleTokenDetailed | nu
 
     const isNativeToken = isSameAddress(token?.address, NATIVE_TOKEN_ADDRESS)
 
-    const assetType = isNativeToken ? EthereumTokenType.Native : EthereumTokenType.ERC20
+    const assetType = isNativeToken ? SchemaType.Native : SchemaType.ERC20
     const [transferState, transferCallback] = useTokenTransferCallback(assetType, token?.address || '')
 
     const sendTip = useCallback(async () => {

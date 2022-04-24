@@ -1,6 +1,17 @@
-import type { RequestArguments, TransactionConfig as TransactionConfig_ } from 'web3-core'
+import type EVM_Web3 from 'web3'
+import type {
+    RequestArguments,
+    Transaction as Web3Transaction,
+    TransactionConfig as TransactionConfig_,
+} from 'web3-core'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
-import type { CurrencyType } from '@masknet/plugin-infra/web3'
+
+export type Web3 = EVM_Web3
+export type Signature = string
+export type Transaction = EthereumTransactionConfig
+export type TransactionDetailed = Web3Transaction
+export type TransactionSignature = string
+export type TransactionParameter = string | undefined
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 export type ChainIdRecord<T> = { [k in ChainId]: T }
@@ -87,7 +98,7 @@ export interface Wallet {
 
 // #region Ether
 export interface NativeToken {
-    type: EthereumTokenType.Native
+    type: SchemaType.Native
     address: string
     chainId: ChainId
 }
@@ -102,7 +113,7 @@ export interface NativeTokenDetailed extends NativeToken {
 
 // #region ERC20
 export interface ERC20Token {
-    type: EthereumTokenType.ERC20
+    type: SchemaType.ERC20
     address: string
     chainId: ChainId
 }
@@ -117,7 +128,7 @@ export interface ERC20TokenDetailed extends ERC20Token {
 
 // #region ERC721
 export interface ERC721Token {
-    type: EthereumTokenType.ERC721
+    type: SchemaType.ERC721
     address: string
     chainId: ChainId
 }
@@ -170,7 +181,7 @@ export interface ERC721TokenCollectionInfo {
 
 // #region ERC1155
 export interface ERC1155Token {
-    type: EthereumTokenType.ERC1155
+    type: SchemaType.ERC1155
     address: string
     chainId: ChainId
 }
@@ -213,21 +224,20 @@ export type ERC721TokenOutMask = Omit<ERC721TokenDetailed, 'chainId'> & {
 // #endregion
 
 interface TokenDetailedMap {
-    [EthereumTokenType.Native]: NativeTokenDetailed
-    [EthereumTokenType.ERC20]: ERC20TokenDetailed
-    [EthereumTokenType.ERC721]: ERC721TokenDetailed
-    [EthereumTokenType.ERC1155]: ERC1155TokenDetailed
+    [SchemaType.Native]: NativeTokenDetailed
+    [SchemaType.ERC20]: ERC20TokenDetailed
+    [SchemaType.ERC721]: ERC721TokenDetailed
+    [SchemaType.ERC1155]: ERC1155TokenDetailed
 }
 
 interface TokenAssetDetailedMap {
-    [EthereumTokenType.ERC721]: ERC721TokenDetailed
-    [EthereumTokenType.ERC1155]: ERC1155TokenAssetDetailed
+    [SchemaType.ERC721]: ERC721TokenDetailed
+    [SchemaType.ERC1155]: ERC1155TokenAssetDetailed
 }
 
-export type EthereumTokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
+export type EthereumTokenDetailedType<T extends SchemaType> = TokenDetailedMap[T]
 
-export type TokenAssetDetailedType<T extends EthereumTokenType.ERC721 | EthereumTokenType.ERC1155> =
-    TokenAssetDetailedMap[T]
+export type TokenAssetDetailedType<T extends SchemaType.ERC721 | SchemaType.ERC1155> = TokenAssetDetailedMap[T]
 
 // Learn more: https://eips.ethereum.org/EIPS/eip-747
 export interface EthereumAssetDetailed {
@@ -251,7 +261,7 @@ export interface EthereumChainDetailed {
     blockExplorerUrls: string[]
 }
 
-export enum EthereumTokenType {
+export enum SchemaType {
     Native = 0,
     ERC20 = 1,
     ERC721 = 2,
@@ -309,9 +319,6 @@ export enum EthereumMethodType {
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
 
     // only for mask
-    MASK_WATCH_TRANSACTION = 'mask_watchTransaction',
-    MASK_UNWATCH_TRANSACTION = 'mask_unwatchTransaction',
-    MASK_GET_TRANSACTION_RECEIPT = 'mask_getTransactionReceipt',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
     MASK_CONFIRM_TRANSACTION = 'mask_confirmTransaction',
     MASK_REJECT_TRANSACTION = 'mask_rejectTransaction',
@@ -324,162 +331,6 @@ export type EthereumTransactionConfig = TransactionConfig_ & {
     gatewayFee?: string // value paid to the gateway fee recipient, denominated in the fee currency
 }
 
-// #region
-export enum EthereumRpcType {
-    // transaction
-    CANCEL = 'cancel',
-    RETRY = 'retry', // speed up
-
-    // contract interaction
-    SEND_ETHER = 'sendEther',
-    CONTRACT_INTERACTION = 'contractInteraction',
-    CONTRACT_DEPLOYMENT = 'contractDeployment',
-
-    // asset
-    WATCH_ASSET = 'wallet_watchAsset',
-
-    // wallet
-    WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
-
-    // sign
-    SIGN = 'eth_sign',
-    SIGN_TYPED_DATA = 'eth_signTypedData_v4',
-
-    // decrypt
-    ETH_DECRYPT = 'eth_decrypt',
-    ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
-}
-
-export interface RepalceTransactionComputed {
-    type: EthereumRpcType.CANCEL | EthereumRpcType.RETRY
-
-    /**
-     * The original transaction config
-     */
-    _tx: EthereumTransactionConfig
-}
-export interface SendEtherComputed {
-    type: EthereumRpcType.SEND_ETHER
-
-    /**
-     * The original transaction config
-     */
-    _tx: EthereumTransactionConfig
-}
-export interface ContractDeploymentComputed {
-    type: EthereumRpcType.CONTRACT_DEPLOYMENT
-
-    /**
-     * code in bytes
-     */
-    code: string
-
-    /**
-     * The original transaction config
-     */
-    _tx: EthereumTransactionConfig
-}
-export interface ContractInteractionComputed {
-    type: EthereumRpcType.CONTRACT_INTERACTION
-
-    /**
-     * the method type name of the invoked contract
-     */
-    name: string
-
-    /**
-     * parameters in an array of bytes (only built-in abis)
-     */
-    parameters?: {
-        [key in string]?: string
-    }
-
-    /**
-     * The original transaction config
-     */
-    _tx: EthereumTransactionConfig
-}
-export interface SignComputed {
-    type: EthereumRpcType.SIGN
-
-    /**
-     * the sign to address
-     */
-    to: string
-
-    /**
-     * the original message
-     */
-    data: string
-}
-export interface SignTypedDataComputed {
-    type: EthereumRpcType.SIGN_TYPED_DATA
-
-    /**
-     * the sign to address
-     */
-    to: string
-
-    /**
-     * typed data
-     */
-    data: any
-}
-export interface GetEncryptionPlulicKeyComputed {
-    type: EthereumRpcType.ETH_GET_ENCRYPTION_PUBLIC_KEY
-
-    /**
-     * the account address
-     */
-    account: string
-}
-
-export interface DecryptComputed {
-    type: EthereumRpcType.ETH_DECRYPT
-
-    /**
-     * the decrypt to address
-     * Learn more: https://docs.metamask.io/guide/rpc-api.html#eth-decrypt
-     */
-    to: string
-
-    /**
-     * the secret message
-     */
-    secret: string
-}
-
-export interface SwitchChainComputed {
-    type: EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN
-
-    /**
-     * the chain detailed
-     */
-    chain?: EthereumChainDetailed
-}
-
-export interface WatchAssetComputed {
-    type: EthereumRpcType.WATCH_ASSET
-
-    /**
-     * the asset detailed
-     */
-    asset: EthereumAssetDetailed
-}
-
-export type ComputedPayload =
-    | RepalceTransactionComputed
-    | SendEtherComputed
-    | ContractDeploymentComputed
-    | ContractInteractionComputed
-    | SignComputed
-    | SignTypedDataComputed
-    | GetEncryptionPlulicKeyComputed
-    | DecryptComputed
-    | SwitchChainComputed
-    | WatchAssetComputed
-// #endregion
-
 export enum TransactionEventType {
     TRANSACTION_HASH = 'transactionHash',
     RECEIPT = 'receipt',
@@ -487,20 +338,20 @@ export enum TransactionEventType {
     ERROR = 'error',
 }
 
-export enum TransactionStatusType {
-    NOT_DEPEND = 0,
-    SUCCEED = 1,
-    FAILED = 2,
-    CANCELLED = 3,
-}
+// export enum TransactionStatusType {
+//     NOT_DEPEND = 0,
+//     SUCCEED = 1,
+//     FAILED = 2,
+//     CANCELLED = 3,
+// }
 
-export interface ChainOptions {
-    chainId: ChainId
-    account: string
-    currencyType: CurrencyType
-    providerType: ProviderType
-    networkType: NetworkType
-}
+// export interface ChainOptions {
+//     chainId: ChainId
+//     account: string
+//     currencyType: CurrencyType
+//     providerType: ProviderType
+//     networkType: NetworkType
+// }
 
 export interface GasOptions {
     rapid: number
@@ -510,30 +361,30 @@ export interface GasOptions {
     custom: number
 }
 
-export interface Asset {
-    token: FungibleTokenDetailed
-    /**
-     * The chain name of assets
-     */
-    chain: 'eth' | string
-    /**
-     * The total balance of token
-     */
-    balance: string
-    /**
-     * The estimated price
-     */
-    price?: {
-        [key in CurrencyType]: string
-    }
-    /**
-     * The estimated value
-     */
-    value?: {
-        [key in CurrencyType]: string
-    }
-    logoURI?: string
-}
+// export interface Asset {
+//     token: FungibleTokenDetailed
+//     /**
+//      * The chain name of assets
+//      */
+//     chain: 'eth' | string
+//     /**
+//      * The total balance of token
+//      */
+//     balance: string
+//     /**
+//      * The estimated price
+//      */
+//     price?: {
+//         [key in CurrencyType]: string
+//     }
+//     /**
+//      * The estimated value
+//      */
+//     value?: {
+//         [key in CurrencyType]: string
+//     }
+//     logoURI?: string
+// }
 
 export enum DomainProvider {
     ENS = 'ENS',
@@ -591,24 +442,24 @@ export interface TransactionGasFee {
     usd: number
 }
 
-export interface Transaction {
-    type: string | undefined
-    id: string
-    timeAt: Date
-    toAddress: string
-    failed: boolean
-    pairs: TransactionPair[]
-    gasFee: TransactionGasFee | undefined
-    transactionType: string
-}
+// export interface Transaction {
+//     type: string | undefined
+//     id: string
+//     timeAt: Date
+//     toAddress: string
+//     failed: boolean
+//     pairs: TransactionPair[]
+//     gasFee: TransactionGasFee | undefined
+//     transactionType: string
+// }
 
-export interface RecentTransaction {
-    at: Date
-    hash: string
-    status: TransactionStatusType
-    candidates: Record<string, EthereumTransactionConfig>
-    computedPayload?: ComputedPayload
-}
+// export interface RecentTransaction {
+//     at: Date
+//     hash: string
+//     status: TransactionStatusType
+//     candidates: Record<string, EthereumTransactionConfig>
+//     computedPayload?: ComputedPayload
+// }
 
 // #region address name
 export enum AddressNameType {

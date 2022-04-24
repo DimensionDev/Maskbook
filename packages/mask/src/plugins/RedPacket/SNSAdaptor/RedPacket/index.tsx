@@ -13,7 +13,7 @@ import {
     useNetworkType,
     useWeb3,
     useTokenConstants,
-    EthereumTokenType,
+    SchemaType,
     isSameAddress,
 } from '@masknet/web3-shared-evm'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
@@ -58,9 +58,7 @@ export function RedPacket(props: RedPacketProps) {
     const { value: tokenDetailed } = useFungibleTokenDetailed(
         payload.token?.type ??
             payload.token_type ??
-            (isSameAddress(NATIVE_TOKEN_ADDRESS, payload.token_address)
-                ? EthereumTokenType.Native
-                : EthereumTokenType.ERC20),
+            (isSameAddress(NATIVE_TOKEN_ADDRESS, payload.token_address) ? SchemaType.Native : SchemaType.ERC20),
         payload.token?.address ?? payload.token_address ?? '',
     )
     const token = payload.token ?? tokenDetailed

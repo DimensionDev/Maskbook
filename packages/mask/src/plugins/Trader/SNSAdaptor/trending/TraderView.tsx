@@ -21,7 +21,7 @@ import { currentDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
 import {
-    EthereumTokenType,
+    SchemaType,
     useFungibleTokenDetailed,
     useChainIdValid,
     useNetworkType,
@@ -136,7 +136,7 @@ export function TraderView(props: TraderViewProps) {
 
     // #region swap
     const { value: tokenDetailed } = useFungibleTokenDetailed(
-        coinSymbol === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+        coinSymbol === 'eth' ? SchemaType.Native : SchemaType.ERC20,
         coinSymbol === 'eth' ? '' : trending?.coin.contract_address ?? '',
     )
     // #endregion

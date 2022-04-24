@@ -2,8 +2,7 @@ import Web3, { PublicKey } from '@solana/web3.js'
 import bs58 from 'bs58'
 import { Buffer } from 'buffer'
 import urlcat from 'urlcat'
-import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra/web3'
-import { leftShift, multipliedBy, createLookupTableResolver } from '@masknet/web3-shared-base'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
 import { ChainId, ProviderType, NetworkType } from '../types'
 import { getChainConstants } from '../constants'
 
@@ -44,44 +43,6 @@ export function isValidDomain(domain: string) {
 
 export function isValidAddress(address?: string) {
     return !!(address && Web3.PublicKey.isOnCurve(bs58.decode(address)))
-}
-// #endregion
-
-// #region token
-export function createFungibleToken(
-    chainId: ChainId,
-    address: string,
-    name: string,
-    symbol: string,
-    decimals: number,
-    logoURI?: string,
-): Web3Plugin.FungibleToken {
-    return {
-        id: address,
-        chainId,
-        type: TokenType.Fungible,
-        subType: TokenType.Fungible,
-        address,
-        name,
-        symbol,
-        decimals,
-        logoURI,
-    }
-}
-
-export function createFungibleAsset(
-    token: Web3Plugin.FungibleToken,
-    balance: string,
-    price?: { [key in CurrencyType]?: string },
-): Web3Plugin.FungibleAsset {
-    return {
-        ...token,
-        balance: leftShift(balance, 8).toFixed(),
-        price,
-        value: {
-            [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, 8)).toFixed(),
-        },
-    }
 }
 // #endregion
 
@@ -160,19 +121,6 @@ export const resolveProviderName = createLookupTableResolver<ProviderType, strin
 // #endregion
 
 // #region chain detailed
-export function getChainDetailed(chainId: ChainId): Web3Plugin.ChainDetailed {
-    const { NAME, FULL_NAME, SHORT_NAME } = getChainConstants(chainId)
-
-    return {
-        name: NAME ?? 'Solana',
-        chainId,
-        fullName: FULL_NAME ?? 'Solana',
-        shortName: SHORT_NAME ?? 'SOL',
-        chainName: 'Solana',
-        network: chainId === ChainId.Mainnet ? 'mainnet' : 'testnet',
-    }
-}
-
 export function getNetworkTypeFromChainId(chainId: ChainId) {
     return NetworkType.Solana
 }

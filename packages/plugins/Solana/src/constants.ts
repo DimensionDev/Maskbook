@@ -1,12 +1,12 @@
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-solana'
 import { PublicKey } from '@solana/web3.js'
 
 export const PLUGIN_META_KEY = 'com.mask.solana'
-export const PLUGIN_ID = 'com.mask.solana'
+export const PLUGIN_ID = NetworkPluginID.PLUGIN_SOLANA
 export const PLUGIN_NAME = 'Solana Chain'
 export const PLUGIN_DESCRIPTION = ''
-export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
+export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor<ChainId, NetworkType>[] = [
     {
         ID: `${PLUGIN_ID}_solana`,
         networkSupporterPluginID: PLUGIN_ID,
@@ -28,7 +28,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         isMainnet: false,
     },
 ]
-export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
+export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor<ChainId, ProviderType>[] = [
     {
         ID: `${PLUGIN_ID}_phantom`,
         providerAdaptorPluginID: PLUGIN_ID,

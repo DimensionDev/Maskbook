@@ -1,9 +1,12 @@
+import type { Plugin } from '../types'
 import type { Web3Plugin } from '../entry-web3'
 
 export class TransactionFormatterState<ChainId, TransactionParameter, Transaction>
     implements Web3Plugin.ObjectCapabilities.TransactionFormatterState<ChainId, TransactionParameter, Transaction>
 {
-    async format(chainId: ChainId, transaction: Transaction) {
+    constructor(context: Plugin.Shared.SharedContext) {}
+
+    async formatTransaction(chainId: ChainId, transaction: Transaction) {
         const context = await this.createContext(chainId, transaction)
         return this.createDescriptor(chainId, transaction, context)
     }

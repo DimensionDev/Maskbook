@@ -13,7 +13,7 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { first, uniqBy } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import { FungibleTokenDetailed, EthereumTokenType, useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, SchemaType, useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
@@ -98,7 +98,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
+        if (token.value.type !== SchemaType.Native && token.value.type !== SchemaType.ERC20) return
         const schemaName = asset.value.asset_contract?.schemaName
         await PluginCollectibleRPC.createBuyOrder({
             asset: toAsset({
@@ -109,7 +109,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
             expirationTime: !isAuction ? getUnixTime(expirationDateTime) : undefined,
-            paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
+            paymentTokenAddress: token.value.type === SchemaType.Native ? undefined : token.value.address,
         })
     }, [asset?.value, token, account, amount, expirationDateTime, isAuction])
 

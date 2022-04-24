@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import {
     FungibleTokenDetailed,
-    EthereumTokenType,
+    SchemaType,
     useAccount,
     useTransactionState,
     TransactionStateType,
@@ -46,7 +46,7 @@ export function useDepositCallback(
         // step 1: estimate gas
         const config = {
             from: account,
-            value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
+            value: new BigNumber(token.type === SchemaType.Native ? amount : 0).toFixed(),
         }
         const estimatedGas = await poolContract.methods
             .depositTo(account, amount, controlledToken, referrer)

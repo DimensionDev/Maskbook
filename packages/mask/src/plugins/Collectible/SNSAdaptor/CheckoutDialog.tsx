@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import { EthereumTokenType, useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
+import { SchemaType, useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -73,7 +73,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const [ToS_Checked, setToS_Checked] = useState(false)
     const [insufficientBalance, setInsufficientBalance] = useState(false)
     const { token, balance } = useFungibleTokenWatched({
-        type: EthereumTokenType.Native,
+        type: SchemaType.Native,
         address: order.value?.paymentTokenContract?.address ?? '',
     })
     const onCheckout = useCallback(async () => {

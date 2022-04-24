@@ -5,7 +5,7 @@ import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     currySameAddress,
-    EthereumTokenType,
+    SchemaType,
     FungibleTokenDetailed,
     TransactionEventType,
     TransactionStateType,
@@ -166,7 +166,7 @@ export function useSwapCallback(
         ] as Parameters<ITO2['methods']['swap']>
 
         // estimate gas and compose transaction
-        const value = toFixed(token.type === EthereumTokenType.Native ? total : 0)
+        const value = toFixed(token.type === SchemaType.Native ? total : 0)
         const config = {
             from: account,
             gas: isQualificationHasLucky

@@ -1,5 +1,5 @@
 import {
-    EthereumTokenType,
+    SchemaType,
     isSameAddress,
     useAssetsFromChain,
     useERC20TokensDetailedFromTokenLists,
@@ -26,8 +26,8 @@ export function useERC20TokensDetailed() {
                 nativeTokenDetailed ? [nativeTokenDetailed, ...erc20TokensDetailed] : [...erc20TokensDetailed],
                 (x) => x.address.toLowerCase(),
             ).sort((a, z) => {
-                if (a.type === EthereumTokenType.Native) return -1
-                if (z.type === EthereumTokenType.Native) return 1
+                if (a.type === SchemaType.Native) return -1
+                if (z.type === SchemaType.Native) return 1
                 if (isSameAddress(a.address, MASK_ADDRESS)) return -1
                 if (isSameAddress(z.address, MASK_ADDRESS)) return 1
                 return 0

@@ -14,7 +14,7 @@ import {
     TransactionStateType,
     useAccount,
     isSameAddress,
-    EthereumTokenType,
+    SchemaType,
     FungibleTokenDetailed,
     useFungibleTokenDetailed,
     useTokenConstants,
@@ -204,7 +204,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         (history as RedPacketJSONPayload).token?.address ?? (history as RedPacketJSONPayloadFromChain).token_address
 
     const { value: tokenDetailed } = useFungibleTokenDetailed(
-        isSameAddress(NATIVE_TOKEN_ADDRESS, tokenAddress) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+        isSameAddress(NATIVE_TOKEN_ADDRESS, tokenAddress) ? SchemaType.Native : SchemaType.ERC20,
         tokenAddress ?? '',
     )
 

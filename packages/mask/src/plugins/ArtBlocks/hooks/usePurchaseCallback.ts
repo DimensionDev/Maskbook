@@ -1,90 +1,25 @@
-import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    EthereumTokenType,
-    TransactionEventType,
-    TransactionStateType,
-    useAccount,
-    useChainId,
-    useTransactionState,
-} from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
+import BigNumber from 'bignumber.js'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/src/web3'
+import { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { ChainId, encodeTransaction, SchemaType, ProviderType, Transaction } from '@masknet/web3-shared-evm'
 import { useArtBlocksContract } from './useArtBlocksContract'
 
 export function usePurchaseCallback(projectId: string, amount: string, tokenType?: number) {
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId<ChainId>(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection<ChainId, ProviderType, Transaction>(NetworkPluginID.PLUGIN_EVM)
+    const artBlocksContract = useArtBlocksContract()
 
-    const genArt721MinterContract = useArtBlocksContract()
-    const [purchaseState, setPurchaseState] = useTransactionState()
-
-    const purchaseCallback = useCallback(async () => {
-        if (!genArt721MinterContract) {
-            setPurchaseState({
-                type: TransactionStateType.UNKNOWN,
-            })
-            return
+    return useCallback(async () => {
+        if (!artBlocksContract) {
+            throw new Error('Failed to create contract instance.')
         }
-
-        // start waiting for provider to confirm tx
-        setPurchaseState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
-
-        const value = new BigNumber(tokenType === EthereumTokenType.Native ? amount : 0).toFixed()
-        const config = {
+        const transaction = await encodeTransaction(artBlocksContract, artBlocksContract.methods.purchase(projectId), {
             from: account,
-            value,
-            gas: await genArt721MinterContract.methods
-                .purchase(projectId)
-                .estimateGas({
-                    from: account,
-                    value: value,
-                })
-                .catch((error) => {
-                    setPurchaseState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    throw error
-                }),
-        }
-
-        // send transaction and wait for hash
-        return new Promise<void>(async (resolve, reject) => {
-            genArt721MinterContract.methods
-                .purchase(projectId)
-                .send(config as PayableTx)
-                .on(TransactionEventType.RECEIPT, (receipt) => {
-                    setPurchaseState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: 0,
-                        receipt,
-                    })
-                    resolve()
-                })
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setPurchaseState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve()
-                })
-                .on(TransactionEventType.ERROR, (error) => {
-                    setPurchaseState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
-                })
+            value: new BigNumber(tokenType === SchemaType.Native ? amount : 0).toFixed(),
         })
-    }, [account, amount, chainId, genArt721MinterContract, tokenType])
 
-    const resetCallback = useCallback(() => {
-        setPurchaseState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [purchaseState, purchaseCallback, resetCallback] as const
+        return connection?.sendTransaction(transaction)
+    }, [account, amount, chainId, artBlocksContract, tokenType, connection])
 }

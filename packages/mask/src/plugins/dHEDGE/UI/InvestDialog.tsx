@@ -3,7 +3,7 @@ import { usePickToken, InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { isZero, rightShift } from '@masknet/web3-shared-base'
 import {
-    EthereumTokenType,
+    SchemaType,
     formatBalance,
     FungibleTokenDetailed,
     TransactionStateType,
@@ -94,7 +94,7 @@ export function InvestDialog() {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    } = useFungibleTokenBalance(token?.type ?? SchemaType.Native, token?.address ?? '')
     // #endregion
 
     // #region blocking
@@ -220,7 +220,7 @@ export function InvestDialog() {
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
                                 spender={pool.address}
-                                token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
+                                token={token?.type === SchemaType.ERC20 ? token : undefined}>
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth

@@ -66,7 +66,7 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
 
         updateAccount: WalletRPC.updateMaskAccount,
         resetAccount: WalletRPC.resetMaskAccount,
-        selectAccountPrepare: WalletRPC.selectAccountPrepare,
+        selectAccountPrepare: WalletRPC.selectMaskAccountPrepare,
 
         signTransaction: WalletRPC.signTransaction,
         signTypedData: WalletRPC.signTypedData,

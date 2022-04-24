@@ -10,7 +10,7 @@ import {
     getChainIdFromNetworkType,
     useChainId,
     useWeb3,
-    EthereumTokenType,
+    SchemaType,
     useFungibleTokensDetailed,
     getAaveConstants,
     ZERO_ADDRESS,
@@ -92,7 +92,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
 
     const { value: detailedAaveTokens } = useFungibleTokensDetailed(
         compact(flatten(aaveTokens ?? [])).map((m) => {
-            return { address: m, type: EthereumTokenType.ERC20 }
+            return { address: m, type: SchemaType.ERC20 }
         }) ?? [],
         chainId,
     )

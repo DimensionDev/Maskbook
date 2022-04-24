@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import {
     FungibleTokenDetailed,
-    EthereumTokenType,
+    SchemaType,
     useAccount,
     useTransactionState,
     TransactionStateType,
@@ -40,7 +40,7 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
         // step 1: estimate gas
         const config = {
             from: account,
-            value: toFixed(token.type === EthereumTokenType.Native ? amount : 0),
+            value: toFixed(token.type === SchemaType.Native ? amount : 0),
         }
 
         const deposit = () => {

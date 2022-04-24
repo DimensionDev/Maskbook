@@ -21,11 +21,11 @@ export interface ProviderStorage<Account, ProviderType extends string> {
 
 export class ProviderState<
     ChainId extends number,
-    NetworkType extends string,
     ProviderType extends string,
+    NetworkType extends string,
     Web3Provider,
     Web3,
-> implements Web3Plugin.ObjectCapabilities.ProviderState<ChainId, NetworkType, ProviderType>
+> implements Web3Plugin.ObjectCapabilities.ProviderState<ChainId, ProviderType, NetworkType>
 {
     protected site = getSiteType()
     protected storage: StorageObject<ProviderStorage<Web3Plugin.Account<ChainId>, ProviderType>> = null!
@@ -37,7 +37,7 @@ export class ProviderState<
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
-        protected providers: Record<ProviderType, Web3Plugin.Provider<ChainId, Web3Provider, Web3>>,
+        protected providers: Record<ProviderType, Web3Plugin.WalletProvider<ChainId, Web3Provider, Web3>>,
         protected defaultValue: ProviderStorage<Web3Plugin.Account<ChainId>, ProviderType>,
         protected options: {
             isValidAddress(a?: string): boolean
@@ -84,7 +84,10 @@ export class ProviderState<
 
     private setupProviders() {
         Object.entries(this.providers).forEach((entry) => {
-            const [providerType, provider] = entry as [ProviderType, Web3Plugin.Provider<ChainId, Web3Provider, Web3>]
+            const [providerType, provider] = entry as [
+                ProviderType,
+                Web3Plugin.WalletProvider<ChainId, Web3Provider, Web3>,
+            ]
 
             provider.emitter.on('chainId', async (chainId) => {
                 await this.setChainId(providerType, Number.parseInt(chainId, 16) as ChainId)
@@ -124,6 +127,14 @@ export class ProviderState<
                 chainId,
             },
         })
+    }
+
+    isReady(providerType: ProviderType) {
+        return this.providers[providerType].ready
+    }
+
+    untilReady(providerType: ProviderType) {
+        return this.providers[providerType].readyPromise
     }
 
     async connect(chainId: ChainId, providerType: ProviderType) {

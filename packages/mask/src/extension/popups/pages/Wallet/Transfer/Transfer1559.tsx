@@ -3,7 +3,7 @@ import { useI18N } from '../../../../../utils'
 import {
     addGasMargin,
     Asset,
-    EthereumTokenType,
+    SchemaType,
     formatBalance,
     formatEthereumAddress,
     formatGweiToEther,
@@ -275,7 +275,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         defaultValues: {
             address: '',
             amount: '',
-            gasLimit: selectedAsset?.token.type === EthereumTokenType.Native ? '21000' : '0',
+            gasLimit: selectedAsset?.token.type === SchemaType.Native ? '21000' : '0',
             maxPriorityFeePerGas: '',
             maxFeePerGas: '',
         },
@@ -361,14 +361,14 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     // #endregion
 
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        selectedAsset?.token?.type ?? EthereumTokenType.Native,
+        selectedAsset?.token?.type ?? SchemaType.Native,
         selectedAsset?.token?.address ?? '',
     )
 
     const maxAmount = useMemo(() => {
         const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(addGasMargin(minGasLimit ?? MIN_GAS_LIMIT))
         let amount_ = new BigNumber(tokenBalance ?? 0)
-        amount_ = selectedAsset?.token.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
+        amount_ = selectedAsset?.token.type === SchemaType.Native ? amount_.minus(gasFee) : amount_
         return formatBalance(BigNumber.max(0, amount_).toFixed(), selectedAsset?.token.decimals)
     }, [selectedAsset, maxFeePerGas, minGasLimit, tokenBalance])
 
@@ -390,7 +390,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     // #endregion
 
     const [_, transferCallback] = useTokenTransferCallback(
-        selectedAsset?.token.type ?? EthereumTokenType.Native,
+        selectedAsset?.token.type ?? SchemaType.Native,
         selectedAsset?.token.address ?? '',
     )
 

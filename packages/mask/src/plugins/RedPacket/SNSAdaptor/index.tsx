@@ -1,7 +1,7 @@
 import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import {
     ChainId,
-    EthereumTokenType,
+    SchemaType,
     formatBalance,
     getChainDetailed,
     getChainIdFromName,
@@ -124,7 +124,7 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const chainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
     const chainDetailed = getChainDetailed(chainId)
     const tokenDetailed =
-        payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token ?? fetchedToken
+        payload.token?.type === SchemaType.Native ? chainDetailed?.nativeCurrency : payload.token ?? fetchedToken
     return (
         <div style={containerStyle}>
             <RedPacketIcon style={badgeSvgIconSize} /> A Lucky Drop with{' '}

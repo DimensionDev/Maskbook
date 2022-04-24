@@ -1,4 +1,4 @@
-import { EthereumTokenType, GasOptionConfig, useNativeTokenWrapperCallback } from '@masknet/web3-shared-evm'
+import { SchemaType, GasOptionConfig, useNativeTokenWrapperCallback } from '@masknet/web3-shared-evm'
 import { TradeComputed, TradeStrategy } from '../../types'
 import type { NativeTokenWrapper } from './useTradeComputed'
 
@@ -15,8 +15,8 @@ export function useTradeCallback(trade: TradeComputed<NativeTokenWrapper> | null
             const tradeAmount = trade.inputAmount.toFixed()
 
             if (
-                (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Native) ||
-                (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === EthereumTokenType.Native)
+                (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === SchemaType.Native) ||
+                (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === SchemaType.Native)
             ) {
                 wrapCallback(tradeAmount, gasConfig)
                 return

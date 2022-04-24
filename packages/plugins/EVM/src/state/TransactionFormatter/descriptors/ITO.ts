@@ -10,7 +10,7 @@ export class ITODescriptor implements TransactionDescriptor {
         if (!isSameAddress(context.to, ITO2_CONTRACT_ADDRESS)) return
 
         const connection = createConnection(context.chainId, context.from)
-        const token = await connection.getERC20Token(context.parameters?._token_addr ?? '')
+        const token = await connection.getFungileToken(context.parameters?._token_addr ?? '')
         const amount = formatBalance(context.parameters?._total_tokens, token.decimals)
 
         return Promise.resolve({

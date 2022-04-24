@@ -11,7 +11,6 @@
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@masknet/icons": "workspace:*",
     "@masknet/shared-base-ui": "workspace:*",
-    "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",

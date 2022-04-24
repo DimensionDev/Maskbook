@@ -17,9 +17,35 @@ import {
     resolveTransactionLinkOnExplorer,
     resolveDomainLink,
     formatDomainName,
+    ProviderType,
+    NetworkType,
 } from '@masknet/web3-shared-flow'
 
-export class Utils implements Web3Plugin.ObjectCapabilities.Others<ChainId> {
+export class Utils implements Web3Plugin.ObjectCapabilities.Others<ChainId, ProviderType, NetworkType> {
+    getDefaultChainId(): ChainId {
+        throw new Error('Method not implemented.')
+    }
+    resolveProviderName(providerType: ProviderType): string {
+        throw new Error('Method not implemented.')
+    }
+    resolveProviderHomeLink(providerType: ProviderType): string {
+        throw new Error('Method not implemented.')
+    }
+    resolveProviderShortenLink(providerType: ProviderType): string {
+        throw new Error('Method not implemented.')
+    }
+    resolveNetworkName(networkType: NetworkType): string {
+        throw new Error('Method not implemented.')
+    }
+    getNetworkTypeFromChainId(chainId: ChainId): NetworkType {
+        throw new Error('Method not implemented.')
+    }
+    getChainIdFromNetworkType(networkType: NetworkType): ChainId {
+        throw new Error('Method not implemented.')
+    }
+    resolveFungibleTokenLink(chainId: ChainId, address: string): string {
+        throw new Error('Method not implemented.')
+    }
     isChainIdValid = isChainIdValid
     isValidDomain = isValidDomain
     isValidAddress = isValidAddress

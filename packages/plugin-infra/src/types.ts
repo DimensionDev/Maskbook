@@ -8,6 +8,7 @@ import type { TypedMessage } from '@masknet/typed-message'
 import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier, PopupRoutes } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
+import type { Web3Helper } from './web3-helpers'
 
 export declare namespace Plugin {
     /**
@@ -265,6 +266,11 @@ export namespace Plugin.Shared {
     }
 }
 
+// @ts-ignore
+const D: Plugin.SNSAdaptor.Definition = 1
+
+D.Web3UI
+
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedContext {
@@ -283,18 +289,9 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Web3Plugin.UI.UI<number, string, string>
+        Web3UI?: Web3Helper.Web3UI
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<
-            number,
-            string,
-            string,
-            string,
-            unknown,
-            unknown,
-            string,
-            unknown
-        >
+        Web3State?: Web3Helper.Web3State
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -313,6 +310,7 @@ export namespace Plugin.SNSAdaptor {
             onHover?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => () => void
         }
     }
+
     // #region Composition entry
     /**
      * The entry has two type:
@@ -450,21 +448,10 @@ export namespace Plugin.Dashboard {
     export interface Definition extends Shared.DefinitionDeferred<DashboardContext> {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
-        /**
-         * This is a chunk of web3 UIs to be rendered into various places of Mask UI.
-         */
-        Web3UI?: Web3Plugin.UI.UI<number, string, string>
+        /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
+        Web3UI?: Web3Helper.Web3UI
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<
-            number,
-            string,
-            string,
-            string,
-            unknown,
-            unknown,
-            string,
-            unknown
-        >
+        Web3State?: Web3Helper.Web3State
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
         __general_ui__?: GeneralUI.DefinitionDeferred
     }

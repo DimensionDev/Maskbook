@@ -1,74 +1,37 @@
-import type Web3 from 'web3'
-import type { RequestArguments, Transaction, TransactionReceipt } from 'web3-core'
+import type { RequestArguments, TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID, Web3Helper, Web3Plugin } from '@masknet/plugin-infra/web3'
 import type {
+    Web3,
     ChainId,
-    NetworkType,
     ProviderType,
     EIP1193Provider,
     EthereumMethodType,
-    EthereumTransactionConfig,
-    EthereumTokenType,
+    Transaction,
 } from '@masknet/web3-shared-evm'
 
 export type EVM_Web3 = Web3
 
-export type EVM_Web3State = Web3Plugin.ObjectCapabilities.Capabilities<
-    ChainId,
-    ProviderType,
-    NetworkType,
-    string,
-    EthereumTransactionConfig,
-    Transaction,
-    string,
-    EVM_Web3
->
+export type EVM_Web3State = Web3Helper.Web3State<NetworkPluginID.PLUGIN_EVM>
 
-export interface EVM_Provider extends Web3Plugin.Provider<ChainId, EIP1193Provider, EVM_Web3> {
+export type EVM_Web3UI = Web3Helper.Web3UI<NetworkPluginID.PLUGIN_EVM>
+
+export type EVM_ConnectionOptions = Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM>
+
+export interface EVM_Provider extends Web3Plugin.WalletProvider<ChainId, EIP1193Provider, Web3> {
     /** The basic RPC request method. */
     request<T extends unknown>(requestArguments: RequestArguments): Promise<T>
 }
 
-export type EVM_ConnectionOptions = Web3Plugin.ConnectionOptions<ChainId, ProviderType, EthereumTransactionConfig> & {
-    popupsWindow?: boolean
-}
-
-export interface EVM_Connection
-    extends Web3Plugin.Connection<
-        ChainId,
-        ProviderType,
-        string,
-        EthereumTransactionConfig,
-        Transaction,
-        string,
-        EVM_Web3
-    > {
-    getERC20Token(
-        address: string,
-        options?: EVM_ConnectionOptions,
-    ): Promise<Web3Plugin.FungibleToken<EthereumTokenType.ERC20>>
-    getNativeToken(
-        address: string,
-        options?: EVM_ConnectionOptions,
-    ): Promise<Web3Plugin.FungibleToken<EthereumTokenType.Native>>
-    getERC721Token(
-        address: string,
-        tokenId: string,
-        options?: EVM_ConnectionOptions,
-    ): Promise<Web3Plugin.NonFungibleToken<EthereumTokenType.ERC721>>
-    getERC1155Token(
-        address: string,
-        tokenId: string,
-        options?: EVM_ConnectionOptions,
-    ): Promise<Web3Plugin.NonFungibleToken<EthereumTokenType.ERC1155>>
+export interface EVM_Connection extends Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_EVM> {
     getCode(address: string, options?: EVM_ConnectionOptions): Promise<string>
     getTransactionReceiptHijacked(hash: string, options?: EVM_ConnectionOptions): Promise<TransactionReceipt | null>
     getTransactionReceipt(hash: string, options?: EVM_ConnectionOptions): Promise<TransactionReceipt | null>
+
     confirmRequest(options?: EVM_ConnectionOptions): Promise<void>
     rejectRequest(options?: EVM_ConnectionOptions): Promise<void>
-    replaceRequest(hash: string, config: EthereumTransactionConfig, options?: EVM_ConnectionOptions): Promise<void>
-    cancelRequest(hash: string, config: EthereumTransactionConfig, options?: EVM_ConnectionOptions): Promise<void>
+    replaceRequest(hash: string, config: Transaction, options?: EVM_ConnectionOptions): Promise<void>
+    cancelRequest(hash: string, config: Transaction, options?: EVM_ConnectionOptions): Promise<void>
 }
 
 export interface Context {
@@ -78,8 +41,8 @@ export interface Context {
     readonly writeable: boolean
     readonly providerType: ProviderType
     readonly method: EthereumMethodType
-    readonly connection: EVM_Connection
-    readonly requestOptions: EVM_ConnectionOptions | undefined
+    readonly connection: Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_EVM>
+    readonly requestOptions: Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM> | undefined
 
     /**
      * JSON RPC request payload
@@ -91,7 +54,7 @@ export interface Context {
      */
     readonly response: JsonRpcResponse | undefined
 
-    config: EthereumTransactionConfig | undefined
+    config: Transaction | undefined
     requestArguments: RequestArguments
     result: unknown
     error: Error | null

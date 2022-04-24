@@ -5,16 +5,15 @@ import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import {
     ChainId,
     FclProvider,
-    getNetworkTypeFromChainId,
     isSameAddress,
     isValidAddress,
     NetworkType,
     ProviderType,
+    Web3,
 } from '@masknet/web3-shared-flow'
 import { Providers } from './Protocol/provider'
-import type { FlowWeb3 } from './Protocol/types'
 
-export class Provider extends ProviderState<ChainId, NetworkType, ProviderType, FclProvider, FlowWeb3> {
+export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, FclProvider, Web3> {
     constructor(override context: Plugin.Shared.SharedContext) {
         const defaultValue = {
             accounts: getEnumAsArray(ProviderType).reduce((accumulator, providerType) => {

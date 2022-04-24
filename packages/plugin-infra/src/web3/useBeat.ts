@@ -8,22 +8,24 @@ import type { NetworkPluginID } from '../web3-types'
 const DEFAULT_SINGLE_BLOCK_DELAY = 15 * 1000
 const DEFAULT_DOUBLE_BLOCK_DELAY = DEFAULT_SINGLE_BLOCK_DELAY * 2
 
-export function useSingleBlockBeatRetry<T>(
-    pluginID: NetworkPluginID,
-    fn: () => Promise<T>,
+export function useSingleBlockBeatRetry<T extends NetworkPluginID, R>(
+    pluginID: T,
+    fn: () => Promise<R>,
     deps: DependencyList = [],
-): AsyncStateRetry<T> {
+): AsyncStateRetry<R> {
     const chainId = useChainId(pluginID)
     const { Utils } = useWeb3State(pluginID)
+    // @ts-ignore
     return useBeatRetry(fn, Utils?.getAverageBlockDelay?.(chainId) ?? DEFAULT_SINGLE_BLOCK_DELAY, deps)
 }
 
-export function useDoubleBlockBeatRetry<T>(
-    pluginID: NetworkPluginID,
-    fn: () => Promise<T>,
+export function useDoubleBlockBeatRetry<T extends NetworkPluginID, R>(
+    pluginID: T,
+    fn: () => Promise<R>,
     deps: DependencyList = [],
-): AsyncStateRetry<T> {
+): AsyncStateRetry<R> {
     const chainId = useChainId(pluginID)
     const { Utils } = useWeb3State(pluginID)
+    // @ts-ignore
     return useBeatRetry(fn, Utils?.getAverageBlockDelay?.(chainId, 2) ?? DEFAULT_DOUBLE_BLOCK_DELAY, deps)
 }

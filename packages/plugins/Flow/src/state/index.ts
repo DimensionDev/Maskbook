@@ -1,7 +1,4 @@
-import type { CompositeSignature, MutateOptions, TransactionObject } from '@blocto/fcl'
 import type { Plugin } from '@masknet/plugin-infra'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
-import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-flow'
 import { AddressBook } from './AddressBook'
 import { Asset } from './Asset'
 import { Provider } from './Provider'
@@ -11,24 +8,11 @@ import { TokenList } from './TokenList'
 import { Transaction } from './Transaction'
 import { Wallet } from './Wallet'
 import { Utils } from './Utils'
-import type { FlowWeb3 } from './Protocol/types'
+import type { FlowWeb3State } from './Protocol/types'
 
-export type State = Web3Plugin.ObjectCapabilities.Capabilities<
-    ChainId,
-    ProviderType,
-    NetworkType,
-    CompositeSignature[],
-    MutateOptions,
-    TransactionObject,
-    never,
-    FlowWeb3
->
-
-let state: State = null!
-
-export async function createWeb3State(context: Plugin.Shared.SharedContext) {
+export function createWeb3State(context: Plugin.Shared.SharedContext): FlowWeb3State {
     const Provider_ = new Provider(context)
-    state = {
+    return {
         AddressBook: new AddressBook(context, {
             chainId: Provider_.chainId,
         }),
@@ -50,15 +34,4 @@ export async function createWeb3State(context: Plugin.Shared.SharedContext) {
         Wallet: new Wallet(context),
         Utils: new Utils(),
     }
-
-    return state
-}
-
-export function getWeb3State() {
-    if (!state) throw new Error('Please setup state at first.')
-    return state
-}
-
-export async function setWeb3State(newState: State) {
-    state = newState
 }

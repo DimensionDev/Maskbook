@@ -5,7 +5,7 @@ import {
     ChainId,
     FungibleTokenDetailed,
     ERC721TokenDetailed,
-    EthereumTokenType,
+    SchemaType,
     resolveIPFSLinkFromURL,
 } from '@masknet/web3-shared-evm'
 
@@ -77,7 +77,7 @@ function createNFTAsset(asset: ZoraToken): NonFungibleTokenAPI.Asset {
 function createERC721TokenFromAsset(tokenAddress: string, tokenId: string, asset?: ZoraToken): ERC721TokenDetailed {
     return {
         contractDetailed: {
-            type: EthereumTokenType.ERC721,
+            type: SchemaType.ERC721,
             chainId: ChainId.Mainnet,
             address: tokenAddress,
             name: asset?.tokenContract.name ?? '',

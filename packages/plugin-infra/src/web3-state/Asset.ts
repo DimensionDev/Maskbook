@@ -34,4 +34,4 @@ async function* getPagableItemsAsIterator<ChainId extends number, Item>(
     }
 }
 
-export class AssetState<ChainId extends number> implements Web3Plugin.ObjectCapabilities.AssetState<ChainId> {}
+export class AssetState<ChainId, SchemaType> implements Web3Plugin.ObjectCapabilities.AssetState<ChainId, SchemaType> {}

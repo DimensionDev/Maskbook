@@ -1,17 +1,19 @@
 import { first } from 'lodash-unified'
-import type { RequestArguments, SignedTransaction, Transaction, TransactionReceipt } from 'web3-core'
+import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
 import {
     ChainId,
     EthereumMethodType,
     ProviderType,
     getReceiptStatus,
+    Transaction,
+    SchemaType,
+    TransactionDetailed,
     EthereumTransactionConfig,
-    EthereumTokenType,
 } from '@masknet/web3-shared-evm'
 import type { TransactionStatusType, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { createContext, dispatch } from './composer'
 import { Providers } from './provider'
-import type { EVM_Connection as BaseConnection, EVM_ConnectionOptions } from './types'
+import type { EVM_Connection, EVM_ConnectionOptions } from './types'
 
 function isUniversalMethod(method: EthereumMethodType) {
     return [
@@ -21,7 +23,6 @@ function isUniversalMethod(method: EthereumMethodType) {
         EthereumMethodType.ETH_GET_BALANCE,
         EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
         EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
-        EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT,
         EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
         EthereumMethodType.ETH_GET_FILTER_CHANGES,
         EthereumMethodType.ETH_NEW_PENDING_TRANSACTION_FILTER,
@@ -31,8 +32,8 @@ function isUniversalMethod(method: EthereumMethodType) {
     ].includes(method)
 }
 
-class Connection implements BaseConnection {
-    constructor(private account: string, private chainId: ChainId, private providerType: ProviderType) {}
+class Connection implements EVM_Connection {
+    constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
 
     // Hijack RPC requests and process them with koa like middlewares
     private get hijackedRequest() {
@@ -124,7 +125,7 @@ class Connection implements BaseConnection {
     }
 
     async getTransaction(hash: string, options?: EVM_ConnectionOptions) {
-        return this.hijackedRequest<Transaction>(
+        return this.hijackedRequest<TransactionDetailed>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
                 params: [hash],
@@ -146,7 +147,7 @@ class Connection implements BaseConnection {
     getTransactionReceipt(hash: string, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<TransactionReceipt | null>(
             {
-                method: EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT,
+                method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
                 params: [hash],
             },
             options,
@@ -202,14 +203,14 @@ class Connection implements BaseConnection {
         dataToVerify: string,
         signature: string,
         signType?: string,
-        options?: Web3Plugin.ConnectionOptions<ChainId, ProviderType, EthereumTransactionConfig>,
+        options?: Web3Plugin.ConnectionOptions<ChainId, ProviderType, Transaction>,
     ) {
         const web3 = await this.getWeb3(options)
         const dataToSign = await web3.eth.personal.ecRecover(dataToVerify, signature)
         return dataToSign === dataToVerify
     }
 
-    async signTransaction(transaction: EthereumTransactionConfig, options?: EVM_ConnectionOptions) {
+    async signTransaction(transaction: Transaction, options?: EVM_ConnectionOptions) {
         const signed = await this.hijackedRequest<SignedTransaction>(
             {
                 method: EthereumMethodType.ETH_SIGN_TRANSACTION,
@@ -220,11 +221,11 @@ class Connection implements BaseConnection {
         return signed.rawTransaction ?? ''
     }
 
-    signTransactions(transactions: EthereumTransactionConfig[], options?: EVM_ConnectionOptions) {
+    signTransactions(transactions: Transaction[], options?: EVM_ConnectionOptions) {
         return Promise.all(transactions.map((x) => this.signTransaction(x)))
     }
 
-    callTransaction(transaction: EthereumTransactionConfig, options?: EVM_ConnectionOptions) {
+    callTransaction(transaction: Transaction, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CALL,
@@ -233,7 +234,7 @@ class Connection implements BaseConnection {
             options,
         )
     }
-    sendTransaction(transaction: EthereumTransactionConfig, options?: EVM_ConnectionOptions) {
+    sendTransaction(transaction: Transaction, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
@@ -253,51 +254,18 @@ class Connection implements BaseConnection {
         )
     }
 
-    getERC20Token(
+    getFungileToken(
         address: string,
-        options?: EVM_ConnectionOptions | undefined,
-    ): Promise<Web3Plugin.FungibleToken<EthereumTokenType.ERC20>> {
+        options?: Web3Plugin.ConnectionOptions<ChainId, ProviderType, EthereumTransactionConfig> | undefined,
+    ): Promise<Web3Plugin.FungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
-    getNativeToken(
+    getNonFungileToken(
         address: string,
-        options?: EVM_ConnectionOptions | undefined,
-    ): Promise<Web3Plugin.FungibleToken<EthereumTokenType.Native>> {
+        id: string,
+        options?: Web3Plugin.ConnectionOptions<ChainId, ProviderType, EthereumTransactionConfig> | undefined,
+    ): Promise<Web3Plugin.FungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
-    }
-    getERC721Token(
-        address: string,
-        tokenId: string,
-        options?: EVM_ConnectionOptions | undefined,
-    ): Promise<Web3Plugin.NonFungibleToken<EthereumTokenType.ERC721>> {
-        throw new Error('Method not implemented.')
-    }
-    getERC1155Token(
-        address: string,
-        tokenId: string,
-        options?: EVM_ConnectionOptions | undefined,
-    ): Promise<Web3Plugin.NonFungibleToken<EthereumTokenType.ERC1155>> {
-        throw new Error('Method not implemented.')
-    }
-
-    watchTransaction(hash: string, transaction: EthereumTransactionConfig, options?: EVM_ConnectionOptions) {
-        return this.hijackedRequest<void>(
-            {
-                method: EthereumMethodType.MASK_WATCH_TRANSACTION,
-                params: [hash, transaction],
-            },
-            options,
-        )
-    }
-
-    unwatchTransaction(hash: string, options?: EVM_ConnectionOptions) {
-        return this.hijackedRequest<void>(
-            {
-                method: EthereumMethodType.MASK_UNWATCH_TRANSACTION,
-                params: [hash],
-            },
-            options,
-        )
     }
 
     confirmRequest(options?: EVM_ConnectionOptions) {
@@ -320,7 +288,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    replaceRequest(hash: string, transaction: EthereumTransactionConfig, options?: EVM_ConnectionOptions) {
+    replaceRequest(hash: string, transaction: Transaction, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
@@ -330,7 +298,7 @@ class Connection implements BaseConnection {
         )
     }
 
-    cancelRequest(hash: string, transaction: EthereumTransactionConfig, options?: EVM_ConnectionOptions) {
+    cancelRequest(hash: string, transaction: Transaction, options?: EVM_ConnectionOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
@@ -355,5 +323,5 @@ class Connection implements BaseConnection {
  * @returns
  */
 export function createConnection(chainId = ChainId.Mainnet, account = '', providerType = ProviderType.MaskWallet) {
-    return new Connection(account, chainId, providerType)
+    return new Connection(chainId, account, providerType)
 }

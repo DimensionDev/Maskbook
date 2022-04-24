@@ -21,6 +21,7 @@ import {
     formatDomainName,
     ProviderType,
     NetworkType,
+    getAverageBlockDelay,
 } from '@masknet/web3-shared-evm'
 
 export class Utils implements Web3Plugin.ObjectCapabilities.Others<ChainId, ProviderType, NetworkType> {
@@ -55,9 +56,7 @@ export class Utils implements Web3Plugin.ObjectCapabilities.Others<ChainId, Prov
     isSameAddress = isSameAddress
 
     getChainDetailed = getChainDetailed
-    getAverageBlockDelay = (chainId: ChainId) => {
-        return 15 * 1000
-    }
+    getAverageBlockDelay = getAverageBlockDelay
 
     formatAddress = formatEthereumAddress
     formatCurrency = formatCurrency

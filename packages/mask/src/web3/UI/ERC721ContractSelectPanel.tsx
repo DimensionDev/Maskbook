@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 import {
     ChainId,
     ERC721ContractDetailed,
-    EthereumTokenType,
+    SchemaType,
     isSameAddress,
     SocketState,
     useAccount,
@@ -86,7 +86,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
 
     const convertedAssets = assets.map((x) => ({
         contractDetailed: {
-            type: EthereumTokenType.ERC721,
+            type: SchemaType.ERC721,
             address: x.address,
             chainId,
             name: x.name,

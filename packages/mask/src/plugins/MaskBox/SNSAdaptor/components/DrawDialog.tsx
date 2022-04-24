@@ -11,7 +11,7 @@ import {
     useAccount,
     useChainId,
     useMaskBoxConstants,
-    EthereumTokenType,
+    SchemaType,
 } from '@masknet/web3-shared-evm'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -266,9 +266,7 @@ export function DrawDialog(props: DrawDialogProps) {
                     <EthereumERC20TokenApprovedBoundary
                         amount={multipliedBy(paymentTokenPrice, paymentCount).toFixed()}
                         spender={MASK_BOX_CONTRACT_ADDRESS}
-                        token={
-                            paymentTokenDetailed?.type === EthereumTokenType.ERC20 ? paymentTokenDetailed : undefined
-                        }
+                        token={paymentTokenDetailed?.type === SchemaType.ERC20 ? paymentTokenDetailed : undefined}
                         ActionButtonProps={{ size: 'medium', sx: { marginTop: 2 } }}>
                         <ActionButton
                             size="medium"
