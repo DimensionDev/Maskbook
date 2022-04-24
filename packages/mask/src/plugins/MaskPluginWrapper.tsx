@@ -1,5 +1,5 @@
 import { Typography, SnackbarContent, Button, Link } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../social-network'
 import { MaskIcon } from '../resources/MaskIcon'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
@@ -21,6 +21,7 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     open?: boolean
     title: string
     width?: number
+    content?: ReactNode
     action?: ReactNode
     publisher?: JSX.Element
     wrapperEntry?: Plugin.SNSAdaptor.WrapperEntry
@@ -63,26 +64,32 @@ const useStyles = makeStyles<{ style?: CSSProperties }>()((theme, props) => {
                 lineHeight: 0,
             },
         },
-        action: {
+        publish: {
             flex: 1,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-end',
         },
+        action: {
+            textAlign: 'center',
+            margin: theme.spacing(1),
+        },
         body: {
             padding: theme.spacing(0),
         },
         button: {
-            color: MaskColorVar.twitterButtonText,
+            backgroundColor: '#07101B',
+            color: 'white',
+            width: 254,
             '&,&:hover': {
-                background: MaskColorVar.twitterButton,
+                background: '#07101B',
             },
         },
     }
 })
 
 export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
-    const { open, title, children, action, publisher, publisherLink, wrapperEntry } = props
+    const { open, title, children, action, publisher, publisherLink, content, wrapperEntry } = props
     const { classes } = useStyles({ style: wrapperEntry?.style })
 
     const personaConnectStatus = usePersonaConnectStatus()
@@ -108,16 +115,15 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const publisherInfo = useMemo(() => {
         if (!publisher) return null
         const main = (
-            <Typography variant="body1" fontSize={14} fontWeight="500" color={MaskColorVar.textPrimary}>
+            <Typography variant="body1" fontSize={14} fontWeight="500" color="#07101B">
                 {publisher}
             </Typography>
         )
         return (
             <Box className={classes.provider}>
-                <Typography variant="body1" fontSize={14} fontWeight="400" color={MaskColorVar.textSecondary}>
+                <Typography sx={{ marginRight: 0.5 }} variant="body1" fontSize={14} fontWeight="400" color="#767F8D">
                     {t('plugin_provider_by')}
                 </Typography>
-                {'  '}
                 {main}
                 {publisherLink ? (
                     <Link href={publisherLink} underline="none" target="_blank" rel="noopener">
@@ -135,15 +141,24 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
             onClick={(ev) => ev.stopPropagation()}>
             <div className={classes.header}>
                 {wrapperEntry?.icon ?? <MaskIcon size={16} />}
-                <Typography variant="body1" fontSize={15} fontWeight="700">
+                <Typography sx={{ marginLeft: 0.5 }} variant="body1" fontSize={15} fontWeight="700" color="#07101B">
                     {title ?? t('plugin_default_title')}
                 </Typography>
-
-                <div className={classes.action}>{actionButton || action || publisherInfo}</div>
+                <div className={classes.publish}>{publisherInfo}</div>
             </div>
-            {personaConnectStatus.connected && children ? <div className={classes.body}>{children}</div> : null}
+            {personaConnectStatus.connected && children ? (
+                <div className={classes.body}>{children}</div>
+            ) : (
+                <>
+                    <Typography variant="body1" color="#FF3545" sx={{ padding: 1 }} textAlign="center">
+                        {content ?? name}
+                    </Typography>
+                    <div className={classes.action}>{actionButton || action || publisherInfo}</div>
+                </>
+            )}
         </div>
     )
+
     return <Suspense fallback={<SnackbarContent message="Mask is loading this content..." />} children={inner} />
 }
 

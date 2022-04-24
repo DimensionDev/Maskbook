@@ -5,12 +5,16 @@ import {
     usePostInfoDetails,
     Plugin,
     usePluginI18NField,
+    PluginI18NFieldRender,
 } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { Switch } from '@mui/material'
 import Services from '../../extension/service'
 import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
 import { useI18N } from '../../utils'
+import { HTMLProps, useCallback } from 'react'
+import { Button } from '@mui/material'
+import { PluginIcon } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
 
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
@@ -55,21 +59,62 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
     const { t } = useI18N()
     const t2 = usePluginI18NField()
     const { plugins } = props
+    const onClick = useCallback((x: Plugin.DeferredDefinition) => {
+        Services.Settings.setPluginMinimalModeEnabled(x.ID, false)
+    }, [])
     if (!plugins.length) return null
+
     return (
         <>
             {plugins.map((x) => (
                 <MaskPostExtraInfoWrapper
+                    open
                     key={x.ID}
-                    title={t('plugin_not_enabled', { plugin: t2(x.ID, x.name) })}
-                    action={
-                        <Switch
-                            sx={{ marginRight: '-12px' }}
-                            onChange={() => Services.Settings.setPluginMinimalModeEnabled(x.ID, false)}
-                        />
+                    title={t2(x.ID, x.name)}
+                    publisher={
+                        x.publisher ? <PluginI18NFieldRender pluginID={x.ID} field={x.publisher.name} /> : undefined
                     }
+                    publisherLink={x.publisher?.link}
+                    action={
+                        <Button
+                            size="small"
+                            startIcon={<PluginIcon />}
+                            variant="contained"
+                            onClick={() => onClick(x)}
+                            sx={{
+                                backgroundColor: '#07101B',
+                                color: 'white',
+                                width: '254px',
+                                '&:hover': {
+                                    backgroundColor: '#07101B',
+                                },
+                            }}>
+                            Enable plugins
+                        </Button>
+                    }
+                    content={<Rectangle />}
                 />
             ))}
         </>
+    )
+}
+
+const useRectangleStyles = makeStyles()(() => ({
+    rectangle: {
+        height: 8,
+        background: 'rgba(255, 255, 255, 0.5)',
+        borderRadius: 8,
+    },
+}))
+interface RectangleProps extends HTMLProps<HTMLDivElement> {}
+
+export function Rectangle(props: RectangleProps) {
+    const { classes } = useRectangleStyles()
+    return (
+        <div {...props}>
+            <div className={classes.rectangle} style={{ width: 103 }} />
+            <div className={classes.rectangle} style={{ width: 68, marginTop: 4 }} />
+            <div className={classes.rectangle} style={{ width: 48, marginTop: 4 }} />
+        </div>
     )
 }

@@ -11,7 +11,12 @@ import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWallet
 
 const useStyles = makeStyles()((theme) => ({
     button: {
-        marginTop: theme.spacing(1.5),
+        margin: theme.spacing(1.5, 1),
+        backgroundColor: '#07101B',
+        color: 'white',
+        '&:hover': {
+            backgroundColor: '#07101B',
+        },
     },
 }))
 

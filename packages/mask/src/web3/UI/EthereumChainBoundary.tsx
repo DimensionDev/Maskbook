@@ -166,14 +166,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     if (!account)
         return renderBox(
             <>
-                <Typography color="textPrimary">
+                <Typography color="#FF3545">
                     <span>{t('plugin_wallet_connect_wallet_tip')}</span>
                 </Typography>
                 {!props.hiddenConnectButton ? (
                     <ActionButton
                         variant="contained"
                         size="small"
-                        sx={{ marginTop: 1.5 }}
+                        sx={{ marginTop: 1.5, backgroundColor: '#07101B', width: 254, color: 'white' }}
                         onClick={openSelectProviderDialog}>
                         {t('plugin_wallet_connect_wallet')}
                     </ActionButton>
@@ -185,7 +185,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     if (!isAllowed)
         return renderBox(
-            <Typography color="textPrimary">
+            <Typography color="#07101B">
                 <span>
                     {t('plugin_wallet_not_available_on', {
                         network: actualNetwork,
@@ -198,7 +198,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         return renderBox(
             <>
                 {!noSwitchNetworkTip ? (
-                    <Typography color="textPrimary">
+                    <Typography color="#FF3545">
                         <span>
                             {t('plugin_wallet_not_available_on', {
                                 network: plugin?.name?.fallback ?? 'Unknown Plugin',
@@ -211,7 +211,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         variant="contained"
                         size="small"
                         className={classes.switchButton}
-                        sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
+                        sx={
+                            props.switchButtonStyle ?? {
+                                marginTop: 1.5,
+                                backgroundColor: '#07101B',
+                                width: 254,
+                                color: 'white',
+                            }
+                        }
                         init={
                             <span>
                                 {t('plugin_wallet_switch_network', {
@@ -239,7 +246,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     return renderBox(
         <>
             {!noSwitchNetworkTip ? (
-                <Typography color="textPrimary">
+                <Typography color="#FF3545">
                     <span>
                         {t('plugin_wallet_not_available_on', {
                             network: actualNetwork,
@@ -252,7 +259,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     variant="contained"
                     size="small"
                     className={classes.switchButton}
-                    sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
+                    sx={
+                        props.switchButtonStyle ?? {
+                            marginTop: 1.5,
+                            backgroundColor: '#07101B',
+                            width: 254,
+                            color: 'white',
+                        }
+                    }
                     init={
                         <span>
                             {t('plugin_wallet_switch_network', {
