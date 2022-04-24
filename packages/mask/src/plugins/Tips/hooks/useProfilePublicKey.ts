@@ -1,4 +1,4 @@
-import { ProfileIdentifier } from '@masknet/shared-base'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
 
