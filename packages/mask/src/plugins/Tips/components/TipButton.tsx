@@ -1,6 +1,7 @@
 import { TipCoin } from '@masknet/icons'
+import { PluginId } from '@masknet/plugin-infra'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST, NextIDPlatform, NextIDStorageInfo, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { TooltipProps } from '@mui/material'
@@ -8,11 +9,12 @@ import classnames from 'classnames'
 import { uniq } from 'lodash-unified'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
-import Services from '../../../../extension/service'
-import { activatedSocialNetworkUI } from '../../../../social-network'
-import { useI18N } from '../../locales'
-import { PluginNextIDMessages } from '../../messages'
-import { MaskMessages } from '../../../../../shared'
+import { MaskMessages } from '../../../../shared'
+import Services from '../../../extension/service'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { useKvGet } from '../hooks/useKv'
+import { useI18N } from '../locales'
+import { PluginNextIDMessages } from '../messages'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     addresses?: string[]
@@ -55,6 +57,15 @@ const useStyles = makeStyles()({
     },
 })
 
+function useReceiverPublicKey(receiver: ProfileIdentifier | undefined) {
+    const { value: publicKey } = useAsync(async () => {
+        if (!receiver) return
+        const persona = await Services.Identity.queryPersonaByProfile(receiver)
+        return persona?.publicHexKey
+    }, [receiver])
+    return publicKey
+}
+
 export const TipButton: FC<Props> = ({
     className,
     receiver,
@@ -81,41 +92,65 @@ export const TipButton: FC<Props> = ({
         return NextIDProof.queryIsBound(receiverPersona.publicHexKey, platform, receiver.userId, true)
     }, [receiverPersona?.publicHexKey, platform, receiver?.userId])
 
-    const [walletsState, queryBindings] = useAsyncFn(async () => {
-        if (!receiver) return EMPTY_LIST
+    const publicKey = useReceiverPublicKey(receiver)
+    const { value: kv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(publicKey)
 
-        const persona = await Services.Identity.queryPersonaByProfile(receiver)
-        if (!persona?.publicHexKey) return EMPTY_LIST
+    const [NextIDWalletsState, queryWallets] = useAsyncFn(async () => {
+        if (!publicKey) return EMPTY_LIST
 
-        const bindings = await NextIDProof.queryExistedBindingByPersona(persona.publicHexKey, true)
+        const bindings = await NextIDProof.queryExistedBindingByPersona(publicKey, true)
         if (!bindings) return EMPTY_LIST
 
         const wallets = bindings.proofs.filter((p) => p.platform === NextIDPlatform.Ethereum).map((p) => p.identity)
         return wallets
-    }, [receiver])
+    }, [publicKey])
 
-    useAsync(queryBindings, [queryBindings])
+    const walletsFromCloud = useMemo(() => {
+        if (kv?.ok) {
+            if (!kv.val.proofs.length) return null
+            const tipWallets = kv.val.proofs.map((x) =>
+                x.content[PluginId.Tips].filter((y) => y.platform === NextIDPlatform.Ethereum),
+            )[0]
+            if (!tipWallets) return EMPTY_LIST
+            return tipWallets
+                .filter((x) => {
+                    if (NextIDWalletsState.value) {
+                        // Sometimes, the wallet might get deleted from next.id
+                        return x.isPublic && NextIDWalletsState.value.includes(x.identity)
+                    } else {
+                        return x.isPublic
+                    }
+                })
+                .map((x) => x.identity)
+        }
+        return null
+    }, [kv, NextIDWalletsState.value])
+
+    useAsync(queryWallets, [queryWallets])
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
             retryLoadVerifyInfo()
-            queryBindings()
+            queryWallets()
         })
     }, [])
 
     const allAddresses = useMemo(() => {
-        return uniq([...(walletsState.value || []), ...addresses])
-    }, [walletsState.value, addresses])
+        return walletsFromCloud || uniq([...(NextIDWalletsState.value || []), ...addresses])
+    }, [NextIDWalletsState.value, addresses, walletsFromCloud])
 
-    const disabled = loadingPersona || loadingVerifyInfo || !isAccountVerified || allAddresses.length === 0
+    const hideAllWallets = walletsFromCloud !== null && walletsFromCloud.length === 0
+
+    const isChecking = loadingPersona || loadingVerifyInfo
+    const disabled = isChecking || !isAccountVerified || allAddresses.length === 0 || hideAllWallets
 
     const sendTip: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {
             evt.stopPropagation()
             evt.preventDefault()
             if (disabled) return
-            if (walletsState.loading || !walletsState.value) {
-                await queryBindings()
+            if (NextIDWalletsState.loading || !NextIDWalletsState.value) {
+                await queryWallets()
             }
             if (!allAddresses.length || !receiver?.userId) return
             PluginNextIDMessages.tipTask.sendToLocal({
@@ -123,7 +158,7 @@ export const TipButton: FC<Props> = ({
                 addresses: allAddresses,
             })
         },
-        [disabled, walletsState, allAddresses, receiver?.userId, queryBindings],
+        [disabled, NextIDWalletsState, allAddresses, receiver?.userId, queryWallets],
     )
     const dom = (
         <div
@@ -140,7 +175,7 @@ export const TipButton: FC<Props> = ({
         return (
             <ShadowRootTooltip
                 classes={{ tooltip: classes.tooltip }}
-                title={t.tip_wallets_missed()}
+                title={isChecking ? '' : t.tip_wallets_missed()}
                 placement="bottom"
                 arrow={false}
                 {...tooltipProps}>

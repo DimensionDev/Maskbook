@@ -1,19 +1,18 @@
-import { useAsyncRetry } from 'react-use'
+import { EMPTY_LIST, NextIDPersonaBindings, NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
+import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
-import { EMPTY_OBJECT, NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
 
-export function useProvedWallets() {
+export function useProvedWallets(personaIdentifier: PersonaIdentifier | undefined) {
     const res = useAsyncRetry(async () => {
-        const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
-        if (!currentPersonaIdentifier) return EMPTY_OBJECT
-        const currentPersona = await Services.Identity.queryPersona(currentPersonaIdentifier)
-        if (!currentPersona?.publicHexKey) return EMPTY_OBJECT
+        if (!personaIdentifier) return EMPTY_LIST
+        const currentPersona = await Services.Identity.queryPersona(personaIdentifier)
+        if (!currentPersona?.publicHexKey) return EMPTY_LIST
         const { proofs } = (await NextIDProof.queryExistedBindingByPersona(
             currentPersona.publicHexKey,
         )) as NextIDPersonaBindings
         return proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
-    }, [])
+    }, [personaIdentifier])
 
     return res
 }

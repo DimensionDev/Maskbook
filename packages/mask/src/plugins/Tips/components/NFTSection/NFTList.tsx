@@ -6,7 +6,7 @@ import { Checkbox, Link, List, ListItem, Radio } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
-import type { TipNFTKeyPair } from '../../../types'
+import type { TipNFTKeyPair } from '../../types'
 
 interface Props {
     selectedPairs: TipNFTKeyPair[]
@@ -134,8 +134,8 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
                 const link =
                     Utils?.resolveNonFungibleTokenLink && token.contract
                         ? Utils.resolveNonFungibleTokenLink(
-                              token.contract?.chainId,
-                              token.contract?.address,
+                              token.contract.chainId,
+                              token.contract.address,
                               token.tokenId,
                           )
                         : undefined

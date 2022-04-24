@@ -13,11 +13,11 @@ const getCurrentPersonaPublicKey = async () => {
     if (!currentPersona?.publicHexKey) return ''
     return currentPersona.publicHexKey
 }
-export function useKvGet() {
+export function useKvGet<T>(publicKey: string | null | undefined) {
     return useAsyncRetry(async () => {
-        const publicHexKey = await getCurrentPersonaPublicKey()
-        return NextIDStorage.get(publicHexKey)
-    })
+        if (!publicKey) return null
+        return NextIDStorage.get<T>(publicKey)
+    }, [publicKey])
 }
 
 export const getKvPayload = async (patchData: unknown) => {
