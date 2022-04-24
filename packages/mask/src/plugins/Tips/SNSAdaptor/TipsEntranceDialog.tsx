@@ -112,10 +112,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         setShowAlert(true)
         return Services.Settings.getCurrentPersonaIdentifier()
     }, [open])
-    const { value: currentPersona } = useAsyncRetry(
-        () => Services.Identity.queryPersona(currentPersonaIdentifier as ECKeyIdentifier),
-        [currentPersonaIdentifier],
-    )
+    const { value: currentPersona } = useAsyncRetry(() => {
+        return Services.Identity.queryPersona(currentPersonaIdentifier!)
+    }, [currentPersonaIdentifier])
     const clickBack = () => {
         if (bodyViewStep === BodyViewStep.Main) {
             onClose()
@@ -304,7 +303,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         />
                     )}
                     {bodyViewStep === BodyViewStep.AddWallet && (
-                        <AddWalletView onCancel={refresh} bindings={rawWalletList} currentPersona={currentPersona} />
+                        <AddWalletView onCancel={refresh} bindings={rawWalletList} currentPersona={currentPersona!} />
                     )}
 
                     {![BodyViewStep.AddWallet, BodyViewStep.Wallets].includes(bodyViewStep) && rawPatchData.length > 0 && (

@@ -28,9 +28,20 @@ import {
     Web3Plugin,
 } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../../utils'
+import type { Persona } from '../../../../database'
 
 interface AddWalletViewProps {
-    currentPersona: any
+    currentPersona: Pick<
+        Persona,
+        | 'publicHexKey'
+        | 'identifier'
+        | 'hasPrivateKey'
+        | 'mnemonic'
+        | 'createdAt'
+        | 'updatedAt'
+        | 'linkedProfiles'
+        | 'nickname'
+    >
     bindings: BindingProof[]
     onCancel: () => void
 }
@@ -50,7 +61,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
     const { Utils } = useWeb3State() ?? {}
     const isNotEvm = useProviderDescriptor()?.providerAdaptorPluginID !== NetworkPluginID.PLUGIN_EVM
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
-    const isBound = bindings.filter((x) => isSameAddress(x.identity, wallet.account)).length > 0
+    const isBound = bindings.some((x) => isSameAddress(x.identity, wallet.account))
 
     const walletName = () => {
         if (isNotEvm) return `${resolveProviderName(providerType)} Wallet`
@@ -154,7 +165,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
                 notConnected={!wallet.account}
                 wallet={wallet as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>}
                 walletName={walletName()}
-                persona={currentPersona}
+                nickName={currentPersona.nickname}
                 step={step}
                 confirmLoading={confirmLoading || payloadLoading}
                 disableConfirm={isBound || isNotEvm || !wallet.account}
