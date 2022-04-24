@@ -25,6 +25,7 @@ import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useSetupGuideStatusState } from '../DataSource/useNextID'
 import { useMyPersonas } from '../DataSource/useMyPersonas'
 import { WalletMessages } from '../../plugins/Wallet/messages'
+import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -83,8 +84,14 @@ const useStyles = makeStyles()((theme) => {
         },
     }
 })
-
 export function ApplicationBoard() {
+    return (
+        <PersonaContext.Provider>
+            <ApplicationBoardContent />
+        </PersonaContext.Provider>
+    )
+}
+function ApplicationBoardContent() {
     const { classes } = useStyles()
     const theme = useTheme()
     const { t } = useI18N()
@@ -180,6 +187,7 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
     const { t } = useI18N()
     const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
     const lastState = useSetupGuideStatusState()
+    const { currentPersona } = PersonaContext.useContainer()
     const lastRecognized = useLastRecognizedIdentity()
     const username = useMemo(() => {
         return lastState.username || (!lastRecognized.identifier.isUnknown ? lastRecognized.identifier.userId : '')
@@ -205,7 +213,7 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
             currentPersonaPublicKey: currentPersona?.fingerprint,
             currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.fingerprint,
         }
-    }, [platform, username, ui, personas])
+    }, [platform, username, ui, personas, currentPersona])
     const {
         isNextIDVerify,
         isSNSConnectToCurrentPersona,
