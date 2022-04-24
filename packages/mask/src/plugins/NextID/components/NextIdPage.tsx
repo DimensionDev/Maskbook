@@ -48,11 +48,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NextIDPageProps {
+interface NextIdPageProps {
     personaList: string[]
 }
 
-export function NextIdPage({ personaList }: NextIDPageProps) {
+export function NextIdPage({ personaList }: NextIdPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const currentProfileIdentifier = useLastRecognizedIdentity()

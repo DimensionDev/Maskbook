@@ -47,20 +47,22 @@ export enum NextIDVerificationStatus {
     Other = 'Other',
 }
 
-export function useNextIDConnectStatus() {
-    const ui = activatedSocialNetworkUI
-    const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
-    const personaConnectStatus = usePersonaConnectStatus()
-    const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
-    const lastState_ = useValueRef(lastStateRef)
-    const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
+export function useSetupGuideStatusState() {
+    const lastState_ = useValueRef(currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier])
+    return useMemo<SetupGuideCrossContextStatus>(() => {
         try {
             return JSON.parse(lastState_)
         } catch {
             return {}
         }
     }, [lastState_])
+}
 
+export function useNextIDConnectStatus() {
+    const ui = activatedSocialNetworkUI
+    const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
+    const personaConnectStatus = usePersonaConnectStatus()
+    const lastState = useSetupGuideStatusState()
     const lastRecognized = useLastRecognizedIdentity()
     const [username] = useState(
         lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId),
