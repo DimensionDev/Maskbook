@@ -10,8 +10,8 @@ import {
 
 import { TREASURE_ARBITRUM_GRAPHQL_URL } from './constants'
 import type { Listing, Token } from './types'
-import type { NonFungibleTokenAPI } from '..'
-import { getAssetQuery, getTokenHistoryQuery } from './queries'
+import { NonFungibleTokenAPI } from '..'
+import { getAssetQuery, getTokenDetails, getTokenHistoryQuery } from './queries'
 import { first } from 'lodash-unified'
 
 function createNFTAsset(asset: Token): NonFungibleTokenAPI.Asset {
@@ -162,26 +162,97 @@ export class TreasureAPI {
         return history.filter((event) => event !== undefined)
     }
 
-    // async getListings(tokenAddress: string, tokenId: string): Promise<NonFungibleTokenAPI.AssetOrder[]> {
-    //     const variables = {
-    //         tokenAddress,
-    //         tokenId,
-    //     }
-    // }
+    async getOffers(tokenAddress: string, tokenId: string): Promise<NonFungibleTokenAPI.AssetOrder[]> {
+        const variables = {
+            tokenAddress,
+            tokenId,
+        }
+        const nftOffers = await this.client.request(getTokenDetails, variables)
 
-    // async getOrders(
-    //     tokenAddress: string,
-    //     tokenId: string,
-    //     side: NonFungibleTokenAPI.OrderSide,
-    //     opts: NonFungibleTokenAPI.Options = {},
-    // ) {
-    //     switch (side) {
-    //         case NonFungibleTokenAPI.OrderSide.Buy:
-    //             return this.getOffers(tokenAddress, tokenId, opts)
-    //         case NonFungibleTokenAPI.OrderSide.Sell:
-    //             return this.getListings(tokenAddress, tokenId, opts)
-    //         default:
-    //             return []
-    //     }
-    // }
+        const offers: NonFungibleTokenAPI.AssetOrder[] = nftOffers.Token[0].transferEvents.map(
+            (event: Listing): NonFungibleTokenAPI.AssetOrder | undefined => {
+                if (event.status !== 0 && event.status === 1) {
+                    return {
+                        created_time: new Date(`${event.blockTimestamp}Z`).getTime().toString(),
+                        current_price: event.pricePerItem,
+                        payment_token: 'MAGIC' || '',
+                        payment_token_contract: {
+                            name: 'MAGIC',
+                            symbol: 'MAGIC',
+                            decimals: 18,
+                            address: '0x539bdE0d7Dbd336b79148AA742883198BBF60342',
+                        },
+                        listing_time: 0,
+                        side: NonFungibleTokenAPI.OrderSide.Buy,
+                        quantity: '1',
+                        expiration_time: 0,
+                        order_hash: event.transactionLink || '',
+                        approved_on_chain: false,
+                        maker_account: {
+                            user: { username: event.buyer.address || '' },
+                            address: event.buyer.address || '',
+                            profile_img_url: '',
+                            link: '',
+                        },
+                    }
+                }
+                return
+            },
+        )
+
+        return offers.filter((offer) => offer !== undefined)
+    }
+
+    async getListings(tokenAddress: string, tokenId: string): Promise<NonFungibleTokenAPI.AssetOrder[]> {
+        const variables = {
+            tokenAddress,
+            tokenId,
+        }
+
+        const listingTreasure = await this.client.request(getTokenDetails, variables)
+
+        const orders: NonFungibleTokenAPI.AssetOrder[] = listingTreasure.Token[0].transferEvents.map(
+            (event: Listing): NonFungibleTokenAPI.AssetOrder | undefined => {
+                if (event.status !== 1) {
+                    return {
+                        created_time: new Date(`${event.blockTimestamp}Z`).getTime().toString(),
+                        approved_on_chain: false,
+                        current_price: formatWeiToEther(event.pricePerItem || 0).toString(),
+                        payment_token: 'MAGIC',
+                        payment_token_contract: {
+                            name: 'Magic',
+                            symbol: 'MAGIC',
+                            decimals: 18,
+                            address: '0x539bdE0d7Dbd336b79148AA742883198BBF60342',
+                        },
+                        listing_time: 0,
+                        side: NonFungibleTokenAPI.OrderSide.Sell,
+                        quantity: '1',
+                        expiration_time: 0,
+                        order_hash: event.transactionLink || '',
+                        maker_account: {
+                            user: { username: event.seller.address || '' },
+                            address: event.seller.address || '',
+                            profile_img_url: '',
+                            link: '',
+                        },
+                    }
+                }
+                return
+            },
+        )
+
+        return orders.filter((order) => order !== undefined)
+    }
+
+    async getOrders(tokenAddress: string, tokenId: string, side: NonFungibleTokenAPI.OrderSide) {
+        switch (side) {
+            case NonFungibleTokenAPI.OrderSide.Buy:
+                return this.getOffers(tokenAddress, tokenId)
+            case NonFungibleTokenAPI.OrderSide.Sell:
+                return this.getListings(tokenAddress, tokenId)
+            default:
+                return []
+        }
+    }
 }

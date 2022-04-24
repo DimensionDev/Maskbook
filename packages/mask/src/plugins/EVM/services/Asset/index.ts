@@ -99,8 +99,7 @@ export async function getListings(options: ListOption) {
         case NonFungibleAssetProvider.ZORA:
             return Zora.getListings(address, tokenId)
         case NonFungibleAssetProvider.TREASURE:
-            return
-        // return Treasure.getListings(address, tokenId)
+            return []
         default:
             unreachable(provider)
     }

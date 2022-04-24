@@ -245,6 +245,7 @@ export enum NonFungibleAssetProvider {
     RARIBLE = 'Rarible',
     NFTSCAN = 'NFTScan',
     ZORA = 'Zora',
+    TREASURE = 'Treasure',
 }
 
 export interface PriceRecord {
