@@ -113,12 +113,22 @@ export interface Listing {
     pricePerItem: string
     quantity: string
     seller: TreasureUser
+    stats: StatsData
     status: TreasureStatus
     token: Token
     tokenName: string
     totalPrice: string
     transactionLink: string
     user: TreasureUser
+}
+
+export interface StatsData {
+    id: string
+    floorPrice: string
+    items: string
+    listings: string
+    sales: string
+    volume: string
 }
 export interface Exerciser {
     id: string

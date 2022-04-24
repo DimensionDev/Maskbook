@@ -8,11 +8,28 @@ import {
     resolveIPFSLinkFromURL,
 } from '@masknet/web3-shared-evm'
 
-import { TREASURE_ARBITRUM_GRAPHQL_URL } from './constants'
-import type { Listing, Token } from './types'
+import {
+    TREASURE_ARBITRUM_GRAPHQL_URL,
+    TREASURE_METADATA_GRAPHQL_URL,
+    METADATA_SUPPORT,
+    TREASURE_SMOLVERSE_GRAPHQL_URL,
+    SMOLVERSE_SUPPORT,
+    REALM_SUPPORT,
+    TREASURE_REALM_GRAPHQL_URL,
+} from './constants'
+import type { Collections, Listing, Token } from './types'
 import { NonFungibleTokenAPI } from '..'
-import { getAssetQuery, getTokenDetails, getTokenHistoryQuery } from './queries'
+import {
+    getCollections,
+    getTokenDetails,
+    getTokenHistoryQuery,
+    getAssetQuery,
+    getTokenMetadata,
+    getSmolVerseMeta,
+    getRealmMetadata,
+} from './queries'
 import { first } from 'lodash-unified'
+import BigNumber from 'bignumber.js'
 
 function createNFTAsset(asset: Token): NonFungibleTokenAPI.Asset {
     const image_url = asset.metadata.image ?? ''
@@ -92,28 +109,97 @@ function createERC721TokenFromAsset(tokenAddress: string, tokenId: string, asset
 
 export class TreasureAPI {
     private client
+    private metadata
+    private smolverse
+    private realm
+    private bridgeworld
     constructor() {
         this.client = new GraphQLClient(TREASURE_ARBITRUM_GRAPHQL_URL)
+        this.metadata = new GraphQLClient(TREASURE_METADATA_GRAPHQL_URL)
+        this.smolverse = new GraphQLClient(TREASURE_SMOLVERSE_GRAPHQL_URL)
+        this.realm = new GraphQLClient(TREASURE_REALM_GRAPHQL_URL)
+        this.bridgeworld = new GraphQLClient(TREASURE_BRIDGEWORLD_GRAPHQL_URL)
     }
 
-    async getAsset(address: string, tokenId: string) {
+    collectionsCache: Collections | null = null
+
+    async resolveCollectionNameToAddress(collectionName: string): Promise<string | undefined> {
+        if (!this.collectionsCache) {
+            const response = await this.client.request(getCollections)
+            if (response !== undefined) this.collectionsCache = response
+        }
+
+        if (!this.collectionsCache) return
+
+        return first(
+            this.collectionsCache.collections
+                .filter((e) => e.name.toLowerCase().replace(' ', '-') === collectionName)
+                .map((e) => e.id),
+        )
+    }
+
+    async resolveCollectionNameOrAddress(nameOrAddress: string) {
+        if (nameOrAddress.startsWith('0x')) {
+            return nameOrAddress
+        } else {
+            return this.resolveCollectionNameToAddress(nameOrAddress)
+        }
+    }
+
+    async getAsset(slug: string, tokenId: string) {
+        const contractAddress = await this.resolveCollectionNameOrAddress(slug)
+        if (!contractAddress) return
+        const address = convertTreasureId(contractAddress, tokenId)
         const variables = { address, tokenId }
         const assetData = await this.client.request(getAssetQuery, variables)
         if (!assetData) return
-        return createNFTAsset(assetData.Token[0])
+
+        if (METADATA_SUPPORT.includes(contractAddress)) {
+            const id = address
+            const metadataVariables = { id }
+            const metaData = await this.metadata.request(getTokenMetadata, metadataVariables)
+            if (!metaData) return
+            const treasureNFTdata = { ...assetData.tokens[0], ...metaData.tokens[0] }
+            return createNFTAsset(treasureNFTdata)
+        }
+
+        if (SMOLVERSE_SUPPORT.includes(contractAddress)) {
+            const id = address
+            const smolverseVariables = { id }
+            const smolverseData = await this.smolverse.request(getSmolVerseMeta, smolverseVariables)
+            if (!smolverseData) return
+            const smolverseNFTdata = { ...assetData.tokens[0], ...smolverseData.tokens[0] }
+            return createNFTAsset(smolverseNFTdata)
+        }
+
+        if (REALM_SUPPORT.includes(contractAddress)) {
+            const id = tokenId
+            const realmVariables = { id }
+            const realmData = await this.realm.request(getRealmMetadata, realmVariables)
+            if (!realmData) return
+            return createNFTAsset(realmData.realms[0])
+        }
+
+        return createNFTAsset(assetData.tokens[0])
     }
 
-    async getToken(address: string, tokenId: string) {
+    async getToken(slug: string, tokenId: string) {
+        const contractAddress = await this.resolveCollectionNameOrAddress(slug)
+        if (!contractAddress) return
+        const address = convertTreasureId(contractAddress, tokenId)
+        if (!address) return
         const variables = {
             address,
             tokenId,
         }
         const asset = await this.client.request(getAssetQuery, variables)
         if (!asset) return
-        return createERC721TokenFromAsset(address, tokenId, asset.Token[0])
+        return createERC721TokenFromAsset(contractAddress, tokenId, asset.tokens[0])
     }
 
-    async getHistory(address: string, tokenId: string): Promise<NonFungibleTokenAPI.History[]> {
+    async getHistory(slug: string, tokenId: string): Promise<NonFungibleTokenAPI.History[]> {
+        const address = await this.resolveCollectionNameOrAddress(slug)
+        if (!address) return []
         const variables = {
             address,
             tokenId,
@@ -255,4 +341,17 @@ export class TreasureAPI {
                 return []
         }
     }
+}
+
+export function getTreasureNFTList() {
+    return
+}
+export function getTreasureCollectionList() {
+    return
+}
+
+function convertTreasureId(address: string, tokenId: string) {
+    const hexNumber = '0x' + new BigNumber(tokenId).toString(16)
+    console.log([address, hexNumber].join('-'))
+    return [address, hexNumber].join('-')
 }

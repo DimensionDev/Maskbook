@@ -2,12 +2,16 @@ import { gql } from 'graphql-request'
 
 export const getAssetQuery = gql`
     query getAsset($address: String!, $tokenId: String!) {
-        Token(where: { id: { _eq: $address }, tokenId: { _eq: $tokenId } }) {
+        tokens(where: { id: $address, tokenId: $tokenId }) {
             tokenId
             id
             collection {
                 name
-                states {
+                contract
+                floorPrice
+                totalListings
+                stats {
+                    id
                     floorPrice
                     items
                     listings
@@ -50,42 +54,6 @@ export const getTokenHistoryQuery = gql`
     }
 `
 
-export const getBidsQuery = gql`
-    query getBidEvents($tokenAddress: String!, $tokenId: String!) {
-        Token(where: { address: { _eq: $tokenAddress }, tokenId: { _eq: $tokenId } }) {
-            transferEvents {
-                transaction {
-                    marketBidEvents(where: { status: { _eq: "FINALIZED" } }) {
-                        blockTimestamp
-                        amount
-                        currencyAddress
-                        transactionHash
-                        recipient
-                    }
-                }
-            }
-        }
-    }
-`
-
-export const getAsksQuery = gql`
-    query getAskEvents($tokenAddress: String!, $tokenId: String!) {
-        Token(where: { address: { _eq: $tokenAddress }, tokenId: { _eq: $tokenId } }) {
-            transferEvents {
-                transaction {
-                    auctionCreatedEvents {
-                        auctionCurrency
-                        reservePrice
-                        tokenOwner
-                        blockTimestamp
-                        transactionHash
-                    }
-                }
-            }
-        }
-    }
-`
-
 export const getCollectionAttributes = gql`
     query getCollectionAttributes($id: ID!) {
         collection(id: $id) {
@@ -113,23 +81,19 @@ export const getCollectionMetadata = gql`
 `
 
 export const getTokenMetadata = gql`
-    query getTokenMetadata($id: ID!) {
-        token(id: $id) {
-            metadata {
-                attributes {
-                    attribute {
-                        id
-                        name
-                        percentage
-                        value
-                    }
-                }
-                image
-                name
-                description
-            }
+    query getTokenMetadata($address: String!) {
+        tokens(where: { id: $address }) {
             name
             tokenId
+            attributes {
+                id
+                name
+                percentage
+                value
+            }
+            image
+            name
+            description
         }
     }
 `
@@ -146,15 +110,41 @@ export const getTokensMetadata = gql`
     query getTokensMetadata($ids: [ID!]!) {
         tokens(first: 1000, where: { collection_not: "0xfe8c1ac365ba6780aec5a985d989b327c27670a1", id_in: $ids }) {
             id
-            metadata {
-                image
-                name
-                description
-            }
             name
             tokenId
+            attributes {
+                id
+                name
+                percentage
+                value
+            }
         }
     }
+`
+
+export const getSmolVerseMeta = gql`
+    query qetSmolVerseMeta($id: String!){
+        tokens(where: {id: id}){
+            id
+            video
+            name
+            description
+            image
+            owner {
+                id
+            }
+            attributes{
+                id
+                name
+                value
+                percentage
+                tokens {
+                    id
+                    video
+                    tokenId
+                }
+            }
+        }
 `
 
 export const getSmolverseMetadata = gql`
@@ -489,6 +479,49 @@ export const searchItems = gql`
         tokenId
         listings(first: 1, where: { status: Active }, orderBy: pricePerItem, orderDirection: asc) {
             pricePerItem
+        }
+    }
+`
+
+export const getRealmMetadata = gql`
+    query getRealmMetadata($id: String!) {
+        realms(where: { id: $id }) {
+            id
+            feature1
+            feature2
+            feature3
+            metrics {
+                name
+                totalAmount
+            }
+            totalStructures {
+                totalAquariums
+                totalCities
+                totalFarms
+                totalResearchLabs
+            }
+        }
+    }
+`
+
+export const getFilteredFeatures = gql`
+    query getFilteredFeatures($ids: [ID!]!, $feature: [String!]) {
+        feature1: realms(first: 1000, where: { id_in: $ids, feature1_in: $feature }) {
+            id
+        }
+        feature2: realms(first: 1000, where: { id_in: $ids, feature2_in: $feature }) {
+            id
+        }
+        feature3: realms(first: 1000, where: { id_in: $ids, feature3_in: $feature }) {
+            id
+        }
+    }
+`
+
+export const getFilteredStructures = gql`
+    query getFilteredStructures($filters: TotalStructure_filter!) {
+        totalStructures(first: 1000, where: $filters) {
+            id
         }
     }
 `
