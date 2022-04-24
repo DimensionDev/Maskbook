@@ -157,7 +157,7 @@
         "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-aurora",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "ttps://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-harmony",
+        "Harmony": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-harmony",
         "Harmony_Test": ""
     }
 }
