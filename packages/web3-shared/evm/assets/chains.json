@@ -1609,7 +1609,7 @@
     },
     {
         "name": "Moonbeam Polkadot",
-        "chain": "Moonbeam",
+        "chain": "moonbeam",
         "network": "mainnet",
         "rpc": ["https://rpc.api.moonbeam.network"],
         "faucets": [],
