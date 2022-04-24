@@ -2,7 +2,6 @@ import {
     AESCryptoKey,
     AESJsonWebKey,
     ECKeyIdentifier,
-    GroupIdentifier,
     Identifier,
     IdentifierMap,
     PersonaIdentifier,
@@ -318,11 +317,6 @@ export async function queryPostPagedDB(
 // #region db in and out
 function postOutDB(db: PostDBRecord): PostRecord {
     const { identifier, foundAt, postBy, recipients, postCryptoKey, encryptBy, interestedMeta, summary, url } = db
-    if (typeof recipients === 'object') {
-        for (const detail of recipients.values()) {
-            detail.reason.forEach((x) => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
-        }
-    }
     return {
         identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(),
         postBy: restorePrototype(postBy, ProfileIdentifier.prototype),
