@@ -1,15 +1,30 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography, useTheme } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import {
+    EMPTY_LIST,
+    NextIDPlatform,
+    CrossIsolationMessages,
+    ProfileIdentifier,
+    formatPersonaPublicKey,
+} from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
 import { ApplicationSettingDialog } from './ApplicationSettingDialog'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useAsync } from 'react-use'
+import Services from '../../extension/service'
+import { NextIDProof } from '@masknet/web3-providers'
+import type { Persona } from '../../database'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import { useSetupGuideStatusState } from '../DataSource/useNextID'
+import { useMyPersonas } from '../DataSource/useMyPersonas'
+import { WalletMessages } from '../../plugins/Wallet/messages'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -153,5 +168,76 @@ interface RenderEntryComponentWrapperProps {
 
 function RenderEntryComponentWrapper({ application }: RenderEntryComponentWrapperProps) {
     const RenderEntryComponent = application.entry.RenderEntryComponent!
-    return <RenderEntryComponent disabled={!application.enabled} />
+    return application.entry.nextIdRequired ? (
+        <RenderEntryComponentWithNextIDRequired application={application} />
+    ) : (
+        <RenderEntryComponent disabled={!application.enabled} />
+    )
+}
+
+function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComponentWrapperProps) {
+    const ui = activatedSocialNetworkUI
+    const { t } = useI18N()
+    const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
+    const lastState = useSetupGuideStatusState()
+    const lastRecognized = useLastRecognizedIdentity()
+    const username = useMemo(() => {
+        return lastState.username || (!lastRecognized.identifier.isUnknown ? lastRecognized.identifier.userId : '')
+    }, [lastState, lastRecognized])
+    const personas = useMyPersonas()
+
+    const checkSNSConnectToCurrentPersona = useCallback((persona: Persona) => {
+        return (
+            persona?.linkedProfiles.get(new ProfileIdentifier(ui.networkIdentifier, username))
+                ?.connectionConfirmState === 'confirmed'
+        )
+    }, [])
+
+    const { value: ApplicationCurrentStatus } = useAsync(async () => {
+        const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
+        const currentPersona = (await Services.Identity.queryPersona(currentPersonaIdentifier!)) as Persona
+        const currentSNSConnectedPersona = personas.find((persona) =>
+            checkSNSConnectToCurrentPersona(persona as Persona),
+        )
+        return {
+            isSNSConnectToCurrentPersona: checkSNSConnectToCurrentPersona(currentPersona),
+            isNextIDVerify: await NextIDProof.queryIsBound(currentPersona.publicHexKey ?? '', platform, username),
+            currentPersonaPublicKey: currentPersona?.fingerprint,
+            currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.fingerprint,
+        }
+    }, [platform, username, ui, personas])
+    const {
+        isNextIDVerify,
+        isSNSConnectToCurrentPersona,
+        currentPersonaPublicKey,
+        currentSNSConnectedPersonaPublicKey,
+    } = ApplicationCurrentStatus ?? {}
+    const { closeDialog } = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
+
+    const onNextIDVerify = useCallback(() => {
+        closeDialog()
+        CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
+    }, [])
+
+    if (!application.entry.RenderEntryComponent) return null
+
+    const RenderEntryComponent = application.entry.RenderEntryComponent
+
+    return (
+        <RenderEntryComponent
+            disabled={!application.enabled || isNextIDVerify === undefined || !isSNSConnectToCurrentPersona}
+            nextIdVerification={{
+                isNextIDVerify,
+                isSNSConnectToCurrentPersona,
+                toolTipHint: t('plugin_tips_sns_persona_unmatched', {
+                    currentPersonaPublicKey: formatPersonaPublicKey(currentPersonaPublicKey ?? '', 4),
+                    currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
+                        currentSNSConnectedPersonaPublicKey ?? '',
+                        4,
+                    ),
+                }),
+                onNextIDVerify,
+            }}
+        />
+    )
 }

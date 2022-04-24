@@ -9,4 +9,4 @@ export interface TipMessage {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const PluginNextIdMessages: PluginMessageEmitter<TipMessage> = createPluginMessage(PLUGIN_ID)
+export const PluginNextIDMessages: PluginMessageEmitter<TipMessage> = createPluginMessage(PLUGIN_ID)

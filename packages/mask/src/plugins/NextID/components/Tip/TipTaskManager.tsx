@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useState } from 'react'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { TipTaskProvider } from '../../contexts'
-import { PluginNextIdMessages } from '../../messages'
+import { PluginNextIDMessages } from '../../messages'
 import type { TipTask } from '../../types'
 import { TipDialog } from './TipDialog'
 
@@ -18,7 +18,7 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
     }, [])
 
     useEffect(() => {
-        return PluginNextIdMessages.tipTask.on((task) => {
+        return PluginNextIDMessages.tipTask.on((task) => {
             id += 1
             setTasks((list) => [...list, { id, ...task }])
         })

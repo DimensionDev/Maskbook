@@ -35,20 +35,26 @@ export interface SelectProviderDialogProps {}
 export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-
+    const [underPluginID, setUnderPluginID] = useState<NetworkPluginID>()
     // #region remote controlled dialog logic
-    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     // #endregion
-
+    const { open, closeDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+        (ev?) => {
+            if (!ev?.open) return
+            setUnderPluginID(ev?.pluginID ?? NetworkPluginID.PLUGIN_EVM)
+        },
+    )
     // #region native app
     useEffect(() => {
         if (!open) return
         if (hasNativeAPI) nativeAPI?.api.misc_openCreateWalletView()
-    }, [open])
+    }, [open, underPluginID])
     // #endregion
 
     const isDashboard = isDashboardPage()
     const networks = getRegisteredWeb3Networks()
+    const showNetworks = underPluginID ? networks.filter((x) => x.networkSupporterPluginID === underPluginID) : networks
     const providers = getRegisteredWeb3Providers()
     const pluginID = useValueRef(pluginIDSettings) as NetworkPluginID
     const network = useNetworkDescriptor()
@@ -81,7 +87,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <PluginProviderRender
-                    networks={networks}
+                    networks={showNetworks}
                     providers={providers}
                     undeterminedPluginID={undeterminedPluginID}
                     undeterminedNetworkID={undeterminedNetworkID}
