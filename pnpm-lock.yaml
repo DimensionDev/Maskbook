@@ -121,9 +121,13 @@ importers:
     specifiers:
       '@masknet/shared-base': workspace:*
       '@msgpack/msgpack': ^2.7.2
+      elliptic: ^6.5.3
+      pvtsutils: ^1.2.2
     dependencies:
       '@masknet/shared-base': link:../shared-base
       '@msgpack/msgpack': 2.7.2
+      elliptic: 6.5.4
+      pvtsutils: 1.2.2
 
   packages/configuration:
     specifiers:
