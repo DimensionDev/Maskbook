@@ -21,6 +21,11 @@ export interface GeneralAsset {
         city?: string
     }
 }
+
+export interface collectionTypes {
+    platform: string
+    iconURL?: string | null
+}
 export enum AssetType {
     GitcoinDonation = 'Gitcoin-Donation',
     POAP = 'POAP',
@@ -28,4 +33,10 @@ export enum AssetType {
 export interface Response {
     status: boolean
     assets: GeneralAsset[]
+}
+
+export interface WalletsCollection {
+    NFTs: (string | undefined)[]
+    donations: (string | undefined)[]
+    footprints: (string | undefined)[]
 }

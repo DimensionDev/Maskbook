@@ -1,4 +1,4 @@
-import { Button, DialogActions, DialogContent } from '@mui/material'
+import { DialogActions, DialogContent } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { useState } from 'react'
@@ -6,14 +6,12 @@ import { InjectedDialog } from '@masknet/shared'
 import { PersonaAction } from './PersonaAction'
 import { useAllPersona, useCurrentPersona, useCurrentVisitingProfile } from '../hooks/usePersona'
 import { Main } from './Main'
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
-import { useAddressNames } from '@masknet/web3-shared-evm'
+import { NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { ImageManagement } from './ImageManagement'
-import { useDonations } from '../hooks/useDonations'
-import { useFootprints } from '../hooks/useFootprints'
 import WalletSetting from './WalletSetting'
+import { getDonationList, getFootprintList } from '../hooks/useCollectionList'
 const useStyles = makeStyles()((theme) => ({
     root: {
         width: 520,
@@ -84,14 +82,13 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { open, onClose } = props
     const [title, setTitle] = useState('Web3 Profile')
-    const [steps, setSteps] = useState(BodyViewSteps.main)
     const [walletSwitchOpen, setWalletSwitchOpen] = useState(false)
+    const [imageManageOpen, setImageManageOpen] = useState(false)
+
     const persona = useCurrentPersona()
     const currentVisitingProfile = useCurrentVisitingProfile()
-    const { value: addressNames = EMPTY_LIST, loading: loadingAddressNames } = useAddressNames(currentVisitingProfile!)
     const allPersona = useAllPersona()
     const currentPersona = allPersona?.find((x) => x.identifier.compressedPoint === persona?.compressedPoint)
-    console.log({ currentPersona, currentVisitingProfile, addressNames })
 
     const {
         value: bindings,
@@ -101,47 +98,18 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
         if (!currentPersona) return
         return NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey!)
     }, [currentPersona])
-    console.log({ bindings })
-
-    const handleBack = () => {
-        switch (steps) {
-            case BodyViewSteps.main:
-                onClose()
-                break
-            case BodyViewSteps.image_display:
-                setSteps(BodyViewSteps.main)
-                setTitle('Web3 Profile')
-                break
-            default:
-                onClose()
-        }
-    }
-
-    const TitleButton = () => {
-        let button
-        switch (steps) {
-            case BodyViewSteps.main:
-                button = <></>
-                break
-            case BodyViewSteps.image_display:
-                button = (
-                    <Button style={{ marginLeft: 'auto' }} onClick={() => setWalletSwitchOpen(true)}>
-                        Settings
-                    </Button>
-                )
-                break
-        }
-        return button
-    }
 
     const wallets = bindings?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum) || []
-    const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(
-        '0xe93735Deb30AAa0810DfdA7fb2B0E2115982B1d1',
-    )
-    const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(
-        '0xe93735Deb30AAa0810DfdA7fb2B0E2115982B1d1',
-    )
-    console.log({ donations, footprints })
+
+    const { value: donationList } = useAsyncRetry(async () => {
+        if (!currentPersona) return
+        return getDonationList(wallets?.map((wallet) => wallet?.identity))
+    }, [wallets?.length])
+
+    const { value: footprintList } = useAsyncRetry(async () => {
+        if (!currentPersona) return
+        return getFootprintList(wallets?.map((wallet) => wallet?.identity))
+    }, [wallets?.length])
 
     return (
         <>
@@ -150,27 +118,34 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
                 title={title}
                 fullWidth={false}
                 open={open}
-                titleTail={TitleButton()}
-                onClose={handleBack}>
+                onClose={onClose}>
                 <DialogContent className={classes.content}>
-                    {steps === BodyViewSteps.main && (
-                        <Main
-                            openImageSetting={(str: string) => {
-                                setTitle(str)
-                                setSteps(BodyViewSteps.image_display)
-                            }}
-                            persona={currentPersona}
-                            currentVisitingProfile={currentVisitingProfile}
-                        />
-                    )}
-                    {steps === BodyViewSteps.image_display && (
-                        <ImageManagement currentPersona={currentPersona} addresses={wallets} title={title} />
-                    )}
+                    <Main
+                        openImageSetting={(str: string) => {
+                            setTitle(str)
+                            setImageManageOpen(true)
+                        }}
+                        persona={currentPersona}
+                        currentVisitingProfile={currentVisitingProfile}
+                        footprintNumList={footprintList?.map((x) => x?.length)}
+                        donationNumList={donationList?.map((x) => x?.length)}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <PersonaAction currentPersona={currentPersona} currentVisitingProfile={currentVisitingProfile} />
                 </DialogActions>
             </InjectedDialog>
+            <ImageManagement
+                currentPersona={currentPersona}
+                addresses={wallets}
+                title={title}
+                onClose={() => setImageManageOpen(false)}
+                open={imageManageOpen}
+                footprintList={footprintList}
+                donationList={donationList}
+                currentVisitingProfile={currentVisitingProfile}
+            />
+
             <WalletSetting
                 wallets={wallets}
                 open={walletSwitchOpen}

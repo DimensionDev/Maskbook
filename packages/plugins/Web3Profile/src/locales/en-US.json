@@ -1,5 +1,9 @@
 {
     "persona_publick_key_copy": "persona_publick_key_copy",
     "current": "Current",
-    "plugin_wallet_view_on_explorer": "plugin_wallet_view_on_explorer"
+    "plugin_wallet_view_on_explorer": "plugin_wallet_view_on_explorer",
+    "wallets": "Wallets",
+    "donations": "Donations",
+    "footprints": "Footprints",
+    "NFTs": "NFTs"
 }

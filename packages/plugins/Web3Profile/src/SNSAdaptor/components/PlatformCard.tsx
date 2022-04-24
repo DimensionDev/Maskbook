@@ -54,10 +54,20 @@ export interface PlatformCardProps extends withClasses<never | 'root'> {
     platformId?: string
     isCurrent?: boolean
     openImageSetting: (str: string) => void
+    footprintNum?: number
+    donationNum?: number
 }
 
 export function PlatformCard(props: PlatformCardProps) {
-    const { avatar, nickName = 'unknown', platformId = 'unknown', isCurrent = false, openImageSetting } = props
+    const {
+        avatar,
+        nickName = 'unknown',
+        platformId = 'unknown',
+        isCurrent = false,
+        openImageSetting,
+        footprintNum,
+        donationNum,
+    } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -82,30 +92,30 @@ export function PlatformCard(props: PlatformCardProps) {
                 </div>
                 <div className={classes.flexItem} onClick={() => openImageSetting('NFTS')}>
                     <div>
-                        <Typography style={{ fontWeight: '700' }}>NFTs</Typography>
+                        <Typography style={{ fontWeight: '700' }}>{t.NFTs()}</Typography>
                         <Typography>
-                            <span style={{ fontWeight: '700' }}>2</span> Wallets{' '}
-                            <span style={{ fontWeight: '700' }}>200</span> NFTs
+                            <span style={{ fontWeight: '700' }}>2</span> {t.wallets()}{' '}
+                            <span style={{ fontWeight: '700' }}>{0}</span> {t.NFTs()}
                         </Typography>
                     </div>
                     <ArrowForwardIosIcon className={classes.arrowIcon} />
                 </div>
                 <div className={classes.flexItem} onClick={() => openImageSetting('Footprints')}>
                     <div>
-                        <Typography style={{ fontWeight: '700' }}>Footprints</Typography>
+                        <Typography style={{ fontWeight: '700' }}>{t.footprints()}</Typography>
                         <Typography>
-                            <span style={{ fontWeight: '700' }}>5</span> Wallets{' '}
-                            <span style={{ fontWeight: '700' }}>200</span> NFTs
+                            <span style={{ fontWeight: '700' }}>5</span> {t.wallets()}{' '}
+                            <span style={{ fontWeight: '700' }}>{footprintNum ?? 0}</span> {t.footprints()}
                         </Typography>
                     </div>
                     <ArrowForwardIosIcon className={classes.arrowIcon} />
                 </div>
                 <div className={classes.flexItem} onClick={() => openImageSetting('Donations')}>
                     <div>
-                        <Typography style={{ fontWeight: '700' }}>Donations</Typography>
+                        <Typography style={{ fontWeight: '700' }}>{t.donations()}</Typography>
                         <Typography>
-                            <span style={{ fontWeight: '700' }}>2</span> Wallets{' '}
-                            <span style={{ fontWeight: '700' }}>200</span> NFTs
+                            <span style={{ fontWeight: '700' }}>2</span> {t.wallets()}{' '}
+                            <span style={{ fontWeight: '700' }}>{donationNum ?? 0}</span> {t.donations()}
                         </Typography>
                     </div>
                     <ArrowForwardIosIcon className={classes.arrowIcon} />

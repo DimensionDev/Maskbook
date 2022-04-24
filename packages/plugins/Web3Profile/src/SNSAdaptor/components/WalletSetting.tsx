@@ -1,8 +1,6 @@
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { InjectedDialog } from '@masknet/shared'
-import { BindingProof, fromHex, NextIDPlatform, PersonaInformation, toBase64 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { NextIDStorage } from '@masknet/web3-providers'
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { memo } from 'react'
 import { WalletSwitch } from '../components/WalletSwitch'
@@ -66,39 +64,39 @@ const WalletSetting = memo(
         }
 
         const personaSign = usePersonaSign()
-        const onConfirm = async () => {
-            if (!currentPersona?.publicHexKey) return
-            const patch = {
-                ...hiddenList,
-            }
-            try {
-                const payload = await NextIDStorage.getPayload(
-                    currentPersona.publicHexKey,
-                    NextIDPlatform.Twitter,
-                    currentVisitingProfile?.identifier?.userId,
-                    patch,
-                )
-                console.log('payload', payload.val)
-                const signature = await personaSign({
-                    message: payload.val?.signPayload,
-                    method: 'eth',
-                })
+        // const onConfirm = async () => {
+        //     if (!currentPersona?.publicHexKey) return
+        //     const patch = {
+        //         ...hiddenList,
+        //     }
+        //     try {
+        //         const payload = await NextIDStorage.getPayload(
+        //             currentPersona.publicHexKey,
+        //             NextIDPlatform.Twitter,
+        //             currentVisitingProfile?.identifier?.userId,
+        //             patch,
+        //         )
+        //         console.log('payload', payload.val)
+        //         const signature = await personaSign({
+        //             message: payload.val?.signPayload,
+        //             method: 'eth',
+        //         })
 
-                console.log({ signature })
+        //         console.log({ signature })
 
-                const res = await NextIDStorage.set(
-                    payload.val?.uuid,
-                    currentPersona.publicHexKey?.replace(/^0x/, ''),
-                    toBase64(fromHex(signature?.signature?.signature)),
-                    NextIDPlatform.Ethereum,
-                    currentVisitingProfile?.identifier?.userId,
-                    payload.val?.createdAt,
-                    patch,
-                )
-            } catch (err) {
-                return
-            }
-        }
+        //         const res = await NextIDStorage.set(
+        //             payload.val?.uuid,
+        //             currentPersona.publicHexKey?.replace(/^0x/, ''),
+        //             toBase64(fromHex(signature?.signature?.signature)),
+        //             NextIDPlatform.Ethereum,
+        //             currentVisitingProfile?.identifier?.userId,
+        //             payload.val?.createdAt,
+        //             patch,
+        //         )
+        //     } catch (err) {
+        //         return
+        //     }
+        // }
         return (
             <InjectedDialog
                 classes={{ dialogContent: classes.content }}
@@ -169,9 +167,7 @@ const WalletSetting = memo(
                         <Button className={classes.button} onClick={onClose}>
                             Cancel
                         </Button>
-                        <Button className={classes.button} onClick={onConfirm}>
-                            Confirm
-                        </Button>
+                        <Button className={classes.button}>Confirm</Button>
                     </div>
                 </DialogActions>
             </InjectedDialog>

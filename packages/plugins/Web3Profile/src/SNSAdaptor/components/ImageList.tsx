@@ -1,21 +1,14 @@
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import {
-    useCollectibles,
-    useCollections,
-    ChainId,
-    ERC721ContractDetailed,
-    isSameAddress,
-    ZERO_ADDRESS,
-} from '@masknet/web3-shared-evm'
-import { useEffect, useState } from 'react'
+import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { useState } from 'react'
 import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
-import { uniqBy } from 'lodash-unified'
-import { usePersonaSign } from '../hooks/usePersonaSign'
 import { InjectedDialog } from '@masknet/shared'
 import { NextIDStorage } from '@masknet/web3-providers'
 import { NextIDPlatform, PersonaInformation, fromHex, toBase64 } from '@masknet/shared-base'
+import { PLUGIN_ID } from '../../constants'
+import type { collectionTypes } from '../types'
 
 const useStyles = makeStyles()((theme) => {
     console.log({ theme })
@@ -25,6 +18,10 @@ const useStyles = makeStyles()((theme) => {
         walletInfo: {
             display: 'flex',
             alignItems: 'center',
+        },
+        titleTailButton: {
+            marginLeft: 'auto',
+            justifyContent: 'center',
         },
         walletName: {
             fontSize: '16px',
@@ -70,53 +67,16 @@ export interface ImageListDialogProps extends withClasses<never | 'root'> {
     onClose: () => void
     title: string
     currentPersona?: PersonaInformation
+    collectionList?: collectionTypes[]
 }
 
 export function ImageListDialog(props: ImageListDialogProps) {
-    const { address = ZERO_ADDRESS, open, onClose, title, currentPersona } = props
+    const { address = ZERO_ADDRESS, open, onClose, title, currentPersona, collectionList } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const [unListedCollections, setUnListdCollections] = useState<(ERC721ContractDetailed | undefined)[]>([])
-    const [listedCollections, setListdCollections] = useState<(ERC721ContractDetailed | undefined)[]>([])
+    const [unListedCollections, setUnListdCollections] = useState<collectionTypes[] | undefined>([])
+    const [listedCollections, setListdCollections] = useState<collectionTypes[] | undefined>(collectionList)
     const chainId = ChainId.Mainnet
-    const { data: collectionsFormRemote } = useCollections(address, chainId)
-    const {
-        data: collectibles,
-        state: loadingCollectibleDone,
-        retry: retryFetchCollectible,
-    } = useCollectibles(address, chainId)
-
-    useEffect(() => {
-        setListdCollections(
-            uniqBy(
-                collectibles.map((x) => x.contractDetailed),
-                (x) => x.address.toLowerCase(),
-            )
-                .map((x) => {
-                    const item = collectionsFormRemote.find((c) => isSameAddress(c.address, x.address))
-                    if (item) {
-                        return {
-                            name: item.name,
-                            symbol: item.name,
-                            baseURI: item.iconURL,
-                            iconURL: item.iconURL,
-                            address: item.address,
-                        } as ERC721ContractDetailed
-                    }
-                    return x
-                })
-                .filter((collection) => collection?.iconURL),
-        )
-    }, [collectibles.length, collectionsFormRemote.length])
-    const personaSign = usePersonaSign()
-    useEffect(() => {
-        if (!currentPersona) return
-        NextIDStorage.get(currentPersona.publicHexKey!).then((res) => {
-            const unListedCollectionIconURLs = res?.val?.proofs?.find(
-                (x) => x.platform === NextIDPlatform.Ethereum && x.identity === address,
-            )['com.mask.plugin'][`${NextIDPlatform.Ethereum}_${address}`].unListedCollections
-        })
-    }, [currentPersona])
 
     const unList = (url: string | undefined) => {
         if (!url) return
@@ -138,26 +98,6 @@ export function ImageListDialog(props: ImageListDialogProps) {
     }
     const handleClose = () => {
         setUnListdCollections([])
-        setListdCollections(
-            uniqBy(
-                collectibles.map((x) => x.contractDetailed),
-                (x) => x.address.toLowerCase(),
-            )
-                .map((x) => {
-                    const item = collectionsFormRemote.find((c) => isSameAddress(c.address, x.address))
-                    if (item) {
-                        return {
-                            name: item.name,
-                            symbol: item.name,
-                            baseURI: item.iconURL,
-                            iconURL: item.iconURL,
-                            address: item.address,
-                        } as ERC721ContractDetailed
-                    }
-                    return x
-                })
-                .filter((collection) => collection?.iconURL),
-        )
         onClose()
     }
 
@@ -172,15 +112,11 @@ export function ImageListDialog(props: ImageListDialogProps) {
                 NextIDPlatform.Ethereum,
                 address,
                 patch,
+                PLUGIN_ID,
             )
-            console.log('payload', payload.val)
-            const signature = await personaSign({
-                message: payload.val?.signPayload,
-                method: 'eth',
-            })
-
-            console.log({ signature })
-
+            if (!payload) throw new Error('get payload failed')
+            const signature = await personaSign(currentPersona.identifier, payload.val?.signPayload)
+            if (!signature) throw new Error('signature failed')
             const res = await NextIDStorage.set(
                 payload.val?.uuid,
                 currentPersona.publicHexKey?.replace(/^0x/, ''),
@@ -189,9 +125,12 @@ export function ImageListDialog(props: ImageListDialogProps) {
                 address,
                 payload.val?.createdAt,
                 patch,
+                PLUGIN_ID,
             )
+            if (!res) throw new Error('storage kv failed')
+            onClose()
         } catch (err) {
-            return
+            console.log({ err })
         }
     }
 
@@ -201,6 +140,11 @@ export function ImageListDialog(props: ImageListDialogProps) {
             title={title}
             fullWidth={false}
             open={open}
+            titleTail={
+                <Button className={classes.titleTailButton} size="small">
+                    Settings
+                </Button>
+            }
             onClose={handleClose}>
             <DialogContent className={classes.content}>
                 <div className={classes.wrapper}>
