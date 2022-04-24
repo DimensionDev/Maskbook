@@ -1,4 +1,4 @@
-import { useNetworkDescriptor, useWeb3State as useWeb3PluginState } from '@masknet/plugin-infra'
+import { useNetworkDescriptor, useWeb3State as useWeb3PluginState } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'

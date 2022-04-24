@@ -4,9 +4,9 @@ import { Box, Button, DialogContent, Slider } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
 import { useStateList } from 'react-use'
+import { Services } from '../../../../API'
 import FileUpload from '../../../../components/FileUpload'
 import { useDashboardI18N } from '../../../../locales'
-import { updatePersonaAvatar } from '../../api'
 
 interface UploadAvatarDialogProps {
     open: boolean
@@ -28,7 +28,9 @@ export const UploadAvatarDialog = memo<UploadAvatarDialogProps>(({ open, onClose
 
         editor.getImage().toBlob((blob) => {
             if (blob) {
-                updatePersonaAvatar(blob)
+                Services.Settings.getCurrentPersonaIdentifier().then((identifier) =>
+                    Services.Identity.updatePersonaAvatar(identifier, blob),
+                )
             }
         }, file.type)
 

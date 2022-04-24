@@ -1,4 +1,11 @@
-import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
+import {
+    getRegisteredWeb3Networks,
+    NetworkPluginID,
+    Pageable,
+    Pagination,
+    TokenType,
+    Web3Plugin,
+} from '@masknet/plugin-infra/web3'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
@@ -25,7 +32,6 @@ import BigNumber from 'bignumber.js'
 import { uniqBy } from 'lodash-unified'
 import Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
-import { PLUGIN_NETWORKS } from '../../constants'
 import { makeSortAssertWithoutChainFn } from '../../utils/token'
 import { createGetLatestBalance } from './createGetLatestBalance'
 import { createNonFungibleToken } from './createNonFungibleToken'
@@ -39,7 +45,10 @@ export const getFungibleAssetsFn =
     async (address: string, providerType: string, network: Web3Plugin.NetworkDescriptor, pagination?: Pagination) => {
         const chainId = context.chainId.getCurrentValue()
         const wallet = context.wallets.getCurrentValue().find((x) => isSameAddress(x.address, address))
-        const networks = PLUGIN_NETWORKS
+        const networks = getRegisteredWeb3Networks().filter(
+            (x) => NetworkPluginID.PLUGIN_EVM === x.networkSupporterPluginID && x.isMainnet,
+        )
+        const supportedNetworkIds = networks.map((x) => x.chainId)
         const trustedTokens = uniqBy(
             context.erc20Tokens
                 .getCurrentValue()
@@ -52,22 +61,24 @@ export const getFungibleAssetsFn =
         )
         const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
         const dataFromProvider = await context.getAssetsList(address, FungibleAssetProvider.DEBANK)
-        const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x) => ({
-            id: x.token.address,
-            chainId: x.token.chainId,
-            balance: x.balance,
-            price: x.price,
-            value: x.value,
-            logoURI: x.logoURI,
-            token: {
-                ...x.token,
-                type: TokenType.Fungible,
-                name: x.token.name ?? 'Unknown Token',
-                symbol: x.token.symbol ?? 'Unknown',
+        const assetsFromProvider = dataFromProvider
+            .map<Web3Plugin.Asset<Web3Plugin.FungibleToken>>((x) => ({
                 id: x.token.address,
                 chainId: x.token.chainId,
-            },
-        }))
+                balance: x.balance,
+                price: x.price,
+                value: x.value,
+                logoURI: x.logoURI,
+                token: {
+                    ...x.token,
+                    name: x.token.name ?? 'Unknown Token',
+                    symbol: x.token.symbol ?? 'Unknown',
+                    id: x.token.address,
+                    chainId: x.token.chainId,
+                    type: TokenType.Fungible,
+                },
+            }))
+            .filter((x) => supportedNetworkIds.includes(x.chainId))
 
         const balanceCheckerContract = createContract(
             web3,

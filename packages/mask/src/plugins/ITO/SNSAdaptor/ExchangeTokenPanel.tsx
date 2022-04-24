@@ -91,7 +91,9 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
         isSell,
         dataIndex,
         exchangeToken?.address,
+        // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
         excludeTokensAddress.sort().join(),
+        // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
         selectedTokensAddress.sort().join(),
     ])
     // #endregion

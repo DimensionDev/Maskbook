@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-// import { Ok, Some } from '@masknet/plugin-infra'
+// import { Ok, Some } from 'ts-results'
 import { base } from '../base'
 
 interface File {

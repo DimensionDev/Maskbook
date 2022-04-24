@@ -1,4 +1,4 @@
-import type { NetworkPluginID } from '..'
+import type { NetworkPluginID } from '../web3-types'
 import { useNetworkType } from './useNetworkType'
 import { useCurrentWeb3NetworkPluginID } from './Context'
 import { getPluginDefine } from '../manager/store'

@@ -22,7 +22,9 @@ interface DraggableProps {
     moveHandle?: (x: number, y: number) => void
 }
 
-class Draggable extends React.PureComponent<DraggableProps> {
+// TODO: move to function components
+// eslint-disable-next-line @dimensiondev/jsx/no-class-component -- TODO: need refactor
+class Draggable extends React.PureComponent<React.PropsWithChildren<DraggableProps>> {
     ref = React.createRef<HTMLDivElement | null>()
     mouseMoveFuc = this.onMouseMove.bind(this)
     mouseUpFuc = this.onMouseUp.bind(this)

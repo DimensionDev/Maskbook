@@ -21,7 +21,7 @@ import {
     useChainDetailed,
     useWeb3State,
     useReverseAddress,
-} from '@masknet/plugin-infra'
+} from '@masknet/plugin-infra/web3'
 import { useCallback, useEffect, useMemo } from 'react'
 import { WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

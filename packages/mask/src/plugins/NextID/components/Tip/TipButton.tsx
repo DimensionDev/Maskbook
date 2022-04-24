@@ -1,5 +1,5 @@
 import { TipCoin } from '@masknet/icons'
-import { usePostInfoDetails } from '@masknet/plugin-infra'
+import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -11,7 +11,7 @@ import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { useI18N } from '../../locales'
-import { PluginNextIdMessages } from '../../messages'
+import { PluginNextIDMessages } from '../../messages'
 import { MaskMessages } from '../../../../../shared'
 
 interface Props extends HTMLProps<HTMLDivElement> {
@@ -118,7 +118,7 @@ export const TipButton: FC<Props> = ({
                 await queryBindings()
             }
             if (!allAddresses.length || !receiver?.userId) return
-            PluginNextIdMessages.tipTask.sendToLocal({
+            PluginNextIDMessages.tipTask.sendToLocal({
                 recipientSnsId: receiver.userId,
                 addresses: allAddresses,
             })

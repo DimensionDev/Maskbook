@@ -1,4 +1,4 @@
-import type { PostInfo } from '@masknet/plugin-infra'
+import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { Flags } from '../../../../../shared'
 import { createPostActionsInjector } from '../../../../social-network/defaults/inject/PostActions'
 

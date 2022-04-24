@@ -27,6 +27,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
         borderBottom: `1px solid ${theme.palette.divider}`,
+        whiteSpace: 'nowrap',
     },
     dialogContent: {
         overscrollBehavior: 'contain',
@@ -141,6 +142,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             {titleTail}
                         </DialogTitle>
                     ) : null}
+
                     {/* There is a .MuiDialogTitle+.MuiDialogContent selector that provides paddingTop: 0 */}
                     {/* Add an empty span here to revert this effect. */}
                     <span />
@@ -161,7 +163,7 @@ function CopyElementWithNewProps<T>(
         Children.map(children, (child: any) =>
             child?.type === Target
                 ? cloneElement(child, {
-                      classes: mergeClasses(extraClasses, child.props.classes),
+                      classes: mergeClasses(extraClasses as any, child.props.classes),
                   } as DialogContentProps)
                 : null,
         ) || []

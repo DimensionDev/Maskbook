@@ -1,5 +1,4 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
+import { type Web3Plugin, NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab } from '@mui/material'

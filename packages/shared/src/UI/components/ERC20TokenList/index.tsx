@@ -9,7 +9,6 @@ import {
     isSameAddress,
     isValidAddress,
     makeSortAssertFn,
-    makeSortTokenFn,
     useAccount,
     useAssetsByTokenList,
     useChainId,
@@ -19,11 +18,13 @@ import {
     useNativeTokenDetailed,
     useTrustedERC20Tokens,
 } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
 
 const DEFAULT_LIST_HEIGHT = 300
+const SEARCH_KEYS = ['token.address', 'token.symbol', 'token.name']
 
 export interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     targetChainId?: ChainId
@@ -64,7 +65,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     } = props
 
     const { ERC20 } = useTokenListConstants(chainId)
-    const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
+    const { value: erc20TokensDetailed = EMPTY_LIST, loading: erc20TokensDetailedLoading } =
         useERC20TokensDetailedFromTokenLists(
             ERC20,
             keyword,
@@ -87,8 +88,9 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
             (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
     )
 
-    const renderTokens = uniqBy([...tokens, ...filteredTokens, ...(searchedToken ? [searchedToken] : [])], (x) =>
-        x.address.toLowerCase(),
+    const renderTokens = uniqBy(
+        [...tokens, ...filteredTokens, ...(searchedToken ? [searchedToken] : EMPTY_LIST)],
+        (x) => x.address.toLowerCase(),
     )
 
     const {
@@ -101,17 +103,25 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
         chainId,
     )
 
-    const renderAssets =
-        !account || !!assetsError || assetsLoading || searchedTokenLoading
-            ? [...renderTokens]
-                  .sort(makeSortTokenFn(chainId, { isMaskBoost: true }))
-                  .map((token) => ({ token: token, balance: null }))
+    const renderAssets = useMemo(() => {
+        return assetsLoading
+            ? EMPTY_LIST
             : keyword
             ? assets
             : [...assets].sort(makeSortAssertFn(chainId, { isMaskBoost: true }))
+    }, [
+        chainId,
+        keyword,
+        assetsLoading,
+        assets
+            .map((x) => x.token.address)
+            // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
+            .sort()
+            .join(),
+    ])
 
     const getPlaceHolder = () => {
-        if (erc20TokensDetailedLoading)
+        if (erc20TokensDetailedLoading || assetsLoading)
             return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_token_list_loading()} />
         if (searchedTokenLoading)
             return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_search_token_loading()} />
@@ -130,7 +140,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
             disableSearch={!!props.disableSearch}
             onSearch={setKeyword}
             data={renderAssets as Asset[]}
-            searchKey={['token.address', 'token.symbol', 'token.name']}
+            searchKey={SEARCH_KEYS}
             itemRender={getERC20TokenListItem(
                 trustedERC20Tokens,
                 searchedToken ? [searchedToken] : [],

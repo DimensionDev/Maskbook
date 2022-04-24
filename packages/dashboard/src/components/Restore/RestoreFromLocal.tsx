@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Box, Card } from '@mui/material'
-import type { BackupPreview } from '@masknet/public-api'
+import type { BackupPreview } from '@masknet/backup-format'
 import { useDashboardI18N } from '../../locales'
 import { Messages, Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
@@ -62,18 +62,12 @@ export const RestoreFromLocal = memo(() => {
         if (!backupValue) return
 
         setRestoreStatus(RestoreStatus.Verifying)
-        try {
-            const backupInfo = await Services.Welcome.parseBackupStr(backupValue)
-
-            if (backupInfo) {
-                setJSON(backupInfo.info)
-                setBackupId(backupInfo.id)
-                setRestoreStatus(RestoreStatus.Verified)
-            } else {
-                setRestoreStatus(RestoreStatus.WaitingInput)
-                setBackupValue('')
-            }
-        } catch {
+        const backupInfo = await Services.Backup.addUnconfirmedBackup(backupValue)
+        if (backupInfo.ok) {
+            setJSON(backupInfo.val.info)
+            setBackupId(backupInfo.val.id)
+            setRestoreStatus(RestoreStatus.Verified)
+        } else {
             showSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
             setRestoreStatus(RestoreStatus.WaitingInput)
             setBackupValue('')
@@ -95,7 +89,7 @@ export const RestoreFromLocal = memo(() => {
         if (!currentPersona) {
             const lastedPersona = await Services.Identity.queryLastPersonaCreated()
             if (lastedPersona) {
-                await changeCurrentPersona(lastedPersona.identifier)
+                await changeCurrentPersona(lastedPersona)
             }
         }
         navigate(DashboardRoutes.Personas, { replace: true })
@@ -105,10 +99,10 @@ export const RestoreFromLocal = memo(() => {
         try {
             // If json has wallets, restore in popup.
             if (json?.wallets) {
-                await Services.Welcome.checkPermissionAndOpenWalletRecovery(backupId)
+                await Services.Backup.restoreUnconfirmedBackup({ id: backupId, action: 'wallet' })
                 return
             } else {
-                await Services.Welcome.checkPermissionsAndRestore(backupId)
+                await Services.Backup.restoreUnconfirmedBackup({ id: backupId, action: 'confirm' })
 
                 await restoreCallback()
             }

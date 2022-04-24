@@ -12,8 +12,8 @@ import {
     useERC20TokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { pow10 } from '@masknet/web3-shared-base'
-import type Services from '../../../../extension/service'
 import { getContractMethodDescription } from './contractMethodDescription'
+import type { ComputedPayload } from '../../../../extension/background-script/EthereumServices/rpc'
 
 function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {
     const symbol = negative ? '- ' : ''
@@ -28,7 +28,7 @@ function getTransactionDescription(
     chainId: ChainId,
     nativeTokenDetailed?: NativeTokenDetailed | ERC20TokenDetailed,
     tokenDetailed?: ERC20TokenDetailed,
-    computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null,
+    computedPayload?: ComputedPayload | null,
 ) {
     if (!computedPayload) return
     const type = computedPayload.type
@@ -56,26 +56,30 @@ function getTransactionDescription(
                 case 'swapExactETHForTokens':
                     const inputAmount = formatBalance(computedPayload._tx.value, nativeTokenDetailed?.decimals, 2)
                     const outputAmount = formatBalance(
-                        computedPayload.parameters.amountOutMin,
+                        computedPayload.parameters!.amountOutMin,
                         tokenDetailed?.decimals,
                         2,
                     )
                     return `Swap ${inputAmount} ${nativeTokenDetailed?.symbol} for ${outputAmount} ${tokenDetailed?.symbol}`
                 case 'swapExactTokensForETH':
-                    const inAmount = formatBalance(computedPayload.parameters.amountIn, tokenDetailed?.decimals, 2)
+                    const inAmount = formatBalance(computedPayload.parameters!.amountIn, tokenDetailed?.decimals, 2)
                     const outAmount = formatBalance(
-                        computedPayload.parameters.amountOutMin,
+                        computedPayload.parameters!.amountOutMin,
                         nativeTokenDetailed?.decimals,
                         2,
                     )
                     return `Swap ${inAmount} ${tokenDetailed?.symbol} for ${outAmount} ${nativeTokenDetailed?.symbol}`
                 case 'swapExactTokensForTokens':
                     const amountIn = formatBalance(
-                        computedPayload.parameters.amountIn,
+                        computedPayload.parameters!.amountIn,
                         nativeTokenDetailed?.decimals,
                         2,
                     )
-                    const amountOut = formatBalance(computedPayload.parameters.amountOutMin, tokenDetailed?.decimals, 2)
+                    const amountOut = formatBalance(
+                        computedPayload.parameters!.amountOutMin,
+                        tokenDetailed?.decimals,
+                        2,
+                    )
                     return `Swap ${amountIn} ${nativeTokenDetailed?.symbol} for ${amountOut} ${tokenDetailed?.symbol}`
                 default:
                     const description = getContractMethodDescription(
@@ -103,8 +107,6 @@ function getTransactionDescription(
             )}`
         case EthereumRpcType.CANCEL:
             return 'Cancel Transaction'
-        case EthereumRpcType.RETRY:
-            return 'Retry Transaction'
         default:
             return
     }
@@ -113,7 +115,7 @@ function getTransactionDescription(
 export interface RecentTransactionDescriptionProps {
     hash: string
     receipt?: TransactionReceipt | null
-    computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null
+    computedPayload?: ComputedPayload | null
 }
 
 export function RecentTransactionDescription(props: RecentTransactionDescriptionProps) {
@@ -131,17 +133,17 @@ export function RecentTransactionDescription(props: RecentTransactionDescription
                 tokenAddress = computedPayload._tx.to
                 break
             case 'swapExactETHForTokens':
-                tokenAddress = last(computedPayload.parameters.path)
+                tokenAddress = last(computedPayload.parameters!.path)
                 break
             case 'swapExactTokensForETH':
-                tokenAddress = first(computedPayload.parameters.path)
+                tokenAddress = first(computedPayload.parameters!.path)
                 break
             case 'swapExactTokensForTokens':
-                inputTokenAddress = first(computedPayload.parameters.path)
-                tokenAddress = last(computedPayload.parameters.path)
+                inputTokenAddress = first(computedPayload.parameters!.path)
+                tokenAddress = last(computedPayload.parameters!.path)
                 break
             case 'create_red_packet':
-                tokenAddress = computedPayload.parameters._token_addr
+                tokenAddress = computedPayload.parameters!._token_addr
                 break
             default:
                 tokenAddress = ''

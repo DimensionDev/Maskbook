@@ -1,7 +1,7 @@
 import { Children, FC, useState, HTMLProps, ReactElement } from 'react'
 import classnames from 'classnames'
-import { makeStyles } from '../../makeStyles'
-import { MaskColorVar } from '../../constants'
+import { makeStyles } from '../../UIHelper/makeStyles'
+import { MaskColorVar } from '../../CSSVariables'
 
 const useStyles = makeStyles<void, 'selected'>()((theme, _, refs) => {
     const { palette } = theme

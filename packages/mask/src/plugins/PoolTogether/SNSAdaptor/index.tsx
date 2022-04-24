@@ -1,13 +1,15 @@
 import { useMemo } from 'react'
-import { Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra'
+import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { DepositDialog } from '../UI/DepositDialog'
+import { Trans } from 'react-i18next'
 import { URL_PATTERN } from '../constants'
 import { PoolTogetherView } from '../UI/PoolTogetherView'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { PoolTogetherIcon } from '@masknet/icons'
 
 const isPoolTogetherUrl = (url: string) => URL_PATTERN.test(url)
 
@@ -33,6 +35,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection: function Component() {
         return <DepositDialog />
     },
+    ApplicationEntries: [
+        {
+            ApplicationEntryID: base.ID,
+            category: 'dapp',
+            description: <Trans i18nKey="plugin_pooltogether_description" />,
+            name: <Trans i18nKey="plugin_pooltogether_name" />,
+            marketListSortingPriority: 14,
+            tutorialLink:
+                'https://realmasknetwork.notion.site/Participate-in-lossless-lottery-via-PoolTogether-on-Twitter-ETH-and-Polygon-377597e14aff441ab645ecba5ea690f1',
+            icon: <PoolTogetherIcon />,
+        },
+    ],
 }
 
 export default sns

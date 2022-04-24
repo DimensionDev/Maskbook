@@ -1,5 +1,5 @@
 import { SelectedIcon } from '@masknet/icons'
-import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
+import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ImageIcon } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'
@@ -96,7 +96,7 @@ export interface PluginProviderRenderProps {
     setUndeterminedNetworkID: (id: string) => void
     NetworkIconClickBait?: React.ComponentType<Web3Plugin.UI.NetworkIconClickBaitProps>
     ProviderIconClickBait?: React.ComponentType<Web3Plugin.UI.ProviderIconClickBaitProps>
-    onSubmit: () => void
+    onSubmit: (result?: Web3Plugin.ConnectionResult) => Promise<void>
 }
 
 export function PluginProviderRender({
@@ -112,7 +112,6 @@ export function PluginProviderRender({
 }: PluginProviderRenderProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-
     return (
         <>
             <Box className={classes.root}>
@@ -164,7 +163,9 @@ export function PluginProviderRender({
                                             networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
                                         }
                                         provider={provider}
-                                        onSubmit={onSubmit}>
+                                        onSubmit={(network, provider, result) => {
+                                            onSubmit(result)
+                                        }}>
                                         <ListItem className={classes.walletItem} key={provider.ID}>
                                             <ProviderIcon
                                                 className={classes.providerIcon}

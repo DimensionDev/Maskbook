@@ -1,8 +1,13 @@
 {
   "name": "@masknet/shared-base",
   "description": "This package MUST be pure (have no side effects when imported).",
-  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "sideEffect": false,
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
@@ -14,20 +19,22 @@
     "@mui/material": "link:..\\empty",
     "@mui/system": "link:..\\empty",
     "@servie/events": "^3.0.0",
-    "@types/react": "link:..\\empty",
+    "@types/react": "18.0.0",
     "anchorme": "^2.1.2",
     "async-call-rpc": "^6.0.2",
     "bignumber.js": "^9.0.2",
-    "i18next": "^21.6.14",
+    "i18next": "^21.6.15",
     "i18next-browser-languagedetector": "^6.1.4",
     "idb": "^7.0.1",
-    "immer": "^9.0.12",
     "pvtsutils": "^1.2.2",
     "react": "link:..\\empty",
     "tiny-secp256k1": "^2.2.1",
     "typeson": "^7.0.1",
     "typeson-registry": "^2.0.0",
     "use-subscription": "^1.6.0",
-    "z-schema": "^5.0.2"
+    "z-schema": "^5.0.3"
+  },
+  "devDependencies": {
+    "@types/use-subscription": "^1.0.0"
   }
 }

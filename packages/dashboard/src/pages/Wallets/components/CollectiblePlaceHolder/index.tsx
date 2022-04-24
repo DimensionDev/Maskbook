@@ -4,7 +4,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletIcon } from '@masknet/shared'
 import { Box } from '@mui/material'
-import { useNetworkDescriptor } from '@masknet/plugin-infra'
+import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     container: {
