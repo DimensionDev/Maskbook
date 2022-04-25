@@ -27,6 +27,8 @@ import {
     ARTHSWAP_CUSTOM_BASES,
     VERSA_BASE_AGAINST_TOKENS,
     VERSA_CUSTOM_BASES,
+    ASTAREXCHANGE_BASE_AGAINST_TOKENS,
+    ASTAREXCHANGE_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -204,6 +206,19 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: VERSA_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: VERSA_CUSTOM_BASES,
+                }
+            case TradeProvider.ASTAREXCHANGE:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.ASTAREXCHANGE_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.ASTAREXCHANGE_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.ASTAREXCHANGE_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.ASTAREXCHANGE_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.ASTAREXCHANGE_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: ASTAREXCHANGE_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: ASTAREXCHANGE_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {
