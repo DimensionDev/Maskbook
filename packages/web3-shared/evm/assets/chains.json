@@ -2871,9 +2871,16 @@
             "decimals": 18,
             "logoURI": "https://static.debank.com/image/chain/logo_url/astar/398c7e0014bdada3d818367a7273fabe.png"
         },
-        "infoURL": "https://astar.subscan.io/",
+        "infoURL": "https://blockscout.com/astar/",
         "shortName": "Astar",
         "chainId": 592,
-        "networkId": 592
+        "networkId": 592,
+        "explorers": [
+            {
+                "name": "blockscout",
+                "url": "https://blockscout.com/astar/",
+                "standard": "EIP3091"
+            }
+        ]
     }
 ]

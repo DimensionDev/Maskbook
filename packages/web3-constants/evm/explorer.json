@@ -41,6 +41,6 @@
         "Aurora": "https://explorer.mainnet.aurora.dev/api",
         "Aurora_Testnet": "https://explorer.testnet.aurora.dev/api",
         "Conflux": "https://evmapi.confluxscan.net/api",
-        "Astar": ""
+        "Astar": "https://blockscout.com/astar/api"
     }
 }
