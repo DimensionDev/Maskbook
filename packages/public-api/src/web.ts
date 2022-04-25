@@ -184,6 +184,7 @@ export enum TradeProvider {
     PANGOLIN = 14,
     MDEX = 15,
     ARTHSWAP = 16,
+    VERSA = 17,
 }
 
 /** Supported language settings */

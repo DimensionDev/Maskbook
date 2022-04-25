@@ -213,6 +213,13 @@ export function useAllTradeComputed(
         traderEstimateGas: arthswapEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.ARTHSWAP, inputAmount_, inputToken, outputToken)
 
+    // Versa Finance
+    const {
+        trader_: versa_,
+        trader: versa,
+        traderEstimateGas: versaEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.VERSA, inputAmount_, inputToken, outputToken)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -231,6 +238,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
         { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
         { provider: TradeProvider.ARTHSWAP, ...arthswap_, value: arthswap, gas: arthswapEstimateGas },
+        { provider: TradeProvider.VERSA, ...versa_, value: versa, gas: versaEstimateGas },
     ]
 
     return nativeToken_.value
