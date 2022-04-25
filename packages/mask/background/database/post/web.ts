@@ -1,8 +1,9 @@
 import {
     AESCryptoKey,
     AESJsonWebKey,
+    convertIdentifierMapToRawMap,
+    convertRawMapToIdentifierMap,
     ECKeyIdentifier,
-    IdentifierMap,
     PersonaIdentifier,
     PostIdentifier,
     PostIVIdentifier,
@@ -123,7 +124,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
 
                 /**
                  * In the version 3 we use `recipients?: Record<string, RecipientDetail>`
-                 * After upgrade to version 4, we use `recipients: IdentifierMap<ProfileIdentifier, RecipientDetail>`
+                 * After upgrade to version 4, we use `recipients: Map<ProfileIdentifier, RecipientDetail>`
                  */
                 if (oldVersion <= 3) {
                     const store = transaction.objectStore('post')
@@ -217,7 +218,7 @@ export async function updatePostDB(
     t ||= createTransaction(await db(), 'readwrite')('post')
     const emptyRecord: PostRecord = {
         identifier: updateRecord.identifier,
-        recipients: new IdentifierMap(new Map()),
+        recipients: new Map(),
         postBy: undefined,
         foundAt: new Date(),
     }
@@ -325,7 +326,7 @@ function postOutDB(db: PostDBRecord): PostRecord {
     return {
         identifier: PostIVIdentifier.from(identifier).unwrap(),
         postBy: ProfileIdentifier.of(postBy?.network, postBy?.userId).unwrapOr(undefined),
-        recipients: recipients === true ? 'everyone' : new IdentifierMap(recipients, ProfileIdentifier),
+        recipients: recipients === true ? 'everyone' : convertRawMapToIdentifierMap(recipients, ProfileIdentifier),
         foundAt: foundAt,
         postCryptoKey: postCryptoKey,
         encryptBy: ECKeyIdentifier.from(encryptBy).unwrapOr(undefined),
@@ -338,7 +339,7 @@ function postToDB(out: PostRecord): PostDBRecord {
     return {
         ...out,
         identifier: out.identifier.toText(),
-        recipients: out.recipients === 'everyone' ? true : out.recipients.__raw_map__,
+        recipients: out.recipients === 'everyone' ? true : convertIdentifierMapToRawMap(out.recipients),
         encryptBy: out.encryptBy?.toText(),
     }
 }

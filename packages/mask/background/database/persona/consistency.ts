@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import { type IdentifierMap, ProfileIdentifier, type PersonaIdentifier, ECKeyIdentifier } from '@masknet/shared-base'
+import { ProfileIdentifier, type PersonaIdentifier, ECKeyIdentifier } from '@masknet/shared-base'
 import type { FullPersonaDBTransaction } from './type'
 
 type ReadwriteFullPersonaDBTransaction = FullPersonaDBTransaction<'readwrite'>
@@ -59,7 +59,7 @@ async function fixDBInconsistency(diagnosis: Diagnosis, t: ReadwriteFullPersonaD
 }
 
 async function* checkFullPersonaDBConsistency(
-    checkRange: 'full check' | IdentifierMap<ProfileIdentifier | PersonaIdentifier, any>,
+    checkRange: 'full check' | Map<ProfileIdentifier | PersonaIdentifier, any>,
     t: ReadwriteFullPersonaDBTransaction,
 ): AsyncGenerator<Diagnosis, void, unknown> {
     for await (const persona of t.objectStore('personas')) {

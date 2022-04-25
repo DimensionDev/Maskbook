@@ -19,7 +19,6 @@ import {
     ECKeyIdentifierFromJsonWebKey,
     EC_JsonWebKey,
     EC_Public_JsonWebKey,
-    IdentifierMap,
     PostIVIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
@@ -76,7 +75,7 @@ export async function* decryptionWithSocialNetworkDecoding(
     yield* decryption(decoded, context)
 }
 
-const inMemoryCache = new IdentifierMap<PostIVIdentifier, TypedMessage>(new Map(), PostIVIdentifier)
+const inMemoryCache = new Map<PostIVIdentifier, TypedMessage>()
 async function* decryption(payload: string | Uint8Array, context: DecryptionContext) {
     const parse = await parsePayload(payload)
     if (parse.err) return null
@@ -135,7 +134,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                 return savePostKeyToDB(id, key, {
                     // public post will not call this function.
                     // and recipients only will be set when posting/appending recipients.
-                    recipients: new IdentifierMap(new Map()),
+                    recipients: new Map(),
                     postBy: authorHint || parse.safeUnwrap().author.unwrapOr(undefined)?.unwrapOr(undefined),
                     url: postURL,
                 })

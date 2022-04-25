@@ -1,9 +1,9 @@
 import { consistentPersonaDBWriteAccess } from '../../database/persona/db'
-import { IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { cleanAvatarDB } from '../../database/avatar-cache/cleanup'
 import { hasNativeAPI } from '../../../shared/native-rpc'
 
-async function cleanRelationDB(anotherList: IdentifierMap<ProfileIdentifier, undefined>) {
+async function cleanRelationDB(anotherList: Set<ProfileIdentifier>) {
     await consistentPersonaDBWriteAccess(async (t) => {
         for await (const x of t.objectStore('relations')) {
             const profileIdentifier = ProfileIdentifier.from(x.value.profile).unwrap()
@@ -18,7 +18,7 @@ export default async function cleanProfileWithNoLinkedPersona(signal: AbortSigna
     const timeout = setTimeout(cleanProfileWithNoLinkedPersona, 1000 * 60 * 60 * 24 /** 1 day */)
     signal.addEventListener('abort', () => clearTimeout(timeout))
 
-    const cleanedList = new IdentifierMap<ProfileIdentifier, undefined>(new Map(), ProfileIdentifier)
+    const cleanedList = new Set<ProfileIdentifier>()
     const expired = new Date(Date.now() - 1000 * 60 * 60 * 24 * 14 /** days */)
     await consistentPersonaDBWriteAccess(async (t) => {
         if (signal.aborted) throw new Error('Abort')
@@ -26,7 +26,7 @@ export default async function cleanProfileWithNoLinkedPersona(signal: AbortSigna
             if (x.value.linkedPersona) continue
             if (expired < x.value.updatedAt) continue
             const id = ProfileIdentifier.from(x.value.identifier)
-            if (id.some) cleanedList.set(id.val, undefined)
+            if (id.some) cleanedList.add(id.val)
             await x.delete()
         }
     }, false)

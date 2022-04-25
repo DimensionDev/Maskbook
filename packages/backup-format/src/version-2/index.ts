@@ -2,7 +2,6 @@ import { decodeArrayBuffer, encodeArrayBuffer, safeUnreachable } from '@dimensio
 import {
     ECKeyIdentifier,
     ECKeyIdentifierFromJsonWebKey,
-    IdentifierMap,
     isAESJsonWebKey,
     isEC_Private_JsonWebKey,
     isEC_Public_JsonWebKey,
@@ -42,7 +41,7 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
         const identifier = ECKeyIdentifierFromJsonWebKey(publicKey)
         const normalizedPersona: NormalizedBackup.PersonaBackup = {
             identifier,
-            linkedProfiles: new IdentifierMap<ProfileIdentifier, any>(new Map(), ProfileIdentifier),
+            linkedProfiles: new Map(),
             publicKey,
             privateKey: isEC_Private_JsonWebKey(persona.privateKey) ? Some(persona.privateKey) : None,
             localKey: isAESJsonWebKey(persona.localKey) ? Some(persona.localKey) : None,
@@ -111,10 +110,7 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
             if (post.recipients === 'everyone')
                 normalizedPost.recipients = Some<NormalizedBackup.PostReceiverPublic>({ type: 'public' })
             else {
-                const map = new IdentifierMap<ProfileIdentifier, NormalizedBackup.RecipientReason[]>(
-                    new Map(),
-                    ProfileIdentifier,
-                )
+                const map = new Map<ProfileIdentifier, NormalizedBackup.RecipientReason[]>()
                 for (const [recipient, { reason }] of post.recipients) {
                     const id = ProfileIdentifier.from(recipient)
                     if (id.none) continue

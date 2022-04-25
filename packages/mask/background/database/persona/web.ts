@@ -5,8 +5,9 @@ import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/open
 import { assertPersonaDBConsistency } from './consistency'
 import {
     AESJsonWebKey,
+    convertIdentifierMapToRawMap,
+    convertRawMapToIdentifierMap,
     ECKeyIdentifier,
-    IdentifierMap,
     PersonaIdentifier,
     ProfileIdentifier,
     RelationFavor,
@@ -296,9 +297,7 @@ export async function updatePersonaDB(
     let nextLinkedProfiles = old.linkedProfiles
     if (nextRecord.linkedProfiles) {
         if (howToMerge.linkedProfiles === 'merge')
-            nextLinkedProfiles = new IdentifierMap(
-                new Map([...nextLinkedProfiles.__raw_map__, ...nextRecord.linkedProfiles.__raw_map__]),
-            )
+            nextLinkedProfiles = new Map([...nextLinkedProfiles, ...nextRecord.linkedProfiles])
         else nextLinkedProfiles = nextRecord.linkedProfiles
     }
     if (howToMerge.explicitUndefinedField === 'ignore') {
@@ -332,7 +331,7 @@ export async function createOrUpdatePersonaDB(
                 ...record,
                 createdAt: record.createdAt ?? new Date(),
                 updatedAt: record.updatedAt ?? new Date(),
-                linkedProfiles: record.linkedProfiles ?? new IdentifierMap(new Map()),
+                linkedProfiles: record.linkedProfiles ?? new Map(),
             },
             t,
         )
@@ -716,7 +715,7 @@ function personaRecordToDB(x: PersonaRecord): PersonaRecordDB {
         ...x,
         identifier: x.identifier.toText(),
         hasPrivateKey: x.privateKey ? 'yes' : 'no',
-        linkedProfiles: x.linkedProfiles.__raw_map__,
+        linkedProfiles: convertIdentifierMapToRawMap(x.linkedProfiles),
     }
 }
 function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
@@ -727,7 +726,7 @@ function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
         ...x,
         identifier,
         publicHexKey: identifier.publicKeyAsHex,
-        linkedProfiles: new IdentifierMap(x.linkedProfiles, ProfileIdentifier),
+        linkedProfiles: convertRawMapToIdentifierMap(x.linkedProfiles, ProfileIdentifier),
     }
     return obj
 }

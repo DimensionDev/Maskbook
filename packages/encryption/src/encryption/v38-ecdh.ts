@@ -1,5 +1,5 @@
 import { concatArrayBuffer, decodeArrayBuffer } from '@dimensiondev/kit'
-import { AESCryptoKey, EC_Public_CryptoKey, IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
+import type { AESCryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
 import { encryptWithAES } from '../utils'
 import {
     EncryptError,
@@ -84,7 +84,7 @@ export async function v38_addReceiver(
         }),
     ).then((x) => x.entries())
 
-    const ecdhResult: EncryptResult['e2e'] = new IdentifierMap(new Map(), ProfileIdentifier)
+    const ecdhResult: EncryptResult['e2e'] = new Map()
     for (const [index, result] of await ecdh) {
         ecdhResult.set(target.target[index], result)
     }

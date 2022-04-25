@@ -1,18 +1,13 @@
 import type { PostRecord as NativePostRecord } from '@masknet/public-api'
-import type {
-    PostRecord,
-    PostReadWriteTransaction,
-    PostReadOnlyTransaction,
-    RecipientDetail,
-    RecipientReason,
-} from './type'
+import type { PostRecord, PostReadWriteTransaction, PostReadOnlyTransaction, RecipientReason } from './type'
 import {
     PostIVIdentifier,
     AESJsonWebKey,
-    IdentifierMap,
     PersonaIdentifier,
     ProfileIdentifier,
     ECKeyIdentifier,
+    convertRawMapToIdentifierMap,
+    RecipientDetail,
 } from '@masknet/shared-base'
 import { nativeAPI } from '../../../shared/native-rpc'
 import { unreachable } from '@dimensiondev/kit'
@@ -96,8 +91,11 @@ function postOutNative(record: NativePostRecord): PostRecord {
         postBy: ProfileIdentifier.from(record.postBy).unwrap(),
         identifier: PostIVIdentifier.from(record.identifier).unwrap(),
         postCryptoKey: record.postCryptoKey as unknown as AESJsonWebKey,
-        recipients: new IdentifierMap<ProfileIdentifier, RecipientDetail>(
-            new Map(Object.entries(record.recipients)) as any,
+        recipients: convertRawMapToIdentifierMap(
+            Object.entries(record.recipients).map(([a, b]): [string, RecipientDetail] => {
+                return [a, { reason: b.reason.map((x) => ({ ...x, at: new Date(x.at) })) }]
+            }),
+            ProfileIdentifier,
         ),
         foundAt: new Date(record.foundAt),
         encryptBy: ECKeyIdentifier.from(record.encryptBy).unwrapOr(undefined),

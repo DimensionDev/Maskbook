@@ -1,7 +1,7 @@
 import type { Profile, Persona } from './types'
 import { ProfileRecord, PersonaRecord, queryProfileDB, queryPersonaDB } from '../../../background/database/persona/db'
 import { queryAvatarsDataURL } from '../../../background/database/avatar-cache/avatar'
-import { ProfileIdentifier, type PersonaIdentifier, IdentifierMap } from '@masknet/shared-base'
+import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -55,7 +55,7 @@ export async function queryPersona(identifier: PersonaIdentifier): Promise<Perso
         identifier,
         createdAt: new Date(),
         updatedAt: new Date(),
-        linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier),
+        linkedProfiles: new Map(),
         hasPrivateKey: false,
         hasLogout: false,
         fingerprint: identifier.compressedPoint,

@@ -6,7 +6,6 @@ import type {
     ProfileIdentifier,
     RelationFavor,
     PostIVIdentifier,
-    IdentifierMap,
 } from '@masknet/shared-base'
 import type { Option } from 'ts-results'
 
@@ -15,10 +14,10 @@ export namespace NormalizedBackup {
     export interface Data {
         /** Meta about this backup */
         meta: Meta
-        personas: IdentifierMap<PersonaIdentifier, PersonaBackup>
-        profiles: IdentifierMap<ProfileIdentifier, ProfileBackup>
+        personas: Map<PersonaIdentifier, PersonaBackup>
+        profiles: Map<ProfileIdentifier, ProfileBackup>
         relations: RelationBackup[]
-        posts: IdentifierMap<PostIVIdentifier, PostBackup>
+        posts: Map<PostIVIdentifier, PostBackup>
         wallets: WalletBackup[]
         settings: SettingsBackup
         plugins: Record<string, unknown>
@@ -36,7 +35,7 @@ export namespace NormalizedBackup {
         publicKey: EC_Public_JsonWebKey
         privateKey: Option<EC_Private_JsonWebKey>
         localKey: Option<AESJsonWebKey>
-        linkedProfiles: IdentifierMap<ProfileIdentifier, unknown>
+        linkedProfiles: Map<ProfileIdentifier, unknown>
         nickname: Option<string>
         createdAt: Option<Date>
         updatedAt: Option<Date>
@@ -75,7 +74,7 @@ export namespace NormalizedBackup {
     }
     export interface PostReceiverE2E {
         type: 'e2e'
-        receivers: IdentifierMap<ProfileIdentifier, RecipientReason[]>
+        receivers: Map<ProfileIdentifier, RecipientReason[]>
     }
     export interface RecipientReason {
         type: 'auto-share' | 'direct' | 'group'
