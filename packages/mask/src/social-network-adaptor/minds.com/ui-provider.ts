@@ -1,4 +1,4 @@
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-network'
 import { injectPostCommentsDefault } from '../../social-network/defaults'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
@@ -172,7 +172,7 @@ const mindsUI: SocialNetworkUI.Definition = {
                 const id =
                     IdentityProviderMinds.recognized.value.identifier?.userId ||
                     globalUIState.profiles.value?.[0].identifier.userId
-                if (!id) throw new Error('Cannot')
+                if (!id) throw new Error('Cannot figure out password')
                 return ProfileIdentifier.of(EnhanceableSite.Minds, id).unwrap().toText()
             },
         },
