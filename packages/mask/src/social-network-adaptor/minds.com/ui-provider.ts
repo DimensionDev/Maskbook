@@ -173,7 +173,7 @@ const mindsUI: SocialNetworkUI.Definition = {
                     IdentityProviderMinds.recognized.value.identifier?.userId ||
                     globalUIState.profiles.value?.[0].identifier.userId
                 if (!id) throw new Error('Cannot')
-                return ProfileIdentifier.of('minds.com', id).unwrap().toText()
+                return ProfileIdentifier.of(EnhanceableSite.Minds, id).unwrap().toText()
             },
         },
     },
