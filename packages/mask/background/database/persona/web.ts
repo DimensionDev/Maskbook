@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js'
 import { openDB } from 'idb/with-async-ittr'
-import { CryptoKeyToJsonWebKey, restorePrototype } from '../../../utils-pure'
+import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
 import { assertPersonaDBConsistency } from './consistency'
 import {
@@ -208,7 +208,13 @@ export async function queryPersonaByProfileDB(
     t = t || createTransaction(await db(), 'readonly')('personas', 'profiles', 'relations')
     const x = await t.objectStore('profiles').get(query.toText())
     if (!x?.linkedPersona) return null
-    return queryPersonaDB(restorePrototype(x.linkedPersona, ECKeyIdentifier.prototype), t)
+    return queryPersonaDB(
+        new ECKeyIdentifier(
+            x.linkedPersona.curve,
+            x.linkedPersona.compressedPoint || x.linkedPersona.encodedCompressedKey!,
+        ),
+        t,
+    )
 }
 
 /**
@@ -649,6 +655,9 @@ function profileToDB(x: ProfileRecord): ProfileRecordDB {
         ...x,
         identifier: x.identifier.toText(),
         network: x.identifier.network,
+        linkedPersona: x.linkedPersona
+            ? { curve: x.linkedPersona.curve, type: 'ec_key', compressedPoint: x.linkedPersona.publicKey }
+            : undefined,
     }
 }
 function profileOutDB({ network, ...x }: ProfileRecordDB): ProfileRecord {
@@ -657,8 +666,13 @@ function profileOutDB({ network, ...x }: ProfileRecordDB): ProfileRecord {
     }
     return {
         ...x,
-        identifier: Identifier.fromString(x.identifier, ProfileIdentifier).unwrap(),
-        linkedPersona: restorePrototype(x.linkedPersona, ECKeyIdentifier.prototype),
+        identifier: ProfileIdentifier.from(x.identifier).unwrap(),
+        linkedPersona: x.linkedPersona
+            ? new ECKeyIdentifier(
+                  x.linkedPersona.curve,
+                  x.linkedPersona.compressedPoint || x.linkedPersona.encodedCompressedKey!,
+              )
+            : undefined,
     }
 }
 function personaRecordToDB(x: PersonaRecord): PersonaRecordDB {

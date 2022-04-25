@@ -10,7 +10,8 @@ import {
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import { openDB } from 'idb/with-async-ittr'
-import { CryptoKeyToJsonWebKey, PrototypeLess, restorePrototype, restorePrototypeArray } from '../../../utils-pure'
+import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
+import type { PersonaIdentifierStoredInDB, ProfileIdentifierStoredInDB } from '../persona/type'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
 import type {
     RecipientReason,
@@ -32,7 +33,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                     postBy: { userId: string; network: string } | undefined
                     identifier: string
                     recipientGroups?: unknown
-                    recipients?: ProfileIdentifier[]
+                    recipients?: ProfileIdentifierStoredInDB[]
                     foundAt: Date
                     postCryptoKey?: CryptoKey
                 }
@@ -48,7 +49,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                 }
                 type Version5PostRecord = Omit<Version4PostRecord, 'postCryptoKey' | 'recipients'> & {
                     postCryptoKey?: AESJsonWebKey
-                    encryptBy?: PrototypeLess<PersonaIdentifier>
+                    encryptBy?: PersonaIdentifierStoredInDB
                     url?: string
                     summary?: string
                     interestedMeta?: ReadonlyMap<string, unknown>
@@ -103,7 +104,8 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                     for await (const cursor of store) {
                         const v2record: Version2PostRecord = cursor.value as any
                         const oldType = v2record.recipients
-                        oldType && restorePrototypeArray(oldType, ProfileIdentifier.prototype)
+                            ?.map((x) => ProfileIdentifier.of(x.network, x.userId)!)
+                            .filter(Boolean)
                         const newType: Version3PostRecord['recipients'] = {}
                         if (oldType !== undefined)
                             for (const each of oldType) {
@@ -167,7 +169,10 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                         // This is the correct data type
                         if (typeof by === 'string') continue
                         if (!by) continue
-                        cursor.value.encryptBy = restorePrototype(by, ECKeyIdentifier.prototype).toText()
+                        cursor.value.encryptBy = new ECKeyIdentifier(
+                            by.curve,
+                            by.compressedPoint || by.encodedCompressedKey!,
+                        ).toText()
                         cursor.update(cursor.value)
                     }
                     store.createIndex('persona, date', ['encryptBy', 'foundAt'], { unique: false })

@@ -23,7 +23,6 @@ export class ECKeyIdentifier extends Identifier {
     // ! "curve" and "compressedPoint" cannot be renamed because they're stored in the database in it's object form.
     declare readonly curve: 'secp256k1'
     declare readonly publicKey: string
-    declare readonly type: 'ec_key'
     constructor(curve: 'secp256k1', publicKey: string) {
         publicKey = String(publicKey)
         if (curve !== 'secp256k1') throw new Error('Only secp256k1 is supported')
@@ -31,7 +30,6 @@ export class ECKeyIdentifier extends Identifier {
         if (k256Cache[publicKey]) return k256Cache[publicKey]
 
         super()
-        this.type = 'ec_key'
         this.curve = 'secp256k1'
         this.publicKey = publicKey
         Object.freeze(this)
