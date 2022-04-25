@@ -137,7 +137,8 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const chainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
     const chainDetailed = getChainDetailed(chainId)
     const tokenDetailed =
-        payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token ?? fetchedToken
+        payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : fetchedToken ?? payload.token
+
     return (
         <div style={containerStyle}>
             <RedPacketIcon style={badgeSvgIconSize} /> A Lucky Drop with{' '}
