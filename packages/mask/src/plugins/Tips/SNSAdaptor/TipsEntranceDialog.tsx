@@ -176,7 +176,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             )
             if (!signResult) throw new Error('sign error')
             await setKvPatchData(payload.val, signResult.signature.signature, rawPatchData)
-            showSnackbar('Persona signed successfully.', {
+            showSnackbar(t('plugin_tips_persona_sign_success'), {
                 variant: 'success',
                 message: nowTime,
             })
@@ -184,7 +184,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             retryKv()
             return true
         } catch (error) {
-            showSnackbar('Persona Signature failed.', {
+            showSnackbar(t('plugin_tips_persona_sign_error'), {
                 variant: 'error',
                 message: nowTime,
             })
@@ -239,18 +239,20 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     result.createdAt,
                     { signature: signature.signature.signature },
                 )
-                retryProof()
-                retryKv()
-                return true
+                showSnackbar(t('plugin_tips_persona_sign_success'), {
+                    variant: 'success',
+                    message: nowTime,
+                })
             } catch (error) {
-                showSnackbar('Persona Signature failed.', {
+                showSnackbar(t('plugin_tips_persona_sign_error'), {
                     variant: 'error',
                     message: nowTime,
                 })
-                return false
+            } finally {
+                retryProof()
             }
         },
-        [currentPersona],
+        [currentPersona, proofRes],
     )
 
     return (
