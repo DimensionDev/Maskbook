@@ -175,7 +175,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 variant: 'success',
                 message: nowTime,
             })
-            retryProof()
             retryKv()
             return true
         } catch (error) {
