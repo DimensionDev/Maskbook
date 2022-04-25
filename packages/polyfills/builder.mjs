@@ -20,20 +20,19 @@ let polyfillVersion = '__'
     const lockfile = await readFile(lockfilePath)
     const hash = createHash('sha256')
     hash.update(lockfile)
-    polyfillVersion = 'v5' + hash.digest('hex')
+    polyfillVersion = 'v1' + hash.digest('hex')
 }
 
 const versionFilePath = fileURLToPath(new URL('./dist/version.txt', import.meta.url))
 if ((await readFile(versionFilePath, 'utf-8').catch(() => '')) === polyfillVersion) process.exit(0)
 
 await builder({
-    modules: ['es', 'web'],
+    modules: ['core-js/stable'],
     targets: [
         'iOS >= 14.0',
         // Android
         'Firefox >= 99',
-        'last 2 Chrome versions',
-        'last 2 Firefox versions',
+        'last 3 Chrome versions',
     ],
     summary: {
         comment: { size: false, modules: true },
