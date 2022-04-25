@@ -3,7 +3,7 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useI18N } from '../locales/i18n_generated'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { useAccount, useChainId, useGasLimit, useGasPrice } from '@masknet/web3-shared-evm'
-import { getTraderApi } from '../apis/nftswap'
+import { useTraderApi } from '../apis/nftswap'
 import type { TradeMetaData, nftData } from '../types'
 import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
 import { ActionButtonPromise } from '../../../../mask/src/extension/options-page/DashboardComponents/ActionButton'
@@ -115,7 +115,7 @@ const useStyles = makeStyles()((theme, props) => ({
 
 export function PostPreview({ info }: { info: TradeMetaData }) {
     const selectedChainId = useChainId()
-    const nftSwapSdk = getTraderApi(selectedChainId)
+    const nftSwapSdk = useTraderApi(selectedChainId)
     const account = useAccount()
     const { classes } = useStyles()
     const t = useI18N()

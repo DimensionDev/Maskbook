@@ -69,10 +69,7 @@ const TreeChildItemContent = React.forwardRef(function CustomContent(
         item_index: number | undefined,
     ) => {
         handleSelection(collection_index, item_index)
-        // nftList[0].tokens[0].is_selected = !nftList[0].tokens[0].is_selected
     }
-    // in your component
-    // https://trader.xyz/images/missing-img-lg.png
     const child = (
         <img
             alt="no-image"

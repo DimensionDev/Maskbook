@@ -20,7 +20,6 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const NftListView = (props: {
     nftList: PreviewNftList[] | null | undefined
     handleSelection(collection_index: number, item_index: number, type: string): void
@@ -69,8 +68,6 @@ const NftListView = (props: {
         (
             props: TreeItemProps & {
                 ContentProps?: {
-                    // nftData?: TreeNftData
-                    // handleSelection(collection_index: number, item_index: number): void
                     nftData?: TreeNftData
                     handleSelection?(collection_index: number, item_index: number, type: string): void
                 }

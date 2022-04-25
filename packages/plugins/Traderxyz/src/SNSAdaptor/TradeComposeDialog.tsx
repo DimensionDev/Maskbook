@@ -9,7 +9,7 @@ import { type FungibleTokenDetailed, ChainId } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { useAsync } from 'react-use'
 import { amountToWei } from '../helpers'
-import { getTraderApi } from '../apis/nftswap'
+import { useTraderApi } from '../apis/nftswap'
 import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
 import { SelectTokenView } from './SelectTokenView'
 import { PreviewOrderView } from './PreviewOrderView'
@@ -182,7 +182,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     const [token, setToken] = useState<FungibleTokenDetailed | null>()
     const [inputAmount, setInputAmount] = useState<string>('0')
     const [orderInfo, setOrderInfo] = useState<orderInfo>()
-    const nftSwapSdk = getTraderApi(selectedChainId)
+    const nftSwapSdk = useTraderApi(selectedChainId)
     const account = useAccount()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
