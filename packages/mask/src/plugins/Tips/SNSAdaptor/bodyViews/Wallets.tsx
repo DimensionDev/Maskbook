@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
 interface WalletsPageProp {
     wallets: BindingProof[]
     releaseLoading: boolean
-    onRelease: (wallet?: BindingProof) => Promise<void>
+    onRelease(wallet?: BindingProof): Promise<void>
     personaName: string | undefined
 }
 
