@@ -60,6 +60,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
         <>
             {plugins.map((x) => (
                 <MaskPostExtraInfoWrapper
+                    open
                     key={x.ID}
                     title={t('plugin_not_enabled', { plugin: t2(x.ID, x.name) })}
                     action={
