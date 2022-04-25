@@ -68,8 +68,8 @@ const NftListView = (props: {
         (
             props: TreeItemProps & {
                 ContentProps?: {
-                    nftData?: TreeNftData
-                    handleSelection?(collection_index: number, item_index: number, type: string): void
+                    nftData?: TreeNftData | undefined
+                    handleSelection?(collection_index: number, item_index: number, type?: string): void
                 }
             },
         ) => <TreeItem {...props} className={props.className} ContentComponent={TreeChildItemContent} />,

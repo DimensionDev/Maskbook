@@ -14,7 +14,7 @@ export const PreviewOrderView = (props: {
     const child = (
         <img
             alt="no-image"
-            src="https://trader.xyz/images/missing-img-lg.png"
+            src={new URL('./assets/missing-img.png', import.meta.url).toString()}
             className={classes.previewBoxInnerGridContainerItemImg}
         />
     )

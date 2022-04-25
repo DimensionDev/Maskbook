@@ -70,13 +70,11 @@ export interface Token {
     asset_contract: AssetContract
 }
 
-export interface PreviewNftListInterFace {
+export type PreviewNftList = {
     collection_name?: string
     contract_address?: string
     tokens: Token[]
 }
-
-export type PreviewNftList = PreviewNftListInterFace
 
 export interface OpenSeaAssetContract {
     address: string

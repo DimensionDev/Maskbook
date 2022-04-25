@@ -8,7 +8,7 @@ import TradeComposeDialog from './TradeComposeDialog'
 import { TradeMetadataReader } from '../helpers'
 import { PostPreview } from './PostPreview'
 import { META_KEY } from '../constants'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { useI18N } from '../locales/i18n_generated'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -37,9 +37,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
+                    const t = useI18N()
                     return (
                         <ApplicationEntry
-                            title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
+                            title={t.display_name()}
                             disabled={disabled}
                             icon={icon}
                             onClick={() =>

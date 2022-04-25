@@ -48,8 +48,7 @@ const useStyles = makeStyles()((theme) => {
 const TreeChildItemContent = React.forwardRef(function CustomContent(
     props: TreeItemContentProps & {
         nftData?: TreeNftData
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        handleSelection?: any
+        handleSelection?(collection_index: number | undefined, item_index: number | undefined): void
     },
     ref,
 ) {
@@ -68,7 +67,9 @@ const TreeChildItemContent = React.forwardRef(function CustomContent(
         collection_index: number | undefined,
         item_index: number | undefined,
     ) => {
-        handleSelection(collection_index, item_index)
+        if (handleSelection) {
+            handleSelection(collection_index, item_index)
+        }
     }
     const child = (
         <img
