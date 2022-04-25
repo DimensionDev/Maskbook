@@ -211,7 +211,7 @@ const facebookUI: SocialNetworkUI.Definition = {
                 const id =
                     IdentityProviderFacebook.recognized.value.identifier?.userId ||
                     globalUIState.profiles.value?.[0].identifier.userId
-                if (!id) throw new Error('Cannot')
+                if (!id) throw new Error('Cannot figure out password')
                 return ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrap().toText()
             },
         },
