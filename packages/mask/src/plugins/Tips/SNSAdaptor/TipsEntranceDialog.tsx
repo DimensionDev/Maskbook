@@ -1,5 +1,3 @@
-import { PluginId } from '@masknet/plugin-infra'
-import { useActivatedPlugin } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
@@ -102,10 +100,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const [hasChanged, setHasChanged] = useState(false)
     const [rawPatchData, setRawPatchData] = useState<BindingProof[]>([])
     const [rawWalletList, setRawWalletList] = useState<BindingProof[]>([])
-    const plugin = useActivatedPlugin(PluginId.Tips, 'any')
-    const supportedNetworks = useSupportedNetworks(
-        Object.keys(plugin?.enableRequirement.web3 ?? {}) as NetworkPluginID[],
-    )
+    const supportedNetworks = useSupportedNetworks([NetworkPluginID.PLUGIN_EVM])
 
     const { showSnackbar } = useCustomSnackbar()
     const account = useAccount()
