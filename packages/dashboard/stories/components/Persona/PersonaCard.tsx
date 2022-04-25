@@ -14,7 +14,7 @@ export const PersonaCard = of({
         active: false,
         profiles: [
             {
-                identifier: ProfileIdentifier.of(EnhanceableSite.Twitter, 'hello')!,
+                identifier: ProfileIdentifier.of(EnhanceableSite.Twitter, 'hello').unwrap(),
             },
         ],
         identifier: new ECKeyIdentifier('secp256k1', ''),

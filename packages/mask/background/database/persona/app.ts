@@ -29,7 +29,6 @@ import type {
     AESJsonWebKey as Native_AESJsonWebKey,
 } from '@masknet/public-api'
 import { MaskMessages } from '../../../shared'
-import { convertPersonaHexPublicKey } from './util'
 
 export async function createPersonaDBReadonlyAccess(action: () => Promise<void>) {
     await action()
@@ -401,7 +400,7 @@ function personaRecordOutDB(x: NativePersonaRecord): PersonaRecord {
 
     return {
         publicKey: x.publicKey as JsonWebKey as unknown as EC_Public_JsonWebKey,
-        publicHexKey: convertPersonaHexPublicKey(identifier),
+        publicHexKey: identifier.publicKeyAsHex,
         privateKey: x.privateKey as JsonWebKey as unknown as EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as AESJsonWebKey,
         identifier,

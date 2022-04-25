@@ -21,9 +21,7 @@ function parse(x: string): Option<Identifier> {
     if (x.startsWith('person:')) {
         const [network, userID] = x.slice('person:'.length).split('/')
         if (!network || !userID) return None
-        const id = ProfileIdentifier.of(network, userID)
-        if (id) return Some(id)
-        return None
+        return ProfileIdentifier.of(network, userID)
     } else if (x.startsWith('post:')) {
         const [postID, ...rest] = x.slice('post:'.length).split('/')
         const inner = parse(rest.join('/'))

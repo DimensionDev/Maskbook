@@ -19,7 +19,7 @@ function resolveLastRecognizedIdentityInner(
         const avatar = selfInfoSelectors().userAvatar.evaluate()
         if (!isNil(handle)) {
             ref.value = {
-                identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle) || undefined,
+                identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
                 nickname,
                 avatar,
             }
@@ -50,7 +50,7 @@ function resolveCurrentVisitingIdentityInner(
         const avatar = getAvatar()
 
         ref.value = {
-            identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle) || undefined,
+            identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
             nickname,
             avatar,
             bio,

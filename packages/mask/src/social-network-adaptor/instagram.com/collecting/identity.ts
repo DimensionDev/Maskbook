@@ -20,7 +20,7 @@ function resolveCurrentVisitingIdentityInner(
         const avatar = getAvatar()
 
         ref.value = {
-            identifier: ProfileIdentifier.of(instagramBase.networkIdentifier, handle) || undefined,
+            identifier: ProfileIdentifier.of(instagramBase.networkIdentifier, handle).unwrapOr(undefined),
             nickname,
             avatar,
             bio,

@@ -58,7 +58,7 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
             function collectPostInfo() {
                 const { pid, messages, handle, name, avatar } = postParser(activityNode)
                 if (!pid) return
-                const postBy = ProfileIdentifier.of(mindsBase.networkIdentifier, handle)
+                const postBy = ProfileIdentifier.of(mindsBase.networkIdentifier, handle).unwrapOr(null)
                 info.postID.value = pid
                 info.postBy.value = postBy
                 info.nickname.value = name

@@ -17,7 +17,7 @@ async function resolveLastRecognizedIdentityInner(
     if (handle) {
         // get handle and avatar from the user menu
         ref.value = {
-            identifier: ProfileIdentifier.of(mindsBase.networkIdentifier, handle) || undefined,
+            identifier: ProfileIdentifier.of(mindsBase.networkIdentifier, handle).unwrapOr(undefined),
             nickname: undefined,
             avatar,
         }
@@ -27,7 +27,7 @@ async function resolveLastRecognizedIdentityInner(
             .then((res) => res.json())
             .then(({ channel }) => {
                 ref.value = {
-                    identifier: ProfileIdentifier.of(mindsBase.networkIdentifier, channel.username) || undefined,
+                    identifier: ProfileIdentifier.of(mindsBase.networkIdentifier, channel.username).unwrapOr(undefined),
                     nickname: channel.name,
                     avatar: channel.avatar_url?.medium,
                 }

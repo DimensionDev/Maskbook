@@ -212,7 +212,7 @@ const facebookUI: SocialNetworkUI.Definition = {
                     IdentityProviderFacebook.recognized.value.identifier?.userId ||
                     globalUIState.profiles.value?.[0].identifier.userId
                 if (!id) throw new Error('Cannot')
-                return ProfileIdentifier.of(EnhanceableSite.Facebook, id)!.toText()
+                return ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrap().toText()
             },
         },
     },

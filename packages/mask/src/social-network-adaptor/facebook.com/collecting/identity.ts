@@ -36,7 +36,10 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolv
         .then((x) => x.url)
         .then(getUserID)
         .then((id) =>
-            assign({ ...ref.value, identifier: ProfileIdentifier.of(EnhanceableSite.Facebook, id) || undefined }),
+            assign({
+                ...ref.value,
+                identifier: ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrapOr(undefined),
+            }),
         )
 }
 
@@ -56,7 +59,7 @@ function resolveCurrentVisitingIdentityInner(
         const avatar = getAvatar()
 
         ref.value = {
-            identifier: ProfileIdentifier.of(EnhanceableSite.Facebook, handle) || undefined,
+            identifier: ProfileIdentifier.of(EnhanceableSite.Facebook, handle).unwrapOr(undefined),
             nickname,
             avatar,
             bio,

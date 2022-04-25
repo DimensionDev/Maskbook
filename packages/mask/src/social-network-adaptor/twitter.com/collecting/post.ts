@@ -186,7 +186,7 @@ function collectPostInfo(
     const { pid, messages, handle, name, avatar } = postParser(tweetNode)
 
     if (!pid) return
-    const postBy = ProfileIdentifier.of(twitterBase.networkIdentifier, handle)
+    const postBy = ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(null)
     info.postID.value = pid
     info.postBy.value = postBy
     info.nickname.value = name

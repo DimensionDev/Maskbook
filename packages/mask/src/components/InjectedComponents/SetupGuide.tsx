@@ -115,9 +115,9 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onConnect = async () => {
         const id = ProfileIdentifier.of(ui.networkIdentifier, username)
-        if (!id) return
+        if (!id.some) return
         // attach persona with SNS profile
-        await Services.Identity.attachProfile(id, persona, {
+        await Services.Identity.attachProfile(id.val, persona, {
             connectionConfirmState: 'confirmed',
         })
 

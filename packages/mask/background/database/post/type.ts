@@ -6,6 +6,7 @@ import type {
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import type { DBSchema } from 'idb/with-async-ittr'
+import type { ProfileIdentifierStoredInDB } from '../persona/type'
 import type { IDBPSafeTransaction } from '../utils/openDB'
 
 export type RecipientReason = (
@@ -50,7 +51,7 @@ export interface PostRecord {
 }
 
 export interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients' | 'encryptBy'> {
-    postBy: { userId: string; network: string } | undefined
+    postBy: ProfileIdentifierStoredInDB | undefined
     identifier: string
     recipients: true | Map<string, RecipientDetail>
     encryptBy?: string

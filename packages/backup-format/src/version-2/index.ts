@@ -237,7 +237,7 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
         const item: BackupJSONFileVersion2['posts'][0] = {
             identifier: id.toText(),
             foundAt: Number(data.foundAt),
-            postBy: data.postBy?.toText() || 'person:',
+            postBy: data.postBy?.toText() || 'person:localhost/$unknown',
             interestedMeta: MetaToJson(data.interestedMeta),
             encryptBy: data.encryptBy.unwrapOr(undefined)?.toText(),
             summary: data.summary.unwrapOr(undefined),

@@ -1,4 +1,4 @@
-import { type Option, None } from 'ts-results'
+import { type Option, None, Some } from 'ts-results'
 import { EnhanceableSite } from '../Site/type'
 import { Identifier } from './base'
 import { banSlash } from './utils'
@@ -17,10 +17,10 @@ export class ProfileIdentifier extends Identifier {
         if (x.startsWith('person:')) return Identifier.from(x) as Option<ProfileIdentifier>
         return None
     }
-    static of(network: string | undefined | null, userID: string | undefined | null) {
-        if (!userID || !network) return null
-        if (network === EnhanceableSite.Localhost && userID === '$unknown') return null
-        return new ProfileIdentifier(network, userID)
+    static of(network: string | undefined | null, userID: string | undefined | null): Option<ProfileIdentifier> {
+        if (!userID || !network) return None
+        if (network === EnhanceableSite.Localhost && userID === '$unknown') return None
+        return Some(new ProfileIdentifier(network, userID))
     }
 
     // ! "network" and "userId" cannot be renamed because they're stored in the database in it's object form.

@@ -28,7 +28,7 @@ const publicTarget: EncryptOptions['target'] = {
 }
 const example: EncryptOptions = {
     version: -38,
-    author: ProfileIdentifier.of('localhost', 'alice')!,
+    author: ProfileIdentifier.of('localhost', 'alice').unwrap(),
     message: makeTypedMessageText('hello world'),
     target: publicTarget,
     network: 'localhost',
@@ -74,11 +74,11 @@ test('v38 public encryption', async () => {
 test('v37 E2E encryption', async () => {
     const payload: EncryptOptions = {
         network: 'localhost',
-        author: ProfileIdentifier.of('localhost', 'bob')!,
+        author: ProfileIdentifier.of('localhost', 'bob').unwrap(),
         message: makeTypedMessageText('hello world'),
         target: {
             type: 'E2E',
-            target: [ProfileIdentifier.of('localhost', 'jack')!],
+            target: [ProfileIdentifier.of('localhost', 'jack').unwrap()],
         },
         version: -37,
     }
@@ -133,7 +133,7 @@ test('v37 E2E encryption', async () => {
         {
             iv: encrypted.identifier.toIV(),
             postAESKey: encrypted.postKey,
-            target: [ProfileIdentifier.of('localhost', 'joey')!],
+            target: [ProfileIdentifier.of('localhost', 'joey').unwrap()],
             version: -37,
         },
         {
@@ -167,11 +167,11 @@ test('v37 E2E encryption', async () => {
 test('v38 E2E encryption', async () => {
     const payload: EncryptOptions = {
         network: 'localhost',
-        author: ProfileIdentifier.of('localhost', 'bob')!,
+        author: ProfileIdentifier.of('localhost', 'bob').unwrap(),
         message: makeTypedMessageText('hello world'),
         target: {
             type: 'E2E',
-            target: [ProfileIdentifier.of('localhost', 'jack')!],
+            target: [ProfileIdentifier.of('localhost', 'jack').unwrap()],
         },
         version: -38,
     }
@@ -229,7 +229,7 @@ test('v38 E2E encryption', async () => {
         {
             iv: encrypted.identifier.toIV(),
             postAESKey: encrypted.postKey,
-            target: [ProfileIdentifier.of('localhost', 'joey')!],
+            target: [ProfileIdentifier.of('localhost', 'joey').unwrap()],
             version: -38,
         },
         {

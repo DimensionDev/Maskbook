@@ -48,6 +48,6 @@ export function parseAuthor(network: unknown, id: unknown): PayloadParseResult.P
     if (net.includes('/')) return new CheckedError(PayloadException.InvalidPayload, 'Invalid network').toErr()
 
     const identifier = ProfileIdentifier.of(net, id)
-    if (identifier) return OptionalResult.Some(identifier)
+    if (identifier.some) return OptionalResult.Some(identifier.val)
     return OptionalResult.None
 }

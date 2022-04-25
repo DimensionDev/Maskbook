@@ -27,7 +27,9 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal: Ab
             let remover = () => {}
             const remove = () => remover()
             const check = () => {
-                ifUsingMask(ProfileIdentifier.of('twitter.com', bioPageUserIDSelector(main).evaluate())).then(() => {
+                ifUsingMask(
+                    ProfileIdentifier.of('twitter.com', bioPageUserIDSelector(main).evaluate()).unwrapOr(null),
+                ).then(() => {
                     const root = createReactRootShadowed(meta.afterShadow, { signal })
                     root.render(<Icon size={size} />)
                     remover = root.destroy

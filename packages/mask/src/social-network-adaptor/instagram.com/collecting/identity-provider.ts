@@ -30,7 +30,7 @@ async function query(): Promise<null | IdentityResolved> {
     const detail = (await tx.store.get('users.users'))[id]
     db.close()
     return {
-        identifier: ProfileIdentifier.of(instagramBase.networkIdentifier, detail.username) || undefined,
+        identifier: ProfileIdentifier.of(instagramBase.networkIdentifier, detail.username).unwrapOr(undefined),
         avatar: detail.profilePictureUrl,
         nickname: detail.fullName,
     }

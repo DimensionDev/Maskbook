@@ -39,7 +39,7 @@ export function normalizeBackupVersion1(file: BackupJSONFileVersion1): Normalize
 
     const { whoami, people } = file
     for (const { network, publicKey, userId, nickname, localKey, privateKey } of [...whoami, ...(people || [])]) {
-        const identifier = ProfileIdentifier.of(network, userId)!
+        const identifier = ProfileIdentifier.of(network, userId).unwrap()
         const profile: NormalizedBackup.ProfileBackup = {
             identifier,
             nickname: nickname ? Some(nickname) : None,

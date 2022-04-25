@@ -30,7 +30,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
         openDB<PostDB>('maskbook-post-v2', currentTryOpen, {
             async upgrade(db, oldVersion, _newVersion, transaction): Promise<void> {
                 type Version2PostRecord = {
-                    postBy: { userId: string; network: string } | undefined
+                    postBy: ProfileIdentifierStoredInDB | undefined
                     identifier: string
                     recipientGroups?: unknown
                     recipients?: ProfileIdentifierStoredInDB[]
@@ -104,7 +104,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                     for await (const cursor of store) {
                         const v2record: Version2PostRecord = cursor.value as any
                         const oldType = v2record.recipients
-                            ?.map((x) => ProfileIdentifier.of(x.network, x.userId)!)
+                            ?.map((x) => ProfileIdentifier.of(x.network, x.userId).unwrapOr(null!))
                             .filter(Boolean)
                         const newType: Version3PostRecord['recipients'] = {}
                         if (oldType !== undefined)
@@ -325,11 +325,11 @@ function postOutDB(db: PostDBRecord): PostRecord {
     const { identifier, foundAt, postBy, recipients, postCryptoKey, encryptBy, interestedMeta, summary, url } = db
     return {
         identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(),
-        postBy: ProfileIdentifier.of(postBy?.network, postBy?.userId) || undefined,
+        postBy: ProfileIdentifier.of(postBy?.network, postBy?.userId).unwrapOr(undefined),
         recipients: recipients === true ? 'everyone' : new IdentifierMap(recipients, ProfileIdentifier),
         foundAt: foundAt,
         postCryptoKey: postCryptoKey,
-        encryptBy: encryptBy ? Identifier.fromString(encryptBy, ECKeyIdentifier).unwrapOr(undefined) : undefined,
+        encryptBy: encryptBy ? ECKeyIdentifier.from(encryptBy).unwrapOr(undefined) : undefined,
         interestedMeta,
         summary,
         url,

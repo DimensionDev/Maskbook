@@ -195,7 +195,7 @@ const twitterUI: SocialNetworkUI.Definition = {
                     IdentityProviderTwitter.recognized.value.identifier?.userId ||
                     globalUIState.profiles.value?.[0].identifier.userId
                 if (!id) throw new Error('Cannot')
-                return ProfileIdentifier.of('twitter.com', id)!.toText()
+                return ProfileIdentifier.of('twitter.com', id).unwrap().toText()
             },
         },
     },

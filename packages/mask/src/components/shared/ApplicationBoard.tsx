@@ -196,7 +196,7 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
 
     const checkSNSConnectToCurrentPersona = useCallback((persona: Persona) => {
         return username
-            ? persona?.linkedProfiles.get(ProfileIdentifier.of(ui.networkIdentifier, username)!)
+            ? persona?.linkedProfiles.get(ProfileIdentifier.of(ui.networkIdentifier, username).unwrapOr(undefined!))
                   ?.connectionConfirmState === 'confirmed'
             : undefined
     }, [])

@@ -51,7 +51,7 @@ async function query(): Promise<null | IdentityResolved> {
     }
     const detail = await getBioByCookie()
     return {
-        identifier: ProfileIdentifier.of(openseaBase.networkIdentifier, detail.username) || undefined,
+        identifier: ProfileIdentifier.of(openseaBase.networkIdentifier, detail.username).unwrapOr(undefined),
         avatar: detail.profilePictureUrl,
         nickname: detail.nickname,
     }

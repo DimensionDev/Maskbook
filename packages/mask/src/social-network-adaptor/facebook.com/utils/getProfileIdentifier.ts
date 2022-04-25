@@ -29,7 +29,7 @@ export function getProfileIdentifierAtFacebook(links: link[] | link, allowCollec
             .map((x) => ({ nickname: x!.ariaLabel, id: getUserID(x!.href), dom: x }))
             .filter((x) => x.id)
         const { dom, id, nickname } = result[0] || {}
-        const identifier = ProfileIdentifier.of(EnhanceableSite.Facebook, id)
+        const identifier = ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrapOr(null)
         if (identifier) {
             const currentProfile = getCurrentIdentifier()
             let avatar: string | null = null

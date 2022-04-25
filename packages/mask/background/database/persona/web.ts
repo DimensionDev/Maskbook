@@ -29,7 +29,6 @@ import type {
     PersonaRecord,
 } from './type'
 import { isEmpty } from 'lodash-unified'
-import { convertPersonaHexPublicKey } from './util'
 /**
  * Database structure:
  *
@@ -691,7 +690,7 @@ function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
     const obj: PersonaRecord = {
         ...x,
         identifier,
-        publicHexKey: convertPersonaHexPublicKey(identifier),
+        publicHexKey: identifier.publicKeyAsHex,
         linkedProfiles: new IdentifierMap(x.linkedProfiles, ProfileIdentifier),
     }
     return obj

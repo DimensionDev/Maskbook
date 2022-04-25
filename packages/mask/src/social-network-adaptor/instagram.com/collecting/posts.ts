@@ -62,7 +62,7 @@ function getPostBy(node: DOMProxy): ProfileIdentifier | null {
     if (!author) return null
     const href = new URL(author.href).pathname
     if (href.startsWith('/') && href.endsWith('/') && href.slice(1, -1).includes('/') === false) {
-        return ProfileIdentifier.of(instagramBase.networkIdentifier, href.slice(1, -1))
+        return ProfileIdentifier.of(instagramBase.networkIdentifier, href.slice(1, -1)).unwrapOr(null)
     }
     return null
 }
