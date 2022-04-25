@@ -2,6 +2,7 @@ import type { ReadonlyIdentifierMap, ProfileIdentifier } from '@masknet/shared-b
 import type { ProfileRecord, PersonaRecord, LinkedProfileDetails } from '../../../background/database/persona/db'
 
 type TypedOmit<T, Q extends keyof T> = Omit<T, Q>
+/** @deprecated */
 export interface Profile extends Readonly<TypedOmit<ProfileRecord, 'localKey' | 'linkedPersona'>> {
     readonly linkedPersona?: Persona
     readonly avatar?: string

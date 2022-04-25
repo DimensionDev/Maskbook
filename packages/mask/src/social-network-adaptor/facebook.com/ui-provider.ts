@@ -6,7 +6,6 @@ import { getProfilePageUrlAtFacebook } from './utils/parse-username'
 import { taskOpenComposeBoxFacebook } from './automation/openComposeBox'
 import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposition'
 import { CurrentVisitingIdentityProviderFacebook, IdentityProviderFacebook } from './collecting/identity'
-import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
 import { injectCompositionFacebook } from './injection/Composition'
 import { injectSetupPromptFacebook } from './injection/SetupPrompt'
@@ -157,12 +156,10 @@ const facebookUI: SocialNetworkUI.Definition = {
         useTheme: useThemeFacebookVariant,
     },
     init(signal) {
-        const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
-        InitAutonomousStateFriends(signal, friends, facebookShared.networkIdentifier)
         InitAutonomousStateProfiles(signal, profiles, facebookShared.networkIdentifier)
         enableFbStyleTextPayloadReplace()
-        return { friends, profiles }
+        return { profiles }
     },
     injection: {
         newPostComposition: {
