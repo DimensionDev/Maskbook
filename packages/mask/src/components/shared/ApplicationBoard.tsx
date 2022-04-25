@@ -32,13 +32,12 @@ const useStyles = makeStyles()((theme) => {
     return {
         applicationWrapper: {
             padding: theme.spacing(1, 0.25),
-            overflowY: 'scroll',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             gridTemplateRows: '100px',
             gridGap: theme.spacing(2),
             justifyContent: 'space-between',
-            height: 340,
+            height: 310,
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
