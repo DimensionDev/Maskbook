@@ -4,6 +4,7 @@ import { PostIdentifier } from './post'
 import { ECKeyIdentifier } from './ec-key'
 import { PostIVIdentifier } from './post-iv'
 import { Identifier } from './base'
+
 /**
  * This type only refers to the stringified Identifier. ANY suffix CANNOT be renamed.
  * person:...
@@ -15,7 +16,7 @@ import { Identifier } from './base'
  * group: has removed, if you want to add a new identifier for grouping, please choose another prefix.
  * @internal
  */
-export function parse(x: string): Option<Identifier> {
+function parse(x: string): Option<Identifier> {
     x = String(x)
     if (x.startsWith('person:')) {
         const [network, userID] = x.slice('person:'.length).split('/')

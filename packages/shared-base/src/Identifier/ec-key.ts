@@ -1,9 +1,9 @@
 import { decodeArrayBuffer } from '@dimensiondev/kit'
 import { Convert } from 'pvtsutils'
 import { type Option, None } from 'ts-results'
-import { isObject } from 'lodash-unified'
 import { Identifier } from './base'
 
+const instance = new WeakSet()
 const k256Cache: Record<string, ECKeyIdentifier> = Object.create(null)
 const keyAsHex: Record<string, string> = Object.create(null)
 
@@ -31,10 +31,10 @@ export class ECKeyIdentifier extends Identifier {
 
         super()
         this.curve = 'secp256k1'
-        this.publicKey = publicKey
+        this.publicKey = publicKey.replace(/\|/g, '/')
         Object.freeze(this)
         k256Cache[publicKey] = this
-        this.#fin = true
+        instance.add(this)
     }
     toText() {
         const normalized = this.publicKey.replace(/\//g, '|')
@@ -48,9 +48,8 @@ export class ECKeyIdentifier extends Identifier {
         return '0x' + (keyAsHex[this.publicKey] ??= Convert.ToHex(decodeArrayBuffer(this.publicKey)))
     }
     declare [Symbol.toStringTag]: string
-    #fin!: boolean
-    static [Symbol.hasInstance](x: unknown): boolean {
-        return isObject(x) && #fin in x && x.#fin
+    static [Symbol.hasInstance](x: any): boolean {
+        return instance.has(x)
     }
 }
 ECKeyIdentifier.prototype[Symbol.toStringTag] = 'ECKeyIdentifier'

@@ -1,9 +1,9 @@
-import { isObject } from 'lodash-unified'
 import { type Option, None } from 'ts-results'
 import { EnhanceableSite } from '../Site/type'
 import { Identifier } from './base'
 import { banSlash } from './utils'
 
+const instance = new WeakSet()
 const id: Record<string, Record<string, ProfileIdentifier>> = Object.create(null)
 /**
  * Refers to a profile on a network.
@@ -45,15 +45,14 @@ export class ProfileIdentifier extends Identifier {
         this.userId = userID
         Object.freeze(this)
         networkCache[userID] = this
-        this.#fin = true
+        instance.add(this)
     }
     toText() {
         return `person:${this.network}/${this.userId}`
     }
     declare [Symbol.toStringTag]: string
-    #fin!: boolean
-    static [Symbol.hasInstance](x: unknown): boolean {
-        return isObject(x) && #fin in x && x.#fin
+    static [Symbol.hasInstance](x: any): boolean {
+        return instance.has(x)
     }
 }
 ProfileIdentifier.prototype[Symbol.toStringTag] = 'ProfileIdentifier'

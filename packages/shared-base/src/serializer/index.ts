@@ -6,7 +6,7 @@ import * as BN from 'bignumber.js'
 
 // @ts-ignore
 import { builtin, blob, file, filelist, imagebitmap, specialNumbers, cryptokey } from 'typeson-registry'
-import { Identifier } from '../Identifier'
+import { Identifier, IdentifierMap } from '../Identifier'
 
 const pendingRegister = new Set<() => void>()
 let typeson: Typeson | undefined
@@ -23,6 +23,7 @@ function setup() {
     addClass('Some', Some)
 
     addClass('BigNumber', BigNumber)
+    addClass('IdentifierMap', IdentifierMap)
 
     typeson.register({
         Identifier: [(x) => x instanceof Identifier, (x: Identifier) => x.toText(), (x) => Identifier.from(x).unwrap()],

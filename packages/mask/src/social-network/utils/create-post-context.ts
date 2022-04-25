@@ -101,7 +101,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             getCurrentValue: () => {
                 const by = opt.author.getCurrentValue()
                 const id = opt.snsID.getCurrentValue()
-                if (id === null || !by) return null
+                if (!id || !by) return null
                 return new PostIdentifier(by, id)
             },
             subscribe: (sub) => {

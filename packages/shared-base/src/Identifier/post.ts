@@ -1,9 +1,9 @@
-import { isObject } from 'lodash-unified'
 import { type Option, None } from 'ts-results'
 import { Identifier } from './base'
-import type { ProfileIdentifier } from './profile'
+import { ProfileIdentifier } from './profile'
 import { banSlash } from './utils'
 
+const instance = new WeakSet()
 const id = new WeakMap<ProfileIdentifier, Record<string, PostIdentifier>>()
 /**
  * If identifier is a PostIdentifier, that means this post is bound with other post in some kind
@@ -18,7 +18,7 @@ export class PostIdentifier extends Identifier {
     declare readonly identifier: ProfileIdentifier
     declare readonly postID: string
     constructor(identifier: ProfileIdentifier, postID: string) {
-        if (!(identifier instanceof PostIdentifier))
+        if (!(identifier instanceof ProfileIdentifier))
             throw new TypeError('[@masknet/shared-base] PostIdentifier.identifier is not a ProfileIdentifier')
 
         if (!id.has(identifier)) id.set(identifier, Object.create(null))
@@ -31,7 +31,7 @@ export class PostIdentifier extends Identifier {
         this.postID = postID
         Object.freeze(this)
         idCache[postID] = this
-        this.#fin = true
+        instance.add(this)
     }
     toText() {
         return `post:${this.postID}/${this.identifier.toText()}`
@@ -41,9 +41,8 @@ export class PostIdentifier extends Identifier {
         return this.postID
     }
     declare [Symbol.toStringTag]: string
-    #fin!: boolean
-    static [Symbol.hasInstance](x: unknown): boolean {
-        return isObject(x) && #fin in x && x.#fin
+    static [Symbol.hasInstance](x: any): boolean {
+        return instance.has(x)
     }
 }
 PostIdentifier.prototype[Symbol.toStringTag] = 'PostIdentifier'

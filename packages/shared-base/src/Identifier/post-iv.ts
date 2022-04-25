@@ -1,9 +1,9 @@
 import { decodeArrayBuffer } from '@dimensiondev/kit'
-import { isObject } from 'lodash-unified'
 import { type Option, None } from 'ts-results'
 import { Identifier } from './base'
 import { banSlash } from './utils'
 
+const instance = new WeakSet()
 const id: Record<string, Record<string, PostIVIdentifier>> = Object.create(null)
 export class PostIVIdentifier extends Identifier {
     static override from(x: string): Option<PostIVIdentifier> {
@@ -26,7 +26,7 @@ export class PostIVIdentifier extends Identifier {
         this.postIV = postIV
         Object.freeze(this)
         networkCache[postIV] = this
-        this.#fin = true
+        instance.add(this)
     }
     toText() {
         return `post_iv:${this.network}/${this.postIV.replace(/\//g, '|')}`
@@ -36,9 +36,8 @@ export class PostIVIdentifier extends Identifier {
         return new Uint8Array(decodeArrayBuffer(x))
     }
     declare [Symbol.toStringTag]: string
-    #fin!: boolean
-    static [Symbol.hasInstance](x: unknown): boolean {
-        return isObject(x) && #fin in x && x.#fin
+    static [Symbol.hasInstance](x: any): boolean {
+        return instance.has(x)
     }
 }
 PostIVIdentifier.prototype[Symbol.toStringTag] = 'PostIVIdentifier'
