@@ -52,7 +52,6 @@
     "react-i18next": "^11.16.5",
     "ses": "0.15.12",
     "ts-results": "3.3.0",
-    "typeson-registry": "2.0.0",
     "web3-core": "1.7.3",
     "web3-core-method": "1.7.3"
   },
