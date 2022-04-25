@@ -1,7 +1,8 @@
 import { isObject } from 'lodash-unified'
 import { type Option, None } from 'ts-results'
 import { EnhanceableSite } from '../Site/type'
-import { banSlash, Identifier } from './base'
+import { Identifier } from './base'
+import { banSlash } from './utils'
 
 const id: Record<string, Record<string, ProfileIdentifier>> = Object.create(null)
 /**

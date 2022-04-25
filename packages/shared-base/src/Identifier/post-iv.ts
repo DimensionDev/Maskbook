@@ -1,7 +1,8 @@
 import { decodeArrayBuffer } from '@dimensiondev/kit'
 import { isObject } from 'lodash-unified'
 import { type Option, None } from 'ts-results'
-import { banSlash, Identifier } from './base'
+import { Identifier } from './base'
+import { banSlash } from './utils'
 
 const id: Record<string, Record<string, PostIVIdentifier>> = Object.create(null)
 export class PostIVIdentifier extends Identifier {
@@ -20,7 +21,6 @@ export class PostIVIdentifier extends Identifier {
         if (networkCache[postIV]) return networkCache[postIV]
 
         banSlash(network)
-        banSlash(postIV)
         super()
         this.network = network
         this.postIV = postIV

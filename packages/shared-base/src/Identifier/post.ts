@@ -1,7 +1,8 @@
 import { isObject } from 'lodash-unified'
 import { type Option, None } from 'ts-results'
-import { banSlash, Identifier } from './base'
+import { Identifier } from './base'
 import type { ProfileIdentifier } from './profile'
+import { banSlash } from './utils'
 
 const id = new WeakMap<ProfileIdentifier, Record<string, PostIdentifier>>()
 /**
