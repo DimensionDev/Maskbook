@@ -27,7 +27,7 @@ import { useMyPersonas } from '../DataSource/useMyPersonas'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
@@ -35,18 +35,20 @@ const useStyles = makeStyles()((theme) => {
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
+            overflowX: 'hidden',
             gridTemplateRows: '100px',
             gridGap: theme.spacing(2),
             justifyContent: 'space-between',
             height: 340,
+            width: props.shouldScroll ? 575 : 560,
             '::-webkit-scrollbar': {
                 backgroundColor: 'transparent',
-                width: 5,
+                width: 20,
             },
             '::-webkit-scrollbar-thumb': {
-                borderRadius: '6px',
+                borderRadius: '20px',
                 width: 5,
-                border: '2px solid rgba(0, 0, 0, 0)',
+                border: '7px solid rgba(0, 0, 0, 0)',
                 backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
                 backgroundClip: 'padding-box',
             },
@@ -100,7 +102,6 @@ export function ApplicationBoard() {
     )
 }
 function ApplicationBoardContent() {
-    const { classes } = useStyles()
     const theme = useTheme()
     const { t } = useI18N()
     const [openSettings, setOpenSettings] = useState(false)
@@ -143,6 +144,7 @@ function ApplicationBoardContent() {
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
     const listedAppList = applicationList.filter((x) => !getUnlistedApp(x))
+    const { classes } = useStyles({ shouldScroll: listedAppList.length > 12 })
     return (
         <>
             <div className={classes.header}>
