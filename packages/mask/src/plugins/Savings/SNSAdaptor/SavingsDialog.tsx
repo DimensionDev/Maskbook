@@ -102,7 +102,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
             ...LDO_PAIRS.filter((x) => x[0].chainId === chainId).map((pair) => new LidoProtocol(pair)),
             ...splitToPair(detailedAaveTokens).map((pair: any) => new AAVEProtocol(pair)),
         ],
-        [chainId, detailedAaveTokens],
+        [chainId, detailedAaveTokens, tab],
     )
 
     useUpdateEffect(() => {
@@ -156,7 +156,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                             <SavingsTable
                                                 chainId={chainId}
                                                 tab={TabType.Withdraw}
-                                                protocols={protocols.filter((x) => !x.balance.isZero())}
+                                                protocols={protocols}
                                                 setTab={setTab}
                                                 setSelectedProtocol={setSelectedProtocol}
                                             />
