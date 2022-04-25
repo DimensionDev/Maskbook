@@ -34,12 +34,21 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(1, 0.25),
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
+            overflowY: 'auto',
             gridTemplateRows: '100px',
             gridGap: theme.spacing(2),
             justifyContent: 'space-between',
-            height: 310,
-            '&::-webkit-scrollbar': {
-                display: 'none',
+            height: 340,
+            '::-webkit-scrollbar': {
+                backgroundColor: 'transparent',
+                width: 5,
+            },
+            '::-webkit-scrollbar-thumb': {
+                borderRadius: '6px',
+                width: 5,
+                border: '2px solid rgba(0, 0, 0, 0)',
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                backgroundClip: 'padding-box',
             },
             [smallQuery]: {
                 overflow: 'auto',
