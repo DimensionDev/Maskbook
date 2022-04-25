@@ -10,10 +10,13 @@ import {
     ProfileIdentifier,
     RelationFavor,
 } from '@masknet/shared-base'
+import __ from 'elliptic'
+import { Convert } from 'pvtsutils'
 import { decode, encode } from '@msgpack/msgpack'
 import { Err, None, Some } from 'ts-results'
 import { createEmptyNormalizedBackup } from '../normalize'
 import type { NormalizedBackup } from '../normalize/type'
+import { hex2buffer } from '../utils/hex2buffer'
 
 export function isBackupVersion2(item: unknown): item is BackupJSONFileVersion2 {
     try {
@@ -146,6 +149,16 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
     }
 
     for (const wallet of wallets || []) {
+        if (wallet.privateKey?.d && !wallet.publicKey) {
+            // @ts-ignore
+            const ec = new (__.ec || __.default.ec)('secp256k1') as __.ec
+            const key = ec.keyFromPrivate(wallet.privateKey.d)
+            const hexPub = key.getPublic('hex').slice(2)
+            const hexX = hexPub.slice(0, hexPub.length / 2)
+            const hexY = hexPub.slice(hexPub.length / 2, hexPub.length)
+            wallet.privateKey.x = Convert.ToBase64Url(hex2buffer(hexX))
+            wallet.privateKey.y = Convert.ToBase64Url(hex2buffer(hexY))
+        }
         const normalizedWallet: NormalizedBackup.WalletBackup = {
             address: wallet.address,
             name: wallet.name,

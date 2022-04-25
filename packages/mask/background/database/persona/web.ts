@@ -167,7 +167,6 @@ export async function consistentPersonaDBWriteAccess(
     t.addEventListener('error', finish)
 
     // Pause those events when patching write access
-    const resumeProfile = MaskMessages.events.profilesChanged.pause()
     const resumePersona = MaskMessages.events.ownPersonaChanged.pause()
     const resumeRelation = MaskMessages.events.relationsChanged.pause()
     try {
@@ -181,12 +180,10 @@ export async function consistentPersonaDBWriteAccess(
         }
         try {
             await assertPersonaDBConsistency(tryToAutoFix ? 'fix' : 'throw', 'full check', t)
-            resumeProfile((data) => [data.flat()])
             resumePersona((data) => (data.length ? [undefined] : []))
             resumeRelation((data) => [data.flat()])
         } finally {
             // If the consistency check throws, we drop all pending events
-            resumeProfile(() => [])
             resumePersona(() => [])
             resumeRelation(() => [])
         }
@@ -374,7 +371,6 @@ export async function safeDeletePersonaDB(
  */
 export async function createProfileDB(record: ProfileRecord, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').add(profileToDB(record))
-    MaskMessages.events.profilesChanged.sendToAll([{ of: record.identifier, reason: 'update' }])
 }
 
 /**
@@ -462,7 +458,6 @@ export async function updateProfileDB(
         ...updating,
     })
     await t.objectStore('profiles').put(nextRecord)
-    MaskMessages.events.profilesChanged.sendToAll([{ reason: 'update', of: updating.identifier }])
 }
 export async function createOrUpdateProfileDB(rec: ProfileRecord, t: ProfileTransaction<'readwrite'>) {
     if (await queryProfileDB(rec.identifier, t)) return updateProfileDB(rec, t)
@@ -529,7 +524,6 @@ export async function attachProfileDB(
  */
 export async function deleteProfileDB(id: ProfileIdentifier, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').delete(id.toText())
-    MaskMessages.events.profilesChanged.sendToAll([{ reason: 'delete', of: id }])
 }
 
 /**

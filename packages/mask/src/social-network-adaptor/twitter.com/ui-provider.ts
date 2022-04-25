@@ -2,7 +2,6 @@ import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-netwo
 import { twitterBase } from './base'
 import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword'
 import { twitterShared } from './shared'
-import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
 import { openComposeBoxTwitter } from './automation/openComposeBox'
 import { pasteTextToCompositionTwitter } from './automation/pasteTextToComposition'
@@ -146,11 +145,9 @@ const twitterUI: SocialNetworkUI.Definition = {
         i18nOverwrite: i18NOverwriteTwitter,
     },
     init(signal) {
-        const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
-        InitAutonomousStateFriends(signal, friends, twitterShared.networkIdentifier)
         InitAutonomousStateProfiles(signal, profiles, twitterShared.networkIdentifier)
-        return { friends, profiles }
+        return { profiles }
     },
     injection: {
         toolbox: injectToolboxHintAtTwitter,
