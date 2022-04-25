@@ -1,4 +1,4 @@
-import { IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
+import { IdentifierMap } from '@masknet/shared-base'
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentifierWithAvatar, createAvatarDBAccess } from './db'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import { blobToDataURL, memoizePromise } from '@dimensiondev/kit'
