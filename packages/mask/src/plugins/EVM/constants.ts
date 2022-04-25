@@ -180,7 +180,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Astar,
         type: NetworkType.Astar,
-        name: 'Conflux',
+        name: 'Astar',
         icon: new URL('./assets/astar.png', import.meta.url),
         iconColor: 'rgb(36, 150, 238)',
         isMainnet: true,
