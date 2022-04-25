@@ -10,8 +10,6 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@codingsh/harmony-crypto": "0.1.58",
-    "@harmony-js/utils": "^0.1.56",
     "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
