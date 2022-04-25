@@ -18,7 +18,8 @@
         "Fantom": "0xc119574d5fb333f5ac018658d4d8b5035e16bf39",
         "Aurora": "0xC119574D5Fb333F5AC018658D4d8b5035E16bf39",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "MULTICALL_ADDRESS": {
         "Mainnet": "0x1F98415757620B543A52E61c46B32eB19261F984",
@@ -39,7 +40,8 @@
         "Fantom": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
         "Aurora": "0x6cc1b1058F9153358278C35E0b2D382f1585854B",
         "Aurora_Testnet": "",
-        "Conflux": "0x19f179d7e0d7d9f9d5386afff64271d98a91615b"
+        "Conflux": "0x19f179d7e0d7d9f9d5386afff64271d98a91615b",
+        "Astar": "0x5FA712069F62c62eA73a7F8e2A4bdec11c2BfeF7"
     },
     "ENS_REGISTRAR_ADDRESS": {
         "Mainnet": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
@@ -60,7 +62,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "ENS_REVERSE_RECORDS_ADDRESS": {
         "Mainnet": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
@@ -81,6 +84,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     }
 }

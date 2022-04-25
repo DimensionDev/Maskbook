@@ -18,7 +18,8 @@
         "Fantom": "",
         "Aurora": "0xf5056B96ab242C566002852d0b98ce0BcDf1af51",
         "Aurora_Testnet": "0xB4D669bc117735FdA44e90e52795132187705B21",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "MASK_BOX_CONTRACT_FROM_BLOCK": {
         "Mainnet": 13687866,
@@ -39,6 +40,7 @@
         "Fantom": 0,
         "Aurora": 57259004,
         "Aurora_Testnet": 77919118,
-        "Conflux": 0
+        "Conflux": 0,
+        "Astar": 0
     }
 }

@@ -73,6 +73,9 @@ export enum ChainId {
 
     // Conflux
     Conflux = 1030,
+
+    // Astar
+    Astar = 592,
 }
 
 export enum LockStatus {
@@ -660,6 +663,7 @@ export enum NetworkType {
     Metis = 'Metis',
     Optimistic = 'Optimistic',
     Conflux = 'Conflux',
+    Astar = 'Astar',
 }
 
 export enum ProviderType {

@@ -18,6 +18,7 @@
         "Fantom": ["https://tokens.r2d2.to/latest/250/tokens.json"],
         "Aurora": ["https://tokens.r2d2.to/latest/1313161554/tokens.json"],
         "Aurora_Testnet": [],
-        "Conflux": ["https://tokens.r2d2.to/latest/1030/tokens.json"]
+        "Conflux": ["https://tokens.r2d2.to/latest/1030/tokens.json"],
+        "Astar": []
     }
 }

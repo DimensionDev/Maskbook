@@ -18,7 +18,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "UNISWAP_V2_FACTORY_ADDRESS": {
         "Mainnet": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
@@ -39,7 +40,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "UNISWAP_V2_THEGRAPH": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
@@ -60,7 +62,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "UNISWAP_V2_INIT_CODE_HASH": {
         "Mainnet": "0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f",
@@ -81,7 +84,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "UNISWAP_SWAP_ROUTER_ADDRESS": {
         "Mainnet": "0xe592427a0aece92de3edee1f18e0157c05861564",
@@ -102,7 +106,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "UNISWAP_V3_FACTORY_ADDRESS": {
         "Mainnet": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
@@ -123,7 +128,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "UNISWAP_V3_QUOTER_ADDRESS": {
         "Mainnet": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
@@ -144,7 +150,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "UNISWAP_V3_THEGRAPH": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
@@ -165,7 +172,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "UNISWAP_V3_INIT_CODE_HASH": {
         "Mainnet": "0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54",
@@ -186,7 +194,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "SUSHISWAP_ROUTER_ADDRESS": {
         "Mainnet": "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",
@@ -207,7 +216,8 @@
         "Fantom": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
         "Aurora": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "SUSHISWAP_FACTORY_ADDRESS": {
         "Mainnet": "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac",
@@ -228,7 +238,8 @@
         "Fantom": "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "SUSHISWAP_THEGRAPH": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/zippoxer/sushiswap-subgraph-fork",
@@ -249,7 +260,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "SUSHISWAP_INIT_CODE_HASH": {
         "Mainnet": "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303",
@@ -270,7 +282,8 @@
         "Fantom": "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "SASHIMISWAP_ROUTER_ADDRESS": {
         "Mainnet": "0xe4fe6a45f354e845f954cddee6084603cedb9410",
@@ -291,7 +304,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "SASHIMISWAP_FACTORY_ADDRESS": {
         "Mainnet": "0xF028F723ED1D0fE01cC59973C49298AA95c57472",
@@ -312,7 +326,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "SASHIMISWAP_THEGRAPH": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/sashimiproject/sashimi",
@@ -333,7 +348,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "SASHIMISWAP_INIT_CODE_HASH": {
         "Mainnet": "0xb465bbe4edb8c9b0da8ff0b2b36ce0065de9fcd5a33f32c6856ea821779c8b72",
@@ -354,7 +370,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "QUICKSWAP_ROUTER_ADDRESS": {
         "Mainnet": "",
@@ -375,7 +392,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "QUICKSWAP_FACTORY_ADDRESS": {
         "Mainnet": "",
@@ -396,7 +414,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "QUICKSWAP_THEGRAPH": {
         "Mainnet": "",
@@ -417,7 +436,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "QUICKSWAP_INIT_CODE_HASH": {
         "Mainnet": "",
@@ -438,7 +458,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "PANCAKESWAP_ROUTER_ADDRESS": {
         "Mainnet": "",
@@ -459,7 +480,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "PANCAKESWAP_FACTORY_ADDRESS": {
         "Mainnet": "",
@@ -480,7 +502,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "PANCAKESWAP_THEGRAPH": {
         "Mainnet": "",
@@ -501,7 +524,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "PANCAKESWAP_INIT_CODE_HASH": {
         "Mainnet": "",
@@ -522,7 +546,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "BALANCER_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -543,7 +568,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "BALANCER_EXCHANGE_PROXY_ADDRESS": {
         "Mainnet": "0x3E66B66Fd1d0b02fDa6C811Da9E0547970DB2f21",
@@ -564,7 +590,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "BALANCER_POOLS_URL": {
         "Mainnet": "https://ipfs.fleek.co/ipns/balancer-bucket.storage.fleek.co/balancer-exchange/pools",
@@ -585,7 +612,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "DODO_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -606,7 +634,8 @@
         "Fantom": "",
         "Aurora": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "DODO_EXCHANGE_PROXY_ADDRESS": {
         "Mainnet": "0xCB859eA579b28e02B87A1FDE08d087ab9dbE5149",
@@ -627,7 +656,8 @@
         "Fantom": "",
         "Aurora": "0x335aC99bb3E51BDbF22025f092Ebc1Cf2c5cC619",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "BANCOR_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -648,7 +678,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "BANCOR_EXCHANGE_PROXY_ADDRESS": {
         "Mainnet": "0x2F9EC37d6CcFFf1caB21733BdaDEdE11c823cCB0",
@@ -669,7 +700,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "TRADERJOE_ROUTER_ADDRESS": {
         "Mainnet": "",
@@ -690,7 +722,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "TRADERJOE_FACTORY_ADDRESS": {
         "Mainnet": "",
@@ -711,7 +744,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "TRADERJOE_THEGRAPH": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/traderjoe-xyz/exchange",
@@ -732,7 +766,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "TRADERJOE_INIT_CODE_HASH": {
         "Mainnet": "",
@@ -753,7 +788,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "OPENOCEAN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -774,7 +810,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "OPENOCEAN_EXCHANGE_PROXY_ADDRESS": {
         "Mainnet": "0x6352a56caadC4F1E25CD6c75970Fa768A3304e64",
@@ -795,7 +832,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "PANGOLIN_ROUTER_ADDRESS": {
         "Mainnet": "",
@@ -816,7 +854,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "PANGOLIN_FACTORY_ADDRESS": {
         "Mainnet": "",
@@ -837,7 +876,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "PANGOLIN_THEGRAPH": {
         "Mainnet": "",
@@ -858,7 +898,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "PANGOLIN_INIT_CODE_HASH": {
         "Mainnet": "",
@@ -879,7 +920,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "WANNASWAP_ROUTER_V2_ADDRESS": {
         "Mainnet": "",
@@ -900,7 +942,8 @@
         "Fantom": "",
         "Aurora": "0xa3a1eF5Ae6561572023363862e238aFA84C72ef5",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "WANNASWAP_ROUTER_ADDRESS": {
         "Mainnet": "",
@@ -921,7 +964,8 @@
         "Fantom": "",
         "Aurora": "0x8f1E0Cf0f9f269Bc977C38635E560aa5b0E63323",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "WANNASWAP_FACTORY_ADDRESS": {
         "Mainnet": "",
@@ -942,7 +986,8 @@
         "Fantom": "",
         "Aurora": "0x7928D4FeA7b2c90C732c10aFF59cf403f0C38246",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "WANNASWAP_THEGRAPH": {
         "Mainnet": "",
@@ -963,7 +1008,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "WANNASWAP_INIT_CODE_HASH": {
         "Mainnet": "",
@@ -984,7 +1030,8 @@
         "Fantom": "",
         "Aurora": "0xa06b8b0642cf6a9298322d0c8ac3c68c291ca24dc66245cf23aa2abc33b57e21",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "TRISOLARIS_ROUTER_ADDRESS": {
         "Mainnet": "",
@@ -1005,7 +1052,8 @@
         "Fantom": "",
         "Aurora": "0x2CB45Edb4517d5947aFdE3BEAbF95A582506858B",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "TRISOLARIS_FACTORY_ADDRESS": {
         "Mainnet": "",
@@ -1026,7 +1074,8 @@
         "Fantom": "",
         "Aurora": "0xc66F594268041dB60507F00703b152492fb176E7",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "TRISOLARIS_THEGRAPH": {
         "Mainnet": "",
@@ -1047,7 +1096,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "TRISOLARIS_INIT_CODE_HASH": {
         "Mainnet": "",
@@ -1068,7 +1118,8 @@
         "Fantom": "",
         "Aurora": "0x754e1d90e536e4c1df81b7f030f47b4ca80c87120e145c294f098c83a6cb5ace",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "MDEX_ROUTER_ADDRESS": {
         "Mainnet": "0x74119c3bca85bEA0538A62319a79b4a372590B47",
@@ -1089,7 +1140,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "MDEX_FACTORY_ADDRESS": {
         "Mainnet": "0x7DAe51BD3E3376B8c7c4900E9107f12Be3AF1bA8",
@@ -1110,7 +1162,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "MDEX_THEGRAPH": {
         "Mainnet": "",
@@ -1131,7 +1184,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
     },
     "MDEX_INIT_CODE_HASH": {
         "Mainnet": "0x8ecc069c645df696f2ca5116ab459c5c2889f299e73c1b208aaa3cdd7d110b16",
@@ -1152,6 +1206,95 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Astar": ""
+    },
+    "ARTHSWAP_ROUTER_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Astar": "0xE915D2393a08a00c5A463053edD31bAe2199b9e7"
+    },
+    "ARTHSWAP_FACTORY_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Astar": "0xA9473608514457b4bF083f9045fA63ae5810A03E"
+    },
+    "ARTHSWAP_THEGRAPH": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Astar": ""
+    },
+    "ARTHSWAP_INIT_CODE_HASH": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Astar": "0x613b36de6401276e4d938ad0db4063490e66bb3ab2e4aec17cab78a15ea7a0b6"
     }
 }

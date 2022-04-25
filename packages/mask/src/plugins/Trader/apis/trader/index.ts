@@ -52,11 +52,14 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
             return [TradeProvider.SUSHISWAP]
         case NetworkType.Aurora:
             return [TradeProvider.DODO, TradeProvider.WANNASWAP, TradeProvider.TRISOLARIS]
+        case NetworkType.Astar:
+            return [TradeProvider.ARTHSWAP]
         case NetworkType.Boba:
         case NetworkType.Fuse:
         case NetworkType.Metis:
         case NetworkType.Optimistic:
         case NetworkType.Conflux:
+        case NetworkType.Astar:
             console.error('To be implement network: ', networkType)
             return []
         default:

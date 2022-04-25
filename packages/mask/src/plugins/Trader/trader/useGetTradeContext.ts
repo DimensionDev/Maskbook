@@ -23,6 +23,8 @@ import {
     TRISOLARIS_CUSTOM_BASES,
     MDEX_BASE_AGAINST_TOKENS,
     MDEX_CUSTOM_BASES,
+    ARTHSWAP_BASE_AGAINST_TOKENS,
+    ARTHSWAP_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -174,6 +176,19 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: MDEX_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: MDEX_CUSTOM_BASES,
+                }
+            case TradeProvider.ARTHSWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.ARTHSWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.ARTHSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.ARTHSWAP_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.ARTHSWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.ARTHSWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: ARTHSWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: ARTHSWAP_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {

@@ -2857,5 +2857,23 @@
         "shortName": "Conflux",
         "chainId": 1030,
         "networkId": 1030
+    },
+    {
+        "name": "Astar",
+        "chain": "Astar",
+        "network": "mainnet",
+        "rpc": ["https://evm.astar.network"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": {
+            "name": "Astar",
+            "symbol": "Astar",
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/chain/logo_url/astar/398c7e0014bdada3d818367a7273fabe.png"
+        },
+        "infoURL": "https://astar.subscan.io/",
+        "shortName": "Astar",
+        "chainId": 592,
+        "networkId": 592
     }
 ]

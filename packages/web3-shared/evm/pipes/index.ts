@@ -97,6 +97,7 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Fantom]: 'fantom',
         [NetworkType.Aurora]: 'Aurora',
         [NetworkType.Conflux]: 'conflux',
+        [NetworkType.Astar]: 'Astar',
     },
     'ethereum',
 )
@@ -113,6 +114,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Fantom]: 'Fantom',
         [NetworkType.Aurora]: 'Aurora',
         [NetworkType.Conflux]: 'Conflux',
+        [NetworkType.Astar]: 'Astar',
     },
     'Unknown',
 )
@@ -148,6 +150,7 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Aurora]: 'rgb(112, 212, 74)',
         [ChainId.Conflux]: 'rgb(24, 163, 138)',
         [ChainId.Aurora_Testnet]: 'rgb(112, 212, 74)',
+        [ChainId.Astar]: 'rgb(36, 150, 238)',
     },
     'rgb(214, 217, 220)',
 )
