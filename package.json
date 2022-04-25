@@ -38,6 +38,7 @@
     "@mui/lab": "5.0.0-alpha.77",
     "@mui/material": "5.6.1",
     "@mui/system": "5.6.1",
+    "@solana/web3.js": "1.39.1",
     "@types/masknet__global-types": "workspace:*",
     "@types/react": "18.0.2",
     "@types/react-dom": "^18.0.0",
@@ -51,6 +52,7 @@
     "react-i18next": "^11.16.5",
     "ses": "0.15.12",
     "ts-results": "3.3.0",
+    "typeson-registry": "2.0.0",
     "web3-core": "1.7.3",
     "web3-core-method": "1.7.3"
   },
@@ -86,7 +88,8 @@
   "pnpm": {
     "overrides": {
       "@types/node": "^17.0.23",
-      "@types/react": "18.0.2"
+      "@types/react": "18.0.2",
+      "@solana/web3.js": "1.39.1"
     },
     "onlyBuiltDependencies": []
   }

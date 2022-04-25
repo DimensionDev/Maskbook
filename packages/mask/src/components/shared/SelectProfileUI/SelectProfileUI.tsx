@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import type { Profile } from '../../../database'
+import type { ProfileInformation as Profile } from '@masknet/shared-base'
 import { ProfileInList } from './ProfileInList'
 import { ProfileInChip } from './ProfileInChip'
 import { FixedSizeList } from 'react-window'
@@ -28,9 +28,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const items: Profile[] = props.items
-    const selected: Profile[] = props.selected
-    const { frozenSelected, onSetSelected, disabled } = props
+    const { frozenSelected, onSetSelected, disabled, items, selected } = props
 
     const [search, setSearch] = useState('')
     const listBeforeSearch = items.filter((x) => {
@@ -42,14 +40,12 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
         if (search === '') return true
         return (
             !!x.identifier.userId.toLowerCase().match(search.toLowerCase()) ||
-            !!x.linkedPersona?.fingerprint.toLowerCase().match(search.toLowerCase()) ||
+            !!x.fingerprint?.toLowerCase().match(search.toLowerCase()) ||
             !!(x.nickname || '').toLowerCase().match(search.toLowerCase())
         )
     })
     const SelectAllButton = (
-        <Button
-            className={classes.buttons}
-            onClick={() => onSetSelected([...selected, ...listAfterSearch] as Profile[])}>
+        <Button className={classes.buttons} onClick={() => onSetSelected([...selected, ...listAfterSearch])}>
             {t('select_all')}
         </Button>
     )
@@ -80,16 +76,14 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                     <>
                         {frozenSelected.map((x) => FrozenChip(x))}
                         {selected
-                            .filter((item) => !frozenSelected.includes(item as Profile))
+                            .filter((item) => !frozenSelected.includes(item))
                             .map((item) => (
                                 <ProfileInChip
                                     disabled={disabled}
                                     key={item.identifier.toText()}
                                     item={item}
                                     onDelete={() =>
-                                        onSetSelected(
-                                            selected.filter((x) => !x.identifier.equals(item.identifier)) as Profile[],
-                                        )
+                                        onSetSelected(selected.filter((x) => !x.identifier.equals(item.identifier)))
                                     }
                                 />
                             ))}
@@ -104,7 +98,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                     )}
                     onKeyDown={(e) => {
                         if (search === '' && e.key === 'Backspace') {
-                            onSetSelected(selected.slice(0, selected.length - 1) as Profile[])
+                            onSetSelected(selected.slice(0, selected.length - 1))
                         }
                     }}
                     placeholder={disabled ? '' : t('search_box_placeholder')}
@@ -149,16 +143,13 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                 item={item}
                 disabled={disabled}
                 onClick={() => {
-                    onSetSelected(selected.concat(item) as Profile[])
+                    onSetSelected(selected.concat(item))
                     setSearch('')
                 }}
                 ListItemProps={{ style }}
             />
         )
     }
-}
-SelectProfileUI.defaultProps = {
-    frozenSelected: [],
 }
 function FrozenChip(item: Profile) {
     return <ProfileInChip disabled key={item.identifier.toText()} item={item} />

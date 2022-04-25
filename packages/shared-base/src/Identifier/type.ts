@@ -42,7 +42,6 @@ const fromString = (id: string | Identifier, constructor?: typeof Identifier): R
         // the second overload
         if (fromStringCache.has(id)) result = fromStringCache.get(id)
         else if (type === 'person') result = ProfileIdentifier[$fromString](rest.join(':'))
-        else if (type === 'group') result = GroupIdentifier[$fromString](rest.join(':'))
         else if (type === 'post') result = PostIdentifier[$fromString](rest.join(':'))
         else if (type === 'post_iv') result = PostIVIdentifier[$fromString](rest.join(':'))
         else if (type === 'ec_key') result = ECKeyIdentifier[$fromString](rest.join(':'))
@@ -107,46 +106,10 @@ export class ProfileIdentifier extends Identifier {
     toText() {
         return `person:${this.network}/${this.userId}`
     }
-    friendlyToText() {
-        return `${this.userId}@${this.network}`
-    }
     static [$fromString](str: string) {
         const [network, userId] = str.split('/')
         if (!network || !userId) return null
         return new ProfileIdentifier(network, userId)
-    }
-}
-export class GroupIdentifier extends Identifier {
-    static getFriendsGroupIdentifier(who: ProfileIdentifier, groupId: string) {
-        return new GroupIdentifier(who.network, who.userId, groupId)
-    }
-    constructor(
-        public readonly network: string,
-        public readonly virtualGroupOwner: string | null,
-        public readonly groupID: string,
-    ) {
-        super()
-        noSlash(network)
-        noSlash(groupID)
-        if (virtualGroupOwner === '') this.virtualGroupOwner = null
-    }
-    get ownerIdentifier(): ProfileIdentifier | null {
-        if (this.virtualGroupOwner === null) return null
-        return new ProfileIdentifier(this.network, this.virtualGroupOwner)
-    }
-    toText() {
-        return 'group:' + [this.network, this.virtualGroupOwner, this.groupID].join('/')
-    }
-    get isReal() {
-        return !this.virtualGroupOwner
-    }
-    get isVirtual() {
-        return !!this.virtualGroupOwner
-    }
-    static [$fromString](str: string) {
-        const [network, belongs, groupID] = str.split('/')
-        if (!network || !groupID) return null
-        return new GroupIdentifier(network, belongs, groupID)
     }
 }
 export class PostIdentifier<T extends Identifier = Identifier> extends Identifier {
