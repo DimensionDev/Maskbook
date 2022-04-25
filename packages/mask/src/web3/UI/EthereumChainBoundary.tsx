@@ -173,7 +173,15 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     <ActionButton
                         variant="contained"
                         size="small"
-                        sx={{ marginTop: 1.5, backgroundColor: '#07101B', width: 254, color: 'white' }}
+                        sx={{
+                            marginTop: 1.5,
+                            backgroundColor: '#07101B',
+                            width: 254,
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#07101B',
+                            },
+                        }}
                         onClick={openSelectProviderDialog}>
                         {t('plugin_wallet_connect_wallet')}
                     </ActionButton>

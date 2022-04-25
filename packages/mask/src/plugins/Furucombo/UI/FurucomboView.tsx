@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, useChainId } from '@masknet/web3-shared-evm'
-import { Card, CardContent, Tabs, Tab, Typography, Paper } from '@mui/material'
+import { Card, CardContent, Tabs, Tab, Typography, Paper, CircularProgress, Button, Stack } from '@mui/material'
 import { useState } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useFetchPools } from '../hooks/usePool'
@@ -33,6 +33,14 @@ const useStyles = makeStyles()((theme) => ({
         fontFamily: 'inherit',
         color: 'white',
     },
+    reload: {
+        backgroundColor: '#07101B',
+        '&:hover': {
+            backgroundColor: '#07101B',
+        },
+        color: 'white',
+        width: 254,
+    },
 }))
 
 interface PoolViewProps {
@@ -46,15 +54,25 @@ export function FurucomboView(props: PoolViewProps) {
     const [tabIndex, setTabIndex] = useState(0)
     const currentChainId = useChainId()
 
-    const { value, loading, error } = useFetchPools()
+    const { value, loading, error, retry } = useFetchPools()
 
-    if (loading) return <Typography align="center">{t('loading')}</Typography>
+    if (loading)
+        return (
+            <Stack sx={{ alignItems: 'center' }}>
+                <CircularProgress size="small" />
+            </Stack>
+        )
 
     if (error || !value)
         return (
-            <Typography align="center" color="textPrimary">
-                {t('plugin_furucombo_smt_wrong')}
-            </Typography>
+            <>
+                <Typography align="center" color="#FF3545">
+                    {t('plugin_furucombo_load_failed')}
+                </Typography>
+                <Button variant="contained" className={classes.reload} onClick={retry}>
+                    {t('plugin_furucombo_reload')}
+                </Button>
+            </>
         )
 
     const { investables = [] } = value

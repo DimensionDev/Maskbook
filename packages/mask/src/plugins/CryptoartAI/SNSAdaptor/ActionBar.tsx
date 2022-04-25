@@ -10,13 +10,15 @@ import { CheckoutDialog } from './CheckoutDialog'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {
-            marginLeft: theme.spacing(-0.5),
-            marginRight: theme.spacing(-0.5),
-        },
+        root: {},
         button: {
             flex: 1,
             margin: `0 ${theme.spacing(0.5)}`,
+            backgroundColor: '#07101B',
+            color: 'white',
+            '&:hover': {
+                backgroundColor: '#07101B',
+            },
         },
     }
 })
@@ -43,7 +45,7 @@ export function ActionBar(props: ActionBarProps) {
     if (!asset.value) return null
 
     return (
-        <Box className={classes.root} sx={{ marginTop: 1 }} display="flex" justifyContent="center">
+        <Box className={classes.root} sx={{ margin: 1 }} display="flex" justifyContent="center">
             {!assetSource?.isSoldOut &&
             !assetSource?.is_owner &&
             assetSource?.is24Auction &&

@@ -33,7 +33,6 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
             border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
-            marginBottom: 12,
         },
         content: {
             width: '100%',
@@ -141,24 +140,35 @@ export function Collectible(props: CollectibleProps) {
         setProvider,
         getEnumAsArray(NonFungibleAssetProvider).map((x) => x.value),
         resolveCollectibleProviderName,
+        true,
     )
     // #endregion
 
     if (!asset.value || !token)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                <Typography color="textPrimary" sx={{ marginTop: 8, marginBottom: 8 }}>
+                <Typography color="#07101B" sx={{ marginTop: 8, marginBottom: 8 }}>
                     Failed to load your collectible on {resolveCollectibleProviderName(provider)}.
                 </Typography>
-                {CollectibleProviderSwitcher}
-                <Button
-                    color="primary"
-                    size="small"
-                    variant="text"
-                    onClick={() => asset.retry()}
-                    sx={{ marginTop: 1.5 }}>
-                    Refresh
-                </Button>
+                <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
+                    <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
+                    <Box sx={{ flex: 1, padding: 1 }}>
+                        <Button
+                            variant="contained"
+                            fullWidth
+                            onClick={() => asset.retry()}
+                            sx={{
+                                marginTop: 1.5,
+                                backgroundColor: '#07101B',
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: '#07101B',
+                                },
+                            }}>
+                            Refresh
+                        </Button>
+                    </Box>
+                </Box>
             </Box>
         )
     const tabs = [

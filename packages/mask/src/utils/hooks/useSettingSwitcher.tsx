@@ -36,6 +36,7 @@ export function useSwitcher<T extends string | number>(
     onSwitch: (option: T) => void,
     options: T[],
     resolver: (option: T) => string,
+    fullWidth?: boolean,
 ) {
     const nextOption = useMemo(() => {
         if (options.length === 0) return
@@ -50,7 +51,12 @@ export function useSwitcher<T extends string | number>(
     if (typeof nextOption === 'undefined') return null
 
     return (
-        <ActionButton sx={{ marginTop: 1 }} color="primary" variant="contained" onClick={() => onSwitch(nextOption)}>
+        <ActionButton
+            fullWidth={fullWidth}
+            sx={{ marginTop: 1 }}
+            color="primary"
+            variant="contained"
+            onClick={() => onSwitch(nextOption)}>
             Switch to {resolver(nextOption)}
         </ActionButton>
     )
