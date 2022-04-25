@@ -211,7 +211,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     )
 
     const historyToken = {
-        ...pick((tokenDetailed ?? (history as RedPacketJSONPayload)).token, ['decimals', 'symbol']),
+        ...pick(tokenDetailed ?? (history as RedPacketJSONPayload).token, ['decimals', 'symbol']),
         address: tokenAddress,
     } as ERC20TokenDetailed | NativeTokenDetailed
 
