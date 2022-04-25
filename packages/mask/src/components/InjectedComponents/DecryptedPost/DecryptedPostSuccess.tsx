@@ -1,64 +1,114 @@
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { AdditionalContent } from '../AdditionalPostContent'
-import { useShareMenu } from '../SelectPeopleDialog'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { SelectProfileDialog } from '../SelectPeopleDialog'
+import { makeStyles } from '@masknet/theme'
 import { Link } from '@mui/material'
-import type { Profile } from '../../../database'
 import type { TypedMessage } from '@masknet/typed-message'
-import type { ProfileIdentifier } from '@masknet/shared-base'
+import { EMPTY_LIST, ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender'
+import { usePostInfo, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { usePostClaimedAuthor } from '../../DataSource/usePostInfo'
+import { useRecipientsList } from '../../CompositionDialog/useRecipientsList'
+import { useAsyncRetry } from 'react-use'
+import Services from '../../../extension/service'
+import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
+import { delay } from '@dimensiondev/kit'
 
-export interface DecryptPostSuccessProps extends withClasses<never> {
-    data: { content: TypedMessage }
-    requestAppendRecipients?(to: Profile[]): Promise<void>
-    alreadySelectedPreviously: Profile[]
-    profiles: Profile[]
-    sharedPublic?: boolean | null
+export interface DecryptPostSuccessProps {
+    message: TypedMessage
     /** The author in the payload */
-    author?: ProfileIdentifier
+    author: ProfileIdentifier | undefined
     /** The author of the encrypted post */
-    postedBy?: ProfileIdentifier
+    postedBy: ProfileIdentifier | undefined
+    whoAmI: ProfileIdentifier
 }
 
-const useSuccessStyles = makeStyles()((theme) => {
-    return {
-        header: { display: 'flex', alignItems: 'center' },
-        addRecipientsLink: { cursor: 'pointer', marginLeft: theme.spacing(1) },
-        signatureVerifyPassed: { display: 'flex' },
-        signatureVerifyFailed: { display: 'flex' },
-    }
-})
+function useCanAppendShareTarget(whoAmI: ProfileIdentifier) {
+    const version = usePostInfoDetails.version()
+    const sharedPublic = usePostInfoDetails.publicShared()
+    const authorInPayload = usePostClaimedAuthor()
+    const currentPostBy = usePostInfoDetails.author()
+    const postAuthor = authorInPayload || currentPostBy
 
+    if (sharedPublic) return false
+    if (version !== -38) return false
+    if (!whoAmI.equals(postAuthor)) return false
+    return true
+}
 export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
-    const {
-        data: { content },
-        profiles,
-        author,
-        postedBy,
-    } = props
-    const classes = useStylesExtends(useSuccessStyles(), props)
+    if (useCanAppendShareTarget(props.whoAmI)) return <DecryptPostSuccessAppendShare {...props} />
+    return <DecryptPostSuccessBase {...props} />
+})
+const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
+    props: React.PropsWithChildren<DecryptPostSuccessProps>,
+) {
+    const { message, author, postedBy } = props
     const { t } = useI18N()
-    const shareMenu = useShareMenu(
-        profiles,
-        props.requestAppendRecipients || (async () => {}),
-        props.alreadySelectedPreviously,
-    )
-    const rightActions = props.requestAppendRecipients && props.sharedPublic === false && (
-        <Link color="primary" onClick={shareMenu.showShare} className={classes.addRecipientsLink}>
-            {t('decrypted_postbox_add_recipients')}
-        </Link>
-    )
     return (
         <>
-            {shareMenu.ShareMenu}
             <AdditionalContent
-                headerActions={wrapAuthorDifferentMessage(author, postedBy, rightActions)}
                 title={t('decrypted_postbox_title')}
-                message={content}
+                headerActions={wrapAuthorDifferentMessage(author, postedBy, props.children)}
+                message={message}
             />
-            <DecryptedUI_PluginRendererWithSuggestion message={content} metadata={content.meta} />
+            <DecryptedUI_PluginRendererWithSuggestion message={message} metadata={message.meta} />
         </>
     )
 })
+
+const useStyles = makeStyles()((theme) => {
+    return {
+        addRecipientsLink: { cursor: 'pointer', marginLeft: theme.spacing(1) },
+    }
+})
+const DecryptPostSuccessAppendShare = memo(function DecryptPostSuccessAppendShare(props: DecryptPostSuccessProps) {
+    const { classes } = useStyles()
+    const { t } = useI18N()
+    const [showDialog, setShowDialog] = useState(false)
+    const recipients = useRecipientsList()
+    const canAppendShareTarget = useCanAppendShareTarget(props.whoAmI) && recipients.hasRecipients
+
+    const rightActions = canAppendShareTarget ? (
+        <>
+            <Link color="primary" onClick={() => setShowDialog(true)} className={classes.addRecipientsLink}>
+                {t('decrypted_postbox_add_recipients')}
+            </Link>
+            {showDialog && (
+                <AppendShareDetail whoAmI={props.whoAmI} onClose={() => setShowDialog(false)} recipients={recipients} />
+            )}
+        </>
+    ) : null
+    return <DecryptPostSuccessBase {...props}>{rightActions}</DecryptPostSuccessBase>
+})
+
+function AppendShareDetail(props: { onClose(): void; recipients: LazyRecipients; whoAmI: ProfileIdentifier }) {
+    const info = usePostInfo()!
+    const iv = usePostInfoDetails.postIVIdentifier()!
+    const { value: alreadySelectedPreviously = EMPTY_LIST, retry } = useAsyncRetry(
+        () => Services.Crypto.getIncompleteRecipientsOfPost(iv),
+        [iv],
+    )
+    useEffect(props.recipients.request, [])
+
+    return (
+        <SelectProfileDialog
+            open
+            alreadySelectedPreviously={alreadySelectedPreviously}
+            profiles={props.recipients.recipients || EMPTY_LIST}
+            onClose={props.onClose}
+            onSelect={async (profiles) => {
+                await Services.Crypto.appendShareTarget(
+                    info.version.getCurrentValue()!,
+                    iv,
+                    profiles.map((x) => x.identifier),
+                    props.whoAmI,
+                    { type: 'direct', at: new Date() },
+                )
+                await delay(1500)
+                retry()
+            }}
+        />
+    )
+}
