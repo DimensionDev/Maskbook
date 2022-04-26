@@ -185,6 +185,7 @@ export enum TradeProvider {
     MDEX = 15,
     ARTHSWAP = 16,
     VERSA = 17,
+    ASTAREXCHANGE = 18,
 }
 
 /** Supported language settings */

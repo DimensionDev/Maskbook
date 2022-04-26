@@ -106,6 +106,8 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.VERSA:
             return uniswapV2Like
+        case TradeProvider.ASTAREXCHANGE:
+            return uniswapV2Like
         case TradeProvider.ZRX:
             return zrx
         case TradeProvider.BALANCER:
