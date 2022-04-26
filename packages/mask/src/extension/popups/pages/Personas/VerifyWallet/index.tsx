@@ -162,6 +162,7 @@ const VerifyWallet = memo(() => {
                 changeWallet={changeWallet}
                 onConfirm={handleConfirm}
                 confirmLoading={confirmLoading}
+                onCustomCancel={() => navigate(-1)}
             />
         </div>
     )

@@ -71,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface DisconnectWalletDialogProps extends DialogProps {
     confirmLoading: boolean
-    onConfirmDisconnect: () => Promise<boolean>
+    onConfirmDisconnect: () => Promise<void>
     address?: string
     onClose: () => void
     personaName: string | undefined
