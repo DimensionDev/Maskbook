@@ -5,8 +5,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ErrorIcon from '@mui/icons-material/Error'
 import { noop } from 'lodash-unified'
 import { TokenIcon } from '@masknet/shared'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../utils'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -30,7 +31,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface SelectTokenChipProps {
-    token?: FungibleTokenDetailed | null
+    token?: FungibleToken<ChainId, SchemaType> | null
     error?: Error
     loading?: boolean
     readonly?: boolean
@@ -65,7 +66,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
         return (
             <Chip
                 className={classes.chip}
-                icon={<TokenIcon address={token.address} name={token.name} logoURI={token.logoURI} />}
+                icon={<TokenIcon address={token.address} name={token.name} logoURL={token.logoURL} />}
                 deleteIcon={<ErrorIcon className={classes.icon} />}
                 label={token.symbol}
                 color="default"
@@ -85,7 +86,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
                     classes={{ icon: classes.tokenIcon }}
                     address={token.address}
                     name={token.name}
-                    logoURI={token.logoURI}
+                    logoURL={token.logoURL}
                 />
             }
             deleteIcon={readonly ? undefined : <ExpandMoreIcon className={classes.icon} />}

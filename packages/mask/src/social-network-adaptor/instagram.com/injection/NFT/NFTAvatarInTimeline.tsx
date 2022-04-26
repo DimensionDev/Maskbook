@@ -1,8 +1,8 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { getInjectNodeInfo } from '../../utils/avatar'
-import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
-import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
+// import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
+// import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { searchInstagramPostAvatarSelector } from '../../utils/selector'
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
@@ -24,14 +24,14 @@ const TimeLineRainbow = memo(
                     top: 0,
                     zIndex: 2,
                 }}>
-                <NFTBadgeTimeline
+                {/* <NFTBadgeTimeline
                     userId={userId}
                     avatarId={avatarId}
                     width={width}
                     height={height}
                     classes={classes}
                     snsKey={RSS3_KEY_SNS.INSTAGRAM}
-                />
+                /> */}
             </div>
         )
     },

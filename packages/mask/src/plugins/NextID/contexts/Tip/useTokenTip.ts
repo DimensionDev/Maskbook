@@ -1,15 +1,13 @@
-import { rightShift } from '@masknet/web3-shared-base'
-import {
-    SchemaType,
-    FungibleTokenDetailed,
-    isSameAddress,
-    useTokenConstants,
-    useTokenTransferCallback,
-} from '@masknet/web3-shared-evm'
+import { rightShift, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, useTokenConstants, useTokenTransferCallback } from '@masknet/web3-shared-evm'
 import { useCallback } from 'react'
 import type { TipTuple } from './type'
 
-export function useTokenTip(recipient: string, token: FungibleTokenDetailed | null, amount: string): TipTuple {
+export function useTokenTip(
+    recipient: string,
+    token: FungibleToken<ChainId, SchemaType> | null,
+    amount: string,
+): TipTuple {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     const isNativeToken = isSameAddress(token?.address, NATIVE_TOKEN_ADDRESS)

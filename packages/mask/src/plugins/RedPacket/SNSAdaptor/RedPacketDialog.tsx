@@ -1,23 +1,15 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { useAccount, useChainId, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import {
-    formatBalance,
-    getChainName,
-    TransactionStateType,
-    useAccount,
-    useChainId,
-    useNetworkType,
-    useRedPacketConstants,
-    useWeb3,
-} from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { chainResolver, formatBalance, TransactionStateType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import Services from '../../../extension/service'
 import { useI18N } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketMetaKey } from '../constants'
@@ -70,17 +62,17 @@ interface RedPacketDialogProps extends withClasses<never> {
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
-    const chainId = useChainId()
-    const account = useAccount()
     const { classes } = useStyles()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const state = useState(DialogTabs.create)
 
-    const networkType = useNetworkType()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const contract_version = 4
     const [settings, setSettings] = useState<RedPacketSettings>()
-    const web3 = useWeb3()
 
     const onClose = useCallback(() => {
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
@@ -90,7 +82,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         props.onClose()
     }, [props, state])
 
-    const { address: publicKey, privateKey } = useMemo(() => web3.eth.accounts.create(), [])
+    const { address: publicKey, privateKey } = useMemo(() => web3?.eth.accounts.create(), [web3])
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname
@@ -132,7 +124,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     // assemble JSON payload
     const payload = useRef<RedPacketJSONPayload>({
-        network: getChainName(chainId),
+        network: chainResolver.chainName(chainId),
     } as RedPacketJSONPayload)
 
     useEffect(() => {
@@ -144,7 +136,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         }
         payload.current.contract_address = contractAddress
         payload.current.contract_version = contract_version
-        payload.current.network = getChainName(chainId)
+        payload.current.network = chainResolver.chainName(chainId)
     }, [chainId, networkType, contract_version, createState])
 
     // #region remote controlled transaction dialog

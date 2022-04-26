@@ -7,12 +7,14 @@ import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import { useAsync, useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { DeriveWalletTable } from '../components/DeriveWalletTable'
-import { currySameAddress, ProviderType, useWallets } from '@masknet/web3-shared-evm'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
 import { LoadingButton } from '@mui/lab'
 import { PopupRoutes } from '@masknet/shared-base'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { first } from 'lodash-unified'
+import { useWallets } from '@masknet/plugin-infra/web3'
+import { currySameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     container: {
@@ -78,7 +80,7 @@ const AddDeriveWallet = memo(() => {
     const location = useLocation()
     const state = location.state as any as { mnemonic?: string } | undefined
     const { classes } = useStyles()
-    const wallets = useWallets(ProviderType.MaskWallet)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const walletName = new URLSearchParams(location.search).get('name')
     const { mnemonic } = state || {}
 

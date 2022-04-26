@@ -1,9 +1,9 @@
+import { unreachable } from '@dimensiondev/kit'
 import { useSubscription, Subscription } from 'use-subscription'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { createManager } from './manage'
 import { getPluginDefine } from './store'
 import type { CurrentSNSNetwork, Plugin } from '../types'
-import type { NetworkPluginID } from '../web3-types'
-import { unreachable } from '@dimensiondev/kit'
 
 const { events, activated, startDaemon, minimalMode } = createManager((def) => def.SNSAdaptor)
 

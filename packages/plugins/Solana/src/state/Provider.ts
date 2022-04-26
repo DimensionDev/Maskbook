@@ -1,13 +1,13 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { isSameAddress, isValidAddress } from '@masknet/web3-shared-evm'
+import { Account, isSameAddress } from '@masknet/web3-shared-base'
+import { isValidAddress } from '@masknet/web3-shared-evm'
 import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
-import { ProviderState, Web3Plugin } from '@masknet/plugin-infra/web3'
-import { ChainId, getNetworkTypeFromChainId, NetworkType, ProviderType, SolProvider } from '@masknet/web3-shared-solana'
-import type { SolanaWeb3 } from './Protocol/types'
+import { ProviderState } from '@masknet/plugin-infra/web3'
+import { chainResolver, ChainId, NetworkType, ProviderType, Web3Provider, Web3 } from '@masknet/web3-shared-solana'
 import { Providers } from './Protocol/provider'
 
-export class Provider extends ProviderState<ChainId, NetworkType, ProviderType, SolProvider, SolanaWeb3> {
+export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(override context: Plugin.Shared.SharedContext) {
         const defaultValue = {
             accounts: getEnumAsArray(ProviderType).reduce((accumulator, providerType) => {
@@ -16,7 +16,7 @@ export class Provider extends ProviderState<ChainId, NetworkType, ProviderType, 
                     chainId: ChainId.Mainnet,
                 }
                 return accumulator
-            }, {} as Record<ProviderType, Web3Plugin.Account<ChainId>>),
+            }, {} as Record<ProviderType, Account<ChainId>>),
             providers: [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].reduce(
                 (accumulator, site) => {
                     accumulator[site.value] = ProviderType.Phantom
@@ -30,7 +30,9 @@ export class Provider extends ProviderState<ChainId, NetworkType, ProviderType, 
             isSameAddress,
             isValidAddress,
             getDefaultChainId: () => ChainId.Mainnet,
-            getNetworkTypeFromChainId,
+            getDefaultNetworkType: () => NetworkType.Solana,
+            getNetworkTypeFromChainId: (chainId: ChainId) =>
+                chainResolver.chainNetworkType(chainId) ?? NetworkType.Solana,
         })
     }
 }

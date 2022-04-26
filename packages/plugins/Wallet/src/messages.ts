@@ -1,7 +1,13 @@
 import type BigNumber from 'bignumber.js'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
-import type { NetworkPluginID, TransactionStatusType, Web3Plugin } from '@masknet/plugin-infra/web3'
-import type { ChainId, ERC721ContractDetailed, GasOption, GasOptions, TransactionState } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type {
+    GasOptionType,
+    NetworkPluginID,
+    NonFungibleTokenContract,
+    TransactionStatusType,
+} from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType, TransactionState } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants'
 
 export type TransactionDialogEvent =
@@ -16,11 +22,6 @@ export type TransactionDialogEvent =
           open: false
       }
 
-export type GasPriceDialogEvent = {
-    open: boolean
-    type?: keyof GasOptions
-}
-
 export type SelectProviderDialogEvent =
     | {
           open: true
@@ -33,8 +34,8 @@ export type SelectProviderDialogEvent =
 export type ConnectWalletDialogEvent =
     | {
           open: true
-          network: Web3Plugin.NetworkDescriptor<number, string>
-          provider: Web3Plugin.ProviderDescriptor<number, string>
+          network: Web3Helper.NetworkDescriptorAll
+          provider: Web3Helper.ProviderDescriptorAll
       }
     | {
           open: false
@@ -51,7 +52,7 @@ export type GasSettingDialogEvent = {
     gasPrice?: BigNumber.Value
     maxFee?: BigNumber.Value
     priorityFee?: BigNumber.Value
-    gasOption?: GasOption | null
+    gasOption?: GasOptionType | null
 }
 
 export type WalletRiskWarningDialogEvent =
@@ -72,7 +73,7 @@ export type SelectNftContractDialogEvent = {
     /**
      * The selected detailed nft contract.
      */
-    contract?: ERC721ContractDetailed
+    contract?: NonFungibleTokenContract<ChainId, SchemaType>
 }
 
 export interface SocketMessageUpdatedEvent {
@@ -82,12 +83,12 @@ export interface SocketMessageUpdatedEvent {
     from: 'cache' | 'remote'
 }
 
-export interface TransactionProgressEvent<ChainId, Transaction> {
+export interface TransactionProgressEvent {
     pluginID: NetworkPluginID
-    chainId: ChainId
+    chainId: Web3Helper.ChainIdAll
     status: TransactionStatusType
     transactionId: string
-    transaction: Transaction
+    transaction: Web3Helper.TransactionAll
 }
 
 export interface WalletMessage<ChainId, Transaction> {
@@ -95,11 +96,6 @@ export interface WalletMessage<ChainId, Transaction> {
      * Transaction dialog
      */
     transactionDialogUpdated: TransactionDialogEvent
-
-    /**
-     * Gas price dialog
-     */
-    gasPriceDialogUpdated: GasPriceDialogEvent
 
     /**
      * Select provider dialog
@@ -135,11 +131,8 @@ export interface WalletMessage<ChainId, Transaction> {
     phrasesUpdated: void
     addressBookUpdated: void
     transactionsUpdated: void
-    transactionProgressUpdated: TransactionProgressEvent<ChainId, Transaction>
+    transactionProgressUpdated: TransactionProgressEvent
     requestsUpdated: { hasRequest: boolean }
-    erc20TokensUpdated: void
-    erc721TokensUpdated: void
-    erc1155TokensUpdated: void
     /** true: Now locked; false: Now unlocked */
     walletLockStatusUpdated: boolean
     socketMessageUpdated: SocketMessageUpdatedEvent

@@ -1,45 +1,51 @@
+import { useCallback } from 'react'
+import type { TransactionReceipt } from 'web3-core'
+import Web3Utils from 'web3-utils'
 import type { ITO } from '@masknet/web3-contracts/types/ITO'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
 import type { Qualification } from '@masknet/web3-contracts/types/Qualification'
 import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
-    currySameAddress,
+    ChainId,
     SchemaType,
-    FungibleTokenDetailed,
     TransactionEventType,
     TransactionStateType,
-    useAccount,
-    useChainId,
-    useTransactionState,
-    isSameAddress,
     useITOConstants,
 } from '@masknet/web3-shared-evm'
-import { isPositive, isZero, toFixed } from '@masknet/web3-shared-base'
-import { useCallback } from 'react'
-import type { TransactionReceipt } from 'web3-core'
-import Web3Utils from 'web3-utils'
+import {
+    isSameAddress,
+    isPositive,
+    isZero,
+    NetworkPluginID,
+    toFixed,
+    FungibleToken,
+    currySameAddress,
+} from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
 import { fromHex, toHex } from '@masknet/shared-base'
 import { useITO_Contract } from './useITO_Contract'
 import { useQualificationContract } from './useQualificationContract'
 import type { JSON_PayloadInMask } from '../../types'
 import { checkAvailability } from '../../Worker/apis/checkAvailability'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 
 export function useSwapCallback(
     payload: JSON_PayloadInMask,
     total: string,
-    token: Partial<FungibleTokenDetailed>,
+    token: Partial<FungibleToken<ChainId, SchemaType>>,
     isQualificationHasLucky = false,
 ) {
     const { t } = useI18N()
 
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { ITO_CONTRACT_ADDRESS } = useITOConstants()
-    const { contract: ITO_Contract, version } = useITO_Contract(payload.contract_address)
+    const { contract: ITO_Contract, version } = useITO_Contract(chainId, payload.contract_address)
     const [swapState, setSwapState] = useTransactionState()
     const { contract: qualificationContract } = useQualificationContract(
+        chainId,
         payload.qualification_address,
         payload.contract_address,
     )
@@ -166,7 +172,7 @@ export function useSwapCallback(
         ] as Parameters<ITO2['methods']['swap']>
 
         // estimate gas and compose transaction
-        const value = toFixed(token.type === SchemaType.Native ? total : 0)
+        const value = toFixed(token.schema === SchemaType.Native ? total : 0)
         const config = {
             from: account,
             gas: isQualificationHasLucky

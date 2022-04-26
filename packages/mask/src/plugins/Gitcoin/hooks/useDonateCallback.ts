@@ -1,16 +1,16 @@
 import BigNumber from 'bignumber.js'
 import { useCallback, useMemo } from 'react'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import { toFixed } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import {
+    ChainId,
     SchemaType,
-    FungibleTokenDetailed,
     TransactionEventType,
     TransactionStateType,
-    useAccount,
     useGitcoinConstants,
-    useTransactionState,
 } from '@masknet/web3-shared-evm'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
 
 /**
@@ -19,11 +19,12 @@ import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
  * @param amount
  * @param token
  */
-export function useDonateCallback(address: string, amount: string, token?: FungibleTokenDetailed) {
+export function useDonateCallback(address: string, amount: string, token?: FungibleToken<ChainId, SchemaType>) {
     const { GITCOIN_ETH_ADDRESS, GITCOIN_TIP_PERCENTAGE } = useGitcoinConstants()
-    const bulkCheckoutContract = useBulkCheckoutContract()
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const bulkCheckoutContract = useBulkCheckoutContract(chainId)
     const [donateState, setDonateState] = useTransactionState()
 
     const donations = useMemo((): [string, string, string][] => {
@@ -33,12 +34,12 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         const grantAmount = new BigNumber(amount).minus(tipAmount)
         return [
             [
-                token.type === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
+                token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
                 tipAmount.toFixed(), // amount
                 address, // dest
             ],
             [
-                token.type === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
+                token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
                 grantAmount.toFixed(), // amount
                 address, // dest
             ],
@@ -59,7 +60,7 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         })
 
         // estimate gas and compose transaction
-        const value = toFixed(token.type === SchemaType.Native ? amount : 0)
+        const value = toFixed(token.schema === SchemaType.Native ? amount : 0)
         const config = {
             from: account,
             gas: await bulkCheckoutContract.methods

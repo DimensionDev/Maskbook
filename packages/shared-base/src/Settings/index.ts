@@ -8,7 +8,7 @@ export type Settings<T> = ValueRef<T> & {
 
 export type ValueComparer<T> = (a: T, b: T) => boolean
 
-export function createMemorySettings<T extends unknown>(
+export function createInMemorySettings<T extends unknown>(
     value: T,
     comparer: ValueComparer<T> = (a: any, b: any) => a === b,
 ) {

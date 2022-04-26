@@ -1,12 +1,14 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import type { SwapParameters } from '@uniswap/v2-sdk'
-import { GasOptionConfig, TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
+import { GasOptionConfig, TransactionState, TransactionStateType } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { swapErrorToUserReadableMessage } from '../../helpers'
 import type { TradeProvider } from '@masknet/public-api'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -34,8 +36,8 @@ export function useTradeCallback(
     allowedSlippage?: number,
 ) {
     const { targetChainId } = TargetChainIdContext.useContainer()
-    const web3 = useWeb3({ chainId: targetChainId })
-    const account = useAccount()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const tradeParameters = useTradeParameters(trade, tradeProvider, allowedSlippage)
 
     const [tradeState, setTradeState] = useState<TransactionState>({
@@ -43,7 +45,7 @@ export function useTradeCallback(
     })
 
     const tradeCallback = useCallback(async () => {
-        if (!tradeParameters.length) {
+        if (!tradeParameters.length || !web3) {
             setTradeState({
                 type: TransactionStateType.UNKNOWN,
             })

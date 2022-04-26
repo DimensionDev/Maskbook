@@ -1,12 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import {
-    useAccount,
-    resolveAddressLinkOnExplorer,
-    useWeb3,
-    resolveNetworkName,
-    useNetworkType,
-    TransactionStateType,
-} from '@masknet/web3-shared-evm'
+import { explorerResolver, TransactionStateType, networkResolver } from '@masknet/web3-shared-evm'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { Grid, Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
@@ -23,6 +16,8 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
+import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -244,8 +239,8 @@ export interface RedPacketNftProps {
 export function RedPacketNft({ payload }: RedPacketNftProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const web3 = useWeb3()
-    const account = useAccount()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const {
         value: availability,
@@ -262,7 +257,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const isClaiming = claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING
 
     const openAddressLinkOnExplorer = useCallback(() => {
-        openWindow(resolveAddressLinkOnExplorer(payload.chainId, payload.contractAddress))
+        openWindow(explorerResolver.addressLink(payload.chainId, payload.contractAddress))
     }, [payload])
 
     const [sourceType, setSourceType] = useState('')
@@ -287,7 +282,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const rpNftImg = new URL('./assets/redpacket.nft.png', import.meta.url).toString()
     // #region on share
     const postLink = usePostLink()
-    const networkType = useNetworkType()
+    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const shareText = availability?.isClaimed
         ? t(
               isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
@@ -296,7 +291,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
               {
                   sender: payload.senderName,
                   payload: postLink,
-                  network: resolveNetworkName(networkType),
+                  network: networkResolver.networkName(networkType),
                   account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
               },
           ).trim()
@@ -307,7 +302,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
               {
                   sender: payload.senderName,
                   payload: postLink,
-                  network: resolveNetworkName(networkType),
+                  network: networkResolver.networkName(networkType),
                   account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
               },
           ).trim()

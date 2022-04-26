@@ -1,5 +1,11 @@
-import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra/web3'
-import { leftShift, multipliedBy } from '@masknet/web3-shared-base'
+import {
+    CurrencyType,
+    TokenType,
+    FungibleAsset,
+    FungibleToken,
+    leftShift,
+    multipliedBy,
+} from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-flow'
 
 export function createFungibleToken(
@@ -8,8 +14,8 @@ export function createFungibleToken(
     name: string,
     symbol: string,
     decimals: number,
-    logoURI?: string,
-): Web3Plugin.FungibleToken<ChainId, SchemaType> {
+    logoURL?: string,
+): FungibleToken<ChainId, SchemaType> {
     return {
         id: address,
         chainId,
@@ -19,15 +25,15 @@ export function createFungibleToken(
         name,
         symbol,
         decimals,
-        logoURI,
+        logoURL,
     }
 }
 
 export function createFungibleAsset(
-    token: Web3Plugin.FungibleToken<ChainId, SchemaType>,
+    token: FungibleToken<ChainId, SchemaType>,
     balance: string,
     price?: { [key in CurrencyType]?: string },
-): Web3Plugin.FungibleAsset<ChainId, SchemaType> {
+): FungibleAsset<ChainId, SchemaType> {
     return {
         ...token,
         balance: leftShift(balance, 8).toFixed(),

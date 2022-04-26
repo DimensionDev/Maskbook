@@ -7,10 +7,13 @@
   },
   "include": ["./src", "./src/**/*.json"],
   "references": [
-    { "path": "../web3-shared/evm" },
     { "path": "../theme" },
+    { "path": "../plugin-infra" },
     { "path": "../shared-base" },
     { "path": "../shared-base-ui" },
+    { "path": "../web3-shared/evm" },
+    { "path": "../web3-shared/flow" },
+    { "path": "../web3-shared/solana" },
     { "path": "../icons" }
   ]
 }

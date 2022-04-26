@@ -1,12 +1,12 @@
 import type { StorageItem } from '@masknet/shared-base'
+import type { RiskWarningState as Web3RiskWarningState } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
-import type { Web3Plugin } from '../entry-web3'
 
 interface ConfirmationBook {
     [key: string]: boolean
 }
 
-export class RiskWarningState implements Web3Plugin.ObjectCapabilities.RiskWarningState {
+export class RiskWarningState implements Web3RiskWarningState {
     protected storage: StorageItem<ConfirmationBook> = null!
 
     constructor(

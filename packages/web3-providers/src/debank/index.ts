@@ -1,9 +1,17 @@
 import urlcat from 'urlcat'
-import type { Pageable, Web3Plugin } from '@masknet/plugin-infra'
-import { ChainId, formatGweiToWei, getDeBankConstants } from '@masknet/web3-shared-evm'
+import {
+    FungibleAsset,
+    GasOptionType,
+    GasOption,
+    Pageable,
+    Transaction,
+    Web3Pagination,
+    createPageable,
+} from '@masknet/web3-shared-base'
+import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType } from '@masknet/web3-shared-evm'
 import { formatAssets, formatTransactions } from './format'
 import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from './type'
-import type { FungibleTokenAPI, GasPriceAPI, HistoryAPI } from '../types'
+import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types'
 
 const DEBANK_API = 'https://api.debank.com'
 const DEBANK_OPEN_API = 'https://openapi.debank.com'
@@ -23,8 +31,16 @@ function gasModifier(gasDict: GasPriceDictResponse, chain: string) {
     return gasDict
 }
 
-export class DeBankAPI implements FungibleTokenAPI.Provider, HistoryAPI.Provider, GasPriceAPI.Provider {
-    async getGasPrice(chainId: ChainId): Promise<Web3Plugin.GasPrice> {
+export class DeBankAPI
+    implements
+        FungibleTokenAPI.Provider<ChainId, SchemaType>,
+        HistoryAPI.Provider<ChainId, SchemaType>,
+        GasOptionAPI.Provider<ChainId>
+{
+    async getGasOptions(chainId: ChainId): Promise<{
+        estimatedBaseFee: string
+        options: Record<GasOptionType, GasOption>
+    }> {
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
 
@@ -34,33 +50,42 @@ export class DeBankAPI implements FungibleTokenAPI.Provider, HistoryAPI.Provider
 
         const responseModified = gasModifier(result, CHAIN_ID)
         return {
-            fast: {
-                price: responseModified.data.fast.price,
-                estimatedSeconds: responseModified.data.fast.estimated_seconds,
-            },
-            normal: {
-                price: responseModified.data.normal.price,
-                estimatedSeconds: responseModified.data.normal.estimated_seconds,
-            },
-            slow: {
-                price: responseModified.data.slow.price,
-                estimatedSeconds: responseModified.data.slow.estimated_seconds,
+            estimatedBaseFee: '0',
+            options: {
+                [GasOptionType.FAST]: {
+                    estimatedSeconds: responseModified.data.fast.estimated_seconds,
+                    suggestedMaxFeePerGas: responseModified.data.fast.price.toString(),
+                    suggestedMaxPriorityFeePerGas: '0',
+                },
+                [GasOptionType.NORMAL]: {
+                    estimatedSeconds: responseModified.data.normal.estimated_seconds,
+                    suggestedMaxFeePerGas: responseModified.data.normal.price.toString(),
+                    suggestedMaxPriorityFeePerGas: '0',
+                },
+                [GasOptionType.SLOW]: {
+                    estimatedSeconds: responseModified.data.slow.estimated_seconds,
+                    suggestedMaxFeePerGas: responseModified.data.slow.price.toString(),
+                    suggestedMaxPriorityFeePerGas: '0',
+                },
             },
         }
     }
 
-    async getAssets(chainId: ChainId, address: string): Promise<Pageable<Web3Plugin.FungibleAsset>> {
+    async getAssets(
+        address: string,
+        pagination?: Web3Pagination<ChainId>,
+    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
         const response = await fetch(
             urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
+                id: address.toLowerCase(),
                 is_all: true,
                 has_balance: true,
-                id: address.toLowerCase(),
             }),
         )
         const result = (await response.json()) as WalletTokenRecord[] | undefined
         try {
-            return {
-                data: formatAssets(
+            return createPageable(
+                formatAssets(
                     (result ?? []).map((x) => ({
                         ...x,
 
@@ -69,24 +94,23 @@ export class DeBankAPI implements FungibleTokenAPI.Provider, HistoryAPI.Provider
                         chain: x.chain === 'bsc' ? 'bnb' : x.chain,
                     })),
                 ),
-                hasNextPage: false,
-            }
+            )
         } catch {
-            return {
-                data: [],
-                hasNextPage: false,
-            }
+            return createPageable()
         }
     }
 
-    async getTransactions(chainId: ChainId, address: string): Promise<Web3Plugin.Transaction[]> {
+    async getTransactions(
+        address: string,
+        { chainId = ChainId.Mainnet }: Web3Pagination<ChainId> = {},
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
-        if (!CHAIN_ID) return []
+        if (!CHAIN_ID) return createPageable()
 
         const response = await fetch(`${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`)
         const { data, error_code } = (await response.json()) as HistoryResponse
         if (error_code !== 0) throw new Error('Fail to load transactions.')
 
-        return formatTransactions(chainId, data)
+        return createPageable(formatTransactions(chainId, data))
     }
 }

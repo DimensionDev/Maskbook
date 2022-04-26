@@ -28,8 +28,8 @@ export interface MaskNetworkAPIs {
     getConnectedPersonas(): Promise<string>
     app_isPluginEnabled(params: { pluginID: string }): Promise<boolean>
     app_setPluginStatus(params: { pluginID: string; enabled: boolean }): Promise<void>
-    settings_getTrendingDataSource(): Promise<DataProvider>
-    settings_setTrendingDataSource(params: { provider: DataProvider }): Promise<void>
+    // settings_getTrendingDataSource(): Promise<DataProvider>
+    // settings_setTrendingDataSource(params: { provider: DataProvider }): Promise<void>
     settings_getLaunchPageSettings(): Promise<LaunchPage>
     settings_getTheme(): Promise<Appearance>
     settings_setTheme(params: { theme: Appearance }): Promise<void>

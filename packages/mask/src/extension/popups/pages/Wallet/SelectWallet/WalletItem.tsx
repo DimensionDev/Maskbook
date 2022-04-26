@@ -1,12 +1,12 @@
-import type { Wallet } from '@masknet/web3-shared-evm'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
+import { Wallet } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { makeStyles } from '@masknet/theme'
 import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { CopyIconButton } from '../../../components/CopyIconButton'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     item: {
@@ -52,8 +52,8 @@ export interface WalletItemProps {
 
 export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }) => {
     const { classes } = useStyles()
-    const { Utils } = useWeb3State()
-    const { value: domain } = useReverseAddress(wallet.address, NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State()
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
 
     return (
         <ListItem className={classes.item} onClick={onClick}>
@@ -63,12 +63,12 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
                     <div>
                         <Typography className={classes.name}>
                             <Typography component="span"> {wallet.name}</Typography>
-                            {domain && Utils?.formatDomainName ? (
-                                <Typography component="span">{Utils.formatDomainName(domain)}</Typography>
+                            {domain && Others?.formatDomainName ? (
+                                <Typography component="span">{Others.formatDomainName(domain)}</Typography>
                             ) : null}
                         </Typography>
                         <Typography className={classes.address}>
-                            <FormattedAddress address={wallet.address} size={12} formatter={formatEthereumAddress} />
+                            <FormattedAddress address={wallet.address} size={12} formatter={Others?.formatAddress} />
                             <CopyIconButton className={classes.copy} text={wallet.address} />
                         </Typography>
                     </div>

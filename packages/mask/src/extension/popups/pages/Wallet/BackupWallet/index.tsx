@@ -5,11 +5,11 @@ import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { TabContext, TabPanel } from '@mui/lab'
 import { File as FileIcon } from '@masknet/icons'
-import { useWallet } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import Services from '../../../../service'
+import { useWallet } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     header: {

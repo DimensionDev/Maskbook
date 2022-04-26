@@ -1,7 +1,11 @@
 import type { Subscription } from 'use-subscription'
 import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
+import {
+    RecentTransaction,
+    TransactionStatusType,
+    TransactionState as Web3TransactionState,
+} from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
-import { Web3Plugin, TransactionStatusType } from '../web3-types'
 
 export type TransactionStorage<ChainId, Transaction> = Record<
     // @ts-ignore
@@ -10,7 +14,7 @@ export type TransactionStorage<ChainId, Transaction> = Record<
         Record<
             // address
             string,
-            (Web3Plugin.RecentTransaction & {
+            (RecentTransaction<ChainId> & {
                 candidates: Record<
                     // transaction id
                     string,
@@ -21,13 +25,11 @@ export type TransactionStorage<ChainId, Transaction> = Record<
     >
 >
 
-export class TransactionState<ChainId, Transaction>
-    implements Web3Plugin.ObjectCapabilities.TransactionState<ChainId, Transaction>
-{
+export class TransactionState<ChainId, Transaction> implements Web3TransactionState<ChainId, Transaction> {
     static MAX_RECORD_SIZE = 20
 
     protected storage: StorageItem<TransactionStorage<ChainId, Transaction>> = null!
-    public transactions?: Subscription<Web3Plugin.RecentTransaction[]>
+    public transactions?: Subscription<RecentTransaction<ChainId>[]>
 
     constructor(
         protected context: Plugin.Shared.SharedContext,

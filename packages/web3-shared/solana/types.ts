@@ -1,16 +1,4 @@
-import type {
-    default as SolanaWeb3,
-    PublicKey,
-    Transaction as SolanaTransaction,
-    TransactionResponse,
-} from '@solana/web3.js'
-
-export type Web3 = typeof SolanaWeb3
-export type Signature = string
-export type Transaction = SolanaTransaction
-export type TransactionDetailed = TransactionResponse
-export type TransactionSignature = SolanaTransaction
-export type TransactionParameter = string
+import type { PublicKey, Transaction as SolanaTransaction, TransactionResponse } from '@solana/web3.js'
 
 export enum ChainId {
     Mainnet = 101,
@@ -19,8 +7,9 @@ export enum ChainId {
 }
 
 export enum SchemaType {
-    Fungible = 1,
-    NonFungile = 2,
+    Native = 1,
+    Fungible = 2,
+    NonFungile = 3,
 }
 
 export enum NetworkType {
@@ -57,7 +46,8 @@ export interface Payload {
     params?: any
 }
 
-export interface SolProvider {
+export type Web3 = typeof import('@solana/web3.js')
+export type Web3Provider = {
     on(name: string, callback: () => void): void
     request: <T>(payload: Payload) => Promise<T>
     connect(): Promise<{
@@ -65,3 +55,8 @@ export interface SolProvider {
     }>
     disconnect(): Promise<void>
 }
+export type Signature = string
+export type Transaction = SolanaTransaction
+export type TransactionDetailed = TransactionResponse
+export type TransactionSignature = SolanaTransaction
+export type TransactionParameter = string

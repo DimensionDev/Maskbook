@@ -1,9 +1,9 @@
-import { NetworkPluginID, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
-import { ChainId, getChainDetailed } from '@masknet/web3-shared-evm'
+import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ImageIcon } from '@masknet/shared'
-import { getNetworkColor } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -26,13 +26,13 @@ export const NetworkView = (props: NetworkViewProps) => {
     const { chainId = ChainId.Mainnet } = props
     const networkProvider = useNetworkDescriptor(undefined, NetworkPluginID.PLUGIN_EVM)
 
-    const chainDetail = getChainDetailed(chainId)
-    const color = getNetworkColor(chainDetail?.chainId ?? ChainId.Mainnet)
+    const color = chainResolver.chainColor(chainId)
+    const fullName = chainResolver.chainFullName(chainId)
 
     return (
         <Typography variant="subtitle2" color={color} className={classes.root}>
             <ImageIcon classes={{ icon: classes.icon }} icon={networkProvider?.icon} />
-            {chainDetail?.fullName}
+            {fullName}
         </Typography>
     )
 }

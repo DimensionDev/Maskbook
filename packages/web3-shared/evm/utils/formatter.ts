@@ -59,12 +59,12 @@ export function formatEthereumAddress(address: string, size = 0) {
     return `${address_.substr(0, 2 + size)}...${address_.substr(-size)}`
 }
 
-export function formatNFT_TokenId(tokenId: string, size = 0) {
+export function formatTokenId(tokenId: string, size = 0) {
     if (tokenId.length < 9) return `#${tokenId}`
     return `#${tokenId.substr(0, 2 + size)}...${tokenId.substr(-size)}`
 }
 
-export function formatDomainName(domain?: string, size = 4) {
+export function formatDomainName(domain: string, size = 4) {
     if (!domain || !isValidDomain(domain)) return domain
     const [domainName, company] = domain.split('.')
     if (domainName.length < 13) return domain

@@ -10,17 +10,8 @@ import { createContainer } from 'unstated-next'
 import { unreachable } from '@dimensiondev/kit'
 import {
     ChainId,
-    isSameAddress,
-    useERC20TokenBalance,
-    useNativeTokenBalance,
     useTokenConstants,
-    useFungibleTokensDetailed,
     SchemaType,
-    useChainId,
-    useAccount,
-    useERC20TokenAllowance,
-    useERC20TokenDetailed,
-    useERC721ContractDetailed,
     useMaskBoxConstants,
     ZERO_ADDRESS,
     isZeroAddress,
@@ -43,15 +34,25 @@ import {
     isGreaterThan,
     isGreaterThanOrEqualTo,
     isLessThanOrEqualTo,
+    isSameAddress,
     multipliedBy,
-    useBeat,
+    NetworkPluginID,
 } from '@masknet/web3-shared-base'
+import {
+    useAccount,
+    useBeat,
+    useChainId,
+    useFungibleToken,
+    useFungibleTokenBalance,
+    useNonFungibleToken,
+} from '@masknet/plugin-infra/web3'
+import { useERC20TokenAllowance } from '@masknet/plugin-infra/web3-evm'
 
 function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()
     const beat = useBeat()
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
     const coder = ABICoder as unknown as ABICoder.AbiCoder
@@ -162,8 +163,11 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const notInWhiteList = value?.message === 'leaf not found'
 
     // at least hold token amount
-    const { value: holderToken } = useERC20TokenDetailed(boxInfo?.holderTokenAddress)
-    const { value: holderTokenBalance = '0' } = useERC20TokenBalance(holderToken?.address)
+    const { value: holderToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, boxInfo?.holderTokenAddress)
+    const { value: holderTokenBalance = '0' } = useFungibleTokenBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        holderToken?.address,
+    )
     const holderMinTokenAmountBN = new BigNumber(boxInfo?.holderMinTokenAmount ?? 0)
     const insufficientHolderToken =
         isGreaterThan(holderMinTokenAmountBN, 0) && !holderMinTokenAmountBN.lte(holderTokenBalance)
@@ -252,7 +256,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // #endregion
 
     // #region the erc721 contract detailed
-    const { value: contractDetailed } = useERC721ContractDetailed(maskBoxInfo?.nft_address)
+    const { value: contractDetailed } = useNonFungibleToken(NetworkPluginID.PLUGIN_EVM, maskBoxInfo?.nft_address)
     // #endregion
 
     // #region the payment count
@@ -274,8 +278,9 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // #endregion
 
     // #region the payment token
-    const { value: paymentNativeTokenBalance = '0' } = useNativeTokenBalance()
-    const { value: paymentERC20TokenBalance = '0' } = useERC20TokenBalance(
+    const { value: paymentNativeTokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM)
+    const { value: paymentERC20TokenBalance = '0' } = useFungibleTokenBalance(
+        NetworkPluginID.PLUGIN_EVM,
         isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS) ? '' : paymentTokenAddress,
     )
     const paymentTokenInfo = boxInfo?.payments.find((x) => isSameAddress(x.token.address, paymentTokenAddress))

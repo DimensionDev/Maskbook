@@ -2,16 +2,12 @@ import { useMemo, useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import {
     formatEthereumAddress,
-    resolveAddressLinkOnExplorer,
-    useChainId,
-    useWallet,
-    useAccount,
+    explorerResolver,
     ERC721ContractDetailed,
     ERC721TokenDetailed,
-    useWeb3,
     TransactionStateType,
     isNativeTokenAddress,
-    formatNFT_TokenId,
+    formatTokenId,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -27,6 +23,8 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { RedPacketNftMetaKey } from '../constants'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
+import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -159,14 +157,14 @@ export interface RedpacketNftConfirmDialogProps {
 export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps) {
     const { classes } = useStyles()
     const { open, onBack, onClose, message, contract, tokenList } = props
-    const wallet = useWallet()
-    const account = useAccount()
-    const chainId = useChainId()
-    const web3 = useWeb3()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { attachMetadata } = useCompositionContext()
 
     const { t } = useI18N()
-    const { address: publicKey, privateKey } = useMemo(() => web3.eth.accounts.create(), [])
+    const { address: publicKey, privateKey } = useMemo(() => web3?.eth.accounts.create(), [])
     const duration = 60 * 60 * 24
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
@@ -247,7 +245,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                                 <Link
                                     color="textPrimary"
                                     className={classes.link}
-                                    href={resolveAddressLinkOnExplorer(chainId, account)}
+                                    href={explorerResolver.addressLink(chainId, account)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={stop}>
@@ -357,7 +355,7 @@ interface NFTCardProps {
 function NFTCard(props: NFTCardProps) {
     const { token, renderOrder } = props
     const { classes } = useStyles()
-    const [name, setName] = useState(formatNFT_TokenId(token.tokenId, 2))
+    const [name, setName] = useState(formatTokenId(token.tokenId, 2))
     return (
         <ListItem className={classNames(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer

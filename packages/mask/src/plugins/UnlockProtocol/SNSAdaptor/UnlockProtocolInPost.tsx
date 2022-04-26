@@ -4,10 +4,12 @@ import React, { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { paywallUrl } from '../constants'
 import { renderWithUnlockProtocolMetadata, UnlockProtocolMetadataReader } from '../helpers'
-import { useAccount, useChainId } from '@masknet/web3-shared-evm'
+import {} from '@masknet/web3-shared-evm'
 import { PluginUnlockProtocolRPC } from '../messages'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { usePluginWrapper } from '@masknet/plugin-infra/dom'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface UnlockProtocolInPostProps {
     message: TypedMessage
@@ -17,8 +19,8 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
     const { t } = useI18N()
     const { message } = props
     const [content, setContent] = useState('')
-    const address = useAccount()
-    const chain = useChainId()
+    const address = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chain = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [redirectUrl, setRedirectUrl] = useState('')
 
     useEffect(() => {

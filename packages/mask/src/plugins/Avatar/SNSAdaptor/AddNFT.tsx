@@ -1,11 +1,14 @@
 import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { InputBox } from '../../../extension/options-page/DashboardComponents/InputBox'
 import { useI18N } from '../../../utils'
 import { createNFT } from '../utils'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -32,13 +35,13 @@ export interface AddNFTProps {
     open: boolean
 }
 export function AddNFT(props: AddNFTProps) {
+    const { onClose, open, onAddClick } = props
     const { t } = useI18N()
     const { classes } = useStyles()
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
-    const { onClose, open, onAddClick } = props
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const onClick = useCallback(async () => {
         if (!address) {

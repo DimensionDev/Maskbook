@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useTheme } from '@mui/material/styles'
-
 import { MobileStepper, Button, Box, Paper, Typography, Skeleton, Link } from '@mui/material'
 import { KeyboardArrowLeft, KeyboardArrowRight, OpenInNew } from '@mui/icons-material'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { resolveImageLinkOnArtBlocks, resolveTokenLinkOnArtBlocks } from '../pipes'
 import { buildTokenId } from '../utils'
 import type { Project } from '../types'
@@ -82,7 +82,7 @@ export function CollectionView(props: CollectionProps) {
     const { project } = props
     const [isImageLoaded, setImageLoaded] = useState(false)
     const [activeStep, setActiveStep] = useState(1)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const currentSelectedToken = {
         tokenId: buildTokenId(Number(project.projectId), activeStep - 1),

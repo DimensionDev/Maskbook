@@ -1,5 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import { SchemaType, FungibleTokenDetailed, isSameAddress, useTokenConstants } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { SchemaType, FungibleTokenDetailed, useTokenConstants } from '@masknet/web3-shared-evm'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTrade(inputToken?: FungibleTokenDetailed, outputToken?: FungibleTokenDetailed) {

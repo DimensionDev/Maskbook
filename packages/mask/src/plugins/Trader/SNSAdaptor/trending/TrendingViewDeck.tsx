@@ -14,7 +14,7 @@ import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
-import { useAccount, formatCurrency } from '@masknet/web3-shared-evm'
+import { formatCurrency } from '@masknet/web3-shared-evm'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeFooter } from '../trader/TradeFooter'
 import { currentDataProviderSettings, getCurrentPreferredCoinIdSettings } from '../../settings'
@@ -23,6 +23,8 @@ import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowa
 import { CoinSafetyAlert } from './CoinSafetyAlert'
 import { PluginId } from '@masknet/plugin-infra'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -119,7 +121,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     // #region buy
     const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').find((x) => x.ID === PluginId.Transak)
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isAllowanceCoin = useTransakAllowanceCoin(coin)
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 

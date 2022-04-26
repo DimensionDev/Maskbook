@@ -2,11 +2,12 @@ import { useAsync } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Grid, Typography, CircularProgress } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
-import { isZero, rightShift } from '@masknet/web3-shared-base'
-import { ChainId, formatBalance, isSameAddress, useAccount, useAssets, useWeb3 } from '@masknet/web3-shared-evm'
+import { isZero, rightShift, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, formatBalance } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
 import { SavingsProtocol, TabType } from '../types'
+import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -79,9 +80,8 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const web3 = useWeb3({ chainId })
-
-    const account = useAccount()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const { value: assets, loading: getAssetsLoading } = useAssets(
         protocols.map((x) => x.bareToken),

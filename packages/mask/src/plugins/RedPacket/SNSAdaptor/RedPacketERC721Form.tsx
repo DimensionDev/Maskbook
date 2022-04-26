@@ -10,10 +10,8 @@ import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumER
 import {
     ERC721ContractDetailed,
     ERC721TokenDetailed,
-    useAccount,
-    useChainId,
     useNftRedPacketConstants,
-    formatNFT_TokenId,
+    formatTokenId,
 } from '@masknet/web3-shared-evm'
 import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
 import CheckIcon from '@mui/icons-material/Check'
@@ -25,6 +23,8 @@ import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { NFTSelectOption } from '../types'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -208,8 +208,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const [balance, setBalance] = useState(0)
     const [selectOption, setSelectOption] = useState<NFTSelectOption | undefined>(undefined)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [contract, setContract] = useState<ERC721ContractDetailed>()
     const [manualSelectedTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>([])
     const [onceAllSelectedTokenDetailedList, setAllTokenDetailedList] = useState<OrderedERC721Token[]>([])
@@ -397,7 +397,7 @@ interface NFTCardProps {
 function NFTCard(props: NFTCardProps) {
     const { token, removeToken, renderOrder } = props
     const { classes } = useStyles()
-    const [name, setName] = useState(formatNFT_TokenId(token.tokenId, 2))
+    const [name, setName] = useState(formatTokenId(token.tokenId, 2))
     return (
         <ListItem className={classNames(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer

@@ -6,11 +6,6 @@
     ".": {
       "webpack": "./index.ts",
       "default": "../dist/flow/index.js"
-    },
-    "./types": {
-      "types": "../dist/flow/types.d.ts",
-      "webpack": "./types.ts",
-      "default": "../dist/flow/types.js"
     }
   },
   "dependencies": {

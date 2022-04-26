@@ -1,13 +1,18 @@
-import { useSubscription } from 'use-subscription'
-import { useWeb3State, Web3Helper } from '../entry-web3'
-import { ZERO } from '../utils/subscription'
-import type { NetworkPluginID } from '../web3-types'
+import { Subscription, useSubscription } from 'use-subscription'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '../web3-helpers'
+import { useWeb3State } from './useWeb3State'
+import { UNDEIFNED } from '../utils/subscription'
+import { useDefaultChainId } from './useDefaultChainId'
 
 export function useChainId<T extends NetworkPluginID>(
     pluginID?: T,
     expectedChainId?: Web3Helper.Definition[T]['ChainId'],
 ) {
     const { Provider } = useWeb3State(pluginID)
-    const defaultChainId = useSubscription(Provider?.chainId ?? ZERO)
-    return expectedChainId ?? (defaultChainId as Web3Helper.Definition[T]['ChainId'])
+    const defaultChainId = useDefaultChainId(pluginID) as Web3Helper.Definition[T]['ChainId']
+    const actualChainId = useSubscription(
+        (Provider?.chainId ?? UNDEIFNED) as Subscription<Web3Helper.Definition[T]['ChainId'] | undefined>,
+    )
+    return expectedChainId ?? actualChainId ?? defaultChainId
 }

@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { OpenSea } from '@masknet/web3-providers'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 import {
-    useChainId,
     useCollectibles,
     ERC721TokenDetailed,
-    isSameAddress,
     ERC721ContractDetailed,
     SocketState,
     resolveIPFSLink,
@@ -16,6 +15,7 @@ import { cloneDeep, findLastIndex } from 'lodash-unified'
 import { delay } from '@dimensiondev/kit'
 import type { User, FilterContract } from '../types'
 import { Punk3D } from '../constants'
+import { useChainId } from '@masknet/plugin-infra/web3'
 
 function useInitNFTs(config: Record<string, Constant> | undefined) {
     return useMemo(() => {
@@ -31,7 +31,7 @@ function useInitNFTs(config: Record<string, Constant> | undefined) {
 export function useNFTs(user: User | undefined, configNFTs: Record<string, Constant> | undefined) {
     const initContracts = useInitNFTs(configNFTs)
     const [nfts, setNfts] = useState<FilterContract[]>(initContracts)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [fetchTotal, setFetchTotal] = useState<ERC721TokenDetailed[]>([])
     const { data: collectibles, state } = useCollectibles(user?.address ?? '', chainId)
     useEffect(() => {
@@ -70,7 +70,7 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
 export function useNFTsExtra(configNFTs: Record<string, Constant> | undefined) {
     const initContracts = useInitNFTs(configNFTs)
     const [retry, setRetry] = useState(0)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [extra, setExtra] = useState<ERC721ContractDetailed[]>([])
     useAsync(async () => {
         if (!initContracts.length) return

@@ -2,16 +2,16 @@ import { useMemo } from 'react'
 import { flatMap } from 'lodash-unified'
 import type { Pair } from '@uniswap/v2-sdk'
 import type { Currency, Token } from '@uniswap/sdk-core'
-import { isChainIdValid } from '@masknet/web3-shared-evm'
 import { toUniswapToken } from '../../helpers'
 import { PairState, usePairs } from './usePairs'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { chainResolver } from '@masknet/web3-shared-evm'
 
 export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currencyA?: Currency, currencyB?: Currency) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const chainIdValid = isChainIdValid(chainId)
+    const chainIdValid = chainResolver.isValid(chainId)
     const context = useGetTradeContext(tradeProvider)
 
     const [tokenA, tokenB] = chainIdValid ? [currencyA?.wrapped, currencyB?.wrapped] : [undefined, undefined]

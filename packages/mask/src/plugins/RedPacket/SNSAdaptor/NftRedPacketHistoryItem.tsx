@@ -6,12 +6,13 @@ import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, NonFungibleToken, NonFungibleTokenEvent } from '@masknet/web3-shared-base'
+import { useAccount, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
-import type { NftRedPacketHistory } from '../types'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed'
 import { NftList } from './NftList'
@@ -142,20 +143,26 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface NftRedPacketHistoryItemProps {
-    history: NftRedPacketHistory
-    onSend: (history: NftRedPacketHistory, contract: ERC721ContractDetailed) => void
+    history: NonFungibleTokenEvent<ChainId, SchemaType>
+    onSend: (
+        history: NonFungibleTokenEvent<ChainId, SchemaType>,
+        contract: NonFungibleToken<ChainId, SchemaType.ERC721>,
+    ) => void
     onShowPopover: (anchorEl: HTMLElement, text: string) => void
     onHidePopover: () => void
 }
 export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
     ({ history, onSend, onShowPopover, onHidePopover }) => {
-        const account = useAccount()
         const { t } = useI18N()
         const { classes } = useStyles()
+        const account = useAccount(NetworkPluginID.PLUGIN_EVM)
         const {
             computed: { canSend, isPasswordValid },
         } = useNftAvailabilityComputed(account, history.payload)
-        const { value: contractDetailed } = useERC721ContractDetailed(history.token_contract.address)
+        const { value: contractDetailed } = useNonFungibleTokenContract(
+            NetworkPluginID.PLUGIN_EVM,
+            history.contract_address.address,
+        )
         const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
             WalletMessages.events.walletStatusDialogUpdated,
         )
@@ -185,8 +192,8 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         classes={{ icon: classes.icon }}
                         address={contractDetailed?.address ?? ''}
                         name={contractDetailed?.name ?? '-'}
-                        logoURI={
-                            contractDetailed?.iconURL ??
+                        logoURL={
+                            contractDetailed?.logoURL ??
                             new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
                         }
                     />

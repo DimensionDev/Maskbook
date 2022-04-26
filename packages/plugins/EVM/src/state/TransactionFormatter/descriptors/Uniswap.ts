@@ -1,9 +1,9 @@
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { TransactionContext } from '@masknet/web3-shared-base'
 import { ChainId, createNativeToken } from '@masknet/web3-shared-evm'
 import { getTokenAmountDescription } from '../utils'
 
 export class UniswapDescriptor {
-    compute(context: Web3Plugin.TransactionContext<ChainId>) {
+    compute(context: TransactionContext<ChainId>) {
         return Promise.resolve({
             title: 'Contract Depolyment',
             description: `Contract Deployment ${getTokenAmountDescription(

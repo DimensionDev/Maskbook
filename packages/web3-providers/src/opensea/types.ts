@@ -1,5 +1,3 @@
-import type { NonFungibleTokenAPI } from '..'
-
 export interface OpenSeaFees {
     opensea_seller_fee_basis_points: number
     opensea_buyer_fee_basis_points: number
@@ -202,10 +200,12 @@ export interface OpenSeaAssetEvent {
     payment_token: OpenSeaFungibleToken
     quantity: string
     ending_price: string
-    bid_amount: string
+    bid_amount?: string
+    total_price?: string
     starting_price: string
-    transaction: {
-        blockExplorerLink: string
+    transaction?: {
+        transaction_index: string
+        transaction_hash: string
         id: string
     }
     assetQuantity: {
@@ -220,11 +220,11 @@ export interface OpenSeaAssetEvent {
 }
 
 export interface OpenSeaAssetOrder {
-    approved_on_chain: boolean
     asset: OpenSeaResponse
     listing_time: number
     created_time?: string
 
+    base_price?: string
     current_price?: string
     current_bounty?: string
     maker: OpenSeaCustomAccount

@@ -1,7 +1,8 @@
 import { memo, useCallback } from 'react'
 import { Button, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, ProviderType, useWallet, useWallets, useWalletPrimary } from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
@@ -11,6 +12,7 @@ import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { WalletItem } from './WalletItem'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
 import classNames from 'classnames'
+import { useWallet, useWalletPrimary, useWallets } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     header: {
@@ -81,12 +83,12 @@ const useStyles = makeStyles()({
 
 const SwitchWallet = memo(() => {
     const { t } = useI18N()
-    const walletPrimary = useWalletPrimary()
     const { classes } = useStyles()
 
     const navigate = useNavigate()
-    const wallet = useWallet()
-    const wallets = useWallets(ProviderType.MaskWallet)
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const walletPrimary = useWalletPrimary(NetworkPluginID.PLUGIN_EVM)
 
     const handleClickCreate = useCallback(() => {
         if (!walletPrimary) {

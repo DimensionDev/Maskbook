@@ -1,7 +1,6 @@
-import { Pagination, Web3Plugin, CurrencyType, Pageable } from '@masknet/plugin-infra/web3'
-import { ChainId, createClient, getTokenConstants } from '@masknet/web3-shared-flow'
+import { ChainId, createClient, getTokenConstants, SchemaType } from '@masknet/web3-shared-flow'
 import { CoinGecko } from '@masknet/web3-providers'
-import { rightShift } from '@masknet/web3-shared-base'
+import { FungibleAsset, Pagination, CurrencyType, Pageable, rightShift } from '@masknet/web3-shared-base'
 import { createFungibleAsset, createFungibleToken } from '../helpers'
 
 async function getTokenBalance(
@@ -64,7 +63,9 @@ async function getAssetFUSD(chainId: ChainId, account: string) {
             new URL('../assets/FUSD.png', import.meta.url).toString(),
         ),
         balance,
-        price,
+        {
+            [CurrencyType.USD]: price.toString(),
+        },
     )
 }
 
@@ -88,7 +89,9 @@ async function getAssetFLOW(chainId: ChainId, account: string) {
             new URL('../assets/flow.png', import.meta.url).toString(),
         ),
         balance,
-        price,
+        {
+            [CurrencyType.USD]: price.toString(),
+        },
     )
 }
 
@@ -112,8 +115,9 @@ async function getAssetTether(chainId: ChainId, account: string) {
             new URL('../assets/tUSD.png', import.meta.url).toString(),
         ),
         balance,
-
-        price,
+        {
+            [CurrencyType.USD]: price.toString(),
+        },
     )
 }
 
@@ -121,7 +125,7 @@ export async function getFungibleAssets(
     chainId: ChainId,
     address: string,
     pagination?: Pagination,
-): Promise<Pageable<Web3Plugin.FungibleAsset>> {
+): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
     const allSettled = await Promise.allSettled([
         getAssetFLOW(chainId, address),
         getAssetFUSD(chainId, address),
@@ -130,9 +134,10 @@ export async function getFungibleAssets(
 
     return {
         currentPage: 0,
-        data: (await allSettled
-            .map((x) => (x.status === 'fulfilled' ? x.value : null))
-            .filter(Boolean)) as Web3Plugin.FungibleAsset[],
+        data: allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)).filter(Boolean) as FungibleAsset<
+            ChainId,
+            SchemaType
+        >[],
         hasNextPage: false,
     }
 }

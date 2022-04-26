@@ -1,10 +1,11 @@
 import { ChangeEvent, useCallback, useMemo } from 'react'
-import { Box, Chip, ChipProps, InputProps, StandardTextFieldProps, Typography } from '@mui/material'
-import { makeStyles, MaskTextField, useStylesExtends } from '@masknet/theme'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
+import { Box, Chip, ChipProps, InputProps, StandardTextFieldProps, Typography } from '@mui/material'
+import { makeStyles, MaskTextField, useStylesExtends } from '@masknet/theme'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
 import { SelectTokenChip, SelectTokenChipProps } from '../SelectTokenChip'
-import { FungibleTokenDetailed, formatBalance } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales'
 import { FormattedBalance } from '../../../wallet'
 
@@ -56,7 +57,7 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     disableToken?: boolean
     disableBalance?: boolean
     label: string
-    token?: FungibleTokenDetailed | null
+    token?: FungibleToken<ChainId, SchemaType> | null
     onAmountChange: (amount: string) => void
     InputProps?: Partial<InputProps>
     MaxChipProps?: Partial<ChipProps>

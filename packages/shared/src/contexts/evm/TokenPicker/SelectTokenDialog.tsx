@@ -1,7 +1,7 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ERC20TokenList, useSharedI18N } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ChainId, FungibleTokenDetailed, useTokenConstants } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 // see https://github.com/import-js/eslint-plugin-import/issues/2288
 // eslint-disable-next-line import/no-deprecated
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
@@ -10,6 +10,7 @@ import { useBaseUIRuntime } from '../../base'
 import { MINDS_ID } from '../../../constants'
 import { InjectedDialog } from '../../components'
 import { useRowSize } from './useRowSize'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 
 interface StyleProps {
     compact: boolean
@@ -48,13 +49,13 @@ export interface PickTokenOptions {
     whitelist?: string[]
     title?: string
     blacklist?: string[]
-    tokens?: FungibleTokenDetailed[]
+    tokens?: FungibleToken<ChainId, SchemaType>[]
     selectedTokens?: string[]
 }
 
 export interface SelectTokenDialogProps extends PickTokenOptions {
     open: boolean
-    onSelect?(token: FungibleTokenDetailed): void
+    onSelect?(token: FungibleToken<ChainId, SchemaType>): void
     onClose?(): void
 }
 

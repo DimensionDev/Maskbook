@@ -1,17 +1,23 @@
 import * as ABICoder from 'web3-eth-abi'
 import type { Plugin } from '@masknet/plugin-infra'
-import { TransactionDescriptorType, TransactionFormatterState, Web3Plugin } from '@masknet/plugin-infra/web3'
-import { isZero } from '@masknet/web3-shared-base'
+import {
+    isZero,
+    isSameAddress,
+    TransactionContext,
+    TransactionDescriptor as TransactionDescriptorBase,
+    TransactionDescriptorType,
+} from '@masknet/web3-shared-base'
+import { TransactionFormatterState } from '@masknet/plugin-infra/web3'
 import {
     ChainId,
-    EthereumTransactionConfig,
     getData,
     getFunctionParameters,
     getTo,
     getTransactionSignature,
     isEmptyHex,
-    isSameAddress,
     isZeroAddress,
+    Transaction,
+    TransactionParameter,
 } from '@masknet/web3-shared-evm'
 import { readABI } from './TransactionFormatter/abi'
 import { createConnection } from './Protocol/connection'
@@ -26,11 +32,7 @@ import { ITODescriptor } from './TransactionFormatter/descriptors/ITO'
 import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacket'
 import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20'
 
-export class TransactionFormatter
-    extends TransactionFormatterState<ChainId, string | undefined, EthereumTransactionConfig>
-    implements
-        Web3Plugin.ObjectCapabilities.TransactionFormatterState<ChainId, string | undefined, EthereumTransactionConfig>
-{
+export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
     private connection = createConnection()
     private descriptors: Record<TransactionDescriptorType, TransactionDescriptor[]> = {
@@ -52,8 +54,8 @@ export class TransactionFormatter
 
     override async createContext(
         chainId: ChainId,
-        transaction: EthereumTransactionConfig,
-    ): Promise<Web3Plugin.TransactionContext<ChainId, string | undefined>> {
+        transaction: Transaction,
+    ): Promise<TransactionContext<ChainId, string | undefined>> {
         const from = (transaction.from as string | undefined) ?? ''
         const value = (transaction.value as string | undefined) ?? '0x0'
         const data = getData(transaction)
@@ -121,15 +123,16 @@ export class TransactionFormatter
 
     override async createDescriptor(
         chainId: ChainId,
-        transaction: EthereumTransactionConfig,
-        context: Web3Plugin.TransactionContext<ChainId, string | undefined>,
-    ): Promise<Web3Plugin.TransactionDescriptor<EthereumTransactionConfig>> {
+        transaction: Transaction,
+        context: TransactionContext<ChainId, TransactionParameter>,
+    ): Promise<TransactionDescriptorBase<ChainId, Transaction>> {
         for (const descriptor of this.descriptors[context.type]) {
             const computed = await descriptor.compute(context)
 
             if (computed)
                 return {
                     ...computed,
+                    chainId,
                     type: context.type,
                     _tx: transaction,
                 }

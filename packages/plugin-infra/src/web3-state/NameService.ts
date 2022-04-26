@@ -1,13 +1,13 @@
 import type { Subscription } from 'use-subscription'
 import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
+import type { NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
-import type { Web3Plugin } from '../web3-types'
 
 export class NameServiceState<
     ChainId extends number,
     DomainBook extends Record<string, string> = Record<string, string>,
     DomainBooks extends Record<ChainId, DomainBook> = Record<ChainId, DomainBook>,
-> implements Web3Plugin.ObjectCapabilities.NameServiceState<ChainId, DomainBook>
+> implements Web3NameServiceState<ChainId, DomainBook>
 {
     protected storage: StorageItem<DomainBooks> = null!
     public domainBook?: Subscription<DomainBook>

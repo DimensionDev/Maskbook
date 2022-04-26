@@ -1,5 +1,5 @@
-import type { ProfileIdentifier } from '@masknet/shared-base'
-import { RelationFavor } from '@masknet/shared-base'
+import { ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
+import { currySameAddress } from '@masknet/web3-shared-base'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import {
@@ -8,7 +8,6 @@ import {
     createOrUpdatePersonaDB,
     createOrUpdateProfileDB,
 } from '../../../../background/database/persona/db'
-import { currySameAddress } from '@masknet/web3-shared-evm'
 import { PersonaRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'

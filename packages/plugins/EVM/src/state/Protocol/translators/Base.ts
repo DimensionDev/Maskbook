@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { toHex } from 'web3-utils'
-import { addGasMargin, isEIP1559Supported } from '@masknet/web3-shared-evm'
+import { addGasMargin, chainResolver } from '@masknet/web3-shared-evm'
 import type { Context, Translator } from '../types'
 
 export class Base implements Translator {
@@ -15,7 +15,7 @@ export class Base implements Translator {
                 config.gas = BigNumber.max(toHex(addGasMargin(config.gas as string).toFixed()), 21000).toFixed()
 
             // fix gas price
-            if (isEIP1559Supported(context.chainId)) {
+            if (chainResolver.isSupport(context.chainId, 'EIP1559')) {
                 delete config.gasPrice
             } else {
                 delete config.maxFeePerGas

@@ -1,6 +1,8 @@
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { TransactionState, TransactionStateType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
@@ -25,8 +27,8 @@ export function OperationFooter({
 }: OperationFooterProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const account = useAccount()
-    const chainIdValid = useChainIdValid()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainIdValid = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     // #region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(

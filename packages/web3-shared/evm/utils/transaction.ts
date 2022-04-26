@@ -1,13 +1,10 @@
 import { sha3, toHex } from 'web3-utils'
-import type { TransactionReceipt } from 'web3-core'
 import { unreachable } from '@dimensiondev/kit'
-import type { TransactionState } from '../hooks'
-import { EthereumTransactionConfig, TransactionStateType } from '../types'
-import { getReceiptStatus } from './payload'
+import { Transaction, TransactionStateType } from '../types'
 import { isEmptyHex } from './address'
 import { ZERO_ADDRESS } from '../constants'
 
-export function isEIP1559Transaction(receipt: EthereumTransactionConfig) {
+export function isEIP1559Transaction(receipt: Transaction) {
     return typeof receipt.maxFeePerGas !== 'undefined' && typeof receipt.maxPriorityFeePerGas !== 'undefined'
 }
 
@@ -54,7 +51,7 @@ export function isNextStateAvailable(type: TransactionStateType, nextType: Trans
     }
 }
 
-export function getData(config: EthereumTransactionConfig) {
+export function getData(config: Transaction) {
     const { data } = config
     if (!data) return
     if (isEmptyHex(data)) return
@@ -62,63 +59,25 @@ export function getData(config: EthereumTransactionConfig) {
     return data
 }
 
-export function getTo(config: EthereumTransactionConfig) {
+export function getTo(config: Transaction) {
     const { to } = config
     if (!to) return ZERO_ADDRESS
     if (isEmptyHex(to)) return ZERO_ADDRESS
     return to
 }
 
-export function getFunctionSignature(tx: EthereumTransactionConfig) {
+export function getFunctionSignature(tx: Transaction) {
     const data = getData(tx)
     return data?.slice(0, 10)
 }
 
-export function getFunctionParameters(tx: EthereumTransactionConfig) {
+export function getFunctionParameters(tx: Transaction) {
     const data = getData(tx)
     return data?.slice(10)
 }
 
-export function getTransactionSignature(transaction: EthereumTransactionConfig | null) {
+export function getTransactionSignature(transaction: Transaction | null) {
     if (!transaction) return
     const { from, to, data, value } = transaction
-    return sha3([from, to, data || '0x0', toHex(value || '0x0') || '0x0'].join('_')) ?? undefined
-}
-
-export function getTransactionState(receipt: TransactionReceipt): TransactionState {
-    if (receipt.blockNumber) {
-        const status = getReceiptStatus(receipt)
-        switch (status) {
-            case TransactionStatusType.SUCCEED:
-                return {
-                    type: TransactionStateType.CONFIRMED,
-                    no: 0,
-                    receipt,
-                }
-            case TransactionStatusType.FAILED:
-                return {
-                    type: TransactionStateType.FAILED,
-                    receipt,
-                    error: new Error('FAILED'),
-                }
-            case TransactionStatusType.NOT_DEPEND:
-                return {
-                    type: TransactionStateType.FAILED,
-                    receipt,
-                    error: new Error('Invalid transaction status.'),
-                }
-            case TransactionStatusType.CANCELLED:
-                return {
-                    type: TransactionStateType.FAILED,
-                    receipt,
-                    error: new Error('CANCELLED'),
-                }
-            default:
-                unreachable(status)
-        }
-    }
-    return {
-        type: TransactionStateType.RECEIPT,
-        receipt,
-    }
+    return sha3([from, to, data || '0x0', toHex((value as string) || '0x0') || '0x0'].join('_')) ?? undefined
 }

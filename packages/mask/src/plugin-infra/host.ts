@@ -28,9 +28,10 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
 
         nativeType: nativeAPI?.type,
         hasNativeAPI,
-        nativeSend: async (payload: JsonRpcPayload) => {
+
+        send: async (payload: JsonRpcPayload) => {
             if (nativeAPI?.type === 'iOS') {
-                return nativeAPI.api.send(payload)
+                return nativeAPI.api.send(payload) as unknown as JsonRpcResponse
             } else {
                 const response = await nativeAPI?.api.sendJsonString(JSON.stringify(payload))
                 if (!response) throw new Error('Failed to send request to native APP.')
@@ -76,8 +77,14 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
         updateWallet: WalletRPC.updateWallet,
         removeWallet: WalletRPC.removeWallet,
 
-        shiftUnconfirmedRequest: WalletRPC.shiftUnconfirmedRequest,
-        pushUnconfirmedRequest: WalletRPC.pushUnconfirmedRequest,
+        // shiftUnconfirmedRequest: WalletRPC.shiftUnconfirmedRequest,
+        // pushUnconfirmedRequest: WalletRPC.pushUnconfirmedRequest,
+        shiftUnconfirmedRequest() {
+            return null!
+        },
+        pushUnconfirmedRequest() {
+            return null!
+        },
     }
 }
 

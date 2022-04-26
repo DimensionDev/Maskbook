@@ -1,37 +1,52 @@
-import type { Web3Plugin, Pageable, Pagination } from '../web3-types'
+import type {
+    Pageable,
+    Pagination,
+    AssetState as Web3AssetState,
+    FungibleAsset,
+    NonFungibleAsset,
+} from '@masknet/web3-shared-base'
 
-async function* getPagableItemsAsIterator<ChainId extends number, Item>(
-    chainId: ChainId,
-    address: string,
-    getItems?: (chainId: ChainId, address: string, pagination: Pagination) => Promise<Pageable<Item>>,
-    options: {
-        /** The number of start page. */
-        startAt?: number
-        /** The number of end page. */
-        endAt?: number
-        /** The size of each page. */
-        size?: number
-    } = {},
-): AsyncIterableIterator<Item> {
-    if (!getItems) {
-        yield* []
-        return
+const PAGE_SIZE = 50
+const MAX_PAGE_SIZE = 25
+
+export class AssetState<ChainId, SchemaType> implements Web3AssetState<ChainId, SchemaType> {
+    getFungibleAssets(
+        address: string,
+        pagination?: Pagination | undefined,
+    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
+        throw new Error('Method not implemented.')
     }
 
-    const { startAt = 0, endAt = 10, size = 50 } = options
-    let page = startAt
+    getNonFungibleAssets(
+        address: string,
+        pagination?: Pagination | undefined,
+    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+        throw new Error('Method not implemented.')
+    }
 
-    while (page < endAt) {
-        const result = await getItems(chainId, address, {
-            page,
-            size,
-        })
+    async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
+        for (let i = 0; i < MAX_PAGE_SIZE; i += 1) {
+            const pageable = await this.getFungibleAssets(address, {
+                page: i,
+                size: PAGE_SIZE,
+            })
 
-        yield* result.data
+            yield* pageable.data
 
-        if (result.hasNextPage) page += 1
-        else return
+            if (pageable.data.length === 0) return
+        }
+    }
+
+    async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
+        for (let i = 0; i < MAX_PAGE_SIZE; i += 1) {
+            const pageable = await this.getNonFungibleAssets(address, {
+                page: i,
+                size: PAGE_SIZE,
+            })
+
+            yield* pageable.data
+
+            if (pageable.data.length === 0) return
+        }
     }
 }
-
-export class AssetState<ChainId, SchemaType> implements Web3Plugin.ObjectCapabilities.AssetState<ChainId, SchemaType> {}

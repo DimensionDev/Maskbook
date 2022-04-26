@@ -7,12 +7,13 @@ import { createTransaction } from '../../../../background/database/utils/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import type { LegacyWalletRecord } from '../database/types'
 import { fromHex, toHex } from '@masknet/shared-base'
-import { currySameAddress, isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { isSameAddress, currySameAddress } from '@masknet/web3-shared-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { LegacyWalletRecordOutDB } from './helpers'
 import { currentAccountSettings, currentProviderSettings } from '../settings'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
 import { hasNativeAPI } from '../../../../shared/native-rpc'
-import { getAccounts } from '../../../extension/background-script/EthereumService'
+// import { getAccounts } from '../../../extension/background-script/EthereumService'
 
 function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {
     const address = currentAccountSettings.value
@@ -50,7 +51,8 @@ export async function gatLegacyWallet(address: string = currentAccountSettings.v
 
 export async function getLegacyWallets(provider?: ProviderType) {
     if (hasNativeAPI) {
-        const accounts = await getAccounts()
+        // const accounts = await getAccounts()
+        const accounts: string[] = []
         const address = first(accounts) ?? ''
         if (!address) return []
         return [createWalletRecord(address, 'Mask Network')]

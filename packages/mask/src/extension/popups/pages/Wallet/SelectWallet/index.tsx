@@ -2,20 +2,14 @@ import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { first } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
-import {
-    ChainId,
-    getNetworkName,
-    isSameAddress,
-    ProviderType,
-    useAccount,
-    useChainIdValid,
-    useWallets,
-} from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Button, List, Typography } from '@mui/material'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
 import { WalletItem } from './WalletItem'
+import { useAccount, useChainIdValid, useWallets } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     content: {
@@ -86,17 +80,16 @@ const SelectWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const location = useLocation()
-    const wallet = useAccount()
-    const wallets = useWallets(ProviderType.MaskWallet)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
 
-    const [selected, setSelected] = useState(wallet)
+    const [selected, setSelected] = useState(account)
 
     const search = new URLSearchParams(location.search)
 
     const chainIdSearched = search.get('chainId')
     const chainId = chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined
-
-    const chainIdValid = useChainIdValid()
 
     const handleCancel = useCallback(async () => {
         await WalletRPC.selectMaskAccount([])

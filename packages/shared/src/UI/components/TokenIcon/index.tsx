@@ -1,19 +1,18 @@
 import { memo } from 'react'
 import {
     ChainId,
-    currySameAddress,
+    chainResolver,
     formatEthereumAddress,
-    getChainDetailed,
     getTokenConstants,
-    isSameAddress,
-    useChainId,
     useTokenAssetBaseURLConstants,
 } from '@masknet/web3-shared-evm'
 import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useImageFailOver } from '../../hooks'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 import NO_IMAGE_COLOR from './constants'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { currySameAddress, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useImageFailOver } from '../../../hooks'
 
 function getFallbackIcons(address: string, baseURIs: string[]) {
     const checkSummedAddress = formatEthereumAddress(address)
@@ -37,29 +36,28 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TokenIconProps extends withClasses<'icon'> {
     name?: string
-    logoURI?: string | string[]
+    logoURL?: string | string[]
     chainId?: ChainId
     address: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const currentChainId = useChainId()
-    const { address, logoURI, name, chainId = currentChainId, AvatarProps, classes } = props
-    let _logoURI = logoURI
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { address, logoURL, name, chainId = currentChainId, AvatarProps, classes } = props
+    let _logoURL = logoURL
 
-    if (!logoURI && isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, formatEthereumAddress(address))) {
-        const nativeToken = getChainDetailed(chainId)
-        _logoURI = nativeToken?.nativeCurrency.logoURI
+    if (!logoURL && isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, formatEthereumAddress(address))) {
+        _logoURL = chainResolver.nativeCurrency(chainId)?.logoURL
     }
 
     const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId)
     const fallbackLogos = getFallbackIcons(address, TOKEN_ASSET_BASE_URI ?? [])
 
-    const images = _logoURI
-        ? Array.isArray(_logoURI)
-            ? [..._logoURI, ...fallbackLogos]
-            : [_logoURI, ...fallbackLogos]
+    const images = _logoURL
+        ? Array.isArray(_logoURL)
+            ? [..._logoURL, ...fallbackLogos]
+            : [_logoURL, ...fallbackLogos]
         : fallbackLogos
     const { value: trustedLogoURI, loading } = useImageFailOver(images, '')
 

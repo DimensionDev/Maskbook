@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 import { compact } from 'lodash-unified'
-import { isSameAddress, useChainId, getChainIdFromName, ChainId } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress, getChainIdFromName, ChainId } from '@masknet/web3-shared-evm'
 import { NftRedPacketJSONPayload, RedPacketStatus } from '../../types'
 import { useAvailabilityNftRedPacket } from './useAvailabilityNftRedPacket'
 
@@ -9,7 +11,7 @@ import { useAvailabilityNftRedPacket } from './useAvailabilityNftRedPacket'
  * @param payload
  */
 export function useNftAvailabilityComputed(account: string, payload: NftRedPacketJSONPayload) {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const asyncResult = useAvailabilityNftRedPacket(payload?.rpid, account)
 
     const result = asyncResult

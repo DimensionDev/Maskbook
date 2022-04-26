@@ -8,7 +8,9 @@ import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
-import { resolveAddressLinkOnExplorer, useChainId, useWallet } from '@masknet/web3-shared-evm'
+import { explorerResolver } from '@masknet/web3-shared-evm'
+import { useChainId, useWallet } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     content: {
@@ -41,8 +43,8 @@ const useStyles = makeStyles()({
 const WalletSettings = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const chainId = useChainId()
-    const wallet = useWallet()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
     return (
         <>
@@ -61,7 +63,7 @@ const WalletSettings = memo(() => {
                         </ListItem>
                     ) : null}
                     <Link
-                        href={resolveAddressLinkOnExplorer(chainId, wallet?.address ?? '')}
+                        href={explorerResolver.addressLink(chainId, wallet?.address ?? '')}
                         target="_blank"
                         rel="noopener noreferrer">
                         <ListItem className={classes.item}>

@@ -3,14 +3,13 @@ import { createComplexGlobalSettings, createGlobalSettings } from '../../setting
 import {
     ChainId,
     NonFungibleAssetProvider,
-    CryptoPrice,
     NetworkType,
     FungibleAssetProvider,
     ProviderType,
-    LockStatus,
-    GasOptions,
 } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants'
+import { LockStatus } from './types'
+import type { GasOptionType, Price } from '@masknet/web3-shared-base'
 
 export const currentMaskWalletAccountSettings = createGlobalSettings(`${PLUGIN_ID}+selectedMaskWalletAddress`, '')
 
@@ -50,13 +49,13 @@ export const currentNonFungibleAssetDataProviderSettings = createGlobalSettings<
     NonFungibleAssetProvider.OPENSEA,
 )
 
-export const currentGasOptionsSettings = createComplexGlobalSettings<GasOptions | null>(
+export const currentGasOptionsSettings = createComplexGlobalSettings<GasOptionType | null>(
     `${PLUGIN_ID}+gasOptions`,
     null,
     isEqual,
 )
 
-export const currentTokenPricesSettings = createComplexGlobalSettings<CryptoPrice>(
+export const currentTokenPricesSettings = createComplexGlobalSettings<Record<string, Price>>(
     `${PLUGIN_ID}+tokenPrices`,
     {},
     isEqual,

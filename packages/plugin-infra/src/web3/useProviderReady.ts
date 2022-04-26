@@ -1,14 +1,18 @@
 import { useMemo } from 'react'
-import type { NetworkPluginID } from '../web3-types'
-import { useProviderType } from './useProviderType'
-import { useCurrentWeb3NetworkPluginID } from './Context'
-import { getPluginDefine } from '../manager/store'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '../web3-helpers'
+import { useWeb3State } from './useWeb3State'
 
-export function useProviderReady<T extends NetworkPluginID>(expectedPluginID?: T, expectedProviderTypeOrID?: string) {
-    const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
-    const providerType = useProviderType(pluginID)
+export function useProviderReady<T extends NetworkPluginID>(
+    pluginID?: T,
+    providerType?: Web3Helper.Definition[T]['ProviderType'],
+) {
+    type IsReady = (providerType: Web3Helper.Definition[T]['ProviderType']) => boolean
 
-    return getPluginDefine(pluginID)?.declareWeb3Providers?.find((x) =>
-        [x.type, x.ID].includes(expectedProviderTypeOrID ?? providerType ?? ''),
-    )
+    const { Provider } = useWeb3State(pluginID)
+
+    return useMemo(async () => {
+        if (!providerType || !Provider) return false
+        return (Provider.isReady as IsReady)(providerType) ?? false
+    }, [providerType, Provider])
 }

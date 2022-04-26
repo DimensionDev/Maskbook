@@ -1,6 +1,6 @@
-import { useControlledDialog, useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
+import { useControlledDialog, useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { PurchaseDialog } from './PurchaseDialog'
 import type { Project } from '../types'

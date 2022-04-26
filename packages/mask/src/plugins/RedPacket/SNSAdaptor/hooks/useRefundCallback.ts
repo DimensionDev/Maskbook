@@ -1,12 +1,16 @@
 import { useCallback } from 'react'
 import { useRedPacketContract } from './useRedPacketContract'
-import { TransactionEventType, TransactionStateType, useTransactionState } from '@masknet/web3-shared-evm'
+import { TransactionEventType, TransactionStateType } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import type { TransactionReceipt } from 'web3-core'
+import { useChainId } from '@masknet/plugin-infra/src/web3'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useRefundCallback(version: number, from: string, id?: string) {
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [refundState, setRefundState] = useTransactionState()
-    const redPacketContract = useRedPacketContract(version)
+    const redPacketContract = useRedPacketContract(chainId, version)
 
     const refundCallback = useCallback(async () => {
         if (!redPacketContract || !id) {

@@ -5,7 +5,8 @@ import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Avatar, Button, DialogActions, DialogContent, Paper, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useWeb3State, NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh'
 import { useI18N, useMatchXS } from '../../../../utils'
 import { WalletMessages } from '../../messages'
@@ -65,7 +66,7 @@ export function WalletRiskWarningDialog() {
     const [account, setAccount] = useState('')
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
 
-    const { RiskWarning, Utils } = useWeb3State(pluginID)
+    const { RiskWarning, Others } = useWeb3State(pluginID)
 
     const { open, setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletRiskWarningDialogUpdated,
@@ -119,7 +120,7 @@ export function WalletRiskWarningDialog() {
                             {t('nft_wallet_label')}
                         </Typography>
                         <Typography variant="body1" color="textPrimary" className={classes.texts}>
-                            {isMobile ? Utils?.formatAddress(account, 5) : account}
+                            {isMobile ? Others?.formatAddress(account, 5) : account}
                         </Typography>
                     </Paper>
                 </Paper>

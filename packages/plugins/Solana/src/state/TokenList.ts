@@ -1,7 +1,8 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { TokenListState, Web3Plugin } from '@masknet/plugin-infra/web3'
+import { TokenListState } from '@masknet/plugin-infra/web3'
+import type { Token } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 
 export class TokenList extends TokenListState<ChainId, SchemaType> {
@@ -21,7 +22,7 @@ export class TokenList extends TokenListState<ChainId, SchemaType> {
                 [chainId.value]: [],
             }
             return accumualtor
-        }, {} as Record<'fungibleTokens' | 'nonFungibleTokens', Record<ChainId, Web3Plugin.Token<ChainId, SchemaType>[]>>)
+        }, {} as Record<'fungibleTokens' | 'nonFungibleTokens', Record<ChainId, Token<ChainId, SchemaType>[]>>)
 
         super(context, defaultValue, subscriptions)
     }

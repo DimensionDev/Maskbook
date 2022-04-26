@@ -61,7 +61,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const state = useState(RpTypeTabs.ERC20)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'

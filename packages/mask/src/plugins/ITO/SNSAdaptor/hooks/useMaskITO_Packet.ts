@@ -1,10 +1,12 @@
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '@masknet/web3-shared-evm'
 import { useMaskITO_Contract } from './useMaskITO_Contract'
 
 export function useMaskITO_Packet() {
-    const account = useAccount()
-    const MaskITO_Contract = useMaskITO_Contract()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const MaskITO_Contract = useMaskITO_Contract(chainId)
     return useAsyncRetry(async () => {
         if (!MaskITO_Contract) return
         const [unlockTime, claimable = '0'] = await Promise.all([

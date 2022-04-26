@@ -8,7 +8,7 @@ import {
     currentPluginMinimalModeNOTEnabled,
     pluginIDSettings,
 } from '../../settings/settings'
-import { currentDataProviderSettings } from '../../plugins/Trader/settings'
+// import { currentDataProviderSettings } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
     currentAccountSettings,
@@ -41,7 +41,8 @@ export const [getChainId, setChainId] = create(currentChainIdSettings)
 export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSettings)
 export const [getGasOptions, setGasOptions] = create(currentGasOptionsSettings)
 export const [getGasPrice, setGasPrice] = create(currentGasOptionsSettings)
-export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
+// export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
+export const [getTrendingDataSource, setTrendingDataSource] = create(currentProviderSettings)
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 
 export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(currentNetworkSettings)

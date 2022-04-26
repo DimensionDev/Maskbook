@@ -1,7 +1,8 @@
 import { first } from 'lodash-unified'
 import { SelectedIcon } from '@masknet/icons'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ImageIcon } from '@masknet/shared'
+import type { Web3Helper, Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils'
@@ -89,17 +90,29 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface PluginProviderRenderProps {
-    networks: Web3Plugin.NetworkDescriptor<number, string>[]
-    providers: Web3Plugin.ProviderDescriptor<number, string>[]
-    undeterminedPluginID?: string
+    networks: Web3Helper.NetworkDescriptorAll[]
+    providers: Web3Helper.ProviderDescriptorAll[]
+    undeterminedPluginID?: NetworkPluginID
     undeterminedNetworkID?: string
-    onNetworkIconClicked: (network: Web3Plugin.NetworkDescriptor<number, string>) => void
+    onNetworkIconClicked: (network: Web3Helper.NetworkDescriptorAll) => void
     onProviderIconClicked: (
-        network: Web3Plugin.NetworkDescriptor<number, string>,
-        provider: Web3Plugin.ProviderDescriptor<number, string>,
+        network: Web3Helper.NetworkDescriptorAll,
+        provider: Web3Helper.ProviderDescriptorAll,
     ) => void
-    NetworkIconClickBait?: React.ComponentType<Web3Plugin.UI.NetworkIconClickBaitProps<number, string, string>>
-    ProviderIconClickBait?: React.ComponentType<Web3Plugin.UI.ProviderIconClickBaitProps<number, string, string>>
+    NetworkIconClickBait?: React.ComponentType<
+        Web3Plugin.UI.NetworkIconClickBaitProps<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['ProviderType'],
+            Web3Helper.Definition[NetworkPluginID]['NetworkType']
+        >
+    >
+    ProviderIconClickBait?: React.ComponentType<
+        Web3Plugin.UI.ProviderIconClickBaitProps<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['ProviderType'],
+            Web3Helper.Definition[NetworkPluginID]['NetworkType']
+        >
+    >
 }
 
 export function PluginProviderRender({

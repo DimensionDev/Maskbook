@@ -21,7 +21,8 @@ import {
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Messages, Services, PluginMessages } from '../../API'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TUTORIAL_URLS_EN } from './constants'
@@ -201,7 +202,7 @@ export default function Plugins() {
         },
     ]
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
     const openTransakDialog = useCallback(
         (code?: string) => {

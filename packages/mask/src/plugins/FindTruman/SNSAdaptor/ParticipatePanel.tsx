@@ -1,13 +1,14 @@
-import { useAccount } from '@masknet/web3-shared-evm'
-import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
+import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
 import { fetchQuestions, fetchUserStoryStatus, submitCompletion, submitPoll, submitPuzzle } from '../Worker/apis'
 import { Box, Button, Card, DialogActions, DialogContent, Typography } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import StageCard from './StageCard'
 import { useControlledDialog } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import OptionsCard from './OptionsCard'
 import ResultCard from './ResultCard'
 import getUnixTime from 'date-fns/getUnixTime'
@@ -75,7 +76,7 @@ export default function ParticipatePanel(props: ParticipatePanelProps) {
     const { storyId } = props
     const { classes } = useStyles()
     const { t } = useContext(FindTrumanContext)
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const { open: isDialogOpen, onOpen: onDialogOpen, onClose: onDialogClose } = useControlledDialog()
 

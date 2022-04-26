@@ -1,6 +1,7 @@
 import { identity } from 'lodash-unified'
 import { Network } from 'opensea-js'
-import { ChainId, createLookupTableResolver, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
+import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import {
     NullAddress,
     RaribleRopstenUserURL,
@@ -63,7 +64,10 @@ export const resolveCollectibleProviderName = createLookupTableResolver<NonFungi
     },
 )
 
-export const resolveRaribleUserNetwork = createLookupTableResolver<ChainId, string>(
+export const resolveRaribleUserNetwork = createLookupTableResolver<
+    ChainId.Mainnet | ChainId.Ropsten | ChainId.Rinkeby,
+    string
+>(
     {
         [ChainId.Mainnet]: RaribleUserURL,
         [ChainId.Ropsten]: RaribleRopstenUserURL,
@@ -72,7 +76,7 @@ export const resolveRaribleUserNetwork = createLookupTableResolver<ChainId, stri
     RaribleUserURL,
 )
 
-export const resolveLinkOnOpenSea = createLookupTableResolver<ChainId, string>(
+export const resolveLinkOnOpenSea = createLookupTableResolver<ChainId.Mainnet | ChainId.Rinkeby, string>(
     {
         [ChainId.Mainnet]: OpenSeaMainnetURL,
         [ChainId.Rinkeby]: OpenSeaTestnetURL,
@@ -80,7 +84,10 @@ export const resolveLinkOnOpenSea = createLookupTableResolver<ChainId, string>(
     OpenSeaMainnetURL,
 )
 
-export const resolveLinkOnRarible = createLookupTableResolver<ChainId, string>(
+export const resolveLinkOnRarible = createLookupTableResolver<
+    ChainId.Mainnet | ChainId.Ropsten | ChainId.Rinkeby,
+    string
+>(
     {
         [ChainId.Mainnet]: 'https://rarible.com',
         [ChainId.Rinkeby]: 'https://rinkeby.rarible.com',
@@ -89,7 +96,7 @@ export const resolveLinkOnRarible = createLookupTableResolver<ChainId, string>(
     'https://rarible.com',
 )
 
-export const resolveLinkOnZora = createLookupTableResolver<ChainId, string>(
+export const resolveLinkOnZora = createLookupTableResolver<ChainId.Mainnet, string>(
     {
         [ChainId.Mainnet]: 'https://zora.co',
     },

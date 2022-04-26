@@ -13,7 +13,7 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { first, uniqBy } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import { FungibleTokenDetailed, SchemaType, useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, SchemaType, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
@@ -28,10 +28,11 @@ import { PluginTraderMessages } from '../../Trader/messages'
 import { Trans } from 'react-i18next'
 import getUnixTime from 'date-fns/getUnixTime'
 import type { useAsset } from '@masknet/plugin-evm/src/hooks'
-import { rightShift, ZERO } from '@masknet/web3-shared-base'
+import { NetworkPluginID, rightShift, ZERO } from '@masknet/web3-shared-base'
 import type { Coin } from '../../Trader/types'
 import { SelectTokenListPanel } from './SelectTokenListPanel'
 import { isWyvernSchemaName } from '../utils'
+import { useAccount } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -85,7 +86,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)

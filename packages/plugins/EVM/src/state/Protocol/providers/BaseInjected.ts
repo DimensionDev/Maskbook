@@ -2,12 +2,12 @@ import { first } from 'lodash-unified'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@dimensiondev/kit'
 import { isExtensionSiteType } from '@masknet/shared-base'
-import { ChainId, EIP1193Provider, EthereumMethodType } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumMethodType, Web3Provider } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types'
 import { BaseProvider } from './Base'
 
 export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
-    private provider: EIP1193Provider | null = null
+    private provider: Web3Provider | null = null
 
     constructor(protected path = ['ethereum']) {
         super()
@@ -24,7 +24,7 @@ export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
             result = Reflect.has(result, name)
             if (!result) return null
         }
-        return result as EIP1193Provider
+        return result as Web3Provider
     }
 
     override get ready() {

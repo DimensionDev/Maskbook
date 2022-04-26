@@ -8,31 +8,23 @@ import {
     useSystemPreferencePalette,
 } from '@masknet/theme'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
+import { i18NextInstance } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { NetworkPluginID, PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra/web3'
-import { Web3Provider } from '@masknet/web3-shared-evm'
-
-import { i18NextInstance } from '@masknet/shared-base'
+import { PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra/web3'
 
 import '../utils/kv-storage'
 
 import './PluginHost'
 import { Pages } from '../pages/routes'
-import { Web3Context } from '../web3/context'
 import { useAppearance, usePluginID } from '../pages/Personas/api'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext'
-// import { fixWeb3State } from '@masknet/plugin-evm/src/UI'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
 export default function DashboardRoot() {
     const pluginID = usePluginID()
     const PluginsWeb3State = useAllPluginsWeb3State()
-
-    // TODO:
-    // migrate EVM plugin
-    // fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
 
     // #region theme
     const appearance = useAppearance()
@@ -48,28 +40,26 @@ export default function DashboardRoot() {
     // #endregion
 
     return (
-        <Web3Provider value={Web3Context}>
-            <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State}>
-                <I18NextProviderHMR i18n={i18NextInstance}>
-                    <StyledEngineProvider injectFirst>
-                        <ThemeProvider theme={theme}>
-                            <PersonaContext.Provider>
-                                <ErrorBoundary>
-                                    <CssBaseline />
-                                    <CustomSnackbarProvider>
-                                        <SharedContextProvider>
-                                            <HashRouter>
-                                                <Pages />
-                                            </HashRouter>
-                                            <PluginRender />
-                                        </SharedContextProvider>
-                                    </CustomSnackbarProvider>
-                                </ErrorBoundary>
-                            </PersonaContext.Provider>
-                        </ThemeProvider>
-                    </StyledEngineProvider>
-                </I18NextProviderHMR>
-            </PluginsWeb3ContextProvider>
-        </Web3Provider>
+        <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State}>
+            <I18NextProviderHMR i18n={i18NextInstance}>
+                <StyledEngineProvider injectFirst>
+                    <ThemeProvider theme={theme}>
+                        <PersonaContext.Provider>
+                            <ErrorBoundary>
+                                <CssBaseline />
+                                <CustomSnackbarProvider>
+                                    <SharedContextProvider>
+                                        <HashRouter>
+                                            <Pages />
+                                        </HashRouter>
+                                        <PluginRender />
+                                    </SharedContextProvider>
+                                </CustomSnackbarProvider>
+                            </ErrorBoundary>
+                        </PersonaContext.Provider>
+                    </ThemeProvider>
+                </StyledEngineProvider>
+            </I18NextProviderHMR>
+        </PluginsWeb3ContextProvider>
     )
 }

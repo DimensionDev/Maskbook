@@ -1,11 +1,4 @@
-import {
-    formatBalance,
-    resolveTransactionLinkOnExplorer,
-    TransactionStateType,
-    useChainId,
-    useERC20TokenDetailed,
-    DAI,
-} from '@masknet/web3-shared-evm'
+import { formatBalance, TransactionStateType, DAI, explorerResolver } from '@masknet/web3-shared-evm'
 import { Button, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
@@ -15,6 +8,8 @@ import type { GoodGhostingInfo } from '../types'
 import { GameActionDialog } from './GameActionDialog'
 import { useGameToken } from '../hooks/usePoolData'
 import { isGameActionError } from '../utils'
+import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -28,7 +23,7 @@ interface GameActionProps {
 }
 
 export function GameAction(props: GameActionProps) {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const gameToken = useGameToken()
 
     const { classes } = useStyles()
@@ -45,7 +40,7 @@ export function GameAction(props: GameActionProps) {
         value: tokenDetailed,
         loading: loadingToken,
         error: errorToken,
-    } = useERC20TokenDetailed(DAI[chainId]?.address)
+    } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, DAI[chainId]?.address)
 
     if (loadingToken || errorToken) return <></>
 
@@ -58,7 +53,7 @@ export function GameAction(props: GameActionProps) {
             props.info.refresh()
         } catch (error) {
             if (isGameActionError(error) && error.transactionHash) {
-                const link = resolveTransactionLinkOnExplorer(chainId, error.transactionHash)
+                const link = explorerResolver.transactionLink(chainId, error.transactionHash)
                 if (error.gameActionStatus === TransactionStateType.CONFIRMED) {
                     setErrorState({
                         message: t('plugin_good_ghosting_tx_fail'),

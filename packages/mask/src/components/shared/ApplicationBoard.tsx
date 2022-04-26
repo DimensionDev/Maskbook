@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'

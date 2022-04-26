@@ -1,4 +1,4 @@
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import {
     ERC721ContractDetailed,
     FungibleTokenDetailed,
@@ -28,7 +28,7 @@ export interface ContextOptions {
     sendTip: () => Promise<void>
     isSending: boolean
     sendState: TransactionState
-    storedTokens: Web3Plugin.NonFungibleToken[]
+    storedTokens: NonFungibleToken[]
     reset: () => void
 }
 

@@ -3,13 +3,14 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
-import { EthereumRpcType, useWallet } from '@masknet/web3-shared-evm'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
+import { useWallet } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, TransactionDescriptorType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -86,13 +87,13 @@ const SignRequest = memo(() => {
     const location = useLocation()
     const { classes } = useStyles()
     const { value, loading: requestLoading } = useUnconfirmedRequest()
-    const wallet = useWallet()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const [transferError, setTransferError] = useState(false)
 
     const { data, address } = useMemo(() => {
         if (
-            value?.computedPayload?.type === EthereumRpcType.SIGN ||
-            value?.computedPayload?.type === EthereumRpcType.SIGN_TYPED_DATA
+            value?.computedPayload?.type === TransactionDescriptorType.SIGN ||
+            value?.computedPayload?.type === TransactionDescriptorType.SIGN_TYPED_DATA
         ) {
             let message = value.computedPayload.data
             try {

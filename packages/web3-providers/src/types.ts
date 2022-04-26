@@ -1,10 +1,25 @@
+import type { Result } from 'ts-results'
 import type RSS3 from 'rss3-next'
 import type { Transaction as Web3Transaction } from 'web3-core'
-import type { CurrencyType, Pageable, Web3Plugin } from '@masknet/plugin-infra/web3'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import type { Result } from 'ts-results'
 import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
+import type {
+    Transaction,
+    FungibleAsset,
+    NonFungibleToken,
+    NonFungibleAsset,
+    CurrencyType,
+    Pageable,
+    FungibleToken,
+    Pagination,
+    Web3Pagination,
+    OrderSide,
+    NonFungibleTokenCollection,
+    NonFungibleTokenContract,
+    NonFungibleTokenOrder,
+    NonFungibleTokenEvent,
+    GasOptions,
+} from '@masknet/web3-shared-base'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -86,71 +101,79 @@ export namespace RSS3BaseAPI {
 
 export namespace PriceAPI {
     export interface Provider {
-        getTokenPrice(tokenId: string, currency: CurrencyType): Promise<Web3Plugin.CryptoPrices['']>
-        getTokensPrice(tokenIds: string[], currency: CurrencyType): Promise<Web3Plugin.CryptoPrices>
+        getTokenPrice(address: string, currency: CurrencyType): Promise<number>
+        getTokensPrice(listOfAddress: string[], currency: CurrencyType): Promise<Record<string, number>>
     }
 }
 
 export namespace HistoryAPI {
-    export interface Provider {
-        getTransactions(chainId: number, address: string): Promise<Pageable<Web3Plugin.Transaction>>
+    export interface Provider<ChainId, SchemaType> {
+        getTransactions(
+            address: string,
+            pagination?: Web3Pagination<ChainId>,
+        ): Promise<Pageable<Transaction<ChainId, SchemaType>>>
     }
 }
 
-export namespace GasPriceAPI {
-    export interface Provider {
-        getGasPrice(chainId: number): Promise<Web3Plugin.GasPrice>
+export namespace GasOptionAPI {
+    export interface Provider<ChainId> {
+        getGasOptions(chainId: ChainId): Promise<GasOptions>
     }
 }
 
 export namespace FungibleTokenAPI {
-    export interface Provider {
-        getAssets(chainId: number, address: string): Promise<Pageable<Web3Plugin.FungibleAsset>>
+    export interface Provider<ChainId, SchemaType> {
+        getAssets(address: string, pagination?: Pagination): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
     }
 }
 
 export namespace NonFungibleTokenAPI {
-    export interface Options {
-        chainId?: number
-        page?: number
-        size?: number
-    }
-
-    export interface Provider {
+    export interface Provider<ChainId, SchemaType> {
         getAsset?: (
             address: string,
             tokenId: string,
-            opts?: Options,
-        ) => Promise<Web3Plugin.NonFungibleAsset | undefined>
-        getAssets?: (address: string) => Promise<Web3Plugin.NonFungibleAsset[]>
+            pagination?: Web3Pagination<ChainId>,
+        ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
+        getAssets?: (address: string) => Promise<NonFungibleAsset<ChainId, SchemaType>[]>
         getHistory?: (
             address: string,
             tokenId: string,
-            opts?: Options,
-        ) => Promise<Web3Plugin.NonFungibleAsset['events']>
+            pagination?: Web3Pagination<ChainId>,
+        ) => Promise<NonFungibleTokenEvent<ChainId, SchemaType>[]>
         getListings?: (
             address: string,
             tokenId: string,
-            opts?: Options,
-        ) => Promise<Web3Plugin.NonFungibleAsset['orders']>
-        getOffers?: (address: string, tokenId: string, opts?: Options) => Promise<Web3Plugin.NonFungibleAsset['orders']>
+            pagination?: Web3Pagination<ChainId>,
+        ) => Promise<NonFungibleTokenOrder<ChainId, SchemaType>[]>
+        getOffers?: (
+            address: string,
+            tokenId: string,
+            opts?: Web3Pagination<ChainId>,
+        ) => Promise<NonFungibleTokenOrder<ChainId, SchemaType>[]>
         getOrders?: (
             address: string,
             tokenId: string,
-            side: string,
-            opts?: Options,
-        ) => Promise<Web3Plugin.NonFungibleAsset['orders']>
+            side: OrderSide,
+            pagination?: Web3Pagination<ChainId>,
+        ) => Promise<NonFungibleTokenOrder<ChainId, SchemaType>[]>
         getToken?: (
             address: string,
             tokenId: string,
-            opts?: Options,
-        ) => Promise<Web3Plugin.NonFungibleToken | undefined>
-        getTokens?: (from: string, opts?: Options) => Promise<Pageable<Web3Plugin.NonFungibleToken>>
-        getContract?: (address: string, opts?: Options) => Promise<Web3Plugin.NonFungibleToken['contract'] | undefined>
+            pagination?: Web3Pagination<ChainId>,
+        ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
+        getTokens?: (
+            from: string,
+            opts?: Web3Pagination<ChainId>,
+        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
+        getContract?: (
+            address: string,
+            opts?: Web3Pagination<ChainId>,
+        ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
+        getContractBalance?: (address: string) => Promise<number>
         getCollections?: (
             address: string,
-            opts?: Options,
-        ) => Promise<Pageable<Web3Plugin.NonFungibleToken['collection'] | undefined>>
+            pagination?: Web3Pagination<ChainId>,
+        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId> | undefined>>
     }
 }
 
@@ -277,17 +300,17 @@ export namespace SecurityAPI {
         is_airdrop_scam?: '0' | '1'
     }
 
-    export interface SupportedChain {
-        id: ChainId
+    export interface SupportedChain<ChainId> {
+        chainId: ChainId
         name: string
     }
 
-    export interface Provider {
+    export interface Provider<ChainId> {
         getTokenSecurity(
-            chainId: number,
+            chainId: ChainId,
             listOfAddress: string[],
         ): Promise<Record<string, ContractSecurity & TokenSecurity & TradingSecurity> | void>
-        getSupportedChain(): Promise<SupportedChain[]>
+        getSupportedChain(): Promise<SupportedChain<ChainId>[]>
     }
 }
 
@@ -353,21 +376,21 @@ export namespace InstagramBaseAPI {
 }
 
 export namespace TokenListBaseAPI {
-    export interface Token {
+    export interface Token<ChainId> {
+        chainId: ChainId
         address: string
-        chainId: number
         name: string
         symbol: string
         decimals: number
-        logoURI?: string
+        logoURL?: string
     }
 
-    export interface TokenList {
+    export interface TokenList<ChainId> {
         keywords: string[]
         logoURI: string
         name: string
         timestamp: string
-        tokens: Token[]
+        tokens: Token<ChainId>[]
         version: {
             major: number
             minor: number
@@ -375,25 +398,15 @@ export namespace TokenListBaseAPI {
         }
     }
 
-    export interface TokenObject {
-        tokens: Record<string, Token>
+    export interface TokenObject<ChainId> {
+        tokens: Record<string, Token<ChainId>>
     }
 
-    export interface Provider {
-        fetchFungibleTokensFromTokenLists: (chainId: number, urls: string[]) => Promise<Web3Plugin.FungibleToken[]>
-    }
-}
-
-export namespace TokenPriceBaseAPI {
-    export interface CryptoPrice {
-        [token: string]: {
-            [currency: string]: number
-        }
-    }
-
-    export interface Provider {
-        getTokenPrices: (platform: string, contractAddresses: string[], currency: CurrencyType) => Promise<CryptoPrice>
-        getNativeTokenPrice: (tokenIds: string[], currency: CurrencyType) => Promise<CryptoPrice>
+    export interface Provider<ChainId, SchemaType> {
+        fetchFungibleTokensFromTokenLists: (
+            chainId: ChainId,
+            urls: string[],
+        ) => Promise<FungibleToken<ChainId, SchemaType>[]>
     }
 }
 

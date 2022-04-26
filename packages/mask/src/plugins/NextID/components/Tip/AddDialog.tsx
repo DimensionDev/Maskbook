@@ -1,13 +1,11 @@
-import { useNetworkDescriptors } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useNetworkDescriptors } from '@masknet/plugin-infra/web3'
 import { ImageIcon, InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 import {
     ERC721TokenDetailed,
     getERC721ContractDetailed,
     getERC721TokenDetailed,
-    isSameAddress,
-    useAccount,
-    useChainId,
     useERC721TokenContract,
 } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, FormControl, TextField, Typography } from '@mui/material'
@@ -51,8 +49,8 @@ interface Props extends InjectedDialogProps {
 
 export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
     const { classes } = useStyles()
-    const chainId = useChainId()
-    const account = useAccount()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [contractAddress, setContractAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
     const t = useI18N()

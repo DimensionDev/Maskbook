@@ -3,16 +3,16 @@ import { toHex } from 'web3-utils'
 import { first } from 'lodash-unified'
 import type { HttpProvider, RequestArguments } from 'web3-core'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { ChainId, createEIP1193Provider, createPayload, getChainRPC, getRPCConstants } from '@masknet/web3-shared-evm'
+import { ChainId, createWeb3Provider, createPayload, getRPCConstants } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { EVM_Provider } from '../types'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings'
 
-const WEIGHTS_LENGTH = getRPCConstants(ChainId.Mainnet).RPC_WEIGHTS?.length ?? 4
+const { RPC_URLS = [], RPC_WEIGHTS = [] } = getRPCConstants(ChainId.Mainnet)
 
 export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     private id = 0
-    private seed = Math.floor(Math.random() * WEIGHTS_LENGTH)
+    private seed = Math.floor(Math.random() * RPC_WEIGHTS.length)
     private providerPool = new Map<string, HttpProvider>()
     private instancePool = new Map<string, Web3>()
 
@@ -79,8 +79,7 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     private async createProvider(chainId?: ChainId) {
         await this.readyPromise
 
-        const defaultChainId = Web3StateSettings.value.Provider?.chainId?.getCurrentValue()
-        const url = getChainRPC(chainId ?? defaultChainId ?? ChainId.Mainnet, this.seed)
+        const url = RPC_URLS[RPC_WEIGHTS[this.seed]]
         if (!url) throw new Error('Failed to create provider.')
         return this.createProviderInstance(url)
     }
@@ -113,7 +112,7 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
                 )
             })
         }
-        return createEIP1193Provider(request)
+        return createWeb3Provider(request)
     }
 
     override async connect(chainId: ChainId) {

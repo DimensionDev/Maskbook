@@ -1,5 +1,5 @@
 import { EthereumAddress } from 'wallet.ts'
-import { ChainId, getChainIdFromNetworkType, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
@@ -8,8 +8,8 @@ import {
 import { Flags } from '../../../../shared'
 
 export async function updateMaskAccount(options: { account?: string; chainId?: ChainId; networkType?: NetworkType }) {
-    if (options.chainId && !options.networkType) options.networkType = getNetworkTypeFromChainId(options.chainId)
-    if (!options.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
+    if (options.chainId && !options.networkType) options.networkType = chainResolver.chainNetworkType(options.chainId)
+    if (!options.chainId && options.networkType) options.chainId = networkResolver.networkChainId(options.networkType)
 
     const { account, chainId, networkType } = options
     if (chainId) currentMaskWalletChainIdSettings.value = chainId

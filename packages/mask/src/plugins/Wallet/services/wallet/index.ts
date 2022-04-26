@@ -4,7 +4,8 @@ import { toHex } from 'web3-utils'
 import { toBuffer } from 'ethereumjs-util'
 import { personalSign, signTypedData as signTypedData_, SignTypedDataVersion } from '@metamask/eth-sig-util'
 import { encodeText } from '@dimensiondev/kit'
-import { EthereumTransactionConfig, formatEthereumAddress, isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { Transaction, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import * as sdk from './maskwallet'
@@ -12,7 +13,6 @@ import * as database from './database'
 import * as password from './password'
 import { hasNativeAPI } from '../../../../../shared/native-rpc'
 import type { WalletRecord } from './type'
-import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const splitted = path.split('/')
@@ -45,29 +45,29 @@ export async function getWallets(providerType?: ProviderType): Promise<
         hasDerivationPath: boolean
     })[]
 > {
-    if (hasNativeAPI) {
-        if (providerType && providerType !== ProviderType.MaskWallet) return []
+    // if (hasNativeAPI) {
+    //     if (providerType && providerType !== ProviderType.MaskWallet) return []
 
-        // read wallet from rpc
-        const accounts = await EVM_RPC.getAccounts()
-        const address = first(accounts) ?? ''
-        if (!address) return []
+    //     // read wallet from rpc
+    //     const accounts = await EVM_RPC.getAccounts()
+    //     const address = first(accounts) ?? ''
+    //     if (!address) return []
 
-        const now = new Date()
-        const address_ = formatEthereumAddress(address)
-        return [
-            {
-                id: address_,
-                name: 'Mask Network',
-                address: address_,
-                createdAt: now,
-                updatedAt: now,
-                configurable: false,
-                hasStoredKeyInfo: false,
-                hasDerivationPath: false,
-            },
-        ]
-    }
+    //     const now = new Date()
+    //     const address_ = formatEthereumAddress(address)
+    //     return [
+    //         {
+    //             id: address_,
+    //             name: 'Mask Network',
+    //             address: address_,
+    //             createdAt: now,
+    //             updatedAt: now,
+    //             configurable: false,
+    //             hasStoredKeyInfo: false,
+    //             hasDerivationPath: false,
+    //         },
+    //     ]
+    // }
     return database.getWallets(providerType)
 }
 
@@ -118,7 +118,7 @@ export async function getDerivableAccounts(mnemonic: string, page: number, pageS
     return accounts
 }
 
-export async function signTransaction(address: string, config: EthereumTransactionConfig) {
+export async function signTransaction(address: string, config: Transaction) {
     const password_ = await password.INTERNAL_getPasswordRequired()
     const wallet = await database.getWalletRequired(address)
     const signed = await sdk.signTransaction({
@@ -130,8 +130,8 @@ export async function signTransaction(address: string, config: EthereumTransacti
             gas_limit: config.gas?.toString() ?? '0x0',
             gas_price: config.gasPrice?.toString() ?? '0x0',
             chain_id: config.chainId ? toHex(config.chainId?.toString()) : '0x1',
-            max_fee_per_gas: config.maxFeePerGas ?? '0x0',
-            max_inclusion_fee_per_gas: config.maxFeePerGas ?? '0x0',
+            max_fee_per_gas: (config.maxFeePerGas as string | undefined) ?? '0x0',
+            max_inclusion_fee_per_gas: (config.maxFeePerGas as string | undefined) ?? '0x0',
             nonce: config.nonce ? toHex(config.nonce) : '0x0',
             to_address: config.to,
             payload: config.data ? encodeText(config.data) : new Uint8Array(),

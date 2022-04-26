@@ -7,9 +7,10 @@ import { Settings } from './Settings'
 import { TokenList } from './TokenList'
 import { Transaction } from './Transaction'
 import { Wallet } from './Wallet'
-import { Utils } from './Utils'
+import { Others } from './Others'
+import type { SolanaWeb3State } from './Protocol/types'
 
-export function createWeb3State(context: Plugin.Shared.SharedContext) {
+export function createWeb3State(context: Plugin.Shared.SharedContext): SolanaWeb3State {
     const Provider_ = new Provider(context)
 
     return {
@@ -32,6 +33,6 @@ export function createWeb3State(context: Plugin.Shared.SharedContext) {
             providerType: Provider_.providerType,
         }),
         Wallet: new Wallet(context),
-        Utils: new Utils(),
+        Others: new Others(context),
     }
 }

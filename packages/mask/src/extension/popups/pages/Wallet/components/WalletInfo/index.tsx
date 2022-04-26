@@ -1,14 +1,15 @@
 import { memo } from 'react'
+import { useNavigate, useLocation, useMatch } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MoreHoriz } from '@mui/icons-material'
 import { EditIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
-import { useNavigate, useLocation, useMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { formatEthereumAddress, useWallet } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     container: {
@@ -64,12 +65,11 @@ const useStyles = makeStyles()({
 })
 
 export const WalletInfo = memo(() => {
-    const wallet = useWallet()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
     const address = new URLSearchParams(useLocation().search).get('address')
-
-    const { value: domain } = useReverseAddress(address ?? wallet?.address, NetworkPluginID.PLUGIN_EVM)
-    const { Utils } = useWeb3State()
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address ?? wallet?.address)
+    const { Others } = useWeb3State()
 
     const excludePath = useMatch(PopupRoutes.WalletSettings)
 
@@ -83,7 +83,7 @@ export const WalletInfo = memo(() => {
             onSettingClick={() => navigate(PopupRoutes.WalletSettings)}
             hideSettings={!!excludePath}
             domain={domain}
-            formatDomainName={Utils?.formatDomainName}
+            formatDomainName={Others?.formatDomainName}
         />
     )
 })

@@ -6,13 +6,13 @@ import { SharedContextSettings, Web3StateSettings } from '../../../settings'
 export class MaskWallet implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
         const { Protocol } = Web3StateSettings.value
-        const { hasNativeAPI, nativeSend, account, chainId, signTransaction, signPersonalMessage, signTypedData } =
+        const { hasNativeAPI, send, account, chainId, signTransaction, signPersonalMessage, signTypedData } =
             SharedContextSettings.value
 
         // redirect to native app
         if (hasNativeAPI) {
             try {
-                const response = await nativeSend(context.request)
+                const response = await send(context.request)
                 context.end(new Error(response.error?.message ?? 'Unknown Error'), response.result)
             } catch (error) {
                 context.abort(error)
@@ -44,7 +44,10 @@ export class MaskWallet implements Middleware<Context> {
                         break
                     }
 
-                    const tx = await Protocol?.sendSignedTransaction?.(rawTransaction, {
+                    const connection = await Protocol?.getConnection?.({
+                        chainId: context.chainId,
+                    })
+                    const tx = await connection?.sendSignedTransaction?.(rawTransaction, {
                         chainId: context.chainId,
                     })
                     context.write(tx)

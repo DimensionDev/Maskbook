@@ -2,14 +2,14 @@ import { isEqual } from 'lodash-unified'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { updateLanguage } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { LaunchPage } from './types'
 import { createGlobalSettings, createNetworkSettings, createComplexNetworkSettings } from './createSettings'
 
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)
-export const pluginIDSettings = createGlobalSettings('pluginID', NetworkPluginID.PLUGIN_EVM)
+export const pluginIDSettings = createGlobalSettings<NetworkPluginID>('pluginID', NetworkPluginID.PLUGIN_EVM)
 
 export const currentSetupGuideStatus = createNetworkSettings('currentSetupGuideStatus', '')
 export const userGuideStatus = createNetworkSettings('userGuideStatus', '')

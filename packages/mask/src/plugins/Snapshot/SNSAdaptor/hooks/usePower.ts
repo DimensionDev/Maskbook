@@ -1,5 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { PluginSnapshotRPC } from '../../messages'
 import type { ProposalIdentifier } from '../../types'
 import { useProposal } from './useProposal'
@@ -8,7 +9,7 @@ import { mapKeys } from 'lodash-unified'
 export function usePower(identifier: ProposalIdentifier) {
     const { payload: proposal } = useProposal(identifier.id)
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     return useAsyncRetry(async () => {
         if (!account) return 0
         return (

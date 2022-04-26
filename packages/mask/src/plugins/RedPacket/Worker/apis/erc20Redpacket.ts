@@ -1,12 +1,11 @@
+import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     ChainId,
     FungibleTokenDetailed,
     FungibleTokenOutMask,
     getTokenConstants,
     getRedPacketConstants,
-    resolveChainName,
-    isSameAddress,
-    getChainDetailed,
+    chainResolver,
 } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { first } from 'lodash-unified'
@@ -120,8 +119,11 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
         .map((x) => {
             const token = tokenIntoMask({ ...x.token }) as FungibleTokenDetailed
             if (isSameAddress(x.token.address, NATIVE_TOKEN_ADDRESS)) {
-                token.name = getChainDetailed(x.token.chain_id)?.nativeCurrency.name
-                token.symbol = getChainDetailed(chainId)?.nativeCurrency.symbol
+                const nativeCurrency = chainResolver.nativeCurrency(x.token.chain_id ?? chainId)
+                if (nativeCurrency) {
+                    token.name = nativeCurrency.name
+                    token.symbol = nativeCurrency.symbol
+                }
             }
 
             const redpacketPayload: RedPacketJSONPayload = {
@@ -140,7 +142,7 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
                     message: x.message,
                 },
                 contract_version: x.contract_version,
-                network: resolveChainName(x.chain_id),
+                network: chainResolver.chainName(x.chain_id),
                 token: token,
                 claimers: x.claimers,
                 total_remaining: x.total_remaining,

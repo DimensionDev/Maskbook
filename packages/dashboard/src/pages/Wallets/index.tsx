@@ -1,18 +1,15 @@
 import {
     getRegisteredWeb3Networks,
-    NetworkPluginID,
     useAccount,
     useChainId,
     useNetworkDescriptor,
-    useCurrentWeb3NetworkPluginID,
     useWallet,
     useWallets,
     useWeb3State as useWeb3PluginState,
-    Web3Plugin,
-} from '@masknet/plugin-infra/web3'
+ useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { useWeb3State } from '@masknet/web3-shared-evm'
+import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { useEffect, useMemo, useState } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
@@ -53,7 +50,7 @@ function Wallets() {
     const networks = getRegisteredWeb3Networks()
     const networkDescriptor = useNetworkDescriptor()
     const pluginId = useCurrentWeb3NetworkPluginID()
-    const [selectedNetwork, setSelectedNetwork] = useState<Web3Plugin.NetworkDescriptor | null>(
+    const [selectedNetwork, setSelectedNetwork] = useState<NetworkDescriptor<number, string> | null>(
         networkDescriptor ?? null,
     )
 

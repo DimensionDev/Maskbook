@@ -1,10 +1,10 @@
 import type { Subscription } from 'use-subscription'
+import type { Wallet, WalletState as Web3WalletState } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
-import type { Web3Plugin } from '../web3-types'
 
-export class WalletState implements Web3Plugin.ObjectCapabilities.WalletState {
-    public wallets?: Subscription<Web3Plugin.Wallet[]>
-    public walletPrimary?: Subscription<Web3Plugin.Wallet | null>
+export class WalletState implements Web3WalletState {
+    public wallets?: Subscription<Wallet[]>
+    public walletPrimary?: Subscription<Wallet | null>
 
     constructor(protected context: Plugin.Shared.SharedContext) {
         this.wallets = context.wallets
@@ -15,7 +15,7 @@ export class WalletState implements Web3Plugin.ObjectCapabilities.WalletState {
         return this.context.wallets.getCurrentValue()
     }
 
-    async addWallet(id: string, wallet: Web3Plugin.Wallet) {
+    async addWallet(id: string, wallet: Wallet) {
         return this.context.addWallet(id, wallet)
     }
 

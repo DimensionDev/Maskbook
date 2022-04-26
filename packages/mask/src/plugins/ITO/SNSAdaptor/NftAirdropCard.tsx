@@ -1,11 +1,5 @@
 import formatDateTime from 'date-fns/format'
-import {
-    ChainId,
-    TransactionStateType,
-    useAccount,
-    resolveTransactionLinkOnExplorer,
-    useChainId,
-} from '@masknet/web3-shared-evm'
+import { ChainId, TransactionStateType, explorerResolver } from '@masknet/web3-shared-evm'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { Box, Typography, Button, TextField, CircularProgress, Link } from '@mui/material'
 import { useSpaceStationClaimableTokenCountCallback } from './hooks/useSpaceStationClaimableTokenCountCallback'
@@ -18,6 +12,8 @@ import CloseIcon from '@mui/icons-material/Close'
 import classNames from 'classnames'
 import type { CampaignInfo } from '../types'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -182,8 +178,8 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
         spaceStationAccountClaimableCallback,
         spaceStationAccountClaimableLoading,
     ] = useSpaceStationClaimableTokenCountCallback()
-    const account = useAccount()
-    const currentChainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
 
     const claimableCount = campaignInfos
@@ -280,7 +276,7 @@ interface ClaimItemProps {
 function ClaimItem(props: ClaimItemProps) {
     const { t } = useI18N()
     const { campaignInfo, claimed, retry } = props
-    const currentChainId = useChainId()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [claimState, claimCallback] = useSpaceStationContractClaimCallback(campaignInfo)
     const now = Date.now()
     const { classes } = useStyles()
@@ -304,7 +300,7 @@ function ClaimItem(props: ClaimItemProps) {
                                 className={classes.whiteText}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={resolveTransactionLinkOnExplorer(
+                                href={explorerResolver.transactionLink(
                                     ChainId.Mumbai,
                                     claimState.receipt.transactionHash,
                                 )}>

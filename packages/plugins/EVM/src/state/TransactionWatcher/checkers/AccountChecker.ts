@@ -1,7 +1,7 @@
-import type { TransactionStatusType, Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { TransactionChecker, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
-export class AccountChecker implements Web3Plugin.TransactionChecker<ChainId> {
+export class AccountChecker implements TransactionChecker<ChainId> {
     checkStatus(chainId: ChainId, id: string): Promise<TransactionStatusType> {
         throw new Error('Method not implemented.')
     }

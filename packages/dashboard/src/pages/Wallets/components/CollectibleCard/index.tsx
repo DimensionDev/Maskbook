@@ -1,18 +1,13 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { useHoverDirty } from 'react-use'
+import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
-import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
-import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
-import {
-    NetworkPluginID,
-    useNetworkDescriptor,
-    useCurrentWeb3NetworkPluginID,
-    useWeb3State,
-    Web3Plugin,
-} from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -95,14 +90,14 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface CollectibleCardProps {
     chainId: number
-    token: Web3Plugin.NonFungibleToken
+    token: NonFungibleAsset<number, string>
     onSend(): void
     renderOrder: number
 }
 
 export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onSend, renderOrder }) => {
     const t = useDashboardI18N()
-    const { Utils } = useWeb3State()
+    const { Others } = useWeb3State()
     const { classes } = useStyles()
     const ref = useRef(null)
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
@@ -120,8 +115,8 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
     const showSendButton = (isHovering || isHoveringTooltip) && sendable
 
     let nftLink
-    if (Utils?.resolveNonFungibleTokenLink && token.contract) {
-        nftLink = Utils?.resolveNonFungibleTokenLink?.(token.contract?.chainId, token.contract.address, token.tokenId)
+    if (Others?.resolveNonFungibleTokenLink && token.contract) {
+        nftLink = Others?.resolveNonFungibleTokenLink?.(token.contract?.chainId, token.contract.address, token.tokenId)
     }
 
     return (

@@ -1,6 +1,7 @@
-import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
+import { makeStyles } from '@masknet/theme'
+import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     imgBackground: {
@@ -34,17 +35,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTImageProps {
-    token: ERC721TokenDetailed
-    selectedToken?: ERC721TokenDetailed
-    onChange: (token: ERC721TokenDetailed) => void
+    token: NonFungibleToken<ChainId, SchemaType.ERC721>
+    selectedToken?: NonFungibleToken<ChainId, SchemaType.ERC721>
+    onChange: (token: NonFungibleToken<ChainId, SchemaType.ERC721>) => void
 }
 
-function isSameNFT(a: ERC721TokenDetailed, b?: ERC721TokenDetailed) {
-    return (
-        isSameAddress(a.contractDetailed.address, b?.contractDetailed.address) &&
-        a.contractDetailed.chainId === b?.contractDetailed.chainId &&
-        a.tokenId === b?.tokenId
-    )
+function isSameNFT(a: NonFungibleToken<ChainId, SchemaType.ERC721>, b?: NonFungibleToken<ChainId, SchemaType.ERC721>) {
+    return isSameAddress(a.address, b?.address) && a.chainId === b?.chainId && a.tokenId === b?.tokenId
 }
 
 export function NFTImage(props: NFTImageProps) {
@@ -55,7 +52,7 @@ export function NFTImage(props: NFTImageProps) {
         <div className={classes.imgBackground}>
             <img
                 onClick={() => onChange(token)}
-                src={token.info.imageURL}
+                src={token.metadata?.imageURL}
                 className={classNames(classes.image, isSameNFT(token, selectedToken) ? classes.selected : '')}
             />
         </div>

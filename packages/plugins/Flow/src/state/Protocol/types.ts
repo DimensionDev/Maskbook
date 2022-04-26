@@ -1,12 +1,11 @@
-import type { NetworkPluginID, Web3Helper, Web3Plugin } from '@masknet/plugin-infra/web3'
-import type { ChainId, FclProvider, Web3 } from '@masknet/web3-shared-flow'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID, WalletProvider } from '@masknet/web3-shared-base'
+import type { ChainId, ProviderType, Web3, Web3Provider } from '@masknet/web3-shared-flow'
 
-export type FlowWeb3 = Web3
+export interface FlowProvider extends WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {}
 
-export type FlowWeb3State = Web3Helper.Web3State<NetworkPluginID.PLUGIN_FLOW>
+export interface FlowWeb3State extends Web3Helper.Web3State<NetworkPluginID.PLUGIN_FLOW> {}
 
-export interface FlowProvider extends Web3Plugin.WalletProvider<ChainId, FclProvider, FlowWeb3> {}
+export interface FlowWeb3Connection extends Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_FLOW> {}
 
-export interface FlowConnection extends Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_FLOW> {}
-
-export type FlowConnectionOptions = Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_FLOW>
+export interface FlowConnectionOptions extends Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_FLOW> {}

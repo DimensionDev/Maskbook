@@ -1,18 +1,12 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { v4 as uuid } from 'uuid'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { usePickToken, InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { isZero, rightShift } from '@masknet/web3-shared-base'
-import {
-    SchemaType,
-    formatBalance,
-    FungibleTokenDetailed,
-    TransactionStateType,
-    useAccount,
-    useFungibleTokenBalance,
-} from '@masknet/web3-shared-evm'
+import { FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { SchemaType, formatBalance, TransactionStateType, ChainId } from '@masknet/web3-shared-evm'
+import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { DialogContent } from '@mui/material'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { v4 as uuid } from 'uuid'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
@@ -56,11 +50,11 @@ export function InvestDialog() {
     const { classes } = useStyles()
     const [id] = useState(uuid)
     const [pool, setPool] = useState<Pool>()
-    const [token, setToken] = useState<FungibleTokenDetailed>()
+    const [token, setToken] = useState<FungibleToken<ChainId, SchemaType>>()
     const [allowedTokens, setAllowedTokens] = useState<string[]>()
 
     // context
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     // #region remote controlled dialog
     const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated, (ev) => {
@@ -94,7 +88,7 @@ export function InvestDialog() {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useFungibleTokenBalance(token?.type ?? SchemaType.Native, token?.address ?? '')
+    } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
     // #endregion
 
     // #region blocking
@@ -220,7 +214,7 @@ export function InvestDialog() {
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
                                 spender={pool.address}
-                                token={token?.type === SchemaType.ERC20 ? token : undefined}>
+                                token={token?.schema === SchemaType.ERC20 ? token : undefined}>
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth

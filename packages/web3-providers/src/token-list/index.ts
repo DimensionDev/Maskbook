@@ -1,41 +1,16 @@
-import { groupBy } from 'lodash-unified'
+import { first, groupBy } from 'lodash-unified'
 import { memoizePromise } from '@dimensiondev/kit'
-import { TokenType, Web3Plugin } from '@masknet/plugin-infra'
-import { ChainId, SchemaType, formatEthereumAddress, getChainDetailed } from '@masknet/web3-shared-evm'
+import { FungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, formatEthereumAddress, chainResolver } from '@masknet/web3-shared-evm'
 import type { TokenListBaseAPI } from '../types'
-
-const NATIVE_TOKEN_ADDRESS_IN_1INCH = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
 const fetchTokenList = memoizePromise(
     async (url: string) => {
         const response = await fetch(url, { cache: 'force-cache' })
-        return response.json() as Promise<TokenListBaseAPI.TokenList | TokenListBaseAPI.TokenObject>
+        return response.json() as Promise<TokenListBaseAPI.TokenList<ChainId> | TokenListBaseAPI.TokenObject<ChainId>>
     },
     (url) => url,
 )
-
-/**
- * Fetch tokens from 1inch token list
- * @param url
- * @param chainId
- */
-async function fetch1inchERC20TokensFromTokenList(
-    url: string,
-    chainId = ChainId.Mainnet,
-): Promise<Web3Plugin.FungibleToken[]> {
-    const tokens = ((await fetchTokenList(url)) as TokenListBaseAPI.TokenObject).tokens
-    const _tokens = Object.values(tokens)
-    return _tokens
-        .filter((x) => x.address.toLowerCase() !== NATIVE_TOKEN_ADDRESS_IN_1INCH)
-        .map((x) => ({
-            id: x.address,
-            type: TokenType.Fungible,
-            subType: SchemaType.ERC20,
-            ...x,
-            chainId: chainId,
-            logoURI: x.logoURI ? [x.logoURI] : [],
-        }))
-}
 
 /**
  * Fetch tokens from common token list
@@ -45,21 +20,21 @@ async function fetch1inchERC20TokensFromTokenList(
 async function fetchCommonERC20TokensFromTokenList(
     url: string,
     chainId = ChainId.Mainnet,
-): Promise<Web3Plugin.FungibleToken[]> {
-    return ((await fetchTokenList(url)) as TokenListBaseAPI.TokenList).tokens
+): Promise<FungibleToken<ChainId, SchemaType.ERC20>[]> {
+    return ((await fetchTokenList(url)) as TokenListBaseAPI.TokenList<ChainId>).tokens
         .filter(
             (x) =>
                 x.chainId === chainId &&
                 (process.env.NODE_ENV === 'production' && process.env.channel === 'stable'
-                    ? getChainDetailed(chainId)?.network === 'mainnet'
+                    ? chainResolver.isMainnet(chainId)
                     : true),
         )
         .map((x) => ({
             id: x.address,
             type: TokenType.Fungible,
-            subType: SchemaType.ERC20,
+            schema: SchemaType.ERC20,
             ...x,
-            logoURI: x.logoURI ? [x.logoURI] : [],
+            logoURL: x.logoURL,
         }))
 }
 
@@ -70,11 +45,6 @@ async function fetchCommonERC20TokensFromTokenList(
  */
 async function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.Mainnet) {
     const allRequest = urls.map(async (x) => {
-        if (x.includes('1inch')) {
-            const tokens = await fetch1inchERC20TokensFromTokenList(x, chainId)
-            return { tokens, weight: 0 }
-        }
-
         const tokens = await fetchCommonERC20TokensFromTokenList(x, chainId)
         return { tokens, weight: x.startsWith('https://tokens.r2d2.to') ? 1 : 0 }
     })
@@ -88,24 +58,24 @@ async function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.M
  * @param urls
  * @param chainId
  */
-export class TokenListAPI implements TokenListBaseAPI.Provider {
+export class TokenListAPI implements TokenListBaseAPI.Provider<ChainId, SchemaType> {
     async fetchFungibleTokensFromTokenLists(chainId: ChainId, url: string[]) {
         const result = memoizePromise(
-            async (urls: string[], chainId = ChainId.Mainnet): Promise<Web3Plugin.FungibleToken[]> => {
+            async (urls: string[], chainId = ChainId.Mainnet): Promise<FungibleToken<ChainId, SchemaType>[]> => {
                 const tokens = (await fetchERC20TokensFromTokenList(urls, chainId))
                     .sort((a, b) => b.weight - a.weight)
                     .flatMap((x) => x.tokens)
                 const groupedToken = groupBy(tokens, (x) => x.address.toLowerCase())
 
                 return Object.values(groupedToken).map((tokenList) => {
-                    const logoURIs = tokenList
-                        .map((token) => token.logoURI)
+                    const logoURLs = tokenList
+                        .map((token) => token.logoURL)
                         .flat()
                         .filter((token) => !!token) as string[]
                     return {
                         ...tokenList[0],
                         ...{ address: formatEthereumAddress(tokenList[0].address) },
-                        ...{ logoURI: logoURIs },
+                        ...{ logoURL: first(logoURLs) },
                     }
                 })
             },

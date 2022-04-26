@@ -1,26 +1,24 @@
 import { useSpaceStationContract } from './useSpaceStationContract'
-import {
-    useAccount,
-    useSpaceStationGalaxyConstants,
-    useTransactionState,
-    TransactionStateType,
-    TransactionEventType,
-} from '@masknet/web3-shared-evm'
+import { useSpaceStationGalaxyConstants, TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
 import { useCallback } from 'react'
 import type { CampaignInfo } from '../../types'
 import type { SpaceStationGalaxy } from '@masknet/web3-contracts/types/SpaceStationGalaxy'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { getAccountClaimSignature, mutationParticipate } from '../../Worker/apis/spaceStationGalaxy'
-import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 
 export function useSpaceStationContractClaimCallback(campaignInfo: CampaignInfo) {
-    const account = useAccount()
-    const spaceStationContract = useSpaceStationContract()
-    const { CONTRACT_ADDRESS } = useSpaceStationGalaxyConstants()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { CONTRACT_ADDRESS } = useSpaceStationGalaxyConstants(chainId)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const spaceStationContract = useSpaceStationContract(chainId)
     const [claimState, setClaimState] = useTransactionState()
 
     const claimCallback = useCallback(async () => {
-        if (!CONTRACT_ADDRESS || !spaceStationContract || !campaignInfo) {
+        if (!CONTRACT_ADDRESS || !spaceStationContract || !campaignInfo || !connection) {
             setClaimState({ type: TransactionStateType.UNKNOWN })
             return
         }
@@ -32,7 +30,7 @@ export function useSpaceStationContractClaimCallback(campaignInfo: CampaignInfo)
 
         let useSignature = ''
         try {
-            useSignature = await EVM_RPC.personalSign(
+            useSignature = await connection.signMessage(
                 `${campaignInfo.name}
 
 ${campaignInfo.description}`,

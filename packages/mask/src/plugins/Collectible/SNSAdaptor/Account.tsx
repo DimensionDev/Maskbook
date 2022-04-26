@@ -1,5 +1,6 @@
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../utils'
-import { useAccount, isSameAddress } from '@masknet/web3-shared-evm'
 
 export interface AccountProps {
     address?: string
@@ -8,7 +9,7 @@ export interface AccountProps {
 
 export function Account({ address, username }: AccountProps) {
     const { t } = useI18N()
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     return <>{isSameAddress(account, address ?? '') ? t('plugin_collectible_you') : username || address?.slice(2, 8)}</>
 }

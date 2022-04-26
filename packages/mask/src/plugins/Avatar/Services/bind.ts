@@ -1,5 +1,5 @@
-import { ChainId, isSameAddress } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import { KeyValue } from '@masknet/web3-providers'
 import { NFT_AVATAR_DB_NAME, NFT_AVATAR_DB_NAME_STORAGE } from '../constants'

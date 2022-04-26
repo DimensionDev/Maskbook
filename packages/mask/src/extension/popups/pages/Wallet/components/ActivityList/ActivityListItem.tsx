@@ -1,13 +1,13 @@
-import type { RecentTransaction } from '../../../../../../plugins/Wallet/services'
-import { makeStyles } from '@masknet/theme'
 import { memo, useMemo } from 'react'
+import { makeStyles } from '@masknet/theme'
 import { Box, Button, ListItem, ListItemText, Typography } from '@mui/material'
-import { formatEthereumAddress, TransactionStatusType } from '@masknet/web3-shared-evm'
+import type { NetworkPluginID, Transaction, TransactionStatusType } from '@masknet/web3-shared-base'
+import type { ChainId, formatEthereumAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon, UploadIcon } from '@masknet/icons'
-import { RecentTransactionDescription } from '../../../../../../plugins/Wallet/SNSAdaptor/TransactionSnackbar/TransactionDescription'
+// import { RecentTransactionDescription } from '../../../../../../plugins/Wallet/SNSAdaptor/TransactionSnackbar/TransactionDescription'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../../../../utils'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     item: {
@@ -61,80 +61,81 @@ const useStyles = makeStyles()({
 
 export interface ActivityListItemProps {
     toAddress?: string
-    transaction: RecentTransaction
+    transaction: Transaction<ChainId, SchemaType>
     onSpeedUpClick: (e: React.MouseEvent<HTMLButtonElement>) => void
     onCancelClick: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export const ActivityListItem = memo<ActivityListItemProps>(
     ({ transaction, toAddress, onSpeedUpClick, onCancelClick }) => {
-        const { t } = useI18N()
-        const { classes } = useStyles()
-        const { Utils } = useWeb3State()
-        const { value: domain } = useReverseAddress(toAddress, NetworkPluginID.PLUGIN_EVM)
+        return null
+        // const { t } = useI18N()
+        // const { classes } = useStyles()
+        // const { Others } = useWeb3State()
+        // const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
 
-        const transactionComputedPayloadName =
-            transaction.computedPayload && 'name' in transaction.computedPayload && transaction.computedPayload.name
-        const transactionIcon = useMemo(() => {
-            switch (transaction.status) {
-                case TransactionStatusType.NOT_DEPEND:
-                    return <LoaderIcon className={classes.loader} />
-                case TransactionStatusType.CANCELLED:
-                case TransactionStatusType.SUCCEED:
-                    if (transactionComputedPayloadName === 'transfer') return <UploadIcon className={classes.send} />
-                    return <InteractionCircleIcon className={classes.interaction} />
-                case TransactionStatusType.FAILED:
-                default:
-                    return <CircleCloseIcon style={{ fill: 'none' }} />
-            }
-        }, [transaction.status, transactionComputedPayloadName])
-        return (
-            <ListItem className={classes.item}>
-                {transactionIcon}
-                <ListItemText style={{ marginLeft: 15 }}>
-                    <Typography className={classes.description}>
-                        <RecentTransactionDescription {...transaction} />
-                    </Typography>
+        // const transactionComputedPayloadName =
+        //     transaction.computedPayload && 'name' in transaction.computedPayload && transaction.computedPayload.name
+        // const transactionIcon = useMemo(() => {
+        //     switch (transaction.status) {
+        //         case TransactionStatusType.NOT_DEPEND:
+        //             return <LoaderIcon className={classes.loader} />
+        //         case TransactionStatusType.SUCCEED:
+        //             if (transactionComputedPayloadName === 'transfer') return <UploadIcon className={classes.send} />
+        //             return <InteractionCircleIcon className={classes.interaction} />
+        //         case TransactionStatusType.FAILED:
+        //         default:
+        //             return <CircleCloseIcon style={{ fill: 'none' }} />
+        //     }
+        // }, [transaction.status, transactionComputedPayloadName])
+        // return (
+        //     <ListItem className={classes.item}>
+        //         {transactionIcon}
+        //         <ListItemText style={{ marginLeft: 15 }}>
+        //             <Typography className={classes.description}>
+        //                 <RecentTransactionDescription {...transaction} />
+        //             </Typography>
 
-                    {transaction.status === TransactionStatusType.NOT_DEPEND ? (
-                        <Typography fontSize={12} color="#FFB915" fontWeight={600} lineHeight="16px">
-                            {t('pending')}
-                        </Typography>
-                    ) : (
-                        <Typography className={classes.secondaryDesc}>
-                            {transaction.at ? `${formatDateTime(transaction.at, 'MMM dd')}.  ` : null}
-                            {toAddress
-                                ? t('popups_wallet_activity_to_address', {
-                                      address: Utils?.formatDomainName?.(domain) || formatEthereumAddress(toAddress, 4),
-                                  })
-                                : null}
-                        </Typography>
-                    )}
+        //             {transaction.status === TransactionStatusType.NOT_DEPEND ? (
+        //                 <Typography fontSize={12} color="#FFB915" fontWeight={600} lineHeight="16px">
+        //                     {t('pending')}
+        //                 </Typography>
+        //             ) : (
+        //                 <Typography className={classes.secondaryDesc}>
+        //                     {transaction.at ? `${formatDateTime(transaction.at, 'MMM dd')}.  ` : null}
+        //                     {toAddress
+        //                         ? t('popups_wallet_activity_to_address', {
+        //                               address:
+        //                                   Others?.formatDomainName?.(domain) || formatEthereumAddress(toAddress, 4),
+        //                           })
+        //                         : null}
+        //                 </Typography>
+        //             )}
 
-                    {transaction.status === TransactionStatusType.NOT_DEPEND ? (
-                        <Box display="flex" mt={1}>
-                            {Object.keys(transaction.candidates).length === 1 ? (
-                                <Button className={classes.button} variant="contained" onClick={onSpeedUpClick}>
-                                    {t('speed_up')}
-                                </Button>
-                            ) : null}
-                            <Button
-                                className={classes.button}
-                                style={{ color: '#1C68F3', backgroundColor: '#F7F9FA', marginLeft: 2 }}
-                                onClick={onCancelClick}>
-                                {t('cancel')}
-                            </Button>
-                        </Box>
-                    ) : null}
+        //             {transaction.status === TransactionStatusType.NOT_DEPEND ? (
+        //                 <Box display="flex" mt={1}>
+        //                     {Object.keys(transaction.candidates).length === 1 ? (
+        //                         <Button className={classes.button} variant="contained" onClick={onSpeedUpClick}>
+        //                             {t('speed_up')}
+        //                         </Button>
+        //                     ) : null}
+        //                     <Button
+        //                         className={classes.button}
+        //                         style={{ color: '#1C68F3', backgroundColor: '#F7F9FA', marginLeft: 2 }}
+        //                         onClick={onCancelClick}>
+        //                         {t('cancel')}
+        //                     </Button>
+        //                 </Box>
+        //             ) : null}
 
-                    {transaction.status === TransactionStatusType.FAILED ? (
-                        <Typography fontSize={12} color="#FF5F5F" fontWeight={600} lineHeight="16px">
-                            {t('failed')}
-                        </Typography>
-                    ) : null}
-                </ListItemText>
-                <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />
-            </ListItem>
-        )
+        //             {transaction.status === TransactionStatusType.FAILED ? (
+        //                 <Typography fontSize={12} color="#FF5F5F" fontWeight={600} lineHeight="16px">
+        //                     {t('failed')}
+        //                 </Typography>
+        //             ) : null}
+        //         </ListItemText>
+        //         <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />
+        //     </ListItem>
+        // )
     },
 )

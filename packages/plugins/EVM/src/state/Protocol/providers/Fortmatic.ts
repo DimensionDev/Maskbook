@@ -61,7 +61,7 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
     }
 
     private createFortmatic(chainId: ChainIdFortmatic) {
-        const rpcUrl = first(getRPCConstants(chainId).RPC)
+        const rpcUrl = first(getRPCConstants(chainId).RPC_URLS)
         if (!rpcUrl) throw new Error('Failed to create provider.')
         return new Fortmatic(resolveAPI_Key(chainId), { chainId, rpcUrl })
     }

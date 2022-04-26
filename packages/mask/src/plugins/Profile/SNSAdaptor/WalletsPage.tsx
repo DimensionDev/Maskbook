@@ -5,10 +5,11 @@ import { Copy, ExternalLink } from 'react-feather'
 import { RewardIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { NetworkPluginID, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
+import { useChainId, useNetworkDescriptor, useWallets } from '@masknet/plugin-infra/web3'
 import { ImageIcon, useSnackbarCallback } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { formatEthereumAddress, resolveAddressLinkOnExplorer, useChainId, useWallets } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Button, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 
@@ -49,9 +50,9 @@ const useStyles = makeStyles()((theme) => ({
 export function WalletsPage() {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const chainId = useChainId()
-    const wallets = useWallets()
-    const networkDescriptor = useNetworkDescriptor(undefined, NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
     const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
@@ -87,7 +88,7 @@ export function WalletsPage() {
                             </Link>
                             <Link
                                 className={classes.link}
-                                href={resolveAddressLinkOnExplorer(chainId, wallet.address)}
+                                href={explorerResolver.addressLink(chainId, wallet.address)}
                                 target="_blank"
                                 title="View on Explorer"
                                 rel="noopener noreferrer">

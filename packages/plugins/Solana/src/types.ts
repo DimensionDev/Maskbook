@@ -1,3 +1,1 @@
-export interface FungibleToken {
-    address: string
-}
+export {}

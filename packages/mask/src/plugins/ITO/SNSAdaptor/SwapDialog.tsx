@@ -1,20 +1,21 @@
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { usePickToken } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
+import {
+    leftShift,
+    NetworkPluginID,
+    rightShift,
+    ZERO,
+    FungibleToken,
+    currySameAddress,
+} from '@masknet/web3-shared-base'
 import {
     ChainId,
-    currySameAddress,
     SchemaType,
     formatBalance,
-    FungibleTokenDetailed,
     isNativeTokenAddress,
-    isSameAddress,
-    resolveTransactionLinkOnExplorer,
+    explorerResolver,
     TransactionStateType,
-    useChainId,
-    useFungibleTokenBalance,
-    useFungibleTokenDetailed,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
 import { CircularProgress, Slider, Typography } from '@mui/material'
@@ -30,6 +31,7 @@ import type { JSON_PayloadInMask } from '../types'
 import { useQualificationVerify } from './hooks/useQualificationVerify'
 import { useSwapCallback } from './hooks/useSwapCallback'
 import { SwapStatus } from './SwapGuide'
+import { useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -86,7 +88,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface SwapDialogProps extends withClasses<'root'> {
-    exchangeTokens: FungibleTokenDetailed[]
+    exchangeTokens: FungibleToken<ChainId, SchemaType>[]
     payload: JSON_PayloadInMask
     initAmount: BigNumber
     tokenAmount: BigNumber
@@ -96,7 +98,7 @@ export interface SwapDialogProps extends withClasses<'root'> {
     setStatus: (status: SwapStatus) => void
     chainId: ChainId
     account: string
-    token: FungibleTokenDetailed
+    token: FungibleToken<ChainId, SchemaType>
 }
 
 export function SwapDialog(props: SwapDialogProps) {
@@ -114,18 +116,15 @@ export function SwapDialog(props: SwapDialogProps) {
         exchangeTokens,
     } = props
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const classes = useStylesExtends(useStyles(), props)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),
     )
-    const { value: initToken } = useFungibleTokenDetailed(
-        isSameAddress(NATIVE_TOKEN_ADDRESS, payload.exchange_tokens[0].address) ? SchemaType.Native : SchemaType.ERC20,
-        payload.exchange_tokens[0].address,
-    )
+    const { value: initToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, payload.exchange_tokens[0].address)
 
-    const [swapToken, setSwapToken] = useState<FungibleTokenDetailed | undefined>(undefined)
+    const [swapToken, setSwapToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(undefined)
 
     useEffect(() => {
         setSwapToken(initToken)
@@ -165,7 +164,7 @@ export function SwapDialog(props: SwapDialogProps) {
 
     // #region balance
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        swapToken ? swapToken.type : SchemaType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         swapToken ? swapToken.address : NATIVE_TOKEN_ADDRESS,
     )
     // #endregion
@@ -217,7 +216,7 @@ export function SwapDialog(props: SwapDialogProps) {
         if (swapState.type === TransactionStateType.HASH) {
             const { hash } = swapState
             setTimeout(() => {
-                openWindow(resolveTransactionLinkOnExplorer(chainId, hash))
+                openWindow(explorerResolver.transactionLink(chainId, hash))
             }, 2000)
             return
         }

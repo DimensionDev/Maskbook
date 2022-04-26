@@ -19,7 +19,7 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { Result } from 'ts-results'
-import { PermissionAwareRedirectOf } from '../../../extension/popups'
+// import { PermissionAwareRedirectOf } from '../../../extension/popups'
 import Services from '../../../extension/service'
 import { useExternalPluginManifest } from '../loader'
 import { createThirdPartyPopupContext } from '../sns-context'
@@ -131,7 +131,7 @@ function Loader(props: { url: string }) {
                     <ListItemText primary="Description" secondary={loading ? skeleton : value?.description ?? ''} />
                 </ListItem>
             </List>
-            <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
+            {/* <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
                 {contribution ? (
                     <Button
                         variant="contained"
@@ -146,7 +146,7 @@ function Loader(props: { url: string }) {
                         {t('plugin_external_get_started')}
                     </Button>
                 ) : null}
-            </Box>
+            </Box> */}
         </Box>
     )
 }

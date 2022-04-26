@@ -1,13 +1,13 @@
 import { first } from 'lodash-unified'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
-import { ChainId, Coin98MethodType } from '@masknet/web3-shared-solana'
+import type { PublicKey, Transaction } from '@solana/web3.js'
+import type { Account } from '@masknet/web3-shared-base'
+import { ChainId, Coin98MethodType, ProviderType } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types'
 import { BaseInjectedProvider } from './BaseInjected'
-import type { PublicKey, Transaction } from '@solana/web3.js'
 
 export class Coin98Provider extends BaseInjectedProvider implements SolanaProvider {
     constructor() {
-        super(['coin98', 'sol'])
+        super(['coin98', 'sol'], ProviderType.Coin98)
     }
 
     private get coin98() {
@@ -32,7 +32,7 @@ export class Coin98Provider extends BaseInjectedProvider implements SolanaProvid
         return transaction
     }
 
-    override async connect(chainId: ChainId): Promise<Web3Plugin.Account<ChainId>> {
+    override async connect(chainId: ChainId): Promise<Account<ChainId>> {
         await this.readyPromise
 
         const accounts = await this.coin98.request<string[]>({

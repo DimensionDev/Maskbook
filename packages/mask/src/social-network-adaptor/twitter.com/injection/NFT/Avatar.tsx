@@ -1,10 +1,10 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
+// import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { getInjectNodeInfo } from '../../utils/avatar'
 import { postAvatarsContentSelector } from '../../utils/selector'
-import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
-import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
+// import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
+// import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 
 function getTwitterId(ele: HTMLElement) {
     const twitterIdNode = (ele.firstChild?.nextSibling as HTMLElement).querySelector(
@@ -39,7 +39,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                             top: 0,
                             zIndex: 2,
                         }}>
-                        {info.isTwitterNFT ? (
+                        {/* {info.isTwitterNFT ? (
                             <NFTAvatarMiniClip width={info.width} height={info.height} screenName={twitterId} />
                         ) : (
                             <NFTBadgeTimeline
@@ -49,7 +49,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                                 height={info.height - 4}
                                 snsKey={RSS3_KEY_SNS.TWITTER}
                             />
-                        )}
+                        )} */}
                     </div>,
                 )
                 remover = root.destroy

@@ -10,9 +10,9 @@ import {
 } from '../../utils/selector'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
-import { toPNG } from '../../../../plugins/Avatar/utils'
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
-import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
+// import { toPNG } from '../../../../plugins/Avatar/utils'
+// import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+// import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
@@ -66,19 +66,19 @@ function NFTAvatarInTwitter() {
 
     const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent | undefined>()
 
-    const onChange = async (token: ERC721TokenDetailed) => {
-        if (!token.info.imageURL) return
-        const image = await toPNG(token.info.imageURL)
-        if (!image) return
-        changeImageToActiveElements(image)
+    // const onChange = async (token: ERC721TokenDetailed) => {
+    //     if (!token.info.imageURL) return
+    //     const image = await toPNG(token.info.imageURL)
+    //     if (!image) return
+    //     changeImageToActiveElements(image)
 
-        setAvatarEvent({
-            userId: identity.identifier.userId,
-            avatarId: getAvatarId(identity.avatar ?? ''),
-            address: token.contractDetailed.address,
-            tokenId: token.tokenId,
-        })
-    }
+    //     setAvatarEvent({
+    //         userId: identity.identifier.userId,
+    //         avatarId: getAvatarId(identity.avatar ?? ''),
+    //         address: token.contractDetailed.address,
+    //         tokenId: token.tokenId,
+    //     })
+    // }
 
     const handler = () => {
         MaskMessages.events.NFTAvatarUpdated.sendToLocal(
@@ -99,5 +99,6 @@ function NFTAvatarInTwitter() {
         return () => profileSave.removeEventListener('click', handler)
     }, [handler])
 
-    return <NFTAvatar onChange={onChange} classes={classes} />
+    return null
+    // return <NFTAvatar onChange={onChange} classes={classes} />
 }

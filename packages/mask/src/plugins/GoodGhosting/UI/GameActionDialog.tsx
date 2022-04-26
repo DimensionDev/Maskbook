@@ -2,12 +2,13 @@ import { Box, Button, DialogContent, DialogActions, Typography } from '@mui/mate
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { ERC20TokenDetailed, formatBalance, useERC20TokenBalance } from '@masknet/web3-shared-evm'
+import { ChainId, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
 import type { GoodGhostingInfo } from '../types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useI18N } from '../../../utils'
 import { useGameToken } from '../hooks/usePoolData'
-import { isGreaterThanOrEqualTo } from '@masknet/web3-shared-base'
+import { FungibleToken, isGreaterThanOrEqualTo, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -38,7 +39,7 @@ interface GameActionDialogProps {
     actionText: string
     onAction: () => void
     onClose: () => void
-    token: ERC20TokenDetailed | undefined
+    token: FungibleToken<ChainId, SchemaType.ERC20> | undefined
     info: GoodGhostingInfo
     needsApprove: boolean
 }
@@ -54,7 +55,7 @@ export function GameActionDialog(props: GameActionDialogProps) {
         loading: loadingTokenBalance,
         error: errorTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useERC20TokenBalance(gameToken.address)
+    } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, gameToken.address)
 
     const hasSufficientBalance =
         !loadingTokenBalance && !errorTokenBalance && isGreaterThanOrEqualTo(tokenBalance, info.segmentPayment)

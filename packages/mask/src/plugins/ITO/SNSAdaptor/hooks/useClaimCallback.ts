@@ -1,23 +1,18 @@
 import { useCallback } from 'react'
 import stringify from 'json-stable-stringify'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    TransactionEventType,
-    TransactionStateType,
-    useAccount,
-    useChainId,
-    useTransactionState,
-    useITOConstants,
-    isSameAddress,
-} from '@masknet/web3-shared-evm'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { TransactionEventType, TransactionStateType, useITOConstants } from '@masknet/web3-shared-evm'
 import { useITO_Contract } from './useITO_Contract'
 import { checkAvailability } from '../../Worker/apis/checkAvailability'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 
 export function useClaimCallback(pids: string[], contractAddress: string | undefined) {
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { ITO_CONTRACT_ADDRESS } = useITOConstants()
-    const { contract: ITO_Contract } = useITO_Contract(contractAddress)
+    const { contract: ITO_Contract } = useITO_Contract(chainId, contractAddress)
     const [claimState, setClaimState] = useTransactionState()
 
     const isV1 = isSameAddress(ITO_CONTRACT_ADDRESS ?? '', contractAddress)

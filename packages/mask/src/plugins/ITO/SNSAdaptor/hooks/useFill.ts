@@ -8,16 +8,14 @@ import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import {
     TransactionEventType,
     TransactionStateType,
-    useAccount,
-    useChainId,
-    useTransactionState,
-    useWeb3,
-    FungibleTokenDetailed,
-    ERC20TokenDetailed,
     TransactionState,
     FAKE_SIGN_PASSWORD,
+    ChainId,
+    SchemaType,
 } from '@masknet/web3-shared-evm'
-import { isGreaterThan, ONE } from '@masknet/web3-shared-base'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
+import { useAccount, useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
+import { FungibleToken, isGreaterThan, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
 import { useITO_Contract } from './useITO_Contract'
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants'
@@ -36,8 +34,8 @@ export interface PoolSettings {
     total: string
     qualificationAddress: string
     exchangeAmounts: string[]
-    exchangeTokens: FungibleTokenDetailed[]
-    token?: ERC20TokenDetailed
+    exchangeTokens: FungibleToken<ChainId, SchemaType>[]
+    token?: FungibleToken<ChainId, SchemaType.ERC20>
     advanceSettingData: AdvanceSettingData
 }
 
@@ -57,22 +55,22 @@ type paramsObjType = {
     now: number
     invalidTokenAt: number
     exchangeAmounts: string[]
-    exchangeTokens: FungibleTokenDetailed[]
-    token: ERC20TokenDetailed | undefined
+    exchangeTokens: FungibleToken<ChainId, SchemaType>[]
+    token: FungibleToken<ChainId, SchemaType.ERC20> | undefined
 }
 
 export function useFillCallback(poolSettings?: PoolSettings) {
     const { t } = useI18N()
-    const web3 = useWeb3()
-    const account = useAccount()
-    const chainId = useChainId()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { contract: ITO_Contract } = useITO_Contract()
     const [fillState, setFillState] = useTransactionState()
     const [fillSettings, setFillSettings] = useState(poolSettings)
     const paramResult = useFillParams(poolSettings)
 
     const fillCallback = useCallback(async () => {
-        if (!poolSettings) {
+        if (!web3 || !poolSettings) {
             setFillState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -173,7 +171,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
 export function useFillParams(poolSettings: PoolSettings | undefined) {
     const { contract: ITO_Contract } = useITO_Contract()
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     return useAsync(async () => {
         if (!poolSettings || !ITO_Contract) return null

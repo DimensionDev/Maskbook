@@ -4,19 +4,17 @@ import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/mate
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
 import {
-    CurrencyType,
-    NetworkPluginID,
     useChainId,
     useNetworkDescriptors,
     useCurrentWeb3NetworkPluginID,
     useWeb3State,
     Web3Plugin,
 } from '@masknet/plugin-infra/web3'
+import { CurrencyType, NetworkPluginID, pow10, toFixed } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 import { getTokenUSDValue } from '../../utils/getTokenUSDValue'
-import { pow10, toFixed } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -75,7 +73,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const currentChainId = useChainId()
-    const { Utils } = useWeb3State()
+    const { Others } = useWeb3State()
     const networkDescriptors = useNetworkDescriptors()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const isOnCurrentChain = useMemo(() => currentChainId === asset.chainId, [asset, currentChainId])
@@ -90,7 +88,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                             address={asset.address}
                             name={asset.name}
                             chainId={asset.chainId}
-                            logoURI={asset.logoURI || asset.logoURI}
+                            logoURL={asset.logoURI || asset.logoURI}
                             AvatarProps={{ sx: { width: 36, height: 36 } }}
                         />
                         <Box className={classes.chainIcon}>
@@ -104,13 +102,13 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
-                <Typography>{toFixed(Utils?.formatBalance?.(asset.balance, asset.decimals) ?? '', 6)}</Typography>
+                <Typography>{toFixed(Others?.formatBalance?.(asset.balance, asset.decimals) ?? '', 6)}</Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>
                     {asset.price?.[CurrencyType.USD]
                         ? new BigNumber(asset.price[CurrencyType.USD] ?? '').gt(pow10(-6))
-                            ? Utils?.formatCurrency?.(Number.parseFloat(asset.price[CurrencyType.USD] ?? ''), '$')
+                            ? Others?.formatCurrency?.(Number.parseFloat(asset.price[CurrencyType.USD] ?? ''), '$')
                             : '<0.000001'
                         : '-'}
                 </Typography>
@@ -123,7 +121,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                         <FormattedCurrency
                             value={getTokenUSDValue(asset.value).toFixed(2)}
                             sign="$"
-                            formatter={Utils?.formatCurrency}
+                            formatter={Others?.formatCurrency}
                         />
                     )}
                 </Typography>

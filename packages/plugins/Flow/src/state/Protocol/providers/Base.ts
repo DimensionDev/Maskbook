@@ -1,10 +1,10 @@
 import { Emitter } from '@servie/events'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
-import type { ChainId, FclProvider } from '@masknet/web3-shared-flow'
-import type { FlowProvider, FlowWeb3 } from '../types'
+import type { Account, ProviderEvents } from '@masknet/web3-shared-base'
+import type { ChainId, ProviderType, Web3, Web3Provider } from '@masknet/web3-shared-flow'
+import type { FlowProvider } from '../types'
 
 export class BaseProvider implements FlowProvider {
-    emitter = new Emitter<Web3Plugin.ProviderEvents<ChainId>>()
+    emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()
 
     // No need to wait by default
     get ready() {
@@ -19,13 +19,13 @@ export class BaseProvider implements FlowProvider {
     switchChain(chainId?: ChainId): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    createWeb3(chainId?: ChainId): Promise<FlowWeb3> {
+    createWeb3(chainId?: ChainId): Promise<Web3> {
         throw new Error('Method not implemented.')
     }
-    createWeb3Provider(chainId?: ChainId): Promise<FclProvider> {
+    createWeb3Provider(chainId?: ChainId): Promise<Web3Provider> {
         throw new Error('Method not implemented.')
     }
-    connect(chainId?: ChainId): Promise<Web3Plugin.Account<ChainId>> {
+    connect(chainId?: ChainId): Promise<Account<ChainId>> {
         throw new Error('Method not implemented.')
     }
     disconnect(): Promise<void> {

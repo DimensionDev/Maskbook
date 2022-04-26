@@ -1,15 +1,10 @@
 import { useCallback } from 'react'
-import {
-    FungibleTokenDetailed,
-    SchemaType,
-    useAccount,
-    useTransactionState,
-    TransactionStateType,
-    TransactionEventType,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
 import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
 import { Pool, PoolType } from '../types'
-import { toFixed } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 
 /**
  * A callback for invest dhedge pool
@@ -17,11 +12,13 @@ import { toFixed } from '@masknet/web3-shared-base'
  * @param amount
  * @param token
  */
-export function useInvestCallback(pool: Pool | undefined, amount: string, token?: FungibleTokenDetailed) {
-    const poolV1Contract = useDHedgePoolV1Contract(pool?.address ?? '')
-    const poolV2Contract = useDHedgePoolV2Contract(pool?.address ?? '')
+export function useInvestCallback(pool: Pool | undefined, amount: string, token?: FungibleToken<ChainId, SchemaType>) {
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
-    const account = useAccount()
+    const poolV1Contract = useDHedgePoolV1Contract(chainId, pool?.address ?? '')
+    const poolV2Contract = useDHedgePoolV2Contract(chainId, pool?.address ?? '')
+
     const [investState, setInvestState] = useTransactionState()
 
     const investCallback = useCallback(async () => {
@@ -40,7 +37,7 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
         // step 1: estimate gas
         const config = {
             from: account,
-            value: toFixed(token.type === SchemaType.Native ? amount : 0),
+            value: toFixed(token.schema === SchemaType.Native ? amount : 0),
         }
 
         const deposit = () => {

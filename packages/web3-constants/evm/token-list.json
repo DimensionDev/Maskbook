@@ -1,10 +1,10 @@
 {
     "FUNGIBLE_TOKEN_LISTS": {
-        "Mainnet": [],
+        "Mainnet": ["https://tokens.r2d2.to/latest/1/tokens.json"],
         "Ropsten": ["https://tokens.r2d2.to/latest/3/tokens.json"],
         "Rinkeby": ["https://tokens.r2d2.to/latest/4/tokens.json"],
         "Kovan": ["https://irhonin.github.io/kovan-token-list/kovan-token-list.json"],
-        "Gorli": [],
+        "Gorli": ["https://tokens.r2d2.to/latest/5/tokens.json"],
         "BSC": ["https://tokens.r2d2.to/latest/56/tokens.json"],
         "BSCT": ["https://tokens.r2d2.to/latest/97/tokens.json"],
         "Matic": ["https://tokens.r2d2.to/latest/137/tokens.json"],
@@ -21,7 +21,7 @@
         "Conflux": ["https://tokens.r2d2.to/latest/1030/tokens.json"]
     },
     "NON_FUNGIBLE_TOKEN_LISTS": {
-        "Mainnet": [],
+        "Mainnet": ["https://tokens.r2d2.to/latest/1/non-fungible-tokens.json"],
         "Ropsten": [],
         "Rinkeby": [],
         "Kovan": [],

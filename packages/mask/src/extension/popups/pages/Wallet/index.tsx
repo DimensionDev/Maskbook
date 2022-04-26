@@ -1,5 +1,4 @@
 import { WalletStartUp } from './components/StartUp'
-import { EthereumRpcType, useWallet } from '@masknet/web3-shared-evm'
 import { WalletAssets } from './components/WalletAssets'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
@@ -12,6 +11,8 @@ import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
 import urlcat from 'urlcat'
 import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
+import { useWallet } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, TransactionDescriptorType } from '@masknet/web3-shared-base'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -35,7 +36,7 @@ const ReplaceTransaction = lazy(() => import('./ReplaceTransaction'))
 
 const r = relativeRouteOf(PopupRoutes.Wallet)
 export default function Wallet() {
-    const wallet = useWallet()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const location = useLocation()
     const navigate = useNavigate()
 
@@ -63,12 +64,12 @@ export default function Wallet() {
 
         if (value?.computedPayload) {
             switch (value.computedPayload.type) {
-                case EthereumRpcType.SIGN:
-                case EthereumRpcType.SIGN_TYPED_DATA:
+                case TransactionDescriptorType.SIGN:
+                case TransactionDescriptorType.SIGN_TYPED_DATA:
                     navigate(PopupRoutes.WalletSignRequest, { replace: true })
                     break
-                case EthereumRpcType.CONTRACT_INTERACTION:
-                case EthereumRpcType.SEND_ETHER:
+                case TransactionDescriptorType.INTERACTION:
+                case TransactionDescriptorType.TRANSFER:
                     navigate(PopupRoutes.ContractInteraction, { replace: true })
                     break
                 default:

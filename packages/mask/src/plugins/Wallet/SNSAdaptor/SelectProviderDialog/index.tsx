@@ -6,11 +6,10 @@ import { InjectedDialog } from '@masknet/shared'
 import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
-    NetworkPluginID,
     useNetworkDescriptor,
     useWeb3State,
     useWeb3UI,
-    Web3Plugin,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { WalletMessages } from '../../messages'
@@ -50,28 +49,26 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
 
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
-    const pluginID = useValueRef(pluginIDSettings) as NetworkPluginID
+    const pluginID = useValueRef(pluginIDSettings)
     const network = useNetworkDescriptor()
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
 
-    const { Utils, Provider } = useWeb3State(undeterminedPluginID)
-    const { NetworkIconClickBait, ProviderIconClickBait } = useWeb3UI(undeterminedPluginID).SelectProviderDialog ?? {}
+    const { Others, Provider } = useWeb3State(undeterminedPluginID) as Web3Helper.Web3StateAll
+    const { NetworkIconClickBait, ProviderIconClickBait } =
+        (useWeb3UI(undeterminedPluginID) as Web3Helper.Web3UIAll).SelectProviderDialog ?? {}
 
-    const onNetworkIconClicked = useCallback((network: Web3Plugin.NetworkDescriptor<number, string>) => {
+    const onNetworkIconClicked = useCallback((network: Web3Helper.NetworkDescriptorAll) => {
         setUndeterminedPluginID(network.networkSupporterPluginID)
         setUndeterminedNetworkID(network.ID)
     }, [])
 
     const onProviderIconClicked = useCallback(
-        async (
-            network: Web3Plugin.NetworkDescriptor<number, string>,
-            provider: Web3Plugin.ProviderDescriptor<number, string>,
-        ) => {
+        async (network: Web3Helper.NetworkDescriptorAll, provider: Web3Helper.ProviderDescriptorAll) => {
             closeDialog()
 
             if (!(await Provider?.isReady(provider.type))) {
-                const downloadLink = Utils?.resolveProviderHomeLink(provider.type)
+                const downloadLink = Others?.providerResolver.providerHomeLink(provider.type)
                 if (downloadLink) openWindow(downloadLink)
                 return
             }
@@ -84,7 +81,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
                 provider,
             })
         },
-        [Utils, Provider, closeDialog],
+        [Others, Provider, closeDialog],
     )
 
     // not available for the native app

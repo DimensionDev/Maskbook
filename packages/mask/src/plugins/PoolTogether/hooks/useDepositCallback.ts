@@ -1,14 +1,10 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import {
-    FungibleTokenDetailed,
-    SchemaType,
-    useAccount,
-    useTransactionState,
-    TransactionStateType,
-    TransactionEventType,
-} from '@masknet/web3-shared-evm'
+import { SchemaType, TransactionStateType, TransactionEventType, ChainId } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 
 /**
  * A callback for deposit into pool
@@ -23,11 +19,12 @@ export function useDepositCallback(
     amount: string,
     controlledToken: string,
     referrer: string,
-    token?: FungibleTokenDetailed,
+    token?: FungibleToken<ChainId, SchemaType>,
 ) {
-    const poolContract = usePoolTogetherPoolContract(address)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const poolContract = usePoolTogetherPoolContract(chainId, address)
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [depositState, setDepositState] = useTransactionState()
 
     const depositCallback = useCallback(async () => {
@@ -46,7 +43,7 @@ export function useDepositCallback(
         // step 1: estimate gas
         const config = {
             from: account,
-            value: new BigNumber(token.type === SchemaType.Native ? amount : 0).toFixed(),
+            value: new BigNumber(token.schema === SchemaType.Native ? amount : 0).toFixed(),
         }
         const estimatedGas = await poolContract.methods
             .depositTo(account, amount, controlledToken, referrer)

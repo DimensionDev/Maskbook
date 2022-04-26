@@ -6,26 +6,26 @@ import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { InjectedDialog, FormattedAddress, FormattedBalance, TokenIcon } from '@masknet/shared'
 import type { TradeComputed } from '../../types'
-import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType, Wallet } from '@masknet/web3-shared-evm'
 import {
     createNativeToken,
     formatBalance,
     formatEthereumAddress,
     formatPercentage,
     formatWeiToEther,
-    resolveAddressLinkOnExplorer,
+    explorerResolver,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { InfoIcon, RetweetIcon, CramIcon } from '@masknet/icons'
-import { isZero, multipliedBy } from '@masknet/web3-shared-base'
+import { FungibleToken, isZero, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import { isDashboardPage } from '@masknet/shared-base'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { currentSlippageSettings } from '../../settings'
-import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { useUpdateEffect } from 'react-use'
 import { ONE_BIPS } from '../../constants'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     section: {
@@ -118,8 +118,8 @@ const MAX_SLIPPAGE = 1000
 export interface ConfirmDialogUIProps extends withClasses<never> {
     open: boolean
     trade: TradeComputed
-    inputToken: FungibleTokenDetailed
-    outputToken: FungibleTokenDetailed
+    inputToken: FungibleToken<ChainId, SchemaType>
+    outputToken: FungibleToken<ChainId, SchemaType>
     gas?: number
     gasPrice?: string
     onConfirm: () => void
@@ -150,7 +150,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
 
     // #region gas price
     const nativeToken = createNativeToken(chainId)
-    const tokenPrice = useNativeTokenPrice(chainId)
+    const { value: tokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const gasFee = useMemo(() => {
         return gas && gasPrice ? multipliedBy(gasPrice, gas).integerValue().toFixed() : '0'
@@ -231,7 +231,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                     style={{ color: 'inherit', height: 20 }}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    href={resolveAddressLinkOnExplorer(chainId, wallet.address)}>
+                                    href={explorerResolver.addressLink(chainId, wallet.address)}>
                                     <ExternalLink style={{ marginLeft: 5 }} size={20} />
                                 </Link>
                             ) : null}
@@ -243,7 +243,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             <TokenIcon
                                 classes={{ icon: classes.tokenIcon }}
                                 address={inputToken.address}
-                                logoURI={inputToken.logoURI}
+                                logoURL={inputToken.logoURL}
                             />
                             <FormattedBalance
                                 value={inputAmount.toFixed() ?? '0'}
@@ -260,7 +260,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             <TokenIcon
                                 classes={{ icon: classes.tokenIcon }}
                                 address={outputToken.address}
-                                logoURI={outputToken.logoURI}
+                                logoURL={outputToken.logoURL}
                             />
                             <FormattedBalance
                                 value={outputAmount.toFixed() ?? '0'}

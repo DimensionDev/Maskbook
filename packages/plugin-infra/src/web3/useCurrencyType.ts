@@ -1,7 +1,7 @@
 import { useSubscription } from 'use-subscription'
-import { useWeb3State } from '../entry-web3'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3State } from './useWeb3State'
 import { UNDEIFNED } from '../utils/subscription'
-import type { NetworkPluginID } from '../web3-types'
 
 export function useCurrencyType<T extends NetworkPluginID>(pluginID?: T) {
     const { Settings } = useWeb3State(pluginID)

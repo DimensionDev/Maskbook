@@ -1,13 +1,15 @@
 import { compact } from 'lodash-unified'
-import { useChainId, useITOConstants } from '@masknet/web3-shared-evm'
+import { useITOConstants } from '@masknet/web3-shared-evm'
 import isAfter from 'date-fns/isAfter'
 import { JSON_PayloadInMask, JSON_PayloadFromChain, ITO_Status } from '../../types'
 import { useAvailability } from './useAvailability'
 import { useQualification } from './useQualification'
 import { ITO_CONTRACT_BASE_TIMESTAMP } from '../../constants'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useAvailabilityComputed(payload: JSON_PayloadInMask | JSON_PayloadFromChain) {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
     const asyncResult = useAvailability(payload.pid, payload.contract_address)
     const { value: availability, loading: loadingITO } = asyncResult

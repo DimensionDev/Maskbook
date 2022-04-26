@@ -20,13 +20,9 @@ import { TrendingViewDeck } from './TrendingViewDeck'
 import { currentDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import {
-    SchemaType,
-    useFungibleTokenDetailed,
-    useChainIdValid,
-    useNetworkType,
-    isNativeTokenSymbol,
-} from '@masknet/web3-shared-evm'
+import { SchemaType, isNativeTokenSymbol } from '@masknet/web3-shared-evm'
+import { useChainIdValid, useFungibleToken, useNetworkType } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
@@ -110,10 +106,10 @@ export function TraderView(props: TraderViewProps) {
     const { classes } = useStyles({ isPopper })
     const dataProvider = useCurrentDataProvider(dataProviders)
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
-    const chainIdValid = useChainIdValid()
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
 
     // #region track network type
-    const networkType = useNetworkType()
+    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
 
@@ -135,8 +131,8 @@ export function TraderView(props: TraderViewProps) {
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
     // #region swap
-    const { value: tokenDetailed } = useFungibleTokenDetailed(
-        coinSymbol === 'eth' ? SchemaType.Native : SchemaType.ERC20,
+    const { value: tokenDetailed } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
         coinSymbol === 'eth' ? '' : trending?.coin.contract_address ?? '',
     )
     // #endregion

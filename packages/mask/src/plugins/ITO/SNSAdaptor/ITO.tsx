@@ -2,19 +2,23 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
     formatBalance,
     formatEthereumAddress,
-    FungibleTokenDetailed,
-    getChainDetailed,
-    isSameAddress,
-    currySameAddress,
-    resolveLinkOnExplorer,
     TransactionStateType,
-    useAccount,
-    useChainId,
-    useChainIdValid,
     useTokenConstants,
     isNativeTokenAddress,
+    explorerResolver,
+    chainResolver,
+    ChainId,
+    SchemaType,
 } from '@masknet/web3-shared-evm'
-import { isZero, ZERO, isGreaterThan } from '@masknet/web3-shared-base'
+import {
+    isZero,
+    ZERO,
+    isGreaterThan,
+    NetworkPluginID,
+    isSameAddress,
+    currySameAddress,
+    FungibleToken,
+} from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Box, Card, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -22,7 +26,6 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import urlcat from 'urlcat'
 import { startCase } from 'lodash-unified'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
@@ -44,6 +47,7 @@ import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { useAccount, useChainId, useChainIdValid } from '@masknet/plugin-infra/web3'
 
 export interface IconProps {
     size?: number
@@ -190,8 +194,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
 // #region token item
 interface TokenItemProps {
     price: string
-    token: FungibleTokenDetailed
-    exchangeToken: FungibleTokenDetailed
+    token: FungibleToken<ChainId, SchemaType>
+    exchangeToken: FungibleToken<ChainId, SchemaType>
 }
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
@@ -203,12 +207,12 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
             <TokenIcon
                 classes={{ icon: classes.tokenIcon }}
                 address={exchangeToken.address}
-                logoURI={exchangeToken.logoURI}
+                logoURL={exchangeToken.logoURI}
             />
             <Typography component="span">
                 <strong>{price}</strong>{' '}
                 {isSameAddress(exchangeToken.address, NATIVE_TOKEN_ADDRESS)
-                    ? getChainDetailed(exchangeToken.chainId)?.nativeCurrency.symbol
+                    ? chainResolver.nativeCurrency(exchangeToken.chainId)?.symbol
                     : exchangeToken.symbol}{' '}
                 / {token.symbol}
             </Typography>
@@ -224,10 +228,10 @@ export interface ITO_Props {
 
 export function ITO(props: ITO_Props) {
     // context
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const postLink = usePostLink()
-    const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(props.payload.contract_address)
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
     const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)
@@ -644,9 +648,7 @@ export function ITO(props: ITO_Props) {
                     })}
                     <Link
                         className={classes.tokenLink}
-                        href={urlcat(resolveLinkOnExplorer(token.chainId), '/token/:address', {
-                            address: token.address,
-                        })}
+                        href={explorerResolver.fungibleTokenLink(token.chainId, token.address)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <OpenInNewIcon fontSize="small" className={classes.totalIcon} />

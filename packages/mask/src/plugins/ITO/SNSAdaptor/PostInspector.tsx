@@ -1,19 +1,12 @@
 import { useCallback, useMemo } from 'react'
-import {
-    useChainId,
-    useFungibleTokenDetailed,
-    SchemaType,
-    FungibleTokenDetailed,
-    FungibleTokenInitial,
-    useFungibleTokensDetailed,
-    isSameAddress,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { isCompactPayload } from './helpers'
 import { usePoolPayload } from './hooks/usePoolPayload'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO, ITO_Error, ITO_Loading } from './ITO'
+import { NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
+import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
 
 export interface PostInspectorProps {
     payload: JSON_PayloadInMask
@@ -24,7 +17,7 @@ export function PostInspector(props: PostInspectorProps) {
     const isCompactPayload_ = isCompactPayload(props.payload)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const {
         value: payload,
         error,
@@ -35,14 +28,14 @@ export function PostInspector(props: PostInspectorProps) {
     const _payload = payload ?? props.payload
     // To meet the max allowance of the data size of image steganography, we need to
     //  cut off some properties, such as save the token address string only.
-    const token = _payload.token as unknown as string | FungibleTokenDetailed
+    const token = _payload.token as unknown as string | FungibleToken<ChainId, SchemaType>
     const {
         value: tokenDetailed,
         loading: _loadingToken,
         retry: retryToken,
-    } = useFungibleTokenDetailed(
-        SchemaType.ERC20,
-        typeof token === 'string' ? (token as string) : (token as FungibleTokenDetailed).address,
+    } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
+        typeof token === 'string' ? (token as string) : (token as FungibleToken<ChainId, SchemaType>).address,
     )
 
     const exchangeFungibleTokens = useMemo(

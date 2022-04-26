@@ -1,5 +1,6 @@
+import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { usePickToken } from '@masknet/shared'
-import { SchemaType, isNativeTokenAddress, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FC, useCallback, useMemo } from 'react'
 import { TokenAmountPanel } from '../../../../../web3/UI/TokenAmountPanel'

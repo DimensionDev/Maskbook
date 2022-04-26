@@ -1,13 +1,17 @@
-import { useAsync } from 'react-use'
-import { useChainId, useWeb3State } from '.'
-import type { NetworkPluginID } from '../web3-types'
+import { useAsyncRetry } from 'react-use'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from './useChainId'
+import { useWeb3State } from './useWeb3State'
+import type { Web3Helper } from '../web3-helpers'
 
 export function useLookupAddress<T extends NetworkPluginID>(pluginId?: T, domain?: string) {
-    const chainId = useChainId(pluginId)
-    const { NameService, Utils } = useWeb3State(pluginId)
+    type LookupDomain = (chainId: Web3Helper.Definition[T]['ChainId'], domain?: string) => Promise<string | undefined>
 
-    return useAsync(async () => {
-        // @ts-ignore
-        return domain && Utils?.isValidDomain?.(domain) ? NameService?.lookup?.(chainId, domain) : undefined
-    }, [NameService, Utils, domain, chainId])
+    const chainId = useChainId(pluginId)
+    const { NameService, Others } = useWeb3State(pluginId)
+
+    return useAsyncRetry(async () => {
+        if (!chainId || !Others?.isValidDomain?.(domain) || !NameService) return
+        return (NameService.lookup as LookupDomain)(chainId, domain)
+    }, [NameService, Others, domain, chainId])
 }

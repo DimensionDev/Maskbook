@@ -1,24 +1,25 @@
 import { useEffect, useMemo, useState } from 'react'
 import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
-import { formatGweiToWei, GasOption, isEIP1559Supported, useChainId, useGasPrice } from '@masknet/web3-shared-evm'
+import { chainResolver, formatGweiToWei } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useGasOptions } from '../../../hooks/useGasOptions'
+import { useChainId, useGasOptions, useGasPrice } from '@masknet/plugin-infra/web3'
+import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 
 export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const [gasLimit_, setGasLimit_] = useState(0)
     const [customGasPrice, setCustomGasPrice] = useState<BigNumber.Value>(0)
-    const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
+    const [gasOption, setGasOption] = useState<GasOptionType>(GasOptionType.NORMAL)
     const [maxFee, setMaxFee] = useState<BigNumber.Value>(0)
     const [priorityFee, setPriorityFee] = useState<BigNumber.Value>(0)
 
-    const is1559Supported = useMemo(() => isEIP1559Supported(chainId), [chainId])
-    const { value: defaultGasPrice = '0' } = useGasPrice()
+    const is1559Supported = useMemo(() => chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
+    const { value: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
     const gasPrice = customGasPrice || defaultGasPrice
-    const { gasOptions } = useGasOptions()
+    const { value: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
 
     const { setDialog: setGasSettingDialog, closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.gasSettingDialogUpdated,
@@ -44,29 +45,28 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         if (!gasOptions) return
 
         if (is1559Supported) {
-            const gasLevel = gasOptions.medium as Exclude<typeof gasOptions.medium, number>
+            const gasLevel = gasOptions.options.normal
             setMaxFee((oldVal) => {
-                return !oldVal ? formatGweiToWei(gasLevel?.suggestedMaxFeePerGas ?? 0) : oldVal
+                return !oldVal ? formatGweiToWei(gasLevel?.suggestedMaxFeePerGas ?? '0') : oldVal
             })
             setPriorityFee((oldVal) => {
-                return !oldVal ? formatGweiToWei(gasLevel?.suggestedMaxPriorityFeePerGas ?? 0) : oldVal
+                return !oldVal ? formatGweiToWei(gasLevel?.suggestedMaxPriorityFeePerGas ?? '0') : oldVal
             })
         } else {
-            setCustomGasPrice((oldVal) => (!oldVal ? (gasOptions.medium as number) : oldVal))
+            setCustomGasPrice((oldVal) => (!oldVal ? gasOptions.options.normal.suggestedMaxFeePerGas : oldVal))
         }
-    }, [is1559Supported, gasOptions?.medium])
+    }, [is1559Supported, gasOptions?.options.normal])
 
     useEffect(() => {
         if (!gasOptions) return
-
         if (is1559Supported) {
-            const gasLevel = gasOptions.medium as Exclude<typeof gasOptions.medium, number>
+            const gasLevel = gasOptions.options.normal
             setMaxFee(formatGweiToWei(gasLevel?.suggestedMaxFeePerGas ?? 0))
             setPriorityFee(formatGweiToWei(gasLevel?.suggestedMaxPriorityFeePerGas ?? 0))
         } else {
-            setCustomGasPrice(gasOptions.medium as number)
+            setCustomGasPrice(gasOptions.options.normal.suggestedMaxFeePerGas)
         }
-    }, [chainId, gasOptions?.medium])
+    }, [chainId, gasOptions?.options.normal])
 
     const gasConfig = useMemo(() => {
         return is1559Supported

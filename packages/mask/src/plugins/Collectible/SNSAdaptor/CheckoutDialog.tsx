@@ -12,7 +12,9 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import { SchemaType, useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
+import { SchemaType, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, isGreaterThan } from '@masknet/web3-shared-base'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -25,7 +27,6 @@ import { CheckoutOrder } from './CheckoutOrder'
 import type { useAsset } from '@masknet/plugin-evm/src/hooks'
 import type { useAssetOrder } from '../hooks/useAssetOrder'
 import type { Coin } from '../../Trader/types'
-import { isGreaterThan } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -67,7 +68,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const isVerified = asset?.value?.is_verified ?? false
     const { t } = useI18N()
     const { classes } = useStyles()
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)

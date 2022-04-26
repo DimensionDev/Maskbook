@@ -1,12 +1,13 @@
 import { makeStyles } from '@masknet/theme'
 import { MINDS_ID } from '@masknet/shared'
-import { useChainId, ChainId } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { RedPacketFormProps, RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../../../utils'
 import { activatedSocialNetworkUI } from '../../../social-network'
-
 import { IconURLs } from './IconURL'
 
 interface StyleProps {
@@ -52,7 +53,7 @@ export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly
     const { origin, onNext, onChange, onClose, state } = props
     const { t } = useI18N()
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const tabProps: AbstractTabProps = {
         tabs: [

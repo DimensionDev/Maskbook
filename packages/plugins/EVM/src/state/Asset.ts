@@ -1,27 +1,22 @@
-import type { Pagination, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { OpenSea, NFTScan, DeBank, Zerion } from '@masknet/web3-providers'
+import type { Web3Pagination } from '@masknet/web3-shared-base'
+import { AssetState } from '@masknet/plugin-infra/web3'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
-export class Asset implements Web3Plugin.ObjectCapabilities.AssetState<ChainId, SchemaType> {
-    async getFungibleAssets(chainId: ChainId, address: string, pagination?: Pagination) {
+export class Asset extends AssetState<ChainId, SchemaType> {
+    override async getFungibleAssets(address: string, pagination?: Web3Pagination<ChainId>) {
         try {
-            return DeBank.getAssets(chainId, address)
+            return DeBank.getAssets(address, pagination)
         } catch {
-            return Zerion.getAssets(chainId, address)
+            return Zerion.getAssets(address, pagination)
         }
     }
 
-    async getNonFungibleAssets(chainId: ChainId, address: string, pagination?: Pagination) {
+    override async getNonFungibleAssets(address: string, pagination?: Web3Pagination<ChainId>) {
         try {
-            return OpenSea.getTokens(address, {
-                chainId,
-                ...pagination,
-            })
+            return OpenSea.getTokens(address, pagination)
         } catch {
-            return NFTScan.getTokens(address, {
-                chainId,
-                ...pagination,
-            })
+            return NFTScan.getTokens(address, pagination)
         }
     }
 }

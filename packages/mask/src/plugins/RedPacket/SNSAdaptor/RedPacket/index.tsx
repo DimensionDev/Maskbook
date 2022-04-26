@@ -6,15 +6,11 @@ import {
     ChainId,
     formatBalance,
     getChainIdFromName,
-    resolveNetworkName,
     TransactionStateType,
-    useAccount,
     useFungibleTokenDetailed,
-    useNetworkType,
-    useWeb3,
     useTokenConstants,
     SchemaType,
-    isSameAddress,
+    networkResolver,
 } from '@masknet/web3-shared-evm'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -30,6 +26,8 @@ import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
 import { OperationFooter } from './OperationFooter'
 import { useStyles } from './useStyles'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 
 export interface RedPacketProps {
     payload: RedPacketJSONPayload
@@ -42,9 +40,9 @@ export function RedPacket(props: RedPacketProps) {
     const { classes } = useStyles()
 
     // context
-    const web3 = useWeb3()
-    const account = useAccount()
-    const networkType = useNetworkType()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
 
     // #region token detailed
     const {
@@ -71,7 +69,7 @@ export function RedPacket(props: RedPacketProps) {
     const shareTextOption = {
         sender: payload.sender.name,
         payload: postLink,
-        network: resolveNetworkName(networkType),
+        network: networkResolver.networkName(networkType),
         account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
     }
 
@@ -79,7 +77,7 @@ export function RedPacket(props: RedPacketProps) {
         payload.contract_version,
         account,
         payload.rpid,
-        payload.contract_version > 3 ? web3.eth.accounts.sign(account, payload.password).signature : payload.password,
+        payload.contract_version > 3 ? web3?.eth.accounts.sign(account, payload.password).signature : payload.password,
     )
 
     const shareText = (

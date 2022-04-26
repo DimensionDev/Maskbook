@@ -1,15 +1,7 @@
 import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import classNames from 'classnames'
-import {
-    Asset,
-    currySameAddress,
-    ERC20TokenDetailed,
-    formatBalance,
-    FungibleTokenDetailed,
-    isSameAddress,
-    useAddERC20TokenCallback,
-    useTrustERC20TokenCallback,
-} from '@masknet/web3-shared-evm'
+import { currySameAddress, FungibleAsset, FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
 import { TokenIcon } from '../TokenIcon'
 import type { MaskSearchableListItemProps } from '@masknet/theme'
 import { makeStyles, MaskLoadingButton } from '@masknet/theme'
@@ -76,8 +68,8 @@ const useStyles = makeStyles()((theme) => ({
 
 export const getERC20TokenListItem =
     (
-        addedTokens: FungibleTokenDetailed[],
-        externalTokens: FungibleTokenDetailed[],
+        addedTokens: FungibleToken<ChainId, SchemaType.ERC20>[],
+        externalTokens: FungibleToken<ChainId, SchemaType.ERC20>[],
         info: {
             from: 'search' | 'defaultList'
             inList: boolean
@@ -86,15 +78,15 @@ export const getERC20TokenListItem =
         loadingAsset: boolean,
         account?: string,
     ) =>
-    ({ data, onSelect }: MaskSearchableListItemProps<Asset>) => {
+    ({ data, onSelect }: MaskSearchableListItemProps<FungibleAsset<ChainId, SchemaType>>) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
-        const [, addERC20Token] = useAddERC20TokenCallback()
-        const [, trustERC20Token] = useTrustERC20TokenCallback()
-        const token = data.token
+        // const [, addERC20Token] = useAddERC20TokenCallback()
+        // const [, trustERC20Token] = useTrustERC20TokenCallback()
+        const token = data
 
         if (!token) return null
-        const { address, name, symbol, logoURI } = token
+        const { address, name, symbol, logoURL } = token
         const isNotAdded = some(externalTokens, (t: any) => isSameAddress(address, t.address))
         const isAdded = some(addedTokens, (t: any) => isSameAddress(address, t.address))
 
@@ -102,8 +94,8 @@ export const getERC20TokenListItem =
             async (event: React.MouseEvent<HTMLButtonElement>) => {
                 event.stopPropagation()
                 if (!token || !account) return
-                await addERC20Token(token as ERC20TokenDetailed)
-                await trustERC20Token(account, token as ERC20TokenDetailed)
+                // await addERC20Token(token as FungibleToken<ChainId, SchemaType.ERC20>)
+                // await trustERC20Token(account, token as FungibleToken<ChainId, SchemaType.ERC20>)
             },
             [token, account],
         )
@@ -148,7 +140,7 @@ export const getERC20TokenListItem =
                 onClick={handleTokenSelect}
                 disabled={selectedTokens.some(currySameAddress(address))}>
                 <ListItemIcon>
-                    <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURI={logoURI} />
+                    <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURL={logoURL} />
                 </ListItemIcon>
                 <ListItemText classes={{ primary: classes.text }}>
                     <Typography

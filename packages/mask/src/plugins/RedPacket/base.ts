@@ -1,5 +1,5 @@
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketMetaKey, RedPacketNftMetaKey, RedPacketPluginID } from './constants'
 
@@ -32,8 +32,6 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Conflux,
                 ],
             },
-            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
-            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
     },
     contribution: {

@@ -1,9 +1,10 @@
+import { useContext, useEffect, useState } from 'react'
 import { DialogContent, Card, Grid, Alert, Box, Typography, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useContext, useEffect, useState } from 'react'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../utils'
 import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
-import { useAccount } from '@masknet/web3-shared-evm'
 import { fetchConst, fetchUserParticipatedStoryStatus } from '../Worker/apis'
 import type { UserStoryStatus, FindTrumanConst } from '../types'
 import { BorderLinearProgress } from './ResultCard'
@@ -45,7 +46,7 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
     const { i18n } = useI18N()
     const { t } = useContext(FindTrumanContext)
     const { classes } = useStyles()
-    const account = useAccount().toLowerCase()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM).toLowerCase()
     const [statuses, setStatuses] = useState<UserStoryStatus[]>([])
     const [consts, setConsts] = useState<FindTrumanConst>()
 

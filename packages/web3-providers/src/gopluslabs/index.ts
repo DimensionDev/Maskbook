@@ -1,6 +1,6 @@
-import { ChainId } from '@masknet/web3-shared-evm'
-import { parseInt, uniqBy } from 'lodash-unified'
 import urlcat from 'urlcat'
+import { parseInt, uniqBy } from 'lodash-unified'
+import { ChainId } from '@masknet/web3-shared-evm'
 import type { SecurityAPI } from '..'
 import { fetchJSON } from '../helpers'
 import { GO_PLUS_LABS_ROOT_URL } from './constants'
@@ -10,7 +10,7 @@ export interface SupportedChainResponse {
     name: string
 }
 
-export class GoPlusLabsAPI implements SecurityAPI.Provider {
+export class GoPlusLabsAPI implements SecurityAPI.Provider<ChainId> {
     async getTokenSecurity(chainId: ChainId, listOfAddress: string[]) {
         const response = await fetchJSON<{
             code: 0 | 1
@@ -30,7 +30,7 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider {
         return response.result
     }
 
-    async getSupportedChain(): Promise<SecurityAPI.SupportedChain[]> {
+    async getSupportedChain(): Promise<SecurityAPI.SupportedChain<ChainId>[]> {
         const { code, result } = await fetchJSON<{
             code: 0 | 1
             message: 'OK' | string
@@ -38,6 +38,6 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider {
         }>(urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/supported_chains'))
 
         if (code !== 1) return []
-        return result.map((x) => ({ id: parseInt(x.id) ?? ChainId.Mainnet, name: x.name }))
+        return result.map((x) => ({ chainId: parseInt(x.id) ?? ChainId.Mainnet, name: x.name }))
     }
 }

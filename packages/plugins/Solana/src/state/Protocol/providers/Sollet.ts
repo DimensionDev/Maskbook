@@ -1,6 +1,6 @@
 import type { Transaction } from '@solana/web3.js'
 import Wallet from '@project-serum/sol-wallet-adapter'
-import type { ChainId } from '@masknet/web3-shared-solana'
+import { ChainId, ProviderType } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types'
 import { BaseProvider } from './Base'
 
@@ -45,6 +45,7 @@ export class SolletProvider extends BaseProvider implements SolanaProvider {
 
     override async disconnect() {
         await this.solanaProvider.disconnect()
+        this.emitter.emit('disconnect', ProviderType.Sollet)
 
         // clean the internal wallet
         this.wallet = null

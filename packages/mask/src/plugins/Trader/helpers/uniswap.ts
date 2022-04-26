@@ -3,15 +3,8 @@ import { memoize } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { Currency, Token, CurrencyAmount, TradeType, Percent, Price, Ether } from '@uniswap/sdk-core'
 import type { Trade } from '@uniswap/v2-sdk'
-import {
-    formatEthereumAddress,
-    ChainId,
-    SchemaType,
-    FungibleTokenDetailed,
-    isSameAddress,
-    WNATIVE,
-} from '@masknet/web3-shared-evm'
-import { pow10, isGreaterThan } from '@masknet/web3-shared-base'
+import { formatEthereumAddress, ChainId, SchemaType, FungibleTokenDetailed, WNATIVE } from '@masknet/web3-shared-evm'
+import { pow10, isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../constants'
 
 export function swapErrorToUserReadableMessage(error: any): string {

@@ -4,14 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
 import { Button, Link, List } from '@mui/material'
-import {
-    ChainId,
-    EthereumRpcType,
-    isNativeTokenAddress,
-    isSameAddress,
-    resolveTransactionLinkOnExplorer,
-    useChainId,
-} from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID, TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { ChainId, explorerResolver, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext'
 import type { RecentTransaction } from '../../../../../../plugins/Wallet/services'
@@ -19,6 +13,7 @@ import { useI18N } from '../../../../../../utils'
 import { ReplaceType } from '../../type'
 import { ActivityListItem } from './ActivityListItem'
 import type { ComputedPayload } from '../../../../../../plugins/Wallet/SNSAdaptor/WalletStatusDialog/type'
+import { useChainId } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     list: {
@@ -104,9 +99,9 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
         transactions?.filter((transaction) => {
             if (!tokenAddress) return true
             else if (isNativeTokenAddress(tokenAddress))
-                return transaction.computedPayload?.type === EthereumRpcType.SEND_ETHER
+                return transaction.computedPayload?.type === TransactionDescriptorType.TRANSFER
             else if (
-                transaction.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
+                transaction.computedPayload?.type === TransactionDescriptorType.INTERACTION &&
                 (transaction.computedPayload?.name === 'transfer' ||
                     transaction.computedPayload?.name === 'transferFrom')
             ) {
@@ -115,7 +110,7 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
             return false
         }) ?? []
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     return <ActivityListUI dataSource={dataSource} chainId={chainId} />
 })
 
@@ -140,7 +135,7 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
                     const toAddress = getToAddress(transaction.computedPayload)
                     return (
                         <Link
-                            href={resolveTransactionLinkOnExplorer(chainId, transaction.hash)}
+                            href={explorerResolver.transactionLink(chainId, transaction.hash)}
                             target="_blank"
                             rel="noopener noreferrer"
                             key={index}
@@ -185,9 +180,9 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
 function getToAddress(computedPayload?: ComputedPayload | null) {
     if (!computedPayload) return undefined
     switch (computedPayload.type) {
-        case EthereumRpcType.SEND_ETHER:
+        case TransactionDescriptorType.TRANSFER:
             return computedPayload._tx.to
-        case EthereumRpcType.CONTRACT_INTERACTION:
+        case TransactionDescriptorType.INTERACTION:
             switch (computedPayload.name) {
                 case 'transfer':
                 case 'transferFrom':
@@ -196,9 +191,9 @@ function getToAddress(computedPayload?: ComputedPayload | null) {
                 default:
                     return computedPayload._tx.to
             }
-        case EthereumRpcType.CONTRACT_DEPLOYMENT:
+        case TransactionDescriptorType.CONTRACT_DEPLOYMENT:
             return computedPayload._tx.to
-        case EthereumRpcType.CANCEL:
+        case TransactionDescriptorType.CANCEL:
         default:
             return undefined
     }

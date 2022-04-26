@@ -4,7 +4,8 @@ import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 
@@ -20,8 +21,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
-    const [providerType, setProviderType] = useState<string>()
-    const [networkType, setNetworkType] = useState<string>()
+    const [providerType, setProviderType] = useState<Web3Helper.Definition[NetworkPluginID]['ProviderType']>()
+    const [networkType, setNetworkType] = useState<Web3Helper.Definition[NetworkPluginID]['NetworkType']>()
 
     // #region remote controlled dialog
     const { open, setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
@@ -35,14 +36,17 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     )
     // #endregion
 
-    const { Provider, Utils } = useWeb3State(pluginID)
+    const { Provider, Others } = useWeb3State(pluginID) as Web3Helper.Web3StateAll
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
 
-        if (!networkType || !providerType || !Utils || !Provider) throw new Error('Failed to connect to provider.')
+        if (!networkType || !providerType || !Others || !Provider) throw new Error('Failed to connect to provider.')
 
-        await Provider.connect(Utils.getChainIdFromNetworkType(networkType), providerType)
+        const chainId = Others?.networkResovler.networkChainId(networkType)
+        if (!chainId) throw new Error('Failed to connect to provider.')
+
+        await Provider.connect(chainId, providerType)
 
         setConnectWalletDialog({
             open: false,
@@ -55,7 +59,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
     return (
         <InjectedDialog
-            title={`Connect to ${Utils?.resolveProviderName(providerType)}`}
+            title={`Connect to ${Others?.providerResolver.providerName(providerType)}`}
             open={open}
             onClose={() => setConnectWalletDialog({ open: false })}>
             <DialogContent className={classes.content}>

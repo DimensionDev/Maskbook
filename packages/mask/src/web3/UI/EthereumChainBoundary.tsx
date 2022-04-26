@@ -3,19 +3,14 @@ import { Box, Typography, Theme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { NetworkPluginID, useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount, useAllowTestnet, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import {
     ChainId,
-    getChainDetailedCAIP,
-    getChainName,
-    getNetworkTypeFromChainId,
-    isChainIdValid,
+    chainResolver,
     isValidAddress as isValidEthereumAddress,
     NetworkType,
     ProviderType,
-    resolveNetworkName,
-    useAllowTestnet,
-    useChainId,
 } from '@masknet/web3-shared-evm'
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
@@ -25,9 +20,8 @@ import ActionButton, {
 } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
-import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
+import { WalletMessages } from '../../plugins/Wallet/messages'
 import { pluginIDSettings } from '../../settings/settings'
-import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()(() => ({}))
 
@@ -49,21 +43,22 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const pluginID = useCurrentWeb3NetworkPluginID()
     const plugin = useActivatedPlugin(pluginID, 'any')
 
-    const account = useAccount()
-    const chainId = useChainId()
-    const allowTestnet = useAllowTestnet()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const allowTestnet = useAllowTestnet(NetworkPluginID.PLUGIN_EVM)
     const providerType = useValueRef(currentProviderSettings)
 
     const { noSwitchNetworkTip = false } = props
     const classes = useStylesExtends(useStyles(), props)
     const expectedChainId = props.chainId
-    const expectedNetwork = getChainName(expectedChainId)
+    const expectedNetwork = chainResolver.chainName(expectedChainId)
 
     const actualChainId = chainId
-    const actualNetwork = getChainName(actualChainId)
+    const actualNetwork = chainResolver.chainName(actualChainId)
 
     // if false then it will not guide the user to switch the network
-    const isAllowed = isChainIdValid(expectedChainId, allowTestnet) && !!account && providerType !== ProviderType.Coin98
+    const isAllowed =
+        chainResolver.isValid(expectedChainId, allowTestnet) && !!account && providerType !== ProviderType.Coin98
 
     // is the actual chain id matched with the expected one?
     const isChainMatched = actualChainId === expectedChainId
@@ -86,7 +81,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     // #endregion
 
     // request ethereum-compatible network
-    const networkType = getNetworkTypeFromChainId(expectedChainId)
+    const networkType = chainResolver.chainNetworkType(expectedChainId)
 
     const onSwitchChain = useCallback(async () => {
         // a short time loading makes the user fells better
@@ -95,42 +90,41 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         if (!isAllowed) return
 
         const switchToChain = async () => {
-            // read the chain detailed from the built-in chain list
-            const chainDetailedCAIP = getChainDetailedCAIP(expectedChainId)
-            if (!chainDetailedCAIP) throw new Error('Unknown network type.')
-
-            // if mask wallet was used it can switch network automatically
-            if (providerType === ProviderType.MaskWallet) {
-                await WalletRPC.updateAccount({
-                    chainId: expectedChainId,
-                })
-                return
-            }
-
-            if (!networkType) return
-            try {
-                const overrides = {
-                    chainId: expectedChainId,
-                    providerType,
-                }
-                await Promise.race([
-                    (async () => {
-                        await delay(30 /* seconds */ * 1000 /* milliseconds */)
-                        throw new Error('Timeout!')
-                    })(),
-                    networkType === NetworkType.Ethereum
-                        ? EVM_RPC.switchEthereumChain(expectedChainId, overrides)
-                        : EVM_RPC.addEthereumChain(chainDetailedCAIP, account, overrides),
-                ])
-
-                // recheck
-                const chainIdHex = await EVM_RPC.getChainId(overrides)
-                if (Number.parseInt(chainIdHex, 16) !== expectedChainId) throw new Error('Failed to switch chain.')
-            } catch {
-                throw new Error(
-                    `Switch Chain Error: Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`,
-                )
-            }
+            // // read the chain detailed from the built-in chain list
+            // const chainDetailedCAIP = getChainDetailedCAIP(expectedChainId)
+            // if (!chainDetailedCAIP) throw new Error('Unknown network type.')
+            // // if mask wallet was used it can switch network automatically
+            // if (providerType === ProviderType.MaskWallet) {
+            //     await WalletRPC.updateAccount({
+            //         chainId: expectedChainId,
+            //     })
+            //     return
+            // }
+            // if (!networkType) return
+            // try {
+            //     const overrides = {
+            //         chainId: expectedChainId,
+            //         providerType,
+            //     }
+            //     await Promise.race([
+            //         (async () => {
+            //             await delay(30 /* seconds */ * 1000 /* milliseconds */)
+            //             throw new Error('Timeout!')
+            //         })(),
+            //         networkType === NetworkType.Ethereum
+            //             ? EVM_RPC.switchEthereumChain(expectedChainId, overrides)
+            //             : EVM_RPC.addEthereumChain(chainDetailedCAIP, account, overrides),
+            //     ])
+            //     // recheck
+            //     const chainIdHex = await EVM_RPC.getChainId(overrides)
+            //     if (Number.parseInt(chainIdHex, 16) !== expectedChainId) throw new Error('Failed to switch chain.')
+            // } catch {
+            //     throw new Error(
+            //         `Switch Chain Error: Make sure your wallet is on the ${networkResolver.networkName(
+            //             networkType,
+            //         )} network.`,
+            //     )
+            // }
         }
 
         const switchToPlugin = async () => {
@@ -141,11 +135,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         if (!isPluginMatched) {
             await switchToPlugin()
             if (!networkType || networkType !== NetworkType.Ethereum || isValidEthereumAddress(account)) return
-            setConnectWalletDialog({
-                open: true,
-                providerType: ProviderType.MetaMask,
-                networkType,
-            })
+            // setConnectWalletDialog({
+            //     open: true,
+            //     providerType: ProviderType.MetaMask,
+            //     networkType,
+            // })
         }
     }, [account, isAllowed, isChainMatched, isPluginMatched, providerType, expectedChainId])
 

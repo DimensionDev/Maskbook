@@ -1,10 +1,12 @@
-import { useSubscription } from 'use-subscription'
-import { useWeb3State } from '../entry-web3'
+import { Subscription, useSubscription } from 'use-subscription'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '../web3-helpers'
+import { useWeb3State } from './useWeb3State'
 import { UNDEIFNED } from '../utils/subscription'
-import type { NetworkPluginID } from '../web3-types'
 
-export function useProviderType<T extends NetworkPluginID>(pluginID?: T) {
+export function useProviderType<T extends NetworkPluginID, ProviderType = Web3Helper.Definition[T]['ProviderType']>(
+    pluginID?: T,
+) {
     const { Provider } = useWeb3State(pluginID)
-    // @ts-ignore
-    return useSubscription(Provider?.providerType ?? UNDEIFNED)
+    return useSubscription((Provider?.providerType ?? UNDEIFNED) as Subscription<ProviderType | undefined>)
 }

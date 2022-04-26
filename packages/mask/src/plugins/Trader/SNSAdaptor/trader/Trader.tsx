@@ -1,19 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
 import {
     ChainId,
     createERC20Token,
     createNativeToken,
     SchemaType,
     formatBalance,
-    FungibleTokenDetailed,
-    isSameAddress,
     TransactionStateType,
-    useChainId,
-    useChainIdValid,
-    useFungibleTokenBalance,
     useTokenConstants,
-    useWallet,
     UST,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -38,6 +33,7 @@ import { PluginTraderMessages } from '../../messages'
 import { SettingsDialog } from './SettingsDialog'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
+import { useChainId, useChainIdValid, useFungibleTokenBalance, useWallet } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -51,17 +47,17 @@ export interface TraderProps extends withClasses<'root'> {
     coin?: Coin
     defaultInputCoin?: Coin
     defaultOutputCoin?: Coin
-    tokenDetailed?: FungibleTokenDetailed
+    tokenDetailed?: FungibleToken<ChainId, SchemaType>
     chainId?: ChainId
 }
 
 export function Trader(props: TraderProps) {
     const { defaultOutputCoin, coin, chainId: targetChainId, defaultInputCoin } = props
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
-    const wallet = useWallet()
-    const currentChainId = useChainId()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const chainId = targetChainId ?? currentChainId
-    const chainIdValid = useChainIdValid()
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
@@ -158,19 +154,15 @@ export function Trader(props: TraderProps) {
 
     // #region update balance
     const { value: inputTokenBalance_, loading: loadingInputTokenBalance } = useFungibleTokenBalance(
-        isSameAddress(inputToken?.address, NATIVE_TOKEN_ADDRESS)
-            ? SchemaType.Native
-            : inputToken?.type ?? SchemaType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         inputToken?.address ?? '',
-        chainId,
+        { chainId },
     )
 
     const { value: outputTokenBalance_, loading: loadingOutputTokenBalance } = useFungibleTokenBalance(
-        isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS)
-            ? SchemaType.Native
-            : outputToken?.type ?? SchemaType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         outputToken?.address ?? '',
-        chainId,
+        { chainId },
     )
 
     useEffect(() => {

@@ -14,8 +14,10 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import { CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
-import { formatBalance, formatEthereumAddress, useWeb3 } from '@masknet/web3-shared-evm'
+import { formatBalance, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../../utils'
+import { useWeb3 } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     header: {
@@ -104,8 +106,8 @@ export interface DeriveWalletTableRowProps {
 }
 export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, added, onCheck, selected }) => {
     const { classes } = useStyles()
-    const web3 = useWeb3()
-    const { loading, value: balance } = useAsync(async () => web3.eth.getBalance(address), [web3, address])
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const { loading, value: balance } = useAsync(async () => web3?.eth.getBalance(address) ?? '0', [web3, address])
 
     return (
         <TableRow key={address}>

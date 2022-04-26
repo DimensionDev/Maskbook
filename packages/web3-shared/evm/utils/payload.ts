@@ -1,9 +1,12 @@
+import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
 import { sha3 } from 'web3-utils'
-import type { TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { EthereumMethodType, EthereumTransactionConfig, TransactionStatusType } from '../types'
-import { isSameAddress } from './address'
+import { EthereumMethodType, Transaction } from '../types'
+
+export function addGasMargin(value: BigNumber.Value, scale = 3000) {
+    return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
+}
 
 export function createPayload(id: number, method: string, params: any[]) {
     return {
@@ -56,11 +59,11 @@ export function getPayloadConfig(payload: JsonRpcPayload) {
         case EthereumMethodType.ETH_ESTIMATE_GAS:
         case EthereumMethodType.ETH_SIGN_TRANSACTION:
         case EthereumMethodType.ETH_SEND_TRANSACTION: {
-            const [config] = payload.params as [EthereumTransactionConfig]
+            const [config] = payload.params as [Transaction]
             return config
         }
         case EthereumMethodType.MASK_REPLACE_TRANSACTION: {
-            const [, config] = payload.params as [string, EthereumTransactionConfig]
+            const [, config] = payload.params as [string, Transaction]
             return config
         }
         default:
@@ -85,15 +88,4 @@ export function getPayloadHash(payload: JsonRpcPayload) {
 export function getPayloadNonce(payload: JsonRpcPayload) {
     const config = getPayloadConfig(payload)
     return config?.nonce
-}
-
-export function getReceiptStatus(receipt: TransactionReceipt | null) {
-    if (!receipt) return TransactionStatusType.NOT_DEPEND
-    const status = receipt.status as unknown as string
-    if (receipt.status === false || ['0', '0x', '0x0'].includes(status)) return TransactionStatusType.FAILED
-    if (receipt.status === true || ['1', '0x1'].includes(status)) {
-        if (isSameAddress(receipt.from, receipt.to)) return TransactionStatusType.CANCELLED
-        return TransactionStatusType.SUCCEED
-    }
-    return TransactionStatusType.NOT_DEPEND
 }

@@ -3,7 +3,8 @@ import classNames from 'classnames'
 import { Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SnapshotContext } from '../context'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { PluginSnapshotRPC } from '../messages'
@@ -40,7 +41,7 @@ export function VotingCard() {
     const { classes } = useStyles()
     const identifier = useContext(SnapshotContext)
     const { payload: proposal } = useProposal(identifier.id)
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { value: power } = usePower(identifier)
     const choices = proposal.choices
     const [choice, setChoice] = useState(0)

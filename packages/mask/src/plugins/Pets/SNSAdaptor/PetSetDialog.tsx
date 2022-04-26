@@ -1,6 +1,6 @@
 import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
-import { isSameAddress } from '@masknet/web3-shared-evm'
+import { Constant, isSameAddress } from '@masknet/web3-shared-base'
 import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
@@ -15,7 +15,6 @@ import {
     Checkbox,
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { initMeta, initCollection, GLB3DIcon } from '../constants'
 import { PreviewBox } from './PreviewBox'

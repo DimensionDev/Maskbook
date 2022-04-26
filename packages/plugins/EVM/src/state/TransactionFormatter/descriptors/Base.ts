@@ -1,23 +1,24 @@
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { TransactionContext } from '@masknet/web3-shared-base'
 import { ChainId, getTokenConstants } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../../settings'
 import type { TransactionDescriptor } from '../types'
 import { getTokenAmountDescription } from '../utils'
 
 export class BaseTransactionDescriptor implements TransactionDescriptor {
-    async compute(context: Web3Plugin.TransactionContext<ChainId, string | undefined>) {
-        const connection = Web3StateSettings.value.Protocol?.getConnection?.({
+    async compute(context: TransactionContext<ChainId, string | undefined>) {
+        const connection = await Web3StateSettings.value.Protocol?.getConnection?.({
             chainId: context.chainId,
         })
 
         const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(context.chainId)
-        const nativeToken = await connection?.getFungileToken(NATIVE_TOKEN_ADDRESS!)
+        const nativeToken = await connection?.getFungibleToken(NATIVE_TOKEN_ADDRESS!)
 
-        return Promise.resolve({
+        return {
+            chainId: context.chainId,
             title: context.name ?? 'Contract Interaction',
-            description: `${
-                context.value ? getTokenAmountDescription(context.value as string | undefined, nativeToken, true) : '-'
-            }`,
-        })
+            description: context.value
+                ? getTokenAmountDescription(context.value as string | undefined, nativeToken, true)
+                : '-',
+        }
     }
 }

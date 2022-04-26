@@ -1,7 +1,9 @@
 import { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { NetworkDescriptor, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
@@ -12,12 +14,9 @@ import { TransferTab } from '../Transfer'
 import {
     useNetworkDescriptor,
     useWeb3State as useWeb3PluginState,
-    Web3Plugin,
     useAccount,
     useCurrentWeb3NetworkPluginID,
-    NetworkPluginID,
 } from '@masknet/plugin-infra/web3'
-import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()({
     root: {
@@ -37,7 +36,7 @@ const useStyles = makeStyles()({
 })
 
 interface CollectibleListProps {
-    selectedNetwork: Web3Plugin.NetworkDescriptor | null
+    selectedNetwork: NetworkDescriptor<number, string> | null
 }
 
 const ITEM_SIZE = {
@@ -52,7 +51,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const { Asset } = useWeb3PluginState()
     const network = useNetworkDescriptor()
     const [loadingSize, setLoadingSize] = useState(0)
-    const [renderData, setRenderData] = useState<Web3Plugin.NonFungibleToken[]>([])
+    const [renderData, setRenderData] = useState<NonFungibleToken<number, string>[]>([])
 
     const {
         value = { data: EMPTY_LIST, hasNextPage: false },
@@ -85,7 +84,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
 
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const onSend = useCallback(
-        (detail: Web3Plugin.NonFungibleToken) => {
+        (detail: NonFungibleToken<number, string>) => {
             // Sending NFT is only available on EVM currently.
             if (currentPluginId !== NetworkPluginID.PLUGIN_EVM) return
             navigate(DashboardRoutes.WalletsTransfer, {
@@ -125,8 +124,8 @@ export interface CollectibleListUIProps {
     isEmpty: boolean
     showPagination: boolean
     chainId: number
-    dataSource: Web3Plugin.NonFungibleToken[]
-    onSend(detail: Web3Plugin.NonFungibleToken): void
+    dataSource: NonFungibleToken<number, string>[]
+    onSend(detail: NonFungibleToken<number, string>): void
     setLoadingSize(fn: (pre: number | undefined) => number): void
 }
 

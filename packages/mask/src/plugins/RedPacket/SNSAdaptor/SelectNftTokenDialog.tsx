@@ -1,12 +1,11 @@
 import classNames from 'classnames'
 import { InjectedDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 import {
     ERC721TokenDetailed,
     ERC721ContractDetailed,
     useERC721TokenDetailedCallback,
-    useAccount,
-    isSameAddress,
-    formatNFT_TokenId,
+    formatTokenId,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@mui/material'
@@ -19,6 +18,7 @@ import { Trans } from 'react-i18next'
 import { useUpdate } from 'react-use'
 import { findLastIndex } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
+import { useAccount } from '@masknet/plugin-infra/web3'
 
 interface StyleProps {
     isSelectSharesExceed: boolean
@@ -321,7 +321,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         loadingOwnerList,
     } = props
     const { t } = useI18N()
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [tokenDetailed, setTokenDetailed] = useState<OrderedERC721Token>()
     const [searched, setSearched] = useState(false)
     const [tokenDetailedSelectedList, setTokenDetailedSelectedList] =
@@ -758,7 +758,7 @@ function NFTCard(props: NFTCardProps) {
             />
             <div className={classes.selectWrapperNftNameWrapper}>
                 <Typography className={classes.selectWrapperNftName} color="textSecondary">
-                    {formatNFT_TokenId(token.tokenId, 2)}
+                    {formatTokenId(token.tokenId, 2)}
                 </Typography>
             </div>
 

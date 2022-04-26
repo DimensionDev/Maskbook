@@ -1,12 +1,8 @@
 import { FormattedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import {
-    formatEthereumAddress,
-    formatWeiToEther,
-    getChainName,
-    resolveAddressLinkOnExplorer,
-    useChainId,
-} from '@masknet/web3-shared-evm'
+import { chainResolver, explorerResolver, formatEthereumAddress, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { OpenInNew } from '@mui/icons-material'
 import { Typography, Box, Link } from '@mui/material'
 import BigNumber from 'bignumber.js'
@@ -60,7 +56,7 @@ export function DetailsView(props: DetailsViewProps) {
     const { classes } = useStyles()
     const { project } = props
     const { t } = useI18N()
-    const chainId = useChainId() as number
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM) as number
 
     const artistName = ` ${project.artistName}`
     const invocations = `${project.invocations} of ${project.maxInvocations}`
@@ -130,12 +126,12 @@ export function DetailsView(props: DetailsViewProps) {
 
                 <Box className={classes.meta_row}>
                     <Typography variant="body2">{t('plugin_artblocks_blockchain_row')}</Typography>
-                    <Typography variant="body2">{getChainName(chainId)}</Typography>
+                    <Typography variant="body2">{chainResolver.chainName(chainId)}</Typography>
                 </Box>
                 <Box className={classes.meta_row}>
                     <Typography variant="body2">{t('plugin_artblocks_contract_row')}</Typography>
                     <Link
-                        href={resolveAddressLinkOnExplorer(chainId, project.contract.id)}
+                        href={explorerResolver.transactionLink(chainId, project.contract.id)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Typography variant="body2">

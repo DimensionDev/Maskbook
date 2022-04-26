@@ -1,4 +1,10 @@
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import {
+    useAccount,
+    useChainId,
+    useFungibleToken,
+    useCurrentWeb3NetworkPluginID,
+    useFungibleTokens,
+} from '@masknet/plugin-infra/web3'
 import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
@@ -7,18 +13,14 @@ import { SnackbarProvider, makeStyles } from '@masknet/theme'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog, FormattedBalance } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 import {
     formatBalance,
-    useERC20TokenDetailed,
     TransactionStateType,
-    resolveTransactionLinkOnExplorer,
-    useFungibleTokensDetailed,
+    explorerResolver,
     SchemaType,
-    isSameAddress,
     useITOConstants,
     ChainId,
-    useChainId,
-    useAccount,
 } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
@@ -233,8 +235,8 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const pluginId = useCurrentWeb3NetworkPluginID()
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
-    const account = useAccount()
-    const currentChainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const {
         value: campaignInfos,
         loading: loadingAirdrop,
@@ -243,12 +245,10 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
 
     const [chainId, setChainId] = useState(chainIdList.includes(currentChainId) ? currentChainId : ChainId.Mainnet)
     const { value: _swappedTokens, loading: _loading, retry } = useClaimAll(account, chainId)
-    const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokensDetailed(
-        (_swappedTokens ?? []).map((t) => ({
-            address: t.token.address,
-            type: SchemaType.ERC20,
-        })),
-        chainId,
+    const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokens(
+        NetworkPluginID.PLUGIN_EVM,
+        (_swappedTokens ?? []).map((t) => t.token.address) ?? [],
+        { chainId },
     )
     const loading = _loading || loadingTokenDetailed
     const swappedTokens = _swappedTokens?.map((t) => {
@@ -297,7 +297,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         if (claimState.type === TransactionStateType.HASH) {
             const { hash } = claimState
             setTimeout(() => {
-                openWindow(resolveTransactionLinkOnExplorer(chainId, hash))
+                openWindow(explorerResolver.transactionLink(chainId, hash))
             }, 2000)
             return
         }
@@ -435,7 +435,7 @@ function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles({ shortITOwrapper: false })
-    const { value: token } = useERC20TokenDetailed(swappedToken.token.address, undefined, chainId)
+    const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, swappedToken.token.address)
 
     return token ? (
         <ListItem key={i} className={classes.tokenCard}>

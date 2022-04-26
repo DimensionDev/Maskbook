@@ -12,6 +12,7 @@ import { FindTrumanContext } from '../context'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { useConst } from './hooks/useConst'
 import IntroductionPanel from './IntroductionPanel'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme, props) => ({
     wrapper: {
@@ -50,7 +51,7 @@ interface FindTrumanDialogProps {
 export function FindTrumanDialog(props: FindTrumanDialogProps) {
     const { open, onClose } = props
     const { classes } = useStyles()
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { consts, t } = useConst()
 
     const [currentTab, onChange, tabs] = useTabs(

@@ -3,14 +3,7 @@ import { DialogContent, Box, Card, CardContent, CardActions, Link } from '@mui/m
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import {
-    FungibleTokenDetailed,
-    useFungibleTokenWatched,
-    useChainId,
-    isNativeTokenAddress,
-    formatBalance,
-    TransactionStateType,
-} from '@masknet/web3-shared-evm'
+import { isNativeTokenAddress, formatBalance, TransactionStateType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
@@ -24,6 +17,8 @@ import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -90,12 +85,15 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const is24Auction = assetSource?.is24Auction ?? false
     const isVerified = (!assetSource?.isSoldOut && !assetSource?.is_owner) ?? false
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const paymentTokens = resolvePaymentTokensOnCryptoartAI(chainId) ?? []
     const selectedPaymentToken = first(paymentTokens)
 
-    const { amount, token, balance, setAmount, setToken } = useFungibleTokenWatched(selectedPaymentToken)
+    const { amount, token, balance, setAmount, setAddress } = useFungibleTokenWatched(
+        NetworkPluginID.PLUGIN_EVM,
+        selectedPaymentToken?.address,
+    )
 
     const [atLeastBidValue, setAtLeastBidValue] = useState(0)
     useEffect(() => {
@@ -213,10 +211,10 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         <SelectTokenAmountPanel
                             amount={amount}
                             balance={balance.value ?? '0'}
-                            token={token.value as FungibleTokenDetailed}
+                            token={token.value}
                             disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                             onAmountChange={setAmount}
-                            onTokenChange={setToken}
+                            onTokenChange={(x) => setAddress(x.address)}
                             TokenAmountPanelProps={{
                                 label: t('plugin_collectible_price'),
                             }}

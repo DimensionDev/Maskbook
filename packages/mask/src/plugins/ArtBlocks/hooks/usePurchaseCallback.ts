@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/src/web3'
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { ChainId, encodeTransaction, SchemaType, ProviderType, Transaction } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { encodeTransaction, SchemaType } from '@masknet/web3-shared-evm'
 import { useArtBlocksContract } from './useArtBlocksContract'
 
-export function usePurchaseCallback(projectId: string, amount: string, tokenType?: number) {
+export function usePurchaseCallback(projectId: string, amount: string, schemaType?: SchemaType) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId<ChainId>(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection<ChainId, ProviderType, Transaction>(NetworkPluginID.PLUGIN_EVM)
-    const artBlocksContract = useArtBlocksContract()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const artBlocksContract = useArtBlocksContract(chainId)
 
     return useCallback(async () => {
         if (!artBlocksContract) {
@@ -17,9 +17,9 @@ export function usePurchaseCallback(projectId: string, amount: string, tokenType
         }
         const transaction = await encodeTransaction(artBlocksContract, artBlocksContract.methods.purchase(projectId), {
             from: account,
-            value: new BigNumber(tokenType === SchemaType.Native ? amount : 0).toFixed(),
+            value: new BigNumber(schemaType === SchemaType.Native ? amount : 0).toFixed(),
         })
 
         return connection?.sendTransaction(transaction)
-    }, [account, amount, chainId, artBlocksContract, tokenType, connection])
+    }, [account, amount, chainId, artBlocksContract, schemaType, connection])
 }

@@ -1,4 +1,5 @@
-import { formatBalance, FungibleTokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { FormControl, InputAdornment, ListItemIcon, MenuItem, OutlinedInput, Typography } from '@mui/material'
 import { useI18N, useMenu } from '../../../utils'
 import { useEffect, useState, useCallback, useRef, useMemo, ChangeEvent } from 'react'
@@ -73,7 +74,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                             classes={{ icon: classes.icon }}
                             address={x.address}
                             name={x.name}
-                            logoURI={x.logoURI}
+                            logoURL={x.logoURI}
                         />
                     </ListItemIcon>
                     <Typography variant="inherit">{x.symbol}</Typography>
@@ -168,7 +169,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                                         classes={{ icon: classes.icon }}
                                         address={token?.address}
                                         name={token?.name}
-                                        logoURI={token?.logoURI}
+                                        logoURL={token?.logoURI}
                                     />
                                     <Typography
                                         variant="inherit"

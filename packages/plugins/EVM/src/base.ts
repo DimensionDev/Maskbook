@@ -1,15 +1,9 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import {
-    PLUGIN_ID,
-    PLUGIN_NAME,
-    PLUGIN_DESCRIPTION,
-    PLUGIN_PROVIDERS,
-    PLUGIN_NETWORKS,
-    PLUGIN_APPLICATION_CATEGORIES,
-} from './constants'
+import { ChainId, NetworkType, NETWORK_DESCRIPTORS, ProviderType, PROVIDER_DESCRIPTORS } from '@masknet/web3-shared-evm'
+import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants'
 import { languages } from './locales/languages'
 
-export const base: Plugin.Shared.Definition = {
+export const base: Plugin.Shared.Definition<ChainId, ProviderType, NetworkType> = {
     ID: PLUGIN_ID,
     name: { fallback: PLUGIN_NAME },
     description: { fallback: PLUGIN_DESCRIPTION },
@@ -20,7 +14,6 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
     },
     i18n: languages,
-    declareApplicationCategories: PLUGIN_APPLICATION_CATEGORIES,
-    declareWeb3Networks: PLUGIN_NETWORKS,
-    declareWeb3Providers: PLUGIN_PROVIDERS,
+    declareWeb3Networks: NETWORK_DESCRIPTORS,
+    declareWeb3Providers: PROVIDER_DESCRIPTORS,
 }

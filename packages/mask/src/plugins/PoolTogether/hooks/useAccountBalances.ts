@@ -1,19 +1,24 @@
 import { useMemo } from 'react'
-import { useAccount, useMultipleContractSingleData, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { usePoolTogetherTicketContracts } from '../contracts/usePoolTogetherTicket'
 import type { PoolTogetherTicket } from '@masknet/web3-contracts/types/PoolTogetherTicket'
 import { useAsyncRetry } from 'react-use'
 import type { AccountPool, Pool } from '../types'
+import { useMultipleContractSingleData } from '@masknet/plugin-infra/web3-evm'
 
 /**
  * A callback for getting account balances of ticket pools
  * @param pools
  */
 export function useAccountBalance(pools: Pool[]) {
-    const account = useAccount()
-    const ticketContracts = usePoolTogetherTicketContracts(pools.map((pool) => pool.tokens.ticket.address)).filter(
-        Boolean,
-    ) as PoolTogetherTicket[]
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chianId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const ticketContracts = usePoolTogetherTicketContracts(
+        chianId,
+        pools.map((pool) => pool.tokens.ticket.address),
+    ).filter(Boolean) as PoolTogetherTicket[]
 
     const [results, calls, _, callback] = useMultipleContractSingleData(
         ticketContracts,

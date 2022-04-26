@@ -4,13 +4,9 @@ import { useI18N } from '../../../utils'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { FormattedAddress } from '@masknet/shared'
-import {
-    resolveAddressLinkOnExplorer,
-    getChainName,
-    ChainId,
-    useChainId,
-    formatEthereumAddress,
-} from '@masknet/web3-shared-evm'
+import { explorerResolver, ChainId, formatEthereumAddress, chainResolver } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea, resolveUserUrlOnCurrentProvider } from '../pipes'
@@ -66,7 +62,7 @@ export interface TokenTabProps {}
 export function TokenTab(props: TokenTabProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { token, asset, provider } = CollectibleState.useContainer()
 
     if (!asset.value) return null
@@ -165,7 +161,7 @@ export function TokenTab(props: TokenTabProps) {
                 <Box className={classes.chain_row}>
                     <Typography variant="body2">{t('plugin_collectible_contract_address')}</Typography>
                     <Link
-                        href={resolveAddressLinkOnExplorer(ChainId.Mainnet, token?.contractAddress ?? '')}
+                        href={explorerResolver.addressLink(ChainId.Mainnet, token?.contractAddress ?? '')}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Typography variant="body2">
@@ -185,7 +181,7 @@ export function TokenTab(props: TokenTabProps) {
                 </Box>
                 <Box className={classes.chain_row}>
                     <Typography variant="body2">{t('plugin_collectible_block_chain')}</Typography>
-                    <Typography variant="body2">{getChainName(chainId)}</Typography>
+                    <Typography variant="body2">{chainResolver.chainName(chainId)}</Typography>
                 </Box>
             </Box>
         </CollectibleTab>

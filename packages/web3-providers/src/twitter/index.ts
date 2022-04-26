@@ -1,5 +1,5 @@
-import { escapeRegExp } from 'lodash-unified'
 import urlcat from 'urlcat'
+import { escapeRegExp } from 'lodash-unified'
 import type { TwitterBaseAPI } from '../types'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'

@@ -3,7 +3,7 @@ import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { WalletIcon, WarningIcon } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
-import { ProviderType, useWallet, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { first } from 'lodash-unified'
 import { FormattedAddress } from '@masknet/shared'
@@ -11,6 +11,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { useWallet } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     content: {

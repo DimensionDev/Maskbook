@@ -2,16 +2,17 @@ import { useCallback, useMemo, useState } from 'react'
 import stringify from 'json-stable-stringify'
 import { pick } from 'lodash-unified'
 import type { TransactionConfig } from 'web3-core'
-import { GasOptionConfig, TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
+import { GasOptionConfig, TransactionState, TransactionStateType } from '@masknet/web3-shared-evm'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasOptionConfig) {
-    const account = useAccount()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-
-    const web3 = useWeb3({ chainId })
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })
@@ -28,7 +29,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
 
     const tradeCallback = useCallback(async () => {
         // validate config
-        if (!account || !config || !tradeComputed) {
+        if (!web3 || !account || !config || !tradeComputed) {
             setTradeState({
                 type: TransactionStateType.UNKNOWN,
             })

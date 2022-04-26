@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useAsync } from 'react-use'
 import BigNumber from 'bignumber.js'
-import type { ChainId, GasOptionConfig } from '@masknet/web3-shared-evm'
-import { formatGweiToWei, isEIP1559Supported } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, GasOptionConfig , formatGweiToWei } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../Wallet/messages'
 
 export function useGasConfig(chainId: ChainId) {
@@ -11,10 +10,10 @@ export function useGasConfig(chainId: ChainId) {
         try {
             if (gasConfig) {
                 return new BigNumber(
-                    (isEIP1559Supported(chainId) ? gasConfig.maxFeePerGas : gasConfig.gasPrice) ?? 0,
+                    (chainResolver.isSupport(chainId, 'EIP1559') ? gasConfig.maxFeePerGas : gasConfig.gasPrice) ?? 0,
                 ).toString()
             } else {
-                if (isEIP1559Supported(chainId)) {
+                if (chainResolver.isSupport(chainId, 'EIP1559')) {
                     const response = await WalletRPC.getEstimateGasFees(chainId)
                     const maxFeePerGas = formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toFixed(0)
                     const maxPriorityFeePerGas = formatGweiToWei(

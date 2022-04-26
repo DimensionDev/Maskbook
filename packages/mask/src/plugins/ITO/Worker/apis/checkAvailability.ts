@@ -3,7 +3,6 @@ import ITO2_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import type { Availability } from '../../types'
-import Services from '../../../../extension/service'
 
 const interFaceV1 = new Interface(ITO_ABI)
 const interFaceV2 = new Interface(ITO2_ABI)

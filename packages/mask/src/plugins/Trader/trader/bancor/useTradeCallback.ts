@@ -1,15 +1,17 @@
 import { useCallback, useMemo, useState } from 'react'
 import stringify from 'json-stable-stringify'
-import { GasOptionConfig, TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
+import { GasOptionConfig, TransactionState, TransactionStateType } from '@masknet/web3-shared-evm'
 import type { SwapBancorRequest, TradeComputed } from '../../types'
 import { PluginTraderRPC } from '../../messages'
 import { pick } from 'lodash-unified'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasOptionConfig) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const web3 = useWeb3({ chainId })
-    const account = useAccount()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })
@@ -20,7 +22,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
     }, [account, tradeComputed])
 
     const tradeCallback = useCallback(async () => {
-        if (!account || !trade) {
+        if (!account || !trade || !web3) {
             setTradeState({
                 type: TransactionStateType.UNKNOWN,
             })

@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { getMaskColor, makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { MenuItem } from '@mui/material'
-import type { AddressName } from '@masknet/web3-shared-evm'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { first, uniqBy } from 'lodash-unified'
 import { ReversedAddress } from '@masknet/shared'
+import type { IdentityAddress } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -43,7 +44,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface NFTPageProps {
-    addressNames?: AddressName[]
+    addressNames?: IdentityAddress[]
 }
 
 export function NFTPage(props: NFTPageProps) {
@@ -54,7 +55,7 @@ export function NFTPage(props: NFTPageProps) {
     const [selectedAddress, setSelectedAddress] = useState(first(addressNames))
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
     const onClose = () => setAnchorEl(null)
-    const onSelect = (option: AddressName) => {
+    const onSelect = (option: IdentityAddress) => {
         setSelectedAddress(option)
         onClose()
     }
@@ -68,10 +69,10 @@ export function NFTPage(props: NFTPageProps) {
                 onClose={onClose}
                 anchorEl={anchorEl}
                 PaperProps={{ style: { maxHeight: 192 } }}>
-                {uniqBy(addressNames ?? [], (x) => x.resolvedAddress.toLowerCase()).map((x) => {
+                {uniqBy(addressNames ?? [], (x) => x.address.toLowerCase()).map((x) => {
                     return (
-                        <MenuItem key={x.resolvedAddress} value={x.resolvedAddress} onClick={() => onSelect(x)}>
-                            <ReversedAddress address={x.resolvedAddress} />
+                        <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
+                            <ReversedAddress address={x.address} />
                         </MenuItem>
                     )
                 })}

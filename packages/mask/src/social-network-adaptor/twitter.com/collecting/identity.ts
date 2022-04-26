@@ -1,4 +1,5 @@
 import { isNil } from 'lodash-unified'
+import { delay } from '@dimensiondev/kit'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { selfInfoSelectors, searchAvatarSelector, searchAvatarMetaSelector } from '../utils/selector'
 import { ProfileIdentifier } from '@masknet/shared-base'
@@ -6,7 +7,6 @@ import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import Services from '../../../extension/service'
 import { twitterBase } from '../base'
 import { getAvatar, getBio, getNickname, getTwitterId, getPersonalHomepage } from '../utils/user'
-import { delay } from '@dimensiondev/kit'
 
 function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],

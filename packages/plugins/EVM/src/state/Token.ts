@@ -1,12 +1,10 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { TokenState, TokenStorage, Web3Plugin } from '@masknet/plugin-infra/web3'
-import { ChainId, formatEthereumAddress, isSameAddress, isValidAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { TokenState, TokenStorage } from '@masknet/plugin-infra/web3'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, formatEthereumAddress, isValidAddress, SchemaType } from '@masknet/web3-shared-evm'
 
-export class Token
-    extends TokenState<ChainId, SchemaType>
-    implements Web3Plugin.ObjectCapabilities.TokenState<ChainId, SchemaType>
-{
+export class Token extends TokenState<ChainId, SchemaType> {
     constructor(
         context: Plugin.Shared.SharedContext,
         subscriptions: {

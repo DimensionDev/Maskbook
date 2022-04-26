@@ -1,21 +1,13 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { usePickToken, InjectedDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { rightShift } from '@masknet/web3-shared-base'
-import {
-    SchemaType,
-    formatBalance,
-    FungibleTokenDetailed,
-    TransactionStateType,
-    useAccount,
-    useChainId,
-    useFungibleTokenBalance,
-    useGitcoinConstants,
-    useNativeTokenDetailed,
-} from '@masknet/web3-shared-evm'
+import { FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, TransactionStateType, useGitcoinConstants, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useFungibleToken, useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
 import { DialogContent, Link, Typography } from '@mui/material'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Trans } from 'react-i18next'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
@@ -56,14 +48,18 @@ export interface DonateDialogProps extends withClasses<never> {}
 export function DonateDialog(props: DonateDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
+
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+
     const [title, setTitle] = useState('')
     const [address, setAddress] = useState('')
     const [postLink, setPostLink] = useState<string | URL>('')
 
     // context
-    const account = useAccount()
-    const chainId = useChainId()
-    const nativeTokenDetailed = useNativeTokenDetailed()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const nativeTokenDetailed = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants()
 
     // #region remote controlled dialog
@@ -79,10 +75,13 @@ export function DonateDialog(props: DonateDialogProps) {
     // #endregion
 
     // #region the selected token
-    const [token = nativeTokenDetailed.value, setToken] = useState<FungibleTokenDetailed | undefined>(
+    const [token = nativeTokenDetailed.value, setToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(
         nativeTokenDetailed.value,
     )
-    const tokenBalance = useFungibleTokenBalance(token?.type ?? SchemaType.Native, token?.address ?? '')
+
+    const tokenBalance = useAsyncRetry(async () => {
+        return connection?.getFungibleTokenBalance(token?.address ?? ZERO_ADDRESS)
+    }, [connection])
     // #endregion
 
     // #region select token dialog
@@ -106,11 +105,12 @@ export function DonateDialog(props: DonateDialogProps) {
     // #endregion
 
     // #region transaction dialog
-
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareText = token
         ? [
-              `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol}. ${
+              `I just donated ${title} with ${Others?.formatBalance(amount, token.decimals)} ${cashTag}${
+                  token.symbol
+              }. ${
                   isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                       ? `Follow @${
                             isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
@@ -140,7 +140,7 @@ export function DonateDialog(props: DonateDialogProps) {
             open: true,
             shareText,
             state: donateState,
-            summary: `Donating ${formatBalance(amount, token.decimals)} ${token.symbol} for ${title}.`,
+            summary: `Donating ${Others?.formatBalance(amount, token.decimals)} ${token.symbol} for ${title}.`,
         })
     }, [donateState /* update tx dialog only if state changed */])
     // #endregion
@@ -198,7 +198,7 @@ export function DonateDialog(props: DonateDialogProps) {
                         <EthereumERC20TokenApprovedBoundary
                             amount={amount.toFixed()}
                             spender={BULK_CHECKOUT_ADDRESS}
-                            token={token.type === SchemaType.ERC20 ? token : undefined}>
+                            token={token.schema === SchemaType.ERC20 ? token : undefined}>
                             <ActionButton
                                 className={classes.button}
                                 fullWidth

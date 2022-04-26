@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react'
 import { CloseIcon, DownloadIcon, InteractionIcon, ITOIcon, RedPacketIcon, UploadIcon } from '@masknet/icons'
-import { FilterTransactionType, isSameAddress, TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { FilterTransactionType, TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Box } from '@mui/material'
 import classNames from 'classnames'

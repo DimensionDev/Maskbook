@@ -1,18 +1,11 @@
-import { makeStyles } from '@masknet/theme'
+import { z as zod } from 'zod'
 import { memo, useEffect, useMemo, useState } from 'react'
-import {
-    EthereumRpcType,
-    formatGweiToEther,
-    formatGweiToWei,
-    useChainId,
-    useNativeTokenDetailed,
-    useWeb3,
-} from '@masknet/web3-shared-evm'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
+import { makeStyles } from '@masknet/theme'
+import { formatGweiToEther, formatGweiToWei } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../../../utils'
-import { z as zod } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
@@ -21,18 +14,21 @@ import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-unified'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { useNavigate } from 'react-router-dom'
-import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { PopupRoutes } from '@masknet/shared-base'
 import { toHex, fromWei } from 'web3-utils'
 import {
+    GasOptionType,
     isGreaterThan,
     isGreaterThanOrEqualTo,
     isLessThan,
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
+    NetworkPluginID,
     toFixed,
+    TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
+import { useChainId, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -115,48 +111,45 @@ const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 export const GasSetting1559 = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const web3 = useWeb3()
-    const chainId = useChainId()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
     const [getGasLimitError, setGetGasLimitError] = useState(false)
-    const { value: nativeToken } = useNativeTokenDetailed()
-    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
+    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+        chainId: nativeToken?.chainId,
+    })
 
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
-
-    // #region Get suggest gas options data from meta swap api
-    const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
-        return WalletRPC.getEstimateGasFees(chainId)
-    }, [chainId])
-    // #endregion
+    const { value: gasOptions, loading: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
 
     // #region Gas options
     const options = useMemo(
         () => [
             {
                 title: t('popups_wallet_gas_fee_settings_low'),
-                content: gasOptions?.low,
+                content: gasOptions?.options[GasOptionType.SLOW],
             },
             {
                 title: t('popups_wallet_gas_fee_settings_medium'),
-                content: gasOptions?.medium,
+                content: gasOptions?.options[GasOptionType.NORMAL],
             },
             {
                 title: t('popups_wallet_gas_fee_settings_high'),
-                content: gasOptions?.high,
+                content: gasOptions?.options[GasOptionType.FAST],
             },
         ],
         [gasOptions],
     )
     // #endregion
 
-    // #region If the payload type be SEND_ETHER or CONTRACT_INTERACTION, get the gas from the payload
+    // #region If the payload type be TRANSFER or INTERACTION, get the gas from the payload
     const gas = useMemo(() => {
         if (
             value &&
-            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
+            (value?.computedPayload?.type === TransactionDescriptorType.TRANSFER ||
+                value?.computedPayload?.type === TransactionDescriptorType.INTERACTION)
         ) {
             return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
         }
@@ -164,14 +157,15 @@ export const GasSetting1559 = memo(() => {
     }, [value])
     // #endregion
 
-    // #region If the payload type be SEND_ETHER or CONTRACT_INTERACTION, estimate min gas limit by tx data
+    // #region If the payload type be TRANSFER or INTERACTION, estimate min gas limit by tx data
     const { value: minGasLimit } = useAsync(async () => {
         if (
             value &&
-            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
+            (value?.computedPayload?.type === TransactionDescriptorType.TRANSFER ||
+                value?.computedPayload?.type === TransactionDescriptorType.INTERACTION)
         ) {
             try {
+                if (!web3) return 0
                 return web3.eth.estimateGas({
                     data: value.computedPayload._tx.data,
                     from: value.computedPayload._tx.from,
@@ -233,14 +227,14 @@ export const GasSetting1559 = memo(() => {
         },
     })
 
-    // #region If the payload type be SEND_ETHER or CONTRACT_INTERACTION and there are maxFeePerGas and maxPriorityFeePerGas parameters on tx, set them to the form data
+    // #region If the payload type be TRANSFER or INTERACTION and there are maxFeePerGas and maxPriorityFeePerGas parameters on tx, set them to the form data
     useUpdateEffect(() => {
         if (
-            value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-            value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION
+            value?.computedPayload?.type === TransactionDescriptorType.TRANSFER ||
+            value?.computedPayload?.type === TransactionDescriptorType.INTERACTION
         ) {
             if (
-                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
+                value?.computedPayload?.type === TransactionDescriptorType.INTERACTION &&
                 !['transfer', 'transferFrom', 'approve'].includes(value?.computedPayload.name)
             ) {
                 setOption(1)
@@ -298,12 +292,20 @@ export const GasSetting1559 = memo(() => {
     // #region These are additional form rules that need to be prompted for but do not affect the validation of the form
     const maxPriorFeeHelperText = useMemo(() => {
         if (getGasOptionsLoading) return undefined
-        if (isLessThan(maxPriorityFeePerGas, gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
+        if (
+            isLessThan(
+                maxPriorityFeePerGas,
+                gasOptions?.options?.[GasOptionType.SLOW]?.suggestedMaxPriorityFeePerGas ?? 0,
+            )
+        )
             return t('wallet_transfer_error_max_priority_gas_fee_too_low')
         if (
             isGreaterThan(
                 maxPriorityFeePerGas,
-                multipliedBy(gasOptions?.high?.suggestedMaxPriorityFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
+                multipliedBy(
+                    gasOptions?.options?.[GasOptionType.FAST]?.suggestedMaxPriorityFeePerGas ?? 0,
+                    HIGH_FEE_WARNING_MULTIPLIER,
+                ),
             )
         )
             return t('wallet_transfer_error_max_priority_gas_fee_too_high')
@@ -317,7 +319,10 @@ export const GasSetting1559 = memo(() => {
         if (
             isGreaterThan(
                 maxFeePerGas,
-                multipliedBy(gasOptions?.high?.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
+                multipliedBy(
+                    gasOptions?.options?.[GasOptionType.FAST]?.suggestedMaxFeePerGas ?? 0,
+                    HIGH_FEE_WARNING_MULTIPLIER,
+                ),
             )
         )
             return t('wallet_transfer_error_max_fee_too_high')

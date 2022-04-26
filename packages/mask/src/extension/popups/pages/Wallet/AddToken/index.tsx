@@ -1,10 +1,11 @@
 import { memo } from 'react'
 import { Button, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useWallet } from '@masknet/web3-shared-evm'
 import { ERC20TokenList } from '@masknet/shared'
 import { useI18N } from '../../../../../utils'
 import { useNavigate } from 'react-router-dom'
+import { useWallet } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     header: {
@@ -39,9 +40,9 @@ const useStyles = makeStyles()({
 
 const AddToken = memo(() => {
     const { t } = useI18N()
-    const wallet = useWallet()
     const { classes } = useStyles()
     const navigate = useNavigate()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
 
     const excludeTokens = Array.from(wallet?.erc20_token_whitelist ?? [])
 

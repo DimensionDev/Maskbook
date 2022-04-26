@@ -2,7 +2,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { TipButton } from '../../../../plugins/NextID/components/Tip/TipButton'
+// import { TipButton } from '../../../../plugins/NextID/components/Tip/TipButton'
 import { createReactRootShadowed, startWatch, useLocationChange } from '../../../../utils'
 import {
     profileFollowButtonSelector as selector,
@@ -65,5 +65,6 @@ function OpenTipDialog() {
     useLocationChange(setStyleFromEditProfileSelector)
 
     const { classes } = useStyles(style)
-    return <TipButton className={classes.button} receiver={visitingPersona.identifier} />
+    return null
+    // return <TipButton className={classes.button} receiver={visitingPersona.identifier} />
 }

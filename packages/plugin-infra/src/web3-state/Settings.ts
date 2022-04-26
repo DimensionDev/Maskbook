@@ -1,13 +1,13 @@
 import type { Subscription } from 'use-subscription'
 import { createConstantSubscription, StorageObject } from '@masknet/shared-base'
+import { CurrencyType, SettingsState as Web3SettingsState } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
-import { Web3Plugin, CurrencyType } from '../web3-types'
 
 export interface SettingsStorage {
     currencyType: CurrencyType
 }
 
-export class SettingsState implements Web3Plugin.ObjectCapabilities.SettingsState {
+export class SettingsState implements Web3SettingsState {
     protected storage: StorageObject<SettingsStorage> = null!
 
     public allowTestnet?: Subscription<boolean>

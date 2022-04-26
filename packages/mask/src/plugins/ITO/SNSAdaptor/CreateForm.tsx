@@ -1,13 +1,5 @@
-import {
-    ERC20TokenDetailed,
-    SchemaType,
-    formatAmount,
-    formatBalance,
-    useAccount,
-    useITOConstants,
-    useFungibleTokenBalance,
-} from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
+import { SchemaType, formatAmount, formatBalance, useITOConstants } from '@masknet/web3-shared-evm'
+import { isGreaterThan, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, Stack, TextField, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
@@ -30,6 +22,7 @@ import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from
 import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
+import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -126,7 +119,7 @@ export function CreateForm(props: CreateFormProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
 
     const currentIdentity = useCurrentIdentity()
@@ -177,7 +170,7 @@ export function CreateForm(props: CreateFormProps) {
 
     // balance
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        tokenAndAmount?.token?.type ?? SchemaType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         tokenAndAmount?.token?.address ?? '',
     )
 
@@ -239,7 +232,7 @@ export function CreateForm(props: CreateFormProps) {
             name: senderName,
             title: message,
             limit: formatAmount(totalOfPerWallet || '0', first?.token?.decimals),
-            token: first?.token as ERC20TokenDetailed,
+            token: first?.token,
             total: formatAmount(first?.amount || '0', first?.token?.decimals),
             exchangeAmounts: rest.map((item) => formatAmount(item.amount || '0', item?.token?.decimals)),
             exchangeTokens: rest.map((item) => item.token!),
@@ -469,7 +462,7 @@ export function CreateForm(props: CreateFormProps) {
                     <EthereumERC20TokenApprovedBoundary
                         amount={inputTokenAmount}
                         spender={ITO2_CONTRACT_ADDRESS}
-                        token={tokenAndAmount?.token?.type === SchemaType.ERC20 ? tokenAndAmount.token : undefined}>
+                        token={tokenAndAmount?.token?.schema === SchemaType.ERC20 ? tokenAndAmount.token : undefined}>
                         <ActionButton
                             className={classes.button}
                             fullWidth

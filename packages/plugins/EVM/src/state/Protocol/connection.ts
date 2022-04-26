@@ -4,16 +4,23 @@ import {
     ChainId,
     EthereumMethodType,
     ProviderType,
-    getReceiptStatus,
-    Transaction,
     SchemaType,
     TransactionDetailed,
-    EthereumTransactionConfig,
+    Transaction,
+    createNativeToken,
 } from '@masknet/web3-shared-evm'
-import type { TransactionStatusType, Web3Plugin } from '@masknet/plugin-infra/web3'
+import type {
+    ConnectionOptions,
+    FungibleToken,
+    NonFungibleToken,
+    NonFungibleTokenCollection,
+    NonFungibleTokenContract,
+    TransactionStatusType,
+} from '@masknet/web3-shared-base'
 import { createContext, dispatch } from './composer'
 import { Providers } from './provider'
-import type { EVM_Connection, EVM_ConnectionOptions } from './types'
+import type { EVM_Connection, EVM_Web3ConnectionOptions } from './types'
+import { getReceiptStatus } from './utils'
 
 function isUniversalMethod(method: EthereumMethodType) {
     return [
@@ -34,10 +41,96 @@ function isUniversalMethod(method: EthereumMethodType) {
 
 class Connection implements EVM_Connection {
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
+    transferFungibleToken(
+        address: string,
+        amount: string,
+        recipient: string,
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    transferNonFungibleToken(
+        address: string,
+        tokenId: string,
+        amount: string,
+        recipient: string,
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+
+    getGasPrice(options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    getSchemaType(
+        address: string,
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<SchemaType> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenContract(
+        address: string,
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenCollection(
+        address: string,
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<NonFungibleTokenCollection<ChainId>> {
+        throw new Error('Method not implemented.')
+    }
+    getBlockTimestamp(options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Promise<number> {
+        throw new Error('Method not implemented.')
+    }
+    switchChain?:
+        | ((options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) => Promise<void>)
+        | undefined
+
+    getNativeTokenBalance(
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    getFungibleTokenBalance(
+        address: string,
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenBalance(
+        address: string,
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+
+    getNativeToken(
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<FungibleToken<ChainId, SchemaType>> {
+        const token = createNativeToken(options?.chainId ?? ChainId.Mainnet)
+        if (!token) throw new Error('Failed to create native token.')
+        return Promise.resolve(token)
+    }
+
+    getFungibleToken(
+        address: string,
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<FungibleToken<ChainId, SchemaType>> {
+        throw new Error('Method not implemented.')
+    }
+
+    getNonFungibleToken(
+        address: string,
+        id: string,
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<NonFungibleToken<ChainId, SchemaType>> {
+        throw new Error('Method not implemented.')
+    }
 
     // Hijack RPC requests and process them with koa like middlewares
     private get hijackedRequest() {
-        return <T extends unknown>(requestArguments: RequestArguments, options?: EVM_ConnectionOptions) => {
+        return <T extends unknown>(requestArguments: RequestArguments, options?: EVM_Web3ConnectionOptions) => {
             return new Promise<T>(async (resolve, reject) => {
                 const context = createContext(this, requestArguments, {
                     account: this.account,
@@ -71,11 +164,11 @@ class Connection implements EVM_Connection {
         }
     }
 
-    getWeb3(options?: EVM_ConnectionOptions) {
+    getWeb3(options?: EVM_Web3ConnectionOptions) {
         return Providers[options?.providerType ?? this.providerType].createWeb3(options?.chainId ?? this.chainId)
     }
 
-    async getAccount(options?: EVM_ConnectionOptions) {
+    async getAccount(options?: EVM_Web3ConnectionOptions) {
         const accounts = await this.hijackedRequest<string[]>(
             {
                 method: EthereumMethodType.ETH_ACCOUNTS,
@@ -85,7 +178,7 @@ class Connection implements EVM_Connection {
         return first(accounts) ?? ''
     }
 
-    async getChainId(options?: EVM_ConnectionOptions) {
+    async getChainId(options?: EVM_Web3ConnectionOptions) {
         const chainId = await this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CHAIN_ID,
@@ -95,7 +188,7 @@ class Connection implements EVM_Connection {
         return Number.parseInt(chainId, 16)
     }
 
-    getBlockNumber(options?: EVM_ConnectionOptions) {
+    getBlockNumber(options?: EVM_Web3ConnectionOptions) {
         return this.hijackedRequest<number>(
             {
                 method: EthereumMethodType.ETH_BLOCK_NUMBER,
@@ -104,7 +197,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    getBalance(address: string, options?: EVM_ConnectionOptions) {
+    getBalance(address: string, options?: EVM_Web3ConnectionOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_GET_BALANCE,
@@ -114,7 +207,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    getCode(address: string, options?: EVM_ConnectionOptions) {
+    getCode(address: string, options?: EVM_Web3ConnectionOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_GET_CODE,
@@ -124,7 +217,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async getTransaction(hash: string, options?: EVM_ConnectionOptions) {
+    async getTransaction(hash: string, options?: EVM_Web3ConnectionOptions) {
         return this.hijackedRequest<TransactionDetailed>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
@@ -134,7 +227,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    getTransactionReceiptHijacked(hash: string, options?: EVM_ConnectionOptions) {
+    getTransactionReceipt(hash: string, options?: EVM_Web3ConnectionOptions) {
         return this.hijackedRequest<TransactionReceipt | null>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
@@ -144,22 +237,11 @@ class Connection implements EVM_Connection {
         )
     }
 
-    getTransactionReceipt(hash: string, options?: EVM_ConnectionOptions) {
-        return this.hijackedRequest<TransactionReceipt | null>(
-            {
-                method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
-                params: [hash],
-            },
-            options,
-        )
+    async getTransactionStatus(id: string, options?: EVM_Web3ConnectionOptions): Promise<TransactionStatusType> {
+        return getReceiptStatus(await this.getTransactionReceipt(id, options))
     }
 
-    async getTransactionStatus(id: string, options?: EVM_ConnectionOptions): Promise<TransactionStatusType> {
-        const receipt = await this.getTransactionReceiptHijacked(id, options)
-        return getReceiptStatus(receipt)
-    }
-
-    async getTransactionNonce(address: string, options?: EVM_ConnectionOptions) {
+    async getTransactionNonce(address: string, options?: EVM_Web3ConnectionOptions) {
         const count = await this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
@@ -173,7 +255,7 @@ class Connection implements EVM_Connection {
     signMessage(
         dataToSign: string,
         signType?: 'personaSign' | 'typedDataSign' | Omit<string, 'personaSign' | 'typedDataSign'>,
-        options?: EVM_ConnectionOptions,
+        options?: EVM_Web3ConnectionOptions,
     ) {
         if (!options?.account) throw new Error('Unknown account.')
 
@@ -203,14 +285,14 @@ class Connection implements EVM_Connection {
         dataToVerify: string,
         signature: string,
         signType?: string,
-        options?: Web3Plugin.ConnectionOptions<ChainId, ProviderType, Transaction>,
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction>,
     ) {
         const web3 = await this.getWeb3(options)
         const dataToSign = await web3.eth.personal.ecRecover(dataToVerify, signature)
         return dataToSign === dataToVerify
     }
 
-    async signTransaction(transaction: Transaction, options?: EVM_ConnectionOptions) {
+    async signTransaction(transaction: Transaction, options?: EVM_Web3ConnectionOptions) {
         const signed = await this.hijackedRequest<SignedTransaction>(
             {
                 method: EthereumMethodType.ETH_SIGN_TRANSACTION,
@@ -221,11 +303,11 @@ class Connection implements EVM_Connection {
         return signed.rawTransaction ?? ''
     }
 
-    signTransactions(transactions: Transaction[], options?: EVM_ConnectionOptions) {
+    signTransactions(transactions: Transaction[], options?: EVM_Web3ConnectionOptions) {
         return Promise.all(transactions.map((x) => this.signTransaction(x)))
     }
 
-    callTransaction(transaction: Transaction, options?: EVM_ConnectionOptions) {
+    callTransaction(transaction: Transaction, options?: EVM_Web3ConnectionOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CALL,
@@ -234,7 +316,7 @@ class Connection implements EVM_Connection {
             options,
         )
     }
-    sendTransaction(transaction: Transaction, options?: EVM_ConnectionOptions) {
+    sendTransaction(transaction: Transaction, options?: EVM_Web3ConnectionOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
@@ -244,7 +326,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    sendSignedTransaction(signature: string, options?: EVM_ConnectionOptions) {
+    sendSignedTransaction(signature: string, options?: EVM_Web3ConnectionOptions) {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
@@ -254,21 +336,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    getFungileToken(
-        address: string,
-        options?: Web3Plugin.ConnectionOptions<ChainId, ProviderType, EthereumTransactionConfig> | undefined,
-    ): Promise<Web3Plugin.FungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
-    }
-    getNonFungileToken(
-        address: string,
-        id: string,
-        options?: Web3Plugin.ConnectionOptions<ChainId, ProviderType, EthereumTransactionConfig> | undefined,
-    ): Promise<Web3Plugin.FungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
-    }
-
-    confirmRequest(options?: EVM_ConnectionOptions) {
+    confirmRequest(options?: EVM_Web3ConnectionOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_CONFIRM_TRANSACTION,
@@ -278,7 +346,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    rejectRequest(options?: EVM_ConnectionOptions) {
+    rejectRequest(options?: EVM_Web3ConnectionOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_REJECT_TRANSACTION,
@@ -288,7 +356,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    replaceRequest(hash: string, transaction: Transaction, options?: EVM_ConnectionOptions) {
+    replaceRequest(hash: string, transaction: Transaction, options?: EVM_Web3ConnectionOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
@@ -298,7 +366,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    cancelRequest(hash: string, transaction: Transaction, options?: EVM_ConnectionOptions) {
+    cancelRequest(hash: string, transaction: Transaction, options?: EVM_Web3ConnectionOptions) {
         return this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,

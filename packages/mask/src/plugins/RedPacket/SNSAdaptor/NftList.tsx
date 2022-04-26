@@ -1,10 +1,11 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ERC721ContractDetailed, formatNFT_TokenId } from '@masknet/web3-shared-evm'
+import { ChainId, formatTokenId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, ListItem, ListProps, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { FC, HTMLProps, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3-types'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -92,7 +93,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface NftItemProps extends HTMLProps<HTMLDivElement> {
-    contract: ERC721ContractDetailed
+    contract: Web3Plugin.NonFungibleToken<ChainId, SchemaType.ERC721>['contract']
     tokenId: string
     claimed?: boolean
     renderOrder: number
@@ -101,7 +102,7 @@ interface NftItemProps extends HTMLProps<HTMLDivElement> {
 export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, renderOrder, ...rest }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [name, setName] = useState(formatNFT_TokenId(tokenId, 2))
+    const [name, setName] = useState(formatTokenId(tokenId, 2))
 
     return (
         <div className={classnames(className, classes.nft)} {...rest}>

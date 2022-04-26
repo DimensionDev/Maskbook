@@ -4,20 +4,22 @@ import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 import {
+    isSameAddress,
+    isZero,
+    isGreaterThan,
+    isGreaterThanOrEqualTo,
+    multipliedBy,
+    rightShift,
+    NetworkPluginID,
+} from '@masknet/web3-shared-base'
+import {
     Asset,
     SchemaType,
     formatBalance,
     formatGweiToWei,
     formatWeiToGwei,
     formatEthereumAddress,
-    useChainId,
-    useGasLimit,
-    useTokenTransferCallback,
-    useWallet,
-    useFungibleTokenBalance,
-    isSameAddress,
 } from '@masknet/web3-shared-evm'
-import { isZero, isGreaterThan, isGreaterThanOrEqualTo, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
@@ -35,6 +37,8 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { toHex } from 'web3-utils'
 import { TransferAddressError } from '../type'
 import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
+import { useChainId, useFungibleTokenBalance, useWallet } from '@masknet/plugin-infra/web3'
+import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()({
     container: {
@@ -148,8 +152,8 @@ export interface Prior1559TransferProps {
 export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, openAssetMenu, otherWallets }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const wallet = useWallet()
-    const chainId = useChainId()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const navigate = useNavigate()
 
@@ -252,7 +256,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     // #endregion
 
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        selectedAsset?.token?.type ?? SchemaType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         selectedAsset?.token?.address ?? '',
     )
 
@@ -494,7 +498,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                                             classes={{ icon: classes.icon }}
                                                             address={selectedAsset?.token.address ?? ''}
                                                             name={selectedAsset?.token.name}
-                                                            logoURI={selectedAsset?.token.logoURI}
+                                                            logoURL={selectedAsset?.token.logoURI}
                                                         />
                                                     }
                                                     deleteIcon={<ChevronDown className={classes.icon} />}

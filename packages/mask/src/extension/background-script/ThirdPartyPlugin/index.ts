@@ -1,6 +1,6 @@
 import type { MaskSDK_SNS_ContextIdentifier } from '../../../plugins/External/sns-context'
 import type { Manifest } from '../../../plugins/External/types'
-import { constructThirdPartyRequestPermissionURL } from '../../popups/ThirdPartyRequestPermission/utils'
+// import { constructThirdPartyRequestPermissionURL } from '../../popups/ThirdPartyRequestPermission/utils'
 import { ThirdPartyPluginPermission } from './types'
 
 export async function fetchManifest(addr: string): Promise<Manifest> {
@@ -53,7 +53,7 @@ export async function hasPermission(baseURL: string, permissions: ThirdPartyPlug
  */
 export async function requestPermission(baseURL: string, permissions: ThirdPartyPluginPermission[]): Promise<boolean> {
     if (await hasPermission(baseURL, permissions)) return true
-    await openPluginPopup(constructThirdPartyRequestPermissionURL(baseURL, permissions))
+    // await openPluginPopup(constructThirdPartyRequestPermissionURL(baseURL, permissions))
     return hasPermission(baseURL, permissions)
 }
 

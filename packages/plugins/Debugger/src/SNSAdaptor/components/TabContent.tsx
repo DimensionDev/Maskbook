@@ -1,11 +1,13 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { useBalance, useBlockNumber } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
+import type { IdentityAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, ListItemText, Typography } from '@mui/material'
 
 export interface TabContentProps {
-    identity?: Plugin.SNSAdaptor.ProfileIdentity
-    addressNames?: Plugin.SNSAdaptor.ProfileAddress[]
+    identity?: SocialIdentity
+    addressNames?: IdentityAddress[]
 }
 
 const useStyles = makeStyles()({
@@ -61,7 +63,7 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
                                     {x.type}: {x.label}
                                 </Typography>
                             }
-                            secondary={x.resolvedAddress}
+                            secondary={x.address}
                         />
                     </ListItem>
                 ))}

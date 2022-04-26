@@ -1,8 +1,8 @@
 import io from 'socket.io-client'
 import { values } from 'lodash-unified'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { ChainId, getZerionConstants } from '@masknet/web3-shared-evm'
-import type { Pageable, Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { FungibleAsset, Pageable, Transaction, Web3Pagination } from '@masknet/web3-shared-base'
+import { ChainId, getZerionConstants, SchemaType } from '@masknet/web3-shared-evm'
 import type {
     SocketRequestBody,
     SocketNameSpace,
@@ -100,9 +100,11 @@ async function getTransactionList(address: string, scope: string, page?: number,
 
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
 
-export class ZerionAPI implements FungibleTokenAPI.Provider, HistoryAPI.Provider {
-    async getAssets(chainId: ChainId, address: string) {
-        let result: Web3Plugin.FungibleAsset[] = []
+export class ZerionAPI
+    implements FungibleTokenAPI.Provider<ChainId, SchemaType>, HistoryAPI.Provider<ChainId, SchemaType>
+{
+    async getAssets(address: string, pagination?: Web3Pagination<ChainId>) {
+        let result: FungibleAsset<ChainId, SchemaType>[] = []
         const pairs = getEnumAsArray(ChainId).map(
             (x) => [x.value, getZerionConstants(x.value).ASSETS_SCOPE_NAME] as const,
         )
@@ -129,13 +131,17 @@ export class ZerionAPI implements FungibleTokenAPI.Provider, HistoryAPI.Provider
         }
 
         return {
+            currentPage: 0,
             data: result,
             hasNextPage: false,
         }
     }
 
-    async getTransactions(chainId: ChainId, address: string): Promise<Pageable<Web3Plugin.Transaction>> {
-        let result: Web3Plugin.Transaction[] = []
+    async getTransactions(
+        address: string,
+        pagination: Web3Pagination<ChainId>,
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+        let result: Transaction<ChainId, SchemaType>[] = []
         // xdai-assets is not support
         const pairs = getEnumAsArray(ChainId).map(
             (x) => [x.value, getZerionConstants(x.value).TRANSACTIONS_SCOPE_NAME] as const,

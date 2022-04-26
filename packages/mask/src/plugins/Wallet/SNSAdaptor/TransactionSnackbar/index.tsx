@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Link } from '@mui/material'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { createLookupTableResolver } from '@masknet/web3-shared-base'
-import { TransactionStatusType, useWeb3State } from '@masknet/plugin-infra/web3'
+import { createLookupTableResolver, TransactionStatusType } from '@masknet/web3-shared-base'
+import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { isPopupPage } from '@masknet/shared-base'
 import type { TransactionProgressEvent } from '@masknet/plugin-wallet'
@@ -23,8 +23,8 @@ export function TransactionSnackbar() {
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const snackbarKeyRef = useRef<SnackbarKey>()
 
-    const [progress, setProgress] = useState<TransactionProgressEvent<number, unknown>>()
-    const { Utils, TransactionFormatter } = useWeb3State(progress?.pluginID)
+    const [progress, setProgress] = useState<TransactionProgressEvent>()
+    const { Others, TransactionFormatter } = useWeb3State(progress?.pluginID) as Web3Helper.Web3StateAll
 
     const resolveSnackbarConfig = createLookupTableResolver<
         TransactionStatusType,
@@ -45,11 +45,6 @@ export function TransactionSnackbar() {
                 processing: false,
                 variant: 'error',
                 message: t('plugin_wallet_snackbar_failed'),
-            },
-            [TransactionStatusType.CANCELLED]: {
-                processing: false,
-                variant: 'success',
-                message: 'plugin_wallet_snackbar_canceled',
             },
         },
         {},
@@ -86,7 +81,7 @@ export function TransactionSnackbar() {
                     <Link
                         className={classes.link}
                         color="inherit"
-                        href={Utils?.resolveTransactionLink?.(progress.chainId, progress.transactionId)}
+                        href={Others?.explorerResolver.transactionLink?.(progress.chainId, progress.transactionId)}
                         target="_blank"
                         rel="noopener noreferrer">
                         {computed.description} <LaunchIcon sx={{ ml: 1 }} fontSize="inherit" />

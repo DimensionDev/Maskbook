@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback } from 'react'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { useWeb3, isSameAddress } from '@masknet/web3-shared-evm'
-import { useAccount, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra/web3'
-import CyberConnect, { Env } from '@cyberlab/cyberconnect'
-import { PluginCyberConnectRPC } from '../messages'
-import { CircularProgress, useTheme, Typography } from '@mui/material'
 import { useAsync } from 'react-use'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { useWeb3, useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import CyberConnect, { Env } from '@cyberlab/cyberconnect'
+import { CircularProgress, useTheme, Typography } from '@mui/material'
+import { PluginCyberConnectRPC } from '../messages'
 
 const useStyles = makeStyles()(() => ({
     button: {
@@ -91,20 +91,20 @@ export default function ConnectButton({
     refreshFollowList: () => void
 }) {
     const { classes, cx } = useStyles()
-    const web3 = useWeb3()
-    const myAddress = useAccount()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [cc, setCc] = useState<CyberConnect | null>(null)
     const [isFollowing, setFollowing] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const blockChainNetwork = useCurrentWeb3NetworkPluginID()
     useAsync(async () => {
-        if (isSameAddress(myAddress, address)) return
-        const res = await PluginCyberConnectRPC.fetchFollowStatus(myAddress, address)
+        if (isSameAddress(account, address)) return
+        const res = await PluginCyberConnectRPC.fetchFollowStatus(account, address)
         setFollowing(res.data.followStatus.isFollowing)
-    }, [address, myAddress])
+    }, [address, account])
 
     useEffect(() => {
-        if (!web3.eth.currentProvider) return
+        if (!web3?.eth.currentProvider) return
         const ccInstance = new CyberConnect({
             provider: web3.eth.currentProvider,
             namespace: 'Mask',
@@ -112,7 +112,7 @@ export default function ConnectButton({
         })
 
         setCc(ccInstance)
-    }, [web3, myAddress])
+    }, [web3, account])
 
     const handleClick = useCallback(() => {
         if (!cc) return
@@ -136,13 +136,13 @@ export default function ConnectButton({
                     setLoading(false)
                 })
         }
-    }, [cc, myAddress, isFollowing])
+    }, [cc, account, isFollowing])
 
     return blockChainNetwork !== NetworkPluginID.PLUGIN_EVM ? (
         <Typography variant="body2" sx={{ marginTop: 2, color: MaskColorVar.cyberconnectPrimary }}>
             Please switch to EVM-based wallet to follow
         </Typography>
-    ) : !isSameAddress(myAddress, address) ? (
+    ) : !isSameAddress(account, address) ? (
         <div
             className={cx(classes.button, {
                 [classes.isFollowing]: isFollowing,

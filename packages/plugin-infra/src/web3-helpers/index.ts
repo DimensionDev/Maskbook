@@ -1,7 +1,16 @@
-import type { NetworkPluginID, Web3Plugin } from '../web3-types'
+import {
+    Connection,
+    ConnectionOptions,
+    NetworkDescriptor,
+    NetworkPluginID,
+    ProtocolState,
+    ProviderDescriptor,
+    ProviderState,
+} from '@masknet/web3-shared-base'
 import type * as EVM from '@masknet/web3-shared-evm'
 import type * as Flow from '@masknet/web3-shared-flow'
 import type * as Solana from '@masknet/web3-shared-solana'
+import type { Web3Plugin } from '../web3-types'
 
 export declare namespace Web3Helper {
     export type Definition = {
@@ -15,6 +24,7 @@ export declare namespace Web3Helper {
             TransactionDetailed: EVM.TransactionDetailed
             TransactionSignature: EVM.TransactionSignature
             TransactionParameter: EVM.TransactionParameter
+            Web3Provider: EVM.Web3Provider
             Web3: EVM.Web3
         }
         [NetworkPluginID.PLUGIN_FLOW]: {
@@ -27,6 +37,7 @@ export declare namespace Web3Helper {
             TransactionDetailed: Flow.TransactionDetailed
             TransactionSignature: Flow.TransactionSignature
             TransactionParameter: Flow.TransactionParameter
+            Web3Provider: Flow.Web3Provider
             Web3: Flow.Web3
         }
         [NetworkPluginID.PLUGIN_SOLANA]: {
@@ -39,21 +50,37 @@ export declare namespace Web3Helper {
             TransactionDetailed: Solana.TransactionDetailed
             TransactionSignature: Solana.TransactionSignature
             TransactionParameter: Solana.TransactionParameter
+            Web3Provider: Solana.Web3Provider
             Web3: Solana.Web3
         }
     }
 
-    export type Web3ConnectionOptions<T extends NetworkPluginID = never> = T extends never
-        ? Web3Plugin.ConnectionOptions<number, string, unknown>
-        : Web3Plugin.ConnectionOptions<
+    export type Web3<T extends NetworkPluginID = never> = T extends never ? never : Definition[T]['Web3']
+
+    export type Web3ProviderState<T extends NetworkPluginID = never> = T extends never
+        ? never
+        : ProviderState<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
+
+    export type Web3ProtocolState<T extends NetworkPluginID = never> = T extends never
+        ? never
+        : ProtocolState<
               Definition[T]['ChainId'],
+              Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
-              Definition[T]['Transaction']
+              Definition[T]['Signature'],
+              Definition[T]['Transaction'],
+              Definition[T]['TransactionDetailed'],
+              Definition[T]['TransactionSignature'],
+              Definition[T]['Web3']
           >
 
+    export type Web3ConnectionOptions<T extends NetworkPluginID = never> = T extends never
+        ? never
+        : ConnectionOptions<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['Transaction']>
+
     export type Web3Connection<T extends NetworkPluginID = never> = T extends never
-        ? Web3Plugin.Connection<number, string, string, string, unknown, unknown, string, unknown>
-        : Web3Plugin.Connection<
+        ? never
+        : Connection<
               Definition[T]['ChainId'],
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
@@ -65,18 +92,7 @@ export declare namespace Web3Helper {
           >
 
     export type Web3State<T extends NetworkPluginID = never> = T extends never
-        ? Web3Plugin.ObjectCapabilities.Capabilities<
-              number,
-              string,
-              string,
-              string,
-              string,
-              unknown,
-              unknown,
-              string,
-              unknown,
-              unknown
-          >
+        ? never
         : Web3Plugin.ObjectCapabilities.Capabilities<
               Definition[T]['ChainId'],
               Definition[T]['SchemaType'],
@@ -91,6 +107,57 @@ export declare namespace Web3Helper {
           >
 
     export type Web3UI<T extends NetworkPluginID = never> = T extends never
-        ? Web3Plugin.UI.UI<number, string, string>
+        ? never
         : Web3Plugin.UI.UI<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
+
+    export type ChainIdAll = Definition[NetworkPluginID]['ChainId']
+    export type SchemaTypeAll = Definition[NetworkPluginID]['SchemaType']
+    export type ProviderTypeAll = Definition[NetworkPluginID]['ProviderType']
+    export type NetworkTypeAll = Definition[NetworkPluginID]['NetworkType']
+    export type SignatureAll = Definition[NetworkPluginID]['Signature']
+    export type TransactionAll = Definition[NetworkPluginID]['Transaction']
+    export type TransactionDetailedAll = Definition[NetworkPluginID]['TransactionDetailed']
+    export type TransactionSignatureAll = Definition[NetworkPluginID]['TransactionSignature']
+    export type TransactionParameterAll = Definition[NetworkPluginID]['TransactionParameter']
+    export type Web3All = Definition[NetworkPluginID]['Web3']
+
+    export type NetworkDescriptorAll = NetworkDescriptor<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['NetworkType']
+    >
+
+    export type ProviderDescriptorAll = ProviderDescriptor<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['ProviderType']
+    >
+
+    export type Web3ConnectionAll = Connection<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType'],
+        Definition[NetworkPluginID]['ProviderType'],
+        Definition[NetworkPluginID]['Signature'],
+        Definition[NetworkPluginID]['Transaction'],
+        Definition[NetworkPluginID]['TransactionDetailed'],
+        Definition[NetworkPluginID]['TransactionSignature'],
+        Definition[NetworkPluginID]['Web3']
+    >
+
+    export type Web3StateAll = Web3Plugin.ObjectCapabilities.Capabilities<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType'],
+        Definition[NetworkPluginID]['ProviderType'],
+        Definition[NetworkPluginID]['NetworkType'],
+        Definition[NetworkPluginID]['Signature'],
+        Definition[NetworkPluginID]['Transaction'],
+        Definition[NetworkPluginID]['TransactionDetailed'],
+        Definition[NetworkPluginID]['TransactionSignature'],
+        Definition[NetworkPluginID]['TransactionParameter'],
+        Definition[NetworkPluginID]['Web3']
+    >
+
+    export type Web3UIAll = Web3Plugin.UI.UI<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['ProviderType'],
+        Definition[NetworkPluginID]['NetworkType']
+    >
 }

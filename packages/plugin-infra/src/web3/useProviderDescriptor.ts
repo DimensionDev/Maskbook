@@ -1,5 +1,4 @@
-import { useMemo } from 'react'
-import type { NetworkPluginID } from '../web3-types'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useProviderType } from './useProviderType'
 import { useCurrentWeb3NetworkPluginID } from './Context'
 import { getPluginDefine } from '../manager/store'

@@ -1,16 +1,24 @@
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
-import { ChainId, createNativeToken } from '@masknet/web3-shared-evm'
+import type { TransactionContext } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { getTokenAmountDescription } from '../utils'
+import { Web3StateSettings } from '../../../settings'
 
 export class ContractDepolymentDescriptor {
-    compute(context: Web3Plugin.TransactionContext<ChainId>) {
-        return Promise.resolve({
+    async compute(context: TransactionContext<ChainId>) {
+        const connection = await Web3StateSettings.value.Protocol?.getConnection?.({
+            chainId: context.chainId,
+        })
+
+        return {
+            chainId: context.chainId,
             title: 'Contract Depolyment',
             description: `Contract Deployment ${getTokenAmountDescription(
                 context.value,
-                createNativeToken(context.chainId),
+                await connection?.getNativeToken({
+                    chainId: context.chainId,
+                }),
                 true,
             )}`,
-        })
+        }
     }
 }

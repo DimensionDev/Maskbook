@@ -1,9 +1,10 @@
 import { Trans } from 'react-i18next'
 import { ImageIcon } from '@masknet/shared'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, CircularProgress, Typography, Paper, Link } from '@mui/material'
 import { useStylesExtends, makeStyles, MaskColorVar } from '@masknet/theme'
-import { NetworkPluginID, useProviderDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useProviderDescriptor, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
 import { FlashIcon } from '../../../../resources/FlashIcon'
@@ -41,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ConnectionProgressProps extends withClasses<never> {
     pluginID: NetworkPluginID
-    providerType: string
+    providerType: Web3Helper.Definition[NetworkPluginID]['ProviderType']
     connection: AsyncStateRetry<true>
 }
 
@@ -52,10 +53,10 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const { Utils } = useWeb3State(pluginID)
+    const { Others } = useWeb3State(pluginID) as Web3Helper.Web3StateAll
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
 
-    if (!Utils) return null
+    if (!Others) return null
 
     return (
         <>
@@ -68,7 +69,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                                 {loading
                                     ? t('plugin_wallet_connecting_with')
                                     : t(connected ? 'plugin_wallet_connected_with' : 'plugin_wallet_connect_with')}{' '}
-                                {Utils.resolveProviderName(providerType)}
+                                {Others.providerResolver.providerName(providerType)}
                             </Typography>
                             {loading ? (
                                 <Box display="flex" alignItems="center">
@@ -101,20 +102,20 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                     <Trans
                         i18nKey="plugin_wallet_connect_tip"
                         components={{
-                            providerLink: Utils.resolveProviderHomeLink(providerType) ? (
+                            providerLink: Others.providerResolver.providerHomeLink(providerType) ? (
                                 <Link
                                     className={classes.tipLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    href={Utils.resolveProviderHomeLink(providerType)}
+                                    href={Others.providerResolver.providerHomeLink(providerType)}
                                 />
                             ) : (
                                 <span />
                             ),
                         }}
                         values={{
-                            providerName: Utils.resolveProviderName(providerType),
-                            providerShortenLink: Utils.resolveProviderShortenLink(providerType),
+                            providerName: Others.providerResolver.providerName(providerType),
+                            providerShortenLink: Others.providerResolver.providerShortenLink(providerType),
                         }}
                     />
                 </Typography>

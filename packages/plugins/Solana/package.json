@@ -34,5 +34,9 @@
     "bs58": "^4.0.1",
     "buffer": "^6.0.3",
     "react-use": "^17.3.2"
+  },
+  "devDependencies": {
+    "@types/bs58": "^4.0.1",
+    "@types/use-subscription": "^1.0.0"
   }
 }

@@ -1,8 +1,12 @@
 import type { Plugin } from '../types'
-import type { Web3Plugin } from '../entry-web3'
+import type {
+    TransactionContext,
+    TransactionDescriptor,
+    TransactionFormatterState as Web3TransactionFormatterState,
+} from '@masknet/web3-shared-base'
 
 export class TransactionFormatterState<ChainId, TransactionParameter, Transaction>
-    implements Web3Plugin.ObjectCapabilities.TransactionFormatterState<ChainId, TransactionParameter, Transaction>
+    implements Web3TransactionFormatterState<ChainId, TransactionParameter, Transaction>
 {
     constructor(context: Plugin.Shared.SharedContext) {}
 
@@ -13,14 +17,14 @@ export class TransactionFormatterState<ChainId, TransactionParameter, Transactio
     createContext(
         chainId: ChainId,
         transaction: Transaction,
-    ): Promise<Web3Plugin.TransactionContext<ChainId, TransactionParameter>> {
+    ): Promise<TransactionContext<ChainId, TransactionParameter>> {
         throw new Error('Method not implemented.')
     }
     createDescriptor(
         chainId: ChainId,
         transaction: Transaction,
-        context: Web3Plugin.TransactionContext<ChainId, TransactionParameter>,
-    ): Promise<Web3Plugin.TransactionDescriptor<Transaction>> {
+        context: TransactionContext<ChainId, TransactionParameter>,
+    ): Promise<TransactionDescriptor<ChainId, Transaction>> {
         throw new Error('Method not implemented.')
     }
 }

@@ -1,5 +1,5 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react'
-import { ChainId, Transaction, useAccount, useTransactions } from '@masknet/web3-shared-evm'
+import { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { useUpdateEffect } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
@@ -8,6 +8,8 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { HistoryTableRow } from '../HistoryTableRow'
 import { noop } from 'lodash-unified'
+import { useAccount, useTransactions } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -48,12 +50,12 @@ interface HistoryTableProps {
 
 export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const {
         value = { transactions: [], hasNextPage: false },
         loading: transactionLoading,
         error: transactionError,
-    } = useTransactions(account, page, 50, selectedChainId)
+    } = useTransactions(NetworkPluginID.PLUGIN_EVM, account, page, 50, selectedChainId)
 
     const { transactions = [], hasNextPage } = value
 

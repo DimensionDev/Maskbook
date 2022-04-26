@@ -1,4 +1,4 @@
-import { useAccount, formatNFT_TokenId } from '@masknet/web3-shared-evm'
+import { formatTokenId } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useControlledDialog } from '../../../utils'
 import { useAsyncRetry } from 'react-use'
@@ -25,6 +25,8 @@ import { useContext, useMemo, useState } from 'react'
 import { LoadingButton } from '@mui/lab'
 import getUnixTime from 'date-fns/getUnixTime'
 import { FindTrumanContext } from '../context'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme, props) => ({
     skeleton: {
@@ -101,9 +103,7 @@ const useStyles = makeStyles()((theme, props) => ({
 interface PartsPanelProps {}
 
 export default function PartsPanel(props: PartsPanelProps) {
-    const { classes } = useStyles()
-    const { t } = useContext(FindTrumanContext)
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const {
         value: partsInfo,
@@ -338,7 +338,7 @@ function QuestDialog(props: QuestDialogProps) {
     const { t, const: consts } = useContext(FindTrumanContext)
 
     const poapIds = useMemo(() => {
-        return quest.poaps.map((e) => formatNFT_TokenId(e.tokenId.toString(), 2)).join(', ')
+        return quest.poaps.map((e) => formatTokenId(e.tokenId.toString(), 2)).join(', ')
     }, [quest])
 
     const availablePoap = useMemo(() => {

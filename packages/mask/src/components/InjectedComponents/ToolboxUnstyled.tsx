@@ -10,7 +10,6 @@ import {
     ListItemText as MuiListItemText,
     Box,
 } from '@mui/material'
-import { TransactionStatusType } from '@masknet/web3-shared-evm'
 import {
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -18,9 +17,10 @@ import {
     useWallet,
     useChainColor,
     useChainIdValid,
-    useChainDetailed,
     useWeb3State,
     useReverseAddress,
+    useChainIdMainnet,
+    useTransactions,
 } from '@masknet/plugin-infra/web3'
 import { useCallback, useEffect, useMemo } from 'react'
 import { WalletIcon } from '@masknet/shared'
@@ -28,13 +28,13 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
-import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 import GuideStep from '../GuideStep'
 import { MaskFilledIcon } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { NextIDVerificationStatus, useNextIDConnectStatus } from '../DataSource/useNextID'
+import { TransactionStatusType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -177,13 +177,11 @@ function useToolbox() {
     const selectedWallet = useWallet()
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
-    const chainDetailed = useChainDetailed()
-    const { Utils } = useWeb3State()
+    const chainIdMainnet = useChainIdMainnet()
+    const { Others } = useWeb3State()
 
     // #region recent pending transactions
-    const { value: pendingTransactions = [] } = useRecentTransactions({
-        status: TransactionStatusType.NOT_DEPEND,
-    })
+    const pendingTransactions = useTransactions(undefined, TransactionStatusType.NOT_DEPEND)
     // #endregion
 
     // #region Wallet
@@ -194,13 +192,13 @@ function useToolbox() {
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
 
-    const { value: domain } = useReverseAddress(account)
+    const { value: domain } = useReverseAddress(undefined, account)
 
     function renderButtonText() {
         if (!account) return t('mask_network')
         if (!chainIdValid) return t('plugin_wallet_wrong_network')
         if (pendingTransactions.length <= 0)
-            return Utils?.formatDomainName?.(domain) || Utils?.formatAddress?.(account, 4) || account
+            return Others?.formatDomainName?.(domain) || Others?.formatAddress?.(account, 4) || account
         return (
             <>
                 <span style={{ marginRight: 12 }}>
@@ -220,8 +218,7 @@ function useToolbox() {
 
     const walletTitle = renderButtonText()
 
-    const shouldDisplayChainIndicator =
-        account && chainIdValid && chainDetailed?.network && chainDetailed.network !== 'mainnet'
+    const shouldDisplayChainIndicator = account && chainIdValid && !chainIdMainnet
     return {
         openWallet,
         isWalletValid,

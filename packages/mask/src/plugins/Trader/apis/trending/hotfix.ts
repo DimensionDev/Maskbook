@@ -1,7 +1,8 @@
+import { getEnumAsArray } from '@dimensiondev/kit'
 import {
-    getChainIdFromNetworkType,
     getCoinGeckoConstants,
     getCoinMarketCapConstants,
+    networkResolver,
     NetworkType,
 } from '@masknet/web3-shared-evm'
 import { TagType } from '../../types'
@@ -11,7 +12,6 @@ import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
 import { currentNetworkSettings } from '../../../Wallet/settings'
-import { getEnumAsArray } from '@dimensiondev/kit'
 
 const BLACKLIST_MAP: {
     [key in DataProvider]: {
@@ -105,7 +105,7 @@ const NETWORK_ID_MAP: {
 }
 
 getEnumAsArray(NetworkType).map(({ value: networkType }) => {
-    const chainId = getChainIdFromNetworkType(networkType)
+    const chainId = networkResolver.networkChainId(networkType)
     NETWORK_ID_MAP[DataProvider.COIN_GECKO][networkType] = getCoinGeckoConstants(chainId).PLATFORM_ID ?? ''
     NETWORK_ID_MAP[DataProvider.COIN_MARKET_CAP][networkType] = getCoinMarketCapConstants(chainId).CHAIN_ID ?? ''
 })

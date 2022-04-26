@@ -5,11 +5,11 @@ import {
     getPayloadFrom,
     ProviderType,
     EthereumMethodType,
-    EthereumTransactionConfig,
+    Transaction,
     ChainId,
 } from '@masknet/web3-shared-evm'
 import { getError, hasError } from './error'
-import type { Context, EVM_Connection, Middleware, EVM_ConnectionOptions } from './types'
+import type { Context, EVM_Connection, EVM_Web3ConnectionOptions, Middleware } from './types'
 import { SharedContextSettings, Web3StateSettings } from '../../settings'
 
 class Composer<T> {
@@ -59,7 +59,7 @@ class RequestContext implements Context {
     constructor(
         private _connection: EVM_Connection,
         private _requestArguments: RequestArguments,
-        private _options?: EVM_ConnectionOptions,
+        private _options?: EVM_Web3ConnectionOptions,
     ) {
         // increase pid
         pid += 1
@@ -97,7 +97,7 @@ class RequestContext implements Context {
         return getPayloadConfig(this.request)
     }
 
-    set config(config: EthereumTransactionConfig | undefined) {
+    set config(config: Transaction | undefined) {
         if (!this.config || !config) return
         this._requestArguments = {
             method: this.method,
@@ -175,6 +175,10 @@ class RequestContext implements Context {
         this.error = error
         this.result = result
     }
+
+    toJSON() {
+        return {}
+    }
 }
 
 const composer = new Composer<Context>()
@@ -190,7 +194,7 @@ export function dispatch(context: Context, next: () => Promise<void>) {
 export function createContext(
     connection: EVM_Connection,
     requestArguments: RequestArguments,
-    options?: EVM_ConnectionOptions,
+    options?: EVM_Web3ConnectionOptions,
 ) {
     return new RequestContext(connection, requestArguments, options)
 }

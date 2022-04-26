@@ -1,16 +1,14 @@
-import {
-    SchemaType,
-    useERC721ContractDetailed,
-    useERC721TokenDetailedCallback,
-    useTokenTransferCallback,
-} from '@masknet/web3-shared-evm'
+import { useERC721TokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+import { useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useERC721TokenDetailedCallback } from '@masknet/web3-shared-evm'
 import { useCallback, useEffect } from 'react'
 import { WalletRPC } from '../../../Wallet/messages'
 import type { TipTuple } from './type'
 
 export function useNftTip(recipient: string, tokenId: string | null, contractAddress?: string): TipTuple {
-    const [transferState, transferCallback] = useTokenTransferCallback(SchemaType.ERC721, contractAddress || '')
-    const { value: contractDetailed } = useERC721ContractDetailed(contractAddress)
+    const [transferState, transferCallback] = useERC721TokenTransferCallback(contractAddress || '')
+    const { value: contractDetailed } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, contractAddress)
     const [, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contractDetailed)
 
     useEffect(() => {

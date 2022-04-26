@@ -1,7 +1,8 @@
 import type { TransactionReceipt } from 'web3-core'
-import { EthereumMethodType, EthereumTransactionConfig, getReceiptStatus } from '@masknet/web3-shared-evm'
-import { TransactionStatusType } from '@masknet/plugin-infra/web3'
+import { TransactionStatusType } from '@masknet/web3-shared-base'
+import { EthereumMethodType, Transaction } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
+import { getReceiptStatus } from '../utils'
 import { Web3StateSettings } from '../../../settings'
 
 export class RecentTransaction implements Middleware<Context> {
@@ -12,7 +13,7 @@ export class RecentTransaction implements Middleware<Context> {
         switch (context.method) {
             case EthereumMethodType.MASK_REPLACE_TRANSACTION:
                 try {
-                    const [hash, config] = context.request.params as [string, EthereumTransactionConfig]
+                    const [hash, config] = context.request.params as [string, Transaction]
 
                     // remember the hash of the replaced tx
                     replacedHash = hash

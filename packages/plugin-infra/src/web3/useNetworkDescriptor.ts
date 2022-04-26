@@ -1,12 +1,11 @@
-import { useMemo } from 'react'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useNetworkType } from './useNetworkType'
 import { useCurrentWeb3NetworkPluginID } from './Context'
 import { getPluginDefine } from '../manager/store'
-import type { NetworkPluginID } from '../web3-types'
 
 export function useNetworkDescriptor<T extends NetworkPluginID>(
     expectedPluginID?: T,
-    expectedChainIdOrNetworkTypeOrID?: string,
+    expectedChainIdOrNetworkTypeOrID?: string | number,
 ) {
     const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
     const networkType = useNetworkType(pluginID)

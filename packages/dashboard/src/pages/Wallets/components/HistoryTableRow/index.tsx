@@ -86,7 +86,7 @@ export interface HistoryTableRowUIProps extends HistoryTableRowProps {
 export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
     ({ transaction, selectedChainId, formattedType, domain }) => {
         const { classes } = useStyles()
-        const { Utils } = useWeb3State()
+        const { Others } = useWeb3State()
         return (
             <TableRow className={classes.hover}>
                 <TableCell className={classes.cell} align="center" variant="body">
@@ -136,12 +136,12 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                     <Box className={classes.link}>
                         <Typography variant="body2">
                             {domain
-                                ? Utils?.formatDomainName?.(domain)
-                                : Utils?.formatAddress?.(transaction.toAddress, 4)}
+                                ? Others?.formatDomainName?.(domain)
+                                : Others?.formatAddress?.(transaction.toAddress, 4)}
                         </Typography>
                         <Link
                             sx={{ height: 21 }}
-                            href={Utils?.resolveTransactionLink?.(selectedChainId, transaction.id)}
+                            href={Others?.explorerResolver.transactionLink(selectedChainId, transaction.id)}
                             target="_blank"
                             rel="noopener noreferrer">
                             <LinkOutIcon className={classes.linkIcon} />

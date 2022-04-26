@@ -16,6 +16,7 @@
     "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "@types/socket.io-client": "^1.4.36",
     "bignumber.js": "9.0.2",
     "date-fns": "^2.28.0",
     "graphql-request": "^3.4.0",
@@ -31,5 +32,5 @@
   },
   "devDependencies": {
     "@types/lru-cache": "^7.6.1"
-}
+  }
 }

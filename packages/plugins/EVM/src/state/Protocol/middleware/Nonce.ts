@@ -136,7 +136,7 @@ export class Nonce implements Middleware<Context> {
             }
         }
 
-        await next()
+        await next() // send transaction
 
         if (context.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
 

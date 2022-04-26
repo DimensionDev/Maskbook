@@ -1,14 +1,12 @@
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { usePickToken, InjectedDialog } from '@masknet/shared'
 import { keyframes, makeStyles } from '@masknet/theme'
-import { isZero, rightShift } from '@masknet/web3-shared-base'
+import { isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import {
     SchemaType,
     formatBalance,
     FungibleTokenDetailed,
     TransactionStateType,
-    useAccount,
-    useFungibleTokenBalance,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { DialogContent, Grid, Typography } from '@mui/material'
@@ -28,6 +26,7 @@ import { useDepositCallback } from '../hooks/useDepositCallback'
 import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
 import { calculateOdds, getPrizePeriod } from '../utils'
+import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const rainbow_animation = keyframes`
     0% {
@@ -86,7 +85,7 @@ export function DepositDialog() {
     const [odds, setOdds] = useState<string>()
 
     // context
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     // #region remote controlled dialog
     const { open, closeDialog: onClose } = useRemoteControlledDialog(
@@ -119,7 +118,7 @@ export function DepositDialog() {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useFungibleTokenBalance(token?.type ?? SchemaType.Native, token?.address ?? '')
+    } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address ?? '')
     // #endregion
 
     useEffect(() => {

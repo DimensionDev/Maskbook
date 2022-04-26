@@ -3,7 +3,7 @@ import { DialogContent, Box, Card, CardContent, CardActions, Typography, Link } 
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import { useChainId, useFungibleTokenWatched, TransactionStateType, formatBalance } from '@masknet/web3-shared-evm'
+import { TransactionStateType, formatBalance } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
@@ -16,6 +16,8 @@ import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -85,11 +87,11 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const paymentTokens = resolvePaymentTokensOnCryptoartAI(chainId) ?? []
     const selectedPaymentToken = first(paymentTokens)
-    const { token, balance } = useFungibleTokenWatched(selectedPaymentToken)
+    const { token, balance } = useFungibleTokenWatched(NetworkPluginID.PLUGIN_EVM, selectedPaymentToken?.address)
 
     const [purchaseState, onCheckout, resetCallback] = usePurchaseCallback(
         asset?.value?.editionNumber ?? '0',

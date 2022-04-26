@@ -1,5 +1,5 @@
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { pluginDescription, pluginName, pluginId, pluginMetaKey } from './constants'
 
@@ -16,8 +16,6 @@ export const base: Plugin.Shared.Definition = {
             [NetworkPluginID.PLUGIN_EVM]: {
                 supportedChainIds: [ChainId.Mainnet, ChainId.xDai, ChainId.Matic, ChainId.Rinkeby],
             },
-            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
-            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
     },
     contribution: {

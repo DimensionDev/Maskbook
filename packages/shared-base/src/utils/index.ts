@@ -1,3 +1,4 @@
+export * from './asyncIterator'
 export * from './detect'
 export * from './getLocalImplementation'
 export * from './parseURL'

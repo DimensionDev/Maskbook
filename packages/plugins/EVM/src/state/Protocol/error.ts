@@ -1,6 +1,6 @@
 import { isNil } from 'lodash-unified'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { JSON_RPC_ERROR_CODE } from '../../constants'
+import { JSON_RPC_ERROR_CODE } from '../../types'
 
 function getInternalError(error: unknown, response?: JsonRpcResponse | null, fallback?: string): Error {
     {

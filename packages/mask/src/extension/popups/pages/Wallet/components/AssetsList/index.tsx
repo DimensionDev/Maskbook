@@ -68,7 +68,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(({ dataSource, onItemClick }
                             address={asset.token.address}
                             name={asset.token.name}
                             chainId={asset.token.chainId}
-                            logoURI={asset.token.logoURI}
+                            logoURL={asset.token.logoURI}
                             AvatarProps={{ sx: { width: 20, height: 20 } }}
                         />
                         <ListItemText className={classes.text}>

@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect } from 'react'
-import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
+// import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 import { startWatch, createReactRootShadowed, useLocationChange } from '../../../../utils'
 import { searchEditProfileSelector } from '../../utils/selector'
 
@@ -9,7 +9,8 @@ export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchEditProfileSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(
-        <OpenNFTAvatarEditProfileButtonInTwitter />,
+        // <OpenNFTAvatarEditProfileButtonInTwitter />,
+        <></>,
     )
 }
 
@@ -51,5 +52,6 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     useLocationChange(() => setStyleFromEditProfileSelector())
 
     const { classes } = useStyles(style)
-    return <NFTAvatarButton classes={{ root: classes.root }} onClick={onClick} />
+    // return <NFTAvatarButton classes={{ root: classes.root }} onClick={onClick} />
+    return null
 }

@@ -1,5 +1,5 @@
-import { isSameAddress } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { PluginNFTAvatarRPC } from '../messages'
 import { getNFTAvatarFromJSON } from '../Services/db'

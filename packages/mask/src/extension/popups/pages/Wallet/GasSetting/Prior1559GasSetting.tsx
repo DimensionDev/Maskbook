@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { isLessThan, pow10 } from '@masknet/web3-shared-base'
+import { isLessThan, NetworkPluginID, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
@@ -7,13 +7,9 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     ChainId,
-    EthereumRpcType,
     formatGweiToWei,
     formatWeiToEther,
     formatWeiToGwei,
-    useChainId,
-    useNativeTokenDetailed,
-    useWeb3,
     ChainIdOptionalRecord,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
@@ -25,9 +21,9 @@ import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-unified'
 import { useNavigate } from 'react-router-dom'
-import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { PopupRoutes } from '@masknet/shared-base'
 import { toHex } from 'web3-utils'
+import { useChainId, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -99,15 +95,16 @@ const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
 export const Prior1559GasSetting = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const web3 = useWeb3()
-    const chainId = useChainId()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const [getGasLimitError, setGetGasLimitError] = useState(false)
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
-    const { value: nativeToken } = useNativeTokenDetailed()
-
-    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
+    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+        chainId: nativeToken?.chainId,
+    })
 
     // #region Get gas options from debank
     const { value: gasOptions } = useAsync(async () => {
@@ -147,8 +144,8 @@ export const Prior1559GasSetting = memo(() => {
     const gas = useMemo(() => {
         if (
             value &&
-            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
+            (value?.computedPayload?.type === TransactionDescriptorType.TRANSFER ||
+                value?.computedPayload?.type === TransactionDescriptorType.INTERACTION)
         ) {
             return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
         }
@@ -158,11 +155,11 @@ export const Prior1559GasSetting = memo(() => {
     const { value: minGasLimit } = useAsync(async () => {
         if (
             value &&
-            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
+            (value?.computedPayload?.type === TransactionDescriptorType.TRANSFER ||
+                value?.computedPayload?.type === TransactionDescriptorType.INTERACTION)
         ) {
             try {
-                return web3.eth.estimateGas(value.computedPayload._tx)
+                return web3?.eth.estimateGas(value.computedPayload._tx) ?? 0
             } catch {
                 return 0
             }
@@ -204,8 +201,8 @@ export const Prior1559GasSetting = memo(() => {
 
     useUpdateEffect(() => {
         if (
-            value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-            value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION
+            value?.computedPayload?.type === TransactionDescriptorType.TRANSFER ||
+            value?.computedPayload?.type === TransactionDescriptorType.INTERACTION
         ) {
             // if rpc payload contain gas price, set it to default values
             if (value?.computedPayload._tx.gasPrice) {

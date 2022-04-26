@@ -1,5 +1,5 @@
-import type { Web3Plugin } from '@masknet/plugin-infra/src/entry-web3'
-import type { ChainId, EthereumTransactionConfig } from '@masknet/web3-shared-evm'
+import type { TransactionContext, TransactionDescriptor as TransactionDescriptorBase } from '@masknet/web3-shared-base'
+import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
 
 export interface TransactionMethodABI {
     name: string
@@ -30,6 +30,6 @@ export interface TrabsactionComputationContext {
 
 export interface TransactionDescriptor {
     compute: (
-        context: Web3Plugin.TransactionContext<ChainId, string | undefined>,
-    ) => Promise<Omit<Web3Plugin.TransactionDescriptor<EthereumTransactionConfig>, 'type' | '_tx'> | undefined>
+        context: TransactionContext<ChainId, string | undefined>,
+    ) => Promise<Omit<TransactionDescriptorBase<ChainId, Transaction>, 'type' | '_tx'> | undefined>
 }

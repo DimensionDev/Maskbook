@@ -1,8 +1,12 @@
 {
   "name": "@masknet/plugin-evm",
   "private": true,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@dimensiondev/metamask-extension-provider": "^3.0.6-20210519045409-1835d4d",
@@ -26,11 +30,15 @@
     "ethjs-ens": "^2.0.1",
     "fortmatic": "^2.2.1",
     "react-use": "^17.3.2",
+    "urlcat": "^2.0.4",
     "wallet.ts": "^1.0.1",
     "web3": "1.7.3",
     "web3-core": "1.7.3",
     "web3-core-helpers": "1.7.3",
     "web3-eth-abi": "1.7.3",
     "web3-utils": "1.7.3"
+  },
+  "devDependencies": {
+    "@types/use-subscription": "^1.0.0"
   }
 }

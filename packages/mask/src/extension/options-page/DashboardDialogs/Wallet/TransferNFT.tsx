@@ -2,12 +2,7 @@ import { Button, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import {
-    ERC721TokenDetailed,
-    formatEthereumAddress,
-    TransactionStateType,
-    useTokenTransferCallback,
-} from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, SchemaType, TransactionStateType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Image } from '../../../../components/shared/Image'
@@ -15,6 +10,8 @@ import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { MaskIconOutlined } from '../../../../resources/MaskIcon'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import { useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useTransferDialogStylesNFT = makeStyles()((theme) => ({
     root: {
@@ -30,7 +27,9 @@ const useTransferDialogStylesNFT = makeStyles()((theme) => ({
     },
 }))
 
-export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ token: ERC721TokenDetailed }>) {
+export function DashboardWalletTransferDialogNFT(
+    props: WrappedDialogProps<{ token: NonFungibleToken<ChainId, SchemaType> }>,
+) {
     const { token } = props.ComponentProps!
     const { onClose } = props
 
@@ -42,8 +41,8 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
 
     // #region transfer tokens
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
-        token.contractDetailed.type,
-        token.contractDetailed.address,
+        token.schema,
+        token.address,
     )
 
     const onTransfer = useCallback(async () => {
@@ -72,7 +71,7 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
         setTransactionDialog({
             open: true,
             state: transferState,
-            summary: `Transfer ${token.info.name} to ${formatEthereumAddress(address, 4)}.`,
+            summary: `Transfer ${token.metadata?.name} to ${formatEthereumAddress(address, 4)}.`,
         })
     }, [transferState /* update tx dialog only if state changed */])
     // #endregion
@@ -90,13 +89,13 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
             <DashboardDialogWrapper
                 primary={t('wallet_transfer_title')}
                 icon={
-                    token.info.mediaUrl ? (
+                    token.metadata?.mediaURL ? (
                         <Image
                             component="img"
                             width={160}
                             height={220}
                             style={{ objectFit: 'contain' }}
-                            src={token.info.mediaUrl}
+                            src={token.metadata.mediaURL}
                         />
                     ) : (
                         <MaskIconOutlined className={classes.placeholder} />

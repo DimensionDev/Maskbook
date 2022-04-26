@@ -2,12 +2,19 @@ import Web3 from 'web3'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { Emitter } from '@servie/events'
-import { ChainId, createEIP1193Provider, EthereumMethodType, getChainDetailedCAIP } from '@masknet/web3-shared-evm'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { Account, ProviderEvents } from '@masknet/web3-shared-base'
+import {
+    chainResolver,
+    createWeb3Provider,
+    ChainId,
+    ProviderType,
+    EthereumMethodType,
+    getRPCConstants,
+} from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types'
 
 export class BaseProvider implements EVM_Provider {
-    emitter = new Emitter<Web3Plugin.ProviderEvents<ChainId>>()
+    emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()
 
     // No need to wait by default
     get ready() {
@@ -19,7 +26,7 @@ export class BaseProvider implements EVM_Provider {
         return Promise.resolve()
     }
 
-    // Switch chain by RPC calls by default
+    // Switch chain with RPC calls by default
     switchChain(chainId?: ChainId): Promise<void> {
         if (chainId === ChainId.Mainnet) {
             return this.request({
@@ -31,10 +38,19 @@ export class BaseProvider implements EVM_Provider {
                 ],
             })
         } else {
-            const chainDetailed = getChainDetailedCAIP(chainId)
+            if (!chainId) throw new Error('Unknown chain id.')
+
             return this.request<void>({
                 method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
-                params: [chainDetailed].filter(Boolean),
+                params: [
+                    {
+                        chainId: toHex(chainId),
+                        chainName: chainResolver.chainName(chainId),
+                        nativeCurrency: chainResolver.nativeCurrency(chainId),
+                        rpcUrls: getRPCConstants(chainId).RPC_URLS ?? [],
+                        blockExplorerUrls: [chainResolver.infoURL(chainId)?.url],
+                    },
+                ],
             })
         }
     }
@@ -54,10 +70,10 @@ export class BaseProvider implements EVM_Provider {
     // Create an external provider from the basic request method.
     async createWeb3Provider(chainId?: ChainId) {
         await this.readyPromise
-        return createEIP1193Provider(this.request.bind(this))
+        return createWeb3Provider(this.request.bind(this))
     }
 
-    connect(chainId: ChainId): Promise<Web3Plugin.Account<ChainId>> {
+    connect(chainId: ChainId): Promise<Account<ChainId>> {
         throw new Error('Method not implemented')
     }
 

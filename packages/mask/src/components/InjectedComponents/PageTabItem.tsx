@@ -2,6 +2,7 @@ import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
 import { type Plugin, usePluginI18NField } from '@masknet/plugin-infra/content-script'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 const borderShadows = {
     dark: '0px 0px 16px 0px #FFFFFF33',
@@ -36,9 +37,9 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface PageTabItemProps {
     pluginID: string
-    tab: Plugin.SNSAdaptor.ProfileTab
+    tab: Plugin.SNSAdaptor.ProfileTab<Web3Helper.ChainIdAll>
     selected?: boolean
-    onClick?: (tab: Plugin.SNSAdaptor.ProfileTab) => void
+    onClick?: (tab: Plugin.SNSAdaptor.ProfileTab<Web3Helper.ChainIdAll>) => void
 }
 
 export function PageTabItem(props: PageTabItemProps) {

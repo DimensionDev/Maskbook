@@ -7,7 +7,7 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
-import { NonFungibleAssetProvider, useAccount } from '@masknet/web3-shared-evm'
+import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { isOne, isZero } from '@masknet/web3-shared-base'
 import { LoadingAnimation } from '@masknet/shared'
 
@@ -40,7 +40,6 @@ const useStyles = makeStyles()((theme) => {
 export function ListingTab() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const account = useAccount()
     const { token, asset, provider, orders, orderPage, setOrderPage } = CollectibleState.useContainer()
 
     const isDifferenceToken = useMemo(() => {

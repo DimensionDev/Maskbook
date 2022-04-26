@@ -1,10 +1,12 @@
-import { useI18N } from '../../../utils'
-import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar } from '@mui/material'
 import { useState } from 'react'
+import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatWeiToEther } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { useI18N } from '../../../utils'
 import { CollectionView } from './CollectionView'
 import { DetailsView } from './DetailsView'
-import { formatWeiToEther, useChainId } from '@masknet/web3-shared-evm'
 import { useFetchProject } from '../hooks/useProject'
 import { ActionBar } from './ActionBar'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
@@ -58,7 +60,7 @@ interface CollectibleProps {
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [tabIndex, setTabIndex] = useState(0)
 
     const { value, loading, error } = useFetchProject(props.projectId)

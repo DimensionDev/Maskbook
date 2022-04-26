@@ -1,8 +1,9 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { TokenListState, Web3Plugin } from '@masknet/plugin-infra/web3'
+import { TokenListState } from '@masknet/plugin-infra/web3'
 import { TokenList as TokenListAPI } from '@masknet/web3-providers'
+import type { Token } from '@masknet/web3-shared-base'
 import { ChainId, getTokenListConstants, SchemaType } from '@masknet/web3-shared-evm'
 
 export class TokenList extends TokenListState<ChainId, SchemaType> {
@@ -22,21 +23,21 @@ export class TokenList extends TokenListState<ChainId, SchemaType> {
                 [chainId.value]: [],
             }
             return accumualtor
-        }, {} as Record<'fungibleTokens' | 'nonFungibleTokens', Record<ChainId, Web3Plugin.Token<ChainId, SchemaType>[]>>)
+        }, {} as Record<'fungibleTokens' | 'nonFungibleTokens', Record<ChainId, Token<ChainId, SchemaType>[]>>)
 
         super(context, defaultValue, subscriptions)
     }
 
-    async getFungibleTokens(chainId: ChainId) {
-        const tokenListCached = await super.getFungibleTokenLists(chainId)
+    async getTokensList(type: 'fungible' | 'nonFungible', chainId: ChainId) {
+        const tokenListCached = await super.getTokenList(type, chainId)
         if (tokenListCached) return tokenListCached
 
         const { FUNGIBLE_TOKEN_LISTS = [] } = getTokenListConstants(chainId)
         super.setTokenList(
+            type,
             chainId,
             await TokenListAPI.fetchFungibleTokensFromTokenLists(chainId, FUNGIBLE_TOKEN_LISTS),
-            'fungible',
         )
-        return super.getFungibleTokenLists(chainId)
+        return super.getTokenList(type, chainId)
     }
 }

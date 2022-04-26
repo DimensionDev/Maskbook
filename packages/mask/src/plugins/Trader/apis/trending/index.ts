@@ -15,7 +15,7 @@ import {
     resolveCoinId,
     resolveNetworkType,
 } from './hotfix'
-import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
+import { chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings, currentNetworkSettings } from '../../../Wallet/settings'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
 
@@ -141,7 +141,7 @@ export async function checkAvailabilityOnDataProvider(keyword: string, type: Tag
 }
 
 export async function getAvailableDataProviders(type?: TagType, keyword?: string) {
-    const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
+    const networkType = chainResolver.chainNetworkType(currentChainIdSettings.value)
     if (!networkType) return []
     if (!type || !keyword)
         return getEnumAsArray(DataProvider)

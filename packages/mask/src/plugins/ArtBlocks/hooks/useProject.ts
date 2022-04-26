@@ -1,6 +1,6 @@
-import { useChainId } from '@masknet/plugin-infra/src/web3'
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { useAsyncRetry } from 'react-use'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { fetchProject } from '../apis'
 
 export function useFetchProject(projectId: string) {

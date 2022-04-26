@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import type { Web3Plugin } from '../web3-types'
+import type { Connection, ConnectionOptions, ProtocolState as Web3ProtocolState } from '@masknet/web3-shared-base'
 
 export class ProtocolState<
     ChainId,
@@ -10,13 +10,13 @@ export class ProtocolState<
     TransactionDetailed,
     TransactionSignature,
     Web3,
-    Web3Options extends Web3Plugin.ConnectionOptions<ChainId, ProviderType, Transaction> = Web3Plugin.ConnectionOptions<
+    Web3ConnectionOptions extends ConnectionOptions<ChainId, ProviderType, Transaction> = ConnectionOptions<
         ChainId,
         ProviderType,
         Transaction
     >,
 > implements
-        Web3Plugin.ObjectCapabilities.ProtocolState<
+        Web3ProtocolState<
             ChainId,
             SchemaType,
             ProviderType,
@@ -25,7 +25,7 @@ export class ProtocolState<
             TransactionDetailed,
             TransactionSignature,
             Web3,
-            Web3Options
+            Web3ConnectionOptions
         >
 {
     constructor(
@@ -33,7 +33,7 @@ export class ProtocolState<
             chainId?: ChainId,
             account?: string,
             providerType?: ProviderType,
-        ) => Web3Plugin.Connection<
+        ) => Connection<
             ChainId,
             SchemaType,
             ProviderType,
@@ -42,7 +42,7 @@ export class ProtocolState<
             TransactionDetailed,
             TransactionSignature,
             Web3,
-            Web3Options
+            Web3ConnectionOptions
         >,
         protected subscription: {
             account?: Subscription<string>
@@ -51,7 +51,7 @@ export class ProtocolState<
         },
     ) {}
 
-    getConnection(options?: Web3Options) {
+    async getConnection(options?: Web3ConnectionOptions) {
         return this.createConnection(
             options?.chainId ?? this.subscription.chainId?.getCurrentValue(),
             options?.account ?? this.subscription.account?.getCurrentValue(),
@@ -59,54 +59,8 @@ export class ProtocolState<
         )
     }
 
-    getWeb3(options?: Web3Options) {
-        return this.getConnection(options).getWeb3(options)
-    }
-
-    getAccount(options?: Web3Options) {
-        return this.getConnection(options).getAccount(options)
-    }
-
-    getChainId(options?: Web3Options) {
-        return this.getConnection(options).getChainId(options)
-    }
-
-    getLatestBalance(account: string, options?: Web3Options) {
-        return this.getConnection(options).getBalance(account, options)
-    }
-
-    getLatestBlockNumber(options?: Web3Options) {
-        return this.getConnection(options).getBlockNumber(options)
-    }
-
-    getTransactionStatus(id: string, options?: Web3Options) {
-        return this.getConnection(options).getTransactionStatus(id, options)
-    }
-
-    signMessage(message: string, signType?: string | undefined, options?: Web3Options) {
-        return this.getConnection(options).signMessage(message, signType, options)
-    }
-
-    verifyMessage(message: string, signature: Signature, signType?: string | undefined, options?: Web3Options) {
-        return this.getConnection(options).verifyMessage(message, signature, signType, options)
-    }
-
-    signTransaction(transaction: Transaction, options?: Web3Options) {
-        return this.getConnection(options).signTransaction(transaction, options)
-    }
-
-    async callTransaction(transaction: Transaction, options?: Web3Options) {
-        const connection = this.getConnection(options)
-        return connection.callTransaction(transaction, options)
-    }
-
-    async sendTransaction(transaction: Transaction, options?: Web3Options) {
-        const connection = this.getConnection(options)
-        const signedTransaction = await connection.signTransaction(transaction, options)
-        return connection.sendSignedTransaction(signedTransaction, options)
-    }
-
-    sendSignedTransaction(signature: TransactionSignature, options?: Web3Options) {
-        return this.getConnection(options).sendSignedTransaction(signature, options)
+    async getWeb3(options?: Web3ConnectionOptions) {
+        const connection = await this.getConnection(options)
+        return connection.getWeb3(options)
     }
 }

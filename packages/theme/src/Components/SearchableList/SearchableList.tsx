@@ -1,5 +1,5 @@
 import { ReactNode, useMemo, useState } from 'react'
-import { FixedSizeList, FixedSizeListProps } from 'react-window'
+import type { FixedSizeList, FixedSizeListProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
 import { Box, InputAdornment } from '@mui/material'
@@ -115,7 +115,7 @@ export function SearchableList<T extends {}>({
             {placeholder}
             {!placeholder && (
                 <div className={classes.list}>
-                    <FixedSizeList
+                    {/* <FixedSizeList
                         width="100%"
                         height={height ?? 300}
                         overscanCount={25}
@@ -126,10 +126,10 @@ export function SearchableList<T extends {}>({
                         }}
                         itemCount={readyToRenderData.length}
                         {...rest}>
-                        {(props) => (
+                        {(props:) => (
                             <MaskSearchableItemInList<T> {...props}>{itemRender as any}</MaskSearchableItemInList>
                         )}
-                    </FixedSizeList>
+                    </FixedSizeList> */}
                 </div>
             )}
         </div>

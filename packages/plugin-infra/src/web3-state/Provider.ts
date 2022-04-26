@@ -9,8 +9,8 @@ import {
     mergeSubscription,
     StorageObject,
 } from '@masknet/shared-base'
+import type { Account, WalletProvider, ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
-import type { Web3Plugin } from '../web3-types'
 
 export interface ProviderStorage<Account, ProviderType extends string> {
     /** Providers map to account settings. */
@@ -25,10 +25,10 @@ export class ProviderState<
     NetworkType extends string,
     Web3Provider,
     Web3,
-> implements Web3Plugin.ObjectCapabilities.ProviderState<ChainId, ProviderType, NetworkType>
+> implements Web3ProviderState<ChainId, ProviderType, NetworkType>
 {
     protected site = getSiteType()
-    protected storage: StorageObject<ProviderStorage<Web3Plugin.Account<ChainId>, ProviderType>> = null!
+    protected storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>> = null!
 
     public account?: Subscription<string>
     public chainId?: Subscription<ChainId>
@@ -37,12 +37,13 @@ export class ProviderState<
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
-        protected providers: Record<ProviderType, Web3Plugin.WalletProvider<ChainId, Web3Provider, Web3>>,
-        protected defaultValue: ProviderStorage<Web3Plugin.Account<ChainId>, ProviderType>,
+        protected providers: Record<ProviderType, WalletProvider<ChainId, ProviderType, Web3Provider, Web3>>,
+        protected defaultValue: ProviderStorage<Account<ChainId>, ProviderType>,
         protected options: {
             isValidAddress(a?: string): boolean
             isSameAddress(a?: string, b?: string): boolean
             getDefaultChainId(): ChainId
+            getDefaultNetworkType(): NetworkType
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
@@ -60,21 +61,21 @@ export class ProviderState<
         this.providerType = mapSubscription(this.storage.providers.subscription, (providers) => providers[site])
 
         this.chainId = mapSubscription(
-            mergeSubscription<[ProviderType, Record<ProviderType, Web3Plugin.Account<ChainId>>]>(
+            mergeSubscription<[ProviderType, Record<ProviderType, Account<ChainId>>]>(
                 this.providerType,
                 this.storage.accounts.subscription,
             ),
             ([providerType, accounts]) => accounts[providerType].chainId,
         )
         this.account = mapSubscription(
-            mergeSubscription<[ProviderType, Record<ProviderType, Web3Plugin.Account<ChainId>>]>(
+            mergeSubscription<[ProviderType, Record<ProviderType, Account<ChainId>>]>(
                 this.providerType,
                 this.storage.accounts.subscription,
             ),
             ([providerType, accounts]) => accounts[providerType].account,
         )
         this.networkType = mapSubscription(
-            mergeSubscription<[ProviderType, Record<ProviderType, Web3Plugin.Account<ChainId>>]>(
+            mergeSubscription<[ProviderType, Record<ProviderType, Account<ChainId>>]>(
                 this.providerType,
                 this.storage.accounts.subscription,
             ),
@@ -86,7 +87,7 @@ export class ProviderState<
         Object.entries(this.providers).forEach((entry) => {
             const [providerType, provider] = entry as [
                 ProviderType,
-                Web3Plugin.WalletProvider<ChainId, Web3Provider, Web3>,
+                WalletProvider<ChainId, ProviderType, Web3Provider, Web3>,
             ]
 
             provider.emitter.on('chainId', async (chainId) => {
@@ -98,7 +99,7 @@ export class ProviderState<
                 if (account && this.options.isValidAddress(account)) await this.setAccount(providerType, account)
             })
 
-            provider.emitter.on('discconect', async () => {
+            provider.emitter.on('disconnect', async () => {
                 await this.setAccount(providerType, '')
                 await this.setChainId(providerType, this.options.getDefaultChainId())
             })
@@ -157,6 +158,9 @@ export class ProviderState<
             ])
         }
 
+        // double confirmation
+        if (chainId !== account.chainId) throw new Error('Failed to connect provider.')
+
         provider.emitter.emit('connect', account)
         return account
     }
@@ -164,5 +168,6 @@ export class ProviderState<
     async disconect(providerType: ProviderType) {
         const provider = this.providers[providerType]
         await provider.disconnect()
+        provider.emitter.emit('disconnect', providerType)
     }
 }

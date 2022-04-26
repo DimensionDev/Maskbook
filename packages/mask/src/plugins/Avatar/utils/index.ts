@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js'
 import { isNull } from 'lodash-unified'
-import { ChainId, NonFungibleAssetProvider, formatBalance } from '@masknet/web3-shared-evm'
+import { ChainId, NonFungibleAssetProvider, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 import Services from '../../../extension/service'
-import { getOrderUnitPrice, NonFungibleTokenAPI } from '@masknet/web3-providers'
-import { ZERO } from '@masknet/web3-shared-base'
+import { getOrderUnitPrice } from '@masknet/web3-providers'
+import { NonFungibleTokenEvent, ZERO } from '@masknet/web3-shared-base'
 
-function getLastSalePrice(lastSale?: NonFungibleTokenAPI.AssetEvent | null) {
+function getLastSalePrice(lastSale?: NonFungibleTokenEvent<ChainId, SchemaType> | null) {
     if (!lastSale?.total_price || !lastSale?.payment_token?.decimals) return
     return formatBalance(lastSale.total_price, lastSale.payment_token.decimals)
 }

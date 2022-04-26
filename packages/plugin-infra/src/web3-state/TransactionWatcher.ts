@@ -1,6 +1,11 @@
 import { Emitter } from '@servie/events'
+import {
+    TransactionChecker,
+    TransactionStatusType,
+    WatchEvents,
+    TransactionWatcherState as Web3TransactionWatcherState,
+} from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
-import { TransactionStatusType, Web3Plugin } from '../web3-types'
 
 interface StorageItem<ChainId, Transaction> {
     at: number
@@ -57,7 +62,7 @@ class Watcher<ChainId, Trnasaction> {
     private storage = new Storage<ChainId, Trnasaction>()
 
     constructor(
-        protected checkers: Web3Plugin.TransactionChecker<ChainId>[],
+        protected checkers: TransactionChecker<ChainId>[],
         protected options: {
             delay: number
             onNotify: (id: string, status: TransactionStatusType) => void
@@ -119,17 +124,18 @@ class Watcher<ChainId, Trnasaction> {
 }
 
 export class TransactionWatcherState<ChainId, Transaction>
-    implements Web3Plugin.ObjectCapabilities.TransactionWatcherState<ChainId, Transaction>
+    implements Web3TransactionWatcherState<ChainId, Transaction>
 {
     private watchers: Map<ChainId, Watcher<ChainId, Transaction>> = new Map()
 
-    emitter: Emitter<Web3Plugin.WatchEvents> = new Emitter()
+    emitter: Emitter<WatchEvents> = new Emitter()
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
-        protected checkers: Web3Plugin.TransactionChecker<ChainId>[],
+        protected checkers: TransactionChecker<ChainId>[],
         protected options: {
-            getAverageBlockDelay: (chainId: ChainId, scale?: number) => number
+            /** Default block delay in seconds */
+            defaultBlockDelay: number
         },
     ) {}
 
@@ -138,7 +144,7 @@ export class TransactionWatcherState<ChainId, Transaction>
             this.watchers.set(
                 chainId,
                 new Watcher(this.checkers, {
-                    delay: this.options.getAverageBlockDelay(chainId),
+                    delay: this.options.defaultBlockDelay * 1000,
                     onNotify: this.notifyTransaction.bind(this),
                 }),
             )

@@ -1,21 +1,18 @@
-import { SOR } from '@balancer-labs/sor'
-import { JsonRpcProvider } from '@ethersproject/providers'
-import { ChainId, getRPCConstants, getTraderConstants, isSameAddress } from '@masknet/web3-shared-evm'
-import { ZERO } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { first, memoize } from 'lodash-unified'
+import { SOR } from '@balancer-labs/sor'
+import { JsonRpcProvider } from '@ethersproject/providers'
+import { ZERO, isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, getRPCConstants, getTraderConstants } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE } from '../../constants'
-import { getFutureTimestamps } from '../../helpers/blocks'
 import type { Route } from '../../types'
-import { fetchBlockNumbersByTimestamps } from '../blocks'
-import { fetchLBP_PoolsByTokenAddress, fetchLBP_PoolTokenPrices, fetchLBP_PoolTokens } from '../LBP'
 
 // #region create cached SOR
 const createSOR_ = memoize(
     (chainId: ChainId) => {
-        const { RPC } = getRPCConstants(chainId)
-        const providerURL = first(RPC)
+        const { RPC_URLS } = getRPCConstants(chainId)
+        const providerURL = first(RPC_URLS)
         if (!providerURL) throw new Error('Unknown chain id.')
         return new SOR(
             // we choose a fixed provider cause it's only used here.
@@ -125,52 +122,4 @@ export async function getSwaps(
         swaps: [swaps, tradeAmount, spotPrice] as const,
         routes,
     }
-}
-
-export async function fetchTokenPrices(address: string, duration: number, size: number) {
-    // use the first pool sorted by swap count (desc)
-    const pools = await fetchLBP_PoolsByTokenAddress(address)
-    const pool = first(pools)
-    if (!pool) return []
-
-    // create timestamps by given duration and size
-    const timestamps = getFutureTimestamps(pool.createTime, duration, size)
-
-    // expand timestamps to block numbers
-    const blockNumbers = await fetchBlockNumbersByTimestamps(timestamps)
-    if (!blockNumbers.length) return []
-
-    // fetch the token prices in the pool
-    const prices = await fetchLBP_PoolTokenPrices(
-        pool.id,
-        address,
-        blockNumbers.map((x) => x.blockNumber),
-    )
-
-    // compose the result as timestamp and price pairs
-    return prices.map((x, i) => ({
-        timestamp: timestamps[i],
-        blockNumber: x.blockNumber,
-        price: Number.parseFloat(x.price),
-    }))
-}
-
-export async function fetchPoolTokens(address: string, duration: number, size: number) {
-    // use the first pool sorted by swap count (desc)
-    const pools = await fetchLBP_PoolsByTokenAddress(address)
-    const pool = first(pools)
-    if (!pool) return []
-
-    // create timestamps by given duration and size
-    const timestamps = getFutureTimestamps(pool.createTime, duration, size)
-
-    // expand timestamps to block numbers
-    const blockNumbers = await fetchBlockNumbersByTimestamps(timestamps)
-    if (!blockNumbers.length) return []
-
-    const poolTokens = await fetchLBP_PoolTokens(
-        pool.id,
-        blockNumbers.map((x) => x.blockNumber),
-    )
-    return []
 }

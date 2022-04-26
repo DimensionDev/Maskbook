@@ -9,18 +9,18 @@ import {
     currentProviderSettings,
     currentTokenPricesSettings,
 } from '../plugins/Wallet/settings'
-import { currentDataProviderSettings } from '../plugins/Trader/settings'
+// import { currentDataProviderSettings } from '../plugins/Trader/settings'
 import type { InternalSettings } from './createSettings'
 
 type ToBeListedSettings = { [key in keyof MaskSettingsEvents]: InternalSettings<MaskSettingsEvents[key]> }
 export function ToBeListened(): ToBeListedSettings {
     return {
         appearanceSettings,
-        pluginIDSettings,
+        // pluginIDSettings,
         languageSettings,
         currentChainIdSettings,
-        currentTokenPricesSettings,
-        currentDataProviderSettings,
+        // currentTokenPricesSettings,
+        // currentDataProviderSettings,
         currentProviderSettings,
         currentNetworkSettings,
         currentAccountSettings,

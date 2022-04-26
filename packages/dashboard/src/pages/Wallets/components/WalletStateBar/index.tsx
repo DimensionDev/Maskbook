@@ -9,14 +9,18 @@ import {
     useProviderDescriptor,
     useWallet,
     useWeb3State,
-    Web3Plugin,
     useReverseAddress,
+    useTransactions,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginMessages } from '../../../../API'
-import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useDashboardI18N } from '../../../../locales'
 import { useNetworkSelector } from './useNetworkSelector'
+import {
+    NetworkPluginID,
+    TransactionStatusType,
+    Wallet,
+} from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     bar: {
@@ -64,11 +68,9 @@ export const WalletStateBar = memo(() => {
     const t = useDashboardI18N()
 
     const wallet = useWallet()
-    const networkDescriptor = useNetworkDescriptor()
-    const providerDescriptor = useProviderDescriptor()
-    const { value: pendingTransactions = EMPTY_LIST } = useRecentTransactions({
-        status: TransactionStatusType.NOT_DEPEND,
-    })
+    const networkDescriptor = useNetworkDescriptor() as Web3Helper.NetworkDescriptorAll
+    const providerDescriptor = useProviderDescriptor() as Web3Helper.ProviderDescriptorAll
+    const pendingTransactions = useTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
 
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         PluginMessages.Wallet.events.walletStatusDialogUpdated,
@@ -80,7 +82,7 @@ export const WalletStateBar = memo(() => {
 
     const [menu, openMenu] = useNetworkSelector()
 
-    const { value: domain } = useReverseAddress(wallet?.address)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.address)
 
     if (!wallet) {
         return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
@@ -101,9 +103,9 @@ export const WalletStateBar = memo(() => {
 
 interface WalletStateBarUIProps {
     isPending: boolean
-    network?: Web3Plugin.NetworkDescriptor
-    provider?: Web3Plugin.ProviderDescriptor
-    wallet?: Web3Plugin.Wallet
+    network?: Web3Helper.NetworkDescriptorAll
+    provider?: Web3Helper.ProviderDescriptorAll
+    wallet?: Wallet
     domain?: string
     openConnectWalletDialog(): void
     openMenu: ReturnType<typeof useNetworkSelector>[1]
@@ -121,7 +123,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
 }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const { Utils } = useWeb3State()
+    const { Others } = useWeb3State()
 
     if (!wallet || !network || !provider) return null
 
@@ -165,19 +167,19 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                 <Box sx={{ userSelect: 'none' }}>
                     {provider.type !== ProviderType.MaskWallet ? (
                         <Box fontSize={16} display="flex" alignItems="center">
-                            {domain && Utils?.formatDomainName ? Utils.formatDomainName(domain) : provider.name}
+                            {domain && Others?.formatDomainName ? Others.formatDomainName(domain) : provider.name}
                         </Box>
                     ) : (
                         <Box fontSize={16} display="flex" alignItems="center">
                             {wallet.name}
-                            {domain && Utils?.formatDomainName ? (
-                                <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
+                            {domain && Others?.formatDomainName ? (
+                                <Typography className={classes.domain}>{Others.formatDomainName(domain)}</Typography>
                             ) : null}
                         </Box>
                     )}
 
                     <Box fontSize={12}>
-                        <FormattedAddress address={wallet.address} size={10} formatter={Utils?.formatAddress} />
+                        <FormattedAddress address={wallet.address} size={10} formatter={Others?.formatAddress} />
                     </Box>
                 </Box>
             </Stack>

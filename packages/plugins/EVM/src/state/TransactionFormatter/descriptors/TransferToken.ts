@@ -1,18 +1,23 @@
-import type { Web3Plugin } from '@masknet/plugin-infra/src/entry-web3'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { createConnection } from '../../Protocol/connection'
+import type { TransactionContext } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { Web3StateSettings } from '../../../settings'
 import { getTokenAmountDescription } from '../utils'
 
 export class TransferTokenDescriptor {
-    compute(context: Web3Plugin.TransactionContext<ChainId>) {
-        const connection = createConnection(context.chainId)
+    async compute(context: TransactionContext<ChainId>) {
+        const connection = await Web3StateSettings.value.Protocol?.getConnection?.({
+            chainId: context.chainId,
+        })
 
-        return Promise.resolve({
+        return {
+            chainId: context.chainId,
             title: 'Transfer',
             description: `Send token -${getTokenAmountDescription(
                 context.value,
-                connection.getFungileToken(context.chainId),
+                await connection?.getNativeToken({
+                    chainId: context.chainId,
+                }),
             )}`,
-        })
+        }
     }
 }

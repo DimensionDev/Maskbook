@@ -1,21 +1,9 @@
 import type BigNumber from 'bignumber.js'
-import type { ERC20TokenRecord } from '../Wallet/database/types'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export enum GitcoinGrantFailedReason {
     InvalidURL = 0,
     FetchFailed = 1,
-}
-
-// #endregion
-// #region gitcoin
-export interface GitcoinDonationPayload {
-    donor_address: string
-    donation_address: string
-    donation_total: BigNumber
-    chainId: ChainId
-    token_type: SchemaType
-    token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }
 
 export interface GitcoinDonationRecord {

@@ -5,13 +5,7 @@ import React from 'react'
 import { useTheme } from '@mui/system'
 import { ExternalLink } from 'react-feather'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import {
-    ERC20Token,
-    formatCurrency,
-    formatEthereumAddress,
-    resolveAddressLinkOnExplorer,
-    resolveTokenLinkOnExplorer,
-} from '@masknet/web3-shared-evm'
+import { formatCurrency, formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -101,10 +95,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
                             </Typography>
                             <Link
                                 lineHeight="14px"
-                                href={resolveTokenLinkOnExplorer({
-                                    chainId: tokenSecurity.chainId,
-                                    address: tokenSecurity.contract,
-                                } as ERC20Token)}
+                                href={explorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 <ExternalLink color={theme.palette.text.strong} size={14} />
@@ -122,7 +113,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
                             {tokenSecurity.creator_address && (
                                 <Link
                                     lineHeight="14px"
-                                    href={resolveAddressLinkOnExplorer(
+                                    href={explorerResolver.addressLink(
                                         tokenSecurity.chainId,
                                         tokenSecurity.creator_address,
                                     )}
@@ -144,7 +135,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
                             {tokenSecurity.owner_address && (
                                 <Link
                                     lineHeight="14px"
-                                    href={resolveAddressLinkOnExplorer(
+                                    href={explorerResolver.addressLink(
                                         tokenSecurity.chainId,
                                         tokenSecurity.owner_address,
                                     )}

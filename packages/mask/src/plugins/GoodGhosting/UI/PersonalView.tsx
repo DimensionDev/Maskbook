@@ -1,10 +1,4 @@
-import {
-    formatBalance,
-    formatEthereumAddress,
-    resolveTransactionLinkOnExplorer,
-    TransactionStateType,
-    useChainId,
-} from '@masknet/web3-shared-evm'
+import { formatBalance, formatEthereumAddress, explorerResolver, TransactionStateType } from '@masknet/web3-shared-evm'
 import { Grid, Typography, Button, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
@@ -15,6 +9,8 @@ import type { GoodGhostingInfo, Player } from '../types'
 import { getPlayerStatus, isGameActionError, PlayerStatus } from '../utils'
 import BigNumber from 'bignumber.js'
 import { FormattedBalance } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     infoRow: {
@@ -44,7 +40,7 @@ interface PersonalViewProps {
 export function PersonalView(props: PersonalViewProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const gameToken = useGameToken()
     const { canEarlyWithdraw, earlyWithdraw } = useEarlyWithdraw(props.info)
     const [buttonEnabled, setButtonEnabled] = useState(true)
@@ -67,7 +63,7 @@ export function PersonalView(props: PersonalViewProps) {
             await earlyWithdraw()
         } catch (error) {
             if (isGameActionError(error) && error.transactionHash) {
-                const link = resolveTransactionLinkOnExplorer(chainId, error.transactionHash)
+                const link = explorerResolver.transactionLink(chainId, error.transactionHash)
                 if (error.gameActionStatus === TransactionStateType.CONFIRMED) {
                     setErrorState({
                         message: t('plugin_good_ghosting_tx_fail'),

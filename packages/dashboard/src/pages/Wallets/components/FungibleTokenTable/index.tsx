@@ -1,23 +1,21 @@
 import { memo, useCallback, useEffect, useState } from 'react'
+import { useAsync } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import BigNumber from 'bignumber.js'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
-import { useWeb3State } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
+import { FungibleAsset, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginMessages } from '../../../../API'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { useNavigate } from 'react-router-dom'
-import { useAsync } from 'react-use'
 import {
     useNetworkDescriptor,
-    useWeb3State as useWeb3PluginState,
-    Web3Plugin,
+    useWeb3State,
     useAccount,
-    NetworkPluginID,
     useCurrentWeb3NetworkPluginID,
 } from '@masknet/plugin-infra/web3'
 
@@ -70,8 +68,8 @@ interface TokenTableProps {
 export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
     const account = useAccount()
-    const { Asset } = useWeb3PluginState()
-    const { portfolioProvider } = useWeb3State()
+    const { Asset } = useWeb3State()
+    // const { portfolioProvider } = useWeb3State()
     const network = useNetworkDescriptor()
     const [tokenUpdateCount, setTokenUpdateCount] = useState(0)
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
@@ -91,7 +89,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         )
     }, [])
 
-    const onSwap = useCallback((token: Web3Plugin.FungibleToken) => {
+    const onSwap = useCallback((token: FungibleToken<number, string>) => {
         openSwapDialog({
             open: true,
             traderProps: {
@@ -107,7 +105,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
     }, [])
 
     const onSend = useCallback(
-        (token: Web3Plugin.FungibleToken) => navigate(DashboardRoutes.WalletsTransfer, { state: { token } }),
+        (token: FungibleToken<number, string>) => navigate(DashboardRoutes.WalletsTransfer, { state: { token } }),
         [],
     )
 
@@ -125,16 +123,16 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
 export interface TokenTableUIProps {
     isLoading: boolean
     isEmpty: boolean
-    dataSource: Web3Plugin.FungibleAsset[]
-    onSwap(token: Web3Plugin.FungibleToken): void
-    onSend(token: Web3Plugin.FungibleToken): void
+    dataSource: FungibleAsset<number, string>[]
+    onSwap(token: FungibleToken<number, string>): void
+    onSend(token: FungibleToken<number, string>): void
 }
 
 export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isEmpty, dataSource }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const { Utils } = useWeb3PluginState()
+    const { Others } = useWeb3State()
 
     return (
         <TableContainer className={classes.container}>
@@ -172,10 +170,10 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                             {dataSource
                                 .sort((first, second) => {
                                     const firstValue = new BigNumber(
-                                        Utils?.formatBalance?.(first.balance, first.token.decimals) ?? '',
+                                        Others?.formatBalance?.(first.balance, first.decimals) ?? '',
                                     )
                                     const secondValue = new BigNumber(
-                                        Utils?.formatBalance?.(second.balance, second.token.decimals) ?? '',
+                                        Others?.formatBalance?.(second.balance, second.decimals) ?? '',
                                     )
 
                                     if (firstValue.isEqualTo(secondValue)) return 0

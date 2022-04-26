@@ -7,7 +7,7 @@ import { Settings } from './Settings'
 import { TokenList } from './TokenList'
 import { Transaction } from './Transaction'
 import { Wallet } from './Wallet'
-import { Utils } from './Utils'
+import { Others } from './Others'
 import type { FlowWeb3State } from './Protocol/types'
 
 export function createWeb3State(context: Plugin.Shared.SharedContext): FlowWeb3State {
@@ -32,6 +32,6 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): FlowWeb3S
             providerType: Provider_.providerType,
         }),
         Wallet: new Wallet(context),
-        Utils: new Utils(),
+        Others: new Others(context),
     }
 }

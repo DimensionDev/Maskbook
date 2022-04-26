@@ -1,16 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Card, CardActions, CardContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    SchemaType,
-    FungibleTokenDetailed,
-    FungibleTokenWatched,
-    isNativeTokenAddress,
-    useAccount,
-} from '@masknet/web3-shared-evm'
-import { isZero, isLessThan } from '@masknet/web3-shared-base'
+import { SchemaType, FungibleTokenDetailed, FungibleTokenWatched, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { isZero, isLessThan, NetworkPluginID } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -53,7 +48,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const [reservePrice, setReservePrice] = useState('')
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())

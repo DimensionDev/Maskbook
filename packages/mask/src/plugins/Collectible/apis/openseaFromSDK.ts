@@ -1,12 +1,12 @@
 import { OpenSeaPort } from 'opensea-js'
-import { ChainId, createEIP1193Provider } from '@masknet/web3-shared-evm'
+import { ChainId, createWeb3Provider } from '@masknet/web3-shared-evm'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, ReferrerAddress } from '../constants'
 import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 function createOpenSeaPortChain(chainId: ChainId.Mainnet | ChainId.Rinkeby) {
     return new OpenSeaPort(
-        createEIP1193Provider(EVM_RPC.request),
+        createWeb3Provider(EVM_RPC.request),
         {
             networkName: resolveOpenSeaNetwork(chainId),
             apiKey: OpenSeaAPI_Key,

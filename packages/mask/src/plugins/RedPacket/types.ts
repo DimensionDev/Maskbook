@@ -1,11 +1,5 @@
-import type { ERC20TokenRecord } from '../Wallet/database/types'
-import type {
-    SchemaType,
-    FungibleTokenDetailed,
-    ChainId,
-    ERC721TokenDetailed,
-    ERC721TokenOutMask,
-} from '@masknet/web3-shared-evm'
+import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { SchemaType, ChainId } from '@masknet/web3-shared-evm'
 
 // #region erc20 red packet
 export interface RedPacketRecord {
@@ -52,22 +46,16 @@ interface RedPacketBasic {
 }
 
 export interface RedPacketJSONPayload extends RedPacketBasic {
+    contract_version: number
     sender: {
         address: string
         name: string
         message: string
     }
-    contract_version: number
     network?: string
-    token_type?: SchemaType.Native | SchemaType.ERC20
-    token?: FungibleTokenDetailed
-    token_address?: string
+    token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
     claimers?: { address: string; name: string }[]
     total_remaining?: string
-}
-
-export interface RedPacketJSONPayloadFromChain extends Omit<RedPacketJSONPayload, 'token'> {
-    token_address: string
 }
 
 export interface RedpacketAvailability {
@@ -96,15 +84,14 @@ export interface RedPacketNftJSONPayload {
 }
 
 export interface NftRedPacketJSONPayload extends RedPacketBasic {
+    contract_version: number
     sender: {
         address: string
         name: string
         message: string
     }
-    contract_version: number
     network?: string
-    token_type: SchemaType.ERC721
-    token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
+    token?: Pick<FungibleToken<ChainId, SchemaType.ERC721>, 'address' | 'name' | 'decimals' | 'symbol'>
 }
 
 export enum NFTSelectOption {
@@ -112,16 +99,8 @@ export enum NFTSelectOption {
     Partial = 'Partial',
 }
 
-interface ERC721TokenContract {
-    address: string
-    name: string
-    symbol: string
-    chain_id: number
-}
-
-export interface NftRedPacketSubgraphInMask extends Omit<RedPacketBasic, 'is_random'> {
-    token: ERC721TokenDetailed
-    token_contract: ERC721TokenContract
+export interface NftRedPacketSubgraph extends Omit<RedPacketBasic, 'is_random'> {
+    token: NonFungibleToken<ChainId, SchemaType.ERC721>
     address: string
     chain_id: number
     message: string
@@ -137,11 +116,7 @@ export interface NftRedPacketSubgraphInMask extends Omit<RedPacketBasic, 'is_ran
     total_remaining: string
 }
 
-export interface NftRedPacketSubgraphOutMask extends Omit<NftRedPacketSubgraphInMask, 'token'> {
-    token: ERC721TokenOutMask
-}
-
-export interface NftRedPacketHistory extends NftRedPacketSubgraphInMask {
+export interface NftRedPacketHistory extends NftRedPacketSubgraph {
     payload: NftRedPacketJSONPayload
 }
 

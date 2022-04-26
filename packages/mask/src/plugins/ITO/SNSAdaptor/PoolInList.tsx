@@ -2,16 +2,11 @@ import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import {
     SchemaType,
     formatBalance,
-    FungibleTokenInitial,
-    getChainDetailed,
-    isSameAddress,
     TransactionStateType,
-    useAccount,
-    useFungibleTokenDetailed,
-    useFungibleTokensDetailed,
     useTokenConstants,
+    chainResolver,
 } from '@masknet/web3-shared-evm'
-import { isZero } from '@masknet/web3-shared-base'
+import { isZero, NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 import {
     Box,
     Card,
@@ -39,6 +34,7 @@ import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { omit } from 'lodash-unified'
 import { useSubscription } from 'use-subscription'
 import { PersistentStorages } from '../../../../shared'
+import { useAccount, useFungibleToken, useFungibleTokens } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -143,8 +139,8 @@ export function PoolInList(props: PoolInListProps) {
 
     const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
     // #region Fetch tokens detailed
-    const { value: _tokenDetailed } = useFungibleTokenDetailed(
-        SchemaType.ERC20,
+    const { value: _tokenDetailed } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
         (pool as JSON_PayloadFromChain).token_address ?? (pool as JSON_PayloadInMask).token.address,
     )
     const poolToken = (pool as JSON_PayloadInMask).token ?? _tokenDetailed
@@ -159,7 +155,10 @@ export function PoolInList(props: PoolInListProps) {
           )
         : []
 
-    const { value: _exchangeTokens } = useFungibleTokensDetailed(_poolTokens)
+    const { value: _exchangeTokens } = useFungibleTokens(
+        NetworkPluginID.PLUGIN_EVM,
+        _poolTokens.map((x) => x.address),
+    )
     const exchangeTokens = (pool as JSON_PayloadInMask).exchange_tokens ?? _exchangeTokens
     // #endregion
 
@@ -182,7 +181,7 @@ export function PoolInList(props: PoolInListProps) {
     })
     // #endregion
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)
     const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)
     const title = pool.message.split(MSG_DELIMITER)[1] ?? pool.message
@@ -236,7 +235,7 @@ export function PoolInList(props: PoolInListProps) {
                     <TokenIcon
                         classes={{ icon: classes.icon }}
                         address={poolToken.address}
-                        logoURI={poolToken.logoURI}
+                        logoURL={poolToken.logoURI}
                     />
                 </Box>
                 <Box className={classes.content}>
@@ -324,7 +323,7 @@ export function PoolInList(props: PoolInListProps) {
                                                 size="small"
                                                 style={{ whiteSpace: 'nowrap' }}>
                                                 {isSameAddress(token.address, NATIVE_TOKEN_ADDRESS)
-                                                    ? getChainDetailed(token.chainId)?.nativeCurrency.symbol
+                                                    ? chainResolver.nativeCurrency(token.chainId)?.symbol
                                                     : token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
@@ -338,7 +337,7 @@ export function PoolInList(props: PoolInListProps) {
                                                     6,
                                                 )}{' '}
                                                 {isSameAddress(token.address, NATIVE_TOKEN_ADDRESS)
-                                                    ? getChainDetailed(token.chainId)?.nativeCurrency.symbol
+                                                    ? chainResolver.nativeCurrency(token.chainId)?.symbol
                                                     : token.symbol}{' '}
                                                 / {poolToken.symbol}
                                             </TableCell>

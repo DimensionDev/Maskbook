@@ -23,7 +23,6 @@
     "@masknet/plugin-flow": "workspace:*",
     "@masknet/plugin-solana": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
-    "@masknet/plugin-solana": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
     "@masknet/public-api": "workspace:*",
     "@masknet/shared": "workspace:*",

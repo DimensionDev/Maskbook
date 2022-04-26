@@ -1,4 +1,6 @@
-import type * as fcl from '@blocto/fcl'
+/// <reference path="./env.d.ts" />
+
+import type { CompositeSignature, MutateOptions, TransactionObject } from '@blocto/fcl'
 
 export enum ChainId {
     Mainnet = 1,
@@ -24,11 +26,11 @@ export enum AssetProviderType {
     Default = 'Default',
 }
 
-export enum FclProvider {}
-
-export type Web3 = typeof fcl
-export type Signature = fcl.CompositeSignature[]
-export type Transaction = fcl.MutateOptions
-export type TransactionDetailed = fcl.TransactionObject
+export type Web3 = typeof import('@blocto/fcl')
+// export type Web3 = never
+export type Web3Provider = {}
+export type Signature = CompositeSignature[]
+export type Transaction = MutateOptions
+export type TransactionDetailed = TransactionObject
 export type TransactionSignature = never
 export type TransactionParameter = string

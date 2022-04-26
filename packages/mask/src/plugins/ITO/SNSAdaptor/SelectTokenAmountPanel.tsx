@@ -1,16 +1,17 @@
-import { ERC20TokenListProps, usePickToken } from '@masknet/shared'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { useCallback } from 'react'
+import { ERC20TokenListProps, usePickToken } from '@masknet/shared'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TokenAmountPanel, TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 
 export interface SelectTokenAmountPanelProps {
     amount: string
     balance: string
-    token?: FungibleTokenDetailed
+    token?: FungibleToken<ChainId, SchemaType>
     disableNativeToken?: boolean
     disableSearchBar?: boolean
     onAmountChange: (amount: string) => void
-    onTokenChange: (token: FungibleTokenDetailed) => void
+    onTokenChange: (token: FungibleToken<ChainId, SchemaType>) => void
     FungibleTokenListProps?: Partial<ERC20TokenListProps>
     TokenAmountPanelProps?: Partial<TokenAmountPanelProps>
 }

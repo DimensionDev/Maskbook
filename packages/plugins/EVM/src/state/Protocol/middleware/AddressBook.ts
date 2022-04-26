@@ -1,20 +1,14 @@
-import {
-    ChainId,
-    EthereumMethodType,
-    isSameAddress,
-    isZeroAddress,
-    TransactionParameter,
-} from '@masknet/web3-shared-evm'
-import { TransactionDescriptorType, Web3Plugin } from '@masknet/plugin-infra/web3'
+import { ChainId, EthereumMethodType, isZeroAddress, TransactionParameter } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
 import { Web3StateSettings } from '../../../settings'
+import { isSameAddress, TransactionContext, TransactionDescriptorType } from '@masknet/web3-shared-base'
 
 export class AddressBook implements Middleware<Context> {
-    private getFrom(context?: Web3Plugin.TransactionContext<ChainId, TransactionParameter>) {
+    private getFrom(context?: TransactionContext<ChainId, TransactionParameter>) {
         return context?.from
     }
 
-    private getTo(context?: Web3Plugin.TransactionContext<ChainId, TransactionParameter>) {
+    private getTo(context?: TransactionContext<ChainId, TransactionParameter>) {
         if (!context) return
         switch (context.type) {
             case TransactionDescriptorType.TRANSFER:

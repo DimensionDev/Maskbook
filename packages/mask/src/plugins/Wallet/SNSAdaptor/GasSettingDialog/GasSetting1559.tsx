@@ -1,69 +1,67 @@
+import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-    formatGweiToEther,
-    useChainId,
-    useNativeTokenDetailed,
-    GasOption,
-    formatGweiToWei,
-} from '@masknet/web3-shared-evm'
+import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
+import { Controller, useForm } from 'react-hook-form'
+import { formatGweiToEther, formatGweiToWei, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import BigNumber from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-unified'
-import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
-import { Controller, useForm } from 'react-hook-form'
-import { z as zod } from 'zod'
-import { StyledInput } from '../../../../extension/popups/components/StyledInput'
+// import { StyledInput } from '../../../../extension/popups/components/StyledInput'
 import { useI18N } from '../../../../utils'
-import { WalletRPC } from '../../messages'
-import { useNativeTokenPrice } from '../../hooks/useTokenPrice'
 import { useGasSettingStyles } from './useGasSettingStyles'
 import type { GasSettingProps } from './types'
 import {
+    GasOptionType,
     isGreaterThan,
     isGreaterThanOrEqualTo,
     isLessThan,
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
+    NetworkPluginID,
     toFixed,
 } from '@masknet/web3-shared-base'
+import { useChainId, useFungibleTokenBalance, useGasOptions } from '@masknet/plugin-infra/web3'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
 export const GasSetting1559: FC<GasSettingProps> = memo(
-    ({ gasLimit, minGasLimit = 0, gasOption = GasOption.Medium, onConfirm = noop }) => {
-        const { classes } = useGasSettingStyles()
+    ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }) => {
         const { t } = useI18N()
-        const chainId = useChainId()
-        const [selectedGasOption, setGasOption] = useState<GasOption | null>(gasOption)
-        const { value: nativeToken } = useNativeTokenDetailed()
-        const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
+        const { classes } = useGasSettingStyles()
+        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+        const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
 
-        // #region Get suggest gas options data from meta swap api
-        const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
-            return WalletRPC.getEstimateGasFees(chainId)
-        }, [chainId])
-        // #endregion
+        const [selectedGasOption, setGasOptionType] = useState<GasOptionType | null>(gasOptionType)
+        const { value: nativeTokenPrice = 0 } = useFungibleTokenBalance(
+            NetworkPluginID.PLUGIN_EVM,
+            NATIVE_TOKEN_ADDRESS,
+            {
+                chainId,
+            },
+        )
+
+        const { value: gasOptions, loading: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
 
         // #region Gas options
         const options = useMemo(
             () => [
                 {
                     title: t('popups_wallet_gas_fee_settings_low'),
-                    gasOption: GasOption.Low,
-                    content: gasOptions?.low,
+                    gasOption: GasOptionType.SLOW,
+                    content: gasOptions?.options[GasOptionType.SLOW],
                 },
                 {
                     title: t('popups_wallet_gas_fee_settings_medium'),
-                    gasOption: GasOption.Medium,
-                    content: gasOptions?.medium,
+                    gasOption: GasOptionType.NORMAL,
+                    content: gasOptions?.options[GasOptionType.NORMAL],
                 },
                 {
                     title: t('popups_wallet_gas_fee_settings_high'),
-                    gasOption: GasOption.High,
-                    content: gasOptions?.high,
+                    gasOption: GasOptionType.FAST,
+                    content: gasOptions?.options[GasOptionType.FAST],
                 },
             ],
             [gasOptions],
@@ -160,12 +158,20 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
         // #region These are additional form rules that need to be prompted for but do not affect the validation of the form
         const maxPriorFeeHelperText = useMemo(() => {
             if (getGasOptionsLoading) return undefined
-            if (isLessThan(maxPriorityFeePerGas, gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
+            if (
+                isLessThan(
+                    maxPriorityFeePerGas,
+                    gasOptions?.options[GasOptionType.SLOW]?.suggestedMaxPriorityFeePerGas ?? 0,
+                )
+            )
                 return t('wallet_transfer_error_max_priority_gas_fee_too_low')
             if (
                 isGreaterThan(
                     maxPriorityFeePerGas,
-                    multipliedBy(gasOptions?.high?.suggestedMaxPriorityFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
+                    multipliedBy(
+                        gasOptions?.options[GasOptionType.FAST]?.suggestedMaxPriorityFeePerGas ?? 0,
+                        HIGH_FEE_WARNING_MULTIPLIER,
+                    ),
                 )
             )
                 return t('wallet_transfer_error_max_priority_gas_fee_too_high')
@@ -179,7 +185,10 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
             if (
                 isGreaterThan(
                     maxFeePerGas,
-                    multipliedBy(gasOptions?.high?.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
+                    multipliedBy(
+                        gasOptions?.options[GasOptionType.FAST]?.suggestedMaxFeePerGas ?? 0,
+                        HIGH_FEE_WARNING_MULTIPLIER,
+                    ),
                 )
             )
                 return t('wallet_transfer_error_max_fee_too_high')
@@ -193,7 +202,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                     {options.map(({ title, content, gasOption }, index) => (
                         <div
                             key={index}
-                            onClick={() => setGasOption(gasOption)}
+                            onClick={() => setGasOptionType(gasOption)}
                             className={selectedGasOption === gasOption ? classes.selected : undefined}>
                             <Typography className={classes.optionsTitle}>{title}</Typography>
                             <Typography component="div">
@@ -216,20 +225,21 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                     <Controller
                         control={control}
                         render={({ field }) => {
-                            return (
-                                <StyledInput
-                                    {...field}
-                                    onChange={(e) => {
-                                        setGasOption(null)
-                                        field.onChange(e)
-                                    }}
-                                    error={!!errors.gasLimit?.message}
-                                    helperText={errors.gasLimit?.message}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
-                                    }}
-                                />
-                            )
+                            return <></>
+                            // return (
+                            //     <StyledInput
+                            //         {...field}
+                            //         onChange={(e) => {
+                            //             setGasOptionType(null)
+                            //             field.onChange(e)
+                            //         }}
+                            //         error={!!errors.gasLimit?.message}
+                            //         helperText={errors.gasLimit?.message}
+                            //         inputProps={{
+                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
+                            //         }}
+                            //     />
+                            // )
                         }}
                         name="gasLimit"
                     />
@@ -249,20 +259,23 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                     </Typography>
                     <Controller
                         control={control}
-                        render={({ field }) => (
-                            <StyledInput
-                                {...field}
-                                onChange={(e) => {
-                                    setGasOption(null)
-                                    field.onChange(e)
-                                }}
-                                error={!!errors.maxPriorityFeePerGas?.message || !!maxPriorFeeHelperText}
-                                helperText={errors.maxPriorityFeePerGas?.message || maxPriorFeeHelperText}
-                                inputProps={{
-                                    pattern: '^[0-9]*[.,]?[0-9]*$',
-                                }}
-                            />
-                        )}
+                        render={({ field }) => {
+                            return <></>
+                            // return (
+                            //     <StyledInput
+                            //         {...field}
+                            //         onChange={(e) => {
+                            //             setGasOptionType(null)
+                            //             field.onChange(e)
+                            //         }}
+                            //         error={!!errors.maxPriorityFeePerGas?.message || !!maxPriorFeeHelperText}
+                            //         helperText={errors.maxPriorityFeePerGas?.message || maxPriorFeeHelperText}
+                            //         inputProps={{
+                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
+                            //         }}
+                            //     />
+                            // )
+                        }}
                         name="maxPriorityFeePerGas"
                     />
                     <Typography className={classes.label}>
@@ -281,20 +294,23 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                     </Typography>
                     <Controller
                         control={control}
-                        render={({ field }) => (
-                            <StyledInput
-                                {...field}
-                                onChange={(e) => {
-                                    setGasOption(null)
-                                    field.onChange(e)
-                                }}
-                                error={!!errors.maxFeePerGas?.message || !!maxFeeGasHelperText}
-                                helperText={errors.maxFeePerGas?.message || maxFeeGasHelperText}
-                                inputProps={{
-                                    pattern: '^[0-9]*[.,]?[0-9]*$',
-                                }}
-                            />
-                        )}
+                        render={({ field }) => {
+                            return <></>
+                            // return (
+                            //     <StyledInput
+                            //         {...field}
+                            //         onChange={(e) => {
+                            //             setGasOptionType(null)
+                            //             field.onChange(e)
+                            //         }}
+                            //         error={!!errors.maxFeePerGas?.message || !!maxFeeGasHelperText}
+                            //         helperText={errors.maxFeePerGas?.message || maxFeeGasHelperText}
+                            //         inputProps={{
+                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
+                            //         }}
+                            //     />
+                            // )
+                        }}
                         name="maxFeePerGas"
                     />
                 </form>

@@ -1,5 +1,5 @@
-import { ERC20TokenDetailed, useAccount, useChainId, isSameAddress, useTokenConstants } from '@masknet/web3-shared-evm'
-import { ZERO } from '@masknet/web3-shared-base'
+import { ZERO, NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { useTokenConstants } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
@@ -10,6 +10,7 @@ import { RemindDialog } from './RemindDialog'
 import { ShareDialog } from './ShareDialog'
 import { SwapDialog, SwapDialogProps } from './SwapDialog'
 import { UnlockDialog } from './UnlockDialog'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 
 export enum SwapStatus {
     Remind = 0,
@@ -67,8 +68,8 @@ export function SwapGuide(props: SwapGuideProps) {
     const initAmount = ZERO
     const [tokenAmount, setTokenAmount] = useState<BigNumber>(initAmount)
     const [actualSwapAmount, setActualSwapAmount] = useState<BigNumber.Value>(0)
-    const chainId = useChainId()
-    const account = useAccount()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const SwapTitle: Record<SwapStatus, string> = {
         [SwapStatus.Remind]: t('plugin_ito_dialog_swap_reminder_title'),
@@ -101,11 +102,9 @@ export function SwapGuide(props: SwapGuideProps) {
                         case SwapStatus.Unlock:
                             return (
                                 <UnlockDialog
-                                    tokens={
-                                        payload.exchange_tokens.filter(
-                                            (x) => !isSameAddress(NATIVE_TOKEN_ADDRESS, x.address),
-                                        ) as ERC20TokenDetailed[]
-                                    }
+                                    tokens={payload.exchange_tokens.filter(
+                                        (x) => !isSameAddress(NATIVE_TOKEN_ADDRESS, x.address),
+                                    )}
                                 />
                             )
                         case SwapStatus.Swap:

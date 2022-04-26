@@ -1,25 +1,26 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
-import { useAssets, useTrustedERC20Tokens, Asset, useChainDetailed } from '@masknet/web3-shared-evm'
-import { useRecentTransactions } from '../../../../../plugins/Wallet/hooks/useRecentTransactions'
-import type { RecentTransaction } from '../../../../../plugins/Wallet/services'
+// import { useAssets, Asset } from '@masknet/web3-shared-evm'
+// import { useRecentTransactions } from '../../../../../plugins/Wallet/hooks/useRecentTransactions'
+import { useChainId, useTrustedFungibleTokens, useTransactions } from '@masknet/plugin-infra/web3'
+import { FungibleAsset, NetworkPluginID, Transaction } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import type { SchemaType } from '@masknet/web3-shared-evm'
 
 function useWalletContext() {
-    const chainDetailed = useChainDetailed()
-    const erc20Tokens = useTrustedERC20Tokens()
-    const { value: assets, loading } = useAssets(erc20Tokens)
-    const { value: transactions } = useRecentTransactions({
-        computedPayload: true,
-    })
-    const [currentToken, setCurrentToken] = useState<Asset>()
-    const [transaction, setTransaction] = useState<RecentTransaction | null>()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const erc20Tokens = useTrustedFungibleTokens(NetworkPluginID.PLUGIN_EVM)
+    const transactions = useTransactions(NetworkPluginID.PLUGIN_EVM)
+    const [currentToken, setCurrentToken] = useState<FungibleAsset<ChainId, SchemaType>>()
+    const [transaction, setTransaction] = useState<Transaction<ChainId, SchemaType> | null>()
 
     return {
         currentToken,
         setCurrentToken,
-        assets: assets.filter((asset) => asset.token.chainId === chainDetailed?.chainId),
+        // assets: assets.filter((asset) => asset.token.chainId === chainId),
+        assets: [],
         transactions,
-        assetsLoading: loading,
+        assetsLoading: false,
         transaction,
         setTransaction,
     }

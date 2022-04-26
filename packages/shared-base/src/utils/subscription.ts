@@ -1,6 +1,6 @@
 import { noop } from 'lodash-unified'
-import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { Subscription } from 'use-subscription'
+import type { ValueRef } from '@dimensiondev/holoflows-kit'
 
 export function createConstantSubscription<T>(value: T) {
     return {

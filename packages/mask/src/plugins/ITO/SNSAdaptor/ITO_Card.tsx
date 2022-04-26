@@ -1,4 +1,4 @@
-import { ERC20TokenDetailed, formatBalance, TransactionStateType } from '@masknet/web3-shared-evm'
+import { ChainId, formatBalance, SchemaType, TransactionStateType } from '@masknet/web3-shared-evm'
 import { Alert, Box, Skeleton, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useEffect } from 'react'
@@ -12,6 +12,7 @@ import { WalletMessages } from '../../Wallet/messages'
 import { useMaskClaimCallback } from './hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -50,7 +51,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ITO_CardProps extends withClasses<never> {
-    token?: ERC20TokenDetailed
+    token?: FungibleToken<ChainId, SchemaType.ERC20>
     onUpdateAmount: (amount: string) => void
     onUpdateBalance: () => void
 }

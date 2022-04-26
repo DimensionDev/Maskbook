@@ -1,15 +1,13 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import {
-    SchemaType,
-    formatBalance,
-    FungibleTokenDetailed,
-    useAccount,
-    useChainId,
-    useFungibleTokenBalance,
-    useNativeTokenDetailed,
-    useRedPacketConstants,
-} from '@masknet/web3-shared-evm'
+    FungibleToken,
+    isGreaterThan,
+    isZero,
+    multipliedBy,
+    NetworkPluginID,
+    rightShift,
+} from '@masknet/web3-shared-base'
+import { SchemaType, formatBalance, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
@@ -23,6 +21,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
+import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -86,13 +85,15 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { onChange, onNext, origin } = props
     // context
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
     // #region select token
-    const { value: nativeTokenDetailed } = useNativeTokenDetailed()
-    const [token = nativeTokenDetailed, setToken] = useState<FungibleTokenDetailed | undefined>(origin?.token)
+    const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
+    const [token = nativeTokenDetailed, setToken] = useState<
+        FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20> | undefined
+    >(origin?.token)
     const pickToken = usePickToken()
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await pickToken({
@@ -270,7 +271,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             <EthereumWalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
                     amount={totalAmount.toFixed()}
-                    token={token?.type === SchemaType.ERC20 ? token : undefined}
+                    token={token?.schema === SchemaType.ERC20 ? token : undefined}
                     spender={HAPPY_RED_PACKET_ADDRESS_V4}>
                     <ActionButton
                         variant="contained"

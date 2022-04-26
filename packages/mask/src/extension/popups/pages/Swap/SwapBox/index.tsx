@@ -1,4 +1,4 @@
-import { useChainId } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { useMemo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'

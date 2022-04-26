@@ -1,37 +1,5 @@
-import { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
-import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-flow/types'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export const PLUGIN_ID = NetworkPluginID.PLUGIN_FLOW
 export const PLUGIN_NAME = 'Flow Chain'
 export const PLUGIN_DESCRIPTION = ''
-export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor<ChainId, NetworkType>[] = [
-    {
-        ID: `${PLUGIN_ID}_flow`,
-        networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.Mainnet,
-        type: NetworkType.Flow,
-        name: 'Flow',
-        icon: new URL('./assets/flow.png', import.meta.url),
-        iconColor: 'rgb(54, 173, 104)',
-        isMainnet: true,
-    },
-    {
-        ID: `${PLUGIN_ID}_flow_testnet`,
-        networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.Testnet,
-        type: NetworkType.Flow,
-        name: 'Flow Testnet',
-        icon: new URL('./assets/flow.png', import.meta.url),
-        iconColor: 'rgb(54, 173, 104)',
-        isMainnet: false,
-    },
-]
-export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor<ChainId, ProviderType>[] = [
-    {
-        ID: `${PLUGIN_ID}_blocto`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.Blocto,
-        name: 'Blocto',
-        icon: new URL('./assets/blocto.png', import.meta.url),
-    },
-]

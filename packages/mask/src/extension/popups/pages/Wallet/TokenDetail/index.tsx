@@ -12,18 +12,14 @@ import { getTokenUSDValue } from '../../../../../plugins/Wallet/helpers'
 import { InteractionCircleIcon } from '@masknet/icons'
 import { useI18N } from '../../../../../utils'
 import { PluginTransakMessages } from '../../../../../plugins/Transak/messages'
-import {
-    formatBalance,
-    formatCurrency,
-    isSameAddress,
-    useNativeTokenDetailed,
-    useWallet,
-} from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, formatCurrency } from '@masknet/web3-shared-evm'
 import Services from '../../../../service'
 import { compact, intersectionWith } from 'lodash-unified'
 import urlcat from 'urlcat'
 import { ActivityList } from '../components/ActivityList'
 import { openWindow } from '@masknet/shared-base-ui'
+import { useFungibleToken, useWallet } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     content: {
@@ -68,10 +64,10 @@ const useStyles = makeStyles()({
 const TokenDetail = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const wallet = useWallet()
     const navigate = useNavigate()
     const { currentToken } = useContainer(WalletContext)
-    const { value: nativeToken } = useNativeTokenDetailed()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
 
     const { value: isActiveSocialNetwork } = useAsync(async () => {
         const urls = compact((await browser.tabs.query({ active: true })).map((tab) => tab.url))
@@ -125,7 +121,7 @@ const TokenDetail = memo(() => {
                     address={currentToken.token.address}
                     name={currentToken.token.name}
                     chainId={currentToken.token.chainId}
-                    logoURI={currentToken.token.logoURI}
+                    logoURL={currentToken.token.logoURI}
                     AvatarProps={{ sx: { width: 24, height: 24 } }}
                 />
                 <Typography className={classes.balance}>

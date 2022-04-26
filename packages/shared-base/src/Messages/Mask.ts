@@ -14,11 +14,11 @@ import type { RelationFavor } from '../Persona/type'
 
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
-    languageSettings: LanguageOptions
     pluginIDSettings: string
+    languageSettings: LanguageOptions
     currentChainIdSettings: number
-    currentTokenPricesSettings: CryptoPrice
-    currentDataProviderSettings: DataProvider
+    // currentTokenPricesSettings: CryptoPrice
+    // currentDataProviderSettings: DataProvider
     currentProviderSettings: ProviderType
     currentNetworkSettings: NetworkType
     currentAccountSettings: string

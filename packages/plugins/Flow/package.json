@@ -22,5 +22,8 @@
     "@servie/events": "^3.0.0",
     "bignumber.js": "^9.0.2",
     "react-use": "^17.3.2"
+  },
+  "devDependencies": {
+    "@types/use-subscription": "^1.0.0"
   }
 }

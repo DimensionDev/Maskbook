@@ -1,19 +1,15 @@
 import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { Box, Button, DialogActions, DialogContent } from '@mui/material'
-import {
-    SchemaType,
-    isSameAddress,
-    useERC721ContractDetailed,
-    useERC721TokenDetailedCallback,
-    useWallet,
-} from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { SchemaType } from '@masknet/web3-shared-evm'
 import { EthereumAddress } from 'wallet.ts'
 import { useDashboardI18N } from '../../../../locales'
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PluginServices } from '../../../../API'
+import { useNonFungibleTokenContract, useWallet } from '@masknet/plugin-infra/web3'
 
 export interface AddCollectibleDialogProps {
     open: boolean
@@ -31,41 +27,47 @@ enum FormErrorType {
 }
 
 export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose }) => {
-    const wallet = useWallet()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const [address, setAddress] = useState('')
-    const { value: contractDetailed, loading: contractDetailLoading } = useERC721ContractDetailed(address)
-    const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contractDetailed)
-
-    const onSubmit = useCallback(async () => {
-        if (contractDetailLoading || !wallet) return
-
-        const tokenInDB = await PluginServices.Wallet.getToken(SchemaType.ERC721, address, tokenId)
-        if (tokenInDB) throw new Error(FormErrorType.Added)
-
-        const tokenDetailed = await erc721TokenDetailedCallback()
-
-        if (
-            (tokenDetailed && !isSameAddress(tokenDetailed.info.owner, wallet.address)) ||
-            !tokenDetailed ||
-            !tokenDetailed.info.owner
-        ) {
-            throw new Error(FormErrorType.NotExist)
-        } else {
-            await PluginServices.Wallet.addToken(tokenDetailed)
-            onClose()
-        }
-    }, [contractDetailLoading, wallet, address, tokenId, erc721TokenDetailedCallback])
-
-    return (
-        <AddCollectibleDialogUI
-            open={open}
-            onClose={onClose}
-            address={address}
-            onAddressChange={setAddress}
-            onTokenIdChange={setTokenId}
-            onSubmit={onSubmit}
-        />
+    const { value: contractDetailed, loading: contractDetailLoading } = useNonFungibleTokenContract(
+        NetworkPluginID.PLUGIN_EVM,
+        address,
     )
+
+    return null
+
+    // const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contractDetailed)
+
+    // const onSubmit = useCallback(async () => {
+    //     if (contractDetailLoading || !wallet) return
+
+    //     const tokenInDB = await PluginServices.Wallet.getToken(SchemaType.ERC721, address, tokenId)
+    //     if (tokenInDB) throw new Error(FormErrorType.Added)
+
+    //     const tokenDetailed = await erc721TokenDetailedCallback()
+
+    //     if (
+    //         (tokenDetailed && !isSameAddress(tokenDetailed.info.owner, wallet.address)) ||
+    //         !tokenDetailed ||
+    //         !tokenDetailed.info.owner
+    //     ) {
+    //         throw new Error(FormErrorType.NotExist)
+    //     } else {
+    //         await PluginServices.Wallet.addToken(tokenDetailed)
+    //         onClose()
+    //     }
+    // }, [contractDetailLoading, wallet, address, tokenId, erc721TokenDetailedCallback])
+
+    // return (
+    //     <AddCollectibleDialogUI
+    //         open={open}
+    //         onClose={onClose}
+    //         address={address}
+    //         onAddressChange={setAddress}
+    //         onTokenIdChange={setTokenId}
+    //         onSubmit={onSubmit}
+    //     />
+    // )
 })
 
 export interface AddCollectibleDialogUIProps {

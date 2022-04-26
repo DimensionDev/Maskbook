@@ -13,18 +13,11 @@ import {
 } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import {
-    ERC20TokenDetailed,
-    SchemaType,
-    FungibleTokenDetailed,
-    useArtBlocksConstants,
-    useFungibleTokenWatched,
-    TransactionStateType,
-} from '@masknet/web3-shared-evm'
+import { SchemaType, useArtBlocksConstants, TransactionStateType } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog, TokenAmountPanel } from '@masknet/shared'
-import { leftShift } from '@masknet/web3-shared-base'
+import { leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
 import { WalletMessages } from '../../Wallet/messages'
@@ -33,6 +26,7 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import { useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -61,16 +55,16 @@ export function PurchaseDialog(props: ActionBarProps) {
     const { classes } = useStyles()
     const { project, open, onClose } = props
 
-    const { token, balance } = useFungibleTokenWatched({
-        type: project.currencySymbol === 'ETH' || !project.currencySymbol ? 0 : 1,
-        address: project.currencyAddress ? project.currencyAddress : '',
-    })
+    const { token, balance } = useFungibleTokenWatched(
+        NetworkPluginID.PLUGIN_EVM,
+        project.currencyAddress ? project.currencyAddress : '',
+    )
 
     const [ToS_Checked, setToS_Checked] = useState(false)
     const [purchaseState, onCheckout, resetCallback] = usePurchaseCallback(
         project.projectId,
         project.pricePerTokenInWei,
-        token.value?.type,
+        token.value?.schema,
     )
     const { GEN_ART_721_MINTER: spender } = useArtBlocksConstants()
 
@@ -143,7 +137,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                             label={t('plugin_artblocks_price_per_mint')}
                             amount={price.toString()}
                             balance={balance.value ?? '0'}
-                            token={token.value as FungibleTokenDetailed}
+                            token={token.value}
                             onAmountChange={() => {}}
                         />
                         <FormControlLabel
@@ -175,7 +169,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                     </CardContent>
                     <CardActions>
                         <EthereumWalletConnectedBoundary>
-                            {token.value?.type === SchemaType.Native ? (
+                            {token.value?.schema === SchemaType.Native ? (
                                 <ActionButton
                                     className={classes.button}
                                     disabled={!!validationMessage}
@@ -188,11 +182,11 @@ export function PurchaseDialog(props: ActionBarProps) {
                                         : t('plugin_artblocks_purchasing')}
                                 </ActionButton>
                             ) : null}
-                            {token.value?.type === SchemaType.ERC20 ? (
+                            {token.value?.schema === SchemaType.ERC20 ? (
                                 <EthereumERC20TokenApprovedBoundary
                                     amount={project.pricePerTokenInWei}
                                     spender={spender}
-                                    token={token.value as ERC20TokenDetailed}>
+                                    token={token.value}>
                                     <ActionButton
                                         className={classes.button}
                                         disabled={!!validationMessage}

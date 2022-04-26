@@ -1,7 +1,9 @@
 import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Image } from '../../../components/shared/Image'
-import { ERC20TokenDetailed, useChainId, formatBalance } from '@masknet/web3-shared-evm'
+import { formatBalance, SchemaType } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { resolveAssetLinkOnCurrentProvider } from '../pipes'
 import { useI18N } from '../../../utils'
 import type { Order } from 'opensea-js/lib/types'
@@ -22,16 +24,18 @@ export function CheckoutOrder() {
     const { token, asset, assetOrder, provider } = CollectibleState.useContainer()
     const order = assetOrder?.value ?? asset?.value?.desktopOrder
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     if (!asset?.value || !token) return null
     if (!order) return null
 
     const price = (order as Order).currentPrice ?? asset.value.current_price
     const getPrice = () => {
         if (!price) return 'error'
-        const decimal = asset.value?.response_.collection.payment_tokens.find((item: ERC20TokenDetailed) => {
-            return item.symbol === asset.value?.current_symbol
-        })?.decimals
+        const decimal = asset.value?.response_.collection.payment_tokens.find(
+            (item: FungibleToken<ChianId, SchemaType.ERC20>) => {
+                return item.symbol === asset.value?.current_symbol
+            },
+        )?.decimals
         if (!decimal) return 'error'
         return formatBalance(price, decimal) ?? 'error'
     }

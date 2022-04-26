@@ -1,5 +1,7 @@
 import { compact } from 'lodash-unified'
-import { isSameAddress, useChainId, getChainIdFromName, ChainId } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { RedPacketJSONPayload, RedPacketStatus, RedPacketAvailability } from '../../types'
 import { useAvailability } from './useAvailability'
 
@@ -8,8 +10,8 @@ import { useAvailability } from './useAvailability'
  * @param payload
  */
 export function useAvailabilityComputed(account: string, payload: RedPacketJSONPayload) {
-    const chainId = useChainId()
-    const parsedChainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const parsedChainId = chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
     const asyncResult = useAvailability(payload.contract_version, account, payload.rpid, parsedChainId)
 
     const result = asyncResult

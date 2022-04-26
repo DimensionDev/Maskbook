@@ -1,13 +1,14 @@
 import { memo } from 'react'
-import { useDashboardI18N } from '../../../../locales'
+import { useCopyToClipboard } from 'react-use'
 import { MaskColorVar, MaskDialog, makeStyles } from '@masknet/theme'
 import { QRCode, useSnackbarCallback } from '@masknet/shared'
 import { DialogContent, Typography, DialogActions, Button } from '@mui/material'
-import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
-import { useCopyToClipboard } from 'react-use'
-import { useCurrentSelectedWalletNetwork } from '../../api'
-import { NetworkType, resolveNetworkAddressPrefix } from '@masknet/web3-shared-evm'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkType } from '@masknet/web3-shared-evm'
+import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
+import { useDashboardI18N } from '../../../../locales'
+import { useCurrentSelectedWalletNetwork } from '../../api'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -37,8 +38,8 @@ export interface ReceiveDialogProps {
 
 export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, walletAddress, onClose }) => {
     const currentSelectedWalletNetwork = useCurrentSelectedWalletNetwork()
-    const { value: domain } = useReverseAddress(walletAddress)
-    const { Utils } = useWeb3State()
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, walletAddress)
+    const { Others } = useWeb3State()
     return (
         <ReceiveDialogUI
             open={open}
@@ -47,7 +48,7 @@ export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, wallet
             domain={domain}
             onClose={onClose}
             currentNetworkType={currentSelectedWalletNetwork}
-            formatDomainName={Utils?.formatDomainName}
+            formatDomainName={Others?.formatDomainName}
         />
     )
 })

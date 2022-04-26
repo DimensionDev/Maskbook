@@ -1,14 +1,12 @@
 import { unreachable } from '@dimensiondev/kit'
 import {
     ChainId,
-    createLookupTableResolver,
     FilterTransactionType,
     NetworkType,
     FungibleAssetProvider,
-    getChainIdFromNetworkType,
     getZerionConstants,
+    networkResolver,
 } from '@masknet/web3-shared-evm'
-import type { SocketRequestAssetScope } from '../types'
 
 export function resolvePortfolioDataProviderName(provider: FungibleAssetProvider) {
     switch (provider) {
@@ -33,35 +31,9 @@ export function resolveDebankTransactionType(category: string) {
 }
 
 export function resolveZerionAssetsScopeName(networkType: NetworkType) {
-    return getZerionConstants(getChainIdFromNetworkType(networkType)).ASSETS_SCOPE_NAME ?? ''
+    return getZerionConstants(networkResolver.networkChainId(networkType)).ASSETS_SCOPE_NAME ?? ''
 }
 
 export function resolveZerionTransactionsScopeName(networkType: NetworkType) {
-    return getZerionConstants(getChainIdFromNetworkType(networkType)).TRANSACTIONS_SCOPE_NAME ?? ''
+    return getZerionConstants(networkResolver.networkChainId(networkType)).TRANSACTIONS_SCOPE_NAME ?? ''
 }
-
-export const resolveChainByScope = createLookupTableResolver<
-    SocketRequestAssetScope,
-    {
-        chain: string
-        chainId?: ChainId
-    }
->(
-    {
-        assets: {
-            chain: 'eth',
-            chainId: ChainId.Mainnet,
-        },
-        'bsc-assets': {
-            chain: 'bsc',
-            chainId: ChainId.BSC,
-        },
-        'polygon-assets': {
-            chain: 'matic',
-            chainId: ChainId.Matic,
-        },
-    },
-    {
-        chain: 'unknown',
-    },
-)

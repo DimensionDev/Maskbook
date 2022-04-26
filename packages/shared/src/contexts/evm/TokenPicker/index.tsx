@@ -1,15 +1,16 @@
 import { defer, DeferTuple } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { createContext, FC, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react'
 import { PickTokenOptions, SelectTokenDialog } from './SelectTokenDialog'
 
 interface ContextOptions {
-    pickToken: (options: PickTokenOptions) => Promise<FungibleTokenDetailed | null>
+    pickToken: (options: PickTokenOptions) => Promise<FungibleToken<ChainId, SchemaType> | null>
 }
 const TokenPickerContext = createContext<ContextOptions>(null!)
 
-type PickerDeferTuple = DeferTuple<FungibleTokenDetailed | null>
+type PickerDeferTuple = DeferTuple<FungibleToken<ChainId, SchemaType> | null>
 
 interface Task {
     id: number
@@ -30,7 +31,7 @@ export const TokenPickerProvider: FC<PropsWithChildren<{}>> = ({ children }) => 
     const contextValue = useMemo(() => {
         return {
             pickToken: (options: PickTokenOptions) => {
-                const [promise, resolve, reject] = defer<FungibleTokenDetailed | null>()
+                const [promise, resolve, reject] = defer<FungibleToken<ChainId, SchemaType> | null>()
                 id += 1
                 const newTask: Task = { id, promise, resolve, reject, pickerOptions: options }
                 setTasks((list) => [...list, newTask])

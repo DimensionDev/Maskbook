@@ -5,12 +5,11 @@ import {
     Plugin,
     PluginI18NFieldRender,
     usePluginI18NField,
+    PluginId,
 } from '@masknet/plugin-infra/content-script'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Result } from 'ts-results'
-import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
-import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
@@ -33,7 +32,7 @@ export const PluginEntryRender = memo(
         const result = [...useActivatedPluginsSNSAdaptor('any')]
             .sort((plugin) => {
                 // TODO: support priority order
-                if (plugin.ID === RedPacketPluginID || plugin.ID === ITO_PluginID) return -1
+                if (plugin.ID === PluginId.RedPacket || plugin.ID === PluginId.ITO) return -1
                 return 1
             })
             .map((plugin) =>

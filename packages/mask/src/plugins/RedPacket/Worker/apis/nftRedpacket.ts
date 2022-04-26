@@ -1,4 +1,4 @@
-import { SchemaType, getChainName, getNftRedPacketConstants } from '@masknet/web3-shared-evm'
+import { SchemaType, getNftRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { first, pick } from 'lodash-unified'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
@@ -111,7 +111,7 @@ export async function getNftRedPacketHistory(address: string, page: number) {
             creation_time: x.creation_time * 1000,
         } as NftRedPacketSubgraphInMask
         const redPacketBasic = pick(nftRedPacketSubgraphInMask, redPacketBasicKeys)
-        const network = getChainName(nftRedPacketSubgraphInMask.chain_id)
+        const network = chainResolver.chainNetworkType(nftRedPacketSubgraphInMask.chain_id)
         const sender = {
             address: nftRedPacketSubgraphInMask.creator.address,
             name: nftRedPacketSubgraphInMask.creator.name,

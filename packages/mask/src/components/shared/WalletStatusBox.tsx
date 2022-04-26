@@ -18,10 +18,9 @@ import {
     useWallet,
 } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
-import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
+import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
-import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     content: {
@@ -105,9 +104,9 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const providerType = useProviderType()
     const providerDescriptor = useProviderDescriptor()
     const networkDescriptor = useNetworkDescriptor()
-    const { Utils } = useWeb3State() ?? {}
+    const { Others } = useWeb3State() ?? {}
 
-    const { value: domain } = useReverseAddress(account)
+    const { value: domain } = useReverseAddress(undefined, account)
 
     // #region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
@@ -131,20 +130,20 @@ export function WalletStatusBox(props: WalletStatusBox) {
     // #endregion
 
     const onDisconnect = useCallback(async () => {
-        switch (providerType) {
-            case ProviderType.MaskWallet:
-            case ProviderType.MetaMask:
-            case ProviderType.Coin98:
-            case ProviderType.WalletConnect:
-            case ProviderType.Fortmatic:
-                await EVM_RPC.disconnect({
-                    providerType,
-                })
-                await WalletRPC.resetAccount()
-                break
-            default:
-                break
-        }
+        // switch (providerType) {
+        //     case ProviderType.MaskWallet:
+        //     case ProviderType.MetaMask:
+        //     case ProviderType.Coin98:
+        //     case ProviderType.WalletConnect:
+        //     case ProviderType.Fortmatic:
+        //         await EVM_RPC.disconnect({
+        //             providerType,
+        //         })
+        //         await WalletRPC.resetAccount()
+        //         break
+        //     default:
+        //         break
+        // }
     }, [chainId, providerType])
 
     return account ? (
@@ -159,8 +158,8 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 <div className={classes.infoRow} style={{ marginBottom: 6 }}>
                     {providerType !== ProviderType.MaskWallet ? (
                         <Typography className={classes.accountName}>
-                            {domain && Utils?.formatDomainName
-                                ? Utils.formatDomainName(domain)
+                            {domain && Others?.formatDomainName
+                                ? Others.formatDomainName(domain)
                                 : providerDescriptor?.name}
                         </Typography>
                     ) : (
@@ -168,15 +167,15 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             <Typography className={classes.accountName}>
                                 {wallet?.name ?? providerDescriptor?.name}
                             </Typography>
-                            {domain && Utils?.formatDomainName ? (
-                                <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
+                            {domain && Others?.formatDomainName ? (
+                                <Typography className={classes.domain}>{Others.formatDomainName(domain)}</Typography>
                             ) : null}
                         </>
                     )}
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={account}>
-                        <FormattedAddress address={account} size={4} formatter={Utils?.formatAddress} />
+                        <FormattedAddress address={account} size={4} formatter={Others?.formatAddress} />
                     </Typography>
                     <Link
                         className={classes.link}
@@ -188,7 +187,8 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     </Link>
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(chainId, account) ?? ''}
+                        // @ts-ignore
+                        href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
                         target="_blank"
                         title={t('plugin_wallet_view_on_explorer')}
                         rel="noopener noreferrer">

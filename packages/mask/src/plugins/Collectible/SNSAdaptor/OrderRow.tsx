@@ -2,12 +2,7 @@ import { useMemo } from 'react'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
-import {
-    ChainId,
-    formatBalance,
-    NonFungibleAssetProvider,
-    resolveAddressLinkOnExplorer,
-} from '@masknet/web3-shared-evm'
+import { ChainId, explorerResolver, formatBalance, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { isOne, isZero } from '@masknet/web3-shared-base'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
@@ -91,7 +86,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                             <>
                                 {provider === NonFungibleAssetProvider.OPENSEA ? (
                                     <Link
-                                        href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.payment_token!)}
+                                        href={explorerResolver.addressLink(ChainId.Mainnet, order.payment_token!)}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={classes.tokenLink}>
@@ -129,7 +124,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                         <Typography style={{ display: 'flex' }} className={classes.content}>
                             {provider === NonFungibleAssetProvider.OPENSEA ? (
                                 <Link
-                                    href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.payment_token!)}
+                                    href={explorerResolver.addressLink(ChainId.Mainnet, order.payment_token!)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={classes.tokenLink}>

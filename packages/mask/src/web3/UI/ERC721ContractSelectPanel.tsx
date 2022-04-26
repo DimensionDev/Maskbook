@@ -1,15 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
-import {
-    ChainId,
-    ERC721ContractDetailed,
-    SchemaType,
-    isSameAddress,
-    SocketState,
-    useAccount,
-    useCollections,
-    useERC721ContractBalance,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, CircularProgress, Typography } from '@mui/material'
@@ -18,6 +9,8 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { SelectNftContractDialogEvent, WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
+import { useAccount, useNonFungibleAssets, useNonFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { isSameAddress, NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
 interface StyleProps {
     hasIcon: boolean
@@ -73,27 +66,32 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
 export interface ERC721TokenSelectPanelProps {
     label?: string
     chainId?: ChainId
-    onContractChange: (contract: ERC721ContractDetailed) => void
+    onContractChange: (contract: NonFungibleTokenContract<ChainId, SchemaType>) => void
     onBalanceChange?: (balance: number) => void
-    contract: ERC721ContractDetailed | null | undefined
+    contract: NonFungibleTokenContract<ChainId, SchemaType> | null | undefined
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, onBalanceChange, contract, label, chainId = ChainId.Mainnet } = props
-    const account = useAccount()
-    const { classes } = useStyles({ hasIcon: Boolean(contract?.iconURL) })
-    const { value: balanceFromChain, loading: loadingFromChain } = useERC721ContractBalance(contract?.address, account)
-    const { data: assets, state: loadingBalanceFromRemoteState } = useCollections(account, chainId, !!contract)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { classes } = useStyles({ hasIcon: Boolean(contract?.logoURL) })
+    const { value: balanceFromChain, loading: loadingFromChain } = useNonFungibleTokenBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        contract?.address,
+        {
+            account,
+        },
+    )
+    const { value: assets = [] } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
 
     const convertedAssets = assets.map((x) => ({
         contractDetailed: {
-            type: SchemaType.ERC721,
-            address: x.address,
             chainId,
+            address: x.address,
             name: x.name,
             symbol: x.symbol,
-            baseURI: x.iconURL,
-            iconURL: x.iconURL,
-        } as ERC721ContractDetailed,
+            schema: SchemaType.ERC721,
+            logoURL: x.logoURL,
+        } as NonFungibleTokenContract<ChainId, SchemaType>,
         balance: x.balance,
     }))
 
@@ -105,11 +103,11 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
 
     const balance = balanceFromChain ? Number(balanceFromChain) : balanceFromRemote ?? 0
 
-    useEffect(() => {
-        onBalanceChange?.(balance)
-    }, [onBalanceChange, balance])
+    // useEffect(() => {
+    //     onBalanceChange?.(balance)
+    // }, [onBalanceChange, balance])
 
-    const loading = (loadingFromChain || loadingBalanceFromRemoteState !== SocketState.done) && !balance
+    const loading = loadingFromChain && !balance
 
     // #region select contract
     const [id] = useState(uuid)
@@ -150,7 +148,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
             </div>
             <div className={classNames(classes.wrapper, classes.pointer)} onClick={openDialog}>
                 <div className={classes.tokenWrapper}>
-                    {contract?.iconURL ? <img className={classes.icon} src={contract?.iconURL} /> : null}
+                    {contract?.logoURL ? <img className={classes.icon} src={contract?.logoURL} /> : null}
                     {contract?.name ? (
                         <Typography className={classes.nftName} color="textPrimary">
                             {contract?.name}

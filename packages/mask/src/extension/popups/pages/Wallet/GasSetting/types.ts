@@ -1,9 +1,9 @@
-import type { GasOption } from '@masknet/web3-shared-evm'
+import type { GasOptionType } from '@masknet/web3-shared-base'
 
 export interface GasSettingProps {
     gasLimit?: number | string
     onGasLimitChange?: (newVal: number | string) => void
-    gasOption?: GasOption
-    onGasOptionChange?: (newOption: GasOption) => void
+    gasOptionType?: GasOptionType
+    onGasOptionTypeChange?: (newOptionType: GasOptionType) => void
     onConfirm?: (options: { gasPrice: number; gasLimit: number | string }) => void
 }

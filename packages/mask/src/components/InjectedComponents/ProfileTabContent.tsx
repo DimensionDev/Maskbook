@@ -4,10 +4,11 @@ import {
     PluginId,
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins } from '@masknet/plugin-infra/web3'
+import { useAddressNames, useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useAddressNames } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress } from '@mui/material'
 import { first } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
@@ -47,13 +48,16 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const [hidden, setHidden] = useState(true)
-    const [selectedTab, setSelectedTab] = useState<Plugin.SNSAdaptor.ProfileTab | undefined>()
+    const [selectedTab, setSelectedTab] = useState<Plugin.SNSAdaptor.ProfileTab<ChainId> | undefined>()
 
     const currentIdentity = useLastRecognizedIdentity()
     const identity = useCurrentVisitingIdentity()
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const { value: addressNames = EMPTY_LIST, loading: loadingAddressNames } = useAddressNames(identity)
+    const { value: addressNames = EMPTY_LIST, loading: loadingAddressNames } = useAddressNames(
+        NetworkPluginID.PLUGIN_EVM,
+        identity,
+    )
     const { value: personaList = EMPTY_LIST, loading: loadingPersonaList } = useNextIDBoundByPlatform(
         platform as NextIDPlatform,
         identity.identifier.userId,

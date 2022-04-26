@@ -4,7 +4,7 @@ import { WalletRPC } from '../../../Wallet/messages'
 import { I18NFunction, useI18N } from '../../../../utils'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { formatGweiToWei, GasOptionConfig, useChainId } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import classnames from 'classnames'
 import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
@@ -20,9 +20,11 @@ import {
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
+    NetworkPluginID,
     toFixed,
 } from '@masknet/web3-shared-base'
 import { isDashboardPage } from '@masknet/shared-base'
+import { useChainId } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     option: {
@@ -152,7 +154,7 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
         const { t } = useI18N()
         const isDashboard = isDashboardPage()
         const { classes } = useStyles({ isDashboard })
-        const chainId = useChainId()
+        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
         const [selected, setOption] = useState<number | null>(1)
 

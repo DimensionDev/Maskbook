@@ -1,24 +1,18 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../Wallet/messages'
-import {
-    formatGweiToWei,
-    formatWeiToEther,
-    formatWeiToGwei,
-    GasOptionConfig,
-    useChainId,
-    useNativeTokenDetailed,
-} from '@masknet/web3-shared-evm'
+import { formatGweiToWei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import classnames from 'classnames'
-import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { ExpandMore } from '@mui/icons-material'
 import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { isDashboardPage } from '@masknet/shared-base'
+import { useChainId, useFungibleToken, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     container: {
@@ -117,7 +111,7 @@ interface GasPrior1559SettingsProps {
 
 export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
     ({ onCancel, onSave: onSave_, gasConfig, onSaveSlippage }) => {
-        const chainId = useChainId()
+        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
         const isDashboard = isDashboardPage()
         const { classes } = useStyles({ isDashboard })
         const { t } = useI18N()
@@ -156,8 +150,10 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
             [gasOptions, customGasPrice],
         )
 
-        const { value: nativeToken } = useNativeTokenDetailed()
-        const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
+        const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
+        const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+            chainId: nativeToken?.chainId,
+        })
 
         // #region Confirm function
         const handleConfirm = useCallback(() => {

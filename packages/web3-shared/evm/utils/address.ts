@@ -1,6 +1,6 @@
 import { EthereumAddress } from 'wallet.ts'
-import { compact, castArray, uniq } from 'lodash-unified'
 import { getEnumAsArray } from '@dimensiondev/kit'
+import { currySameAddress, isSameAddress } from '@masknet/web3-shared-base'
 import { getRedPacketConstants, getTokenConstants, ZERO_ADDRESS } from '../constants'
 import { ChainId } from '../types'
 
@@ -8,27 +8,9 @@ export function isEmptyHex(hex?: string) {
     return !hex || ['0x', '0x0'].includes(hex)
 }
 
-export function isSameAddress(a?: string, b?: string) {
-    if (!a || !b) return false
-    return a.toLowerCase() === b.toLowerCase()
-}
-
 export function isValidAddress(address?: string) {
     if (!address) return false
     return EthereumAddress.isValid(address)
-}
-
-export function currySameAddress(addresses: string | string[] = []) {
-    addresses = compact(uniq(castArray(addresses))).map((address) => address.toLowerCase())
-    return (target?: string | { address: string }) => {
-        if (addresses.length === 0 || !target) return false
-        if (typeof target === 'string') {
-            return addresses.includes(target.toLowerCase())
-        } else if (typeof target === 'object' && typeof target.address === 'string') {
-            return addresses.includes(target.address.toLowerCase())
-        }
-        throw new Error('Unsupported `target` address format')
-    }
 }
 
 export const isZeroAddress = currySameAddress(ZERO_ADDRESS)

@@ -11,7 +11,6 @@ import { createPluginHost, createSharedContext } from '../../plugin-infra/host'
 import type { DashboardPluginMessages, DashboardPluginServices } from '@masknet/shared'
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot'
 import { status } from '../../setup.ui'
-import { createSubscriptionFromAsync } from '@masknet/shared-base'
 
 const msg: DashboardPluginMessages = {
     Wallet: WalletMessages,

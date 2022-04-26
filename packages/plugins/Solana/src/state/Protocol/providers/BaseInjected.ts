@@ -1,12 +1,12 @@
 import { delay } from '@dimensiondev/kit'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { isExtensionSiteType } from '@masknet/shared-base'
-import { ChainId, SolProvider } from '@masknet/web3-shared-solana'
+import type { Account } from '@masknet/web3-shared-base'
+import { ChainId, ProviderType, Web3Provider } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types'
 import { BaseProvider } from './Base'
 
 export class BaseInjectedProvider extends BaseProvider implements SolanaProvider {
-    constructor(protected path = ['solana']) {
+    constructor(protected path = ['solana'], protected providerType: ProviderType) {
         super()
     }
 
@@ -21,7 +21,7 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
             result = Reflect.has(result, name)
             if (!result) return null
         }
-        return result as SolProvider
+        return result as Web3Provider
     }
 
     override get ready() {
@@ -40,7 +40,7 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
 
     protected onDisconnect() {
         console.log('DEBUG: onDisconnect')
-        this.emitter.emit('discconect')
+        this.emitter.emit('disconnect', this.providerType)
     }
 
     override async createWeb3Provider(chainId?: ChainId) {
@@ -76,7 +76,7 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
         })
     }
 
-    override async connect(chainId: ChainId): Promise<Web3Plugin.Account<ChainId>> {
+    override async connect(chainId: ChainId): Promise<Account<ChainId>> {
         await this.readyPromise
 
         const provider = await this.createWeb3Provider()

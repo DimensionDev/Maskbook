@@ -1,8 +1,8 @@
-import type { Wallet } from '@masknet/web3-shared-evm'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { makeStyles } from '@masknet/theme'
+import { formatEthereumAddress, Wallet } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
@@ -53,8 +53,8 @@ export interface WalletItemProps {
 
 export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }) => {
     const { classes } = useStyles()
-    const { Utils } = useWeb3State()
-    const { value: domain } = useReverseAddress(wallet.address, NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State()
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
 
     return (
         <ListItem className={classes.item} onClick={onClick} style={{ paddingRight: isSelected ? 10 : 42 }}>
@@ -62,8 +62,8 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
             <ListItemText className={classes.text}>
                 <Typography className={classes.name}>
                     <Typography component="span">{wallet.name}</Typography>
-                    {domain && Utils?.formatDomainName ? (
-                        <Typography component="span">{Utils.formatDomainName(domain)}</Typography>
+                    {domain && Others?.formatDomainName ? (
+                        <Typography component="span">{Others.formatDomainName(domain)}</Typography>
                     ) : null}
                 </Typography>
                 <Typography className={classes.address}>

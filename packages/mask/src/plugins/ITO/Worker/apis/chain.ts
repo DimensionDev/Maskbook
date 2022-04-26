@@ -1,22 +1,16 @@
-import {
-    ChainId,
-    getExplorerConstants,
-    getITOConstants,
-    isSameAddress,
-    FungibleTokenDetailed,
-    SchemaType,
-} from '@masknet/web3-shared-evm'
-import { Interface } from '@ethersproject/abi'
-import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
+import isAfter from 'date-fns/isAfter'
+import isEqual from 'date-fns/isEqual'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, getExplorerConstants, getITOConstants, SchemaType } from '@masknet/web3-shared-evm'
+import { Interface } from '@ethersproject/abi'
+import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import type { PoolFromNetwork, JSON_PayloadFromChain, SwappedTokenType } from '../../types'
 import { MSG_DELIMITER, ITO_CONTRACT_BASE_TIMESTAMP } from '../../constants'
 import { getTransactionReceipt } from '../../../../extension/background-script/EthereumService'
 import { checkAvailability } from './checkAvailability'
-import isAfter from 'date-fns/isAfter'
-import isEqual from 'date-fns/isEqual'
 
 const interFace = new Interface(ITO_ABI)
 

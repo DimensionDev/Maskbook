@@ -9,11 +9,10 @@ import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } 
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../utils'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 import {
     formatBalance,
     TransactionStateType,
-    useAccount,
-    isSameAddress,
     SchemaType,
     FungibleTokenDetailed,
     useFungibleTokenDetailed,
@@ -27,6 +26,7 @@ import { useRefundCallback } from './hooks/useRefundCallback'
 import { WalletMessages } from '../../Wallet/messages'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
+import { useAccount } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -184,10 +184,10 @@ export interface RedPacketInHistoryListProps {
     onSelect: (payload: RedPacketJSONPayload) => void
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
-    const account = useAccount()
     const { history, onSelect } = props
     const { t } = useI18N()
     const { classes } = useStyles()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const {
         value: availability,
@@ -261,7 +261,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     classes={{ icon: classes.icon }}
                     address={historyToken?.address ?? ''}
                     name={historyToken?.name}
-                    logoURI={historyToken?.logoURI}
+                    logoURL={historyToken?.logoURI}
                 />
                 <Box className={classes.content}>
                     <section className={classes.section}>

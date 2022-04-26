@@ -5,7 +5,7 @@ import { defer } from '@dimensiondev/kit'
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
 import QRCodeModal from '@walletconnect/qrcode-modal'
-import { ChainId, EthereumMethodType } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { EVM_Provider } from '../types'
 
@@ -72,7 +72,7 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
 
         if (error) return
 
-        this.emitter.emit('discconect')
+        this.emitter.emit('disconnect', ProviderType.WalletConnect)
     }
 
     private onSessionUpdate(error: Error | null, payload: SessionPayload) {

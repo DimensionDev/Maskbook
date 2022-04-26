@@ -3,16 +3,13 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { ReplaceType } from '../type'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import {
-    EthereumTransactionConfig,
+    Transaction,
     formatGweiToEther,
     formatGweiToWei,
     formatWeiToGwei,
-    getChainIdFromNetworkType,
-    isEIP1559Supported,
-    useNativeTokenDetailed,
-    useNetworkType,
+    chainResolver,
+    networkResolver,
 } from '@masknet/web3-shared-evm'
 import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
@@ -26,8 +23,9 @@ import { isEmpty } from 'lodash-unified'
 import { useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
-import { isPositive, multipliedBy } from '@masknet/web3-shared-base'
+import { isPositive, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
+import { useFungibleToken, useNativeTokenPrice, useNetworkType } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     container: {
@@ -72,14 +70,15 @@ const ReplaceTransaction = memo(() => {
     const defaultGas = transaction?.computedPayload?._tx.gas ?? 0
     const defaultGasPrice = transaction?.computedPayload?._tx.gasPrice ?? 0
 
-    const defaultMaxFeePerGas = (transaction?.computedPayload?._tx as EthereumTransactionConfig).maxFeePerGas ?? 0
-    const defaultMaxPriorityFeePerGas =
-        (transaction?.computedPayload?._tx as EthereumTransactionConfig).maxPriorityFeePerGas ?? 0
+    const defaultMaxFeePerGas = (transaction?.computedPayload?._tx as Transaction).maxFeePerGas ?? 0
+    const defaultMaxPriorityFeePerGas = (transaction?.computedPayload?._tx as Transaction).maxPriorityFeePerGas ?? 0
 
-    const { value: nativeToken } = useNativeTokenDetailed()
-    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
-    const networkType = useNetworkType()
-    const is1559 = isEIP1559Supported(getChainIdFromNetworkType(networkType))
+    const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+        chainId: nativeToken?.chainId,
+    })
+    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    const is1559 = chainResolver.isSupport(networkResolver.networkChainId(networkType), 'EIP1559')
 
     const schema = useMemo(() => {
         return zod.object({

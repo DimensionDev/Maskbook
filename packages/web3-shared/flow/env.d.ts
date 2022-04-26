@@ -8,8 +8,6 @@ declare module '@blocto/fcl' {
     // Definitions by: Louis Guitton <https://github.com/louisguitton/>
     // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-    export as namespace fcl
-
     // CONFIGURATION
     export type Environment = 'local' | 'canarynet' | 'testnet' | 'mainnet'
 
