@@ -4,6 +4,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { PlatformAvatar } from './PlatformAvatar'
 
 import { useI18N } from '../../locales'
+import type { accountType } from '../types'
 
 const useStyles = makeStyles()((theme) => {
     console.log({ theme })
@@ -49,25 +50,15 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface PlatformCardProps extends withClasses<never | 'root'> {
-    avatar?: string
-    nickName?: string
-    platformId?: string
-    isCurrent?: boolean
+    account?: accountType
     openImageSetting: (str: string) => void
     footprintNum?: number
     donationNum?: number
+    isCurrent?: boolean
 }
 
 export function PlatformCard(props: PlatformCardProps) {
-    const {
-        avatar,
-        nickName = 'unknown',
-        platformId = 'unknown',
-        isCurrent = false,
-        openImageSetting,
-        footprintNum,
-        donationNum,
-    } = props
+    const { account, openImageSetting, footprintNum, donationNum, isCurrent } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -76,17 +67,13 @@ export function PlatformCard(props: PlatformCardProps) {
             <Stack height="100%" spacing={1} divider={<Divider className={classes.divider} />}>
                 <div className={classes.flexItem}>
                     <div style={{ display: 'flex' }}>
-                        <PlatformAvatar
-                            networkIcon={avatar}
-                            providerIcon={new URL('../assets/twitter.png', import.meta.url)}
-                            size={36}
-                        />
+                        <PlatformAvatar providerIcon={new URL('../assets/twitter.png', import.meta.url)} size={36} />
                         <div style={{ marginLeft: '20px' }}>
                             <Typography style={{ fontSize: '14px', fontWeight: '700', display: 'flex' }}>
-                                {nickName}
+                                kk
                                 {isCurrent && <Typography className={classes.currentTag}>{t.current()}</Typography>}
                             </Typography>
-                            <Typography>@{platformId}</Typography>
+                            <Typography>@{account?.identity}</Typography>
                         </div>
                     </div>
                 </div>
@@ -94,7 +81,7 @@ export function PlatformCard(props: PlatformCardProps) {
                     <div>
                         <Typography style={{ fontWeight: '700' }}>{t.NFTs()}</Typography>
                         <Typography>
-                            <span style={{ fontWeight: '700' }}>2</span> {t.wallets()}{' '}
+                            <span style={{ fontWeight: '700' }}>{account?.walletList?.NFTs?.length}</span> {t.wallets()}{' '}
                             <span style={{ fontWeight: '700' }}>{0}</span> {t.NFTs()}
                         </Typography>
                     </div>
@@ -104,8 +91,9 @@ export function PlatformCard(props: PlatformCardProps) {
                     <div>
                         <Typography style={{ fontWeight: '700' }}>{t.footprints()}</Typography>
                         <Typography>
-                            <span style={{ fontWeight: '700' }}>5</span> {t.wallets()}{' '}
-                            <span style={{ fontWeight: '700' }}>{footprintNum ?? 0}</span> {t.footprints()}
+                            <span style={{ fontWeight: '700' }}>{account?.walletList?.footprints?.length}</span>{' '}
+                            {t.wallets()} <span style={{ fontWeight: '700' }}>{footprintNum ?? 0}</span>{' '}
+                            {t.footprints()}
                         </Typography>
                     </div>
                     <ArrowForwardIosIcon className={classes.arrowIcon} />
@@ -114,8 +102,8 @@ export function PlatformCard(props: PlatformCardProps) {
                     <div>
                         <Typography style={{ fontWeight: '700' }}>{t.donations()}</Typography>
                         <Typography>
-                            <span style={{ fontWeight: '700' }}>2</span> {t.wallets()}{' '}
-                            <span style={{ fontWeight: '700' }}>{donationNum ?? 0}</span> {t.donations()}
+                            <span style={{ fontWeight: '700' }}>{account?.walletList?.donations?.length}</span>{' '}
+                            {t.wallets()} <span style={{ fontWeight: '700' }}>{donationNum ?? 0}</span> {t.donations()}
                         </Typography>
                     </div>
                     <ArrowForwardIosIcon className={classes.arrowIcon} />

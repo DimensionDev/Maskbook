@@ -10,8 +10,9 @@ import { NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { ImageManagement } from './ImageManagement'
-import WalletSetting from './WalletSetting'
 import { getDonationList, getFootprintList } from '../hooks/useCollectionList'
+import { getWalletList } from '../utils'
+import { getWalletHiddenList } from '../hooks/useHiddenList'
 const useStyles = makeStyles()((theme) => ({
     root: {
         width: 520,
@@ -72,11 +73,6 @@ export interface BuyTokenDialogProps extends withClasses<never | 'root'> {
     onClose(): void
 }
 
-enum BodyViewSteps {
-    main = 'Web3 Profile',
-    image_display = 'Settings',
-}
-
 export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -84,6 +80,7 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     const [title, setTitle] = useState('Web3 Profile')
     const [walletSwitchOpen, setWalletSwitchOpen] = useState(false)
     const [imageManageOpen, setImageManageOpen] = useState(false)
+    const [accountId, setAccountId] = useState<string>()
 
     const persona = useCurrentPersona()
     const currentVisitingProfile = useCurrentVisitingProfile()
@@ -99,17 +96,32 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
         return NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey!)
     }, [currentPersona])
 
-    const wallets = bindings?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum) || []
+    const wallets =
+        bindings?.proofs
+            ?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
+            ?.map((address) => ({
+                address: address?.identity,
+                platform: address?.platform,
+            })) || []
+
+    const accounts = bindings?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Twitter) || []
 
     const { value: donationList } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return getDonationList(wallets?.map((wallet) => wallet?.identity))
+        return getDonationList(wallets?.map((wallet) => wallet?.address))
     }, [wallets?.length])
 
     const { value: footprintList } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return getFootprintList(wallets?.map((wallet) => wallet?.identity))
+        return getFootprintList(wallets?.map((wallet) => wallet?.address))
     }, [wallets?.length])
+
+    const { value: hiddenObj, retry: retryGetWalletHiddenList } = useAsyncRetry(async () => {
+        if (!currentPersona) return
+        return getWalletHiddenList(currentPersona.publicHexKey!)
+    }, [currentPersona])
+
+    const accountList = getWalletList(accounts, wallets, hiddenObj)
 
     return (
         <>
@@ -121,14 +133,16 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
                 onClose={onClose}>
                 <DialogContent className={classes.content}>
                     <Main
-                        openImageSetting={(str: string) => {
+                        openImageSetting={(str: string, accountId: string) => {
                             setTitle(str)
                             setImageManageOpen(true)
+                            setAccountId(accountId)
                         }}
                         persona={currentPersona}
                         currentVisitingProfile={currentVisitingProfile}
                         footprintNumList={footprintList?.map((x) => x?.length)}
                         donationNumList={donationList?.map((x) => x?.length)}
+                        accountList={accountList}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -137,22 +151,16 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
             </InjectedDialog>
             <ImageManagement
                 currentPersona={currentPersona}
-                addresses={wallets}
+                accountList={accountList?.find((x) => x?.identity === accountId)}
                 title={title}
                 onClose={() => setImageManageOpen(false)}
                 open={imageManageOpen}
+                accountId={accountId}
                 footprintList={footprintList}
                 donationList={donationList}
                 currentVisitingProfile={currentVisitingProfile}
-            />
-
-            <WalletSetting
-                wallets={wallets}
-                open={walletSwitchOpen}
-                title={title}
-                onClose={() => setWalletSwitchOpen(false)}
-                currentPersona={currentPersona}
-                currentVisitingProfile={currentVisitingProfile}
+                allWallets={wallets}
+                getWalletHiddenRetry={retryGetWalletHiddenList}
             />
         </>
     )

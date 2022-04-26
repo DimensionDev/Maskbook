@@ -1,30 +1,29 @@
 import { PlatformCard } from './PlatformCard'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-
+import type { accountType } from '../types'
 interface MainProps {
     persona?: PersonaInformation
-    openImageSetting: (str: string) => void
+    openImageSetting: (str: string, accountId: string) => void
     currentVisitingProfile?: IdentityResolved
     footprintNumList?: number[]
     donationNumList?: number[]
+    accountList?: accountType[]
 }
 export function Main(props: MainProps) {
-    const { persona, openImageSetting, currentVisitingProfile, footprintNumList, donationNumList } = props
+    const { persona, openImageSetting, currentVisitingProfile, footprintNumList, donationNumList, accountList } = props
     return (
         <div>
-            {persona?.linkedProfiles?.map((identifier, index) => (
+            {accountList?.map((account, index) => (
                 <PlatformCard
                     openImageSetting={(str: string) => {
-                        openImageSetting(str)
+                        openImageSetting(str, account?.identity)
                     }}
-                    key={identifier?.identifier?.userId}
-                    nickName={identifier?.nickname}
-                    platformId={identifier?.identifier?.userId}
-                    avatar={identifier?.avatar}
-                    isCurrent={identifier?.identifier?.userId === currentVisitingProfile?.identifier?.userId}
+                    key={account?.identity}
+                    account={account}
                     footprintNum={footprintNumList?.[index]}
                     donationNum={donationNumList?.[index]}
+                    isCurrent={account?.identity === currentVisitingProfile?.identifier?.userId}
                 />
             ))}
         </div>

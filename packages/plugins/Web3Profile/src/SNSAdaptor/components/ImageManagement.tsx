@@ -2,14 +2,14 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 // import { Copy } from 'react-feather'
 import { WalletAssetsCard } from './WalletAssets'
-import type { BindingProof, PersonaInformation } from '@masknet/shared-base'
+import type { PersonaInformation } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList'
 import { useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { PersonaAction } from './PersonaAction'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import type { collectionTypes } from '../types'
+import type { accountType, collectionTypes, walletTypes } from '../types'
 import WalletSetting from './WalletSetting'
 
 const useStyles = makeStyles()((theme) => ({
@@ -61,7 +61,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ImageManagementProps extends withClasses<never | 'root'> {
-    addresses?: BindingProof[]
     title: string
     currentPersona?: PersonaInformation
     open: boolean
@@ -69,19 +68,40 @@ export interface ImageManagementProps extends withClasses<never | 'root'> {
     currentVisitingProfile?: IdentityResolved
     footprintList?: collectionTypes[][]
     donationList?: collectionTypes[][]
+    accountList?: accountType
+    accountId?: string
+    allWallets?: walletTypes[]
+    getWalletHiddenRetry: () => void
 }
 
 export function ImageManagement(props: ImageManagementProps) {
     const t = useI18N()
 
     const classes = useStylesExtends(useStyles(), props)
-    const { addresses, title, currentPersona, open, onClose, currentVisitingProfile, donationList, footprintList } =
-        props
+    const {
+        title,
+        currentPersona,
+        open,
+        onClose,
+        accountId,
+        allWallets,
+        currentVisitingProfile,
+        donationList,
+        footprintList,
+        accountList,
+        getWalletHiddenRetry,
+    } = props
     const [settingAddress, setSettingAddress] = useState<string>()
     const [imageListOpen, setImageListOpen] = useState(false)
     const [walletSettingOpen, setWalletSettingOpen] = useState(false)
     const [collectionIndex, setCollectionIndex] = useState(0)
     const collectionList = title === 'Donations' ? donationList : footprintList
+    const addresses =
+        title === 'Donations'
+            ? accountList?.walletList?.donations
+            : title === 'Footprints'
+            ? accountList?.walletList?.footprints
+            : accountList?.walletList?.NFTs
 
     return (
         <InjectedDialog
@@ -99,15 +119,15 @@ export function ImageManagement(props: ImageManagementProps) {
                 <div>
                     {addresses?.map((address, index) => (
                         <WalletAssetsCard
-                            key={address.identity}
+                            key={address.address}
                             onSetting={() => {
-                                setSettingAddress(address.identity)
+                                setSettingAddress(address.address)
                                 setImageListOpen(true)
                                 setCollectionIndex(index)
                             }}
                             type={title}
                             collectionList={collectionList?.[index]}
-                            address={address.identity}
+                            address={address.address}
                         />
                     ))}
                     <ImageListDialog
@@ -119,12 +139,14 @@ export function ImageManagement(props: ImageManagementProps) {
                         collectionList={collectionList?.[collectionIndex]}
                     />
                     <WalletSetting
-                        wallets={addresses}
+                        wallets={allWallets}
+                        accountList={accountList}
                         open={walletSettingOpen}
                         title={title}
+                        accountId={accountId}
                         onClose={() => setWalletSettingOpen(false)}
                         currentPersona={currentPersona}
-                        currentVisitingProfile={currentVisitingProfile}
+                        retryData={getWalletHiddenRetry}
                     />
                 </div>
             </DialogContent>

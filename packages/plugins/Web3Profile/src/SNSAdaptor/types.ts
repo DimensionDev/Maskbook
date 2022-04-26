@@ -1,3 +1,5 @@
+import type { BindingProof } from '@masknet/shared-base'
+
 export interface GeneralAsset {
     platform: string
     identity: string
@@ -36,7 +38,16 @@ export interface Response {
 }
 
 export interface WalletsCollection {
-    NFTs: (string | undefined)[]
-    donations: (string | undefined)[]
-    footprints: (string | undefined)[]
+    NFTs?: walletTypes[]
+    donations?: walletTypes[]
+    footprints?: walletTypes[]
+}
+
+export interface walletTypes {
+    address: string
+    platform?: string
+}
+
+export interface accountType extends BindingProof {
+    walletList: WalletsCollection
 }

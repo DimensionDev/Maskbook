@@ -5,6 +5,7 @@ import { useI18N } from '../../locales'
 import { ExternalLink } from 'react-feather'
 import { useState } from 'react'
 import { formatAddress } from '../utils'
+import type { walletTypes } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -47,9 +48,9 @@ const useStyles = makeStyles()((theme) => ({
 
 interface WalletSwitchProps {
     type: number
-    address: string
+    address: walletTypes
     isPublic: boolean
-    hiddenItems: string | undefined[]
+    hiddenItems?: walletTypes[]
 }
 
 export function WalletSwitch({ type, address, isPublic, hiddenItems }: WalletSwitchProps) {
@@ -64,7 +65,7 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems }: WalletSwi
         if (!v) {
             hiddenItems.push(address)
         } else {
-            const index = hiddenItems?.findIndex((item) => item === address)
+            const index = hiddenItems?.findIndex((item) => item?.address === address?.address)
             if (index !== -1) {
                 hiddenItems.splice(index, 1)
             }
@@ -78,8 +79,8 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems }: WalletSwi
                     <Typography className={classes.accountName}>{getWalletName()}</Typography>
                 </div>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.address} variant="body2" title={address}>
-                        <FormattedAddress address={address} size={4} formatter={formatAddress} />
+                    <Typography className={classes.address} variant="body2" title={address?.address}>
+                        <FormattedAddress address={address?.address} size={4} formatter={formatAddress} />
                     </Typography>
 
                     <Link

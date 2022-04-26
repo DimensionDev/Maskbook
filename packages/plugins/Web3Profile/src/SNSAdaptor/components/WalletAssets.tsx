@@ -80,7 +80,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                             size={20}
                             borderRadius="0"
                         />
-                        <Typography className={classes.walletName}>{domain}</Typography>
+                        <Typography className={classes.walletName}>{domain || address}</Typography>
                         <Link
                             className={classes.link}
                             href={address ? Utils?.resolveAddressLink?.(chainId, address) ?? '' : ''}
