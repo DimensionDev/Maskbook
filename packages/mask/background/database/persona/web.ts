@@ -452,10 +452,42 @@ const fuse = new Fuse([] as ProfileRecord[], {
  */
 export async function updateProfileDB(
     updating: Partial<ProfileRecord> & Pick<ProfileRecord, 'identifier'>,
-    t: ProfileTransaction<'readwrite'>,
+    t: FullPersonaDBTransaction<'readwrite'>,
 ): Promise<void> {
     const old = await t.objectStore('profiles').get(updating.identifier.toText())
     if (!old) throw new Error('Updating a non exists record')
+
+    if (old.linkedPersona && updating.linkedPersona && old.linkedPersona !== updating.linkedPersona) {
+        const oldIdentifier = Identifier.fromString(old.identifier, ProfileIdentifier).unwrap()
+        const oldLinkedPersona = await queryPersonaByProfileDB(oldIdentifier, t)
+
+        if (oldLinkedPersona) {
+            oldLinkedPersona.linkedProfiles.delete(oldIdentifier)
+            await updatePersonaDB(
+                oldLinkedPersona,
+                {
+                    linkedProfiles: 'replace',
+                    explicitUndefinedField: 'ignore',
+                },
+                t,
+            )
+        }
+    }
+
+    if (updating.linkedPersona && old.linkedPersona !== updating.linkedPersona) {
+        const linkedPersona = await queryPersonaDB(updating.linkedPersona, t)
+        if (linkedPersona) {
+            linkedPersona.linkedProfiles.set(updating.identifier, { connectionConfirmState: 'confirmed' })
+            await updatePersonaDB(
+                linkedPersona,
+                {
+                    linkedProfiles: 'replace',
+                    explicitUndefinedField: 'ignore',
+                },
+                t,
+            )
+        }
+    }
 
     const nextRecord: ProfileRecordDB = profileToDB({
         ...profileOutDB(old),
@@ -464,7 +496,7 @@ export async function updateProfileDB(
     await t.objectStore('profiles').put(nextRecord)
     MaskMessages.events.profilesChanged.sendToAll([{ reason: 'update', of: updating.identifier }])
 }
-export async function createOrUpdateProfileDB(rec: ProfileRecord, t: ProfileTransaction<'readwrite'>) {
+export async function createOrUpdateProfileDB(rec: ProfileRecord, t: FullPersonaDBTransaction<'readwrite'>) {
     if (await queryProfileDB(rec.identifier, t)) return updateProfileDB(rec, t)
     else return createProfileDB(rec, t)
 }
