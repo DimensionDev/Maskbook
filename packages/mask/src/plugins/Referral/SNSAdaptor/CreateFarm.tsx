@@ -23,8 +23,7 @@ import { ATTRACE_FEE_PERCENT, NATIVE_TOKEN, META_KEY } from '../constants'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { referralFarmService } from '../Worker/services'
 import { PluginReferralMessages, SelectTokenUpdated } from '../messages'
-import { useRequiredChainId } from '../hooks/useRequiredChainId'
-import { roundValue } from '../helpers'
+import { roundValue, getRequiredChainId } from '../helpers'
 
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -97,7 +96,7 @@ export function CreateFarm(props: PageInterface) {
     const { classes: tabClasses } = useTabStyles()
     const { classes: sharedClasses } = useSharedStyles()
     const currentChainId = useChainId()
-    const requiredChainId = useRequiredChainId(currentChainId)
+    const requiredChainId = getRequiredChainId(currentChainId)
     const web3 = useWeb3()
     const account = useAccount()
     const { attachMetadata, dropMetadata } = useCompositionContext()

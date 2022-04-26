@@ -21,4 +21,4 @@ export const CONFIRMATION_V1_ADDR = '0x28D2C20Dd2A8ad4E299C77Dc722e3bA919BAEE05'
 export const APR = 'N/A'
 
 // set DISABLE_PLUGIN = false to test it
-export const DISABLE_PLUGIN = true
+export const DISABLE_PLUGIN = false

@@ -18,8 +18,7 @@ import { AdjustFarmRewardsInterface, TransactionStatus, PagesType, TabsReferralF
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useRequiredChainId } from '../hooks/useRequiredChainId'
-import { roundValue } from '../helpers'
+import { roundValue, getRequiredChainId } from '../helpers'
 import { APR, ATTRACE_FEE_PERCENT } from '../constants'
 import { referralFarmService, farmsService } from '../Worker/services'
 
@@ -68,7 +67,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     const web3 = useWeb3({ chainId })
     const account = useAccount()
     const { showSnackbar } = useCustomSnackbar()
-    const requiredChainId = useRequiredChainId(chainId)
+    const requiredChainId = getRequiredChainId(chainId)
     const { value: rewardBalance = '0' } = useFungibleTokenBalance(
         rewardToken?.type ?? EthereumTokenType.Native,
         rewardToken?.address ?? '',

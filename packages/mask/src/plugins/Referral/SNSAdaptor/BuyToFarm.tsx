@@ -9,11 +9,10 @@ import { v4 as uuid } from 'uuid'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
-import { useRequiredChainId } from '../hooks/useRequiredChainId'
 import { PluginReferralMessages, SelectTokenUpdated } from '../messages'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { farmsService, proofOfRecommendationService } from '../Worker/services'
-import { toChainAddressEthers, getFarmsRewardData } from '../helpers'
+import { toChainAddressEthers, getFarmsRewardData, getRequiredChainId } from '../helpers'
 import { MASK_REFERRER, SWAP_CHAIN_ID } from '../constants'
 import { TabsCreateFarm, TransactionStatus, PageInterface, PagesType, TabsReferralFarms } from '../types'
 import type { Coin } from '../../Trader/types'
@@ -59,7 +58,7 @@ export function BuyToFarm(props: PageInterface) {
     const { classes: tabClasses } = useTabStyles()
     const { classes: sharedClasses } = useSharedStyles()
     const currentChainId = useChainId()
-    const requiredChainId = useRequiredChainId(currentChainId)
+    const requiredChainId = getRequiredChainId(currentChainId)
     const web3 = useWeb3()
     const account = useAccount()
     const { showSnackbar } = useCustomSnackbar()

@@ -18,8 +18,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
 import { farmsService, entitlementsService, referralFarmService } from '../Worker/services'
-import { toNativeRewardTokenDefn, parseChainAddress, roundValue, makeLeafHash } from '../helpers'
-import { useRequiredChainId } from '../hooks/useRequiredChainId'
+import { toNativeRewardTokenDefn, parseChainAddress, roundValue, makeLeafHash, getRequiredChainId } from '../helpers'
 import {
     Farm,
     EntitlementLog,
@@ -256,7 +255,7 @@ export function MyFarms(props: PageInterface) {
     const { classes } = useStyles()
     const { classes: sharedClasses } = useSharedStyles()
     const currentChainId = useChainId()
-    const requiredChainId = useRequiredChainId(currentChainId)
+    const requiredChainId = getRequiredChainId(currentChainId)
     const account = useAccount()
     const { ERC20 } = useTokenListConstants()
 

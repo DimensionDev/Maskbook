@@ -6,7 +6,7 @@ import { createTypedMessageMetadataReader } from '@masknet/typed-message'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { keccak256 } from 'web3-utils'
 
-import { META_KEY, REFERRAL_FARMS_V1_ADDR, CONFIRMATION_V1_ADDR } from './constants'
+import { META_KEY, REFERRAL_FARMS_V1_ADDR, CONFIRMATION_V1_ADDR, supportedChainIds } from './constants'
 import type {
     ReferralMetaData,
     RewardData,
@@ -170,4 +170,8 @@ export function makeLeafHash(chainId: number, entitlement: Entitlement, rewardTo
 export function roundValue(value: string | number, tokenDecimals?: number) {
     const valueStr = tokenDecimals === 0 ? Math.ceil(Number(value)).toString() : Number(value).toFixed(5)
     return Number.parseFloat(valueStr)
+}
+
+export function getRequiredChainId(currentChainId: ChainId) {
+    return supportedChainIds.includes(currentChainId) ? currentChainId : supportedChainIds[0]
 }

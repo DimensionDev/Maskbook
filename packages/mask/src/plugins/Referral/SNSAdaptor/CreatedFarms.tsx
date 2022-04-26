@@ -16,8 +16,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { farmsService } from '../Worker/services'
 import { FarmDepositChange, FarmExistsEvent, PageInterface, PagesType, TabsReferralFarms } from '../types'
-import { toNativeRewardTokenDefn, parseChainAddress } from '../helpers'
-import { useRequiredChainId } from '../hooks/useRequiredChainId'
+import { toNativeRewardTokenDefn, parseChainAddress, getRequiredChainId } from '../helpers'
 
 import { AccordionFarm } from './shared-ui/AccordionFarm'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -176,7 +175,7 @@ export function CreatedFarms(props: PageInterface) {
     const { classes } = useStyles()
     const { classes: sharedClasses } = useSharedStyles()
     const currentChainId = useChainId()
-    const requiredChainId = useRequiredChainId(currentChainId)
+    const requiredChainId = getRequiredChainId(currentChainId)
     const account = useAccount()
     const { ERC20 } = useTokenListConstants()
     const { value: allTokens = EMPTY_LIST, loading: loadingAllTokens } = useAsync(

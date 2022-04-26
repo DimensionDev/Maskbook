@@ -14,10 +14,9 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { META_KEY } from '../constants'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useRequiredChainId } from '../hooks/useRequiredChainId'
 import { proofOfRecommendationService, farmsService } from '../Worker/services'
 import { PluginReferralMessages, SelectTokenUpdated } from '../messages'
-import { getFarmsRewardData, getSponsoredFarmsForReferredToken } from '../helpers'
+import { getFarmsRewardData, getSponsoredFarmsForReferredToken, getRequiredChainId } from '../helpers'
 import {
     ReferralMetaData,
     TabsCreateFarm,
@@ -76,7 +75,7 @@ const useStyles = makeStyles()((theme) => ({
 export function ReferToFarm(props: PageInterface) {
     const { t } = useI18N()
     const currentChainId = useChainId()
-    const requiredChainId = useRequiredChainId(currentChainId)
+    const requiredChainId = getRequiredChainId(currentChainId)
     const web3 = useWeb3()
     const account = useAccount()
     const { showSnackbar } = useCustomSnackbar()
