@@ -1,5 +1,5 @@
 import { Typography, SnackbarContent, Button, Link } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../social-network'
 import { MaskIcon } from '../resources/MaskIcon'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
@@ -15,11 +15,10 @@ import {
     PluginWrapperMethods,
 } from '@masknet/plugin-infra/content-script'
 import { ProviderByIcon } from '@masknet/icons'
-import type { CSSProperties } from '@emotion/serialize'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     open?: boolean
-    title: string
+    title: JSX.Element | string
     width?: number
     content?: ReactNode
     action?: ReactNode
@@ -28,11 +27,11 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     publisherLink?: string
 }
 
-const useStyles = makeStyles<{ style?: CSSProperties }>()((theme, props) => {
+const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) => {
     return {
         card: {
             background:
-                props?.style?.background ??
+                props?.backgroundGradient ??
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
             margin: theme.spacing(2, 0),
             width: '100%',
@@ -78,11 +77,11 @@ const useStyles = makeStyles<{ style?: CSSProperties }>()((theme, props) => {
             padding: theme.spacing(0),
         },
         button: {
-            backgroundColor: '#07101B',
+            backgroundColor: MaskColorVar.buttonPluginBackground,
             color: 'white',
             width: 254,
             '&,&:hover': {
-                background: '#07101B',
+                background: MaskColorVar.buttonPluginBackground,
             },
         },
     }
@@ -90,7 +89,7 @@ const useStyles = makeStyles<{ style?: CSSProperties }>()((theme, props) => {
 
 export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const { open, title, children, action, publisher, publisherLink, content, wrapperProps } = props
-    const { classes } = useStyles({ style: wrapperProps?.style })
+    const { classes } = useStyles({ backgroundGradient: wrapperProps?.backgroundGradient })
 
     const personaConnectStatus = usePersonaConnectStatus()
     const { t } = useI18N()
@@ -115,7 +114,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const publisherInfo = useMemo(() => {
         if (!publisher) return null
         const main = (
-            <Typography variant="body1" fontSize={14} fontWeight="500" color="#07101B">
+            <Typography variant="body1" fontSize={14} fontWeight="500" color={MaskColorVar.textPluginColor}>
                 {publisher}
             </Typography>
         )
@@ -141,7 +140,12 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
             onClick={(ev) => ev.stopPropagation()}>
             <div className={classes.header}>
                 {wrapperProps?.icon ?? <MaskIcon size={16} />}
-                <Typography sx={{ marginLeft: 0.5 }} variant="body1" fontSize={15} fontWeight="700" color="#07101B">
+                <Typography
+                    sx={{ marginLeft: 0.5 }}
+                    variant="body1"
+                    fontSize={15}
+                    fontWeight="700"
+                    color={MaskColorVar.textPluginColor}>
                     {title ?? t('plugin_default_title')}
                 </Typography>
                 <div className={classes.publish}>{publisherInfo}</div>
@@ -150,7 +154,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                 <div className={classes.body}>{children}</div>
             ) : (
                 <>
-                    <Typography variant="body1" color="#FF3545" sx={{ padding: 1 }} textAlign="center">
+                    <Typography variant="body1" color={MaskColorVar.errorPlugin} sx={{ padding: 1 }} textAlign="center">
                         {content ?? name}
                     </Typography>
                     <div className={classes.action}>{actionButton || action || publisherInfo}</div>

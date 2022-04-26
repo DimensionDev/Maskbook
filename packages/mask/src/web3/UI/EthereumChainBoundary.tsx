@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Box, Typography, Theme } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID, useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
@@ -166,7 +166,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     if (!account)
         return renderBox(
             <>
-                <Typography color="#FF3545">
+                <Typography color={MaskColorVar.errorPlugin}>
                     <span>{t('plugin_wallet_connect_wallet_tip')}</span>
                 </Typography>
                 {!props.hiddenConnectButton ? (
@@ -175,11 +175,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         size="small"
                         sx={{
                             marginTop: 1.5,
-                            backgroundColor: '#07101B',
+                            backgroundColor: MaskColorVar.buttonPluginBackground,
                             width: 254,
                             color: 'white',
                             '&:hover': {
-                                backgroundColor: '#07101B',
+                                backgroundColor: MaskColorVar.buttonPluginBackground,
                             },
                         }}
                         onClick={openSelectProviderDialog}>
@@ -193,7 +193,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     if (!isAllowed)
         return renderBox(
-            <Typography color="#07101B">
+            <Typography color={MaskColorVar.textPluginColor}>
                 <span>
                     {t('plugin_wallet_not_available_on', {
                         network: actualNetwork,
@@ -206,7 +206,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         return renderBox(
             <>
                 {!noSwitchNetworkTip ? (
-                    <Typography color="#FF3545">
+                    <Typography color={MaskColorVar.errorPlugin}>
                         <span>
                             {t('plugin_wallet_not_available_on', {
                                 network: plugin?.name?.fallback ?? 'Unknown Plugin',
@@ -222,7 +222,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         sx={
                             props.switchButtonStyle ?? {
                                 marginTop: 1.5,
-                                backgroundColor: '#07101B',
+                                backgroundColor: MaskColorVar.textPluginColor,
                                 width: 254,
                                 color: 'white',
                             }
@@ -254,7 +254,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     return renderBox(
         <>
             {!noSwitchNetworkTip ? (
-                <Typography color="#FF3545">
+                <Typography color={MaskColorVar.errorPlugin}>
                     <span>
                         {t('plugin_wallet_not_available_on', {
                             network: actualNetwork,
@@ -270,7 +270,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     sx={
                         props.switchButtonStyle ?? {
                             marginTop: 1.5,
-                            backgroundColor: '#07101B',
+                            backgroundColor: MaskColorVar.buttonPluginBackground,
                             width: 254,
                             color: 'white',
                         }

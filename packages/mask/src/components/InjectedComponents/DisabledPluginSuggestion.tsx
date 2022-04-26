@@ -4,17 +4,15 @@ import {
     registeredPlugins,
     usePostInfoDetails,
     Plugin,
-    usePluginI18NField,
     PluginI18NFieldRender,
 } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Services from '../../extension/service'
 import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
-import { useI18N } from '../../utils'
 import { HTMLProps, useCallback } from 'react'
 import { Button } from '@mui/material'
 import { PluginIcon } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
@@ -56,8 +54,6 @@ export function PossiblePluginSuggestionPostInspector() {
     return <PossiblePluginSuggestionUI plugins={matches} />
 }
 export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefinition[] }) {
-    const { t } = useI18N()
-    const t2 = usePluginI18NField()
     const { plugins } = props
     const onClick = useCallback((x: Plugin.DeferredDefinition) => {
         Services.Settings.setPluginMinimalModeEnabled(x.ID, false)
@@ -70,7 +66,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                 <MaskPostExtraInfoWrapper
                     open
                     key={x.ID}
-                    title={t2(x.ID, x.name)}
+                    title={<PluginI18NFieldRender field={x.name} pluginID={x.ID} />}
                     publisher={
                         x.publisher ? <PluginI18NFieldRender pluginID={x.ID} field={x.publisher.name} /> : undefined
                     }
@@ -82,11 +78,11 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                             variant="contained"
                             onClick={() => onClick(x)}
                             sx={{
-                                backgroundColor: '#07101B',
+                                backgroundColor: MaskColorVar.buttonPluginBackground,
                                 color: 'white',
                                 width: '254px',
                                 '&:hover': {
-                                    backgroundColor: '#07101B',
+                                    backgroundColor: MaskColorVar.buttonPluginBackground,
                                 },
                             }}>
                             Enable plugins

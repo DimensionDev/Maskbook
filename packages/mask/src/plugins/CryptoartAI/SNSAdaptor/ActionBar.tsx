@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Box } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -14,10 +14,10 @@ const useStyles = makeStyles()((theme) => {
         button: {
             flex: 1,
             margin: `0 ${theme.spacing(0.5)}`,
-            backgroundColor: '#07101B',
+            backgroundColor: MaskColorVar.buttonPluginBackground,
             color: 'white',
             '&:hover': {
-                backgroundColor: '#07101B',
+                backgroundColor: MaskColorVar.buttonPluginBackground,
             },
         },
     }

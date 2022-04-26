@@ -1,4 +1,4 @@
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, useChainId } from '@masknet/web3-shared-evm'
 import { Card, CardContent, Tabs, Tab, Typography, Paper, CircularProgress, Button, Stack } from '@mui/material'
 import { useState } from 'react'
@@ -34,9 +34,9 @@ const useStyles = makeStyles()((theme) => ({
         color: 'white',
     },
     reload: {
-        backgroundColor: '#07101B',
+        backgroundColor: MaskColorVar.buttonPluginBackground,
         '&:hover': {
-            backgroundColor: '#07101B',
+            backgroundColor: MaskColorVar.buttonPluginBackground,
         },
         color: 'white',
         width: 254,
@@ -66,7 +66,7 @@ export function FurucomboView(props: PoolViewProps) {
     if (error || !value)
         return (
             <>
-                <Typography align="center" color="#FF3545">
+                <Typography align="center" color={MaskColorVar.errorPlugin}>
                     {t('plugin_furucombo_load_failed')}
                 </Typography>
                 <Button variant="contained" className={classes.reload} onClick={retry}>

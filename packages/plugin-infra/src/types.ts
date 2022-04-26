@@ -6,7 +6,6 @@ import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@maskn
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
-import type { CSSProperties } from '@emotion/serialize'
 
 export declare namespace Plugin {
     /**
@@ -341,7 +340,7 @@ export namespace Plugin.SNSAdaptor {
 
     export interface PluginWrapperProps {
         icon?: React.ReactNode
-        style?: CSSProperties
+        backgroundGradient?: string
     }
 
     export interface ProfileIdentity {
