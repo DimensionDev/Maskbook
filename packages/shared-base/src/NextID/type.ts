@@ -4,7 +4,7 @@ export enum NextIDAction {
 }
 
 export enum NextIDPlatform {
-    NextId = 'nextid',
+    NextID = 'nextid',
     Twitter = 'twitter',
     Keybase = 'keybase',
     Ethereum = 'ethereum',
@@ -35,6 +35,10 @@ export interface BindingProof {
     invalid_reason: string
     latest_checked_at: string
     is_valid: boolean
+    last_checked_at: string
+    rawIdx?: number
+    isDefault?: 0 | 1
+    isPublic?: 0 | 1
 }
 
 interface Pagination {
@@ -54,5 +58,17 @@ export interface NextIDStoragePayload {
     uuid: string
     signPayload: string
     createdAt: string
+}
+export interface NextIDStorageInfo<T = unknown> {
+    persona: string
+    proofs: NextIDStorageProofs<T>[]
+}
+export interface NextIDStorageProofs<T> {
+    content: {
+        // pluginId
+        [index: string]: T
+    }
+    identity: string
+    platform: NextIDPlatform
 }
 // #endregion
