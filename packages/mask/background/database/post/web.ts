@@ -2,7 +2,6 @@ import {
     AESCryptoKey,
     AESJsonWebKey,
     ECKeyIdentifier,
-    Identifier,
     IdentifierMap,
     PersonaIdentifier,
     PostIdentifier,
@@ -83,8 +82,8 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                     const old = await store.getAll()
                     await store.clear()
                     for (const each of old) {
-                        const id = Identifier.fromString(each.identifier, PostIdentifier)
-                        if (id.ok) {
+                        const id = PostIdentifier.from(each.identifier)
+                        if (id.some) {
                             const { postId, identifier } = id.val
                             each.identifier = new PostIVIdentifier(
                                 (identifier as ProfileIdentifier).network,
@@ -262,9 +261,9 @@ export async function queryPostsDB(
     t ||= createTransaction(await db(), 'readonly')('post')
     const selected: PostRecord[] = []
     for await (const { value } of t.objectStore('post')) {
-        const idResult = Identifier.fromString(value.identifier, PostIVIdentifier)
-        if (idResult.err) {
-            console.warn(idResult.val.message)
+        const idResult = PostIVIdentifier.from(value.identifier)
+        if (idResult.none) {
+            console.warn('Invalid identifier', value.identifier)
             continue
         }
         const id = idResult.val
@@ -301,7 +300,7 @@ export async function queryPostPagedDB(
         if (!cursor.value.postBy) continue
         if (!options.userIds.includes(cursor.value.postBy.userId)) continue
 
-        const postIdentifier = Identifier.fromString(cursor.value.identifier, PostIVIdentifier).unwrap()
+        const postIdentifier = PostIVIdentifier.from(cursor.value.identifier).unwrap()
         if (postIdentifier.network !== options.network) continue
 
         if (firstRecord && options.after) {
@@ -324,12 +323,12 @@ export async function queryPostPagedDB(
 function postOutDB(db: PostDBRecord): PostRecord {
     const { identifier, foundAt, postBy, recipients, postCryptoKey, encryptBy, interestedMeta, summary, url } = db
     return {
-        identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(),
+        identifier: PostIVIdentifier.from(identifier).unwrap(),
         postBy: ProfileIdentifier.of(postBy?.network, postBy?.userId).unwrapOr(undefined),
         recipients: recipients === true ? 'everyone' : new IdentifierMap(recipients, ProfileIdentifier),
         foundAt: foundAt,
         postCryptoKey: postCryptoKey,
-        encryptBy: encryptBy ? ECKeyIdentifier.from(encryptBy).unwrapOr(undefined) : undefined,
+        encryptBy: ECKeyIdentifier.from(encryptBy).unwrapOr(undefined),
         interestedMeta,
         summary,
         url,

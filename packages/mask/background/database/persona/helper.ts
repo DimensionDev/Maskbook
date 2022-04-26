@@ -112,7 +112,7 @@ export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIden
                 if (of instanceof ProfileIdentifier) {
                     if (!persona.linkedProfiles.has(of)) continue
                 } else if (of instanceof ECKeyIdentifier) {
-                    if (!persona.identifier.equals(of)) continue
+                    if (persona.identifier !== of) continue
                 } else safeUnreachable(of)
             }
             sameCurvePrivateKeys.set(persona.identifier, persona.privateKey)

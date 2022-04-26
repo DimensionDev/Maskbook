@@ -138,7 +138,7 @@ export const PersonaListUI = memo<PersonaListUIProps>(
                             onEdit={() => onEdit(persona)}
                             onLogout={() => onLogout(persona)}
                             identifier={identifier}
-                            isCurrent={currentPersona?.identifier.equals(identifier)}
+                            isCurrent={currentPersona?.identifier === identifier}
                             nickname={nickname}
                         />
                     )

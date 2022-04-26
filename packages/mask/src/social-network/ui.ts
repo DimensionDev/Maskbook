@@ -7,7 +7,6 @@ import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
 import {
     ECKeyIdentifier,
-    Identifier,
     createSubscriptionFromAsync,
     PersonaIdentifier,
     EnhanceableSite,
@@ -218,7 +217,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             const { persona, status }: SetupGuideCrossContextStatus = JSON.parse(id || '{}')
             if (persona && status && !started) {
                 started = true
-                ui.injection.setupWizard?.(signal, Identifier.fromString(persona, ECKeyIdentifier).unwrap())
+                ui.injection.setupWizard?.(signal, ECKeyIdentifier.from(persona).unwrap())
             }
         }
         currentSetupGuideStatus[network].addListener(onStatusUpdate)

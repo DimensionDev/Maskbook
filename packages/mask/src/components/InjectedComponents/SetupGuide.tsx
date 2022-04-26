@@ -9,7 +9,6 @@ import { makeTypedMessageText } from '@masknet/typed-message'
 import {
     PersonaIdentifier,
     ProfileIdentifier,
-    Identifier,
     ECKeyIdentifier,
     NextIDPlatform,
     toBase64,
@@ -104,7 +103,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     // #endregion
 
     const { value: persona_ } = useAsync(async () => {
-        return Services.Identity.queryPersona(Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap())
+        return Services.Identity.queryPersona(ECKeyIdentifier.from(persona.toText()).unwrap())
     }, [persona])
 
     useEffect(() => {

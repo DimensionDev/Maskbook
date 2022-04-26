@@ -12,9 +12,10 @@ const keyAsHex: Record<string, string> = Object.create(null)
  * ec_key:secp256k1/CompressedPoint
  */
 export class ECKeyIdentifier extends Identifier {
-    static override from(x: string): Option<ECKeyIdentifier> {
-        x = String(x)
-        if (x.startsWith('ec_key:')) return Identifier.from(x) as Option<ECKeyIdentifier>
+    static override from(str: string | null | undefined): Option<ECKeyIdentifier> {
+        if (!str) return None
+        str = String(str)
+        if (str.startsWith('ec_key:')) return Identifier.from(str) as Option<ECKeyIdentifier>
         return None
     }
 

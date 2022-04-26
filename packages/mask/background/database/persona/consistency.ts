@@ -1,11 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import {
-    type IdentifierMap,
-    ProfileIdentifier,
-    type PersonaIdentifier,
-    Identifier,
-    ECKeyIdentifier,
-} from '@masknet/shared-base'
+import { type IdentifierMap, ProfileIdentifier, type PersonaIdentifier, ECKeyIdentifier } from '@masknet/shared-base'
 import type { FullPersonaDBTransaction } from './type'
 
 type ReadwriteFullPersonaDBTransaction = FullPersonaDBTransaction<'readwrite'>
@@ -69,8 +63,8 @@ async function* checkFullPersonaDBConsistency(
     t: ReadwriteFullPersonaDBTransaction,
 ): AsyncGenerator<Diagnosis, void, unknown> {
     for await (const persona of t.objectStore('personas')) {
-        const personaID = Identifier.fromString(persona.key, ECKeyIdentifier)
-        if (personaID.err) {
+        const personaID = ECKeyIdentifier.from(persona.key)
+        if (personaID.none) {
             yield { type: Type.Invalid_Persona, invalidPersonaKey: persona.key, _record: persona.value }
             continue
         }
@@ -80,8 +74,8 @@ async function* checkFullPersonaDBConsistency(
     }
 
     for await (const profile of t.objectStore('profiles')) {
-        const profileID = Identifier.fromString(profile.key, ProfileIdentifier)
-        if (profileID.err) {
+        const profileID = ProfileIdentifier.from(profile.key)
+        if (profileID.none) {
             yield { type: Type.Invalid_Profile, invalidProfileKey: profile.key, _record: profile.value }
         } else if (checkRange === 'full check' || checkRange.has(profileID.val)) {
             yield* checkProfileLink(profileID.val, t)
@@ -96,8 +90,8 @@ async function* checkPersonaLink(
     const linkedProfiles = rec?.linkedProfiles
     if (!linkedProfiles) return
     for (const each of linkedProfiles) {
-        const profileID = Identifier.fromString(each[0], ProfileIdentifier)
-        if (profileID.err) {
+        const profileID = ProfileIdentifier.from(each[0])
+        if (profileID.none) {
             yield { type: Type.Invalid_Persona_LinkedProfiles, invalidProfile: each[0], persona: personaID }
             continue
         }

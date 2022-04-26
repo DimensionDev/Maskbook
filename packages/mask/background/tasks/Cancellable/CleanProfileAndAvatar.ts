@@ -1,12 +1,12 @@
 import { consistentPersonaDBWriteAccess } from '../../database/persona/db'
-import { IdentifierMap, Identifier, ProfileIdentifier } from '@masknet/shared-base'
+import { IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
 import { cleanAvatarDB } from '../../database/avatar-cache/cleanup'
 import { hasNativeAPI } from '../../../shared/native-rpc'
 
 async function cleanRelationDB(anotherList: IdentifierMap<ProfileIdentifier, undefined>) {
     await consistentPersonaDBWriteAccess(async (t) => {
         for await (const x of t.objectStore('relations')) {
-            const profileIdentifier = Identifier.fromString(x.value.profile, ProfileIdentifier).unwrap()
+            const profileIdentifier = ProfileIdentifier.from(x.value.profile).unwrap()
             if (anotherList.has(profileIdentifier)) x.delete()
         }
     })
@@ -25,8 +25,8 @@ export default async function cleanProfileWithNoLinkedPersona(signal: AbortSigna
         for await (const x of t.objectStore('profiles')) {
             if (x.value.linkedPersona) continue
             if (expired < x.value.updatedAt) continue
-            const id = Identifier.fromString(x.value.identifier, ProfileIdentifier)
-            if (id.ok) cleanedList.set(id.val, undefined)
+            const id = ProfileIdentifier.from(x.value.identifier)
+            if (id.some) cleanedList.set(id.val, undefined)
             await x.delete()
         }
     }, false)

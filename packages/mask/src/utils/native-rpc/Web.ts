@@ -6,7 +6,7 @@ import type {
     AESJsonWebKey as Native_AESJsonWebKey,
 } from '@masknet/public-api'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
-import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
+import { ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { launchPageSettings } from '../../settings/settings'
 import Services from '../../extension/service'
 import type { Profile } from '../../database'
@@ -17,8 +17,8 @@ import { MaskMessages } from '../messages'
 import type { MobileProfiles } from '../../../background/services/identity/profile/query'
 import type { MobilePersona } from '../../../background/services/identity/persona/mobile'
 
-const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
-const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
+const stringToPersonaIdentifier = (str: string) => ECKeyIdentifier.from(str).unwrap()
+const stringToProfileIdentifier = (str: string) => ProfileIdentifier.from(str).unwrap()
 function personaFormatter(p: MobilePersona) {
     const profiles = {}
 
@@ -189,7 +189,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         const profiles = await Services.Identity.mobile_queryProfilesWithIdentifiers(records.map((x) => x.profile))
 
         return profiles.map((profile) => {
-            const record = records.find((x) => x.profile.equals(profile.identifier))
+            const record = records.find((x) => x.profile === profile.identifier)
             const favor = record?.favor
             const personaIdentifier = record?.linked.toText()
             return profileRelationFormatter(profile, personaIdentifier, favor)

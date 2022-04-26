@@ -118,7 +118,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
         for (const profile of data) {
             if (of) {
                 if (!profile.linkedPersona) continue
-                if (!profile.linkedPersona.equals(of)) continue
+                if (profile.linkedPersona !== of) continue
             }
             profiles.set(profile.identifier, {
                 identifier: profile.identifier,

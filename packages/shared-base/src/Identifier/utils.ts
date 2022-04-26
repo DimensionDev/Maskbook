@@ -16,24 +16,25 @@ import { Identifier } from './base'
  * group: has removed, if you want to add a new identifier for grouping, please choose another prefix.
  * @internal
  */
-function parse(x: string): Option<Identifier> {
-    x = String(x)
-    if (x.startsWith('person:')) {
-        const [network, userID] = x.slice('person:'.length).split('/')
+function parse(str: string | null | undefined): Option<Identifier> {
+    if (!str) return None
+    str = String(str)
+    if (str.startsWith('person:')) {
+        const [network, userID] = str.slice('person:'.length).split('/')
         if (!network || !userID) return None
         return ProfileIdentifier.of(network, userID)
-    } else if (x.startsWith('post:')) {
-        const [postID, ...rest] = x.slice('post:'.length).split('/')
+    } else if (str.startsWith('post:')) {
+        const [postID, ...rest] = str.slice('post:'.length).split('/')
         const inner = parse(rest.join('/'))
         if (inner.none) return None
         if (inner.val instanceof ProfileIdentifier) return Some(new PostIdentifier(inner.val, postID))
         return None
-    } else if (x.startsWith('post_iv:')) {
-        const [network, postIV] = x.slice('post_iv:'.length).split('/')
+    } else if (str.startsWith('post_iv:')) {
+        const [network, postIV] = str.slice('post_iv:'.length).split('/')
         if (!network || !postIV) return None
         return Some(new PostIVIdentifier(network, postIV.replace(/\|/g, '/')))
-    } else if (x.startsWith('ec_key:')) {
-        const [curve, compressedPoint] = x.slice('ec_key:'.length).split('/')
+    } else if (str.startsWith('ec_key:')) {
+        const [curve, compressedPoint] = str.slice('ec_key:'.length).split('/')
         if (curve !== 'secp256k1') return None
         if (!compressedPoint) return None
         return Some(new ECKeyIdentifier(curve, compressedPoint))

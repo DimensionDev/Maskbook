@@ -6,7 +6,6 @@ import { assertPersonaDBConsistency } from './consistency'
 import {
     AESJsonWebKey,
     ECKeyIdentifier,
-    Identifier,
     IdentifierMap,
     PersonaIdentifier,
     ProfileIdentifier,
@@ -250,7 +249,7 @@ export async function queryPersonasDB(
         if (
             (query?.hasPrivateKey && !out.privateKey) ||
             (query?.nameContains && out.nickname !== query.nameContains) ||
-            (query?.identifiers && !query.identifiers.some((x) => x.equals(out.identifier))) ||
+            (query?.identifiers && !query.identifiers.some((x) => x === out.identifier)) ||
             (query?.initialized && out.uninitialized)
         )
             continue
@@ -425,7 +424,7 @@ export async function queryProfilesDB(
         for await (const each of t.objectStore('profiles').iterate()) {
             const out = profileOutDB(each.value)
             if (query.hasLinkedPersona && !out.linkedPersona) continue
-            if (query.identifiers.some((x) => out.identifier.equals(x))) result.push(out)
+            if (query.identifiers.some((x) => out.identifier === x)) result.push(out)
         }
     } else {
         for await (const each of t.objectStore('profiles').iterate()) {
@@ -549,7 +548,7 @@ export async function attachProfileDB(
     const persona = await queryPersonaDB(attachTo, t)
     if (!persona || !profile) return
 
-    if (profile.linkedPersona !== undefined && !profile.linkedPersona.equals(attachTo)) {
+    if (profile.linkedPersona !== undefined && profile.linkedPersona !== attachTo) {
         await detachProfileDB(identifier, t)
     }
 
@@ -721,9 +720,8 @@ function personaRecordToDB(x: PersonaRecord): PersonaRecordDB {
     }
 }
 function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
-    // @ts-ignore
-    delete x.hasPrivateKey
-    const identifier = Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap()
+    Reflect.deleteProperty(x, 'hasPrivateKey' as keyof typeof x)
+    const identifier = ECKeyIdentifier.from(x.identifier).unwrap()
 
     const obj: PersonaRecord = {
         ...x,
@@ -746,8 +744,8 @@ function relationRecordToDB(x: Omit<RelationRecord, 'network'>): RelationRecordD
 function relationRecordOutDB(x: RelationRecordDB): RelationRecord {
     return {
         ...x,
-        profile: Identifier.fromString(x.profile, ProfileIdentifier).unwrap(),
-        linked: Identifier.fromString(x.linked, ECKeyIdentifier).unwrap(),
+        profile: ProfileIdentifier.from(x.profile).unwrap(),
+        linked: ECKeyIdentifier.from(x.linked).unwrap(),
     }
 }
 

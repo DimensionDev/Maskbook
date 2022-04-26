@@ -11,10 +11,10 @@ const id: Record<string, Record<string, ProfileIdentifier>> = Object.create(null
 export class ProfileIdentifier extends Identifier {
     /** @deprecated Avoid using it */
     static unknownToText = 'person:localhost/$unknown'
-    static override from(x: string): Option<ProfileIdentifier> {
-        x = String(x)
-        if (x === this.unknownToText) return None
-        if (x.startsWith('person:')) return Identifier.from(x) as Option<ProfileIdentifier>
+    static override from(str: string | null | undefined): Option<ProfileIdentifier> {
+        str = String(str)
+        if (str === this.unknownToText) return None
+        if (str.startsWith('person:')) return Identifier.from(str) as Option<ProfileIdentifier>
         return None
     }
     static of(network: string | undefined | null, userID: string | undefined | null): Option<ProfileIdentifier> {
