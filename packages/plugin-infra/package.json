@@ -72,7 +72,7 @@
     "use-subscription": "^1.6.0"
   },
   "devDependencies": {
-    "react-i18next": "^11.16.5"
+    "react-i18next": "^11.16.7"
   },
   "peerDependencies": {
     "react-i18next": "^11.15.3"

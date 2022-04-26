@@ -3,7 +3,6 @@ import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-netwo
 import { injectPostCommentsDefault } from '../../social-network/defaults'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
-import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
 import { unreachable } from '@dimensiondev/kit'
 import { pasteImageToCompositionMinds } from './automation/AttachImageToComposition'
@@ -136,12 +135,10 @@ const mindsUI: SocialNetworkUI.Definition = {
         useTheme: useThemeMindsVariant,
     },
     init(signal) {
-        const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
-        InitAutonomousStateFriends(signal, friends, mindsShared.networkIdentifier)
         InitAutonomousStateProfiles(signal, profiles, mindsShared.networkIdentifier)
         enableFbStyleTextPayloadReplace()
-        return { friends, profiles }
+        return { profiles }
     },
     injection: {
         toolbox: injectToolboxHintAtMinds,
