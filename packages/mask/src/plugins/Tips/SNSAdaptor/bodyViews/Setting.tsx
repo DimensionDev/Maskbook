@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface SettingPageProp {
     wallets: BindingProof[]
-    onSwitchChange: (idx: number, v: boolean) => void
+    onSwitchChange(idx: number, v: boolean): void
 }
 
 const SettingPage = memo(({ wallets, onSwitchChange }: SettingPageProp) => {
