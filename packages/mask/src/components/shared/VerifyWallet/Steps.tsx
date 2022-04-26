@@ -11,7 +11,6 @@ import {
 } from './constants'
 import { ImageIcon } from '@masknet/shared'
 import { Button, Typography } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import { useEffect } from 'react'
 import { useI18N } from '../../../utils'
@@ -109,7 +108,6 @@ interface StepsProps {
 export function Steps(props: StepsProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const navigate = useNavigate()
     const {
         changeWallet,
         nickname,
@@ -150,14 +148,6 @@ export function Steps(props: StepsProps) {
             showSnackbar(t('wallet_verify_has_bound'), { variant: 'error' })
         }
     }, [disableConfirm])
-
-    const onCancel = () => {
-        if (notInPop && onCustomCancel !== undefined) {
-            onCustomCancel()
-            return
-        }
-        navigate(-1)
-    }
 
     return (
         <div className={classes.container}>
@@ -204,7 +194,7 @@ export function Steps(props: StepsProps) {
                     size="large"
                     fullWidth
                     color="primary"
-                    onClick={onCancel}>
+                    onClick={onCustomCancel}>
                     {t('cancel')}
                 </Button>
                 <LoadingButton

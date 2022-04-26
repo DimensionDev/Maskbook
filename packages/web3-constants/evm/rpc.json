@@ -53,11 +53,11 @@
         ],
         "Arbitrum": ["https://arb1.arbitrum.io/rpc"],
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
-        "xDai": ["https://rpc.xdaichain.com/"],
+        "xDai": ["https://rpc.gnosischain.com"],
         "Avalanche": ["https://api.avax.network/ext/bc/C/rpc"],
         "Avalanche_Fuji": ["https://api.avax-test.network/ext/bc/C/rpc"],
         "Celo": ["https://forno.celo.org"],
-        "Fantom": ["https://rpc.ftm.tools/"],
+        "Fantom": ["https://rpc.ftm.tools"],
         "Aurora": ["https://mainnet.aurora.dev"],
         "Aurora_Testnet": ["https://testnet.aurora.dev"],
         "Conflux": ["https://evm.confluxrpc.com"]

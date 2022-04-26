@@ -35,14 +35,14 @@ export interface SelectProviderDialogProps {}
 export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [underPluginID, setUnderPluginID] = useState<NetworkPluginID>()
+    const [underPluginID, setUnderPluginID] = useState<NetworkPluginID | undefined>()
     // #region remote controlled dialog logic
     // #endregion
     const { open, closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
         (ev?) => {
             if (!ev?.open) return
-            setUnderPluginID(ev?.pluginID ?? NetworkPluginID.PLUGIN_EVM)
+            setUnderPluginID(ev?.pluginID)
         },
     )
     // #region native app
