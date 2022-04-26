@@ -43,9 +43,7 @@ export async function queryOwnedPersonaInformation(): Promise<PersonaInformation
                 publicHexKey: persona.publicHexKey,
             })
 
-            if (!persona.linkedProfiles.size) {
-                extraPromises.push(toProfileInformation([]).then((x) => map.push(...x)))
-            } else {
+            if (persona.linkedProfiles.size) {
                 const profiles = await queryProfilesDB({ identifiers: [...persona.linkedProfiles.keys()] }, t)
                 // we must not await toProfileInformation cause it is tx of another db.
                 extraPromises.push(toProfileInformation(profiles).then((x) => map.push(...x)))
