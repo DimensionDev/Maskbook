@@ -12,3 +12,8 @@ export const formatPersonaName = (nickname?: string) => {
 
     return `${nickname.substring(0, 12)}...`
 }
+
+export function formatPersonaPublicKey(address: string, size = 0) {
+    if (size === 0 || size >= 20) return address
+    return `${address.substr(0, 2 + size)}...${address.substr(-size)}`
+}

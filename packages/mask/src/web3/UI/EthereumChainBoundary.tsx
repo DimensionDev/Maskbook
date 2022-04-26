@@ -63,7 +63,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const actualNetwork = getChainName(actualChainId)
 
     // if false then it will not guide the user to switch the network
-    const isAllowed = isChainIdValid(expectedChainId, allowTestnet) && !!account && providerType !== ProviderType.Coin98
+    const isAllowed =
+        isChainIdValid(expectedChainId, allowTestnet) &&
+        !!account &&
+        providerType !== ProviderType.Coin98 &&
+        providerType !== ProviderType.Fortmatic
 
     // is the actual chain id matched with the expected one?
     const isChainMatched = actualChainId === expectedChainId

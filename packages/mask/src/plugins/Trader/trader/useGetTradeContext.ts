@@ -41,6 +41,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     GRAPH_API: DEX_TRADE.UNISWAP_V2_THEGRAPH,
                     INIT_CODE_HASH: DEX_TRADE.UNISWAP_V2_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.UNISWAP_V2_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.UNISWAP_V2_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: DEX_TRADE.UNISWAP_V2_FACTORY_ADDRESS,
                     AGAINST_TOKENS: UNISWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
@@ -53,6 +54,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     GRAPH_API: DEX_TRADE.UNISWAP_V3_THEGRAPH,
                     INIT_CODE_HASH: DEX_TRADE.UNISWAP_V3_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.UNISWAP_SWAP_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.UNISWAP_SWAP_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: DEX_TRADE.UNISWAP_V3_FACTORY_ADDRESS,
                     AGAINST_TOKENS: UNISWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
@@ -65,6 +67,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     GRAPH_API: DEX_TRADE.SUSHISWAP_THEGRAPH,
                     INIT_CODE_HASH: DEX_TRADE.SUSHISWAP_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.SUSHISWAP_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.SUSHISWAP_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: DEX_TRADE.SUSHISWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: SUSHISWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
@@ -77,6 +80,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     GRAPH_API: DEX_TRADE.SASHIMISWAP_THEGRAPH,
                     INIT_CODE_HASH: DEX_TRADE.SASHIMISWAP_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.SASHIMISWAP_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.SASHIMISWAP_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: DEX_TRADE.SASHIMISWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: SASHIMISWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
@@ -89,6 +93,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     GRAPH_API: DEX_TRADE.QUICKSWAP_THEGRAPH,
                     INIT_CODE_HASH: DEX_TRADE.QUICKSWAP_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.QUICKSWAP_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.QUICKSWAP_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: DEX_TRADE.QUICKSWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: QUICKSWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
@@ -101,6 +106,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     GRAPH_API: DEX_TRADE.PANCAKESWAP_THEGRAPH,
                     INIT_CODE_HASH: DEX_TRADE.PANCAKESWAP_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.PANCAKESWAP_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.PANCAKESWAP_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: DEX_TRADE.PANCAKESWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: PANCAKESWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
@@ -113,6 +119,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     GRAPH_API: DEX_TRADE.TRADERJOE_THEGRAPH,
                     INIT_CODE_HASH: DEX_TRADE.TRADERJOE_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.TRADERJOE_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.TRADERJOE_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: DEX_TRADE.TRADERJOE_FACTORY_ADDRESS,
                     AGAINST_TOKENS: TRADERJOE_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
@@ -125,6 +132,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     GRAPH_API: DEX_TRADE.PANGOLIN_THEGRAPH,
                     INIT_CODE_HASH: DEX_TRADE.PANGOLIN_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.PANGOLIN_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.PANGOLIN_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: DEX_TRADE.PANGOLIN_FACTORY_ADDRESS,
                     AGAINST_TOKENS: PANGOLIN_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
@@ -137,6 +145,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     GRAPH_API: DEX_TRADE.WANNASWAP_THEGRAPH,
                     INIT_CODE_HASH: DEX_TRADE.WANNASWAP_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.WANNASWAP_ROUTER_V2_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.WANNASWAP_ROUTER_V2_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: DEX_TRADE.WANNASWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: WANNASWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
@@ -149,6 +158,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     GRAPH_API: DEX_TRADE.TRISOLARIS_THEGRAPH,
                     INIT_CODE_HASH: DEX_TRADE.TRISOLARIS_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.TRISOLARIS_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.TRISOLARIS_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: DEX_TRADE.TRISOLARIS_FACTORY_ADDRESS,
                     AGAINST_TOKENS: TRISOLARIS_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
@@ -161,6 +171,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     GRAPH_API: DEX_TRADE.MDEX_THEGRAPH,
                     INIT_CODE_HASH: DEX_TRADE.MDEX_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.MDEX_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.MDEX_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: DEX_TRADE.MDEX_FACTORY_ADDRESS,
                     AGAINST_TOKENS: MDEX_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
@@ -173,27 +184,28 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
             case TradeProvider.BALANCER:
                 return {
                     TYPE: tradeProvider,
-                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.BALANCER_EXCHANGE_PROXY_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.BALANCER_EXCHANGE_PROXY_ADDRESS,
                 }
             case TradeProvider.DODO:
                 return {
                     TYPE: tradeProvider,
-                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.DODO_EXCHANGE_PROXY_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.DODO_EXCHANGE_PROXY_ADDRESS,
                 }
             case TradeProvider.BANCOR:
                 return {
                     TYPE: tradeProvider,
-                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.BANCOR_EXCHANGE_PROXY_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.BANCOR_EXCHANGE_PROXY_ADDRESS,
                 }
             case TradeProvider.OPENOCEAN:
                 return {
                     TYPE: tradeProvider,
-                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.BANCOR_EXCHANGE_PROXY_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.OPENOCEAN_EXCHANGE_PROXY_ADDRESS,
                 }
             case TradeProvider.WOOFI:
                 return {
                     TYPE: tradeProvider,
                     ROUTER_CONTRACT_ADDRESS: DEX_TRADE.WOOFI_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.WOOFI_ROUTER_ADDRESS,
                     AGAINST_TOKENS: WOOFI_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: WOOFI_CUSTOM_BASES,

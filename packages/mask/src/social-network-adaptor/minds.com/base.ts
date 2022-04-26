@@ -1,10 +1,10 @@
-import { MINDS_ID } from '@masknet/shared'
 import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 const origins = ['https://www.minds.com/*', 'https://minds.com/*', 'https://cdn.minds.com/*']
 export const mindsBase: SocialNetwork.Base = {
-    networkIdentifier: MINDS_ID,
+    networkIdentifier: EnhanceableSite.Minds,
     encryptionNetwork: SocialNetworkEnum.Minds,
     declarativePermissions: { origins },
     shouldActivate(location) {
@@ -13,7 +13,7 @@ export const mindsBase: SocialNetwork.Base = {
 }
 
 export function isMinds(ui: SocialNetwork.Base) {
-    return ui.networkIdentifier === MINDS_ID
+    return ui.networkIdentifier === EnhanceableSite.Minds
 }
 
 export const mindsWorkerBase: SocialNetworkWorker.WorkerBase & SocialNetwork.Base = {

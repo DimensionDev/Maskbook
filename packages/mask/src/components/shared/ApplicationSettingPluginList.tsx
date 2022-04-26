@@ -1,5 +1,5 @@
 import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
-import { Fragment, useMemo, useState, useCallback } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -18,7 +18,8 @@ export function setUnlistedApp(app: Application, unlisted: boolean) {
 }
 
 export function getUnlistedApp(app: Application): boolean {
-    return PersistentStorages.ApplicationEntryUnListedList.storage[app.entry.ApplicationEntryID].value
+    const state = PersistentStorages.ApplicationEntryUnListedList.storage[app.entry.ApplicationEntryID]
+    return state.initialized ? state.value : true
 }
 // #endregion
 
@@ -135,10 +136,13 @@ function AppList(props: AppListProps) {
 
     return appList.length > 0 ? (
         <List className={classes.list}>
-            {appList.map((x, i) => (
-                <Fragment key={x.entry.ApplicationEntryID}>
-                    <AppListItem application={x} setUnlistedApp={setUnlistedApp} isListed={isListed} />
-                </Fragment>
+            {appList.map((application, index) => (
+                <AppListItem
+                    key={index}
+                    application={application}
+                    setUnlistedApp={setUnlistedApp}
+                    isListed={isListed}
+                />
             ))}
         </List>
     ) : (

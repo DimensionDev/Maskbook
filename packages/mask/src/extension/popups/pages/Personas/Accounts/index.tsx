@@ -33,7 +33,7 @@ const Accounts = memo(() => {
                 ...profile,
                 platform: target?.platform,
                 identity: target?.identity,
-                is_valid: SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(profile.identifier.network)
+                is_valid: SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(profile.identifier.network as EnhanceableSite)
                     ? target?.is_valid
                     : true,
             }
