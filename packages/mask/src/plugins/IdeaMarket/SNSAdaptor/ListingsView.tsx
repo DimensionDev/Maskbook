@@ -31,7 +31,6 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             height: 350,
-            // width: '100%',
         },
         grid: {
             '& .MuiDataGrid-row:nth-child(odd)': {

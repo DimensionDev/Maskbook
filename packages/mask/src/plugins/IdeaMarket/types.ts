@@ -28,31 +28,18 @@ export interface UserIdeaTokenBalance {
     amount: BigNumber
 }
 
-export enum Period {
-    H1 = '1h',
-    D1 = '1d',
-    W1 = '1w',
-    M1 = '1m',
-    Y1 = '1y',
-}
-
 export interface IdeaTokenPricePoint {
-    price: number
+    price: string
 }
 
 export interface Market {
     id: string
-    name: MarketAvailable
+    name: string
     marketID: number
 }
 
-export enum MarketAvailable {
-    Wikipedia = 'Wikipedia',
-    Minds = 'Minds',
-    Twitter = 'Twitter',
-    Substack = 'Substack',
-    Showtime = 'Showtime',
-    Url = 'URL',
+export enum Markets {
+    Twitter = 1,
 }
 
 export enum IdeaTokenTab {

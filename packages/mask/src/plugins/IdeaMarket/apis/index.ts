@@ -10,6 +10,7 @@ export async function fetchIdeaToken(marketName: string, tokenName: string) {
                 tokenID
                 market {
                     name
+                    marketID
                 }
                 rank
                 latestPricePoint {
@@ -82,6 +83,7 @@ export async function fetchUserTokensBalances(holder: string) {
                     market {
                         id
                         name
+                        marketID
                     }
                     latestPricePoint {
                       price

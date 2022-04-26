@@ -8,10 +8,12 @@ import { useAccount } from '@masknet/web3-shared-evm'
 import { LoadingAnimation } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { leftShift } from '@masknet/web3-shared-base'
-import type { UserIdeaTokenBalance } from '../types'
+import { Markets, UserIdeaTokenBalance } from '../types'
 import { BASE_URL, TWITTER_BASE_URL } from '../constants'
 import { UrlIcon } from '../icons/UrlIcon'
 import { urlWithoutProtocol } from '../utils'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -89,7 +91,7 @@ export function AccountView() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const account = useAccount()
-    const { value: userTokenBalances, error, loading } = useFetchUserTokens(account)
+    const { value: userTokenBalances = EMPTY_LIST, error, loading } = useFetchUserTokens(account)
 
     if (loading) {
         return (
@@ -107,7 +109,7 @@ export function AccountView() {
         )
     }
 
-    if (userTokenBalances?.length === 0) {
+    if (userTokenBalances.length === 0) {
         return (
             <Typography className={classes.empty} color="textPrimary">
                 {t('no_data')}
@@ -143,17 +145,11 @@ export function AccountView() {
                                 balance.token.name.length > 30
                                     ? balance.token.name.slice(0, 30).concat('...')
                                     : balance.token.name
-                            const tokenPrice = Number.parseFloat(
-                                balance.token.latestPricePoint.price.toString(),
-                            ).toFixed(2)
-                            const userTokenBalance = leftShift(balance.amount, 18).toFixed(2, 1)
-                            const balanceValue =
-                                balance.token.latestPricePoint.price * leftShift(balance.amount, 18).toNumber()
-
-                            const totalBalance = (
-                                Number.parseFloat(balanceValue.toString()) -
-                                Number.parseFloat(balanceValue.toString()) * 0.01
-                            ).toFixed(2)
+                            const tokenPrice = new BigNumber(balance.token.latestPricePoint.price)
+                            const userTokenBalance = leftShift(balance.amount, 18)
+                            const balanceValue = tokenPrice.multipliedBy(userTokenBalance)
+                            const platformFee = new BigNumber(0.01)
+                            const perceivedBalanceValue = balanceValue.minus(balanceValue.multipliedBy(platformFee))
 
                             return (
                                 <TableRow className={classes.row} key={balance.id}>
@@ -169,7 +165,7 @@ export function AccountView() {
                                                     <UrlIcon className={classes.url} />
                                                 )}
                                             </div>
-                                            {balance.token.market.id === '0x1' ? (
+                                            {balance.token.market.marketID === Markets.Twitter ? (
                                                 <Grid>
                                                     <Typography title={token.twitter ? token.twitter.name : token.name}>
                                                         {token.twitter?.name} ({token.name})
@@ -209,9 +205,9 @@ export function AccountView() {
                                             )}
                                         </div>
                                     </TableCell>
-                                    <TableCell align="center">&#36;{tokenPrice}</TableCell>
-                                    <TableCell align="center">{userTokenBalance}</TableCell>
-                                    <TableCell align="center">&#36;{totalBalance}</TableCell>
+                                    <TableCell align="center">&#36;{tokenPrice.toFixed(2, 1)}</TableCell>
+                                    <TableCell align="center">{userTokenBalance.toFixed(2, 1)}</TableCell>
+                                    <TableCell align="center">&#36;{perceivedBalanceValue.toFixed(2, 1)}</TableCell>
                                     <TableCell>
                                         <Grid container alignContent="center" justifyContent="center">
                                             <Button

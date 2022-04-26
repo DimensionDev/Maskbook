@@ -991,7 +991,7 @@
     "nft_wallet_change": "Change",
     "nft_button_add_collectible": "Add Collectible",
     "nft_avatar": "NFT Avatar",
-    "plugin_ideamarket_smthg_wrong": "Can't load... something went wrong",
+    "plugin_ideamarket_smthg_wrong": "Failed to load, please retry later.",
     "plugin_ideamarket_tab_listings": "Listings",
     "plugin_ideamarket_tab_account": "Account",
     "plugin_ideamarket_price": "Price",

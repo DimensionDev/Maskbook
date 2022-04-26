@@ -1,8 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { IDEAMARKET_PLUGIN_ID } from './constants'
+import { PluginId } from '@masknet/plugin-infra'
 
 export const base: Plugin.Shared.Definition = {
-    ID: IDEAMARKET_PLUGIN_ID,
+    ID: PluginId.IdeaMarket,
     name: { fallback: 'IdeaMarket' },
     description: {
         fallback: "Ideamarket values the world's information,creating public narratives without third parties.",
@@ -13,6 +13,7 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'beta',
     },
+    experimentalMark: true,
     contribution: {
         postContent: new Set([/(https:\/\/)?ideamarket.io\/?/]),
     },

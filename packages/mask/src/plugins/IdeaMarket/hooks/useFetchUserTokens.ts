@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import { fetchTwitterLookup, fetchUserTokensBalances } from '../apis'
-import type { UserIdeaTokenBalance } from '../types'
+import { Markets, UserIdeaTokenBalance } from '../types'
 
 export function useFetchUserTokens(holder: string) {
     return useAsync(async () => {
@@ -9,7 +9,7 @@ export function useFetchUserTokens(holder: string) {
 
         const tokenBalancesWithTwitterData = await Promise.all(
             tokenBalances.map(async (balance: UserIdeaTokenBalance) => {
-                if (balance.token.market.id !== '0x1') return balance
+                if (balance.token.market.marketID !== Markets.Twitter) return balance
 
                 const twitterLookup = await fetchTwitterLookup(balance.token)
                 const newToken = { ...balance }
