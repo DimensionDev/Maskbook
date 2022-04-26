@@ -15,7 +15,6 @@ export const base: Plugin.Shared.Definition = {
             networks: {},
         },
         target: 'stable',
-        web3: {},
     },
     i18n: languages,
 }
