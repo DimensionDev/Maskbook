@@ -492,7 +492,7 @@ importers:
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       '@metamask/eth-sig-util': 4.0.0
       '@msgpack/msgpack': 2.7.2
-      '@mui/x-data-grid': 5.5.1_abb7793718a9f4c92a8bcd741316e15b
+      '@mui/x-data-grid': 5.5.1_621ab3b6748d201f895a234ab9a66e29
       '@servie/events': 3.0.0
       '@sinonjs/text-encoding': 0.7.1
       '@snapshot-labs/snapshot.js': 0.3.31
@@ -5800,8 +5800,7 @@ packages:
       react-is: 17.0.2
     dev: false
 
-<<<<<<< HEAD
-  /@mui/x-data-grid/5.5.1_abb7793718a9f4c92a8bcd741316e15b:
+  /@mui/x-data-grid/5.5.1_621ab3b6748d201f895a234ab9a66e29:
     resolution: {integrity: sha512-0Lf7P2wr1IoK//4KLsIIps++G6XGMdlxhGxNprM4DhQZRfccX97E3o+t15W4f4YP8IdTKmdD2TjM31xcGF+HxQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -5809,8 +5808,8 @@ packages:
       '@mui/system': ^5.2.8
       react: ^17.0.2
     dependencies:
-      '@mui/material': 5.6.1_b73e98d62f0f3dc6d8f6fd5b5b22b4f0
-      '@mui/system': 5.6.1_a8e4c1d5d6504c83bcced91ba3634c66
+      '@mui/material': 5.6.2_1376d0c029fe63cac75d7e36fe4212f4
+      '@mui/system': 5.6.2_de97b6be3b01c831652fad9cf8222fb8
       '@mui/utils': 5.6.1_react@18.0.0
       clsx: 1.1.1
       prop-types: 15.8.1
@@ -5818,10 +5817,7 @@ packages:
       reselect: 4.1.5
     dev: false
 
-  /@mui/x-date-pickers/5.0.0-alpha.0_e844a6e16fd7d7a28f33fa21f9f2d7df:
-=======
   /@mui/x-date-pickers/5.0.0-alpha.0_d79be74d1141b1f4572a79fd57afdc07:
->>>>>>> 026e87204c13219dbcb0059b40b2cf093705339d
     resolution: {integrity: sha512-JTzTaNSWbxNi8KDUJjHCH6im0YlIEv88gPoKhGm7s6xCGT1q6FtMp/oQ40nhfwrJ73nkM5G1JXRIzI/yfsHXQQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:

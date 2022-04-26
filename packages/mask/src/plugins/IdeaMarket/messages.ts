@@ -1,5 +1,4 @@
-import { createPluginMessage, createPluginRPC, PluginMessageEmitter } from '@masknet/plugin-infra'
-import { IDEAMARKET_PLUGIN_ID } from './constants'
+import { createPluginMessage, createPluginRPC, PluginMessageEmitter, PluginId } from '@masknet/plugin-infra'
 
 export interface IdeaMarketMessages {
     rpc: unknown
@@ -7,9 +6,9 @@ export interface IdeaMarketMessages {
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
-const PluginIdeaMarketMessages: PluginMessageEmitter<IdeaMarketMessages> = createPluginMessage(IDEAMARKET_PLUGIN_ID)
+const PluginIdeaMarketMessages: PluginMessageEmitter<IdeaMarketMessages> = createPluginMessage(PluginId.IdeaMarket)
 export const PluginIdeaMarketRPC = createPluginRPC(
-    IDEAMARKET_PLUGIN_ID,
+    PluginId.IdeaMarket,
     () => import('./services'),
     PluginIdeaMarketMessages.rpc,
 )
