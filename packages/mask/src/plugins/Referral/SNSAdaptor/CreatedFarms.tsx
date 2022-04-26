@@ -11,6 +11,7 @@ import { formatUnits } from '@ethersproject/units'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Grid, Typography, CircularProgress, Box, Button } from '@mui/material'
 import { TokenList } from '@masknet/web3-providers'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
 import { farmsService } from '../Worker/services'
@@ -178,21 +179,21 @@ export function CreatedFarms(props: PageInterface) {
     const requiredChainId = useRequiredChainId(currentChainId)
     const account = useAccount()
     const { ERC20 } = useTokenListConstants()
-    const { value: allTokens = [], loading: loadingAllTokens } = useAsync(
+    const { value: allTokens = EMPTY_LIST, loading: loadingAllTokens } = useAsync(
         async () =>
             !ERC20 || ERC20.length === 0 ? [] : TokenList.fetchERC20TokensFromTokenLists(ERC20, currentChainId),
-        [currentChainId, ERC20?.sort().join()],
+        [currentChainId, ERC20],
     )
     const { value: nativeToken } = useNativeTokenDetailed()
 
     // fetch my farms
-    const { value: myFarms = [], loading: loadingMyFarms } = useAsync(
+    const { value: myFarms = EMPTY_LIST, loading: loadingMyFarms } = useAsync(
         async () => farmsService.getMyFarms(account, currentChainId),
         [currentChainId, account],
     )
 
     // fetch all deposits
-    const { value: farmsDeposits = [], loading: loadingFarmsDeposits } = useAsync(
+    const { value: farmsDeposits = EMPTY_LIST, loading: loadingFarmsDeposits } = useAsync(
         async () => farmsService.getFarmsDeposits(currentChainId),
         [currentChainId],
     )

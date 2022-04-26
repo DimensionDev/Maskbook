@@ -113,7 +113,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
             totalFarmRewardNum,
             Number(dailyFarmReward),
         )
-    }, [web3, account, chainId, farm, referredToken, rewardToken, totalFarmReward, dailyFarmReward])
+    }, [web3, account, chainId, referredToken, rewardToken, totalFarmReward, dailyFarmReward])
 
     const onClickAdjustRewards = useCallback(() => {
         if (totalFarmReward && Number(totalFarmReward) > 0) {
@@ -121,7 +121,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
         } else {
             onAdjustFarmReward()
         }
-    }, [totalFarmReward, dailyFarmReward])
+    }, [totalFarmReward])
 
     const onOpenDepositDialog = useCallback(() => {
         props.continue(
@@ -135,13 +135,13 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                         totalFarmReward,
                         token: rewardToken,
                         attraceFee,
-                        requiredChainId: requiredChainId,
+                        requiredChainId,
                         onDeposit: onAdjustFarmReward,
                     },
                 },
             },
         )
-    }, [props, attraceFee, totalFarmReward, rewardToken, requiredChainId])
+    }, [props, attraceFee, totalFarmReward, rewardToken, requiredChainId, onAdjustFarmReward])
 
     const getTransactionTitles = useCallback(
         (totalFarmReward: number, dailyFarmReward: number, attraceFee: number, rewardToken?: FungibleTokenDetailed) => {
@@ -210,14 +210,14 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                 continue: () => {},
             },
         })
-    }, [props, farm, rewardToken, referredToken])
+    }, [props?.onChangePage, farm, rewardToken, referredToken])
 
     const onErrorDeposit = useCallback(
         (error?: string) => {
             error && showSnackbar(error, { variant: 'error' })
             onChangePageToAdjustRewards()
         },
-        [props, farm, rewardToken, referredToken],
+        [props?.onChangePage, showSnackbar, onChangePageToAdjustRewards],
     )
 
     const onConfirmedAdjustFarm = useCallback(
@@ -237,7 +237,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                 },
             })
         },
-        [props],
+        [props?.onChangePage, t, onChangePageToAdjustRewards],
     )
 
     const farmMetaState = farm?.farmHash ? farmsMetaState?.get(farm.farmHash) : undefined
@@ -269,27 +269,11 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                     </Grid>
                     <Grid item xs={4} className={classes.valueCol}>
                         {t('plugin_referral_daily_farm_reward')}
-                        <span>
-                            {rewardData ? (
-                                <>
-                                    {rewardData.dailyReward} {rewardToken?.symbol ?? '-'}
-                                </>
-                            ) : (
-                                '-'
-                            )}
-                        </span>
+                        <span>{rewardData ? `${rewardData.dailyReward} ${rewardToken?.symbol ?? '-'}` : '-'}</span>
                     </Grid>
                     <Grid item xs={4} className={classes.valueCol}>
                         {t('plugin_referral_total_farm_rewards')}
-                        <span>
-                            {rewardData ? (
-                                <>
-                                    {rewardData.totalReward} {rewardToken?.symbol ?? '-'}
-                                </>
-                            ) : (
-                                '-'
-                            )}
-                        </span>
+                        <span> {rewardData ? `${rewardData.totalReward} ${rewardToken?.symbol ?? '-'}` : '-'}</span>
                     </Grid>
                 </Grid>
                 <Grid item xs={6} display="flex">

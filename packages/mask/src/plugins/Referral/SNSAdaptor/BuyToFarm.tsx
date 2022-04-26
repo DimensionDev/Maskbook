@@ -6,6 +6,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { v4 as uuid } from 'uuid'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
 import { useRequiredChainId } from '../hooks/useRequiredChainId'
@@ -64,7 +65,7 @@ export function BuyToFarm(props: PageInterface) {
     const { showSnackbar } = useCustomSnackbar()
     const { ERC20 } = useTokenListConstants()
 
-    const [tab, setTab] = useState<string>(TabsCreateFarm.NEW)
+    const [tab, setTab] = useState(TabsCreateFarm.NEW)
     const [id] = useState(uuid())
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
@@ -80,7 +81,7 @@ export function BuyToFarm(props: PageInterface) {
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
     // fetch all farms
-    const { value: farms = [] } = useAsync(
+    const { value: farms = EMPTY_LIST } = useAsync(
         async () => farmsService.getAllFarms(currentChainId, ERC20),
         [ERC20, currentChainId],
     )
@@ -92,7 +93,7 @@ export function BuyToFarm(props: PageInterface) {
             title: t('plugin_referral_select_a_token_to_buy_and_hold'),
             onlyFarmTokens: true,
         })
-    }, [id, setToken])
+    }, [id])
 
     const swapToken = useCallback(() => {
         if (!token) {
@@ -126,14 +127,14 @@ export function BuyToFarm(props: PageInterface) {
                 },
             },
         })
-    }, [props])
+    }, [props?.onChangePage, t])
 
     const onError = useCallback(
         (error?: string) => {
             showSnackbar(error || t('go_wrong'), { variant: 'error' })
             props?.onChangePage?.(PagesType.BUY_TO_FARM, `${TabsReferralFarms.TOKENS}: ${PagesType.BUY_TO_FARM}`)
         },
-        [props],
+        [props?.onChangePage, t, showSnackbar],
     )
 
     const onClickBuyToFarm = useCallback(async () => {
@@ -157,7 +158,7 @@ export function BuyToFarm(props: PageInterface) {
 
     const referredTokenFarms = token
         ? farms.filter((farm) => farm.referredTokenDefn === toChainAddressEthers(token.chainId, token.address))
-        : []
+        : EMPTY_LIST
     const rewardData = getFarmsRewardData(referredTokenFarms)
 
     return (

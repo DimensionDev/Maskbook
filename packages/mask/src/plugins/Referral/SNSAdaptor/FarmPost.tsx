@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useAsync } from 'react-use'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useWeb3, useTokenListConstants } from '@masknet/web3-shared-evm'
@@ -53,7 +53,7 @@ export function FarmPost(props: FarmPostProps) {
     const { showSnackbar } = useCustomSnackbar()
     const { ERC20 } = useTokenListConstants()
 
-    const { value: farms = [] } = useAsync(
+    const { value: farms = EMPTY_LIST } = useAsync(
         async () => (chainId ? farmsService.getAllFarms(chainId, ERC20) : []),
         [ERC20, chainId],
     )
@@ -67,12 +67,9 @@ export function FarmPost(props: FarmPostProps) {
         [],
     )
 
-    const onError = useCallback(
-        (error?: string) => {
-            showSnackbar(error || t('go_wrong'), { variant: 'error' })
-        },
-        [props],
-    )
+    const onError = useCallback((error?: string) => {
+        showSnackbar(error || t('go_wrong'), { variant: 'error' })
+    }, [])
 
     const onClickReferToFarm = async () => {
         try {

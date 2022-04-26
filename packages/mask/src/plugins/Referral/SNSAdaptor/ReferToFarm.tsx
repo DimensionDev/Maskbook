@@ -9,6 +9,7 @@ import { blue } from '@mui/material/colors'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
 import { META_KEY } from '../constants'
@@ -91,7 +92,7 @@ export function ReferToFarm(props: PageInterface) {
     const { classes: sharedClasses } = useSharedStyles()
     const { ERC20 } = useTokenListConstants()
 
-    const [tab, setTab] = useState<string>(TabsCreateFarm.NEW)
+    const [tab, setTab] = useState(TabsCreateFarm.NEW)
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
@@ -106,7 +107,7 @@ export function ReferToFarm(props: PageInterface) {
     )
 
     // fetch all farms
-    const { value: farms = [], loading: loadingAllFarms } = useAsync(
+    const { value: farms = EMPTY_LIST, loading: loadingAllFarms } = useAsync(
         async () => farmsService.getAllFarms(currentChainId, ERC20),
         [currentChainId, ERC20],
     )
@@ -132,7 +133,7 @@ export function ReferToFarm(props: PageInterface) {
                 },
             },
         })
-    }, [props])
+    }, [props?.onChangePage, t])
 
     const insertData = useCallback(
         (selectedReferralData: ReferralMetaData) => {
@@ -152,7 +153,7 @@ export function ReferToFarm(props: PageInterface) {
             showSnackbar(error || t('go_wrong'), { variant: 'error' })
             props?.onChangePage?.(PagesType.REFER_TO_FARM, `${TabsReferralFarms.TOKENS}: ${PagesType.REFER_TO_FARM}`)
         },
-        [props],
+        [props?.onChangePage, t, showSnackbar],
     )
 
     const onClickReferFarm = async () => {

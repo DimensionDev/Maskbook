@@ -108,7 +108,7 @@ export function CreateFarm(props: PageInterface) {
         WalletMessages.events.walletStatusDialogUpdated,
     )
 
-    const [tab, setTab] = useState<string>(TabsCreateFarm.NEW)
+    const [tab, setTab] = useState(TabsCreateFarm.NEW)
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const { value: rewardBalance = '0' } = useFungibleTokenBalance(
         token?.type ?? EthereumTokenType.Native,
@@ -223,7 +223,7 @@ export function CreateFarm(props: PageInterface) {
                         totalFarmReward,
                         token,
                         attraceFee,
-                        requiredChainId: requiredChainId,
+                        requiredChainId,
                         onDeposit: onDeposit,
                     },
                 },
@@ -269,7 +269,7 @@ export function CreateFarm(props: PageInterface) {
     )
     const onErrorDeposit = useCallback(
         () => props?.onChangePage?.(PagesType.CREATE_FARM, TabsReferralFarms.TOKENS + ': ' + PagesType.CREATE_FARM),
-        [props],
+        [props?.onChangePage],
     )
 
     const balance = formatBalance(rewardBalance ?? '', token?.decimals, 6)

@@ -14,6 +14,7 @@ import {
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { TokenList } from '@masknet/web3-providers'
 import { Grid, Typography, CircularProgress, Button, Box } from '@mui/material'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
 import { farmsService, entitlementsService, referralFarmService } from '../Worker/services'
@@ -157,7 +158,7 @@ function FarmsList({ entitlements, allTokens, farms, rewardsHarvested, ...props 
                 },
             })
         },
-        [props],
+        [props?.onChangePage, t],
     )
 
     const onErrorHarvestRewards = useCallback(
@@ -165,7 +166,7 @@ function FarmsList({ entitlements, allTokens, farms, rewardsHarvested, ...props 
             showSnackbar(error || t('go_wrong'), { variant: 'error' })
             props?.onChangePage?.(pageType, TabsReferralFarms.TOKENS + ': ' + pageType)
         },
-        [props],
+        [props?.onChangePage, t, showSnackbar],
     )
 
     const onClickHarvestRewards = useCallback(
@@ -259,26 +260,26 @@ export function MyFarms(props: PageInterface) {
     const account = useAccount()
     const { ERC20 } = useTokenListConstants()
 
-    const { value: entitlements = [], loading: loadingEntitlements } = useAsync(
+    const { value: entitlements = EMPTY_LIST, loading: loadingEntitlements } = useAsync(
         async () => (account ? entitlementsService.getAccountEntitlements(account) : []),
         [account],
     )
-    const { value: rewardsHarvested = [], loading: loadingRewardsHarvested } = useAsync(
+    const { value: rewardsHarvested = EMPTY_LIST, loading: loadingRewardsHarvested } = useAsync(
         async () => (account ? farmsService.getMyRewardsHarvested(account, currentChainId) : []),
         [account, currentChainId],
     )
 
     // fetch farm for referred tokens
-    const { value: farms = [], loading: loadingFarms } = useAsync(
+    const { value: farms = EMPTY_LIST, loading: loadingFarms } = useAsync(
         async () => farmsService.getAllFarms(currentChainId),
         [currentChainId],
     )
 
     // fetch tokens data
-    const { value: allTokens = [], loading: loadingAllTokens } = useAsync(
+    const { value: allTokens = EMPTY_LIST, loading: loadingAllTokens } = useAsync(
         async () =>
             !ERC20 || ERC20.length === 0 ? [] : TokenList.fetchERC20TokensFromTokenLists(ERC20, currentChainId),
-        [currentChainId, ERC20?.sort().join()],
+        [currentChainId, ERC20],
     )
 
     if (currentChainId !== requiredChainId) {

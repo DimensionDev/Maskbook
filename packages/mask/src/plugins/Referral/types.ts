@@ -271,20 +271,6 @@ export enum RpcMethod {
     oracle_sendProofOfRecommendationOrigin = 'oracle_sendProofOfRecommendationOrigin',
     oracle_sendProofOfRecommendation = 'oracle_sendProofOfRecommendation',
 }
-export type JsonRpcRequestId = number | string
-export interface JsonRpcResponse {
-    jsonrpc: '2.0'
-    // Has a value for successful requests, might have a value for failed requests
-    id: JsonRpcRequestId | null
-    // If result has a value, it indicates success
-    result?: any
-    // If error has a value, indicates failure
-    error?: {
-        code: number // Json Rpc compatible code
-        message: string
-        data?: any
-    }
-}
 
 // entitlements
 export interface Entitlement {

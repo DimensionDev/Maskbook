@@ -1,6 +1,6 @@
 import { monotonicFactory } from 'ulid'
 
-import type { JsonRpcResponse } from '../../types'
+import type { JsonRpcResponse } from 'web3-core-helpers'
 
 const ORACLE_URL = 'https://oracle-4470-dub.attrace.com'
 

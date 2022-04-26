@@ -4,6 +4,7 @@ import { delay } from '@dimensiondev/kit'
 import { FungibleTokenDetailed, useChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogContent } from '@mui/material'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { PluginReferralMessages } from '../messages'
 import { NATIVE_TOKEN } from '../constants'
@@ -28,7 +29,7 @@ export function SelectToken() {
         setTitle(ev.title)
         setOnlyFarmTokens(!!ev.onlyFarmTokens)
     })
-    const { value: farms = [], loading: loadingAllFarms } = useAsync(
+    const { value: farms = EMPTY_LIST, loading: loadingAllFarms } = useAsync(
         async () => farmsService.getAllFarms(currentChainId),
         [currentChainId],
     )
