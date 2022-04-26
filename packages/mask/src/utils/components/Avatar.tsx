@@ -1,5 +1,5 @@
 import MuiAvatar, { AvatarProps } from '@mui/material/Avatar/Avatar'
-import type { Profile } from '../../database'
+import type { ProfileInformation as Profile } from '@masknet/shared-base'
 import { useTheme } from '@mui/material'
 
 export function mapContactAvatarColor(string: string, theme: 'light' | 'dark') {

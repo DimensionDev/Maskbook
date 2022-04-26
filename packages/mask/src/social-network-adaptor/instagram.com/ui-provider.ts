@@ -33,11 +33,10 @@ const define: SocialNetworkUI.Definition = {
     configuration: {},
     customization: {},
     init(signal) {
-        const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
         InitAutonomousStateProfiles(signal, profiles, instagramBase.networkIdentifier)
         // No need to init cause this network is not going to support those features now.
-        return { friends, profiles }
+        return { profiles }
     },
     injection: {
         setupWizard: createTaskStartSetupGuideDefault(),
