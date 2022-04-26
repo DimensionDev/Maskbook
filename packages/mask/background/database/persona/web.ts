@@ -448,10 +448,27 @@ const fuse = new Fuse([] as ProfileRecord[], {
  */
 export async function updateProfileDB(
     updating: Partial<ProfileRecord> & Pick<ProfileRecord, 'identifier'>,
-    t: ProfileTransaction<'readwrite'>,
+    t: FullPersonaDBTransaction<'readwrite'>,
 ): Promise<void> {
     const old = await t.objectStore('profiles').get(updating.identifier.toText())
     if (!old) throw new Error('Updating a non exists record')
+
+    if (old.linkedPersona && updating.linkedPersona && old.linkedPersona !== updating.linkedPersona) {
+        const ide = Identifier.fromString(old.identifier, ProfileIdentifier).unwrap()
+        const oldLinkedPersona = await queryPersonaByProfileDB(ide, t)
+
+        if (oldLinkedPersona) {
+            oldLinkedPersona.linkedProfiles.delete(ide)
+            await updatePersonaDB(
+                oldLinkedPersona,
+                {
+                    linkedProfiles: 'replace',
+                    explicitUndefinedField: 'ignore',
+                },
+                t,
+            )
+        }
+    }
 
     const nextRecord: ProfileRecordDB = profileToDB({
         ...profileOutDB(old),
@@ -459,7 +476,7 @@ export async function updateProfileDB(
     })
     await t.objectStore('profiles').put(nextRecord)
 }
-export async function createOrUpdateProfileDB(rec: ProfileRecord, t: ProfileTransaction<'readwrite'>) {
+export async function createOrUpdateProfileDB(rec: ProfileRecord, t: FullPersonaDBTransaction<'readwrite'>) {
     if (await queryProfileDB(rec.identifier, t)) return updateProfileDB(rec, t)
     else return createProfileDB(rec, t)
 }
