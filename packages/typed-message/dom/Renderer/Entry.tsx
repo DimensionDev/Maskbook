@@ -1,9 +1,9 @@
 import { useContext } from 'react'
-import type { TypedMessage } from '../../base'
-import { TypedMessageUnknownRenderer as TypedMessageUnknownRender } from './Core/Unknown'
-import { RegistryContext } from './utils/RegistryContext'
-import { RenderFragmentsContext } from './utils/RenderFragments'
-import { useTextResize } from './utils/TextResizerContext'
+import type { TypedMessage } from '../../base/index.js'
+import { TypedMessageUnknownRenderer as TypedMessageUnknownRender } from './Core/Unknown.js'
+import { RegistryContext } from './utils/RegistryContext.js'
+import { RenderFragmentsContext } from './utils/RenderFragments.js'
+import { useTextResize } from './utils/TextResizerContext.js'
 export interface RenderProps {
     message: TypedMessage
 }

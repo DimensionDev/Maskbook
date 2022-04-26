@@ -9,7 +9,7 @@ import { injectPostInspectorInstagram } from './injection/post-inspector'
 import { CurrentVisitingIdentityProviderInstagram } from './collecting/identity'
 import { injectProfileNFTAvatarInInstagram } from './injection/NFT/ProfileNFTAvatar'
 import { injectNFTAvatarInInstagram } from './injection/NFT/NFTAvatarInInstagram'
-import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
+import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from './injection/NFT/NFTAvatarEditProfile'
 import { injectUserNFTAvatarAtInstagram } from './injection/NFT/NFTAvatarInTimeline'
 import { injectProfileTabAtInstagram } from './injection/ProfileTab'
 import { injectProfileTabContentAtInstagram } from './injection/ProfileTabContent'
@@ -30,18 +30,13 @@ const define: SocialNetworkUI.Definition = {
         currentVisitingIdentityProvider: CurrentVisitingIdentityProviderInstagram,
         postsProvider: PostProviderInstagram,
     },
-    configuration: {
-        setupWizard: {
-            disableSayHello: true,
-        },
-    },
+    configuration: {},
     customization: {},
     init(signal) {
-        const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
         InitAutonomousStateProfiles(signal, profiles, instagramBase.networkIdentifier)
         // No need to init cause this network is not going to support those features now.
-        return { friends, profiles }
+        return { profiles }
     },
     injection: {
         setupWizard: createTaskStartSetupGuideDefault(),
@@ -52,6 +47,7 @@ const define: SocialNetworkUI.Definition = {
         userAvatar: injectUserNFTAvatarAtInstagram,
         profileTab: injectProfileTabAtInstagram,
         profileTabContent: injectProfileTabContentAtInstagram,
+        openNFTAvatarSettingDialog,
         /* newPostComposition: {
             start: newPostCompositionInstagram,
             supportedInputTypes: { text: true, image: true },

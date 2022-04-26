@@ -1,5 +1,5 @@
 export interface Token {
-    tokenId: BigInt
+    tokenId: bigint
     contract: Contract
     project: Project
 }

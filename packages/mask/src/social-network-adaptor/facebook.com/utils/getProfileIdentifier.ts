@@ -1,6 +1,5 @@
-import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
+import { ProfileIdentifier, EnhanceableSite, ProfileInformation } from '@masknet/shared-base'
 import Services from '../../../extension/service'
-import type { Profile } from '../../../database'
 import { getCurrentIdentifier } from '../../utils'
 import { searchUserIdOnMobileSelector } from './selector'
 
@@ -23,7 +22,7 @@ type link = HTMLAnchorElement | null | undefined
 export function getProfileIdentifierAtFacebook(
     links: link[] | link,
     allowCollectInfo?: boolean,
-): Pick<Profile, 'identifier' | 'nickname' | 'avatar'> {
+): Pick<ProfileInformation, 'identifier' | 'nickname' | 'avatar'> {
     const unknown = { identifier: ProfileIdentifier.unknown, avatar: undefined, nickname: undefined }
     try {
         if (!Array.isArray(links)) links = [links]

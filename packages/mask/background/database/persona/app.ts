@@ -126,7 +126,7 @@ export async function updatePersonaDB( // Do a copy here. We need to delete keys
 
 export async function createOrUpdatePersonaDB(
     record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier' | 'publicKey'>,
-    howToMerge: Parameters<typeof updatePersonaDB>[1] & { protectPrivateKey?: boolean },
+    howToMerge: Parameters<typeof updatePersonaDB>[1],
     t?: PersonasTransaction<'readwrite'>,
 ): Promise<void> {
     return nativeAPI?.api.update_persona({
@@ -134,7 +134,6 @@ export async function createOrUpdatePersonaDB(
         options: {
             linkedProfileMergePolicy: howToMerge.linkedProfiles === 'replace' ? 0 : 1,
             deleteUndefinedFields: howToMerge.explicitUndefinedField !== 'ignore',
-            protectPrivateKey: howToMerge.protectPrivateKey,
             createWhenNotExist: true,
         },
     })
@@ -174,7 +173,6 @@ export async function createProfileDB(record: ProfileRecord, t?: ProfileTransact
     await nativeAPI?.api.create_profile({
         profile: profileRecordToDB(record),
     })
-    MaskMessages.events.profilesChanged.sendToAll([{ of: record.identifier, reason: 'update' }])
 }
 
 /**
@@ -214,22 +212,6 @@ export async function queryProfilesDB(
 
     if (!profiles) return []
     return profiles.map((x) => profileRecordOutDB(x))
-}
-
-/**
- * @deprecated
- * query profiles with paged
- * @param options
- * @param count
- */
-export async function queryProfilesPagedDB(
-    options: {
-        after?: ProfileIdentifier
-        query?: string
-    },
-    count: number,
-): Promise<ProfileRecord[]> {
-    return []
 }
 
 /**
@@ -293,7 +275,6 @@ export async function deleteProfileDB(id: ProfileIdentifier, t?: ProfileTransact
     await nativeAPI?.api.delete_profile({
         identifier: id.toText(),
     })
-    MaskMessages.events.profilesChanged.sendToAll([{ reason: 'delete', of: id }])
 }
 
 /**
@@ -365,6 +346,25 @@ export async function updateRelationDB(
         MaskMessages.events.relationsChanged.sendToAll([
             { of: updating.profile, favor: updating.favor, reason: 'update' },
         ])
+    }
+}
+
+// TODO: should have a batch API for this.
+export async function createOrUpdateRelationDB(
+    record: Omit<RelationRecord, 'network'>,
+    t: RelationTransaction<'readwrite'>,
+    silent = false,
+) {
+    const old = await nativeAPI?.api.query_relations({
+        options: {
+            personaIdentifier: record.linked.toText(),
+        },
+    })
+
+    if (old?.length) {
+        await updateRelationDB(record, t, silent)
+    } else {
+        await createRelationDB(record, t, silent)
     }
 }
 

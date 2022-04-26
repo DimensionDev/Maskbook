@@ -33,7 +33,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
         const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
 
         if (lastCreatedPersona) {
-            await changeCurrentPersona(lastCreatedPersona.identifier)
+            await changeCurrentPersona(lastCreatedPersona)
             onClose()
         } else {
             onClose()

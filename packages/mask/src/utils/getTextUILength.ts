@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 export function getTextUILength(text: string) {
     return Array.from(text).reduce((acc, char) => acc + getCharUILength(char), 0)
 }

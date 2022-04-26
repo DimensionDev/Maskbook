@@ -2,7 +2,6 @@ import {
     AESCryptoKey,
     AESJsonWebKey,
     ECKeyIdentifier,
-    GroupIdentifier,
     Identifier,
     IdentifierMap,
     PersonaIdentifier,
@@ -196,6 +195,10 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
     },
 )
 export const PostDBAccess = db
+export async function withPostDBTransaction(task: (t: PostReadWriteTransaction) => Promise<void>) {
+    const t = createTransaction(await PostDBAccess(), 'readwrite')('post')
+    await task(t)
+}
 
 export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction) {
     t ||= createTransaction(await db(), 'readwrite')('post')
@@ -314,11 +317,6 @@ export async function queryPostPagedDB(
 // #region db in and out
 function postOutDB(db: PostDBRecord): PostRecord {
     const { identifier, foundAt, postBy, recipients, postCryptoKey, encryptBy, interestedMeta, summary, url } = db
-    if (typeof recipients === 'object') {
-        for (const detail of recipients.values()) {
-            detail.reason.forEach((x) => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
-        }
-    }
     return {
         identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(),
         postBy: restorePrototype(postBy, ProfileIdentifier.prototype),

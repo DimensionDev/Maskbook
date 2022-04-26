@@ -6,7 +6,6 @@ import { ProfileIdentifier } from '@masknet/shared-base'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { memoizePromise } from '@dimensiondev/kit'
-import { Flags } from '../../../../shared'
 import { startWatch } from '../../../utils/watcher'
 
 function Icon(props: { size: number }) {
@@ -69,7 +68,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         if (signal?.aborted) return
         const node = ls.evaluate()
         if (!node) return
-        const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
+        const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
         proxy.realCurrent = node
         const root = createReactRootShadowed(proxy.afterShadow, { signal })
         root.render(<Icon size={24} />)
@@ -81,6 +80,9 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
 }
 export const ifUsingMask = memoizePromise(
     (pid: ProfileIdentifier) =>
-        Services.Identity.queryProfile(pid).then((x) => (x.linkedPersona ? Promise.resolve() : Promise.reject())),
+        Services.Identity.queryProfilesInformation([pid]).then((x) => {
+            if (x[0].fingerprint) return
+            throw new Error('Not using mask')
+        }),
     (pid: ProfileIdentifier) => pid.toText(),
 )

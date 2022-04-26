@@ -6,7 +6,6 @@ import { getProfilePageUrlAtFacebook } from './utils/parse-username'
 import { taskOpenComposeBoxFacebook } from './automation/openComposeBox'
 import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposition'
 import { CurrentVisitingIdentityProviderFacebook, IdentityProviderFacebook } from './collecting/identity'
-import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
 import { injectCompositionFacebook } from './injection/Composition'
 import { injectSetupPromptFacebook } from './injection/SetupPrompt'
@@ -30,7 +29,7 @@ import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './inject
 import { injectProfileNFTAvatarInFaceBook } from './injection/NFT/ProfileNFTAvatar'
 import { injectNFTAvatarInFacebook } from './injection/NFT/NFTAvatarInFacebook'
 import { injectUserNFTAvatarAtFacebook } from './injection/NFT/NFTAvatarInTimeline'
-import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
+import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from './injection/NFT/NFTAvatarEditProfile'
 import { injectProfileTabAtFacebook } from './injection/ProfileTab'
 import { injectPostReplacerAtFacebook } from './injection/PostReplacer'
 import { injectProfileTabContentAtFacebook } from './injection/ProfileContent'
@@ -157,12 +156,10 @@ const facebookUI: SocialNetworkUI.Definition = {
         useTheme: useThemeFacebookVariant,
     },
     init(signal) {
-        const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
-        InitAutonomousStateFriends(signal, friends, facebookShared.networkIdentifier)
         InitAutonomousStateProfiles(signal, profiles, facebookShared.networkIdentifier)
         enableFbStyleTextPayloadReplace()
-        return { friends, profiles }
+        return { profiles }
     },
     injection: {
         newPostComposition: {
@@ -197,6 +194,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInFaceBook,
         profileAvatar: injectNFTAvatarInFacebook,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
+        openNFTAvatarSettingDialog,
         enhancedPostRenderer: injectPostReplacerAtFacebook,
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),

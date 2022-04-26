@@ -111,7 +111,7 @@ export interface DecryptReportedInfo {
     claimedAuthor?: ProfileIdentifier
     publicShared?: boolean
     version?: SupportedPayloadVersions
-    ownersKeyEncrypted?: Uint8Array
+    isAuthorOfPost?: boolean
 }
 export interface DecryptIntermediateProgress {
     type: DecryptProgressKind.Progress

@@ -4,12 +4,14 @@ import { DialogStackingProvider } from '@masknet/theme'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { MaskMessages, useI18N } from '../../utils'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useFriendsList as useRecipientsList } from '../DataSource/useActivatedUI'
+import { useRecipientsList } from './useRecipientsList'
 import { InjectedDialog } from '@masknet/shared'
 import { CompositionDialogUI, CompositionRef } from './CompositionUI'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest'
 import Services from '../../extension/service'
 import { useSubmit } from './useSubmit'
+import { useAsync } from 'react-use'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
@@ -18,6 +20,13 @@ export interface PostDialogProps {
 let openOnInitAnswered = false
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useI18N()
+
+    const currentIdentity = useCurrentIdentity()?.identifier
+    /** @deprecated */
+    const { value: hasLocalKey } = useAsync(
+        async () => (currentIdentity ? Services.Identity.hasLocalKey(currentIdentity) : false),
+        [currentIdentity],
+    )
 
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     // #region Open
@@ -76,6 +85,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     const UI = useRef<CompositionRef>(null)
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
+    const recipients = useRecipientsList()
     return (
         <DialogStackingProvider>
             <InjectedDialog keepMounted open={open} onClose={onClose} title={t('post_dialog__title')}>
@@ -85,11 +95,12 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         hasClipboardPermission={hasClipboardPermission}
                         onRequestClipboardPermission={onRequestClipboardPermission}
                         requireClipboardPermission={requireClipboardPermission}
-                        recipients={useRecipientsList()}
+                        recipients={recipients}
                         maxLength={560}
                         onSubmit={onSubmit_}
                         supportImageEncoding={networkSupport?.text ?? false}
                         supportTextEncoding={networkSupport?.image ?? false}
+                        disabledRecipients={hasLocalKey === false ? 'E2E' : undefined}
                     />
                 </DialogContent>
             </InjectedDialog>

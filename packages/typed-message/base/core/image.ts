@@ -1,5 +1,5 @@
-import type { NonSerializableTypedMessage, Meta } from '../base'
-import { createIsType } from '../utils/internal'
+import type { NonSerializableTypedMessage, Meta } from '../base.js'
+import { createIsType } from '../utils/internal.js'
 
 /**
  * A single image

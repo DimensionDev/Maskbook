@@ -15,12 +15,13 @@ import { isAbsolute, join } from 'path'
 import { readFileSync } from 'fs'
 import { nonNullable, EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils'
 import { BuildFlags, normalizeBuildFlags, computedBuildFlags } from './flags'
+import ResolveTypeScriptPlugin from 'resolve-typescript-plugin'
 
 import './clean-hmr'
 
 export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const normalizedFlags = normalizeBuildFlags(rawFlags)
-    const { sourceMapKind, supportWebAssembly } = computedBuildFlags(normalizedFlags)
+    const { sourceMapKind, supportWebAssembly, lockdown } = computedBuildFlags(normalizedFlags)
     const { hmr, mode, profiling, reactRefresh, readonlyCache, reproducibleBuild, runtime, outputPath } =
         normalizedFlags
 
@@ -52,6 +53,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             })(),
         },
         resolve: {
+            plugins: [new ResolveTypeScriptPlugin()],
             extensions: ['.js', '.ts', '.tsx'],
             alias: (() => {
                 const alias = {
@@ -62,6 +64,10 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.js'),
                     // fake esm
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
+                }
+                if (lockdown) {
+                    // https://github.com/near/near-api-js/issues/833
+                    alias['error-polyfill'] = require.resolve('./package-overrides/null.js')
                 }
                 if (profiling) {
                     alias['scheduler/tracing'] = 'scheduler/tracing-profiling'
@@ -94,6 +100,13 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                           test: /\.wasm?$/,
                           loader: require.resolve('./wasm-to-asm.ts'),
                           type: 'javascript/auto',
+                      }
+                    : undefined!,
+                // Patch regenerator-runtime
+                lockdown
+                    ? {
+                          test: /\..?js$/,
+                          loader: require.resolve('./fix-regenerator-runtime.ts'),
                       }
                     : undefined!,
                 // TypeScript
@@ -176,6 +189,13 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                         to: polyfillFolder,
                     },
                     { from: require.resolve('webextension-polyfill/dist/browser-polyfill.js'), to: polyfillFolder },
+                    {
+                        from:
+                            mode === 'development'
+                                ? require.resolve('../../../node_modules/ses/dist/lockdown.umd.js')
+                                : require.resolve('../../../node_modules/ses/dist/lockdown.umd.min.js'),
+                        to: join(polyfillFolder, 'lockdown.js'),
+                    },
                 ],
             }),
             emitManifestFile(normalizedFlags),
@@ -244,14 +264,15 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })
     baseConfig.plugins!.push(
-        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', sourceMap: !!sourceMapKind }),
-        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', sourceMap: !!sourceMapKind }),
+        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', sourceMap: !!sourceMapKind, lockdown }),
+        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', sourceMap: !!sourceMapKind, lockdown }),
         addHTMLEntry({
             chunks: ['contentScript'],
             filename: 'generated__content__script.html',
             sourceMap: !!sourceMapKind,
+            lockdown,
         }),
-        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', sourceMap: !!sourceMapKind }),
+        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', sourceMap: !!sourceMapKind, lockdown }),
     )
     // background
     if (runtime.manifest === 3) {
@@ -267,9 +288,9 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             addHTMLEntry({
                 chunks: ['background'],
                 filename: 'background.html',
-                secp256k1: true,
                 gun: true,
                 sourceMap: !!sourceMapKind,
+                lockdown,
             }),
         )
     }
@@ -295,18 +316,12 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
 }
 function addHTMLEntry(
     options: HTMLPlugin.Options & {
-        secp256k1?: boolean
         sourceMap: boolean
         gun?: boolean
+        lockdown: boolean
     },
 ) {
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
-    if (options.secp256k1) {
-        templateContent = templateContent.replace(
-            `<!-- secp256k1 -->`,
-            '<script src="/polyfill/secp256k1.js"></script>',
-        )
-    }
     if (options.gun) {
         templateContent = templateContent.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
     }
@@ -314,6 +329,13 @@ function addHTMLEntry(
         templateContent = templateContent.replace(
             `<!-- CSP -->`,
             `<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; require-trusted-types-for 'script'; trusted-types default webpack">`,
+        )
+    }
+    if (options.lockdown) {
+        templateContent = templateContent.replace(
+            `<!-- lockdown -->`,
+            `<script src="/polyfill/lockdown.js"></script>
+        <script src="/lockdown.js"></script>`,
         )
     }
     return new HTMLPlugin({

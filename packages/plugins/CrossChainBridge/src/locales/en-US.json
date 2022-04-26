@@ -1,5 +1,5 @@
 {
-    "dialog_title": "Cross-chain",
+    "__plugin_name": "Cross-chain",
     "official": "Official",
     "cbridge_intro": "Powered by Celer Network. Support $Mask!",
     "rainbow_bridge_intro": "Bridge between or send within Ethereum, NEAR and Aurora! "

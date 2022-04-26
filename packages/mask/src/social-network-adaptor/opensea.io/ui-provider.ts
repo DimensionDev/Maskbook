@@ -12,17 +12,12 @@ const define: SocialNetworkUI.Definition = {
     collecting: {
         identityProvider: IdentityProviderOpensea,
     },
-    configuration: {
-        setupWizard: {
-            disableSayHello: true,
-        },
-    },
+    configuration: {},
     customization: {},
     init(signal) {
-        const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
         InitAutonomousStateProfiles(signal, profiles, openseaShared.networkIdentifier)
-        return { friends, profiles }
+        return { profiles }
     },
     injection: {
         setupWizard: createTaskStartSetupGuideDefault(),

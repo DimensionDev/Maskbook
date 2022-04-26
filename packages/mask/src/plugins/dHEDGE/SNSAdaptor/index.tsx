@@ -2,8 +2,10 @@ import { useMemo } from 'react'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
+import { DHEDGEIcon } from '@masknet/icons'
 import { base } from '../base'
 import { PoolView } from '../UI/PoolView'
+import { Trans } from 'react-i18next'
 import { InvestDialog } from '../UI/InvestDialog'
 import { createMatchLink } from '../constants'
 
@@ -43,6 +45,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection: function Component() {
         return <InvestDialog />
     },
+    ApplicationEntries: [
+        {
+            ApplicationEntryID: base.ID,
+            category: 'dapp',
+            description: <Trans i18nKey="plugin_dhedge_description" />,
+            name: <Trans i18nKey="plugin_dhedge_name" />,
+            icon: <DHEDGEIcon />,
+            marketListSortingPriority: 11,
+            tutorialLink:
+                'https://realmasknetwork.notion.site/Invest-in-your-favourite-fund-manager-via-dHEDGE-on-Twitter-ETH-and-Polygon-fb00ff2e626949279c83b59ed9207b9a',
+        },
+    ],
 }
 
 export default sns
