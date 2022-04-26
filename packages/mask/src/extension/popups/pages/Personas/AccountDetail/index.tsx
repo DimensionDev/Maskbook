@@ -3,7 +3,7 @@ import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { useNavigate } from 'react-router-dom'
-import { NextIDAction, PopupRoutes } from '@masknet/shared-base'
+import { EnhanceableSite, NextIDAction, PopupRoutes } from '@masknet/shared-base'
 import { AccountDetailUI } from './UI'
 import { useAsyncFn } from 'react-use'
 import Service from '../../../../service'
@@ -25,7 +25,7 @@ const AccountDetail = memo(() => {
             if (!selectedAccount?.identifier) return
 
             if (
-                SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(selectedAccount.identifier.network) &&
+                SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(selectedAccount.identifier.network as EnhanceableSite) &&
                 selectedAccount.is_valid
             ) {
                 setOpen(true)
