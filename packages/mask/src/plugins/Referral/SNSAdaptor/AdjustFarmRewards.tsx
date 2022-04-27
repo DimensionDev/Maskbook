@@ -20,7 +20,8 @@ import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { roundValue, getRequiredChainId } from '../helpers'
 import { APR, ATTRACE_FEE_PERCENT } from '../constants'
-import { referralFarmService, farmsService } from '../Worker/services'
+import { adjustFarmRewards } from './utils/referralFarm'
+import { ReferralRPC } from '../messages'
 
 import { FarmTokenDetailed } from './shared-ui/FarmTokenDetailed'
 
@@ -77,7 +78,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     const [totalFarmReward, setTotalFarmReward] = useState<string>('')
 
     const { value: farmsMetaState } = useAsync(
-        async () => (farm?.farmHash ? farmsService.getFarmsMetaState(chainId, [farm.farmHash]) : undefined),
+        async () => (farm?.farmHash ? ReferralRPC.getFarmsMetaState(chainId, [farm.farmHash]) : undefined),
         [farm, chainId],
     )
 
@@ -89,6 +90,65 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
         setAttraceFee(attraceFee)
     }, [])
 
+    const onChangePageToAdjustRewards = useCallback(() => {
+        props?.onChangePage?.(PagesType.ADJUST_REWARDS, TabsReferralFarms.TOKENS + ': ' + PagesType.ADJUST_REWARDS, {
+            adjustFarmDialog: {
+                farm: farm,
+                rewardToken,
+                referredToken,
+                continue: () => {},
+            },
+        })
+    }, [props?.onChangePage, farm, rewardToken, referredToken])
+
+    const onErrorDeposit = useCallback(
+        (error?: string) => {
+            error && showSnackbar(error, { variant: 'error' })
+            onChangePageToAdjustRewards()
+        },
+        [props?.onChangePage, showSnackbar, onChangePageToAdjustRewards],
+    )
+    const onConfirmedAdjustFarm = useCallback(
+        (txHash: string) => {
+            props?.onChangePage?.(PagesType.TRANSACTION, t('plugin_referral_transaction'), {
+                hideAttrLogo: true,
+                hideBackBtn: true,
+                transactionDialog: {
+                    transaction: {
+                        status: TransactionStatus.CONFIRMED,
+                        actionButton: {
+                            label: t('dismiss'),
+                            onClick: onChangePageToAdjustRewards,
+                        },
+                        transactionHash: txHash,
+                    },
+                },
+            })
+        },
+        [props?.onChangePage, t, onChangePageToAdjustRewards],
+    )
+
+    const onConfirmAdjustFarm = useCallback(() => {
+        const { title, subtitle } = getTransactionTitles(
+            Number.parseFloat(totalFarmReward),
+            Number.parseFloat(dailyFarmReward),
+            attraceFee,
+            props.rewardToken,
+        )
+
+        props?.onChangePage?.(PagesType.TRANSACTION, t('plugin_referral_transaction'), {
+            hideAttrLogo: true,
+            hideBackBtn: true,
+            transactionDialog: {
+                transaction: {
+                    status: TransactionStatus.CONFIRMATION,
+                    title: title,
+                    subtitle: subtitle,
+                },
+            },
+        })
+    }, [props, totalFarmReward, dailyFarmReward, attraceFee])
+
     const onAdjustFarmReward = useCallback(async () => {
         if (!referredToken || !rewardToken) {
             return onErrorDeposit(t('go_wrong'))
@@ -96,7 +156,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
 
         const depositValue = Number.parseFloat(totalFarmReward) + attraceFee
 
-        referralFarmService.adjustFarmRewards(
+        adjustFarmRewards(
             (val: boolean) => {
                 val && onConfirmAdjustFarm()
             },
@@ -110,15 +170,18 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
             depositValue,
             Number.parseFloat(dailyFarmReward),
         )
-    }, [web3, account, chainId, referredToken, rewardToken, totalFarmReward, dailyFarmReward])
-
-    const onClickAdjustRewards = useCallback(() => {
-        if (totalFarmReward && Number.parseFloat(totalFarmReward) > 0) {
-            onOpenDepositDialog()
-        } else {
-            onAdjustFarmReward()
-        }
-    }, [totalFarmReward])
+    }, [
+        web3,
+        account,
+        chainId,
+        referredToken,
+        rewardToken,
+        totalFarmReward,
+        dailyFarmReward,
+        onErrorDeposit,
+        onConfirmedAdjustFarm,
+        onConfirmAdjustFarm,
+    ])
 
     const onOpenDepositDialog = useCallback(() => {
         props.continue(
@@ -140,6 +203,14 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
             },
         )
     }, [props, attraceFee, totalFarmReward, referredToken, rewardToken, requiredChainId, farm, onAdjustFarmReward])
+
+    const onClickAdjustRewards = useCallback(() => {
+        if (totalFarmReward && Number.parseFloat(totalFarmReward) > 0) {
+            onOpenDepositDialog()
+        } else {
+            onAdjustFarmReward()
+        }
+    }, [totalFarmReward, onOpenDepositDialog, onAdjustFarmReward])
 
     const getTransactionTitles = useCallback(
         (totalFarmReward: number, dailyFarmReward: number, attraceFee: number, rewardToken?: FungibleTokenDetailed) => {
@@ -176,66 +247,6 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
             }
         },
         [t],
-    )
-
-    const onConfirmAdjustFarm = useCallback(() => {
-        const { title, subtitle } = getTransactionTitles(
-            Number.parseFloat(totalFarmReward),
-            Number.parseFloat(dailyFarmReward),
-            attraceFee,
-            props.rewardToken,
-        )
-
-        props?.onChangePage?.(PagesType.TRANSACTION, t('plugin_referral_transaction'), {
-            hideAttrLogo: true,
-            hideBackBtn: true,
-            transactionDialog: {
-                transaction: {
-                    status: TransactionStatus.CONFIRMATION,
-                    title: title,
-                    subtitle: subtitle,
-                },
-            },
-        })
-    }, [props, totalFarmReward, dailyFarmReward, attraceFee])
-
-    const onChangePageToAdjustRewards = useCallback(() => {
-        props?.onChangePage?.(PagesType.ADJUST_REWARDS, TabsReferralFarms.TOKENS + ': ' + PagesType.ADJUST_REWARDS, {
-            adjustFarmDialog: {
-                farm: farm,
-                rewardToken,
-                referredToken,
-                continue: () => {},
-            },
-        })
-    }, [props?.onChangePage, farm, rewardToken, referredToken])
-
-    const onErrorDeposit = useCallback(
-        (error?: string) => {
-            error && showSnackbar(error, { variant: 'error' })
-            onChangePageToAdjustRewards()
-        },
-        [props?.onChangePage, showSnackbar, onChangePageToAdjustRewards],
-    )
-
-    const onConfirmedAdjustFarm = useCallback(
-        (txHash: string) => {
-            props?.onChangePage?.(PagesType.TRANSACTION, t('plugin_referral_transaction'), {
-                hideAttrLogo: true,
-                hideBackBtn: true,
-                transactionDialog: {
-                    transaction: {
-                        status: TransactionStatus.CONFIRMED,
-                        actionButton: {
-                            label: t('dismiss'),
-                            onClick: onChangePageToAdjustRewards,
-                        },
-                        transactionHash: txHash,
-                    },
-                },
-            })
-        },
-        [props?.onChangePage, t, onChangePageToAdjustRewards],
     )
 
     const farmMetaState = farm?.farmHash ? farmsMetaState?.get(farm.farmHash) : undefined

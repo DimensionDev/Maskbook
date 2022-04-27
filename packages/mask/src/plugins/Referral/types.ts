@@ -1,6 +1,7 @@
 import type { ChainId as ChainIdMain, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import type BigNumber from 'bignumber.js'
 import type { FarmExists, FarmDepositChange } from '@masknet/web3-contracts/types/ReferralFarmsV1'
+import type { BigNumberish } from '@ethersproject/bignumber'
 
 export interface ReferralNetwork {
     chainId: ChainIdMain
@@ -277,7 +278,7 @@ export interface Entitlement {
     nonce: BigNumber
     period: BigNumber
     proof: string[]
-    rewardValue: BigNumber
+    rewardValue: BigNumberish
 }
 export interface EntitlementLog {
     name: 'PeriodEntitlement'

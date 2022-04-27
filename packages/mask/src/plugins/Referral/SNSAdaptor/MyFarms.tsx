@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useAsync } from 'react-use'
 import { v4 as uuid } from 'uuid'
 import { groupBy } from 'lodash-unified'
-import { fromWei } from 'web3-utils'
+import { formatUnits } from '@ethersproject/units'
 import {
     useAccount,
     useChainId,
@@ -17,7 +17,6 @@ import { Grid, Typography, CircularProgress, Button, Box } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
-import { farmsService, entitlementsService, referralFarmService } from '../Worker/services'
 import { toNativeRewardTokenDefn, parseChainAddress, roundValue, makeLeafHash, getRequiredChainId } from '../helpers'
 import {
     Farm,
@@ -28,6 +27,8 @@ import {
     RewardsHarvestedEvent,
     TabsReferralFarms,
 } from '../types'
+import { ReferralRPC } from '../messages'
+import { harvestRewards } from './utils/referralFarm'
 
 import { AccordionFarm } from './shared-ui/AccordionFarm'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -182,7 +183,7 @@ function FarmsList({ entitlements, allTokens, farms, rewardsHarvested, ...props 
 
                 return true
             })
-            referralFarmService.harvestRewards(
+            harvestRewards(
                 onConfirmHarvestRewards,
                 () => onStartHarvestRewards(totalRewards, rewardTokenSymbol),
                 onErrorHarvestRewards,
@@ -200,7 +201,7 @@ function FarmsList({ entitlements, allTokens, farms, rewardsHarvested, ...props 
         <>
             {Object.entries(entitlementsGroupedByRewardToken).map(([rewardTokenDefn, entitlements]) => {
                 const totalRewards = entitlements.reduce(function (accumulator, current) {
-                    return accumulator + Number.parseFloat(fromWei(current.args.rewardValue.toString()))
+                    return accumulator + Number.parseFloat(formatUnits(current.args.rewardValue))
                 }, 0)
                 const harvested = rewardsHarvested.filter((reward) => reward.rewardTokenDefn === rewardTokenDefn)
                 const claimed = harvested.reduce(function (accumulator, current) {
@@ -260,20 +261,19 @@ export function MyFarms(props: PageInterface) {
     const { ERC20 } = useTokenListConstants()
 
     const { value: entitlements = EMPTY_LIST, loading: loadingEntitlements } = useAsync(
-        async () => (account ? entitlementsService.getAccountEntitlements(account) : []),
+        async () => (account ? ReferralRPC.getAccountEntitlements(account) : []),
         [account],
     )
     const { value: rewardsHarvested = EMPTY_LIST, loading: loadingRewardsHarvested } = useAsync(
-        async () => (account ? farmsService.getMyRewardsHarvested(account, currentChainId) : []),
+        async () => (account ? ReferralRPC.getMyRewardsHarvested(account, currentChainId) : []),
         [account, currentChainId],
     )
 
     // fetch farm for referred tokens
     const { value: farms = EMPTY_LIST, loading: loadingFarms } = useAsync(
-        async () => farmsService.getAllFarms(currentChainId),
+        async () => ReferralRPC.getAllFarms(currentChainId),
         [currentChainId],
     )
-
     // fetch tokens data
     const { value: allTokens = EMPTY_LIST, loading: loadingAllTokens } = useAsync(
         async () =>

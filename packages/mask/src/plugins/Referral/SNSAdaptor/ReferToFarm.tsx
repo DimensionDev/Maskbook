@@ -14,9 +14,9 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { META_KEY } from '../constants'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import { proofOfRecommendationService, farmsService } from '../Worker/services'
-import { PluginReferralMessages, SelectTokenUpdated } from '../messages'
+import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
 import { getFarmsRewardData, getSponsoredFarmsForReferredToken, getRequiredChainId } from '../helpers'
+import { singAndPostProofOfRecommendationOrigin } from './utils/proofOfRecommendation'
 import {
     ReferralMetaData,
     TabsCreateFarm,
@@ -107,7 +107,7 @@ export function ReferToFarm(props: PageInterface) {
 
     // fetch all farms
     const { value: farms = EMPTY_LIST, loading: loadingAllFarms } = useAsync(
-        async () => farmsService.getAllFarms(currentChainId, ERC20),
+        async () => ReferralRPC.getAllFarms(currentChainId, ERC20),
         [currentChainId, ERC20],
     )
 
@@ -155,16 +155,18 @@ export function ReferToFarm(props: PageInterface) {
         [props?.onChangePage, t, showSnackbar],
     )
 
-    const onClickReferFarm = async () => {
+    const onClickReferFarm = useCallback(async () => {
         if (!token?.address) {
             return onError(t('plugin_referral_error_token_not_select'))
         }
 
         try {
             onConfirmReferFarm()
-            await proofOfRecommendationService.singAndPostProofOfRecommendationOrigin(web3, account, token.address)
+
+            await singAndPostProofOfRecommendationOrigin(web3, account, token.address)
+
             insertData({
-                referral_token: token.address ?? '',
+                referral_token: token?.address ?? '',
                 referral_token_name: token?.name ?? '',
                 referral_token_symbol: token?.symbol ?? '',
                 referral_token_icon: token?.logoURI ?? [''],
@@ -175,7 +177,7 @@ export function ReferToFarm(props: PageInterface) {
         } catch (error: any) {
             onError(error?.message)
         }
-    }
+    }, [token, currentChainId, account, senderName])
 
     const farm_category_types = [
         {

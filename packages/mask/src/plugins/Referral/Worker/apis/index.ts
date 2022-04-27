@@ -1,4 +1,3 @@
-export * as entitlementsService from './entitlements'
-export * as farmsService from './farms'
-export * as referralFarmService from './referralFarm'
-export * as proofOfRecommendationService from './proofOfRecommendation'
+export * from './entitlements'
+export * from './farms'
+export * from './proofOfRecommendation'

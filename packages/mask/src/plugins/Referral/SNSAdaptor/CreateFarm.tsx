@@ -21,9 +21,9 @@ import { useI18N } from '../../../utils'
 import { TabsCreateFarm, TokenType, TransactionStatus, PageInterface, PagesType, TabsReferralFarms } from '../types'
 import { ATTRACE_FEE_PERCENT, NATIVE_TOKEN, META_KEY } from '../constants'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import { referralFarmService } from '../Worker/services'
 import { PluginReferralMessages, SelectTokenUpdated } from '../messages'
 import { roundValue, getRequiredChainId } from '../helpers'
+import { runCreateERC20PairFarm } from './utils/referralFarm'
 
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -129,7 +129,7 @@ export function CreateFarm(props: PageInterface) {
         if (token.address !== NATIVE_TOKEN) {
             const totalFarmRewardNum = Number.parseFloat(totalFarmReward) + attraceFee
 
-            await referralFarmService.runCreateERC20PairFarm(
+            await runCreateERC20PairFarm(
                 (val: boolean) => {
                     val && onConfirmDeposit()
                 },

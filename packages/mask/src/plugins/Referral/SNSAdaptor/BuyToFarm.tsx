@@ -9,10 +9,11 @@ import { v4 as uuid } from 'uuid'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
-import { PluginReferralMessages, SelectTokenUpdated } from '../messages'
+import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
 import { PluginTraderMessages } from '../../Trader/messages'
-import { farmsService, proofOfRecommendationService } from '../Worker/services'
+
 import { toChainAddressEthers, getFarmsRewardData, getRequiredChainId } from '../helpers'
+import { singAndPostProofOfRecommendationWithReferrer } from './utils/proofOfRecommendation'
 import { MASK_REFERRER, SWAP_CHAIN_ID } from '../constants'
 import { TabsCreateFarm, TransactionStatus, PageInterface, PagesType, TabsReferralFarms } from '../types'
 import type { Coin } from '../../Trader/types'
@@ -81,7 +82,7 @@ export function BuyToFarm(props: PageInterface) {
 
     // fetch all farms
     const { value: farms = EMPTY_LIST } = useAsync(
-        async () => farmsService.getAllFarms(currentChainId, ERC20),
+        async () => ReferralRPC.getAllFarms(currentChainId, ERC20),
         [ERC20, currentChainId],
     )
 
@@ -140,20 +141,16 @@ export function BuyToFarm(props: PageInterface) {
         if (!token?.address) {
             return onError(t('plugin_referral_error_token_not_select'))
         }
+
         try {
             onConfirmReferFarm()
-            await proofOfRecommendationService.singAndPostProofOfRecommendationWithReferrer(
-                web3,
-                account,
-                token.address,
-                MASK_REFERRER,
-            )
+            await singAndPostProofOfRecommendationWithReferrer(web3, account, token.address, MASK_REFERRER)
             props?.onChangePage?.(PagesType.BUY_TO_FARM, `${TabsReferralFarms.TOKENS}: ${PagesType.BUY_TO_FARM}`)
             swapToken()
         } catch (error: any) {
             onError(error?.message)
         }
-    }, [web3, account, token, props])
+    }, [props?.onChangePage, web3, account, token])
 
     const referredTokenFarms = token
         ? farms.filter((farm) => farm.referredTokenDefn === toChainAddressEthers(token.chainId, token.address))

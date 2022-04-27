@@ -6,13 +6,12 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogContent } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
-import { PluginReferralMessages } from '../messages'
+import { PluginReferralMessages, ReferralRPC } from '../messages'
 import { NATIVE_TOKEN } from '../constants'
 import { parseChainAddress } from '../helpers'
 
 import { InjectedDialog } from '@masknet/shared'
 import { ERC20TokenList } from './shared-ui/ERC20TokenList'
-import { farmsService } from '../Worker/services'
 
 const DISABLED_NATIVE_TOKEN = true
 
@@ -30,7 +29,7 @@ export function SelectToken() {
         setOnlyFarmTokens(!!ev.onlyFarmTokens)
     })
     const { value: farms = EMPTY_LIST, loading: loadingAllFarms } = useAsync(
-        async () => farmsService.getAllFarms(currentChainId),
+        async () => ReferralRPC.getAllFarms(currentChainId),
         [currentChainId],
     )
 

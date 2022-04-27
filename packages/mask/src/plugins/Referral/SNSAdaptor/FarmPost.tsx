@@ -11,12 +11,16 @@ import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 
 import type { ReferralMetaData } from '../types'
 import type { Coin } from '../../Trader/types'
-import { proofOfRecommendationService, farmsService } from '../Worker/services'
 import { MASK_REFERRER, META_KEY, SWAP_CHAIN_ID } from '../constants'
 import { useI18N } from '../../../utils'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { getFarmsRewardData, getSponsoredFarmsForReferredToken } from '../helpers'
 import { PluginTraderMessages } from '../../Trader/messages'
+import { ReferralRPC } from '../messages'
+import {
+    singAndPostProofOfRecommendationOrigin,
+    singAndPostProofOfRecommendationWithReferrer,
+} from './utils/proofOfRecommendation'
 
 import { RewardFarmPostWidget } from './shared-ui/RewardFarmPostWidget'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
@@ -54,7 +58,7 @@ export function FarmPost(props: FarmPostProps) {
     const { ERC20 } = useTokenListConstants()
 
     const { value: farms = EMPTY_LIST } = useAsync(
-        async () => (chainId ? farmsService.getAllFarms(chainId, ERC20) : []),
+        async () => (chainId ? ReferralRPC.getAllFarms(chainId, ERC20) : []),
         [ERC20, chainId],
     )
     const openComposeBox = useCallback(
@@ -71,13 +75,9 @@ export function FarmPost(props: FarmPostProps) {
         showSnackbar(error || t('go_wrong'), { variant: 'error' })
     }, [])
 
-    const onClickReferToFarm = async () => {
+    const onClickReferToFarm = useCallback(async () => {
         try {
-            await proofOfRecommendationService.singAndPostProofOfRecommendationOrigin(
-                web3,
-                account,
-                payload.referral_token,
-            )
+            await singAndPostProofOfRecommendationOrigin(web3, account, payload.referral_token)
 
             const senderName =
                 currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
@@ -100,7 +100,7 @@ export function FarmPost(props: FarmPostProps) {
         } catch (error: any) {
             onError(error?.message)
         }
-    }
+    }, [currentIdentity, payload, chainId, account, web3])
 
     const swapToken = useCallback(() => {
         if (!payload.referral_token) {
@@ -124,17 +124,14 @@ export function FarmPost(props: FarmPostProps) {
 
     const onClickBuyToFarm = useCallback(async () => {
         try {
-            await proofOfRecommendationService.singAndPostProofOfRecommendationWithReferrer(
-                web3,
-                account,
-                payload.referral_token,
-                payload?.promoter_address ?? MASK_REFERRER,
-            )
+            const tokenAddress = payload.referral_token
+            const referrer = payload?.promoter_address ?? MASK_REFERRER
+            await singAndPostProofOfRecommendationWithReferrer(web3, account, tokenAddress, referrer)
             swapToken()
         } catch (error: any) {
             onError(error?.message)
         }
-    }, [web3, account, payload])
+    }, [payload, account, web3])
 
     const sponsoredFarms = getSponsoredFarmsForReferredToken(chainId, token, farms)
 

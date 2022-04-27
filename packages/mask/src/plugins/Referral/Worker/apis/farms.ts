@@ -8,7 +8,7 @@ import type {
     RewardsHarvestedEvent,
 } from '../../types'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
-import { keccak256, fromWei, asciiToHex, padRight } from 'web3-utils'
+import { keccak256, asciiToHex, padRight } from 'web3-utils'
 import { defaultAbiCoder, Interface } from '@ethersproject/abi'
 import { orderBy } from 'lodash-unified'
 import { TokenList } from '@masknet/web3-providers'
@@ -107,8 +107,7 @@ function parseBasicFarmEvents(unparsed: any, tokens: ERC20TokenDetailed[]) {
         if (e.topic === eventIds.FarmDepositChange) {
             const prevTotalFarmRewards = prevFarmState?.totalFarmRewards || 0
 
-            const totalFarmRewards =
-                prevTotalFarmRewards + Number.parseFloat(formatUnits(e.args.delta.toString(), rewardTokenDec))
+            const totalFarmRewards = prevTotalFarmRewards + Number.parseFloat(formatUnits(e.args.delta, rewardTokenDec))
             farmMap.set(farmHash, { ...prevFarmState, totalFarmRewards })
         }
         if (e.topic === eventIds.FarmMetastate) {
@@ -147,7 +146,7 @@ function parseRewardsHarvestedEvents(unparsed: any) {
 
     const rewards: Array<RewardsHarvestedEvent> = parsed.map((e) => {
         const { farmHash, caller, rewardTokenDefn, leafHash, value } = e.args
-        return { farmHash, caller, rewardTokenDefn, leafHash, value: Number.parseFloat(fromWei(value.toString())) }
+        return { farmHash, caller, rewardTokenDefn, leafHash, value: Number.parseFloat(formatUnits(value)) }
     })
 
     return rewards

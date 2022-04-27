@@ -14,9 +14,9 @@ import { TokenList } from '@masknet/web3-providers'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
-import { farmsService } from '../Worker/services'
 import { FarmDepositChangeEvent, FarmExistsEvent, PageInterface, PagesType, TabsReferralFarms } from '../types'
 import { toNativeRewardTokenDefn, parseChainAddress, getRequiredChainId } from '../helpers'
+import { ReferralRPC } from '../messages'
 
 import { AccordionFarm } from './shared-ui/AccordionFarm'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -187,13 +187,13 @@ export function CreatedFarms(props: PageInterface) {
 
     // fetch my farms
     const { value: myFarms = EMPTY_LIST, loading: loadingMyFarms } = useAsync(
-        async () => farmsService.getMyFarms(account, currentChainId),
+        async () => ReferralRPC.getMyFarms(account, currentChainId),
         [currentChainId, account],
     )
 
     // fetch all deposits
     const { value: farmsDeposits = EMPTY_LIST, loading: loadingFarmsDeposits } = useAsync(
-        async () => farmsService.getFarmsDeposits(currentChainId),
+        async () => ReferralRPC.getFarmsDeposits(currentChainId),
         [currentChainId],
     )
 
