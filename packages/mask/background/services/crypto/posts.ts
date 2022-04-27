@@ -16,7 +16,11 @@ export async function queryPagedPostHistory(
     return (await queryPostPagedDB(persona, options, count)).map(convertPostRecordToPostInformation).filter(isNonNull)
 }
 
-function convertPostRecordToPostInformation(x: PostRecord): PostInformation | undefined {
+function convertPostRecordToPostInformation({ recipients, ...x }: PostRecord): PostInformation | undefined {
     if (!x.postBy) return undefined
-    return { ...x, postBy: x.postBy }
+    return {
+        ...x,
+        postBy: x.postBy,
+        recipients: recipients === 'everyone' ? 'everyone' : new Set(recipients.keys()),
+    }
 }
