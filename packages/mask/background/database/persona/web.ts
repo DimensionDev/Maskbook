@@ -464,7 +464,7 @@ export async function updateProfileDB(
         : undefined
 
     if (oldLinkedPersona && updating.linkedPersona && oldLinkedPersona !== updating.linkedPersona) {
-        const oldIdentifier = Identifier.fromString(old.identifier, ProfileIdentifier).unwrap()
+        const oldIdentifier = ProfileIdentifier.from(old.identifier).unwrap()
         const oldLinkedPersona = await queryPersonaByProfileDB(oldIdentifier, t)
 
         if (oldLinkedPersona) {
