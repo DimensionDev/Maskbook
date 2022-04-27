@@ -12,7 +12,6 @@ import type {
 import {
     ProfileIdentifier,
     PersonaIdentifier,
-    Identifier,
     IdentifierMap,
     ECKeyIdentifier,
     EC_Public_JsonWebKey,
@@ -396,7 +395,7 @@ function partialPersonaRecordToDB(
 }
 
 function personaRecordOutDB(x: NativePersonaRecord): PersonaRecord {
-    const identifier = Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap()
+    const identifier = ECKeyIdentifier.from(x.identifier).unwrap()
 
     return {
         publicKey: x.publicKey as JsonWebKey as unknown as EC_Public_JsonWebKey,
@@ -424,8 +423,8 @@ function profileRecordToDB(x: ProfileRecord): NativeProfileRecord {
 function profileRecordOutDB(x: NativeProfileRecord): ProfileRecord {
     return {
         localKey: x.localKey as JsonWebKey as unknown as AESJsonWebKey,
-        identifier: Identifier.fromString(x.identifier, ProfileIdentifier).unwrap(),
-        linkedPersona: x.linkedPersona ? Identifier.fromString(x.linkedPersona, ECKeyIdentifier).unwrap() : undefined,
+        identifier: ProfileIdentifier.from(x.identifier).unwrap(),
+        linkedPersona: ECKeyIdentifier.from(x.linkedPersona).unwrapOr(undefined),
         createdAt: new Date(x.createdAt),
         updatedAt: new Date(x.updatedAt),
     }
@@ -455,8 +454,8 @@ function relationRecordToDB(x: Omit<RelationRecord, 'network'>): Omit<NativeRela
 function relationRecordOutDB(x: NativeRelationRecord): RelationRecord {
     return {
         ...x,
-        profile: Identifier.fromString(x.profile, ProfileIdentifier).unwrap(),
-        linked: Identifier.fromString(x.linked, ECKeyIdentifier).unwrap(),
+        profile: ProfileIdentifier.from(x.profile).unwrap(),
+        linked: ECKeyIdentifier.from(x.linked).unwrap(),
     }
 }
 // #endregion

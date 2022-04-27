@@ -213,7 +213,7 @@ async function storeAuthorPublicKey(
     postAuthor: ProfileIdentifier | null,
     pub: EC_Key,
 ) {
-    if (!payloadAuthor.equals(postAuthor)) {
+    if (payloadAuthor !== postAuthor) {
         // ! Author detected is not equal to AuthorHint.
         // ! Skip store the public key because it might be a security problem.
         return

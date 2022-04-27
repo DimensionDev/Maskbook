@@ -68,7 +68,7 @@ export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier |
         .map((x) => x.identifier)
     const newVal = ECKeyIdentifier.from(currentPersonaIdentifier.value).unwrapOr(head(personas))
     if (!newVal) return undefined
-    if (personas.find((x) => x.equals(newVal))) return newVal
+    if (personas.find((x) => x === newVal)) return newVal
     if (personas[0]) currentPersonaIdentifier.value = personas[0].toText()
     return personas[0]
 }

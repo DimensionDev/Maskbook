@@ -89,7 +89,7 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                                     <PersonaCard
                                         publicKey={publicHexKey}
                                         identifier={identifier}
-                                        active={identifier.equals(currentPersonaIdentifier)}
+                                        active={identifier === currentPersonaIdentifier}
                                         key={identifier.toText()}
                                         nickname={nickname}
                                         profiles={[...linkedProfiles.values()]}

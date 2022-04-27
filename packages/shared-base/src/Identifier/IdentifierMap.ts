@@ -44,12 +44,9 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
         return this.__raw_map__.delete(data.toText())
     }
     private _identifierFromString(key: string) {
-        const identifier = Identifier.fromString(key)
-        if (identifier.err) {
-            console.warn(
-                'IdentifierMap found a key which cannot be converted into Identifier: ',
-                identifier.val.message,
-            )
+        const identifier = Identifier.from(key)
+        if (identifier.none) {
+            console.warn('IdentifierMap found a key which cannot be converted into Identifier', key)
         } else {
             if (this.constructorName.length === 0) return identifier.val as IdentifierType
             if (this.constructorName.includes(identifier.val.constructor.name)) return identifier.val as IdentifierType

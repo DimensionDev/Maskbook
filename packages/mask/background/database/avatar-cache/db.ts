@@ -1,5 +1,5 @@
 import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { Identifier, IdentifierMap, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { ECKeyIdentifier, Identifier, IdentifierMap, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { createDBAccess, createTransaction, IDBPSafeTransaction } from '../utils/openDB'
 
 const pendingUpdate = new IdentifierMap<IdentifierWithAvatar, Partial<AvatarMetadataRecord>>(new Map())
@@ -97,9 +97,9 @@ export async function queryAvatarOutdatedDB(
     const outdated: IdentifierWithAvatar[] = []
     for await (const { value } of t.objectStore('metadata')) {
         if (deadline > value[attribute]) {
-            const id = Identifier.fromString(value.identifier)
-            if (id.err) continue
-            outdated.push(id.val as IdentifierWithAvatar)
+            const id = Identifier.from(value.identifier)
+            if (id.none) continue
+            if (id.val instanceof ProfileIdentifier || id.val instanceof ECKeyIdentifier) outdated.push(id.val)
         }
     }
     return outdated
