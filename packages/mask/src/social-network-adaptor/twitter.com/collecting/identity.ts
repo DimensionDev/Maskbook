@@ -48,11 +48,14 @@ function resolveLastRecognizedIdentityMobileInner(
 ) {
     const onLocationChange = async () => {
         const settings = await Twitter.getSettings()
+        const identifier = ProfileIdentifier.of(twitterBase.networkIdentifier, settings?.screen_name).unwrapOr(
+            undefined,
+        )
 
-        if (settings?.screen_name && (!ref.value.identifier || ref.value.identifier.isUnknown)) {
+        if (identifier && !ref.value.identifier) {
             ref.value = {
                 ...ref.value,
-                identifier: new ProfileIdentifier(twitterBase.networkIdentifier, settings.screen_name),
+                identifier,
             }
         }
     }
@@ -118,7 +121,7 @@ export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolv
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveLastRecognizedIdentityInner(this.recognized, cancel)
-        if (isMobileTwitter()) resolveLastRecognizedIdentityMobileInner(this.recognized, cancel)
+        if (isMobileTwitter) resolveLastRecognizedIdentityMobileInner(this.recognized, cancel)
     },
 }
 
