@@ -88,9 +88,9 @@ export const fetchDownloadLink = ({ account, code, type }: VerifyCodeRequest) =>
     }).then<BackupFileInfo>(({ abstract, download_url, size, uploaded_at }) => {
         return {
             downloadURL: download_url,
-            size: size,
+            size,
             uploadedAt: uploaded_at,
-            abstract: abstract,
+            abstract,
         }
     })
 }

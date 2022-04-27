@@ -141,7 +141,7 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
                 },
                 contract_version: x.contract_version,
                 network: resolveChainName(x.chain_id),
-                token: token,
+                token,
                 claimers: x.claimers,
                 total_remaining: x.total_remaining,
                 block_number: x.block_number,
