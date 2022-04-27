@@ -37,9 +37,7 @@ export const EmailField = memo(({ toStep }: StepCommonProps) => {
                     variant="rounded"
                     color="primary"
                     size="large"
-                    onClick={() =>
-                        toStep(ValidationCodeStep.AccountValidation, { account: account, type: AccountType.email })
-                    }
+                    onClick={() => toStep(ValidationCodeStep.AccountValidation, { account, type: AccountType.email })}
                     disabled={!account || invalidEmail}>
                     {t.next()}
                 </Button>

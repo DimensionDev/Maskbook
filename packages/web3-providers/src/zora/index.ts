@@ -89,7 +89,7 @@ function createERC721TokenFromAsset(tokenAddress: string, tokenId: string, asset
             mediaUrl: asset?.metadata.json.animation_url ?? asset?.metadata.json.image_url ?? '',
             owner: asset?.owner,
         },
-        tokenId: tokenId,
+        tokenId,
     }
 }
 

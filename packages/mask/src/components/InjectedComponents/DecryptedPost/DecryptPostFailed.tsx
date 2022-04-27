@@ -7,9 +7,9 @@ import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 export interface DecryptPostFailedProps {
     error: Error
     /** The author in the payload */
-    author?: ProfileIdentifier
+    author: ProfileIdentifier | null
     /** The author of the encrypted post */
-    postedBy?: ProfileIdentifier
+    postedBy: ProfileIdentifier | null
 }
 export const DecryptPostFailed = memo(function DecryptPostFailed(props: DecryptPostFailedProps) {
     const { author, postedBy, error } = props

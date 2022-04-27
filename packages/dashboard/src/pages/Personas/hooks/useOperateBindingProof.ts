@@ -26,7 +26,7 @@ export function useDeleteBound() {
             username,
             payload.createdAt,
             {
-                signature: signature,
+                signature,
             },
         )
         Services.Identity.detachProfile(profile)

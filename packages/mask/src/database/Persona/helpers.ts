@@ -1,20 +1,7 @@
 import type { Profile, Persona } from './types'
-import {
-    ProfileRecord,
-    queryProfilesDB,
-    PersonaRecord,
-    queryProfileDB,
-    queryPersonaDB,
-    queryPersonasDB,
-} from '../../../background/database/persona/db'
-import { queryAvatarDataURL } from '../../../background/database/avatar-cache/avatar'
-import * as bip39 from 'bip39'
-import { ProfileIdentifier, type PersonaIdentifier, IdentifierMap } from '@masknet/shared-base'
-import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
-import {
-    deriveLocalKeyFromECDHKey,
-    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
-} from '../../../background/services/identity/persona/utils'
+import { ProfileRecord, PersonaRecord, queryProfileDB, queryPersonaDB } from '../../../background/database/persona/db'
+import { queryAvatarsDataURL } from '../../../background/database/avatar-cache/avatar'
+import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -22,7 +9,7 @@ export async function profileRecordToProfile(record: ProfileRecord): Promise<Pro
     delete rec.linkedPersona
     delete rec.localKey
     const _ = persona ? queryPersona(persona) : undefined
-    const _2 = queryAvatarDataURL(rec.identifier).catch(() => undefined)
+    const _2 = queryAvatarsDataURL([rec.identifier]).then((x) => x.get(rec.identifier))
     return {
         ...rec,
         linkedPersona: await _,
@@ -68,49 +55,13 @@ export async function queryPersona(identifier: PersonaIdentifier): Promise<Perso
         identifier,
         createdAt: new Date(),
         updatedAt: new Date(),
-        linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier),
+        linkedProfiles: new Map(),
         hasPrivateKey: false,
         hasLogout: false,
         fingerprint: identifier.compressedPoint,
     }
 }
 
-/**
- * Select a set of Profiles
- */
-export async function queryProfilesWithQuery(query: Parameters<typeof queryProfilesDB>[0]): Promise<Profile[]> {
-    const _ = await queryProfilesDB(query)
-    return Promise.all(_.map(profileRecordToProfile))
-}
-
-/**
- * Select a set of Personas
- */
-export async function queryPersonasWithQuery(query?: Parameters<typeof queryPersonasDB>[0]): Promise<Persona[]> {
-    const _ = await queryPersonasDB(query)
-    return _.map(personaRecordToPersona)
-}
-
 export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
-}
-
-export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: string | undefined, password: string) {
-    const personas = await queryPersonasWithQuery({ nameContains: nickname })
-    if (personas.length > 0) throw new Error('Nickname already exists')
-
-    const verify = bip39.validateMnemonic(mnemonicWord)
-    if (!verify) throw new Error('Verify error')
-
-    const { key, mnemonicRecord: mnemonic } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWord, password)
-    const { privateKey, publicKey } = key
-    const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
-    return createPersonaByJsonWebKey({
-        privateKey,
-        publicKey,
-        localKey,
-        mnemonic,
-        nickname,
-        uninitialized: false,
-    })
 }

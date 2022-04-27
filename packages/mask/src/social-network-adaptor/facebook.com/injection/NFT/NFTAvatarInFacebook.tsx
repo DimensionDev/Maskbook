@@ -63,7 +63,7 @@ function NFTAvatarInFacebook() {
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
-    const { value: _avatar } = useNFTAvatar(identity.identifier.userId, RSS3_KEY_SNS.FACEBOOK)
+    const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.FACEBOOK)
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
 
@@ -104,6 +104,7 @@ function NFTAvatarInFacebook() {
         const storages = InMemoryStorages.FacebookNFTEventOnMobile.storage
 
         if (!wallet) return
+        if (!identity.identifier) return
         if (NFTEvent?.address && NFTEvent?.tokenId && NFTEvent?.avatarId) {
             try {
                 const avatarInfo = await PluginNFTAvatarRPC.saveNFTAvatar(

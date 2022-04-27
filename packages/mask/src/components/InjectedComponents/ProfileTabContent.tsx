@@ -53,11 +53,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const { value: addressNames = EMPTY_LIST, loading: loadingAddressNames } = useAddressNames(identity)
     const { value: personaList = EMPTY_LIST, loading: loadingPersonaList } = useNextIDBoundByPlatform(
         platform as NextIDPlatform,
-        identity.identifier.userId,
+        identity.identifier?.userId,
     )
 
     const currentAccountNotConnectPersona =
-        currentIdentity.identifier.userId === identity.identifier.userId &&
+        currentIdentity.identifier === identity.identifier &&
         personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.publicHexKey) === -1
 
     const translate = usePluginI18NField()

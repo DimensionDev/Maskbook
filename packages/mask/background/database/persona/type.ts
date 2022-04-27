@@ -1,12 +1,10 @@
 import type { IDBPSafeTransaction } from '../utils/openDB'
 import type { DBSchema } from 'idb/with-async-ittr'
-import type { PrototypeLess } from '../../../utils-pure'
 import type {
     PersonaIdentifier,
     AESJsonWebKey,
     EC_Private_JsonWebKey,
     EC_Public_JsonWebKey,
-    IdentifierMap,
     ProfileIdentifier,
     RelationFavor,
 } from '@masknet/shared-base'
@@ -45,10 +43,20 @@ export type PersonaRecordDB = Omit<PersonaRecord, 'identifier' | 'linkedProfiles
     hasPrivateKey: 'no' | 'yes'
 }
 
-export type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey'> & {
+export type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey' | 'linkedPersona'> & {
     identifier: string
     network: string
-    linkedPersona?: PrototypeLess<PersonaIdentifier>
+    linkedPersona?: PersonaIdentifierStoredInDB
+}
+export type PersonaIdentifierStoredInDB = {
+    compressedPoint?: string
+    encodedCompressedKey?: string
+    type: 'ec_key'
+    curve: 'secp256k1'
+}
+export type ProfileIdentifierStoredInDB = {
+    userId: string
+    network: string
 }
 
 export type RelationRecordDB = Omit<RelationRecord, 'profile' | 'linked'> & {
@@ -116,7 +124,7 @@ export interface PersonaRecord {
     privateKey?: EC_Private_JsonWebKey
     localKey?: AESJsonWebKey
     nickname?: string
-    linkedProfiles: IdentifierMap<ProfileIdentifier, LinkedProfileDetails>
+    linkedProfiles: Map<ProfileIdentifier, LinkedProfileDetails>
     createdAt: Date
     updatedAt: Date
     hasLogout?: boolean

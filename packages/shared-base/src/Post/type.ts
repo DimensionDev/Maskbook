@@ -1,5 +1,4 @@
-import type { PostIVIdentifier, ProfileIdentifier } from '../Identifier/type'
-import type { IdentifierMap } from '../Identifier/IdentifierMap'
+import type { PostIVIdentifier, ProfileIdentifier } from '../Identifier'
 
 /**
  * UI display
@@ -14,7 +13,7 @@ export interface RecipientDetail {
 export interface PostRecord {
     postBy: ProfileIdentifier
     identifier: PostIVIdentifier
-    recipients: 'everyone' | IdentifierMap<ProfileIdentifier, RecipientDetail>
+    recipients: 'everyone' | Map<ProfileIdentifier, RecipientDetail>
     foundAt: Date
     url?: string
     summary?: string

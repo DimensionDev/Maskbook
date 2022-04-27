@@ -1,13 +1,13 @@
 import type { PersonaIdentifier, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
-import { first, noop, orderBy } from 'lodash-unified'
-import { queryAvatarDataURL } from '../../../database/avatar-cache/avatar'
+import { first, orderBy } from 'lodash-unified'
 import {
     createPersonaDBReadonlyAccess,
     queryPersonaDB,
     queryPersonasDB,
-    queryProfileDB,
+    queryProfilesDB,
 } from '../../../database/persona/db'
 import { queryPersonasDB as queryPersonasFromIndexedDB } from '../../../database/persona/web'
+import { toProfileInformation } from '../../__utils__/convert'
 import { MobilePersona, personaRecordToMobilePersona } from './mobile'
 
 export async function mobile_queryPersonaRecordsFromIndexedDB() {
@@ -42,13 +42,11 @@ export async function queryOwnedPersonaInformation(): Promise<PersonaInformation
                 linkedProfiles: map,
                 publicHexKey: persona.publicHexKey,
             })
-            for (const [profile] of persona.linkedProfiles) {
-                const linkedProfile = await queryProfileDB(profile, t)
 
-                const rec: ProfileInformation = { identifier: profile, nickname: linkedProfile?.nickname }
-                // We must not await another task inside db transaction
-                queryAvatarDataURL(profile).then((x) => (rec.avatar = x), noop)
-                map.push(rec)
+            if (persona.linkedProfiles.size) {
+                const profiles = await queryProfilesDB({ identifiers: [...persona.linkedProfiles.keys()] }, t)
+                // we must not await toProfileInformation cause it is tx of another db.
+                extraPromises.push(toProfileInformation(profiles).then((x) => map.push(...x)))
             }
         }
     })

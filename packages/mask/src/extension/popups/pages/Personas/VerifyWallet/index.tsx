@@ -110,7 +110,7 @@ const VerifyWallet = memo(() => {
                 payload.createdAt,
                 {
                     walletSignature: walletSig,
-                    signature: signature,
+                    signature,
                 },
             )
             setSigned(true)
