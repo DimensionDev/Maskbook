@@ -244,7 +244,10 @@ export function resolveCollectibleLink(
         case NonFungibleAssetProvider.ZORA:
             return ''
         case NonFungibleAssetProvider.TREASURE:
-            return ''
+            return urlcat(resolveCollectibleAssetLink(chainId, provider), '/:adddress/:tokenId', {
+                address,
+                tokenId,
+            })
         default:
             unreachable(provider)
     }

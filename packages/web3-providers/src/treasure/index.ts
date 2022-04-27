@@ -6,18 +6,10 @@ import {
     ERC721TokenDetailed,
     EthereumTokenType,
     resolveIPFSLinkFromURL,
+    getTreasureConstants,
 } from '@masknet/web3-shared-evm'
 
-import {
-    TREASURE_ARBITRUM_GRAPHQL_URL,
-    TREASURE_METADATA_GRAPHQL_URL,
-    METADATA_SUPPORT,
-    TREASURE_SMOLVERSE_GRAPHQL_URL,
-    TREASURE_BRIDGEWORLD_GRAPHQL_URL,
-    SMOLVERSE_SUPPORT,
-    REALM_SUPPORT,
-    TREASURE_REALM_GRAPHQL_URL,
-} from './constants'
+import { METADATA_SUPPORT, SMOLVERSE_SUPPORT, REALM_SUPPORT } from './constants'
 import type { Collections, Listing, Token } from './types'
 import { NonFungibleTokenAPI } from '..'
 import {
@@ -31,6 +23,11 @@ import {
 } from './queries'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
+import { TargetChainIdContext } from './useTargetChainIdContext'
+
+// eslint-disable-next-line react-hooks/rules-of-hooks
+const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+const TREASURE = getTreasureConstants(chainId)
 
 function createNFTAsset(asset: Token): NonFungibleTokenAPI.Asset {
     const image_url = asset.metadata.image ?? ''
@@ -59,7 +56,7 @@ function createNFTAsset(asset: Token): NonFungibleTokenAPI.Asset {
         traits: asset.metadata.attribute?.map((e: any) => {
             return {
                 trait_type: e.attribute.name,
-                value: e.attribute.name === 'IQ' ? Number(e.attribute.value) / 1e18 : e.attribute.value,
+                value: e.attribute.name === 'IQ' ? new BigNumber(e.attribute.value, 1e18) : e.attribute.value,
             }
         }),
         safelist_request_status: '',
@@ -104,22 +101,22 @@ function createERC721TokenFromAsset(tokenAddress: string, tokenId: string, asset
             mediaUrl: asset?.metadata.image ?? '',
             owner: asset?.owner.id,
         },
-        tokenId: tokenId,
+        tokenId,
     }
 }
 
-export class TreasureAPI {
+export class TreasureAPI implements NonFungibleTokenAPI.Provider {
     private client
     private metadata
     private smolverse
     private realm
     private bridgeworld
     constructor() {
-        this.client = new GraphQLClient(TREASURE_ARBITRUM_GRAPHQL_URL)
-        this.metadata = new GraphQLClient(TREASURE_METADATA_GRAPHQL_URL)
-        this.smolverse = new GraphQLClient(TREASURE_SMOLVERSE_GRAPHQL_URL)
-        this.realm = new GraphQLClient(TREASURE_REALM_GRAPHQL_URL)
-        this.bridgeworld = new GraphQLClient(TREASURE_BRIDGEWORLD_GRAPHQL_URL)
+        this.client = new GraphQLClient(TREASURE.TREASURE_ARBITRUM_GRAPHQL_URL)
+        this.metadata = new GraphQLClient(TREASURE.TREASURE_METADATA_GRAPHQL_URL)
+        this.smolverse = new GraphQLClient(TREASURE.TREASURE_SMOLVERSE_GRAPHQL_URL)
+        this.realm = new GraphQLClient(TREASURE.TREASURE_REALM_GRAPHQL_URL)
+        this.bridgeworld = new GraphQLClient(TREASURE.TREASURE_BRIDGEWORLD_GRAPHQL_URL)
     }
 
     collectionsCache: Collections | null = null
@@ -345,14 +342,13 @@ export class TreasureAPI {
 }
 
 export function getTreasureNFTList() {
-    return
+    return []
 }
 export function getTreasureCollectionList() {
-    return
+    return []
 }
 
 function convertTreasureId(address: string, tokenId: string) {
     const hexNumber = '0x' + new BigNumber(tokenId).toString(16)
-    console.log([address, hexNumber].join('-'))
     return [address, hexNumber].join('-')
 }

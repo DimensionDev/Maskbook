@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/prefer-enum-initializers */
 
 enum TokenStandard {
-    ERC721,
-    ERC1155,
+    ERC721 = 1,
+    ERC1155 = 2,
 }
 
 enum TreasureStatus {
-    Active,
-    Hidden,
-    Sold,
+    Active = 1,
+    Hidden = 2,
+    Sold = 3,
 }
 export interface TreasureToken {
     id: string

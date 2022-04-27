@@ -26,6 +26,7 @@ import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
 import Aave from '@masknet/web3-constants/evm/aave.json'
 import Lido from '@masknet/web3-constants/evm/lido.json'
+import Treasure from '@masknet/web3-constants/evm/treasure.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
 function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
@@ -122,3 +123,6 @@ export const useAaveConstants = hookTransform(getAaveConstants)
 
 export const getLidoConstants = transform(Lido)
 export const useLidoConstants = hookTransform(getLidoConstants)
+
+export const getTreasureConstants = transform(Treasure)
+export const useTreasureConstants = hookTransform(getTreasureConstants)
