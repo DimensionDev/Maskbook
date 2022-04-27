@@ -13,7 +13,7 @@ import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import Services from '../../../extension/service'
 import { twitterBase } from '../base'
 import { getAvatar, getBio, getNickname, getTwitterId, getPersonalHomepage } from '../utils/user'
-import { hasNativeAPI } from '../../../../shared/native-rpc'
+import { isMobileTwitter } from '../utils/isMobile'
 
 function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
@@ -117,7 +117,7 @@ export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolv
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveLastRecognizedIdentityInner(this.recognized, cancel)
-        if (hasNativeAPI) resolveLastRecognizedIdentityMobileInner(this.recognized, cancel)
+        if (isMobileTwitter()) resolveLastRecognizedIdentityMobileInner(this.recognized, cancel)
     },
 }
 
