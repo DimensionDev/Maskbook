@@ -46,6 +46,9 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         whiteSpace: 'nowrap',
     },
+    timestamp: {
+        fontSize: 12,
+    },
     cell: {
         fontSize: 14,
         display: 'flex',
@@ -62,6 +65,9 @@ const useStyles = makeStyles()((theme) => ({
         width: 12,
         height: 12,
         marginLeft: theme.spacing(0.5),
+    },
+    clear: {
+        fontSize: 14,
     },
 }))
 
@@ -141,7 +147,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
                         component="strong">
                         {functionName}
                     </Typography>
-                    <Typography variant="body1" color={theme.palette.text.secondary}>
+                    <Typography className={classes.timestamp} variant="body1" color={theme.palette.text.secondary}>
                         {format(tx.at, 'yyyy.MM.dd hh:mm')}
                     </Typography>
                 </Stack>
@@ -167,7 +173,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
             </Grid>
             <Grid item className={classes.cell} md={2} justifyContent="center">
                 {txStatus === TransactionStatusType.NOT_DEPEND ? (
-                    <Button variant="text" size="small" onClick={handleClear}>
+                    <Button className={classes.clear} variant="text" size="small" onClick={handleClear}>
                         {t('wallet_status_pending_clear')}
                     </Button>
                 ) : null}

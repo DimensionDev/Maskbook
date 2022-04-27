@@ -89,7 +89,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
             erc721Token={{
                 chainId,
                 contractAddress,
-                tokenId: tokenId,
+                tokenId,
             }}
             url={url}
             options={{

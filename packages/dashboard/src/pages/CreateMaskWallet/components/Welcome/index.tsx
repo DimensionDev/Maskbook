@@ -83,7 +83,6 @@ const Welcome = memo(() => {
               }
               body::-webkit-scrollbar-thumb {
                 border-radius: 4px;
-
               }
             `
         iframeDocument.head?.appendChild(style)

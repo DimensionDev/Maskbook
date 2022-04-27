@@ -10,7 +10,7 @@ function usePersonaContext() {
     const currentPersonaIdentifier = useCurrentPersonaIdentifier()
     const definedSocialNetworks: SocialNetwork[] = useDefinedSocialNetworkUIs()
     const personas = useOwnedPersonas()
-    const currentPersona = personas.find((x) => x.identifier.equals(currentPersonaIdentifier))
+    const currentPersona = personas.find((x) => x.identifier === currentPersonaIdentifier)
     const [open, setOpen] = useState(false)
 
     const [, connectPersona] = useConnectSocialNetwork()

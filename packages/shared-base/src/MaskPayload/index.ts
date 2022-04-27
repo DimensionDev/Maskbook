@@ -1,4 +1,4 @@
-import type { ProfileIdentifier } from '../Identifier/type'
+import type { ProfileIdentifier } from '../Identifier'
 
 export type Payload = PayloadAlpha40_Or_Alpha39 | PayloadAlpha38
 export type PayloadLatest = PayloadAlpha38

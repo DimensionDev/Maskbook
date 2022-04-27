@@ -101,7 +101,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             getCurrentValue: () => {
                 const by = opt.author.getCurrentValue()
                 const id = opt.snsID.getCurrentValue()
-                if (by.isUnknown || id === null) return null
+                if (!id || !by) return null
                 return new PostIdentifier(by, id)
             },
             subscribe: (sub) => {
@@ -110,7 +110,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 return () => void [a(), b()]
             },
         })
-        const postIVIdentifier = new ValueRef<PostIVIdentifier | null>(null, PostIVIdentifier.equals)
+        const postIVIdentifier = new ValueRef<PostIVIdentifier | null>(null)
         const isPublicShared = new ValueRef<boolean | undefined>(undefined)
         const isAuthorOfPost = new ValueRef<boolean | undefined>(undefined)
         const version = new ValueRef<SupportedPayloadVersions | undefined>(undefined)
@@ -157,8 +157,9 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             isAuthorOfPost: createSubscriptionFromValueRef(isAuthorOfPost),
             version: createSubscriptionFromValueRef(version),
             decryptedReport(opts) {
-                if (opts.iv)
-                    postIVIdentifier.value = new PostIVIdentifier(author.author.getCurrentValue().network, opts.iv)
+                const currentAuthor = author.author.getCurrentValue()
+                if (opts.iv && currentAuthor)
+                    postIVIdentifier.value = new PostIVIdentifier(currentAuthor.network, opts.iv)
                 if (opts.sharedPublic?.some) isPublicShared.value = opts.sharedPublic.val
                 if (opts.isAuthorOfPost) isAuthorOfPost.value = opts.isAuthorOfPost.val
                 if (opts.version) version.value = opts.version
@@ -169,7 +170,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
 export function createRefsForCreatePostContext() {
     const avatarURL = new ValueRef<string | null>(null)
     const nickname = new ValueRef<string | null>(null)
-    const postBy = new ValueRef<ProfileIdentifier>(ProfileIdentifier.unknown, ProfileIdentifier.equals)
+    const postBy = new ValueRef<ProfileIdentifier | null>(null)
     const postID = new ValueRef<string | null>(null)
     const postMessage = new ValueRef<TypedMessageTuple<readonly TypedMessage[]>>(makeTypedMessageTupleFromList())
     const postMetadataImages = new ObservableSet<string>()

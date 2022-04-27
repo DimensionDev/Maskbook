@@ -1,4 +1,3 @@
-import { IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentifierWithAvatar, createAvatarDBAccess } from './db'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import { blobToDataURL, memoizePromise } from '@dimensiondev/kit'
@@ -8,8 +7,8 @@ import { createTransaction } from '../utils/openDB'
  * Get a (cached) blob url for an identifier. No cache for native api.
  * ? Because of cross-origin restrictions, we cannot use blob url here. sad :(
  */
-async function nativeImpl(identifiers: IdentifierWithAvatar[]): Promise<IdentifierMap<IdentifierWithAvatar, string>> {
-    const map = new IdentifierMap<IdentifierWithAvatar, string>(new Map())
+async function nativeImpl(identifiers: IdentifierWithAvatar[]): Promise<Map<IdentifierWithAvatar, string>> {
+    const map = new Map<IdentifierWithAvatar, string>(new Map())
     await Promise.allSettled(
         identifiers.map(async (id) => {
             const result = await nativeAPI!.api.query_avatar({ identifier: id.toText() })
@@ -19,10 +18,10 @@ async function nativeImpl(identifiers: IdentifierWithAvatar[]): Promise<Identifi
     return map
 }
 const indexedDBImpl = memoizePromise(
-    async function (identifiers: IdentifierWithAvatar[]): Promise<IdentifierMap<IdentifierWithAvatar, string>> {
+    async function (identifiers: IdentifierWithAvatar[]): Promise<Map<IdentifierWithAvatar, string>> {
         const promises: Promise<unknown>[] = []
 
-        const map = new IdentifierMap<IdentifierWithAvatar, string>(new Map())
+        const map = new Map<IdentifierWithAvatar, string>()
         const t = createTransaction(await createAvatarDBAccess(), 'readonly')('avatars')
         for (const id of identifiers) {
             // Must not await here. Because we insert non-idb async operation (blobToDataURL).
@@ -38,9 +37,8 @@ const indexedDBImpl = memoizePromise(
     },
     (id) => id.flatMap((x) => x.toText()).join(';'),
 )
-export const queryAvatarsDataURL: (
-    identifiers: IdentifierWithAvatar[],
-) => Promise<IdentifierMap<IdentifierWithAvatar, string>> = hasNativeAPI ? nativeImpl : indexedDBImpl
+export const queryAvatarsDataURL: (identifiers: IdentifierWithAvatar[]) => Promise<Map<IdentifierWithAvatar, string>> =
+    hasNativeAPI ? nativeImpl : indexedDBImpl
 
 /**
  * Store an avatar with a url for an identifier.
@@ -49,7 +47,6 @@ export const queryAvatarsDataURL: (
  */
 
 export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: ArrayBuffer | string): Promise<void> {
-    if (identifier instanceof ProfileIdentifier && identifier.isUnknown) return
     try {
         if (hasNativeAPI) {
             // ArrayBuffer is unreachable on Native side.

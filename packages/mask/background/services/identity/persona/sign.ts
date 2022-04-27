@@ -53,7 +53,7 @@ export async function signWithPersona({ message, method, identifier }: SignReque
 }
 
 export async function generateSignResult(signer: ECKeyIdentifier, message: string) {
-    const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier.equals(signer))
+    const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === signer)
     if (!persona) throw new Error('Persona not found')
 
     // will have problem with UTF-8?

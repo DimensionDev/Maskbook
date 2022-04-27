@@ -31,7 +31,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const { classes } = useStyles()
     const { items, selected, onSetSelected } = props
     const currentIdentity = useCurrentIdentity()
-    const profileItems = items.recipients?.filter((x) => !x.identifier.equals(currentIdentity?.identifier))
+    const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
     const [open, setOpen] = useState(false)
 
     useEffect(() => void (open && items.request()), [open, items.request])
