@@ -9,9 +9,3 @@ export const LDO_PAIRS: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
         createERC20Tokens('LDO_stETH_ADDRESS', 'Liquid staked Ether 2.0', 'stETH', 18)[ChainId.Mainnet],
     ],
 ]
-
-export const YearnChains = {
-    [ChainId.Mainnet]: 'ethereum',
-    [ChainId.Fantom]: 'fantom',
-    [ChainId.Arbitrum]: 'arbitrum',
-}

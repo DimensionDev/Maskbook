@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 
 import {
@@ -8,10 +9,9 @@ import {
     useFungibleTokensDetailed,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
-import { useMemo } from 'react'
+import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import { flatten, compact } from 'lodash-unified'
-import type Web3 from 'web3'
 import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider'
 import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
 import { splitToPair } from '../utils'
@@ -19,7 +19,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 
 export function useAaveTokens(chainId: ChainId, web3: Web3) {
     const {
-        value: aaveTokens,
+        value: aaveTokens = EMPTY_LIST,
         loading,
         error,
         retry,
@@ -44,7 +44,7 @@ export function useAaveTokens(chainId: ChainId, web3: Web3) {
     }, [web3, chainId])
 
     const { value: detailedAaveTokens, loading: loadingTokenDetails } = useFungibleTokensDetailed(
-        compact(flatten(aaveTokens ?? [])).map((address: string) => {
+        compact(flatten(aaveTokens)).map((address: string) => {
             return { address, type: EthereumTokenType.ERC20 }
         }) ?? [],
         chainId,

@@ -94,7 +94,6 @@ export class AAVEProtocol implements SavingsProtocol {
             const liquidityRate = +fullResponse.data.reserves[0].liquidityRate
 
             const RAY = pow10(27) // 10 to the power 27
-            const SECONDS_PER_YEAR = 31536000
 
             // APY and APR are returned here as decimals, multiply by 100 to get the percents
             this._apr = new BigNumber(liquidityRate).times(100).div(RAY).toFixed(2)

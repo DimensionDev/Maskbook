@@ -1,5 +1,4 @@
-import { YearnChains } from './constants'
-import type { ChainId, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { ChainId, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { chunk } from 'lodash-unified'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { ChainIdYearn, FungibleTokenPair } from './types'
@@ -10,5 +9,5 @@ export function splitToPair(details: FungibleTokenDetailed[] | undefined): Fungi
 }
 
 export function isValidYearnChain(chainId: ChainId): chainId is ChainIdYearn {
-    return Reflect.has(YearnChains, chainId)
+    return [ChainId.Mainnet, ChainId.Fantom, ChainId.Arbitrum].includes(chainId)
 }

@@ -61,7 +61,6 @@ export class YearnProtocol implements SavingsProtocol {
                 return
             }
         } catch (error) {
-            console.error('YFI APR ERROR: ', error)
             this._apr = YearnProtocol.DEFAULT_APR
         }
     }
@@ -72,7 +71,6 @@ export class YearnProtocol implements SavingsProtocol {
             const balance = await contract?.methods.balanceOf(account).call()
             this._balance = new BigNumber(balance ?? '0')
         } catch (error) {
-            console.error('YFI BALANCE ERROR: ', error)
             this._balance = ZERO
         }
     }
@@ -112,7 +110,6 @@ export class YearnProtocol implements SavingsProtocol {
 
             return true
         } catch (error) {
-            console.error('YFI deposit ERROR: ', error)
             return false
         }
     }
@@ -146,7 +143,6 @@ export class YearnProtocol implements SavingsProtocol {
 
             return true
         } catch (error) {
-            console.error('YFI Withdraw ERROR: ', error)
             return false
         }
     }
