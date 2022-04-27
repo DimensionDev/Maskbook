@@ -59,14 +59,14 @@ export async function fetchPool(address?: string, subgraphUrl?: string) {
         : prizePool.prizeStrategy.multipleWinners
 
     return {
-        address: address,
+        address,
         config: {
             numberOfWinners: prizeStrategy.numberOfWinners ?? '1',
             prizePeriodSeconds: prizeStrategy.prizePeriodSeconds,
         },
         prize: {},
         prizePool: {
-            address: address,
+            address,
         },
         tokens: {
             ticket: {

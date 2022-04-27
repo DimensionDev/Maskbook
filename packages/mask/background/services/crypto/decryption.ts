@@ -139,8 +139,8 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                     url: postURL,
                 })
             },
-            hasLocalKeyOf: hasLocalKeyOf,
-            decryptByLocalKey: decryptByLocalKey,
+            hasLocalKeyOf,
+            decryptByLocalKey,
             async deriveAESKey(pub) {
                 return Array.from((await deriveAESByECDH(pub)).values())
             },

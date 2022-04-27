@@ -56,8 +56,8 @@ function profileRelationFormatter(p: Profile, personaIdentifier: string | undefi
         linkedPersona: !!p.linkedPersona,
         createdAt: p.createdAt.getTime(),
         updatedAt: p.updatedAt.getTime(),
-        personaIdentifier: personaIdentifier,
-        favor: favor,
+        personaIdentifier,
+        favor,
     }
 }
 

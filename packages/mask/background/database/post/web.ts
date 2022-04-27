@@ -14,12 +14,12 @@ import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
 import type { PersonaIdentifierStoredInDB, ProfileIdentifierStoredInDB } from '../persona/type'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
 import type {
-    RecipientReason,
-    PostRecord,
     PostDB,
     PostDBRecord,
     PostReadOnlyTransaction,
     PostReadWriteTransaction,
+    PostRecord,
+    RecipientReason,
 } from './type'
 
 type UpgradeKnowledge = { version: 4; data: Map<string, AESJsonWebKey> } | undefined
@@ -327,8 +327,8 @@ function postOutDB(db: PostDBRecord): PostRecord {
         identifier: PostIVIdentifier.from(identifier).unwrap(),
         postBy: ProfileIdentifier.of(postBy?.network, postBy?.userId).unwrapOr(undefined),
         recipients: recipients === true ? 'everyone' : convertRawMapToIdentifierMap(recipients, ProfileIdentifier),
-        foundAt: foundAt,
-        postCryptoKey: postCryptoKey,
+        foundAt,
+        postCryptoKey,
         encryptBy: ECKeyIdentifier.from(encryptBy).unwrapOr(undefined),
         interestedMeta,
         summary,
