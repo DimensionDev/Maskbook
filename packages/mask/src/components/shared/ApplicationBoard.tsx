@@ -242,7 +242,7 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
         currentPersonaPublicKey,
         currentSNSConnectedPersonaPublicKey,
     } = ApplicationCurrentStatus ?? {}
-    const { closeDialog } = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
+    const { closeDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
 
     const onNextIdVerify = useCallback(() => {
         closeDialog()
