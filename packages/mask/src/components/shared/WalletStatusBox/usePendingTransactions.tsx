@@ -55,7 +55,7 @@ export function usePendingTransactions() {
     const frozenTxes = useRef<RecentTransaction[]>([])
     const [meltedTxHashes, setMeltedTxHashes] = useState<string[]>([])
     useEffect(() => {
-        frozenTxes.current = pendingTransactions.slice(0, 2)
+        frozenTxes.current = pendingTransactions.slice(0, 5)
         setMeltedTxHashes([])
     }, [showRecentTransactions])
     const clearRecentTxes = useClearRecentTransactions()

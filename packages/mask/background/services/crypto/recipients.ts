@@ -8,12 +8,12 @@ export async function hasRecipientAvailable(whoAmI: ProfileIdentifier): Promise<
 
     if (profiles.length === 0) return false
     if (profiles.length > 1) return true
-    return !profiles[0].identifier.equals(whoAmI)
+    return profiles[0].identifier !== whoAmI
 }
 
 export async function getRecipients(whoAmI: ProfileIdentifier): Promise<ProfileInformation[]> {
     const profiles = (await queryProfilesDB({ hasLinkedPersona: true, network: whoAmI.network })).filter(
-        (x) => !x.identifier.equals(whoAmI) && x.linkedPersona,
+        (x) => x.identifier !== whoAmI && x.linkedPersona,
     )
     return toProfileInformation(profiles)
 }

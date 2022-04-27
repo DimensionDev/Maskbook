@@ -72,8 +72,8 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
             attachMetadata(RedPacketNftMetaKey, {
                 id: rpid,
                 txid,
-                duration: duration,
-                message: message,
+                duration,
+                message,
                 senderName,
                 contractName: contractDetailed.name,
                 contractAddress: contractDetailed.address,

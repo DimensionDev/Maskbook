@@ -22,7 +22,7 @@ function modify(manifest: Manifest, flags: NormalizedFlags) {
 
         if (flags.runtime.architecture === 'app') {
             manifest.permissions.push('nativeMessaging', 'nativeMessagingFromContent', 'geckoViewAddons')
-            manifest.applications = { gecko: { id: 'info@dimension.com' } }
+            manifest.applications = { gecko: { id: 'info@dimension.im' } }
         }
     }
     // Grant all URL permissions on App

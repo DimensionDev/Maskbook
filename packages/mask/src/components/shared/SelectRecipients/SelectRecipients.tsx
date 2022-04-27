@@ -31,7 +31,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const { classes } = useStyles()
     const { items, selected, onSetSelected } = props
     const currentIdentity = useCurrentIdentity()
-    const profileItems = items.recipients?.filter((x) => !x.identifier.equals(currentIdentity?.identifier))
+    const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
     const [open, setOpen] = useState(false)
 
     useEffect(() => void (open && items.request()), [open, items.request])
@@ -40,7 +40,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         <Box className={classes.root}>
             <Chip
                 label={t('post_dialog__select_specific_e2e_target_title', {
-                    selected: new Set([...selected.map((x) => x.identifier.toText())]).size,
+                    selected: new Set(selected.map((x) => x.identifier)).size,
                 })}
                 avatar={<AddIcon />}
                 disabled={props.disabled || profileItems?.length === 0}

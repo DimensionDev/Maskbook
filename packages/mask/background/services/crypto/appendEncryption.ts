@@ -1,12 +1,5 @@
 import { appendEncryptionTarget, EC_Key, EC_KeyCurveEnum, SupportedPayloadVersions } from '@masknet/encryption'
-import {
-    EC_Public_CryptoKey,
-    IdentifierMap,
-    PostIVIdentifier,
-    ProfileIdentifier,
-    RecipientDetail,
-    RecipientReason,
-} from '@masknet/shared-base'
+import type { EC_Public_CryptoKey, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { deriveAESByECDH, queryPublicKey } from '../../database/persona/helper'
 import { updatePostDB, queryPostDB } from '../../database/post'
 import { publishPostAESKey_version39Or38 } from '../../network/gun/encryption/queryPostKey'
@@ -17,14 +10,12 @@ export async function appendShareTarget(
     post: PostIVIdentifier,
     target: ProfileIdentifier[],
     whoAmI: ProfileIdentifier,
-    reason: RecipientReason,
 ): Promise<void> {
     if (version === -39 || version === -40) throw new TypeError('invalid version')
     const key = await getPostKeyCache(post)
     const postRec = await queryPostDB(post)
     const postBy = postRec?.encryptBy || postRec?.postBy || whoAmI
 
-    if (whoAmI?.isUnknown) throw new Error('Cannot find private key')
     if (!key) throw new Error('No post key found')
 
     const e2e = await appendEncryptionTarget(
@@ -52,12 +43,7 @@ export async function appendShareTarget(
     updatePostDB(
         {
             identifier: post,
-            recipients: new IdentifierMap(
-                new Map(
-                    target.map<[string, RecipientDetail]>((identifier) => [identifier.toText(), { reason: [reason] }]),
-                ),
-                ProfileIdentifier,
-            ),
+            recipients: new Map(target.map((identifier): [ProfileIdentifier, Date] => [identifier, new Date()])),
         },
         'append',
     )

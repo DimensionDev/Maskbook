@@ -68,15 +68,16 @@ export interface PersonaRecord {
     uninitialized?: boolean
 }
 
-type RecipientReason = ({ type: 'auto-share' } | { type: 'direct' } | { type: 'group'; group: any }) & {
-    at: number
+export type MobileRecipientReason =
+    | { type: 'auto-share'; at: number }
+    | { type: 'direct'; at: number }
+    | { type: 'group'; group: any; at: number }
+
+export interface MobileRecipientDetail {
+    reason: MobileRecipientReason[]
 }
 
-interface RecipientDetail {
-    reason: RecipientReason[]
-}
-
-export interface PostRecord {
+export interface MobilePostRecord {
     /**
      * For old data stored before version 3, this identifier may be ProfileIdentifier.unknown
      */
@@ -86,7 +87,7 @@ export interface PostRecord {
     /**
      * Receivers
      */
-    recipients: Record<string, RecipientDetail>
+    recipients: Record<string, MobileRecipientDetail>
     /** @deprecated */
     recipientGroups?: unknown
     /**

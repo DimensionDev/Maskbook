@@ -59,7 +59,7 @@ export async function generate_ECDH_256k1_KeyPair_ByMnemonicWord(
         key,
         password,
         mnemonicRecord: {
-            parameter: { path: path, withPassword: password.length > 0 },
+            parameter: { path, withPassword: password.length > 0 },
             words: mnemonicWord,
         },
     }
@@ -81,7 +81,7 @@ export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(
         key,
         password,
         mnemonicRecord: {
-            parameter: { path: path, withPassword: password.length > 0 },
+            parameter: { path, withPassword: password.length > 0 },
             words: mnemonicWord,
         },
     }
