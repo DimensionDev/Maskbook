@@ -20,7 +20,7 @@
     "build-ios": "build --preset iOS",
     "lint": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache --fix",
     "lint:ci": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache",
-    "lint:ci-report": "pnpm lint:ci -- --format=junit --output-file=reports/junit/eslint-results.xml",
+    "lint:ci-report": "pnpm lint:ci -- --format=junit --output-file=reports/junit/eslint-results.xml --max-warnings=0",
     "postinstall": "patch-package",
     "prepare": "husky install",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",

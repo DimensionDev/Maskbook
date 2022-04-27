@@ -166,7 +166,7 @@ export function useTradeCallback(
                     } else {
                         setTradeState({
                             type: TransactionStateType.HASH,
-                            hash: hash,
+                            hash,
                         })
                         resolve(hash)
                     }

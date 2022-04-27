@@ -182,7 +182,7 @@ export function DepositDialog() {
                   : 'plugin_pooltogether_share_no_official_account',
               {
                   amount: rawAmount,
-                  cashTag: cashTag,
+                  cashTag,
                   symbol: token.symbol,
                   pool: pool?.name ?? `${pool?.tokens.underlyingToken.symbol} Pool`,
                   account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),

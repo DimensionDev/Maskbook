@@ -117,7 +117,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
                 payload.createdAt,
                 {
                     walletSignature: walletSig,
-                    signature: signature,
+                    signature,
                 },
             )
             showSnackbar(t('plugin_tips_wallet_sign_success'), { variant: 'success', message: nowTime })
