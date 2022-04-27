@@ -1,5 +1,3 @@
-import { PluginId } from '@masknet/plugin-infra'
-import { useActivatedPlugin } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
@@ -102,10 +100,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const [hasChanged, setHasChanged] = useState(false)
     const [rawPatchData, setRawPatchData] = useState<BindingProof[]>([])
     const [rawWalletList, setRawWalletList] = useState<BindingProof[]>([])
-    const plugin = useActivatedPlugin(PluginId.Tips, 'any')
-    const supportedNetworks = useSupportedNetworks(
-        Object.keys(plugin?.enableRequirement.web3 ?? {}) as NetworkPluginID[],
-    )
+    const supportedNetworks = useSupportedNetworks([NetworkPluginID.PLUGIN_EVM])
 
     const { showSnackbar } = useCustomSnackbar()
     const account = useAccount()
@@ -176,15 +171,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             )
             if (!signResult) throw new Error('sign error')
             await setKvPatchData(payload.val, signResult.signature.signature, rawPatchData)
-            showSnackbar('Persona signed successfully.', {
+            showSnackbar(t('plugin_tips_persona_sign_success'), {
                 variant: 'success',
                 message: nowTime,
             })
-            retryProof()
             retryKv()
             return true
         } catch (error) {
-            showSnackbar('Persona Signature failed.', {
+            showSnackbar(t('plugin_tips_persona_sign_error'), {
                 variant: 'error',
                 message: nowTime,
             })
@@ -239,18 +233,20 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     result.createdAt,
                     { signature: signature.signature.signature },
                 )
-                retryProof()
-                retryKv()
-                return true
+                showSnackbar(t('plugin_tips_persona_sign_success'), {
+                    variant: 'success',
+                    message: nowTime,
+                })
             } catch (error) {
-                showSnackbar('Persona Signature failed.', {
+                showSnackbar(t('plugin_tips_persona_sign_error'), {
                     variant: 'error',
                     message: nowTime,
                 })
-                return false
+            } finally {
+                retryProof()
             }
         },
-        [currentPersona],
+        [currentPersona, proofRes],
     )
 
     return (

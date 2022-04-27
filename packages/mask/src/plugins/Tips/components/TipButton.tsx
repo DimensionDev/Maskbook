@@ -17,7 +17,7 @@ import { PluginNextIDMessages } from '../messages'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     addresses?: string[]
-    receiver?: ProfileIdentifier
+    receiver?: ProfileIdentifier | null
     tooltipProps?: Partial<TooltipProps>
 }
 
@@ -88,7 +88,7 @@ export const TipButton: FC<Props> = ({
         })
     }, [])
 
-    const publicWallets = usePublicWallets(receiver)
+    const publicWallets = usePublicWallets(receiver || undefined)
     const allAddresses = useMemo(() => uniq([...publicWallets, ...addresses]), [publicWallets, addresses])
 
     const isChecking = loadingPersona || loadingVerifyInfo

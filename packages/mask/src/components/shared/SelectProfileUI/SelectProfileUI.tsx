@@ -32,11 +32,11 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
 
     const [search, setSearch] = useState('')
     const listBeforeSearch = items.filter((x) => {
-        if (selected.find((y) => x.identifier.equals(y.identifier))) return false
+        if (selected.find((y) => x.identifier === y.identifier)) return false
         return true
     })
     const listAfterSearch = listBeforeSearch.filter((x) => {
-        if (frozenSelected.find((y) => x.identifier.equals(y.identifier))) return false
+        if (frozenSelected.find((y) => x.identifier === y.identifier)) return false
         if (search === '') return true
         return (
             !!x.identifier.userId.toLowerCase().match(search.toLowerCase()) ||
@@ -83,7 +83,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                                     key={item.identifier.toText()}
                                     item={item}
                                     onDelete={() =>
-                                        onSetSelected(selected.filter((x) => !x.identifier.equals(item.identifier)))
+                                        onSetSelected(selected.filter((x) => x.identifier !== item.identifier))
                                     }
                                 />
                             ))}

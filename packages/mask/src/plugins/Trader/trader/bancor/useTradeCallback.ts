@@ -36,7 +36,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
             const error = new Error(err.error.messages?.[0] || 'Unknown Error')
             setTradeState({
                 type: TransactionStateType.FAILED,
-                error: error,
+                error,
             })
             throw error
         }

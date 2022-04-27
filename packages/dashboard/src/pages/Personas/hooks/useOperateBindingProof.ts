@@ -14,7 +14,7 @@ export function useDeleteBound() {
         const signResult = await Services.Identity.signWithPersona({
             method: 'eth',
             message: payload.signPayload,
-            identifier: persona_.identifier.toText(),
+            identifier: persona_.identifier,
         })
         if (!signResult) throw new Error('Failed to sign by persona.')
         const signature = signResult.signature.signature
@@ -26,7 +26,7 @@ export function useDeleteBound() {
             username,
             payload.createdAt,
             {
-                signature: signature,
+                signature,
             },
         )
         Services.Identity.detachProfile(profile)

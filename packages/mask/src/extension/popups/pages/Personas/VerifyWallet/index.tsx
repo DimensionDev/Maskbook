@@ -110,7 +110,7 @@ const VerifyWallet = memo(() => {
                 payload.createdAt,
                 {
                     walletSignature: walletSig,
-                    signature: signature,
+                    signature,
                 },
             )
             setSigned(true)
@@ -162,6 +162,7 @@ const VerifyWallet = memo(() => {
                 changeWallet={changeWallet}
                 onConfirm={handleConfirm}
                 confirmLoading={confirmLoading}
+                onCustomCancel={() => navigate(-1)}
             />
         </div>
     )

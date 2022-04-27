@@ -19,7 +19,6 @@ import { Trash2 } from 'react-feather'
 const useStyles = makeStyles()({
     list: {
         padding: 0,
-        height: 'calc(100vh - 185px)',
         overflow: 'auto',
     },
     item: {
@@ -138,7 +137,7 @@ export const PersonaListUI = memo<PersonaListUIProps>(
                             onEdit={() => onEdit(persona)}
                             onLogout={() => onLogout(persona)}
                             identifier={identifier}
-                            isCurrent={currentPersona?.identifier.equals(identifier)}
+                            isCurrent={currentPersona?.identifier === identifier}
                             nickname={nickname}
                         />
                     )

@@ -98,9 +98,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
         if (!platform && !identity) return []
 
-        const response = await fetchJSON<NextIDBindings>(
-            urlcat(BASE_URL, '/v1/proof', { platform: platform, identity: identity }),
-        )
+        const response = await fetchJSON<NextIDBindings>(urlcat(BASE_URL, '/v1/proof', { platform, identity }))
 
         // TODO: merge Pagination into this
         return response.unwrap().ids

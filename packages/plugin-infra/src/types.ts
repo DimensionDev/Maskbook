@@ -347,7 +347,7 @@ export namespace Plugin.SNSAdaptor {
         bio?: string
         homepage?: string
         nickname?: string
-        identifier: ProfileIdentifier
+        identifier?: ProfileIdentifier
     }
 
     export interface ProfileAddress {
@@ -675,7 +675,7 @@ export enum CurrentSNSNetwork {
 }
 
 export interface IdentityResolved {
-    identifier: ProfileIdentifier
+    identifier?: ProfileIdentifier
     nickname?: string
     avatar?: string
     bio?: string

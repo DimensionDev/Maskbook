@@ -19,7 +19,7 @@ export function isValidFacebookUsername(name: string) {
 /**
  * Normalize post url
  */
-export function getPostUrlAtFacebook(post: PostIdentifier<ProfileIdentifier>) {
+export function getPostUrlAtFacebook(post: PostIdentifier) {
     const id = post.identifier
     const { postId } = post
     const { userId } = id

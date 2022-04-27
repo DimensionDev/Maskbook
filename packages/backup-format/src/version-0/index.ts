@@ -3,7 +3,6 @@ import {
     ECKeyIdentifierFromJsonWebKey,
     EC_Private_JsonWebKey,
     EC_Public_JsonWebKey,
-    IdentifierMap,
     isAESJsonWebKey,
     isEC_Private_JsonWebKey,
     isEC_Public_JsonWebKey,
@@ -39,7 +38,7 @@ export function normalizeBackupVersion0(file: BackupJSONFileVersion0): Normalize
     const persona: NormalizedBackup.PersonaBackup = {
         identifier: ECKeyIdentifierFromJsonWebKey(publicKey),
         publicKey,
-        linkedProfiles: new IdentifierMap<ProfileIdentifier, any>(new Map(), ProfileIdentifier),
+        linkedProfiles: new Map(),
         localKey: isAESJsonWebKey(local) ? Some(local) : None,
         privateKey: isEC_Private_JsonWebKey(privateKey) ? Some(privateKey) : None,
         mnemonic: None,
@@ -51,7 +50,7 @@ export function normalizeBackupVersion0(file: BackupJSONFileVersion0): Normalize
 
     if (username && username !== '$unknown' && username !== '$local') {
         const profile: NormalizedBackup.ProfileBackup = {
-            identifier: new ProfileIdentifier('facebook.com', username),
+            identifier: ProfileIdentifier.of('facebook.com', username).unwrap(),
             linkedPersona: Some(persona.identifier),
             createdAt: None,
             updatedAt: None,
