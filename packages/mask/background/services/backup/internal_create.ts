@@ -1,5 +1,5 @@
 import { createEmptyNormalizedBackup, NormalizedBackup } from '@masknet/backup-format'
-import { IdentifierMap, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import type { PersonaIdentifier } from '@masknet/shared-base'
 import { None, Some } from 'ts-results'
 import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../database/persona/db'
 import { queryPostsDB } from '../../database/post'
@@ -90,7 +90,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
             if (post.recipients !== 'everyone') {
                 recipients = {
                     type: 'e2e',
-                    receivers: new IdentifierMap(new Map(), ProfileIdentifier),
+                    receivers: new Map(),
                 }
                 for (const [recipient, reason] of post.recipients) {
                     if (reason.reason.length === 0) continue

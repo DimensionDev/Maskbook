@@ -1,10 +1,4 @@
-import type {
-    AESJsonWebKey,
-    IdentifierMap,
-    PersonaIdentifier,
-    PostIVIdentifier,
-    ProfileIdentifier,
-} from '@masknet/shared-base'
+import type { AESJsonWebKey, PersonaIdentifier, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { DBSchema } from 'idb/with-async-ittr'
 import type { ProfileIdentifierStoredInDB } from '../persona/type'
 import type { IDBPSafeTransaction } from '../utils/openDB'
@@ -32,7 +26,7 @@ export interface PostRecord {
     /**
      * Receivers
      */
-    recipients: 'everyone' | IdentifierMap<ProfileIdentifier, RecipientDetail>
+    recipients: 'everyone' | Map<ProfileIdentifier, RecipientDetail>
     /** @deprecated */
     recipientGroups?: unknown
     /**

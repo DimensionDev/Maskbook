@@ -12,11 +12,12 @@ import type {
 import {
     ProfileIdentifier,
     PersonaIdentifier,
-    IdentifierMap,
     ECKeyIdentifier,
     EC_Public_JsonWebKey,
     EC_Private_JsonWebKey,
     AESJsonWebKey,
+    convertRawMapToIdentifierMap,
+    convertIdentifierMapToRawMap,
 } from '@masknet/shared-base'
 import { nativeAPI } from '../../../shared/native-rpc'
 import type {
@@ -374,7 +375,7 @@ function personaRecordToDB(x: PersonaRecord): NativePersonaRecord {
         privateKey: x.privateKey as JsonWebKey as unknown as Native_EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
         identifier: x.identifier.toText(),
-        linkedProfiles: Object.fromEntries(x.linkedProfiles.__raw_map__),
+        linkedProfiles: Object.fromEntries(convertIdentifierMapToRawMap(x.linkedProfiles)),
         createdAt: x.createdAt.getTime(),
         updatedAt: x.createdAt.getTime(),
     }
@@ -388,7 +389,7 @@ function partialPersonaRecordToDB(
         privateKey: x.privateKey as JsonWebKey as unknown as Native_EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
         identifier: x.identifier.toText(),
-        linkedProfiles: x.linkedProfiles?.__raw_map__ ? Object.fromEntries(x.linkedProfiles.__raw_map__) : {},
+        linkedProfiles: x.linkedProfiles ? Object.fromEntries(x.linkedProfiles) : {},
         createdAt: x.createdAt?.getTime(),
         updatedAt: x.createdAt?.getTime(),
     }
@@ -403,7 +404,7 @@ function personaRecordOutDB(x: NativePersonaRecord): PersonaRecord {
         privateKey: x.privateKey as JsonWebKey as unknown as EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as AESJsonWebKey,
         identifier,
-        linkedProfiles: new IdentifierMap(new Map(Object.entries(x.linkedProfiles)), ProfileIdentifier),
+        linkedProfiles: convertRawMapToIdentifierMap(Object.entries(x.linkedProfiles), ProfileIdentifier),
         createdAt: new Date(x.createdAt),
         updatedAt: new Date(x.updatedAt),
     }

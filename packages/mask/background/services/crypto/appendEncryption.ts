@@ -1,7 +1,6 @@
 import { appendEncryptionTarget, EC_Key, EC_KeyCurveEnum, SupportedPayloadVersions } from '@masknet/encryption'
-import {
+import type {
     EC_Public_CryptoKey,
-    IdentifierMap,
     PostIVIdentifier,
     ProfileIdentifier,
     RecipientDetail,
@@ -51,11 +50,8 @@ export async function appendShareTarget(
     updatePostDB(
         {
             identifier: post,
-            recipients: new IdentifierMap(
-                new Map(
-                    target.map<[string, RecipientDetail]>((identifier) => [identifier.toText(), { reason: [reason] }]),
-                ),
-                ProfileIdentifier,
+            recipients: new Map(
+                target.map((identifier): [ProfileIdentifier, RecipientDetail] => [identifier, { reason: [reason] }]),
             ),
         },
         'append',

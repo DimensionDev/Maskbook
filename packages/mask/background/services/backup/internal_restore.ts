@@ -1,5 +1,5 @@
 import type { NormalizedBackup } from '@masknet/backup-format'
-import { IdentifierMap, ProfileIdentifier, RecipientDetail, RelationFavor, RecipientReason } from '@masknet/shared-base'
+import { ProfileIdentifier, RecipientDetail, RelationFavor, RecipientReason } from '@masknet/shared-base'
 import {
     consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
@@ -32,9 +32,9 @@ async function restorePersonas(backup: NormalizedBackup.Data) {
 
     await consistentPersonaDBWriteAccess(async (t) => {
         for (const [id, persona] of personas) {
-            for (const [id] of persona.linkedProfiles.__raw_map__) {
+            for (const [id] of persona.linkedProfiles) {
                 const state: LinkedProfileDetails = { connectionConfirmState: 'confirmed' }
-                persona.linkedProfiles.__raw_map__.set(id, state)
+                persona.linkedProfiles.set(id, state)
             }
 
             await createOrUpdatePersonaDB(
@@ -52,7 +52,7 @@ async function restorePersonas(backup: NormalizedBackup.Data) {
                             parameter: { path: mnemonic.path, withPassword: mnemonic.hasPassword },
                         }))
                         .unwrapOr(undefined),
-                    linkedProfiles: persona.linkedProfiles as IdentifierMap<ProfileIdentifier, unknown> as any,
+                    linkedProfiles: persona.linkedProfiles as Map<ProfileIdentifier, unknown> as any,
                     // "login" again because this is the restore process.
                     // We need to explicitly set this flag because the backup may already in the database (but marked as "logout").
                     hasLogout: false,
@@ -123,7 +123,7 @@ function restorePosts(backup: Iterable<NormalizedBackup.PostBackup>) {
                 const { val } = post.recipients
                 if (val.type === 'public') rec.recipients = 'everyone'
                 else {
-                    const map = new IdentifierMap<ProfileIdentifier, RecipientDetail>(new Map(), ProfileIdentifier)
+                    const map = new Map<ProfileIdentifier, RecipientDetail>()
                     for (const [id, detail] of val.receivers) {
                         map.set(id, {
                             reason: detail.map((x): RecipientReason => ({ at: x.at, type: 'direct' })),

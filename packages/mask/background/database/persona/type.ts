@@ -5,7 +5,6 @@ import type {
     AESJsonWebKey,
     EC_Private_JsonWebKey,
     EC_Public_JsonWebKey,
-    IdentifierMap,
     ProfileIdentifier,
     RelationFavor,
 } from '@masknet/shared-base'
@@ -125,7 +124,7 @@ export interface PersonaRecord {
     privateKey?: EC_Private_JsonWebKey
     localKey?: AESJsonWebKey
     nickname?: string
-    linkedProfiles: IdentifierMap<ProfileIdentifier, LinkedProfileDetails>
+    linkedProfiles: Map<ProfileIdentifier, LinkedProfileDetails>
     createdAt: Date
     updatedAt: Date
     hasLogout?: boolean

@@ -6,7 +6,7 @@ import type {
     AESJsonWebKey as Native_AESJsonWebKey,
 } from '@masknet/public-api'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
-import { ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { convertIdentifierMapToRawMap, ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { launchPageSettings } from '../../settings/settings'
 import Services from '../../extension/service'
 import type { Profile } from '../../database'
@@ -232,7 +232,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 privateKey: x.privateKey as JsonWebKey as unknown as Native_EC_Private_JsonWebKey,
                 localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
                 identifier: x.identifier.toText(),
-                linkedProfiles: Object.fromEntries(x.linkedProfiles.__raw_map__),
+                linkedProfiles: Object.fromEntries(convertIdentifierMapToRawMap(x.linkedProfiles)),
                 createdAt: x.createdAt.getTime(),
                 updatedAt: x.createdAt.getTime(),
                 hasLogout: x.hasLogout,

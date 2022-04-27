@@ -4,7 +4,6 @@ import {
     AESCryptoKey,
     EC_Private_CryptoKey,
     PostIVIdentifier,
-    IdentifierMap,
     registerSerializableClass,
 } from '@masknet/shared-base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
@@ -77,7 +76,7 @@ export interface EncryptResult {
     e2e?: EncryptionResultE2EMap
 }
 /** Additional information that need to be send to the internet in order to allow recipients to decrypt */
-export type EncryptionResultE2EMap = IdentifierMap<ProfileIdentifier, PromiseSettledResult<EncryptionResultE2E>>
+export type EncryptionResultE2EMap = Map<ProfileIdentifier, PromiseSettledResult<EncryptionResultE2E>>
 export interface EncryptionResultE2E {
     target: ProfileIdentifier
     encryptedPostKey: Uint8Array
