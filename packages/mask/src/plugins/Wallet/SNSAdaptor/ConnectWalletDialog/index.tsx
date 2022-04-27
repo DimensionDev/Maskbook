@@ -32,17 +32,15 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
 
     // #region remote controlled dialog
-    const { open, setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.connectWalletDialogUpdated,
-        (ev) => {
-            if (!ev.open) return
-            setProviderType(ev.providerType)
-            setNetworkType(ev.networkType)
-        },
-    )
-    const onClose = useCallback(() => {
-        setConnectWalletDialog({ open: false })
-    }, [])
+    const {
+        open,
+        closeDialog,
+        setDialog: setConnectWalletDialog,
+    } = useRemoteControlledDialog(WalletMessages.events.connectWalletDialogUpdated, (ev) => {
+        if (!ev.open) return
+        setProviderType(ev.providerType)
+        setNetworkType(ev.networkType)
+    })
     // #endregion
 
     // #region walletconnect
@@ -116,10 +114,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                 // it will always add a new RPC provider even if the network exists
                 if (providerType !== ProviderType.Coin98) {
                     await Promise.race([
-                        (async () => {
-                            await delay(30 /* seconds */ * 1000 /* milliseconds */)
+                        delay(30 /* seconds */ * 1000 /* milliseconds */).then(() => {
                             throw new Error('Timeout!')
-                        })(),
+                        }),
                         networkType === NetworkType.Ethereum
                             ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
                             : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
@@ -156,7 +153,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     if (!providerType) return null
 
     return (
-        <InjectedDialog title={`Connect to ${resolveProviderName(providerType)}`} open={open} onClose={onClose}>
+        <InjectedDialog title={`Connect to ${resolveProviderName(providerType)}`} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <ConnectionProgress providerType={providerType} connection={connection} />
             </DialogContent>
