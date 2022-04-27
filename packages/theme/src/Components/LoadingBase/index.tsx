@@ -1,6 +1,6 @@
 import { LoadingBaseIcon as LoadingIcon } from '@masknet/icons'
 import type { SvgIconProps } from '@mui/material'
-import { makeStyles } from '../../entry'
+import { makeStyles } from '../../UIHelper'
 
 const useStyles = makeStyles()({
     animated: {
