@@ -6,6 +6,7 @@ import { useDashboardI18N } from '../../locales'
 import links from '../../components/FooterLine/links.json'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useSetupSocialNetwork } from './hooks/useSetupSocialNetwork'
+import { Services } from '../../API'
 
 const Content = styled('div')(({ theme }) => ({
     padding: `${theme.spacing(1)} ${theme.spacing(4)}`,
@@ -78,7 +79,7 @@ export default function Welcome() {
             iframeRef={iframeRef}
             privacyPolicyURL={agreementContentPageURL}
             iframeLoadHandler={handleIFrameLoad}
-            agreeHandler={() => setupSocialNetwork('twitter.com')}
+            agreeHandler={() => Services.SocialNetwork.setupSocialNetwork('twitter.com')}
             cancelHandler={() => window.close()}
         />
     )
