@@ -7,6 +7,7 @@ import {
     EthereumTokenType,
     resolveIPFSLinkFromURL,
     getTreasureConstants,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 
 import { METADATA_SUPPORT, SMOLVERSE_SUPPORT, REALM_SUPPORT } from './constants'
