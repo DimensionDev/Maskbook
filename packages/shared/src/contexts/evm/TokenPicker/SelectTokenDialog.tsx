@@ -63,6 +63,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     disableSearchBar,
     disableNativeToken,
     tokens,
+    whitelist,
     blacklist = EMPTY_LIST,
     selectedTokens = EMPTY_LIST,
     onSelect,
@@ -91,6 +92,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     onSelect={onSelect}
                     tokens={tokens ?? []}
+                    whitelist={whitelist}
                     blacklist={
                         disableNativeToken && NATIVE_TOKEN_ADDRESS ? [NATIVE_TOKEN_ADDRESS, ...blacklist] : blacklist
                     }

@@ -4,4 +4,3 @@
 - <https://github.com/immerjs/immer/pull/914/>
 - web3-core-method: Wait for newer version than 1.7.3: <https://github.com/ChainSafe/web3.js/pull/4918>
 - @solana/web3.js => <https://github.com/lquixada/cross-fetch/pull/137>
-- <https://github.com/dfahlander/typeson-registry/pull/26>
