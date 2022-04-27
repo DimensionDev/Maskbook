@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+import type { Plugin } from '@masknet/plugin-infra'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Typography } from '@mui/material'
 
@@ -38,20 +39,66 @@ const useStyles = makeStyles()((theme) => ({
             height: 36,
         },
     },
+    recommendFeatureApplicationBox: {
+        width: 220,
+        height: 97,
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 10,
+        borderRadius: 8,
+    },
+    recommendFeatureAppIconWrapper: {
+        marginRight: 12,
+        '> *': {
+            width: 48,
+            height: 48,
+        },
+    },
+    recommendFeatureAppListItemName: {
+        fontSize: 14,
+        fontWeight: 500,
+        cursor: 'pointer',
+        color: theme.palette.common.white,
+    },
+    recommendFeatureAppListItemDescription: {
+        fontSize: 12,
+        fontWeight: 500,
+        cursor: 'pointer',
+        color: theme.palette.common.white,
+    },
 }))
 
 interface ApplicationEntryProps {
     icon: React.ReactNode
     title: React.ReactNode
     disabled?: boolean
+    recommendFeature?: Plugin.SNSAdaptor.ApplicationEntry['recommendFeature']
     tooltipHint?: string
     onClick: () => void
 }
 
 export function ApplicationEntry(props: ApplicationEntryProps) {
-    const { title, onClick, disabled = false, icon, tooltipHint } = props
+    const { title, onClick, disabled = false, icon, tooltipHint, recommendFeature } = props
     const { classes } = useStyles()
-    const jsx = (
+    const jsx = recommendFeature ? (
+        <div
+            style={{
+                background: recommendFeature.backgroundGradient,
+            }}
+            className={classNames(classes.recommendFeatureApplicationBox, disabled ? classes.disabled : '')}
+            onClick={disabled ? () => {} : onClick}>
+            <div className={classes.recommendFeatureAppIconWrapper}>{icon}</div>
+            <div>
+                <Typography className={classes.recommendFeatureAppListItemName}>{title}</Typography>
+                <Typography className={classes.recommendFeatureAppListItemDescription}>
+                    {recommendFeature.description}
+                </Typography>
+            </div>
+        </div>
+    ) : (
         <div
             className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
             onClick={disabled ? () => {} : onClick}>

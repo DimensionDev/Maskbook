@@ -330,6 +330,7 @@
     "plugin_red_packet_erc20_tab_title": "Token",
     "plugin_red_packet_erc721_tab_title": "Collectibles",
     "plugin_red_packet_name": "Lucky Drop",
+    "plugin_red_packet_recommend_feature_description": "Surpirse your social friends with Lucky Drop",
     "plugin_red_packet_description": "Gift crypto or NFTs to any users, first come, first served.",
     "plugin_red_packet_erc721_insufficient_balance": "Insufficient Balance",
     "plugin_red_packet_details": "Lucky Drop Details",

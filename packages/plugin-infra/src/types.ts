@@ -340,6 +340,11 @@ export namespace Plugin.SNSAdaptor {
         category?: 'dapp' | 'other'
 
         nextIdRequired?: boolean
+
+        recommendFeature?: {
+            description: React.ReactNode
+            backgroundGradient: string
+        }
     }
 
     export interface ProfileIdentity {

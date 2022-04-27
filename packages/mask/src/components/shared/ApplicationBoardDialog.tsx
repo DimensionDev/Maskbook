@@ -11,6 +11,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         content: {
             padding: theme.spacing(2.5),
+            height: 540,
         },
     }
 })

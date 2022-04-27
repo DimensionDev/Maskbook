@@ -95,12 +95,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <RedPacketIcon />
             const name = <Trans i18nKey="plugin_red_packet_name" />
+            const recommendFeature = {
+                description: <Trans i18nKey="plugin_red_packet_recommend_feature_description" />,
+                backgroundGradient: 'linear-gradient(180.54deg, #FF9A9E 0.71%, #FECFEF 98.79%, #FECFEF 99.78%)',
+            }
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
                     return (
                         <ApplicationEntry
                             title={name}
+                            recommendFeature={recommendFeature}
                             disabled={disabled}
                             icon={icon}
                             onClick={() =>
@@ -123,6 +128,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 tutorialLink:
                     'https://realmasknetwork.notion.site/Gift-token-NFTs-to-your-friends-Support-ETH-BSC-and-Polygon-0a71fd421aae4563bd07caa3e2129e5b',
                 category: 'dapp',
+                recommendFeature,
             }
         })(),
     ],

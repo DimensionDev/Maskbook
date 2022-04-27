@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react'
 import { Close as CloseIcon } from '@mui/icons-material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { Typography, useTheme } from '@mui/material'
+import { Typography, useTheme, Box } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
@@ -87,6 +87,10 @@ const useStyles = makeStyles()((theme) => {
         closeIcon: {
             cursor: 'pointer',
         },
+        recommendFeatureAppListWrapper: {
+            width: '100%',
+            margin: '16px 2px 12px 2px',
+        },
     }
 })
 
@@ -144,7 +148,8 @@ function ApplicationBoardContent(props: Props) {
                 .filter((x) => Boolean(x.entry.RenderEntryComponent)),
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
-    const listedAppList = applicationList.filter((x) => !getUnlistedApp(x))
+    const recommendFeatureAppList = applicationList.filter((x) => x.entry.recommendFeature)
+    const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
     return (
         <>
             <div className={classes.header}>
@@ -156,6 +161,12 @@ function ApplicationBoardContent(props: Props) {
                     onClick={() => setOpenSettings(true)}
                 />
             </div>
+
+            <Box className={classes.recommendFeatureAppListWrapper}>
+                {recommendFeatureAppList.map((application) => (
+                    <RenderEntryComponentWrapper key={application.entry.ApplicationEntryID} application={application} />
+                ))}
+            </Box>
 
             {listedAppList.length > 0 ? (
                 <section className={classes.applicationWrapper}>
