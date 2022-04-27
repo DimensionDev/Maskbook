@@ -103,19 +103,19 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     useUpdateEffect(() => {
         setSelectedTab(undefined)
-    }, [identity.identifier.userId])
+    }, [identity.identifier])
 
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
             if (data.hidden) setHidden(data.hidden)
         })
-    }, [identity.identifier.userId])
+    }, [identity.identifier])
 
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
             setHidden(!data.show)
         })
-    }, [identity.identifier.userId])
+    }, [identity.identifier])
 
     const ContentComponent = useMemo(() => {
         const tabId =
