@@ -68,6 +68,7 @@ function registerPostCollectorInner(
         (info: PostInfo) => {
             const currentProfile = getCurrentIdentifier()
             const profileIdentifier = info.author.getCurrentValue()
+            if (!profileIdentifier) return
             Services.Identity.updateProfileInfo(profileIdentifier, {
                 nickname: info.nickname.getCurrentValue(),
                 avatarURL: info.avatarURL.getCurrentValue()?.toString(),
@@ -76,7 +77,7 @@ function registerPostCollectorInner(
                 Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona.identifier)
             }
         },
-        (info: PostInfo) => info.author.getCurrentValue()?.toText(),
+        (info: PostInfo) => info.author.getCurrentValue(),
     )
     const watcher = new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
@@ -185,9 +186,9 @@ function collectPostInfo(
     const { pid, messages, handle, name, avatar } = postParser(tweetNode)
 
     if (!pid) return
-    const postBy = handle ? new ProfileIdentifier(twitterBase.networkIdentifier, handle) : ProfileIdentifier.unknown
+    const postBy = ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(null)
     info.postID.value = pid
-    if (!info.postBy.value.equals(postBy)) info.postBy.value = postBy
+    info.postBy.value = postBy
     info.nickname.value = name
     info.avatarURL.value = avatar || null
 

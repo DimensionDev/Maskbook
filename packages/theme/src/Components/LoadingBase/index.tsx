@@ -1,6 +1,6 @@
-import { makeStyles } from '@masknet/theme'
+import { LoadingBaseIcon as LoadingIcon } from '@masknet/icons'
 import type { SvgIconProps } from '@mui/material'
-import { LoadingIcon } from '../icons/Loading'
+import { makeStyles } from '../../UIHelper'
 
 const useStyles = makeStyles()({
     animated: {
@@ -16,7 +16,7 @@ const useStyles = makeStyles()({
     },
 })
 
-export const LoadingAnimation = (props: SvgIconProps) => {
+export const LoadingBase = (props: SvgIconProps) => {
     const { classes } = useStyles()
     return <LoadingIcon {...props} className={`${classes.animated} ${props.className}`} />
 }

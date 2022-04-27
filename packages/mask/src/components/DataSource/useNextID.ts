@@ -31,8 +31,9 @@ const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string)
     })
 }
 
-export const useNextIDBoundByPlatform = (platform: NextIDPlatform, identity: string) => {
+export const useNextIDBoundByPlatform = (platform: NextIDPlatform, identity?: string) => {
     const res = useAsyncRetry(() => {
+        if (!identity) return Promise.resolve([])
         return NextIDProof.queryExistedBindingByPlatform(platform, identity)
     }, [platform, identity])
     useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
@@ -64,9 +65,7 @@ export function useNextIDConnectStatus() {
     const personaConnectStatus = usePersonaConnectStatus()
     const lastState = useSetupGuideStatusState()
     const lastRecognized = useLastRecognizedIdentity()
-    const [username] = useState(
-        lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId),
-    )
+    const [username] = useState(lastState.username || lastRecognized.identifier?.userId || '')
 
     const { value: VerificationStatus = NextIDVerificationStatus.Other, retry } = useAsyncRetry(async () => {
         // Whether in connect to {platform} process
@@ -83,7 +82,7 @@ export function useNextIDConnectStatus() {
 
         const currentPersonaIdentity = await Services.Settings.getCurrentPersonaIdentifier()
 
-        if (currentPersonaIdentity?.toText() !== currentConnectedPersona?.identifier.toText())
+        if (currentPersonaIdentity !== currentConnectedPersona?.identifier)
             return NextIDVerificationStatus.WaitingLocalConnect
 
         if (!currentConnectedPersona?.publicHexKey) return NextIDVerificationStatus.WaitingLocalConnect

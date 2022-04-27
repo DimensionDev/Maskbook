@@ -70,7 +70,7 @@ function createERC721TokenFromAsset(
             imageURL,
             owner: asset?.owners[0],
         },
-        tokenId: tokenId,
+        tokenId,
     }
 }
 

@@ -1,5 +1,4 @@
 import type { ProfileIdentifier, ProfileInformation } from '@masknet/shared-base'
-import { uniqBy } from 'lodash-unified'
 import {
     createPersonaDBReadonlyAccess,
     ProfileRecord,
@@ -52,10 +51,7 @@ export async function queryOwnedProfilesInformation(network?: string): Promise<P
         const personas = (await queryPersonasDB({ hasPrivateKey: true }, t)).sort((a, b) =>
             a.updatedAt > b.updatedAt ? 1 : -1,
         )
-        const ids = uniqBy(
-            personas.flatMap((x) => [...x.linkedProfiles.keys()]),
-            (x) => x.toText(),
-        )
+        const ids = Array.from(new Set(personas.flatMap((x) => [...x.linkedProfiles.keys()])))
         profiles = await queryProfilesDB({ identifiers: ids, network }, t)
     })
     return toProfileInformation(profiles!.filter((x) => x.identifier.network === network))

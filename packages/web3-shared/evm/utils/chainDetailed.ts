@@ -144,7 +144,7 @@ export function getCoinGeckoCoinId(chainId: ChainId) {
 export function getNetworkName(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) return 'Unknown Network'
-    if (chainDetailed.networkId === ChainId.Matic) return chainDetailed.fullName
+    if (chainDetailed.chainId === ChainId.Matic) return chainDetailed.fullName
     if (chainDetailed.network === 'mainnet') return chainDetailed.chain
     return upperFirst(chainDetailed.network)
 }
