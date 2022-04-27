@@ -56,15 +56,15 @@ function collectPostsInstagramInner(
     )
 }
 
-function getPostBy(node: DOMProxy): ProfileIdentifier {
+function getPostBy(node: DOMProxy): ProfileIdentifier | null {
     // the first a
     const author = node.current.querySelector('a')
-    if (!author) return ProfileIdentifier.unknown
+    if (!author) return null
     const href = new URL(author.href).pathname
     if (href.startsWith('/') && href.endsWith('/') && href.slice(1, -1).includes('/') === false) {
-        return new ProfileIdentifier(instagramBase.networkIdentifier, href.slice(1, -1))
+        return ProfileIdentifier.of(instagramBase.networkIdentifier, href.slice(1, -1)).unwrapOr(null)
     }
-    return ProfileIdentifier.unknown
+    return null
 }
 function getPostID(node: DOMProxy): null | string {
     return node.current?.querySelector<HTMLAnchorElement>('a[href^="/p/"]')?.href.match(/\/p\/(.+)\/.+/)?.[1] || null

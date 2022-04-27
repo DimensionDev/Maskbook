@@ -1,6 +1,4 @@
-import { ProfileIdentifier } from '@masknet/shared-base'
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentifierWithAvatar, createAvatarDBAccess } from './db'
-import { MaskMessages } from '../../../shared'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import { blobToDataURL, memoizePromise } from '@dimensiondev/kit'
 import { createTransaction } from '../utils/openDB'
@@ -9,33 +7,46 @@ import { createTransaction } from '../utils/openDB'
  * Get a (cached) blob url for an identifier. No cache for native api.
  * ? Because of cross-origin restrictions, we cannot use blob url here. sad :(
  */
-export const queryAvatarDataURL = (
-    hasNativeAPI
-        ? async function (identifier: IdentifierWithAvatar): Promise<string | undefined> {
-              return nativeAPI?.api.query_avatar({ identifier: identifier.toText() })
-          }
-        : memoizePromise(
-              async function (identifier: IdentifierWithAvatar): Promise<string | undefined> {
-                  const t = createTransaction(await createAvatarDBAccess(), 'readonly')('avatars')
-                  const buffer = await queryAvatarDB(t, identifier)
-                  if (!buffer) throw new Error('Avatar not found')
-                  return blobToDataURL(new Blob([buffer], { type: 'image/png' }))
-              },
-              (id) => id.toText(),
-          )
-) as ((identifier: IdentifierWithAvatar) => Promise<string | undefined>) & {
-    cache?: Map<string, unknown>
+async function nativeImpl(identifiers: IdentifierWithAvatar[]): Promise<Map<IdentifierWithAvatar, string>> {
+    const map = new Map<IdentifierWithAvatar, string>(new Map())
+    await Promise.allSettled(
+        identifiers.map(async (id) => {
+            const result = await nativeAPI!.api.query_avatar({ identifier: id.toText() })
+            result && map.set(id, result)
+        }),
+    )
+    return map
 }
+const indexedDBImpl = memoizePromise(
+    async function (identifiers: IdentifierWithAvatar[]): Promise<Map<IdentifierWithAvatar, string>> {
+        const promises: Promise<unknown>[] = []
+
+        const map = new Map<IdentifierWithAvatar, string>()
+        const t = createTransaction(await createAvatarDBAccess(), 'readonly')('avatars')
+        for (const id of identifiers) {
+            // Must not await here. Because we insert non-idb async operation (blobToDataURL).
+            promises.push(
+                queryAvatarDB(t, id)
+                    .then((buffer) => buffer && blobToDataURL(new Blob([buffer], { type: 'image/png' })))
+                    .then((url) => url && map.set(id, url)),
+            )
+        }
+
+        await Promise.allSettled(promises)
+        return map
+    },
+    (id) => id.flatMap((x) => x.toText()).join(';'),
+)
+export const queryAvatarsDataURL: (identifiers: IdentifierWithAvatar[]) => Promise<Map<IdentifierWithAvatar, string>> =
+    hasNativeAPI ? nativeImpl : indexedDBImpl
 
 /**
  * Store an avatar with a url for an identifier.
  * @param identifier - This avatar belongs to.
  * @param avatar - Avatar to store. If it is a string, will try to fetch it.
- * @param force - Ignore the outdated setting. Force update.
  */
 
 export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: ArrayBuffer | string): Promise<void> {
-    if (identifier instanceof ProfileIdentifier && identifier.isUnknown) return
     try {
         if (hasNativeAPI) {
             // ArrayBuffer is unreachable on Native side.
@@ -66,9 +77,6 @@ export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: Arra
     } catch (error) {
         console.error('[AvatarDB] Store avatar failed', error)
     } finally {
-        queryAvatarDataURL.cache?.delete(identifier.toText())
-        if (identifier instanceof ProfileIdentifier) {
-            MaskMessages.events.profilesChanged.sendToAll([{ of: identifier, reason: 'update' }])
-        }
+        indexedDBImpl.cache?.delete(identifier.toText())
     }
 }

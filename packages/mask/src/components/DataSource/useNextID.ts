@@ -31,8 +31,9 @@ const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string)
     })
 }
 
-export const useNextIDBoundByPlatform = (platform: NextIDPlatform, identity: string) => {
+export const useNextIDBoundByPlatform = (platform: NextIDPlatform, identity?: string) => {
     const res = useAsyncRetry(() => {
+        if (!identity) return Promise.resolve([])
         return NextIDProof.queryExistedBindingByPlatform(platform, identity)
     }, [platform, identity])
     useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
@@ -47,24 +48,24 @@ export enum NextIDVerificationStatus {
     Other = 'Other',
 }
 
-export function useNextIDConnectStatus() {
-    const ui = activatedSocialNetworkUI
-    const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
-    const personaConnectStatus = usePersonaConnectStatus()
-    const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
-    const lastState_ = useValueRef(lastStateRef)
-    const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
+export function useSetupGuideStatusState() {
+    const lastState_ = useValueRef(currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier])
+    return useMemo<SetupGuideCrossContextStatus>(() => {
         try {
             return JSON.parse(lastState_)
         } catch {
             return {}
         }
     }, [lastState_])
+}
 
+export function useNextIDConnectStatus() {
+    const ui = activatedSocialNetworkUI
+    const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
+    const personaConnectStatus = usePersonaConnectStatus()
+    const lastState = useSetupGuideStatusState()
     const lastRecognized = useLastRecognizedIdentity()
-    const [username] = useState(
-        lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId),
-    )
+    const [username] = useState(lastState.username || lastRecognized.identifier?.userId || '')
 
     const { value: VerificationStatus = NextIDVerificationStatus.Other, retry } = useAsyncRetry(async () => {
         // Whether in connect to {platform} process

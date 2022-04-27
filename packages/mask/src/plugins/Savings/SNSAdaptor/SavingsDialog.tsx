@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { Typography, DialogContent } from '@mui/material'
+import { DialogContent } from '@mui/material'
 import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
 import { FolderTabPanel, FolderTabs } from '@masknet/theme'
 import { ChainId, getChainIdFromNetworkType, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
@@ -93,32 +93,26 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                     />
                                 </div>
                                 <div className={classes.tableTabWrapper}>
-                                    {protocols.length === 0 ? (
-                                        <Typography variant="body2" textAlign="center">
-                                            {t('plugin_no_protocol_available')}
-                                        </Typography>
-                                    ) : (
-                                        <FolderTabs>
-                                            <FolderTabPanel label="Deposit">
-                                                <SavingsTable
-                                                    chainId={chainId}
-                                                    tab={TabType.Deposit}
-                                                    protocols={protocols}
-                                                    setTab={setTab}
-                                                    setSelectedProtocol={setSelectedProtocol}
-                                                />
-                                            </FolderTabPanel>
-                                            <FolderTabPanel label="Withdraw">
-                                                <SavingsTable
-                                                    chainId={chainId}
-                                                    tab={TabType.Withdraw}
-                                                    protocols={protocols.filter((x) => !x.balance.isZero())}
-                                                    setTab={setTab}
-                                                    setSelectedProtocol={setSelectedProtocol}
-                                                />
-                                            </FolderTabPanel>
-                                        </FolderTabs>
-                                    )}
+                                    <FolderTabs>
+                                        <FolderTabPanel label="Deposit">
+                                            <SavingsTable
+                                                chainId={chainId}
+                                                tab={TabType.Deposit}
+                                                protocols={protocols}
+                                                setTab={setTab}
+                                                setSelectedProtocol={setSelectedProtocol}
+                                            />
+                                        </FolderTabPanel>
+                                        <FolderTabPanel label="Withdraw">
+                                            <SavingsTable
+                                                chainId={chainId}
+                                                tab={TabType.Withdraw}
+                                                protocols={protocols}
+                                                setTab={setTab}
+                                                setSelectedProtocol={setSelectedProtocol}
+                                            />
+                                        </FolderTabPanel>
+                                    </FolderTabs>
                                 </div>
                             </>
                         )}

@@ -1,19 +1,12 @@
-import type {
-    AESJsonWebKey,
-    GroupIdentifier,
-    IdentifierMap,
-    PersonaIdentifier,
-    PostIVIdentifier,
-    ProfileIdentifier,
-} from '@masknet/shared-base'
+import type { AESJsonWebKey, PersonaIdentifier, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { DBSchema } from 'idb/with-async-ittr'
-import type { PrototypeLess } from '../../../utils-pure'
+import type { ProfileIdentifierStoredInDB } from '../persona/type'
 import type { IDBPSafeTransaction } from '../utils/openDB'
 
 export type RecipientReason = (
     | { type: 'auto-share' }
     | { type: 'direct' }
-    | { type: 'group'; group: GroupIdentifier }
+    | { type: 'group'; /** @deprecated */ group: unknown }
 ) & {
     /**
      * When we send the key to them by this reason?
@@ -27,16 +20,13 @@ export interface RecipientDetail {
     reason: RecipientReason[]
 }
 export interface PostRecord {
-    /**
-     * For old data stored before version 3, this identifier may be ProfileIdentifier.unknown
-     */
-    postBy: ProfileIdentifier
+    postBy: ProfileIdentifier | undefined
     identifier: PostIVIdentifier
     postCryptoKey?: AESJsonWebKey
     /**
      * Receivers
      */
-    recipients: 'everyone' | IdentifierMap<ProfileIdentifier, RecipientDetail>
+    recipients: 'everyone' | Map<ProfileIdentifier, RecipientDetail>
     /** @deprecated */
     recipientGroups?: unknown
     /**
@@ -55,7 +45,7 @@ export interface PostRecord {
 }
 
 export interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients' | 'encryptBy'> {
-    postBy: PrototypeLess<ProfileIdentifier>
+    postBy: ProfileIdentifierStoredInDB | undefined
     identifier: string
     recipients: true | Map<string, RecipientDetail>
     encryptBy?: string

@@ -21,7 +21,7 @@ function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDe
         ? formatBalance(amount, tokenDetailed?.decimals ?? 0, 4)
         : 'infinite'
     const token = tokenDetailed?.symbol?.trim()
-    return `${symbol}${value} ${token}`
+    return `${symbol}${value} ${token ?? ''}`
 }
 
 function getTransactionDescription(

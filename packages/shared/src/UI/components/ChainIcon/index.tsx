@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     point: {
@@ -12,14 +12,14 @@ const useStyles = makeStyles()((theme) => ({
         border: `1px solid ${theme.palette.background.paper}`,
     },
 }))
-export interface ChainIconProps {
+export interface ChainIconProps extends withClasses<'point'> {
     color: string
     size?: number
     bordered?: boolean
 }
 
-export const ChainIcon = memo<ChainIconProps>(({ color, size = 12.5 }) => {
-    const { classes } = useStyles()
+export const ChainIcon = memo<ChainIconProps>(({ color, size = 12.5, ...props }) => {
+    const classes = useStylesExtends(useStyles(), props)
 
     return (
         <div

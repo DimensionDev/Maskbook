@@ -19,7 +19,6 @@ import {
     ECKeyIdentifierFromJsonWebKey,
     EC_JsonWebKey,
     EC_Public_JsonWebKey,
-    IdentifierMap,
     PostIVIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
@@ -62,7 +61,7 @@ export async function* decryptionWithSocialNetworkDecoding(
     if (encoded.type === 'text') {
         decoded = socialNetworkDecoder(context.currentSocialNetwork, encoded.text)[0]
     } else {
-        if (!context.authorHint || context.authorHint.isUnknown) {
+        if (!context.authorHint) {
             return yield new DecryptError(DecryptErrorReasons.UnrecognizedAuthor, undefined)
         }
         const result = await steganographyDecodeImage(encoded.image, {
@@ -76,15 +75,12 @@ export async function* decryptionWithSocialNetworkDecoding(
     yield* decryption(decoded, context)
 }
 
-const inMemoryCache = new IdentifierMap<PostIVIdentifier, TypedMessage>(new Map(), PostIVIdentifier)
+const inMemoryCache = new Map<PostIVIdentifier, TypedMessage>()
 async function* decryption(payload: string | Uint8Array, context: DecryptionContext) {
     const parse = await parsePayload(payload)
     if (parse.err) return null
 
-    const { currentSocialNetwork, postURL } = context
-    let { currentProfile, authorHint } = context
-    if (currentProfile?.isUnknown) currentProfile = null
-    if (authorHint?.isUnknown) authorHint = null
+    const { currentSocialNetwork, postURL, currentProfile, authorHint } = context
 
     // #region Identify the PostIdentifier
     const iv = parse.val.encryption.unwrapOr(null)?.iv.unwrapOr(null)
@@ -138,11 +134,8 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                 return savePostKeyToDB(id, key, {
                     // public post will not call this function.
                     // and recipients only will be set when posting/appending recipients.
-                    recipients: new IdentifierMap(new Map()),
-                    postBy:
-                        authorHint ||
-                        parse.safeUnwrap().author.unwrapOr(null)?.unwrapOr(null) ||
-                        ProfileIdentifier.unknown,
+                    recipients: new Map(),
+                    postBy: authorHint || parse.safeUnwrap().author.unwrapOr(undefined)?.unwrapOr(undefined),
                     url: postURL,
                 })
             },
@@ -219,7 +212,7 @@ async function storeAuthorPublicKey(
     postAuthor: ProfileIdentifier | null,
     pub: EC_Key,
 ) {
-    if (!payloadAuthor.equals(postAuthor)) {
+    if (payloadAuthor !== postAuthor) {
         // ! Author detected is not equal to AuthorHint.
         // ! Skip store the public key because it might be a security problem.
         return

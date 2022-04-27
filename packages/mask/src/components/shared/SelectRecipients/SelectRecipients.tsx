@@ -1,12 +1,14 @@
 import { Box, Chip } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import AddIcon from '@mui/icons-material/Add'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { difference } from 'lodash-unified'
 import { useI18N } from '../../../utils'
-import type { Profile } from '../../../database'
+import type { ProfileInformation as Profile } from '@masknet/shared-base'
+import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     root: {
@@ -16,9 +18,8 @@ const useStyles = makeStyles()({
 })
 
 export interface SelectRecipientsUIProps {
-    items: Profile[]
+    items: LazyRecipients
     selected: Profile[]
-    frozenSelected: Profile[]
     disabled?: boolean
     hideSelectAll?: boolean
     hideSelectNone?: boolean
@@ -30,10 +31,10 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const { classes } = useStyles()
     const { items, selected, onSetSelected } = props
     const currentIdentity = useCurrentIdentity()
-    const profileItems = items.filter(
-        (x) => !x.identifier.equals(currentIdentity?.identifier) && x.linkedPersona?.fingerprint,
-    )
+    const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
     const [open, setOpen] = useState(false)
+
+    useEffect(() => void (open && items.request()), [open, items.request])
 
     return (
         <Box className={classes.root}>
@@ -42,13 +43,13 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
                     selected: new Set([...selected.map((x) => x.identifier.toText())]).size,
                 })}
                 avatar={<AddIcon />}
-                disabled={props.disabled || profileItems.length === 0}
+                disabled={props.disabled || profileItems?.length === 0}
                 onClick={() => setOpen(true)}
             />
             <SelectRecipientsDialogUI
                 open={open}
-                items={profileItems}
-                selected={profileItems.filter((x) => selected.includes(x))}
+                items={profileItems || EMPTY_LIST}
+                selected={profileItems?.filter((x) => selected.includes(x)) || EMPTY_LIST}
                 disabled={false}
                 submitDisabled={false}
                 onSubmit={() => setOpen(false)}
@@ -58,8 +59,4 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             />
         </Box>
     )
-}
-
-SelectRecipientsUI.defaultProps = {
-    frozenSelected: [],
 }

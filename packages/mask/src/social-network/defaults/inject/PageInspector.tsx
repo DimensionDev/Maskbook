@@ -3,6 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import { PageInspector, PageInspectorProps } from '../../../components/InjectedComponents/PageInspector'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 
+export interface InjectPageInspectorDefaultConfig {}
+
 export function injectPageInspectorDefault<T extends string>(
     config: InjectPageInspectorDefaultConfig = {},
     additionalPropsToPageInspector: (classes: Record<T, string>) => Partial<PageInspectorProps> = () => ({}),
@@ -20,5 +22,3 @@ export function injectPageInspectorDefault<T extends string>(
         createReactRootShadowed(dom, { signal, key: 'page-inspector' }).render(<PageInspectorDefault />)
     }
 }
-
-interface InjectPageInspectorDefaultConfig {}

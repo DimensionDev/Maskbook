@@ -21,7 +21,7 @@ const log: AsyncCallOptions['log'] = {
 }
 
 export const Services = {
-    Crypto: add(() => import('./background-script/CryptoService'), 'Crypto'),
+    Crypto: add(() => import('../../background/services/crypto'), 'Crypto'),
     Identity: add(() => import('./background-script/IdentityService'), 'Identity'),
     Backup: add(() => import('./background-script/BackupService'), 'Backup'),
     Helper: add(() => import('../../background/services/helper'), 'Helper'),
@@ -40,7 +40,7 @@ export const ServicesWithProgress: _AsyncGeneratorVersionOf<typeof import('./ser
 if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
     import.meta.webpackHot.accept(
         [
-            './background-script/CryptoService',
+            '../../background/services/crypto',
             './background-script/IdentityService',
             './background-script/BackupService',
             '../../background/services/helper',

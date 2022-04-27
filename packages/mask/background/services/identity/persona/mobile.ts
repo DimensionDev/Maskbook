@@ -1,10 +1,10 @@
-import type { PersonaIdentifier, ReadonlyIdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
+import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { LinkedProfileDetails, PersonaRecord } from '../../../database/persona/type'
 
 export interface MobilePersona {
     identifier: PersonaIdentifier
     nickname?: string
-    linkedProfiles: ReadonlyIdentifierMap<ProfileIdentifier, LinkedProfileDetails>
+    linkedProfiles: ReadonlyMap<ProfileIdentifier, LinkedProfileDetails>
     hasPrivateKey: boolean
     createdAt: Date
     updatedAt: Date
