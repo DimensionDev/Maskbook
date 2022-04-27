@@ -35,17 +35,14 @@ export interface MaskMobileOnlyEvents {
 export interface MaskSNSEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: AutoPasteFailedEvent
-    requestComposition: CompositionRequest
     replaceComposition: SerializableTypedMessages
     // TODO: move to plugin message
     profileTabUpdated: ProfileNFTsPageEvent
     profileTabHidden: { hidden: boolean }
-    // TODO: move to plugin message
-    profileNFTsTabUpdated: 'reset'
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
     nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent
-    Native_visibleSNS_currentDetectedProfileUpdated: string
+    Native_visibleSNS_currentDetectedProfileUpdated: ProfileIdentifier
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, MaskSNSEvents {

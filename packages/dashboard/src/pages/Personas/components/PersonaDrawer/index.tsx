@@ -90,7 +90,6 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                                         publicKey={publicHexKey}
                                         identifier={identifier}
                                         active={identifier === currentPersonaIdentifier}
-                                        key={identifier.toText()}
                                         nickname={nickname}
                                         profiles={[...linkedProfiles.values()]}
                                         onClick={() => onChangeCurrentPersona(identifier)}

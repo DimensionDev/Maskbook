@@ -40,7 +40,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         <Box className={classes.root}>
             <Chip
                 label={t('post_dialog__select_specific_e2e_target_title', {
-                    selected: new Set([...selected.map((x) => x.identifier.toText())]).size,
+                    selected: new Set(selected.map((x) => x.identifier)).size,
                 })}
                 avatar={<AddIcon />}
                 disabled={props.disabled || profileItems?.length === 0}
