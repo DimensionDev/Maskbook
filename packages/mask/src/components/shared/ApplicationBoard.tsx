@@ -97,7 +97,7 @@ interface Props {
 export function ApplicationBoard(props: Props) {
     return (
         <PersonaContext.Provider>
-            <ApplicationBoardContent />
+            <ApplicationBoardContent {...props} />
         </PersonaContext.Provider>
     )
 }
