@@ -3,7 +3,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Typography } from '@mui/material'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => ({
     applicationBox: {
         display: 'flex',
         flexDirection: 'column',
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     disabled: {
         opacity: 0.4,
-        cursor: 'default',
+        cursor: 'default !important',
         pointerEvent: 'none',
     },
     iconWrapper: {
@@ -60,13 +60,13 @@ const useStyles = makeStyles()((theme) => ({
     recommendFeatureAppListItemName: {
         fontSize: 14,
         fontWeight: 500,
-        cursor: 'pointer',
+        cursor: disabled ? 'default' : 'pointer',
         color: theme.palette.common.white,
     },
     recommendFeatureAppListItemDescription: {
         fontSize: 12,
         fontWeight: 500,
-        cursor: 'pointer',
+        cursor: disabled ? 'default' : 'pointer',
         color: theme.palette.common.white,
     },
 }))
@@ -82,7 +82,7 @@ interface ApplicationEntryProps {
 
 export function ApplicationEntry(props: ApplicationEntryProps) {
     const { title, onClick, disabled = false, icon, tooltipHint, recommendFeature } = props
-    const { classes } = useStyles()
+    const { classes } = useStyles({ disabled })
     const jsx = recommendFeature ? (
         <div
             style={{

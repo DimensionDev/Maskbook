@@ -12,6 +12,7 @@ const useStyles = makeStyles()((theme) => {
         content: {
             padding: theme.spacing(2.5),
             height: 540,
+            overflowX: 'hidden',
         },
     }
 })

@@ -25,6 +25,7 @@ import type { Persona } from '../../database'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useSetupGuideStatusState } from '../DataSource/useNextID'
 import { useMyPersonas } from '../DataSource/useMyPersonas'
+import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
 
@@ -232,6 +233,7 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
                   ?.connectionConfirmState === 'confirmed'
             : undefined
     }, [])
+    const personaConnectStatus = usePersonaConnectStatus()
 
     const { value: ApplicationCurrentStatus } = useAsync(async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
@@ -256,19 +258,26 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
     } = ApplicationCurrentStatus ?? {}
     const { closeDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
 
-    const onNextIdVerify = useCallback(() => {
+    const jumpSetupGuide = useCallback(() => {
         closeDialog()
-        CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
-    }, [])
+        personaConnectStatus.connected === false
+            ? personaConnectStatus.action?.()
+            : CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
+    }, [personaConnectStatus])
 
     if (!application.entry.RenderEntryComponent) return null
 
     const RenderEntryComponent = application.entry.RenderEntryComponent
     const shouldVerifyNextId = Boolean(!isNextIDVerify && ApplicationCurrentStatus)
-    const shouldDisplayTooltipHint = ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false
+    const shouldDisplayTooltipHint =
+        ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected
     return (
         <RenderEntryComponent
-            disabled={!application.enabled || isNextIDVerify === undefined || !isSNSConnectToCurrentPersona}
+            disabled={
+                !application.enabled ||
+                isNextIDVerify === undefined ||
+                (!isSNSConnectToCurrentPersona && personaConnectStatus.connected)
+            }
             tooltipHint={
                 shouldDisplayTooltipHint
                     ? t('plugin_tips_sns_persona_unmatched', {
@@ -280,7 +289,7 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
                       })
                     : undefined
             }
-            onClick={shouldVerifyNextId ? onNextIdVerify : undefined}
+            onClick={shouldVerifyNextId || personaConnectStatus.connected === false ? jumpSetupGuide : undefined}
         />
     )
 }
