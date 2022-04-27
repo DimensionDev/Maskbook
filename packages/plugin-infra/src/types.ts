@@ -314,13 +314,40 @@ export namespace Plugin.SNSAdaptor {
 
     export interface ApplicationEntry {
         /**
+         * The contrast between ApplicationEntryID and PluginID is that one plugin may contains multiple entries.
+         */
+        ApplicationEntryID: string
+        /**
          * Render entry component
          */
-        RenderEntryComponent: (props: { disabled: boolean }) => JSX.Element
+        RenderEntryComponent?: (props: {
+            disabled: boolean
+            tooltipHint?: string
+            onClick?: () => void
+        }) => JSX.Element | null
         /**
          * Used to order the applications on the board
          */
-        defaultSortingPriority: number
+        appBoardSortingDefaultPriority?: number
+
+        /**
+         * Used to order the applications on the market list
+         */
+        marketListSortingPriority?: number
+
+        icon: React.ReactNode
+
+        name: I18NFieldOrReactNode
+
+        description?: I18NFieldOrReactNode
+
+        tutorialLink?: string
+        /**
+         * Does the application listed in the DAPP list
+         */
+        category?: 'dapp' | 'other'
+
+        nextIdRequired?: boolean
     }
 
     export interface ProfileIdentity {
@@ -676,13 +703,14 @@ export enum PluginId {
     NextID = 'com.mask.next_id',
     External = 'io.mask.external',
     Furucombo = 'app.furucombo',
+    FindTruman = 'org.findtruman',
     Gitcoin = 'co.gitcoin',
     GoodGhosting = 'co.good_ghosting',
     MaskBox = 'com.maskbook.box',
     Poll = 'com.maskbook.poll',
     Profile = 'com.mask.profile',
     Trader = 'com.maskbook.trader',
-    Tip = 'com.maskbook.tip',
+    Tips = 'com.maskbook.tip',
     Transak = 'com.maskbook.transak',
     Valuables = 'com.maskbook.tweet',
     DAO = 'money.juicebox',
@@ -694,6 +722,7 @@ export enum PluginId {
     RedPacketNFT = 'com.maskbook.red_packet_nft',
     Pets = 'com.maskbook.pets',
     Snapshot = 'org.snapshot',
+    Savings = 'com.savings',
     ITO = 'com.maskbook.ito',
     Wallet = 'com.maskbook.wallet',
     PoolTogether = 'com.pooltogether',

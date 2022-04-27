@@ -167,7 +167,6 @@ export async function consistentPersonaDBWriteAccess(
     t.addEventListener('error', finish)
 
     // Pause those events when patching write access
-    const resumeProfile = MaskMessages.events.profilesChanged.pause()
     const resumePersona = MaskMessages.events.ownPersonaChanged.pause()
     const resumeRelation = MaskMessages.events.relationsChanged.pause()
     try {
@@ -181,12 +180,10 @@ export async function consistentPersonaDBWriteAccess(
         }
         try {
             await assertPersonaDBConsistency(tryToAutoFix ? 'fix' : 'throw', 'full check', t)
-            resumeProfile((data) => [data.flat()])
             resumePersona((data) => (data.length ? [undefined] : []))
             resumeRelation((data) => [data.flat()])
         } finally {
             // If the consistency check throws, we drop all pending events
-            resumeProfile(() => [])
             resumePersona(() => [])
             resumeRelation(() => [])
         }
@@ -320,20 +317,10 @@ export async function updatePersonaDB(
 
 export async function createOrUpdatePersonaDB(
     record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier' | 'publicKey'>,
-    howToMerge: Parameters<typeof updatePersonaDB>[1] & { protectPrivateKey?: boolean },
+    howToMerge: Parameters<typeof updatePersonaDB>[1],
     t: PersonasTransaction<'readwrite'>,
 ) {
     const personaInDB = await t.objectStore('personas').get(record.identifier.toText())
-
-    if (howToMerge.protectPrivateKey && !!personaInDB?.privateKey && !record.privateKey) return
-
-    if (howToMerge.protectPrivateKey && !!personaInDB?.privateKey) {
-        const nextRecord = personaRecordOutDB(personaInDB)
-        nextRecord.hasLogout = false
-
-        return updatePersonaDB(nextRecord, howToMerge, t)
-    }
-
     if (personaInDB) return updatePersonaDB(record, howToMerge, t)
     else
         return createPersonaDB(
@@ -341,7 +328,7 @@ export async function createOrUpdatePersonaDB(
                 ...record,
                 createdAt: record.createdAt ?? new Date(),
                 updatedAt: record.updatedAt ?? new Date(),
-                linkedProfiles: new IdentifierMap(new Map()),
+                linkedProfiles: record.linkedProfiles ?? new IdentifierMap(new Map()),
             },
             t,
         )
@@ -384,7 +371,6 @@ export async function safeDeletePersonaDB(
  */
 export async function createProfileDB(record: ProfileRecord, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').add(profileToDB(record))
-    MaskMessages.events.profilesChanged.sendToAll([{ of: record.identifier, reason: 'update' }])
 }
 
 /**
@@ -458,60 +444,54 @@ const fuse = new Fuse([] as ProfileRecord[], {
 })
 
 /**
- * @deprecated
- * @param options
- * @param count
- */
-export async function queryProfilesPagedDB(
-    options: {
-        after?: ProfileIdentifier
-        query?: string
-    },
-    count: number,
-): Promise<ProfileRecord[]> {
-    const t = createTransaction(await db(), 'readonly')('profiles')
-    const breakPoint = options.after?.toText()
-    let firstRecord = true
-    const data: ProfileRecord[] = []
-    for await (const rec of t.objectStore('profiles').iterate()) {
-        if (firstRecord && breakPoint && rec.key !== breakPoint) {
-            rec.continue(breakPoint)
-            firstRecord = false
-            continue
-        }
-        firstRecord = false
-        // after this record
-        if (rec.key === breakPoint) continue
-        if (count <= 0) break
-        const outData = profileOutDB(rec.value)
-        if (typeof options.query === 'string') {
-            fuse.setCollection([outData])
-            if (!fuse.search(options.query).length) continue
-        }
-        count -= 1
-        data.push(outData)
-    }
-    return data
-}
-
-/**
  * Update a profile.
  */
 export async function updateProfileDB(
     updating: Partial<ProfileRecord> & Pick<ProfileRecord, 'identifier'>,
-    t: ProfileTransaction<'readwrite'>,
+    t: FullPersonaDBTransaction<'readwrite'>,
 ): Promise<void> {
     const old = await t.objectStore('profiles').get(updating.identifier.toText())
     if (!old) throw new Error('Updating a non exists record')
+
+    if (old.linkedPersona && updating.linkedPersona && old.linkedPersona !== updating.linkedPersona) {
+        const oldIdentifier = Identifier.fromString(old.identifier, ProfileIdentifier).unwrap()
+        const oldLinkedPersona = await queryPersonaByProfileDB(oldIdentifier, t)
+
+        if (oldLinkedPersona) {
+            oldLinkedPersona.linkedProfiles.delete(oldIdentifier)
+            await updatePersonaDB(
+                oldLinkedPersona,
+                {
+                    linkedProfiles: 'replace',
+                    explicitUndefinedField: 'ignore',
+                },
+                t,
+            )
+        }
+    }
+
+    if (updating.linkedPersona && old.linkedPersona !== updating.linkedPersona) {
+        const linkedPersona = await queryPersonaDB(updating.linkedPersona, t)
+        if (linkedPersona) {
+            linkedPersona.linkedProfiles.set(updating.identifier, { connectionConfirmState: 'confirmed' })
+            await updatePersonaDB(
+                linkedPersona,
+                {
+                    linkedProfiles: 'replace',
+                    explicitUndefinedField: 'ignore',
+                },
+                t,
+            )
+        }
+    }
 
     const nextRecord: ProfileRecordDB = profileToDB({
         ...profileOutDB(old),
         ...updating,
     })
     await t.objectStore('profiles').put(nextRecord)
-    MaskMessages.events.profilesChanged.sendToAll([{ reason: 'update', of: updating.identifier }])
 }
-export async function createOrUpdateProfileDB(rec: ProfileRecord, t: ProfileTransaction<'readwrite'>) {
+export async function createOrUpdateProfileDB(rec: ProfileRecord, t: FullPersonaDBTransaction<'readwrite'>) {
     if (await queryProfileDB(rec.identifier, t)) return updateProfileDB(rec, t)
     else return createProfileDB(rec, t)
 }
@@ -576,7 +556,6 @@ export async function attachProfileDB(
  */
 export async function deleteProfileDB(id: ProfileIdentifier, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').delete(id.toText())
-    MaskMessages.events.profilesChanged.sendToAll([{ reason: 'delete', of: id }])
 }
 
 /**
@@ -675,6 +654,22 @@ export async function updateRelationDB(
         MaskMessages.events.relationsChanged.sendToAll([
             { of: updating.profile, favor: updating.favor, reason: 'update' },
         ])
+    }
+}
+
+export async function createOrUpdateRelationDB(
+    record: Omit<RelationRecord, 'network'>,
+    t: RelationTransaction<'readwrite'>,
+    silent = false,
+) {
+    const old = await t
+        .objectStore('relations')
+        .get(IDBKeyRange.only([record.linked.toText(), record.profile.toText()]))
+
+    if (old) {
+        await updateRelationDB(record, t, silent)
+    } else {
+        await createRelationDB(record, t, silent)
     }
 }
 

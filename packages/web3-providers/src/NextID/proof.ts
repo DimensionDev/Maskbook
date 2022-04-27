@@ -80,7 +80,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         })
 
         // Should delete cache when proof status changed
-        const cacheKeyOfQueryPersona = getPersonaQueryURL(NextIDPlatform.NextId, personaPublicKey)
+        const cacheKeyOfQueryPersona = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
         const cacheKeyOfExistedBinding = geyExistedBindingQueryURL(platform, identity, personaPublicKey)
         deleteCache(cacheKeyOfQueryPersona)
         deleteCache(cacheKeyOfExistedBinding)
@@ -89,7 +89,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
-        const url = getPersonaQueryURL(NextIDPlatform.NextId, personaPublicKey)
+        const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
         const response = await fetchJSON<NextIDBindings>(url, {}, enableCache)
         // Will have only one item when query by personaPublicKey
         return first(response.unwrap().ids)

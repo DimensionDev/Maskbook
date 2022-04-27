@@ -117,20 +117,19 @@ export async function queryPostsDB(
     return []
 }
 
-export const PostDBAccess = () => undefined
+export async function withPostDBTransaction(task: (t: PostReadWriteTransaction) => Promise<void>) {
+    await task(null!)
+}
+
 // #endregion
 
-type RecipientReasonJSON = (
-    | { type: 'auto-share' }
-    | { type: 'direct' }
-    | { type: 'group'; group: string /** GroupIdentifier */ }
-) & {
+type RecipientReasonJSON = ({ type: 'auto-share' } | { type: 'direct' }) & {
     at: number
 }
 
 function RecipientReasonToJSON(y: RecipientReason): RecipientReasonJSON {
     if (y.type === 'direct' || y.type === 'auto-share')
         return { at: y.at.getTime(), type: y.type } as RecipientReasonJSON
-    else if (y.type === 'group') return { at: y.at.getTime(), group: y.group.toText(), type: y.type }
+    else if (y.type === 'group') return { at: y.at.getTime(), type: 'direct' }
     return unreachable(y)
 }

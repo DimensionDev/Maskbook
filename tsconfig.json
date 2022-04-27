@@ -15,7 +15,7 @@
     // @masknet/scripts: insert-here 1
     { "path": "./packages/backup-format/tsconfig.tests.json" },
     { "path": "./packages/encryption/tsconfig.tests.json" },
-    { "path": "./packages/shared-base/tsconfig.tests.json" },
+    { "path": "./packages/typed-message/tests/tsconfig.json" },
     // All plugins should be type checked too
     { "path": "./packages/plugins" }
   ],
