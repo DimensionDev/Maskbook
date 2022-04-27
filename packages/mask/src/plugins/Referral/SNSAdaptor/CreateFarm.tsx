@@ -127,7 +127,7 @@ export function CreateFarm(props: PageInterface) {
         }
 
         if (token.address !== NATIVE_TOKEN) {
-            const totalFarmRewardNum = Number(totalFarmReward) + Number(attraceFee)
+            const totalFarmRewardNum = Number.parseFloat(totalFarmReward) + attraceFee
 
             await referralFarmService.runCreateERC20PairFarm(
                 (val: boolean) => {
@@ -141,7 +141,7 @@ export function CreateFarm(props: PageInterface) {
                 token,
                 token,
                 totalFarmRewardNum,
-                Number(dailyFarmReward),
+                Number.parseFloat(dailyFarmReward),
             )
         } else {
             showSnackbar(t('plugin_referral_error_native_token_farm'), { variant: 'error' })
@@ -203,7 +203,7 @@ export function CreateFarm(props: PageInterface) {
 
     const onChangeTotalFarmReward = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const totalFarmReward = e.currentTarget.value
-        const totalFarmRewardNum = Number(e.currentTarget.value)
+        const totalFarmRewardNum = Number.parseFloat(e.currentTarget.value)
         const attraceFee = totalFarmRewardNum * (ATTRACE_FEE_PERCENT / 100)
 
         setTotalFarmReward(totalFarmReward)
@@ -239,7 +239,7 @@ export function CreateFarm(props: PageInterface) {
                     status: TransactionStatus.CONFIRMATION,
                     title: t('plugin_referral_transaction_confirm_permission_deposit'),
                     subtitle: t('plugin_referral_create_farm_transaction_confirm_desc', {
-                        reward: roundValue(Number(totalFarmReward) + attraceFee, token?.decimals),
+                        reward: roundValue(Number.parseFloat(totalFarmReward) + attraceFee, token?.decimals),
                         token: token?.symbol ?? '',
                     }),
                 },
@@ -272,9 +272,10 @@ export function CreateFarm(props: PageInterface) {
     )
 
     const balance = formatBalance(rewardBalance ?? '', token?.decimals, 6)
-    const insufficientFunds = Number(totalFarmReward) > Number(balance)
+    const totalFarmRewardNum = Number.parseFloat(totalFarmReward)
+    const insufficientFunds = totalFarmRewardNum > Number.parseFloat(balance)
     const createFarmBtnDisabled =
-        !token?.address || !Number(totalFarmReward) || !Number(dailyFarmReward) || insufficientFunds
+        !token?.address || !totalFarmRewardNum || !Number.parseFloat(dailyFarmReward) || insufficientFunds
 
     return (
         <Box className={classes.container}>

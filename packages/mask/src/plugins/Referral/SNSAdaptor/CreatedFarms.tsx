@@ -101,7 +101,7 @@ function groupDepositForFarms(
         const farm = allFarmsMap.get(farmHash)
         const rewardTokenAddr = farm?.rewardTokenDefn && parseChainAddress(farm.rewardTokenDefn).address
         const rewardTokenDec = rewardTokenAddr ? allTokensMap.get(rewardTokenAddr)?.decimals : 18
-        const totalFarmRewards = prevFarmState + Number(formatUnits(delta.toString(), rewardTokenDec))
+        const totalFarmRewards = prevFarmState + Number.parseFloat(formatUnits(delta.toString(), rewardTokenDec))
         farmTotalDepositMap.set(farmHash, totalFarmRewards)
     })
 

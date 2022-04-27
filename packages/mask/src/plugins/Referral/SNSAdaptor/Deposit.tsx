@@ -40,7 +40,10 @@ export function Deposit(props: DepositDialogInterface | undefined) {
     if (!props?.deposit) return <>{null}</>
 
     const { deposit } = props
-    const totalDeposit = roundValue(Number(deposit.totalFarmReward) + deposit.attraceFee, deposit.token?.decimals)
+    const totalDeposit = roundValue(
+        Number.parseFloat(deposit.totalFarmReward) + deposit.attraceFee,
+        deposit.token?.decimals,
+    )
 
     return (
         <Grid container display="flex" flexDirection="column" className={classes.container}>

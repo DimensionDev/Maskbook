@@ -200,7 +200,7 @@ function FarmsList({ entitlements, allTokens, farms, rewardsHarvested, ...props 
         <>
             {Object.entries(entitlementsGroupedByRewardToken).map(([rewardTokenDefn, entitlements]) => {
                 const totalRewards = entitlements.reduce(function (accumulator, current) {
-                    return accumulator + Number(fromWei(current.args.rewardValue.toString()))
+                    return accumulator + Number.parseFloat(fromWei(current.args.rewardValue.toString()))
                 }, 0)
                 const harvested = rewardsHarvested.filter((reward) => reward.rewardTokenDefn === rewardTokenDefn)
                 const claimed = harvested.reduce(function (accumulator, current) {

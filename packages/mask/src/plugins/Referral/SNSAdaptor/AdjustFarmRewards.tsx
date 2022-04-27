@@ -84,8 +84,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
 
     const onChangeTotalFarmReward = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const totalFarmReward = e.currentTarget.value
-        const totalFarmRewardNum = Number(totalFarmReward)
-        const attraceFee = totalFarmRewardNum * (ATTRACE_FEE_PERCENT / 100)
+        const attraceFee = Number.parseFloat(totalFarmReward) * (ATTRACE_FEE_PERCENT / 100)
 
         setTotalFarmReward(totalFarmReward)
         setAttraceFee(attraceFee)
@@ -96,7 +95,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
             return onErrorDeposit(t('go_wrong'))
         }
 
-        const totalFarmRewardNum = Number(totalFarmReward) + Number(attraceFee)
+        const depositValue = Number.parseFloat(totalFarmReward) + attraceFee
 
         referralFarmService.adjustFarmRewards(
             (val: boolean) => {
@@ -109,13 +108,13 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
             chainId,
             rewardToken,
             referredToken,
-            totalFarmRewardNum,
-            Number(dailyFarmReward),
+            depositValue,
+            Number.parseFloat(dailyFarmReward),
         )
     }, [web3, account, chainId, referredToken, rewardToken, totalFarmReward, dailyFarmReward])
 
     const onClickAdjustRewards = useCallback(() => {
-        if (totalFarmReward && Number(totalFarmReward) > 0) {
+        if (totalFarmReward && Number.parseFloat(totalFarmReward) > 0) {
             onOpenDepositDialog()
         } else {
             onAdjustFarmReward()
@@ -181,8 +180,8 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
 
     const onConfirmAdjustFarm = useCallback(() => {
         const { title, subtitle } = getTransactionTitles(
-            Number(totalFarmReward),
-            Number(dailyFarmReward),
+            Number.parseFloat(totalFarmReward),
+            Number.parseFloat(dailyFarmReward),
             attraceFee,
             props.rewardToken,
         )
@@ -247,8 +246,9 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     }
 
     const balance = formatBalance(rewardBalance ?? '', rewardToken?.decimals, 6)
-    const insufficientFunds = Number(totalFarmReward) > Number(balance)
-    const adjustRewardsBtnDisabled = (!Number(dailyFarmReward) && !Number(totalFarmReward)) || insufficientFunds
+    const totalFarmRewardNum = Number.parseFloat(totalFarmReward)
+    const insufficientFunds = totalFarmRewardNum > Number.parseFloat(balance)
+    const adjustRewardsBtnDisabled = (!Number.parseFloat(dailyFarmReward) && !totalFarmRewardNum) || insufficientFunds
 
     return rewardToken ? (
         <Box display="flex" flexDirection="column">

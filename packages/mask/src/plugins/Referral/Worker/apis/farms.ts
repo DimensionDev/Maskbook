@@ -107,7 +107,8 @@ function parseBasicFarmEvents(unparsed: any, tokens: ERC20TokenDetailed[]) {
         if (e.topic === eventIds.FarmDepositChange) {
             const prevTotalFarmRewards = prevFarmState?.totalFarmRewards || 0
 
-            const totalFarmRewards = prevTotalFarmRewards + Number(formatUnits(e.args.delta.toString(), rewardTokenDec))
+            const totalFarmRewards =
+                prevTotalFarmRewards + Number.parseFloat(formatUnits(e.args.delta.toString(), rewardTokenDec))
             farmMap.set(farmHash, { ...prevFarmState, totalFarmRewards })
         }
         if (e.topic === eventIds.FarmMetastate) {
@@ -119,7 +120,7 @@ function parseBasicFarmEvents(unparsed: any, tokens: ERC20TokenDetailed[]) {
 
                 farmMap.set(farmHash, {
                     ...prevFarmState,
-                    dailyFarmReward: Number(formatUnits(periodReward, rewardTokenDec)),
+                    dailyFarmReward: Number.parseFloat(formatUnits(periodReward, rewardTokenDec)),
                 })
             }
         }
@@ -146,7 +147,7 @@ function parseRewardsHarvestedEvents(unparsed: any) {
 
     const rewards: Array<RewardsHarvestedEvent> = parsed.map((e) => {
         const { farmHash, caller, rewardTokenDefn, leafHash, value } = e.args
-        return { farmHash, caller, rewardTokenDefn, leafHash, value: Number(fromWei(value.toString())) }
+        return { farmHash, caller, rewardTokenDefn, leafHash, value: Number.parseFloat(fromWei(value.toString())) }
     })
 
     return rewards
