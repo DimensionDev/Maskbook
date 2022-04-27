@@ -55,8 +55,8 @@ export async function detachProfileWithNextID(
  * @param identifier The resolved identity
  */
 export async function resolveUnknownLegacyIdentity(identifier: ProfileIdentifier): Promise<void> {
-    const unknown = new ProfileIdentifier(identifier.network, '$unknown')
-    const self = new ProfileIdentifier(identifier.network, '$self')
+    const unknown = ProfileIdentifier.of(identifier.network, '$unknown').unwrap()
+    const self = ProfileIdentifier.of(identifier.network, '$self').unwrap()
 
     const r = await queryProfilesDB({ identifiers: [unknown, self] })
     if (!r.length) return

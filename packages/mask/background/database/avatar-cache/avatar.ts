@@ -1,4 +1,4 @@
-import { IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
+import { IdentifierMap } from '@masknet/shared-base'
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentifierWithAvatar, createAvatarDBAccess } from './db'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import { blobToDataURL, memoizePromise } from '@dimensiondev/kit'
@@ -49,7 +49,6 @@ export const queryAvatarsDataURL: (
  */
 
 export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: ArrayBuffer | string): Promise<void> {
-    if (identifier instanceof ProfileIdentifier && identifier.isUnknown) return
     try {
         if (hasNativeAPI) {
             // ArrayBuffer is unreachable on Native side.

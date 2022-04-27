@@ -27,7 +27,7 @@ export async function v37_addReceiver(
     const ecdh = Promise.allSettled(
         target.target.map(async (id): Promise<EncryptionResultE2E> => {
             const iv = postIV || fillIV(io)
-            const receiverPublicKey = id.isUnknown ? undefined : await io.queryPublicKey(id)
+            const receiverPublicKey = await io.queryPublicKey(id)
             if (!receiverPublicKey) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
             const [ephemeralPublicKey, ephemeralPrivateKey] = await getEphemeralKey(receiverPublicKey.algr)
             const aes = await crypto.subtle.deriveKey(

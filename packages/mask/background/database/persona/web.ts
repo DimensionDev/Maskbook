@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js'
 import { openDB } from 'idb/with-async-ittr'
-import { CryptoKeyToJsonWebKey, restorePrototype } from '../../../utils-pure'
+import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
 import { assertPersonaDBConsistency } from './consistency'
 import {
@@ -29,7 +29,6 @@ import type {
     PersonaRecord,
 } from './type'
 import { isEmpty } from 'lodash-unified'
-import { convertPersonaHexPublicKey } from './util'
 /**
  * Database structure:
  *
@@ -208,7 +207,13 @@ export async function queryPersonaByProfileDB(
     t = t || createTransaction(await db(), 'readonly')('personas', 'profiles', 'relations')
     const x = await t.objectStore('profiles').get(query.toText())
     if (!x?.linkedPersona) return null
-    return queryPersonaDB(restorePrototype(x.linkedPersona, ECKeyIdentifier.prototype), t)
+    return queryPersonaDB(
+        new ECKeyIdentifier(
+            x.linkedPersona.curve,
+            x.linkedPersona.compressedPoint || x.linkedPersona.encodedCompressedKey!,
+        ),
+        t,
+    )
 }
 
 /**
@@ -452,8 +457,14 @@ export async function updateProfileDB(
 ): Promise<void> {
     const old = await t.objectStore('profiles').get(updating.identifier.toText())
     if (!old) throw new Error('Updating a non exists record')
+    const oldLinkedPersona = old.linkedPersona
+        ? new ECKeyIdentifier(
+              old.linkedPersona.curve,
+              old.linkedPersona.compressedPoint || old.linkedPersona.encodedCompressedKey!,
+          )
+        : undefined
 
-    if (old.linkedPersona && updating.linkedPersona && old.linkedPersona !== updating.linkedPersona) {
+    if (oldLinkedPersona && updating.linkedPersona && oldLinkedPersona !== updating.linkedPersona) {
         const oldIdentifier = Identifier.fromString(old.identifier, ProfileIdentifier).unwrap()
         const oldLinkedPersona = await queryPersonaByProfileDB(oldIdentifier, t)
 
@@ -470,7 +481,7 @@ export async function updateProfileDB(
         }
     }
 
-    if (updating.linkedPersona && old.linkedPersona !== updating.linkedPersona) {
+    if (updating.linkedPersona && oldLinkedPersona !== updating.linkedPersona) {
         const linkedPersona = await queryPersonaDB(updating.linkedPersona, t)
         if (linkedPersona) {
             linkedPersona.linkedProfiles.set(updating.identifier, { connectionConfirmState: 'confirmed' })
@@ -681,6 +692,9 @@ function profileToDB(x: ProfileRecord): ProfileRecordDB {
         ...x,
         identifier: x.identifier.toText(),
         network: x.identifier.network,
+        linkedPersona: x.linkedPersona
+            ? { curve: x.linkedPersona.curve, type: 'ec_key', compressedPoint: x.linkedPersona.publicKey }
+            : undefined,
     }
 }
 function profileOutDB({ network, ...x }: ProfileRecordDB): ProfileRecord {
@@ -689,8 +703,13 @@ function profileOutDB({ network, ...x }: ProfileRecordDB): ProfileRecord {
     }
     return {
         ...x,
-        identifier: Identifier.fromString(x.identifier, ProfileIdentifier).unwrap(),
-        linkedPersona: restorePrototype(x.linkedPersona, ECKeyIdentifier.prototype),
+        identifier: ProfileIdentifier.from(x.identifier).unwrap(),
+        linkedPersona: x.linkedPersona
+            ? new ECKeyIdentifier(
+                  x.linkedPersona.curve,
+                  x.linkedPersona.compressedPoint || x.linkedPersona.encodedCompressedKey!,
+              )
+            : undefined,
     }
 }
 function personaRecordToDB(x: PersonaRecord): PersonaRecordDB {
@@ -709,7 +728,7 @@ function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
     const obj: PersonaRecord = {
         ...x,
         identifier,
-        publicHexKey: convertPersonaHexPublicKey(identifier),
+        publicHexKey: identifier.publicKeyAsHex,
         linkedProfiles: new IdentifierMap(x.linkedProfiles, ProfileIdentifier),
     }
     return obj

@@ -61,7 +61,7 @@ export namespace NormalizedBackup {
     }
     export interface PostBackup {
         identifier: PostIVIdentifier
-        postBy: ProfileIdentifier
+        postBy?: ProfileIdentifier
         postCryptoKey: Option<AESJsonWebKey>
         recipients: Option<PostReceiverPublic | PostReceiverE2E>
         foundAt: Date

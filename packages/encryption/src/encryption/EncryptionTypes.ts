@@ -14,7 +14,9 @@ export interface EncryptOptions {
     /** Payload version to use. */
     version: -38 | -37
     /** Current author who started the encryption. */
-    author: ProfileIdentifier
+    author?: ProfileIdentifier
+    /** Network of the encryption */
+    network: string
     /** The message to be encrypted. */
     message: SerializableTypedMessages
     /** Encryption target. */
@@ -71,7 +73,7 @@ export interface EncryptResult {
     postKey: AESCryptoKey
     output: string | Uint8Array
     identifier: PostIVIdentifier
-    author: ProfileIdentifier
+    author?: ProfileIdentifier
     e2e?: EncryptionResultE2EMap
 }
 /** Additional information that need to be send to the internet in order to allow recipients to decrypt */

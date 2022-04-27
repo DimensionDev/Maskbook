@@ -21,6 +21,7 @@ export async function encryptTo(
 ): Promise<string> {
     const { identifier, output, postKey, e2e } = await encrypt(
         {
+            network: whoAmI.network,
             author: whoAmI,
             message: content,
             target,

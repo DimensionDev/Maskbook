@@ -18,7 +18,7 @@ export function NFTBadgeTweet(props: NFTBadgeTweetProps) {
     const { avatarId, width, height, snsKey } = props
     const identity = useLastRecognizedIdentity()
 
-    if (!identity?.identifier.userId) return null
+    if (!identity?.identifier?.userId) return null
     return (
         <NFTBadgeTimeline
             width={width}

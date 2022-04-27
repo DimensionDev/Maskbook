@@ -6,7 +6,6 @@ import {
     Identifier,
     ECKeyIdentifier,
 } from '@masknet/shared-base'
-import { restorePrototype } from '../../../utils-pure'
 import type { FullPersonaDBTransaction } from './type'
 
 type ReadwriteFullPersonaDBTransaction = FullPersonaDBTransaction<'readwrite'>
@@ -124,7 +123,10 @@ async function* checkProfileLink(
         yield { type: Type.Invalid_Profile_LinkedPersona, invalidLinkedPersona, profile }
         return
     }
-    const designatedPersona = restorePrototype(invalidLinkedPersona, ECKeyIdentifier.prototype)
+    const designatedPersona = new ECKeyIdentifier(
+        invalidLinkedPersona.curve,
+        invalidLinkedPersona.compressedPoint || invalidLinkedPersona.encodedCompressedKey!,
+    )
     const persona = await t.objectStore('personas').get(designatedPersona.toText())
     if (!persona?.linkedProfiles.has(profile.toText())) {
         yield { type: Type.One_Way_Link_In_Profile, profile, designatedPersona }

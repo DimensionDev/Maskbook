@@ -6,7 +6,7 @@ import type {
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import type { DBSchema } from 'idb/with-async-ittr'
-import type { PrototypeLess } from '../../../utils-pure'
+import type { ProfileIdentifierStoredInDB } from '../persona/type'
 import type { IDBPSafeTransaction } from '../utils/openDB'
 
 export type RecipientReason = (
@@ -26,10 +26,7 @@ export interface RecipientDetail {
     reason: RecipientReason[]
 }
 export interface PostRecord {
-    /**
-     * For old data stored before version 3, this identifier may be ProfileIdentifier.unknown
-     */
-    postBy: ProfileIdentifier
+    postBy: ProfileIdentifier | undefined
     identifier: PostIVIdentifier
     postCryptoKey?: AESJsonWebKey
     /**
@@ -54,7 +51,7 @@ export interface PostRecord {
 }
 
 export interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients' | 'encryptBy'> {
-    postBy: PrototypeLess<ProfileIdentifier>
+    postBy: ProfileIdentifierStoredInDB | undefined
     identifier: string
     recipients: true | Map<string, RecipientDetail>
     encryptBy?: string

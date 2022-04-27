@@ -2,7 +2,7 @@ import { MutationObserverWatcher, DOMProxy, LiveSelector } from '@dimensiondev/h
 import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSelector } from '../utils/selector'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import Services from '../../../extension/service'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { memoizePromise } from '@dimensiondev/kit'
@@ -27,14 +27,15 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal: Ab
             let remover = () => {}
             const remove = () => remover()
             const check = () => {
-                ifUsingMask(new ProfileIdentifier('twitter.com', bioPageUserIDSelector(main).evaluate() || '')).then(
-                    () => {
-                        const root = createReactRootShadowed(meta.afterShadow, { signal })
-                        root.render(<Icon size={size} />)
-                        remover = root.destroy
-                    },
-                    remove,
-                )
+                ifUsingMask(
+                    ProfileIdentifier.of(EnhanceableSite.Twitter, bioPageUserIDSelector(main).evaluate()).unwrapOr(
+                        null,
+                    ),
+                ).then(() => {
+                    const root = createReactRootShadowed(meta.afterShadow, { signal })
+                    root.render(<Icon size={size} />)
+                    remover = root.destroy
+                }, remove)
             }
             check()
             return {
@@ -79,10 +80,10 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
     }
 }
 export const ifUsingMask = memoizePromise(
-    (pid: ProfileIdentifier) =>
-        Services.Identity.queryProfilesInformation([pid]).then((x) => {
-            if (x[0].fingerprint) return
-            throw new Error('Not using mask')
-        }),
+    async (pid: ProfileIdentifier | null) => {
+        if (!pid) throw new Error()
+        const p = await Services.Identity.queryProfilesInformation([pid])
+        if (!p[0].fingerprint) throw new Error()
+    },
     (pid: ProfileIdentifier) => pid.toText(),
 )
