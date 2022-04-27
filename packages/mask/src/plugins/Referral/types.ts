@@ -1,5 +1,6 @@
 import type { ChainId as ChainIdMain, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import type BigNumber from 'bignumber.js'
+import type { FarmExists, FarmDepositChange } from '@masknet/web3-contracts/types/ReferralFarmsV1'
 
 export interface ReferralNetwork {
     chainId: ChainIdMain
@@ -108,16 +109,12 @@ export type Link = string
 
 // A single metastate key-value object
 
-export interface FarmExistsEvent {
-    farmHash: FarmHash
-    referredTokenDefn: ChainAddress
-    rewardTokenDefn: ChainAddress
-    sponsor: EvmAddress
-}
-export interface FarmDepositChange {
-    farmHash: FarmHash
-    delta: BigNumber
-}
+export type FarmExistsEvent = Pick<
+    FarmExists['returnValues'],
+    'farmHash' | 'sponsor' | 'referredTokenDefn' | 'rewardTokenDefn'
+>
+export type FarmDepositChangeEvent = Pick<FarmDepositChange['returnValues'], 'farmHash' | 'delta'>
+
 export interface FarmMetastate {
     farmHash: FarmHash
     dailyFarmReward: number
@@ -126,10 +123,6 @@ export interface FarmDepositAndMetastate {
     farmHash: FarmHash
     delta: BigNumber
     dailyFarmReward: BigNumber
-}
-export interface FarmTokenChange {
-    farmHash: FarmHash
-    token: ChainAddress
 }
 export interface RewardsHarvestedEvent {
     farmHash: FarmHash

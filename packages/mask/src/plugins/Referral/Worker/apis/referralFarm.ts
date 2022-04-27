@@ -5,10 +5,11 @@ import type { TransactionReceipt } from 'web3-core'
 import { ChainId, createContract, TransactionEventType, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import type Web3 from 'web3'
 import { AbiItem, asciiToHex, padRight, toWei } from 'web3-utils'
+import ReferralFarmsV1ABI from '@masknet/web3-contracts/abis/ReferralFarmsV1.json'
+import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
 import { roundValue, toChainAddressEthers } from '../../helpers'
 import type { EntitlementLog } from '../../types'
-import { ERC20_ABI, REFERRAL_FARMS_V1_ABI } from './abis'
 import { REFERRAL_FARMS_V1_ADDR } from '../../constants'
 
 export async function runCreateERC20PairFarm(
@@ -29,7 +30,7 @@ export async function runCreateERC20PairFarm(
         const referredTokenDefn = toChainAddressEthers(chainId, referredToken.address)
         const rewardTokenDefn = toChainAddressEthers(chainId, rewardToken.address)
         const farmsAddr = REFERRAL_FARMS_V1_ADDR
-        const farms = createContract(web3, farmsAddr, REFERRAL_FARMS_V1_ABI as AbiItem[])
+        const farms = createContract(web3, farmsAddr, ReferralFarmsV1ABI as AbiItem[])
 
         const rewardTokenDecimals = rewardToken.decimals
         const totalFarmRewardStr = roundValue(totalFarmReward, rewardTokenDecimals).toString()
@@ -41,7 +42,7 @@ export async function runCreateERC20PairFarm(
         }
 
         // Grant permission
-        const rewardTokenInstance = createContract(web3, rewardToken.address, ERC20_ABI as AbiItem[])
+        const rewardTokenInstance = createContract(web3, rewardToken.address, ERC20ABI as AbiItem[])
         const allowance = await rewardTokenInstance?.methods.allowance(account, farmsAddr).call()
         const isNeededGrantPermission = new BigNumber(allowance).isLessThan(totalFarmReward)
         if (isNeededGrantPermission) {
@@ -132,7 +133,7 @@ export async function adjustFarmRewards(
             }
 
             const farmsAddr = REFERRAL_FARMS_V1_ADDR
-            const farms = createContract(web3, farmsAddr, REFERRAL_FARMS_V1_ABI as AbiItem[])
+            const farms = createContract(web3, farmsAddr, ReferralFarmsV1ABI as AbiItem[])
             const rewardTokenDefn = toChainAddressEthers(chainId, rewardToken.address)
             const referredTokenDefn = toChainAddressEthers(chainId, referredToken.address)
             const rewardTokenDecimals = rewardToken.decimals
@@ -207,7 +208,7 @@ export async function harvestRewards(
         const proofs = entitlementsSorted.map((entitlement) => entitlement.args.proof)
 
         const farmsAddr = REFERRAL_FARMS_V1_ADDR
-        const farms = createContract(web3, farmsAddr, REFERRAL_FARMS_V1_ABI as AbiItem[])
+        const farms = createContract(web3, farmsAddr, ReferralFarmsV1ABI as AbiItem[])
 
         const estimatedGas = await farms?.methods.harvestRewards(requests, proofs, []).estimateGas(config)
 

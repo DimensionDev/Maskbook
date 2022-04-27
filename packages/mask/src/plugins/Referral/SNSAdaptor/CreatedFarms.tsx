@@ -15,7 +15,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
 import { farmsService } from '../Worker/services'
-import { FarmDepositChange, FarmExistsEvent, PageInterface, PagesType, TabsReferralFarms } from '../types'
+import { FarmDepositChangeEvent, FarmExistsEvent, PageInterface, PagesType, TabsReferralFarms } from '../types'
 import { toNativeRewardTokenDefn, parseChainAddress, getRequiredChainId } from '../helpers'
 
 import { AccordionFarm } from './shared-ui/AccordionFarm'
@@ -88,7 +88,7 @@ interface Farm extends FarmExistsEvent {
 }
 function groupDepositForFarms(
     myFarms: FarmExistsEvent[],
-    farmsDeposits: FarmDepositChange[],
+    farmsDeposits: FarmDepositChangeEvent[],
     allTokensMap: Map<string, ERC20TokenDetailed>,
 ) {
     const farms: Farm[] = []
@@ -101,7 +101,7 @@ function groupDepositForFarms(
         const farm = allFarmsMap.get(farmHash)
         const rewardTokenAddr = farm?.rewardTokenDefn && parseChainAddress(farm.rewardTokenDefn).address
         const rewardTokenDec = rewardTokenAddr ? allTokensMap.get(rewardTokenAddr)?.decimals : 18
-        const totalFarmRewards = prevFarmState + Number.parseFloat(formatUnits(delta.toString(), rewardTokenDec))
+        const totalFarmRewards = prevFarmState + Number.parseFloat(formatUnits(delta, rewardTokenDec))
         farmTotalDepositMap.set(farmHash, totalFarmRewards)
     })
 

@@ -1,7 +1,7 @@
 import type {
     ChainAddress,
     FarmExistsEvent,
-    FarmDepositChange,
+    FarmDepositChangeEvent,
     ChainId,
     Farm,
     FarmHash,
@@ -13,13 +13,13 @@ import { defaultAbiCoder, Interface } from '@ethersproject/abi'
 import { orderBy } from 'lodash-unified'
 import { TokenList } from '@masknet/web3-providers'
 import { formatUnits } from '@ethersproject/units'
+import ReferralFarmsV1ABI from '@masknet/web3-contracts/abis/ReferralFarmsV1.json'
 
 import { expandBytes24ToBytes32, expandEvmAddressToBytes32, parseChainAddress } from '../../helpers'
 import { queryIndexersWithNearestQuorum } from './indexers'
-import { REFERRAL_FARMS_V1_ABI } from './abis'
 import { REFERRAL_FARMS_V1_ADDR } from '../../constants'
 
-const REFERRAL_FARMS_V1_IFACE = new Interface(REFERRAL_FARMS_V1_ABI)
+const REFERRAL_FARMS_V1_IFACE = new Interface(ReferralFarmsV1ABI)
 
 // Index the events name => id
 const eventIds: any = {}
@@ -53,7 +53,7 @@ function parseFarmExistsEvents(unparsed: any) {
 function parseFarmDepositChangeEvents(unparsed: any) {
     const parsed = parseEvents(unparsed)
 
-    const farms: Array<FarmDepositChange> = parsed.map((e) => {
+    const farms: Array<FarmDepositChangeEvent> = parsed.map((e) => {
         const { delta, farmHash } = e.args
         return { farmHash, delta }
     })
@@ -186,7 +186,7 @@ export async function getMyFarms(
     return parseFarmExistsEvents(res.items)
 }
 
-export async function getFarmsDeposits(chainId: ChainId): Promise<Array<FarmDepositChange>> {
+export async function getFarmsDeposits(chainId: ChainId): Promise<Array<FarmDepositChangeEvent>> {
     const farmsAddr = REFERRAL_FARMS_V1_ADDR
 
     const res = await queryIndexersWithNearestQuorum({
