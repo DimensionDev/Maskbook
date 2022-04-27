@@ -3,8 +3,8 @@ import { Interface } from '@ethersproject/abi'
 import { keccak256 } from 'web3-utils'
 
 import { expandEvmAddressToBytes32 } from '../../helpers'
-import { queryIndexersWithNearestQuorum } from './indexers'
-import type { EntitlementLog } from '../../types'
+import { type EntitlementLog, RpcMethod } from '../../types'
+import { getOracle, rpcCall } from './oracle'
 
 enum ORACLE_CHAIN_ID {
     testnet = 4470,
@@ -20,24 +20,20 @@ Object.entries(eventsPeriodEntitlement.events).forEach(([k, v]) => (eventIdsPeri
 
 function parsePeriodEntitlementEvents(items: Array<any>): Array<any> {
     const itemsSorted = orderBy(items, ['chainId', 'blockNumber', 'logIndex'], ['asc', 'asc', 'asc'])
-    // TODO: clean console.log
-    console.log({ entitlementEvents: itemsSorted })
     const parsed = itemsSorted.map((row) => {
         return eventsPeriodEntitlement.parseLog({
             data: row.data,
-            topics: JSON.parse(row.topics),
+            topics: row.topics,
         })
     })
     return parsed
 }
 
 export async function getAccountEntitlements(account: string): Promise<EntitlementLog[]> {
-    // Query indexers
-    const res = await queryIndexersWithNearestQuorum({
-        topic1: [eventIdsPeriodEntitlement.PeriodEntitlement],
-        topic3: [expandEvmAddressToBytes32(account)],
-        chainId: [ORACLE_CHAIN_ID.testnet],
-    })
+    const host = await getOracle()
+    const topics = [eventIdsPeriodEntitlement.PeriodEntitlement, '', expandEvmAddressToBytes32(account)]
 
-    return parsePeriodEntitlementEvents(res.items)
+    const { result } = await rpcCall(host, RpcMethod.oracle_getLogs, [{ topics, chainId: [ORACLE_CHAIN_ID.testnet] }])
+
+    return parsePeriodEntitlementEvents(result)
 }

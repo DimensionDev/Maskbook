@@ -269,6 +269,7 @@ export enum RpcMethod {
     oracle_getTimePromise = 'oracle_getTimePromise',
     oracle_sendProofOfRecommendationOrigin = 'oracle_sendProofOfRecommendationOrigin',
     oracle_sendProofOfRecommendation = 'oracle_sendProofOfRecommendation',
+    oracle_getLogs = 'oracle_getLogs',
 }
 
 // entitlements
