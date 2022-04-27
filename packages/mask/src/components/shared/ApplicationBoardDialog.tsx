@@ -33,7 +33,7 @@ export function ApplicationBoardDialog() {
     }, [])
 
     return (
-        <InjectedDialog open={open} maxWidth="sm">
+        <InjectedDialog open={open} maxWidth="sm" onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <ApplicationBoard closeDialog={closeDialog} />
             </DialogContent>
