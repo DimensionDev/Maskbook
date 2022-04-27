@@ -28,7 +28,7 @@ function resolveLastRecognizedIdentityInner(
             ref.value = {
                 avatar,
                 nickname,
-                identifier: new ProfileIdentifier(twitterBase.networkIdentifier, handle),
+                identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
             }
         }
     }
