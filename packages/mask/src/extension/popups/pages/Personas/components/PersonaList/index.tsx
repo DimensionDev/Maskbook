@@ -19,7 +19,6 @@ import { Trash2 } from 'react-feather'
 const useStyles = makeStyles()({
     list: {
         padding: 0,
-        height: 'calc(100vh - 185px)',
         overflow: 'auto',
     },
     item: {
