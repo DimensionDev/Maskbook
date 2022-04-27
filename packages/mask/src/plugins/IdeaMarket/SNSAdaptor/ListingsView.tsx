@@ -187,7 +187,7 @@ export function ListingsView() {
         }
     })
 
-    const renderNameCell = (params: GridRenderCellParams<String>) => {
+    const renderNameCell = (params: GridRenderCellParams<string>) => {
         return (
             <div className={classes.nameCellContainer}>
                 <Grid className={classes.profileAvatar}>
