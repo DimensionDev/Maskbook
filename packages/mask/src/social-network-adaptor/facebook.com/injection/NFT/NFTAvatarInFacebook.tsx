@@ -6,7 +6,7 @@ import type { NFTAvatarEvent } from '@masknet/shared-base'
 import { max, pickBy } from 'lodash-unified'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
-import { useWallet } from '@masknet/plugin-infra'
+import { useWallet } from '@masknet/plugin-infra/web3'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { getAvatarId } from '../../utils/user'
@@ -63,7 +63,7 @@ function NFTAvatarInFacebook() {
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
-    const { value: _avatar } = useNFTAvatar(identity.identifier.userId, RSS3_KEY_SNS.FACEBOOK)
+    const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.FACEBOOK)
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
 
@@ -104,6 +104,7 @@ function NFTAvatarInFacebook() {
         const storages = InMemoryStorages.FacebookNFTEventOnMobile.storage
 
         if (!wallet) return
+        if (!identity.identifier) return
         if (NFTEvent?.address && NFTEvent?.tokenId && NFTEvent?.avatarId) {
             try {
                 const avatarInfo = await PluginNFTAvatarRPC.saveNFTAvatar(

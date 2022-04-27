@@ -1,4 +1,4 @@
-import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
 import { FungibleTokenDetailed, isNativeTokenAddress, useTokenConstants } from '@masknet/web3-shared-evm'
 import { BALANCER_SWAP_TYPE } from '../../constants'
 import { PluginTraderRPC } from '../../messages'

@@ -1,11 +1,11 @@
-import { ChangeEvent, useCallback } from 'react'
+import { useCallback } from 'react'
 import classNames from 'classnames'
 import { ListItemText, Checkbox, ListItemAvatar } from '@mui/material'
 import ListItemButton from '@mui/material/ListItemButton'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
 import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
-import type { Profile } from '../../../database'
+import type { ProfileInformation as Profile } from '@masknet/shared-base'
 import { Avatar } from '../../../utils/components/Avatar'
 import type { CheckboxProps } from '@mui/material/Checkbox'
 import type { ListItemTypeMap } from '@mui/material/ListItem'
@@ -32,7 +32,7 @@ export interface ProfileInListProps extends withClasses<never> {
     search?: string
     checked?: boolean
     disabled?: boolean
-    onChange: (ev: ChangeEvent<HTMLInputElement>, checked: boolean) => void
+    onChange: (ev: React.MouseEvent<HTMLDivElement>, checked: boolean) => void
     CheckboxProps?: Partial<CheckboxProps>
     ListItemProps?: Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>>
 }
@@ -40,8 +40,8 @@ export function ProfileInList(props: ProfileInListProps) {
     const classes = useStylesExtends(useStyle(), props)
     const profile = props.item
     const name = profile.nickname || profile.identifier.userId
-    const secondary = profile.linkedPersona?.fingerprint ? profile.linkedPersona?.fingerprint.toLowerCase() : ''
-    const onClick = useCallback((ev) => props.onChange(ev, !props.checked), [props])
+    const secondary = profile.fingerprint?.toLowerCase()
+    const onClick = useCallback((ev: React.MouseEvent<HTMLDivElement>) => props.onChange(ev, !props.checked), [props])
     return (
         <ListItemButton
             onClick={onClick}
@@ -70,7 +70,7 @@ export function ProfileInList(props: ProfileInListProps) {
                         highlightClassName={classes.highlighted}
                         searchWords={[props.search ?? '']}
                         autoEscape
-                        textToHighlight={secondary}
+                        textToHighlight={secondary || ''}
                     />
                 }
             />

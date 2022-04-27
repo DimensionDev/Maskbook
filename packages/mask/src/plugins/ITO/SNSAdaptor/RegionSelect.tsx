@@ -74,7 +74,7 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
     const displayRef = useRef<HTMLElement | null>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [open, setOpen] = useState(false)
-    const handleDisplayRef = useCallback((node) => {
+    const handleDisplayRef = useCallback((node: HTMLElement | null) => {
         displayRef.current = node
         if (node) setAnchorEl(node)
     }, [])

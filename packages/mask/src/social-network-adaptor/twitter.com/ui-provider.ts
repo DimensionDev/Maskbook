@@ -2,7 +2,6 @@ import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-netwo
 import { twitterBase } from './base'
 import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword'
 import { twitterShared } from './shared'
-import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
 import { openComposeBoxTwitter } from './automation/openComposeBox'
 import { pasteTextToCompositionTwitter } from './automation/pasteTextToComposition'
@@ -26,14 +25,13 @@ import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { injectPostActionsAtTwitter } from './injection/PostActions'
-import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
-import { unreachable } from '@dimensiondev/kit'
+import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
 import { injectOpenTipButtonOnProfile } from './injection/Tip/index'
 import { injectProfileNFTAvatarInTwitter } from './injection/NFT/ProfileNFTAvatar'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
-import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
+import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from './injection/NFT/NFTAvatarEditProfile'
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
 import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
 import { TwitterRenderFragments } from './customization/render-fragments'
@@ -146,11 +144,9 @@ const twitterUI: SocialNetworkUI.Definition = {
         i18nOverwrite: i18NOverwriteTwitter,
     },
     init(signal) {
-        const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
-        InitAutonomousStateFriends(signal, friends, twitterShared.networkIdentifier)
         InitAutonomousStateProfiles(signal, profiles, twitterShared.networkIdentifier)
-        return { friends, profiles }
+        return { profiles }
     },
     injection: {
         toolbox: injectToolboxHintAtTwitter,
@@ -184,6 +180,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         postAndReplyNFTAvatar: injectUserNFTAvatarAtTweet,
         avatarClipNFT: injectNFTAvatarClipInTwitter,
+        openNFTAvatarSettingDialog,
     },
     configuration: {
         nextIDConfig: {
@@ -192,14 +189,13 @@ const twitterUI: SocialNetworkUI.Definition = {
             collectVerificationPost,
         },
         steganography: {
+            // ! Change this might be a breaking change !
             password() {
-                // ! Change this might be a breaking change !
-                return new ProfileIdentifier(
-                    'twitter.com',
-                    ProfileIdentifier.getUserName(IdentityProviderTwitter.recognized.value.identifier) ||
-                        ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
-                        unreachable('Cannot figure out password' as never),
-                ).toText()
+                const id =
+                    IdentityProviderTwitter.recognized.value.identifier?.userId ||
+                    globalUIState.profiles.value?.[0].identifier.userId
+                if (!id) throw new Error('Cannot figure out password')
+                return ProfileIdentifier.of(EnhanceableSite.Twitter, id).unwrap().toText()
             },
         },
     },

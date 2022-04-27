@@ -7,9 +7,15 @@ import type {
     ERC721TokenDetailed,
     NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
-import type { CurrencyType } from '@masknet/plugin-infra'
+import type { CurrencyType } from '@masknet/plugin-infra/web3'
 import type { Result } from 'ts-results'
-import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
+import type {
+    NextIDAction,
+    NextIDStoragePayload,
+    NextIDPayload,
+    NextIDPlatform,
+    NextIDStorageInfo,
+} from '@masknet/shared-base'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -299,7 +305,7 @@ export namespace NonFungibleTokenAPI {
 
 export namespace StorageAPI {
     export interface Storage {
-        set<T extends {}>(key: string, value: T): Promise<void>
+        set(key: string, value: any): Promise<void>
         get<T>(key: string): Promise<T | undefined>
         delete?(key: string): Promise<void>
     }
@@ -312,7 +318,7 @@ export namespace StorageAPI {
 
 export namespace NextIDBaseAPI {
     export interface Storage {
-        set<T extends {}>(
+        set<T>(
             uuid: string,
             personaPublicKey: string,
             signature: string,
@@ -320,13 +326,15 @@ export namespace NextIDBaseAPI {
             identity: string,
             createdAt: string,
             patchData: unknown,
-        ): Promise<Result<void, string>>
-        get<T>(key: string): Promise<Result<T, string>>
+            pluginId: string,
+        ): Promise<Result<T, string>>
+        get(key: string): Promise<Result<NextIDStorageInfo, string>>
         getPayload(
             personaPublicKey: string,
             platform: NextIDPlatform,
             identity: string,
             patchData: unknown,
+            pluginId: string,
         ): Promise<Result<NextIDStoragePayload, string>>
     }
     export interface Proof {

@@ -2,6 +2,7 @@ import { SocialNetworkUI, creator } from '../../../social-network'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { instagramBase } from '../base'
 import { openDB } from 'idb/with-async-ittr'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 export const IdentityProviderInstagram: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     async start(signal) {
         const ref = this.recognized
@@ -17,7 +18,7 @@ export const IdentityProviderInstagram: SocialNetworkUI.CollectingCapabilities.I
     recognized: creator.EmptyIdentityResolveProviderState(),
 }
 
-async function query(): Promise<null | SocialNetworkUI.CollectingCapabilities.IdentityResolved> {
+async function query(): Promise<null | IdentityResolved> {
     const db = await openDB('redux', 1, {
         upgrade: () => {
             db.createObjectStore('paths')
@@ -29,7 +30,7 @@ async function query(): Promise<null | SocialNetworkUI.CollectingCapabilities.Id
     const detail = (await tx.store.get('users.users'))[id]
     db.close()
     return {
-        identifier: new ProfileIdentifier(instagramBase.networkIdentifier, detail.username),
+        identifier: ProfileIdentifier.of(instagramBase.networkIdentifier, detail.username).unwrapOr(undefined),
         avatar: detail.profilePictureUrl,
         nickname: detail.fullName,
     }

@@ -1,4 +1,4 @@
-import { DashboardRoutes, ProfileIdentifier } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import stringify from 'json-stable-stringify'
 import { useMemo } from 'react'
 import type { Persona } from '../../database'
@@ -10,7 +10,7 @@ import { useLastRecognizedIdentity } from './useActivatedUI'
 import { useMyPersonas } from './useMyPersonas'
 
 const createPersona = () => {
-    Services.Welcome.openOptionsPage(DashboardRoutes.Setup)
+    Services.Helper.openDashboard(DashboardRoutes.Setup)
 }
 
 const connectPersona = async () => {
@@ -26,10 +26,11 @@ export function usePersonaConnectStatus() {
     const lastRecognized = useLastRecognizedIdentity()
 
     return useMemo(() => {
-        const id = new ProfileIdentifier(activatedSocialNetworkUI.networkIdentifier, lastRecognized.identifier.userId)
+        const id = lastRecognized.identifier
         let connected = false
-        let currentConnectedPersona: Persona | undefined
+        let currentConnectedPersona: Pick<Persona, 'identifier' | 'publicHexKey'> | undefined
         personas.forEach((p) => {
+            if (!id) return
             if (!p.linkedProfiles.get(id)) return
             connected = true
             currentConnectedPersona = p

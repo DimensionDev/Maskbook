@@ -1,2 +1,2 @@
-export { decodeTypedMessageFromDocument } from './decode'
-export { encodeTypedMessageToDocument } from './encode'
+export { decodeTypedMessageFromDocument } from './decode.js'
+export { encodeTypedMessageToDocument } from './encode.js'

@@ -1,4 +1,4 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { getNFTScanNFTList, getOpenSeaCollectionList } from '@masknet/web3-providers'
 import { collectAllPageDate } from '../helper/request'
 import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RPCMethodRegistrationValue } from '../types'

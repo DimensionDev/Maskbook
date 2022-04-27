@@ -1,7 +1,7 @@
 import { encodeArrayBuffer, decodeArrayBuffer, concatArrayBuffer } from '@dimensiondev/kit'
 import type { EC_JsonWebKey, EC_Public_JsonWebKey } from './JWKType'
 import { fromBase64URL, toBase64URL } from '../convert'
-import { ECKeyIdentifier } from '../Identifier/type'
+import { ECKeyIdentifier } from '../Identifier'
 import type { EC_CryptoKey } from '.'
 
 // This module is only used in background.
@@ -47,6 +47,17 @@ export function decompressSecp256k1Point(point: Uint8Array): { x: string; y: str
     const x = uncompressed.slice(1, len + 1)
     const y = uncompressed.slice(len + 1)
     return { x: toBase64URL(x), y: toBase64URL(y) }
+}
+
+export function compressSecp256k1KeyRaw(point: Uint8Array) {
+    if (!secp256k1.isPoint(point)) throw new TypeError('Not a point on secp256k1!')
+    if (secp256k1.isPointCompressed(point)) return point
+    return secp256k1.pointCompress(point, true)
+}
+export function decompressSecp256k1KeyRaw(point: Uint8Array) {
+    if (!secp256k1.isPoint(point)) throw new TypeError('Not a point on secp256k1!')
+    if (!secp256k1.isPointCompressed(point)) return point
+    return secp256k1.pointCompress(point, false)
 }
 
 export function compressSecp256k1Key(key: EC_JsonWebKey): string {

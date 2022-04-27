@@ -6,6 +6,7 @@ import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { searchAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector'
 import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user'
 import { delay } from '@dimensiondev/kit'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,
@@ -15,12 +16,11 @@ export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.Id
     },
 }
 
-function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal: AbortSignal) {
+function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolved>, signal: AbortSignal) {
     const self = (isMobileFacebook ? myUsernameLiveSelectorMobile : myUsernameLiveSelectorPC)
         .clone()
         .map((x) => getProfileIdentifierAtFacebook(x, false))
     const watcher = new MutationObserverWatcher(self)
-        .setComparer(undefined, (a, b) => a.identifier.equals(b.identifier))
         .addListener('onAdd', (e) => assign(e.value))
         .addListener('onChange', (e) => assign(e.newValue))
         .startWatch({
@@ -29,13 +29,18 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal
             characterData: true,
         })
     signal.addEventListener('abort', () => watcher.stopWatch())
-    function assign(i: Value) {
-        if (!i.identifier.isUnknown) ref.value = i
+    function assign(i: IdentityResolved) {
+        if (i.identifier) ref.value = i
     }
     fetch('/me', { method: 'HEAD', signal })
         .then((x) => x.url)
         .then(getUserID)
-        .then((id) => id && assign({ ...ref.value, identifier: new ProfileIdentifier(EnhanceableSite.Facebook, id) }))
+        .then((id) =>
+            assign({
+                ...ref.value,
+                identifier: ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrapOr(undefined),
+            }),
+        )
 }
 
 function resolveCurrentVisitingIdentityInner(
@@ -54,7 +59,7 @@ function resolveCurrentVisitingIdentityInner(
         const avatar = getAvatar()
 
         ref.value = {
-            identifier: handle ? new ProfileIdentifier(EnhanceableSite.Facebook, handle) : ProfileIdentifier.unknown,
+            identifier: ProfileIdentifier.of(EnhanceableSite.Facebook, handle).unwrapOr(undefined),
             nickname,
             avatar,
             bio,
@@ -103,5 +108,4 @@ const myUsernameLiveSelectorMobile = new LiveSelector().querySelector<HTMLAnchor
     '#bookmarks_flyout .mSideMenu > div > ul > li:first-child a, #MComposer a',
 )
 
-type Value = SocialNetworkUI.CollectingCapabilities.IdentityResolved
 // #endregion

@@ -2,12 +2,63 @@
   "name": "@masknet/plugin-infra",
   "private": true,
   "license": "AGPL-3.0-or-later",
-  "main": "./dist/index.js",
-  "types": "./dist/",
+  "exports": {
+    ".": {
+      "types": "./dist/entry.d.ts",
+      "webpack": "./src/entry.ts",
+      "default": "./dist/entry.js"
+    },
+    "./web3": {
+      "types": "./dist/entry-web3.d.ts",
+      "webpack": "./src/entry-web3.ts",
+      "default": "./dist/entry-web3.js"
+    },
+    "./dom": {
+      "types": "./dist/entry-dom.d.ts",
+      "webpack": "./src/entry-dom.ts",
+      "default": "./dist/entry-dom.js"
+    },
+    "./background-worker": {
+      "types": "./dist/entry-background-worker.d.ts",
+      "webpack": "./src/entry-background-worker.ts",
+      "default": "./dist/entry-background-worker.js"
+    },
+    "./dashboard": {
+      "types": "./dist/entry-dashboard.d.ts",
+      "webpack": "./src/entry-dashboard.ts",
+      "default": "./dist/entry-dashboard.js"
+    },
+    "./content-script": {
+      "types": "./dist/entry-content-script.d.ts",
+      "webpack": "./src/entry-content-script.ts",
+      "default": "./dist/entry-content-script.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "web3": [
+        "./dist/entry-web3.d.ts"
+      ],
+      "dom": [
+        "./dist/entry-dom.d.ts"
+      ],
+      "background-worker": [
+        "./dist/entry-background-worker.d.ts"
+      ],
+      "dashboard": [
+        "./dist/entry-dashboard.d.ts"
+      ],
+      "content-script": [
+        "./dist/entry-content-script.d.ts"
+      ]
+    }
+  },
+  "types": "./dist/entry.d.ts",
   "scripts": {},
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@masknet/encryption": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
     "@masknet/shared-base-ui": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",
@@ -21,7 +72,7 @@
     "use-subscription": "^1.6.0"
   },
   "devDependencies": {
-    "react-i18next": "^11.16.2"
+    "react-i18next": "^11.16.7"
   },
   "peerDependencies": {
     "react-i18next": "^11.15.3"

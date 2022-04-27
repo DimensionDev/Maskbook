@@ -1,4 +1,4 @@
-import type { NetworkPluginID } from '..'
+import type { NetworkPluginID } from '../web3-types'
 import { useChainId } from './useChainId'
 import { useWeb3State } from './useWeb3State'
 

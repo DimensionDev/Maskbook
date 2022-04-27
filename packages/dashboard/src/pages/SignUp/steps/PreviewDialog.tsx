@@ -3,7 +3,7 @@ import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme, useCustomSnackbar
 import { Box, Button, DialogContent, ThemeProvider, Typography } from '@mui/material'
 import { MnemonicReveal } from '../../../components/Mnemonic'
 import { MiniMaskIcon, InfoIcon, CopyIcon } from '@masknet/icons'
-import { ForwardedRef, forwardRef, useEffect, useRef } from 'react'
+import { ForwardedRef, forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
 import { WatermarkURL } from '../../../assets'
@@ -53,6 +53,7 @@ interface PreviewDialogProps {
     id?: string
     privateKey: string
     words?: string[]
+    height?: string
     onClose(): void
 }
 
@@ -60,6 +61,7 @@ export function PreviewDialog(props: PreviewDialogProps) {
     const { personaName, open, type, onClose } = props
     const t = useDashboardI18N()
     const ref = useRef(null)
+    const [height, setHeight] = useState('')
 
     const onPrint = useReactToPrint({
         content: () => ref.current,
@@ -76,7 +78,16 @@ export function PreviewDialog(props: PreviewDialogProps) {
     }
 
     const onClick = async () => {
-        type === 'print' ? onPrint() : await onDownload()
+        if (type === 'print') {
+            setHeight('100vh')
+            setTimeout(() => {
+                onPrint()
+                setHeight('')
+            })
+        } else {
+            await onDownload()
+        }
+
         onClose()
     }
 
@@ -87,7 +98,7 @@ export function PreviewDialog(props: PreviewDialogProps) {
                 open={open}
                 onClose={onClose}>
                 <DialogContent sx={{ marginTop: '-24px', padding: '0' }}>
-                    <ComponentToPrint {...props} ref={ref} />
+                    <ComponentToPrint {...props} ref={ref} height={height} />
 
                     <Box padding="0 24px 24px">
                         <Button size="large" fullWidth onClick={onClick}>
@@ -101,11 +112,16 @@ export function PreviewDialog(props: PreviewDialogProps) {
 }
 
 const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRef<any>) => {
-    const { personaName, id, privateKey, words } = props
+    const { personaName, id, privateKey, words, height } = props
     const { classes } = useStyles()
     const t = useDashboardI18N()
     const [state, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
+
+    const qrValue = useMemo(() => {
+        const main = words?.length ? `mnemonic/${btoa(words.join(' '))}` : `privatekey/${privateKey}`
+        return `mask://persona/${main}?nickname=${personaName}`
+    }, [words?.join(), privateKey, personaName])
 
     useEffect(() => {
         if (state.value) {
@@ -120,7 +136,7 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
         <Box
             display="flex"
             justifyContent="center"
-            height="100%"
+            height={height}
             padding="24px 24px 0"
             ref={ref}
             color="#111432"
@@ -157,13 +173,7 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                             </Typography>
                         </Box>
                     </Box>
-                    <QRCode
-                        value={`mask://persona/privatekey/${privateKey}`}
-                        ecLevel="L"
-                        size={120}
-                        quietZone={6}
-                        qrStyle="dots"
-                    />
+                    <QRCode value={qrValue} ecLevel="L" size={120} quietZone={6} qrStyle="dots" />
                 </Box>
                 {words?.length ? (
                     <>

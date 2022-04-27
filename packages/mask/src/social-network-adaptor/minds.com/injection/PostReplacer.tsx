@@ -1,5 +1,5 @@
 import { injectPostReplacer } from '../../../social-network/defaults/inject/PostReplacer'
-import type { PostInfo } from '../../../social-network/PostInfo'
+import type { PostInfo } from '@masknet/plugin-infra/content-script'
 
 function resolveContentNode(node: HTMLElement) {
     return node.closest(

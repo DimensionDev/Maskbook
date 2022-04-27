@@ -1,5 +1,5 @@
 {
-    "dialog_title": "Check Security",
+    "__plugin_name": "Check Security",
     "powered_by_go_plus": "Powered by Go+",
     "high_risk": "High Risk",
     "low_risk": "Low Risk",
@@ -75,5 +75,13 @@
     "risk_is_whitelisted_title": "Whitelist function",
     "risk_is_whitelisted_body": "The whitelist function is included. Some addresses may not be able to trade normally (honeypot risk).",
     "risk_not_is_whitelisted_title": "No whitelist",
-    "risk_not_is_whitelisted_body": "The whitelist function is not included. If there is a whitelist, some addresses may not be able to trade normally (honeypot risk)."
+    "risk_not_is_whitelisted_body": "The whitelist function is not included. If there is a whitelist, some addresses may not be able to trade normally (honeypot risk).",
+    "risk_is_true_token_title": "True Token",
+    "risk_is_true_token_body": "This token is issued by its declared team. Some scams will create a well-known token with the same name to defraud their users of their assets.",
+    "risk_not_is_true_token_title": "Fake Token",
+    "risk_not_is_true_token_body": "This token is not issued by its declared team. Some scams will create a well-known token with the same name to defraud their users of their assets.",
+    "risk_is_airdrop_scam_title": "Airdrop Scam",
+    "risk_is_airdrop_scam_body": "You may lose your assets if giving approval to the website of this token.",
+    "risk_not_is_airdrop_scam_title": "No Airdrop Scam",
+    "risk_not_is_airdrop_scam_body": "This is not an airdrop scam. Many scams attract users through airdrops."
 }

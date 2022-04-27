@@ -15,9 +15,7 @@
     "cancel": "取消",
     "delete": "刪除",
     "copy_success_of_wallet_address": "複製錢包地址成功！",
-    "tip_to": "到",
     "token_insufficient_balance": "餘額不足",
-    "tip_type_token": "代幣",
-    "send_tip": "送出",
-    "sending_tip": "傳送中…"
+    "sending_tip": "傳送中…",
+    "send_tip_successfully": "小費打賞成功"
 }

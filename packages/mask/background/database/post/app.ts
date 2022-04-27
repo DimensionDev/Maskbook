@@ -93,16 +93,14 @@ function postInNative(record: Partial<PostRecord> & Pick<PostRecord, 'identifier
 
 function postOutNative(record: NativePostRecord): PostRecord {
     return {
-        postBy: ProfileIdentifier.fromString(record.postBy, ProfileIdentifier).unwrap(),
-        identifier: PostIVIdentifier.fromString(record.identifier, PostIVIdentifier).unwrap(),
+        postBy: ProfileIdentifier.from(record.postBy).unwrap(),
+        identifier: PostIVIdentifier.from(record.identifier).unwrap(),
         postCryptoKey: record.postCryptoKey as unknown as AESJsonWebKey,
         recipients: new IdentifierMap<ProfileIdentifier, RecipientDetail>(
             new Map(Object.entries(record.recipients)) as any,
         ),
         foundAt: new Date(record.foundAt),
-        encryptBy: record.encryptBy
-            ? ECKeyIdentifier.fromString(record.encryptBy, ECKeyIdentifier).unwrap()
-            : undefined,
+        encryptBy: ECKeyIdentifier.from(record.encryptBy).unwrapOr(undefined),
         url: record.url,
         summary: record.summary,
         interestedMeta: record.interestedMeta,
@@ -117,20 +115,19 @@ export async function queryPostsDB(
     return []
 }
 
-export const PostDBAccess = () => undefined
+export async function withPostDBTransaction(task: (t: PostReadWriteTransaction) => Promise<void>) {
+    await task(null!)
+}
+
 // #endregion
 
-type RecipientReasonJSON = (
-    | { type: 'auto-share' }
-    | { type: 'direct' }
-    | { type: 'group'; group: string /** GroupIdentifier */ }
-) & {
+type RecipientReasonJSON = ({ type: 'auto-share' } | { type: 'direct' }) & {
     at: number
 }
 
 function RecipientReasonToJSON(y: RecipientReason): RecipientReasonJSON {
     if (y.type === 'direct' || y.type === 'auto-share')
         return { at: y.at.getTime(), type: y.type } as RecipientReasonJSON
-    else if (y.type === 'group') return { at: y.at.getTime(), group: y.group.toText(), type: y.type }
+    else if (y.type === 'group') return { at: y.at.getTime(), type: 'direct' }
     return unreachable(y)
 }

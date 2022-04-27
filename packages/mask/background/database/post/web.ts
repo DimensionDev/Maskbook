@@ -2,8 +2,6 @@ import {
     AESCryptoKey,
     AESJsonWebKey,
     ECKeyIdentifier,
-    GroupIdentifier,
-    Identifier,
     IdentifierMap,
     PersonaIdentifier,
     PostIdentifier,
@@ -11,7 +9,8 @@ import {
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import { openDB } from 'idb/with-async-ittr'
-import { CryptoKeyToJsonWebKey, PrototypeLess, restorePrototype, restorePrototypeArray } from '../../../utils-pure'
+import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
+import type { PersonaIdentifierStoredInDB, ProfileIdentifierStoredInDB } from '../persona/type'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
 import type {
     RecipientReason,
@@ -30,10 +29,10 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
         openDB<PostDB>('maskbook-post-v2', currentTryOpen, {
             async upgrade(db, oldVersion, _newVersion, transaction): Promise<void> {
                 type Version2PostRecord = {
-                    postBy: PrototypeLess<ProfileIdentifier>
+                    postBy: ProfileIdentifierStoredInDB | undefined
                     identifier: string
                     recipientGroups?: unknown
-                    recipients?: ProfileIdentifier[]
+                    recipients?: ProfileIdentifierStoredInDB[]
                     foundAt: Date
                     postCryptoKey?: CryptoKey
                 }
@@ -49,7 +48,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                 }
                 type Version5PostRecord = Omit<Version4PostRecord, 'postCryptoKey' | 'recipients'> & {
                     postCryptoKey?: AESJsonWebKey
-                    encryptBy?: PrototypeLess<PersonaIdentifier>
+                    encryptBy?: PersonaIdentifierStoredInDB
                     url?: string
                     summary?: string
                     interestedMeta?: ReadonlyMap<string, unknown>
@@ -83,8 +82,8 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                     const old = await store.getAll()
                     await store.clear()
                     for (const each of old) {
-                        const id = Identifier.fromString(each.identifier, PostIdentifier)
-                        if (id.ok) {
+                        const id = PostIdentifier.from(each.identifier)
+                        if (id.some) {
                             const { postId, identifier } = id.val
                             each.identifier = new PostIVIdentifier(
                                 (identifier as ProfileIdentifier).network,
@@ -104,7 +103,8 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                     for await (const cursor of store) {
                         const v2record: Version2PostRecord = cursor.value as any
                         const oldType = v2record.recipients
-                        oldType && restorePrototypeArray(oldType, ProfileIdentifier.prototype)
+                            ?.map((x) => ProfileIdentifier.of(x.network, x.userId).unwrapOr(null!))
+                            .filter(Boolean)
                         const newType: Version3PostRecord['recipients'] = {}
                         if (oldType !== undefined)
                             for (const each of oldType) {
@@ -113,7 +113,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                         const next: Version3PostRecord = {
                             ...v2record,
                             recipients: newType,
-                            postBy: ProfileIdentifier.unknown,
+                            postBy: undefined,
                             foundAt: new Date(0),
                             recipientGroups: [],
                         }
@@ -168,7 +168,10 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                         // This is the correct data type
                         if (typeof by === 'string') continue
                         if (!by) continue
-                        cursor.value.encryptBy = restorePrototype(by, ECKeyIdentifier.prototype).toText()
+                        cursor.value.encryptBy = new ECKeyIdentifier(
+                            by.curve,
+                            by.compressedPoint || by.encodedCompressedKey!,
+                        ).toText()
                         cursor.update(cursor.value)
                     }
                     store.createIndex('persona, date', ['encryptBy', 'foundAt'], { unique: false })
@@ -196,6 +199,10 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
     },
 )
 export const PostDBAccess = db
+export async function withPostDBTransaction(task: (t: PostReadWriteTransaction) => Promise<void>) {
+    const t = createTransaction(await PostDBAccess(), 'readwrite')('post')
+    await task(t)
+}
 
 export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction) {
     t ||= createTransaction(await db(), 'readwrite')('post')
@@ -211,7 +218,7 @@ export async function updatePostDB(
     const emptyRecord: PostRecord = {
         identifier: updateRecord.identifier,
         recipients: new IdentifierMap(new Map()),
-        postBy: ProfileIdentifier.unknown,
+        postBy: undefined,
         foundAt: new Date(),
     }
     const currentRecord = (await queryPostDB(updateRecord.identifier, t)) || emptyRecord
@@ -254,9 +261,9 @@ export async function queryPostsDB(
     t ||= createTransaction(await db(), 'readonly')('post')
     const selected: PostRecord[] = []
     for await (const { value } of t.objectStore('post')) {
-        const idResult = Identifier.fromString(value.identifier, PostIVIdentifier)
-        if (idResult.err) {
-            console.warn(idResult.val.message)
+        const idResult = PostIVIdentifier.from(value.identifier)
+        if (idResult.none) {
+            console.warn('Invalid identifier', value.identifier)
             continue
         }
         const id = idResult.val
@@ -290,9 +297,10 @@ export async function queryPostPagedDB(
 
     for await (const cursor of t.objectStore('post').iterate()) {
         if (cursor.value.encryptBy !== linked.toText()) continue
+        if (!cursor.value.postBy) continue
         if (!options.userIds.includes(cursor.value.postBy.userId)) continue
 
-        const postIdentifier = Identifier.fromString(cursor.value.identifier, PostIVIdentifier).unwrap()
+        const postIdentifier = PostIVIdentifier.from(cursor.value.identifier).unwrap()
         if (postIdentifier.network !== options.network) continue
 
         if (firstRecord && options.after) {
@@ -314,18 +322,13 @@ export async function queryPostPagedDB(
 // #region db in and out
 function postOutDB(db: PostDBRecord): PostRecord {
     const { identifier, foundAt, postBy, recipients, postCryptoKey, encryptBy, interestedMeta, summary, url } = db
-    if (typeof recipients === 'object') {
-        for (const detail of recipients.values()) {
-            detail.reason.forEach((x) => x.type === 'group' && restorePrototype(x.group, GroupIdentifier.prototype))
-        }
-    }
     return {
-        identifier: Identifier.fromString(identifier, PostIVIdentifier).unwrap(),
-        postBy: restorePrototype(postBy, ProfileIdentifier.prototype),
+        identifier: PostIVIdentifier.from(identifier).unwrap(),
+        postBy: ProfileIdentifier.of(postBy?.network, postBy?.userId).unwrapOr(undefined),
         recipients: recipients === true ? 'everyone' : new IdentifierMap(recipients, ProfileIdentifier),
         foundAt: foundAt,
         postCryptoKey: postCryptoKey,
-        encryptBy: encryptBy ? Identifier.fromString(encryptBy, ECKeyIdentifier).unwrapOr(undefined) : undefined,
+        encryptBy: ECKeyIdentifier.from(encryptBy).unwrapOr(undefined),
         interestedMeta,
         summary,
         url,

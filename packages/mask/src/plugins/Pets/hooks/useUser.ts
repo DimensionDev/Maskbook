@@ -22,11 +22,11 @@ export function useCurrentVisitingUser(flag?: number) {
     useAsync(async () => {
         let address = ''
         try {
-            const response = await PluginPetRPC.getUserAddress(identity.identifier.userId ?? '')
+            const response = await PluginPetRPC.getUserAddress(identity.identifier?.userId ?? '')
             if (response) address = response as string
         } finally {
             setUser({
-                userId: identity.identifier.userId ?? '',
+                userId: identity.identifier?.userId ?? '',
                 address: address,
             })
         }

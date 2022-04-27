@@ -1,4 +1,4 @@
-import { Transformer, TypedMessage, emptyTransformationContext, TransformationContext } from '../../../base'
+import { Transformer, TypedMessage, emptyTransformationContext, TransformationContext } from '../../../base/index.js'
 import { createContext, useContext, useMemo } from 'react'
 export const TransformerProvider = createContext<Transformer>((x) => x)
 export const TransformationContextProvider = createContext<TransformationContext>(emptyTransformationContext)

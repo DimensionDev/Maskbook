@@ -1,13 +1,12 @@
 import { makeStyles } from '@masknet/theme'
-import { MINDS_ID } from '@masknet/shared'
 import { useChainId, ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketFormProps, RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../../../utils'
 import { activatedSocialNetworkUI } from '../../../social-network'
-
 import { IconURLs } from './IconURL'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 interface StyleProps {
     snsId: string
@@ -22,7 +21,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     tabs: {
         height: 36,
         minHeight: 36,
-        margin: `0 ${snsId === MINDS_ID ? '12px' : 'auto'}`,
+        margin: `0 ${snsId === EnhanceableSite.Minds ? '12px' : 'auto'}`,
         borderRadius: 4,
         backgroundColor: theme.palette.background.default,
         '& .Mui-selected': {
@@ -49,7 +48,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
 }))
 
 export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly [number, (next: number) => void] }) {
-    const { origin, onNext, onChange, onClose, SelectMenuProps, state } = props
+    const { origin, onNext, onChange, onClose, state } = props
     const { t } = useI18N()
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const chainId = useChainId()
@@ -63,15 +62,7 @@ export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly
                         <span>{t('plugin_red_packet_erc20_tab_title')}</span>
                     </div>
                 ),
-                children: (
-                    <RedPacketERC20Form
-                        origin={origin}
-                        onClose={onClose}
-                        onNext={onNext}
-                        onChange={onChange}
-                        SelectMenuProps={SelectMenuProps}
-                    />
-                ),
+                children: <RedPacketERC20Form origin={origin} onClose={onClose} onNext={onNext} onChange={onChange} />,
                 sx: { p: 0 },
             },
             {

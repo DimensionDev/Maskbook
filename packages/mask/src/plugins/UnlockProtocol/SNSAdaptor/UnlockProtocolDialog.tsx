@@ -7,7 +7,7 @@ import { pluginMetaKey } from '../constants'
 import type { UnlockLocks } from '../types'
 import { PluginUnlockProtocolRPC } from '../messages'
 import { SelectRecipientsUnlockDialogUI } from './SelectRecipientsUnlockDialog'
-import { useCompositionContext } from '@masknet/plugin-infra'
+import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 
 interface UnlockProtocolDialogProps extends withClasses<'wrapper'> {

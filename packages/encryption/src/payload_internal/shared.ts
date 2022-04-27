@@ -2,9 +2,9 @@ import { ProfileIdentifier, CheckedError, OptionalResult, EnhanceableSite } from
 import { Ok } from 'ts-results'
 import { PayloadParseResult, SocialNetworkEnum } from '../payload'
 import { CryptoException, PayloadException } from '../types'
-import { importAESFromJWK } from '../utils'
+import { importAES } from '../utils'
 
-const import_AES_GCM_256 = CheckedError.withErr(importAESFromJWK.AES_GCM_256, CryptoException.InvalidCryptoKey)
+const import_AES_GCM_256 = CheckedError.withErr(importAES, CryptoException.InvalidCryptoKey)
 
 /**
  * @internal
@@ -47,5 +47,7 @@ export function parseAuthor(network: unknown, id: unknown): PayloadParseResult.P
 
     if (net.includes('/')) return new CheckedError(PayloadException.InvalidPayload, 'Invalid network').toErr()
 
-    return OptionalResult.Some(new ProfileIdentifier(net, id))
+    const identifier = ProfileIdentifier.of(net, id)
+    if (identifier.some) return OptionalResult.Some(identifier.val)
+    return OptionalResult.None
 }

@@ -1,20 +1,20 @@
-import { Identifier } from './type'
+import { Identifier } from './base'
 import { immerable } from 'immer'
+import type { Option } from 'ts-results'
 
 /**
- * The IdentifierMap is like a built-in Map<Identifier, T>.
- *
- * Because Identifier is not a value-type record so to make it behave like a value-type,
- * please use this class instead of Map<Identifier, T>.
+ * @deprecated
  */
 export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<IdentifierType, T> {
-    [immerable] = true
     /**
      *
      * @param __raw_map__ The origin data.
      * @param constructor The Identifier constructor. If provided, IdentifierMap will try to do a runtime check to make sure the identifier type is correct.
      */
-    constructor(public readonly __raw_map__: Map<string, T>, ...constructor: (new (...args: any) => IdentifierType)[]) {
+    constructor(
+        public readonly __raw_map__: Map<string, T>,
+        ...constructor: { name: string; from(x: string): Option<IdentifierType> }[]
+    ) {
         if (constructor) {
             this.constructorName = constructor.map((x) => x.name)
         }
@@ -44,12 +44,9 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
         return this.__raw_map__.delete(data.toText())
     }
     private _identifierFromString(key: string) {
-        const identifier = Identifier.fromString(key)
-        if (identifier.err) {
-            console.warn(
-                'IdentifierMap found a key which cannot be converted into Identifier: ',
-                identifier.val.message,
-            )
+        const identifier = Identifier.from(key)
+        if (identifier.none) {
+            console.warn('IdentifierMap found a key which cannot be converted into Identifier', key)
         } else {
             if (this.constructorName.length === 0) return identifier.val as IdentifierType
             if (this.constructorName.includes(identifier.val.constructor.name)) return identifier.val as IdentifierType
@@ -94,13 +91,15 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     *values() {
         for (const [k, v] of this.entries()) yield v
     }
-    public [Symbol.toStringTag]: string;
     [Symbol.iterator](): Generator<[IdentifierType, T], void, unknown> {
         return this.entries()
     }
+    declare [Symbol.toStringTag]: string
 }
-IdentifierMap.prototype[Symbol.toStringTag] = 'IdentifierMap'
-
+Object.defineProperties(IdentifierMap.prototype, {
+    [immerable]: { value: true, configurable: true, writable: true },
+    [Symbol.toStringTag]: { value: 'IdentifierMap', configurable: true, writable: true },
+})
 export type ReadonlyIdentifierMap<IdentifierType extends Identifier, T> = ReadonlyMap<IdentifierType, T> & {
     readonly __raw_map__: ReadonlyMap<string, T>
 }

@@ -1,7 +1,7 @@
 import { test, expect } from '@jest/globals'
 import { None, Some } from 'ts-results'
-import { encodePayload, AESAlgorithmEnum, parsePayload, PayloadWellFormed } from '../src'
-import { importAESFromJWK } from '../src/utils'
+import { encodePayload, parsePayload, PayloadWellFormed } from '../src'
+import { importAES } from '../src/utils'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { queryTestPublicKey } from './keys'
 
@@ -35,8 +35,8 @@ test('Encode v37 payload', async () => {
     // test 2
     {
         const newPayload = { ...payload }
-        newPayload.author = Some(new ProfileIdentifier('localhost', 'unknown'))
-        const k256Key = (await queryTestPublicKey(new ProfileIdentifier('localhost', 'alice')))!
+        newPayload.author = Some(ProfileIdentifier.of('localhost', 'unknown').unwrap())
+        const k256Key = (await queryTestPublicKey(ProfileIdentifier.of('localhost', 'alice').unwrap()))!
         newPayload.authorPublicKey = Some(k256Key)
         newPayload.encryption = {
             type: 'E2E',
@@ -55,10 +55,7 @@ test('Encode v37 payload', async () => {
 })
 
 async function getAESKey(): Promise<PayloadWellFormed.PublicEncryption['AESKey']> {
-    return {
-        algr: AESAlgorithmEnum.A256GCM,
-        key: (await importAESFromJWK.AES_GCM_256(testKey)).unwrap(),
-    }
+    return (await importAES(testKey)).unwrap()
 }
 const testKey = {
     alg: 'A256GCM',

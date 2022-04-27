@@ -48,11 +48,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NextIDPageProps {
+interface NextIdPageProps {
     personaList: string[]
 }
 
-export function NextIdPage({ personaList }: NextIDPageProps) {
+export function NextIdPage({ personaList }: NextIdPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const currentProfileIdentifier = useLastRecognizedIdentity()
@@ -63,7 +63,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const isOwn = currentProfileIdentifier.identifier.toText() === visitingPersonaIdentifier.identifier.toText()
+    const isOwn = currentProfileIdentifier.identifier === visitingPersonaIdentifier.identifier
     const tipable = !isOwn
 
     const personaActionButton = useMemo(() => {
@@ -78,12 +78,14 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
     }, [personaConnectStatus, t])
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
-        if (!visitingPersonaIdentifier) return
+        if (!visitingPersonaIdentifier?.identifier) return
         return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
     }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
 
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
         if (!currentPersona?.publicHexKey) return
+        if (!currentPersona.identifier) return
+        if (!visitingPersonaIdentifier.identifier) return
         return NextIDProof.queryIsBound(
             currentPersona.publicHexKey,
             platform,

@@ -1,9 +1,14 @@
 import { useCallback, useEffect } from 'react'
 import { useMount } from 'react-use'
 import { first } from 'lodash-unified'
-import { ChainId, EthereumMethodType, isFortmaticSupported, ProviderType } from '@masknet/web3-shared-evm'
-import * as Fortmatic from '@masknet/web3-shared-evm/providers/Fortmatic'
-import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
+import {
+    ChainId,
+    EthereumMethodType,
+    isFortmaticSupported,
+    ProviderType,
+    FortmaticProvider as Fortmatic,
+} from '@masknet/web3-shared-evm'
+import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra/web3'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { EVM_Messages } from '../../messages'
 import { WalletRPC } from '../../../Wallet/messages'

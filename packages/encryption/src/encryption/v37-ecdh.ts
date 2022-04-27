@@ -1,5 +1,4 @@
 import { IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
-import { AESAlgorithmEnum } from '../payload'
 import { encryptWithAES } from '../utils'
 import {
     type EncryptTargetE2E,
@@ -28,7 +27,7 @@ export async function v37_addReceiver(
     const ecdh = Promise.allSettled(
         target.target.map(async (id): Promise<EncryptionResultE2E> => {
             const iv = postIV || fillIV(io)
-            const receiverPublicKey = id.isUnknown ? undefined : await io.queryPublicKey(id)
+            const receiverPublicKey = await io.queryPublicKey(id)
             if (!receiverPublicKey) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
             const [ephemeralPublicKey, ephemeralPrivateKey] = await getEphemeralKey(receiverPublicKey.algr)
             const aes = await crypto.subtle.deriveKey(
@@ -39,7 +38,7 @@ export async function v37_addReceiver(
                 ['encrypt'],
             )
             // Note: we're reusing iv in the post encryption.
-            const encryptedPostKey = await encryptWithAES(AESAlgorithmEnum.A256GCM, aes, iv, await postKeyEncoded)
+            const encryptedPostKey = await encryptWithAES(aes, iv, await postKeyEncoded)
             const result: EncryptionResultE2E = {
                 encryptedPostKey: encryptedPostKey.unwrap(),
                 target: id,

@@ -6,9 +6,9 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
-import { LoadingTable } from './LoadingTable'
 import { isOne, isZero } from '@masknet/web3-shared-base'
 import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
+import { LoadingAnimation } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -61,7 +61,12 @@ export function OfferTab() {
         return offers.value.data
     }, [offers])
 
-    if (asset.loading) return <LoadingTable />
+    if (asset.loading || offers.loading)
+        return (
+            <div className={classes.empty}>
+                <LoadingAnimation />
+            </div>
+        )
     if (!offers.value?.data.length || asset.error || !dataSource.length)
         return (
             <Table size="small" stickyHeader>

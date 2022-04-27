@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
-import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
+import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { RedPacket } from './RedPacket'
 import { RedPacketRPC } from '../messages'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -14,10 +14,7 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
 
     // #region discover red packet
     const postIdentifier = usePostInfoDetails.identifier()
-    const fromUrl =
-        postIdentifier && !postIdentifier.isUnknown
-            ? activatedSocialNetworkUI.utils.getPostURL?.(postIdentifier)?.toString()
-            : undefined
+    const fromUrl = postIdentifier ? activatedSocialNetworkUI.utils.getPostURL?.(postIdentifier)?.toString() : undefined
     useEffect(() => {
         if (!fromUrl) return
         if (!payload.txid && payload.contract_version !== 1) return

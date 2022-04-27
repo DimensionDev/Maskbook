@@ -10,7 +10,7 @@ import {
     EncryptOptions,
     parsePayload,
 } from '../src'
-import { importAESFromJWK } from '../src/utils'
+import { importAES } from '../src/utils'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { makeTypedMessageText, makeTypedMessageTupleSerializable } from '@masknet/typed-message'
 import {
@@ -28,9 +28,10 @@ const publicTarget: EncryptOptions['target'] = {
 }
 const example: EncryptOptions = {
     version: -38,
-    author: new ProfileIdentifier('localhost', 'alice'),
+    author: ProfileIdentifier.of('localhost', 'alice').unwrap(),
     message: makeTypedMessageText('hello world'),
     target: publicTarget,
+    network: 'localhost',
 }
 test('v37 public encryption', async () => {
     await testSet('minimal v37', { ...example, version: -37 })
@@ -42,6 +43,7 @@ test('v37 public encryption', async () => {
             target: publicTarget,
             message: complexMessage(),
             author: example.author,
+            network: 'localhost',
         },
         {
             ...minimalEncryptIO,
@@ -60,6 +62,7 @@ test('v38 public encryption', async () => {
             target: publicTarget,
             message: makeTypedMessageText('hello world'),
             author: example.author,
+            network: 'localhost',
         },
         {
             ...minimalEncryptIO,
@@ -70,11 +73,12 @@ test('v38 public encryption', async () => {
 
 test('v37 E2E encryption', async () => {
     const payload: EncryptOptions = {
-        author: new ProfileIdentifier('localhost', 'bob'),
+        network: 'localhost',
+        author: ProfileIdentifier.of('localhost', 'bob').unwrap(),
         message: makeTypedMessageText('hello world'),
         target: {
             type: 'E2E',
-            target: [new ProfileIdentifier('localhost', 'jack')],
+            target: [ProfileIdentifier.of('localhost', 'jack').unwrap()],
         },
         version: -37,
     }
@@ -129,7 +133,7 @@ test('v37 E2E encryption', async () => {
         {
             iv: encrypted.identifier.toIV(),
             postAESKey: encrypted.postKey,
-            target: [new ProfileIdentifier('localhost', 'joey')],
+            target: [ProfileIdentifier.of('localhost', 'joey').unwrap()],
             version: -37,
         },
         {
@@ -162,11 +166,12 @@ test('v37 E2E encryption', async () => {
 })
 test('v38 E2E encryption', async () => {
     const payload: EncryptOptions = {
-        author: new ProfileIdentifier('localhost', 'bob'),
+        network: 'localhost',
+        author: ProfileIdentifier.of('localhost', 'bob').unwrap(),
         message: makeTypedMessageText('hello world'),
         target: {
             type: 'E2E',
-            target: [new ProfileIdentifier('localhost', 'jack')],
+            target: [ProfileIdentifier.of('localhost', 'jack').unwrap()],
         },
         version: -38,
     }
@@ -224,7 +229,7 @@ test('v38 E2E encryption', async () => {
         {
             iv: encrypted.identifier.toIV(),
             postAESKey: encrypted.postKey,
-            target: [new ProfileIdentifier('localhost', 'joey')],
+            target: [ProfileIdentifier.of('localhost', 'joey').unwrap()],
             version: -38,
         },
         {
@@ -334,7 +339,7 @@ async function returnFalse(): Promise<boolean> {
     return false
 }
 async function returnTestKey() {
-    return (await importAESFromJWK.AES_GCM_256(testKey)).unwrap()
+    return (await importAES(testKey)).unwrap()
 }
 
 function complexMessage() {

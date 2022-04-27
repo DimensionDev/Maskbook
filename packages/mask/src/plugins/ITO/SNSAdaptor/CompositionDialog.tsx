@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog, InjectedDialogProps, MINDS_ID } from '@masknet/shared'
+import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
 import { DialogTabs, JSON_PayloadInMask } from '../types'
 import { CreateForm } from './CreateForm'
@@ -19,8 +19,9 @@ import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-unified'
-import { useCompositionContext } from '@masknet/plugin-infra'
+import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 interface StyleProps {
     snsId: string
@@ -28,7 +29,7 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     content: {
-        ...(snsId === MINDS_ID ? { minWidth: 600 } : {}),
+        ...(snsId === EnhanceableSite.Minds ? { minWidth: 600 } : {}),
         position: 'relative',
         paddingTop: 50,
     },
@@ -76,9 +77,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     // #region blocking
     const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings)
-    const onDone = useCallback(() => {
-        fillCallback()
-    }, [fillCallback])
     // #endregion
 
     const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
@@ -249,7 +247,12 @@ export function CompositionDialog(props: CompositionDialogProps) {
                     <AbstractTab classes={{ tabs: classes.tabs }} height={540} {...tabProps} />
                 ) : null}
                 {step === ITOCreateFormPageStep.ConfirmItoPage ? (
-                    <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={onDone} onClose={onClose} />
+                    <ConfirmDialog
+                        poolSettings={poolSettings}
+                        onBack={onBack}
+                        onDone={fillCallback}
+                        onClose={onClose}
+                    />
                 ) : null}
             </DialogContent>
         </InjectedDialog>

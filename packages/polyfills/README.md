@@ -14,9 +14,9 @@ Extra:
 ## Supporting browsers
 
 - Safari 14+ (Released on Sept 2020)
-- Chrome Last 2 versions (about 3 months) (98+ at 3/4/2022)
-- Firefox Last 2 versions (about 3 months) (97+ at 3/4/2022)
-- GeckoView 91 (last updated at 7/23/2021).
+- Chrome Last 2 versions (about 3 months)
+- Firefox Last 2 versions (about 3 months)
+- GeckoView 99 (last updated at 4/5/2022).
 
 ## Targeting ES Syntax and APIs
 
@@ -34,8 +34,6 @@ Those features are not easy to polyfill.
   - BigUint64Array (requires Safari 15)
   - DataView.prototype.getBigInt64 (requires Safari 15)
   - DataView.prototype.getBigUint64 (requires Safari 15)
-- ES2021:
-  - WeakReference (requires Safari 15)
 - ES2022:
   - ⭐ C l a s s ⭐ F i e l d s ⭐ (requires Safari 15)
   - Class initialization block (Safari not supported, Firefox 93+)

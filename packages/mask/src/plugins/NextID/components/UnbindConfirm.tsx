@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { Box, DialogContent, Button } from '@mui/material'
-import { useWeb3State } from '@masknet/plugin-infra'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../locales'
 import { makeStyles, MaskDialog } from '@masknet/theme'
 

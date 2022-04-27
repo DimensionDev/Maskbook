@@ -1,5 +1,5 @@
 {
-    "dialog_title": "crwdns14808:0crwdne14808:0",
+    "__plugin_name": "crwdns16294:0crwdne16294:0",
     "powered_by_go_plus": "crwdns14810:0crwdne14810:0",
     "high_risk": "crwdns14812:0crwdne14812:0",
     "low_risk": "crwdns14814:0crwdne14814:0",
@@ -11,6 +11,8 @@
     "security_detection": "crwdns14826:0crwdne14826:0",
     "risky_factors": "crwdns14828:0{{quantity}}crwdne14828:0",
     "attention_factors": "crwdns14830:0{{quantity}}crwdne14830:0",
+    "risky_factor": "crwdns14968:0{{quantity}}crwdne14968:0",
+    "attention_factor": "crwdns14970:0{{quantity}}crwdne14970:0",
     "security_info_code_not_verify_title": "crwdns14832:0crwdne14832:0",
     "security_info_code_not_verify_message": "crwdns14834:0crwdne14834:0",
     "security_info_functions_that_can_suspend_trading_title": "crwdns14836:0crwdne14836:0",
@@ -21,7 +23,10 @@
     "token_info_contract_owner": "crwdns14846:0crwdne14846:0",
     "token_info_total_supply": "crwdns14848:0crwdne14848:0",
     "default_placeholder": "crwdns14850:0crwdne14850:0",
-    "not_found_tip": "crwdns14852:0crwdne14852:0",
+    "not_found_tip_title": "crwdns14972:0crwdne14972:0",
+    "not_found_tip_network_error": "crwdns14974:0crwdne14974:0",
+    "not_found_tip_network_chain_correct": "crwdns14976:0crwdne14976:0",
+    "not_found_tip_network_address_not_cover": "crwdns14978:0crwdne14978:0",
     "risk_safe_description": "crwdns14854:0crwdne14854:0",
     "risk_contract_source_code_verified_title": "crwdns14856:0crwdne14856:0",
     "risk_contract_source_code_verified_body": "crwdns14858:0crwdne14858:0",
@@ -70,5 +75,13 @@
     "risk_is_whitelisted_title": "crwdns14944:0crwdne14944:0",
     "risk_is_whitelisted_body": "crwdns14946:0crwdne14946:0",
     "risk_not_is_whitelisted_title": "crwdns14948:0crwdne14948:0",
-    "risk_not_is_whitelisted_body": "crwdns14950:0crwdne14950:0"
+    "risk_not_is_whitelisted_body": "crwdns14950:0crwdne14950:0",
+    "risk_is_true_token_title": "crwdns15004:0crwdne15004:0",
+    "risk_is_true_token_body": "crwdns15006:0crwdne15006:0",
+    "risk_not_is_true_token_title": "crwdns15008:0crwdne15008:0",
+    "risk_not_is_true_token_body": "crwdns15010:0crwdne15010:0",
+    "risk_is_airdrop_scam_title": "crwdns15012:0crwdne15012:0",
+    "risk_is_airdrop_scam_body": "crwdns15014:0crwdne15014:0",
+    "risk_not_is_airdrop_scam_title": "crwdns15016:0crwdne15016:0",
+    "risk_not_is_airdrop_scam_body": "crwdns15018:0crwdne15018:0"
 }

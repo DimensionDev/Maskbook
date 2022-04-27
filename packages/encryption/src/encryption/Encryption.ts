@@ -7,7 +7,7 @@ import {
     SerializableTypedMessages,
 } from '@masknet/typed-message'
 import { None, Option, Some } from 'ts-results'
-import { AESAlgorithmEnum, EC_Key, encodePayload, PayloadWellFormed } from '../payload'
+import { EC_Key, encodePayload, PayloadWellFormed } from '../payload'
 import { encryptWithAES } from '../utils'
 
 import {
@@ -29,11 +29,11 @@ export async function encrypt(options: EncryptOptions, io: EncryptIO): Promise<E
     if (!postKey.usages.includes('encrypt') || !postKey.usages.includes('decrypt') || !postKey.extractable) {
         throw new EncryptError(EncryptErrorReasons.AESKeyUsageError)
     }
-    const authorPublic = queryAuthorPublicKey(options.author, io)
+    const authorPublic = queryAuthorPublicKey(options.author || null, io)
 
     const encodedMessage = encodeMessage(options.version, options.message)
     const encryptedMessage = encodedMessage
-        .then((message) => encryptWithAES(AESAlgorithmEnum.A256GCM, postKey, postIV, message))
+        .then((message) => encryptWithAES(postKey, postIV, message))
         .then((x) => x.unwrap())
 
     let encryption: PayloadWellFormed.PublicEncryption | PayloadWellFormed.EndToEndEncryption
@@ -43,7 +43,7 @@ export async function encrypt(options: EncryptOptions, io: EncryptIO): Promise<E
         encryption = {
             iv: postIV,
             type: 'public',
-            AESKey: { algr: AESAlgorithmEnum.A256GCM, key: postKey },
+            AESKey: postKey,
         }
     } else {
         const postKeyEncoded = encodePostKey(options.version, postKey)
@@ -57,7 +57,7 @@ export async function encrypt(options: EncryptOptions, io: EncryptIO): Promise<E
     const payload = encodePayload
         .NoSign({
             version: options.version,
-            author: options.author.isUnknown ? None : Some(options.author),
+            author: options.author ? Some(options.author) : None,
             authorPublicKey: await authorPublic,
             encryption,
             encrypted: await encryptedMessage,
@@ -67,7 +67,7 @@ export async function encrypt(options: EncryptOptions, io: EncryptIO): Promise<E
 
     return {
         author: options.author,
-        identifier: new PostIVIdentifier(options.author.network, encodeArrayBuffer(postIV)),
+        identifier: new PostIVIdentifier(options.network, encodeArrayBuffer(postIV)),
         postKey,
         output: await payload,
         e2e: ecdhResult,
@@ -113,7 +113,7 @@ async function e2e_v37(
             ['encrypt'],
         )
         // Note: we're reusing iv in the post encryption.
-        const encryptedPostKey = await encryptWithAES(AESAlgorithmEnum.A256GCM, aes, postIV, await postKeyEncoded)
+        const encryptedPostKey = await encryptWithAES(aes, postIV, await postKeyEncoded)
         return encryptedPostKey.unwrap()
     })
 
@@ -155,11 +155,11 @@ async function encodeMessage(version: -38 | -37, message: SerializableTypedMessa
     return encodeTypedMessageV38Format(message)
 }
 async function queryAuthorPublicKey(
-    of: ProfileIdentifier,
+    of: ProfileIdentifier | null,
     io: EncryptIO,
 ): Promise<Option<EC_Key<EC_Public_CryptoKey>>> {
     try {
-        if (of.isUnknown) return None
+        if (!of) return None
         const key = await io.queryPublicKey(of)
         if (!key) return None
         return Some(key)

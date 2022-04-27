@@ -1,5 +1,5 @@
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { SubscriptionFromValueRef } from '@masknet/shared-base'
+import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
@@ -18,7 +18,7 @@ const backgroundColorRef = new ValueRef('rgb(255, 255, 255)')
 
 const currentTheme = new ValueRef<PaletteMode>('light')
 export const PaletteModeProviderTwitter: SocialNetworkUI.Customization.PaletteModeProvider = {
-    current: SubscriptionFromValueRef(currentTheme),
+    current: createSubscriptionFromValueRef(currentTheme),
     start: startWatchThemeColor,
 }
 
@@ -258,6 +258,9 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                 styleOverrides: {
                     root: {
                         backgroundColor: theme.palette.action.mask,
+                    },
+                    invisible: {
+                        opacity: '0 !important',
                     },
                 },
             }

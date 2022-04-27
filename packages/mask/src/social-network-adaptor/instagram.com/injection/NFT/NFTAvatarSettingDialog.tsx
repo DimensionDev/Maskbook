@@ -10,7 +10,7 @@ import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { DialogStackingProvider, makeStyles } from '@masknet/theme'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { Instagram } from '@masknet/web3-providers'
-import { useWallet } from '@masknet/plugin-infra'
+import { useWallet } from '@masknet/plugin-infra/web3'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
@@ -35,6 +35,7 @@ export function NFTAvatarSettingDialog() {
         async (token: ERC721TokenDetailed) => {
             try {
                 if (!token.info.imageURL) return
+                if (!identity.identifier) return
                 const image = await toPNG(token.info.imageURL)
                 if (!image || !wallet) return
 

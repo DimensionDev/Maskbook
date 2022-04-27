@@ -15,7 +15,7 @@
     // @masknet/scripts: insert-here 1
     { "path": "./packages/backup-format/tsconfig.tests.json" },
     { "path": "./packages/encryption/tsconfig.tests.json" },
-    { "path": "./packages/shared-base/tsconfig.tests.json" },
+    { "path": "./packages/typed-message/tests/tsconfig.json" },
     // All plugins should be type checked too
     { "path": "./packages/plugins" }
   ],
@@ -100,6 +100,7 @@
       "@masknet/plugin-template": ["./packages/plugins/template/src"],
       "@masknet/plugin-cyberconnect": ["./packages/plugins/CyberConnect/src"],
       "@masknet/plugin-go-plus-security": ["./packages/plugins/GoPlusSecurity/src"],
+      "@masknet/plugin-cross-chain-bridge": ["./packages/plugins/CrossChainBridge/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     },

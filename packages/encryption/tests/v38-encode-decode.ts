@@ -1,8 +1,8 @@
 import { expect, test } from '@jest/globals'
-import { AESAlgorithmEnum, encodePayload, parsePayload, PayloadWellFormed } from '../src'
+import { encodePayload, parsePayload, PayloadWellFormed } from '../src'
 import { None, Some } from 'ts-results'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { importAESFromJWK } from '../src/utils'
+import { importAES } from '../src/utils'
 import { queryTestPublicKey } from './keys'
 
 test('Parse v38 encoded by old infra', async () => {
@@ -17,16 +17,13 @@ test('Parse older v38 payload that does not have newer field', async () => {
 
 test('Encode v38 payload', async () => {
     const payload: PayloadWellFormed.Payload = {
-        author: Some(new ProfileIdentifier('facebook.com', 'test')),
-        authorPublicKey: Some((await queryTestPublicKey(new ProfileIdentifier('localhost', 'alice')))!),
+        author: Some(ProfileIdentifier.of('facebook.com', 'test').unwrap()),
+        authorPublicKey: Some((await queryTestPublicKey(ProfileIdentifier.of('localhost', 'alice').unwrap()))!),
         encrypted: new Uint8Array(Buffer.from('3a0d6ee692c6f46896b196f14301c01ad2fa26aa', 'hex')),
         encryption: {
             type: 'public',
             iv: new Uint8Array(Buffer.from('0633db7e24805c2bdcff69ea2afda7cd', 'hex')),
-            AESKey: {
-                algr: AESAlgorithmEnum.A256GCM,
-                key: await importAESFromJWK(AESKey, AESAlgorithmEnum.A256GCM).then((x) => x.unwrap() as any),
-            },
+            AESKey: await importAES(AESKey).then((x) => x.unwrap()),
         },
         signature: None,
         version: -38,

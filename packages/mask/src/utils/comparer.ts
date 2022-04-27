@@ -5,7 +5,7 @@ function PersonaComparer(a: Persona, b: Persona): boolean {
     if (a.updatedAt.getTime() !== b.updatedAt.getTime()) return false
     if (a.fingerprint !== b.fingerprint) return false
     if (a.hasPrivateKey !== b.hasPrivateKey) return false
-    if (!a.identifier.equals(b.identifier)) return false
+    if (a.identifier !== b.identifier) return false
     // simple check
     if (a.linkedProfiles.size !== b.linkedProfiles.size) return false
     if (a.nickname !== b.nickname) return false

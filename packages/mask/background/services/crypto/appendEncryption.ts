@@ -1,4 +1,4 @@
-import { appendEncryptionTarget, EC_Key, EC_KeyCurveEnum } from '@masknet/encryption'
+import { appendEncryptionTarget, EC_Key, EC_KeyCurveEnum, SupportedPayloadVersions } from '@masknet/encryption'
 import {
     EC_Public_CryptoKey,
     IdentifierMap,
@@ -13,17 +13,17 @@ import { publishPostAESKey_version39Or38 } from '../../network/gun/encryption/qu
 import { getPostKeyCache } from './decryption'
 
 export async function appendShareTarget(
-    version: -38,
+    version: SupportedPayloadVersions,
     post: PostIVIdentifier,
     target: ProfileIdentifier[],
     whoAmI: ProfileIdentifier,
     reason: RecipientReason,
 ): Promise<void> {
+    if (version === -39 || version === -40) throw new TypeError('invalid version')
     const key = await getPostKeyCache(post)
     const postRec = await queryPostDB(post)
     const postBy = postRec?.encryptBy || postRec?.postBy || whoAmI
 
-    if (whoAmI?.isUnknown) throw new Error('Cannot find private key')
     if (!key) throw new Error('No post key found')
 
     const e2e = await appendEncryptionTarget(

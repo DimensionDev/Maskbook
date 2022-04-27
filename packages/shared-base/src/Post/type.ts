@@ -1,4 +1,4 @@
-import type { PostIVIdentifier, ProfileIdentifier } from '../Identifier/type'
+import type { PostIVIdentifier, ProfileIdentifier } from '../Identifier'
 import type { IdentifierMap } from '../Identifier/IdentifierMap'
 
 /**
