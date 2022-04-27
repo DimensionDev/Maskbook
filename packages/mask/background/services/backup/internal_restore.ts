@@ -1,5 +1,5 @@
 import type { NormalizedBackup } from '@masknet/backup-format'
-import { ProfileIdentifier, RecipientDetail, RelationFavor, RecipientReason } from '@masknet/shared-base'
+import { ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
 import {
     consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
@@ -8,6 +8,7 @@ import {
     LinkedProfileDetails,
 } from '../../database/persona/db'
 import { withPostDBTransaction, createPostDB, PostRecord, queryPostDB, updatePostDB } from '../../database/post'
+import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../database/post/dbType'
 
 // Well, this is a bit of a hack, because we have not move those two parts into this project yet.
 let restorePlugins: (backup: NormalizedBackup.Data['plugins']) => Promise<void>
@@ -123,10 +124,10 @@ function restorePosts(backup: Iterable<NormalizedBackup.PostBackup>) {
                 const { val } = post.recipients
                 if (val.type === 'public') rec.recipients = 'everyone'
                 else {
-                    const map = new Map<ProfileIdentifier, RecipientDetail>()
+                    const map = new Map<ProfileIdentifier, LatestRecipientDetailDB>()
                     for (const [id, detail] of val.receivers) {
                         map.set(id, {
-                            reason: detail.map((x): RecipientReason => ({ at: x.at, type: 'direct' })),
+                            reason: detail.map((x): LatestRecipientReasonDB => ({ at: x.at, type: 'direct' })),
                         })
                     }
                 }

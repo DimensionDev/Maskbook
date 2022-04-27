@@ -1,8 +1,6 @@
 import {
     AESCryptoKey,
     AESJsonWebKey,
-    convertIdentifierMapToRawMap,
-    convertRawMapToIdentifierMap,
     ECKeyIdentifier,
     PersonaIdentifier,
     PostIdentifier,
@@ -11,16 +9,9 @@ import {
 } from '@masknet/shared-base'
 import { openDB } from 'idb/with-async-ittr'
 import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
-import type { PersonaIdentifierStoredInDB, ProfileIdentifierStoredInDB } from '../persona/type'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
-import type {
-    PostDB,
-    PostDBRecord,
-    PostReadOnlyTransaction,
-    PostReadWriteTransaction,
-    PostRecord,
-    RecipientReason,
-} from './type'
+import type { PostRecord, PostDB, PostReadOnlyTransaction, PostReadWriteTransaction } from './type'
+import type { PostDB_HistoryTypes, LatestPostDBRecord, LatestRecipientDetailDB } from './dbType'
 
 type UpgradeKnowledge = { version: 4; data: Map<string, AESJsonWebKey> } | undefined
 const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
@@ -29,46 +20,6 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
     (currentTryOpen, knowledge) =>
         openDB<PostDB>('maskbook-post-v2', currentTryOpen, {
             async upgrade(db, oldVersion, _newVersion, transaction): Promise<void> {
-                type Version2PostRecord = {
-                    postBy: ProfileIdentifierStoredInDB | undefined
-                    identifier: string
-                    recipientGroups?: unknown
-                    recipients?: ProfileIdentifierStoredInDB[]
-                    foundAt: Date
-                    postCryptoKey?: CryptoKey
-                }
-                type Version3RecipientDetail = {
-                    /** Why they're able to receive this message? */
-                    reason: RecipientReason[]
-                }
-                type Version3PostRecord = Omit<Version2PostRecord, 'recipients'> & {
-                    recipients: Record<string, Version3RecipientDetail>
-                }
-                type Version4PostRecord = Omit<Version3PostRecord, 'recipients'> & {
-                    recipients: Map<string, Version3RecipientDetail>
-                }
-                type Version5PostRecord = Omit<Version4PostRecord, 'postCryptoKey' | 'recipients'> & {
-                    postCryptoKey?: AESJsonWebKey
-                    encryptBy?: PersonaIdentifierStoredInDB
-                    url?: string
-                    summary?: string
-                    interestedMeta?: ReadonlyMap<string, unknown>
-                    recipients: true | Map<string, Version3RecipientDetail>
-                }
-                type Version6PostRecord = Omit<Version5PostRecord, 'encryptBy'> & {
-                    encryptBy?: string
-                }
-                /**
-                 * A type assert that make sure a and b are the same type
-                 * @param a The latest version PostRecord
-                 */
-                function _assert(a: Version6PostRecord, b: PostDBRecord) {
-                    a = b
-                    b = a
-                }
-                // Prevent unused code removal
-                // eslint-disable-next-line no-constant-condition
-                if (1 + 1 === 3) _assert({} as any, {} as any)
                 if (oldVersion < 1) {
                     // inline keys
                     return void db.createObjectStore('post', { keyPath: 'identifier' })
@@ -102,23 +53,23 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                 if (oldVersion <= 2) {
                     const store = transaction.objectStore('post')
                     for await (const cursor of store) {
-                        const v2record: Version2PostRecord = cursor.value as any
+                        const v2record: PostDB_HistoryTypes.Version2PostRecord = cursor.value as any
                         const oldType = v2record.recipients
                             ?.map((x) => ProfileIdentifier.of(x.network, x.userId).unwrapOr(null!))
                             .filter(Boolean)
-                        const newType: Version3PostRecord['recipients'] = {}
+                        const newType: PostDB_HistoryTypes.Version3PostRecord['recipients'] = {}
                         if (oldType !== undefined)
                             for (const each of oldType) {
                                 newType[each.toText()] = { reason: [{ type: 'direct', at: new Date(0) }] }
                             }
-                        const next: Version3PostRecord = {
+                        const next: PostDB_HistoryTypes.Version3PostRecord = {
                             ...v2record,
                             recipients: newType,
                             postBy: undefined,
                             foundAt: new Date(0),
                             recipientGroups: [],
                         }
-                        await cursor.update(next as Version3PostRecord as any)
+                        await cursor.update(next as PostDB_HistoryTypes.Version3PostRecord as any)
                     }
                 }
 
@@ -129,12 +80,12 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                 if (oldVersion <= 3) {
                     const store = transaction.objectStore('post')
                     for await (const cursor of store) {
-                        const v3Record: Version3PostRecord = cursor.value as any
-                        const newType: Version4PostRecord['recipients'] = new Map()
+                        const v3Record: PostDB_HistoryTypes.Version3PostRecord = cursor.value as any
+                        const newType: PostDB_HistoryTypes.Version4PostRecord['recipients'] = new Map()
                         for (const [key, value] of Object.entries(v3Record.recipients)) {
                             newType.set(key, value)
                         }
-                        const v4Record: Version4PostRecord = {
+                        const v4Record: PostDB_HistoryTypes.Version4PostRecord = {
                             ...v3Record,
                             recipients: newType,
                         }
@@ -147,10 +98,10 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                 if (oldVersion <= 4) {
                     const store = transaction.objectStore('post')
                     for await (const cursor of store) {
-                        const v4Record: Version4PostRecord = cursor.value as any
+                        const v4Record: PostDB_HistoryTypes.Version4PostRecord = cursor.value as any
                         const data = knowledge?.data!
                         if (!v4Record.postCryptoKey) continue
-                        const v5Record: Version5PostRecord = {
+                        const v5Record: PostDB_HistoryTypes.Version5PostRecord = {
                             ...v4Record,
                             postCryptoKey: data.get(v4Record.identifier)!,
                         }
@@ -164,7 +115,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                 if (oldVersion <= 6) {
                     const store = transaction.objectStore('post')
                     for await (const cursor of store) {
-                        const v5Record: Version5PostRecord = cursor.value as any
+                        const v5Record: PostDB_HistoryTypes.Version5PostRecord = cursor.value as any
                         const by = v5Record.encryptBy
                         // This is the correct data type
                         if (typeof by === 'string') continue
@@ -199,17 +150,24 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
         return undefined
     },
 )
+
+/** @internal */
 export const PostDBAccess = db
+
+/** @internal */
 export async function withPostDBTransaction(task: (t: PostReadWriteTransaction) => Promise<void>) {
     const t = createTransaction(await PostDBAccess(), 'readwrite')('post')
     await task(t)
 }
 
-export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction) {
+/** @internal */
+export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction): Promise<void> {
     t ||= createTransaction(await db(), 'readwrite')('post')
     const toSave = postToDB(record)
     await t.objectStore('post').add(toSave)
 }
+
+/** @internal */
 export async function updatePostDB(
     updateRecord: Partial<PostRecord> & Pick<PostRecord, 'identifier'>,
     mode: 'append' | 'override',
@@ -224,21 +182,13 @@ export async function updatePostDB(
     }
     const currentRecord = (await queryPostDB(updateRecord.identifier, t)) || emptyRecord
     const nextRecord: PostRecord = { ...currentRecord, ...updateRecord }
-    const nextRecipients: PostDBRecord['recipients'] =
+    const nextRecipients: LatestPostDBRecord['recipients'] =
         mode === 'override' ? postToDB(nextRecord).recipients : postToDB(currentRecord).recipients
     if (mode === 'append') {
         if (updateRecord.recipients) {
             if (typeof updateRecord.recipients === 'object' && typeof nextRecipients === 'object') {
-                for (const [id, patchDetail] of updateRecord.recipients) {
-                    const idText = id.toText()
-                    if (nextRecipients.has(idText)) {
-                        const { reason, ...rest } = patchDetail
-                        const nextDetail = nextRecipients.get(idText)!
-                        Object.assign(nextDetail, rest)
-                        nextDetail.reason = [...nextDetail.reason, ...patchDetail.reason]
-                    } else {
-                        nextRecipients.set(idText, patchDetail)
-                    }
+                for (const [id, date] of updateRecord.recipients) {
+                    nextRecipients.set(id.toText(), { reason: [{ at: date, type: 'direct' }] })
                 }
             } else {
                 nextRecord.recipients = 'everyone'
@@ -249,12 +199,15 @@ export async function updatePostDB(
     await t.objectStore('post').put(nextRecordInDBType)
 }
 
+/** @internal */
 export async function queryPostDB(record: PostIVIdentifier, t?: PostReadOnlyTransaction): Promise<PostRecord | null> {
     t ||= createTransaction(await db(), 'readonly')('post')
     const result = await t.objectStore('post').get(record.toText())
     if (result) return postOutDB(result)
     return null
 }
+
+/** @internal */
 export async function queryPostsDB(
     query: string | ((data: PostRecord, id: PostIVIdentifier) => boolean),
     t?: PostReadOnlyTransaction,
@@ -280,6 +233,7 @@ export async function queryPostsDB(
 
 /**
  * Query posts by paged
+ * @internal
  */
 export async function queryPostPagedDB(
     linked: PersonaIdentifier,
@@ -290,7 +244,7 @@ export async function queryPostPagedDB(
         page?: number
     },
     count: number,
-) {
+): Promise<PostRecord[]> {
     const t = createTransaction(await db(), 'readonly')('post')
 
     const data: PostRecord[] = []
@@ -320,13 +274,25 @@ export async function queryPostPagedDB(
     return data
 }
 
-// #region db in and out
-function postOutDB(db: PostDBRecord): PostRecord {
-    const { identifier, foundAt, postBy, recipients, postCryptoKey, encryptBy, interestedMeta, summary, url } = db
+function postOutDB(db: LatestPostDBRecord): PostRecord {
+    const { identifier, foundAt, postBy, postCryptoKey, encryptBy, interestedMeta, summary, url } = db
+    let recipients: PostRecord['recipients']
+    if (db.recipients === true) {
+        recipients = 'everyone'
+    } else {
+        recipients = new Map()
+        for (const [id, { reason }] of db.recipients) {
+            const identifier = ProfileIdentifier.from(id)
+            if (identifier.none) continue
+            const detail = reason[0]
+            if (!detail) continue
+            recipients.set(identifier.val, detail.at)
+        }
+    }
     return {
         identifier: PostIVIdentifier.from(identifier).unwrap(),
         postBy: ProfileIdentifier.of(postBy?.network, postBy?.userId).unwrapOr(undefined),
-        recipients: recipients === true ? 'everyone' : convertRawMapToIdentifierMap(recipients, ProfileIdentifier),
+        recipients,
         foundAt,
         postCryptoKey,
         encryptBy: ECKeyIdentifier.from(encryptBy).unwrapOr(undefined),
@@ -335,12 +301,21 @@ function postOutDB(db: PostDBRecord): PostRecord {
         url,
     }
 }
-function postToDB(out: PostRecord): PostDBRecord {
+function postToDB(out: PostRecord): LatestPostDBRecord {
+    let recipients: LatestPostDBRecord['recipients']
+    if (out.recipients === 'everyone') {
+        recipients = true
+    } else {
+        const map = new Map<string, LatestRecipientDetailDB>()
+        for (const [id, detail] of out.recipients) {
+            map.set(id.toText(), { reason: [{ at: detail, type: 'direct' }] })
+        }
+        recipients = map
+    }
     return {
         ...out,
         identifier: out.identifier.toText(),
-        recipients: out.recipients === 'everyone' ? true : convertIdentifierMapToRawMap(out.recipients),
         encryptBy: out.encryptBy?.toText(),
+        recipients,
     }
 }
-// #endregion

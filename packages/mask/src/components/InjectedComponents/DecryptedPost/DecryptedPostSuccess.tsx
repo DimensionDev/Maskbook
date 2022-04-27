@@ -109,7 +109,6 @@ function AppendShareDetail(props: { onClose(): void; recipients: LazyRecipients;
                     iv,
                     profiles.map((x) => x.identifier),
                     props.whoAmI,
-                    { type: 'direct', at: new Date() },
                 )
                 await delay(1500)
                 retry()
