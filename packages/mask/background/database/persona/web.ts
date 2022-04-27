@@ -457,8 +457,14 @@ export async function updateProfileDB(
 ): Promise<void> {
     const old = await t.objectStore('profiles').get(updating.identifier.toText())
     if (!old) throw new Error('Updating a non exists record')
+    const oldLinkedPersona = old.linkedPersona
+        ? new ECKeyIdentifier(
+              old.linkedPersona.curve,
+              old.linkedPersona.compressedPoint || old.linkedPersona.encodedCompressedKey!,
+          )
+        : undefined
 
-    if (old.linkedPersona && updating.linkedPersona && old.linkedPersona !== updating.linkedPersona) {
+    if (oldLinkedPersona && updating.linkedPersona && oldLinkedPersona !== updating.linkedPersona) {
         const oldIdentifier = Identifier.fromString(old.identifier, ProfileIdentifier).unwrap()
         const oldLinkedPersona = await queryPersonaByProfileDB(oldIdentifier, t)
 
@@ -475,7 +481,7 @@ export async function updateProfileDB(
         }
     }
 
-    if (updating.linkedPersona && old.linkedPersona !== updating.linkedPersona) {
+    if (updating.linkedPersona && oldLinkedPersona !== updating.linkedPersona) {
         const linkedPersona = await queryPersonaDB(updating.linkedPersona, t)
         if (linkedPersona) {
             linkedPersona.linkedProfiles.set(updating.identifier, { connectionConfirmState: 'confirmed' })
