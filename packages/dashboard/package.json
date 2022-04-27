@@ -34,8 +34,6 @@
     "@masknet/web3-shared-evm": "workspace:*",
     "@msgpack/msgpack": "^2.7.2",
     "@servie/events": "^3.0.0",
-    "react-dnd": "^16.0.0",
-    "react-dnd-html5-backend": "^16.0.0",
     "@types/color": "^3.0.3",
     "@types/react-avatar-editor": "^10.3.6",
     "async-call-rpc": "^6.0.2",
@@ -46,10 +44,12 @@
     "html-to-image": "^1.9.0",
     "json-stable-stringify": "^1.0.1",
     "react-avatar-editor": "^12.0.0",
-    "react-hook-form": "^7.29.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-hook-form": "^7.30.0",
     "react-qrcode-logo": "^2.7.0",
     "react-router-dom": "^6.3.0",
-    "react-to-print": "^2.14.5",
+    "react-to-print": "^2.14.6",
     "react-use": "^17.3.2",
     "unstated-next": "^1.1.0",
     "urlcat": "^2.0.4",
@@ -62,12 +62,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",
-    "@storybook/addon-actions": "^6.4.21",
-    "@storybook/addon-essentials": "^6.4.21",
-    "@storybook/addon-links": "^6.4.21",
-    "@storybook/builder-webpack5": "^6.4.21",
-    "@storybook/manager-webpack5": "^6.4.21",
-    "@storybook/react": "^6.4.21",
-    "babel-loader": "^8.2.4"
+    "@storybook/addon-actions": "^6.4.22",
+    "@storybook/addon-essentials": "^6.4.22",
+    "@storybook/addon-links": "^6.4.22",
+    "@storybook/builder-webpack5": "^6.4.22",
+    "@storybook/manager-webpack5": "^6.4.22",
+    "@storybook/react": "^6.4.22",
+    "babel-loader": "^8.2.5"
   }
 }

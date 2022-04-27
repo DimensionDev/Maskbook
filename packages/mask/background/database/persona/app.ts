@@ -173,7 +173,6 @@ export async function createProfileDB(record: ProfileRecord, t?: ProfileTransact
     await nativeAPI?.api.create_profile({
         profile: profileRecordToDB(record),
     })
-    MaskMessages.events.profilesChanged.sendToAll([{ of: record.identifier, reason: 'update' }])
 }
 
 /**
@@ -213,22 +212,6 @@ export async function queryProfilesDB(
 
     if (!profiles) return []
     return profiles.map((x) => profileRecordOutDB(x))
-}
-
-/**
- * @deprecated
- * query profiles with paged
- * @param options
- * @param count
- */
-export async function queryProfilesPagedDB(
-    options: {
-        after?: ProfileIdentifier
-        query?: string
-    },
-    count: number,
-): Promise<ProfileRecord[]> {
-    return []
 }
 
 /**
@@ -292,7 +275,6 @@ export async function deleteProfileDB(id: ProfileIdentifier, t?: ProfileTransact
     await nativeAPI?.api.delete_profile({
         identifier: id.toText(),
     })
-    MaskMessages.events.profilesChanged.sendToAll([{ reason: 'delete', of: id }])
 }
 
 /**

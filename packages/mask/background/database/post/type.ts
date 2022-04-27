@@ -1,6 +1,5 @@
 import type {
     AESJsonWebKey,
-    GroupIdentifier,
     IdentifierMap,
     PersonaIdentifier,
     PostIVIdentifier,
@@ -13,7 +12,7 @@ import type { IDBPSafeTransaction } from '../utils/openDB'
 export type RecipientReason = (
     | { type: 'auto-share' }
     | { type: 'direct' }
-    | { type: 'group'; group: GroupIdentifier }
+    | { type: 'group'; /** @deprecated */ group: unknown }
 ) & {
     /**
      * When we send the key to them by this reason?

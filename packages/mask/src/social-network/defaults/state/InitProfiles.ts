@@ -2,7 +2,7 @@ import { MaskMessages } from '../../../utils/messages'
 import Services from '../../../extension/service'
 import type { SocialNetworkUI } from '../../types'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import type { Profile } from '../../../database'
+import type { ProfileInformation } from '@masknet/shared-base'
 
 export function InitAutonomousStateProfiles(
     signal: AbortSignal,
@@ -15,8 +15,8 @@ export function InitAutonomousStateProfiles(
         MaskMessages.events.ownPersonaChanged.on(() => query(network, ref)),
     )
 
-    async function query(network: string, ref: ValueRef<readonly Profile[]>) {
-        const val = await Services.Identity.queryMyProfiles(network)
+    async function query(network: string, ref: ValueRef<readonly ProfileInformation[]>) {
+        const val = await Services.Identity.queryOwnedProfilesInformation(network)
         if (signal.aborted) return
         ref.value = val
     }

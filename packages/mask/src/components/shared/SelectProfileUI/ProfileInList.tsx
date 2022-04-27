@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
 import type { ListItemTypeMap } from '@mui/material/ListItem'
 import { Avatar } from '../../../utils'
-import type { Profile } from '../../../database'
+import type { ProfileInformation as Profile } from '@masknet/shared-base'
 
 export interface ProfileInListProps {
     item: Profile
@@ -47,7 +47,7 @@ export const ProfileInList = memo<ProfileInListProps>((props) => {
                     secondary: classes.overflow,
                 }}
                 primary={name}
-                secondary={props.item.linkedPersona?.fingerprint.toLowerCase()}
+                secondary={props.item.fingerprint?.toLowerCase()}
             />
         </ListItemButton>
     )
