@@ -1179,7 +1179,7 @@
     "plugin_referral_confirm_transaction_harvesting": "Harvesting your rewards of  {{reward}} {{symbol}}",
     "plugin_referral_transaction_confirm_permission_deposit": "Confirm permission and deposit",
     "plugin_referral_create_farm_transaction_confirm_desc": "Confirm permission for the token and deposit {{reward}} {{token}} to create referral farm",
-    "plugin_referral_adjust_rewards_error": "Reward token not found. Try later",
+    "plugin_referral_adjust_rewards_error": "Reward token not found.",
     "plugin_referral_continue": "Continue",
     "plugin_referral_error_token_not_select": "Token didn't select",
     "plugin_referral_error_native_token_farm": "Cannot create farm with native token.",

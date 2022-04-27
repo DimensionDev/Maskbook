@@ -58,7 +58,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     const { farm, rewardToken, referredToken } = props
-    localStorage.setItem('adjustFarmRewardsData', JSON.stringify({ farm, rewardToken, referredToken }))
 
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -136,10 +135,11 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                         requiredChainId,
                         onDeposit: onAdjustFarmReward,
                     },
+                    adjustFarmData: { farm, referredToken, rewardToken },
                 },
             },
         )
-    }, [props, attraceFee, totalFarmReward, rewardToken, requiredChainId, onAdjustFarmReward])
+    }, [props, attraceFee, totalFarmReward, referredToken, rewardToken, requiredChainId, farm, onAdjustFarmReward])
 
     const getTransactionTitles = useCallback(
         (totalFarmReward: number, dailyFarmReward: number, attraceFee: number, rewardToken?: FungibleTokenDetailed) => {
@@ -357,6 +357,8 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
             </Grid>
         </Box>
     ) : (
-        <Typography>{t('plugin_referral_adjust_rewards_error')}</Typography>
+        <Typography fontWeight={500} variant="h6" textAlign="center" padding={8}>
+            {t('plugin_referral_adjust_rewards_error')}
+        </Typography>
     )
 }

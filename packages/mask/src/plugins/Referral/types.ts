@@ -190,6 +190,11 @@ export interface AdjustFarmRewardsInterface extends PageInterface {
 
 export interface DepositDialogInterface {
     deposit?: DepositProps
+    adjustFarmData?: {
+        farm?: AdjustFarm
+        rewardToken?: FungibleTokenDetailed
+        referredToken?: FungibleTokenDetailed
+    }
 }
 
 type TransactionProps =

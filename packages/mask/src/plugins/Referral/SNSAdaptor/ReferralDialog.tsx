@@ -136,6 +136,16 @@ export function ReferralDialog({ open, onClose, onSwapDialogOpen }: ReferralDial
         }
     }
 
+    const onBackToAdjustRewardsDialog = useCallback(async () => {
+        const props: DialogInterface = {
+            adjustFarmDialog: {
+                ...propsData?.depositDialog?.adjustFarmData,
+                continue: () => {},
+            },
+        }
+        setPropsData(props)
+    }, [propsData])
+
     const onHandleClose = useCallback(async () => {
         const { page } = currentPage
         if (page === PagesType.LANDING) {
@@ -152,22 +162,10 @@ export function ReferralDialog({ open, onClose, onSwapDialogOpen }: ReferralDial
             setPreviousPages(temp)
 
             if (page === PagesType.DEPOSIT && previousPage.page === PagesType.ADJUST_REWARDS) {
-                const data: any = localStorage.getItem('adjustFarmRewardsData')
-                const adjustFarmRewardsData = JSON.parse(data)
-
-                const props: DialogInterface = {
-                    adjustFarmDialog: {
-                        farm: adjustFarmRewardsData.farm,
-                        referredToken: adjustFarmRewardsData.referredToken,
-                        rewardToken: adjustFarmRewardsData.rewardToken,
-                        continue: () => {},
-                    },
-                }
-
-                setPropsData(props)
+                onBackToAdjustRewardsDialog()
             }
         }
-    }, [currentPage, onClose])
+    }, [currentPage, onClose, onBackToAdjustRewardsDialog])
 
     return (
         <InjectedDialog
