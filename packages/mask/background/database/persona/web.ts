@@ -494,38 +494,6 @@ export async function updateProfileDB(
         }
     }
 
-    if (old.linkedPersona && updating.linkedPersona && old.linkedPersona !== updating.linkedPersona) {
-        const oldIdentifier = Identifier.fromString(old.identifier, ProfileIdentifier).unwrap()
-        const oldLinkedPersona = await queryPersonaByProfileDB(oldIdentifier, t)
-
-        if (oldLinkedPersona) {
-            oldLinkedPersona.linkedProfiles.delete(oldIdentifier)
-            await updatePersonaDB(
-                oldLinkedPersona,
-                {
-                    linkedProfiles: 'replace',
-                    explicitUndefinedField: 'ignore',
-                },
-                t,
-            )
-        }
-    }
-
-    if (updating.linkedPersona && old.linkedPersona !== updating.linkedPersona) {
-        const linkedPersona = await queryPersonaDB(updating.linkedPersona, t)
-        if (linkedPersona) {
-            linkedPersona.linkedProfiles.set(updating.identifier, { connectionConfirmState: 'confirmed' })
-            await updatePersonaDB(
-                linkedPersona,
-                {
-                    linkedProfiles: 'replace',
-                    explicitUndefinedField: 'ignore',
-                },
-                t,
-            )
-        }
-    }
-
     const nextRecord: ProfileRecordDB = profileToDB({
         ...profileOutDB(old),
         ...updating,
