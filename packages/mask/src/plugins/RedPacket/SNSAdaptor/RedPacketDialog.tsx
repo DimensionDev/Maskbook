@@ -56,6 +56,9 @@ const useStyles = makeStyles()((theme) => ({
     flexContainer: {
         justifyContent: 'space-around',
     },
+    test: {
+        backgroundColor: 'blue',
+    },
 }))
 
 enum CreateRedPacketPageStep {

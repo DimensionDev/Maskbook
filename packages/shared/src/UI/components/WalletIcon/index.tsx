@@ -33,7 +33,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
 }))
 
-interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon'> {
+interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon' | 'root'> {
     size?: number
     badgeSize?: number
     inverse?: boolean

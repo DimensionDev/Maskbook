@@ -13,6 +13,9 @@ const useStyles = makeStyles()((theme) => ({
         opacity: 0.5,
     },
     flexContainer: {},
+    test: {
+        backgroundColor: 'blue',
+    },
 }))
 
 interface TabPanelProps extends BoxProps {

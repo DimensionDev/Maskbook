@@ -14,9 +14,8 @@ import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/mater
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { usePickToken } from '@masknet/shared'
+import { usePickToken, WalletStatusBar } from '@masknet/shared'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -267,20 +266,20 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     value={message}
                 />
             </div>
+
             <EthereumWalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
                     amount={totalAmount.toFixed()}
                     token={token?.type === EthereumTokenType.ERC20 ? token : undefined}
                     spender={HAPPY_RED_PACKET_ADDRESS_V4}>
-                    <ActionButton
-                        variant="contained"
-                        size="large"
-                        className={classes.button}
-                        fullWidth
-                        disabled={!!validationMessage}
-                        onClick={onClick}>
-                        {validationMessage || t('plugin_red_packet_next')}
-                    </ActionButton>
+                    <WalletStatusBar
+                        actionProps={{
+                            disabled: !!validationMessage,
+                            title: validationMessage || t('plugin_red_packet_next'),
+                            action: onClick,
+                        }}
+                        classes={{ button: classes.button }}
+                    />
                 </EthereumERC20TokenApprovedBoundary>
             </EthereumWalletConnectedBoundary>
         </>

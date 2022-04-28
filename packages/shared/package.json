@@ -16,6 +16,7 @@
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/plugin-wallet": "workspace:*",
     "anchorme": "^2.1.2",
     "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",
