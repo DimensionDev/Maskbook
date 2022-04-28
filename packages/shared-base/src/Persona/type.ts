@@ -1,4 +1,4 @@
-import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier/type'
+import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier'
 import type { NextIDPersonaBindings } from '../NextID/type'
 /**
  * This interface contains the minimal information for UI display
@@ -16,6 +16,7 @@ export interface ProfileInformation {
     nickname?: string
     avatar?: string
     identifier: ProfileIdentifier
+    fingerprint?: string
 }
 
 export enum RelationFavor {

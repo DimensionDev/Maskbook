@@ -13,8 +13,8 @@ export function usePersonaSign(
         try {
             const result = await Services.Identity.signWithPersona({
                 method: 'eth',
-                message: message,
-                identifier: currentIdentifier.toText(),
+                message,
+                identifier: currentIdentifier,
             })
             return result
         } catch {

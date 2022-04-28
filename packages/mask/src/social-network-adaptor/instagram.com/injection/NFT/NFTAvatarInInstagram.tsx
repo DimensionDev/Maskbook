@@ -45,7 +45,7 @@ function NFTAvatarInInstagram() {
 
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
-    const { value: _avatar } = useNFTAvatar(identity.identifier.userId, RSS3_KEY_SNS.INSTAGRAM)
+    const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.INSTAGRAM)
     const windowSize = useWindowSize()
 
     const showAvatar = useMemo(() => {

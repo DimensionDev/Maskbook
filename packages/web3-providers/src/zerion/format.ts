@@ -62,14 +62,14 @@ export function formatAssets(
 
         return {
             id: address,
-            chainId: chainId,
+            chainId,
             token: {
                 id: address,
                 name: asset.name,
                 symbol: asset.symbol,
                 decimals: asset.decimals,
-                address: address,
-                chainId: chainId,
+                address,
+                chainId,
                 type: TokenType.Fungible,
                 logoURI: asset.icon_url,
             },
