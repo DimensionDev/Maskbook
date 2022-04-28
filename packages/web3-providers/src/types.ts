@@ -17,8 +17,6 @@ import type {
     NextIDStorageInfo,
 } from '@masknet/shared-base'
 
-import type { TreasureUser, Creator } from './treasure/types'
-
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
         status: '0' | '1'
@@ -151,7 +149,7 @@ export namespace NonFungibleTokenAPI {
         maker_account?: AssetOwner
         taker_account?: AssetOwner
         payment_token?: string
-        payment_token_contract?: AssetToken
+        payment_token_contract: AssetToken
         fee_recipient_account?: AssetToken
         cancelled_or_finalized?: boolean
         marked_invalid?: boolean
@@ -201,8 +199,8 @@ export namespace NonFungibleTokenAPI {
         asset_contract: { name: string; description: string; schemaName: string } | null
         current_price: number | null
         current_symbol: string
-        owner: AssetOwner | TreasureUser | null
-        creator: AssetOwner | Creator | null
+        owner: AssetOwner | null
+        creator: AssetOwner | null
         token_id: string
         token_address: string
         traits: AssetTrait[]

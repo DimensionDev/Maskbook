@@ -7,7 +7,6 @@ import {
     EthereumTokenType,
     resolveIPFSLinkFromURL,
     getTreasureConstants,
-    ChainId,
 } from '@masknet/web3-shared-evm'
 
 import { METADATA_SUPPORT, SMOLVERSE_SUPPORT, REALM_SUPPORT } from './constants'
@@ -25,10 +24,13 @@ import {
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { TargetChainIdContext } from './useTargetChainIdContext'
+import { EthereumAddress } from 'wallet.ts/dist/EthereumAddress'
+import { getTokenConstants } from '../../../web3-shared/evm/constants/constants'
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const { targetChainId: chainId } = TargetChainIdContext.useContainer()
 const TREASURE = getTreasureConstants(chainId)
+const { MAGIC_ADDRESS } = getTokenConstants(chainId)
 
 function createNFTAsset(asset: Token): NonFungibleTokenAPI.Asset {
     const image_url = asset.metadata.image ?? ''
@@ -218,10 +220,10 @@ export class TreasureAPI implements NonFungibleTokenAPI.Provider {
                             quantity: event.quantity,
                             price: event.collection.floorPrice,
                             paymentToken: {
-                                name: 'Magic',
+                                name: 'MAGIC',
                                 symbol: 'MAGIC',
                                 decimals: 18,
-                                address: '0x539bdE0d7Dbd336b79148AA742883198BBF60342',
+                                address: MAGIC_ADDRESS,
                             },
                         },
                         accountPair: {
@@ -265,7 +267,7 @@ export class TreasureAPI implements NonFungibleTokenAPI.Provider {
                             name: 'MAGIC',
                             symbol: 'MAGIC',
                             decimals: 18,
-                            address: '0x539bdE0d7Dbd336b79148AA742883198BBF60342',
+                            address: MAGIC_ADDRESS,
                         },
                         listing_time: 0,
                         side: NonFungibleTokenAPI.OrderSide.Buy,
@@ -304,12 +306,7 @@ export class TreasureAPI implements NonFungibleTokenAPI.Provider {
                         approved_on_chain: false,
                         current_price: formatWeiToEther(event.pricePerItem || 0).toString(),
                         payment_token: 'MAGIC',
-                        payment_token_contract: {
-                            name: 'Magic',
-                            symbol: 'MAGIC',
-                            decimals: 18,
-                            address: '0x539bdE0d7Dbd336b79148AA742883198BBF60342',
-                        },
+                        payment_token_contract: Magic,
                         listing_time: 0,
                         side: NonFungibleTokenAPI.OrderSide.Sell,
                         quantity: '1',
@@ -351,5 +348,6 @@ export function getTreasureCollectionList() {
 
 function convertTreasureId(address: string, tokenId: string) {
     const hexNumber = '0x' + new BigNumber(tokenId).toString(16)
-    return [address, hexNumber].join('-')
+    const contractAddress = EthereumAddress.checksumAddress(address)
+    return [contractAddress, hexNumber].join('-')
 }

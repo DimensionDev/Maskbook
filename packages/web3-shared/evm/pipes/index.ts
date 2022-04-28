@@ -220,7 +220,7 @@ export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungi
         case NonFungibleAssetProvider.ZORA:
             return ''
         case NonFungibleAssetProvider.TREASURE:
-            return ''
+            return 'https://marketplace.treasure.lol/collection/'
         default:
             unreachable(provider)
     }
