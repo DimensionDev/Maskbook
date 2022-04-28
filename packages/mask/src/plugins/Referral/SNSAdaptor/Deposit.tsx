@@ -37,7 +37,7 @@ export function Deposit(props: DepositDialogInterface | undefined) {
         props?.deposit && (await props.deposit.onDeposit())
     }, [props])
 
-    if (!props?.deposit) return <>{null}</>
+    if (!props?.deposit) return null
 
     const { deposit } = props
     const totalDeposit = roundValue(
