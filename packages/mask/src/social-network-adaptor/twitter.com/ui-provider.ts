@@ -2,7 +2,6 @@ import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-netwo
 import { twitterBase } from './base'
 import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword'
 import { twitterShared } from './shared'
-import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
 import { openComposeBoxTwitter } from './automation/openComposeBox'
 import { pasteTextToCompositionTwitter } from './automation/pasteTextToComposition'
@@ -26,8 +25,7 @@ import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { injectPostActionsAtTwitter } from './injection/PostActions'
-import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
-import { unreachable } from '@dimensiondev/kit'
+import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
 import { injectOpenTipButtonOnProfile } from './injection/Tip/index'
@@ -66,7 +64,9 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'center',
             padding: '3px 16px',
-            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#eff3f4'}`,
+            position: 'relative',
+            background: theme.palette.background.modalTitle,
+            borderBottom: 'none',
             '& > h2': {
                 display: 'inline-block',
                 whiteSpace: 'nowrap',
@@ -146,11 +146,9 @@ const twitterUI: SocialNetworkUI.Definition = {
         i18nOverwrite: i18NOverwriteTwitter,
     },
     init(signal) {
-        const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
-        InitAutonomousStateFriends(signal, friends, twitterShared.networkIdentifier)
         InitAutonomousStateProfiles(signal, profiles, twitterShared.networkIdentifier)
-        return { friends, profiles }
+        return { profiles }
     },
     injection: {
         toolbox: injectToolboxHintAtTwitter,
@@ -193,14 +191,13 @@ const twitterUI: SocialNetworkUI.Definition = {
             collectVerificationPost,
         },
         steganography: {
+            // ! Change this might be a breaking change !
             password() {
-                // ! Change this might be a breaking change !
-                return new ProfileIdentifier(
-                    'twitter.com',
-                    ProfileIdentifier.getUserName(IdentityProviderTwitter.recognized.value.identifier) ||
-                        ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
-                        unreachable('Cannot figure out password' as never),
-                ).toText()
+                const id =
+                    IdentityProviderTwitter.recognized.value.identifier?.userId ||
+                    globalUIState.profiles.value?.[0].identifier.userId
+                if (!id) throw new Error('Cannot figure out password')
+                return ProfileIdentifier.of(EnhanceableSite.Twitter, id).unwrap().toText()
             },
         },
     },

@@ -1,6 +1,5 @@
-import type { PersonaIdentifier, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
-import { first, noop, orderBy } from 'lodash-unified'
-import { queryAvatarDataURL } from '../../../database/avatar-cache/avatar'
+import type { PersonaIdentifier, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
+import { first, orderBy } from 'lodash-unified'
 import {
     createPersonaDBReadonlyAccess,
     queryPersonaDB,
@@ -8,6 +7,7 @@ import {
     queryProfileDB,
 } from '../../../database/persona/db'
 import { queryPersonasDB as queryPersonasFromIndexedDB } from '../../../database/persona/web'
+import { toPersonaInformation } from '../../__utils__/convert'
 import { MobilePersona, personaRecordToMobilePersona } from './mobile'
 
 export async function mobile_queryPersonaRecordsFromIndexedDB() {
@@ -30,33 +30,27 @@ export async function mobile_queryPersonas(
 }
 
 export async function queryOwnedPersonaInformation(): Promise<PersonaInformation[]> {
-    const result: PersonaInformation[] = []
-    const extraPromises: Promise<any>[] = []
+    let result: Promise<PersonaInformation[]>
     await createPersonaDBReadonlyAccess(async (t) => {
         const personas = await queryPersonasDB({ hasPrivateKey: true }, t)
-        for (const persona of personas.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))) {
-            const map: ProfileInformation[] = []
-            result.push({
-                nickname: persona.nickname,
-                identifier: persona.identifier,
-                linkedProfiles: map,
-                publicHexKey: persona.publicHexKey,
-            })
-            for (const [profile] of persona.linkedProfiles) {
-                const linkedProfile = await queryProfileDB(profile, t)
-
-                const rec: ProfileInformation = { identifier: profile, nickname: linkedProfile?.nickname }
-                // We must not await another task inside db transaction
-                queryAvatarDataURL(profile).then((x) => (rec.avatar = x), noop)
-                map.push(rec)
-            }
-        }
+        result = toPersonaInformation(personas, t).mustNotAwaitThisWithInATransaction
     })
-    await Promise.all(extraPromises)
-    return result
+    return result!
 }
 
 export async function queryLastPersonaCreated(): Promise<PersonaIdentifier | undefined> {
     const all = await queryPersonasDB({ hasPrivateKey: true })
     return first(orderBy(all, (x) => x.createdAt, 'desc'))?.identifier
+}
+
+export async function queryPersonaByProfile(id: ProfileIdentifier): Promise<PersonaInformation | undefined> {
+    let result: Promise<PersonaInformation> | undefined
+    await createPersonaDBReadonlyAccess(async (t) => {
+        const profile = await queryProfileDB(id, t)
+        if (!profile?.linkedPersona) return
+        const persona = await queryPersonaDB(profile.linkedPersona, t)
+        if (!persona) return
+        result = toPersonaInformation([persona], t).mustNotAwaitThisWithInATransaction.then((x) => first(x)!)
+    })
+    return result
 }

@@ -152,7 +152,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                         </span>
                     </Tooltip>
                     <Tooltip
-                        disableHoverListener={isOnCurrentChain || asset.token.chainId !== ChainId.Conflux}
+                        disableHoverListener={isOnCurrentChain || asset.token.chainId === ChainId.Conflux}
                         disableTouchListener
                         title={<ChangeNetworkTip chainId={asset.token.chainId} />}
                         placement="top"

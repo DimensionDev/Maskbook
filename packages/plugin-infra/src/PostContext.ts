@@ -26,7 +26,7 @@ export interface PostContextSNSActions {
 export interface PostContextAuthor {
     readonly nickname: Subscription<string | null>
     readonly avatarURL: Subscription<URL | null>
-    readonly author: Subscription<ProfileIdentifier>
+    readonly author: Subscription<ProfileIdentifier | null>
     /** ID on the SNS network. */
     readonly snsID: Subscription<string | null>
 }
@@ -63,7 +63,7 @@ export interface PostContext extends PostContextAuthor {
     readonly comment: undefined | PostContextComment
     // #region Metadata of a post (author, mentioned items, ...)
     /** Auto computed */
-    readonly identifier: Subscription<null | PostIdentifier<ProfileIdentifier>>
+    readonly identifier: Subscription<null | PostIdentifier>
     readonly url: Subscription<URL | null>
     // Meta
     readonly mentionedLinks: Subscription<string[]>

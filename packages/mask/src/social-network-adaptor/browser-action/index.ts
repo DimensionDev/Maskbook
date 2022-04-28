@@ -1,7 +1,7 @@
 import { defineSocialNetworkUI, definedSocialNetworkUIs, SocialNetworkUI, SocialNetwork } from '../../social-network'
 import { isEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { SocialNetworkEnum } from '@masknet/encryption'
-import { IdentifierMap, EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 const base: SocialNetwork.Base = {
     encryptionNetwork: SocialNetworkEnum.Unknown,
@@ -30,7 +30,6 @@ const define: SocialNetworkUI.Definition = {
     async init(signal) {
         const state: Readonly<SocialNetworkUI.AutonomousState> = {
             profiles: new ValueRef([]),
-            friends: new ValueRef(new IdentifierMap(new Map())),
         }
         const activeTab = ((await browser.tabs.query({ active: true, currentWindow: true })) || [])[0]
         if (activeTab === undefined) return state

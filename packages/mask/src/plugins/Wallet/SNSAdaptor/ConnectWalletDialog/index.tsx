@@ -28,7 +28,6 @@ export interface ConnectWalletDialogProps {}
 
 export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const { classes } = useStyles()
-
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
 
