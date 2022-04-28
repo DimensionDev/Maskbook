@@ -2,6 +2,7 @@ import { ButtonGroup, ButtonGroupProps, styled, Tab } from '@mui/material'
 import { useTabContext, getPanelId, getTabId } from '@mui/lab/TabContext'
 import { forwardRef, cloneElement, Children, isValidElement } from 'react'
 import { BaseTab } from './BaseTab'
+import { FlexibleTab } from './FlexibleTab'
 
 export interface MaskTabListProps
     extends React.PropsWithChildren<Pick<ButtonGroupProps, 'classes' | 'disabled' | 'fullWidth' | 'size'>> {
@@ -52,11 +53,18 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             selected: child.props.value === context.value,
             onChange: props.onChange,
         }
-        if (child.type === Tab) {
+        if (child.type === Tab && variant === 'base') {
             return (
                 <BaseTab value={child.props.value} {...extra}>
                     {child.props.label}
                 </BaseTab>
+            )
+        }
+        if (child.type === Tab && variant === 'flexible') {
+            return (
+                <FlexibleTab value={child.props.value} {...extra}>
+                    {child.props.label}
+                </FlexibleTab>
             )
         }
         return cloneElement(child, extra)

@@ -1,22 +1,20 @@
 import { Button, ButtonProps, styled } from '@mui/material'
 import { forwardRef } from 'react'
 
-const BaseTabWrap = styled(Button, {
+const FlexibleTabTabWrap = styled(Button, {
     shouldForwardProp: (prop) => prop !== 'activated',
 })<{ activated?: boolean; color?: string }>(({ theme, activated }) => ({
     flex: 1,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    boxShadow: activated ? '0px 0px 20px rgba(0, 0, 0, 0.05)' : 'none',
-    background: activated ? theme.palette.background.paper : 'transparent',
-    borderRadius: `${theme.spacing(1.5)} ${theme.spacing(1.5)} 0px 0px !important`,
-    color: activated ? theme.palette.text.primary : theme.palette.text.secondary,
+    background: activated ? '#F2F6FA' : 'transparent',
+    borderRadius: `${theme.spacing(1)} !important`,
+    color: activated ? '#1C68F3' : theme.palette.text.secondary,
     fontWeight: 'bold',
 
     '&:hover': {
-        color: theme.palette.text.primary,
-        boxShadow: activated ? '0px 0px 20px rgba(0, 0, 0, 0.05)' : 'none',
-        background: activated ? theme.palette.background.paper : 'transparent',
+        color: activated ? '1C68F3' : theme.palette.text.primary,
+        background: activated ? theme.palette.background.default : 'transparent',
     },
 }))
 
@@ -26,7 +24,7 @@ export interface ButtonTabProps extends React.PropsWithChildren<Omit<ButtonProps
     onChange?(event: object, value: string): void
 }
 
-export const BaseTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, ref) => {
+export const FlexibleTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, ref) => {
     const activated = !!props.selected
     const { onChange, onClick, value } = props
 
@@ -36,7 +34,7 @@ export const BaseTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, ref
     }
 
     return (
-        <BaseTabWrap
+        <FlexibleTabTabWrap
             activated={activated}
             ref={ref}
             role="tab"

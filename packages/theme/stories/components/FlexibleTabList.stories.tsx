@@ -5,13 +5,13 @@ import { Tab } from '@mui/material'
 import { useState } from 'react'
 import { MaskTabList, MaskTabListProps } from '../../src'
 
-const defaultTabs = ['One', 'Two', 'Three']
+const defaultTabs = ['One', 'Two', 'Three', 'Four', 'Five', 'Six']
 const { meta, of } = story(function ({ tabs, ...rest }: { tabs: string[] } & MaskTabListProps) {
     if (tabs.length === 0) tabs = tabs
     const [state, setState] = useState(tabs[0])
     return (
         <TabContext value={tabs.includes(state) ? state : tabs[0]}>
-            <MaskTabList variant="base" {...rest} onChange={(e, v) => setState(v)} aria-label="My tab?">
+            <MaskTabList variant="flexible" {...rest} onChange={(e, v) => setState(v)} aria-label="My tab?">
                 {tabs.map((x) => (
                     <Tab key={x} value={x} label={x} />
                 ))}
@@ -24,12 +24,11 @@ const { meta, of } = story(function ({ tabs, ...rest }: { tabs: string[] } & Mas
         </TabContext>
     )
 })
-
 export default meta({
-    title: 'Components/Tab List/Base',
+    title: 'Components/Tab List/Flexible',
     argTypes: {},
 })
 
-export const BaseTabsList = of({
+export const FlexibleTabList = of({
     args: { tabs: defaultTabs, disabled: false, fullWidth: false },
 })
