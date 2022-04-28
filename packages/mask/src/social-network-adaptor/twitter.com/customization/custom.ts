@@ -100,19 +100,16 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     root: {
                         background: theme.palette.background.input,
                     },
-                    input: {
-                        background: theme.palette.background.input,
-                    },
                 },
             }
-            theme.components.MuiDialogTitle = {
-                styleOverrides: {
-                    root: {
-                        background: theme.palette.background.modalTitle,
-                        borderBottom: 'none',
-                    },
-                },
-            }
+            // theme.components.MuiDialogTitle = {
+            //     styleOverrides: {
+            //         root: {
+            //             background: theme.palette.background.modalTitle,
+            //             borderBottom: 'none',
+            //         },
+            //     },
+            // }
             theme.components.MuiButton = {
                 defaultProps: {
                     size: 'medium',

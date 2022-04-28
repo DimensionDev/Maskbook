@@ -32,7 +32,8 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         overscrollBehavior: 'contain',
     },
     dialogTitleTypography: {
-        marginLeft: 6,
+        flex: 1,
+        textAlign: 'center',
         verticalAlign: 'middle',
     },
     dialogCloseButton: {

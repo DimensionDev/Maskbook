@@ -14,6 +14,8 @@ import { isCompactPayload } from './helpers'
 import { usePoolPayload } from './hooks/usePoolPayload'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO, ITO_Error, ITO_Loading } from './ITO'
+import { useClassicMaskSNSPluginTheme } from '../../../utils'
+import { ThemeProvider } from '@mui/material'
 
 export interface PostInspectorProps {
     payload: JSON_PayloadInMask
@@ -92,5 +94,12 @@ export function PostInspector(props: PostInspectorProps) {
             />
         )
     }
-    return <EthereumChainBoundary chainId={chain_id}>{renderITO()}</EthereumChainBoundary>
+
+    const theme = useClassicMaskSNSPluginTheme()
+
+    return (
+        <ThemeProvider theme={theme}>
+            <EthereumChainBoundary chainId={chain_id}>{renderITO()}</EthereumChainBoundary>
+        </ThemeProvider>
+    )
 }
