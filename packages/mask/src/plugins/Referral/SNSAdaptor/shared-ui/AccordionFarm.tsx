@@ -1,10 +1,8 @@
 import { makeStyles } from '@masknet/theme'
-import { ERC20TokenDetailed, useChainId, useNativeTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { Grid, Accordion, AccordionDetails, AccordionSummary } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-import type { ChainAddress } from '../../types'
-import { toNativeRewardTokenDefn, parseChainAddress } from '../../helpers'
 import { APR } from '../../constants'
 
 import { FarmTokenDetailed } from './FarmTokenDetailed'
@@ -44,28 +42,13 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface AccordionFarmProps extends React.PropsWithChildren<{}> {
-    farm: {
-        referredTokenDefn: ChainAddress
-        rewardTokenDefn: ChainAddress
-    }
-    allTokensMap: Map<string, ERC20TokenDetailed>
+    rewardToken?: FungibleTokenDetailed
+    referredToken?: FungibleTokenDetailed
     totalValue: number
-    accordionDetails: React.ReactElement
-    apr?: number
 }
 
-export function AccordionFarm({ farm, allTokensMap, totalValue, accordionDetails }: AccordionFarmProps) {
+export function AccordionFarm({ rewardToken, referredToken, totalValue, children }: AccordionFarmProps) {
     const { classes } = useStyles()
-    const chainId = useChainId()
-    const { value: nativeToken } = useNativeTokenDetailed()
-
-    const nativeRewardToken = toNativeRewardTokenDefn(chainId)
-    const referredTokenAddr = parseChainAddress(farm.referredTokenDefn).address
-    const rewardTokenAddr = parseChainAddress(farm.rewardTokenDefn).address
-
-    const referredToken =
-        farm.referredTokenDefn === nativeRewardToken ? nativeToken : allTokensMap.get(referredTokenAddr)
-    const rewardToken = farm.rewardTokenDefn === nativeRewardToken ? nativeToken : allTokensMap.get(rewardTokenAddr)
 
     return (
         <Accordion className={classes.accordion}>
@@ -79,9 +62,7 @@ export function AccordionFarm({ farm, allTokensMap, totalValue, accordionDetails
                 }}>
                 <Grid container className={classes.container}>
                     <Grid item xs={6}>
-                        <FarmTokenDetailed
-                            token={{ address: parseChainAddress(farm.referredTokenDefn).address, ...referredToken }}
-                        />
+                        <FarmTokenDetailed token={referredToken} />
                     </Grid>
                     <Grid item xs={2} display="flex" alignItems="center">
                         {APR}
@@ -91,7 +72,7 @@ export function AccordionFarm({ farm, allTokensMap, totalValue, accordionDetails
                     </Grid>
                 </Grid>
             </AccordionSummary>
-            <AccordionDetails className={classes.accordionDetails}>{accordionDetails}</AccordionDetails>
+            <AccordionDetails className={classes.accordionDetails}>{children}</AccordionDetails>
         </Accordion>
     )
 }

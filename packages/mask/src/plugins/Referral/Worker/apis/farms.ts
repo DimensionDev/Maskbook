@@ -5,7 +5,7 @@ import type {
     ChainId,
     Farm,
     FarmHash,
-    RewardsHarvestedEvent,
+    RewardsHarvested,
 } from '../../types'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { keccak256, asciiToHex, padRight } from 'web3-utils'
@@ -144,7 +144,7 @@ function parseBasicFarmEvents(unparsed: any, tokens: ERC20TokenDetailed[]) {
 function parseRewardsHarvestedEvents(unparsed: any) {
     const parsed = parseEvents(unparsed)
 
-    const rewards: Array<RewardsHarvestedEvent> = parsed.map((e) => {
+    const rewards: RewardsHarvested[] = parsed.map((e) => {
         const { farmHash, caller, rewardTokenDefn, leafHash, value } = e.args
         return { farmHash, caller, rewardTokenDefn, leafHash, value: Number.parseFloat(formatUnits(value)) }
     })
@@ -238,7 +238,7 @@ export async function getMyRewardsHarvested(
     account: string,
     chainId: ChainId,
     filter?: { rewardTokens?: ChainAddress[] },
-): Promise<Array<RewardsHarvestedEvent>> {
+): Promise<RewardsHarvested[]> {
     const farmsAddr = REFERRAL_FARMS_V1_ADDR
 
     // Allow filtering by reward tokens

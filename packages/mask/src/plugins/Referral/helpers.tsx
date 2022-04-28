@@ -3,10 +3,8 @@ import { BigNumber } from '@ethersproject/bignumber'
 import type { PrefixedHexString } from 'ethereumjs-util'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { createTypedMessageMetadataReader } from '@masknet/typed-message'
-import { defaultAbiCoder } from '@ethersproject/abi'
-import { keccak256 } from 'web3-utils'
 
-import { META_KEY, REFERRAL_FARMS_V1_ADDR, CONFIRMATION_V1_ADDR, supportedChainIds } from './constants'
+import { META_KEY, supportedChainIds } from './constants'
 import type {
     ReferralMetaData,
     RewardData,
@@ -16,7 +14,6 @@ import type {
     EvmAddress,
     Bytes32,
     Bytes24,
-    Entitlement,
 } from './types'
 import schema from './schema.json'
 
@@ -141,30 +138,6 @@ export function getSponsoredFarmsForReferredToken(chainId?: number, referredToke
     if (!farms?.length || !referredToken || !chainId) return undefined
 
     return farms.filter((farm) => farm.referredTokenDefn === toChainAddressEthers(chainId, referredToken))
-}
-
-export function makeLeafHash(chainId: number, entitlement: Entitlement, rewardTokenDefn: string) {
-    return keccak256(
-        defaultAbiCoder.encode(
-            [
-                'bytes24',
-                'bytes24',
-                'address',
-                '(bytes32 farmHash, uint128 rewardValue, bytes24 rewardTokenDefn, uint64 effectNonce)',
-            ],
-            [
-                toChainAddressEthers(chainId, CONFIRMATION_V1_ADDR),
-                toChainAddressEthers(chainId, REFERRAL_FARMS_V1_ADDR),
-                entitlement.entitlee,
-                {
-                    farmHash: entitlement.farmHash,
-                    rewardValue: entitlement.rewardValue,
-                    rewardTokenDefn: rewardTokenDefn,
-                    effectNonce: entitlement.nonce,
-                },
-            ],
-        ),
-    )
 }
 
 export function roundValue(value: string | number, tokenDecimals?: number) {

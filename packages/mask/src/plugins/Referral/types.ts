@@ -50,11 +50,13 @@ interface AdjustFarm extends FarmExistsEvent {
     apr?: number
 }
 
-export interface AdjustFarmRewardsInterface extends PageInterface {
+export interface AdjustFarmRewards {
     farm?: AdjustFarm
     rewardToken?: FungibleTokenDetailed
     referredToken?: FungibleTokenDetailed
 }
+
+export interface AdjustFarmRewardsInterface extends AdjustFarmRewards, PageInterface {}
 
 export interface DepositDialogInterface {
     deposit?: DepositProps
@@ -107,11 +109,13 @@ export interface DialogInterface {
     transactionDialog?: TransactionDialogInterface
 }
 
+export type ChangePage = (page: PagesType, title?: string, props?: DialogInterface) => void
+
 export interface PageInterface {
     pageType?: PagesType
     onClose?: () => void
     continue: (currentPage: PagesType, nextPage: PagesType, title?: string, props?: DialogInterface) => void
-    onChangePage?: (page: PagesType, title?: string, props?: DialogInterface) => void
+    onChangePage?: ChangePage
 }
 
 export interface ReferralMetaData {
@@ -162,7 +166,7 @@ export type FarmExistsEvent = Pick<
 >
 export type FarmDepositChangeEvent = Pick<FarmDepositChange['returnValues'], 'farmHash' | 'delta'>
 
-export interface RewardsHarvestedEvent {
+export interface RewardsHarvested {
     farmHash: FarmHash
     caller: EvmAddress
     rewardTokenDefn: ChainAddress
@@ -176,7 +180,6 @@ export interface Farm extends FarmExistsEvent {
     dailyFarmReward: number
 }
 
-// entitlements
 export interface Entitlement {
     entitlee: EvmAddress
     farmHash: FarmHash
@@ -185,11 +188,17 @@ export interface Entitlement {
     proof: string[]
     rewardValue: BigNumberish
 }
-export interface EntitlementLog {
-    name: 'PeriodEntitlement'
-    signature: 'PeriodEntitlement(bytes32,address,uint128,uint64,uint128,bytes32[])'
-    topic: '0xe8dfdbedb76748323fb50fec7140469b02cf18a5afc749752f8f48061d877d92'
-    args: Entitlement
+
+export interface Reward extends Entitlement {}
+
+export interface RewardDetailed extends Reward {
+    rewardTokenDefn?: ChainAddress
+    referredTokenDefn?: ChainAddress
+    claimed: boolean
+}
+
+export interface AccountRewards {
+    [rewardTokenDefn: string]: RewardDetailed[]
 }
 
 export interface RewardData {

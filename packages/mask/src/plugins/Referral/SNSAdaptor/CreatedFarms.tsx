@@ -10,65 +10,27 @@ import {
 import { formatUnits } from '@ethersproject/units'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Grid, Typography, CircularProgress, Box, Button } from '@mui/material'
-import { TokenList } from '@masknet/web3-providers'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
-import { FarmDepositChangeEvent, FarmExistsEvent, PageInterface, PagesType, TabsReferralFarms } from '../types'
+import {
+    FarmDepositChangeEvent,
+    FarmExistsEvent,
+    PageInterface,
+    PagesType,
+    TabsReferralFarms,
+    AdjustFarmRewards,
+} from '../types'
 import { toNativeRewardTokenDefn, parseChainAddress, getRequiredChainId } from '../helpers'
+import { fetchERC20TokensFromTokenListsMap } from './utils/tokenLists'
 import { ReferralRPC } from '../messages'
 
 import { AccordionFarm } from './shared-ui/AccordionFarm'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
-import { useSharedStyles } from './styles'
+import { useSharedStyles, useMyFarmsStyles } from './styles'
 
 const useStyles = makeStyles()((theme) => ({
-    container: {
-        lineHeight: '22px',
-        fontWeight: 300,
-        '& > div::-webkit-scrollbar': {
-            width: '7px',
-        },
-        '& > div::-webkit-scrollbar-track': {
-            boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-            webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-        },
-        '& > div::-webkit-scrollbar-thumb': {
-            borderRadius: '4px',
-            backgroundColor: theme.palette.background.default,
-        },
-    },
-    col: {
-        color: theme.palette.text.secondary,
-        fontWeight: 500,
-    },
-    content: {
-        height: 320,
-        overflowY: 'scroll',
-        marginTop: 20,
-        color: theme.palette.text.strong,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    heading: {
-        paddingRight: '27px',
-    },
-    noFarm: {
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: '12px',
-        background: theme.palette.background.default,
-        height: '44px',
-        color: theme.palette.text.strong,
-        fontWeight: 500,
-    },
-    total: {
-        marginRight: '4px',
-    },
     buttonWithdraw: {
         background: getMaskColor(theme).redMain,
         marginRight: '12px',
@@ -89,7 +51,7 @@ interface Farm extends FarmExistsEvent {
 function groupDepositForFarms(
     myFarms: FarmExistsEvent[],
     farmsDeposits: FarmDepositChangeEvent[],
-    allTokensMap: Map<string, ERC20TokenDetailed>,
+    allTokens?: Map<string, ERC20TokenDetailed>,
 ) {
     const farms: Farm[] = []
     const farmTotalDepositMap = new Map<string, number>()
@@ -100,7 +62,7 @@ function groupDepositForFarms(
         const prevFarmState = farmTotalDepositMap.get(farmHash) || 0
         const farm = allFarmsMap.get(farmHash)
         const rewardTokenAddr = farm?.rewardTokenDefn && parseChainAddress(farm.rewardTokenDefn).address
-        const rewardTokenDec = rewardTokenAddr ? allTokensMap.get(rewardTokenAddr)?.decimals : 18
+        const rewardTokenDec = rewardTokenAddr ? allTokens?.get(rewardTokenAddr)?.decimals : 18
         const totalFarmRewards = prevFarmState + Number.parseFloat(formatUnits(delta, rewardTokenDec))
         farmTotalDepositMap.set(farmHash, totalFarmRewards)
     })
@@ -112,36 +74,39 @@ function groupDepositForFarms(
     return farms
 }
 
-type TCreatedFarmsContent = {
-    currentChainId: ChainId
+type FarmListProps = {
+    chainId: ChainId
     farms: Farm[]
     loading: boolean
-    allTokensMap: Map<string, ERC20TokenDetailed>
-    onAdjustRewardButtonClick: (farm: Farm) => void
+    allTokens?: Map<string, ERC20TokenDetailed>
+    onAdjustRewardButtonClick: (props: AdjustFarmRewards) => void
 }
-function CreatedFarmsContent({
-    currentChainId,
-    farms,
-    loading,
-    onAdjustRewardButtonClick,
-    allTokensMap,
-}: TCreatedFarmsContent) {
+function FarmList({ chainId, loading, farms, onAdjustRewardButtonClick, allTokens }: FarmListProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const { classes: myFarmsClasses } = useMyFarmsStyles()
+    const { value: nativeToken } = useNativeTokenDetailed()
 
     if (loading) return <CircularProgress size={50} />
 
-    if (!farms.length) return <Typography className={classes.noFarm}>{t('plugin_referral_no_created_farm')}</Typography>
+    if (!farms.length)
+        return <Typography className={myFarmsClasses.noFarm}>{t('plugin_referral_no_created_farm')}</Typography>
 
     return (
         <>
-            {farms.map((farm) => (
-                <AccordionFarm
-                    key={farm.farmHash}
-                    farm={farm}
-                    allTokensMap={allTokensMap}
-                    totalValue={Number.parseFloat(farm?.totalFarmRewards?.toFixed(5) ?? '0')}
-                    accordionDetails={
+            {farms.map((farm) => {
+                const rewardToken =
+                    farm.rewardTokenDefn === toNativeRewardTokenDefn(chainId)
+                        ? nativeToken
+                        : allTokens?.get(parseChainAddress(farm.rewardTokenDefn).address)
+                const referredToken = allTokens?.get(parseChainAddress(farm.referredTokenDefn).address)
+
+                return (
+                    <AccordionFarm
+                        key={farm.farmHash}
+                        rewardToken={rewardToken}
+                        referredToken={referredToken}
+                        totalValue={Number.parseFloat(farm?.totalFarmRewards?.toFixed(5) ?? '0')}>
                         <Box display="flex" justifyContent="flex-end">
                             <Button variant="text" disabled classes={{ disabled: classes.viewStatsDisabled }}>
                                 {t('plugin_referral_view_stats')}
@@ -158,14 +123,14 @@ function CreatedFarmsContent({
                                 variant="contained"
                                 size="medium"
                                 onClick={() => {
-                                    onAdjustRewardButtonClick({ ...farm })
+                                    onAdjustRewardButtonClick({ farm, rewardToken, referredToken })
                                 }}>
                                 {t('plugin_referral_adjust_rewards')}
                             </Button>
                         </Box>
-                    }
-                />
-            ))}
+                    </AccordionFarm>
+                )
+            })}
         </>
     )
 }
@@ -174,16 +139,17 @@ export function CreatedFarms(props: PageInterface) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { classes: sharedClasses } = useSharedStyles()
+    const { classes: myFarmsClasses } = useMyFarmsStyles()
     const currentChainId = useChainId()
     const requiredChainId = getRequiredChainId(currentChainId)
     const account = useAccount()
     const { ERC20 } = useTokenListConstants()
-    const { value: allTokens = EMPTY_LIST, loading: loadingAllTokens } = useAsync(
+
+    const { value: allTokens, loading: loadingAllTokens } = useAsync(
         async () =>
-            !ERC20 || ERC20.length === 0 ? [] : TokenList.fetchERC20TokensFromTokenLists(ERC20, currentChainId),
+            !ERC20 || ERC20.length === 0 ? undefined : fetchERC20TokensFromTokenListsMap(ERC20, currentChainId),
         [currentChainId, ERC20],
     )
-    const { value: nativeToken } = useNativeTokenDetailed()
 
     // fetch my farms
     const { value: myFarms = EMPTY_LIST, loading: loadingMyFarms } = useAsync(
@@ -197,18 +163,9 @@ export function CreatedFarms(props: PageInterface) {
         [currentChainId],
     )
 
-    const allTokensMap = new Map(allTokens.map((token) => [token.address.toLowerCase(), token]))
-    const farms = groupDepositForFarms(myFarms, farmsDeposits, allTokensMap)
+    const farms = groupDepositForFarms(myFarms, farmsDeposits, allTokens)
 
-    const onAdjustRewardButtonClick = (farm: Farm) => {
-        const nativeRewardToken = toNativeRewardTokenDefn(currentChainId)
-
-        const rewardToken =
-            farm.rewardTokenDefn === nativeRewardToken
-                ? nativeToken
-                : allTokensMap.get(parseChainAddress(farm.rewardTokenDefn).address)
-        const referredToken = allTokensMap.get(parseChainAddress(farm.referredTokenDefn).address)
-
+    const onAdjustRewardButtonClick = ({ farm, rewardToken, referredToken }: AdjustFarmRewards) => {
         props.continue(
             PagesType.CREATE_FARM,
             PagesType.ADJUST_REWARDS,
@@ -235,24 +192,24 @@ export function CreatedFarms(props: PageInterface) {
     }
 
     return (
-        <div className={classes.container}>
-            <Grid container justifyContent="space-between" rowSpacing="20px" className={classes.heading}>
-                <Grid item xs={6} className={classes.col}>
+        <div className={myFarmsClasses.container}>
+            <Grid container justifyContent="space-between" rowSpacing="20px" className={myFarmsClasses.heading}>
+                <Grid item xs={6} className={myFarmsClasses.col}>
                     {t('plugin_referral_referral_farm')}
                 </Grid>
-                <Grid item xs={2} className={classes.col}>
+                <Grid item xs={2} className={myFarmsClasses.col}>
                     {t('plugin_referral_apr')}
                 </Grid>
-                <Grid item xs={4} className={classes.col}>
+                <Grid item xs={4} className={myFarmsClasses.col}>
                     {t('plugin_referral_total_rewards')}
                 </Grid>
             </Grid>
-            <div className={classes.content}>
-                <CreatedFarmsContent
-                    currentChainId={currentChainId}
+            <div className={myFarmsClasses.content}>
+                <FarmList
+                    chainId={currentChainId}
                     loading={loadingMyFarms || loadingFarmsDeposits || loadingAllTokens}
                     farms={farms}
-                    allTokensMap={allTokensMap}
+                    allTokens={allTokens}
                     onAdjustRewardButtonClick={onAdjustRewardButtonClick}
                 />
             </div>

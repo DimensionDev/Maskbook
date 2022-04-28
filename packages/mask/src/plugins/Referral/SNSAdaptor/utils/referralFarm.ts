@@ -9,7 +9,7 @@ import ReferralFarmsV1ABI from '@masknet/web3-contracts/abis/ReferralFarmsV1.jso
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
 import { roundValue, toChainAddressEthers } from '../../helpers'
-import type { EntitlementLog } from '../../types'
+import type { Reward } from '../../types'
 import { REFERRAL_FARMS_V1_ADDR } from '../../constants'
 
 export async function runCreateERC20PairFarm(
@@ -182,8 +182,7 @@ export async function harvestRewards(
     onError: (error?: string) => void,
     web3: Web3,
     account: string,
-    chainId: ChainId,
-    entitlements: EntitlementLog[],
+    rewards: Reward[],
     rewardTokenDefn: string,
 ) {
     try {
@@ -192,22 +191,20 @@ export async function harvestRewards(
         const config = {
             from: account,
         }
-        const entitlementsSorted = entitlements.sort(
-            (entitlementA, entitlementB) =>
-                Number.parseFloat(formatUnits(entitlementA.args.nonce, 0)) -
-                Number.parseFloat(formatUnits(entitlementB.args.nonce, 0)),
+        const rewardsSorted = rewards.sort(
+            (rewardA, rewardB) =>
+                Number.parseFloat(formatUnits(rewardA.nonce, 0)) - Number.parseFloat(formatUnits(rewardB.nonce, 0)),
         )
 
-        const requests = entitlementsSorted.map((entitlement) => {
+        const requests = rewardsSorted.map(({ farmHash, rewardValue, nonce }) => {
             return {
-                farmHash: entitlement.args.farmHash,
-                value: entitlement.args.rewardValue,
+                farmHash,
+                value: rewardValue,
                 rewardTokenDefn,
-                effectNonce: entitlement.args.nonce,
+                effectNonce: nonce,
             }
         })
-
-        const proofs = entitlementsSorted.map((entitlement) => entitlement.args.proof)
+        const proofs = rewardsSorted.map((reward) => reward.proof)
 
         const farmsAddr = REFERRAL_FARMS_V1_ADDR
         const farms = createContract(web3, farmsAddr, ReferralFarmsV1ABI as AbiItem[])

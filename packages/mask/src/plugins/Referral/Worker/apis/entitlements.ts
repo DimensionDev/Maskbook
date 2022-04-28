@@ -3,7 +3,7 @@ import { Interface } from '@ethersproject/abi'
 import { keccak256 } from 'web3-utils'
 
 import { expandEvmAddressToBytes32 } from '../../helpers'
-import { type EntitlementLog, RpcMethod } from '../../types'
+import { type Entitlement, RpcMethod } from '../../types'
 import { getOracle, rpcCall } from './oracle'
 
 enum ORACLE_CHAIN_ID {
@@ -24,12 +24,12 @@ function parsePeriodEntitlementEvents(items: Array<any>): Array<any> {
         return eventsPeriodEntitlement.parseLog({
             data: row.data,
             topics: row.topics,
-        })
+        }).args
     })
     return parsed
 }
 
-export async function getAccountEntitlements(account: string): Promise<EntitlementLog[]> {
+export async function getAccountEntitlements(account: string): Promise<Entitlement[]> {
     const host = await getOracle()
     const topics = [eventIdsPeriodEntitlement.PeriodEntitlement, '', expandEvmAddressToBytes32(account)]
 
