@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: '100%',
         height: '100%',
         overflow: 'auto',
-        padding: theme.spacing(3, 0)
+        padding: theme.spacing(3, 0),
     },
     tabs: {
         width: '288px',
@@ -197,7 +197,7 @@ export function BuyToFarm(props: PageInterface) {
                             <Divider />
                             <Box marginTop="20px" display="flex" alignItems="center">
                                 <SponsoredFarmIcon />
-                                <b>{t('plugin_referral_sponsored_farm')}</b>
+                                <Typography fontWeight={600}>{t('plugin_referral_sponsored_farm')}</Typography>
                                 {t('plugin_referral_sponsored_farm_detail')}
                             </Box>
                         </Grid>

@@ -20,6 +20,7 @@ import {
     useNativeTokenDetailed,
     useTrustedERC20Tokens,
 } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { MaskFixedSizeListProps, MaskTextFieldProps, makeStyles, MaskColorVar } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { SearchableList } from './SearchableList'
