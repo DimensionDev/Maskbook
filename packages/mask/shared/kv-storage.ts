@@ -42,6 +42,7 @@ export const PersistentStorages = {
             [PluginId.Tips]: false,
             [PluginId.Transak]: false,
             [PluginId.Pets]: false,
+            [PluginId.Game]: false,
             [PluginId.FindTruman]: false,
             [PluginId.GoPlusSecurity]: false,
         },

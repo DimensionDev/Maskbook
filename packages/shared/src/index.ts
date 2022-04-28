@@ -11,6 +11,7 @@ export interface DashboardPluginMessages {
     Transak: unknown
     Swap: unknown
     Pets: unknown
+    Game: unknown
 }
 
 export interface DashboardPluginServices {

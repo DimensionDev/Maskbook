@@ -25,7 +25,8 @@ function installPluginService() {
     const Transak = channelOf('com.maskbook.transak')
     const Swap = channelOf('com.maskbook.trader')
     const Pets = channelOf('com.maskbook.pets')
-    setPluginMessages({ Wallet, Transak, Swap, Pets })
+    const Game = channelOf('com.maskbook.game')
+    setPluginMessages({ Wallet, Transak, Swap, Pets, Game })
     setPluginServices({
         Wallet: initRPCBridge(PluginMessages.Wallet.events.rpc),
         Swap: initRPCBridge(PluginMessages.Swap.rpc),
