@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { Typography, useTheme, Box } from '@mui/material'
+import { Typography, Box } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
@@ -84,7 +84,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
         },
         recommendFeatureAppListWrapper: {
             width: '100%',
-            margin: '16px 2px 12px 2px',
+            margin: '0px 2px 12px 2px',
         },
     }
 })
@@ -101,15 +101,12 @@ export function ApplicationBoard(props: Props) {
     )
 }
 function ApplicationBoardContent(props: Props) {
-    const theme = useTheme()
     const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId()
     const account = useAccount()
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
-    const SettingIconDarkModeUrl = new URL('./assets/settings_dark_mode.png', import.meta.url).toString()
-    const SettingIconLightModeUrl = new URL('./assets/settings_light_mode.png', import.meta.url).toString()
     const applicationList = useMemo(
         () =>
             snsAdaptorPlugins
