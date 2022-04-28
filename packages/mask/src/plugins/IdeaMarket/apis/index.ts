@@ -1,6 +1,6 @@
 import { SUBGRAPH_URL, TWITTER_BEARER_TOKEN } from '../constants'
 import { first } from 'lodash-unified'
-import type { IdeaToken } from '../types'
+import { IdeaToken, Markets } from '../types'
 
 export async function fetchIdeaToken(marketName: string, tokenName: string) {
     const body = {
@@ -21,7 +21,7 @@ export async function fetchIdeaToken(marketName: string, tokenName: string) {
                 daiInToken
             }
         }`,
-        variables: { marketName: marketName, tokenName: tokenName },
+        variables: { marketName, tokenName },
     }
     const response = await fetch(SUBGRAPH_URL, {
         body: JSON.stringify(body),
@@ -57,10 +57,10 @@ export async function fetchAllTokens(searchTerm: string, page: number, filters: 
             }
         }`,
         variables: {
-            searchTerm: searchTerm,
-            rowsPerPage: rowsPerPage,
+            searchTerm,
+            rowsPerPage,
             skip: page === 0 ? 0 : page * rowsPerPage,
-            filters: filters,
+            filters,
         },
     }
     const response = await fetch(SUBGRAPH_URL, {
@@ -124,7 +124,7 @@ export async function fetchTwitterLookup(token: IdeaToken) {
 
 export async function fetchTwitterLookups(tokens: IdeaToken[]) {
     const twitterHandles = tokens
-        .filter((token) => token.market.id === '0x1')
+        .filter((token) => token.market.marketID === Markets.Twitter)
         .map((token) => token.name.slice(1))
         .join(',')
     const response = await fetch(
@@ -139,7 +139,7 @@ export async function fetchTwitterLookups(tokens: IdeaToken[]) {
 
     // create a hashmap in order to optimize twitter username lookups
     const twitterLookupsToDictionary = twitterLookups.reduce(
-        (result: { [x: string]: any }, lookup: { username: string }) => {
+        (result: { [x: string]: { username: string } }, lookup: { username: string }) => {
             result[lookup.username.toLowerCase()] = lookup
             return result
         },
@@ -147,7 +147,7 @@ export async function fetchTwitterLookups(tokens: IdeaToken[]) {
     )
 
     const tokensWithTwitterLookups = tokens.map((token: IdeaToken) => {
-        if (token.market.id === '0x1') {
+        if (token.market.marketID === Markets.Twitter) {
             return { ...token, twitter: twitterLookupsToDictionary[token.name.slice(1).toLowerCase()] }
         }
 

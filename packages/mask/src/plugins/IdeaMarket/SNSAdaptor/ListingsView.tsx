@@ -25,7 +25,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { UrlIcon } from '../icons/UrlIcon'
 import { TwitterIcon } from '../icons/TwitterIcon'
 import { BASE_URL, TWITTER_BASE_URL } from '../constants'
-import type { IdeaToken } from '../types'
+import { IdeaToken, Markets } from '../types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -179,7 +179,7 @@ export function ListingsView() {
             name: token.name,
             dayChange: token.dayChange,
             market: token.market.name,
-            marketId: token.market.id,
+            marketID: token.market.marketID,
             price: token.latestPricePoint.price,
             deposits: formatWeiToEther(token.daiInToken).toNumber(),
             button: '',
@@ -197,7 +197,7 @@ export function ListingsView() {
                         <UrlIcon className={classes.url} />
                     )}
                 </Grid>
-                {params.row.marketId === '0x1' ? (
+                {params.row.marketID === Markets.Twitter ? (
                     <Grid>
                         <Typography title={params.row.twitter ? params.row.twitter.name : params.row.name}>
                             {params.row.twitter?.name} ({params.row.name})
@@ -351,9 +351,9 @@ export function ListingsView() {
                             setSearchText(event.target.value)
                         },
                         clearSearch: () => setSearchText(''),
-                        filters: filters,
-                        setFilters: setFilters,
-                        setPage: setPage,
+                        filters,
+                        setFilters,
+                        setPage,
                     },
                 }}
                 disableSelectionOnClick
