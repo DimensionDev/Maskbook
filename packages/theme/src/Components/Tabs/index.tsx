@@ -1,9 +1,19 @@
 import { Button, ButtonGroup, ButtonGroupProps, styled, Tab } from '@mui/material'
 import { useTabContext, getPanelId, getTabId } from '@mui/lab/TabContext'
-import { forwardRef, cloneElement, Children, isValidElement, useState } from 'react'
+import {
+    forwardRef,
+    cloneElement,
+    Children,
+    isValidElement,
+    useState,
+    useRef,
+    useEffect,
+    useImperativeHandle,
+} from 'react'
 import { BaseTab } from './BaseTab'
 import { FlexibleTab } from './FlexibleTab'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew' // flexBasis: theme.spacing(3),
+import { useWindowSize } from 'react-use'
 
 type MaskTabVariant = 'base' | 'flexible' | 'round'
 
@@ -33,22 +43,24 @@ const ArrowBackIosNewIconWrap = styled(ArrowBackIosNewIcon)(({ theme }) => ({
 }))
 
 const ButtonGroupWrap = styled(ButtonGroup, {
-    shouldForwardProp: (prop) => prop !== 'maskVariant' && prop !== 'isOpen',
-})<{ maskVariant?: MaskTabVariant; isOpen: boolean }>(({ theme, maskVariant, isOpen }) => ({
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center',
-    flexWrap: maskVariant === 'flexible' && isOpen ? 'wrap' : 'nowrap',
-    overflow: isOpen ? 'auto' : 'hidden',
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    flex: 1,
-    transform: '',
-    background:
-        maskVariant === 'flexible' && !isOpen
-            ? 'linear-gradient(270deg, rgba(223, 229, 244, 0.8) 36px, rgba(244, 247, 254, 0) 20%)'
-            : 'transparent',
-}))
+    shouldForwardProp: (prop) => prop !== 'maskVariant' && prop !== 'isOpen' && prop !== 'isOverflow',
+})<{ maskVariant?: MaskTabVariant; isOpen: boolean; isOverflow: boolean }>(
+    ({ theme, maskVariant, isOpen, isOverflow }) => ({
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: maskVariant === 'flexible' && isOpen ? 'wrap' : 'nowrap',
+        overflow: 'hidden',
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        flex: 1,
+        transform: '',
+        background:
+            maskVariant === 'flexible' && !isOpen && isOverflow
+                ? 'linear-gradient(270deg, rgba(223, 229, 244, 0.8) 36px, rgba(244, 247, 254, 0) 20%)'
+                : 'transparent',
+    }),
+)
 
 /**
  * This component is like TabList + Tabs in the @mui/material.
@@ -74,9 +86,22 @@ const ButtonGroupWrap = styled(ButtonGroup, {
 export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, ref) => {
     const context = useTabContext()
     const [open, handleToggle] = useState<boolean>(false)
+    const [isTabsOverflow, setTabsOverflow] = useState<boolean>(false)
+    const innerRef = useRef<HTMLDivElement>(null)
+    const { width } = useWindowSize()
+
     if (context === null) throw new TypeError('No TabContext provided')
 
     const { onChange, variant = 'base', ...rest } = props
+
+    useImperativeHandle(ref, () => innerRef?.current!)
+
+    useEffect(() => {
+        if (!innerRef?.current) return
+
+        const current = innerRef.current as unknown as HTMLDivElement
+        setTabsOverflow(current?.scrollWidth > current?.clientWidth)
+    }, [innerRef.current, width])
 
     const children = Children.map(props.children, (child) => {
         if (!isValidElement(child)) return child
@@ -104,9 +129,15 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     })
 
     return (
-        <ButtonGroupWrap maskVariant={variant} isOpen={open} {...rest} ref={ref} role="tablist">
+        <ButtonGroupWrap
+            maskVariant={variant}
+            isOpen={open}
+            isOverflow={isTabsOverflow}
+            {...rest}
+            ref={innerRef}
+            role="tablist">
             {children}
-            {variant === 'flexible' && (
+            {variant === 'flexible' && isTabsOverflow && (
                 <ArrowButtonWrap
                     variant="text"
                     size="small"
