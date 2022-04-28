@@ -66,8 +66,6 @@
             "https://api.harmony.one",
             "https://a.api.s0.t.hmny.io",
             "https://api.s0.t.hmny.io",
-            "https://rpc.heavenswail.one/",
-            "https://api.fuzz.fi/",
             "https://rpc.hermesdefi.io/"
         ],
         "Harmony_Test": ["https://api.s0.b.hmny.io/"]
