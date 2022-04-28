@@ -13,13 +13,14 @@ const useStyles = makeStyles()(() => ({
         right: 0,
         bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        zIndex: 99999,
     },
     body: {
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        zIndex: 99999,
+        zIndex: 3,
     },
     iframeBox: {
         position: 'relative',
@@ -62,8 +63,8 @@ const useStyles = makeStyles()(() => ({
         borderRadius: '12px',
         right: '20px',
         top: '20px',
-        zIndex: 99999,
         paddingLeft: 0,
+        zIndex: 3,
     },
 }))
 
@@ -75,21 +76,26 @@ const IFrame = styled('iframe')`
 `
 const gameUrl = 'https://mg.land'
 
-const GameWindow = () => {
+interface Props {
+    isShow: boolean
+    onClose: () => void
+}
+
+const GameWindow = (props: Props) => {
     const classes = useStylesExtends(useStyles(), {})
 
-    const [isShow, setShow] = useState(true)
     const [isFullScreen, setFullScreen] = useState(false)
 
     const handleClose = () => {
-        setShow(false)
+        setFullScreen(false)
+        props.onClose()
     }
 
     const toggleFullscreen = () => {
         setFullScreen((prev) => !prev)
     }
 
-    return (
+    return props.isShow ? (
         <div className={classes.root}>
             <div className={classes.body}>
                 <div className={classNames(classes.iframeBox, { [classes.fullScreen]: isFullScreen })}>
@@ -101,7 +107,7 @@ const GameWindow = () => {
                 </div>
             </div>
         </div>
-    )
+    ) : null
 }
 
 export default GameWindow

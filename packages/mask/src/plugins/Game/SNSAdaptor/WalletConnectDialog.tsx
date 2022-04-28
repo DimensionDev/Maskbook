@@ -1,26 +1,40 @@
 import { useState } from 'react'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import DialogContent from '@mui/material/DialogContent'
-// import { walletDialogShowSettings } from '../settings'
+import { PluginGameMessages } from '../messages'
+
 import { InjectedDialog } from '@masknet/shared'
-import WalletBar from './WalletBar'
+import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import GameList from './GameList'
+import GameWindow from './GameWindow'
 
 const WalletConnectDialog = () => {
-    const [isShow, setShow] = useState(true)
-
+    const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.essayDialogUpdated, () => {})
     const handleClose = () => {
-        setShow(false)
+        closeDialog()
     }
 
-    // const isShow = useValueRef<boolean>(walletDialogShowSettings)
+    const [isGameShow, setGameShow] = useState(false)
+
+    const handleGameClose = () => {
+        setGameShow(false)
+    }
+
+    const handleGameOpen = () => {
+        closeDialog()
+        setGameShow(true)
+    }
 
     return (
-        <InjectedDialog onClose={handleClose} open={isShow} title="Game">
-            <DialogContent>
-                <WalletBar />
-                <GameList />
-            </DialogContent>
-        </InjectedDialog>
+        <>
+            <InjectedDialog onClose={handleClose} open={open} title="Game">
+                <DialogContent>
+                    <WalletStatusBox />
+                    <GameList onPlay={handleGameOpen} />
+                </DialogContent>
+            </InjectedDialog>
+            <GameWindow isShow={isGameShow} onClose={handleGameClose} />
+        </>
     )
 }
 

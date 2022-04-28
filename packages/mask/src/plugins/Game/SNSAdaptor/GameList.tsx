@@ -59,7 +59,11 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-const GameList = () => {
+interface Props {
+    onPlay: () => void
+}
+
+const GameList = (props: Props) => {
     const classes = useStylesExtends(useStyles(), {})
 
     return (
@@ -75,18 +79,9 @@ const GameList = () => {
                         </div>
                         <div className={classes.rank}>Rank 112</div>
                     </div>
-                    <Button className={classes.playBtn}>Play</Button>
-                </li>
-                <li className={classes.gameBar}>
-                    <img className={classes.logo} src="#" alt="game logo" />
-                    <div className={classes.info}>
-                        <div className={classes.infoTitle}>Skiing Adcenture</div>
-                        <div className={classes.introduction}>
-                            Fead the starving little penguins - decompression game
-                        </div>
-                        <div className={classes.rank}>Rank 112</div>
-                    </div>
-                    <Button className={classes.playBtn}>Play</Button>
+                    <Button className={classes.playBtn} onClick={props.onPlay}>
+                        Play
+                    </Button>
                 </li>
             </ul>
         </div>

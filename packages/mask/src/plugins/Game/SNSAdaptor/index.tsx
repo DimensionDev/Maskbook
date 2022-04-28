@@ -4,6 +4,8 @@ import { PluginGameMessages } from '../messages'
 // import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationEntry } from '@masknet/shared'
+import WalletConnectDialog from './WalletConnectDialog'
+// import GameWindow from './GameWindow'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -11,7 +13,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection() {
         return (
             <>
-                <div>Game</div>
+                {/* <GameWindow /> */}
+                <WalletConnectDialog />
             </>
         )
     },
