@@ -101,7 +101,7 @@ export function Landing(props: PageInterface) {
                 {data.map((e, i) => {
                     return (
                         <Grid
-                            key={`${e.name}-${i}`}
+                            key={i}
                             item
                             xs={12}
                             display="flex"
