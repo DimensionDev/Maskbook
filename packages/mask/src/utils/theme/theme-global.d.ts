@@ -1,8 +1,18 @@
 declare module '@mui/material/styles/createPalette.d' {
     export interface Palette {
         secondaryDivider: string
+        public: {
+            primary: string
+            success: string
+            warning: string
+            danger: string
+            white: string
+            dark: string
+            secondaryDark: string
+        }
     }
     export interface TypeText {
+        third: string
         hint: string
         strong: string
         buttonText: string
@@ -16,6 +26,15 @@ declare module '@mui/material/styles/createPalette.d' {
         input: string
         tipMask: string
         messageShadow: string
+        modalTitle: string
+    }
+}
+
+declare module '@mui/material/index.d' {
+    export interface Color {
+        primary: string
+        second: string
+        third: string
     }
 }
 export {}

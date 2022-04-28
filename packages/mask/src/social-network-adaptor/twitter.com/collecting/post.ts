@@ -77,7 +77,7 @@ function registerPostCollectorInner(
                 Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona.identifier)
             }
         },
-        (info: PostInfo) => info.author.getCurrentValue()?.toText(),
+        (info: PostInfo) => info.author.getCurrentValue(),
     )
     const watcher = new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {

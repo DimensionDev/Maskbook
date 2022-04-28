@@ -26,14 +26,14 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
-        borderBottom: `1px solid ${theme.palette.divider}`,
         whiteSpace: 'nowrap',
     },
     dialogContent: {
         overscrollBehavior: 'contain',
     },
     dialogTitleTypography: {
-        marginLeft: 6,
+        flex: 1,
+        textAlign: 'center',
         verticalAlign: 'middle',
     },
     dialogCloseButton: {

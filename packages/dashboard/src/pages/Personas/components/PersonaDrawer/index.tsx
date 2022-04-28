@@ -82,7 +82,8 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                 <Stack justifyContent="space-between" gap={2} height="100%" maxHeight="100%">
                     <Box overflow="auto">
                         {personas.map((item) => {
-                            const { identifier, nickname, linkedProfiles, publicHexKey } = item
+                            const { identifier, nickname, linkedProfiles } = item
+                            const publicHexKey = identifier.publicKeyAsHex
                             if (!publicHexKey) return null
                             return (
                                 <Box mb={2.5} key={identifier.toText()}>
@@ -90,7 +91,6 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                                         publicKey={publicHexKey}
                                         identifier={identifier}
                                         active={identifier === currentPersonaIdentifier}
-                                        key={identifier.toText()}
                                         nickname={nickname}
                                         profiles={[...linkedProfiles.values()]}
                                         onClick={() => onChangeCurrentPersona(identifier)}

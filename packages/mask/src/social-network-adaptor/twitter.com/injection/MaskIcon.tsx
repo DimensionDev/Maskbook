@@ -85,5 +85,5 @@ export const ifUsingMask = memoizePromise(
         const p = await Services.Identity.queryProfilesInformation([pid])
         if (!p[0].fingerprint) throw new Error()
     },
-    (pid: ProfileIdentifier) => pid.toText(),
+    (x) => x,
 )

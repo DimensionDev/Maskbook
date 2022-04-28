@@ -14,7 +14,7 @@ export function usePersonaSign(
             const result = await Services.Identity.signWithPersona({
                 method: 'eth',
                 message,
-                identifier: currentIdentifier.toText(),
+                identifier: currentIdentifier,
             })
             return result
         } catch {

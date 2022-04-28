@@ -9,7 +9,6 @@ import { makeTypedMessageText } from '@masknet/typed-message'
 import {
     PersonaIdentifier,
     ProfileIdentifier,
-    ECKeyIdentifier,
     NextIDPlatform,
     toBase64,
     fromHex,
@@ -103,7 +102,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     // #endregion
 
     const { value: persona_ } = useAsync(async () => {
-        return Services.Identity.queryPersona(ECKeyIdentifier.from(persona.toText()).unwrap())
+        return Services.Identity.queryPersona(persona)
     }, [persona])
 
     useEffect(() => {
@@ -146,7 +145,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             const signResult = await Services.Identity.signWithPersona({
                 method: 'eth',
                 message: payload.signPayload,
-                identifier: persona_.identifier.toText(),
+                identifier: persona_.identifier,
             })
             if (!signResult) throw new Error('Failed to sign by persona.')
             const signature = signResult.signature.signature
