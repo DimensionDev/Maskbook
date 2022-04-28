@@ -277,7 +277,7 @@ export function MyFarms(props: PageInterface) {
     // fetch tokens data
     const { value: allTokens = EMPTY_LIST, loading: loadingAllTokens } = useAsync(
         async () =>
-            !ERC20 || ERC20.length === 0 ? [] : TokenList.fetchERC20TokensFromTokenLists(ERC20, currentChainId),
+            !ERC20 || ERC20.length === 0 ? undefined : TokenList.fetchERC20TokensFromTokenLists(ERC20, currentChainId),
         [currentChainId, ERC20],
     )
 
