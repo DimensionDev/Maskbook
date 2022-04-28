@@ -5,7 +5,7 @@ import { Tab } from '@mui/material'
 import { useState } from 'react'
 import { MaskTabList, MaskTabListProps } from '../../src'
 
-const defaultTabs = ['One', 'Two', 'Three', 'Four', 'Five', 'Six']
+const defaultTabs = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve']
 const { meta, of } = story(function ({ tabs, ...rest }: { tabs: string[] } & MaskTabListProps) {
     if (tabs.length === 0) tabs = tabs
     const [state, setState] = useState(tabs[0])

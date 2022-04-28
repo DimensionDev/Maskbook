@@ -3,7 +3,7 @@ import { forwardRef } from 'react'
 
 const BaseTabWrap = styled(Button, {
     shouldForwardProp: (prop) => prop !== 'activated',
-})<{ activated?: boolean; color?: string }>(({ theme, activated }) => ({
+})<{ activated?: boolean }>(({ theme, activated }) => ({
     flex: 1,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),

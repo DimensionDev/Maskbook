@@ -4,9 +4,11 @@ import { forwardRef } from 'react'
 const FlexibleTabTabWrap = styled(Button, {
     shouldForwardProp: (prop) => prop !== 'activated',
 })<{ activated?: boolean; color?: string }>(({ theme, activated }) => ({
-    flex: 1,
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+    flexShrink: 0,
+    flexGrow: 0,
+    paddingLeft: theme.spacing(1.5),
+    paddingRight: theme.spacing(1.5),
+    minWidth: theme.spacing(3),
     background: activated ? '#F2F6FA' : 'transparent',
     borderRadius: `${theme.spacing(1)} !important`,
     color: activated ? '#1C68F3' : theme.palette.text.secondary,

@@ -1,21 +1,53 @@
-import { ButtonGroup, ButtonGroupProps, styled, Tab } from '@mui/material'
+import { Button, ButtonGroup, ButtonGroupProps, styled, Tab } from '@mui/material'
 import { useTabContext, getPanelId, getTabId } from '@mui/lab/TabContext'
-import { forwardRef, cloneElement, Children, isValidElement } from 'react'
+import { forwardRef, cloneElement, Children, isValidElement, useState } from 'react'
 import { BaseTab } from './BaseTab'
 import { FlexibleTab } from './FlexibleTab'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew' // flexBasis: theme.spacing(3),
+
+type MaskTabVariant = 'base' | 'flexible' | 'round'
 
 export interface MaskTabListProps
     extends React.PropsWithChildren<Pick<ButtonGroupProps, 'classes' | 'disabled' | 'fullWidth' | 'size'>> {
     onChange(event: object, value: string): void
     'aria-label': string
-    variant?: 'base' | 'flexible' | 'round'
+    variant?: MaskTabVariant
 }
 
-const ButtonGroupWrap = styled(ButtonGroup)(({ theme }) => ({
+const ArrowButtonWrap = styled(Button)(({ theme }) => ({
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    padding: theme.spacing(1.5),
+    height: 38,
+    width: 38,
+    background: '#F2F6FA',
+
+    '&:hover': {
+        background: '#F2F6FA',
+    },
+}))
+
+const ArrowBackIosNewIconWrap = styled(ArrowBackIosNewIcon)(({ theme }) => ({
+    color: theme.palette.text.primary,
+}))
+
+const ButtonGroupWrap = styled(ButtonGroup, {
+    shouldForwardProp: (prop) => prop !== 'maskVariant' && prop !== 'isOpen',
+})<{ maskVariant?: MaskTabVariant; isOpen: boolean }>(({ theme, maskVariant, isOpen }) => ({
+    position: 'relative',
     display: 'flex',
+    alignItems: 'center',
+    flexWrap: maskVariant === 'flexible' && isOpen ? 'wrap' : 'nowrap',
+    overflow: isOpen ? 'auto' : 'hidden',
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
     flex: 1,
+    transform: '',
+    background:
+        maskVariant === 'flexible' && !isOpen
+            ? 'linear-gradient(270deg, rgba(223, 229, 244, 0.8) 36px, rgba(244, 247, 254, 0) 20%)'
+            : 'transparent',
 }))
 
 /**
@@ -41,6 +73,7 @@ const ButtonGroupWrap = styled(ButtonGroup)(({ theme }) => ({
  */
 export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, ref) => {
     const context = useTabContext()
+    const [open, handleToggle] = useState<boolean>(false)
     if (context === null) throw new TypeError('No TabContext provided')
 
     const { onChange, variant = 'base', ...rest } = props
@@ -71,8 +104,20 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     })
 
     return (
-        <ButtonGroupWrap {...rest} ref={ref} role="tablist">
+        <ButtonGroupWrap maskVariant={variant} isOpen={open} {...rest} ref={ref} role="tablist">
             {children}
+            {variant === 'flexible' && (
+                <ArrowButtonWrap
+                    variant="text"
+                    size="small"
+                    aria-controls={open ? 'split-button-menu' : undefined}
+                    aria-expanded={open ? 'true' : undefined}
+                    aria-label="select tabs list"
+                    aria-haspopup="menu"
+                    onClick={() => handleToggle(!open)}>
+                    <ArrowBackIosNewIconWrap sx={{ transform: open ? 'rotate(90deg)' : 'rotate(270deg)' }} />
+                </ArrowButtonWrap>
+            )}
         </ButtonGroupWrap>
     )
 })
