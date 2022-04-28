@@ -28,11 +28,6 @@ async function getERC721ContractDetailedFromChain(address: string, chainId: Chai
         result.status === 'fulfilled' ? result.value : '',
     ) as string[]
 
-    // if (chainId === ChainId.Harmony) {
-    //     const addressONE = isBech32Address(address) ? fromBech32(address) : address
-    //     return createERC721ContractDetailed(chainId, addressONE, name, symbol, baseURI)
-    // }
-
     return createERC721ContractDetailed(chainId, address, name, symbol, baseURI)
 }
 
