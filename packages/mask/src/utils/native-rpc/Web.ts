@@ -15,27 +15,9 @@ import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
 import type { MobileProfiles } from '../../../background/services/identity/profile/query'
-import type { MobilePersona } from '../../../background/services/identity/persona/mobile'
 
 const stringToPersonaIdentifier = (str: string) => ECKeyIdentifier.from(str).unwrap()
 const stringToProfileIdentifier = (str: string) => ProfileIdentifier.from(str).unwrap()
-function personaFormatter(p: MobilePersona) {
-    const profiles = {}
-
-    for (const [key, value] of p.linkedProfiles) {
-        const k = key.toText()
-        Object.assign(profiles, { [k]: value?.connectionConfirmState })
-    }
-
-    return {
-        identifier: p.identifier.toText(),
-        nickname: p.nickname,
-        linkedProfiles: profiles,
-        hasPrivateKey: p.hasPrivateKey,
-        createdAt: p.createdAt.getTime(),
-        updatedAt: p.updatedAt.getTime(),
-    }
-}
 
 function profileFormatter(
     p: Pick<Profile, 'identifier' | 'nickname' | 'createdAt' | 'updatedAt' | 'linkedPersona'> | MobileProfiles,
@@ -88,18 +70,16 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
     persona_createPersonaByMnemonic: async ({ mnemonic, nickname, password }) => {
         const x = await Services.Identity.mobile_restoreFromMnemonicWords(mnemonic, nickname, password)
-        return personaFormatter(x!)
+        return x!
     },
     persona_queryPersonas: async ({ identifier, hasPrivateKey }) => {
         const id = identifier ? stringToPersonaIdentifier(identifier) : undefined
-        const result = await Services.Identity.mobile_queryPersonas(id, hasPrivateKey)
+        const result = await Services.Identity.mobile_queryPersonas({ hasPrivateKey, identifier: id })
 
-        return result?.map(personaFormatter)
+        return result
     },
     persona_queryMyPersonas: async ({ network }) => {
-        const result = await Services.Identity.queryMyPersonas(network)
-
-        return result?.map(personaFormatter)
+        return Services.Identity.mobile_queryPersonas({ hasPrivateKey: true, network })
     },
     persona_updatePersonaInfo: ({ identifier, data }) => {
         const { nickname } = data
@@ -118,17 +98,17 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             connectionConfirmState: 'confirmed',
         })
 
-        const persona = await Services.Identity.queryPersona(identifier)
-        if (!persona.hasPrivateKey) throw new Error('invalid persona')
-        await Services.Identity.setupPersona(persona.identifier)
+        const [persona] = await Services.Identity.mobile_queryPersonas({ identifier })
+        if (!persona?.hasPrivateKey) throw new Error('invalid persona')
+        await Services.Identity.setupPersona(identifier)
     },
     persona_disconnectProfile: async ({ identifier }) => {
         await Services.Identity.detachProfile(stringToProfileIdentifier(identifier))
     },
     persona_restoreFromPrivateKey: async ({ privateKey, nickname }) => {
         const identifier = await Services.Identity.createPersonaByPrivateKey(privateKey, nickname)
-        const persona = await Services.Identity.queryPersona(identifier)
-        return personaFormatter(persona)
+        const persona = await Services.Identity.mobile_queryPersonas({ identifier })
+        return persona[0]
     },
     persona_backupPrivateKey: async ({ identifier }) => {
         const privateKey = await Services.Backup.backupPersonaPrivateKey(stringToPersonaIdentifier(identifier))
@@ -136,7 +116,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
     persona_queryPersonaByPrivateKey: async ({ privateKey }) => {
         const persona = await Services.Identity.mobile_queryPersonaByPrivateKey(privateKey)
-        return persona ? personaFormatter(persona) : undefined
+        return persona || undefined
     },
     persona_getCurrentPersonaIdentifier: async () => {
         const identifier = await Services.Settings.getCurrentPersonaIdentifier()
