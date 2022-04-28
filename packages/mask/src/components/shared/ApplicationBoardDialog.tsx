@@ -12,9 +12,9 @@ import { useI18N } from '../../utils'
 const useStyles = makeStyles()((theme) => {
     return {
         content: {
-            padding: theme.spacing(2, 2.5),
-            height: 490,
-            overflowX: 'hidden',
+            padding: theme.spacing(1, 2, 2),
+            height: 470,
+            overflow: 'hidden',
         },
         settingIcon: {
             height: 24,

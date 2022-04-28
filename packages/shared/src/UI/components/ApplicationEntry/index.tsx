@@ -16,8 +16,8 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => (
     applicationBoxHover: {
         cursor: 'pointer',
         '&:hover': {
-            transform: 'scale(1.05) translateY(-4px)',
-            boxShadow: theme.palette.mode === 'light' ? '0px 10px 16px rgba(0, 0, 0, 0.1)' : 'none',
+            transform: 'scale(1.02) translateY(-2px)',
+            boxShadow: theme.palette.mode === 'light' ? '0px 5px 8px rgba(0, 0, 0, 0.05)' : 'none',
         },
     },
     applicationImg: {
@@ -41,9 +41,11 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => (
     },
     recommendFeatureApplicationBox: {
         width: 220,
+        minWidth: 220,
         height: 97,
+        marginRight: 12,
         cursor: 'pointer',
-        display: 'flex',
+        display: 'inline-flex',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -88,7 +90,10 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             style={{
                 background: recommendFeature.backgroundGradient,
             }}
-            className={classNames(classes.recommendFeatureApplicationBox, disabled ? classes.disabled : '')}
+            className={classNames(
+                classes.recommendFeatureApplicationBox,
+                disabled ? classes.disabled : classes.applicationBoxHover,
+            )}
             onClick={disabled ? () => {} : onClick}>
             <div className={classes.recommendFeatureAppIconWrapper}>{icon}</div>
             <div>

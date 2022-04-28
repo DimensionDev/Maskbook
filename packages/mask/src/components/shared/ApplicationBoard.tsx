@@ -83,8 +83,10 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
             color: getMaskColor(theme).textLight,
         },
         recommendFeatureAppListWrapper: {
-            width: '100%',
-            margin: '0px 2px 12px 2px',
+            display: 'flex',
+            overflowX: 'scroll',
+            margin: '0px 2px 4px 2px',
+            padding: '8px 2px 0 2px',
         },
     }
 })
