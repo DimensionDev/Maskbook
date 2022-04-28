@@ -5,12 +5,16 @@ export const getWalletHiddenList = async (publicKey: string) => {
     if (!publicKey) return
     const res = await NextIDStorage.get(publicKey)
     console.log('res', res)
-    const hiddenObj = {}
+    const hiddenObj = {
+        hiddenWallets: {},
+        hiddenCollections: {},
+    }
     if (res) {
         res?.val?.proofs
             ?.filter((x) => x.platform === NextIDPlatform.Twitter)
             ?.forEach((y) => {
-                hiddenObj[y.identity] = y?.content?.[PLUGIN_ID]?.hiddenAddresses
+                hiddenObj.hiddenWallets[y.identity] = y?.content?.[PLUGIN_ID]?.hiddenAddresses
+                hiddenObj.hiddenCollections[y.identity] = y?.content?.[PLUGIN_ID]?.unListedCollections
             })
         return hiddenObj
     }

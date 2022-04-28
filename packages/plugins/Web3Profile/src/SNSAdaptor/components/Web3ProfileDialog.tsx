@@ -78,7 +78,6 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { open, onClose } = props
     const [title, setTitle] = useState('Web3 Profile')
-    const [walletSwitchOpen, setWalletSwitchOpen] = useState(false)
     const [imageManageOpen, setImageManageOpen] = useState(false)
     const [accountId, setAccountId] = useState<string>()
 

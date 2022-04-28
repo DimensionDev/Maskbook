@@ -93,7 +93,9 @@ export function PlatformCard(props: PlatformCardProps) {
                             {t.wallets()}{' '}
                             <span style={{ fontWeight: '700' }}>
                                 {account?.walletList?.footprints?.reduce(
-                                    (pre, cur) => pre + (cur?.collections?.length ?? 0),
+                                    (pre, cur) =>
+                                        pre +
+                                        (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
                                     0,
                                 )}
                             </span>{' '}
@@ -110,7 +112,9 @@ export function PlatformCard(props: PlatformCardProps) {
                             {t.wallets()}{' '}
                             <span style={{ fontWeight: '700' }}>
                                 {account?.walletList?.donations?.reduce(
-                                    (pre, cur) => pre + (cur?.collections?.length ?? 0),
+                                    (pre, cur) =>
+                                        pre +
+                                        (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
                                     0,
                                 )}
                             </span>{' '}

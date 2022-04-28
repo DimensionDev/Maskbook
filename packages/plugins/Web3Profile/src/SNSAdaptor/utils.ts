@@ -1,5 +1,5 @@
 import type { BindingProof } from '@masknet/shared-base'
-import type { collection, WalletsCollection, walletTypes } from './types'
+import type { collection, collectionTypes, WalletsCollection, walletTypes } from './types'
 
 export const formatPublicKey = (publicKey?: string) => {
     return `${publicKey?.slice(0, 6)}...${publicKey?.slice(-6)}`
@@ -9,10 +9,27 @@ export const formatAddress = (address: string, size = 4) => {
     return `${address?.slice(0, size)}...${address?.slice(-size)}`
 }
 
-export const eduplicateArray = (listA?: walletTypes[], listB?: walletTypes[]) => {
+const eduplicateArray = (listA?: walletTypes[], listB?: walletTypes[]) => {
     if (!listA || listA?.length === 0) return
     if (!listB || listB?.length === 0) return [...listA]
     return listA?.filter((l2) => listB.findIndex((l1) => l2.address === l1.address) === -1)
+}
+
+const addHiddenToArray = (listA?: collectionTypes[], listB?: string[]) => {
+    if (!listA || listA?.length === 0) return
+    if (!listB || listB?.length === 0) return [...listA]
+    return listA?.map((x) => {
+        if (listB?.findIndex((y) => y === x.iconURL) !== -1) {
+            return {
+                ...x,
+                hidden: true,
+            }
+        }
+        return {
+            ...x,
+            hidden: false,
+        }
+    })
 }
 
 export const getWalletList = (
@@ -26,14 +43,20 @@ export const getWalletList = (
     return accounts?.map((key) => ({
         ...key,
         walletList: {
-            NFTs: eduplicateArray(wallets, hiddenObj[key?.identity]?.NFTs),
-            donations: eduplicateArray(wallets, hiddenObj[key?.identity]?.donations)?.map((wallet) => ({
+            NFTs: eduplicateArray(wallets, hiddenObj.hiddenWallets[key?.identity]?.NFTs),
+            donations: eduplicateArray(wallets, hiddenObj.hiddenWallets[key?.identity]?.donations)?.map((wallet) => ({
                 ...wallet,
-                collections: donations?.find((donation) => donation?.address === wallet?.address)?.collections,
+                collections: addHiddenToArray(
+                    donations?.find((donation) => donation?.address === wallet?.address)?.collections,
+                    hiddenObj.hiddenCollections?.[key?.identity]?.[wallet?.address]?.Donations,
+                ),
             })),
-            footprints: eduplicateArray(wallets, hiddenObj[key?.identity]?.footprints)?.map((wallet) => ({
+            footprints: eduplicateArray(wallets, hiddenObj.hiddenWallets[key?.identity]?.footprints)?.map((wallet) => ({
                 ...wallet,
-                collections: footprints?.find((footprint) => footprint?.address === wallet?.address)?.collections,
+                collections: addHiddenToArray(
+                    footprints?.find((footprint) => footprint?.address === wallet?.address)?.collections,
+                    hiddenObj.hiddenCollections?.[key?.identity]?.[wallet?.address]?.Footprints,
+                ),
             })),
         },
     }))

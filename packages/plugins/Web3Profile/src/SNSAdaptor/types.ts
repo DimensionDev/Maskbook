@@ -27,6 +27,7 @@ export interface GeneralAsset {
 export interface collectionTypes {
     platform: string
     iconURL?: string | null
+    hidden?: boolean
 }
 
 export interface collection {

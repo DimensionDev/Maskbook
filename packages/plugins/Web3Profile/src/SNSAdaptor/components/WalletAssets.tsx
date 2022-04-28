@@ -94,18 +94,21 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
             </div>
 
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                {collectionList?.slice(0, 10)?.map((collection, i) => (
-                    <div
-                        key={i}
-                        className={classes.collectionWrap}
-                        style={{ borderRadius: type === 'Donations' ? '50%' : '12px' }}>
-                        <ImageIcon
-                            size={89}
-                            borderRadius={type === 'Donations' ? '50%' : '12px'}
-                            icon={collection?.iconURL}
-                        />
-                    </div>
-                ))}
+                {collectionList
+                    ?.filter((collection) => !collection?.hidden)
+                    ?.slice(0, 10)
+                    ?.map((collection, i) => (
+                        <div
+                            key={i}
+                            className={classes.collectionWrap}
+                            style={{ borderRadius: type === 'Donations' ? '50%' : '12px' }}>
+                            <ImageIcon
+                                size={89}
+                                borderRadius={type === 'Donations' ? '50%' : '12px'}
+                                icon={collection?.iconURL}
+                            />
+                        </div>
+                    ))}
             </Box>
         </Card>
     )

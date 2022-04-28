@@ -128,7 +128,9 @@ export function ImageManagement(props: ImageManagementProps) {
                         title={title}
                         address={settingAddress}
                         open={imageListOpen}
+                        accountId={accountId}
                         onClose={() => setImageListOpen(false)}
+                        retryData={getWalletHiddenRetry}
                         collectionList={addresses?.find((address) => address?.address === settingAddress)?.collections}
                     />
                     <WalletSetting

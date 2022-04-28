@@ -1,7 +1,7 @@
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
 import { InjectedDialog } from '@masknet/shared'
@@ -69,15 +69,22 @@ export interface ImageListDialogProps extends withClasses<never | 'root'> {
     title: string
     currentPersona?: PersonaInformation
     collectionList?: collectionTypes[]
+    accountId?: string
+    retryData: () => void
 }
 
 export function ImageListDialog(props: ImageListDialogProps) {
-    const { address = ZERO_ADDRESS, open, onClose, title, currentPersona, collectionList } = props
+    const { address = ZERO_ADDRESS, open, onClose, retryData, title, accountId, currentPersona, collectionList } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const [unListedCollections, setUnListdCollections] = useState<collectionTypes[] | undefined>([])
-    const [listedCollections, setListdCollections] = useState<collectionTypes[] | undefined>(collectionList)
+    const [listedCollections, setListdCollections] = useState<collectionTypes[] | undefined>([])
     const chainId = ChainId.Mainnet
+
+    useEffect(() => {
+        setListdCollections(collectionList?.filter((collection) => !collection?.hidden))
+        setUnListdCollections(collectionList?.filter((collection) => collection?.hidden))
+    }, [collectionList])
 
     const unList = (url: string | undefined) => {
         if (!url) return
@@ -99,20 +106,23 @@ export function ImageListDialog(props: ImageListDialogProps) {
     }
     const handleClose = () => {
         setUnListdCollections([])
-        setListdCollections(collectionList)
         onClose()
     }
 
     const onConfirm = async () => {
         if (!currentPersona?.publicHexKey) return
         const patch = {
-            unListedCollections: unListedCollections?.map((x) => x?.iconURL),
+            unListedCollections: {
+                [address]: {
+                    [title]: unListedCollections?.map((x) => x?.iconURL),
+                },
+            },
         }
         try {
             const payload = await NextIDStorage.getPayload(
                 currentPersona.publicHexKey,
-                NextIDPlatform.Ethereum,
-                address,
+                NextIDPlatform.Twitter,
+                accountId!,
                 patch,
                 PLUGIN_ID,
             )
@@ -123,14 +133,15 @@ export function ImageListDialog(props: ImageListDialogProps) {
                 payload.val?.uuid,
                 currentPersona.publicHexKey?.replace(/^0x/, ''),
                 toBase64(fromHex(signature?.signature?.signature)),
-                NextIDPlatform.Ethereum,
-                address,
+                NextIDPlatform.Twitter,
+                accountId!,
                 payload.val?.createdAt,
                 patch,
                 PLUGIN_ID,
             )
             if (!res) throw new Error('storage kv failed')
             onClose()
+            retryData()
         } catch (err) {
             console.log({ err })
         }
