@@ -9,6 +9,7 @@ import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { languageSettings } from '../../settings/settings'
+import { cloneDeep, merge } from 'lodash-unified'
 
 const staticRef = createSubscriptionFromValueRef(new ValueRef('light'))
 const defaultUseTheme = (t: Theme) => t
@@ -25,4 +26,19 @@ export function useClassicMaskSNSTheme() {
     const [localization, isRTL] = useThemeLanguage(useValueRef(languageSettings))
     const theme = unstable_createMuiStrictModeTheme(baseTheme, localization)
     return usePostTheme(theme)
+}
+
+export function useClassicMaskSNSPluginTheme() {
+    const theme = useClassicMaskSNSTheme()
+    return unstable_createMuiStrictModeTheme(
+        merge(cloneDeep(theme), {
+            components: {
+                MuiButton: {
+                    defaultProps: {
+                        variant: 'roundedContained',
+                    },
+                },
+            },
+        }),
+    )
 }
