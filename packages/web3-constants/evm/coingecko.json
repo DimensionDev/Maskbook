@@ -19,7 +19,7 @@
         "Aurora": "aurora",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "harmony-shard-0",
+        "Harmony": "harmony",
         "Harmony_Test": ""
     },
     "COIN_ID": {
@@ -42,7 +42,7 @@
         "Aurora": "ethereum",
         "Aurora_Testnet": "",
         "Conflux": "conflux-token",
-        "Harmony": "harmony-shard-0",
+        "Harmony": "harmony",
         "Harmony_Test": ""
     }
 }
