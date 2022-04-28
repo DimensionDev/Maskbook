@@ -4,10 +4,9 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Tabs } from '@mui/material'
 import { useI18N } from '../../../utils'
 import type { TokenInfo } from '../types'
-import { NFTListPage, NFTListPagePolygon } from './NFTListPage'
+import { NFTListPage } from './NFTListPage'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {},
     selected: {
         backgroundColor: theme.palette.background.paper,
         borderTop: `2px solid ${theme.palette.background.default}`,
@@ -16,6 +15,9 @@ const useStyles = makeStyles()((theme) => ({
     tab: {
         backgroundColor: theme.palette.background.default,
         color: theme.palette.text.secondary,
+    },
+    tabPanel: {
+        padding: theme.spacing(2),
     },
 }))
 interface NFTListProps {
@@ -53,7 +55,7 @@ export function NFTList(props: NFTListProps) {
                     className={currentTab === tabs.Polygon ? classes.selected : classes.tab}
                 />
             </Tabs>
-            <TabPanel value={tabs.ETH}>
+            <TabPanel value={tabs.ETH} className={classes.tabPanel}>
                 <NFTListPage
                     tokens={tokens.filter((x) => x.contractDetailed.chainId === ChainId.Mainnet) ?? []}
                     tokenInfo={tokenInfo}
@@ -62,8 +64,8 @@ export function NFTList(props: NFTListProps) {
                     onSelect={onSelect}
                 />
             </TabPanel>
-            <TabPanel value={tabs.Polygon}>
-                <NFTListPagePolygon
+            <TabPanel value={tabs.Polygon} className={classes.tabPanel}>
+                <NFTListPage
                     tokens={tokens.filter((x) => x.contractDetailed.chainId === ChainId.Matic) ?? []}
                     tokenInfo={tokenInfo}
                     chainId={ChainId.Matic}

@@ -165,7 +165,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
 
     return (
         <>
-            <DialogContent>
+            <DialogContent sx={{ overFlow: 'hidden' }}>
                 <AvatarEditor
                     ref={(e) => setEditor(e)}
                     image={image!}

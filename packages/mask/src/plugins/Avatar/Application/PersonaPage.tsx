@@ -41,7 +41,7 @@ export function PersonaPage(props: PersonaPageProps) {
 
     useEffect(() => {
         if (!personaVerifiedStatus || personaVerifiedStatus?.isVerified) return
-        reset()
+        if (reset) reset()
         onClose()
     }, [personaVerifiedStatus, onClose, reset])
 

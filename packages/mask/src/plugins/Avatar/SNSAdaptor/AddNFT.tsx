@@ -29,6 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 export interface AddNFTProps {
     onClose: () => void
+    chainId?: ChainId
     onAddClick?: (token: ERC721TokenDetailed) => void
     open: boolean
     title?: string
@@ -39,7 +40,7 @@ export function AddNFT(props: AddNFTProps) {
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
-    const { onClose, open, onAddClick, title } = props
+    const { onClose, open, onAddClick, title, chainId } = props
     const account = useAccount()
 
     const onClick = useCallback(async () => {
@@ -54,6 +55,10 @@ export function AddNFT(props: AddNFTProps) {
 
         createNFT(address, tokenId)
             .then(async (token) => {
+                if (chainId && token && token.contractDetailed.chainId !== chainId) {
+                    setMessage('chain does not match.')
+                    return
+                }
                 if (!token || !isSameAddress(token?.info.owner, account)) {
                     setMessage(t('nft_owner_hint'))
                     return

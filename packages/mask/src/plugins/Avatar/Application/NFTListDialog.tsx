@@ -14,8 +14,8 @@ import { NFTList } from './NFTList'
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
         position: 'absolute',
-        top: 8,
-        right: 4,
+        top: 10,
+        right: 10,
     },
 
     button: {
