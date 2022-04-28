@@ -116,7 +116,7 @@ export const UnbindPanelUI = memo<BindPanelUIProps>(
                                 <div>
                                     <Typography className={classes.name}>{currentPersona?.nickname}</Typography>
                                     <Typography className={classes.identifier}>
-                                        {formatPersonaFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
+                                        {formatPersonaFingerprint(currentPersona?.identifier.rawPublicKey ?? '', 10)}
                                     </Typography>
                                 </div>
                             </Stack>

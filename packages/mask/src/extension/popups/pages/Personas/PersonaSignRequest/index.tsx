@@ -143,12 +143,12 @@ const PersonaSignRequest = memo(() => {
                     !identity ||
                     !createdAt ||
                     !uuid ||
-                    !currentPersona?.publicHexKey
+                    !currentPersona?.identifier.publicKeyAsHex
                 )
                     break
                 await Services.Identity.detachProfileWithNextID(
                     uuid,
-                    currentPersona.publicHexKey,
+                    currentPersona.identifier.publicKeyAsHex,
                     platform,
                     identity,
                     createdAt,

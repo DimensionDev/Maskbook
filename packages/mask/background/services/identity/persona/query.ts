@@ -40,7 +40,6 @@ export async function queryOwnedPersonaInformation(): Promise<PersonaInformation
                 nickname: persona.nickname,
                 identifier: persona.identifier,
                 linkedProfiles: map,
-                publicHexKey: persona.publicHexKey,
             })
 
             if (persona.linkedProfiles.size) {

@@ -9,7 +9,7 @@ export async function toProfileInformation(profiles: ProfileRecord[]) {
         result.push({
             identifier: profile.identifier,
             nickname: profile.nickname,
-            fingerprint: profile.linkedPersona?.compressedPoint,
+            fingerprint: profile.linkedPersona?.rawPublicKey,
         })
     }
 

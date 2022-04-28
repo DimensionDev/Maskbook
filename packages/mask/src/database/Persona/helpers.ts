@@ -26,7 +26,7 @@ export function personaRecordToPersona(record: PersonaRecord): Persona {
     return {
         ...rec,
         hasPrivateKey,
-        fingerprint: rec.identifier.compressedPoint,
+        fingerprint: rec.identifier.rawPublicKey,
     }
 }
 
@@ -58,7 +58,7 @@ export async function queryPersona(identifier: PersonaIdentifier): Promise<Perso
         linkedProfiles: new Map(),
         hasPrivateKey: false,
         hasLogout: false,
-        fingerprint: identifier.compressedPoint,
+        fingerprint: identifier.rawPublicKey,
     }
 }
 
