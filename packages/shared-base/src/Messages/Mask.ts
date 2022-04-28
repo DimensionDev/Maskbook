@@ -61,7 +61,8 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     restoreSuccess: void
     relationsChanged: RelationChangedEvent[]
     pluginMinimalModeChanged: [id: string, newStatus: boolean]
-
+    compositionAttachMetaData: [metaId: string, meta?: unknown]
+    compositionDropMetaData: [metaId: string]
     requestExtensionPermission: RequestExtensionPermissionEvent
     personaSignRequest: PersonaSignRequestEvent
     maskSDKHotModuleReload: void

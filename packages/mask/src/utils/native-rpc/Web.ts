@@ -254,6 +254,12 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             })),
         }
     },
+    composition_attachMetaData: async ({ metaId, meta }) => {
+        MaskMessages.events.compositionAttachMetaData.sendToAll([metaId, meta])
+    },
+    composition_dropMetaData: async ({ metaId }) => {
+        MaskMessages.events.compositionDropMetaData.sendToAll([metaId])
+    },
 }
 
 function wrapWithAssert(env: Environment, f: Function) {

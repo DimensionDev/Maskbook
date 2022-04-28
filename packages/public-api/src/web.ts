@@ -76,6 +76,8 @@ export interface MaskNetworkAPIs {
         profiles: ProfileRecord[]
         relations: RelationRecord[]
     }>
+    composition_attachMetaData(params: { metaId: string; meta?: unknown }): Promise<void>
+    composition_dropMetaData(params: { metaId: string }): Promise<void>
 }
 
 export interface WalletInfo {

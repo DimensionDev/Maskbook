@@ -1,4 +1,13 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
+import {
+    forwardRef,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
+    startTransition,
+    useCallback,
+    useEffect,
+} from 'react'
 import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
@@ -8,7 +17,7 @@ import { Send } from '@mui/icons-material'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
 import { CharLimitIndicator } from './CharLimitIndicator'
-import { useI18N } from '../../utils'
+import { MaskMessages, useI18N } from '../../utils'
 import { Flags, PersistentStorages } from '../../../shared'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
@@ -167,6 +176,22 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
             })
             .finally(reset)
     }, [encodingKind, encryptionKind, recipients, props.onSubmit])
+
+    useEffect(() => {
+        const clearAttachWatcher = MaskMessages.events.compositionAttachMetaData.on(([metaId, meta]) => {
+            Editor.current?.attachMetadata(metaId, meta)
+        })
+
+        const clearDropWatcher = MaskMessages.events.compositionDropMetaData.on(([metaId]) => {
+            Editor.current?.dropMetadata(metaId)
+        })
+
+        return () => {
+            clearAttachWatcher()
+            clearDropWatcher()
+        }
+    }, [])
+
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
