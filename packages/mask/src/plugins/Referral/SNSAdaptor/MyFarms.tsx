@@ -3,6 +3,7 @@ import { useAsync } from 'react-use'
 import { v4 as uuid } from 'uuid'
 import { groupBy } from 'lodash-unified'
 import { formatUnits } from '@ethersproject/units'
+import BigNumber from 'bignumber.js'
 import {
     useAccount,
     useChainId,
@@ -201,13 +202,15 @@ function FarmsList({ entitlements, allTokens, farms, rewardsHarvested, ...props 
         <>
             {Object.entries(entitlementsGroupedByRewardToken).map(([rewardTokenDefn, entitlements]) => {
                 const totalRewards = entitlements.reduce(function (accumulator, current) {
-                    return accumulator + Number.parseFloat(formatUnits(current.args.rewardValue))
-                }, 0)
+                    return accumulator.plus(new BigNumber(formatUnits(current.args.rewardValue)))
+                }, new BigNumber(0))
+
                 const harvested = rewardsHarvested.filter((reward) => reward.rewardTokenDefn === rewardTokenDefn)
                 const claimed = harvested.reduce(function (accumulator, current) {
-                    return accumulator + current.value
-                }, 0)
-                const claimable = totalRewards - claimed
+                    return accumulator.plus(new BigNumber(formatUnits(current.value)))
+                }, new BigNumber(0))
+
+                const claimable = totalRewards.minus(claimed).toNumber()
 
                 const nativeRewardToken = toNativeRewardTokenDefn(currentChainId)
                 const rewardToken =
@@ -221,7 +224,7 @@ function FarmsList({ entitlements, allTokens, farms, rewardsHarvested, ...props 
                         key={uuid()}
                         farm={{ rewardTokenDefn, referredTokenDefn: rewardTokenDefn }}
                         allTokensMap={allTokensMap}
-                        totalValue={totalRewards}
+                        totalValue={totalRewards.toNumber()}
                         accordionDetails={
                             <Box display="flex" justifyContent="flex-end">
                                 <Typography display="flex" alignItems="center" marginRight="20px" fontWeight={600}>
@@ -235,7 +238,7 @@ function FarmsList({ entitlements, allTokens, farms, rewardsHarvested, ...props 
                                     onClick={() =>
                                         onClickHarvestRewards(
                                             entitlements,
-                                            totalRewards,
+                                            totalRewards.toNumber(),
                                             rewardTokenDefn,
                                             rewardToken?.symbol,
                                         )
