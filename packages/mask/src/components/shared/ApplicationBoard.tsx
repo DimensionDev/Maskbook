@@ -1,5 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
-import { Close as CloseIcon } from '@mui/icons-material'
+import { useMemo, useCallback } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography, useTheme, Box } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
@@ -15,7 +14,6 @@ import {
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
-import { ApplicationSettingDialog } from './ApplicationSettingDialog'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useAsync } from 'react-use'
@@ -74,17 +72,6 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
             justifyContent: 'center',
             alignItems: 'center',
         },
-        header: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 11.5,
-        },
-        settingIcon: {
-            height: 24,
-            width: 24,
-            cursor: 'pointer',
-        },
         placeholderWrapper: {
             display: 'flex',
             justifyContent: 'center',
@@ -94,9 +81,6 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
         },
         placeholder: {
             color: getMaskColor(theme).textLight,
-        },
-        closeIcon: {
-            cursor: 'pointer',
         },
         recommendFeatureAppListWrapper: {
             width: '100%',
@@ -119,7 +103,6 @@ export function ApplicationBoard(props: Props) {
 function ApplicationBoardContent(props: Props) {
     const theme = useTheme()
     const { t } = useI18N()
-    const [openSettings, setOpenSettings] = useState(false)
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId()
@@ -163,16 +146,6 @@ function ApplicationBoardContent(props: Props) {
     const { classes } = useStyles({ shouldScroll: listedAppList.length > 12 })
     return (
         <>
-            <div className={classes.header}>
-                <CloseIcon className={classes.closeIcon} onClick={props.closeDialog} />
-                <Typography className={classes.subTitle}>{t('applications')}</Typography>
-                <img
-                    src={theme.palette.mode === 'dark' ? SettingIconDarkModeUrl : SettingIconLightModeUrl}
-                    className={classes.settingIcon}
-                    onClick={() => setOpenSettings(true)}
-                />
-            </div>
-
             <Box className={classes.recommendFeatureAppListWrapper}>
                 {recommendFeatureAppList.map((application) => (
                     <RenderEntryComponentWrapper key={application.entry.ApplicationEntryID} application={application} />
@@ -195,9 +168,6 @@ function ApplicationBoardContent(props: Props) {
                     </Typography>
                 </div>
             )}
-            {openSettings ? (
-                <ApplicationSettingDialog open={openSettings} onClose={() => setOpenSettings(false)} />
-            ) : null}
         </>
     )
 }
