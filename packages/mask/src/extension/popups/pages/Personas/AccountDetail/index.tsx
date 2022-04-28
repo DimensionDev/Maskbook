@@ -45,10 +45,11 @@ const AccountDetail = memo(() => {
 
     const [confirmState, onConfirmReleaseBind] = useAsyncFn(async () => {
         try {
-            if (!currentPersona?.publicHexKey || !selectedAccount?.identity || !selectedAccount?.platform) return
+            if (!currentPersona?.identifier.publicKeyAsHex || !selectedAccount?.identity || !selectedAccount?.platform)
+                return
 
             const result = await NextIDProof.createPersonaPayload(
-                currentPersona.publicHexKey,
+                currentPersona.identifier.publicKeyAsHex,
                 NextIDAction.Delete,
                 selectedAccount.identity,
                 selectedAccount.platform,
@@ -62,7 +63,7 @@ const AccountDetail = memo(() => {
 
             await Service.Identity.detachProfileWithNextID(
                 result.uuid,
-                currentPersona.publicHexKey,
+                currentPersona.identifier.publicKeyAsHex,
                 selectedAccount.platform,
                 selectedAccount.identity,
                 result.createdAt,

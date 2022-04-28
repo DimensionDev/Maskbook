@@ -69,10 +69,10 @@ const ConnectedWallets = memo(() => {
     const [confirmState, onConfirmRelease] = useAsyncFn(
         async (wallet?: ConnectedWalletInfo) => {
             try {
-                if (!currentPersona?.publicHexKey || !wallet) return
+                if (!currentPersona?.identifier.publicKeyAsHex || !wallet) return
 
                 const result = await NextIDProof.createPersonaPayload(
-                    currentPersona.publicHexKey,
+                    currentPersona.identifier.publicKeyAsHex,
                     NextIDAction.Delete,
                     wallet.identity,
                     wallet.platform,
@@ -89,7 +89,7 @@ const ConnectedWallets = memo(() => {
 
                 await NextIDProof.bindProof(
                     result.uuid,
-                    currentPersona.publicHexKey,
+                    currentPersona.identifier.publicKeyAsHex,
                     NextIDAction.Delete,
                     wallet.platform,
                     wallet.identity,

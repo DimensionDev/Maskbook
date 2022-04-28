@@ -691,7 +691,7 @@ function profileToDB(x: ProfileRecord): ProfileRecordDB {
         identifier: x.identifier.toText(),
         network: x.identifier.network,
         linkedPersona: x.linkedPersona
-            ? { curve: x.linkedPersona.curve, type: 'ec_key', compressedPoint: x.linkedPersona.publicKey }
+            ? { curve: x.linkedPersona.curve, type: 'ec_key', compressedPoint: x.linkedPersona.rawPublicKey }
             : undefined,
     }
 }

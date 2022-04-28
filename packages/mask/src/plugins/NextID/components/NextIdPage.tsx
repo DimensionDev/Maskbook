@@ -83,11 +83,11 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
     }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
 
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
-        if (!currentPersona?.publicHexKey) return
+        if (!currentPersona?.identifier.publicKeyAsHex) return
         if (!currentPersona.identifier) return
         if (!visitingPersonaIdentifier.identifier) return
         return NextIDProof.queryIsBound(
-            currentPersona.publicHexKey,
+            currentPersona.identifier.publicKeyAsHex,
             platform,
             visitingPersonaIdentifier.identifier.userId,
         )
@@ -99,7 +99,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         retry: retryQueryBinding,
     } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey!)
+        return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
     }, [currentPersona, isOwn])
 
     const onVerify = async () => {
