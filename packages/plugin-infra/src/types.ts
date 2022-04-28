@@ -341,6 +341,9 @@ export namespace Plugin.SNSAdaptor {
 
         nextIdRequired?: boolean
 
+        /**
+         * Display using an eye-catching card and unable to be unlisted.
+         */
         recommendFeature?: {
             description: React.ReactNode
             backgroundGradient: string
