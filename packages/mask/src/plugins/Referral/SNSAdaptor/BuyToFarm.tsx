@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: '100%',
         height: '100%',
         overflow: 'auto',
-        padding: `${theme.spacing(3)} 0`,
+        padding: theme.spacing(3, 0)
     },
     tabs: {
         width: '288px',
