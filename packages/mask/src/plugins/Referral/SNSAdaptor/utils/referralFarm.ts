@@ -1,5 +1,5 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
-import { parseUnits } from '@ethersproject/units'
+import { formatUnits, parseUnits } from '@ethersproject/units'
 import BigNumber from 'bignumber.js'
 import type { TransactionReceipt } from 'web3-core'
 import { ChainId, createContract, TransactionEventType, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
@@ -193,7 +193,9 @@ export async function harvestRewards(
             from: account,
         }
         const entitlementsSorted = entitlements.sort(
-            (entitlementA, entitlementB) => entitlementA.args.nonce.toNumber() - entitlementB.args.nonce.toNumber(),
+            (entitlementA, entitlementB) =>
+                Number.parseFloat(formatUnits(entitlementA.args.nonce, 0)) -
+                Number.parseFloat(formatUnits(entitlementB.args.nonce, 0)),
         )
 
         const requests = entitlementsSorted.map((entitlement) => {
