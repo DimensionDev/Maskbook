@@ -71,12 +71,12 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     const [keyword, setKeyword] = useState('')
     const {
         whitelist: includeTokens,
-        blacklist: excludeTokens = [],
-        renderList = [],
-        tokens = [],
+        blacklist: excludeTokens = EMPTY_LIST,
+        renderList = EMPTY_LIST,
+        tokens = EMPTY_LIST,
         onSelect,
         FixedSizeListProps,
-        selectedTokens = [],
+        selectedTokens = EMPTY_LIST,
         dataLoading,
     } = props
 
