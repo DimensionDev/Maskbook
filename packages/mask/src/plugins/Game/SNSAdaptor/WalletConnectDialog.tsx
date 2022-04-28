@@ -8,6 +8,8 @@ import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import GameList from './GameList'
 import GameWindow from './GameWindow'
 
+import { WalletMessages } from '../../Wallet/messages'
+
 const WalletConnectDialog = () => {
     const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.essayDialogUpdated, () => {})
     const handleClose = () => {
@@ -22,8 +24,13 @@ const WalletConnectDialog = () => {
 
     const handleGameOpen = () => {
         closeDialog()
+        closeWalletDialog()
         setGameShow(true)
     }
+
+    const { closeDialog: closeWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
 
     return (
         <>
