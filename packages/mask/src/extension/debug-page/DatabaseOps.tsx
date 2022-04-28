@@ -153,7 +153,7 @@ async function backupAll() {
                 records,
             })
         }
-        instances.push({ name: name, version: version, stores })
+        instances.push({ name, version, stores })
     }
     const payload: BackupFormat = {
         buildInfo: {

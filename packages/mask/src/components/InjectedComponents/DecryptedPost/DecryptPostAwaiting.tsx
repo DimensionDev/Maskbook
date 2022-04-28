@@ -7,9 +7,9 @@ import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 export interface DecryptPostAwaitingProps {
     type?: DecryptionProgress
     /** The author in the payload */
-    author?: ProfileIdentifier
+    author: ProfileIdentifier | null
     /** The author of the encrypted post */
-    postedBy?: ProfileIdentifier
+    postedBy: ProfileIdentifier | null
 }
 export const DecryptPostAwaiting = memo(function DecryptPostAwaiting(props: DecryptPostAwaitingProps) {
     const { author, postedBy, type } = props

@@ -9,8 +9,6 @@ import { makeTypedMessageText } from '@masknet/typed-message'
 import {
     PersonaIdentifier,
     ProfileIdentifier,
-    Identifier,
-    ECKeyIdentifier,
     NextIDPlatform,
     toBase64,
     fromHex,
@@ -67,18 +65,17 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     // #region setup username
     const lastRecognized = useLastRecognizedIdentity()
-    const getUsername = () =>
-        lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
+    const getUsername = () => lastState.username || lastRecognized.identifier?.userId || ''
     const [username, setUsername] = useState(getUsername)
 
     const disableVerify =
-        lastRecognized.identifier.isUnknown || !lastState.username
+        !lastRecognized.identifier || !lastState.username
             ? false
             : lastRecognized.identifier.userId !== lastState.username
 
     useEffect(() => {
         const handler = (val: IdentityResolved) => {
-            if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
+            if (username === '' && val.identifier) setUsername(val.identifier.userId)
         }
         ui.collecting.identityProvider?.recognized.addListener(handler)
 
@@ -105,7 +102,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     // #endregion
 
     const { value: persona_ } = useAsync(async () => {
-        return Services.Identity.queryPersona(Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap())
+        return Services.Identity.queryPersona(persona)
     }, [persona])
 
     useEffect(() => {
@@ -115,8 +112,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }, [])
 
     const onConnect = async () => {
+        const id = ProfileIdentifier.of(ui.networkIdentifier, username)
+        if (!id.some) return
         // attach persona with SNS profile
-        await Services.Identity.attachProfile(new ProfileIdentifier(ui.networkIdentifier, username), persona, {
+        await Services.Identity.attachProfile(id.val, persona, {
             connectionConfirmState: 'confirmed',
         })
 
@@ -126,6 +125,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }
 
     const onVerify = async () => {
+        if (!username) return
         if (!persona_?.publicHexKey) return
         const collectVerificationPost = ui.configuration.nextIDConfig?.collectVerificationPost
 
@@ -145,7 +145,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             const signResult = await Services.Identity.signWithPersona({
                 method: 'eth',
                 message: payload.signPayload,
-                identifier: persona_.identifier.toText(),
+                identifier: persona_.identifier,
             })
             if (!signResult) throw new Error('Failed to sign by persona.')
             const signature = signResult.signature.signature

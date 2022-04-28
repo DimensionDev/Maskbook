@@ -2,7 +2,6 @@ import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
 import type { IdentityResolved, PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
-    Identifier,
     ObservableWeakMap,
     PersonaIdentifier,
     PostIdentifier,
@@ -32,7 +31,7 @@ export namespace SocialNetwork {
         /** @returns the profile url. e.g.: https://twitter.com/realMaskNetwork */
         getProfilePage?(userId?: string): string
         /** @returns post URL from PostIdentifier */
-        getPostURL?(post: PostIdentifier<Identifier>): URL | null
+        getPostURL?(post: PostIdentifier): URL | null
         /** Is this username valid in this network */
         isValidUsername?(username: string): boolean
         /** How to encode/decode text payload (e.g. make it into a link so it will be shortened by SNS). */

@@ -44,7 +44,7 @@ export async function fetchPoolPerformance(address: string, period: Period, url:
         }`,
         variables: {
             fundAddress: address,
-            period: period,
+            period,
         },
     }
     const response = await fetch(url, {

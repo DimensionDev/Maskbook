@@ -17,8 +17,8 @@ test('Parse older v38 payload that does not have newer field', async () => {
 
 test('Encode v38 payload', async () => {
     const payload: PayloadWellFormed.Payload = {
-        author: Some(new ProfileIdentifier('facebook.com', 'test')),
-        authorPublicKey: Some((await queryTestPublicKey(new ProfileIdentifier('localhost', 'alice')))!),
+        author: Some(ProfileIdentifier.of('facebook.com', 'test').unwrap()),
+        authorPublicKey: Some((await queryTestPublicKey(ProfileIdentifier.of('localhost', 'alice').unwrap()))!),
         encrypted: new Uint8Array(Buffer.from('3a0d6ee692c6f46896b196f14301c01ad2fa26aa', 'hex')),
         encryption: {
             type: 'public',

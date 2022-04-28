@@ -108,7 +108,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                   amount: asset?.value?.priceInEth,
                   symbol: token?.value?.symbol,
                   title: asset?.value?.title,
-                  assetLink: assetLink,
+                  assetLink,
                   account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
               },
           )

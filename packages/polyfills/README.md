@@ -34,8 +34,6 @@ Those features are not easy to polyfill.
   - BigUint64Array (requires Safari 15)
   - DataView.prototype.getBigInt64 (requires Safari 15)
   - DataView.prototype.getBigUint64 (requires Safari 15)
-- ES2021:
-  - WeakReference (requires Safari 15)
 - ES2022:
   - ⭐ C l a s s ⭐ F i e l d s ⭐ (requires Safari 15)
   - Class initialization block (Safari not supported, Firefox 93+)
