@@ -82,7 +82,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
 
     const { ERC20 } = useTokenListConstants(chainId)
 
-    const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
+    const { value: erc20TokensDetailed = EMPTY_LIST, loading: erc20TokensDetailedLoading } =
         useERC20TokensDetailedFromTokenLists(
             ERC20,
             keyword,
