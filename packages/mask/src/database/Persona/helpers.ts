@@ -61,7 +61,3 @@ export async function queryPersona(identifier: PersonaIdentifier): Promise<Perso
         fingerprint: identifier.rawPublicKey,
     }
 }
-
-export async function queryPersonaByProfile(i: ProfileIdentifier) {
-    return (await queryProfile(i)).linkedPersona
-}

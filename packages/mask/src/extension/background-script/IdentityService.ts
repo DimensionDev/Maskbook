@@ -14,9 +14,6 @@ assertEnvironment(Environment.ManifestBackground)
 
 export * from '../../../background/services/identity'
 
-/** @deprecated */
-export { queryPersonaByProfile } from '../../database'
-
 export async function mobile_queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]): Promise<Profile[]> {
     if (process.env.architecture !== 'app') throw new Error('This function is only available in the app')
     const _ = await queryProfilesDB({ identifiers })

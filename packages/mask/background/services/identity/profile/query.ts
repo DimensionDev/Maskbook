@@ -38,7 +38,7 @@ export async function mobile_queryProfileRecordFromIndexedDB() {
 
 export async function queryProfilesInformation(identifiers: ProfileIdentifier[]): Promise<ProfileInformation[]> {
     const profiles = await queryProfilesDB({ identifiers })
-    return toProfileInformation(profiles)
+    return toProfileInformation(profiles).mustNotAwaitThisWithInATransaction
 }
 /** @deprecated */
 export async function hasLocalKey(identifier: ProfileIdentifier) {
@@ -55,4 +55,5 @@ export async function queryOwnedProfilesInformation(network?: string): Promise<P
         profiles = await queryProfilesDB({ identifiers: ids, network }, t)
     })
     return toProfileInformation(profiles!.filter((x) => x.identifier.network === network))
+        .mustNotAwaitThisWithInATransaction
 }
