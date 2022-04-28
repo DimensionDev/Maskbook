@@ -1,70 +1,51 @@
-import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
-import AbstractTab, { AbstractTabProps } from './AbstractTab'
-import { ChainId, getChainDetailed } from '@masknet/web3-shared-evm'
+import { MaskTabList, useTabs } from '@masknet/theme'
 import { isDashboardPage } from '@masknet/shared-base'
-
-interface StyleProps {
-    chainLength: number
-    isDashboard: boolean
-}
-const useStyles = makeStyles<StyleProps>()((theme, props) => ({
-    tab: {
-        backgroundColor: !props.isDashboard
-            ? `${theme.palette.background.default}!important`
-            : `${MaskColorVar.primaryBackground2}!important`,
-        marginRight: 1,
-        '&:last-child': {
-            marginRight: 0,
-        },
-    },
-    tabs: {
-        '& .MuiTabs-flexContainer': {
-            backgroundColor: theme.palette.background.paper,
-        },
-        '& .Mui-selected': {
-            color: '#ffffff',
-            backgroundColor: `${theme.palette.primary.main}!important`,
-        },
-        '& .MuiTabs-scroller': {
-            margin: '0 1px',
-        },
-        '& .MuiTabs-scrollButtons': {
-            width: 'unset',
-            backgroundColor: !props.isDashboard
-                ? `${theme.palette.background.default}!important`
-                : `${MaskColorVar.primaryBackground2}!important`,
-            '&.Mui-disabled': {
-                opacity: 1,
-                '& svg': {
-                    opacity: 0.3,
-                },
-            },
-        },
-    },
-}))
+import TabContext from '@mui/lab/TabContext'
+import { Stack, Tab, Typography } from '@mui/material'
+import { useNetworkDescriptors } from '@masknet/plugin-infra/web3'
+import { WalletIcon } from '@masknet/shared'
 
 interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
-    chains: ChainId[]
-    setChainId: (chainId: ChainId) => void
-    chainId: ChainId
+    chains: number[]
+    setChainId: (chainId: number) => void
+    chainId: number
 }
+
 export function NetworkTab(props: NetworkTabProps) {
     const isDashboard = isDashboardPage()
-    const classes = useStylesExtends(useStyles({ chainLength: props.chains.length, isDashboard }), props)
     const { chainId, setChainId, chains } = props
-    const createTabItem = (name: string, chainId: ChainId) => ({
-        label: <span>{name}</span>,
-        sx: { p: 0 },
-        cb: () => setChainId(chainId),
-    })
 
-    const tabProps: AbstractTabProps = {
-        tabs: chains.map((chainId) => createTabItem(getChainDetailed(chainId)?.chain ?? 'Unknown', chainId)),
-        index: chains.indexOf(chainId),
-        classes,
-        hasOnlyOneChild: true,
-        scrollable: true,
-    }
+    const networks = useNetworkDescriptors()
+    const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
+    const networkIds = usedNetworks.map((x) => x.chainId.toString())
+    const [currentTab, , , setTab] = useTabs(chainId.toString() ?? networkIds[0], ...networkIds)
 
-    return <AbstractTab {...tabProps} height={350} />
+    return (
+        <TabContext value={currentTab}>
+            <MaskTabList
+                variant="flexible"
+                onChange={(e, v) => {
+                    setChainId(Number.parseInt(v, 10))
+                    setTab(v)
+                }}
+                aria-label="Network Tabs">
+                {usedNetworks.map((x) => {
+                    return (
+                        <Tab
+                            key={x.chainId}
+                            value={x.chainId.toString()}
+                            label={
+                                <Stack display="inline-flex" flexDirection="row" gap={0.5}>
+                                    <WalletIcon networkIcon={x.icon} size={16} />
+                                    <Typography variant="body2" fontSize={14} fontWeight="bold">
+                                        {x.name}
+                                    </Typography>
+                                </Stack>
+                            }
+                        />
+                    )
+                })}
+            </MaskTabList>
+        </TabContext>
+    )
 }

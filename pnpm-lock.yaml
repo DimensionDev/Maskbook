@@ -1245,11 +1245,12 @@ importers:
       classnames: ^2.3.1
       fuse.js: ^6.6.2
       notistack: 2.0.5
+      react-use: ^17.3.2
       react-window: ^1.8.7
       tinycolor2: ^1.4.2
       tss-react: ^3.6.2
       unstated-next: ^1.1.0
-      use-subscription: 1.6.0
+      use-subscription: ^1.6.0
     dependencies:
       '@masknet/icons': link:../icons
       '@masknet/shared-base': link:../shared-base
@@ -1259,6 +1260,7 @@ importers:
       classnames: 2.3.1
       fuse.js: 6.6.2
       notistack: 2.0.5
+      react-use: 17.3.2
       react-window: 1.8.7
       tinycolor2: 1.4.2
       tss-react: 3.6.2
@@ -13191,7 +13193,7 @@ packages:
       quick-lru: 4.0.1
 
   /camelcase/1.2.1:
-    resolution: {integrity: sha1-m7UwTS4LVmmLLHWLCKPqqdqlijk=}
+    resolution: {integrity: sha512-wzLkDa4K/mzI1OSITC+DUyjgIl/ETNHE9QvYgy6J6Jvqyyz4C0Xfd+lQhb19sX2jMpZV4IssUn0VDVmglV+s4g==}
     engines: {node: '>=0.10.0'}
     dev: false
 
@@ -13200,7 +13202,7 @@ packages:
     engines: {node: '>=0.10.0'}
 
   /camelcase/4.1.0:
-    resolution: {integrity: sha1-1UVjW+HjPFQmScaRc+Xeas+uNN0=}
+    resolution: {integrity: sha512-FxAv7HpHrXbh3aPo4o2qxHay2lkLY3x5Mw3KeE4KQE8ysVfziWeRZDwcjauvwBSGEC/nXUPzZy8zeh4HokqOnw==}
     engines: {node: '>=4'}
     dev: false
 
@@ -13527,7 +13529,7 @@ packages:
     dev: false
 
   /cliui/2.1.0:
-    resolution: {integrity: sha1-S0dXYP+AJkx2LDoXGQMukcf+oNE=}
+    resolution: {integrity: sha512-GIOYRizG+TGoc7Wgc1LiOTLare95R3mzKgoln+Q/lE4ceiYH19gUpl0l0Ffq4lJDEf3FxujMe6IBfOCs7pfqNA==}
     dependencies:
       center-align: 0.1.3
       right-align: 0.1.3
@@ -26151,7 +26153,7 @@ packages:
       serialize-javascript: 6.0.0
       source-map: 0.6.1
       terser: 5.12.1
-      webpack: 5.72.1
+      webpack: 5.72.1_webpack-cli@4.9.2
     dev: true
 
   /terser-webpack-plugin/5.3.1_x4y5r4zvu22k667e7z56zns5yi:
