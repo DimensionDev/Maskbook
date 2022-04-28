@@ -1,5 +1,5 @@
 import type { BindingProof } from '@masknet/shared-base'
-import type { WalletsCollection, walletTypes } from './types'
+import type { collection, WalletsCollection, walletTypes } from './types'
 
 export const formatPublicKey = (publicKey?: string) => {
     return `${publicKey?.slice(0, 6)}...${publicKey?.slice(-6)}`
@@ -18,15 +18,23 @@ export const eduplicateArray = (listA?: walletTypes[], listB?: walletTypes[]) =>
 export const getWalletList = (
     accounts: BindingProof[],
     wallets: walletTypes[],
-    hiddenObj: Record<string, { hiddenAddresses: WalletsCollection }>,
+    hiddenObj: Record<string, WalletsCollection>,
+    footprints: collection[],
+    donations: collection[],
 ) => {
     if (wallets?.length === 0 || !hiddenObj || accounts?.length === 0) return
     return accounts?.map((key) => ({
         ...key,
         walletList: {
-            NFTs: eduplicateArray(wallets, hiddenObj[`twitter_${key?.identity}`]?.hiddenAddresses?.NFTs),
-            donations: eduplicateArray(wallets, hiddenObj[`twitter_${key?.identity}`]?.hiddenAddresses?.donations),
-            footprints: eduplicateArray(wallets, hiddenObj[`twitter_${key?.identity}`]?.hiddenAddresses?.footprints),
+            NFTs: eduplicateArray(wallets, hiddenObj[key?.identity]?.NFTs),
+            donations: eduplicateArray(wallets, hiddenObj[key?.identity]?.donations)?.map((wallet) => ({
+                ...wallet,
+                collections: donations?.find((donation) => donation?.address === wallet?.address)?.collections,
+            })),
+            footprints: eduplicateArray(wallets, hiddenObj[key?.identity]?.footprints)?.map((wallet) => ({
+                ...wallet,
+                collections: footprints?.find((footprint) => footprint?.address === wallet?.address)?.collections,
+            })),
         },
     }))
 }

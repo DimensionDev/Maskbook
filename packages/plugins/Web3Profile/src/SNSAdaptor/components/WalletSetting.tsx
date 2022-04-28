@@ -1,11 +1,12 @@
 import { InjectedDialog } from '@masknet/shared'
-import { fromHex, NextIDPlatform, PersonaInformation, toBase64 } from '@masknet/shared-base'
+import { PluginId } from '@masknet/plugin-infra'
+import { context } from '../context'
+import { fromHex, NextIDPlatform, PersonaInformation, PopupRoutes, toBase64 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDStorage } from '@masknet/web3-providers'
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { memo } from 'react'
 import { WalletSwitch } from '../components/WalletSwitch'
-import { usePersonaSign } from '../hooks/usePersonaSign'
 import type { accountType, walletTypes } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
@@ -57,6 +58,8 @@ interface WalletSettingProp {
     retryData: () => void
 }
 
+const pluginId = PluginId.Web3Profile
+
 const WalletSetting = memo(
     ({ wallets, accountList, title, open, onClose, accountId, currentPersona, retryData }: WalletSettingProp) => {
         const { classes } = useStyles()
@@ -73,20 +76,21 @@ const WalletSetting = memo(
             ),
         }
 
-        const personaSign = usePersonaSign()
         const onConfirm = async () => {
             if (!currentPersona?.publicHexKey) return
             const patch = {
                 hiddenAddresses: { ...hiddenList },
             }
+            console.log({ patch })
             try {
                 const payload = await NextIDStorage.getPayload(
                     currentPersona.publicHexKey,
                     NextIDPlatform.Twitter,
                     accountId!,
                     patch,
+                    pluginId,
                 )
-                const signature = await personaSign?.(currentPersona?.identifier, payload.val?.signPayload)
+                const signature = await context.generateSign?.(currentPersona?.identifier, payload.val?.signPayload)
 
                 const res = await NextIDStorage.set(
                     payload.val?.uuid,
@@ -96,6 +100,7 @@ const WalletSetting = memo(
                     accountId!,
                     payload.val?.createdAt,
                     patch,
+                    pluginId,
                 )
                 retryData()
                 onClose()
@@ -103,12 +108,21 @@ const WalletSetting = memo(
                 return
             }
         }
+
+        const openPopupsWindow = () => {
+            context.openPopupWindow(PopupRoutes.ConnectedWallets)
+        }
         return (
             <InjectedDialog
                 classes={{ dialogContent: classes.content }}
                 title={title}
                 fullWidth={false}
                 open={open}
+                titleTail={
+                    <Button size="small" onClick={openPopupsWindow}>
+                        Wallets
+                    </Button>
+                }
                 onClose={onClose}>
                 <DialogContent className={classes.content}>
                     <div>

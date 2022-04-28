@@ -151,6 +151,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 allPersona: allPersonaSub,
                 lastRecognizedProfile: lastRecognizedSub,
                 currentVisitingProfile: currentVisitingSub,
+                openPopupWindow: Services.Helper.openPopupWindow,
             }
         }),
     )

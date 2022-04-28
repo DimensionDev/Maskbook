@@ -28,6 +28,11 @@ export interface collectionTypes {
     platform: string
     iconURL?: string | null
 }
+
+export interface collection {
+    address: string
+    collections?: collectionTypes[]
+}
 export enum AssetType {
     GitcoinDonation = 'Gitcoin-Donation',
     POAP = 'POAP',
@@ -46,8 +51,13 @@ export interface WalletsCollection {
 export interface walletTypes {
     address: string
     platform?: string
+    collections?: collectionTypes[]
 }
 
 export interface accountType extends BindingProof {
     walletList: WalletsCollection
+}
+
+export interface personaInfo {
+    accountList: accountType[]
 }

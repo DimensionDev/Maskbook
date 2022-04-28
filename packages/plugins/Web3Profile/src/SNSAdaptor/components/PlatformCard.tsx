@@ -52,13 +52,11 @@ const useStyles = makeStyles()((theme) => {
 export interface PlatformCardProps extends withClasses<never | 'root'> {
     account?: accountType
     openImageSetting: (str: string) => void
-    footprintNum?: number
-    donationNum?: number
     isCurrent?: boolean
 }
 
 export function PlatformCard(props: PlatformCardProps) {
-    const { account, openImageSetting, footprintNum, donationNum, isCurrent } = props
+    const { account, openImageSetting, isCurrent } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -81,7 +79,7 @@ export function PlatformCard(props: PlatformCardProps) {
                     <div>
                         <Typography style={{ fontWeight: '700' }}>{t.NFTs()}</Typography>
                         <Typography>
-                            <span style={{ fontWeight: '700' }}>{account?.walletList?.NFTs?.length}</span> {t.wallets()}{' '}
+                            <span style={{ fontWeight: '700' }}>{0}</span> {t.wallets()}{' '}
                             <span style={{ fontWeight: '700' }}>{0}</span> {t.NFTs()}
                         </Typography>
                     </div>
@@ -92,7 +90,13 @@ export function PlatformCard(props: PlatformCardProps) {
                         <Typography style={{ fontWeight: '700' }}>{t.footprints()}</Typography>
                         <Typography>
                             <span style={{ fontWeight: '700' }}>{account?.walletList?.footprints?.length}</span>{' '}
-                            {t.wallets()} <span style={{ fontWeight: '700' }}>{footprintNum ?? 0}</span>{' '}
+                            {t.wallets()}{' '}
+                            <span style={{ fontWeight: '700' }}>
+                                {account?.walletList?.footprints?.reduce(
+                                    (pre, cur) => pre + (cur?.collections?.length ?? 0),
+                                    0,
+                                )}
+                            </span>{' '}
                             {t.footprints()}
                         </Typography>
                     </div>
@@ -103,7 +107,14 @@ export function PlatformCard(props: PlatformCardProps) {
                         <Typography style={{ fontWeight: '700' }}>{t.donations()}</Typography>
                         <Typography>
                             <span style={{ fontWeight: '700' }}>{account?.walletList?.donations?.length}</span>{' '}
-                            {t.wallets()} <span style={{ fontWeight: '700' }}>{donationNum ?? 0}</span> {t.donations()}
+                            {t.wallets()}{' '}
+                            <span style={{ fontWeight: '700' }}>
+                                {account?.walletList?.donations?.reduce(
+                                    (pre, cur) => pre + (cur?.collections?.length ?? 0),
+                                    0,
+                                )}
+                            </span>{' '}
+                            {t.donations()}
                         </Typography>
                     </div>
                     <ArrowForwardIosIcon className={classes.arrowIcon} />

@@ -121,7 +121,8 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
         return getWalletHiddenList(currentPersona.publicHexKey!)
     }, [currentPersona])
 
-    const accountList = getWalletList(accounts, wallets, hiddenObj)
+    const accountList = getWalletList(accounts, wallets, hiddenObj, footprintList, donationList)
+    console.log({ hiddenObj, accountList, donationList, footprintList })
 
     return (
         <>
@@ -140,8 +141,6 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
                         }}
                         persona={currentPersona}
                         currentVisitingProfile={currentVisitingProfile}
-                        footprintNumList={footprintList?.map((x) => x?.length)}
-                        donationNumList={donationList?.map((x) => x?.length)}
                         accountList={accountList}
                     />
                 </DialogContent>
@@ -156,8 +155,6 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
                 onClose={() => setImageManageOpen(false)}
                 open={imageManageOpen}
                 accountId={accountId}
-                footprintList={footprintList}
-                donationList={donationList}
                 currentVisitingProfile={currentVisitingProfile}
                 allWallets={wallets}
                 getWalletHiddenRetry={retryGetWalletHiddenList}

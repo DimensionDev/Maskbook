@@ -68,8 +68,6 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
     const { Utils } = useWeb3State()
     const { value: domain } = useReverseAddress(address)
 
-    console.log({ collectionList })
-
     return (
         <Card className={classes.wrapper}>
             <div>

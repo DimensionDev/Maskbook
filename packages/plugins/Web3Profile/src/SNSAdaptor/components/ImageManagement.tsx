@@ -9,7 +9,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { PersonaAction } from './PersonaAction'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import type { accountType, collectionTypes, walletTypes } from '../types'
+import type { accountType, walletTypes } from '../types'
 import WalletSetting from './WalletSetting'
 
 const useStyles = makeStyles()((theme) => ({
@@ -66,8 +66,6 @@ export interface ImageManagementProps extends withClasses<never | 'root'> {
     open: boolean
     onClose: () => void
     currentVisitingProfile?: IdentityResolved
-    footprintList?: collectionTypes[][]
-    donationList?: collectionTypes[][]
     accountList?: accountType
     accountId?: string
     allWallets?: walletTypes[]
@@ -86,16 +84,12 @@ export function ImageManagement(props: ImageManagementProps) {
         accountId,
         allWallets,
         currentVisitingProfile,
-        donationList,
-        footprintList,
         accountList,
         getWalletHiddenRetry,
     } = props
     const [settingAddress, setSettingAddress] = useState<string>()
     const [imageListOpen, setImageListOpen] = useState(false)
     const [walletSettingOpen, setWalletSettingOpen] = useState(false)
-    const [collectionIndex, setCollectionIndex] = useState(0)
-    const collectionList = title === 'Donations' ? donationList : footprintList
     const addresses =
         title === 'Donations'
             ? accountList?.walletList?.donations
@@ -123,10 +117,9 @@ export function ImageManagement(props: ImageManagementProps) {
                             onSetting={() => {
                                 setSettingAddress(address.address)
                                 setImageListOpen(true)
-                                setCollectionIndex(index)
                             }}
                             type={title}
-                            collectionList={collectionList?.[index]}
+                            collectionList={address?.collections}
                             address={address.address}
                         />
                     ))}
@@ -136,7 +129,7 @@ export function ImageManagement(props: ImageManagementProps) {
                         address={settingAddress}
                         open={imageListOpen}
                         onClose={() => setImageListOpen(false)}
-                        collectionList={collectionList?.[collectionIndex]}
+                        collectionList={addresses?.find((address) => address?.address === settingAddress)?.collections}
                     />
                     <WalletSetting
                         wallets={allWallets}

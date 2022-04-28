@@ -9,6 +9,7 @@ import { NextIDStorage } from '@masknet/web3-providers'
 import { NextIDPlatform, PersonaInformation, fromHex, toBase64 } from '@masknet/shared-base'
 import { PLUGIN_ID } from '../../constants'
 import type { collectionTypes } from '../types'
+import { context } from '../context'
 
 const useStyles = makeStyles()((theme) => {
     console.log({ theme })
@@ -84,7 +85,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
         setUnListdCollections((pre) => [...pre, unListingCollection])
         const unListingIndex = listedCollections?.findIndex((collection) => collection?.iconURL === url)
         const currentListed = listedCollections
-        currentListed?.splice(unListingIndex, 1)
+        currentListed?.splice(unListingIndex!, 1)
         setListdCollections([...currentListed])
     }
     const list = (url: string | undefined) => {
@@ -93,11 +94,12 @@ export function ImageListDialog(props: ImageListDialogProps) {
         setListdCollections((pre) => [...pre, listingCollection])
         const listingIndex = unListedCollections?.findIndex((collection) => collection?.iconURL === url)
         const currentUnListed = unListedCollections
-        currentUnListed?.splice(listingIndex, 1)
+        currentUnListed?.splice(listingIndex!, 1)
         setUnListdCollections([...currentUnListed])
     }
     const handleClose = () => {
         setUnListdCollections([])
+        setListdCollections(collectionList)
         onClose()
     }
 
@@ -115,7 +117,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                 PLUGIN_ID,
             )
             if (!payload) throw new Error('get payload failed')
-            const signature = await personaSign(currentPersona.identifier, payload.val?.signPayload)
+            const signature = await context.generateSign(currentPersona.identifier, payload.val?.signPayload)
             if (!signature) throw new Error('signature failed')
             const res = await NextIDStorage.set(
                 payload.val?.uuid,
