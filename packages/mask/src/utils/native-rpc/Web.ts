@@ -1,43 +1,35 @@
-import type {
+import {
     MaskNetworkAPIs,
     RelationFavor,
     EC_Private_JsonWebKey as Native_EC_Private_JsonWebKey,
     EC_Public_JsonWebKey as Native_EC_Public_JsonWebKey,
     AESJsonWebKey as Native_AESJsonWebKey,
+    MobileProfile,
+    MobileProfileRelation,
 } from '@masknet/public-api'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
 import { convertIdentifierMapToRawMap, ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { launchPageSettings } from '../../settings/settings'
 import Services from '../../extension/service'
-import type { Profile } from '../../database'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
-import type { MobileProfiles } from '../../../background/services/identity/profile/query'
 
 const stringToPersonaIdentifier = (str: string) => ECKeyIdentifier.from(str).unwrap()
 const stringToProfileIdentifier = (str: string) => ProfileIdentifier.from(str).unwrap()
 
-function profileFormatter(
-    p: Pick<Profile, 'identifier' | 'nickname' | 'createdAt' | 'updatedAt' | 'linkedPersona'> | MobileProfiles,
-) {
+function profileRelationFormatter(
+    p: MobileProfile,
+    personaIdentifier: string | undefined,
+    favor: RelationFavor | undefined = RelationFavor.UNCOLLECTED,
+): MobileProfileRelation {
     return {
-        identifier: p.identifier.toText(),
+        identifier: p.identifier,
         nickname: p.nickname,
         linkedPersona: !!p.linkedPersona,
-        createdAt: p.createdAt.getTime(),
-        updatedAt: p.updatedAt.getTime(),
-    }
-}
-
-function profileRelationFormatter(p: Profile, personaIdentifier: string | undefined, favor: RelationFavor | undefined) {
-    return {
-        identifier: p.identifier.toText(),
-        nickname: p.nickname,
-        linkedPersona: !!p.linkedPersona,
-        createdAt: p.createdAt.getTime(),
-        updatedAt: p.updatedAt.getTime(),
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
         personaIdentifier,
         favor,
     }
@@ -129,14 +121,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         await Services.Identity.logoutPersona(stringToPersonaIdentifier(identifier))
     },
     profile_queryProfiles: async ({ network }) => {
-        const result = await Services.Identity.mobile_queryProfiles(network)
-
-        return result?.map(profileFormatter)
+        return Services.Identity.mobile_queryProfiles({ network })
     },
     profile_queryMyProfiles: async ({ network }) => {
-        const result = await Services.Identity.mobile_queryMyProfiles(network)
-
-        return result?.map(profileFormatter)
+        return Services.Identity.mobile_queryOwnedProfiles(network)
     },
     profile_updateProfileInfo: async ({ identifier, data }) => {
         await Services.Identity.updateProfileInfo(stringToProfileIdentifier(identifier), data)
@@ -166,10 +154,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             count,
         )
 
-        const profiles = await Services.Identity.mobile_queryProfilesWithIdentifiers(records.map((x) => x.profile))
+        const profiles = await Services.Identity.mobile_queryProfiles({ identifiers: records.map((x) => x.profile) })
 
         return profiles.map((profile) => {
-            const record = records.find((x) => x.profile === profile.identifier)
+            const record = records.find((x) => x.profile.toText() === profile.identifier)
             const favor = record?.favor
             const personaIdentifier = record?.linked.toText()
             return profileRelationFormatter(profile, personaIdentifier, favor)
