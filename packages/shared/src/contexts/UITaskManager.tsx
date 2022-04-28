@@ -11,16 +11,19 @@ interface ContextOptionsGeneric<T, R> {
 }
 
 type BaseDialogProps = Pick<InjectedDialogProps, 'open' | 'onClose'>
+type CallableKeys<T> = keyof {
+    [K in keyof T as T[K] extends ((...args: any[]) => any) | undefined ? K : never]: any
+}
 
 /**
  * Create a manager of small UI task sessions,
  * which provide  a Context and a Provider
  */
 export const createUITaskManager = <
-    TaskOptions,
+    TaskOptions extends Record<string, any>,
     Result,
     Props extends BaseDialogProps,
-    ResolveProp extends keyof Props,
+    ResolveProp extends CallableKeys<Props> & CallableKeys<TaskOptions>,
 >(
     Component: FunctionComponent<Props>,
     taskResolveField: ResolveProp,
@@ -79,6 +82,7 @@ export const createUITaskManager = <
                             open: true,
                             ...task.taskOptions,
                             [taskResolveField]: (result: Result | null) => {
+                                task.taskOptions[taskResolveField]?.()
                                 task.resolve(result)
                             },
                             onClose: () => {

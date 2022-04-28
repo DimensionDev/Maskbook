@@ -42,19 +42,19 @@ const useStyles = makeStyles()((theme) => ({
 
 interface TransactionDialogUIProps extends withClasses<never> {}
 
-interface ShowTransactionPendingOptions {
+interface ShareTransactionOptions {
     title: string
     content: string
 }
 
-function useShowTransactionPending({ title, content }: ShowTransactionPendingOptions) {
+function useShowTransactionPending({ title, content }: ShareTransactionOptions) {
     const showConfirm = useShowConfirm()
     const { classes } = useStyles()
     const { t } = useI18N()
 
     return () => {
         return showConfirm({
-            title: title,
+            title,
             content: (
                 <>
                     <CircularProgress size={64} color="primary" />

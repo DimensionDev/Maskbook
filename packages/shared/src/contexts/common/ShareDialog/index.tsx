@@ -5,7 +5,7 @@ import type { ConfirmOptions } from './types'
 
 const { TaskManagerContext, TaskManagerProvider: ConfirmProvider } = createUITaskManager<
     ConfirmOptions,
-    boolean,
+    void,
     ConfirmDialogProps,
     'onConfirm'
 >(ConfirmDialog, 'onConfirm')
