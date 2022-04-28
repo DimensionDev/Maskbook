@@ -1,4 +1,4 @@
-import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@masknet/shared-base'
+import { ECKeyIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 import { head } from 'lodash-unified'
 import type { InternalSettings } from '../../settings/createSettings'
 import {
@@ -66,11 +66,9 @@ export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier |
     const personas = (await queryMyPersonas())
         .sort((a, b) => (a.createdAt > b.createdAt ? 1 : 0))
         .map((x) => x.identifier)
-    const newVal = Identifier.fromString<PersonaIdentifier>(currentPersonaIdentifier.value, ECKeyIdentifier).unwrapOr(
-        head(personas),
-    )
+    const newVal = ECKeyIdentifier.from(currentPersonaIdentifier.value).unwrapOr(head(personas))
     if (!newVal) return undefined
-    if (personas.find((x) => x.equals(newVal))) return newVal
+    if (personas.find((x) => x === newVal)) return newVal
     if (personas[0]) currentPersonaIdentifier.value = personas[0].toText()
     return personas[0]
 }

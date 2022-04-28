@@ -89,7 +89,7 @@ export async function getRecentTransactions(
                     payload,
                     payloadReplacement,
                     status: helpers.getReceiptStatus(receipt),
-                    receipt: receipt,
+                    receipt,
                 }
 
                 if (!options?.receipt) {

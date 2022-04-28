@@ -6,5 +6,7 @@ export default function NotificationsToMobile(signal: AbortSignal) {
 
     // we don't need response
     const forwardToMobile = notify(nativeAPI!.api.notify_visible_detected_profile_changed)
-    MaskMessages.events.Native_visibleSNS_currentDetectedProfileUpdated.on(forwardToMobile, { signal })
+    MaskMessages.events.Native_visibleSNS_currentDetectedProfileUpdated.on((x) => forwardToMobile(x.toText()), {
+        signal,
+    })
 }

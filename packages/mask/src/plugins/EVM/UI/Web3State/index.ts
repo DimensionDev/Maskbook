@@ -150,8 +150,8 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         formatDomainName,
         resolveNonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) =>
             resolveCollectibleLink(chainId as ChainId, NonFungibleAssetProvider.OPENSEA, {
-                contractDetailed: { address: address },
-                tokenId: tokenId,
+                contractDetailed: { address },
+                tokenId,
             } as unknown as any),
     }
     return state

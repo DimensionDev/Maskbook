@@ -75,7 +75,7 @@ export function Banner(props: BannerProps) {
     }, [networkIdentifier, nextStep])
     const defaultUserName = networkIdentifier
         ? {
-              defaultValue: lastRecognizedIdentity.identifier.isUnknown ? '' : lastRecognizedIdentity.identifier.userId,
+              defaultValue: lastRecognizedIdentity.identifier?.userId ?? '',
               value,
               onChange,
               isValid: activatedSocialNetworkUI.utils.isValidUsername || (() => true),

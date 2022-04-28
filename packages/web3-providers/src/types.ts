@@ -472,7 +472,13 @@ export namespace TwitterBaseAPI {
             }[]
         }
     }
+
+    export interface Settings {
+        screen_name: string
+    }
+
     export interface Provider {
+        getSettings: () => Promise<Settings | undefined>
         getUserNftContainer: (screenName: string) => Promise<
             | {
                   address: string
