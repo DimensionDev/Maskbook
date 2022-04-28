@@ -20,7 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <img src={new URL('../assets/logo.png', import.meta.url).toString()} />
+            const icon = <img src={new URL('../assets/icon-logo.png', import.meta.url).toString()} />
             const name = 'Game' // <Trans i18nKey="plugin_pets_name" />
             return {
                 ApplicationEntryID: base.ID,

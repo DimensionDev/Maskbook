@@ -1,5 +1,6 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Button } from '@mui/material'
+import { IconGame } from '../constants'
 
 const useStyles = makeStyles()(() => ({
     walletBar: {},
@@ -71,7 +72,7 @@ const GameList = (props: Props) => {
             <h2 className={classes.title}>GameList</h2>
             <ul className={classes.gameList}>
                 <li className={classes.gameBar}>
-                    <img className={classes.logo} src="#" alt="game logo" />
+                    <img className={classes.logo} src={IconGame} alt="game logo" />
                     <div className={classes.info}>
                         <div className={classes.infoTitle}>Skiing Adcenture</div>
                         <div className={classes.introduction}>
