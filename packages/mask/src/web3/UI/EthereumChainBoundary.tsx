@@ -165,7 +165,10 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     <span>{t('plugin_wallet_connect_wallet_tip')}</span>
                 </Typography>
                 {!props.hiddenConnectButton ? (
-                    <ActionButton sx={{ marginTop: 1.5 }} onClick={openSelectProviderDialog}>
+                    <ActionButton
+                        sx={{ marginTop: 1.5 }}
+                        onClick={openSelectProviderDialog}
+                        size={props.ActionButtonPromiseProps?.size}>
                         {t('plugin_wallet_connect_wallet')}
                     </ActionButton>
                 ) : null}
