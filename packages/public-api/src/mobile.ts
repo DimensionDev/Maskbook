@@ -6,7 +6,7 @@ import type {
     ProfileRecord,
     LinkedProfileDetails,
     RelationRecord,
-    PostRecord,
+    MobilePostRecord,
 } from './types'
 import type { ProfileIdentifier_string } from './web'
 
@@ -103,15 +103,15 @@ export interface SharedNativeAPIs {
     delete_relation(params: { personaIdentifier: string; profileIdentifier: string }): Promise<void>
     query_avatar(params: { identifier: string }): Promise<string>
     store_avatar(params: { identifier: string; avatar: string }): Promise<void>
-    create_post(params: { post: PostRecord }): Promise<PostRecord>
-    query_post(params: { identifier: string }): Promise<PostRecord>
+    create_post(params: { post: MobilePostRecord }): Promise<MobilePostRecord>
+    query_post(params: { identifier: string }): Promise<MobilePostRecord>
     query_posts(params: {
         encryptBy?: string
         userIds: string[]
         network?: string
         pageOption?: PageOption
-    }): Promise<PostRecord[]>
-    update_post(params: { post: Partial<PostRecord>; options: { mode: 0 | 1 } }): Promise<PostRecord[]>
+    }): Promise<MobilePostRecord[]>
+    update_post(params: { post: Partial<MobilePostRecord>; options: { mode: 0 | 1 } }): Promise<MobilePostRecord[]>
     notify_visible_detected_profile_changed(newID: ProfileIdentifier_string): Promise<void>
 }
 /**

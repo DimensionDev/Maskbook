@@ -30,6 +30,7 @@ export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even
     })
 }
 
+/** @internal looks like not directly used. let's not exposing it for now. */
 export async function loginPersona(identifier: PersonaIdentifier) {
     return consistentPersonaDBWriteAccess((t) =>
         updatePersonaDB(

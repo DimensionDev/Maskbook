@@ -2,7 +2,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { TipButton } from '../../../../plugins/NextID/components/Tip/TipButton'
+import { TipButton } from '../../../../plugins/Tips/components'
 import { createReactRootShadowed, startWatch, useLocationChange } from '../../../../utils'
 import {
     profileFollowButtonSelector as selector,

@@ -8,6 +8,7 @@ import { VALUABLES_VCENT_URL } from '../constants'
 import { useAsync } from 'react-use'
 import { PluginVCentRPC } from '../messages'
 import { useI18N } from '../../../utils'
+import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 
 const useStyle = makeStyles()((theme) => ({
     root: {
@@ -78,7 +79,7 @@ export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) 
     const { t } = useI18N()
     const { value: tweets } = useAsync(() => PluginVCentRPC.getTweetData(tweetAddress), [tweetAddress])
     const tweet = first(tweets)
-
+    usePluginWrapper(tweet?.type === 'Offer')
     // only offer tweets
     if (tweet?.type !== 'Offer') return null
 

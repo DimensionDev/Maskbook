@@ -1,7 +1,8 @@
-import type { ReadonlyIdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import type { ProfileRecord, PersonaRecord, LinkedProfileDetails } from '../../../background/database/persona/db'
 
 type TypedOmit<T, Q extends keyof T> = Omit<T, Q>
+/** @deprecated */
 export interface Profile extends Readonly<TypedOmit<ProfileRecord, 'localKey' | 'linkedPersona'>> {
     readonly linkedPersona?: Persona
     readonly avatar?: string
@@ -10,11 +11,7 @@ export interface Profile extends Readonly<TypedOmit<ProfileRecord, 'localKey' | 
 }
 
 export interface Persona extends TypedOmit<PersonaRecord, 'localKey' | 'publicKey' | 'privateKey' | 'linkedProfiles'> {
-    readonly linkedProfiles: ReadonlyIdentifierMap<ProfileIdentifier, LinkedProfileDetails>
+    readonly linkedProfiles: ReadonlyMap<ProfileIdentifier, LinkedProfileDetails>
     readonly hasPrivateKey: boolean
     readonly fingerprint: string
 }
-
-export interface PersonaWithPrivateKey
-    extends Omit<PersonaRecord, 'privateKey'>,
-        Required<Pick<PersonaRecord, 'privateKey'>> {}

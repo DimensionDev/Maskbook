@@ -8,7 +8,7 @@ import { Web3UI } from '../Web3UI'
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     async init(signal, context) {
-        setupStorage(context.createKVStorage('memory', StorageDefaultValue))
+        setupStorage(context.createKVStorage('persistent', StorageDefaultValue))
         sns.Web3State = createWeb3State(signal)
         await connectWallet(true)
         await watchAccount()

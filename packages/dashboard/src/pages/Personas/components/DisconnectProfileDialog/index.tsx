@@ -90,7 +90,7 @@ export const DisconnectProfileDialog = ({
                             {t.personas_disconnect_warning()}
                         </Typography>
                         <Typography className={classes.personaTextZone}>
-                            persona: {personaIdentifier.compressedPoint}
+                            persona: {personaIdentifier.rawPublicKey}
                         </Typography>
                         <Stack mt={3} mb={1} direction="row" justifyContent="space-around" gap={4}>
                             <Button sx={{ flex: 1 }} onClick={onClose} color="secondary">

@@ -1,12 +1,12 @@
 import {
     personaRecordToPersona,
+    profileRecordToProfile,
     queryPersona as queryPersonaRAW,
     queryProfile,
-    queryProfilesWithQuery,
 } from '../../database'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { Persona, Profile } from '../../database/Persona/types'
-import { queryPersonasDB } from '../../../background/database/persona/db'
+import { queryPersonasDB, queryProfilesDB } from '../../../background/database/persona/db'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 
@@ -14,21 +14,14 @@ assertEnvironment(Environment.ManifestBackground)
 
 export * from '../../../background/services/identity'
 
-/** @deprecated */
-export { queryProfile, queryPersonaByProfile } from '../../database'
-
-/** @deprecated */
-export function queryProfiles(network?: string): Promise<Profile[]> {
-    return queryProfilesWithQuery({ network })
+export async function mobile_queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]): Promise<Profile[]> {
+    if (process.env.architecture !== 'app') throw new Error('This function is only available in the app')
+    const _ = await queryProfilesDB({ identifiers })
+    return Promise.all(_.map(profileRecordToProfile))
 }
 
-/** @deprecated */
-export function queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]) {
-    return queryProfilesWithQuery({ identifiers })
-}
-
-/** @deprecated */
-export async function queryMyProfiles(network?: string): Promise<Profile[]> {
+export async function mobile_queryMyProfiles(network?: string): Promise<Profile[]> {
+    if (process.env.architecture !== 'app') throw new Error('This function is only available in the app')
     const myPersonas = (await queryMyPersonas(network)).filter((x) => !x.uninitialized)
     return Promise.all(
         myPersonas

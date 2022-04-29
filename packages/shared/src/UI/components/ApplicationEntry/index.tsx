@@ -1,8 +1,9 @@
 import classNames from 'classnames'
-import { makeStyles } from '@masknet/theme'
+import type { Plugin } from '@masknet/plugin-infra'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Typography } from '@mui/material'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => ({
     applicationBox: {
         display: 'flex',
         flexDirection: 'column',
@@ -10,14 +11,13 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         backgroundColor: theme.palette.background.default,
         borderRadius: '8px',
-
         height: 100,
     },
     applicationBoxHover: {
         cursor: 'pointer',
         '&:hover': {
-            transform: 'scale(1.05) translateY(-4px)',
-            boxShadow: theme.palette.mode === 'light' ? '0px 10px 16px rgba(0, 0, 0, 0.1)' : 'none',
+            transform: 'scale(1.02) translateY(-2px)',
+            boxShadow: theme.palette.mode === 'light' ? '0px 5px 8px rgba(0, 0, 0, 0.05)' : 'none',
         },
     },
     applicationImg: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     disabled: {
         opacity: 0.4,
-        cursor: 'default',
+        cursor: 'default !important',
         pointerEvent: 'none',
     },
     iconWrapper: {
@@ -39,19 +39,71 @@ const useStyles = makeStyles()((theme) => ({
             height: 36,
         },
     },
+    recommendFeatureApplicationBox: {
+        width: 220,
+        minWidth: 220,
+        height: 97,
+        marginRight: 12,
+        cursor: 'pointer',
+        display: 'inline-flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 10,
+        borderRadius: 8,
+    },
+    recommendFeatureAppIconWrapper: {
+        marginRight: 12,
+        '> *': {
+            width: 48,
+            height: 48,
+        },
+    },
+    recommendFeatureAppListItemName: {
+        fontSize: 14,
+        fontWeight: 500,
+        cursor: disabled ? 'default' : 'pointer',
+        color: theme.palette.common.white,
+    },
+    recommendFeatureAppListItemDescription: {
+        fontSize: 12,
+        fontWeight: 500,
+        cursor: disabled ? 'default' : 'pointer',
+        color: theme.palette.common.white,
+    },
 }))
 
-interface Props {
+interface ApplicationEntryProps {
     icon: React.ReactNode
     title: React.ReactNode
     disabled?: boolean
+    recommendFeature?: Plugin.SNSAdaptor.ApplicationEntry['recommendFeature']
+    tooltipHint?: string
     onClick: () => void
 }
 
-export function ApplicationEntry(props: Props) {
-    const { title, onClick, disabled = false, icon } = props
-    const { classes } = useStyles()
-    return (
+export function ApplicationEntry(props: ApplicationEntryProps) {
+    const { title, onClick, disabled = false, icon, tooltipHint, recommendFeature } = props
+    const { classes } = useStyles({ disabled })
+    const jsx = recommendFeature ? (
+        <div
+            style={{
+                background: recommendFeature.backgroundGradient,
+            }}
+            className={classNames(
+                classes.recommendFeatureApplicationBox,
+                disabled ? classes.disabled : classes.applicationBoxHover,
+            )}
+            onClick={disabled ? () => {} : onClick}>
+            <div className={classes.recommendFeatureAppIconWrapper}>{icon}</div>
+            <div>
+                <Typography className={classes.recommendFeatureAppListItemName}>{title}</Typography>
+                <Typography className={classes.recommendFeatureAppListItemDescription}>
+                    {recommendFeature.description}
+                </Typography>
+            </div>
+        </div>
+    ) : (
         <div
             className={classNames(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
             onClick={disabled ? () => {} : onClick}>
@@ -60,5 +112,19 @@ export function ApplicationEntry(props: Props) {
                 {title}
             </Typography>
         </div>
+    )
+    return tooltipHint ? (
+        <ShadowRootTooltip
+            PopperProps={{
+                disablePortal: true,
+            }}
+            placement="top"
+            arrow
+            disableHoverListener={!tooltipHint}
+            title={<Typography>{tooltipHint}</Typography>}>
+            {jsx}
+        </ShadowRootTooltip>
+    ) : (
+        jsx
     )
 }

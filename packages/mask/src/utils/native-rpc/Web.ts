@@ -6,7 +6,7 @@ import type {
     AESJsonWebKey as Native_AESJsonWebKey,
 } from '@masknet/public-api'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
-import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
+import { convertIdentifierMapToRawMap, ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { launchPageSettings } from '../../settings/settings'
 import Services from '../../extension/service'
 import type { Profile } from '../../database'
@@ -14,12 +14,11 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
-import type { PersonaInformation } from '@masknet/shared-base'
 import type { MobileProfiles } from '../../../background/services/identity/profile/query'
 import type { MobilePersona } from '../../../background/services/identity/persona/mobile'
 
-const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
-const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
+const stringToPersonaIdentifier = (str: string) => ECKeyIdentifier.from(str).unwrap()
+const stringToProfileIdentifier = (str: string) => ProfileIdentifier.from(str).unwrap()
 function personaFormatter(p: MobilePersona) {
     const profiles = {}
 
@@ -50,35 +49,15 @@ function profileFormatter(
     }
 }
 
-const profileRelationFormatter = (
-    p: Profile,
-    personaIdentifier: string | undefined,
-    favor: RelationFavor | undefined,
-) => {
+function profileRelationFormatter(p: Profile, personaIdentifier: string | undefined, favor: RelationFavor | undefined) {
     return {
         identifier: p.identifier.toText(),
         nickname: p.nickname,
         linkedPersona: !!p.linkedPersona,
         createdAt: p.createdAt.getTime(),
         updatedAt: p.updatedAt.getTime(),
-        personaIdentifier: personaIdentifier,
-        favor: favor,
-    }
-}
-
-const personaInformationFormatter = (p: PersonaInformation) => {
-    const profiles = p.linkedProfiles.map((profileInformation) => {
-        return {
-            nickname: profileInformation.nickname,
-            identifier: profileInformation.identifier.toText(),
-            avatar: profileInformation.avatar,
-        }
-    })
-
-    return {
-        identifier: p.identifier.toText(),
-        nickname: p.nickname,
-        linkedProfiles: profiles,
+        personaIdentifier,
+        favor,
     }
 }
 
@@ -175,7 +154,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return result?.map(profileFormatter)
     },
     profile_queryMyProfiles: async ({ network }) => {
-        const result = await Services.Identity.queryMyProfiles(network)
+        const result = await Services.Identity.mobile_queryMyProfiles(network)
 
         return result?.map(profileFormatter)
     },
@@ -207,10 +186,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             count,
         )
 
-        const profiles = await Services.Identity.queryProfilesWithIdentifiers(records.map((x) => x.profile))
+        const profiles = await Services.Identity.mobile_queryProfilesWithIdentifiers(records.map((x) => x.profile))
 
         return profiles.map((profile) => {
-            const record = records.find((x) => x.profile.equals(profile.identifier))
+            const record = records.find((x) => x.profile === profile.identifier)
             const favor = record?.favor
             const personaIdentifier = record?.linked.toText()
             return profileRelationFormatter(profile, personaIdentifier, favor)
@@ -253,7 +232,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 privateKey: x.privateKey as JsonWebKey as unknown as Native_EC_Private_JsonWebKey,
                 localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
                 identifier: x.identifier.toText(),
-                linkedProfiles: Object.fromEntries(x.linkedProfiles.__raw_map__),
+                linkedProfiles: Object.fromEntries(convertIdentifierMapToRawMap(x.linkedProfiles)),
                 createdAt: x.createdAt.getTime(),
                 updatedAt: x.createdAt.getTime(),
                 hasLogout: x.hasLogout,

@@ -65,11 +65,11 @@ const MenuText = styled('span')(`
 export const PersonaRowCard = memo(() => {
     const { currentPersona, connectPersona, disconnectPersona, renamePersona, deleteBound, definedSocialNetworks } =
         PersonaContext.useContainer()
-    if (!currentPersona || !currentPersona.publicHexKey) return null
+    if (!currentPersona || !currentPersona.identifier.publicKeyAsHex) return null
 
     return (
         <PersonaRowCardUI
-            publicKey={currentPersona.publicHexKey}
+            publicKey={currentPersona.identifier.publicKeyAsHex}
             nickname={currentPersona.nickname}
             identifier={currentPersona.identifier}
             profiles={currentPersona.linkedProfiles}
@@ -180,7 +180,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         <PublicKeyIcon />
                     </Box>
                     <Typography variant="body1" sx={{ fontSize: 13 }} component="span">
-                        {identifier.compressedPoint}
+                        {identifier.rawPublicKey}
                     </Typography>
                 </Box>
                 <Box>

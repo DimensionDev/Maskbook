@@ -47,8 +47,8 @@ const FileServiceDialog: React.FC<Props> = (props) => {
     const [uploading, setUploading] = useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = useState<FileInfo | null>(null)
     const { attachMetadata, dropMetadata } = useCompositionContext()
-    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
     )
     const onInsert = () => {
         if (isNil(selectedFileInfo)) {
@@ -59,7 +59,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
         } else {
             dropMetadata(META_KEY_2)
         }
-        closeWalletStatusDialog()
+        closeApplicationBoardDialog()
         props.onClose()
     }
 

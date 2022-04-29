@@ -1,5 +1,4 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { regexMatch } from '../../../utils/utils'
 import { isMobileTwitter } from './isMobile'
 import { isCompose } from './postBox'
 
@@ -216,24 +215,36 @@ export const postsContentSelector = () =>
 
 export const postAvatarsContentSelector = () =>
     querySelectorAll('[data-testid="tweet"] > div > div > div > :nth-child(2)')
-const base = querySelector<HTMLScriptElement>('#react-root + script')
-const handle = /"screen_name":"(.*?)"/
-const name = /"name":"(.*?)"/
-const bio = /"description":"(.*?)"/
-const avatar = /"profile_image_url_https":"(.*?)"/
-/**
- * first matched element can be extracted by index zero, followings are all capture groups, if no 'g' specified.
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
- */
-const p = (regex: RegExp, index: number) => {
-    return base.clone().map((x) => regexMatch(x.innerText, regex, index))
+
+// #region self info
+export const searchSelfHandleSelector = () => {
+    return querySelector<HTMLSpanElement>(
+        [
+            '[data-testid="SideNav_AccountSwitcher_Button"] [dir="ltr"] span', // desktop
+            '#layers [role="group"] [role="dialog"] [role="link"] [dir="ltr"] span', // sidebar opened in mobile
+        ].join(),
+    )
 }
-export const selfInfoSelectors = () => ({
-    handle: p(handle, 1),
-    name: p(name, 1),
-    bio: p(bio, 1),
-    userAvatar: p(avatar, 1),
-})
+
+export const searchSelfNicknameSelector = () => {
+    return querySelector<HTMLSpanElement>(
+        [
+            '[data-testid="SideNav_AccountSwitcher_Button"] [dir="auto"] span span', // desktop
+            '#layers [role="group"] [role="dialog"] [role="link"] span span', // sidebar opened in mobile
+        ].join(),
+    )
+}
+
+export const searchSelfAvatarSelector = () => {
+    return querySelector<HTMLImageElement>(
+        [
+            '#layers ~ div [role="banner"] [role="button"] img', // desktop
+            '[data-testid="DashButton_ProfileIcon_Link"] [role="presentation"] img', // topbar in mobile
+            '#layers [role="group"] [role="dialog"] [role="link"] img', // sidebar opened in mobile
+        ].join(),
+    )
+}
+// #endregion
 
 // #region twitter nft avatar
 export const searchProfileAvatarSelector = () => {

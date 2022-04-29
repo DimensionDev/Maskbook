@@ -7,7 +7,7 @@ import { useChainId, useWallets, useWeb3State } from '@masknet/plugin-infra/web3
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { useAsync, useAsyncFn } from 'react-use'
-import { compact } from 'lodash-unified'
+import { compact, sortBy } from 'lodash-unified'
 import type { ConnectedWalletInfo } from '../type'
 import { NextIDProof } from '@masknet/web3-providers'
 import Service from '../../../../service'
@@ -46,23 +46,33 @@ const ConnectedWallets = memo(() => {
 
                     return {
                         ...x,
-                        name: `${x.platform} wallet ${index + 1}`,
+                        name: '',
                     }
                 }
                 return null
             }),
         )
 
-        return compact(results)
+        return sortBy(compact(results), (x) => Number(x.created_at))
+            .map((x, index) => {
+                if (!x.name)
+                    return {
+                        ...x,
+                        name: `${x.platform} wallet ${index + 1}`,
+                    }
+
+                return x
+            })
+            .reverse()
     }, [wallets, NameService, proofs])
 
     const [confirmState, onConfirmRelease] = useAsyncFn(
         async (wallet?: ConnectedWalletInfo) => {
             try {
-                if (!currentPersona?.publicHexKey || !wallet) return
+                if (!currentPersona?.identifier.publicKeyAsHex || !wallet) return
 
                 const result = await NextIDProof.createPersonaPayload(
-                    currentPersona.publicHexKey,
+                    currentPersona.identifier.publicKeyAsHex,
                     NextIDAction.Delete,
                     wallet.identity,
                     wallet.platform,
@@ -79,7 +89,7 @@ const ConnectedWallets = memo(() => {
 
                 await NextIDProof.bindProof(
                     result.uuid,
-                    currentPersona.publicHexKey,
+                    currentPersona.identifier.publicKeyAsHex,
                     NextIDAction.Delete,
                     wallet.platform,
                     wallet.identity,

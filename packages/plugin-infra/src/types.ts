@@ -312,7 +312,11 @@ export namespace Plugin.SNSAdaptor {
         /**
          * Render entry component
          */
-        RenderEntryComponent?: (props: { disabled: boolean }) => JSX.Element | null
+        RenderEntryComponent?: (props: {
+            disabled: boolean
+            tooltipHint?: string
+            onClick?: () => void
+        }) => JSX.Element | null
         /**
          * Used to order the applications on the board
          */
@@ -334,6 +338,16 @@ export namespace Plugin.SNSAdaptor {
          * Does the application listed in the DAPP list
          */
         category?: 'dapp' | 'other'
+
+        nextIdRequired?: boolean
+
+        /**
+         * Display using an eye-catching card and unable to be unlisted.
+         */
+        recommendFeature?: {
+            description: React.ReactNode
+            backgroundGradient: string
+        }
     }
 
     export interface ProfileIdentity {
@@ -341,7 +355,7 @@ export namespace Plugin.SNSAdaptor {
         bio?: string
         homepage?: string
         nickname?: string
-        identifier: ProfileIdentifier
+        identifier?: ProfileIdentifier
     }
 
     export interface ProfileAddress {
@@ -669,7 +683,7 @@ export enum CurrentSNSNetwork {
 }
 
 export interface IdentityResolved {
-    identifier: ProfileIdentifier
+    identifier?: ProfileIdentifier
     nickname?: string
     avatar?: string
     bio?: string
@@ -696,7 +710,7 @@ export enum PluginId {
     Poll = 'com.maskbook.poll',
     Profile = 'com.mask.profile',
     Trader = 'com.maskbook.trader',
-    Tip = 'com.maskbook.tip',
+    Tips = 'com.maskbook.tip',
     Transak = 'com.maskbook.transak',
     Valuables = 'com.maskbook.tweet',
     DAO = 'money.juicebox',
