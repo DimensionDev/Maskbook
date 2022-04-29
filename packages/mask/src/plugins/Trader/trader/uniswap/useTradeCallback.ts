@@ -1,12 +1,12 @@
-import { useCallback, useState } from 'react'
-import BigNumber from 'bignumber.js'
-import type { SwapParameters } from '@uniswap/v2-sdk'
-import { GasOptionConfig, TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
-import { useSwapParameters as useTradeParameters } from './useTradeParameters'
-import type { SwapCall, Trade, TradeComputed } from '../../types'
-import { swapErrorToUserReadableMessage } from '../../helpers'
 import type { TradeProvider } from '@masknet/public-api'
+import { GasOptionConfig, TransactionEventType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
+import type { SwapParameters } from '@uniswap/v2-sdk'
+import BigNumber from 'bignumber.js'
+import { useCallback, useState } from 'react'
+import { swapErrorToUserReadableMessage } from '../../helpers'
+import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -37,23 +37,13 @@ export function useTradeCallback(
     const web3 = useWeb3({ chainId: targetChainId })
     const account = useAccount()
     const tradeParameters = useTradeParameters(trade, tradeProvider, allowedSlippage)
-
-    const [tradeState, setTradeState] = useState<TransactionState>({
-        type: TransactionStateType.UNKNOWN,
-    })
+    const [loading, setLoading] = useState(false)
 
     const tradeCallback = useCallback(async () => {
         if (!tradeParameters.length) {
-            setTradeState({
-                type: TransactionStateType.UNKNOWN,
-            })
             return
         }
-
-        // start waiting for provider to confirm tx
-        setTradeState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
+        setLoading(true)
 
         // step 1: estimate each trade parameter
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
@@ -76,7 +66,7 @@ export function useTradeCallback(
                             gasEstimate: new BigNumber(gasEstimate),
                         }
                     })
-                    .catch((error) => {
+                    .catch(() => {
                         return web3.eth
                             .call(config)
                             .then(() => {
@@ -105,18 +95,10 @@ export function useTradeCallback(
         if (!bestCallOption) {
             const errorCalls = estimatedCalls.filter((call): call is FailedCall => 'error' in call)
             if (errorCalls.length > 0) {
-                setTradeState({
-                    type: TransactionStateType.FAILED,
-                    error: errorCalls[errorCalls.length - 1].error,
-                })
                 return
             }
             const firstNoErrorCall = estimatedCalls.find((call): call is SwapCallEstimate => !('error' in call))
             if (!firstNoErrorCall) {
-                setTradeState({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('Unexpected error. Could not estimate gas for the swap.'),
-                })
                 return
             }
             bestCallOption = firstNoErrorCall
@@ -124,10 +106,6 @@ export function useTradeCallback(
 
         return new Promise<string>(async (resolve, reject) => {
             if (!bestCallOption) {
-                setTradeState({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('Bad call options.'),
-                })
                 return
             }
 
@@ -135,51 +113,31 @@ export function useTradeCallback(
                 call: { address, calldata, value },
             } = bestCallOption
 
-            web3.eth.sendTransaction(
-                {
+            web3.eth
+                .sendTransaction({
                     from: account,
                     to: address,
                     data: calldata,
                     ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
                     ...gasConfig,
-                },
-                async (error, hash) => {
-                    if (error) {
-                        if ((error as any)?.code) {
-                            const error_ = new Error(
-                                (error as any)?.message === 'Unable to add more requests.'
-                                    ? 'Unable to add more requests.'
-                                    : 'Transaction rejected.',
-                            )
-                            setTradeState({
-                                type: TransactionStateType.FAILED,
-                                error: error_,
-                            })
-                            reject(error_)
-                        } else {
-                            setTradeState({
-                                type: TransactionStateType.FAILED,
-                                error: new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`),
-                            })
-                        }
-                    } else {
-                        setTradeState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
+                })
+                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                    resolve(receipt.transactionHash)
+                })
+                .on(TransactionEventType.ERROR, (error) => {
+                    if (!(error as any)?.code) {
+                        return
                     }
-                },
-            )
-        })
+                    const error_ = new Error(
+                        error?.message === 'Unable to add more requests.'
+                            ? 'Unable to add more requests.'
+                            : 'Transaction rejected.',
+                    )
+                    reject(error_)
+                })
+        }).finally(() => setLoading(false))
     }, [web3, account, tradeParameters, gasConfig])
 
-    const resetCallback = useCallback(() => {
-        setTradeState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [tradeState, tradeCallback, resetCallback] as const
+    return [loading, tradeCallback] as const
 }

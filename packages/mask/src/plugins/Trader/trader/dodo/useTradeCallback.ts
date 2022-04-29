@@ -1,8 +1,8 @@
-import { useCallback, useMemo, useState } from 'react'
+import { GasOptionConfig, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { pick } from 'lodash-unified'
+import { useCallback, useMemo, useState } from 'react'
 import type { TransactionConfig } from 'web3-core'
-import { GasOptionConfig, TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import type { SwapRouteSuccessResponse, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 
@@ -14,9 +14,7 @@ export function useTradeCallback(
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const web3 = useWeb3({ chainId })
 
-    const [tradeState, setTradeState] = useState<TransactionState>({
-        type: TransactionStateType.UNKNOWN,
-    })
+    const [loading, setLoading] = useState(false)
 
     // compose transaction config
     const config = useMemo(() => {
@@ -30,55 +28,35 @@ export function useTradeCallback(
     const tradeCallback = useCallback(async () => {
         // validate config
         if (!account || !config) {
-            setTradeState({
-                type: TransactionStateType.UNKNOWN,
-            })
             return
         }
 
-        // start waiting for provider to confirm tx
-        setTradeState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
-
+        setLoading(true)
         // compose transaction config
         const config_ = {
             ...config,
-            gas: await web3.eth.estimateGas(config).catch((error) => {
-                setTradeState({
-                    type: TransactionStateType.FAILED,
-                    error,
+            gas: await web3.eth
+                .estimateGas(config)
+                .catch((error) => {
+                    throw error
                 })
-                throw error
-            }),
+                .finally(() => setLoading(false)),
             ...gasConfig,
         }
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
-            web3.eth.sendTransaction(config_, (error, hash) => {
-                if (error) {
-                    setTradeState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
-                } else {
-                    setTradeState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve(hash)
-                }
-            })
+            web3.eth
+                .sendTransaction(config_, (error, hash) => {
+                    if (error) {
+                        reject(error)
+                    } else {
+                        resolve(hash)
+                    }
+                })
+                .finally(() => setLoading(false))
         })
     }, [web3, account, chainId, stringify(config), gasConfig])
 
-    const resetCallback = useCallback(() => {
-        setTradeState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [tradeState, tradeCallback, resetCallback] as const
+    return [loading, tradeCallback] as const
 }

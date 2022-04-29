@@ -1,19 +1,19 @@
-import { useCallback, useState } from 'react'
-import { Typography, DialogContent, DialogActions, Button, CircularProgress, Link } from '@mui/material'
+import { InjectedDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import WarningIcon from '@mui/icons-material/Warning'
-import DoneIcon from '@mui/icons-material/Done'
 import {
-    useChainId,
+    resolveTransactionLinkOnExplorer,
     TransactionState,
     TransactionStateType,
-    resolveTransactionLinkOnExplorer,
+    useChainId,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog, useShowConfirm } from '@masknet/shared'
+import DoneIcon from '@mui/icons-material/Done'
+import WarningIcon from '@mui/icons-material/Warning'
+import { Button, CircularProgress, DialogActions, DialogContent, Link, Typography } from '@mui/material'
+import { useCallback, useState } from 'react'
+import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N } from '../../../utils'
 import { WalletMessages } from '../messages'
-import { activatedSocialNetworkUI } from '../../../social-network'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -41,34 +41,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface TransactionDialogUIProps extends withClasses<never> {}
-
-interface ShareTransactionOptions {
-    title: string
-    content: string
-}
-
-function useShowTransactionPending({ title, content }: ShareTransactionOptions) {
-    const showConfirm = useShowConfirm()
-    const { classes } = useStyles()
-    const { t } = useI18N()
-
-    return () => {
-        return showConfirm({
-            title,
-            content: (
-                <>
-                    <CircularProgress size={64} color="primary" />
-                    <Typography className={classes.primary} color="textPrimary" variant="subtitle1">
-                        {t('plugin_wallet_transaction_wait_for_confirmation')}
-                    </Typography>
-                    <Typography className={classes.secondary} color="textSecondary">
-                        {content}
-                    </Typography>
-                </>
-            ),
-        })
-    }
-}
 
 function TransactionDialogUI(props: TransactionDialogUIProps) {
     const { t } = useI18N()
