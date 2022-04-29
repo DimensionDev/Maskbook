@@ -152,12 +152,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     const renderBox = (children?: React.ReactNode) => {
         return (
-            <Box
-                className={props.className}
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                sx={!props.disablePadding ? { paddingTop: 1, paddingBottom: 1 } : null}>
+            <Box className={props.className} display="flex" flexDirection="column" alignItems="center">
                 {children}
             </Box>
         )
@@ -170,7 +165,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     <span>{t('plugin_wallet_connect_wallet_tip')}</span>
                 </Typography>
                 {!props.hiddenConnectButton ? (
-                    <ActionButton size="small" sx={{ marginTop: 1.5 }} onClick={openSelectProviderDialog}>
+                    <ActionButton sx={{ marginTop: 1.5 }} onClick={openSelectProviderDialog}>
                         {t('plugin_wallet_connect_wallet')}
                     </ActionButton>
                 ) : null}
@@ -204,7 +199,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 ) : null}
                 {isAllowed ? (
                     <ActionButtonPromise
-                        size="small"
                         className={classes.switchButton}
                         sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
                         init={
@@ -244,7 +238,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             ) : null}
             {isAllowed ? (
                 <ActionButtonPromise
-                    size="small"
                     className={classes.switchButton}
                     sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
                     init={
