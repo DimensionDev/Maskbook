@@ -1,13 +1,13 @@
-export interface estimateSuggestOption {
+export interface EstimateSuggestOption {
     maxWaitTimeEstimate: number
     minWaitTimeEstimate: number
     suggestedMaxFeePerGas: string
     suggestedMaxPriorityFeePerGas: string
 }
 
-export interface estimateSuggestResponse {
+export interface EstimateSuggestResponse {
     estimatedBaseFee: string
-    low?: estimateSuggestOption
-    medium?: estimateSuggestOption
-    high?: estimateSuggestOption
+    low?: EstimateSuggestOption
+    medium?: EstimateSuggestOption
+    high?: EstimateSuggestOption
 }

@@ -6,6 +6,5 @@ import type { GasSettingProps } from './types'
 
 export const GasSetting: FC<GasSettingProps> = (props) => {
     const chainId = useChainId()
-    const is1559Supported = isEIP1559Supported(chainId)
-    return is1559Supported ? <GasSetting1559 {...props} /> : <Prior1559GasSetting {...props} />
+    return isEIP1559Supported(chainId) ? <GasSetting1559 {...props} /> : <Prior1559GasSetting {...props} />
 }
