@@ -1,6 +1,6 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Button } from '@mui/material'
-import { IconGame } from '../constants'
+import { IconGameSpaceHuggers, IconGameEliminateTheSquare, IconGameVeeFriends } from '../constants'
 
 const useStyles = makeStyles()(() => ({
     walletBar: {},
@@ -61,7 +61,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 interface Props {
-    onPlay: () => void
+    onPlay: (id: number) => void
 }
 
 const GameList = (props: Props) => {
@@ -71,7 +71,7 @@ const GameList = (props: Props) => {
         <div className={classes.walletBar}>
             <h2 className={classes.title}>GameList</h2>
             <ul className={classes.gameList}>
-                <li className={classes.gameBar}>
+                {/* <li className={classes.gameBar}>
                     <img className={classes.logo} src={IconGame} alt="game logo" />
                     <div className={classes.info}>
                         <div className={classes.infoTitle}>Skiing Adcenture</div>
@@ -81,6 +81,43 @@ const GameList = (props: Props) => {
                         <div className={classes.rank}>Rank 112</div>
                     </div>
                     <Button className={classes.playBtn} onClick={props.onPlay}>
+                        Play
+                    </Button>
+                </li> */}
+                <li className={classes.gameBar}>
+                    <img className={classes.logo} src={IconGameSpaceHuggers} alt="Space Huggers" />
+                    <div className={classes.info}>
+                        <div className={classes.infoTitle}>Space Huggers</div>
+                        <div className={classes.introduction}>
+                            A run and gun roguelike platformer with destructible environments
+                        </div>
+                        <div className={classes.rank}>Rank 1</div>
+                    </div>
+                    <Button className={classes.playBtn} onClick={() => props.onPlay(1)}>
+                        Play
+                    </Button>
+                </li>
+                <li className={classes.gameBar}>
+                    <img className={classes.logo} src={IconGameEliminateTheSquare} alt="Eliminate the square" />
+                    <div className={classes.info}>
+                        <div className={classes.infoTitle}>Eliminate the square</div>
+                        <div className={classes.introduction}>
+                            Eliminate as many target blocks as possible within 60 seconds
+                        </div>
+                        <div className={classes.rank}>Rank 2</div>
+                    </div>
+                    <Button className={classes.playBtn} onClick={() => props.onPlay(2)}>
+                        Play
+                    </Button>
+                </li>
+                <li className={classes.gameBar}>
+                    <img className={classes.logo} src={IconGameVeeFriends} alt="Vee Friends" />
+                    <div className={classes.info}>
+                        <div className={classes.infoTitle}>Vee Friends</div>
+                        <div className={classes.introduction}>A fun game to play before this character reveals</div>
+                        <div className={classes.rank}>Rank 3</div>
+                    </div>
+                    <Button className={classes.playBtn} onClick={() => props.onPlay(3)}>
                         Play
                     </Button>
                 </li>

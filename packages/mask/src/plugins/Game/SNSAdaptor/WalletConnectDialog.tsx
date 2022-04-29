@@ -20,11 +20,13 @@ const WalletConnectDialog = () => {
 
     const handleGameClose = () => {
         setGameShow(false)
+        setGameId(0)
     }
 
-    const handleGameOpen = () => {
+    const handleGameOpen = (id: number) => {
         closeDialog()
         closeWalletDialog()
+        setGameId(id)
         setGameShow(true)
     }
 
@@ -32,6 +34,7 @@ const WalletConnectDialog = () => {
         WalletMessages.events.walletStatusDialogUpdated,
     )
 
+    const [gameId, setGameId] = useState(0)
     return (
         <>
             <InjectedDialog onClose={handleClose} open={open} title="Game">
@@ -40,7 +43,7 @@ const WalletConnectDialog = () => {
                     <GameList onPlay={handleGameOpen} />
                 </DialogContent>
             </InjectedDialog>
-            <GameWindow isShow={isGameShow} onClose={handleGameClose} />
+            <GameWindow id={gameId} isShow={isGameShow} onClose={handleGameClose} />
         </>
     )
 }

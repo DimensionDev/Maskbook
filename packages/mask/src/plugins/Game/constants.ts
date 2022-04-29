@@ -42,4 +42,8 @@ export const Share_Twitter_TXT = `I just set up my Non-Fungible Friend with @rea
 
 export const IconClose = new URL('./assets/icon-close.png', import.meta.url).toString()
 export const IconFull = new URL('./assets/icon-full.png', import.meta.url).toString()
+
 export const IconGame = new URL('./assets/icon-logo.png', import.meta.url).toString()
+export const IconGameSpaceHuggers = new URL('./assets/game-spaceHuggers.png', import.meta.url).toString()
+export const IconGameEliminateTheSquare = new URL('./assets/game-eliminateTheSquare.png', import.meta.url).toString()
+export const IconGameVeeFriends = new URL('./assets/game-veeFriends.png', import.meta.url).toString()
