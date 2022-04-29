@@ -1,12 +1,12 @@
 import { Button, useTheme } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-import { DashboardRoutes } from '@masknet/shared-base'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 import { styled } from '@mui/material/styles'
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { useDashboardI18N } from '../../locales'
 import links from '../../components/FooterLine/links.json'
 import { openWindow } from '@masknet/shared-base-ui'
+import { useSetupSocialNetwork } from './hooks/useSetupSocialNetwork'
+import { Services } from '../../API'
 
 const Content = styled('div')(({ theme }) => ({
     padding: `${theme.spacing(1)} ${theme.spacing(4)}`,
@@ -33,7 +33,7 @@ const IFrame = styled('iframe')(({ theme }) => ({
 export default function Welcome() {
     const iframeRef = useRef<HTMLIFrameElement | null>(null)
     const mode = useTheme().palette.mode
-    const navigate = useNavigate()
+    const [, setupSocialNetwork] = useSetupSocialNetwork()
 
     const agreementContentPageURL = new URL('./en.html', import.meta.url).toString()
     const privacyPolicyDocument = useMemo(() => () => iframeRef?.current?.contentWindow?.document, [iframeRef])
@@ -79,7 +79,7 @@ export default function Welcome() {
             iframeRef={iframeRef}
             privacyPolicyURL={agreementContentPageURL}
             iframeLoadHandler={handleIFrameLoad}
-            agreeHandler={() => navigate(DashboardRoutes.Setup)}
+            agreeHandler={() => Services.SocialNetwork.setupSocialNetwork('twitter.com')}
             cancelHandler={() => window.close()}
         />
     )

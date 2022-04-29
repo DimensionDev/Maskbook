@@ -229,6 +229,19 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     }
 }
 
+export async function loadSocialNetworkUIs(): Promise<SocialNetworkUI.Definition[]> {
+    const defines = [...definedSocialNetworkUIs.values()].map(async (x) => x.load())
+    const uis = (await Promise.all(defines)).map((x) => x.default)
+
+    if (!defines) throw new Error('SNS adaptor load failed')
+
+    for (const ui of uis) {
+        definedSocialNetworkUIsResolved.set(ui.networkIdentifier, ui)
+    }
+
+    return uis
+}
+
 export async function loadSocialNetworkUI(identifier: string): Promise<SocialNetworkUI.Definition> {
     if (definedSocialNetworkUIsResolved.has(identifier)) return definedSocialNetworkUIsResolved.get(identifier)!
     const define = definedSocialNetworkUIs.get(identifier)

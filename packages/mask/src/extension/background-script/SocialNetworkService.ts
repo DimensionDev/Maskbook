@@ -1,12 +1,17 @@
-import { definedSocialNetworkUIs, getNetworkWorker, loadSocialNetworkUI, SocialNetworkUI } from '../../social-network'
-import { Flags } from '../../../shared'
-
-import { currentSetupGuideStatus } from '../../settings/settings'
+import { currentSetupGuideStatus, userGuideStatus } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
 import { SetupGuideStep } from '../../components/InjectedComponents/SetupGuide/types'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { delay } from '@dimensiondev/kit'
 import { requestExtensionPermission } from '../../../background/services/helper'
+import {
+    definedSocialNetworkUIs,
+    getNetworkWorker,
+    loadSocialNetworkUI,
+    loadSocialNetworkUIs,
+    SocialNetworkUI,
+} from '../../social-network'
+import { Flags } from '../../../shared'
 
 export async function getDefinedSocialNetworkUIs() {
     return [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {
@@ -20,6 +25,28 @@ function requestSNSAdaptorPermission(ui: SocialNetworkUI.Definition) {
     const req = ui.permission?.request()
     if (req) return req
     return requestExtensionPermission({ origins: [...ui.declarativePermissions.origins] })
+}
+
+function requestSNSAdaptorsPermission(uis: SocialNetworkUI.Definition[]) {
+    const req = uis.filter((x) => !x.permission?.request())
+    if (!req.length) return req
+    return requestExtensionPermission({
+        origins: [...req.map((x) => x.declarativePermissions.origins).flat()],
+    })
+}
+
+export async function setupSocialNetwork(defaultNetwork: string) {
+    const ui = await loadSocialNetworkUI(defaultNetwork)
+    const home = ui.utils.getHomePage?.()
+
+    const uis = await loadSocialNetworkUIs()
+    if (!Flags.no_web_extension_dynamic_permission_request) {
+        if (!(await requestSNSAdaptorsPermission(uis))) return
+    }
+
+    userGuideStatus[defaultNetwork].value = '1'
+    await delay(100)
+    home && browser.tabs.create({ active: true, url: home })
 }
 
 export async function connectSocialNetwork(
