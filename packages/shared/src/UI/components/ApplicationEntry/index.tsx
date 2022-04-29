@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props {
+interface ApplicationEntryProps {
     icon: React.ReactNode
     title: React.ReactNode
     disabled?: boolean
@@ -51,7 +51,7 @@ interface Props {
     nextIdVerifyToolTipHint?: string
 }
 
-export function ApplicationEntry(props: Props) {
+export function ApplicationEntry(props: ApplicationEntryProps) {
     const {
         icon,
         title,
@@ -64,6 +64,7 @@ export function ApplicationEntry(props: Props) {
         hint = '',
         nextIdVerifyToolTipHint,
     } = props
+
     const { classes } = useStyles()
     const jsx = (
         <div
@@ -79,7 +80,7 @@ export function ApplicationEntry(props: Props) {
         <>
             {(hint && !disabled) || nextIdVerifyToolTipHint ? (
                 <ShadowRootTooltip
-                    title={<Typography>{hint ?? nextIdVerifyToolTipHint}</Typography>}
+                    title={<Typography>{hint || nextIdVerifyToolTipHint}</Typography>}
                     {...tooltipProps}
                     disableHoverListener={!nextIdVerifyToolTipHint}>
                     {jsx}

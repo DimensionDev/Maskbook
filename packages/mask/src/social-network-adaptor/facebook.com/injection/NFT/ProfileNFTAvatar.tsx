@@ -65,6 +65,7 @@ function NFTAvatarInFacebookFirstStep() {
             if (!token.info.imageURL) return
             const image = await toPNG(token.info.imageURL)
             if (!image) return
+            if (!identity.identifier) return
 
             await changeImageToActiveElements(image)
 
@@ -146,7 +147,8 @@ function NFTAvatarListInFaceBookMobile() {
 
             await changeImageToActiveElementsOnMobile(image)
 
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue(identity.identifier.userId)
+            identity.identifier &&
+                InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue(identity.identifier.userId)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(token.contractDetailed.address)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(token.tokenId)
         },

@@ -12,9 +12,9 @@ export function usePersonaVerify() {
     return useAsyncRetry(async () => {
         if (!visitingPersonaIdentifier?.identifier) return
         const persona = await Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
-        if (!persona?.publicHexKey) return
+        if (!persona?.identifier.publicKeyAsHex) return
         const isVerified = await NextIDProof.queryIsBound(
-            persona.publicHexKey,
+            persona.identifier.publicKeyAsHex,
             platform,
             visitingPersonaIdentifier.identifier.userId,
         )

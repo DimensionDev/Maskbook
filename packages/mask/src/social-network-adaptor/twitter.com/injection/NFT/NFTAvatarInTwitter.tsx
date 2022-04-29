@@ -53,7 +53,7 @@ function NFTAvatarInTwitter() {
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet()
     const { value: _avatar } = usePersonaNFTAvatar(
-        identity.identifier.userId,
+        identity.identifier?.userId ?? '',
         getAvatarId(identity.avatar ?? ''),
         RSS3_KEY_SNS.TWITTER,
     )
@@ -85,6 +85,7 @@ function NFTAvatarInTwitter() {
     // After the avatar is set, it cannot be saved immediately, and must wait until the avatar of twitter is updated
     useAsync(async () => {
         if (!wallet || !NFTAvatar) return
+        if (!identity.identifier) return
 
         if (!NFTEvent?.address || !NFTEvent?.tokenId) {
             setAvatar(undefined)
@@ -188,7 +189,7 @@ function NFTAvatarInTwitter() {
         if (
             location.pathname &&
             location.pathname.split('/').length === 2 &&
-            trim(location.pathname, '/') !== identity.identifier.userId
+            trim(location.pathname, '/') !== identity.identifier?.userId
         ) {
             setAvatar(undefined)
         }

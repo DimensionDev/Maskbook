@@ -5,7 +5,7 @@ import { i18n } from '../../../shared-ui/locales_legacy'
 import { Result, Ok, Err } from 'ts-results'
 import { decodeTextPayloadUI } from '../../social-network/utils/text-payload-ui'
 
-import { Identifier, Payload, ProfileIdentifier } from '@masknet/shared-base'
+import { Payload, ProfileIdentifier } from '@masknet/shared-base'
 
 /**
  * Detect if there is version -40, -39 or -38 payload
@@ -46,9 +46,7 @@ function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): 
             signature,
             authorPublicKey,
             sharedPublic: publicShared === '1',
-            authorUserID: Result.wrap(() =>
-                Identifier.fromString('person:' + atob(authorID), ProfileIdentifier).unwrap(),
-            ).unwrapOr(undefined),
+            authorUserID: ProfileIdentifier.from('person:' + atob(authorID)).unwrapOr(undefined),
         }
     }
     return {

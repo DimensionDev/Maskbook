@@ -14,14 +14,16 @@ export function usePersonas() {
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const identifier = useSubscription(context.lastRecognizedProfile)
     return useAsyncRetry(async () => {
-        if (!identifier) return
+        if (!identifier?.identifier?.userId) return
         const personaBindings = await NextIDProof.queryExistedBindingByPlatform(
             platform,
-            identifier?.identifier.userId.toLowerCase(),
+            identifier.identifier.userId.toLowerCase(),
         )
 
         const currentPersonaBinding = first(
-            personaBindings.sort((a, b) => sortPersonaBindings(a, b, identifier?.identifier.userId.toLowerCase())),
+            personaBindings.sort((a, b) =>
+                sortPersonaBindings(a, b, identifier.identifier?.userId.toLowerCase() ?? ''),
+            ),
         )
         if (!currentPersonaBinding) return
 

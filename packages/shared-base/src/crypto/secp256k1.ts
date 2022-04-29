@@ -1,7 +1,7 @@
 import { encodeArrayBuffer, decodeArrayBuffer, concatArrayBuffer } from '@dimensiondev/kit'
 import type { EC_JsonWebKey, EC_Public_JsonWebKey } from './JWKType'
 import { fromBase64URL, toBase64URL } from '../convert'
-import { ECKeyIdentifier } from '../Identifier/type'
+import { ECKeyIdentifier } from '../Identifier'
 import type { EC_CryptoKey } from '.'
 
 // This module is only used in background.

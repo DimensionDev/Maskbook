@@ -1,11 +1,9 @@
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-network'
 import { injectPostCommentsDefault } from '../../social-network/defaults'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
-import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
-import { unreachable } from '@dimensiondev/kit'
 import { pasteImageToCompositionMinds } from './automation/AttachImageToComposition'
 import { gotoNewsFeedPageMinds } from './automation/gotoNewsFeedPage'
 import { gotoProfilePageMinds } from './automation/gotoProfilePage'
@@ -136,12 +134,10 @@ const mindsUI: SocialNetworkUI.Definition = {
         useTheme: useThemeMindsVariant,
     },
     init(signal) {
-        const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
-        InitAutonomousStateFriends(signal, friends, mindsShared.networkIdentifier)
         InitAutonomousStateProfiles(signal, profiles, mindsShared.networkIdentifier)
         enableFbStyleTextPayloadReplace()
-        return { friends, profiles }
+        return { profiles }
     },
     injection: {
         toolbox: injectToolboxHintAtMinds,
@@ -171,14 +167,13 @@ const mindsUI: SocialNetworkUI.Definition = {
     },
     configuration: {
         steganography: {
+            // ! Change this might be a breaking change !
             password() {
-                // ! Change this might be a breaking change !
-                return new ProfileIdentifier(
-                    'minds.com',
-                    ProfileIdentifier.getUserName(IdentityProviderMinds.recognized.value.identifier) ||
-                        ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
-                        unreachable('Cannot figure out password' as never),
-                ).toText()
+                const id =
+                    IdentityProviderMinds.recognized.value.identifier?.userId ||
+                    globalUIState.profiles.value?.[0].identifier.userId
+                if (!id) throw new Error('Cannot figure out password')
+                return ProfileIdentifier.of(EnhanceableSite.Minds, id).unwrap().toText()
             },
         },
     },

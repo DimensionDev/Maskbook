@@ -19,18 +19,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = { i18nKey: 'application_dialog_title', fallback: 'NFT PFP' }
             const icon = <ApplicationIcon />
             return {
-                RenderEntryComponent({ disabled, nextIdVerification }) {
+                RenderEntryComponent({ disabled, tooltipHint }) {
                     const [open, setOpen] = useState(false)
                     return (
                         <>
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                disabled={
-                                    nextIdVerification?.isNextIdVerify === undefined ||
-                                    !nextIdVerification?.isSNSConnectToCurrentPersona
-                                        ? true
-                                        : disabled
-                                }
                                 icon={icon}
                                 onClick={() => setOpen(true)}
                                 tooltipProps={{
@@ -46,7 +40,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                         />
                                     </Typography>
                                 }
-                                nextIdVerifyToolTipHint={nextIdVerification?.toolTipHint}
                             />
 
                             <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />

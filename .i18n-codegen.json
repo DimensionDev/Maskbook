@@ -219,6 +219,18 @@
             }
         },
         {
+            "input": "./packages/mask/src/plugins/Tips/locales/en-US.json",
+            "output": "./packages/mask/src/plugins/Tips/locales/i18n_generated",
+            "parser": "i18next",
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.maskbook.tip",
+                "trans": "Translate",
+                "sourceMap": "inline"
+            }
+        },
+        {
             "input": "./packages/mask/src/plugins/Avatar/locales/en-US.json",
             "output": "./packages/mask/src/plugins/Avatar/locales/i18n_generated",
             "parser": "i18next",

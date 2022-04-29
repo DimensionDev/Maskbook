@@ -75,7 +75,7 @@ export function PersonaPage(props: PersonaPageProps) {
                     {persona?.binds?.proofs
                         .filter((proof) => proof.platform === NextIDPlatform.Twitter)
                         .map((x, i) =>
-                            x.identity.toLowerCase() === currentIdentity?.identifier.userId.toLowerCase() ? (
+                            x.identity.toLowerCase() === currentIdentity?.identifier?.userId.toLowerCase() ? (
                                 <PersonaItem
                                     key={i}
                                     avatar={currentIdentity.avatar ?? ''}

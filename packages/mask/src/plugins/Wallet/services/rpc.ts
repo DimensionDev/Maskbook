@@ -110,7 +110,7 @@ export async function deleteUnconfirmedRequest(payload: JsonRpcPayload) {
     const chunk = {
         ...chunk_,
         updatedAt: now,
-        requests: requests,
+        requests,
     }
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
     WalletMessages.events.requestsUpdated.sendToAll({ hasRequest: false })

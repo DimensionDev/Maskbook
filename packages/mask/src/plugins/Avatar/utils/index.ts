@@ -8,6 +8,7 @@ import BigNumber from 'bignumber.js'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
 import type { NextIDAvatarMeta } from '../types'
+import { PLUGIN_ID } from '../constants'
 
 function getLastSalePrice(lastSale?: NonFungibleTokenAPI.AssetEvent | null) {
     if (!lastSale?.total_price || !lastSale?.payment_token?.decimals) return
@@ -114,7 +115,12 @@ export async function getNFTAvatarByUserId(userId: string): Promise<NextIDAvatar
     const bindings = await NextIDProof.queryExistedBindingByPlatform(platform, userId.toLowerCase())
 
     for (const binding of bindings.sort((a, b) => sortPersonaBindings(a, b, userId))) {
-        const response = await NextIDStorage.get<NextIDAvatarMeta>(binding.persona, platform, userId.toLowerCase())
+        const response = await NextIDStorage.getByIdentity<NextIDAvatarMeta>(
+            binding.persona,
+            platform,
+            userId.toLowerCase(),
+            PLUGIN_ID,
+        )
         if (response.ok) return response.val
     }
     return

@@ -12,8 +12,9 @@ import type { NextIDAvatarMeta } from '../types'
 import { useI18N } from '../locales/i18n_generated'
 import { context } from '../context'
 import { PluginNFTAvatarRPC } from '../messages'
-import { RSS3_KEY_SNS } from '../constants'
+import { PLUGIN_ID, RSS3_KEY_SNS } from '../constants'
 import { useSubscription } from 'use-subscription'
+import Services from '../../../extension/service'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -59,11 +60,17 @@ async function saveToNextID(
     proof?: BindingProof,
 ) {
     if (!proof?.identity || !persona?.publicHexKey || !persona.identifier) return
-    const payload = await NextIDStorage.getPayload(persona.publicHexKey, proof?.platform, proof?.identity, info)
+    const payload = await NextIDStorage.getPayload(
+        persona.publicHexKey,
+        proof?.platform,
+        proof?.identity,
+        info,
+        PLUGIN_ID,
+    )
     if (!payload.ok) {
         return
     }
-    const result = await context.personaSign({ message: payload.val.signPayload, method: 'eth' })
+    const result = await Services.Identity.generateSignResult(persona.identifier, payload.val.signPayload)
     if (!result) return
     const response = await NextIDStorage.set(
         payload.val.uuid,
@@ -73,6 +80,7 @@ async function saveToNextID(
         proof.identity,
         payload.val.createdAt,
         info,
+        PLUGIN_ID,
     )
     return response.ok
 }
@@ -128,9 +136,10 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const t = useI18N()
 
     const onSave = useCallback(() => {
-        if (!editor || !account || !token || !currentConnectedPersona || !proof || !identifier) return
+        if (!editor) return
         editor.getImage().toBlob(async (blob) => {
-            if (!blob) return
+            if (!blob || !identifier?.identifier?.userId || !account || !token || !currentConnectedPersona || !proof)
+                return
             setDisabled(true)
 
             const avatarData = await uploadAvatar(blob, identifier.identifier.userId)

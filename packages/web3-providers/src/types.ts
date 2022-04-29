@@ -320,13 +320,21 @@ export namespace NextIDBaseAPI {
             identity: string,
             createdAt: string,
             patchData: unknown,
+            pluginId: string,
         ): Promise<Result<T, string>>
-        get<T>(key: string, platform: NextIDPlatform, identity: string): Promise<Result<T, string>>
+        getByIdentity<T>(
+            key: string,
+            platform: NextIDPlatform,
+            identity: string,
+            pluginId: string,
+        ): Promise<Result<T, string>>
+        get<T>(key: string): Promise<Result<T, string>>
         getPayload(
             personaPublicKey: string,
             platform: NextIDPlatform,
             identity: string,
             patchData: unknown,
+            pluginId: string,
         ): Promise<Result<NextIDStoragePayload, string>>
     }
     export interface Proof {
@@ -468,7 +476,13 @@ export namespace TwitterBaseAPI {
         imageUrl: string
         mediaId: string
     }
+
+    export interface Settings {
+        screen_name: string
+    }
+
     export interface Provider {
+        getSettings: () => Promise<Settings | undefined>
         getUserNftContainer: (screenName: string) => Promise<
             | {
                   address: string

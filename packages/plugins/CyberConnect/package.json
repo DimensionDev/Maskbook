@@ -9,14 +9,14 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@masknet/plugin-infra": "workspace:*",
-    "@masknet/theme": "workspace:*",
-    "@masknet/web3-shared-evm": "workspace:*",
-    "@masknet/icons": "workspace:*",
-    "@masknet/shared-base": "workspace:*",
-    "@masknet/typed-message": "workspace:*",
     "@cyberlab/cyberconnect": "^4.2.2",
-    "boring-avatars": "^1.5.8",
+    "@masknet/icons": "workspace:*",
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/theme": "workspace:*",
+    "@masknet/typed-message": "workspace:*",
+    "@masknet/web3-shared-evm": "workspace:*",
+    "boring-avatars": "^1.6.3",
     "react-use": "^17.3.2"
   }
 }
