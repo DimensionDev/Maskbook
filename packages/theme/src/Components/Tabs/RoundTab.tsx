@@ -7,10 +7,13 @@ const RoundTabWrap = styled(Button, {
     flex: 1,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
+    height: 34,
+    lineHeight: '16px',
     boxShadow: activated ? ' 0px 2px 5px 1px rgba(0, 0, 0, 0.05);' : 'none',
     background: activated ? theme.palette.background.paper : 'transparent',
     borderRadius: `${theme.spacing(2)} !important`,
     color: activated ? theme.palette.text.primary : theme.palette.text.secondary,
+    fontSize: 14,
     fontWeight: 'bold',
 
     '&:hover': {
@@ -30,7 +33,7 @@ export const RoundTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, re
     const activated = !!props.selected
     const { onChange, onClick, value } = props
 
-    const handleClick = (event: any) => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         if (!activated && onChange) onChange(event, String(value))
         if (onClick) onClick(event)
     }

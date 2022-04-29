@@ -12,7 +12,7 @@ import {
 } from 'react'
 import { BaseTab } from './BaseTab'
 import { FlexibleTab } from './FlexibleTab'
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew' // flexBasis: theme.spacing(3),
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import { useWindowSize } from 'react-use'
 import { RoundTab } from './RoundTab'
 
@@ -41,6 +41,7 @@ const ArrowButtonWrap = styled(Button)(({ theme }) => ({
 
 const ArrowBackIosNewIconWrap = styled(ArrowBackIosNewIcon)(({ theme }) => ({
     color: theme.palette.text.primary,
+    width: 16,
 }))
 
 const ButtonGroupWrap = styled(ButtonGroup, {
@@ -55,6 +56,7 @@ const ButtonGroupWrap = styled(ButtonGroup, {
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),
         flex: 1,
+        gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
         transform: '',
         background:
             maskVariant === 'flexible' && !isOpen && isOverflow
@@ -87,7 +89,7 @@ const ButtonGroupWrap = styled(ButtonGroup, {
 export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, ref) => {
     const context = useTabContext()
     const [open, handleToggle] = useState<boolean>(false)
-    const [isTabsOverflow, setTabsOverflow] = useState<boolean>(false)
+    const [isTabsOverflow, setIsTabsOverflow] = useState<boolean>(false)
     const innerRef = useRef<HTMLDivElement>(null)
     const { width } = useWindowSize()
 
@@ -101,7 +103,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
         if (!innerRef?.current) return
 
         const current = innerRef.current as unknown as HTMLDivElement
-        setTabsOverflow(current?.scrollWidth > current?.clientWidth)
+        setIsTabsOverflow(current?.scrollWidth > current?.clientWidth)
     }, [innerRef.current, width])
 
     const children = Children.map(props.children, (child) => {

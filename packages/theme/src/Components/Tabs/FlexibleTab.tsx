@@ -6,17 +6,19 @@ const FlexibleTabTabWrap = styled(Button, {
 })<{ activated?: boolean; color?: string }>(({ theme, activated }) => ({
     flexShrink: 0,
     flexGrow: 0,
-    paddingLeft: theme.spacing(1.5),
-    paddingRight: theme.spacing(1.5),
+    padding: theme.spacing(1.25, 1.5),
+    height: 38,
+    lineHeight: '16px',
     minWidth: theme.spacing(3),
     background: activated ? '#F2F6FA' : 'transparent',
     borderRadius: `${theme.spacing(1)} !important`,
     color: activated ? '#1C68F3' : theme.palette.text.secondary,
+    fontSize: 14,
     fontWeight: 'bold',
 
     '&:hover': {
+        background: activated ? '#F2F6FA' : 'transparent',
         color: activated ? '1C68F3' : theme.palette.text.primary,
-        background: activated ? theme.palette.background.default : 'transparent',
     },
 }))
 
@@ -30,7 +32,7 @@ export const FlexibleTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props,
     const activated = !!props.selected
     const { onChange, onClick, value } = props
 
-    const handleClick = (event: any) => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         if (!activated && onChange) onChange(event, String(value))
         if (onClick) onClick(event)
     }

@@ -7,10 +7,13 @@ const BaseTabWrap = styled(Button, {
     flex: 1,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
+    height: 36,
+    lineHeight: '18px',
     boxShadow: activated ? '0px 0px 20px rgba(0, 0, 0, 0.05)' : 'none',
     background: activated ? theme.palette.background.paper : 'transparent',
     borderRadius: `${theme.spacing(1.5)} ${theme.spacing(1.5)} 0px 0px !important`,
     color: activated ? theme.palette.text.primary : theme.palette.text.secondary,
+    fontSize: 16,
     fontWeight: 'bold',
 
     '&:hover': {
@@ -30,7 +33,7 @@ export const BaseTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, ref
     const activated = !!props.selected
     const { onChange, onClick, value } = props
 
-    const handleClick = (event: any) => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         if (!activated && onChange) onChange(event, String(value))
         if (onClick) onClick(event)
     }
@@ -44,7 +47,7 @@ export const BaseTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, ref
             disableElevation
             variant="contained"
             aria-selected={activated}
-            onClick={handleClick}
+            onClick={(e) => handleClick(e)}
             onChange={undefined}
         />
     )
