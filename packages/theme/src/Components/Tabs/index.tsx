@@ -90,7 +90,7 @@ const ButtonGroupWrap = styled(ButtonGroup, {
 export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, ref) => {
     const context = useTabContext()
     const [open, handleToggle] = useState<boolean>(false)
-    const [isTabsOverflow, setIsTabsOverflow] = useState<boolean>(false)
+    const [isTabsOverflow, setIsTabsOverflow] = useState(false)
     const innerRef = useRef<HTMLDivElement>(null)
     const { width } = useWindowSize()
 
@@ -103,7 +103,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     useEffect(() => {
         if (!innerRef?.current) return
 
-        const current = innerRef.current as unknown as HTMLDivElement
+        const current = innerRef.current
         setIsTabsOverflow(current?.scrollWidth > current?.clientWidth)
     }, [innerRef.current, width])
 
