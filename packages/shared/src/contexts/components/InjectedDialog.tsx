@@ -38,6 +38,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     },
     dialogCloseButton: {
         color: theme.palette.text.primary,
+        position: 'absolute',
     },
     paper: clean ? { width: 'auto', backgroundImage: 'none' } : {},
 }))
