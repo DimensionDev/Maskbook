@@ -261,10 +261,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         MaskMessages.events.compositionDropMetaData.sendToAll([metaId])
     },
     plugin_getData: async ({ pluginId, id, type }) => {
-        return Services.Helper.getPluginDataById(pluginId, type, id)
+        return Services.Helper.mobile_getPluginDataById(pluginId, type, id)
     },
     plugin_setData: async ({ pluginId, type, record }) => {
-        return Services.Helper.setPluginData(pluginId, type, record)
+        return Services.Helper.mobile_setPluginData(pluginId, type, record)
     },
 }
 
