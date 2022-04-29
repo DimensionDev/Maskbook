@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 9999,
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1),
-        border: `1px solid ${theme.palette.text.primary}`,
+        border: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
         // backgroundColor: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(0, 0, 0)',
         // color: theme.palette.mode === 'dark' ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)',
         backgroundColor: theme.palette.background.paper,
