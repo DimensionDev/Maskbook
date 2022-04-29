@@ -58,7 +58,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const currentAccountNotConnectPersona =
         currentIdentity.identifier === identity.identifier &&
-        personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.publicHexKey) === -1
+        personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.identifier.publicKeyAsHex) ===
+            -1
 
     const translate = usePluginI18NField()
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')

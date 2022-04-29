@@ -8,8 +8,8 @@ import {
     EMPTY_LIST,
     NextIDPlatform,
     CrossIsolationMessages,
-    ProfileIdentifier,
     formatPersonaPublicKey,
+    PersonaInformation,
 } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -20,7 +20,6 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { NextIDProof } from '@masknet/web3-providers'
-import type { Persona } from '../../database'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useSetupGuideStatusState } from '../DataSource/useNextID'
 import { useMyPersonas } from '../DataSource/useMyPersonas'
@@ -204,26 +203,24 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
     }, [lastState, lastRecognized])
     const personas = useMyPersonas()
 
-    const checkSNSConnectToCurrentPersona = useCallback((persona: Persona) => {
-        return username
-            ? persona?.linkedProfiles.get(ProfileIdentifier.of(ui.networkIdentifier, username).unwrapOr(undefined!))
-                  ?.connectionConfirmState === 'confirmed'
-            : undefined
+    const checkSNSConnectToCurrentPersona = useCallback((persona: PersonaInformation) => {
+        if (!username) return undefined
+        return persona.linkedProfiles.some((x) => x.identifier.userId === username)
     }, [])
 
     const { value: ApplicationCurrentStatus } = useAsync(async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
-        const currentPersona = (await Services.Identity.queryPersona(currentPersonaIdentifier!)) as Persona
-        const currentSNSConnectedPersona = personas.find((persona) =>
-            checkSNSConnectToCurrentPersona(persona as Persona),
+        const currentPersona = (await Services.Identity.queryOwnedPersonaInformation(true)).find(
+            (x) => x.identifier === currentPersonaIdentifier,
         )
+        const currentSNSConnectedPersona = personas.find(checkSNSConnectToCurrentPersona)
         return {
-            isSNSConnectToCurrentPersona: checkSNSConnectToCurrentPersona(currentPersona),
+            isSNSConnectToCurrentPersona: currentPersona ? checkSNSConnectToCurrentPersona(currentPersona) : false,
             isNextIDVerify: username
-                ? await NextIDProof.queryIsBound(currentPersona.publicHexKey ?? '', platform, username)
+                ? await NextIDProof.queryIsBound(currentPersona?.identifier.publicKeyAsHex ?? '', platform, username)
                 : false,
-            currentPersonaPublicKey: currentPersona?.fingerprint,
-            currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.fingerprint,
+            currentPersonaPublicKey: currentPersona?.identifier.rawPublicKey,
+            currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.identifier.rawPublicKey,
         }
     }, [platform, username, ui, personas, currentPersona])
     const {

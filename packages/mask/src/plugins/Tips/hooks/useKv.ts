@@ -10,8 +10,7 @@ const getCurrentPersonaPublicKey = async () => {
     const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
     if (!currentPersonaIdentifier) return ''
     const currentPersona = await Services.Identity.queryPersona(currentPersonaIdentifier)
-    if (!currentPersona?.publicHexKey) return ''
-    return currentPersona.publicHexKey
+    return currentPersona?.identifier.publicKeyAsHex || ''
 }
 export function useKvGet<T>(publicKey: string | null | undefined) {
     return useAsyncRetry(async () => {

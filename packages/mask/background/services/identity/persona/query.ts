@@ -44,10 +44,11 @@ export async function mobile_queryPersonas(options: MobileQueryPersonasOptions):
         .map((x) => personaRecordToMobilePersona(x))
 }
 
-export async function queryOwnedPersonaInformation(): Promise<PersonaInformation[]> {
+export async function queryOwnedPersonaInformation(initializedOnly: boolean): Promise<PersonaInformation[]> {
     let result: Promise<PersonaInformation[]>
     await createPersonaDBReadonlyAccess(async (t) => {
-        const personas = await queryPersonasDB({ hasPrivateKey: true }, t)
+        let personas = await queryPersonasDB({ hasPrivateKey: true }, t)
+        if (initializedOnly) personas = personas.filter((x) => !x.uninitialized)
         result = toPersonaInformation(personas, t).mustNotAwaitThisWithInATransaction
     })
     return result!
@@ -64,6 +65,16 @@ export async function queryPersonaByProfile(id: ProfileIdentifier): Promise<Pers
         const profile = await queryProfileDB(id, t)
         if (!profile?.linkedPersona) return
         const persona = await queryPersonaDB(profile.linkedPersona, t)
+        if (!persona) return
+        result = toPersonaInformation([persona], t).mustNotAwaitThisWithInATransaction.then((x) => first(x)!)
+    })
+    return result
+}
+
+export async function queryPersona(id: PersonaIdentifier): Promise<undefined | PersonaInformation> {
+    let result: Promise<PersonaInformation> | undefined
+    await createPersonaDBReadonlyAccess(async (t) => {
+        const persona = await queryPersonaDB(id, t)
         if (!persona) return
         result = toPersonaInformation([persona], t).mustNotAwaitThisWithInATransaction.then((x) => first(x)!)
     })
