@@ -47,7 +47,7 @@ export const bridgedSolanaProvider: BridgedSolanaProvider = {
     getProperty(key) {
         return createPromise((id) => sendEvent('solanaBridgePrimitiveAccess', id, key))
     },
-    isConnected: isConnected,
+    isConnected,
     untilAvailable() {
         return createPromise((id) => sendEvent('untilSolanaBridgeOnline', id))
     },

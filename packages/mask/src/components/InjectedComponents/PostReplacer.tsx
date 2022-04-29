@@ -36,7 +36,7 @@ export function PostReplacer(props: PostReplacerProps) {
 
     const initialTransformationContext = useMemo((): TransformationContext => {
         return {
-            authorHint: author,
+            authorHint: author || undefined,
             currentProfile,
             postURL: url?.toString(),
         }

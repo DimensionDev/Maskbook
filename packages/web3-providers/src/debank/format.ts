@@ -22,7 +22,7 @@ export function formatAssets(data: WalletTokenRecord[]): Asset[] {
                 chainId: chainIdFromChain,
                 token: {
                     id: address,
-                    address: address,
+                    address,
                     chainId: chainIdFromChain,
                     type: TokenType.Fungible,
                     decimals: y.decimals,

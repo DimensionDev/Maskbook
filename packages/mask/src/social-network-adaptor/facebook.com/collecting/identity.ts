@@ -21,7 +21,6 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolv
         .clone()
         .map((x) => getProfileIdentifierAtFacebook(x, false))
     const watcher = new MutationObserverWatcher(self)
-        .setComparer(undefined, (a, b) => a.identifier.equals(b.identifier))
         .addListener('onAdd', (e) => assign(e.value))
         .addListener('onChange', (e) => assign(e.newValue))
         .startWatch({
@@ -31,12 +30,17 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolv
         })
     signal.addEventListener('abort', () => watcher.stopWatch())
     function assign(i: IdentityResolved) {
-        if (!i.identifier.isUnknown) ref.value = i
+        if (i.identifier) ref.value = i
     }
     fetch('/me', { method: 'HEAD', signal })
         .then((x) => x.url)
         .then(getUserID)
-        .then((id) => id && assign({ ...ref.value, identifier: new ProfileIdentifier(EnhanceableSite.Facebook, id) }))
+        .then((id) =>
+            assign({
+                ...ref.value,
+                identifier: ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrapOr(undefined),
+            }),
+        )
 }
 
 function resolveCurrentVisitingIdentityInner(
@@ -55,7 +59,7 @@ function resolveCurrentVisitingIdentityInner(
         const avatar = getAvatar()
 
         ref.value = {
-            identifier: handle ? new ProfileIdentifier(EnhanceableSite.Facebook, handle) : ProfileIdentifier.unknown,
+            identifier: ProfileIdentifier.of(EnhanceableSite.Facebook, handle).unwrapOr(undefined),
             nickname,
             avatar,
             bio,

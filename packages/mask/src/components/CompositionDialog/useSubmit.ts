@@ -1,4 +1,3 @@
-import { ProfileIdentifier } from '@masknet/shared-base'
 import { useCallback } from 'react'
 import Services from '../../extension/service'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
@@ -8,7 +7,6 @@ import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../utils'
 import { SteganographyTextPayload } from '../InjectedComponents/SteganographyTextPayload'
 import type { SubmitComposition } from './CompositionUI'
-import { unreachable } from '@dimensiondev/kit'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base'
 
@@ -20,12 +18,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
 
-            const network = activatedSocialNetworkUI.networkIdentifier
-            const currentProfile = new ProfileIdentifier(
-                network,
-                ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
-                    unreachable('Cannot figure out current profile' as never),
-            )
+            const currentProfile = globalUIState.profiles.value?.[0].identifier
 
             const _encrypted = await Services.Crypto.encryptTo(content, target, whoAmI?.identifier ?? currentProfile)
             const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, _encrypted)

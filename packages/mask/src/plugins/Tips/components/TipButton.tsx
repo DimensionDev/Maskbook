@@ -17,7 +17,7 @@ import { PluginNextIDMessages } from '../messages'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     addresses?: string[]
-    receiver?: ProfileIdentifier
+    receiver?: ProfileIdentifier | null
     tooltipProps?: Partial<TooltipProps>
 }
 
@@ -78,9 +78,9 @@ export const TipButton: FC<Props> = ({
         loading: loadingVerifyInfo,
         retry: retryLoadVerifyInfo,
     } = useAsyncRetry(() => {
-        if (!receiverPersona?.publicHexKey || !receiver?.userId) return Promise.resolve(false)
-        return NextIDProof.queryIsBound(receiverPersona.publicHexKey, platform, receiver.userId, true)
-    }, [receiverPersona?.publicHexKey, platform, receiver?.userId])
+        if (!receiverPersona?.identifier.publicKeyAsHex || !receiver?.userId) return Promise.resolve(false)
+        return NextIDProof.queryIsBound(receiverPersona.identifier.publicKeyAsHex, platform, receiver.userId, true)
+    }, [receiverPersona?.identifier.publicKeyAsHex, platform, receiver?.userId])
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
@@ -88,7 +88,7 @@ export const TipButton: FC<Props> = ({
         })
     }, [])
 
-    const publicWallets = usePublicWallets(receiver)
+    const publicWallets = usePublicWallets(receiver || undefined)
     const allAddresses = useMemo(() => uniq([...publicWallets, ...addresses]), [publicWallets, addresses])
 
     const isChecking = loadingPersona || loadingVerifyInfo
