@@ -1,5 +1,5 @@
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import type { FarmExists, FarmDepositChange } from '@masknet/web3-contracts/types/ReferralFarmsV1'
+import type { FarmExists, FarmDepositChange, FarmMetastate } from '@masknet/web3-contracts/types/ReferralFarmsV1'
 import type { BigNumberish } from '@ethersproject/bignumber'
 
 export enum TokenType {
@@ -165,6 +165,13 @@ export type FarmExistsEvent = Pick<
     'farmHash' | 'sponsor' | 'referredTokenDefn' | 'rewardTokenDefn'
 >
 export type FarmDepositChangeEvent = Pick<FarmDepositChange['returnValues'], 'farmHash' | 'delta'>
+export type FarmMetastateEvent = Pick<FarmMetastate['returnValues'], 'farmHash' | 'key' | 'value'>
+
+export interface FarmMetaDataEvent extends FarmDepositChangeEvent, FarmMetastateEvent {}
+export interface FarmMetaDataLog {
+    args: FarmMetaDataEvent
+    topic: string
+}
 
 export interface RewardsHarvested {
     farmHash: FarmHash
@@ -178,6 +185,11 @@ export interface Farm extends FarmExistsEvent {
     // sum of all delta in FarmDepositChange event
     totalFarmRewards: number
     dailyFarmReward: number
+}
+
+export interface FarmDetailed extends Farm {
+    rewardToken?: FungibleTokenDetailed
+    referredToken?: FungibleTokenDetailed
 }
 
 export interface Entitlement {
@@ -205,6 +217,7 @@ export interface RewardData {
     apr: number
     dailyReward: number
     totalReward: number
+    rewardToken?: FungibleTokenDetailed
 }
 
 // apis
