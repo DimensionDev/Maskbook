@@ -40,11 +40,13 @@ export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> 
     switchButtonStyle?: SxProps<Theme>
     children?: React.ReactNode
     isValidChainId?: (actualChainId: ChainId, expectedChainId: ChainId) => boolean
+    size?: 'small' | 'medium' | 'large'
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
 }
 
 export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const { t } = useI18N()
+    const { size = 'small' } = props
 
     const pluginID = useCurrentWeb3NetworkPluginID()
     const plugin = useActivatedPlugin(pluginID, 'any')
@@ -170,7 +172,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     <span>{t('plugin_wallet_connect_wallet_tip')}</span>
                 </Typography>
                 {!props.hiddenConnectButton ? (
-                    <ActionButton size="small" sx={{ marginTop: 1.5 }} onClick={openSelectProviderDialog}>
+                    <ActionButton size={size} sx={{ marginTop: 1.5 }} onClick={openSelectProviderDialog}>
                         {t('plugin_wallet_connect_wallet')}
                     </ActionButton>
                 ) : null}
@@ -204,7 +206,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 ) : null}
                 {isAllowed ? (
                     <ActionButtonPromise
-                        size="small"
+                        size={size}
                         className={classes.switchButton}
                         sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
                         init={
@@ -244,7 +246,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             ) : null}
             {isAllowed ? (
                 <ActionButtonPromise
-                    size="small"
+                    size={size}
                     className={classes.switchButton}
                     sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
                     init={
