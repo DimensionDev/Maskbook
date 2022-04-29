@@ -118,10 +118,6 @@ function ApplicationBoardContent(props: Props) {
                 .reduce<Application[]>((acc, cur) => {
                     if (!cur.ApplicationEntries) return acc
                     const currentWeb3NetworkSupportedChainIds = cur.enableRequirement.web3?.[currentWeb3Network]
-                    const isWeb3Enabled = Boolean(
-                        currentWeb3NetworkSupportedChainIds === undefined ||
-                            currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
-                    )
                     const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
                     const currentSNSIsSupportedNetwork = cur.enableRequirement.networks.networks[currentSNSNetwork]
                     const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
@@ -130,8 +126,9 @@ function ApplicationBoardContent(props: Props) {
                         cur.ApplicationEntries.map((x) => {
                             return {
                                 entry: x,
-                                enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
+                                enabled: isSNSEnabled,
                                 pluginId: cur.ID,
+                                isWalletConnectedRequired: !account && isWalletConnectedRequired,
                             }
                         }) ?? EMPTY_LIST,
                     )
@@ -180,10 +177,21 @@ interface RenderEntryComponentWrapperProps {
 
 function RenderEntryComponentWrapper({ application }: RenderEntryComponentWrapperProps) {
     const RenderEntryComponent = application.entry.RenderEntryComponent!
+    const { t } = useI18N()
+    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
+
     return application.entry.nextIdRequired ? (
         <RenderEntryComponentWithNextIDRequired application={application} />
     ) : (
-        <RenderEntryComponent disabled={!application.enabled} />
+        <RenderEntryComponent
+            disabled={!application.enabled}
+            tooltipHint={
+                application.isWalletConnectedRequired ? t('application_tooltip_hint_connect_wallet') : undefined
+            }
+            onClick={application.isWalletConnectedRequired ? openWalletStatusDialog : undefined}
+        />
     )
 }
 
@@ -252,13 +260,19 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
             }
             tooltipHint={
                 shouldDisplayTooltipHint
-                    ? t('plugin_tips_sns_persona_unmatched', {
+                    ? t('application_tooltip_hint_sns_persona_unmatched', {
                           currentPersonaPublicKey: formatPersonaPublicKey(currentPersonaPublicKey ?? '', 4),
                           currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
                               currentSNSConnectedPersonaPublicKey ?? '',
                               4,
                           ),
                       })
+                    : personaConnectStatus.connected === false
+                    ? t('application_tooltip_hint_connect_persona')
+                    : shouldVerifyNextId
+                    ? t('application_tooltip_hint_verify')
+                    : application.isWalletConnectedRequired
+                    ? t('application_tooltip_hint_connect_wallet')
                     : undefined
             }
             onClick={shouldVerifyNextId || personaConnectStatus.connected === false ? jumpSetupGuide : undefined}

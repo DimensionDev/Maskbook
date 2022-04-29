@@ -17,7 +17,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
     return useCallback(
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
-
+            console.log({ whoAmI, profiles: globalUIState.profiles })
             const currentProfile = globalUIState.profiles.value?.[0].identifier
 
             const _encrypted = await Services.Crypto.encryptTo(content, target, whoAmI?.identifier ?? currentProfile)
