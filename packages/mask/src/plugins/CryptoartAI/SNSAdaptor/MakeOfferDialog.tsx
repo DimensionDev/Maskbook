@@ -1,29 +1,26 @@
-import { useState, useCallback, useMemo, useEffect } from 'react'
-import { DialogContent, Box, Card, CardContent, CardActions, Link } from '@mui/material'
+import { InjectedDialog, useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { first } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
 import {
-    FungibleTokenDetailed,
-    useFungibleTokenWatched,
-    useChainId,
-    isNativeTokenAddress,
     formatBalance,
-    TransactionStateType,
+    FungibleTokenDetailed,
+    isNativeTokenAddress,
+    useChainId,
+    useFungibleTokenWatched,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../../utils'
+import { Box, Card, CardActions, CardContent, DialogContent, Link } from '@mui/material'
+import BigNumber from 'bignumber.js'
+import { first } from 'lodash-unified'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { WalletMessages } from '../../Wallet/messages'
-import type { useAsset } from '../hooks/useAsset'
-import { resolvePaymentTokensOnCryptoartAI, resolveAssetLinkOnCryptoartAI } from '../pipes'
-import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { useI18N } from '../../../utils'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
+import type { useAsset } from '../hooks/useAsset'
+import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
+import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -103,14 +100,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         setAtLeastBidValue(price.isFinite() ? price.plus(price.gte(1) ? '0.1' : '0.01').toNumber() : 0.01)
     }, [assetSource?.latestBidVo])
 
-    const [placeBidState, placeBidCallback, resetCallback] = usePlaceBidCallback(
-        is24Auction,
-        assetSource?.editionNumber ?? '0',
-    )
-
-    const onMakeOffer = useCallback(() => {
-        placeBidCallback(new BigNumber(amount).shiftedBy(selectedPaymentToken?.decimals ?? 18).toNumber())
-    }, [placeBidCallback, amount])
+    const [isPlacingBid, placeBidCallback] = usePlaceBidCallback(is24Auction, assetSource?.editionNumber ?? '0')
 
     const assetLink = resolveAssetLinkOnCryptoartAI(assetSource?.creator?.username, assetSource?.token_id, chainId)
     const shareText = token
@@ -127,37 +117,21 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
               },
           )
         : ''
-
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        useCallback(
-            (ev: { open: boolean }) => {
-                if (!ev.open) {
-                    if (placeBidState.type === TransactionStateType.HASH) onClose()
-                    if (placeBidState.type === TransactionStateType.CONFIRMED) {
-                        asset?.retry()
-                    }
-                }
-                resetCallback()
-            },
-            [placeBidState, onClose],
-        ),
-    )
-
-    useEffect(() => {
-        if (placeBidState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialog({
-            open: true,
-            shareText,
-            state: placeBidState,
-            summary:
-                (assetSource?.is24Auction
-                    ? t('plugin_collectible_place_a_bid')
-                    : t('plugin_collectible_make_an_offer')) +
-                ' ' +
-                assetSource?.title,
-        })
-    }, [placeBidState])
+    const openShareTxDialog = useOpenShareTxDialog()
+    const onMakeOffer = useCallback(async () => {
+        const hash = await placeBidCallback(
+            new BigNumber(amount).shiftedBy(selectedPaymentToken?.decimals ?? 18).toNumber(),
+        )
+        if (hash) {
+            await openShareTxDialog({
+                hash,
+                onShare() {
+                    activatedSocialNetworkUI.utils.share?.(shareText)
+                },
+            })
+            asset?.retry()
+        }
+    }, [placeBidCallback, amount, asset?.retry])
 
     useEffect(() => {
         setAmount(atLeastBidValue.toString())
@@ -253,9 +227,10 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         <EthereumWalletConnectedBoundary>
                             <Box className={classes.buttons} display="flex" alignItems="center" justifyContent="center">
                                 <ActionButton
+                                    loading={isPlacingBid}
                                     className={classes.button}
                                     variant="contained"
-                                    disabled={!!validationMessage}
+                                    disabled={!!validationMessage || isPlacingBid}
                                     fullWidth
                                     onClick={onMakeOffer}>
                                     {validationMessage ||
