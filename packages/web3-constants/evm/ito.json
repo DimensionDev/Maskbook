@@ -63,7 +63,7 @@
         "Aurora": "0x2cf91AD8C175305EBe6970Bd8f81231585EFbd77",
         "Aurora_Testnet": "0xdcA6F476EebCDE8FE8b072e3fC80dBC28dC209b3",
         "Conflux": "0x066804d9123bf2609ed4a4a40b1177a9c5a9ed51",
-        "Astar": ""
+        "Astar": "0x1D720657e6B11F468BACE2d513b10C8CbfF247Cd"
     },
     "ITO2_CONTRACT_CREATION_BLOCK_HEIGHT": {
         "Mainnet": 12766513,
@@ -85,7 +85,7 @@
         "Aurora": 57350598,
         "Aurora_Testnet": 77919102,
         "Conflux": 37722805,
-        "Astar": 0
+        "Astar": 915536
     },
     "DEFAULT_QUALIFICATION_ADDRESS": {
         "Mainnet": "0x81b6ae377e360dcad63611846a2516f4ba8c88ac",
@@ -129,7 +129,7 @@
         "Aurora": "0x578a7Fee5f0D8CEc7d00578Bf37374C5b95C4b98",
         "Aurora_Testnet": "",
         "Conflux": "0x05ee315e407c21a594f807d61d6cc11306d1f149",
-        "Astar": ""
+        "Astar": "0xdd2Cf3fF67769d49613587CcE8A452D3b58AfC33"
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-mainnet",
@@ -151,6 +151,6 @@
         "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-aurora",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": ""
+        "Astar": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-astar"
     }
 }
