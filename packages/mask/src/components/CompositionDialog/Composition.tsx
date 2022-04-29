@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 import { DialogContent } from '@mui/material'
 import { DialogStackingProvider } from '@masknet/theme'
-import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
+import { activatedSocialNetworkUI } from '../../social-network'
 import { MaskMessages, useI18N } from '../../utils'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRecipientsList } from './useRecipientsList'
@@ -56,12 +56,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     useEffect(() => {
         return CrossIsolationMessages.events.requestComposition.on(({ reason, open, content, options }) => {
-            if (
-                (reason !== 'reply' && reason !== type) ||
-                (reason === 'reply' && type === 'popup') ||
-                globalUIState.profiles.value.length <= 0
-            )
-                return
+            if ((reason !== 'reply' && reason !== type) || (reason === 'reply' && type === 'popup')) return
             setOpen(open)
             setReason(reason)
             if (content) UI.current?.setMessage(content)

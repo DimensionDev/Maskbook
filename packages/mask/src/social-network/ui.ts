@@ -90,7 +90,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         ui.injection.toolbox?.(signal, 'wallet')
         ui.injection.toolbox?.(signal, 'application')
     }
-    ui.injection.setupPrompt?.(signal)
     ui.injection.newPostComposition?.start?.(signal)
     ui.injection.searchResult?.(signal)
     ui.injection.userBadge?.(signal)
