@@ -14,6 +14,7 @@ import { BaseTab } from './BaseTab'
 import { FlexibleTab } from './FlexibleTab'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew' // flexBasis: theme.spacing(3),
 import { useWindowSize } from 'react-use'
+import { RoundTab } from './RoundTab'
 
 type MaskTabVariant = 'base' | 'flexible' | 'round'
 
@@ -123,6 +124,13 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                 <FlexibleTab value={child.props.value} {...extra}>
                     {child.props.label}
                 </FlexibleTab>
+            )
+        }
+        if (child.type === Tab && variant === 'round') {
+            return (
+                <RoundTab value={child.props.value} {...extra}>
+                    {child.props.label}
+                </RoundTab>
             )
         }
         return cloneElement(child, extra)
