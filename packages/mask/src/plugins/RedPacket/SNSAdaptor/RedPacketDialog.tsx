@@ -1,9 +1,8 @@
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, useOpenShareTxDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import {
-    formatBalance,
     getChainName,
     TransactionStateType,
     useAccount,
@@ -139,31 +138,14 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         contract_version,
         publicKey,
     )
-    // #endregion
-
-    // assemble JSON payload
-    const payload = useRef<RedPacketJSONPayload>({
-        network: getChainName(chainId),
-    } as RedPacketJSONPayload)
-
-    useEffect(() => {
-        if (createState.type !== TransactionStateType.UNKNOWN) return
-        const contractAddress = HAPPY_RED_PACKET_ADDRESS_V4
-        if (!contractAddress) {
-            onClose()
-            return
-        }
-        payload.current.contract_address = contractAddress
-        payload.current.contract_version = contract_version
-        payload.current.network = getChainName(chainId)
-    }, [chainId, networkType, contract_version, createState])
-
-    // #region remote controlled transaction dialog
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-
+    const openShareTxDialog = useOpenShareTxDialog()
+    const createRedpacket = useCallback(async () => {
+        const hash = await createCallback()
+        if (hash) {
+            await openShareTxDialog({
+                hash,
+                onShare() {},
+            })
             // reset state
             resetCreateCallback()
 
@@ -199,8 +181,26 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             setSettings(undefined)
             // output the redpacket as JSON payload
             onCreateOrSelect(payload.current)
-        },
-    )
+        }
+    }, [])
+    // #endregion
+
+    // assemble JSON payload
+    const payload = useRef<RedPacketJSONPayload>({
+        network: getChainName(chainId),
+    } as RedPacketJSONPayload)
+
+    useEffect(() => {
+        if (createState.type !== TransactionStateType.UNKNOWN) return
+        const contractAddress = HAPPY_RED_PACKET_ADDRESS_V4
+        if (!contractAddress) {
+            onClose()
+            return
+        }
+        payload.current.contract_address = contractAddress
+        payload.current.contract_version = contract_version
+        payload.current.network = getChainName(chainId)
+    }, [chainId, networkType, contract_version, createState])
 
     // open the transaction dialog
     useEffect(() => {
@@ -219,15 +219,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             }
             RedPacketRPC.discoverRedPacket(record)
         }
-
-        setTransactionDialog({
-            open: true,
-            state: createState,
-            summary: t('plugin_red_packet_create_with_token', {
-                amount: formatBalance(createSettings?.total, createSettings?.token?.decimals),
-                symbol: createSettings?.token.symbol,
-            }),
-        })
     }, [createState /* update tx dialog only if state changed */])
     // #endregion
 
@@ -292,7 +283,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     <RedPacketConfirmDialog
                         onClose={onClose}
                         onBack={onBack}
-                        onCreate={createCallback}
+                        onCreate={createRedpacket}
                         settings={settings}
                     />
                 ) : null}

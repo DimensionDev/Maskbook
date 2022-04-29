@@ -165,7 +165,7 @@ export const TransferERC721 = memo(() => {
     const account = useAccount()
     const nativeToken = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice()
-    const [isTransfering, transferCallback] = useTokenTransferCallback(
+    const [isTransferring, transferCallback] = useTokenTransferCallback(
         EthereumTokenType.ERC721,
         contract?.address ?? '',
     )
@@ -410,7 +410,7 @@ export const TransferERC721 = memo(() => {
                         </Box>
                     </Box>
                     <Box mt={4}>
-                        <Button sx={{ width: 240 }} type="submit" disabled={isSubmitting || isTransfering}>
+                        <Button sx={{ width: 240 }} type="submit" disabled={isSubmitting || isTransferring}>
                             {t.wallets_transfer_send()}
                         </Button>
                     </Box>

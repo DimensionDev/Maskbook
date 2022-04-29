@@ -1,24 +1,21 @@
-import classNames from 'classnames'
-import { useCallback, useEffect, useMemo } from 'react'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { Card, Typography } from '@mui/material'
+import { useOpenShareTxDialog } from '@masknet/shared'
 import {
+    ChainId,
     formatBalance,
+    getChainIdFromName,
     resolveNetworkName,
-    TransactionStateType,
     useAccount,
     useNetworkType,
     useWeb3,
-    useTokenConstants,
-    getChainIdFromName,
-    ChainId,
 } from '@masknet/web3-shared-evm'
+import { Card, Typography } from '@mui/material'
+import classNames from 'classnames'
+import { useCallback, useMemo } from 'react'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
-import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
+import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../../utils'
-import { WalletMessages } from '../../../Wallet/messages'
 import type { RedPacketAvailability, RedPacketJSONPayload } from '../../types'
 import { RedPacketStatus } from '../../types'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
@@ -43,13 +40,10 @@ export function RedPacket(props: RedPacketProps) {
     const networkType = useNetworkType()
 
     // #region token detailed
-    const {
-        value: availability,
-        computed: availabilityComputed,
-        retry: revalidateAvailability,
-    } = useAvailabilityComputed(account ?? payload.contract_address, payload)
-
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
+    const { value: availability, computed: availabilityComputed } = useAvailabilityComputed(
+        account ?? payload.contract_address,
+        payload,
+    )
 
     const token = payload.token
 
@@ -66,7 +60,7 @@ export function RedPacket(props: RedPacketProps) {
         account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
     }
 
-    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
+    const [isClaiming, claimCallback] = useClaimCallback(
         payload.contract_version,
         account,
         payload.rpid,
@@ -74,7 +68,7 @@ export function RedPacket(props: RedPacketProps) {
     )
 
     const shareText = (
-        listOfStatus.includes(RedPacketStatus.claimed) || claimState.type === TransactionStateType.CONFIRMED
+        listOfStatus.includes(RedPacketStatus.claimed) || !isClaiming
             ? isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                 ? t('plugin_red_packet_share_message_official_account', shareTextOption)
                 : t('plugin_red_packet_share_message_not_twitter', shareTextOption)
@@ -83,43 +77,25 @@ export function RedPacket(props: RedPacketProps) {
             : t('plugin_red_packet_share_unclaimed_message_not_twitter', shareTextOption)
     ).trim()
 
-    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
-        payload.contract_version,
-        account,
-        payload.rpid,
-    )
+    const [isRefunding, isRefunded, refundCallback] = useRefundCallback(payload.contract_version, account, payload.rpid)
 
-    // close the transaction dialog
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-    )
-
-    // open the transaction dialog
-    useEffect(() => {
-        const state = canClaim ? claimState : refundState
-        if (state.type === TransactionStateType.UNKNOWN) return
-        if (!availability || !token) return
-        if (state.type === TransactionStateType.CONFIRMED) {
-            canClaim &&
-                setTransactionDialog({
-                    open: true,
-                    shareText,
-                    state,
-                    summary: t('plugin_red_packet_claiming_from', { name: payload.sender.name }),
-                })
-            resetClaimCallback()
-            resetRefundCallback()
-            revalidateAvailability()
-        }
-    }, [claimState, refundState /* update tx dialog only if state changed */])
-    // #endregion
+    const openShareTxDialog = useOpenShareTxDialog()
 
     const onClaimOrRefund = useCallback(async () => {
-        resetClaimCallback()
-        resetRefundCallback()
-        if (canClaim) await claimCallback()
-        else if (canRefund) await refundCallback()
-    }, [canClaim, canRefund, claimCallback, refundCallback])
+        let hash: string | undefined
+        if (canClaim) {
+            hash = await claimCallback()
+        } else if (canRefund) {
+            hash = await refundCallback()
+        }
+        if (!hash) return
+        openShareTxDialog({
+            hash,
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
+            },
+        })
+    }, [canClaim, canRefund, claimCallback, isRefunded])
 
     const myStatus = useMemo(() => {
         if (token && listOfStatus.includes(RedPacketStatus.claimed))
@@ -206,8 +182,8 @@ export function RedPacket(props: RedPacketProps) {
                     chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}
                     canClaim={canClaim}
                     canRefund={canRefund}
-                    claimState={claimState}
-                    refundState={refundState}
+                    isClaiming={isClaiming}
+                    isRefunding={isRefunding}
                     onShare={handleShare}
                     onClaimOrRefund={onClaimOrRefund}
                 />

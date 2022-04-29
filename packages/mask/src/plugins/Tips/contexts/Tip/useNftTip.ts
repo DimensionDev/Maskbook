@@ -9,7 +9,7 @@ import { WalletRPC } from '../../../Wallet/messages'
 import type { TipTuple } from './type'
 
 export function useNftTip(recipient: string, tokenId: string | null, contractAddress?: string): TipTuple {
-    const [isTransfering, transferCallback] = useTokenTransferCallback(EthereumTokenType.ERC721, contractAddress || '')
+    const [isTransferring, transferCallback] = useTokenTransferCallback(EthereumTokenType.ERC721, contractAddress || '')
     const { value: contractDetailed } = useERC721ContractDetailed(contractAddress)
     const [, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contractDetailed)
 
@@ -29,5 +29,5 @@ export function useNftTip(recipient: string, tokenId: string | null, contractAdd
         return hash
     }, [tokenId, contractAddress, erc721TokenDetailedCallback, recipient, transferCallback])
 
-    return [isTransfering, sendTip]
+    return [isTransferring, sendTip]
 }

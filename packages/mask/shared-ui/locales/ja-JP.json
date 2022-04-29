@@ -123,7 +123,6 @@
     "plugin_red_packet_description_empty": "期限切れです",
     "plugin_red_packet_description_broken": "破損しています",
     "plugin_red_packet_description_failover": "{{amount}} {{symbol}} / {{shares}} 株",
-    "plugin_red_packet_claiming_from": "{{name}} から投げ銭を請求中",
     "plugin_red_packet_amount_per_share": "1株当たりの金額",
     "plugin_red_packet_send_symbol": "{{symbol}} を送る",
     "plugin_red_packet_create_with_token": "{{symbol}} で投げ銭を作成する",

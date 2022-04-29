@@ -1,18 +1,16 @@
+import { InjectedDialog, useOpenShareTxDialog, usePickToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { usePickToken, InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { isZero, rightShift } from '@masknet/web3-shared-base'
 import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
-    TransactionStateType,
     useAccount,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { v4 as uuid } from 'uuid'
+import { useCallback, useMemo, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
@@ -23,7 +21,6 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
-import { WalletMessages } from '../../Wallet/messages'
 import { useInvestCallback } from '../hooks/useInvestCallback'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
@@ -54,7 +51,6 @@ const useStyles = makeStyles()((theme) => ({
 export function InvestDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [id] = useState(uuid)
     const [pool, setPool] = useState<Pool>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const [allowedTokens, setAllowedTokens] = useState<string[]>()
@@ -98,7 +94,34 @@ export function InvestDialog() {
     // #endregion
 
     // #region blocking
-    const [investState, investCallback, resetInvestCallback] = useInvestCallback(pool, amount.toFixed(), token)
+    const [isInvesting, investCallback] = useInvestCallback(pool, amount.toFixed(), token)
+    const openShareTxDialog = useOpenShareTxDialog()
+    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+    const shareText = token
+        ? [
+              `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${pool?.name}. ${
+                  isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                      ? `Follow @${
+                            isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                        } (mask.io) to invest dHEDGE pools.`
+                      : ''
+              }`,
+              '#mask_io',
+          ].join('\n')
+        : ''
+    const invest = useCallback(async () => {
+        const hash = await investCallback()
+        if (hash) {
+            await openShareTxDialog({
+                hash,
+                onShare() {
+                    activatedSocialNetworkUI.utils.share?.(shareText)
+                },
+            })
+            retryLoadTokenBalance()
+            onClose()
+        }
+    }, [investCallback, openShareTxDialog, onClose])
     // #endregion
 
     // #region Swap
@@ -131,48 +154,8 @@ export function InvestDialog() {
     // #endregion
 
     // #region transaction dialog
-    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareText = token
-        ? [
-              `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${pool?.name}. ${
-                  isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                      ? `Follow @${
-                            isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                        } (mask.io) to invest dHEDGE pools.`
-                      : ''
-              }`,
-              '#mask_io',
-          ].join('\n')
-        : ''
 
     // on close transaction dialog
-    const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        useCallback(
-            (ev: { open: boolean }) => {
-                if (!ev.open) {
-                    retryLoadTokenBalance()
-                    if (investState.type === TransactionStateType.HASH) onClose()
-                }
-                if (investState.type === TransactionStateType.HASH) setRawAmount('')
-                resetInvestCallback()
-            },
-            [id, investState, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
-        ),
-    )
-
-    // open the transaction dialog
-    useEffect(() => {
-        if (!token || !pool) return
-        if (investState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
-            open: true,
-            shareText,
-            state: investState,
-            summary: `Investing ${formatBalance(amount, token.decimals)}${token.symbol} on ${pool?.name} pool.`,
-        })
-    }, [investState /* update tx dialog only if state changed */])
-    // #endregion
 
     // #region submit button
     const validationMessage = useMemo(() => {
@@ -213,7 +196,8 @@ export function InvestDialog() {
                                 fullWidth
                                 onClick={openSwap}
                                 variant="contained"
-                                loading={loadingTokenBalance}>
+                                disabled={isInvesting}
+                                loading={loadingTokenBalance || isInvesting}>
                                 {t('plugin_dhedge_buy_token', { symbol: token?.symbol })}
                             </ActionButton>
                         ) : (
@@ -224,10 +208,10 @@ export function InvestDialog() {
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth
-                                    disabled={!!validationMessage}
-                                    onClick={investCallback}
+                                    disabled={!!validationMessage || isInvesting}
+                                    onClick={invest}
                                     variant="contained"
-                                    loading={loadingTokenBalance}>
+                                    loading={loadingTokenBalance || isInvesting}>
                                     {validationMessage || t('plugin_dhedge_invest')}
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>

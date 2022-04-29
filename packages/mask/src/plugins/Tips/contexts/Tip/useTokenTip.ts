@@ -21,12 +21,12 @@ export function useTokenTip(
     const isNativeToken = isSameAddress(token?.address, NATIVE_TOKEN_ADDRESS)
 
     const assetType = isNativeToken ? EthereumTokenType.Native : EthereumTokenType.ERC20
-    const [isTransfering, transferCallback] = useTokenTransferCallback(assetType, token?.address || '')
+    const [isTransferring, transferCallback] = useTokenTransferCallback(assetType, token?.address || '')
 
     const sendTip = useCallback(async () => {
         const transferAmount = rightShift(amount || '0', token?.decimals || 0).toFixed()
         return transferCallback(transferAmount, recipient, gasConfig)
     }, [amount, token, recipient, transferCallback, gasConfig])
 
-    return [isTransfering, sendTip]
+    return [isTransferring, sendTip]
 }

@@ -1,26 +1,22 @@
-import { useCallback } from 'react'
-import { useRedPacketContract } from './useRedPacketContract'
-import { TransactionEventType, TransactionStateType, useTransactionState } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import type { TransactionReceipt } from 'web3-core'
+import { TransactionEventType } from '@masknet/web3-shared-evm'
+import { useCallback, useState } from 'react'
+import { useRedPacketContract } from './useRedPacketContract'
 
-export function useRefundCallback(version: number, from: string, id?: string) {
-    const [refundState, setRefundState] = useTransactionState()
+export function useRefundCallback(
+    version: number,
+    from: string,
+    id?: string,
+): [loading: boolean, isRefunded: boolean, refund: () => Promise<string | undefined>] {
+    const [loading, setLoading] = useState(false)
+    const [isRefunded, setIsRefunded] = useState(false)
     const redPacketContract = useRedPacketContract(version)
 
     const refundCallback = useCallback(async () => {
-        if (!redPacketContract || !id) {
-            setRefundState({
-                type: TransactionStateType.UNKNOWN,
-            })
-            return
-        }
+        if (!redPacketContract || !id) return
 
-        // start waiting for provider to confirm tx
-        setRefundState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
-
+        setLoading(true)
+        setIsRefunded(false)
         // estimate gas and compose transaction
         const config = {
             from,
@@ -30,50 +26,23 @@ export function useRefundCallback(version: number, from: string, id?: string) {
                     from,
                 })
                 .catch((error) => {
-                    setRefundState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
+                    setLoading(false)
                     throw error
                 }),
         }
 
         // step 2: blocking
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<string>((resolve, reject) => {
             redPacketContract.methods
                 .refund(id)
                 .send(config as NonPayableTx)
-                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                    setRefundState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: 0,
-                        receipt,
-                    })
-                    resolve()
+                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                    resolve(receipt.transactionHash)
+                    setIsRefunded(true)
                 })
-                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                    setRefundState({
-                        type: TransactionStateType.CONFIRMED,
-                        no,
-                        receipt,
-                    })
-                    resolve()
-                })
-                .on(TransactionEventType.ERROR, (error: Error) => {
-                    setRefundState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
-                })
-        })
+                .once(TransactionEventType.ERROR, reject)
+        }).finally(() => setLoading(false))
     }, [id, redPacketContract, from])
 
-    const resetCallback = useCallback(() => {
-        setRefundState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [refundState, refundCallback, resetCallback] as const
+    return [loading, isRefunded, refundCallback]
 }

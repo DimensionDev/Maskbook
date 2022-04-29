@@ -121,7 +121,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         return BigNumber.max(0, amount_).toFixed()
     }, [tokenBalance, gasPrice, selectedToken?.type, amount, gasLimit, maxFee, is1559Supported])
 
-    const [isTransfering, transferCallback] = useTokenTransferCallback(tokenType, selectedToken.address)
+    const [isTransferring, transferCallback] = useTokenTransferCallback(tokenType, selectedToken.address)
 
     const onTransfer = useCallback(async () => {
         let hash: string | undefined
@@ -310,7 +310,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     </Box>
                 ) : null}
                 <Box mt={4} display="flex" flexDirection="row" justifyContent="center">
-                    <Button sx={{ width: 240 }} disabled={!!validationMessage || isTransfering} onClick={onTransfer}>
+                    <Button sx={{ width: 240 }} disabled={!!validationMessage || isTransferring} onClick={onTransfer}>
                         {validationMessage || t.wallets_transfer_send()}
                     </Button>
                 </Box>

@@ -13,8 +13,7 @@ import {
     useTransactionState,
 } from '@masknet/web3-shared-evm'
 import { omit } from 'lodash-unified'
-import { useCallback, useRef, useState } from 'react'
-import type { TransactionReceipt } from 'web3-core'
+import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
 
@@ -136,16 +135,17 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
     const getCreateParams = useCreateParams(redPacketSettings, version, publicKey)
 
-    const transactionHashRef = useRef<string>()
-
+    const resetCallback = useCallback(() => {
+        setCreateState({
+            type: TransactionStateType.UNKNOWN,
+        })
+    }, [])
     const createCallback = useCallback(async () => {
         const { token } = redPacketSettings
         const createParams = await getCreateParams()
 
         if (!token || !redPacketContract || !createParams) {
-            setCreateState({
-                type: TransactionStateType.UNKNOWN,
-            })
+            resetCallback()
             return
         }
 
@@ -170,41 +170,24 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
 
         // estimate gas and compose transaction
         const value = toFixed(token.type === EthereumTokenType.Native ? paramsObj.total : 0)
-        const config = {
+        const config: PayableTx = {
             from: account,
             value,
             gas,
         }
 
         // send transaction and wait for hash
-        return new Promise<void>(async (resolve, reject) => {
+        return new Promise<string>(async (resolve, reject) => {
             redPacketContract.methods
                 .create_red_packet(...params)
-                .send(config as PayableTx)
-                .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
-                    setCreateState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    transactionHashRef.current = hash
-                })
-                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                    setCreateState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: 0,
-                        receipt,
-                    })
-                    transactionHashRef.current = receipt.transactionHash
-                    resolve()
-                })
-                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                .send(config)
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setCreateState({
                         type: TransactionStateType.CONFIRMED,
                         no,
                         receipt,
                     })
-                    transactionHashRef.current = receipt.transactionHash
-                    resolve()
+                    resolve(receipt.transactionHash)
                 })
                 .on(TransactionEventType.ERROR, (error: Error) => {
                     setCreateState({
@@ -215,12 +198,6 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                 })
         })
     }, [account, redPacketContract, redPacketSettings, chainId, getCreateParams])
-
-    const resetCallback = useCallback(() => {
-        setCreateState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
 
     return [createSettings, createState, createCallback, resetCallback] as const
 }
