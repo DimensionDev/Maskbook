@@ -18,7 +18,6 @@ import {
     FungibleTokenDetailed,
     isEIP1559Supported,
     isSameAddress,
-    TransactionStateType,
     useChainId,
     useFungibleTokenBalance,
     useGasLimit,
@@ -122,20 +121,20 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         return BigNumber.max(0, amount_).toFixed()
     }, [tokenBalance, gasPrice, selectedToken?.type, amount, gasLimit, maxFee, is1559Supported])
 
-    const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
-        tokenType,
-        selectedToken.address,
-    )
+    const [isTransfering, transferCallback] = useTokenTransferCallback(tokenType, selectedToken.address)
 
     const onTransfer = useCallback(async () => {
+        let hash: string | undefined
         if (EthereumAddress.isValid(address)) {
-            await transferCallback(transferAmount, address, gasConfig, memo)
-            return
+            hash = await transferCallback(transferAmount, address, gasConfig, memo)
         } else if (Utils?.isValidDomain?.(address)) {
-            await transferCallback(transferAmount, registeredAddress, gasConfig, memo)
-            return
+            hash = await transferCallback(transferAmount, registeredAddress, gasConfig, memo)
         }
-        return
+        if (hash) {
+            setMemo('')
+            setAddress('')
+            setAmount('')
+        }
     }, [transferAmount, address, memo, selectedToken.decimals, transferCallback, gasConfig, registeredAddress, Utils])
 
     // #region validation
@@ -164,15 +163,6 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         network,
     ])
     // #endregion
-
-    useEffect(() => {
-        const ALLOWED_TYPES = [TransactionStateType.FAILED, TransactionStateType.HASH]
-        if (!ALLOWED_TYPES.includes(transferState.type)) return
-        setMemo('')
-        setAddress('')
-        setAmount('')
-        resetTransferCallback()
-    }, [transferState])
 
     const ensContent = useMemo(() => {
         if (resolveDomainLoading) return
@@ -320,12 +310,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     </Box>
                 ) : null}
                 <Box mt={4} display="flex" flexDirection="row" justifyContent="center">
-                    <Button
-                        sx={{ width: 240 }}
-                        disabled={
-                            !!validationMessage || transferState.type === TransactionStateType.WAIT_FOR_CONFIRMING
-                        }
-                        onClick={onTransfer}>
+                    <Button sx={{ width: 240 }} disabled={!!validationMessage || isTransfering} onClick={onTransfer}>
                         {validationMessage || t.wallets_transfer_send()}
                     </Button>
                 </Box>
