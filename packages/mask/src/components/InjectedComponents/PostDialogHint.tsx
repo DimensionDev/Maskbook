@@ -7,7 +7,6 @@ import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/util
 import { MaskSharpIcon, MaskIconInMinds } from '../../resources/MaskIcon'
 import classNames from 'classnames'
 import GuideStep from '../GuideStep'
-import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 
 interface TooltipConfigProps {
     placement?: 'bottom' | 'top'
@@ -75,7 +74,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     return disableGuideTip ? (
         getEntry()
     ) : (
-        <GuideStep step={3} total={3} tip={t('user_guide_tip_3')} onComplete={props.onHintButtonClicked}>
+        <GuideStep step={4} total={4} tip={t('user_guide_tip_4')} onComplete={props.onHintButtonClicked}>
             {getEntry()}
         </GuideStep>
     )
@@ -105,7 +104,5 @@ export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
     iconType?: string
 }
 export function PostDialogHint(props: PostDialogHintProps) {
-    const personaConnectStatus = usePersonaConnectStatus()
-    if (personaConnectStatus.action) return null
     return <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
 }

@@ -119,6 +119,12 @@ export default function GuideStep({
         if (disabled) return
         const open = +lastStep === step
         setOpen(open)
+
+        if (!open) return
+        const url = new URL(location.href)
+        if (url.pathname === '/home') return
+        url.pathname = '/home'
+        location.href = url.href
     }, [lastStep])
 
     useEffect(() => {
@@ -169,7 +175,7 @@ export default function GuideStep({
         return () => {
             window.removeEventListener('resize', onResize)
         }
-    }, [childrenRef])
+    }, [childrenRef, lastStep, open])
 
     return (
         <>
