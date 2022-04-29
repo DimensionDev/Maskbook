@@ -13,9 +13,9 @@ import type { Reward } from '../../types'
 import { REFERRAL_FARMS_V1_ADDR } from '../../constants'
 
 export async function runCreateERC20PairFarm(
-    onStart: (type: boolean) => void,
+    onStart: () => void,
     onError: (error?: string) => void,
-    onTransactionHash: (type: string) => void,
+    onConfirmed: (txHash: string) => void,
     web3: Web3,
     account: string,
     chainId: ChainId,
@@ -25,13 +25,13 @@ export async function runCreateERC20PairFarm(
     dailyFarmReward: number,
 ) {
     try {
-        onStart(true)
-        let tx: any
-        const referredTokenDefn = toChainAddressEthers(chainId, referredToken.address)
-        const rewardTokenDefn = toChainAddressEthers(chainId, rewardToken.address)
+        onStart()
+
         const farmsAddr = REFERRAL_FARMS_V1_ADDR
         const farms = createContract(web3, farmsAddr, ReferralFarmsV1ABI as AbiItem[])
 
+        const referredTokenDefn = toChainAddressEthers(chainId, referredToken.address)
+        const rewardTokenDefn = toChainAddressEthers(chainId, rewardToken.address)
         const rewardTokenDecimals = rewardToken.decimals
         const totalFarmRewardStr = roundValue(totalFarmReward, rewardTokenDecimals).toString()
         const dailyFarmRewardStr = roundValue(dailyFarmReward, rewardTokenDecimals).toString()
@@ -49,11 +49,12 @@ export async function runCreateERC20PairFarm(
             const maxAllowance = new BigNumber(toWei('10000000000000', 'ether'))
             const estimatedGas = await rewardTokenInstance?.methods.approve(farmsAddr, maxAllowance).estimateGas(config)
 
-            tx = await rewardTokenInstance?.methods.approve(farmsAddr, maxAllowance).send({
+            await rewardTokenInstance?.methods.approve(farmsAddr, maxAllowance).send({
                 ...config,
                 gas: estimatedGas,
             })
         }
+        // Create farm
         const metastate =
             dailyFarmReward > 0
                 ? [
@@ -72,33 +73,30 @@ export async function runCreateERC20PairFarm(
             .increaseReferralFarm(rewardTokenDefn, referredTokenDefn, totalFarmRewardUint128, metastate)
             .estimateGas(config)
 
-        tx = await farms?.methods
+        await farms?.methods
             .increaseReferralFarm(rewardTokenDefn, referredTokenDefn, totalFarmRewardUint128, metastate)
             .send({
                 ...config,
                 gas: estimatedGas2,
             })
-            .on(TransactionEventType.RECEIPT, () => {
-                onStart(true)
-            })
             .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
                 // show Confirm dialog only at the first time
                 if (no === 1) {
-                    onTransactionHash(receipt.transactionHash)
+                    onConfirmed(receipt.transactionHash)
                 }
             })
             .on(TransactionEventType.ERROR, (error: Error) => {
-                onStart(false)
+                throw error
             })
     } catch (error: any) {
-        onStart(false)
         onError()
     }
 }
+
 export async function adjustFarmRewards(
-    onStart: (type: boolean) => void,
+    onStart: () => void,
     onError: (error?: string) => void,
-    onTransactionHash: (type: string) => void,
+    onConfirmed: (txHash: string) => void,
     web3: Web3,
     account: string,
     chainId: ChainId,
@@ -113,7 +111,7 @@ export async function adjustFarmRewards(
             return await runCreateERC20PairFarm(
                 onStart,
                 onError,
-                onTransactionHash,
+                onConfirmed,
                 web3,
                 account,
                 chainId,
@@ -126,7 +124,7 @@ export async function adjustFarmRewards(
 
         // Increase/decrease the Daily Farm Reward
         if (dailyFarmReward > 0) {
-            onStart(true)
+            onStart()
 
             const config = {
                 from: account,
@@ -151,28 +149,24 @@ export async function adjustFarmRewards(
                 .configureMetastate(rewardTokenDefn, referredTokenDefn, metastate)
                 .estimateGas(config)
 
-            const tx = await farms?.methods
+            await farms?.methods
                 .configureMetastate(rewardTokenDefn, referredTokenDefn, metastate)
                 .send({
                     ...config,
                     gas: estimatedGas,
                 })
-                .on(TransactionEventType.RECEIPT, (onSucceed: () => void) => {
-                    onStart(true)
-                })
                 .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
                     // show Confirm dialog only at the first time
                     if (no === 1) {
-                        onTransactionHash(receipt.transactionHash)
+                        onConfirmed(receipt.transactionHash)
                     }
                 })
                 .on(TransactionEventType.ERROR, (error: Error) => {
-                    onStart(false)
+                    throw error
                 })
         }
     } catch (error: any) {
         onError(error?.message)
-        onStart(false)
     }
 }
 
@@ -211,14 +205,11 @@ export async function harvestRewards(
 
         const estimatedGas = await farms?.methods.harvestRewards(requests, proofs, []).estimateGas(config)
 
-        const tx = await farms?.methods
+        await farms?.methods
             .harvestRewards(requests, proofs, [])
             .send({
                 ...config,
                 gas: estimatedGas,
-            })
-            .on(TransactionEventType.RECEIPT, (onSucceed: () => void) => {
-                onStart()
             })
             .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
                 // show Confirm dialog only at the first time
@@ -226,7 +217,9 @@ export async function harvestRewards(
                     onConfirm(receipt.transactionHash)
                 }
             })
-            .on(TransactionEventType.ERROR, (error: Error) => {})
+            .on(TransactionEventType.ERROR, (error: Error) => {
+                throw error
+            })
     } catch (error: any) {
         onError(error?.message)
     }
