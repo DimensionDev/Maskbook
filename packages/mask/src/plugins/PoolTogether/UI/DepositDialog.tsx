@@ -129,7 +129,7 @@ export function DepositDialog() {
                   )
                 : undefined,
         )
-    }, [rawAmount])
+    }, [pool, rawAmount])
 
     // #region blocking
     const [isDepositing, depositCallback] = useDepositCallback(
@@ -278,7 +278,7 @@ export function DepositDialog() {
                             <Grid item>
                                 <Typography variant="body2" fontWeight="fontWeightBold" className={classes.oddsValue}>
                                     {t('plugin_pooltogether_odds_value', {
-                                        value: odds,
+                                        value: Number.parseFloat(odds).toFixed(4),
                                         period: getPrizePeriod(t, prizePeriodSeconds),
                                     })}
                                 </Typography>

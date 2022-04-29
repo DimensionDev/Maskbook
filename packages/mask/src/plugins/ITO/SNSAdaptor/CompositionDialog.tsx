@@ -76,7 +76,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const [poolSettings, setPoolSettings] = useState<PoolSettings>()
 
     // #region blocking
-    const [fillSettings, _, fillCallback] = useFillCallback(poolSettings)
+    const [fillSettings, filling, fillCallback] = useFillCallback(poolSettings)
     const openShareTxDialog = useOpenShareTxDialog()
     const fill = useCallback(async () => {
         const receipt = await fillCallback()
@@ -130,7 +130,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 },
             })
         }
-    }, [ITO2_CONTRACT_ADDRESS])
+    }, [ITO2_CONTRACT_ADDRESS, fillCallback])
     // #endregion
 
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
@@ -232,7 +232,13 @@ export function CompositionDialog(props: CompositionDialogProps) {
                     <AbstractTab classes={{ tabs: classes.tabs }} height={540} {...tabProps} />
                 ) : null}
                 {step === ITOCreateFormPageStep.ConfirmItoPage ? (
-                    <ConfirmDialog poolSettings={poolSettings} onBack={onBack} onDone={fill} onClose={onClose} />
+                    <ConfirmDialog
+                        poolSettings={poolSettings}
+                        loading={filling}
+                        onBack={onBack}
+                        onDone={fill}
+                        onClose={onClose}
+                    />
                 ) : null}
             </DialogContent>
         </InjectedDialog>

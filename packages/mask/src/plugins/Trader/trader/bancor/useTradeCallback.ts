@@ -1,4 +1,4 @@
-import { GasOptionConfig, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
+import { GasOptionConfig, TransactionEventType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { pick } from 'lodash-unified'
 import { useCallback, useMemo, useState } from 'react'
@@ -48,15 +48,12 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
             web3.eth
-                .sendTransaction(config_, (error, hash) => {
-                    if (error) {
-                        reject(error)
-                    } else {
-                        resolve(hash)
-                    }
+                .sendTransaction(config_)
+                .on(TransactionEventType.ERROR, reject)
+                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                    resolve(receipt.transactionHash)
                 })
-                .finally(() => setLoading(false))
-        })
+        }).finally(() => setLoading(false))
     }, [web3, account, chainId, stringify(trade), gasConfig])
 
     return [loading, tradeCallback] as const

@@ -50,8 +50,8 @@ export function useDepositCallback(
                     ...config,
                     gas: estimatedGas,
                 })
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    resolve(hash)
+                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                    resolve(receipt.transactionHash)
                 })
                 .on(TransactionEventType.ERROR, (error) => {
                     reject(error)

@@ -25,6 +25,7 @@ export function useNativeTransferCallback() {
 
             if (isGreaterThan(amount, balance)) return
 
+            setLoading(true)
             // send transaction and wait for hash
             const config = {
                 from: account,

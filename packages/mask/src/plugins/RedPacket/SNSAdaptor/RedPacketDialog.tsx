@@ -182,7 +182,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             // output the redpacket as JSON payload
             onCreateOrSelect(payload.current)
         }
-    }, [])
+    }, [createCallback, resetCreateCallback, createSettings, createState, openShareTxDialog, onCreateOrSelect])
     // #endregion
 
     // assemble JSON payload

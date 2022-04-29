@@ -25,6 +25,7 @@ export function useERC20TokenTransferCallback(address?: string, amount?: string,
 
             if (isGreaterThan(amount, balance)) return
 
+            setLoading(true)
             // estimate gas and compose transaction
             const config = {
                 from: account,

@@ -33,27 +33,23 @@ export function useTradeCallback(
         // compose transaction config
         const config_ = {
             ...config,
-            gas: await web3.eth
-                .estimateGas(config)
-                .catch((error) => {
-                    throw error
-                })
-                .finally(() => setLoading(false)),
+            gas: await web3.eth.estimateGas(config).catch((error) => {
+                setLoading(false)
+                throw error
+            }),
             ...gasConfig,
         }
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
-            web3.eth
-                .sendTransaction(config_, (error, hash) => {
-                    if (error) {
-                        reject(error)
-                    } else {
-                        resolve(hash)
-                    }
-                })
-                .finally(() => setLoading(false))
-        })
+            web3.eth.sendTransaction(config_, (error, hash) => {
+                if (error) {
+                    reject(error)
+                } else {
+                    resolve(hash)
+                }
+            })
+        }).finally(() => setLoading(false))
     }, [web3, account, chainId, stringify(config)])
 
     return [loading, tradeCallback] as const

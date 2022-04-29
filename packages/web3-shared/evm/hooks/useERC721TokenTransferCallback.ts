@@ -23,6 +23,7 @@ export function useERC721TokenTransferCallback(address?: string) {
 
             if (!ownerOf || !isSameAddress(ownerOf, account)) return
 
+            setLoading(true)
             // estimate gas and compose transaction
             const config = {
                 from: account,

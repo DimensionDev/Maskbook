@@ -110,7 +110,6 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                     from: account,
                 })
                 .catch((error: Error) => {
-                    setLoading(false)
                     return
                 })) as number | undefined,
         }

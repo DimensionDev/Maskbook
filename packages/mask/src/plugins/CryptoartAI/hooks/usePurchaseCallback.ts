@@ -13,6 +13,7 @@ export function usePurchaseCallback(editionNumber: string, priceInWei: number) {
     const purchaseCallback = useCallback(async () => {
         if (!knownOriginDigitalAssetV2_contract) return
 
+        setLoading(true)
         // estimate gas and compose transaction
         const config = {
             from: account,

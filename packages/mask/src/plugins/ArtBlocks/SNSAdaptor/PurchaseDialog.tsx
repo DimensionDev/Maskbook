@@ -1,4 +1,4 @@
-import { InjectedDialog, TokenAmountPanel, useOpenShareTxDialog } from '@masknet/shared'
+import { InjectedDialog, TokenAmountPanel, useOpenShareTxDialog, useShowConfirm } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { leftShift } from '@masknet/web3-shared-base'
 import {
@@ -90,16 +90,24 @@ export function PurchaseDialog(props: ActionBarProps) {
         postLink,
     ].join('\n')
     const openShareTxDialog = useOpenShareTxDialog()
+    const showConfirm = useShowConfirm()
     const purchase = useCallback(async () => {
-        const hash = await purchaseCallback()
-        if (hash) {
-            await openShareTxDialog({
-                hash,
-                onShare() {
-                    activatedSocialNetworkUI.utils.share?.(shareText)
-                },
+        try {
+            const hash = await purchaseCallback()
+            if (hash) {
+                await openShareTxDialog({
+                    hash,
+                    onShare() {
+                        activatedSocialNetworkUI.utils.share?.(shareText)
+                    },
+                })
+                onClose()
+            }
+        } catch (err: any) {
+            showConfirm({
+                title: 'Error',
+                content: err.message,
             })
-            onClose()
         }
     }, [openShareTxDialog, onClose])
     const { GEN_ART_721_MINTER: spender } = useArtBlocksConstants()
@@ -112,6 +120,19 @@ export function PurchaseDialog(props: ActionBarProps) {
 
         return ''
     }, [price, balance.value, token.value?.decimals, ToS_Checked])
+
+    const actionButton = (
+        <ActionButton
+            loading={isPurchasing}
+            className={classes.button}
+            disabled={!!validationMessage || isPurchasing}
+            color="primary"
+            variant="contained"
+            onClick={purchase}
+            fullWidth>
+            {validationMessage || (isPurchasing ? t('plugin_artblocks_purchasing') : t('plugin_artblocks_purchase'))}
+        </ActionButton>
+    )
 
     return (
         <InjectedDialog title={t('plugin_artblocks_purchase')} open={open} onClose={onClose}>
@@ -154,36 +175,13 @@ export function PurchaseDialog(props: ActionBarProps) {
                     </CardContent>
                     <CardActions>
                         <EthereumWalletConnectedBoundary>
-                            {token.value?.type === EthereumTokenType.Native ? (
-                                <ActionButton
-                                    className={classes.button}
-                                    disabled={!!validationMessage}
-                                    color="primary"
-                                    variant="contained"
-                                    onClick={purchase}
-                                    fullWidth>
-                                    {validationMessage || isPurchasing
-                                        ? t('plugin_artblocks_purchase')
-                                        : t('plugin_artblocks_purchasing')}
-                                </ActionButton>
-                            ) : null}
+                            {token.value?.type === EthereumTokenType.Native ? actionButton : null}
                             {token.value?.type === EthereumTokenType.ERC20 ? (
                                 <EthereumERC20TokenApprovedBoundary
                                     amount={project.pricePerTokenInWei}
                                     spender={spender}
                                     token={token.value as ERC20TokenDetailed}>
-                                    <ActionButton
-                                        loading={isPurchasing}
-                                        className={classes.button}
-                                        disabled={!!validationMessage}
-                                        color="primary"
-                                        variant="contained"
-                                        onClick={purchase}
-                                        fullWidth>
-                                        {validationMessage || !isPurchasing
-                                            ? t('plugin_artblocks_purchase')
-                                            : t('plugin_artblocks_purchasing')}
-                                    </ActionButton>
+                                    {actionButton}
                                 </EthereumERC20TokenApprovedBoundary>
                             ) : null}
                         </EthereumWalletConnectedBoundary>

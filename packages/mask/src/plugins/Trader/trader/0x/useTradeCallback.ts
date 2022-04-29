@@ -48,9 +48,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
                 .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
                     resolve(receipt.transactionHash)
                 })
-                .on(TransactionEventType.ERROR, (error) => {
-                    reject(error)
-                })
+                .on(TransactionEventType.ERROR, reject)
         }).finally(() => setLoading(false))
     }, [web3, account, chainId, stringify(config), gasConfig])
 
