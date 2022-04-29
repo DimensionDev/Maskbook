@@ -9,7 +9,7 @@ const BaseTabWrap = styled(Button, {
     paddingRight: theme.spacing(2),
     height: 36,
     lineHeight: '18px',
-    boxShadow: activated ? '0px 0px 20px rgba(0, 0, 0, 0.05)' : 'none',
+    boxShadow: activated ? '0 0 20px rgba(0, 0, 0, 0.05)' : 'none',
     background: activated ? theme.palette.background.paper : 'transparent',
     borderRadius: `${theme.spacing(1.5)} ${theme.spacing(1.5)} 0px 0px !important`,
     color: activated ? theme.palette.text.primary : theme.palette.text.secondary,
@@ -18,7 +18,7 @@ const BaseTabWrap = styled(Button, {
 
     '&:hover': {
         color: theme.palette.text.primary,
-        boxShadow: activated ? '0px 0px 20px rgba(0, 0, 0, 0.05)' : 'none',
+        boxShadow: activated ? '0 0 20px rgba(0, 0, 0, 0.05)' : 'none',
         background: activated ? theme.palette.background.paper : 'transparent',
     },
 }))

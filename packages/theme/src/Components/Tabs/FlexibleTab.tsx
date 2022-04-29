@@ -1,5 +1,6 @@
 import { Button, ButtonProps, styled } from '@mui/material'
 import { forwardRef } from 'react'
+import { get } from 'lodash-unified'
 
 const FlexibleTabTabWrap = styled(Button, {
     shouldForwardProp: (prop) => prop !== 'activated',
@@ -10,15 +11,16 @@ const FlexibleTabTabWrap = styled(Button, {
     height: 38,
     lineHeight: '16px',
     minWidth: theme.spacing(3),
-    background: activated ? '#F2F6FA' : 'transparent',
+    background: activated ? get(theme.palette.background, 'input') ?? '#F2F6FA' : 'transparent',
     borderRadius: `${theme.spacing(1)} !important`,
-    color: activated ? '#1C68F3' : theme.palette.text.secondary,
+    // TODO: should remove 'get'
+    color: activated ? get(theme.palette, 'public.primary') ?? '#1C68F3' : theme.palette.text.secondary,
     fontSize: 14,
     fontWeight: 'bold',
 
     '&:hover': {
-        background: activated ? '#F2F6FA' : 'transparent',
-        color: activated ? '1C68F3' : theme.palette.text.primary,
+        background: activated ? get(theme.palette.background, 'input') ?? '#F2F6FA' : 'transparent',
+        color: activated ? get(theme.palette, 'public.primary') ?? '#1C68F3' : theme.palette.text.primary,
     },
 }))
 

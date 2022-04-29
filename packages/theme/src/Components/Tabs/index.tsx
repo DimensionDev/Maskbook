@@ -15,6 +15,7 @@ import { FlexibleTab } from './FlexibleTab'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import { useWindowSize } from 'react-use'
 import { RoundTab } from './RoundTab'
+import { get } from 'lodash-unified'
 
 type MaskTabVariant = 'base' | 'flexible' | 'round'
 
@@ -32,10 +33,10 @@ const ArrowButtonWrap = styled(Button)(({ theme }) => ({
     padding: theme.spacing(1.5),
     height: 38,
     width: 38,
-    background: '#F2F6FA',
+    background: get(theme.palette.background, 'input') ?? '#F2F6FA',
 
     '&:hover': {
-        background: '#F2F6FA',
+        background: get(theme.palette.background, 'input') ?? '#F2F6FA',
     },
 }))
 
