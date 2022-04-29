@@ -78,6 +78,8 @@ export interface MaskNetworkAPIs {
     }>
     composition_attachMetaData(params: { metaId: string; meta?: unknown }): Promise<void>
     composition_dropMetaData(params: { metaId: string }): Promise<void>
+    plugin_getData(params: { type: string; id: string; pluginId: string }): Promise<any>
+    plugin_setData(params: { type: string; pluginId: string; record: { id: string } }): Promise<void>
 }
 
 export interface WalletInfo {

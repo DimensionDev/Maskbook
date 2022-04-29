@@ -260,6 +260,12 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     composition_dropMetaData: async ({ metaId }) => {
         MaskMessages.events.compositionDropMetaData.sendToAll([metaId])
     },
+    plugin_getData: async ({ pluginId, id, type }) => {
+        return Services.Helper.getPluginDataById(pluginId, type, id)
+    },
+    plugin_setData: async ({ pluginId, type, record }) => {
+        return Services.Helper.setPluginData(pluginId, type, record)
+    },
 }
 
 function wrapWithAssert(env: Environment, f: Function) {
