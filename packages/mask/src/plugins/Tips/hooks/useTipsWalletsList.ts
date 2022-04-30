@@ -21,10 +21,10 @@ export function useTipsWalletsList(
         const result = proofs.reduce<BindingProof[]>((res, x) => {
             x.isDefault = 0
             x.isPublic = 1
-            const filtered = kvCache?.content[PluginId.Tips]?.find((proof) => isSameAddress(x.identity, proof.identity))
-            if (filtered) {
-                x.isDefault = filtered.isDefault
-                x.isPublic = filtered.isPublic
+            const matched = kvCache?.content[PluginId.Tips]?.find((proof) => isSameAddress(x.identity, proof.identity))
+            if (matched) {
+                x.isDefault = matched.isDefault
+                x.isPublic = matched.isPublic
             }
             res.push(x)
             return res
