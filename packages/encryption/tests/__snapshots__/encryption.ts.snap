@@ -1,23 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`v37 E2E encryption: append target to joey 1`] = `
-IdentifierMap {
-  "__raw_map__": Map {
-    "person:localhost/joey" => Object {
-      "status": "fulfilled",
-      "value": Object {
-        "encryptedPostKey": Uint8Array [ a69db582d0ddb50c4d55625e92f862ef65627ce9ade025340b0a2d130ac3aa66263b96803b5c5d7130889d91fa8ae3da ],
-        "ephemeralPublicKey": CryptoKey { [opaque crypto key material] },
-        "target": ProfileIdentifier {
-          "network": "localhost",
-          "userId": "joey",
-        },
+Map {
+  ProfileIdentifier {
+    "network": "localhost",
+    "userId": "joey",
+  } => Object {
+    "status": "fulfilled",
+    "value": Object {
+      "encryptedPostKey": Uint8Array [ a69db582d0ddb50c4d55625e92f862ef65627ce9ade025340b0a2d130ac3aa66263b96803b5c5d7130889d91fa8ae3da ],
+      "ephemeralPublicKey": CryptoKey { [opaque crypto key material] },
+      "target": ProfileIdentifier {
+        "network": "localhost",
+        "userId": "joey",
       },
     },
   },
-  "constructorName": Array [
-    "ProfileIdentifier",
-  ],
 }
 `;
 
@@ -84,22 +82,20 @@ Object {
     "network": "localhost",
     "userId": "bob",
   },
-  "e2e": IdentifierMap {
-    "__raw_map__": Map {
-      "person:localhost/jack" => Object {
-        "status": "fulfilled",
-        "value": Object {
-          "encryptedPostKey": Uint8Array [ 2efdd4b0b30e637e0a5477269e9ffe0603739d0b2dc381b20ac256cf897b822cc6a8263039bf8a56c723528b8919a336 ],
-          "target": ProfileIdentifier {
-            "network": "localhost",
-            "userId": "jack",
-          },
+  "e2e": Map {
+    ProfileIdentifier {
+      "network": "localhost",
+      "userId": "jack",
+    } => Object {
+      "status": "fulfilled",
+      "value": Object {
+        "encryptedPostKey": Uint8Array [ 2efdd4b0b30e637e0a5477269e9ffe0603739d0b2dc381b20ac256cf897b822cc6a8263039bf8a56c723528b8919a336 ],
+        "target": ProfileIdentifier {
+          "network": "localhost",
+          "userId": "jack",
         },
       },
     },
-    "constructorName": Array [
-      "ProfileIdentifier",
-    ],
   },
   "identifier": PostIVIdentifier {
     "network": "localhost",
@@ -266,23 +262,21 @@ Object {
 `;
 
 exports[`v38 E2E encryption: append target to joey 1`] = `
-IdentifierMap {
-  "__raw_map__": Map {
-    "person:localhost/joey" => Object {
-      "status": "fulfilled",
-      "value": Object {
-        "encryptedPostKey": Uint8Array [ e8cde41c96849e9237068dba7bc777601b31b84587f2a49a9b0e20df68e2cc56720516972beaf9dde32e1a3c3798452eee67d0fe4f358206b0613a688546e1e9e0918005d91d1b02ddbc4a10317f5daba1edc1f5a0a9c1f23fb372b7291dbc7a26322ae539314ae0642eff103cad9e424e05b14225f84f89667ceb45b704fe055e2593d90f4483c38b88 ],
-        "ivToBePublished": Uint8Array [ 67ff404b4dfb01a422ed04107eaf8e23 ],
-        "target": ProfileIdentifier {
-          "network": "localhost",
-          "userId": "joey",
-        },
+Map {
+  ProfileIdentifier {
+    "network": "localhost",
+    "userId": "joey",
+  } => Object {
+    "status": "fulfilled",
+    "value": Object {
+      "encryptedPostKey": Uint8Array [ e8cde41c96849e9237068dba7bc777601b31b84587f2a49a9b0e20df68e2cc56720516972beaf9dde32e1a3c3798452eee67d0fe4f358206b0613a688546e1e9e0918005d91d1b02ddbc4a10317f5daba1edc1f5a0a9c1f23fb372b7291dbc7a26322ae539314ae0642eff103cad9e424e05b14225f84f89667ceb45b704fe055e2593d90f4483c38b88 ],
+      "ivToBePublished": Uint8Array [ 67ff404b4dfb01a422ed04107eaf8e23 ],
+      "target": ProfileIdentifier {
+        "network": "localhost",
+        "userId": "joey",
       },
     },
   },
-  "constructorName": Array [
-    "ProfileIdentifier",
-  ],
 }
 `;
 
@@ -345,23 +339,21 @@ Object {
     "network": "localhost",
     "userId": "bob",
   },
-  "e2e": IdentifierMap {
-    "__raw_map__": Map {
-      "person:localhost/jack" => Object {
-        "status": "fulfilled",
-        "value": Object {
-          "encryptedPostKey": Uint8Array [ 369a0d0df3233ff06da2647b4a5b58d48ec7f8c29ee42c7a81526f322dcc4e203ac7bc72f56e396d5344d0bb6b443ac369c0a382bc54600e3c9a0ea3fa1a0b3ccd1e715f7ec9b0bcb532c32907a80d4c96a20623a83435e47a18dc263651d51718773f9d50d5a3d75409c3f26cbd6fed5ea25234007f6d1a04372f56e7cf56f3a2f9cb57441df4dd6304 ],
-          "ivToBePublished": Uint8Array [ 96a47ca504418e8c6040f10f80e720ba ],
-          "target": ProfileIdentifier {
-            "network": "localhost",
-            "userId": "jack",
-          },
+  "e2e": Map {
+    ProfileIdentifier {
+      "network": "localhost",
+      "userId": "jack",
+    } => Object {
+      "status": "fulfilled",
+      "value": Object {
+        "encryptedPostKey": Uint8Array [ 369a0d0df3233ff06da2647b4a5b58d48ec7f8c29ee42c7a81526f322dcc4e203ac7bc72f56e396d5344d0bb6b443ac369c0a382bc54600e3c9a0ea3fa1a0b3ccd1e715f7ec9b0bcb532c32907a80d4c96a20623a83435e47a18dc263651d51718773f9d50d5a3d75409c3f26cbd6fed5ea25234007f6d1a04372f56e7cf56f3a2f9cb57441df4dd6304 ],
+        "ivToBePublished": Uint8Array [ 96a47ca504418e8c6040f10f80e720ba ],
+        "target": ProfileIdentifier {
+          "network": "localhost",
+          "userId": "jack",
         },
       },
     },
-    "constructorName": Array [
-      "ProfileIdentifier",
-    ],
   },
   "identifier": PostIVIdentifier {
     "network": "localhost",

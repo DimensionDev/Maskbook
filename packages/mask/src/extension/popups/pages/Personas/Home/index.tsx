@@ -37,7 +37,7 @@ const PersonaHome = memo(() => {
         <PersonaHomeUI
             isEmpty={!personas?.length}
             avatar={avatar}
-            fingerprint={currentPersona?.identifier.compressedPoint}
+            fingerprint={currentPersona?.identifier.rawPublicKey}
             nickname={currentPersona?.nickname}
             accountsCount={currentPersona?.linkedProfiles.length ?? 0}
             walletsCount={wallets.length}

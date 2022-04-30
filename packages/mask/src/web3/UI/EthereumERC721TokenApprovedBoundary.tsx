@@ -119,7 +119,6 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         return (
             <WalletStatusBar
                 actionProps={{
-                    loading: true,
                     disabled: true,
                     title: validationMessage,
                 }}

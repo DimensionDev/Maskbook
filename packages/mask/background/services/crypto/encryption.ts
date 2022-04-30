@@ -1,4 +1,4 @@
-import { EC_Public_CryptoKey, IdentifierMap, ProfileIdentifier, RecipientDetail } from '@masknet/shared-base'
+import type { EC_Public_CryptoKey, ProfileIdentifier } from '@masknet/shared-base'
 import { isTypedMessageText, SerializableTypedMessages, TypedMessageText } from '@masknet/typed-message'
 import {
     EC_Key,
@@ -21,6 +21,7 @@ export async function encryptTo(
 ): Promise<string> {
     const { identifier, output, postKey, e2e } = await encrypt(
         {
+            network: whoAmI.network,
             author: whoAmI,
             message: content,
             target,
@@ -58,12 +59,10 @@ export async function encryptTo(
     return output
 }
 
-function e2eMapToRecipientDetails(input: EncryptionResultE2EMap): IdentifierMap<ProfileIdentifier, RecipientDetail> {
-    const result = new IdentifierMap<ProfileIdentifier, RecipientDetail>(new Map(), ProfileIdentifier)
+function e2eMapToRecipientDetails(input: EncryptionResultE2EMap): Map<ProfileIdentifier, Date> {
+    const result = new Map<ProfileIdentifier, Date>()
     for (const [identifier] of input) {
-        result.set(identifier, {
-            reason: [{ type: 'direct', at: new Date() }],
-        })
+        result.set(identifier, new Date())
     }
     return result
 }

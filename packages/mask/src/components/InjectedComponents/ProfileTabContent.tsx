@@ -53,12 +53,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const { value: addressNames = EMPTY_LIST, loading: loadingAddressNames } = useAddressNames(identity)
     const { value: personaList = EMPTY_LIST, loading: loadingPersonaList } = useNextIDBoundByPlatform(
         platform as NextIDPlatform,
-        identity.identifier.userId,
+        identity.identifier?.userId,
     )
 
     const currentAccountNotConnectPersona =
-        currentIdentity.identifier.userId === identity.identifier.userId &&
-        personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.publicHexKey) === -1
+        currentIdentity.identifier === identity.identifier &&
+        personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.identifier.publicKeyAsHex) ===
+            -1
 
     const translate = usePluginI18NField()
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
@@ -103,19 +104,19 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     useUpdateEffect(() => {
         setSelectedTab(undefined)
-    }, [identity.identifier.userId])
+    }, [identity.identifier?.userId])
 
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
             if (data.hidden) setHidden(data.hidden)
         })
-    }, [identity.identifier.userId])
+    }, [identity.identifier?.userId])
 
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
             setHidden(!data.show)
         })
-    }, [identity.identifier.userId])
+    }, [identity.identifier?.userId])
 
     const ContentComponent = useMemo(() => {
         const tabId =
@@ -123,7 +124,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
                 : selectedTabId
         return getTabContent(tabId ?? '')
-    }, [selectedTabId, identity.identifier.userId])
+    }, [selectedTabId, identity.identifier?.userId])
 
     if (hidden) return null
 

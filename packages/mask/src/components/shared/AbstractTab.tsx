@@ -88,7 +88,7 @@ export default function AbstractTab(props: AbstractTabProps) {
                     role="tabpanel"
                     {...tabs.find((_, index) => index === value)}
                     sx={{
-                        height: height,
+                        height,
                         minHeight: height,
                     }}
                 />

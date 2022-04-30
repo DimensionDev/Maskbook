@@ -197,8 +197,8 @@ export function PoolView(props: PoolProps) {
         if (!pool || !token) return
         openDepositDialog({
             open: true,
-            pool: pool,
-            token: token,
+            pool,
+            token,
         })
     }, [pool, token, openDepositDialog])
     // #endregion
@@ -245,7 +245,7 @@ export function PoolView(props: PoolProps) {
                 <Grid container item xs={3} className={classes.metaFooter}>
                     <Grid item className={classes.metaTextPrize}>
                         <Typography fontSize={10} variant="subtitle2">
-                            {t('plugin_pooltogether_prize', { period: period })}
+                            {t('plugin_pooltogether_prize', { period })}
                         </Typography>
                     </Grid>
                     <Grid item>

@@ -1,5 +1,5 @@
 import { concatArrayBuffer, decodeArrayBuffer } from '@dimensiondev/kit'
-import { AESCryptoKey, EC_Public_CryptoKey, IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
+import type { AESCryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
 import { encryptWithAES } from '../utils'
 import {
     EncryptError,
@@ -67,7 +67,7 @@ export async function v38_addReceiver(
     //     Note: Internal_AES is not returned by io.deriveAESKey_version38_or_older, it is internal algorithm of that method.
     const ecdh = Promise.allSettled(
         target.target.map(async (id): Promise<EncryptionResultE2E> => {
-            const receiverPublicKey = id.isUnknown ? undefined : await io.queryPublicKey(id)
+            const receiverPublicKey = await io.queryPublicKey(id)
             if (!receiverPublicKey) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
             const ivToBePublished = fillIV(io)
             const [[aes, iv]] = await deriveAESByECDH_version38OrOlderExtraSteps(
@@ -84,7 +84,7 @@ export async function v38_addReceiver(
         }),
     ).then((x) => x.entries())
 
-    const ecdhResult: EncryptResult['e2e'] = new IdentifierMap(new Map(), ProfileIdentifier)
+    const ecdhResult: EncryptResult['e2e'] = new Map()
     for (const [index, result] of await ecdh) {
         ecdhResult.set(target.target[index], result)
     }

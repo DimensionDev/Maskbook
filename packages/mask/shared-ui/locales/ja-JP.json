@@ -233,7 +233,6 @@
     "plugin_ito_region_search": "リージョンの名前を入力して検索",
     "plugin_ito_region_ban": "あなたのリージョンではこのプールはプールの作成者から Ban されています",
     "plugin_ito_next": "次",
-    "plugin_ito_back": "戻る",
     "plugin_ito_transaction_dialog_summary": "{{amount}} {{symbol}} で ITO を作成。",
     "plugin_ito_swap": "スワップ",
     "plugin_ito_send_tip": "過去のタブからあなたの行った ITO を探すことができます。",

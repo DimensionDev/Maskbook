@@ -15,7 +15,7 @@ export class JSON_Storage implements StorageAPI.Storage {
                 {
                     method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'text/plain',
                     },
                 },
             )
