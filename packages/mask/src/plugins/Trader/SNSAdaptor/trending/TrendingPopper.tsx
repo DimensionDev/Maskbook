@@ -68,7 +68,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const position = useWindowScroll()
     useEffect(() => {
         if (!popper.current) return
-        const { top = Number.NaN, height = Number.NaN } = popper.current?.getBoundingClientRect() ?? {}
+        const { top, height } = popper.current.getBoundingClientRect()
         if ((top < 0 && -1 * top > height) || top > document.documentElement.clientHeight) {
             // out off bottom bound
             setAnchorEl(null)
