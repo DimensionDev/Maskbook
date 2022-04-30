@@ -5,7 +5,7 @@ import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
 import { SnackbarProvider, makeStyles } from '@masknet/theme'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog, FormattedBalance } from '@masknet/shared'
+import { InjectedDialog, FormattedBalance, WalletStatusBar } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
 import {
     formatBalance,
@@ -22,7 +22,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
-import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { useI18N } from '../../../utils'
 import { Flags } from '../../../../shared'
 import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
@@ -30,7 +29,6 @@ import { NftAirdropCard } from './NftAirdropCard'
 import { useClaimAll } from './hooks/useClaimAll'
 import { WalletMessages } from '../../Wallet/messages'
 import { useClaimCallback } from './hooks/useClaimCallback'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import type { SwappedTokenType } from '../types'
@@ -325,9 +323,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             }}>
             <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_dialog_title')}>
                 <DialogContent className={classes.wrapper}>
-                    <div className={classes.walletStatusBox}>
-                        <WalletStatusBox />
-                    </div>
                     <div className={classes.abstractTabWrapper}>
                         <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chainIdList} />
                     </div>
@@ -374,24 +369,25 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                             classes={{
                                                 connectWallet: classes.claimAllButton,
                                             }}>
-                                            <ActionButton
-                                                className={classNames(classes.actionButton, classes.claimAllButton)}
-                                                variant="contained"
-                                                loading={[
-                                                    TransactionStateType.HASH,
-                                                    TransactionStateType.WAIT_FOR_CONFIRMING,
-                                                ].includes(claimState.type)}
-                                                disabled={
-                                                    claimablePids!.length === 0 ||
-                                                    [
+                                            <WalletStatusBar
+                                                actionProps={{
+                                                    loading: [
                                                         TransactionStateType.HASH,
                                                         TransactionStateType.WAIT_FOR_CONFIRMING,
-                                                    ].includes(claimState.type)
-                                                }
-                                                size="small"
-                                                onClick={claimCallback}>
-                                                {t('plugin_ito_claim_all')}
-                                            </ActionButton>
+                                                    ].includes(claimState.type),
+                                                    disabled:
+                                                        claimablePids!.length === 0 ||
+                                                        [
+                                                            TransactionStateType.HASH,
+                                                            TransactionStateType.WAIT_FOR_CONFIRMING,
+                                                        ].includes(claimState.type),
+                                                    action: claimCallback,
+                                                    title: t('plugin_ito_claim_all'),
+                                                }}
+                                                classes={{
+                                                    button: classNames(classes.actionButton, classes.claimAllButton),
+                                                }}
+                                            />
                                         </EthereumWalletConnectedBoundary>
                                     ) : (
                                         <div />
