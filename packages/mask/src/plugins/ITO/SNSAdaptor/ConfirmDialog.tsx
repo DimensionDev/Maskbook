@@ -1,4 +1,4 @@
-import { FormattedAddress, FormattedBalance } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance, WalletStatusBar } from '@masknet/shared'
 import {
     formatBalance,
     formatEthereumAddress,
@@ -16,7 +16,6 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import RepeatIcon from '@mui/icons-material/Repeat'
 import formatDateTime from 'date-fns/format'
 import { Fragment, useCallback, useState, useEffect } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import type { PoolSettings } from './hooks/useFill'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion'
@@ -304,17 +303,15 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </Typography>
                 </Grid>
                 <Grid item lg={6} xs={12} className={classes.button}>
-                    <ActionButton fullWidth variant="outlined" onClick={onBack}>
-                        {t('plugin_ito_back')}
-                    </ActionButton>
-                </Grid>
-                <Grid item lg={6} xs={12} className={classes.button}>
-                    <ActionButton fullWidth variant="contained" onClick={onDone}>
-                        {t('plugin_ito_send_text', {
-                            total: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),
-                            symbol: poolSettings?.token?.symbol,
-                        })}
-                    </ActionButton>
+                    <WalletStatusBar
+                        actionProps={{
+                            title: t('plugin_ito_send_text', {
+                                total: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),
+                                symbol: poolSettings?.token?.symbol,
+                            }),
+                            action: onDone,
+                        }}
+                    />
                 </Grid>
             </Grid>
         </Card>

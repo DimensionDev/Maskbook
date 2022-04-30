@@ -5,8 +5,7 @@ import { formatBalance, isNativeTokenAddress, resolveTokenLinkOnExplorer, useCha
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { FormattedBalance } from '@masknet/shared'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { FormattedBalance, WalletStatusBar } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 
@@ -175,18 +174,16 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 </Paper>
             </Grid>
 
-            <Grid item xs={6}>
-                <ActionButton variant="contained" size="large" fullWidth onClick={onBack}>
-                    {t('plugin_red_packet_back')}
-                </ActionButton>
-            </Grid>
-            <Grid item xs={6}>
-                <ActionButton variant="contained" size="large" fullWidth onClick={onCreate}>
-                    {t('plugin_red_packet_send_symbol', {
-                        amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
-                        symbol: settings?.token?.symbol,
-                    })}
-                </ActionButton>
+            <Grid item xs={12}>
+                <WalletStatusBar
+                    actionProps={{
+                        action: onCreate,
+                        title: t('plugin_red_packet_send_symbol', {
+                            amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
+                            symbol: settings?.token?.symbol,
+                        }),
+                    }}
+                />
             </Grid>
         </Grid>
     )

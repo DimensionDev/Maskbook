@@ -101,8 +101,8 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
     if ([TransactionStateType.WAIT_FOR_CONFIRMING, TransactionStateType.HASH].includes(approveState.type)) {
         return (
             <WalletStatusBar
-                loading
                 actionProps={{
+                    loading: true,
                     disabled: true,
                     title: t('plugin_wallet_nft_approving_all', {
                         symbol: contractDetailed?.symbol
@@ -118,8 +118,8 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
     } else if (validationMessage) {
         return (
             <WalletStatusBar
-                loading={loading}
                 actionProps={{
+                    loading: true,
                     disabled: true,
                     title: validationMessage,
                 }}
@@ -129,9 +129,9 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
     } else if (loading) {
         return (
             <WalletStatusBar
-                loading={loading}
                 actionProps={{
                     disabled: true,
+                    loading: true,
                 }}
                 classes={{ button: classes.approveButton }}
             />

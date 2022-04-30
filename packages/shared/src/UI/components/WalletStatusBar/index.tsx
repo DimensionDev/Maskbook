@@ -35,13 +35,13 @@ interface WalletStatusBarProps extends withClasses<'button'> {
         disabled?: boolean
         startIcon?: React.ReactNode
         endIcon?: React.ReactNode
+        loading?: boolean
     }
-    loading?: boolean
 }
 
 export function WalletStatusBar(props: WalletStatusBarProps) {
     const t = useSharedI18N()
-    const { iconSize = 24, badgeSize = 10, actionProps, loading = false } = props
+    const { iconSize = 24, badgeSize = 10, actionProps } = props
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
     const selectedWallet = useWallet()
@@ -83,9 +83,11 @@ export function WalletStatusBar(props: WalletStatusBarProps) {
                                 variant="contained"
                                 className={classes.button}
                                 fullWidth
-                                disabled={loading || actionProps.disabled}
+                                disabled={actionProps.loading || actionProps.disabled}
                                 onClick={actionProps.action}>
-                                {loading ? <CircularProgress size={24} className={classes.progress} /> : null}
+                                {actionProps.loading ? (
+                                    <CircularProgress size={24} className={classes.progress} />
+                                ) : null}
                                 {actionProps.title}
                             </Button>
                         )}

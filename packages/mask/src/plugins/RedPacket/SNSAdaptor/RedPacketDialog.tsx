@@ -86,6 +86,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const web3 = useWeb3()
 
     const onClose = useCallback(() => {
+        if (step === CreateRedPacketPageStep.ConfirmPage) {
+            setStep(CreateRedPacketPageStep.NewRedPacketPage)
+            return
+        }
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
         setSettings(undefined)
         const [, setValue] = state

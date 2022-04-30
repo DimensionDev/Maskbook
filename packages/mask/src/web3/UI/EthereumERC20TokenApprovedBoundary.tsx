@@ -162,6 +162,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                                 : `Updating ${token.symbol}`,
                         action: resetApproveCallback,
                         disabled: true,
+                        loading: approveStateType === ApproveStateType.PENDING,
                     }}
                     classes={{ button: classes.button }}
                 />

@@ -192,6 +192,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const onClose = useCallback(() => {
         const [, setValue] = state
+        if (step === ITOCreateFormPageStep.ConfirmItoPage) {
+            setStep(ITOCreateFormPageStep.NewItoPage)
+            return
+        }
         setStep(ITOCreateFormPageStep.NewItoPage)
         setPoolSettings(undefined)
         setValue(DialogTabs.create)

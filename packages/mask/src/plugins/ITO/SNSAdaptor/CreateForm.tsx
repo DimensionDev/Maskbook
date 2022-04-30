@@ -18,7 +18,6 @@ import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { sliceTextByUILength, useI18N } from '../../../utils'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -30,6 +29,7 @@ import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from
 import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
+import { WalletStatusBar } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -472,15 +472,14 @@ export function CreateForm(props: CreateFormProps) {
                         token={
                             tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined
                         }>
-                        <ActionButton
-                            className={classes.button}
-                            fullWidth
-                            variant="contained"
-                            size="large"
-                            disabled={!!validationMessage}
-                            onClick={onNext}>
-                            {validationMessage || t('plugin_ito_next')}
-                        </ActionButton>
+                        <WalletStatusBar
+                            actionProps={{
+                                disabled: !!validationMessage,
+                                action: onNext,
+                                title: validationMessage || t('plugin_ito_next'),
+                            }}
+                            classes={{ button: classes.button }}
+                        />
                     </EthereumERC20TokenApprovedBoundary>
                 </EthereumWalletConnectedBoundary>
             </Box>
