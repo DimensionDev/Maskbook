@@ -298,7 +298,6 @@
         "cryptoartai",
         "csrftoken",
         "cusd",
-        "dczs",
         "defi",
         "deletable",
         "devnet",
@@ -325,7 +324,6 @@
         "horiz",
         "huobi",
         "husd",
-        "iakaw",
         "ideamarket",
         "idiv",
         "ifadmin",
@@ -373,7 +371,6 @@
         "rpcs",
         "setx",
         "shapeclip",
-        "smthg",
         "steth",
         "stethabi",
         "strategie",
@@ -401,9 +398,7 @@
         "walletlink",
         "wnative",
         "xdescribe",
-        "xsushi",
-        "xtest",
-        "zycy"
+        "xsushi"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

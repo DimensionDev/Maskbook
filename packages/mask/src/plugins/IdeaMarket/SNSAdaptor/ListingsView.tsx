@@ -237,7 +237,7 @@ export function ListingsView() {
         {
             field: 'name',
             headerName: t('plugin_ideamarket_name'),
-            headerAlign: 'left' as const,
+            headerAlign: 'left',
             flex: 1,
             renderCell: renderNameCell,
         },
@@ -246,7 +246,7 @@ export function ListingsView() {
             headerName: t('plugin_ideamarket_24h'),
             type: 'number',
             width: 60,
-            headerAlign: 'right' as const,
+            headerAlign: 'right',
             valueFormatter: (params: GridValueFormatterParams) => {
                 const value = Number(params.value) * 100
                 const operator = value >= 0 ? '+' : ''
@@ -258,17 +258,17 @@ export function ListingsView() {
             headerName: t('plugin_ideamarket_price'),
             type: 'number',
             width: 64,
-            headerAlign: 'center' as const,
-            align: 'center' as const,
+            headerAlign: 'center',
+            align: 'center',
             valueFormatter: (params: GridValueFormatterParams) => formatterToUSD.format(params.value as number),
         },
         {
             field: 'deposits',
             headerName: t('plugin_ideamarket_deposits'),
-            headerAlign: 'center' as const,
+            headerAlign: 'center',
             width: 95,
             type: 'number',
-            align: 'center' as const,
+            align: 'center',
             valueFormatter: (params: GridValueFormatterParams) => formatterToUSD.format(params.value as number),
         },
         {
@@ -276,7 +276,7 @@ export function ListingsView() {
             headerName: '',
             sortable: false,
             width: 80,
-            align: 'center' as const,
+            align: 'center',
             renderCell: (params: GridRenderCellParams) => (
                 <Grid container alignContent="center" justifyContent="center">
                     <Grid item>

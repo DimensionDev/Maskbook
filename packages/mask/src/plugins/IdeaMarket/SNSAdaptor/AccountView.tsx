@@ -104,7 +104,7 @@ export function AccountView() {
     if (error) {
         return (
             <Typography className={classes.empty} color="textPrimary">
-                {t('plugin_ideamarket_smthg_wrong')}
+                {t('plugin_ideamarket_something_wrong')}
             </Typography>
         )
     }
@@ -205,9 +205,9 @@ export function AccountView() {
                                             )}
                                         </div>
                                     </TableCell>
-                                    <TableCell align="center">&#36;{tokenPrice.toFixed(2, 1)}</TableCell>
+                                    <TableCell align="center">${tokenPrice.toFixed(2, 1)}</TableCell>
                                     <TableCell align="center">{userTokenBalance.toFixed(2, 1)}</TableCell>
-                                    <TableCell align="center">&#36;{perceivedBalanceValue.toFixed(2, 1)}</TableCell>
+                                    <TableCell align="center">${perceivedBalanceValue.toFixed(2, 1)}</TableCell>
                                     <TableCell>
                                         <Grid container alignContent="center" justifyContent="center">
                                             <Button
