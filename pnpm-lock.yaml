@@ -27647,7 +27647,7 @@ packages:
     dev: false
 
   github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
+    resolution: {commit: d463109433b2c49c74a081044f54b2a6a1ccad7c, repo: git+ssh://git@github.com/locize/html-parse-stringify2.git, type: git}
     name: html-parse-stringify2
     version: 2.0.1
     dependencies:
