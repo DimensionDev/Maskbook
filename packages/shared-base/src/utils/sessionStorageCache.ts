@@ -1,3 +1,4 @@
+/* eslint-disable @dimensiondev/browser/no-persistent-storage */
 export const SessionStorageCache = {
     get(scope: string, key: string) {
         return sessionStorage.getItem(`${scope}:${key}`)

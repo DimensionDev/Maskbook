@@ -1,3 +1,4 @@
+/* eslint-disable @dimensiondev/browser/no-persistent-storage */
 import { createContext, PropsWithChildren, useState } from 'react'
 import SettingPasswordDialog from '../components/dialogs/SettingPasswordDialog'
 import { BackupPasswordConfirmDialog } from '../../../components/BackupPasswordConfirmDialog'

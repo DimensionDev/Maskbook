@@ -73,6 +73,7 @@ const key = 'openSNSAndActivatePlugin'
  * @param url URL to open
  * @param pluginID Plugin to activate
  */
+/* eslint-disable @dimensiondev/browser/no-persistent-storage */
 export async function openSNSAndActivatePlugin(url: string, pluginID: string) {
     await browser.tabs.create({ active: true, url })
     sessionStorage.setItem(key, pluginID)
@@ -82,3 +83,4 @@ export async function getDesignatedAutoStartPluginID() {
     sessionStorage.removeItem(key)
     return val
 }
+/* eslint-enable @dimensiondev/browser/no-persistent-storage */

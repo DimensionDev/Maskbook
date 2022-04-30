@@ -1,3 +1,4 @@
+/* eslint-disable @dimensiondev/browser/no-persistent-storage */
 import { memo, useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MasksIcon, TipIcon } from '@masknet/icons'

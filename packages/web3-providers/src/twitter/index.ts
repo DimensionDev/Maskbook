@@ -21,6 +21,11 @@ function getScriptContentMatched(content: string, regexp: RegExp) {
 }
 
 function getCSRFToken() {
+    // use `cookieStore` replace the api call?
+    // see https://developer.mozilla.org/en-US/docs/Web/API/CookieStore
+    // return cookieStore.get('ct0')
+
+    // eslint-disable-next-line @dimensiondev/browser/no-persistent-storage
     const ct0 = document.cookie.split('; ').find((x) => x.includes('ct0'))
     if (!ct0) return ''
     const [, value] = ct0.split('=')

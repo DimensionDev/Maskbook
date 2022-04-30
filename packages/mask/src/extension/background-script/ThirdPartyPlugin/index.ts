@@ -62,6 +62,7 @@ export async function requestPermission(baseURL: string, permissions: ThirdParty
  *
  * Notice: In this demo implementation, all permissions are stored in the sessionStorage and will lost after the plugin refresh.
  */
+/* eslint-disable @dimensiondev/browser/no-persistent-storage */
 export async function grantPermission(baseURL: string, permissions: ThirdPartyPluginPermission[]) {
     for (const permission of permissions)
         sessionStorage.setItem(`plugin:${ThirdPartyPluginPermission[permission]}:${baseURL}`, '1')
@@ -71,3 +72,4 @@ export async function grantPermission(baseURL: string, permissions: ThirdPartyPl
 function hasPermissionInternal(baseURL: string, permission: ThirdPartyPluginPermission) {
     return !!sessionStorage.getItem(`plugin:${ThirdPartyPluginPermission[permission]}:${baseURL}`)
 }
+/* eslint-enable @dimensiondev/browser/no-persistent-storage */

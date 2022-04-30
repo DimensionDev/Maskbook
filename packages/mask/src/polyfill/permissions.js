@@ -1,3 +1,4 @@
+/* eslint-disable @dimensiondev/browser/no-persistent-storage */
 ;(() => {
     if (typeof browser === 'undefined' || !browser) return
     const _permissions = browser.permissions || {}

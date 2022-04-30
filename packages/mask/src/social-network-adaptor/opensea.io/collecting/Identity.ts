@@ -19,6 +19,11 @@ export const IdentityProviderOpensea: SocialNetworkUI.CollectingCapabilities.Ide
 
 async function query(): Promise<null | IdentityResolved> {
     function cookie2Json() {
+        // use `cookieStore` replace the api call?
+        // see https://developer.mozilla.org/en-US/docs/Web/API/CookieStore
+        // return JSON.parse(cookieStore.get('wallet') ?? '{}')
+
+        // eslint-disable-next-line @dimensiondev/browser/no-persistent-storage
         const res = decodeURIComponent(document.cookie)
             .split('; ')
             .find((x) => x.includes('wallet={'))
@@ -35,6 +40,7 @@ async function query(): Promise<null | IdentityResolved> {
             profilePictureUrl: '',
             fullName: '',
         }
+        // eslint-disable-next-line @dimensiondev/browser/no-persistent-storage
         if (document.cookie.length) {
             const _res = cookie2Json()
             const raw = _res.activeAccount

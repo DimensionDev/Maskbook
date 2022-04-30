@@ -4,7 +4,8 @@
         "sourceType": "module"
     },
     "env": {
-        "node": true
+        "node": true,
+        "browser": true
     },
     "plugins": ["unused-imports"],
     "rules": {
