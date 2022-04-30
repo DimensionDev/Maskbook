@@ -1,4 +1,4 @@
-import { Box, DialogActions, DialogContent } from '@mui/material'
+import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { InjectedDialog, WalletStatusBar } from '@masknet/shared'
 import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
@@ -38,6 +38,17 @@ const useStyles = makeStyles()((theme, props) => ({
         width: 535,
         margin: '0 auto',
         padding: 0,
+    },
+    power: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        margin: theme.spacing(2, 0),
+    },
+    icon: {
+        width: 22,
+        height: 22,
+        margin: theme.spacing(0, 1),
     },
 }))
 
@@ -85,6 +96,23 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
                             </Box>
                         </TabContext>
                     )}
+                    <Box className={classes.power}>
+                        <Typography
+                            sx={{ marginRight: 1 }}
+                            variant="body1"
+                            color="textSecondary"
+                            fontSize={14}
+                            fontWeight={700}>
+                            Powered by
+                        </Typography>
+                        <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
+                            FindTruman
+                        </Typography>
+                        <img
+                            className={classes.icon}
+                            src={new URL('../assets/findtruman.png', import.meta.url).toString()}
+                        />
+                    </Box>
                 </DialogContent>
                 <DialogActions>
                     <WalletStatusBar />

@@ -14,7 +14,6 @@ import {
     FormControlLabel,
     Checkbox,
 } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
 import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { initMeta, initCollection, GLB3DIcon } from '../constants'
@@ -24,16 +23,18 @@ import { useUser, useNFTs, useNFTsExtra } from '../hooks'
 import { useI18N } from '../../../utils'
 import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
+import { WalletStatusBar } from '@masknet/shared'
+import { ChearsIcon } from '../assets/Chears'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
         display: 'flex',
-        justifyContent: 'space-between',
-        marginTop: theme.spacing(3),
+        justifyContent: 'flex-end',
+        margin: theme.spacing(3, 0),
+        alignItems: 'center',
     },
     des: {
-        color: '#7b8192',
-        fontSize: '12px',
+        marginRight: theme.spacing(1),
     },
     input: {
         margin: theme.spacing(2, 0, 0),
@@ -89,6 +90,11 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.mode === 'dark' ? '#1B1E38' : '#FFFFFF',
         marginBottom: 10,
         boxShadow: theme.palette.mode === 'dark' ? '0 0 5px #FFFFFF' : '0 0 5px #CCCCCC',
+    },
+    icon: {
+        margin: theme.spacing(0, 1),
+        width: 21,
+        height: 15,
     },
 }))
 
@@ -301,21 +307,28 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     label={t('plugin_pets_dialog_check_title')}
                     sx={{ marginTop: '4px' }}
                 />
-                <LoadingButton
-                    loading={loading}
-                    color="inherit"
-                    size="large"
-                    fullWidth
-                    variant="contained"
-                    className={classes.btn}
-                    onClick={saveHandle}
-                    disabled={!collection.name || !metaData.image}>
-                    {t('plugin_pets_dialog_btn')}
-                </LoadingButton>
                 <Box className={classes.desBox}>
-                    <Typography className={classes.des}>{t('plugin_pets_dialog_created')}</Typography>
-                    <Typography className={classes.des}>{t('plugin_pets_dialog_powered')}</Typography>
+                    <Typography color="textSecondary" fontSize={14} fontWeight={700} className={classes.des}>
+                        {t('plugin_pets_dialog_created')}
+                    </Typography>
+                    <Typography color="textPrimary" fontSize={14} fontWeight={700} className={classes.des}>
+                        MintTeam
+                    </Typography>
+                    <img className={classes.icon} src={new URL('../assets/pets.png', import.meta.url).toString()} />
+                    <Typography fontSize={14} color="textSeconary" fontWeight={700} className={classes.des}>
+                        & Chears
+                    </Typography>
+                    <ChearsIcon style={{ width: 24, height: 24 }} />
                 </Box>
+                <WalletStatusBar
+                    actionProps={{
+                        loading,
+                        action: saveHandle,
+                        title: t('plugin_pets_dialog_btn'),
+                        disabled: !collection.name || !metaData.image,
+                    }}
+                    classes={{ button: classes.btn }}
+                />
             </Box>
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}

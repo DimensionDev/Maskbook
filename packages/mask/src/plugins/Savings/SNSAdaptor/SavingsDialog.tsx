@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { DialogContent } from '@mui/material'
+import { DialogActions, DialogContent } from '@mui/material'
 import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
 import { FolderTabPanel, FolderTabs } from '@masknet/theme'
 import {
@@ -16,8 +16,7 @@ import {
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
-import { InjectedDialog } from '@masknet/shared'
-import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
+import { InjectedDialog, WalletStatusBar } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
 import { TargetChainIdContext } from '../../Trader/trader/useTargetChainIdContext'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
@@ -123,12 +122,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                         }
                     }}>
                     <DialogContent>
-                        {!isDashboard ? (
-                            <div className={classes.walletStatusBox}>
-                                <WalletStatusBox />
-                            </div>
-                        ) : null}
-
                         {selectedProtocol ? (
                             <SavingsForm tab={tab} chainId={chainId} protocol={selectedProtocol} onClose={onClose} />
                         ) : (
@@ -166,6 +159,9 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                             </>
                         )}
                     </DialogContent>
+                    <DialogActions>
+                        <WalletStatusBar />
+                    </DialogActions>
                 </InjectedDialog>
             </AllProviderTradeContext.Provider>
         </TargetChainIdContext.Provider>

@@ -8,13 +8,16 @@ export const Footer = () => {
     return (
         <Stack justifyContent="flex-end" direction="row">
             <Stack direction="row" alignItems="center">
-                <Box>
-                    <Typography variant="body2" mr={1.25}>
-                        {t.powered_by_go_plus()}
+                <Box sx={{ display: 'flex' }}>
+                    <Typography variant="body2" mr={1} color="textSecondary" fontSize={14} fontWeight={700}>
+                        Powered by
+                    </Typography>
+                    <Typography mr={1} variant="body2" color="textPrimary" fontSize={14} fontWeight={700}>
+                        GO+
                     </Typography>
                 </Box>
                 <Link href={PLUGIN_OFFICIAL_WEBSITE} target="_blank" rel="noopener noreferrer">
-                    <GoPlusLabLogo />
+                    <GoPlusLabLogo style={{ width: 24, height: 16 }} />
                 </Link>
             </Stack>
         </Stack>
