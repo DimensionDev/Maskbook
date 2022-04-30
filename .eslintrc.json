@@ -20,6 +20,12 @@
         "no-fallthrough": "error",
         "no-new-wrappers": "error",
         "no-plusplus": "error",
+        "valid-typeof": "error",
+        "no-loss-of-precision": "error",
+        "no-unsafe-optional-chaining": "error",
+        "no-unsafe-negation": "error",
+        "no-unsafe-finally": "error",
+        "no-irregular-whitespace": "error",
         "no-restricted-globals": ["error", "event", "name", "length", "closed"],
         "no-restricted-imports": [
             "error",
