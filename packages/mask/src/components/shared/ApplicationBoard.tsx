@@ -117,20 +117,21 @@ function ApplicationBoardContent() {
             snsAdaptorPlugins
                 .reduce<Application[]>((acc, cur) => {
                     if (!cur.ApplicationEntries) return acc
+                    const currentSNSIsSupportedNetwork = cur.enableRequirement.networks.networks[currentSNSNetwork]
+                    const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
+                    if (!isSNSEnabled) return acc
                     const currentWeb3NetworkSupportedChainIds = cur.enableRequirement.web3?.[currentWeb3Network]
                     const isWeb3Enabled = Boolean(
                         currentWeb3NetworkSupportedChainIds === undefined ||
                             currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
                     )
                     const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
-                    const currentSNSIsSupportedNetwork = cur.enableRequirement.networks.networks[currentSNSNetwork]
-                    const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
 
                     return acc.concat(
                         cur.ApplicationEntries.map((x) => {
                             return {
                                 entry: x,
-                                enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
+                                enabled: account ? isWeb3Enabled : !isWalletConnectedRequired,
                                 pluginId: cur.ID,
                             }
                         }) ?? EMPTY_LIST,

@@ -1,6 +1,6 @@
 import { PLUGIN_ID } from './constants'
 import { languages } from './locales/languages'
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, CurrentSNSNetwork } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-evm'
 
@@ -15,7 +15,11 @@ export const base: Plugin.Shared.Definition = {
         architecture: { app: true, web: true },
         networks: {
             type: 'opt-out',
-            networks: {},
+            networks: {
+                [CurrentSNSNetwork.Twitter]: true,
+                [CurrentSNSNetwork.Facebook]: false,
+                [CurrentSNSNetwork.Instagram]: false,
+            },
         },
         target: 'stable',
         web3: {
