@@ -10,6 +10,7 @@ import {
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
+import { WalletStatusBar } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -86,15 +87,13 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     if (approveStateType === ApproveStateType.UNKNOWN)
         return (
             <Grid container>
-                <ActionButton
-                    className={classes.button}
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    disabled
-                    {...props.ActionButtonProps}>
-                    {fallback ?? 'Enter an amount'}
-                </ActionButton>
+                <WalletStatusBar
+                    actionProps={{
+                        disabled: true,
+                        title: fallback ?? 'Enter an amount',
+                    }}
+                    classes={{ button: classes.button }}
+                />
                 {withChildren ? (
                     <Box className={classes.children}>{render ? (render(true) as any) : children}</Box>
                 ) : null}
@@ -103,15 +102,13 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     if (approveStateType === ApproveStateType.FAILED)
         return (
             <Grid container>
-                <ActionButton
-                    className={classes.button}
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    onClick={resetApproveCallback}
-                    {...props.ActionButtonProps}>
-                    {t('wallet_load_retry', { symbol: token.symbol ?? token.name ?? 'Token' })}
-                </ActionButton>
+                <WalletStatusBar
+                    actionProps={{
+                        title: t('wallet_load_retry', { symbol: token.symbol ?? token.name ?? 'Token' }),
+                        action: resetApproveCallback,
+                    }}
+                    classes={{ button: classes.button }}
+                />
                 {withChildren ? (
                     <Box className={classes.children}>{render ? (render(true) as any) : children}</Box>
                 ) : null}
@@ -157,18 +154,17 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     if (approveStateType === ApproveStateType.PENDING || approveStateType === ApproveStateType.UPDATING)
         return (
             <Grid container>
-                <ActionButton
-                    className={classes.button}
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    disabled
-                    {...props.ActionButtonProps}>
-                    {approveStateType === ApproveStateType.PENDING
-                        ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
-                        : `Updating ${token.symbol}`}
-                    &hellip;
-                </ActionButton>
+                <WalletStatusBar
+                    actionProps={{
+                        title:
+                            approveStateType === ApproveStateType.PENDING
+                                ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
+                                : `Updating ${token.symbol}`,
+                        action: resetApproveCallback,
+                        disabled: true,
+                    }}
+                    classes={{ button: classes.button }}
+                />
             </Grid>
         )
     if (approveStateType === ApproveStateType.APPROVED)

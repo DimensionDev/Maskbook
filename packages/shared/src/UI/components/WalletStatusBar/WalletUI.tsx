@@ -13,6 +13,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
+        cursor: 'pointer',
     },
     address: {
         display: 'flex',

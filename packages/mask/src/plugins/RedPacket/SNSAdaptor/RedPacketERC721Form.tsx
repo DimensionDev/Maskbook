@@ -3,7 +3,6 @@ import { makeStyles } from '@masknet/theme'
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useI18N } from '../../../utils'
 import classNames from 'classnames'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ERC721ContractSelectPanel } from '../../../web3/UI/ERC721ContractSelectPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumERC721TokenApprovedBoundary'
@@ -22,7 +21,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer, WalletStatusBar } from '@masknet/shared'
 import { NFTSelectOption } from '../types'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
@@ -352,14 +351,13 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         owner={account}
                         contractDetailed={contract}
                         operator={RED_PACKET_NFT_ADDRESS}>
-                        <ActionButton
-                            variant="contained"
-                            size="large"
-                            disabled={!!validationMessage}
-                            fullWidth
-                            onClick={() => setOpenConfirmDialog(true)}>
-                            {t('plugin_red_packet_next')}
-                        </ActionButton>
+                        <WalletStatusBar
+                            actionProps={{
+                                disabled: !!validationMessage,
+                                title: t('plugin_red_packet_next'),
+                                action: () => setOpenConfirmDialog(true),
+                            }}
+                        />
                     </EthereumERC721TokenApprovedBoundary>
                 </EthereumWalletConnectedBoundary>
             </Box>

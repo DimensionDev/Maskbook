@@ -30,7 +30,7 @@ interface WalletStatusBarProps extends withClasses<'button'> {
     iconSize?: number
     badgeSize?: number
     actionProps?: {
-        title?: string | React.ReactElement
+        title?: string | React.ReactElement | React.ReactNode
         action?: () => void
         disabled?: boolean
         startIcon?: React.ReactNode
