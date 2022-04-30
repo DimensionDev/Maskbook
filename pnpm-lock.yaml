@@ -1059,6 +1059,7 @@ importers:
       anchorme: ^2.1.2
       bignumber.js: ^9.0.2
       classnames: ^2.3.1
+      color: ^4.2.3
       iframe-resizer-react: ^1.1.0
       lodash-es: ^4.17.21
       qrcode: ^1.5.0
@@ -1079,6 +1080,7 @@ importers:
       anchorme: 2.1.2
       bignumber.js: 9.0.2
       classnames: 2.3.1
+      color: 4.2.3
       iframe-resizer-react: 1.1.0_react-dom@18.0.0+react@18.0.0
       lodash-es: 4.17.21
       qrcode: 1.5.0

@@ -1,15 +1,15 @@
 import { useNetworkDescriptor, useProviderDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 import { ReversedAddress, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { formatEthereumAddress, useAccount, useChainIdValid, useWallet } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, useAccount, useChainColor, useChainIdValid, useWallet } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, Link, Typography } from '@mui/material'
+import Color from 'color'
 import { useState } from 'react'
 import { DownIcon } from '../../assets/Down'
 import { LinkIcon } from '../../assets/Link'
 import { LockWalletIcon } from '../../assets/Lock'
-import { MaskFilledIcon } from '../../assets/MaskFilled'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ filterColor: string }>()((theme, props) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: 'rgba(255, 177, 0, 0.1)',
     },
     icon: {
-        filter: 'drop-shadow(0px 6px 12px rgba(28, 104, 243, 0.2))',
+        filter: `drop-shadow(0px 6px 12px ${new Color(props.filterColor).alpha(0.4).toString()})`,
     },
 }))
 
@@ -50,7 +50,8 @@ interface WalletUIProps {
 
 export function WalletUI(props: WalletUIProps) {
     const { iconSize = 24, badgeSize = 10, onClick } = props
-    const { classes } = useStyles()
+    const chainColor = useChainColor()
+    const { classes } = useStyles({ filterColor: chainColor })
     const { Utils } = useWeb3State()
     const account = useAccount()
     const selectedWallet = useWallet()
@@ -60,21 +61,17 @@ export function WalletUI(props: WalletUIProps) {
     const [pending, setPending] = useState(false)
     const [lock, setLock] = useState(false)
 
-    const isWalletValid = !!account || selectedWallet || chainIdValid
+    console.log(chainColor)
     return (
         <Box className={classes.root} onClick={onClick}>
-            {isWalletValid ? (
-                <WalletIcon
-                    classes={{ root: classes.icon }}
-                    size={iconSize}
-                    badgeSize={badgeSize}
-                    networkIcon={providerDescriptor?.icon}
-                    providerIcon={networkDescriptor?.icon}
-                    isBorderColorNotDefault
-                />
-            ) : (
-                <MaskFilledIcon size={iconSize} />
-            )}
+            <WalletIcon
+                classes={{ root: classes.icon }}
+                size={iconSize}
+                badgeSize={badgeSize}
+                networkIcon={providerDescriptor?.icon}
+                providerIcon={networkDescriptor?.icon}
+                isBorderColorNotDefault
+            />
             <Box className={classes.domain}>
                 <Box className={classes.name}>
                     <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
