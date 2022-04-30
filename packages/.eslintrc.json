@@ -67,6 +67,7 @@
         "unicorn/throw-new-error": "error",
         "@dimensiondev/array/no-implicit-sort": "error",
         "@dimensiondev/browser/prefer-location-assign": "error",
+        "@dimensiondev/browser/no-persistent-storage": "error",
         "@dimensiondev/jsx/no-class-component": "error",
         "@dimensiondev/jsx/no-template-literal": "error",
         "@dimensiondev/no-number-constructor": "off",
@@ -77,6 +78,7 @@
         "@dimensiondev/string/no-unneeded-to-string": "error",
         "@dimensiondev/type/no-instanceof-wrapper": "error",
         "@dimensiondev/type/no-wrapper-type-reference": "error",
+        "@dimensiondev/type/no-const-enum": "error",
         "@dimensiondev/unicode/specific-set": "error",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/no-base-to-string": "off",
@@ -102,7 +104,15 @@
         {
             "files": ["./plugins/**/*"],
             "rules": {
-                "@typescript-eslint/no-explicit-any": "error"
+                "@typescript-eslint/no-explicit-any": "error",
+                "@dimensiondev/no-number-constructor": "error",
+                "@dimensiondev/type/no-empty-literal": [
+                    "off",
+                    {
+                        "array": "Use `EMPTY_LIST` instead of `[]`",
+                        "object": "Use `EMPTY_OBJECT` instead of `{}`"
+                    }
+                ]
             }
         }
     ]

@@ -4,6 +4,7 @@ import type { PayloadWellFormed } from '..'
 import { EC_KeyCurveEnum } from '../payload/types'
 import { encodeMessagePack, exportCryptoKeyToRaw } from '../utils'
 
+// eslint-disable-next-line @dimensiondev/type/no-const-enum
 const enum Index {
     version = 0,
     authorNetwork = 1,

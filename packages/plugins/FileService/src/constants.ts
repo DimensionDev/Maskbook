@@ -7,7 +7,7 @@ export const landing = 'https://files.r2d2.to/partner/arweave/landing-page.html'
 export const signing = 'https://service.r2d2.to/arweave-remote-signing'
 export const mesonPrefix = 'https://coldcdn.com/api/cdn/9m5pde'
 
-export const enum FileRouter {
+export enum FileRouter {
     upload = '/upload',
     uploading = '/uploading',
     uploaded = '/uploaded',

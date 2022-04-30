@@ -7,6 +7,7 @@ import { encryptWithAES, exportCryptoKeyToJWK } from '../utils'
 import { get_v38PublicSharedCryptoKey } from './shared'
 import { CheckedError, compressSecp256k1Point } from '@masknet/shared-base'
 
+// eslint-disable-next-line @dimensiondev/type/no-const-enum
 const enum Index {
     authorPublicKey = 5,
     publicShared = 6,
