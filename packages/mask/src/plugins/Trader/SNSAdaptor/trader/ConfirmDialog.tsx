@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { Alert, Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { InjectedDialog, FormattedAddress, FormattedBalance, TokenIcon } from '@masknet/shared'
+import { InjectedDialog, FormattedAddress, FormattedBalance, TokenIcon, WalletStatusBar } from '@masknet/shared'
 import type { TradeComputed } from '../../types'
 import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
 import {
@@ -379,29 +379,26 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                 {!priceUpdated ? (
                     <DialogActions className={classes.actions}>
                         {isGreatThanSlippageSetting ? (
-                            <Button
-                                classes={{ root: classes.button }}
-                                color="error"
-                                size="large"
-                                variant="contained"
-                                fullWidth
-                                disabled={staled}
-                                onClick={onConfirmPriceImpact}>
-                                {t('plugin_trader_confirm_price_impact', {
-                                    percent: formatPercentage(cacheTrade.priceImpact),
-                                })}
-                            </Button>
+                            <WalletStatusBar
+                                actionProps={{
+                                    color: 'warning',
+                                    title: t('plugin_trader_confirm_price_impact', {
+                                        percent: formatPercentage(cacheTrade.priceImpact),
+                                    }),
+                                    action: onConfirmPriceImpact,
+                                    disabled: staled,
+                                }}
+                                classes={{ button: classes.button }}
+                            />
                         ) : (
-                            <Button
-                                classes={{ root: classes.button }}
-                                color="primary"
-                                size="large"
-                                variant="contained"
-                                fullWidth
-                                disabled={staled}
-                                onClick={onConfirm}>
-                                {t('plugin_trader_confirm_swap')}
-                            </Button>
+                            <WalletStatusBar
+                                actionProps={{
+                                    title: t('plugin_trader_confirm_swap'),
+                                    action: onConfirm,
+                                    disabled: staled,
+                                }}
+                                classes={{ button: classes.button }}
+                            />
                         )}
                     </DialogActions>
                 ) : null}

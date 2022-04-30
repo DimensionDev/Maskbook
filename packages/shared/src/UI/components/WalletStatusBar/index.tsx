@@ -36,6 +36,7 @@ interface WalletStatusBarProps extends withClasses<'button'> {
         startIcon?: React.ReactNode
         endIcon?: React.ReactNode
         loading?: boolean
+        color?: 'warning'
     }
 }
 
@@ -78,6 +79,13 @@ export function WalletStatusBar(props: WalletStatusBarProps) {
                             </Button>
                         ) : (
                             <Button
+                                sx={{
+                                    backgroundColor: actionProps.color === 'warning' ? '#FF3545' : '#07101B',
+                                    color: actionProps.color === 'warning' ? '#ffffff' : MaskColorVar.twitterButtonText,
+                                    '&:hover': {
+                                        backgroundColor: actionProps.color === 'warning' ? '#FF3545' : '#07101B',
+                                    },
+                                }}
                                 startIcon={actionProps.startIcon}
                                 endIcon={actionProps.endIcon}
                                 variant="contained"

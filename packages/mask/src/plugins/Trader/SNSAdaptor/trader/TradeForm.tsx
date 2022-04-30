@@ -10,7 +10,7 @@ import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { FormattedBalance, SelectTokenChip } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip, WalletStatusBar } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
@@ -21,7 +21,6 @@ import TuneIcon from '@mui/icons-material/Tune'
 import { MINIMUM_AMOUNT } from '../../constants'
 import { resolveTradeProviderName } from '../../pipes'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { HelpOutline, ArrowDownward } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
@@ -330,7 +329,6 @@ export const TradeForm = memo<AllTradeFormProps>(
         }, [inputAmount, inputToken, outputToken])
 
         const isGreatThanSlippageSetting = useGreatThanSlippageSetting(focusedTrade?.value?.priceImpact)
-
         return (
             <Box className={classes.root}>
                 <Box display="flex" justifyContent="flex-start" mb={1} width="100%">
@@ -506,32 +504,33 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     }
                                     render={(disable: boolean) =>
                                         isGreatThanSlippageSetting ? (
-                                            <ActionButton
-                                                fullWidth
-                                                variant="contained"
-                                                color="error"
-                                                disabled={focusedTrade?.loading || !focusedTrade?.value || disable}
-                                                classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                                onClick={onSwap}>
-                                                {t('plugin_trader_confirm_price_impact', {
-                                                    percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
-                                                })}
-                                            </ActionButton>
+                                            <WalletStatusBar
+                                                actionProps={{
+                                                    color: 'warning',
+                                                    disabled: focusedTrade?.loading || !focusedTrade?.value || disable,
+                                                    action: onSwap,
+                                                    title: t('plugin_trader_confirm_price_impact', {
+                                                        percent: formatPercentage(
+                                                            focusedTrade?.value?.priceImpact ?? 0,
+                                                        ),
+                                                    }),
+                                                }}
+                                                classes={{ button: classes.button }}
+                                            />
                                         ) : (
-                                            <ActionButton
-                                                fullWidth
-                                                variant="contained"
-                                                disabled={
-                                                    focusedTrade?.loading ||
-                                                    !focusedTrade?.value ||
-                                                    !!validationMessage ||
-                                                    disable
-                                                }
-                                                classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                                color="primary"
-                                                onClick={onSwap}>
-                                                {validationMessage || nativeWrapMessage}
-                                            </ActionButton>
+                                            <WalletStatusBar
+                                                actionProps={{
+                                                    color: 'warning',
+                                                    disabled:
+                                                        focusedTrade?.loading ||
+                                                        !focusedTrade?.value ||
+                                                        !!validationMessage ||
+                                                        disable,
+                                                    title: validationMessage || nativeWrapMessage,
+                                                    action: onSwap,
+                                                }}
+                                                classes={{ button: classes.button }}
+                                            />
                                         )
                                     }
                                 />
