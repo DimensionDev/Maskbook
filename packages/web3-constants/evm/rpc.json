@@ -61,7 +61,7 @@
         "Aurora": ["https://mainnet.aurora.dev"],
         "Aurora_Testnet": ["https://testnet.aurora.dev"],
         "Conflux": ["https://evm.confluxrpc.com"],
-        "Astar": []
+        "Astar": ["https://astar.api.onfinality.io/public"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 1, 2, 3, 4],
@@ -83,6 +83,6 @@
         "Aurora": [0, 0, 0, 0, 0],
         "Aurora_Testnet": [0, 0, 0, 0, 0],
         "Conflux": [0, 0, 0, 0, 0],
-        "Astar": []
+        "Astar": [0, 0, 0, 0, 0]
     }
 }
