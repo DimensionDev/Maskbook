@@ -1,8 +1,7 @@
-import { Box, DialogContent } from '@mui/material'
+import { Box, DialogActions, DialogContent } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, WalletStatusBar } from '@masknet/shared'
 import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
-import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import AssetsPanel from './AssetsPanel'
 import ParticipatePanel from './ParticipatePanel'
@@ -68,9 +67,6 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
             }}>
             <InjectedDialog open={open} onClose={onClose} title="FindTruman">
                 <DialogContent className={classes.wrapper}>
-                    <div className={classes.walletStatusBox}>
-                        <WalletStatusBox />
-                    </div>
                     {consts && (
                         <TabContext value={currentTab}>
                             <div className={classes.abstractTabWrapper}>
@@ -90,6 +86,9 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
                         </TabContext>
                     )}
                 </DialogContent>
+                <DialogActions>
+                    <WalletStatusBar />
+                </DialogActions>
             </InjectedDialog>
         </FindTrumanContext.Provider>
     )
