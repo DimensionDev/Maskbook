@@ -10,6 +10,7 @@
     { "path": "./RSS3/" },
     { "path": "./DAO/" },
     { "path": "./CyberConnect/" },
-    { "path": "./CrossChainBridge/" }
+    { "path": "./CrossChainBridge/" },
+    { "path": "./Traderxyz/" }
   ]
 }

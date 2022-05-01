@@ -1,0 +1,20 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
+  },
+  "include": ["src", "src/**/*.json"],
+  "references": [
+    { "path": "../../theme" },
+    { "path": "../../mask/src" },
+    { "path": "../../plugin-infra" },
+    { "path": "../../shared-base" },
+    { "path": "../../shared-base-ui" },
+    { "path": "../../typed-message/base" },
+    { "path": "../../shared" },
+    { "path": "../../icons" },
+    { "path": "../Wallet" }
+  ]
+}

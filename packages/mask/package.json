@@ -32,6 +32,7 @@
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/plugin-rss3": "workspace:*",
     "@masknet/plugin-solana": "workspace:*",
+    "@masknet/plugin-traderxyz": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
     "@masknet/public-api": "workspace:*",
     "@masknet/sdk": "workspace:*",

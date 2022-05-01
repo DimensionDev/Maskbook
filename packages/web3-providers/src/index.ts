@@ -17,6 +17,8 @@ export * from './types'
 export * from './hooks'
 export * from './opensea/utils'
 export * from './NextID'
+export * from './helpers'
+export * from './opensea/constants'
 
 export const OpenSea = new OpenSeaAPI()
 export const Rarible = new RaribleAPI()

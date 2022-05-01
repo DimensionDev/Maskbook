@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/await-thenable */
 import { test, expect } from '@jest/globals'
 import {
     makeTypedMessageText,
