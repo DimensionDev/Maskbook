@@ -4,7 +4,7 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { styled, useTheme } from '@mui/material/styles'
 import { useDashboardI18N } from '../../../../locales'
 import { Button } from '@mui/material'
-import { MaskNotSquareIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import urlcat from 'urlcat'
 import { openWindow } from '@masknet/shared-base-ui'
 
@@ -139,7 +139,7 @@ export const WelcomeUI = memo(
 
         return (
             <Content>
-                <MaskNotSquareIcon style={{ width: 208, height: 60 }} />
+                <Icon type="mask" style={{ width: 208, height: 60 }} />
                 <IFrame ref={iframeRef} src={privacyPolicyURL} onLoad={iframeLoadHandler} />
                 <ButtonGroup>
                     <CancelButton color="secondary" onClick={cancelHandler}>

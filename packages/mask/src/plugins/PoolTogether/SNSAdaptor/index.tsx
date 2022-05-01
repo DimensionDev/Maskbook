@@ -7,7 +7,7 @@ import { DepositDialog } from '../UI/DepositDialog'
 import { Trans } from 'react-i18next'
 import { URL_PATTERN } from '../constants'
 import { PoolTogetherView } from '../UI/PoolTogetherView'
-import { PoolTogetherIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 
 const isPoolTogetherUrl = (url: string) => URL_PATTERN.test(url)
 
@@ -41,13 +41,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
             name: <Trans i18nKey="plugin_pooltogether_name" />,
             marketListSortingPriority: 14,
             tutorialLink: 'https://realmasknetwork.notion.site/377597e14aff441ab645ecba5ea690f1',
-            icon: <PoolTogetherIcon />,
+            icon: <Icon type="poolTogether" />,
         },
     ],
     wrapperProps: {
         icon: (
-            <PoolTogetherIcon
-                style={{ width: 24, height: 24, filter: 'drop-shadow(0px 6px 12px rgba(70, 39, 155, 0.2))' }}
+            <Icon
+                type="poolTogether"
+                size={24}
+                style={{ filter: 'drop-shadow(0px 6px 12px rgba(70, 39, 155, 0.2))' }}
             />
         ),
         backgroundGradient:

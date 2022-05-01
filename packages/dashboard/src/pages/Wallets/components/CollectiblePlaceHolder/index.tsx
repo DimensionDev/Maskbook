@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { MiniMaskIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { WalletIcon } from '@masknet/shared'
 import { Box } from '@mui/material'
@@ -7,7 +7,7 @@ import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useDashboardI18N } from '../../../../locales'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     container: {
         position: 'relative',
         borderRadius: 8,
@@ -36,7 +36,13 @@ const useStyles = makeStyles()({
         height: 20,
         width: 20,
     },
-})
+    miniMask: {
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 48,
+            opacity: 0.5,
+        },
+    },
+}))
 
 export interface CollectiblePlaceHolderProps {
     chainId?: number
@@ -53,7 +59,7 @@ export const CollectiblePlaceholder = memo<CollectiblePlaceHolderProps>(({ chain
                 <WalletIcon mainIcon={networkDescriptor?.icon} size={20} />
             </Box>
             <div className={classes.placeholder}>
-                <MiniMaskIcon viewBox="0 0 48 48" sx={{ fontSize: 48, opacity: 0.5 }} />
+                <Icon type="miniMask" />
             </div>
         </div>
     )

@@ -18,8 +18,7 @@ import { useContext } from 'react'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { DashboardContext } from './context'
 import {
-    MaskBannerIcon,
-    MaskNotSquareIcon,
+    Icon,
     MenuPersonasActiveIcon,
     MenuPersonasIcon,
     MenuSettingsActiveIcon,
@@ -131,7 +130,9 @@ export function Navigation({ onClose }: NavigationProps) {
 
     return (
         <List onClick={() => onClose?.()}>
-            {isLargeScreen && <LogoItem>{mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}</LogoItem>}
+            {isLargeScreen && (
+                <LogoItem>{mode === 'dark' ? <Icon type="maskBanner" /> : <Icon type="mask" />}</LogoItem>
+            )}
             <ListItemLink to={DashboardRoutes.Personas}>
                 <ItemIcon>
                     {useMatch(DashboardRoutes.Personas) ? <MenuPersonasActiveIcon /> : <MenuPersonasIcon />}

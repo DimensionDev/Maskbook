@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { PolkaDotIcon, WalletConnectIcon, MetaMaskIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { ConnectActionList, ConnectActionListItem } from '../ConnectActionList'
 import { useDashboardI18N } from '../../locales'
 
@@ -18,17 +18,17 @@ export const ConnectWalletList = memo(({ onConnect }: ConnectWalletListProps) =>
         <ConnectActionList>
             <ConnectActionListItem
                 title={t.wallets_connect_wallet_metamask()}
-                icon={<MetaMaskIcon fontSize="inherit" />}
+                icon={<Icon type="metaMask" />}
                 onClick={() => onConnect(ConnectWalletTargets.MetaMask)}
             />
             <ConnectActionListItem
                 title={t.wallets_connect_wallet_connect()}
-                icon={<WalletConnectIcon fontSize="inherit" />}
+                icon={<Icon type="walletConnect" />}
                 onClick={() => onConnect(ConnectWalletTargets.Connect)}
             />
             <ConnectActionListItem
                 title={t.wallets_connect_wallet_polka()}
-                icon={<PolkaDotIcon fontSize="inherit" />}
+                icon={<Icon type="polkaDot" />}
                 onClick={() => onConnect(ConnectWalletTargets.PolkaDot)}
             />
         </ConnectActionList>

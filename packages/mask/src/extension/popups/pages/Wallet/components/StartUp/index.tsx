@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 import { Alert, AlertTitle, Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Link, useLocation } from 'react-router-dom'
-import { MaskWalletIcon, ImportWalletIcon } from '@masknet/icons'
+import { Icon, ImportWalletIcon } from '@masknet/icons'
 import { NetworkSelector } from '../../../../components/NetworkSelector'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../../utils'
@@ -105,7 +105,7 @@ export const WalletStartUp = memo(() => {
                     <NetworkSelector />
                 </Box>
                 <Box className={classes.item} onClick={onEnterCreateWallet}>
-                    <MaskWalletIcon sx={{ fontSize: 24 }} />
+                    <Icon type="maskWallet" />
                     <Typography className={classes.itemTitle}>{t('wallet_new')}</Typography>
                 </Box>
                 {!loading ? (

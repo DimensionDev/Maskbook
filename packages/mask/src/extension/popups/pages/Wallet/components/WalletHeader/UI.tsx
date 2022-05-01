@@ -1,11 +1,11 @@
-import { makeStyles } from '@masknet/theme'
-import { memo, MouseEvent } from 'react'
-import { Box, Link, Typography } from '@mui/material'
-import { CopyIconButton } from '../../../../components/CopyIconButton'
+import { ArrowDropIcon, Icon, PopupLinkIcon } from '@masknet/icons'
 import { ChainIcon, FormattedAddress, WalletIcon } from '@masknet/shared'
-import { ChainId, formatEthereumAddress, explorerResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { ArrowDropIcon, MaskBlueIcon, PopupLinkIcon } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
 import type { NetworkDescriptor, Wallet } from '@masknet/web3-shared-base'
+import { ChainId, explorerResolver, formatEthereumAddress, NetworkType } from '@masknet/web3-shared-evm'
+import { Box, Link, Typography } from '@mui/material'
+import { memo, MouseEvent } from 'react'
+import { CopyIconButton } from '../../../../components/CopyIconButton'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -124,7 +124,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                     onClick={() => {
                         if (!disabled) onActionClick()
                     }}>
-                    <MaskBlueIcon className={classes.avatar} />
+                    <Icon type="maskBlue" className={classes.avatar} />
                     <div>
                         <Typography className={classes.nickname}>{wallet.name}</Typography>
                         <Typography className={classes.identifier}>

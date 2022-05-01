@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
-import { MaskWalletIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { useI18N } from '../../../../../utils'
@@ -80,7 +80,7 @@ const Unlock = memo(() => {
         <>
             <main className={classes.contain}>
                 <div className={classes.header}>
-                    <MaskWalletIcon style={{ fontSize: 48 }} />
+                    <Icon type="maskWallet" size={48} />
                     <Typography className={classes.title}>{t('popups_wallet_unlock_wallet')}</Typography>
                 </div>
                 <div>

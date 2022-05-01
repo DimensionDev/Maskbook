@@ -2,7 +2,7 @@ import { QRCode } from 'react-qrcode-logo'
 import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme, useCustomSnackbar } from '@masknet/theme'
 import { Box, Button, DialogContent, ThemeProvider, Typography } from '@mui/material'
 import { MnemonicReveal } from '../../../components/Mnemonic'
-import { MiniMaskIcon, InfoIcon, CopyIcon } from '@masknet/icons'
+import { Icon, InfoIcon, CopyIcon } from '@masknet/icons'
 import { ForwardedRef, forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
@@ -145,7 +145,7 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                 <Box className={classes.card} display="flex" alignItems="center">
                     <Box flex={1}>
                         <Box display="flex" alignItems="center" paddingBottom="8px">
-                            <MiniMaskIcon />
+                            <Icon type="miniMask" />
                             <Typography fontSize={24} fontWeight={600} className={classes.name}>
                                 {t.persona()}: {personaName}
                             </Typography>

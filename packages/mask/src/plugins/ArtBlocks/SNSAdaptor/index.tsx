@@ -7,7 +7,7 @@ import { base } from '../base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Collectible } from './Collectible'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { ArtBlocksIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -30,7 +30,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             marketListSortingPriority: 15,
             description: <Trans i18nKey="plugin_artblocks_description" />,
             name: <Trans i18nKey="plugin_artblocks_name" />,
-            icon: <ArtBlocksIcon />,
+            icon: <Icon type="artBlocks" />,
         },
     ],
 }
