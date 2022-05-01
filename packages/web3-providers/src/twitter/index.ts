@@ -1,3 +1,4 @@
+import { getCookieValue } from '@dimensiondev/kit'
 import { escapeRegExp } from 'lodash-unified'
 import urlcat from 'urlcat'
 import type { TwitterBaseAPI } from '../types'
@@ -20,18 +21,6 @@ function getScriptContentMatched(content: string, regexp: RegExp) {
     return matched
 }
 
-function getCSRFToken() {
-    // use `cookieStore` replace the api call?
-    // see https://developer.mozilla.org/en-US/docs/Web/API/CookieStore
-    // return cookieStore.get('ct0')
-
-    // eslint-disable-next-line @dimensiondev/browser/no-persistent-storage
-    const ct0 = document.cookie.split('; ').find((x) => x.includes('ct0'))
-    if (!ct0) return ''
-    const [, value] = ct0.split('=')
-    return value
-}
-
 async function getScriptContent(url: string) {
     const response = await fetch(url)
     return response.text()
@@ -44,7 +33,7 @@ async function getTokens() {
 
     const bearerToken = getScriptContentMatched(mainContent ?? '', /s="(\w+%3D\w+)"/)
     const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
-    const csrfToken = getCSRFToken()
+    const csrfToken = getCookieValue('ct0')
 
     return {
         bearerToken,

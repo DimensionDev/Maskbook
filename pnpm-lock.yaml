@@ -14,7 +14,7 @@ importers:
       '@commitlint/cli': ^16.2.3
       '@commitlint/config-conventional': ^16.2.1
       '@dimensiondev/eslint-plugin': ^0.0.2-20220501020553-ec7e75d
-      '@dimensiondev/kit': 0.0.0-20220228054820-f2378be
+      '@dimensiondev/kit': 0.0.0-20220501022859-60d5533
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
       '@emotion/react': ^11.9.0
@@ -65,7 +65,7 @@ importers:
       web3-core: 1.7.3
       web3-core-method: 1.7.3
     dependencies:
-      '@dimensiondev/kit': 0.0.0-20220228054820-f2378be
+      '@dimensiondev/kit': 0.0.0-20220501022859-60d5533
       '@emotion/cache': 11.7.1
       '@emotion/react': 11.9.0_@types+react@18.0.2+react@18.0.0
       '@emotion/serialize': 1.0.3
@@ -3992,6 +3992,7 @@ packages:
 
   /@dimensiondev/eslint-plugin/0.0.2-20220501020553-ec7e75d_eslint@8.14.0:
     resolution: {integrity: sha512-CVW7Hl2UgAmROsV5k1yUaveFpUj38JwzZ2Pdr0+Aw6HCv3hghuWSIwdkPKtHinpAY+Gs5hUpAap3DdRlD9W4vw==, tarball: download/@dimensiondev/eslint-plugin/0.0.2-20220501020553-ec7e75d/5f2354eca5a58afd297be96b7eb03ba0cb9abfb86b5b8f6c33ad995fef89ce2e}
+    engines: {node: '>= 16'}
     peerDependencies:
       eslint: '>= 8'
     dependencies:
@@ -4023,8 +4024,8 @@ packages:
       webextension-polyfill: 0.9.0
     dev: false
 
-  /@dimensiondev/kit/0.0.0-20220228054820-f2378be:
-    resolution: {integrity: sha512-B+5bj3+nTqwp4nigrwXxKK3iQeCn1tlFOuYeqzPCJY/wqMrM+GsAyYdw5BPjFwn5+9uiZ5xSZcnLhSF/6EgjhQ==, tarball: download/@dimensiondev/kit/0.0.0-20220228054820-f2378be/8352c3f70e1a38376b321dd05989ad48c80a260785561da3910520e28560b26b}
+  /@dimensiondev/kit/0.0.0-20220501022859-60d5533:
+    resolution: {integrity: sha512-Uff6um/tvEEm4eE8eAXxCM/NUhor2cpheS9EVwPCuPMybKd8cMZEsCroIi7xVAxqZsf9pejUW2oCYeLhCAe5TA==, tarball: download/@dimensiondev/kit/0.0.0-20220501022859-60d5533/961397d39ba5221918e28ad5e84b871d2d23c872f9fad0e014dfb4bf021d2697}
     dependencies:
       lodash-es: 4.17.21
     dev: false
@@ -27646,7 +27647,7 @@ packages:
     dev: false
 
   github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
+    resolution: {commit: d463109433b2c49c74a081044f54b2a6a1ccad7c, repo: git+ssh://git@github.com/locize/html-parse-stringify2.git, type: git}
     name: html-parse-stringify2
     version: 2.0.1
     dependencies:
