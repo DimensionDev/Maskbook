@@ -157,7 +157,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     }, [gas, gasPrice])
 
     const feeValueUSD = useMemo(
-        () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2)) : '0'),
+        () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(7)) : '0'),
         [gasFee, tokenPrice],
     )
     // #endregion
