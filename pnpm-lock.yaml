@@ -124,6 +124,7 @@ importers:
     specifiers:
       '@masknet/shared-base': workspace:*
       '@msgpack/msgpack': ^2.7.2
+      '@types/elliptic': ^6.4.14
       elliptic: ^6.5.3
       pvtsutils: ^1.2.2
     dependencies:
@@ -131,6 +132,8 @@ importers:
       '@msgpack/msgpack': 2.7.2
       elliptic: 6.5.4
       pvtsutils: 1.2.2
+    devDependencies:
+      '@types/elliptic': 6.4.14
 
   packages/configuration:
     specifiers:
@@ -1333,6 +1336,7 @@ importers:
       '@types/ethereum-blockies': ^0.1.0
       '@types/punycode': ^2.1.0
       '@types/use-subscription': ^1.0.0
+      '@types/uuid': ^8.3.4
       bignumber.js: 9.0.2
       ethereum-blockies: ^0.1.1
       fortmatic: ^2.2.1
@@ -1371,6 +1375,7 @@ importers:
       web3-utils: 1.7.3
     devDependencies:
       '@types/use-subscription': 1.0.0
+      '@types/uuid': 8.3.4
 
   packages/web3-shared/flow:
     specifiers:
@@ -8571,8 +8576,7 @@ packages:
   /@types/elliptic/6.4.14:
     resolution: {integrity: sha512-z4OBcDAU0GVwDTuwJzQCiL6188QvZMkvoERgcVjq0/mPM8jCfdwZ3x5zQEVoL9WCAru3aG5wl3Z5Ww5wBWn7ZQ==}
     dependencies:
-      '@types/bn.js': 4.11.6
-    dev: false
+      '@types/bn.js': 5.1.0
 
   /@types/eslint-scope/3.7.3:
     resolution: {integrity: sha512-PB3ldyrcnAicT35TWPs5IcwKD8S333HMaa2VVv4+wdvebJkjWuW/xESoB8IwRcog8HYVYamb1g/R31Qv5Bx03g==}
