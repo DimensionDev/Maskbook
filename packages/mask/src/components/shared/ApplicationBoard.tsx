@@ -25,10 +25,10 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
             overflowY: 'auto',
             overflowX: 'hidden',
             gridTemplateRows: '100px',
-            gridGap: theme.spacing(2),
+            gridGap: 10,
             justifyContent: 'space-between',
-            height: 340,
-            width: props.shouldScroll ? 575 : 560,
+            height: 320,
+            width: props.shouldScroll ? 575 : 562,
             '::-webkit-scrollbar': {
                 backgroundColor: 'transparent',
                 width: 20,

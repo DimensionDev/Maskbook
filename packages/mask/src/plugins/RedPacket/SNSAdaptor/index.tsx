@@ -102,7 +102,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
-                    console.log({ EntryComponentProps })
                     return (
                         <ApplicationEntry
                             title={name}
