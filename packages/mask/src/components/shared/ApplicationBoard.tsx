@@ -1,9 +1,9 @@
-import { useMemo, useCallback } from 'react'
+import { useContext, createContext, PropsWithChildren, useMemo, useCallback } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useAccount, NetworkPluginID } from '@masknet/plugin-infra/web3'
 import {
     EMPTY_LIST,
     NextIDPlatform,
@@ -100,14 +100,18 @@ interface Props {
 export function ApplicationBoard(props: Props) {
     return (
         <PersonaContext.Provider>
-            <ApplicationBoardContent {...props} />
+            <ApplicationEntryStatusProvider>
+                <ApplicationBoardContent {...props} />
+            </ApplicationEntryStatusProvider>
         </PersonaContext.Provider>
     )
 }
+
 function ApplicationBoardContent(props: Props) {
     const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
+    console.log(currentWeb3Network)
     const chainId = useChainId()
     const account = useAccount()
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
@@ -127,7 +131,9 @@ function ApplicationBoardContent(props: Props) {
                                 entry: x,
                                 enabled: isSNSEnabled,
                                 pluginId: cur.ID,
-                                isWalletConnectedRequired: !account && isWalletConnectedRequired,
+                                isWalletConnectedRequired:
+                                    (!account || currentWeb3Network !== NetworkPluginID.PLUGIN_EVM) &&
+                                    isWalletConnectedRequired,
                             }
                         }) ?? EMPTY_LIST,
                     )
@@ -146,17 +152,14 @@ function ApplicationBoardContent(props: Props) {
         <>
             <Box className={classes.recommendFeatureAppListWrapper}>
                 {recommendFeatureAppList.map((application) => (
-                    <RenderEntryComponentWrapper key={application.entry.ApplicationEntryID} application={application} />
+                    <RenderEntryComponent key={application.entry.ApplicationEntryID} application={application} />
                 ))}
             </Box>
 
             {listedAppList.length > 0 ? (
                 <section className={classes.applicationWrapper}>
                     {listedAppList.map((application) => (
-                        <RenderEntryComponentWrapper
-                            key={application.entry.ApplicationEntryID}
-                            application={application}
-                        />
+                        <RenderEntryComponent key={application.entry.ApplicationEntryID} application={application} />
                     ))}
                 </section>
             ) : (
@@ -170,33 +173,109 @@ function ApplicationBoardContent(props: Props) {
     )
 }
 
-interface RenderEntryComponentWrapperProps {
+interface RenderEntryComponentProps {
     application: Application
 }
 
-function RenderEntryComponentWrapper({ application }: RenderEntryComponentWrapperProps) {
-    const RenderEntryComponent = application.entry.RenderEntryComponent!
+function RenderEntryComponent({ application }: RenderEntryComponentProps) {
+    const Entry = application.entry.RenderEntryComponent!
     const { t } = useI18N()
-    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
+    const { openDialog: _openWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
-
-    return application.entry.nextIdRequired ? (
-        <RenderEntryComponentWithNextIDRequired application={application} />
-    ) : (
-        <RenderEntryComponent
-            disabled={!application.enabled}
-            tooltipHint={
-                application.isWalletConnectedRequired ? t('application_tooltip_hint_connect_wallet') : undefined
-            }
-            onClick={application.isWalletConnectedRequired ? openWalletStatusDialog : undefined}
-        />
+    const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
     )
+    const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
+
+    // #region entry disabled
+    const disabled = useMemo(() => {
+        if (!application.enabled) return true
+
+        if (application.entry.nextIdRequired) {
+            return Boolean(
+                ApplicationEntryStatus.isNextIDVerify === undefined ||
+                    (!ApplicationEntryStatus.isSNSConnectToCurrentPersona && ApplicationEntryStatus.isPersonaConnected),
+            )
+        } else {
+            return false
+        }
+    }, [application, ApplicationEntryStatus])
+    // #endregion
+
+    // #region entry click effect
+    const openWalletStatusDialog = useCallback(() => {
+        closeApplicationBoard()
+        _openWalletStatusDialog()
+    }, [])
+
+    const connectPersona = useCallback(() => {
+        closeApplicationBoard()
+        ApplicationEntryStatus.personaConnectAction?.()
+    }, [ApplicationEntryStatus])
+
+    const verifyPersona = useCallback(() => {
+        closeApplicationBoard()
+        CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
+    }, [])
+
+    const clickHandler = application.isWalletConnectedRequired
+        ? openWalletStatusDialog
+        : ApplicationEntryStatus.isPersonaConnected === false
+        ? connectPersona
+        : ApplicationEntryStatus.shouldVerifyNextId
+        ? verifyPersona
+        : undefined
+    // #endregion
+
+    // #region tooltip hint
+    const tooltipHint = useMemo(() => {
+        if (application.isWalletConnectedRequired) return t('application_tooltip_hint_connect_wallet')
+        if (ApplicationEntryStatus.isPersonaConnected === false) return t('application_tooltip_hint_connect_persona')
+        if (!application.entry.nextIdRequired) return undefined
+        if (ApplicationEntryStatus.shouldDisplayTooltipHint)
+            return t('application_tooltip_hint_sns_persona_unmatched', {
+                currentPersonaPublicKey: formatPersonaPublicKey(
+                    ApplicationEntryStatus.currentPersonaPublicKey ?? '',
+                    4,
+                ),
+                currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
+                    ApplicationEntryStatus.currentSNSConnectedPersonaPublicKey ?? '',
+                    4,
+                ),
+            })
+        if (ApplicationEntryStatus.shouldVerifyNextId) return t('application_tooltip_hint_verify')
+        return undefined
+    }, [application, ApplicationEntryStatus])
+    // #endregion
+
+    return <Entry disabled={disabled} tooltipHint={tooltipHint} onClick={clickHandler} />
 }
 
-function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComponentWrapperProps) {
+interface ApplicationEntryStatusContextProps {
+    isPersonaConnected: boolean | undefined
+    isNextIDVerify: boolean | undefined
+    isSNSConnectToCurrentPersona: boolean | undefined
+    shouldDisplayTooltipHint: boolean | undefined
+    shouldVerifyNextId: boolean | undefined
+    currentPersonaPublicKey: string | undefined
+    currentSNSConnectedPersonaPublicKey: string | undefined
+    personaConnectAction: (() => void) | undefined
+}
+
+const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContextProps>({
+    isPersonaConnected: undefined,
+    isNextIDVerify: undefined,
+    isSNSConnectToCurrentPersona: undefined,
+    shouldDisplayTooltipHint: undefined,
+    shouldVerifyNextId: undefined,
+    currentPersonaPublicKey: undefined,
+    currentSNSConnectedPersonaPublicKey: undefined,
+    personaConnectAction: undefined,
+})
+
+function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const ui = activatedSocialNetworkUI
-    const { t } = useI18N()
     const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
     const lastState = useSetupGuideStatusState()
     const { currentPersona } = PersonaContext.useContainer()
@@ -210,6 +289,7 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
         if (!username) return undefined
         return persona.linkedProfiles.some((x) => x.identifier.userId === username)
     }, [])
+
     const personaConnectStatus = usePersonaConnectStatus()
 
     const { value: ApplicationCurrentStatus } = useAsync(async () => {
@@ -227,52 +307,28 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
             currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.identifier.rawPublicKey,
         }
     }, [platform, username, ui, personas, currentPersona])
+
     const {
         isNextIDVerify,
         isSNSConnectToCurrentPersona,
         currentPersonaPublicKey,
         currentSNSConnectedPersonaPublicKey,
     } = ApplicationCurrentStatus ?? {}
-    const { closeDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
 
-    const jumpSetupGuide = useCallback(() => {
-        closeDialog()
-        personaConnectStatus.connected === false
-            ? personaConnectStatus.action?.()
-            : CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
-    }, [personaConnectStatus])
-
-    if (!application.entry.RenderEntryComponent) return null
-
-    const RenderEntryComponent = application.entry.RenderEntryComponent
-    const shouldVerifyNextId = Boolean(!isNextIDVerify && ApplicationCurrentStatus)
-    const shouldDisplayTooltipHint =
-        ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected
     return (
-        <RenderEntryComponent
-            disabled={
-                !application.enabled ||
-                isNextIDVerify === undefined ||
-                (!isSNSConnectToCurrentPersona && personaConnectStatus.connected)
-            }
-            tooltipHint={
-                shouldDisplayTooltipHint
-                    ? t('application_tooltip_hint_sns_persona_unmatched', {
-                          currentPersonaPublicKey: formatPersonaPublicKey(currentPersonaPublicKey ?? '', 4),
-                          currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
-                              currentSNSConnectedPersonaPublicKey ?? '',
-                              4,
-                          ),
-                      })
-                    : personaConnectStatus.connected === false
-                    ? t('application_tooltip_hint_connect_persona')
-                    : shouldVerifyNextId
-                    ? t('application_tooltip_hint_verify')
-                    : application.isWalletConnectedRequired
-                    ? t('application_tooltip_hint_connect_wallet')
-                    : undefined
-            }
-            onClick={shouldVerifyNextId || personaConnectStatus.connected === false ? jumpSetupGuide : undefined}
-        />
+        <ApplicationEntryStatusContext.Provider
+            value={{
+                personaConnectAction: personaConnectStatus.action ?? undefined,
+                isPersonaConnected: personaConnectStatus.connected,
+                isNextIDVerify,
+                isSNSConnectToCurrentPersona,
+                shouldDisplayTooltipHint:
+                    ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected,
+                shouldVerifyNextId: Boolean(!isNextIDVerify && ApplicationCurrentStatus),
+                currentPersonaPublicKey,
+                currentSNSConnectedPersonaPublicKey,
+            }}>
+            {props.children}
+        </ApplicationEntryStatusContext.Provider>
     )
 }
