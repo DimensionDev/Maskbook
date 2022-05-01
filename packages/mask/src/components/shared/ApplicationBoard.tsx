@@ -4,25 +4,14 @@ import { Typography, Box } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, NetworkPluginID } from '@masknet/plugin-infra/web3'
-import {
-    EMPTY_LIST,
-    NextIDPlatform,
-    CrossIsolationMessages,
-    formatPersonaPublicKey,
-    PersonaInformation,
-} from '@masknet/shared-base'
+import { EMPTY_LIST, CrossIsolationMessages, formatPersonaPublicKey } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useAsync } from 'react-use'
-import Services from '../../extension/service'
-import { NextIDProof } from '@masknet/web3-providers'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import { useSetupGuideStatusState } from '../DataSource/useNextID'
-import { useMyPersonas } from '../DataSource/useMyPersonas'
-import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { useNextIDConnectStatus } from '../DataSource/useNextID'
+import { usePersonaConnectStatus, usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
 
@@ -234,7 +223,9 @@ function RenderEntryComponent({ application }: RenderEntryComponentProps) {
     const tooltipHint = useMemo(() => {
         if (application.isWalletConnectedRequired) return t('application_tooltip_hint_connect_wallet')
         if (!application.entry.nextIdRequired) return undefined
-        if (ApplicationEntryStatus.isPersonaConnected === false) return t('application_tooltip_hint_connect_persona')
+        if (ApplicationEntryStatus.isPersonaConnected === false && !disabled)
+            return t('application_tooltip_hint_connect_persona')
+        if (ApplicationEntryStatus.shouldVerifyNextId && !disabled) return t('application_tooltip_hint_verify')
         if (ApplicationEntryStatus.shouldDisplayTooltipHint)
             return t('application_tooltip_hint_sns_persona_unmatched', {
                 currentPersonaPublicKey: formatPersonaPublicKey(
@@ -246,9 +237,8 @@ function RenderEntryComponent({ application }: RenderEntryComponentProps) {
                     4,
                 ),
             })
-        if (ApplicationEntryStatus.shouldVerifyNextId) return t('application_tooltip_hint_verify')
         return undefined
-    }, [application, ApplicationEntryStatus])
+    }, [application, ApplicationEntryStatus, disabled])
     // #endregion
 
     return <Entry disabled={disabled} tooltipHint={tooltipHint} onClick={clickHandler} />
@@ -277,56 +267,23 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 })
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
-    const ui = activatedSocialNetworkUI
-    const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
-    const lastState = useSetupGuideStatusState()
-    const { currentPersona } = PersonaContext.useContainer()
-    const lastRecognized = useLastRecognizedIdentity()
-    const username = useMemo(() => {
-        return lastState.username || lastRecognized.identifier?.userId
-    }, [lastState, lastRecognized])
-    const personas = useMyPersonas()
-
-    const checkSNSConnectToCurrentPersona = useCallback((persona: PersonaInformation) => {
-        if (!username) return undefined
-        return persona.linkedProfiles.some((x) => x.identifier.userId === username)
-    }, [])
-
     const personaConnectStatus = usePersonaConnectStatus()
+    const nextIDConnectStatus = useNextIDConnectStatus()
 
-    const { value: ApplicationCurrentStatus } = useAsync(async () => {
-        const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
-        const currentPersona = (await Services.Identity.queryOwnedPersonaInformation(true)).find(
-            (x) => x.identifier === currentPersonaIdentifier,
-        )
-        const currentSNSConnectedPersona = personas.find(checkSNSConnectToCurrentPersona)
-        return {
-            isSNSConnectToCurrentPersona: currentPersona ? checkSNSConnectToCurrentPersona(currentPersona) : false,
-            isNextIDVerify: username
-                ? await NextIDProof.queryIsBound(currentPersona?.identifier.publicKeyAsHex ?? '', platform, username)
-                : false,
-            currentPersonaPublicKey: currentPersona?.identifier.rawPublicKey,
-            currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.identifier.rawPublicKey,
-        }
-    }, [platform, username, ui, personas, currentPersona])
-
-    const {
-        isNextIDVerify,
-        isSNSConnectToCurrentPersona,
-        currentPersonaPublicKey,
-        currentSNSConnectedPersonaPublicKey,
-    } = ApplicationCurrentStatus ?? {}
+    const { value: ApplicationCurrentStatus } = usePersonaAgainstSNSConnectStatus()
+    const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
+        ApplicationCurrentStatus ?? {}
 
     return (
         <ApplicationEntryStatusContext.Provider
             value={{
                 personaConnectAction: personaConnectStatus.action ?? undefined,
                 isPersonaConnected: personaConnectStatus.connected,
-                isNextIDVerify,
+                isNextIDVerify: nextIDConnectStatus.isVerified,
                 isSNSConnectToCurrentPersona,
                 shouldDisplayTooltipHint:
                     ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected,
-                shouldVerifyNextId: Boolean(!isNextIDVerify && ApplicationCurrentStatus),
+                shouldVerifyNextId: Boolean(!nextIDConnectStatus.isVerified && ApplicationCurrentStatus),
                 currentPersonaPublicKey,
                 currentSNSConnectedPersonaPublicKey,
             }}>

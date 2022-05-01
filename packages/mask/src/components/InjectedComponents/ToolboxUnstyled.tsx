@@ -22,7 +22,7 @@ import {
     useWeb3State,
     useReverseAddress,
 } from '@masknet/plugin-infra/web3'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect } from 'react'
 import { WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -33,7 +33,6 @@ import GuideStep from '../GuideStep'
 import { MaskFilledIcon } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
-import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { NextIDVerificationStatus, useNextIDConnectStatus } from '../DataSource/useNextID'
 
 const useStyles = makeStyles()((theme) => ({
@@ -147,18 +146,8 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
 
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
-    const personaConnectStatus = usePersonaConnectStatus()
-
-    const title = useMemo(() => {
-        return !personaConnectStatus.hasPersona
-            ? t('create_persona')
-            : !personaConnectStatus.connected
-            ? t('connect_persona')
-            : walletTitle
-    }, [personaConnectStatus, walletTitle, t])
 
     useEffect(() => {
-        if (personaConnectStatus.action) return
         const { status, isVerified, action } = nextIDConnectStatus
         if (isVerified || status === NextIDVerificationStatus.WaitingLocalConnect) return
         if (action) {
@@ -166,15 +155,11 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
         }
     }, [nextIDConnectStatus.status])
 
-    const onClick = () => {
-        personaConnectStatus.action ? personaConnectStatus.action() : openWallet()
-    }
-
     return (
         <>
             <GuideStep step={1} total={3} tip={t('user_guide_tip_1')}>
                 <Container>
-                    <ListItemButton onClick={onClick}>
+                    <ListItemButton onClick={openWallet}>
                         <ListItemIcon>
                             {isWalletValid ? (
                                 <WalletIcon
@@ -197,7 +182,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
                                             justifyContent: 'space-between',
                                             alignItems: 'center',
                                         }}>
-                                        <Typography className={classes.title}>{title}</Typography>
+                                        <Typography className={classes.title}>{walletTitle}</Typography>
                                         {shouldDisplayChainIndicator ? (
                                             <FiberManualRecordIcon
                                                 className={classes.chainIcon}
