@@ -1,3 +1,4 @@
+import type { MobileProfile } from '@masknet/public-api'
 import type { ProfileIdentifier, ProfileInformation } from '@masknet/shared-base'
 import {
     createPersonaDBReadonlyAccess,
@@ -8,27 +9,31 @@ import {
 import { hasLocalKeyOf } from '../../../database/persona/helper'
 import { queryProfilesDB as queryProfilesFromIndexedDB } from '../../../database/persona/web'
 import { toProfileInformation } from '../../__utils__/convert'
+import { profileRecordToMobileProfile } from './mobile'
 
-export interface MobileProfiles {
-    identifier: ProfileIdentifier
-    nickname?: string
-    linkedPersona: boolean
-    createdAt: Date
-    updatedAt: Date
+export interface MobileQueryProfilesOptions {
+    network?: string
+    identifiers?: ProfileIdentifier[]
 }
-export async function mobile_queryProfiles(network?: string): Promise<MobileProfiles[]> {
+export async function mobile_queryProfiles(options: MobileQueryProfilesOptions): Promise<MobileProfile[]> {
     if (process.env.architecture !== 'app') throw new TypeError('This function is only available in app')
-    const result = await queryProfilesDB({ network })
 
-    return result.map(
-        (x): MobileProfiles => ({
-            identifier: x.identifier,
-            createdAt: x.createdAt,
-            updatedAt: x.updatedAt,
-            linkedPersona: !!x.linkedPersona,
-            nickname: x.nickname,
-        }),
-    )
+    const { network, identifiers } = options
+    const result = await queryProfilesDB({ network, identifiers })
+    return result.map(profileRecordToMobileProfile)
+}
+
+export async function mobile_queryOwnedProfiles(network?: string): Promise<MobileProfile[]> {
+    let result: ProfileRecord[]
+    await createPersonaDBReadonlyAccess(async (t) => {
+        const personas = await queryPersonasDB({ hasPrivateKey: true }, t)
+        const profiles = personas
+            .filter((x) => !x.uninitialized)
+            .flatMap((x) => [...x.linkedProfiles.keys()])
+            .filter((x) => (network ? x.network === network : true))
+        result = await queryProfilesDB({ identifiers: profiles })
+    })
+    return result!.map(profileRecordToMobileProfile)
 }
 
 export async function mobile_queryProfileRecordFromIndexedDB() {
@@ -40,6 +45,7 @@ export async function queryProfilesInformation(identifiers: ProfileIdentifier[])
     const profiles = await queryProfilesDB({ identifiers })
     return toProfileInformation(profiles).mustNotAwaitThisWithInATransaction
 }
+
 /** @deprecated */
 export async function hasLocalKey(identifier: ProfileIdentifier) {
     return hasLocalKeyOf(identifier)
