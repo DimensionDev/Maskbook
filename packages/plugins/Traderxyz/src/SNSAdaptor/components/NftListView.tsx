@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import TreeView from '@mui/lab/TreeView'
 import { AddCircle, RemoveCircle } from '@mui/icons-material'
-import type { PreviewNftList, TreeNftData } from '../../types'
+import type { TreeNftData, PreviewNFTList } from '../../types'
 
 import TreeParentContent from './TreeParentContent'
 import TreeChildContent from './TreeChildContent'
@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 const NftListView = (props: {
-    nftList: PreviewNftList[] | null | undefined
+    nftList: PreviewNFTList[] | null | undefined
     handleSelection(collection_index: number, item_index: number, type: string): void
 }): JSX.Element => {
     const { classes } = useStyles()

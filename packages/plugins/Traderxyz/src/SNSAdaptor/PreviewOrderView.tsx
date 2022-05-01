@@ -20,18 +20,16 @@ export const PreviewOrderView = (props: {
         />
     )
 
-    const previewImages = nftList?.map((item: NFTData) => {
+    const previewImages = nftList?.map((item: NFTData, index: number) => {
         return (
-            <>
-                <Grid padding={1}>
-                    <Avatar
-                        className={classes.previewBoxInnerGridContainerItem}
-                        children={child}
-                        alt={item.nft_name}
-                        src={item.image_preview_url}
-                    />
-                </Grid>
-            </>
+            <Grid padding={1} key={'avtar-' + index}>
+                <Avatar
+                    className={classes.previewBoxInnerGridContainerItem}
+                    children={child}
+                    alt={item.nft_name}
+                    src={item.image_preview_url}
+                />
+            </Grid>
         )
     })
 

@@ -2,7 +2,7 @@ import { Box, Chip, Grid, Typography, useTheme } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useI18N } from '../locales/i18n_generated'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import { useAccount, useChainId, useGasLimit, useGasPrice } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { useTraderApi } from '../apis/nftSwap'
 import type { TradeMetaData, NFTData } from '../types'
 import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
@@ -121,19 +121,8 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
     const t = useI18N()
     const theme = useTheme()
     const { showSnackbar } = useCustomSnackbar()
-    const gasLimit = useGasLimit()
-    const gasPrice = useGasPrice()
 
     const signOrder = useCallback(async () => {
-        // WE CAN SET GAS LIMIT IF WE WANT
-
-        console.log(gasLimit, gasPrice)
-
-        const TransactionOverrides = {
-            gasLimit: 10000000,
-            gasPrice: 10000000000,
-        }
-
         const normalizeSignedOrder = nftSwapSdk.normalizeSignedOrder(info.signedOrder)
         const walletAddressUserA = account
         const assetsToSwapUserA = [info.assetsInfo.receiving_token, ...info.assetsInfo.nfts]
@@ -176,7 +165,7 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
                 )
             }
             // fill order
-            const fillTx = await nftSwapSdk.fillSignedOrder(normalizeSignedOrder, undefined, TransactionOverrides).then(
+            const fillTx = await nftSwapSdk.fillSignedOrder(normalizeSignedOrder).then(
                 async (fillTx) => {
                     const fillTxReceipt = await nftSwapSdk.awaitTransactionHash(fillTx?.hash).then(
                         (fillTxReceipt) => {

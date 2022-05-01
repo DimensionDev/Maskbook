@@ -70,7 +70,7 @@ export interface Token {
     asset_contract: AssetContract
 }
 
-export type PreviewNftList = {
+export type PreviewNFTList = {
     collection_name?: string
     contract_address?: string
     tokens: Token[]

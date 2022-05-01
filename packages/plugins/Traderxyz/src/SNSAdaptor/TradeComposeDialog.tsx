@@ -18,7 +18,7 @@ import urlcat from 'urlcat'
 import { OPENSEA_API_KEY, isProxyENV } from '@masknet/web3-providers'
 import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
 
-import type { OpenSeaToken, OpenSeaCollection, Token, AssetContract, PreviewNftList, NFTData } from '../types'
+import type { OpenSeaToken, OpenSeaCollection, Token, AssetContract, PreviewNFTList, NFTData } from '../types'
 
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 
@@ -174,7 +174,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     const [step1, setState1] = useState(true)
     const [step2, setState2] = useState(false)
     const [step3, setState3] = useState(false)
-    const [previewNftList, setPreviewNftList] = useState<PreviewNftList[] | null>()
+    const [previewNftList, setPreviewNftList] = useState<PreviewNFTList[] | null>()
     const [count, setCount] = useState(0)
     const [openBd, setBdOpen] = useState(false)
 
@@ -188,7 +188,6 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
-    console.log('selectedChainId=', selectedChainId)
     // #endregion
 
     useAsync(async () => {
@@ -255,7 +254,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                                 }
                             })
 
-                        const rBoj: PreviewNftList = {
+                        const rBoj: PreviewNFTList = {
                             ...r[0],
                             tokens: t,
                         }
