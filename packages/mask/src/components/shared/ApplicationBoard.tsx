@@ -221,6 +221,8 @@ function RenderEntryComponent({ application }: RenderEntryComponentProps) {
 
     const clickHandler = application.isWalletConnectedRequired
         ? openWalletStatusDialog
+        : !application.entry.nextIdRequired
+        ? undefined
         : ApplicationEntryStatus.isPersonaConnected === false
         ? connectPersona
         : ApplicationEntryStatus.shouldVerifyNextId
@@ -231,8 +233,8 @@ function RenderEntryComponent({ application }: RenderEntryComponentProps) {
     // #region tooltip hint
     const tooltipHint = useMemo(() => {
         if (application.isWalletConnectedRequired) return t('application_tooltip_hint_connect_wallet')
-        if (ApplicationEntryStatus.isPersonaConnected === false) return t('application_tooltip_hint_connect_persona')
         if (!application.entry.nextIdRequired) return undefined
+        if (ApplicationEntryStatus.isPersonaConnected === false) return t('application_tooltip_hint_connect_persona')
         if (ApplicationEntryStatus.shouldDisplayTooltipHint)
             return t('application_tooltip_hint_sns_persona_unmatched', {
                 currentPersonaPublicKey: formatPersonaPublicKey(
