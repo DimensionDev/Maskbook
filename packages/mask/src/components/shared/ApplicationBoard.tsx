@@ -1,4 +1,4 @@
-import { useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
+import { useContext, createContext, PropsWithChildren, useMemo, useCallback } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
@@ -103,15 +103,6 @@ function ApplicationBoardContent(props: Props) {
     const chainId = useChainId()
     const account = useAccount()
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
-
-    const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
-    )
-
-    useEffect(() => {
-        if (account && currentWeb3Network === NetworkPluginID.PLUGIN_EVM) closeApplicationBoard()
-    }, [account])
-
     const applicationList = useMemo(
         () =>
             snsAdaptorPlugins

@@ -75,6 +75,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
                 pluginIDSettings.value = undeterminedPluginID
             }
             closeDialog()
+            WalletMessages.events.ApplicationDialogUpdated.sendToAll({ open: false })
             if (isDashboard) WalletMessages.events.walletStatusDialogUpdated.sendToLocal({ open: false })
         },
         [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog, isDashboard],
