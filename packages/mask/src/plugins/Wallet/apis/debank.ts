@@ -38,7 +38,7 @@ const fieldKeys = ['fast', 'normal', 'slow'] as const
  * Once debank fixes it, we will remove this modifier.
  */
 function gasModifier(gasDict: GasPriceDictResponse, chain: string) {
-    if ([auroraChainOnDebank, harmonyChainOnDebank, arbitrumChainOnDebank].includes(chain)) {
+    if ([auroraChainOnDebank, arbitrumChainOnDebank].includes(chain)) {
         fieldKeys.forEach((fieldKey) => {
             const field = gasDict.data[fieldKey]
             field.price = Math.max(field.price, formatGweiToWei(1).toNumber())
