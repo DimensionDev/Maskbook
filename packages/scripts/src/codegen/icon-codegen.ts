@@ -1,9 +1,9 @@
-import * as path from 'path'
 import * as fs from 'fs'
-import { src, watch } from 'gulp'
-import { prettier, ROOT_PATH, watchTask } from '../utils'
 import glob from 'glob-promise'
+import { watch } from 'gulp'
 import { camelCase } from 'lodash-unified'
+import * as path from 'path'
+import { prettier, ROOT_PATH, watchTask } from '../utils'
 
 const pattern = 'packages/icons/**/*.@(svg|jpe?g|png)'
 const iconRoot = path.resolve(__dirname, '../../../icons')
@@ -27,39 +27,58 @@ function svg2jsx(code: string) {
     )
 }
 
+const responseExtRe = /\.(light|dim|dark)$/
+const responseNameRe = /(.*)\.(light|dim|dark)$/
 export async function generateIcons() {
     const nameMap: Record<string, string> = {}
     const iconsWithDynamicColor: string[] = []
     const lines: string[] = []
-    const names: string[] = []
+    const indexNames = new Set<string>()
+    const iconVarNames = new Map<string, string>()
+    const typeNames = new Set<string>()
 
     const filePaths = await glob.promise(pattern, { cwd: ROOT_PATH, nodir: true })
     filePaths.forEach((filePath) => {
         const parsed = path.parse(filePath)
         const fileName = parsed.base
-        const name = camelCase(parsed.name)
+        let varName = ''
+        const name = parsed.name.match(responseNameRe)
+            ? parsed.name.replace(responseNameRe, (matchedName, m1, m2) => {
+                  varName = camelCase(matchedName)
+                  if (m2 === 'light') return camelCase(m1)
+                  return `${camelCase(m1)}.${m2}`
+              })
+            : camelCase(parsed.name)
         if (name.toLowerCase() === 'redpacket') {
             return
         }
-        names.push(name)
+        indexNames.add(name)
+        iconVarNames.set(name, `${varName || camelCase(name)}Icon`)
+        if (name.match(responseExtRe)) {
+            typeNames.add(name.replace(responseExtRe, ''))
+        } else {
+            typeNames.add(name)
+        }
         nameMap[name] = fileName
         const isSvg = parsed.ext.toLowerCase() === '.svg'
         const code = isSvg ? fs.readFileSync(filePath, 'utf8') : ''
         if (isSvg && hasCurrentColor(code)) {
             iconsWithDynamicColor.push(name)
-            lines.push(`export const ${name}Icon = ${svg2jsx(code)}`)
+            lines.push(`export const ${iconVarNames.get(name)} = ${svg2jsx(code)}`)
         } else {
             const importPath = path.relative(iconRoot, path.join(ROOT_PATH, filePath))
             // console.log('from', iconRoot)
             // console.log('to', path.join(ROOT_PATH, filePath))
             // console.log('importPath', importPath)
-            lines.push(`export const ${name}Icon = new URL("./${importPath}", import.meta.url).href`)
+            lines.push(`export const ${iconVarNames.get(name)} = new URL("./${importPath}", import.meta.url).href`)
         }
     })
 
-    const declareType = `export type IconType = ${names.map((n) => JSON.stringify(n)).join(' | ')}`
+    const declareType = `export type IconType = ${Array.from(typeNames, (v) => JSON.stringify(v)).join(' | ')}`
     const defaultExport = `const icons = {
-    ${names.map((name) => `${name}:${name}Icon`).join(',')}
+    ${Array.from(indexNames)
+        .map((name) => `${JSON.stringify(name)}:${iconVarNames.get(name)}`)
+        .join(',')}
   }
   export default icons`
 
