@@ -1,4 +1,4 @@
-import { useContext, createContext, PropsWithChildren, useMemo, useCallback } from 'react'
+import { useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
@@ -100,10 +100,18 @@ function ApplicationBoardContent(props: Props) {
     const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
-    console.log(currentWeb3Network)
     const chainId = useChainId()
     const account = useAccount()
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
+
+    const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
+    )
+
+    useEffect(() => {
+        if (account && currentWeb3Network === NetworkPluginID.PLUGIN_EVM) closeApplicationBoard()
+    }, [account])
+
     const applicationList = useMemo(
         () =>
             snsAdaptorPlugins
@@ -169,7 +177,7 @@ interface RenderEntryComponentProps {
 function RenderEntryComponent({ application }: RenderEntryComponentProps) {
     const Entry = application.entry.RenderEntryComponent!
     const { t } = useI18N()
-    const { openDialog: _openWalletStatusDialog } = useRemoteControlledDialog(
+    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
     const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
@@ -193,11 +201,6 @@ function RenderEntryComponent({ application }: RenderEntryComponentProps) {
     // #endregion
 
     // #region entry click effect
-    const openWalletStatusDialog = useCallback(() => {
-        closeApplicationBoard()
-        _openWalletStatusDialog()
-    }, [])
-
     const connectPersona = useCallback(() => {
         closeApplicationBoard()
         ApplicationEntryStatus.personaConnectAction?.()
