@@ -9,7 +9,7 @@
     },
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@ethersproject/providers": "^5.0.9",
+        "@ethersproject/providers": "5.4.3",
         "@masknet/icons": "workspace:*",
         "@masknet/plugin-infra": "workspace:*",
         "@masknet/plugin-wallet": "workspace:*",
@@ -23,10 +23,9 @@
         "@masknet/web3-shared-evm": "workspace:*",
         "@traderxyz/nft-swap-sdk": "^0.22.1",
         "bignumber.js": "^9.0.2",
-        "clsx": "^1.1.1",
         "react-use": "^17.3.2",
         "urlcat": "^2.0.4",
-        "use-subscription": "^1.6.0",
+        "use-subscription": "^1.7.0",
         "web3": "1.7.3"
     }
 }

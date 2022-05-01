@@ -3,8 +3,8 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useI18N } from '../locales/i18n_generated'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { useAccount, useChainId, useGasLimit, useGasPrice } from '@masknet/web3-shared-evm'
-import { useTraderApi } from '../apis/nftswap'
-import type { TradeMetaData, nftData } from '../types'
+import { useTraderApi } from '../apis/nftSwap'
+import type { TradeMetaData, NFTData } from '../types'
 import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
 import { ActionButtonPromise } from '../../../../mask/src/extension/options-page/DashboardComponents/ActionButton'
 import { useCallback, useMemo } from 'react'
@@ -241,7 +241,7 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
     }, [])
 
     const nftList = info.assetsInfo.preview_info.nftMediaUrls
-    const previewImages = nftList.map((item: nftData, index: number) => {
+    const previewImages = nftList.map((item: NFTData, index: number) => {
         return (
             <Grid key={index} className={classes.previewBoxInnerGridContainerItem} padding={1}>
                 <img
@@ -258,20 +258,22 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
 
     const labelString = useMemo(() => {
         let labelString = ''
+        const n = nftList
 
-        if (nftList.length > 0) {
-            labelString = `Buy ${nftList[0]?.nft_name} (#${nftList[0]?.nft_id})`
+        if (n && n.length > 0) {
+            labelString = `${t.preview_order_label_title1()} ${n[0]?.nft_name} (#${n[0]?.nft_id})`
 
-            if (nftList.length > 1) {
-                labelString += ` and ${nftList[1]?.nft_name} (#${nftList[1]?.nft_id})`
+            if (n.length > 1) {
+                labelString += ` ${t.preview_order_label_title2()} ${n[1]?.nft_name} (#${n[1]?.nft_id})`
             }
 
-            if (nftList.length > 2) {
-                labelString += ' and Others'
+            if (n.length > 2) {
+                labelString += ` ${t.preview_order_label_title3()}`
             }
 
-            labelString += ' for ' + chipTitle
+            labelString += ` ${t.preview_order_label_title4()} ` + chipTitle
         }
+
         return labelString
     }, [nftList])
 

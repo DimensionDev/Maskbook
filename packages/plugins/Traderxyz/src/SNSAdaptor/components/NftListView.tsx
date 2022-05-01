@@ -10,6 +10,7 @@ import TreeChildItemContent from './TreeChildItemContent'
 import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem'
 import { alpha, styled } from '@mui/material/styles'
 import { useI18N } from '../../locales/i18n_generated'
+import { useMemo } from 'react'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -69,7 +70,7 @@ const NftListView = (props: {
             props: TreeItemProps & {
                 ContentProps?: {
                     nftData?: TreeNftData | undefined
-                    handleSelection?(collection_index: number, item_index: number, type?: string): void
+                    onSelected?(collectionIndex: number, itemIndex: number, type?: string): void
                 }
             },
         ) => <TreeItem {...props} className={props.className} ContentComponent={TreeChildItemContent} />,
@@ -94,7 +95,7 @@ const NftListView = (props: {
                 key={'p-' + index}
                 classes={{ label: classes.label }}
                 label={item.collection_name}
-                ContentProps={{ collectionImage: collectionImage }}>
+                ContentProps={{ collectionImage }}>
                 {item?.tokens?.map((item, i) => (
                     <CustomTreeChildItem
                         nodeId={'p-' + index + 'c-' + i}
@@ -109,7 +110,7 @@ const NftListView = (props: {
                                 collection_index: index,
                                 item_index: i,
                             },
-                            handleSelection: props.handleSelection,
+                            onSelected: props.handleSelection,
                         }}
                     />
                 ))}
@@ -117,13 +118,16 @@ const NftListView = (props: {
         )
     })
 
-    const previewImages1 = props?.nftList
-        ?.map((x) => x?.tokens)
-        .flat()
-        .map((y) => {
-            return y?.image_preview_url
-        })
-        .slice(0, 3)
+    const nftList = props?.nftList
+    const previewImages1 = useMemo(() => {
+        return nftList
+            ?.map((x) => x?.tokens)
+            .flat()
+            .slice(0, 3)
+            .map((y) => {
+                return y?.image_preview_url
+            })
+    }, [nftList])
 
     return (
         <TreeView

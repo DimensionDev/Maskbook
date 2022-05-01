@@ -1,7 +1,16 @@
 import { TreeItemContentProps, useTreeItem } from '@mui/lab/TreeItem'
 import { Typography, Avatar } from '@mui/material'
 import * as React from 'react'
-import clsx from 'clsx'
+import { makeStyles } from '@masknet/theme'
+
+const useStyles = makeStyles()((theme) => {
+    return {
+        itemAvatar: {
+            position: 'relative',
+            right: '0px',
+        },
+    }
+})
 
 const TreeChildContent = React.forwardRef(function CustomContent(
     props: TreeItemContentProps & {
@@ -9,6 +18,10 @@ const TreeChildContent = React.forwardRef(function CustomContent(
     },
     ref,
 ) {
+    const customClasses = useStyles().classes
+
+    const { cx } = useStyles()
+
     const { classes, className, label, nodeId, icon: iconProp, expansionIcon, displayIcon, collectionImage } = props
 
     const { disabled, expanded, selected, focused, handleExpansion, handleSelection, preventSelection } =
@@ -38,7 +51,7 @@ const TreeChildContent = React.forwardRef(function CustomContent(
         <div
             key={nodeId}
             style={{ paddingTop: '10px' }}
-            className={clsx(className, classes.root, {
+            className={cx(className, classes.root, {
                 [classes.expanded]: expanded,
                 [classes.selected]: selected,
                 [classes.focused]: focused,
@@ -48,15 +61,7 @@ const TreeChildContent = React.forwardRef(function CustomContent(
             onMouseDown={handleMouseDown}
             ref={ref as React.Ref<HTMLDivElement>}>
             <div className={classes.iconContainer}>
-                <Avatar
-                    src={collectionImage}
-                    children={child}
-                    alt="no-image"
-                    style={{
-                        position: 'relative',
-                        right: '0px',
-                    }}
-                />
+                <Avatar src={collectionImage} children={child} alt="no-image" className={customClasses.itemAvatar} />
             </div>
             <Typography onClick={handleSelectionClick} component="div" className={classes.label}>
                 {label}

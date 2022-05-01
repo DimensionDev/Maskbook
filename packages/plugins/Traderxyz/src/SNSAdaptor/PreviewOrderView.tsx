@@ -1,10 +1,11 @@
 import { Box, Chip, Grid, IconButton, Typography, Avatar } from '@mui/material'
 import { ArrowBack } from '@mui/icons-material'
-import type { nftData } from '../types'
+import type { NFTData } from '../types'
 import { useI18N } from '../locales/i18n_generated'
+import { useMemo } from 'react'
 
 export const PreviewOrderView = (props: {
-    nftList: nftData[] | undefined
+    nftList: NFTData[] | undefined
     setDisplaySection: Function
     classes: Record<string, string>
     amountLabel: string
@@ -19,7 +20,7 @@ export const PreviewOrderView = (props: {
         />
     )
 
-    const previewImages = nftList?.map((item: nftData) => {
+    const previewImages = nftList?.map((item: NFTData) => {
         return (
             <>
                 <Grid padding={1}>
@@ -34,21 +35,22 @@ export const PreviewOrderView = (props: {
         )
     })
 
-    let labelString = ''
-    const n = nftList
-    if (n) {
-        if (n?.length > 0) {
+    const labelString = useMemo(() => {
+        let labelString = ''
+
+        const n = nftList
+        if (n && n.length > 0) {
             labelString = `${t.preview_order_label_title1()} ${n[0]?.nft_name} (#${n[0]?.nft_id})`
 
-            if (n?.length === 2) {
+            if (n.length > 1) {
                 labelString += ` ${t.preview_order_label_title2()} ${n[1]?.nft_name} (#${n[1]?.nft_id})`
             }
-
-            if (n?.length > 2) {
+            if (n.length > 2) {
                 labelString += ` ${t.preview_order_label_title3()}`
             }
         }
-    }
+        return labelString
+    }, [nftList])
 
     return (
         <div>

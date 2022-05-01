@@ -1,14 +1,26 @@
 import { TreeItemContentProps, useTreeItem } from '@mui/lab/TreeItem'
 import { Avatar, Fade, Typography, AvatarGroup } from '@mui/material'
 import * as React from 'react'
-import clsx from 'clsx'
+import { makeStyles } from '@masknet/theme'
 
+const useStyles = makeStyles()((theme) => {
+    return {
+        itemAvatar: {
+            width: 150,
+            border: '0px solid black',
+        },
+    }
+})
 const TreeParentContent = React.forwardRef(function CustomContent(
     props: TreeItemContentProps & {
         previewImages?: string[]
     },
     ref,
 ) {
+    const customClasses = useStyles().classes
+
+    const { cx } = useStyles()
+
     const { classes, className, label, nodeId, icon: iconProp, expansionIcon, displayIcon, previewImages } = props
 
     const { disabled, expanded, selected, focused, handleExpansion } = useTreeItem(nodeId)
@@ -33,7 +45,7 @@ const TreeParentContent = React.forwardRef(function CustomContent(
     return (
         <div
             key={nodeId}
-            className={clsx(className, classes.root, {
+            className={cx(className, classes.root, {
                 [classes.expanded]: expanded,
                 [classes.selected]: selected,
                 [classes.focused]: focused,
@@ -46,7 +58,7 @@ const TreeParentContent = React.forwardRef(function CustomContent(
                 {label}
             </Typography>
             <Fade in={!expanded}>
-                <AvatarGroup total={3} key={`d-${nodeId}`} style={{ width: '150px', border: '0px solid black' }}>
+                <AvatarGroup total={3} key={`d-${nodeId}`} className={customClasses.itemAvatar}>
                     {ShowNft}
                 </AvatarGroup>
             </Fade>

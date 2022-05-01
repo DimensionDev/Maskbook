@@ -9,16 +9,16 @@ import { type FungibleTokenDetailed, ChainId } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { useAsync } from 'react-use'
 import { amountToWei } from '../helpers'
-import { useTraderApi } from '../apis/nftswap'
-import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
+import { useTraderApi } from '../apis/nftSwap'
 import { SelectTokenView } from './SelectTokenView'
 import { PreviewOrderView } from './PreviewOrderView'
 import NftListView from './components/NftListView'
 import { useI18N } from '../locales/i18n_generated'
 import urlcat from 'urlcat'
 import { OPENSEA_API_KEY, isProxyENV } from '@masknet/web3-providers'
+import type { SwappableAsset } from '@traderxyz/nft-swap-sdk'
 
-import type { OpenSeaToken, OpenSeaCollection, Token, AssetContract, PreviewNftList, nftData } from '../types'
+import type { OpenSeaToken, OpenSeaCollection, Token, AssetContract, PreviewNftList, NFTData } from '../types'
 
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 
@@ -35,7 +35,7 @@ interface orderInfo {
         type: string
     }
     preview_info: {
-        nftMediaUrls: nftData[] | undefined
+        nftMediaUrls: NFTData[] | undefined
         receivingSymbol: {
             symbol: string | undefined
             amount: string
@@ -188,6 +188,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
+    console.log('selectedChainId=', selectedChainId)
     // #endregion
 
     useAsync(async () => {
@@ -210,7 +211,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
 
             return fetch(url, {
                 method: 'GET',
-                headers: headers,
+                headers,
                 ...(!isProxyENV() && { mode: 'cors' }),
             })
         }
@@ -313,10 +314,11 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                     }
                     if (result.contractApproved) {
                         const order = nftSwapSdk.buildOrder(
-                            orderInfo?.nfts as SwappableAsset[], // Maker asset(s) to swap
-                            [orderInfo?.receiving_token] as SwappableAsset[], // Taker asset(s) to swap
+                            orderInfo?.nfts as SwappableAsset[],
+                            [orderInfo?.receiving_token] as SwappableAsset[],
                             account,
                         )
+
                         setBdOpen(true)
                         const signedOrder = await nftSwapSdk.signOrder(order, account).then(
                             (result) => {
@@ -332,7 +334,9 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                             },
                             function (error) {
                                 setBdOpen(false)
-                                showSnackbar(t.submit_order_submit_error_message() + error, { variant: 'error' })
+                                showSnackbar(t.submit_order_submit_error_message() + ' on signOrder:' + error, {
+                                    variant: 'error',
+                                })
                             },
                         )
                     }
@@ -385,7 +389,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
         }
 
         const orderInfo = {
-            nfts: nfts,
+            nfts,
             receiving_token: receivingToken,
             preview_info: previewInfo,
         }

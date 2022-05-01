@@ -1,4 +1,4 @@
-export interface nftData {
+export interface NFTData {
     image_preview_url?: string
     image_thumbnail_url?: string
     nft_name?: string
@@ -24,7 +24,7 @@ export interface TradeMetaData {
             },
         ]
         preview_info: {
-            nftMediaUrls: nftData[]
+            nftMediaUrls: NFTData[]
             receivingSymbol: {
                 symbol: string
                 amount: number
