@@ -1,4 +1,5 @@
 // DO NOT import React in this file. This file is also used by worker.
+/// <reference types="@masknet/global-types/webpack" />
 import type { Plugin } from '../types'
 import { memoize } from 'lodash-unified'
 
