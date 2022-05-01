@@ -910,7 +910,7 @@ importers:
 
   packages/plugins/Traderxyz:
     specifiers:
-      '@ethersproject/providers': 5.4.3
+      '@ethersproject/providers': 5.6.4
       '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/plugin-wallet': workspace:*
@@ -929,7 +929,7 @@ importers:
       use-subscription: ^1.7.0
       web3: 1.7.3
     dependencies:
-      '@ethersproject/providers': 5.4.3
+      '@ethersproject/providers': 5.6.4
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/plugin-wallet': link:../Wallet
@@ -1175,7 +1175,7 @@ importers:
       tiny-secp256k1: 2.2.1
       typeson: 7.0.1
       typeson-registry: 3.0.0
-      use-subscription: 1.6.0_react@18.0.0
+      use-subscription: 1.6.0_react@packages+empty
       z-schema: 5.0.3
     devDependencies:
       '@types/use-subscription': 1.0.0
@@ -26333,6 +26333,14 @@ packages:
       react: ^18.0.0
     dependencies:
       react: 18.0.0
+    dev: false
+
+  /use-subscription/1.6.0_react@packages+empty:
+    resolution: {integrity: sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      react: link:packages/empty
     dev: false
 
   /use-subscription/1.7.0_react@18.0.0:

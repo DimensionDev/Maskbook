@@ -9,7 +9,7 @@
     },
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@ethersproject/providers": "5.4.3",
+        "@ethersproject/providers": "5.6.4",
         "@masknet/icons": "workspace:*",
         "@masknet/plugin-infra": "workspace:*",
         "@masknet/plugin-wallet": "workspace:*",
