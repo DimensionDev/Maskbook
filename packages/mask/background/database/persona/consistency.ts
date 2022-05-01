@@ -127,7 +127,6 @@ async function* checkProfileLink(
     }
 }
 
-// eslint-disable-next-line @dimensiondev/type/no-const-enum
 const enum Type {
     Invalid_Persona = 'invalid identifier in persona',
     Invalid_Persona_LinkedProfiles = 'invalid identifier in persona.linkedProfiles',
