@@ -1,5 +1,5 @@
 import SettingItem from './SettingItem'
-import { SettingsBackupIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import BackupSetting from './BackupSetting'
 import { UserContext } from '../hooks/UserContext'
 import { useContext, useState, useEffect } from 'react'
@@ -19,7 +19,7 @@ export default function BackupSettingItem() {
 
     return (
         <SettingItem
-            icon={<SettingsBackupIcon />}
+            icon={<Icon type="settings" />}
             title={t.settings_global_backup_title()}
             desc={user.backupAt ? desc : t.settings_global_backup_desc()}>
             <BackupSetting />

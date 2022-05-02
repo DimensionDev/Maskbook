@@ -16,7 +16,7 @@ import RestoreSetting from './components/RestoreSetting'
 
 import { PasswordVerifiedProvider } from './hooks/VerifyPasswordContext'
 import { UserProvider } from './hooks/UserContext'
-import { SettingsAppearanceIcon, SettingsLanguageIcon, SettingsRestoreIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 
 export default function Settings() {
     const t = useDashboardI18N()
@@ -27,13 +27,13 @@ export default function Settings() {
                 <PasswordVerifiedProvider>
                     <SettingCard title={t.settings_general()}>
                         <SettingItem
-                            icon={<SettingsLanguageIcon />}
+                            icon={<Icon type="settingsLanguage" />}
                             title={t.settings_language_title()}
                             desc={t.settings_language_desc()}>
                             <LanguageSetting />
                         </SettingItem>
                         <SettingItem
-                            icon={<SettingsAppearanceIcon />}
+                            icon={<Icon type="settingsAppearance" />}
                             title={t.settings_appearance_title()}
                             desc={t.settings_appearance_desc()}>
                             <AppearanceSetting />
@@ -49,7 +49,7 @@ export default function Settings() {
                     <SettingCard title={t.settings_backup_recovery()}>
                         <BackupSettingItem />
                         <SettingItem
-                            icon={<SettingsRestoreIcon />}
+                            icon={<Icon type="settingsRestore" />}
                             title={t.settings_restore_database_title()}
                             desc={t.settings_restore_database_desc()}>
                             <RestoreSetting />
