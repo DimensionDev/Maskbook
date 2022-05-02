@@ -12,6 +12,7 @@ import {
     EnhanceableSite,
     i18NextInstance,
     createSubscriptionFromValueRef,
+    PersonaInformation,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentityResolved, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -120,6 +121,12 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 MaskMessages.events.currentPersonaIdentifier.on,
                 signal,
             )
+            const allPersonaSub = createSubscriptionFromAsync(
+                () => Services.Identity.queryOwnedPersonaInformation(true),
+                undefined as unknown as PersonaInformation[],
+                MaskMessages.events.currentPersonaIdentifier.on,
+                signal,
+            )
             const empty = new ValueRef<IdentityResolved | undefined>(undefined)
             const lastRecognizedSub = createSubscriptionFromValueRef(
                 ui.collecting.identityProvider?.recognized || empty,
@@ -139,6 +146,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 walletSign: Services.Ethereum.personalSign,
                 silentSign: Services.Identity.generateSignResult,
                 currentPersona: personaSub,
+                allPersona: allPersonaSub,
                 lastRecognizedProfile: lastRecognizedSub,
                 currentVisitingProfile: currentVisitingSub,
             }
