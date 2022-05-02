@@ -4,15 +4,15 @@ import { base } from '../base'
 import { CheckSecurityDialog } from './CheckSecurityDialog'
 import { useState } from 'react'
 import { ApplicationEntry } from '@masknet/shared'
-import { SecurityCheckerIcon } from '@masknet/icons'
 import { Trans } from 'react-i18next'
+import { Icon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     ApplicationEntries: [
         (() => {
-            const icon = <SecurityCheckerIcon />
+            const icon = <Icon type="securityChecker" />
             const name = { i18nKey: '__plugin_name', fallback: 'Check Security' }
 
             return {
