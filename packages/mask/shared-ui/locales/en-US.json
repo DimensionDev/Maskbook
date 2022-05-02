@@ -1153,6 +1153,7 @@
     "plugin_referral_token": "Token",
     "plugin_referral_search_placeholder_token": "Token name or contract address",
     "plugin_referral_placeholder_loading": "Loading",
+    "plugin_referral_placeholder_no_farms": "There are no any farms yet.",
     "plugin_referral_select_a_token_to_buy_and_hold": "Select a Token to Buy & Hold via Referral",
     "plugin_referral_token_to_buy_and_hold": "Token to Buy & Hold via Referral",
     "plugin_referral_select_a_token_to_buy_and_hold_and_earn_rewards": "Select a token to Buy & Hold and earn rewards!",

@@ -353,3 +353,15 @@ export async function getRewardsForReferredToken(
 
     return res
 }
+export async function getReferredTokensDefn(chainId: ChainId): Promise<ChainAddress[]> {
+    const farmExistEvents = await queryIndexersWithNearestQuorum({
+        addresses: [REFERRAL_FARMS_V1_ADDR],
+        topic1: [eventIds.FarmExists],
+        chainId: [chainId],
+    })
+
+    const farms: { args: FarmExistsEvent }[] = parseEvents(farmExistEvents.items)
+    const referredTokensDefn = farms.map((farm) => farm.args.referredTokenDefn)
+
+    return [...new Set(referredTokensDefn)]
+}

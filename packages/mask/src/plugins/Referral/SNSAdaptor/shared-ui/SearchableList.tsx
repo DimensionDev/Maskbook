@@ -112,28 +112,30 @@ export function SearchableList<T>({
                 </Box>
             )}
             {placeholder}
-            <Box display="flex" justifyContent="space-between" className={classes.listHeading}>
-                <Typography>{t('plugin_referral_token')}</Typography>
-                <Typography>{t('plugin_referral_estimated_apr')}</Typography>
-            </Box>
             {!placeholder && (
-                <div className={classes.list}>
-                    <FixedSizeList
-                        width="100%"
-                        height={height ?? 300}
-                        overscanCount={25}
-                        itemSize={itemSize ?? 100}
-                        itemData={{
-                            dataSet: readyToRenderData,
-                            onSelect: onSelect,
-                        }}
-                        itemCount={readyToRenderData.length}
-                        {...rest}>
-                        {(props) => (
-                            <MaskSearchableItemInList<T> {...props}>{itemRender as any}</MaskSearchableItemInList>
-                        )}
-                    </FixedSizeList>
-                </div>
+                <>
+                    <Box display="flex" justifyContent="space-between" className={classes.listHeading}>
+                        <Typography>{t('plugin_referral_token')}</Typography>
+                        <Typography>{t('plugin_referral_estimated_apr')}</Typography>
+                    </Box>
+                    <div className={classes.list}>
+                        <FixedSizeList
+                            width="100%"
+                            height={height ?? 300}
+                            overscanCount={25}
+                            itemSize={itemSize ?? 100}
+                            itemData={{
+                                dataSet: readyToRenderData,
+                                onSelect: onSelect,
+                            }}
+                            itemCount={readyToRenderData.length}
+                            {...rest}>
+                            {(props) => (
+                                <MaskSearchableItemInList<T> {...props}>{itemRender as any}</MaskSearchableItemInList>
+                            )}
+                        </FixedSizeList>
+                    </div>
+                </>
             )}
         </div>
     )
