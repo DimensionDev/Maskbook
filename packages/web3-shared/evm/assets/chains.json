@@ -1693,14 +1693,14 @@
     },
     {
         "name": "Moonbeam Polkadot",
-        "chain": "moonbeam",
+        "chain": "Moonbeam",
         "network": "mainnet",
         "rpc": ["https://rpc.api.moonbeam.network"],
         "faucets": [],
         "features": ["EIP1559"],
         "nativeCurrency": { "name": "Glimmer", "symbol": "GLMR", "decimals": 18 },
         "infoURL": "https://moonscan.io/",
-        "shortName": "mobm",
+        "shortName": "Moobeam",
         "chainId": 1284,
         "networkId": 1284
     },

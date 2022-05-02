@@ -29,6 +29,7 @@ export async function getAssetsList(address: string) {
 }
 
 const auroraChainOnDebank = getDeBankConstants(ChainId.Aurora).CHAIN_ID
+const moonbeamChainOnDebank = getDeBankConstants(ChainId.Moonbeam).CHAIN_ID
 const fieldKeys = ['fast', 'normal', 'slow'] as const
 /**
  * Debank's data might be outdated, like gas price for aurora which requires 1 Gwei at least
@@ -36,7 +37,7 @@ const fieldKeys = ['fast', 'normal', 'slow'] as const
  * Once debank fixes it, we will remove this modifier.
  */
 function gasModifier(gasDict: GasPriceDictResponse, chain: string) {
-    if (chain === auroraChainOnDebank) {
+    if ([auroraChainOnDebank, moonbeamChainOnDebank].includes(chain)) {
         fieldKeys.forEach((fieldKey) => {
             const field = gasDict.data[fieldKey]
             field.price = Math.max(field.price, formatGweiToWei(1).toNumber())
