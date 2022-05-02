@@ -137,6 +137,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 },
                 personaSign: Services.Identity.signWithPersona,
                 walletSign: Services.Ethereum.personalSign,
+                silentSign: Services.Identity.generateSignResult,
                 currentPersona: personaSub,
                 lastRecognizedProfile: lastRecognizedSub,
                 currentVisitingProfile: currentVisitingSub,
