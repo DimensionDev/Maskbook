@@ -60,7 +60,7 @@ export function MyFarms(props: PageInterface) {
                     <CircularProgress size={50} />
                 ) : (
                     <>
-                        {!rewards ? (
+                        {!rewards || !Object.keys(rewards).length ? (
                             <Typography className={myFarmsClasses.noFarm}>
                                 {t('plugin_referral_you_have_not_joined_farm')}
                             </Typography>
