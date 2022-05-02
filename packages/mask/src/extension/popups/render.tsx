@@ -28,6 +28,7 @@ startPluginDashboard(
             walletSign: Services.Ethereum.personalSign,
             currentPersona: currentPersonaSub,
             silentSign: Services.Identity.generateSignResult,
+            openPopupWindow: Services.Helper.openPopupWindow,
         }
     }),
 )

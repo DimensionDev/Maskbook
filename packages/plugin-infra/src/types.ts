@@ -8,6 +8,7 @@ import type {
     PersonaIdentifier,
     ECKeyIdentifier,
     PersonaInformation,
+    PopupRoutes,
 } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
@@ -79,6 +80,7 @@ export namespace Plugin.Shared {
         silentSign(signer: ECKeyIdentifier, message: string): Promise<PersonaSignResult>
         currentPersona: Subscription<PersonaIdentifier | undefined>
         allPersona?: Subscription<PersonaInformation[]>
+        openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
     }
     export interface Definition {
         /**
