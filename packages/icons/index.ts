@@ -1,6 +1,5 @@
 export { createIcon } from './utils'
 export * from './utils/MaskIconPaletteContext'
-export * from './plugins'
 export * from './menus'
 export * from './settings'
 export * from './Icon'

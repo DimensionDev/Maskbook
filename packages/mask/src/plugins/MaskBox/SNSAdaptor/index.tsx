@@ -8,7 +8,7 @@ import { PreviewCard } from './components/PreviewCard'
 import { Context } from '../hooks/useContext'
 import { ApplicationEntry } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { MaskBoxIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { RootContext } from '../contexts'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
@@ -34,7 +34,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <MaskBoxIcon />
+            const icon = <Icon type="maskBox" />
             const name = <Trans i18nKey="plugin_mask_box_name" />
             const iconFilterColor = 'rgba(0, 87, 255, 0.3)'
             return {

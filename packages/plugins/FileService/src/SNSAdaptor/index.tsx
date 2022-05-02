@@ -8,7 +8,7 @@ import { FileInfoMetadataReader } from '../helpers'
 import type { FileInfo } from '../types'
 import FileServiceDialog from './MainDialog'
 import { Preview } from './Preview'
-import { FileServiceIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
 
@@ -27,7 +27,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
     CompositionDialogEntry: {
         label: (
             <>
-                <FileServiceIcon style={{ width: 16, height: 16 }} />
+                <Icon type="fileService" size={16} />
                 File Service
             </>
         ),
@@ -35,7 +35,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <FileServiceIcon />
+            const icon = <Icon type="fileService" />
             const name = { i18nKey: '__plugin_name', fallback: 'File Service' }
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {

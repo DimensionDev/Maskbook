@@ -7,7 +7,7 @@ import { PostInspector } from './PostInspector'
 import { Trans } from 'react-i18next'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
-import { SnapshotIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -72,7 +72,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             tutorialLink: 'https://realmasknetwork.notion.site/10c08ed9629942dd852d9afbfab61208',
             name: <Trans i18nKey="plugin_snapshot_info_snapshot" />,
             marketListSortingPriority: 8,
-            icon: <SnapshotIcon />,
+            icon: <Icon type="snapshot" />,
         },
     ],
     wrapperProps: {

@@ -10,7 +10,8 @@ import type { JSON_PayloadComposeMask } from '../types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-unified'
-import { MarketsIcon, MarketsClaimIcon } from '@masknet/icons'
+import { MarketsIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ClaimAllDialog } from './ClaimAllDialog'
@@ -54,14 +55,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
         label: (
             <>
-                <MarketsIcon style={{ width: 16, height: 16 }} />
+                <Icon type="markets" size={16} />
                 ITO
             </>
         ),
     },
     ApplicationEntries: [
         (() => {
-            const icon = <MarketsIcon />
+            const icon = <Icon type="markets" />
             const name = <Trans i18nKey="plugin_ito_name" />
             const iconFilterColor = 'rgba(56, 228, 239, 0.3)'
             const clickHandler = () =>
@@ -102,7 +103,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
         (() => {
-            const icon = <MarketsClaimIcon />
+            const icon = <Icon type="marketsClaim" />
             const name = <Trans i18nKey="plugin_ito_claim" />
             const iconFilterColor = 'rgba(240, 51, 51, 0.3)'
             return {

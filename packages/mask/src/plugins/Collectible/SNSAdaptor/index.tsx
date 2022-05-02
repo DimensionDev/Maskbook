@@ -1,6 +1,6 @@
 import { uniq } from 'lodash-unified'
 import { Trans } from 'react-i18next'
-import { CollectiblesIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
@@ -76,7 +76,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             category: 'dapp',
             description: <Trans i18nKey="plugin_collectibles_description" />,
             name: <Trans i18nKey="plugin_collectibles_name" />,
-            icon: <CollectiblesIcon />,
+            icon: <Icon type="collectibles" />,
             marketListSortingPriority: 7,
             tutorialLink: 'https://realmasknetwork.notion.site/c388746f11774ecfa17914c900d3ed97',
         },

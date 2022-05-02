@@ -6,7 +6,7 @@ import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plug
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
-import { FindTrumanIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { PostInspector } from './PostInspector'
 import { ApplicationEntry } from '@masknet/shared'
 import { FindTrumanDialog } from './FindTrumanDialog'
@@ -90,7 +90,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <FindTrumanIcon />
+            const icon = <Icon type="findTruman" />
             const name = <Trans i18nKey="plugin_find_truman_name" />
             const iconFilterColor = 'rgba(251, 49, 32, 0.3)'
             return {

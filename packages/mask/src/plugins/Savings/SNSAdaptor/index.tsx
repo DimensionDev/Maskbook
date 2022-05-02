@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
-import { SavingsIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { Trans } from 'react-i18next'
 import { useState } from 'react'
 import { base } from '../base'
@@ -11,7 +11,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         (() => {
-            const icon = <SavingsIcon />
+            const icon = <Icon type="savings" />
             const name = <Trans i18nKey="plugin_savings" />
             const iconFilterColor = 'rgba(255, 83, 146, 0.3)'
             return {
