@@ -120,22 +120,22 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         })
 
         // auto-finish the setup process
-        if (!persona_?.hasPrivateKey) throw new Error('invalid persona')
+        if (!persona_) throw new Error('invalid persona')
         await Services.Identity.setupPersona(persona_?.identifier)
     }
 
     const onVerify = async () => {
         if (!username) return
-        if (!persona_?.publicHexKey) return
+        if (!persona_) return
         const collectVerificationPost = ui.configuration.nextIDConfig?.collectVerificationPost
 
         const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
         if (!platform) return
 
-        const isBound = await NextIDProof.queryIsBound(persona_.publicHexKey, platform, username)
+        const isBound = await NextIDProof.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
         if (!isBound) {
             const payload = await NextIDProof.createPersonaPayload(
-                persona_.publicHexKey,
+                persona_.identifier.publicKeyAsHex,
                 NextIDAction.Create,
                 username,
                 platform,
@@ -155,11 +155,11 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             const waitingPost = new Promise<void>((resolve, reject) => {
                 verifyPostCollectTimer.current = setInterval(async () => {
                     const post = collectVerificationPost?.(postContent)
-                    if (post && persona_.publicHexKey) {
+                    if (post && persona_.identifier.publicKeyAsHex) {
                         clearInterval(verifyPostCollectTimer.current!)
                         await NextIDProof.bindProof(
                             payload.uuid,
-                            persona_.publicHexKey,
+                            persona_.identifier.publicKeyAsHex,
                             NextIDAction.Create,
                             platform,
                             username,
@@ -180,7 +180,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             })
 
             await waitingPost
-            const isBound = await NextIDProof.queryIsBound(persona_.publicHexKey, platform, username)
+            const isBound = await NextIDProof.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
             if (!isBound) throw new Error('Failed to verify.')
             MaskMessages.events.ownProofChanged.sendToAll(undefined)
         }
@@ -192,8 +192,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }
 
     const onConnected = async () => {
-        if (enableNextID && persona_?.publicHexKey && platform && username) {
-            const isBound = await NextIDProof.queryIsBound(persona_.publicHexKey, platform, username)
+        if (enableNextID && persona_?.identifier.publicKeyAsHex && platform && username) {
+            const isBound = await NextIDProof.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
             if (!isBound) {
                 currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.VerifyOnNextID,

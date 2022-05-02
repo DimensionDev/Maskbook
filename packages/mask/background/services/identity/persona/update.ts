@@ -1,4 +1,5 @@
 import { decodeArrayBuffer } from '@dimensiondev/kit'
+import type { MobilePersona } from '@masknet/public-api'
 import {
     ECKeyIdentifierFromJsonWebKey,
     EC_JsonWebKey,
@@ -15,7 +16,7 @@ import {
     updatePersonaDB,
     queryPersonasDB,
 } from '../../../database/persona/db'
-import { MobilePersona, personaRecordToMobilePersona } from './mobile'
+import { personaRecordToMobilePersona } from './mobile'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord, validateMnemonic } from './utils'
 
 export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even with private' | 'safe delete') {
@@ -55,6 +56,7 @@ export async function setupPersona(id: PersonaIdentifier) {
     return consistentPersonaDBWriteAccess(async (t) => {
         const d = await queryPersonaDB(id, t)
         if (!d) throw new Error('cannot find persona')
+        if (!d.privateKey) throw new Error('Cannot setup a persona without a private key')
         if (d.linkedProfiles.size === 0) throw new Error('persona should link at least one profile')
         if (d.uninitialized) {
             await updatePersonaDB(
