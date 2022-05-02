@@ -1,10 +1,10 @@
-import { memo } from 'react'
-import { Box, Button, Stack, Typography } from '@mui/material'
-import { EmptyIcon } from '@masknet/icons'
-import { useDashboardI18N } from '../../../../locales'
-import urlcat from 'urlcat'
-import { MaskColorVar } from '@masknet/theme'
+import { Icon } from '@masknet/icons'
 import { openWindow } from '@masknet/shared-base-ui'
+import { MaskColorVar } from '@masknet/theme'
+import { Box, Button, Stack, Theme, Typography, useMediaQuery } from '@mui/material'
+import { memo } from 'react'
+import urlcat from 'urlcat'
+import { useDashboardI18N } from '../../../../locales'
 
 interface PlaceholderProps {
     network: string
@@ -12,6 +12,7 @@ interface PlaceholderProps {
 
 export const Placeholder = memo<PlaceholderProps>(({ network }) => {
     const t = useDashboardI18N()
+    const isXs = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'))
     const url = urlcat('https://www.:network', { network })
 
     const handleClick = () => openWindow(url)
@@ -19,7 +20,7 @@ export const Placeholder = memo<PlaceholderProps>(({ network }) => {
     return (
         <Stack height="100%" alignItems="center" justifyContent="center" mt={-3.5}>
             <Box textAlign="center">
-                <EmptyIcon sx={{ fontSize: 100 }} />
+                <Icon type="empty" size={isXs ? 100 : undefined} />
                 <Typography variant="body2" mb={3} sx={{ color: MaskColorVar.textSecondary }}>
                     {t.personas_post_is_empty()}
                 </Typography>

@@ -119,6 +119,7 @@ export type IconType =
     | 'provider'
     | 'publicKey'
     | 'redditRound'
+    | 'redPacket'
     | 'refresh'
     | 'restore'
     | 'restoreBlue'
@@ -143,7 +144,7 @@ export type IconType =
     | 'success'
     | 'successForSnackBar'
     | 'swap'
-    | 'swapColorfulIcon'
+    | 'swapColorful'
     | 'synchronize'
     | 'telegramRound'
     | 'tick'
@@ -172,6 +173,7 @@ export type IconType =
     | 'menuWallets'
     | 'menuWalletsActive'
     | 'approval'
+    | 'artblocks'
     | 'artBlocks'
     | 'collectibles'
     | 'connect'
@@ -512,7 +514,25 @@ export const publicKeyDarkIcon = new URL('./general/PublicKey.dark.svg', import.
 export const publicKeyLightIcon = new URL('./general/PublicKey.light.svg', import.meta.url).href
 export const publicKeyIcon = new URL('./general/PublicKey.svg', import.meta.url).href
 export const redditRoundIcon = new URL('./general/RedditRound.svg', import.meta.url).href
-export const refreshIcon = new URL('./general/Refresh.svg', import.meta.url).href
+export const redPacketIcon = new URL('./general/RedPacket.svg', import.meta.url).href
+export const refreshIcon = (
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <g>
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M12 4.934a7.198 7.198 0 0 0-6.283 3.68.8.8 0 1 1-1.395-.783A8.8 8.8 0 1 1 3.2 12.134a.8.8 0 0 1 1.6 0 7.2 7.2 0 1 0 7.2-7.2Z"
+                fill="currentColor"
+            />
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M4.797 3.47a.8.8 0 0 1 .8.8v3.2h3.2a.8.8 0 0 1 0 1.6h-4a.8.8 0 0 1-.8-.8v-4a.8.8 0 0 1 .8-.8Z"
+                fill="currentColor"
+            />
+        </g>
+    </svg>
+)
 export const restoreIcon = new URL('./general/Restore.svg', import.meta.url).href
 export const restoreBlueIcon = new URL('./general/RestoreBlue.svg', import.meta.url).href
 export const retweetDarkIcon = new URL('./general/Retweet.dark.svg', import.meta.url).href
@@ -561,7 +581,7 @@ export const starIcon = new URL('./general/Star.svg', import.meta.url).href
 export const successIcon = new URL('./general/Success.svg', import.meta.url).href
 export const successForSnackBarIcon = new URL('./general/SuccessForSnackBar.svg', import.meta.url).href
 export const swapIcon = new URL('./general/Swap.svg', import.meta.url).href
-export const swapColorfulIconIcon = new URL('./general/SwapColorfulIcon.svg', import.meta.url).href
+export const swapColorfulIcon = new URL('./general/SwapColorful.svg', import.meta.url).href
 export const synchronizeIcon = new URL('./general/Synchronize.svg', import.meta.url).href
 export const telegramRoundIcon = new URL('./general/TelegramRound.svg', import.meta.url).href
 export const tickIcon = new URL('./general/Tick.svg', import.meta.url).href
@@ -590,6 +610,7 @@ export const menuSettingsActiveIcon = new URL('./menus/MenuSettingsActive.svg', 
 export const menuWalletsIcon = new URL('./menus/MenuWallets.svg', import.meta.url).href
 export const menuWalletsActiveIcon = new URL('./menus/MenuWalletsActive.svg', import.meta.url).href
 export const approvalIcon = new URL('./plugins/Approval.svg', import.meta.url).href
+export const artblocksIcon = new URL('./plugins/artblocks.png', import.meta.url).href
 export const artBlocksIcon = new URL('./plugins/ArtBlocks.svg', import.meta.url).href
 export const collectiblesIcon = new URL('./plugins/Collectibles.svg', import.meta.url).href
 export const connectDarkIcon = new URL('./plugins/connect.dark.svg', import.meta.url).href
@@ -654,6 +675,7 @@ export const maskBoxIcon = new URL('./plugins/MaskBox.svg', import.meta.url).hre
 export const nftAvatarIcon = new URL('./plugins/NFTAvatar.svg', import.meta.url).href
 export const petIconIcon = new URL('./plugins/PetIcon.svg', import.meta.url).href
 export const poolTogetherIcon = new URL('./plugins/PoolTogether.png', import.meta.url).href
+export const redPacketIcon = new URL('./plugins/RedPacket.svg', import.meta.url).href
 export const savingsIcon = new URL('./plugins/Savings.svg', import.meta.url).href
 export const scamSnifferIcon = new URL('./plugins/ScamSniffer.svg', import.meta.url).href
 export const securityCheckerIcon = new URL('./plugins/SecurityChecker.svg', import.meta.url).href
@@ -707,6 +729,7 @@ export const iconsWithDynamicColor = [
     'leftArrow',
     'link',
     'loading',
+    'refresh',
     'rightArrow',
     'search',
     'currency',
@@ -849,6 +872,7 @@ const icons = {
     'publicKey.dark': publicKeyDarkIcon,
     publicKey: publicKeyIcon,
     redditRound: redditRoundIcon,
+    redPacket: redPacketIcon,
     refresh: refreshIcon,
     restore: restoreIcon,
     restoreBlue: restoreBlueIcon,
@@ -875,7 +899,7 @@ const icons = {
     success: successIcon,
     successForSnackBar: successForSnackBarIcon,
     swap: swapIcon,
-    swapColorfulIcon: swapColorfulIconIcon,
+    swapColorful: swapColorfulIcon,
     synchronize: synchronizeIcon,
     telegramRound: telegramRoundIcon,
     tick: tickIcon,
@@ -904,6 +928,7 @@ const icons = {
     menuWallets: menuWalletsIcon,
     menuWalletsActive: menuWalletsActiveIcon,
     approval: approvalIcon,
+    artblocks: artblocksIcon,
     artBlocks: artBlocksIcon,
     collectibles: collectiblesIcon,
     'connect.dark': connectDarkIcon,

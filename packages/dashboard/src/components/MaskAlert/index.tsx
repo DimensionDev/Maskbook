@@ -2,7 +2,7 @@ import { memo, useCallback, useState } from 'react'
 import { Alert, alertClasses, Collapse, styled, IconButton } from '@mui/material'
 import { Close as CloseIcon } from '@mui/icons-material'
 import { getMaskColor, MaskColorVar } from '@masknet/theme'
-import { InfoIcon, RiskIcon, SuccessIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 
 const InfoAlert = styled(Alert)(({ theme }) => ({
     [`&  > .${alertClasses.message}`]: {
@@ -68,10 +68,10 @@ export interface MaskAlertProps {
 }
 
 const AlertIconMapping = {
-    error: <RiskIcon />,
-    info: <InfoIcon />,
-    success: <SuccessIcon />,
-    warning: <InfoIcon />,
+    error: <Icon type="risk" />,
+    info: <Icon type="info" />,
+    success: <Icon type="success" />,
+    warning: <Icon type="info" />,
 }
 
 export const MaskAlert = memo(({ description, type = 'info' }: MaskAlertProps) => {

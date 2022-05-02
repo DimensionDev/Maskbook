@@ -8,7 +8,7 @@ import {
     PopupRoutes,
 } from '@masknet/shared-base'
 import { ListItemButton, List, Typography } from '@mui/material'
-import { EditIcon, MasksIcon, TickIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import Services from '../../../../../service'
 import { useHover } from 'react-use'
@@ -162,14 +162,17 @@ const PersonaListItem = memo<PersonaListItemProps>(
         const [element] = useHover((isHovering) => (
             <ListItemButton className={classes.item} onClick={() => onChange()}>
                 <div className={classes.iconContainer}>
-                    <MasksIcon />
+                    <Icon type="masks" />
                 </div>
                 <div style={{ flex: 1 }}>
                     <Typography className={classes.name}>
                         {nickname}
                         {isHovering ? (
-                            <EditIcon
+                            <Icon
+                                type="edit"
                                 className={classes.edit}
+                                aria-hidden="false"
+                                aria-role="button"
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     onEdit()
@@ -189,7 +192,7 @@ const PersonaListItem = memo<PersonaListItemProps>(
                         />
                     </Typography>
                 </div>
-                {isCurrent ? <TickIcon className={classes.tick} /> : null}
+                {isCurrent ? <Icon type="tick" className={classes.tick} /> : null}
             </ListItemButton>
         ))
 

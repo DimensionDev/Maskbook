@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { MasksIcon, TipIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { Button, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
 import { useAsyncFn } from 'react-use'
@@ -139,11 +139,11 @@ export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout
     return (
         <>
             <div className={classes.content}>
-                <TipIcon className={classes.icon} />
+                <Icon type="tip" className={classes.icon} />
                 <Typography className={classes.title}>{t('popups_persona_logout')}</Typography>
                 <div className={classes.personaContainer}>
                     <div className={classes.iconContainer}>
-                        <MasksIcon />
+                        <Icon type="masks" />
                     </div>
                     <div>
                         <Typography className={classes.name}>{selectedPersona?.nickname}</Typography>

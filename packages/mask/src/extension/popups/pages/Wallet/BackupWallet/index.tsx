@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import { Button, styled, Tab, tabClasses, Tabs, tabsClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
-import { File as FileIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { useWallet } from '@masknet/plugin-infra/web3'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
@@ -177,7 +177,7 @@ const BackupWallet = memo(() => {
                             className={classes.tabPanel}
                             style={{ flex: currentTab === BackupTabs.JsonFile ? 1 : 0 }}>
                             <div className={classes.placeholder}>
-                                <FileIcon style={{ fontSize: 32, width: 32, height: 32 }} />
+                                <Icon type="file" size={32} />
                             </div>
                             <Typography className={classes.tip}>
                                 {t('popups_wallet_backup_json_file_confirm_password_tip')}

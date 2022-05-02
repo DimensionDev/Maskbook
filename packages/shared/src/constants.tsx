@@ -1,32 +1,22 @@
-import type { ReactNode } from 'react'
-import {
-    FacebookColoredIcon,
-    InstagramColoredIcon,
-    MindsIcon,
-    TwitterColoredIcon,
-    OpenSeaColoredIcon,
-    FacebookRoundIcon,
-    TwitterRoundIcon,
-    InstagramRoundIcon,
-    MindsRoundIcon,
-} from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
+import type { ReactNode } from 'react'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, ReactNode> = {
-    [EnhanceableSite.Twitter]: <TwitterColoredIcon />,
-    [EnhanceableSite.Facebook]: <FacebookColoredIcon />,
-    [EnhanceableSite.Minds]: <MindsIcon />,
-    [EnhanceableSite.Instagram]: <InstagramColoredIcon />,
-    [EnhanceableSite.OpenSea]: <OpenSeaColoredIcon />,
+    [EnhanceableSite.Twitter]: <Icon type="twitterColored" />,
+    [EnhanceableSite.Facebook]: <Icon type="facebookColored" />,
+    [EnhanceableSite.Minds]: <Icon type="minds" />,
+    [EnhanceableSite.Instagram]: <Icon type="instagramColored" />,
+    [EnhanceableSite.OpenSea]: <Icon type="openSeaColoredIcon" />,
     [EnhanceableSite.Localhost]: null,
 }
 
 export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<string, ReactNode> = {
-    [EnhanceableSite.Twitter]: <TwitterRoundIcon />,
-    [EnhanceableSite.Facebook]: <FacebookRoundIcon />,
-    [EnhanceableSite.Minds]: <MindsRoundIcon />,
-    [EnhanceableSite.Instagram]: <InstagramRoundIcon />,
-    [EnhanceableSite.OpenSea]: <OpenSeaColoredIcon />,
+    [EnhanceableSite.Twitter]: <Icon type="twitterRound" />,
+    [EnhanceableSite.Facebook]: <Icon type="facebookRound" />,
+    [EnhanceableSite.Minds]: <Icon type="mindsRound" />,
+    [EnhanceableSite.Instagram]: <Icon type="instagramRound" />,
+    [EnhanceableSite.OpenSea]: <Icon type="openSeaColoredIcon" />,
     [EnhanceableSite.Localhost]: null,
 }
 

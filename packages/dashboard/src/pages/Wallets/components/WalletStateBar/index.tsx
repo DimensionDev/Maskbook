@@ -59,6 +59,14 @@ const useStyles = makeStyles()((theme) => ({
         padding: '2px 8px',
         borderRadius: 4,
     },
+    loadingIndicator: {
+        [theme.breakpoints.down('xs')]: {
+            width: 12,
+            height: 12,
+            marginRight: 0.8,
+            color: MaskColorVar.orangeMain,
+        },
+    },
 }))
 
 export const WalletStateBar = memo(() => {
@@ -155,7 +163,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                         color: MaskColorVar.orangeMain,
                     }}
                     className={classes.bar}>
-                    <LoadingAnimation sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
+                    <LoadingAnimation className={classes.loadingIndicator} />
                     <Typography component="span" fontSize={12} display="inline-block">
                         {t.wallet_transactions_pending()}
                     </Typography>

@@ -5,7 +5,7 @@ import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, ImageIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../components/CopyIconButton'
-import { CircleLoadingIcon, DeleteIcon, EmptyIcon, PopupLinkIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import type { ConnectedWalletInfo } from '../type'
 import { DisconnectWalletDialog } from '../components/DisconnectWalletDialog'
 import { useI18N } from '../../../../../utils'
@@ -129,7 +129,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
         if (loading)
             return (
                 <div className={classes.loading}>
-                    <CircleLoadingIcon className={classes.animated} />
+                    <Icon type="circleLoading" className={classes.animated} />
                     <Typography>{t('popups_loading')}</Typography>
                     <Button className={classes.button} onClick={onAddVerifyWallet}>
                         {t('popups_add_and_verify_wallet')}
@@ -157,16 +157,22 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                                         href={explorerResolver.addressLink(chainId, wallet.identity ?? '')}
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        <PopupLinkIcon className={classes.icon} />
+                                        <Icon type="popupLink" className={classes.icon} />
                                     </Link>
                                 </Typography>
                             </div>
-                            <DeleteIcon className={classes.delete} onClick={() => onDelete(wallet)} />
+                            <Icon
+                                type="delete"
+                                className={classes.delete}
+                                aria-hidden="false"
+                                aria-role="button"
+                                onClick={() => onDelete(wallet)}
+                            />
                         </div>
                     ))
                 ) : (
                     <div className={classes.placeholder}>
-                        <EmptyIcon style={{ fontSize: 60 }} />
+                        <Icon type="empty" size={60} />
                     </div>
                 )}
                 <DisconnectWalletDialog

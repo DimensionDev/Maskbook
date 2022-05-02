@@ -2,7 +2,7 @@ import { memo, useEffect, useRef, useState } from 'react'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useDropArea } from 'react-use'
-import { File as FileIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { blobToText } from '@dimensiondev/kit'
 import { useI18N } from '../../../../../../utils'
 
@@ -72,7 +72,7 @@ export const JsonFileBox = memo<JsonFileBox>(({ onChange }) => {
                     }}
                 />
                 <div className={classes.enter} data-active={over} onClick={() => inputRef.current?.click()}>
-                    <FileIcon style={{ fontSize: 32, width: 32, height: 32 }} />
+                    <Icon type="file" size={32} />
                     <Typography className={classes.tips}>
                         {over
                             ? t('popups_wallet_backup_json_file_drag_tip')

@@ -9,7 +9,7 @@ import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { getTokenUSDValue } from '../../../../../plugins/Wallet/helpers'
-import { InteractionCircleIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { useI18N } from '../../../../../utils'
 import { PluginTransakMessages } from '../../../../../plugins/Transak/messages'
 import Services from '../../../../service'
@@ -148,7 +148,7 @@ const TokenDetail = memo(() => {
                         <Typography className={classes.text}>{t('popups_wallet_token_send')}</Typography>
                     </div>
                     <div onClick={openSwapDialog}>
-                        <InteractionCircleIcon className={classes.icon} />
+                        <Icon type="interactionCircle" className={classes.icon} />
                         <Typography className={classes.text}>{t('popups_wallet_token_swap')}</Typography>
                     </div>
                 </div>

@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import { memo, useMemo, useState } from 'react'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { makeStyles, MaskColorVar, MaskTextField, ShadowRootMenu } from '@masknet/theme'
-import { SearchIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { useI18N } from '../../locales'
 import type { SecurityAPI } from '@masknet/web3-providers'
 import { GoPlusLabs } from '@masknet/web3-providers'
@@ -103,7 +103,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                             classes: { root: classes.search },
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <SearchIcon />
+                                    <Icon type="search" />
                                 </InputAdornment>
                             ),
                         }}

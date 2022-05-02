@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Box, Typography, Link, Button, FilledInput } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { EmptyIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { DashboardTrans } from '../../../../locales/i18n_generated'
 import { useCopyToClipboard } from 'react-use'
 import { useSnackbarCallback } from '@masknet/shared'
@@ -61,7 +61,7 @@ export const EmptyContactPlaceholderUI = memo<EmptyContactPlaceholderUIProps>(({
     const { classes } = useStyles()
     return (
         <Box className={classes.container}>
-            <EmptyIcon className={classes.icon} />
+            <Icon type="empty" className={classes.icon} />
             <Typography className={classes.prompt}>
                 <DashboardTrans.personas_empty_contact_tips
                     components={{ i: <Link href={downloadUrl} /> }}

@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles'
-import { CloudLinkIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { Paper, Stack, Box } from '@mui/material'
 import { ActionCard } from '../../components/ActionCard'
@@ -27,7 +27,7 @@ export function StartUp() {
                     <Box>
                         <ActionCard
                             title={t.wallets_startup_connect()}
-                            icon={<CloudLinkIcon fontSize="inherit" />}
+                            icon={<Icon type="cloudLink" />}
                             subtitle={t.wallets_startup_connect_desc()}
                             action={{
                                 type: 'primary',

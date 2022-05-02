@@ -1,4 +1,4 @@
-import { RestoreBlueIcon, SignUpAccountIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { Box, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { memo } from 'react'
@@ -37,15 +37,9 @@ export const LogoBoxStyled = styled(Box)(({ theme }) => ({
     },
 }))
 
-export const SignUpAccountLogo = styled(SignUpAccountIcon)(({ theme }) => ({
-    width: '100%',
-    height: '96px',
-})) as any as typeof SignUpAccountIcon
+export const SignUpAccountLogo = () => <Icon type="signInAccount" size={96} />
 
-export const RestoreBlueLogo = styled(RestoreBlueIcon)(({ theme }) => ({
-    width: '100%',
-    height: '96px',
-})) as any as typeof RestoreBlueIcon
+export const RestoreBlueLogo = () => <Icon type="restoreBlue" size={96} />
 
 interface PersonaLogoBoxProps {}
 

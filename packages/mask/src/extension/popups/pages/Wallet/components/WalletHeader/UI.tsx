@@ -1,4 +1,4 @@
-import { ArrowDropIcon, Icon, PopupLinkIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { ChainIcon, FormattedAddress, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { NetworkDescriptor, Wallet } from '@masknet/web3-shared-base'
@@ -111,7 +111,8 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                         <Typography className={classes.chainName}>
                             {currentNetwork.name}
                             {!disabled ? (
-                                <ArrowDropIcon
+                                <Icon
+                                    type="arrowDrop"
                                     className={classes.arrow}
                                     style={{ transform: status ? 'rotate(-180deg)' : undefined }}
                                 />
@@ -136,12 +137,13 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                                 href={explorerResolver.addressLink(chainId, wallet.address ?? '')}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <PopupLinkIcon className={classes.icon} />
+                                <Icon type="popupLink" className={classes.icon} />
                             </Link>
                         </Typography>
                     </div>
                     {!disabled ? (
-                        <ArrowDropIcon
+                        <Icon
+                            type="arrowDrop"
                             className={classes.arrow}
                             style={{ transform: isSwitchWallet ? 'rotate(-180deg)' : undefined }}
                         />

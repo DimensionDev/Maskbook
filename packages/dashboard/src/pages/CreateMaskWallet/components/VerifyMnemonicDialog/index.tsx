@@ -1,14 +1,14 @@
-import { memo, useState } from 'react'
-import { Box, Typography, styled, Button, Dialog, DialogTitle, DialogContent } from '@mui/material'
+import { Icon } from '@masknet/icons'
+import { useSnackbarCallback } from '@masknet/shared'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { LoadingButton } from '@mui/lab'
-import { useSnackbarCallback } from '@masknet/shared'
-import { SuccessIcon, CopyIcon } from '@masknet/icons'
+import { Box, Button, Dialog, DialogContent, DialogTitle, styled, Typography } from '@mui/material'
+import { memo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useCopyToClipboard } from 'react-use'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
 import { useDashboardI18N } from '../../../../locales'
-import { useCopyToClipboard } from 'react-use'
-import { useNavigate } from 'react-router-dom'
-import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     dialogTitle: {
@@ -52,6 +52,11 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 12,
         fontSize: 14,
         lineHeight: '20px',
+    },
+    successIcon: {
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 54,
+        },
     },
     copy: {
         fontSize: 20,
@@ -140,7 +145,7 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                     <div className={classes.container}>
                         {address ? (
                             <>
-                                <SuccessIcon sx={{ fontSize: 54 }} />
+                                <Icon type="success" className={classes.successIcon} />
                                 <SuccessTitle>{t.wallets_create_successfully_title()}</SuccessTitle>
                                 <Box style={{ width: '100%' }}>
                                     <Typography className={classes.addressTitle}>
@@ -149,7 +154,7 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                                 </Box>
                                 <Typography className={classes.address}>
                                     {address}
-                                    <CopyIcon className={classes.copy} onClick={() => onCopy(address)} />
+                                    <Icon type="copy" className={classes.copy} onClick={() => onCopy(address)} />
                                 </Typography>
                                 <Button fullWidth className={classes.button} onClick={onDoneClick}>
                                     {t.create_wallet_done()}

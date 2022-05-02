@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { noop } from 'lodash-unified'
-import { CardIcon, DownloadIcon, Icon, SendIcon, SwapIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { MiniNetworkSelector } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskColorVar } from '@masknet/theme'
@@ -139,23 +139,20 @@ export const Balance = memo<BalanceCardProps>(
                 </Box>
                 {showOperations && (
                     <ButtonGroup>
-                        <Button
-                            size="small"
-                            onClick={onSend}
-                            endIcon={<SendIcon style={{ fill: '#fff' }} fontSize="inherit" />}>
+                        <Button size="small" onClick={onSend} endIcon={<Icon type="send" style={{ fill: '#fff' }} />}>
                             {t.wallets_balance_Send()}
                         </Button>
-                        <Button size="small" onClick={onBuy} endIcon={<CardIcon fontSize="inherit" />}>
+                        <Button size="small" onClick={onBuy} endIcon={<Icon type="card" />}>
                             {t.wallets_balance_Buy()}
                         </Button>
-                        <Button size="small" onClick={onSwap} endIcon={<SwapIcon fontSize="inherit" />}>
+                        <Button size="small" onClick={onSwap} endIcon={<Icon type="swap" />}>
                             {t.wallets_balance_Swap()}
                         </Button>
                         <Button
                             size="small"
                             color="secondary"
                             onClick={onReceive}
-                            endIcon={<DownloadIcon fontSize="inherit" style={{ stroke: MaskColorVar.textLink }} />}>
+                            endIcon={<Icon type="download" color={MaskColorVar.textLink} />}>
                             {t.wallets_balance_Receive()}
                         </Button>
                     </ButtonGroup>

@@ -1,12 +1,12 @@
-import { List, ListItem, ListItemAvatar, Avatar, Typography, Box } from '@mui/material'
-import { openWindow } from '@masknet/shared-base-ui'
-import { TutorialIcon } from '@masknet/icons'
-import { useActivatedPluginsSNSAdaptor, PluginI18NFieldRender, PluginId } from '@masknet/plugin-infra/content-script'
+import { Icon } from '@masknet/icons'
+import { PluginI18NFieldRender, PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { SettingSwitch } from '@masknet/shared'
+import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { Avatar, Box, List, ListItem, ListItemAvatar, Typography } from '@mui/material'
+import { useState } from 'react'
 import { Services } from '../../extension/service'
 import CheckSecurityConfirmDialog from './CheckSecurityConfirmDialog'
-import { useState } from 'react'
 
 interface Props {}
 const useStyles = makeStyles()((theme) => ({
@@ -96,7 +96,12 @@ export function ApplicationSettingPluginSwitch(props: Props) {
                                         </Typography>
                                         {x.entry.tutorialLink ? (
                                             <Box className={classes.settings}>
-                                                <TutorialIcon onClick={() => openWindow(x.entry.tutorialLink)} />
+                                                <Icon
+                                                    type="tutorial"
+                                                    aria-hidden="false"
+                                                    aria-role="button"
+                                                    onClick={() => openWindow(x.entry.tutorialLink)}
+                                                />
                                             </Box>
                                         ) : null}
                                     </div>

@@ -1,4 +1,4 @@
-import { LeftArrowIcon, RightArrowIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
 import classnames from 'classnames'
@@ -191,7 +191,7 @@ export function ConcealableTabs<T extends number | string>({
                                 onClick={() => {
                                     slide(false)
                                 }}>
-                                <LeftArrowIcon color="inherit" />
+                                <Icon type="leftArrow" color="inherit" />
                             </Button>
                             <Button
                                 disableRipple
@@ -200,7 +200,7 @@ export function ConcealableTabs<T extends number | string>({
                                 onClick={() => {
                                     slide(true)
                                 }}>
-                                <RightArrowIcon color="inherit" />
+                                <Icon type="rightArrow" color="inherit" />
                             </Button>
                         </>
                     ) : null}

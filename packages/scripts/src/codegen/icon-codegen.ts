@@ -49,9 +49,6 @@ export async function generateIcons() {
                   return `${camelCase(m1)}.${m2}`
               })
             : camelCase(parsed.name)
-        if (name.toLowerCase() === 'redpacket') {
-            return
-        }
         indexNames.add(name)
         iconVarNames.set(name, `${varName || camelCase(name)}Icon`)
         if (name.match(responseExtRe)) {

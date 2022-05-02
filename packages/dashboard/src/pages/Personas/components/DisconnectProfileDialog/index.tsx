@@ -4,12 +4,12 @@ import { useDashboardI18N } from '../../../../locales'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { useState } from 'react'
-import { WarningIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     svg: {
-        '& path': {
-            fill: getMaskColor(theme).orangeMain,
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 64,
         },
     },
     personaTextZone: {
@@ -41,7 +41,7 @@ export const DisconnectProfileDialog = ({
     personaIdentifier,
 }: DisconnectProfileDialogProps) => {
     const t = useDashboardI18N()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const [currentStep, setCurrentStep] = useState<steps>(steps.selection)
     const [profileIdentifier, setProfileIdentifier] = useState<ProfileIdentifier | null>()
     return (
@@ -84,7 +84,7 @@ export const DisconnectProfileDialog = ({
                 {currentStep === steps.action && profileIdentifier && (
                     <Box>
                         <Box textAlign="center" py={2}>
-                            <WarningIcon className={classes.svg} sx={{ fontSize: 64 }} color="warning" />
+                            <Icon type="warning" className={classes.svg} color={theme.palette.warning.main} />
                         </Box>
                         <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1 }}>
                             {t.personas_disconnect_warning()}

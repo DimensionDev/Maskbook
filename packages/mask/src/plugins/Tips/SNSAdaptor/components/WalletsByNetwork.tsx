@@ -1,4 +1,4 @@
-import { SettingsIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import type { BindingProof } from '@masknet/shared-base'
 import { networkMap } from '../../hooks/useSupportedNetworks'
 import { makeStyles } from '@masknet/theme'
@@ -67,7 +67,13 @@ export function WalletsByNetwork({ wallets, networkId, toSetting, setAsDefault }
                     <network.icon className={classes.networkIcon} />
                     {network.name}
                 </Typography>
-                <SettingsIcon onClick={toSetting} className={classes.settingIcon} />
+                <Icon
+                    type="settings"
+                    aria-hidden="false"
+                    aria-role="button"
+                    onClick={toSetting}
+                    className={classes.settingIcon}
+                />
             </div>
             <div className={classes.content}>
                 {isAllHide ? (

@@ -1,4 +1,4 @@
-import { RefreshIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/base'
 import { ChainId, usePoolTogetherConstants } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -113,10 +113,12 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
 
     if (error || errorMask) {
         return (
-            <RefreshIcon
+            <Icon
+                type="refresh"
                 className={classes.refresh}
-                color="primary"
-                style={{ fill: '#1C68F3' }}
+                aria-hidden="false"
+                aria-role="button"
+                color="#1C68F3"
                 onClick={error ? retry : retryMask}
             />
         )

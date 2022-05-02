@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { RefreshIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { Box, Card, CardContent, CardHeader, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -104,10 +104,11 @@ export function PoolView(props: PoolViewProps) {
                 <br />
                 {(error as any)?.message || errorAllowedTokens?.message}
                 <br />
-                <RefreshIcon
+                <Icon
                     className={classes.refresh}
-                    color="primary"
-                    style={{ fill: '#1C68F3' }}
+                    color="#1C68F3"
+                    aria-hidden="false"
+                    role="button"
                     onClick={error ? retry : retryAllowedTokens}
                 />
             </Typography>

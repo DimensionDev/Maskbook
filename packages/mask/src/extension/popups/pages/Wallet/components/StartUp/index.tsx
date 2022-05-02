@@ -1,8 +1,8 @@
 import { memo, useCallback } from 'react'
-import { Alert, AlertTitle, Box, Typography } from '@mui/material'
+import { Alert, AlertTitle, Box, Theme, Typography, useMediaQuery } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Link, useLocation } from 'react-router-dom'
-import { Icon, ImportWalletIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { NetworkSelector } from '../../../../components/NetworkSelector'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../../utils'
@@ -92,6 +92,7 @@ export const WalletStartUp = memo(() => {
     const { hasPassword, loading } = useHasPassword()
 
     useTitle('')
+    const isXs = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'))
 
     return (
         <Box className={classes.container}>
@@ -113,7 +114,7 @@ export const WalletStartUp = memo(() => {
                         to={!hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ImportWallet}
                         style={{ textDecoration: 'none' }}>
                         <Box className={classes.item}>
-                            <ImportWalletIcon sx={{ fontSize: 24 }} />
+                            <Icon type="importWallet" size={isXs ? 24 : undefined} />
                             <Typography className={classes.itemTitle}>{t('plugin_wallet_import_wallet')}</Typography>
                         </Box>
                     </Link>

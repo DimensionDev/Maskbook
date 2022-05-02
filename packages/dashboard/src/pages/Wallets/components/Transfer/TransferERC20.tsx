@@ -1,4 +1,4 @@
-import { RightIcon } from '@masknet/icons'
+import { Icon  } from '@masknet/icons'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 import {
     useChainId,
@@ -193,7 +193,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                             <FormattedAddress address={registeredAddress} size={4} formatter={Others?.formatAddress} />
                         </Typography>
                     </Link>
-                    <RightIcon />
+                    <Icon type="right" />
                 </Box>
             )
         }

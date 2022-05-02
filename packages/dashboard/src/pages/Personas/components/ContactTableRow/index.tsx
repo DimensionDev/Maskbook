@@ -1,8 +1,8 @@
 import type { RelationProfile } from '@masknet/shared-base'
 import { memo, useCallback } from 'react'
-import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@mui/material'
+import { Box, TableCell, TableRow, Typography, Avatar, useTheme, useMediaQuery, Theme } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { StarIcon, Icon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { Services } from '../../../../API'
 import { useDashboardI18N } from '../../../../locales'
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact'
@@ -45,6 +45,11 @@ const useStyles = makeStyles()((theme) => ({
     tableRow: {
         '&:hover': {
             backgroundColor: theme.palette.background.default,
+        },
+    },
+    startIcon: {
+        [theme.breakpoints.down('xs')]: {
+            cursor: 'pointer',
         },
     },
 }))
@@ -108,6 +113,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
         const t = useDashboardI18N()
         const { classes } = useStyles()
         const [first, last] = contact.name.split(' ')
+        const isXs = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'))
 
         return (
             <TableRow className={classes.tableRow}>
@@ -116,11 +122,17 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                         <Typography>{index}</Typography>
                         <Box className={classes.favorite}>
                             {contact.fingerprint ? (
-                                <StarIcon
-                                    sx={{
-                                        fill: contact.favorite ? MaskColorVar.warning : MaskColorVar.iconLight,
-                                        cursor: 'pointer',
-                                    }}
+                                <Icon
+                                    type="star"
+                                    color={
+                                        isXs
+                                            ? contact.favorite
+                                                ? MaskColorVar.warning
+                                                : MaskColorVar.iconLight
+                                            : undefined
+                                    }
+                                    aria-hidden="false"
+                                    aria-role="button"
                                     onClick={handleClickStar}
                                 />
                             ) : null}

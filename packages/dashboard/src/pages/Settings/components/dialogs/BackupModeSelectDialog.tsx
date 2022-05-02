@@ -1,6 +1,6 @@
 import { MaskColorVar, MaskDialog, makeStyles } from '@masknet/theme'
 import { Box, DialogContent, Tooltip, Typography } from '@mui/material'
-import { LocalBackupIcon, CloudBackupIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { useContext, useMemo } from 'react'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
@@ -69,7 +69,7 @@ export default function BackupModeSelectDialog({ open, onClose, onSelect }: Back
             <DialogContent>
                 <Box className={classes.container}>
                     <Box className={classes.mode} onClick={() => onSelect('local')}>
-                        <LocalBackupIcon className={classes.icon} />
+                        <Icon type="localBackup" className={classes.icon} />
                         <Typography className={classes.label}>Local Backup</Typography>
                     </Box>
                     <Box className={classNames(classes.mode, cloudDisabled && 'disabled')}>
@@ -79,7 +79,7 @@ export default function BackupModeSelectDialog({ open, onClose, onSelect }: Back
                             </Tooltip>
                         ) : null}
 
-                        <CloudBackupIcon className={classes.icon} onClick={() => onSelect('cloud')} />
+                        <Icon type="cloudBackup" className={classes.icon} onClick={() => onSelect('cloud')} />
                         <Typography className={classes.label}>Cloud Backup</Typography>
                     </Box>
                 </Box>

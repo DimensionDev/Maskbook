@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { Avatar } from '@mui/material'
-import { GrayMasks } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
 
 const useStyles = makeStyles()(() => ({
@@ -51,7 +51,11 @@ export const AccountAvatar = memo<AccountAvatar>(({ avatar, network, isValid }) 
 
     return (
         <div className={classes.container}>
-            {avatar ? <Avatar className={classes.avatar} src={avatar} /> : <GrayMasks className={classes.avatar} />}
+            {avatar ? (
+                <Avatar className={classes.avatar} src={avatar} />
+            ) : (
+                <Icon type="grayMasks" className={classes.avatar} />
+            )}
             {network ? <div className={classes.network}>{SOCIAL_MEDIA_ROUND_ICON_MAPPING[network]}</div> : null}
             {!isValid ? <div className={classes.valid} /> : null}
         </div>

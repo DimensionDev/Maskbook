@@ -1,7 +1,7 @@
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 import { styled } from '@mui/material/styles'
 import { Box, Container, Stack, Typography } from '@mui/material'
-import { RestoreIcon, SignUpAccountIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
@@ -33,7 +33,7 @@ const Setup = () => {
                     <ActionCard
                         title={t.setup_page_create_account_title()}
                         subtitle={t.setup_page_create_account_subtitle()}
-                        icon={<SignUpAccountIcon />}
+                        icon={<Icon type="signUpAccount" />}
                         action={{
                             type: 'primary',
                             text: t.setup_page_create_account_button(),
@@ -43,7 +43,7 @@ const Setup = () => {
                     <ActionCard
                         title={t.setup_page_create_restore_title()}
                         subtitle={t.setup_page_create_restore_subtitle()}
-                        icon={<RestoreIcon />}
+                        icon={<Icon type="restore" />}
                         action={{
                             type: 'secondary',
                             text: t.setup_page_create_restore_button(),

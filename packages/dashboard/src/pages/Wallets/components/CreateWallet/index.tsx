@@ -1,7 +1,7 @@
 import { Button, styled, FilledInput, Tab, Typography } from '@mui/material'
 import { makeStyles, ButtonGroupTabList, MaskColorVar, useTabs } from '@masknet/theme'
 import { memo } from 'react'
-import { RefreshIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { MaskAlert } from '../../../../components/MaskAlert'
 import { useDashboardI18N } from '../../../../locales'
@@ -90,7 +90,7 @@ export const CreateWallet = memo(() => {
                 </ButtonGroupTabList>
                 <TabPanel classes={panelStyles} value={tabs.mnemonic}>
                     <Refresh>
-                        <RefreshIcon style={{ fill: '#1C68F3' }} />
+                        <Icon type="refresh" color="#1C68F3" />
                         <Typography>{t.wallets_create_wallet_refresh()}</Typography>
                     </Refresh>
                     <MnemonicGeneratorContainer>

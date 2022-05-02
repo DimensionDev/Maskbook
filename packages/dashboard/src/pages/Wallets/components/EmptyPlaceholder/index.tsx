@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { EmptyIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -31,7 +31,7 @@ export const EmptyPlaceholder = memo<EmptyPlaceholderProps>(({ children }) => {
     const { classes } = useStyles()
     return (
         <Box className={classes.container}>
-            <EmptyIcon className={classes.icon} />
+            <Icon type="empty" className={classes.icon} />
             <Typography className={classes.prompt}>{children}</Typography>
         </Box>
     )

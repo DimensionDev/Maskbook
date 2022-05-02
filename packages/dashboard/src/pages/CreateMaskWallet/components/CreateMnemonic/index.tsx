@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import { Alert, Box, Button, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { InfoIcon, RefreshIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog'
@@ -168,7 +168,7 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
             <Typography className={classes.title}>Create a wallet</Typography>
             <div className={classes.refresh}>
                 <Box style={{ display: 'flex', cursor: 'pointer' }} onClick={onRefreshWords}>
-                    <RefreshIcon style={{ fill: '#1C68F3' }} />
+                    <Icon type="refresh" color="#1C68F3" />
                     <Typography>{t.wallets_create_wallet_refresh()}</Typography>
                 </Box>
             </div>
@@ -184,7 +184,11 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
                 </Button>
             </Box>
             {open ? (
-                <Alert icon={<InfoIcon />} severity="error" onClose={() => setOpen(false)} className={classes.alert}>
+                <Alert
+                    icon={<Icon type="info" />}
+                    severity="error"
+                    onClose={() => setOpen(false)}
+                    className={classes.alert}>
                     {t.create_wallet_mnemonic_tip()}
                 </Alert>
             ) : null}

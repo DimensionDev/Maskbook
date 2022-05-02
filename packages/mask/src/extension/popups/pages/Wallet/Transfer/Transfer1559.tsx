@@ -32,7 +32,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Chip, Collapse, Link, MenuItem, Popover, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
-import { RightIcon, UserIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-unified'
@@ -492,7 +492,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                             </Typography>
                         </Box>
                     </Link>
-                    <RightIcon />
+                    <Icon type="right" />
                 </Box>
             )
 
@@ -605,7 +605,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                 InputProps={{
                                     endAdornment: (
                                         <div onClick={openAccountMenu} style={{ marginLeft: 12 }}>
-                                            <UserIcon className={classes.user} />
+                                            <Icon type="user" className={classes.user} />
                                         </div>
                                     ),
                                     onClick: (event) => {

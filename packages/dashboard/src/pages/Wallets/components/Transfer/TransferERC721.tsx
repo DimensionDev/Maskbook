@@ -47,7 +47,7 @@ import {
     useNativeTokenPrice,
     useWeb3Connection,
 } from '@masknet/plugin-infra/web3'
-import { RightIcon } from '@masknet/icons'
+import { Icon  } from '@masknet/icons'
 import { useGasLimit, useNonFungibleOwnerTokens, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -243,7 +243,7 @@ export const TransferERC721 = memo(() => {
                             <FormattedAddress address={registeredAddress} size={4} formatter={Others?.formatAddress} />
                         </Typography>
                     </Link>
-                    <RightIcon />
+                    <Icon type="right" />
                 </Box>
             )
         }

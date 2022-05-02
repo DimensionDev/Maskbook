@@ -16,7 +16,7 @@ import { useI18N } from '../../../../../../utils'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../../../service'
-import { GrayMasks } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { DisconnectDialog } from '../DisconnectDialog'
 import { NextIDProof } from '@masknet/web3-providers'
 import classNames from 'classnames'
@@ -267,7 +267,8 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                                     />
                                 ) : (
                                     <div className={classes.avatar}>
-                                        <GrayMasks
+                                        <Icon
+                                            type="grayMasks"
                                             className={classNames(
                                                 classes.avatar,
                                                 is_valid ? classes.verified_avatar : classes.unverified_avatar,

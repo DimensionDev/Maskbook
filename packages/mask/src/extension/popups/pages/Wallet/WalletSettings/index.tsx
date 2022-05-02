@@ -1,6 +1,6 @@
 import { Link, List, ListItem, ListItemText } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { BackUpIcon, CloudLinkIcon, TrashIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -85,12 +85,12 @@ const WalletSettings = memo(() => {
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.BackupWallet)}>
-                        <BackUpIcon className={classes.icon} />
+                        <Icon type="backUp" className={classes.icon} />
                         <ListItemText className={classes.text}>{t('popups_wallet_backup_wallet')}</ListItemText>
                     </ListItem>
                     {wallet?.configurable ? (
                         <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.DeleteWallet)}>
-                            <TrashIcon className={classes.icon} />
+                            <Icon type="trash" className={classes.icon} />
                             <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
                         </ListItem>
                     ) : null}
@@ -99,7 +99,7 @@ const WalletSettings = memo(() => {
                         target="_blank"
                         rel="noopener noreferrer">
                         <ListItem className={classes.item}>
-                            <CloudLinkIcon className={classes.icon} />
+                            <Icon type="cloudLink" className={classes.icon} />
                             <ListItemText className={classes.text}>{t('popups_wallet_view_on_explorer')}</ListItemText>
                         </ListItem>
                     </Link>

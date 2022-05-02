@@ -12,7 +12,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { PluginServices } from '../../../../API'
 import urlcat from 'urlcat'
 import PasswordField from '../../../../components/PasswordField'
-import { InfoIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -216,7 +216,7 @@ const CreateWalletForm = memo(() => {
                 </Box>
                 {open ? (
                     <Alert
-                        icon={<InfoIcon />}
+                        icon={<Icon type="info" />}
                         severity="error"
                         onClose={() => setOpen(false)}
                         className={classes.alert}>

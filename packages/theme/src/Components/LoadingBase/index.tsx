@@ -1,5 +1,4 @@
-import { CircleLoadingIcon } from '@masknet/icons'
-import type { SvgIconProps } from '@mui/material'
+import { Icon, IconProps } from '@masknet/icons'
 import { makeStyles } from '../../UIHelper'
 
 const useStyles = makeStyles()({
@@ -16,7 +15,7 @@ const useStyles = makeStyles()({
     },
 })
 
-export const LoadingBase = (props: SvgIconProps) => {
-    const { classes } = useStyles()
-    return <CircleLoadingIcon {...props} className={`${classes.animated} ${props.className}`} />
+export const LoadingBase = (props: IconProps) => {
+    const { classes, cx } = useStyles()
+    return <Icon type="circleLoading" {...props} className={cx(classes.animated, props.className)} />
 }

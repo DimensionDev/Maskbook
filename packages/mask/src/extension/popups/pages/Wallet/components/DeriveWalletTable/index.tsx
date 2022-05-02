@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
-import { CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../../utils'
 import { useWeb3 } from '@masknet/plugin-infra/web3'
@@ -135,8 +135,8 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, 
                 <Checkbox
                     disabled={added}
                     defaultChecked={selected || added}
-                    icon={<CheckedBorderIcon sx={{ fontSize: '16px', stroke: '#1C68F3' }} />}
-                    checkedIcon={<CheckedIcon sx={{ fontSize: '16px' }} />}
+                    icon={<Icon type="checkboxBorder" color="#1C68F3" size={16} />}
+                    checkedIcon={<Icon type="checkbox" size={16} />}
                     sx={{
                         color: '#1C68F3',
                         padding: 0,

@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { WalletIcon, WarningIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -137,12 +137,12 @@ const DeleteWallet = memo(() => {
         <>
             <div className={classes.content}>
                 <div className={classes.warning}>
-                    <WarningIcon style={{ fontSize: 48 }} />
+                    <Icon type="warning" size={48} />
                     <Typography className={classes.title}>{t('delete_wallet')}</Typography>
                 </div>
                 <div className={classes.info}>
                     <div className={classes.iconContainer}>
-                        <WalletIcon />
+                        <Icon type="wallet" />
                     </div>
                     <div>
                         <Typography className={classes.name}>{wallet?.name}</Typography>

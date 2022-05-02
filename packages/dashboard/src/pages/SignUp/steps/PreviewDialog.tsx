@@ -2,7 +2,7 @@ import { QRCode } from 'react-qrcode-logo'
 import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme, useCustomSnackbar } from '@masknet/theme'
 import { Box, Button, DialogContent, ThemeProvider, Typography } from '@mui/material'
 import { MnemonicReveal } from '../../../components/Mnemonic'
-import { Icon, InfoIcon, CopyIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { ForwardedRef, forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
@@ -163,7 +163,13 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                         <Box display="flex">
                             <Typography fontSize={14} fontWeight={600} width={102}>
                                 <span style={{ verticalAlign: 'middle' }}>{t.create_account_private_key()} </span>
-                                <CopyIcon className={classes.copyIcon} onClick={() => copyToClipboard(privateKey)} />
+                                <Icon
+                                    type="copy"
+                                    className={classes.copyIcon}
+                                    aria-hidden="false"
+                                    aria-role="button"
+                                    onClick={() => copyToClipboard(privateKey)}
+                                />
                             </Typography>
                             <Typography
                                 fontSize={10}
@@ -185,7 +191,7 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                 ) : null}
 
                 <Box display="flex" alignItems="center" margin="24px 0">
-                    <InfoIcon className={classes.infoIcon} />
+                    <Icon type="info" className={classes.infoIcon} />
                     <Typography fontSize={12} fontWeight={700}>
                         {t.create_account_preview_tip()}
                     </Typography>

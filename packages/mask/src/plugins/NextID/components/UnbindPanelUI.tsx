@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { Box, DialogContent, Stack, Typography } from '@mui/material'
-import { MasksIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { LoadingButton } from '@mui/lab'
 import DoneIcon from '@mui/icons-material/Done'
@@ -111,7 +111,7 @@ export const UnbindPanelUI = memo<BindPanelUIProps>(
                             <Typography className={classes.subTitle}>{t.persona()}</Typography>
                             <Stack direction="row" className={classes.persona}>
                                 <div className={classes.iconContainer}>
-                                    <MasksIcon style={{ fontSize: '48px' }} />
+                                    <Icon type="masks" size={48} />
                                 </div>
                                 <div>
                                     <Typography className={classes.name}>{currentPersona?.nickname}</Typography>

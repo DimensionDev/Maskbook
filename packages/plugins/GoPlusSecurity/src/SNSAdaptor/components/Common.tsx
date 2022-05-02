@@ -1,9 +1,9 @@
+import { Icon } from '@masknet/icons'
 import type { SecurityAPI } from '@masknet/web3-providers'
-import { SecurityRiskIcon, SecurityWarningIcon, SuccessIcon } from '@masknet/icons'
-import { memo, ReactNode } from 'react'
-import { Stack } from '@mui/material'
-import type { useI18N } from '../../locales'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { Stack } from '@mui/material'
+import { memo, ReactNode } from 'react'
+import type { useI18N } from '../../locales'
 
 export type TokenSecurity = SecurityAPI.ContractSecurity &
     SecurityAPI.TokenSecurity &
@@ -15,7 +15,7 @@ export enum SecurityMessageLevel {
     Safe = 'Safe',
 }
 
-export const Center = memo(({ children }) => (
+export const Center: FC = memo(({ children }) => (
     <Stack height="100%" justifyContent="center" alignItems="center">
         {children}
     </Stack>
@@ -35,19 +35,19 @@ export const DefineMapping: DefineMapping = {
         i18nKey: 'high_risk',
         titleColor: '#FF5F5F',
         bgColor: 'rgba(255, 53, 69, 0.1)',
-        icon: (size: number) => <SecurityRiskIcon sx={{ fontSize: size ?? 24 }} />,
+        icon: (size: number) => <Icon type="securityRisk" size={size ?? 24} />,
     },
     [SecurityMessageLevel.Medium]: {
         i18nKey: 'medium_risk',
         titleColor: '#FFB100',
         bgColor: 'rgba(255, 177, 0, 0.1)',
         // TODO: Merge duplicate icon in a another PR.
-        icon: (size: number) => <SecurityWarningIcon sx={{ fontSize: size ?? 24, color: '#FFB915' }} />,
+        icon: (size: number) => <Icon type="securityWarning" size={size ?? 24} color="#FFB915" />,
     },
     [SecurityMessageLevel.Safe]: {
         i18nKey: 'low_risk',
         titleColor: '#60DFAB',
         bgColor: 'rgba(119, 224, 181, 0.1)',
-        icon: (size: number) => <SuccessIcon sx={{ fontSize: size ?? 24 }} />,
+        icon: (size: number) => <Icon type="success" />,
     },
 }
