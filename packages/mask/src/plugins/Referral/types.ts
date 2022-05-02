@@ -206,6 +206,8 @@ export interface Reward extends Entitlement {}
 export interface RewardDetailed extends Reward {
     rewardTokenDefn?: ChainAddress
     referredTokenDefn?: ChainAddress
+    rewardToken?: FungibleTokenDetailed
+    referredToken?: FungibleTokenDetailed
     claimed: boolean
 }
 

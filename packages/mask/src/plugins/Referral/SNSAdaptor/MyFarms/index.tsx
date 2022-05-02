@@ -5,7 +5,6 @@ import { Grid, Typography, CircularProgress } from '@mui/material'
 import { useI18N } from '../../../../utils'
 import { getRequiredChainId } from '../../helpers'
 import type { PageInterface } from '../../types'
-import { fetchERC20TokensFromTokenListsMap } from '../utils/tokenLists'
 import { ReferralRPC } from '../../messages'
 
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
@@ -22,15 +21,9 @@ export function MyFarms(props: PageInterface) {
     const account = useAccount()
     const { ERC20 } = useTokenListConstants()
 
-    const { value: rewards, loading: loadingRewards } = useAsync(
-        async () => account && ReferralRPC.getAccountRewards(account, currentChainId),
-        [account, currentChainId],
-    )
-
-    const { value: allTokens, loading: loadingAllTokens } = useAsync(
-        async () =>
-            !ERC20 || ERC20.length === 0 ? undefined : fetchERC20TokensFromTokenListsMap(ERC20, currentChainId),
-        [currentChainId, ERC20],
+    const { value: rewards, loading } = useAsync(
+        async () => account && ERC20 && ReferralRPC.getAccountRewards(account, currentChainId, ERC20),
+        [account, currentChainId, ERC20],
     )
 
     if (currentChainId !== requiredChainId) {
@@ -63,7 +56,7 @@ export function MyFarms(props: PageInterface) {
                 </Grid>
             </Grid>
             <div className={myFarmsClasses.content}>
-                {loadingRewards || loadingAllTokens ? (
+                {loading ? (
                     <CircularProgress size={50} />
                 ) : (
                     <>
@@ -76,7 +69,6 @@ export function MyFarms(props: PageInterface) {
                                 currentChainId={currentChainId}
                                 account={account}
                                 rewards={rewards}
-                                allTokens={allTokens}
                                 pageType={props.pageType}
                                 onChangePage={props.onChangePage}
                             />

@@ -6,6 +6,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { v4 as uuid } from 'uuid'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
 import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
@@ -79,9 +80,11 @@ export function BuyToFarm(props: PageInterface) {
     )
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
-    const { value: tokenRewards, loading } = useAsync(
+    const { value: tokenRewards = EMPTY_LIST, loading } = useAsync(
         async () =>
-            token?.address && ERC20 && ReferralRPC.getRewardsForReferredToken(currentChainId, token.address, ERC20),
+            token?.address && ERC20
+                ? ReferralRPC.getRewardsForReferredToken(currentChainId, token.address, ERC20)
+                : EMPTY_LIST,
         [token?.address, currentChainId, ERC20],
     )
 
@@ -177,10 +180,10 @@ export function BuyToFarm(props: PageInterface) {
                                 onClick={onClickTokenSelect}
                             />
                         </Grid>
-                        {!token || loading || !tokenRewards ? (
+                        {!token || loading || !tokenRewards?.length ? (
                             <RewardDataWidget />
                         ) : (
-                            [...tokenRewards.values()].map((reward) => (
+                            tokenRewards.map((reward) => (
                                 <RewardDataWidget
                                     key={reward.rewardToken?.address}
                                     title={t('plugin_referral_sponsored_referral_farm')}
@@ -194,7 +197,9 @@ export function BuyToFarm(props: PageInterface) {
                             <Divider />
                             <Box marginTop="20px" display="flex" alignItems="center">
                                 <SponsoredFarmIcon />
-                                <Typography fontWeight={600}>{t('plugin_referral_sponsored_farm')}</Typography>
+                                <Typography fontWeight={600} margin="0 4px 0 8px">
+                                    {t('plugin_referral_sponsored_farm')}
+                                </Typography>
                                 {t('plugin_referral_sponsored_farm_detail')}
                             </Box>
                         </Grid>

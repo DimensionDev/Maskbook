@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useAsync } from 'react-use'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useWeb3, useTokenListConstants } from '@masknet/web3-shared-evm'
@@ -55,8 +55,11 @@ export function FarmPost(props: FarmPostProps) {
     const { showSnackbar } = useCustomSnackbar()
     const { ERC20 } = useTokenListConstants()
 
-    const { value: rewards } = useAsync(
-        async () => chainId && ERC20 && ReferralRPC.getRewardsForReferredToken(chainId, payload.referral_token, ERC20),
+    const { value: rewards = EMPTY_LIST } = useAsync(
+        async () =>
+            chainId && ERC20
+                ? ReferralRPC.getRewardsForReferredToken(chainId, payload.referral_token, ERC20)
+                : EMPTY_LIST,
         [chainId, ERC20],
     )
 
@@ -146,8 +149,8 @@ export function FarmPost(props: FarmPostProps) {
                     </Typography>
                 </Box>
                 <Typography marginTop="8px">{t('plugin_referral_join_receive_rewards')}</Typography>
-                {rewards &&
-                    [...rewards.values()].map((reward) => (
+                {rewards?.length &&
+                    rewards.map((reward) => (
                         <RewardFarmPostWidget
                             key={reward.rewardToken?.address}
                             title={t('plugin_referral_sponsored_referral_farm')}

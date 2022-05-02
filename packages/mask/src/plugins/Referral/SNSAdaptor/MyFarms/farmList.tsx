@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 import { formatUnits } from '@ethersproject/units'
 import BigNumber from 'bignumber.js'
-import { useWeb3, ERC20TokenDetailed, useNativeTokenDetailed, type ChainId } from '@masknet/web3-shared-evm'
+import { useWeb3, type ChainId } from '@masknet/web3-shared-evm'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Typography, Button, Box } from '@mui/material'
 
 import { useI18N } from '../../../../utils'
-import { toNativeRewardTokenDefn, parseChainAddress, roundValue } from '../../helpers'
+import { roundValue } from '../../helpers'
 import { harvestRewards } from '../utils/referralFarm'
 import {
     PagesType,
@@ -23,7 +23,6 @@ interface FarmListProps {
     currentChainId: ChainId
     account: string
     rewards: AccountRewards
-    allTokens?: Map<string, ERC20TokenDetailed>
     pageType?: PagesType
     onChangePage?: ChangePage
 }
@@ -32,13 +31,11 @@ export function FarmList({
     currentChainId,
     account,
     rewards,
-    allTokens,
     pageType = PagesType.REFERRAL_FARMS,
     onChangePage,
 }: FarmListProps) {
     const { t } = useI18N()
     const web3 = useWeb3({ chainId: currentChainId })
-    const { value: nativeToken } = useNativeTokenDetailed()
     const { showSnackbar } = useCustomSnackbar()
 
     const onStartHarvestRewards = useCallback(
@@ -120,19 +117,14 @@ export function FarmList({
                     return accumulator.plus(new BigNumber(current.claimed ? formatUnits(current.rewardValue) : 0))
                 }, new BigNumber(0))
                 const claimable = totalRewards.minus(claimed).toNumber()
-
-                const nativeRewardToken = toNativeRewardTokenDefn(currentChainId)
-                const rewardToken =
-                    rewardTokenDefn === nativeRewardToken
-                        ? nativeToken
-                        : allTokens?.get(parseChainAddress(rewardTokenDefn).address)
+                const rewardToken = rewardTokenRewards[0].rewardToken
 
                 // TODO: change when we will support case: rewardTokenDefn !== referredTokenDefn
                 return (
                     <AccordionFarm
                         key={rewardTokenDefn}
                         rewardToken={rewardToken}
-                        referredToken={rewardToken}
+                        referredToken={rewardTokenRewards[0].referredToken}
                         totalValue={totalRewards.toNumber()}>
                         <Box display="flex" justifyContent="flex-end">
                             <Typography display="flex" alignItems="center" marginRight="20px" fontWeight={600}>

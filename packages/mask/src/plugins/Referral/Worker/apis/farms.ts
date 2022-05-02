@@ -2,7 +2,6 @@ import { orderBy } from 'lodash-unified'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { keccak256, asciiToHex, padRight } from 'web3-utils'
 import { defaultAbiCoder, Interface } from '@ethersproject/abi'
-import { TokenList } from '@masknet/web3-providers'
 import { formatUnits } from '@ethersproject/units'
 import ReferralFarmsV1ABI from '@masknet/web3-contracts/abis/ReferralFarmsV1.json'
 
@@ -10,13 +9,13 @@ import type {
     EvmAddress,
     ChainAddress,
     FarmExistsEvent,
-    FarmDepositChangeEvent,
     FarmMetaDataLog,
     ChainId,
     FarmDetailed,
     FarmHash,
     RewardsHarvested,
     RewardData,
+    FarmDepositChangeEvent,
 } from '../../types'
 import {
     expandBytes24ToBytes32,
@@ -26,6 +25,7 @@ import {
 } from '../../helpers'
 import { queryIndexersWithNearestQuorum } from './indexers'
 import { REFERRAL_FARMS_V1_ADDR } from '../../constants'
+import { fetchERC20TokensFromTokenListsMap } from './tokenLists'
 
 const REFERRAL_FARMS_V1_IFACE = new Interface(ReferralFarmsV1ABI)
 
@@ -57,16 +57,6 @@ function parseFarmExistsEvents(unparsed: any) {
     )
 
     return uniqueFarms
-}
-function parseFarmDepositChangeEvents(unparsed: any) {
-    const parsed = parseEvents(unparsed)
-
-    const farms: Array<FarmDepositChangeEvent> = parsed.map((e) => {
-        const { delta, farmHash } = e.args
-        return { farmHash, delta }
-    })
-
-    return farms
 }
 function parseFarmMetaStateChangeEvents(unparsed: any) {
     const parsed = parseEvents(unparsed)
@@ -153,13 +143,12 @@ interface TokenFilter {
     rewardTokens?: ChainAddress[]
     referredTokens?: ChainAddress[]
 }
-export async function getMyFarms(
+export async function getAccountFarms(
     account: string,
     chainId: ChainId,
+    tokenLists?: string[],
     filter?: TokenFilter,
-): Promise<Array<FarmExistsEvent>> {
-    const farmsAddr = REFERRAL_FARMS_V1_ADDR
-
+): Promise<FarmDetailed[]> {
     // Allow filtering your own tokens
     let topic3, topic4
     if (filter?.rewardTokens) {
@@ -169,9 +158,9 @@ export async function getMyFarms(
         topic4 = filter.referredTokens.map((t) => expandBytes24ToBytes32(t))
     }
 
-    // Query indexers
-    const res = await queryIndexersWithNearestQuorum({
-        addresses: [farmsAddr],
+    // Query account farms
+    const farmExistsEvents = await queryIndexersWithNearestQuorum({
+        addresses: [REFERRAL_FARMS_V1_ADDR],
         topic1: [eventIds.FarmExists],
         topic2: [expandEvmAddressToBytes32(account)],
         topic3,
@@ -179,19 +168,46 @@ export async function getMyFarms(
         chainId: [chainId],
     })
 
-    return parseFarmExistsEvents(res.items)
-}
+    if (!farmExistsEvents?.items.length) return []
 
-export async function getFarmsDeposits(chainId: ChainId): Promise<Array<FarmDepositChangeEvent>> {
-    const farmsAddr = REFERRAL_FARMS_V1_ADDR
+    const farms = parseFarmExistsEvents(farmExistsEvents.items)
 
-    const res = await queryIndexersWithNearestQuorum({
-        addresses: [farmsAddr],
-        topics: [eventIds.FarmDepositChange],
+    const farmsDepositEvents = await queryIndexersWithNearestQuorum({
+        addresses: [REFERRAL_FARMS_V1_ADDR],
+        topic1: [eventIds.FarmDepositChange],
+        topic2: farms.map((farm) => farm.farmHash),
         chainId: [chainId],
     })
+    const farmsDeposits = parseEvents(farmsDepositEvents?.items)
 
-    return parseFarmDepositChangeEvents(res.items)
+    const tokensMap = tokenLists && (await fetchERC20TokensFromTokenListsMap(tokenLists, chainId))
+
+    const farmsMap = new Map(
+        farms.map((farm) => [
+            farm.farmHash,
+            {
+                ...farm,
+                totalFarmRewards: 0,
+                dailyFarmReward: 0,
+                referredToken: tokensMap?.get(parseChainAddress(farm.referredTokenDefn).address),
+                rewardToken: tokensMap?.get(parseChainAddress(farm.rewardTokenDefn).address),
+            },
+        ]),
+    )
+
+    farmsDeposits.forEach((deposit: { args: FarmDepositChangeEvent }) => {
+        const { farmHash, delta } = deposit.args
+        const farmState = farmsMap.get(farmHash)
+
+        if (!farmState) return
+
+        const rewardTokenDec = farmState.rewardToken?.decimals ?? 18
+        const totalFarmRewards =
+            (farmState.totalFarmRewards || 0) + Number.parseFloat(formatUnits(delta, rewardTokenDec))
+        farmsMap.set(farmHash, { ...farmState, totalFarmRewards })
+    })
+
+    return [...farmsMap.values()]
 }
 
 type FarmsMetaStateMap = Map<string, { dailyFarmReward: string }>
@@ -256,9 +272,7 @@ async function getFarmsForReferredToken(
     })
     const farms = parseFarmExistsEvents(farmExistsEvents.items)
 
-    // Query tokens
-    const tokens = tokenLists?.length ? await TokenList.fetchERC20TokensFromTokenLists(tokenLists, chainId) : []
-    const tokensMap = new Map(tokens.map((token) => [token.address.toLowerCase(), token]))
+    const tokensMap = tokenLists?.length ? await fetchERC20TokensFromTokenListsMap(tokenLists, chainId) : undefined
 
     const farmsMap = new Map(
         farms.map((farm) => [
@@ -267,8 +281,8 @@ async function getFarmsForReferredToken(
                 ...farm,
                 totalFarmRewards: 0,
                 dailyFarmReward: 0,
-                referredToken: tokensMap.get(parseChainAddress(farm.referredTokenDefn).address),
-                rewardToken: tokensMap.get(parseChainAddress(farm.rewardTokenDefn).address),
+                referredToken: tokensMap?.get(parseChainAddress(farm.referredTokenDefn).address),
+                rewardToken: tokensMap?.get(parseChainAddress(farm.rewardTokenDefn).address),
             },
         ]),
     )
@@ -290,17 +304,17 @@ export async function getRewardsForReferredToken(
     chainId: ChainId,
     referredToken: EvmAddress,
     tokenLists: string[],
-): Promise<Map<string, RewardData>> {
+): Promise<RewardData[]> {
     const farmsData = await getFarmsForReferredToken(chainId, referredToken, tokenLists)
 
-    const res = new Map<
+    const rewards = new Map<
         ChainAddress,
         { rewardToken?: FungibleTokenDetailed; dailyReward: number; totalReward: number; apr: number }
     >()
     for (const [, value] of farmsData.entries()) {
-        const prevState = res.get(value.rewardTokenDefn)
+        const prevState = rewards.get(value.rewardTokenDefn)
 
-        res.set(value.rewardTokenDefn, {
+        rewards.set(value.rewardTokenDefn, {
             rewardToken: value.rewardToken,
             totalReward: (prevState?.totalReward || 0) + value.totalFarmRewards,
             dailyReward: (prevState?.dailyReward || 0) + value.dailyFarmReward,
@@ -308,8 +322,9 @@ export async function getRewardsForReferredToken(
         })
     }
 
-    return res
+    return [...rewards.values()]
 }
+
 export async function getReferredTokensDefn(chainId: ChainId): Promise<ChainAddress[]> {
     const farmExistEvents = await getFarmExistEvents(chainId)
     const referredTokensDefn = farmExistEvents.map((farm) => farm.referredTokenDefn)

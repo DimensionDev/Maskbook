@@ -9,6 +9,7 @@ import { blue } from '@mui/material/colors'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
 import { META_KEY } from '../constants'
@@ -104,9 +105,11 @@ export function ReferToFarm(props: PageInterface) {
         ),
     )
 
-    const { value: tokenRewards, loading } = useAsync(
+    const { value: tokenRewards = EMPTY_LIST, loading } = useAsync(
         async () =>
-            token?.address && ERC20 && ReferralRPC.getRewardsForReferredToken(currentChainId, token.address, ERC20),
+            token?.address && ERC20
+                ? ReferralRPC.getRewardsForReferredToken(currentChainId, token.address, ERC20)
+                : EMPTY_LIST,
         [token?.address, currentChainId, ERC20],
     )
 
@@ -212,10 +215,10 @@ export function ReferToFarm(props: PageInterface) {
                                 onClick={onClickTokenSelect}
                             />
                         </Grid>
-                        {!token || loading || !tokenRewards ? (
+                        {!token || loading || !tokenRewards.length ? (
                             <RewardDataWidget />
                         ) : (
-                            [...tokenRewards.values()].map((reward) => (
+                            tokenRewards.map((reward) => (
                                 <RewardDataWidget
                                     key={reward.rewardToken?.address}
                                     title={t('plugin_referral_sponsored_referral_farm')}
