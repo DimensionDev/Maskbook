@@ -31,6 +31,7 @@ const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
             personaSign: Services.Identity.signWithPersona,
             walletSign: Services.Ethereum.personalSign,
             currentPersona: currentPersonaSub,
+            silentSign: Services.Identity.generateSignResult,
         }
     },
 }
