@@ -4,7 +4,7 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Navigator } from '../../../components/Navigator'
 import { Avatar, Button, Typography } from '@mui/material'
-import { Icon, MenuPersonasActiveIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { formatPersonaFingerprint, PopupRoutes, formatPersonaName } from '@masknet/shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useI18N } from '../../../../../utils/i18n-next-ui'
@@ -117,9 +117,11 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 {avatar ? (
                                     <Avatar src={avatar} className={classes.avatar} />
                                 ) : (
-                                    <MenuPersonasActiveIcon
+                                    <Icon
+                                        type="menuPersonasActive"
+                                        color="#f9fafa"
                                         className={classes.avatar}
-                                        style={{ fill: '#f9fafa', backgroundColor: '#F9FAFA', borderRadius: 99 }}
+                                        style={{ borderRadius: 99 }}
                                     />
                                 )}
                             </div>

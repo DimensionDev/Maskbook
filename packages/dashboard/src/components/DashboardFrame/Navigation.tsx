@@ -17,15 +17,7 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { useContext } from 'react'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { DashboardContext } from './context'
-import {
-    Icon,
-    MenuPersonasActiveIcon,
-    MenuPersonasIcon,
-    MenuSettingsActiveIcon,
-    MenuSettingsIcon,
-    MenuWalletsActiveIcon,
-    MenuWalletsIcon,
-} from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes } from '@masknet/shared-base'
@@ -135,16 +127,20 @@ export function Navigation({ onClose }: NavigationProps) {
             )}
             <ListItemLink to={DashboardRoutes.Personas}>
                 <ItemIcon>
-                    {useMatch(DashboardRoutes.Personas) ? <MenuPersonasActiveIcon /> : <MenuPersonasIcon />}
+                    {useMatch(DashboardRoutes.Personas) ? (
+                        <Icon type="menuPersonasActive" />
+                    ) : (
+                        <Icon type="menuPersonas" />
+                    )}
                 </ItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
             <ListItemLink to="" selected={!!useMatch(DashboardRoutes.Wallets)} onClick={onExpand}>
                 <ItemIcon>
                     {isWalletPath || isWalletHistoryPath || isWalletTransferPath ? (
-                        <MenuWalletsActiveIcon />
+                        <Icon type="menuWalletsActive" />
                     ) : (
-                        <MenuWalletsIcon />
+                        <Icon type="menuWallets" />
                     )}
                 </ItemIcon>
                 <ListItemText>{t.wallets()}</ListItemText>
@@ -169,7 +165,11 @@ export function Navigation({ onClose }: NavigationProps) {
             </Collapse>
             <ListItemLink to={DashboardRoutes.Settings}>
                 <ItemIcon sx={{ fontSize: 36 }}>
-                    {useMatch(DashboardRoutes.Settings) ? <MenuSettingsActiveIcon /> : <MenuSettingsIcon />}
+                    {useMatch(DashboardRoutes.Settings) ? (
+                        <Icon type="menuSettingsActive" />
+                    ) : (
+                        <Icon type="menuSettings" />
+                    )}
                 </ItemIcon>
                 <ListItemText primary={t.settings()} />
             </ListItemLink>
