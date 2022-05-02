@@ -1,5 +1,5 @@
 import { orderBy } from 'lodash-unified'
-import type { ERC20TokenDetailed, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { keccak256, asciiToHex, padRight } from 'web3-utils'
 import { defaultAbiCoder, Interface } from '@ethersproject/abi'
 import { TokenList } from '@masknet/web3-providers'
@@ -90,46 +90,6 @@ function parseFarmMetaStateChangeEvents(unparsed: any) {
 
     return farmMetastateMap
 }
-function parseBasicFarmEvents(unparsed: any, tokens: ERC20TokenDetailed[]) {
-    const tokensMap = new Map(tokens.map((token) => [token.address.toLowerCase(), token]))
-    const parsed = parseEvents(unparsed)
-
-    // select unique farms
-    const allEventsFarmExists = parsed.filter((e) => e.topic === eventIds.FarmExists)
-    const uniqueFarms: { args: FarmExistsEvent }[] = allEventsFarmExists.filter(
-        (val, index) => index === allEventsFarmExists.findIndex((event) => event.args.farmHash === val.args.farmHash),
-    )
-    const farmsMap = new Map(
-        uniqueFarms.map((farm) => [
-            farm.args.farmHash,
-            {
-                ...farm.args,
-                totalFarmRewards: 0,
-                dailyFarmReward: 0,
-                referredToken: tokensMap.get(parseChainAddress(farm.args.referredTokenDefn).address),
-                rewardToken: tokensMap.get(parseChainAddress(farm.args.rewardTokenDefn).address),
-            },
-        ]),
-    )
-    const farmsDetailed = parseFarmDepositAndFarmMetastateEvents(parsed, farmsMap)
-
-    const res = uniqueFarms.map((event) => {
-        const { farmHash, referredTokenDefn, rewardTokenDefn, sponsor } = event.args
-        const farmDetailed = farmsDetailed.get(farmHash)
-        return {
-            farmHash,
-            referredTokenDefn,
-            rewardTokenDefn,
-            sponsor,
-            totalFarmRewards: farmDetailed?.totalFarmRewards || 0,
-            dailyFarmReward: farmDetailed?.dailyFarmReward || 0,
-            rewardToken: farmDetailed?.rewardToken,
-            referredToken: farmDetailed?.referredToken,
-        }
-    })
-
-    return res
-}
 function parseRewardsHarvestedEvents(unparsed: any) {
     const parsed = parseEvents(unparsed)
 
@@ -139,6 +99,54 @@ function parseRewardsHarvestedEvents(unparsed: any) {
     })
 
     return rewards
+}
+function parseFarmDepositAndFarmMetastateEvents(
+    farmMetaDataEvents: FarmMetaDataLog[],
+    farmsMap: Map<string, FarmDetailed>,
+) {
+    const farmsData = farmsMap
+
+    farmMetaDataEvents.forEach((e) => {
+        const { farmHash } = e.args
+        const farmState = farmsData.get(farmHash)
+
+        if (!farmState) return
+
+        const rewardTokenDec = farmState.rewardToken?.decimals ?? 18
+
+        if (e.topic === eventIds.FarmDepositChange) {
+            const prevTotalFarmRewards = farmState.totalFarmRewards || 0
+
+            const totalFarmRewards = prevTotalFarmRewards + Number.parseFloat(formatUnits(e.args.delta, rewardTokenDec))
+            farmsData.set(farmHash, { ...farmState, totalFarmRewards })
+        }
+        if (e.topic === eventIds.FarmMetastate) {
+            const { key, value } = e.args
+
+            const periodRewardKey = padRight(asciiToHex('periodReward'), 64)
+            if (key === periodRewardKey) {
+                const periodReward = defaultAbiCoder.decode(['uint128', 'int128'], value)[0]
+
+                farmsData.set(farmHash, {
+                    ...farmState,
+                    dailyFarmReward: Number.parseFloat(formatUnits(periodReward, rewardTokenDec)),
+                })
+            }
+        }
+    })
+
+    return farmsData
+}
+
+export async function getFarmExistEvents(chainId: ChainId): Promise<FarmExistsEvent[]> {
+    const farmExistsEvents = await queryIndexersWithNearestQuorum({
+        addresses: [REFERRAL_FARMS_V1_ADDR],
+        topic1: [eventIds.FarmExists],
+        chainId: [chainId],
+    })
+    const farms = parseFarmExistsEvents(farmExistsEvents.items)
+
+    return farms
 }
 
 interface TokenFilter {
@@ -209,20 +217,6 @@ export async function getFarmsMetaState(
     return parseFarmMetaStateChangeEvents(res.items)
 }
 
-export async function getAllFarms(chainId: ChainId, tokenLists?: string[]): Promise<Array<FarmDetailed>> {
-    const farmsAddr = REFERRAL_FARMS_V1_ADDR
-
-    // Query indexers
-    const farmEvents = await queryIndexersWithNearestQuorum({
-        addresses: [farmsAddr],
-        topic1: [eventIds.FarmExists, eventIds.FarmDepositChange, eventIds.FarmMetastate],
-        chainId: [chainId],
-    })
-    // Query tokens
-    const tokens = tokenLists?.length ? await TokenList.fetchERC20TokensFromTokenLists(tokenLists, chainId) : []
-
-    return parseBasicFarmEvents(farmEvents.items, tokens)
-}
 export async function getMyRewardsHarvested(
     account: string,
     chainId: ChainId,
@@ -248,44 +242,7 @@ export async function getMyRewardsHarvested(
     return parseRewardsHarvestedEvents(res.items)
 }
 
-function parseFarmDepositAndFarmMetastateEvents(
-    farmMetaDataEvents: FarmMetaDataLog[],
-    farmsMap: Map<string, FarmDetailed>,
-) {
-    const farmsData = farmsMap
-
-    farmMetaDataEvents.forEach((e) => {
-        const { farmHash } = e.args
-        const farmState = farmsData.get(farmHash)
-
-        if (!farmState) return
-
-        const rewardTokenDec = farmState.rewardToken?.decimals ?? 18
-
-        if (e.topic === eventIds.FarmDepositChange) {
-            const prevTotalFarmRewards = farmState.totalFarmRewards || 0
-
-            const totalFarmRewards = prevTotalFarmRewards + Number.parseFloat(formatUnits(e.args.delta, rewardTokenDec))
-            farmsData.set(farmHash, { ...farmState, totalFarmRewards })
-        }
-        if (e.topic === eventIds.FarmMetastate) {
-            const { key, value } = e.args
-
-            const periodRewardKey = padRight(asciiToHex('periodReward'), 64)
-            if (key === periodRewardKey) {
-                const periodReward = defaultAbiCoder.decode(['uint128', 'int128'], value)[0]
-
-                farmsData.set(farmHash, {
-                    ...farmState,
-                    dailyFarmReward: Number.parseFloat(formatUnits(periodReward, rewardTokenDec)),
-                })
-            }
-        }
-    })
-
-    return farmsData
-}
-export async function getFarmsForReferredToken(
+async function getFarmsForReferredToken(
     chainId: ChainId,
     referredToken: EvmAddress,
     tokenLists: string[],
@@ -354,14 +311,8 @@ export async function getRewardsForReferredToken(
     return res
 }
 export async function getReferredTokensDefn(chainId: ChainId): Promise<ChainAddress[]> {
-    const farmExistEvents = await queryIndexersWithNearestQuorum({
-        addresses: [REFERRAL_FARMS_V1_ADDR],
-        topic1: [eventIds.FarmExists],
-        chainId: [chainId],
-    })
-
-    const farms: { args: FarmExistsEvent }[] = parseEvents(farmExistEvents.items)
-    const referredTokensDefn = farms.map((farm) => farm.args.referredTokenDefn)
+    const farmExistEvents = await getFarmExistEvents(chainId)
+    const referredTokensDefn = farmExistEvents.map((farm) => farm.referredTokenDefn)
 
     return [...new Set(referredTokensDefn)]
 }

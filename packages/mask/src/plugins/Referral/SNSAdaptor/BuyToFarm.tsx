@@ -6,13 +6,12 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { v4 as uuid } from 'uuid'
-import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
 import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
 import { PluginTraderMessages } from '../../Trader/messages'
 
-import { toChainAddressEthers, getFarmsRewardData, getRequiredChainId } from '../helpers'
+import { getRequiredChainId } from '../helpers'
 import { singAndPostProofOfRecommendationWithReferrer } from './utils/proofOfRecommendation'
 import { MASK_REFERRER, SWAP_CHAIN_ID } from '../constants'
 import { TabsCreateFarm, TransactionStatus, PageInterface, PagesType, TabsReferralFarms } from '../types'
@@ -80,10 +79,10 @@ export function BuyToFarm(props: PageInterface) {
     )
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
-    // fetch all farms
-    const { value: farms = EMPTY_LIST } = useAsync(
-        async () => ReferralRPC.getAllFarms(currentChainId, ERC20),
-        [ERC20, currentChainId],
+    const { value: tokenRewards, loading } = useAsync(
+        async () =>
+            token?.address && ERC20 && ReferralRPC.getRewardsForReferredToken(currentChainId, token.address, ERC20),
+        [token?.address, currentChainId, ERC20],
     )
 
     const onClickTokenSelect = useCallback(() => {
@@ -152,11 +151,6 @@ export function BuyToFarm(props: PageInterface) {
         }
     }, [props?.onChangePage, web3, account, token])
 
-    const referredTokenFarms = token
-        ? farms.filter((farm) => farm.referredTokenDefn === toChainAddressEthers(token.chainId, token.address))
-        : EMPTY_LIST
-    const rewardData = getFarmsRewardData(referredTokenFarms)
-
     return (
         <Box className={classes.container}>
             <TabContext value={String(tab)}>
@@ -183,15 +177,18 @@ export function BuyToFarm(props: PageInterface) {
                                 onClick={onClickTokenSelect}
                             />
                         </Grid>
-                        {!token ? (
+                        {!token || loading || !tokenRewards ? (
                             <RewardDataWidget />
                         ) : (
-                            <RewardDataWidget
-                                title={t('plugin_referral_sponsored_farm')}
-                                icon={<SponsoredFarmIcon />}
-                                rewardData={rewardData}
-                                tokenSymbol={token?.symbol}
-                            />
+                            [...tokenRewards.values()].map((reward) => (
+                                <RewardDataWidget
+                                    key={reward.rewardToken?.address}
+                                    title={t('plugin_referral_sponsored_referral_farm')}
+                                    icon={<SponsoredFarmIcon />}
+                                    rewardData={reward}
+                                    tokenSymbol={reward.rewardToken?.symbol}
+                                />
+                            ))
                         )}
                         <Grid item xs={12} display="flex-col" alignItems="center" className={classes.typeNote}>
                             <Divider />

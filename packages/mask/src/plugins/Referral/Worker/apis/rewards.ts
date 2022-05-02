@@ -4,7 +4,7 @@ import { keccak256 } from 'web3-utils'
 
 import type { ChainId, AccountRewards, Reward } from '../../types'
 import { getAccountEntitlements } from './entitlements'
-import { getMyRewardsHarvested, getAllFarms } from './farms'
+import { getMyRewardsHarvested, getFarmExistEvents } from './farms'
 import { toChainAddressEthers } from '../../helpers'
 import { REFERRAL_FARMS_V1_ADDR, CONFIRMATION_V1_ADDR } from '../../constants'
 
@@ -35,7 +35,7 @@ function makeLeafHash(chainId: number, reward: Reward, rewardTokenDefn: string) 
 export async function getAccountRewards(account: string, chainId: ChainId): Promise<AccountRewards | undefined> {
     const entitlements = await getAccountEntitlements(account)
     const rewardsHarvested = await getMyRewardsHarvested(account, chainId)
-    const farms = await getAllFarms(chainId)
+    const farms = await getFarmExistEvents(chainId)
 
     const farmsMap = new Map(farms.map((farm) => [farm.farmHash, farm]))
     const rewardsHarvestedMap = new Map(

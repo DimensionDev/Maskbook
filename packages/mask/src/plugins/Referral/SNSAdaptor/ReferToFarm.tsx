@@ -9,13 +9,12 @@ import { blue } from '@mui/material/colors'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
 import { META_KEY } from '../constants'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
-import { getFarmsRewardData, getSponsoredFarmsForReferredToken, getRequiredChainId } from '../helpers'
+import { getRequiredChainId } from '../helpers'
 import { singAndPostProofOfRecommendationOrigin } from './utils/proofOfRecommendation'
 import {
     ReferralMetaData,
@@ -105,10 +104,10 @@ export function ReferToFarm(props: PageInterface) {
         ),
     )
 
-    // fetch all farms
-    const { value: farms = EMPTY_LIST, loading: loadingAllFarms } = useAsync(
-        async () => ReferralRPC.getAllFarms(currentChainId, ERC20),
-        [currentChainId, ERC20],
+    const { value: tokenRewards, loading } = useAsync(
+        async () =>
+            token?.address && ERC20 && ReferralRPC.getRewardsForReferredToken(currentChainId, token.address, ERC20),
+        [token?.address, currentChainId, ERC20],
     )
 
     const onClickTokenSelect = useCallback(() => {
@@ -186,7 +185,6 @@ export function ReferToFarm(props: PageInterface) {
             icon: <SponsoredFarmIcon />,
         },
     ]
-    const sponsoredFarms = getSponsoredFarmsForReferredToken(token?.chainId, token?.address, farms)
 
     return (
         <Box className={classes.container}>
@@ -214,15 +212,19 @@ export function ReferToFarm(props: PageInterface) {
                                 onClick={onClickTokenSelect}
                             />
                         </Grid>
-                        {(!token || loadingAllFarms || !sponsoredFarms?.length) && <RewardDataWidget />}
-                        {sponsoredFarms?.length ? (
-                            <RewardDataWidget
-                                title={t('plugin_referral_sponsored_referral_farm')}
-                                icon={<SponsoredFarmIcon />}
-                                rewardData={getFarmsRewardData(sponsoredFarms)}
-                                tokenSymbol={token?.symbol}
-                            />
-                        ) : null}
+                        {!token || loading || !tokenRewards ? (
+                            <RewardDataWidget />
+                        ) : (
+                            [...tokenRewards.values()].map((reward) => (
+                                <RewardDataWidget
+                                    key={reward.rewardToken?.address}
+                                    title={t('plugin_referral_sponsored_referral_farm')}
+                                    icon={<SponsoredFarmIcon />}
+                                    rewardData={reward}
+                                    tokenSymbol={reward.rewardToken?.symbol}
+                                />
+                            ))
+                        )}
                     </Grid>
                     <Grid container marginBottom="24px">
                         <Grid item xs={12} margin="24px 0 20px 0">
