@@ -221,6 +221,9 @@ function useToolbox() {
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     // #endregion
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
@@ -246,7 +249,7 @@ function useToolbox() {
 
     const openWallet = useCallback(() => {
         if (hasNativeAPI) return nativeAPI?.api.misc_openCreateWalletView()
-        return openWalletStatusDialog()
+        return isWalletValid ? openWalletStatusDialog() : openSelectProviderDialog()
     }, [openWalletStatusDialog, hasNativeAPI])
 
     const walletTitle = renderButtonText()
