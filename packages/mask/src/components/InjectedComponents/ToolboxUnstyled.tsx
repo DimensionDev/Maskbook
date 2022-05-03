@@ -30,7 +30,7 @@ import { useI18N } from '../../utils'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 import GuideStep from '../GuideStep'
-import { MaskFilledIcon } from '../../resources/MaskIcon'
+import { AccountBalanceWalletIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { NextIDVerificationStatus, useNextIDConnectStatus } from '../DataSource/useNextID'
@@ -170,7 +170,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
                                     isBorderColorNotDefault
                                 />
                             ) : (
-                                <MaskFilledIcon size={iconSize} />
+                                <AccountBalanceWalletIcon />
                             )}
                         </ListItemIcon>
                         {mini ? null : (
