@@ -228,7 +228,7 @@ function useToolbox() {
     const { value: domain } = useReverseAddress(account)
 
     function renderButtonText() {
-        if (!account) return t('mask_network')
+        if (!account) return t('plugin_wallet_connect_wallet')
         if (!chainIdValid) return t('plugin_wallet_wrong_network')
         if (pendingTransactions.length <= 0)
             return Utils?.formatDomainName?.(domain) || Utils?.formatAddress?.(account, 4) || account

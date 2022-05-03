@@ -23,12 +23,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 {...EntryComponentProps}
                                 title={name}
                                 icon={icon}
-                                onClick={() => setOpen(true)}
+                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
                             />
-                            <SavingsDialog
-                                open={open}
-                                onClose={EntryComponentProps.onClick ?? (() => setOpen(false))}
-                            />
+                            <SavingsDialog open={open} onClose={() => setOpen(false)} />
                         </>
                     )
                 },

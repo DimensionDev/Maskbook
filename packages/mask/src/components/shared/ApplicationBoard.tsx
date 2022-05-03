@@ -119,9 +119,12 @@ function ApplicationBoardContent(props: Props) {
                                 entry: x,
                                 enabled: isSNSEnabled,
                                 pluginId: cur.ID,
-                                isWalletConnectedRequired:
-                                    (!account || currentWeb3Network !== NetworkPluginID.PLUGIN_EVM) &&
-                                    isWalletConnectedRequired,
+                                isWalletConnectedRequired: !account && isWalletConnectedRequired,
+                                isWalletConnectedEVMRequired: Boolean(
+                                    account &&
+                                        currentWeb3Network !== NetworkPluginID.PLUGIN_EVM &&
+                                        isWalletConnectedRequired,
+                                ),
                             }
                         }) ?? EMPTY_LIST,
                     )
@@ -168,8 +171,8 @@ interface RenderEntryComponentProps {
 function RenderEntryComponent({ application }: RenderEntryComponentProps) {
     const Entry = application.entry.RenderEntryComponent!
     const { t } = useI18N()
-    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
     )
     const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
@@ -192,7 +195,7 @@ function RenderEntryComponent({ application }: RenderEntryComponentProps) {
     // #endregion
 
     // #region entry click effect
-    const connectPersona = useCallback(() => {
+    const createOrConnectPersona = useCallback(() => {
         closeApplicationBoard()
         ApplicationEntryStatus.personaConnectAction?.()
     }, [ApplicationEntryStatus])
@@ -202,21 +205,25 @@ function RenderEntryComponent({ application }: RenderEntryComponentProps) {
         CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
     }, [])
 
-    const clickHandler = application.isWalletConnectedRequired
-        ? openWalletStatusDialog
-        : !application.entry.nextIdRequired
-        ? undefined
-        : ApplicationEntryStatus.isPersonaConnected === false
-        ? connectPersona
-        : ApplicationEntryStatus.shouldVerifyNextId
-        ? verifyPersona
-        : undefined
+    const clickHandler =
+        application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired
+            ? openSelectProviderDialog
+            : !application.entry.nextIdRequired
+            ? undefined
+            : ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false
+            ? createOrConnectPersona
+            : ApplicationEntryStatus.shouldVerifyNextId
+            ? verifyPersona
+            : undefined
     // #endregion
 
     // #region tooltip hint
     const tooltipHint = useMemo(() => {
         if (application.isWalletConnectedRequired) return t('application_tooltip_hint_connect_wallet')
+        if (application.isWalletConnectedEVMRequired) return t('application_tooltip_hint_switch_to_evm_wallet')
         if (!application.entry.nextIdRequired) return undefined
+        if (ApplicationEntryStatus.isPersonaCreated === false && !disabled)
+            return t('application_tooltip_hint_create_persona')
         if (ApplicationEntryStatus.isPersonaConnected === false && !disabled)
             return t('application_tooltip_hint_connect_persona')
         if (ApplicationEntryStatus.shouldVerifyNextId && !disabled) return t('application_tooltip_hint_verify')
@@ -240,6 +247,7 @@ function RenderEntryComponent({ application }: RenderEntryComponentProps) {
 
 interface ApplicationEntryStatusContextProps {
     isPersonaConnected: boolean | undefined
+    isPersonaCreated: boolean | undefined
     isNextIDVerify: boolean | undefined
     isSNSConnectToCurrentPersona: boolean | undefined
     shouldDisplayTooltipHint: boolean | undefined
@@ -251,6 +259,7 @@ interface ApplicationEntryStatusContextProps {
 
 const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContextProps>({
     isPersonaConnected: undefined,
+    isPersonaCreated: undefined,
     isNextIDVerify: undefined,
     isSNSConnectToCurrentPersona: undefined,
     shouldDisplayTooltipHint: undefined,
@@ -272,6 +281,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
         <ApplicationEntryStatusContext.Provider
             value={{
                 personaConnectAction: personaConnectStatus.action ?? undefined,
+                isPersonaCreated: personaConnectStatus.hasPersona,
                 isPersonaConnected: personaConnectStatus.connected,
                 isNextIDVerify: nextIDConnectStatus.isVerified,
                 isSNSConnectToCurrentPersona,
