@@ -250,7 +250,7 @@ function useToolbox() {
     const openWallet = useCallback(() => {
         if (hasNativeAPI) return nativeAPI?.api.misc_openCreateWalletView()
         return isWalletValid ? openWalletStatusDialog() : openSelectProviderDialog()
-    }, [openWalletStatusDialog, hasNativeAPI])
+    }, [openWalletStatusDialog, openSelectProviderDialog, isWalletValid, hasNativeAPI])
 
     const walletTitle = renderButtonText()
 
