@@ -24,7 +24,7 @@ export function RewardFarmPostWidget({ title, icon, rewardData, tokenSymbol }: R
     const { classes } = useStyles()
 
     return (
-        <Grid container marginTop="24px">
+        <Grid item xs={6} marginTop="24px">
             {title && (
                 <Grid item xs={12} container marginBottom="12px" alignItems="center">
                     {icon && icon}
@@ -44,7 +44,7 @@ export function RewardFarmPostWidget({ title, icon, rewardData, tokenSymbol }: R
                         {t('plugin_referral_daily_reward')}:{' '}
                         {rewardData ? (
                             <>
-                                {Number.parseFloat(rewardData.dailyReward.toFixed(5))} {tokenSymbol ?? '-'}
+                                {Number.parseFloat(rewardData.dailyReward.toFixed(4))} {tokenSymbol ?? '-'}
                             </>
                         ) : (
                             '-'
@@ -56,7 +56,7 @@ export function RewardFarmPostWidget({ title, icon, rewardData, tokenSymbol }: R
                         {t('plugin_referral_total_rewards')}:{' '}
                         {rewardData ? (
                             <>
-                                {Number.parseFloat(rewardData.totalReward.toFixed(5))} {tokenSymbol ?? '-'}
+                                {Number.parseFloat(rewardData.totalReward.toFixed(4))} {tokenSymbol ?? '-'}
                             </>
                         ) : (
                             '-'

@@ -149,16 +149,18 @@ export function FarmPost(props: FarmPostProps) {
                     </Typography>
                 </Box>
                 <Typography marginTop="8px">{t('plugin_referral_join_receive_rewards')}</Typography>
-                {rewards?.length &&
-                    rewards.map((reward) => (
-                        <RewardFarmPostWidget
-                            key={reward.rewardToken?.address}
-                            title={t('plugin_referral_sponsored_referral_farm')}
-                            icon={<SponsoredFarmIcon />}
-                            rewardData={reward}
-                            tokenSymbol={reward.rewardToken?.symbol}
-                        />
-                    ))}
+                <Grid container>
+                    {rewards?.length &&
+                        rewards.map((reward) => (
+                            <RewardFarmPostWidget
+                                key={reward.rewardToken?.address}
+                                title={t('plugin_referral_sponsored_referral_farm')}
+                                icon={<SponsoredFarmIcon />}
+                                rewardData={reward}
+                                tokenSymbol={reward.rewardToken?.symbol}
+                            />
+                        ))}
+                </Grid>
                 <Typography marginTop="24px" variant="body2">
                     {t('plugin_referral_create_by')} <b>@realMaskNetwork</b>
                 </Typography>
