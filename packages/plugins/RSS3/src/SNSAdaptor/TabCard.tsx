@@ -2,8 +2,9 @@ import { AddressViewer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
+import { useAsyncRetry } from 'react-use'
 import { useI18N } from '../locales'
-import { useDonations, useFootprints } from './hooks'
+import { useDonations, useFootprints, useCurrentPersona, getKV } from './hooks'
 import { DonationPage, FootprintPage } from './pages'
 
 export enum TabCardType {
@@ -18,11 +19,15 @@ export interface TabCardProps {
 
 export function TabCard({ type, addressNames }: TabCardProps) {
     const t = useI18N()
-    const addressName = addressNames.find((x) => x.type === AddressNameType.RSS3)
+    const addressName = addressNames.find((x) => x.type === AddressNameType.ADDRESS)
     const userAddress = addressName?.resolvedAddress || ''
     const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(userAddress)
     const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(userAddress)
-
+    const currentPersona = useCurrentPersona()
+    const { value } = useAsyncRetry(async () => {
+        if (!currentPersona) return
+        return getKV(currentPersona?.publicKeyAsHex!)
+    }, [currentPersona])
     if (!addressName) return null
 
     const isDonation = type === TabCardType.Donation

@@ -3,6 +3,7 @@ import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
 import { TabCard, TabCardType } from './TabCard'
+import { setupContext } from './context'
 
 function addressNameSorter(a: Plugin.SNSAdaptor.ProfileAddress, z: Plugin.SNSAdaptor.ProfileAddress) {
     if (a.type === AddressNameType.RSS3) return -1
@@ -14,12 +15,14 @@ function shouldDisplay(
     identity?: Plugin.SNSAdaptor.ProfileIdentity,
     addressNames?: Plugin.SNSAdaptor.ProfileAddress[],
 ) {
-    return addressNames?.some((x) => x.type === AddressNameType.RSS3) ?? false
+    return addressNames?.some((x) => x.type === AddressNameType.ADDRESS) ?? false
 }
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        setupContext(context)
+    },
     ProfileTabs: [
         {
             ID: `${PLUGIN_ID}_donations`,

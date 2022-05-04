@@ -50,5 +50,7 @@
     "nft_not_belong_to_you": "The collectible doesn't exist or belong to you.",
     "send_tip_successfully": "Sent tip successfully.",
     "send_specific_tip_successfully": "Sent {{amount}} {{name}} tip successfully.",
-    "search": "Search"
+    "search": "Search",
+    "web3_profile": "Web3 Profile",
+    "mask_network": "Mask Network"
 }

@@ -845,6 +845,7 @@ importers:
       date-fns: ^2.28.0
       react-use: ^17.3.2
       urlcat: ^2.0.4
+      use-subscription: ^1.7.0
     dependencies:
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
@@ -859,6 +860,7 @@ importers:
       date-fns: 2.28.0
       react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
       urlcat: 2.0.4
+      use-subscription: 1.7.0_react@18.0.0
 
   packages/plugins/Solana:
     specifiers:
@@ -25819,6 +25821,23 @@ packages:
     resolution: {integrity: sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==}
     peerDependencies:
       react: ^18.0.0
+    dependencies:
+      react: 18.0.0
+    dev: false
+
+  /use-subscription/1.7.0_react@18.0.0:
+    resolution: {integrity: sha512-87x6MjiIVE/BWqtxfiRvM6jfvGudN+UeVOnWi7qKYp2c0YJn5+Z5Jt0kZw6Tt+8hs7kw/BWo2WBhizJSAZsQJA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.0.0
+      use-sync-external-store: 1.1.0_react@18.0.0
+    dev: false
+
+  /use-sync-external-store/1.1.0_react@18.0.0:
+    resolution: {integrity: sha512-SEnieB2FPKEVne66NpXPd1Np4R1lTNKfjuy3XdIoPQKYBAFdzbzSZlSn1KJZUiihQLQC5Znot4SBz1EOTBwQAQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.0.0
     dev: false

@@ -8,7 +8,7 @@ import { useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { ConcealableTabs } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useAddressNames } from '@masknet/web3-shared-evm'
+import { AddressName, AddressNameType, useAddressNames } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { first } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
@@ -44,6 +44,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const { t } = useI18N()
     const [hidden, setHidden] = useState(true)
+    const [addressList, setAddressList] = useState<AddressName[]>()
     const [selectedTab, setSelectedTab] = useState<string | undefined>()
 
     const currentIdentity = useLastRecognizedIdentity()
@@ -56,6 +57,26 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         identity.identifier?.userId,
     )
 
+    useEffect(() => {
+        if (personaList.length === 0) {
+            setAddressList(addressNames)
+        } else {
+            const wallets: AddressName[] = []
+            personaList?.forEach((info) =>
+                info?.proofs?.forEach((proof) => {
+                    if (proof?.platform === NextIDPlatform.Ethereum) {
+                        wallets.push({
+                            type: AddressNameType.ADDRESS,
+                            label: proof?.identity,
+                            resolvedAddress: proof?.identity,
+                        })
+                    }
+                }),
+            )
+            setAddressList([...addressNames, ...wallets])
+        }
+    }, [addressNames, personaList])
+
     const currentAccountNotConnectPersona =
         currentIdentity.identifier === identity.identifier &&
         personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.identifier.publicKeyAsHex) ===
@@ -67,8 +88,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const displayPlugins = useMemo(() => {
         return availablePlugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
-            .filter((z) => z.Utils?.shouldDisplay?.(identity, addressNames) ?? true)
-    }, [availablePlugins, identity, addressNames])
+            .filter((z) => z.Utils?.shouldDisplay?.(identity, addressList) ?? true)
+    }, [availablePlugins, identity, addressList])
     const tabs = useMemo(() => {
         return displayPlugins
             .sort((a, z) => {
@@ -154,7 +175,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             </div>
             <div className={classes.content}>
                 <ContentComponent
-                    addressNames={addressNames}
+                    addressNames={addressList}
                     identity={identity}
                     personaList={personaList?.map((persona) => persona.persona)}
                 />
