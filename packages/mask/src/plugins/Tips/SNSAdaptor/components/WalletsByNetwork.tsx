@@ -1,7 +1,8 @@
 import { SettingsIcon } from '@masknet/icons'
 import type { BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { SvgIconTypeMap, Typography } from '@mui/material'
+import type { OverridableComponent } from '@mui/material/OverridableComponent'
 import { useI18N } from '../../../../utils'
 import { WalletItem } from './WalletItem'
 
@@ -39,10 +40,14 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '100px',
         textAlign: 'center',
     },
+    networkIcon: {
+        width: 'auto',
+        height: 18,
+    },
 }))
 
 interface WalletsByNetworkProps {
-    network: { name: string; icon: URL }
+    network: { name: string; icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>> }
     toSetting: () => void
     wallets: BindingProof[]
     setAsDefault: (idx: number) => void
@@ -56,7 +61,7 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
         <div className={classes.container}>
             <div className={classes.topBox}>
                 <Typography className={classes.commonFlexBox} sx={{ fontWeight: 'bold' }}>
-                    <img style={{ height: 18 }} src={network.icon.toString()} />
+                    <network.icon className={classes.networkIcon} />
                     {network.name}
                 </Typography>
                 <SettingsIcon onClick={toSetting} className={classes.settingIcon} />
