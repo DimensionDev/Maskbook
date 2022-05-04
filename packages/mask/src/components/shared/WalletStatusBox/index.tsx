@@ -90,14 +90,6 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     statusBox: {
         position: 'relative',
     },
-    transactionList: {
-        zIndex: 999,
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 88,
-        padding: 0,
-    },
 }))
 interface WalletStatusBox {
     isDashboard?: boolean
@@ -142,73 +134,78 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { summary: pendingSummary, transactionList } = usePendingTransactions()
 
     return account ? (
-        <section
-            className={classNames(
-                classes.statusBox,
-                classes.currentAccount,
-                props.isDashboard ? classes.dashboardBackground : '',
-            )}>
-            <WalletIcon
-                size={48}
-                badgeSize={16}
-                networkIcon={providerDescriptor?.icon} // switch providerIcon and networkIcon to meet design
-                providerIcon={networkDescriptor?.icon}
-            />
-            <div className={classes.accountInfo}>
-                <div className={classes.infoRow} style={{ marginBottom: 6 }}>
-                    {providerType !== ProviderType.MaskWallet ? (
-                        <Typography className={classes.accountName}>
-                            {domain && Utils?.formatDomainName
-                                ? Utils.formatDomainName(domain)
-                                : providerDescriptor?.name}
-                        </Typography>
-                    ) : (
-                        <>
+        <>
+            <section
+                className={classNames(
+                    classes.statusBox,
+                    classes.currentAccount,
+                    props.isDashboard ? classes.dashboardBackground : '',
+                )}>
+                <WalletIcon
+                    size={48}
+                    badgeSize={16}
+                    networkIcon={providerDescriptor?.icon} // switch providerIcon and networkIcon to meet design
+                    providerIcon={networkDescriptor?.icon}
+                />
+                <div className={classes.accountInfo}>
+                    <div className={classes.infoRow} style={{ marginBottom: 6 }}>
+                        {providerType !== ProviderType.MaskWallet ? (
                             <Typography className={classes.accountName}>
-                                {wallet?.name ?? providerDescriptor?.name}
+                                {domain && Utils?.formatDomainName
+                                    ? Utils.formatDomainName(domain)
+                                    : providerDescriptor?.name}
                             </Typography>
-                            {domain && Utils?.formatDomainName ? (
-                                <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
-                            ) : null}
-                        </>
-                    )}
+                        ) : (
+                            <>
+                                <Typography className={classes.accountName}>
+                                    {wallet?.name ?? providerDescriptor?.name}
+                                </Typography>
+                                {domain && Utils?.formatDomainName ? (
+                                    <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
+                                ) : null}
+                            </>
+                        )}
+                    </div>
+                    <div className={classes.infoRow}>
+                        <Typography className={classes.address} variant="body2" title={account}>
+                            <FormattedAddress address={account} size={4} formatter={Utils?.formatAddress} />
+                        </Typography>
+                        <Link
+                            className={classes.link}
+                            underline="none"
+                            component="button"
+                            title={t('wallet_status_button_copy_address')}
+                            onClick={onCopy}>
+                            <Copy className={classes.linkIcon} size={14} />
+                        </Link>
+                        <Link
+                            className={classes.link}
+                            href={Utils?.resolveAddressLink?.(chainId, account) ?? ''}
+                            target="_blank"
+                            title={t('plugin_wallet_view_on_explorer')}
+                            rel="noopener noreferrer">
+                            <ExternalLink className={classes.linkIcon} size={14} />
+                        </Link>
+                    </div>
                 </div>
-                <div className={classes.infoRow}>
-                    <Typography className={classes.address} variant="body2" title={account}>
-                        <FormattedAddress address={account} size={4} formatter={Utils?.formatAddress} />
-                    </Typography>
-                    <Link
-                        className={classes.link}
-                        underline="none"
-                        component="button"
-                        title={t('wallet_status_button_copy_address')}
-                        onClick={onCopy}>
-                        <Copy className={classes.linkIcon} size={14} />
-                    </Link>
-                    <Link
-                        className={classes.link}
-                        href={Utils?.resolveAddressLink?.(chainId, account) ?? ''}
-                        target="_blank"
-                        title={t('plugin_wallet_view_on_explorer')}
-                        rel="noopener noreferrer">
-                        <ExternalLink className={classes.linkIcon} size={14} />
-                    </Link>
-                    {pendingSummary}
-                </div>
+
+                {!props.disableChange && (
+                    <section>
+                        <Button
+                            className={classNames(classes.actionButton)}
+                            variant="contained"
+                            size="small"
+                            onClick={openSelectProviderDialog}>
+                            {t('wallet_status_button_change')}
+                        </Button>
+                    </section>
+                )}
+            </section>
+            <div>
+                {pendingSummary}
+                {transactionList}
             </div>
-            <div className={classes.transactionList}>{transactionList}</div>
-            {!props.disableChange && (
-                <section>
-                    <Button
-                        className={classNames(classes.actionButton)}
-                        variant="contained"
-                        size="small"
-                        onClick={openSelectProviderDialog}>
-                        {t('wallet_status_button_change')}
-                    </Button>
-                </section>
-            )}
-        </section>
+        </>
     ) : (
         <section className={classes.connectButtonWrapper}>
             <Button

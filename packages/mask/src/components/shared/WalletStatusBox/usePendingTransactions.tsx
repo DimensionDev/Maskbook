@@ -1,9 +1,8 @@
-import { LoadingAnimation } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useAim } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { TransactionStatusType } from '@masknet/web3-shared-evm'
-import { Button, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import classnames from 'classnames'
 import { useEffect, useRef, useState } from 'react'
 import {
@@ -17,25 +16,21 @@ import { TransactionList } from './TransactionList'
 
 const useStyles = makeStyles()((theme) => ({
     summaryWrapper: {
-        display: 'inline-block',
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: theme.spacing(1, 1),
     },
     pendingSummary: {
-        backgroundColor: 'rgba(255, 185, 21, 0.1)',
-        height: 24,
-        lineHeight: '22px',
-        display: 'flex',
-        alignItems: 'center',
-        borderRadius: 4,
-        padding: theme.spacing(0.5),
-        boxSizing: 'border-box',
+        cursor: 'default',
         color: theme.palette.warning.main,
         fontSize: 14,
     },
+    clearAll: {
+        cursor: 'pointer',
+        color: theme.palette.primary.main,
+    },
     hide: {
         display: 'none',
-    },
-    transactionList: {
-        boxShadow: '0 0 16px rgba(101, 119, 134, 0.2)',
     },
 }))
 
@@ -50,6 +45,7 @@ export function usePendingTransactions() {
     const { value: pendingTransactions = EMPTY_LIST } = useRecentTransactions({
         status: TransactionStatusType.NOT_DEPEND,
     })
+
     // frozenTxes would not be reactive to pendingTransactions,
     // it would be recreated then the list shows up.
     const frozenTxes = useRef<RecentTransaction[]>([])
@@ -64,38 +60,32 @@ export function usePendingTransactions() {
     const transactions = frozenTxes.current.filter((tx) => !meltedTxHashes.includes(tx.hash))
     // #endregion
 
-    const summary = (
-        <>
-            <div
-                ref={pendingSummaryRef}
-                className={classnames(classes.summaryWrapper, pendingTransactions.length ? '' : classes.hide)}>
+    const summary = pendingTransactions.length ? (
+        <section className={classes.summaryWrapper}>
+            <div ref={pendingSummaryRef} className={classnames(pendingTransactions.length ? '' : classes.hide)}>
                 {pendingTransactions.length ? (
-                    <Typography className={classes.pendingSummary} variant="body2" mr={1}>
+                    <Typography className={classes.pendingSummary} variant="body2" mr={1} fontWeight={700}>
                         {pendingTransactions.length} {t('wallet_status_pending')}
-                        <LoadingAnimation sx={{ fontSize: 16, ml: 0.5 }} />
                     </Typography>
                 ) : null}
             </div>
             {pendingTransactions.length ? (
-                <Button variant="text" size="small" onClick={clearRecentTxes}>
+                <Typography className={classes.clearAll} onClick={clearRecentTxes} fontWeight={700}>
                     {t('wallet_status_pending_clear_all')}
-                </Button>
+                </Typography>
             ) : null}
-        </>
-    )
+        </section>
+    ) : null
 
     const transactionList = (
         <div ref={transactionsListRef} className={showRecentTransactions ? '' : classes.hide}>
-            {showRecentTransactions && transactions.length ? (
-                <TransactionList
-                    className={classes.transactionList}
-                    transactions={transactions}
-                    onClear={(tx) => {
-                        setMeltedTxHashes((list) => [...list, tx.hash])
-                        removeRecentTx(tx.hash)
-                    }}
-                />
-            ) : null}
+            <TransactionList
+                transactions={transactions}
+                onClear={(tx) => {
+                    setMeltedTxHashes((list) => [...list, tx.hash])
+                    removeRecentTx(tx.hash)
+                }}
+            />
         </div>
     )
 
