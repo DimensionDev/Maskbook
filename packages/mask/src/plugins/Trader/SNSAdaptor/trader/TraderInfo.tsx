@@ -1,7 +1,13 @@
 import { memo, useMemo } from 'react'
 import type { TradeInfo } from '../../types'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { createNativeToken, formatBalance, formatPercentage, formatWeiToEther } from '@masknet/web3-shared-evm'
+import {
+    createNativeToken,
+    formatBalance,
+    formatPercentage,
+    formatUSD,
+    formatWeiToEther,
+} from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, TextField, Typography } from '@mui/material'
 import { resolveTradeProviderName } from '../../pipes'
 import { FormattedBalance } from '@masknet/shared'
@@ -13,7 +19,6 @@ import { BestTradeIcon, TriangleWarning } from '@masknet/icons'
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { TradeProvider } from '@masknet/public-api'
-import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
@@ -106,15 +111,10 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
         return trade.gas.value && gasPrice ? multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed() : 0
     }, [trade.gas?.value, gasPrice])
 
-    const feeValueUSD = useMemo(
-        () =>
-            gasFee
-                ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toPrecision(2)) < new BigNumber(0.01)
-                    ? '< 0.01'
-                    : new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toPrecision(2))
-                : '0',
-        [gasFee, tokenPrice],
-    )
+    const feeValueUSD = useMemo(() => {
+        if (!gasFee) return '0'
+        return formatUSD(formatWeiToEther(gasFee).times(tokenPrice))
+    }, [gasFee, tokenPrice])
 
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade.value?.priceImpact)
 
