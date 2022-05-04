@@ -1,6 +1,5 @@
 import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
-import { isSameAddress } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
@@ -20,7 +19,7 @@ import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { initMeta, initCollection, GLB3DIcon } from '../constants'
 import { PreviewBox } from './PreviewBox'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
-import { useUser, useNFTs, useNFTsExtra } from '../hooks'
+import { useUser, useNFTs } from '../hooks'
 import { useI18N } from '../../../utils'
 import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
@@ -107,7 +106,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
 
     const user = useUser()
     const nfts = useNFTs(user, configNFTs)
-    const extraData = useNFTsExtra(configNFTs)
+    // const extraData = useNFTsExtra(configNFTs)
     const [collection, setCollection] = useState<FilterContract>(initCollection)
     const [isCollectionsError, setCollectionsError] = useState(false)
 
@@ -194,9 +193,8 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
         return imageChosen?.mediaUrl
     }, [metaData.image, collection.tokens])
 
-    const renderImg = (address: string) => {
-        const matched = extraData.find((item) => isSameAddress(item.address, address))
-        return <ImageLoader className={classes.thumbnail} src={matched?.iconURL ?? ''} />
+    const renderImg = (item: FilterContract) => {
+        return <ImageLoader className={classes.thumbnail} src={item.icon} />
     }
 
     const paperComponent = (children: ReactNode | undefined) => <Box className={classes.boxPaper}>{children}</Box>
@@ -218,7 +216,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         disabled={!option.tokens.length}
                         className={classes.menuItem}>
                         <Box {...props} component="li" className={classes.itemFix}>
-                            {renderImg(option.contract)}
+                            {renderImg(option)}
                             <Typography className={classes.itemTxt}>{option.name}</Typography>
                         </Box>
                     </MenuItem>
@@ -235,7 +233,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 )}
             />
         )
-    }, [nfts, extraData])
+    }, [nfts])
 
     const tokensRender = useMemo(() => {
         return (

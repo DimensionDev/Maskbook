@@ -24,6 +24,7 @@ export const initMeta = {
 export const initCollection = {
     name: '',
     contract: '',
+    icon: '',
     tokens: [],
 }
 

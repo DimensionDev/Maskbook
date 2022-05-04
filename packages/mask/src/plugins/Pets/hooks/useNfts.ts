@@ -23,7 +23,7 @@ function useInitNFTs(config: Record<string, Constant> | undefined) {
         const nftList = transform(config)()
         return Object.keys(nftList).map((i) => {
             const value = nftList[i as keyof typeof nftList]
-            return { name: i, contract: value as string, tokens: [] }
+            return { name: i, contract: value as string, icon: '', tokens: [] }
         })
     }, [config])
 }
@@ -33,7 +33,9 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
     const [nfts, setNfts] = useState<FilterContract[]>(initContracts)
     const chainId = useChainId()
     const [fetchTotal, setFetchTotal] = useState<ERC721TokenDetailed[]>([])
-    const { data: collectibles, state } = useCollectibles(user?.address ?? '', chainId)
+    // const { data: collectibles, state } = useCollectibles(user?.address ?? '', chainId)
+    const { data: collectibles, state } = useCollectibles('0x141721F4D7Fd95541396E74266FF272502Ec8899', chainId)
+
     useEffect(() => {
         if (!initContracts.length) return
         const tempNFTs: FilterContract[] = cloneDeep(initContracts)
@@ -41,8 +43,20 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
             const total = [...fetchTotal, ...collectibles]
             setFetchTotal(total)
             for (const NFT of total) {
-                const sameNFT = tempNFTs.find((temp) => isSameAddress(temp.contract, NFT.contractDetailed.address))
-                if (!sameNFT) continue
+                let sameNFT = tempNFTs.find((temp) => isSameAddress(temp.contract, NFT.contractDetailed.address))
+                if (!sameNFT) {
+                    sameNFT = {
+                        name: NFT.contractDetailed.name,
+                        contract: NFT.contractDetailed.address,
+                        icon: NFT.contractDetailed.iconURL ?? '',
+                        tokens: [],
+                    }
+                    tempNFTs.push(sameNFT)
+                } else {
+                    if (!sameNFT.icon) {
+                        sameNFT.icon = NFT.contractDetailed.iconURL ?? ''
+                    }
+                }
                 const isPunk =
                     isSameAddress(NFT.contractDetailed.address, Punk3D.contract) && NFT.tokenId === Punk3D.tokenId
                 if (isPunk) {
