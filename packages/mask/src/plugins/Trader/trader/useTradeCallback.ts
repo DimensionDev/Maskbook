@@ -102,6 +102,12 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.MDEX:
             return uniswapV2Like
+        case TradeProvider.DIFFUSION:
+            return uniswapV2Like
+        case TradeProvider.EVMOSWAP:
+            return uniswapV2Like
+        case TradeProvider.CRONUS:
+            return uniswapV2Like
         case TradeProvider.ZRX:
             return zrx
         case TradeProvider.BALANCER:

@@ -23,6 +23,12 @@ import {
     TRISOLARIS_CUSTOM_BASES,
     MDEX_BASE_AGAINST_TOKENS,
     MDEX_CUSTOM_BASES,
+    DIFFUSION_BASE_AGAINST_TOKENS,
+    DIFFUSION_CUSTOM_BASES,
+    CRONUS_BASE_AGAINST_TOKENS,
+    CRONUS_CUSTOM_BASES,
+    EVMOSWAP_BASE_AGAINST_TOKENS,
+    EVMOSWAP_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -174,6 +180,45 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: MDEX_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: MDEX_CUSTOM_BASES,
+                }
+            case TradeProvider.DIFFUSION:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.DIFFUSION_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.DIFFUSION_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.DIFFUSION_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.DIFFUSION_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.DIFFUSION_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: DIFFUSION_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: DIFFUSION_CUSTOM_BASES,
+                }
+            case TradeProvider.CRONUS:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.CRONUS_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.CRONUS_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.CRONUS_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.CRONUS_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.CRONUS_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: CRONUS_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: CRONUS_CUSTOM_BASES,
+                }
+            case TradeProvider.EVMOSWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.EVMOSWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.EVMOSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.EVMOSWAP_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.EVMOSWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.EVMOSWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: EVMOSWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: EVMOSWAP_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {

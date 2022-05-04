@@ -194,6 +194,9 @@ export enum TradeProvider {
     TRADERJOE = 13,
     PANGOLIN = 14,
     MDEX = 15,
+    DIFFUSION = 16,
+    EVMOSWAP = 17,
+    CRONUS = 18,
 }
 
 /** Supported language settings */
@@ -233,6 +236,7 @@ export enum NetworkType {
     Metis = 'Metis',
     Optimistic = 'Optimistic',
     Conflux = 'Conflux',
+    Evmos = 'Evmos',
 }
 
 export enum ProviderType {

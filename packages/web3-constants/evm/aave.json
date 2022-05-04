@@ -18,7 +18,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Evmos": ""
     },
     "AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS": {
         "Mainnet": "0xb53c1a33016b2dc2ff3653530bff1848a515c8c5",
@@ -39,7 +40,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Evmos": ""
     },
     "AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS": {
         "Mainnet": "0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d",
@@ -60,6 +62,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Evmos": ""
     }
 }

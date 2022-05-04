@@ -41,6 +41,9 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.TRISOLARIS]: 'Trisolaris',
         [TradeProvider.WANNASWAP]: 'WannaSwap',
         [TradeProvider.MDEX]: 'Mdex',
+        [TradeProvider.EVMOSWAP]: 'EvmoSwap',
+        [TradeProvider.CRONUS]: 'Cronus',
+        [TradeProvider.DIFFUSION]: 'Diffusion',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)

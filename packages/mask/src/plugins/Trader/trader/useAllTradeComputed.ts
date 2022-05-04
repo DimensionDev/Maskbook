@@ -206,6 +206,27 @@ export function useAllTradeComputed(
         traderEstimateGas: mdexEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.MDEX, inputAmount_, inputToken, outputToken)
 
+    // Diffusion finance
+    const {
+        trader_: diffusion_,
+        trader: diffusion,
+        traderEstimateGas: diffusionEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.DIFFUSION, inputAmount_, inputToken, outputToken)
+
+    // EvmoSwap
+    const {
+        trader_: evmoswap_,
+        trader: evmoswap,
+        traderEstimateGas: evmoswapEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.EVMOSWAP, inputAmount_, inputToken, outputToken)
+
+    // Cronus
+    const {
+        trader_: cronus_,
+        trader: cronus,
+        traderEstimateGas: cronusstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.CRONUS, inputAmount_, inputToken, outputToken)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -223,6 +244,9 @@ export function useAllTradeComputed(
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
         { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
+        { provider: TradeProvider.DIFFUSION, ...mdex_, value: mdex, gas: mdexEstimateGas },
+        { provider: TradeProvider.CRONUS, ...mdex_, value: mdex, gas: mdexEstimateGas },
+        { provider: TradeProvider.EVMOSWAP, ...mdex_, value: mdex, gas: mdexEstimateGas },
     ]
 
     return nativeToken_.value

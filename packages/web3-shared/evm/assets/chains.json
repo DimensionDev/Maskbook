@@ -2971,5 +2971,20 @@
         "infoURL": "https://evm.confluxscan.net",
         "shortName": "Conflux",
         "chainId": 1030
+    },
+    {
+        "name": "Evmos Network",
+        "chain": "Evmos",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "name": "evmos",
+            "symbol": "evmos",
+            "decimals": 18,
+            "logoURI": ""
+        },
+        "infoURL": "https://www.mintscan.io/evmos",
+        "shortName": "Conflux",
+        "chainId": 9001
     }
 ]

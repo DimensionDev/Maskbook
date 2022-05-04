@@ -1133,7 +1133,7 @@ importers:
       tiny-secp256k1: 2.2.1
       typeson: 7.0.1
       typeson-registry: 3.0.0
-      use-subscription: 1.6.0_react@18.0.0
+      use-subscription: 1.6.0_react@packages+empty
       z-schema: 5.0.3
     devDependencies:
       '@types/use-subscription': 1.0.0
@@ -14053,7 +14053,7 @@ packages:
     resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
     dependencies:
       no-case: 3.0.4
-      tslib: 2.3.1
+      tslib: 2.4.0
     dev: true
 
   /dot-prop/5.3.0:
@@ -19615,7 +19615,7 @@ packages:
   /lower-case/2.0.2:
     resolution: {integrity: sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg==}
     dependencies:
-      tslib: 2.3.1
+      tslib: 2.4.0
     dev: true
 
   /lowercase-keys/1.0.1:
@@ -20515,7 +20515,7 @@ packages:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
     dependencies:
       lower-case: 2.0.2
-      tslib: 2.3.1
+      tslib: 2.4.0
     dev: true
 
   /node-addon-api/2.0.2:
@@ -21286,7 +21286,7 @@ packages:
     resolution: {integrity: sha512-uWlGT3YSnK9x3BQJaOdcZwrnV6hPpd8jFH1/ucpiLRPh/2zCVJKS19E4GvYHvaCcACn3foXZ0cLB9Wrx1KGe5g==}
     dependencies:
       no-case: 3.0.4
-      tslib: 2.3.1
+      tslib: 2.4.0
     dev: true
 
   /pascalcase/0.1.1:
@@ -25821,6 +25821,14 @@ packages:
       react: ^18.0.0
     dependencies:
       react: 18.0.0
+    dev: false
+
+  /use-subscription/1.6.0_react@packages+empty:
+    resolution: {integrity: sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      react: link:packages/empty
     dev: false
 
   /use/3.1.1:

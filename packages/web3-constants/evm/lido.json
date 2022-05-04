@@ -18,7 +18,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Evmos": ""
     },
     "LIDO_REFERRAL_ADDRESS": {
         "Mainnet": "0x934b510d4c9103e6a87aef13b816fb080286d649",
@@ -39,6 +40,7 @@
         "Fantom": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Aurora": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Aurora_Testnet": "0x934b510d4c9103e6a87aef13b816fb080286d649",
-        "Conflux": ""
+        "Conflux": "",
+        "Evmos": ""
     }
 }
