@@ -1,4 +1,4 @@
-import { getProcessLock, shell, watchTask } from '../utils'
+import { getProcessLock, watchTask } from '../utils'
 import { series, parallel, TaskFunctionCallback } from 'gulp'
 import { i18nCodegen, i18nCodegenWatch } from './i18n-codegen'
 import { typescript, typescriptWatch } from './typescript'
