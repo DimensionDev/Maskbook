@@ -1,8 +1,8 @@
 import { SettingsIcon } from '@masknet/icons'
 import type { BindingProof } from '@masknet/shared-base'
+import type { SupportedNetworkMap } from '../../hooks/useSupportedNetworks'
 import { makeStyles } from '@masknet/theme'
-import { SvgIconTypeMap, Typography } from '@mui/material'
-import type { OverridableComponent } from '@mui/material/OverridableComponent'
+import { Typography } from '@mui/material'
 import { useI18N } from '../../../../utils'
 import { WalletItem } from './WalletItem'
 
@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface WalletsByNetworkProps {
-    network: { name: string; icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>> }
+    network: SupportedNetworkMap
     toSetting: () => void
     wallets: BindingProof[]
     setAsDefault: (idx: number) => void
