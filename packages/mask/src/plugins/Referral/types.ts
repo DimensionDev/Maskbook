@@ -30,7 +30,7 @@ export enum TabsCreateFarm {
 
 export enum TabsReferAndBuy {
     NEW = 'New',
-    MY_FARMS = 'My Farms',
+    MY_REWARDS = 'My Rewards',
 }
 export interface PageHistory {
     page: PagesType

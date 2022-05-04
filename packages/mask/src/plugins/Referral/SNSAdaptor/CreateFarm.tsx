@@ -269,8 +269,8 @@ export function CreateFarm(props: PageInterface) {
                     variant="fullWidth"
                     onChange={(e, v) => setTab(v)}
                     aria-label="persona-post-contacts-button-group">
-                    <Tab value={TabsCreateFarm.NEW} label="New" classes={tabClasses} />
-                    <Tab value={TabsCreateFarm.CREATED} label="Created" classes={tabClasses} />
+                    <Tab value={TabsCreateFarm.NEW} label={t('plugin_referral_tab_new')} classes={tabClasses} />
+                    <Tab value={TabsCreateFarm.CREATED} label={t('plugin_referral_tab_created')} classes={tabClasses} />
                 </Tabs>
                 <TabPanel value={TabsCreateFarm.NEW} className={classes.tab}>
                     <Typography fontWeight={600} variant="h6" marginBottom="12px">

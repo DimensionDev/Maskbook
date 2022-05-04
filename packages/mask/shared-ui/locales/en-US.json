@@ -1115,6 +1115,9 @@
     "plugin_referral": "Referral Farms",
     "plugin_referral_powered_by": "Powered by",
     "plugin_referral_create_by": "Created by",
+    "plugin_referral_tab_new": "New",
+    "plugin_referral_tab_created": "Created",
+    "plugin_referral_tab_my_rewards": "My Rewards",
     "plugin_referral_referral_farming": "Referral Farming",
     "plugin_referral_referral_farms_short_desc": " distributes yield farming alike returns for successful referrals",
     "plugin_referral_how_it_works": "How it Works",
@@ -1187,5 +1190,6 @@
     "plugin_referral_error_token_not_select": "Token didn't select",
     "plugin_referral_error_native_token_farm": "Cannot create farm with native token.",
     "plugin_referral_buy_and_hold_referral": "Buy & Hold Referral",
-    "plugin_referral_error_insufficient_balance": "Insufficient {{symbol}} balance"
+    "plugin_referral_error_insufficient_balance": "Insufficient {{symbol}} balance",
+    "plugin_referral_reward_tokens": "Reward Tokens"
 }

@@ -17,9 +17,10 @@ import {
     ChangePage,
 } from '../../types'
 
-import { AccordionFarm } from '../shared-ui/AccordionFarm'
+import { AccordionReward } from './AccordionReward'
+import { ReferredTokenRewards } from './ReferredTokenRewards'
 
-interface FarmListProps {
+interface RewardsProps {
     currentChainId: ChainId
     account: string
     rewards: AccountRewards
@@ -27,13 +28,13 @@ interface FarmListProps {
     onChangePage?: ChangePage
 }
 
-export function FarmList({
+export function Rewards({
     currentChainId,
     account,
     rewards,
     pageType = PagesType.REFERRAL_FARMS,
     onChangePage,
-}: FarmListProps) {
+}: RewardsProps) {
     const { t } = useI18N()
     const web3 = useWeb3({ chainId: currentChainId })
     const { showSnackbar } = useCustomSnackbar()
@@ -93,7 +94,6 @@ export function FarmList({
             rewardTokenSymbol?: string,
         ) => {
             const rewardsClaimable = rewards.filter((reward) => !reward.claimed)
-
             harvestRewards(
                 onConfirmHarvestRewards,
                 () => onStartHarvestRewards(totalRewards, rewardTokenSymbol),
@@ -119,34 +119,35 @@ export function FarmList({
                 const claimable = totalRewards.minus(claimed).toNumber()
                 const rewardToken = rewardTokenRewards[0].rewardToken
 
-                // TODO: change when we will support case: rewardTokenDefn !== referredTokenDefn
                 return (
-                    <AccordionFarm
+                    <AccordionReward
                         key={rewardTokenDefn}
                         rewardToken={rewardToken}
-                        referredToken={rewardTokenRewards[0].referredToken}
                         totalValue={totalRewards.toNumber()}>
-                        <Box display="flex" justifyContent="flex-end">
-                            <Typography display="flex" alignItems="center" marginRight="20px" fontWeight={600}>
-                                <span style={{ marginRight: '4px' }}>{t('plugin_referral_claimable')}:</span>{' '}
-                                {roundValue(claimable, rewardToken?.decimals)} {rewardToken?.symbol}
-                            </Typography>
-                            <Button
-                                disabled={claimable <= 0}
-                                variant="contained"
-                                size="medium"
-                                onClick={() =>
-                                    onHarvestRewards(
-                                        rewardTokenRewards,
-                                        totalRewards.toNumber(),
-                                        rewardTokenDefn,
-                                        rewardToken?.symbol,
-                                    )
-                                }>
-                                {t('plugin_referral_harvest_rewards')}
-                            </Button>
+                        <Box display="flex" flexDirection="column">
+                            <ReferredTokenRewards rewards={rewardTokenRewards} />
+                            <Box display="flex" justifyContent="flex-end" marginTop="4px">
+                                <Typography display="flex" alignItems="center" marginRight="20px" fontWeight={600}>
+                                    <span style={{ marginRight: '4px' }}>{t('plugin_referral_claimable')}:</span>{' '}
+                                    {roundValue(claimable, rewardToken?.decimals)} {rewardToken?.symbol}
+                                </Typography>
+                                <Button
+                                    disabled={claimable <= 0}
+                                    variant="contained"
+                                    size="medium"
+                                    onClick={() =>
+                                        onHarvestRewards(
+                                            rewardTokenRewards,
+                                            totalRewards.toNumber(),
+                                            rewardTokenDefn,
+                                            rewardToken?.symbol,
+                                        )
+                                    }>
+                                    {t('plugin_referral_harvest_rewards')}
+                                </Button>
+                            </Box>
                         </Box>
-                    </AccordionFarm>
+                    </AccordionReward>
                 )
             })}
         </>

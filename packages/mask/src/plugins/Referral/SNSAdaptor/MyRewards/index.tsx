@@ -8,11 +8,11 @@ import type { PageInterface } from '../../types'
 import { ReferralRPC } from '../../messages'
 
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
-import { FarmList } from './farmList'
+import { Rewards } from './Rewards'
 
 import { useSharedStyles, useMyFarmsStyles } from '../styles'
 
-export function MyFarms(props: PageInterface) {
+export function MyRewards(props: PageInterface) {
     const { t } = useI18N()
     const { classes: sharedClasses } = useSharedStyles()
     const { classes: myFarmsClasses } = useMyFarmsStyles()
@@ -39,17 +39,12 @@ export function MyFarms(props: PageInterface) {
     return (
         <div className={myFarmsClasses.container}>
             <Grid container justifyContent="space-between" rowSpacing="20px" className={myFarmsClasses.heading}>
-                <Grid item xs={6}>
+                <Grid item xs={8}>
                     <Typography fontWeight={500} className={myFarmsClasses.col}>
-                        {t('plugin_referral_referral_farm')}
+                        {t('plugin_referral_reward_tokens')}
                     </Typography>
                 </Grid>
-                <Grid item xs={2}>
-                    <Typography fontWeight={500} className={myFarmsClasses.col}>
-                        {t('plugin_referral_apr')}
-                    </Typography>
-                </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={4} paddingLeft="12px">
                     <Typography fontWeight={500} className={myFarmsClasses.col}>
                         {t('plugin_referral_rewards_earned')}
                     </Typography>
@@ -65,7 +60,7 @@ export function MyFarms(props: PageInterface) {
                                 {t('plugin_referral_you_have_not_joined_farm')}
                             </Typography>
                         ) : (
-                            <FarmList
+                            <Rewards
                                 currentChainId={currentChainId}
                                 account={account}
                                 rewards={rewards}

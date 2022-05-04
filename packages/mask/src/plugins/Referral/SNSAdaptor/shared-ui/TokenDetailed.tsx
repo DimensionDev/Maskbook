@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { Typography } from '@mui/material'
+import { Typography, Box } from '@mui/material'
 import { TokenIcon } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -45,10 +45,10 @@ export function TokenDetailed({ token }: TokenDetailedProps) {
             {token && (
                 <>
                     <TokenIcon {...token} />
-                    <Typography className={classes.details} display="flex" flexDirection="column">
-                        <div>{token.symbol}</div>
+                    <Box className={classes.details} display="flex" flexDirection="column">
+                        <Typography>{token.symbol}</Typography>
                         <span className={classes.name}>{token.name}</span>
-                    </Typography>
+                    </Box>
                 </>
             )}
         </div>

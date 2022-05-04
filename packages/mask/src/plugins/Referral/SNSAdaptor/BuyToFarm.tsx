@@ -15,12 +15,12 @@ import { PluginTraderMessages } from '../../Trader/messages'
 import { getRequiredChainId } from '../helpers'
 import { singAndPostProofOfRecommendationWithReferrer } from './utils/proofOfRecommendation'
 import { MASK_REFERRER, SWAP_CHAIN_ID } from '../constants'
-import { TabsCreateFarm, TransactionStatus, PageInterface, PagesType, TabsReferralFarms } from '../types'
+import { TabsReferAndBuy, TransactionStatus, PageInterface, PagesType, TabsReferralFarms } from '../types'
 import type { Coin } from '../../Trader/types'
 
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { MyFarms } from './MyFarms'
+import { MyRewards } from './MyRewards'
 import { TokenSelectField } from './shared-ui/TokenSelectField'
 import { RewardDataWidget } from './shared-ui/RewardDataWidget'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
@@ -65,7 +65,7 @@ export function BuyToFarm(props: PageInterface) {
     const { showSnackbar } = useCustomSnackbar()
     const { ERC20 } = useTokenListConstants()
 
-    const [tab, setTab] = useState(TabsCreateFarm.NEW)
+    const [tab, setTab] = useState(TabsReferAndBuy.NEW)
     const [id] = useState(uuid())
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
@@ -163,10 +163,14 @@ export function BuyToFarm(props: PageInterface) {
                     variant="fullWidth"
                     onChange={(e, v) => setTab(v)}
                     aria-label="persona-post-contacts-button-group">
-                    <Tab value={TabsCreateFarm.NEW} label="New" classes={tabClasses} />
-                    <Tab value={TabsCreateFarm.CREATED} label="My Farms" classes={tabClasses} />
+                    <Tab value={TabsReferAndBuy.NEW} label={t('plugin_referral_tab_new')} classes={tabClasses} />
+                    <Tab
+                        value={TabsReferAndBuy.MY_REWARDS}
+                        label={t('plugin_referral_tab_my_rewards')}
+                        classes={tabClasses}
+                    />
                 </Tabs>
-                <TabPanel value={TabsCreateFarm.NEW} className={classes.tab}>
+                <TabPanel value={TabsReferAndBuy.NEW} className={classes.tab}>
                     <Typography fontWeight={600} variant="h6" marginBottom="12px">
                         {t('plugin_referral_select_a_token_to_buy_and_hold_and_earn_rewards')}
                     </Typography>
@@ -218,8 +222,8 @@ export function BuyToFarm(props: PageInterface) {
                         </ActionButton>
                     </EthereumChainBoundary>
                 </TabPanel>
-                <TabPanel value={TabsCreateFarm.CREATED} className={classes.tab}>
-                    <MyFarms pageType={PagesType.BUY_TO_FARM} {...props} />
+                <TabPanel value={TabsReferAndBuy.MY_REWARDS} className={classes.tab}>
+                    <MyRewards pageType={PagesType.BUY_TO_FARM} {...props} />
                 </TabPanel>
             </TabContext>
         </Box>
