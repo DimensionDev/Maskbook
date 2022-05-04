@@ -6,7 +6,7 @@ import { isLocked } from '../utils'
 import { resourceCopy, resourceCopyWatch } from './resource-files'
 
 function patchPackage() {
-    return shell`npx tsc -b`
+    return shell`pnpx patch-package`
 }
 export function codegen(cb: TaskFunctionCallback) {
     if (isLocked('codegen')) return cb()
