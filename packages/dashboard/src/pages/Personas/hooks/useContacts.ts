@@ -43,7 +43,7 @@ export function useContacts(network: string, page: number, size = 20): AsyncStat
             Services.Identity.queryProfilesInformation(identifiers),
         ])
         return profiles.map((profile) => {
-            const favor = values.find((x) => x.profile.equals(profile.identifier))?.favor
+            const favor = values.find((x) => x.profile === profile.identifier)?.favor
             return {
                 ...profile,
                 favor,

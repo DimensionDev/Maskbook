@@ -29,7 +29,7 @@ class SwarmAgent implements ProviderAgent {
         if (isHTML) {
             const file: CollectionEntry<Uint8Array> = {
                 path: name,
-                data: data,
+                data,
             }
             const { reference } = await this.bee.uploadCollection(POSTAGE_STAMP, [file], {
                 encrypt: false,

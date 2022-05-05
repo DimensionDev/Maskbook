@@ -74,7 +74,7 @@ function Personas() {
                 primaryAction={
                     <PersonaStateBar
                         nickname={currentPersona?.nickname}
-                        fingerprint={currentPersona?.identifier.compressedPoint}
+                        fingerprint={currentPersona?.identifier.rawPublicKey}
                         drawerOpen={drawerOpen}
                         toggleDrawer={toggleDrawer}
                     />

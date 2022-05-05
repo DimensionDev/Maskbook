@@ -132,7 +132,7 @@ export function useTimeline(info: GoodGhostingInfo) {
         } else if (index === numberOfRounds - 1) {
             return {
                 eventOnDate: t('plugin_good_ghosting_deposit_deadline', {
-                    index: index,
+                    index,
                 }),
                 ongoingEvent: t('plugin_good_ghosting_waiting_round'),
             }
@@ -144,7 +144,7 @@ export function useTimeline(info: GoodGhostingInfo) {
         } else {
             return {
                 eventOnDate: t('plugin_good_ghosting_deposit_deadline', {
-                    index: index,
+                    index,
                 }),
                 ongoingEvent: t('plugin_good_ghosting_deposit', {
                     index: index + 1,

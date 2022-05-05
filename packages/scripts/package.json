@@ -1,5 +1,6 @@
 {
   "name": "@masknet/cli",
+  "version": "0.0.0",
   "private": true,
   "bin": {
     "build": "./src/bin/build.ts",

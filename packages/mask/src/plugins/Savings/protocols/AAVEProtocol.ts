@@ -76,7 +76,7 @@ export class AAVEProtocol implements SavingsProtocol {
             const response = await fetch(subgraphUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: body,
+                body,
             })
             const fullResponse: {
                 data: {
@@ -127,7 +127,7 @@ export class AAVEProtocol implements SavingsProtocol {
             const response = await fetch(subgraphUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: body,
+                body,
             })
 
             const fullResponse: {
@@ -201,7 +201,7 @@ export class AAVEProtocol implements SavingsProtocol {
                     .on(TransactionEventType.ERROR, (error) => {
                         onChange({
                             type: TransactionStateType.FAILED,
-                            error: error,
+                            error,
                         })
                     })
                     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {

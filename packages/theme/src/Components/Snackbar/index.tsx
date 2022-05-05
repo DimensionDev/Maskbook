@@ -104,7 +104,7 @@ to {
     return {
         root: {
             zIndex: 9999,
-            transform: typeof offsetY !== undefined ? `translateY(${offsetY}px)` : 'none',
+            transform: typeof offsetY !== 'undefined' ? `translateY(${offsetY}px)` : 'none',
             color: MaskColorVar.textLight,
             pointerEvents: 'inherit',
         },
@@ -216,7 +216,7 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
 
 export const CustomSnackbarProvider = memo<SnackbarProviderProps & { offsetY?: number }>(({ offsetY, ...rest }) => {
     const ref = useRef<SnackbarProvider>(null)
-    const { classes } = useStyles({ offsetY: offsetY })
+    const { classes } = useStyles({ offsetY })
     const onDismiss = (key: string | number) => () => {
         ref.current?.closeSnackbar(key)
     }

@@ -2,7 +2,6 @@ import { decodeArrayBuffer, encodeArrayBuffer, safeUnreachable } from '@dimensio
 import {
     ECKeyIdentifier,
     ECKeyIdentifierFromJsonWebKey,
-    IdentifierMap,
     isAESJsonWebKey,
     isEC_Private_JsonWebKey,
     isEC_Public_JsonWebKey,
@@ -13,7 +12,7 @@ import {
 import __ from 'elliptic'
 import { Convert } from 'pvtsutils'
 import { decode, encode } from '@msgpack/msgpack'
-import { Err, None, Some } from 'ts-results'
+import { None, Some } from 'ts-results'
 import { createEmptyNormalizedBackup } from '../normalize'
 import type { NormalizedBackup } from '../normalize/type'
 import { hex2buffer } from '../utils/hex2buffer'
@@ -42,7 +41,7 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
         const identifier = ECKeyIdentifierFromJsonWebKey(publicKey)
         const normalizedPersona: NormalizedBackup.PersonaBackup = {
             identifier,
-            linkedProfiles: new IdentifierMap<ProfileIdentifier, any>(new Map(), ProfileIdentifier),
+            linkedProfiles: new Map(),
             publicKey,
             privateKey: isEC_Private_JsonWebKey(persona.privateKey) ? Some(persona.privateKey) : None,
             localKey: isAESJsonWebKey(persona.localKey) ? Some(persona.localKey) : None,
@@ -52,8 +51,8 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
             mnemonic: None,
         }
         for (const [profile] of persona.linkedProfiles) {
-            const id = ProfileIdentifier.fromString(profile, ProfileIdentifier)
-            if (id.err) continue
+            const id = ProfileIdentifier.from(profile)
+            if (id.none) continue
             normalizedPersona.linkedProfiles.set(id.val, null)
         }
         if (persona.mnemonic) {
@@ -65,16 +64,14 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
     }
 
     for (const profile of profiles) {
-        const identifier = ProfileIdentifier.fromString(profile.identifier, ProfileIdentifier)
-        if (identifier.err) continue
+        const identifier = ProfileIdentifier.from(profile.identifier)
+        if (identifier.none) continue
         const normalizedProfile: NormalizedBackup.ProfileBackup = {
             identifier: identifier.val,
             createdAt: Some(new Date(profile.createdAt)),
             updatedAt: Some(new Date(profile.updatedAt)),
             nickname: profile.nickname ? Some(profile.nickname) : None,
-            linkedPersona: profile.linkedPersona
-                ? ECKeyIdentifier.fromString(profile.linkedPersona, ECKeyIdentifier).toOption()
-                : None,
+            linkedPersona: ECKeyIdentifier.from(profile.linkedPersona),
             localKey: isAESJsonWebKey(profile.localKey) ? Some(profile.localKey) : None,
         }
         backup.profiles.set(identifier.val, normalizedProfile)
@@ -83,7 +80,7 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
     for (const persona of backup.personas.values()) {
         const toRemove: ProfileIdentifier[] = []
         for (const profile of persona.linkedProfiles.keys()) {
-            if (backup.profiles.get(profile)?.linkedPersona?.unwrapOr(undefined)?.equals(persona.identifier)) {
+            if (backup.profiles.get(profile)?.linkedPersona?.unwrapOr(undefined) === persona.identifier) {
                 // do nothing
             } else toRemove.push(profile)
         }
@@ -91,18 +88,18 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
     }
 
     for (const post of posts) {
-        const identifier = PostIVIdentifier.fromString(post.identifier, PostIVIdentifier)
-        const postBy = ProfileIdentifier.fromString(post.postBy, ProfileIdentifier)
-        const encryptBy = post.encryptBy ? ECKeyIdentifier.fromString(post.encryptBy, ECKeyIdentifier) : Err.EMPTY
+        const identifier = PostIVIdentifier.from(post.identifier)
+        const postBy = ProfileIdentifier.from(post.postBy)
+        const encryptBy = ECKeyIdentifier.from(post.encryptBy)
 
-        if (identifier.err) continue
+        if (identifier.none) continue
         const interestedMeta = new Map<string, any>()
         const normalizedPost: NormalizedBackup.PostBackup = {
             identifier: identifier.val,
             foundAt: new Date(post.foundAt),
-            postBy: postBy.unwrapOr(ProfileIdentifier.unknown),
+            postBy: postBy.unwrapOr(undefined),
             interestedMeta,
-            encryptBy: encryptBy.toOption(),
+            encryptBy,
             summary: post.summary ? Some(post.summary) : None,
             url: post.url ? Some(post.url) : None,
             postCryptoKey: isAESJsonWebKey(post.postCryptoKey) ? Some(post.postCryptoKey) : None,
@@ -113,13 +110,10 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
             if (post.recipients === 'everyone')
                 normalizedPost.recipients = Some<NormalizedBackup.PostReceiverPublic>({ type: 'public' })
             else {
-                const map = new IdentifierMap<ProfileIdentifier, NormalizedBackup.RecipientReason[]>(
-                    new Map(),
-                    ProfileIdentifier,
-                )
+                const map = new Map<ProfileIdentifier, NormalizedBackup.RecipientReason[]>()
                 for (const [recipient, { reason }] of post.recipients) {
-                    const id = ProfileIdentifier.fromString(recipient, ProfileIdentifier)
-                    if (id.err) continue
+                    const id = ProfileIdentifier.from(recipient)
+                    if (id.none) continue
                     const reasons: NormalizedBackup.RecipientReason[] = []
                     map.set(id.val, reasons)
                     for (const r of reason) {
@@ -137,13 +131,13 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
 
     for (const relation of relations || []) {
         const { profile, persona, favor } = relation
-        const a = ProfileIdentifier.fromString(profile, ProfileIdentifier)
-        const b = ECKeyIdentifier.fromString(persona, ECKeyIdentifier)
-        if (a.ok && b.ok) {
+        const a = ProfileIdentifier.from(profile)
+        const b = ECKeyIdentifier.from(persona)
+        if (a.some && b.some) {
             backup.relations.push({
                 profile: a.val,
                 persona: b.val,
-                favor: favor,
+                favor,
             })
         }
     }
@@ -237,7 +231,7 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
         const item: BackupJSONFileVersion2['posts'][0] = {
             identifier: id.toText(),
             foundAt: Number(data.foundAt),
-            postBy: data.postBy.toText(),
+            postBy: data.postBy?.toText() || 'person:localhost/$unknown',
             interestedMeta: MetaToJson(data.interestedMeta),
             encryptBy: data.encryptBy.unwrapOr(undefined)?.toText(),
             summary: data.summary.unwrapOr(undefined),
