@@ -10,6 +10,7 @@ import { uniqBy } from 'lodash-unified'
 import { useI18N } from '../locales'
 import { AddressNames } from './WalletList'
 import { NFTList } from './NFTList'
+import { Application_NFT_LIST_PAGE } from '../constants'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -48,6 +49,9 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
     const [tokens, setTokens] = useState<ERC721TokenDetailed[]>([])
+    const [currentPage, setCurrentPage] = useState<Application_NFT_LIST_PAGE>(
+        Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
+    )
     const { showSnackbar } = useCustomSnackbar()
     const onChange = useCallback((address: string) => {
         setSelectedAccount(address)
@@ -91,6 +95,9 @@ export function NFTListDialog(props: NFTListDialogProps) {
         [tokens],
     )
 
+    const onChangePage = (name: Application_NFT_LIST_PAGE) => {
+        setCurrentPage(name)
+    }
     return (
         <>
             <DialogContent sx={{ height: 612, padding: 0 }}>
@@ -101,18 +108,26 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     onChange={onChange}
                 />
                 {(account || Boolean(wallets?.length)) && (
-                    <NFTList tokenInfo={tokenInfo} address={selectedAccount} onSelect={onSelect} tokens={tokens} />
+                    <NFTList
+                        tokenInfo={tokenInfo}
+                        address={selectedAccount}
+                        onSelect={onSelect}
+                        onChangePage={onChangePage}
+                        tokens={tokens}
+                    />
                 )}
             </DialogContent>
             <DialogActions className={classes.actions}>
-                <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
-                    <Typography variant="body1" color="textPrimary">
-                        {t.collectible_not_found()}
-                    </Typography>
-                    <Typography variant="body1" color="#1D9BF0" sx={{ cursor: 'pointer' }} onClick={onClick}>
-                        {t.add_collectible()}
-                    </Typography>
-                </Stack>
+                {currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? (
+                    <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
+                        <Typography variant="body1" color="textPrimary">
+                            {t.collectible_not_found()}
+                        </Typography>
+                        <Typography variant="body1" color="#1D9BF0" sx={{ cursor: 'pointer' }} onClick={onClick}>
+                            {t.add_collectible()}
+                        </Typography>
+                    </Stack>
+                ) : null}
 
                 <Button disabled={disabled} className={classes.button} onClick={onSave}>
                     {t.set_avatar_title()}

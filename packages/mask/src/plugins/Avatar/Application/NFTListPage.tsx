@@ -37,6 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         margin: 'auto',
+        paddingTop: 260,
     },
     button: {
         textAlign: 'center',
@@ -44,6 +45,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-around',
         flexDirection: 'row',
+        color: '#1D9BF0',
     },
     gallery: {
         display: 'flex',

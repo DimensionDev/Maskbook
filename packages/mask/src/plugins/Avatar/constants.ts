@@ -13,3 +13,8 @@ export enum RSS3_KEY_SNS {
     FACEBOOK = '_facebook_nfts',
     INSTAGRAM = '_instagram_nfts',
 }
+
+export enum Application_NFT_LIST_PAGE {
+    Application_nft_tab_eth_page = 'ETH',
+    Application_nft_tab_polygon_page = 'Polygon',
+}

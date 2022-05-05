@@ -26,9 +26,11 @@ export function NFTInfo(props: NFTInfoProps) {
     return (
         <Box className={classes.root}>
             {!nft ? (
-                <Typography>{t.persona_set_nft()}</Typography>
+                <Typography fontWeight={700} fontSize={12}>
+                    {t.persona_set_nft()}
+                </Typography>
             ) : !owner ? (
-                <Typography variant="body1" color="#FFB915">
+                <Typography variant="body1" color="#FFB915" fontWeight={700} fontSize={12}>
                     {t.persona_verification_failed()}
                 </Typography>
             ) : (
