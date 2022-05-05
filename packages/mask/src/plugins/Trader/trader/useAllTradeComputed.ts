@@ -224,7 +224,7 @@ export function useAllTradeComputed(
     const {
         trader_: cronus_,
         trader: cronus,
-        traderEstimateGas: cronusstimateGas,
+        traderEstimateGas: cronusEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.CRONUS, inputAmount_, inputToken, outputToken)
 
     const allTradeResult = [
@@ -244,9 +244,9 @@ export function useAllTradeComputed(
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
         { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
-        { provider: TradeProvider.DIFFUSION, ...mdex_, value: mdex, gas: mdexEstimateGas },
-        { provider: TradeProvider.CRONUS, ...mdex_, value: mdex, gas: mdexEstimateGas },
-        { provider: TradeProvider.EVMOSWAP, ...mdex_, value: mdex, gas: mdexEstimateGas },
+        { provider: TradeProvider.DIFFUSION, ...diffusion_, value: diffusion, gas: diffusionEstimateGas },
+        { provider: TradeProvider.CRONUS, ...cronus_, value: cronus, gas: cronusEstimateGas },
+        { provider: TradeProvider.EVMOSWAP, ...evmoswap_, value: evmoswap, gas: evmoswapEstimateGas },
     ]
 
     return nativeToken_.value

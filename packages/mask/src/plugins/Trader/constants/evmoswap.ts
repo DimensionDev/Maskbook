@@ -1,4 +1,4 @@
-import { ChainId, DAI, USDC, USDT, WBTC, WNATIVE, WNATIVE_ONLY } from '@masknet/web3-shared-evm'
+import { ChainId, DAI, USDC, USDT, WBTC, EMO, WNATIVE, WNATIVE_ONLY } from '@masknet/web3-shared-evm'
 
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
@@ -10,5 +10,5 @@ export const EVMOSWAP_CUSTOM_BASES: ERC20TokenCustomizedBase = {}
 
 export const EVMOSWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WNATIVE_ONLY,
-    [ChainId.Evmos]: [WNATIVE, DAI, USDC, WBTC, USDT].map((x) => x[ChainId.Evmos]),
+    [ChainId.Evmos]: [WNATIVE, DAI, USDC, WBTC, USDT, EMO].map((x) => x[ChainId.Evmos]),
 }

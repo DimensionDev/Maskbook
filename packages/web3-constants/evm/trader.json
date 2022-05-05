@@ -1210,12 +1210,12 @@
         "Evmos": ""
     },
     "DIFFUSION_ROUTER_ADDRESS": {
-        "Mainnet": "0x74119c3bca85bEA0538A62319a79b4a372590B47",
+        "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "0x0384E9ad329396C3A6A401243Ca71633B2bC4333",
+        "BSC": "",
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
@@ -1229,15 +1229,15 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "0xFCd2Ce20ef8ed3D43Ab4f8C2dA13bbF1C6d9512F"
     },
     "DIFFUSION_FACTORY_ADDRESS": {
-        "Mainnet": "0x7DAe51BD3E3376B8c7c4900E9107f12Be3AF1bA8",
+        "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "0x3CD1C46068dAEa5Ebb0d3f55F6915B10648062B8",
+        "BSC": "",
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
@@ -1251,7 +1251,7 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "0x6abdda34fb225be4610a2d153845e09429523cd2"
     },
     "DIFFUSION_THEGRAPH": {
         "Mainnet": "",
@@ -1276,12 +1276,12 @@
         "Evmos": ""
     },
     "DIFFUSION_INIT_CODE_HASH": {
-        "Mainnet": "0x8ecc069c645df696f2ca5116ab459c5c2889f299e73c1b208aaa3cdd7d110b16",
+        "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "0x0d994d996174b05cfc7bed897dc1b20b4c458fc8d64fe98bc78b3c64a6b4d093",
+        "BSC": "",
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
@@ -1295,15 +1295,15 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "0xa192c894487128ec7b68781ed7bd7e3141d1718df9e4e051e0124b7671d9a6ef"
     },
     "CRONUS_ROUTER_ADDRESS": {
-        "Mainnet": "0x74119c3bca85bEA0538A62319a79b4a372590B47",
+        "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "0x0384E9ad329396C3A6A401243Ca71633B2bC4333",
+        "BSC": "",
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
@@ -1317,15 +1317,15 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "0x3bc1f48740a5d6dffac36faf4c9905a941509348"
     },
     "CRONUS_FACTORY_ADDRESS": {
-        "Mainnet": "0x7DAe51BD3E3376B8c7c4900E9107f12Be3AF1bA8",
+        "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "0x3CD1C46068dAEa5Ebb0d3f55F6915B10648062B8",
+        "BSC": "",
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
@@ -1339,7 +1339,7 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "0x20570b7bFf86B2f92068622D0805160f318554Be"
     },
     "CRONUS_THEGRAPH": {
         "Mainnet": "",
@@ -1364,12 +1364,12 @@
         "Evmos": ""
     },
     "CRONUS_INIT_CODE_HASH": {
-        "Mainnet": "0x8ecc069c645df696f2ca5116ab459c5c2889f299e73c1b208aaa3cdd7d110b16",
+        "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "0x0d994d996174b05cfc7bed897dc1b20b4c458fc8d64fe98bc78b3c64a6b4d093",
+        "BSC": "",
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
@@ -1383,15 +1383,15 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "0xc2c769f6cbfb568ac8562fb6e250ca27d65a3c02c8276593bd86244d6d5c6001"
     },
     "EVMOSWAP_ROUTER_ADDRESS": {
-        "Mainnet": "0x74119c3bca85bEA0538A62319a79b4a372590B47",
+        "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "0x0384E9ad329396C3A6A401243Ca71633B2bC4333",
+        "BSC": "",
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
@@ -1405,15 +1405,15 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "0x64c3b10636babb3ef46a7e2e5248b0de43198fcb"
     },
     "EVMOSWAP_FACTORY_ADDRESS": {
-        "Mainnet": "0x7DAe51BD3E3376B8c7c4900E9107f12Be3AF1bA8",
+        "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "0x3CD1C46068dAEa5Ebb0d3f55F6915B10648062B8",
+        "BSC": "",
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
@@ -1427,7 +1427,7 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "0xF24E36e53628C3086493B9EfA785ab9DD85232EB"
     },
     "EVMOSWAP_THEGRAPH": {
         "Mainnet": "",
@@ -1452,12 +1452,12 @@
         "Evmos": ""
     },
     "EVMOSWAP_INIT_CODE_HASH": {
-        "Mainnet": "0x8ecc069c645df696f2ca5116ab459c5c2889f299e73c1b208aaa3cdd7d110b16",
+        "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "0x0d994d996174b05cfc7bed897dc1b20b4c458fc8d64fe98bc78b3c64a6b4d093",
+        "BSC": "",
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
@@ -1471,6 +1471,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "0x1a74734eea11bc0ee7528f77a3306d46a0e9015d2eca65dd5651259a4b2eefe1"
     }
 }
