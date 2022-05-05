@@ -2,8 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "noEmit": true,
-    "tsBuildInfoFile": "./dist/tests.tsbuildinfo",
-    "types": ["node"]
+    "tsBuildInfoFile": "./dist/tests.tsbuildinfo"
   },
   "include": ["./tests"],
   "references": [{ "path": "./tsconfig.json" }]

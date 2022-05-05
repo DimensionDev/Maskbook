@@ -64,7 +64,9 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'center',
             padding: '3px 16px',
-            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#eff3f4'}`,
+            position: 'relative',
+            background: theme.palette.background.modalTitle,
+            borderBottom: 'none',
             '& > h2': {
                 display: 'inline-block',
                 whiteSpace: 'nowrap',

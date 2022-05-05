@@ -67,7 +67,7 @@ export interface MaskNetworkAPIs {
         network: string
         after?: RelationRecord
         count: number
-    }): Promise<MobileProfile[]>
+    }): Promise<MobileProfileRelation[]>
     wallet_updateEthereumAccount(params: { account: string }): Promise<void>
     wallet_updateEthereumChainId(params: { chainId: number }): Promise<void>
     wallet_getLegacyWalletInfo(): Promise<WalletInfo[]>
