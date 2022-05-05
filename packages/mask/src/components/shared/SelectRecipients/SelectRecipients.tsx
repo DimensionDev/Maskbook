@@ -25,7 +25,6 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
 
     useEffect(() => void (open && items.request()), [open, items.request])
-
     return (
         <SelectRecipientsDialogUI
             open={open}

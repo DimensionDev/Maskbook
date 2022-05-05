@@ -12,6 +12,7 @@ import type { ListItemTypeMap } from '@mui/material/ListItem'
 
 const useStyle = makeStyles()({
     root: {
+        maxWidth: 'calc(50% - 6px)',
         cursor: 'pointer',
         paddingLeft: 8,
     },
@@ -48,7 +49,6 @@ export function ProfileInList(props: ProfileInListProps) {
             disabled={props.disabled}
             {...props.ListItemProps}
             className={classNames(classes.root, props.ListItemProps?.className)}>
-            <Checkbox checked={!!props.checked} color="primary" {...props.CheckboxProps} />
             <ListItemAvatar>
                 <Avatar person={profile} />
             </ListItemAvatar>
@@ -74,6 +74,7 @@ export function ProfileInList(props: ProfileInListProps) {
                     />
                 }
             />
+            <Checkbox checked={!!props.checked} color="primary" {...props.CheckboxProps} />
         </ListItemButton>
     )
 }

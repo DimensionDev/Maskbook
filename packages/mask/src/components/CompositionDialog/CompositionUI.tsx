@@ -256,6 +256,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         renderScheme={visibilityPopperList}
                         anchorEl={visibleAnchorEl}
                         setAncorEl={setVisibleAnchorEl}
+                        shareWithNum={recipients.length}
                         onChange={(v) => {
                             if (v && v === 'all') {
                                 setEncryptionKind('Everyone')

@@ -77,6 +77,7 @@ interface PopoverListTriggerProp {
     setAncorEl(v: HTMLElement | null): void
     onChange(v: string): void
     renderScheme: Array<PopoverListItem>
+    shareWithNum?: number
     selected: string
     toShare?(): void
 }
@@ -119,9 +120,15 @@ export function PopoverListTrigger({
     onChange,
     hasPersona,
     toShare,
+    shareWithNum,
 }: PopoverListTriggerProp) {
     const { classes } = useStyles()
     const [selectedValue, setSelectedValue] = useState<string>(selected)
+    const getName = () => {
+        return selectedValue === 'share'
+            ? `${shareWithNum} friends`
+            : renderScheme.find((x) => x.type === selectedValue)?.title
+    }
     return (
         <>
             <div
@@ -129,7 +136,7 @@ export function PopoverListTrigger({
                 onClick={(e) => {
                     setAncorEl(anchorEl ? null : e.currentTarget)
                 }}>
-                {renderScheme.find((x) => x.type === selectedValue)?.title}
+                {getName()}
                 <RightArrowIcon />
             </div>
             <Popover
