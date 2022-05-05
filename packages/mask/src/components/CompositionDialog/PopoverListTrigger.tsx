@@ -74,7 +74,7 @@ interface PopoverListItem {
 interface PopoverListTriggerProp {
     hasPersona?: boolean
     anchorEl: HTMLElement | null
-    setAncorEl(v: HTMLElement | null): void
+    setAnchorEl(v: HTMLElement | null): void
     onChange(v: string): void
     renderScheme: Array<PopoverListItem>
     shareWithNum?: number
@@ -114,7 +114,7 @@ const PopoverListItem = (props: PopoverListItem) => {
 }
 export function PopoverListTrigger({
     anchorEl,
-    setAncorEl,
+    setAnchorEl,
     renderScheme,
     selected,
     onChange,
@@ -134,7 +134,7 @@ export function PopoverListTrigger({
             <div
                 className={classes.popperText}
                 onClick={(e) => {
-                    setAncorEl(anchorEl ? null : e.currentTarget)
+                    setAnchorEl(anchorEl ? null : e.currentTarget)
                 }}>
                 {getName()}
                 <RightArrowIcon />
@@ -144,7 +144,7 @@ export function PopoverListTrigger({
                 className={classes.popper}
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
-                onClose={() => setAncorEl(null)}
+                onClose={() => setAnchorEl(null)}
                 anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'right',

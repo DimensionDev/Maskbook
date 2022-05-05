@@ -255,7 +255,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         selected="all"
                         renderScheme={visibilityPopperList}
                         anchorEl={visibleAnchorEl}
-                        setAncorEl={setVisibleAnchorEl}
+                        setAnchorEl={setVisibleAnchorEl}
                         shareWithNum={recipients.length}
                         onChange={(v) => {
                             if (v && v === 'all') {
@@ -289,7 +289,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         selected="text"
                         renderScheme={methodsPopperList}
                         anchorEl={methodAnchorEl}
-                        setAncorEl={setMethodAnchorEl}
+                        setAnchorEl={setMethodAnchorEl}
                         onChange={(v) => setEncoding(v as SetStateAction<'text' | 'image'>)}
                     />
                 </div>

@@ -56,7 +56,6 @@
     "search_box_placeholder": "ここに打って検索",
     "select_all": "全て選ぶ",
     "select_none": "何も選んでいません。",
-    "select_specific_friends_dialog__button": "完了",
     "select_specific_friends_dialog__title": "特定の連絡先を選ぶ",
     "service_decryption_failed": "復号に失敗",
     "service_unknown_payload": "投稿のバージョンが不明です。Mask のアップデートが必要かもしれません。",

@@ -88,7 +88,6 @@
     "search_box_placeholder": "在這裡輸入以搜尋",
     "select_all": "選擇全部",
     "select_none": "取消選擇全部",
-    "select_specific_friends_dialog__button": "完成",
     "select_specific_friends_dialog__title": "選擇特定聯絡人",
     "service_decryption_failed": "解密失敗。",
     "service_unknown_payload": "未知的貼文版本。您或許需要升級 Mask。",
