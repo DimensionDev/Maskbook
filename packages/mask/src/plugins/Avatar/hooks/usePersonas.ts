@@ -8,7 +8,7 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { context } from '../context'
 import { sortPersonaBindings } from '../utils'
 
-export function usePersonas() {
+export function usePersonas(userId?: string) {
     const personaConnectStatus = usePersonaConnectStatus()
     const currentIdentifier = useSubscription(context.currentVisitingProfile)
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
@@ -17,21 +17,22 @@ export function usePersonas() {
         if (!identifier?.identifier?.userId) return
         const personaBindings = await NextIDProof.queryExistedBindingByPlatform(
             platform,
-            identifier.identifier.userId.toLowerCase(),
+            userId?.toLowerCase() ?? identifier.identifier.userId.toLowerCase(),
         )
 
         const currentPersonaBinding = first(
             personaBindings.sort((a, b) =>
-                sortPersonaBindings(a, b, identifier.identifier?.userId.toLowerCase() ?? ''),
+                sortPersonaBindings(a, b, userId?.toLowerCase() ?? identifier.identifier?.userId.toLowerCase() ?? ''),
             ),
         )
         if (!currentPersonaBinding) return
 
         const isOwner =
-            currentIdentifier?.identifier &&
-            identifier.identifier &&
-            currentIdentifier?.identifier.toText() === identifier.identifier.toText()
+            (currentIdentifier?.identifier &&
+                identifier.identifier &&
+                currentIdentifier?.identifier.toText() === identifier.identifier.toText()) ||
+            (currentIdentifier?.identifier && userId && currentIdentifier?.identifier.toText() === userId.toLowerCase())
         const wallets = currentPersonaBinding?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
         return { wallets, isOwner, binds: currentPersonaBinding, status: personaConnectStatus }
-    }, [currentIdentifier, identifier, personaConnectStatus.hasPersona, platform])
+    }, [currentIdentifier, identifier, personaConnectStatus.hasPersona, platform, userId])
 }

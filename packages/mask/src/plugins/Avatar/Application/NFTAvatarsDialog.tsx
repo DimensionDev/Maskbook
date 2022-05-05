@@ -63,7 +63,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
             }
             open={props.open}
             onClose={onBack}>
-            <DialogContent sx={{ margin: 0, padding: '0px !important' }}>
+            <DialogContent sx={{ margin: 0, padding: '0px !important', overFlow: 'hidden' }}>
                 {step === CreateNFTAvatarStep.Persona ? (
                     <PersonaPage onClose={onClose} onNext={onNext} onChange={onPersonaChange} />
                 ) : null}

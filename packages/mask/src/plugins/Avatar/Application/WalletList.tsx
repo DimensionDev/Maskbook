@@ -10,7 +10,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { NFTWalletConnect } from './WalletConnect'
 import { BindingProof, PopupRoutes } from '@masknet/shared-base'
-import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, NetworkPluginID, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 import { Services } from '../../../extension/service'
 import { useI18N } from '../locales/i18n_generated'
 import { useCopyToClipboard } from 'react-use'
@@ -19,11 +19,11 @@ import { CopyIcon } from '../assets/copy'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        backgroundColor: theme.palette.background.default,
         borderRadius: 9999,
         paddingLeft: 4,
         paddingRight: 4,
         cursor: 'pointer',
+        backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F6F8F8',
     },
     wrapper: {},
     address: {},
@@ -63,7 +63,7 @@ export function AddressNames(props: AddressNamesProps) {
         setSelectedWallet(account || wallets?.[0]?.identity)
     }, [account, wallets?.[0]?.identity])
 
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+    const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const chainId = useChainId()
@@ -75,7 +75,7 @@ export function AddressNames(props: AddressNamesProps) {
     }, [chainId])
 
     const onConnectWallet = useCallback(() => {
-        openSelectProviderDialog()
+        openSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM })
         onClose()
     }, [openSelectProviderDialog, onClose])
 

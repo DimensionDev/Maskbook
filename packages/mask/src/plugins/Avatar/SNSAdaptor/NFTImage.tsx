@@ -6,7 +6,7 @@ import { SelectedIcon } from '../assets/selected'
 const useStyles = makeStyles()((theme) => ({
     imgBackground: {
         position: 'relative',
-        margin: theme.spacing(0.5, 1),
+        margin: theme.spacing(1.25, 1, 1.25, 1.5),
         borderRadius: '100%',
         display: 'flex',
         alignItems: 'center',
@@ -26,11 +26,11 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '100%',
         boxSizing: 'border-box',
         '&:hover': {
-            border: `4px solid ${theme.palette.primary.main}`,
+            border: '2px solid #1D9BF0',
         },
     },
     selected: {
-        border: `4px solid ${theme.palette.primary.main}`,
+        border: '2px solid #1D9BF0',
     },
 }))
 
