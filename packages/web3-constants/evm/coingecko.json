@@ -19,7 +19,7 @@
         "Aurora": "aurora",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "evmos"
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -41,6 +41,6 @@
         "Aurora": "ethereum",
         "Aurora_Testnet": "",
         "Conflux": "conflux-token",
-        "Evmos": ""
+        "Evmos": "evmos-token"
     }
 }

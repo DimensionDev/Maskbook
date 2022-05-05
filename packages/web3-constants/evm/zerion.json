@@ -19,7 +19,7 @@
         "Aurora": "aurora-assets",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "evmos-assets"
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -41,6 +41,6 @@
         "Aurora": "aurora-transactions",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "evmos-transactions"
     }
 }
