@@ -14,7 +14,7 @@ import { BadgeRenderer } from './BadgeRenderer'
 
 const useStyles = makeStyles()({
     root: {
-        minHeight: 108,
+        minHeight: 208,
         flexDirection: 'column',
         padding: 10,
         boxSizing: 'border-box',
