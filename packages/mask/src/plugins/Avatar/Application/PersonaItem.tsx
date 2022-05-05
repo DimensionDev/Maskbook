@@ -36,13 +36,14 @@ interface PersonaItemProps {
     owner?: boolean
     avatar: string
     userId: string
+    nickname?: string
     proof: BindingProof
     onSelect?: (proof: BindingProof, tokenInfo?: TokenInfo) => void
 }
 
 export function PersonaItem(props: PersonaItemProps) {
     const currentIdentity = useSubscription(context.lastRecognizedProfile)
-    const { userId, onSelect, owner = false, proof, avatar } = props
+    const { userId, onSelect, owner = false, proof, avatar, nickname = '' } = props
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = usePersonaNFTAvatar(userId, getAvatarId(avatar) ?? '', RSS3_KEY_SNS.TWITTER)
     const { value: token, loading: loadingToken } = useNFT(_avatar?.address ?? '', _avatar?.tokenId ?? '')
@@ -62,10 +63,15 @@ export function PersonaItem(props: PersonaItemProps) {
 
     return (
         <ListItemButton className={classes.root} onClick={onClick} disabled={!owner}>
-            <NFTAvatar owner={owner} avatar={_avatar?.imageUrl} hasBorder={haveNFT} platform={proof.platform} />
+            <NFTAvatar
+                owner={owner}
+                avatar={avatar || _avatar?.imageUrl}
+                hasBorder={haveNFT}
+                platform={proof.platform}
+            />
             <Box className={classes.userInfo}>
                 <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
-                    {_avatar?.nickname}
+                    {nickname || _avatar?.nickname}
                 </Typography>
                 <Typography variant="body1" color="textSecondary" fontSize={12}>
                     @{userId}

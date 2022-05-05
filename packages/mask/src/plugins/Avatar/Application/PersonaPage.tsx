@@ -80,6 +80,7 @@ export function PersonaPage(props: PersonaPageProps) {
                                     key={i}
                                     avatar={currentIdentity.avatar ?? ''}
                                     owner
+                                    nickname={currentIdentity.nickname}
                                     proof={x}
                                     userId={currentIdentity.identifier.userId}
                                     onSelect={onSelect}
