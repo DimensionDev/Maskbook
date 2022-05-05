@@ -137,6 +137,27 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     },
                     {
                         props: {
+                            variant: 'outlined',
+                        },
+                        style: {
+                            background: theme.palette.grey.third,
+                            color: theme.palette.text.primary,
+                            ['&:hover']: {
+                                backgroundColor: theme.palette.background.paper,
+                                border: 'none',
+                                boxShadow:
+                                    theme.palette.mode === 'dark'
+                                        ? '0px 8px 25px rgba(255, 255, 255, 0.1)'
+                                        : '0px 8px 25px rgba(0, 0, 0, 0.1)',
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                opacity: 0.4,
+                                color: theme.palette.text.primary,
+                            },
+                        },
+                    },
+                    {
+                        props: {
                             variant: 'flat',
                         },
                         style: {
