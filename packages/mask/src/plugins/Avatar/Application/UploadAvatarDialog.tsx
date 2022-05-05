@@ -6,8 +6,7 @@ import { NextIDStorage, Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
-import { BindingProof, fromHex, ProfileIdentifier, toBase64 } from '@masknet/shared-base'
-import type { Persona } from '../../../database'
+import { BindingProof, fromHex, PersonaIdentifier, ProfileIdentifier, toBase64 } from '@masknet/shared-base'
 import type { NextIDAvatarMeta } from '../types'
 import { useI18N } from '../locales/i18n_generated'
 import { context } from '../context'
@@ -54,14 +53,10 @@ async function saveToRSS3(info: NextIDAvatarMeta, account: string, identifier: P
     return avatar
 }
 
-async function saveToNextID(
-    info: NextIDAvatarMeta,
-    persona?: Pick<Persona, 'identifier' | 'publicHexKey'>,
-    proof?: BindingProof,
-) {
-    if (!proof?.identity || !persona?.publicHexKey || !persona.identifier) return
+async function saveToNextID(info: NextIDAvatarMeta, persona?: PersonaIdentifier, proof?: BindingProof) {
+    if (!proof?.identity || !persona?.publicKeyAsHex) return
     const payload = await NextIDStorage.getPayload(
-        persona.publicHexKey,
+        persona.publicKeyAsHex,
         proof?.platform,
         proof?.identity,
         info,
@@ -70,11 +65,11 @@ async function saveToNextID(
     if (!payload.ok) {
         return
     }
-    const result = await Services.Identity.generateSignResult(persona.identifier, payload.val.signPayload)
+    const result = await Services.Identity.generateSignResult(persona, payload.val.signPayload)
     if (!result) return
     const response = await NextIDStorage.set(
         payload.val.uuid,
-        persona.publicHexKey,
+        persona.publicKeyAsHex,
         toBase64(fromHex(result.signature.signature)),
         proof.platform,
         proof.identity,
@@ -90,7 +85,7 @@ async function Save(
     isBindAccount: boolean,
     token: ERC721TokenDetailed,
     data: AvatarInfo,
-    persona: Pick<Persona, 'identifier' | 'publicHexKey'>,
+    persona: PersonaIdentifier,
     proof: BindingProof,
     identifier: ProfileIdentifier,
 ) {
@@ -153,7 +148,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 isBindAccount,
                 token,
                 avatarData,
-                currentConnectedPersona,
+                currentConnectedPersona.identifier,
                 proof,
                 identifier.identifier,
             )

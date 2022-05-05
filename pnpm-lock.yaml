@@ -366,6 +366,7 @@ importers:
       '@types/json-stable-stringify': ^1.0.34
       '@types/json2csv': ^5.0.3
       '@types/node': ^17.0.23
+      '@types/react-avatar-editor': ^10.3.6
       '@types/react-highlight-words': ^0.16.4
       '@types/react-router-dom': ^5.3.3
       '@types/react-virtualized-auto-sizer': ^1.0.1
@@ -509,6 +510,7 @@ importers:
       '@types/json-stable-stringify': 1.0.34
       '@types/json2csv': 5.0.3
       '@types/node': 17.0.26
+      '@types/react-avatar-editor': 10.3.6
       '@types/react-highlight-words': 0.16.4
       '@types/react-router-dom': 5.3.3
       '@types/react-virtualized-auto-sizer': 1.0.1
@@ -24745,7 +24747,7 @@ packages:
       serialize-javascript: 6.0.0
       source-map: 0.6.1
       terser: 5.12.1
-      webpack: 5.72.0
+      webpack: 5.72.0_webpack-cli@4.9.2
     dev: true
 
   /terser/4.8.0:
@@ -27752,7 +27754,7 @@ packages:
     dev: false
 
   github.com/ahultgren/async-eventemitter/fa06e39e56786ba541c180061dbf2c0a5bbf951c:
-    resolution: {commit: fa06e39e56786ba541c180061dbf2c0a5bbf951c, repo: git+ssh://git@github.com/ahultgren/async-eventemitter.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ahultgren/async-eventemitter/tar.gz/fa06e39e56786ba541c180061dbf2c0a5bbf951c}
     name: async-eventemitter
     version: 0.2.3
     dependencies:
