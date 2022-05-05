@@ -45,7 +45,7 @@ export function useYearnTokens(chainId: ChainId, web3: Web3) {
         () => ({
             tokenPairs: splitToPair(detailedYFITokens),
             loading: loading || loadingTokenDetails,
-            error: error,
+            error,
             retry,
         }),
         [chainId, detailedYFITokens, loadingTokenDetails],
