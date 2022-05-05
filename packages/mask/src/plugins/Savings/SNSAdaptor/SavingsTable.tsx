@@ -153,7 +153,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                     <CircleLoadingIcon className={classes.animated} />
                     <Typography className={classes.loading}>{t('popups_loading')}</Typography>
                 </div>
-            ) : protocols.length ? (
+            ) : displayProtocols.length ? (
                 <div className={classes.tableContainer}>
                     {displayProtocols.map((protocol, index) => (
                         <Grid container spacing={0} className={classes.tableRow} key={index}>
