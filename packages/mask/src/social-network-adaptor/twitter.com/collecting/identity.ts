@@ -32,14 +32,29 @@ function resolveLastRecognizedIdentityInner(
             }
         }
     }
-    const watcher = new MutationObserverWatcher(searchSelfHandleSelector())
-        .addListener('onAdd', () => assign())
-        .addListener('onChange', () => assign())
-        .startWatch({
-            childList: true,
-            subtree: true,
+
+    const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
+        const watcher = new MutationObserverWatcher(selector)
+            .addListener('onAdd', () => assign())
+            .addListener('onChange', () => assign())
+            .startWatch({
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['src', 'content'],
+            })
+
+        window.addEventListener('locationchange', assign)
+        cancel.addEventListener('abort', () => {
+            window.removeEventListener('locationchange', assign)
+            watcher.stopWatch()
         })
-    cancel.addEventListener('abort', () => watcher.stopWatch())
+    }
+
+    assign()
+
+    createWatcher(searchSelfHandleSelector())
+    createWatcher(searchSelfAvatarSelector())
 }
 
 function resolveLastRecognizedIdentityMobileInner(
