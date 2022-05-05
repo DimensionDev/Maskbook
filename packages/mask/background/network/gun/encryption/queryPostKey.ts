@@ -153,7 +153,7 @@ namespace Version38Or39 {
         const N = 2
 
         const hash = await work(encodeArrayBuffer(iv), hashPair)
-        return networkHint + '-' + hash.slice(0, Math.max(0, N))
+        return networkHint + '-' + hash.slice(0, N)
     }
 
     // The difference between V38 and V39 is: V39 is not stable (JSON.stringify)
@@ -165,7 +165,7 @@ namespace Version38Or39 {
 
         const jwk = JSON.stringify(key)
         const hash = await work(jwk, hashPair)
-        return hash.slice(0, Math.max(0, N))
+        return hash.slice(0, N)
     }
 
     async function hashKey38(jwk: EC_Public_JsonWebKey) {
@@ -173,7 +173,7 @@ namespace Version38Or39 {
         const N = 2
 
         const hash = await work(jwk.x! + jwk.y!, hashPair)
-        return hash.slice(0, Math.max(0, N))
+        return hash.slice(0, N)
     }
 
     // This is a self contained Gun.SEA.work implementation that only contains code path we used.
