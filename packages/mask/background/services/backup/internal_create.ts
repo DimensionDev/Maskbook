@@ -92,9 +92,8 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
                     type: 'e2e',
                     receivers: new Map(),
                 }
-                for (const [recipient, reason] of post.recipients) {
-                    if (reason.reason.length === 0) continue
-                    recipients.receivers.set(recipient, [{ at: reason.reason[0].at, type: 'direct' }])
+                for (const [recipient, date] of post.recipients) {
+                    recipients.receivers.set(recipient, [{ at: date, type: 'direct' }])
                 }
             }
             posts.set(post.identifier, {

@@ -77,6 +77,6 @@ export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: Arra
     } catch (error) {
         console.error('[AvatarDB] Store avatar failed', error)
     } finally {
-        indexedDBImpl.cache?.delete(identifier.toText())
+        indexedDBImpl.cache.clear()
     }
 }

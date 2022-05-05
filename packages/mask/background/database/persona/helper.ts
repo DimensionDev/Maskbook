@@ -159,7 +159,7 @@ export async function createPersonaByJsonWebKey(options: {
     const record: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),
-        identifier: identifier,
+        identifier,
         linkedProfiles: new Map(),
         publicKey: options.publicKey,
         privateKey: options.privateKey,

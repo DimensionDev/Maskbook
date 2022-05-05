@@ -68,6 +68,8 @@
     "@storybook/builder-webpack5": "^6.4.22",
     "@storybook/manager-webpack5": "^6.4.22",
     "@storybook/react": "^6.4.22",
+    "@types/use-subscription": "^1.0.0",
+    "@types/uuid": "^8.3.4",
     "babel-loader": "^8.2.5"
   }
 }

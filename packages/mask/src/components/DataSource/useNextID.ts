@@ -82,10 +82,10 @@ export function useNextIDConnectStatus() {
 
         const currentPersonaIdentity = await Services.Settings.getCurrentPersonaIdentifier()
 
-        if (currentPersonaIdentity?.toText() !== currentConnectedPersona?.identifier.toText())
+        if (currentPersonaIdentity !== currentConnectedPersona?.identifier)
             return NextIDVerificationStatus.WaitingLocalConnect
 
-        if (!currentConnectedPersona?.publicHexKey) return NextIDVerificationStatus.WaitingLocalConnect
+        if (!currentConnectedPersona) return NextIDVerificationStatus.WaitingLocalConnect
 
         // Whether used 'Don't show me again
         if (
@@ -100,7 +100,11 @@ export function useNextIDConnectStatus() {
         const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
         if (!platform) return NextIDVerificationStatus.Other
 
-        const isBound = await NextIDProof.queryIsBound(currentConnectedPersona.publicHexKey, platform, username)
+        const isBound = await NextIDProof.queryIsBound(
+            currentConnectedPersona.identifier.publicKeyAsHex,
+            platform,
+            username,
+        )
         if (isBound) return NextIDVerificationStatus.Verified
 
         if (isOpenedFromButton) {

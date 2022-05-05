@@ -1,7 +1,7 @@
 import { startPluginWorker, Plugin } from '@masknet/plugin-infra/background-worker'
 import { createSubscriptionFromAsync } from '@masknet/shared-base'
 import { InMemoryStorages, MaskMessages, PersistentStorages } from '../../../../shared'
-import { createPluginDatabase } from '../../../database/Plugin'
+import { createPluginDatabase } from '../../../../background/database/plugin-db'
 import { createPluginHost } from '../../../plugin-infra/host'
 import { Services } from '../../service'
 export default function (signal: AbortSignal) {

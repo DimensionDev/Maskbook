@@ -27,7 +27,7 @@ export function useCurrentVisitingUser(flag?: number) {
         } finally {
             setUser({
                 userId: identity.identifier?.userId ?? '',
-                address: address,
+                address,
             })
         }
     }, [identity, flag])

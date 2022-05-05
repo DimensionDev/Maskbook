@@ -10,7 +10,8 @@ import { TypedMessageBinaryEncodingTypeEnum } from './type.js'
 
 const HEAD = '[@masknet/typed-message] '
 export function encodeTypedMessageToDocument(tm: SerializableTypedMessages) {
-    const doc = [0, encodeTypedMessage(tm)]
+    if (isTypedMessageText(tm)) return encode([0, tm.content, encodeMeta(tm)])
+    const doc = [1, ...encodeTypedMessage(tm)]
     return encode(doc)
 }
 function encodeTypedMessage(tm: SerializableTypedMessages): any[] {

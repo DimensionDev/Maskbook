@@ -111,7 +111,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
             creator: maskBoxInfo.creator,
             name: maskBoxInfo.name,
             sellAll: maskBoxCreationSuccessEvent?.returnValues.sell_all ?? false,
-            personalLimit: personalLimit,
+            personalLimit,
             personalRemaining,
             remaining,
             availableAmount: Math.min(personalRemaining, remaining),
@@ -125,7 +125,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
             tokenIdsPurchased: purchasedTokens,
             payments: paymentTokens.map((token, i) => {
                 return {
-                    token: token,
+                    token,
                     price: maskBoxStatus.payment[i][1],
                     receivableAmount: maskBoxStatus.payment[i][2],
                 }

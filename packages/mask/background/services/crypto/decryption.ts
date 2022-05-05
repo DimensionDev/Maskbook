@@ -113,10 +113,9 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
     // #region store author public key into the database
     try {
         const id = parse.unwrap().author.unwrap().unwrap()
-        const cacheKey = id.toText()
-        if (!hasStoredAuthorPublicKey.has(cacheKey)) {
+        if (!hasStoredAuthorPublicKey.has(id)) {
             storeAuthorPublicKey(id, authorHint, parse.unwrap().authorPublicKey.unwrap().unwrap()).catch(noop)
-            hasStoredAuthorPublicKey.add(cacheKey)
+            hasStoredAuthorPublicKey.add(id)
         }
     } catch {}
     // #endregion
@@ -139,8 +138,8 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                     url: postURL,
                 })
             },
-            hasLocalKeyOf: hasLocalKeyOf,
-            decryptByLocalKey: decryptByLocalKey,
+            hasLocalKeyOf,
+            decryptByLocalKey,
             async deriveAESKey(pub) {
                 return Array.from((await deriveAESByECDH(pub)).values())
             },
@@ -206,7 +205,7 @@ export async function getPostKeyCache(id: PostIVIdentifier) {
     return k as AESCryptoKey
 }
 
-const hasStoredAuthorPublicKey = new Set<string>()
+const hasStoredAuthorPublicKey = new Set<ProfileIdentifier>()
 async function storeAuthorPublicKey(
     payloadAuthor: ProfileIdentifier,
     postAuthor: ProfileIdentifier | null,

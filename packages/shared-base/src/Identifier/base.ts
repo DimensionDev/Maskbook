@@ -7,7 +7,7 @@ export abstract class Identifier {
     private toString() {
         return this.toText()
     }
-    static from(str: string | undefined | null): Option<Identifier> {
+    static from(input: string | undefined | null): Option<Identifier> {
         // this method will be override in ./utils
         return None
     }

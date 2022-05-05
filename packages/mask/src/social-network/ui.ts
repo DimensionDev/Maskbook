@@ -170,7 +170,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             if (!newValue.identifier) return
 
             MaskMessages.events.Native_visibleSNS_currentDetectedProfileUpdated.sendToBackgroundPage(
-                newValue.identifier.toText(),
+                newValue.identifier,
             )
         })
         if (provider.hasDeprecatedPlaceholderName) {

@@ -1,5 +1,5 @@
-import type { PostRecord as NativePostRecord } from '@masknet/public-api'
-import type { PostRecord, PostReadWriteTransaction, PostReadOnlyTransaction, RecipientReason } from './type'
+import type { MobilePostRecord as NativePostRecord } from '@masknet/public-api'
+import type { PostRecord, PostReadWriteTransaction, PostReadOnlyTransaction } from './type'
 import {
     PostIVIdentifier,
     AESJsonWebKey,
@@ -7,10 +7,9 @@ import {
     ProfileIdentifier,
     ECKeyIdentifier,
     convertRawMapToIdentifierMap,
-    RecipientDetail,
 } from '@masknet/shared-base'
 import { nativeAPI } from '../../../shared/native-rpc'
-import { unreachable } from '@dimensiondev/kit'
+import { isNonNull } from '@dimensiondev/kit'
 
 export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction) {
     await nativeAPI?.api.create_post({ post: postInNative(record) as NativePostRecord })
@@ -73,7 +72,7 @@ function postInNative(record: Partial<PostRecord> & Pick<PostRecord, 'identifier
                       Array.from(record.recipients).map(([identifier, detail]) => [
                           identifier.toText(),
                           {
-                              reason: Array.from(detail.reason).map<RecipientReasonJSON>(RecipientReasonToJSON),
+                              reason: RecipientReasonToJSON(detail),
                           },
                       ]),
                   )
@@ -92,9 +91,13 @@ function postOutNative(record: NativePostRecord): PostRecord {
         identifier: PostIVIdentifier.from(record.identifier).unwrap(),
         postCryptoKey: record.postCryptoKey as unknown as AESJsonWebKey,
         recipients: convertRawMapToIdentifierMap(
-            Object.entries(record.recipients).map(([a, b]): [string, RecipientDetail] => {
-                return [a, { reason: b.reason.map((x) => ({ ...x, at: new Date(x.at) })) }]
-            }),
+            Object.entries(record.recipients)
+                .map(([a, b]): [string, Date] | undefined => {
+                    const firstDate = b.reason.find((x) => x.at)?.at
+                    if (firstDate) return [a, new Date(firstDate)]
+                    return undefined
+                })
+                .filter(isNonNull),
             ProfileIdentifier,
         ),
         foundAt: new Date(record.foundAt),
@@ -119,13 +122,8 @@ export async function withPostDBTransaction(task: (t: PostReadWriteTransaction) 
 
 // #endregion
 
-type RecipientReasonJSON = ({ type: 'auto-share' } | { type: 'direct' }) & {
-    at: number
-}
+type RecipientReasonMobile = { type: 'auto-share'; at: number } | { type: 'direct'; at: number }
 
-function RecipientReasonToJSON(y: RecipientReason): RecipientReasonJSON {
-    if (y.type === 'direct' || y.type === 'auto-share')
-        return { at: y.at.getTime(), type: y.type } as RecipientReasonJSON
-    else if (y.type === 'group') return { at: y.at.getTime(), type: 'direct' }
-    return unreachable(y)
+function RecipientReasonToJSON(y: Date): RecipientReasonMobile {
+    return { type: 'direct', at: y.getTime() }
 }

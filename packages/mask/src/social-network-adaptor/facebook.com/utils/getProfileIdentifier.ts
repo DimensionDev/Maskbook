@@ -64,7 +64,7 @@ export function getProfileIdentifierAtFacebook(links: link[] | link, allowCollec
                 }
             } catch {}
             return {
-                identifier: identifier,
+                identifier,
                 avatar: avatar ?? undefined,
                 nickname: nickname ?? undefined,
             }

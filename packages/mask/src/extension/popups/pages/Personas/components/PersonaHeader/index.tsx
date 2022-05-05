@@ -14,7 +14,7 @@ export const PersonaHeader = memo(() => {
     return (matchPersona || matchSelectPersona) && currentPersona ? (
         <PersonaHeaderUI
             onActionClick={() => navigate(matchSelectPersona ? PopupRoutes.Personas : PopupRoutes.SelectPersona)}
-            fingerprint={currentPersona.identifier.compressedPoint}
+            fingerprint={currentPersona.identifier.rawPublicKey}
             isSelectPersonaPage={!!matchSelectPersona}
             avatar={avatar}
             nickname={currentPersona.nickname}

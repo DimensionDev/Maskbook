@@ -15,7 +15,7 @@ function usePersonaContext() {
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { value: personas, retry } = useAsyncRetry(
-        async () => Services.Identity.queryOwnedPersonaInformation(),
+        async () => Services.Identity.queryOwnedPersonaInformation(false),
         [currentPersonaIdentifier],
     )
     const { value: avatar } = useAsync(async () => {
@@ -35,9 +35,9 @@ function usePersonaContext() {
         loading: fetchProofsLoading,
     } = useAsyncRetry(async () => {
         try {
-            if (!currentPersona?.publicHexKey) return EMPTY_LIST
+            if (!currentPersona?.identifier.publicKeyAsHex) return EMPTY_LIST
 
-            const binding = await NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey)
+            const binding = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
 
             return binding?.proofs ?? EMPTY_LIST
         } catch {

@@ -1,9 +1,12 @@
 import type { PoolRecord, PoolRecordInDatabase } from '../types'
-import { ITO_PluginID } from '../constants'
-import { createPluginDatabase } from '../../../database/Plugin'
 import { omit } from 'lodash-unified'
+import type { Plugin } from '@masknet/plugin-infra'
 
-export const PoolDatabase = createPluginDatabase<PoolRecordInDatabase>(ITO_PluginID)
+export let PoolDatabase: Plugin.Worker.DatabaseStorage<PoolRecordInDatabase>
+
+export function setupDatabase(x: typeof PoolDatabase) {
+    PoolDatabase = x
+}
 
 export async function getAllPoolsAsSeller(ids: string[]) {
     const records: PoolRecord[] = []

@@ -27,7 +27,7 @@ export const MaskAvatar = memo<MaskAvatarProps>(({ size = 36, onClick }) => {
             background: MaskColorVar.lightBackground,
             borderRadius: '50%',
         },
-        onClick: onClick,
+        onClick,
         className: classes.author,
     }
 

@@ -1,7 +1,7 @@
 import { PluginId } from '@masknet/plugin-infra'
 import { BindingProof, EMPTY_LIST, NextIDPlatform, NextIDStorageInfo, ProfileIdentifier } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { uniq } from 'lodash-unified'
+import { first, uniq } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { MaskMessages } from '../../../utils'
@@ -25,9 +25,11 @@ export function usePublicWallets(profile: ProfileIdentifier | undefined) {
     const walletsFromCloud = useMemo(() => {
         if (kv?.ok) {
             if (!kv.val.proofs.length) return null
-            const tipWallets = kv.val.proofs.map((x) =>
-                x.content[PluginId.Tips].filter((y) => y.platform === NextIDPlatform.Ethereum),
-            )[0]
+            const tipWallets = first(
+                kv.val.proofs.map((x) =>
+                    x.content[PluginId.Tips]?.filter((y) => y.platform === NextIDPlatform.Ethereum),
+                ),
+            )
             if (!tipWallets) return EMPTY_LIST
             return tipWallets
                 .filter((x) => {

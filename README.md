@@ -48,11 +48,9 @@ Please check out [docs](docs)
 
 ## Reporting a Vulnerability
 
-<!-- https://tools.ietf.org/html/draft-foudil-securitytxt-12 -->
+Contact: `security (at) mask.io`
 
-Contact: <security@mask.io>
-
-Canonical: <https://mask.io/.well-known/security.txt>
+see [SECURITY.md](.github/SECURITY.md)
 
 ## Work for Mask Network
 

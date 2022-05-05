@@ -78,9 +78,9 @@ export const TipButton: FC<Props> = ({
         loading: loadingVerifyInfo,
         retry: retryLoadVerifyInfo,
     } = useAsyncRetry(() => {
-        if (!receiverPersona?.publicHexKey || !receiver?.userId) return Promise.resolve(false)
-        return NextIDProof.queryIsBound(receiverPersona.publicHexKey, platform, receiver.userId, true)
-    }, [receiverPersona?.publicHexKey, platform, receiver?.userId])
+        if (!receiverPersona?.identifier.publicKeyAsHex || !receiver?.userId) return Promise.resolve(false)
+        return NextIDProof.queryIsBound(receiverPersona.identifier.publicKeyAsHex, platform, receiver.userId, true)
+    }, [receiverPersona?.identifier.publicKeyAsHex, platform, receiver?.userId])
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {

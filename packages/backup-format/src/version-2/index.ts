@@ -99,7 +99,7 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
             foundAt: new Date(post.foundAt),
             postBy: postBy.unwrapOr(undefined),
             interestedMeta,
-            encryptBy: encryptBy,
+            encryptBy,
             summary: post.summary ? Some(post.summary) : None,
             url: post.url ? Some(post.url) : None,
             postCryptoKey: isAESJsonWebKey(post.postCryptoKey) ? Some(post.postCryptoKey) : None,
@@ -137,7 +137,7 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
             backup.relations.push({
                 profile: a.val,
                 persona: b.val,
-                favor: favor,
+                favor,
             })
         }
     }

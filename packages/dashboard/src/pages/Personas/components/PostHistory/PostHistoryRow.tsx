@@ -3,7 +3,7 @@ import { memo, ReactNode, useCallback, useMemo } from 'react'
 import { FileMessageIcon, ITOIcon, MessageIcon, PollIcon, RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { Services } from '../../../../API'
-import type { PostRecord } from '@masknet/shared-base'
+import type { PostInformation } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PluginId } from '@masknet/plugin-infra'
@@ -80,7 +80,7 @@ const SUPPORT_PLUGIN: Record<
 }
 
 interface PostHistoryRowProps {
-    post: PostRecord
+    post: PostInformation
     network: string
 }
 
@@ -167,7 +167,7 @@ interface PostHistoryRowUIProps {
     message?: ReactNode
     operation: ReactNode
     recipients: ReactNode[]
-    post: PostRecord
+    post: PostInformation
     onClick(event: React.MouseEvent<HTMLElement>): void
 }
 
