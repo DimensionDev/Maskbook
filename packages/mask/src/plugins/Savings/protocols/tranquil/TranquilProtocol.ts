@@ -11,7 +11,7 @@ import {
 } from '../common/protocol/BenQiRewardProtocol'
 import type { TranquilPriceOracleV2 } from '@masknet/web3-contracts/types/TranquilPriceOracleV2'
 import TranquilPriceOracleV2ABI from '@masknet/web3-contracts/abis/TranquilPriceOracleV2.json'
-import { TRANQ_ADDRESS } from './pairs'
+import { TRANQ_ADDRESS } from '../../constants'
 
 export function getComptrollerContract(address: string, web3: Web3) {
     return createContract<TranquilPriceOracleV2>(web3, address, TranquilPriceOracleV2ABI as AbiItem[])

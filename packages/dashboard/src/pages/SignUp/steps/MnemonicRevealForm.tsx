@@ -47,8 +47,8 @@ export const MnemonicRevealForm = memo(() => {
         try {
             const identifier = await createPersona(words.join(' '), state.personaName)
             setId(identifier)
-            const privateKey = await Services.Identity.exportPersonaPrivateKey(identifier)
-            setPrivateKey(privateKey)
+            const privateKey = await Services.Backup.backupPersonaPrivateKey(identifier)
+            setPrivateKey(privateKey || '')
 
             await changeCurrentPersona(identifier)
         } catch (error) {
@@ -85,12 +85,11 @@ export const MnemonicRevealForm = memo(() => {
 
     useAsync(async () => {
         // handle refresh page after create
-        const personas = await Services.Identity.queryMyPersonas()
+        const personas = await Services.Identity.queryOwnedPersonaInformation(true)
         const persona = personas.find((p) => p.nickname === state.personaName)
-
         if (!persona) return
 
-        Services.Identity.deletePersona(persona.identifier, 'delete even with private')
+        await Services.Identity.deletePersona(persona.identifier, 'delete even with private')
     }, [])
 
     return (

@@ -1,11 +1,16 @@
 import { useAsyncRetry, useUpdateEffect } from 'react-use'
 import { Services } from '../../../API'
-import type { Relation } from '@masknet/shared-base'
+import type { ProfileInformation, Relation, RelationFavor } from '@masknet/shared-base'
 import { useRef } from 'react'
 import { last } from 'lodash-unified'
 import { PersonaContext } from './usePersonaContext'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
-export const useContacts = (network: string, page: number, size = 20) => {
+export interface Contacts extends ProfileInformation {
+    favor: RelationFavor | undefined
+    avatar: string | undefined
+}
+export function useContacts(network: string, page: number, size = 20): AsyncStateRetry<Contacts[]> {
     const cache = useRef<Map<number, Relation | undefined>>(new Map([]))
     const { currentPersona } = PersonaContext.useContainer()
 
@@ -18,6 +23,7 @@ export const useContacts = (network: string, page: number, size = 20) => {
         const lastValue = cache.current.get(page - 1)
 
         const values = await Services.Identity.queryRelationPaged(
+            currentPersona?.identifier,
             {
                 network,
                 after: lastValue,
@@ -29,12 +35,19 @@ export const useContacts = (network: string, page: number, size = 20) => {
         // Cache the last record of  each page
         cache.current.set(page, last(values))
 
-        const profiles = await Services.Identity.queryProfilesWithIdentifiers(values.map((x) => x.profile))
+        if (values.length === 0) return []
+
+        const identifiers = values.map((x) => x.profile)
+        const [avatars, profiles] = await Promise.all([
+            Services.Identity.queryAvatarsDataURL(identifiers),
+            Services.Identity.queryProfilesInformation(identifiers),
+        ])
         return profiles.map((profile) => {
-            const favor = values.find((x) => x.profile.equals(profile.identifier))?.favor
+            const favor = values.find((x) => x.profile === profile.identifier)?.favor
             return {
-                favor,
                 ...profile,
+                favor,
+                avatar: avatars.get(profile.identifier),
             }
         })
     }, [page, size, network, currentPersona])

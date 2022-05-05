@@ -1,10 +1,10 @@
-import type {
+import {
     ProfileIdentifier,
     EC_Public_CryptoKey,
     AESCryptoKey,
     EC_Private_CryptoKey,
     PostIVIdentifier,
-    IdentifierMap,
+    registerSerializableClass,
 } from '@masknet/shared-base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { EC_Key, EC_KeyCurveEnum } from '../payload'
@@ -13,7 +13,9 @@ export interface EncryptOptions {
     /** Payload version to use. */
     version: -38 | -37
     /** Current author who started the encryption. */
-    author: ProfileIdentifier
+    author?: ProfileIdentifier
+    /** Network of the encryption */
+    network: string
     /** The message to be encrypted. */
     message: SerializableTypedMessages
     /** Encryption target. */
@@ -70,11 +72,11 @@ export interface EncryptResult {
     postKey: AESCryptoKey
     output: string | Uint8Array
     identifier: PostIVIdentifier
-    author: ProfileIdentifier
+    author?: ProfileIdentifier
     e2e?: EncryptionResultE2EMap
 }
 /** Additional information that need to be send to the internet in order to allow recipients to decrypt */
-export type EncryptionResultE2EMap = IdentifierMap<ProfileIdentifier, PromiseSettledResult<EncryptionResultE2E>>
+export type EncryptionResultE2EMap = Map<ProfileIdentifier, PromiseSettledResult<EncryptionResultE2E>>
 export interface EncryptionResultE2E {
     target: ProfileIdentifier
     encryptedPostKey: Uint8Array
@@ -94,3 +96,17 @@ export class EncryptError extends Error {
         super(message, { cause })
     }
 }
+registerSerializableClass(
+    'MaskEncryptError',
+    (x) => x instanceof EncryptError,
+    (e: EncryptError) => ({
+        cause: (e as any).cause,
+        message: e.message,
+        stack: e.stack,
+    }),
+    (o) => {
+        const e = new EncryptError(o.message, o.cause)
+        e.stack = o.stack
+        return e
+    },
+)

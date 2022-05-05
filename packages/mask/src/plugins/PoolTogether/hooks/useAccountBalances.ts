@@ -27,7 +27,7 @@ export function useAccountBalance(pools: Pool[]) {
             ? pools.map(
                   (pool, i) =>
                       ({
-                          pool: pool,
+                          pool,
                           account: {
                               ticketBalance: results[i].value,
                               userAddress: account,

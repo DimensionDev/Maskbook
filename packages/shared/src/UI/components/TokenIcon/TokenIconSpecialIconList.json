@@ -193,5 +193,75 @@
         "name": "AVAX",
         "address": "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
         "logo_url": "https://raw.githubusercontent.com/sushiswap/icons/master/network/avalanche.jpg'"
+    },
+    {
+        "name": "STNEAR",
+        "address": "0x07f9f7f963c5cd2bbffd30ccfb964be114332e30",
+        "logo_url": "https://static.debank.com/image/aurora_token/logo_url/0x07f9f7f963c5cd2bbffd30ccfb964be114332e30/625cb2649588721db770dc0f54379a43.png"
+    },
+    {
+        "name": "USDT",
+        "address": "0x4988a896b1227218e4a686fde5eabdcabd91571f",
+        "logo_url": "https://static.debank.com/image/aurora_token/logo_url/0x4988a896b1227218e4a686fde5eabdcabd91571f/3c1a718331e468abe1fc2ebe319f6c77.png"
+    },
+    {
+        "name": "AURORA",
+        "address": "0x8bec47865ade3b172a928df8f990bc7f2a3b9f79",
+        "logo_url": "https://static.debank.com/image/aurora_token/logo_url/0x8bec47865ade3b172a928df8f990bc7f2a3b9f79/ec63b91b7247ce338caa842eb6439530.png"
+    },
+    {
+        "name": "USDC",
+        "address": "0xb12bfca5a55806aaf64e99521918a4bf0fc40802",
+        "logo_url": "https://static.debank.com/image/aurora_token/logo_url/0xb12bfca5a55806aaf64e99521918a4bf0fc40802/43cebbf7a996ebbb31c6b1513e282f0b.png"
+    },
+    {
+        "name": "NEAR",
+        "address": "0xc42c30ac6cc15fac9bd938618bcaa1a1fae8501d",
+        "logo_url": "https://static.debank.com/image/aurora_token/logo_url/0xc42c30ac6cc15fac9bd938618bcaa1a1fae8501d/af4e945c578e905bd2e9dd50deb46972.png"
+    },
+    {
+        "name": "WBTC",
+        "address": "0xf4eb217ba2454613b15dbdea6e5f22276410e89e",
+        "logo_url": "https://static.debank.com/image/aurora_token/logo_url/0xf4eb217ba2454613b15dbdea6e5f22276410e89e/4b8dce79188a892a6ebf6caeec886bed.png"
+    },
+    {
+        "name": "TRI",
+        "address": "0xfa94348467f64d5a457f75f8bc40495d33c65abb",
+        "logo_url": "https://static.debank.com/image/aurora_token/logo_url/0xfa94348467f64d5a457f75f8bc40495d33c65abb/f529cbfca541546078d1aa49ecf81056.png"
+    },
+    {
+        "name": "stONE",
+        "address": "0x22d62b19b7039333ad773b7185bb61294f3adc19",
+        "logo_url": "https://static.debank.com/image/hmy_token/logo_url/0x22d62b19b7039333ad773b7185bb61294f3adc19/2f50553aafc56d830f636a2d67487786.png"
+    },
+    {
+        "name": "1WBTC",
+        "address": "0x3095c7557bcb296ccc6e363de01b760ba031f2d9",
+        "logo_url": "https://static.debank.com/image/hmy_token/logo_url/0x3095c7557bcb296ccc6e363de01b760ba031f2d9/4b8dce79188a892a6ebf6caeec886bed.png"
+    },
+    {
+        "name": "1USDT",
+        "address": "0x3c2b8be99c50593081eaa2a724f0b8285f5aba8f",
+        "logo_url": "https://static.debank.com/image/hmy_token/logo_url/0x3c2b8be99c50593081eaa2a724f0b8285f5aba8f/3c1a718331e468abe1fc2ebe319f6c77.png"
+    },
+    {
+        "name": "1ETH",
+        "address": "0x6983d1e6def3690c4d616b13597a09e6193ea013",
+        "logo_url": "https://static.debank.com/image/hmy_token/logo_url/0x6983d1e6def3690c4d616b13597a09e6193ea013/56f5de0d16e8848bb9ff27cbd8f73f30.png"
+    },
+    {
+        "name": "1USDC",
+        "address": "0x985458e523db3d53125813ed68c274899e9dfab4",
+        "logo_url": "https://static.debank.com/image/hmy_token/logo_url/0x985458e523db3d53125813ed68c274899e9dfab4/43cebbf7a996ebbb31c6b1513e282f0b.png"
+    },
+    {
+        "name": "1BTC",
+        "address": "0xdc54046c0451f9269fee1840aec808d36015697d",
+        "logo_url": "https://static.debank.com/image/hmy_token/logo_url/0xdc54046c0451f9269fee1840aec808d36015697d/ed6d39af4cdeca39b6d19dab162b5c02.png"
+    },
+    {
+        "name": "1DAI",
+        "address": "0xef977d2f931c1978db5f6747666fa1eacb0d0339",
+        "logo_url": "https://static.debank.com/image/hmy_token/logo_url/0xef977d2f931c1978db5f6747666fa1eacb0d0339/61b18dee6896c6dab0684a78d0eee10a.png"
     }
 ]

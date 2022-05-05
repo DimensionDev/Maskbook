@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
-import { useAssets, useTrustedERC20Tokens, Asset, useChainDetailed } from '@masknet/web3-shared-evm'
+import { useAssets, useTrustedERC20Tokens, Asset, useChainDetailed, Wallet } from '@masknet/web3-shared-evm'
 import { useRecentTransactions } from '../../../../../plugins/Wallet/hooks/useRecentTransactions'
 import type { RecentTransaction } from '../../../../../plugins/Wallet/services'
 
@@ -14,7 +14,7 @@ function useWalletContext() {
     })
     const [currentToken, setCurrentToken] = useState<Asset>()
     const [transaction, setTransaction] = useState<RecentTransaction | null>()
-
+    const [selectedWallet, setSelectedWallet] = useState<Wallet | null>()
     return {
         currentToken,
         setCurrentToken,
@@ -23,6 +23,8 @@ function useWalletContext() {
         assetsLoading: loading,
         transaction,
         setTransaction,
+        selectedWallet,
+        setSelectedWallet,
     }
 }
 

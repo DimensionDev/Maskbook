@@ -58,7 +58,7 @@ export class ProviderProxy {
 
         if (!itemInPoll) return
         if (error || !id) {
-            itemInPoll.notify({ id, done: true, error: error, from: 'remote' })
+            itemInPoll.notify({ id, done: true, error, from: 'remote' })
         }
 
         const updatedAt = new Date()

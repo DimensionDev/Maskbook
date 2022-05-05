@@ -11,16 +11,7 @@ export function getLensContract(address: string, web3: Web3) {
     return createContract<AuriLens>(web3, address, AuriLensABI as AbiItem[])
 }
 
-const rewardTokens: RewardToken[] = [
-    // {
-    //     symbol: 'PLY',
-    //     rewardType: -1,
-    // },
-    // {
-    //     symbol: 'auWNEAR',
-    //     rewardType: -1,
-    // },
-]
+const rewardTokens: RewardToken[] = []
 
 export default class AurigamiProtocol extends BenQiRewardProtocol {
     static nativeToken = 'auETH'

@@ -35,6 +35,7 @@ export function NFTAvatarSettingDialog() {
         async (token: ERC721TokenDetailed) => {
             try {
                 if (!token.info.imageURL) return
+                if (!identity.identifier) return
                 const image = await toPNG(token.info.imageURL)
                 if (!image || !wallet) return
 

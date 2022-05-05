@@ -7,7 +7,6 @@ import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
 import {
     ECKeyIdentifier,
-    Identifier,
     createSubscriptionFromAsync,
     PersonaIdentifier,
     EnhanceableSite,
@@ -85,6 +84,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.collecting.postsProvider?.start(signal)
     startPostListener()
     ui.collecting.currentVisitingIdentityProvider?.start(signal)
+
     ui.injection.pageInspector?.(signal)
     if (Flags.toolbox_enabled) ui.injection.toolbox?.(signal)
     ui.injection.setupPrompt?.(signal)
@@ -103,6 +103,13 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.openNFTAvatar?.(signal)
     ui.injection.postAndReplyNFTAvatar?.(signal)
     ui.injection.avatarClipNFT?.(signal)
+
+    // Update user avatar
+    ui.collecting.currentVisitingIdentityProvider?.recognized.addListener((ref) => {
+        if (ref.avatar && ref.identifier) {
+            Services.Identity.updateProfileInfo(ref.identifier, { avatarURL: ref.avatar })
+        }
+    })
 
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),
@@ -159,18 +166,18 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         provider.start(signal)
         provider.recognized.addListener((newValue, oldValue) => {
             if (document.visibilityState === 'hidden') return
-            if (newValue.identifier.equals(oldValue.identifier)) return
-            if (newValue.identifier.isUnknown) return
+            if (newValue.identifier === oldValue.identifier) return
+            if (!newValue.identifier) return
 
             MaskMessages.events.Native_visibleSNS_currentDetectedProfileUpdated.sendToBackgroundPage(
-                newValue.identifier.toText(),
+                newValue.identifier,
             )
         })
         if (provider.hasDeprecatedPlaceholderName) {
             provider.recognized.addListener((id) => {
                 if (signal.aborted) return
-                if (id.identifier.isUnknown) return
-                Services.Identity.resolveIdentity(id.identifier)
+                if (!id.identifier) return
+                Services.Identity.resolveUnknownLegacyIdentity(id.identifier)
             })
         }
     }
@@ -210,7 +217,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             const { persona, status }: SetupGuideCrossContextStatus = JSON.parse(id || '{}')
             if (persona && status && !started) {
                 started = true
-                ui.injection.setupWizard?.(signal, Identifier.fromString(persona, ECKeyIdentifier).unwrap())
+                ui.injection.setupWizard?.(signal, ECKeyIdentifier.from(persona).unwrap())
             }
         }
         currentSetupGuideStatus[network].addListener(onStatusUpdate)

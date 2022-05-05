@@ -3,7 +3,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { Button, DialogActions, DialogContent, InputBase, List, ListItem, ListItemText } from '@mui/material'
 import Fuse from 'fuse.js'
 import { useMemo, useState } from 'react'
-import type { Profile } from '../../../database'
+import type { ProfileInformation as Profile } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
 
@@ -36,7 +36,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const [search, setSearch] = useState('')
     const itemsAfterSearch = useMemo(() => {
         const fuse = new Fuse(items, {
-            keys: ['identifier.userId', 'linkedPersona.fingerprint', 'nickname'],
+            keys: ['identifier.userId', 'fingerprint', 'nickname'],
             isCaseSensitive: false,
             ignoreLocation: true,
             threshold: 0,
@@ -67,7 +67,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                 item={item}
                                 search={search}
                                 checked={
-                                    props.selected.some((x) => x.identifier.equals(item.identifier)) ||
+                                    props.selected.some((x) => x.identifier === item.identifier) ||
                                     disabledItems?.includes(item)
                                 }
                                 disabled={props.disabled || disabledItems?.includes(item)}

@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import { makeStyles } from '@masknet/theme'
-import { Box, Button, Grid, Typography, CircularProgress } from '@mui/material'
+import { Box, Button, Grid, Typography } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { isZero, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, formatBalance, isSameAddress, useAccount, useAssets, useWeb3 } from '@masknet/web3-shared-evm'
@@ -8,6 +8,7 @@ import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
 import { SavingsProtocol, TabType } from '../types'
 import { useMemo } from 'react'
+import { CircleLoadingIcon, DirectIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -60,12 +61,35 @@ const useStyles = makeStyles()((theme, props) => ({
         right: '-5px',
     },
     protocolLabel: {},
-    loading: {
+    placeholder: {
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: 300,
         width: '100%',
+    },
+    loading: {
+        fontSize: 14,
+        color: theme.palette.text.primary,
+        lineHeight: '18px',
+        marginTop: 12,
+    },
+    animated: {
+        fontSize: 36,
+        '@keyframes loadingAnimation': {
+            '0%': {
+                transform: 'rotate(0deg)',
+            },
+            '100%': {
+                transform: 'rotate(360deg)',
+            },
+        },
+        animation: 'loadingAnimation 1s linear infinite',
+    },
+    direct: {
+        fill: theme.palette.secondaryDivider,
+        fontSize: 36,
     },
 }))
 
@@ -125,10 +149,11 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
             </Grid>
 
             {loading || getAssetsLoading ? (
-                <div className={classes.loading}>
-                    <CircularProgress />
+                <div className={classes.placeholder}>
+                    <CircleLoadingIcon className={classes.animated} />
+                    <Typography className={classes.loading}>{t('popups_loading')}</Typography>
                 </div>
-            ) : (
+            ) : protocols.length ? (
                 <div className={classes.tableContainer}>
                     {displayProtocols.map((protocol, index) => (
                         <Grid container spacing={0} className={classes.tableRow} key={index}>
@@ -187,6 +212,10 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                             </Grid>
                         </Grid>
                     ))}
+                </div>
+            ) : (
+                <div className={classes.placeholder}>
+                    <DirectIcon className={classes.direct} />
                 </div>
             )}
         </Box>

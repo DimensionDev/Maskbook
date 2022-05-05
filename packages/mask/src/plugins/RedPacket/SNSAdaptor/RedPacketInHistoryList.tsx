@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import { omit } from 'lodash-unified'
+import { omit, pick } from 'lodash-unified'
 import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } from '../types'
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -18,6 +18,8 @@ import {
     FungibleTokenDetailed,
     useFungibleTokenDetailed,
     useTokenConstants,
+    ERC20TokenDetailed,
+    NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -208,7 +210,10 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         tokenAddress ?? '',
     )
 
-    const historyToken = (history as RedPacketJSONPayload).token ?? tokenDetailed
+    const historyToken = {
+        ...pick(tokenDetailed ?? (history as RedPacketJSONPayload).token, ['decimals', 'symbol']),
+        address: tokenAddress,
+    } as ERC20TokenDetailed | NativeTokenDetailed
 
     // #region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(

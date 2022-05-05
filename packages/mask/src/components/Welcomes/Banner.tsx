@@ -69,13 +69,13 @@ export function Banner(props: BannerProps) {
 
         hasNativeAPI
             ? nativeAPI?.api.misc_openDashboardView()
-            : Services.Welcome.openOptionsPage(
+            : Services.Helper.openDashboard(
                   personaConnectStatus.hasPersona ? DashboardRoutes.Personas : DashboardRoutes.Setup,
               )
     }, [networkIdentifier, nextStep])
     const defaultUserName = networkIdentifier
         ? {
-              defaultValue: lastRecognizedIdentity.identifier.isUnknown ? '' : lastRecognizedIdentity.identifier.userId,
+              defaultValue: lastRecognizedIdentity.identifier?.userId ?? '',
               value,
               onChange,
               isValid: activatedSocialNetworkUI.utils.isValidUsername || (() => true),

@@ -1,14 +1,14 @@
-import { OPENSEA_ID } from '@masknet/shared'
 import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 const origins = ['https://opensea.io/*']
 export const openseaBase: SocialNetwork.Base = {
-    networkIdentifier: OPENSEA_ID,
+    networkIdentifier: EnhanceableSite.OpenSea,
     encryptionNetwork: SocialNetworkEnum.Unknown,
     declarativePermissions: { origins },
     shouldActivate(location) {
-        return location.host.endsWith(OPENSEA_ID)
+        return location.host.endsWith(EnhanceableSite.OpenSea)
     },
     notReadyForProduction: true,
 }

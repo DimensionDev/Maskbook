@@ -39,7 +39,7 @@ export function usePurchaseCallback(projectId: string, amount: string, tokenType
                 .purchase(projectId)
                 .estimateGas({
                     from: account,
-                    value: value,
+                    value,
                 })
                 .catch((error) => {
                     setPurchaseState({

@@ -26,13 +26,14 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
-        borderBottom: `1px solid ${theme.palette.divider}`,
+        whiteSpace: 'nowrap',
     },
     dialogContent: {
         overscrollBehavior: 'contain',
     },
     dialogTitleTypography: {
-        marginLeft: 6,
+        flex: 1,
+        textAlign: 'center',
         verticalAlign: 'middle',
     },
     dialogCloseButton: {
@@ -141,6 +142,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             {titleTail}
                         </DialogTitle>
                     ) : null}
+
                     {/* There is a .MuiDialogTitle+.MuiDialogContent selector that provides paddingTop: 0 */}
                     {/* Add an empty span here to revert this effect. */}
                     <span />

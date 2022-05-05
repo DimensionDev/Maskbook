@@ -1,31 +1,38 @@
-import { isNil } from 'lodash-unified'
+import { delay } from '@dimensiondev/kit'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { selfInfoSelectors, searchAvatarSelector, searchAvatarMetaSelector } from '../utils/selector'
+import { Twitter } from '@masknet/web3-providers'
 import { ProfileIdentifier } from '@masknet/shared-base'
+import {
+    searchAvatarSelector,
+    searchAvatarMetaSelector,
+    searchSelfHandleSelector,
+    searchSelfNicknameSelector,
+    searchSelfAvatarSelector,
+} from '../utils/selector'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import Services from '../../../extension/service'
 import { twitterBase } from '../base'
 import { getAvatar, getBio, getNickname, getTwitterId, getPersonalHomepage } from '../utils/user'
-import { delay } from '@dimensiondev/kit'
+import { isMobileTwitter } from '../utils/isMobile'
 
 function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const selfSelector = selfInfoSelectors().handle
     const assign = () => {
-        const handle = selfInfoSelectors().handle.evaluate()
-        const nickname = selfInfoSelectors().name.evaluate()
-        const avatar = selfInfoSelectors().userAvatar.evaluate()
-        if (!isNil(handle)) {
+        const avatar = searchSelfAvatarSelector().evaluate()?.getAttribute('src') ?? ''
+        const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '')
+        const nickname = searchSelfNicknameSelector().evaluate()?.textContent?.trim() ?? ''
+
+        if (handle) {
             ref.value = {
-                identifier: new ProfileIdentifier(twitterBase.networkIdentifier, handle),
-                nickname,
                 avatar,
+                nickname,
+                identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
             }
         }
     }
-    const watcher = new MutationObserverWatcher(selfSelector)
+    const watcher = new MutationObserverWatcher(searchSelfHandleSelector())
         .addListener('onAdd', () => assign())
         .addListener('onChange', () => assign())
         .startWatch({
@@ -33,6 +40,28 @@ function resolveLastRecognizedIdentityInner(
             subtree: true,
         })
     cancel.addEventListener('abort', () => watcher.stopWatch())
+}
+
+function resolveLastRecognizedIdentityMobileInner(
+    ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    cancel: AbortSignal,
+) {
+    const onLocationChange = async () => {
+        const settings = await Twitter.getSettings()
+        const identifier = ProfileIdentifier.of(twitterBase.networkIdentifier, settings?.screen_name).unwrapOr(
+            undefined,
+        )
+
+        if (identifier && !ref.value.identifier) {
+            ref.value = {
+                ...ref.value,
+                identifier,
+            }
+        }
+    }
+
+    onLocationChange()
+    window.addEventListener('locationchange', onLocationChange, { signal: cancel })
 }
 
 function resolveCurrentVisitingIdentityInner(
@@ -48,8 +77,9 @@ function resolveCurrentVisitingIdentityInner(
         const nickname = getNickname()
         const handle = getTwitterId()
         const avatar = getAvatar()
+
         ref.value = {
-            identifier: new ProfileIdentifier(twitterBase.networkIdentifier, handle),
+            identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
             nickname,
             avatar,
             bio,
@@ -91,6 +121,7 @@ export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolv
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveLastRecognizedIdentityInner(this.recognized, cancel)
+        if (isMobileTwitter) resolveLastRecognizedIdentityMobileInner(this.recognized, cancel)
     },
 }
 
