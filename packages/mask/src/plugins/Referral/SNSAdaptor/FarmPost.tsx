@@ -53,7 +53,7 @@ export function FarmPost(props: FarmPostProps) {
     const currentIdentity = useCurrentIdentity()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     const { showSnackbar } = useCustomSnackbar()
-    const { ERC20 } = useTokenListConstants()
+    const { ERC20 } = useTokenListConstants(chainId)
 
     const { value: rewards = EMPTY_LIST } = useAsync(
         async () =>
