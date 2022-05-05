@@ -1,4 +1,4 @@
-import { lazy, useState } from 'react'
+import { lazy, useEffect, useState } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -23,6 +23,12 @@ const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission'))
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
+function PluginRenderDelayed() {
+    const [a, b] = useState(false)
+    useEffect(() => b(true), [])
+    if (!a) return null
+    return <PluginRender />
+}
 
 export default function Popups() {
     const [title, setTitle] = useState('')
@@ -48,7 +54,7 @@ export default function Popups() {
                                 <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
                             </Routes>
                             {/* TODO: Should only load plugins when the page is plugin-aware. */}
-                            <PluginRender />
+                            <PluginRenderDelayed />
                         </HashRouter>
                     </PageTitleContext.Provider>
                 </PopupContext.Provider>

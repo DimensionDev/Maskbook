@@ -1,6 +1,8 @@
 import { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { PersonaIdentifier } from '@masknet/shared-base'
 
+import { getBrowserStorageUnchecked, InternalStorageKeys } from './utils'
+
 export { __kv_storage_read__, __kv_storage_write__ } from './kv-storage'
 
 // TODO: Migration in process.
@@ -23,3 +25,4 @@ export const getCurrentPortfolioDataProvider = async () => 'Debank'
 export const getCurrentCollectibleDataProvider = async () => 'OpenSea'
 export const getWalletAllowTestChain = async () => false
 export const getCurrentSelectedWalletNetwork = async () => 'Ethereum'
+export { getCurrentPersonaIdentifier_alternative, getLanguagePreference } from './old-settings'

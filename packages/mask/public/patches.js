@@ -83,7 +83,7 @@ globalThis.regeneratorRuntime = undefined
 }
 
 {
-    if (typeof trustedTypes === 'object') {
+    if (typeof trustedTypes === 'object' && location.protocol.includes('extension')) {
         trustedTypes.createPolicy('default', {
             createHTML: (string) => {
                 console.trace('[Trusted Types](default policy): Possible XSS happened. Please remove it.', string)
@@ -91,6 +91,10 @@ globalThis.regeneratorRuntime = undefined
             },
             createScriptURL: (string) => string,
         })
+
+        if (location.pathname !== '/popups.html') {
+            trustedTypes.createPolicy('ssr', {})
+        }
     }
 }
 

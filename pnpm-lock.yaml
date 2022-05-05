@@ -18,6 +18,7 @@ importers:
 
   .:
     specifiers:
+      '@babel/runtime': 7.17.9
       '@commitlint/cli': ^17.0.2
       '@commitlint/config-conventional': ^17.0.2
       '@dimensiondev/eslint-plugin': 0.0.2-20220516081411-2649814
@@ -70,6 +71,7 @@ importers:
       ts-results: 3.3.0
       typescript: ^4.8.0-beta
     dependencies:
+      '@babel/runtime': 7.17.9
       '@dimensiondev/kit': 0.0.0-20220617045824-8bc7a27
       '@emotion/cache': 11.7.1
       '@emotion/react': 11.9.0_7cpxmzzodpxnolj5zcc5cr63ji
@@ -6174,7 +6176,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
       '@mui/material': 5.8.0_4xriuibr7qayay6mzcpq5f43me
       '@types/react': 18.0.9
       react: 18.1.0
@@ -6210,7 +6212,7 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
       '@mui/base': 5.0.0-alpha.81_ohobp6rpsmerwlq5ipwfh5yigy
       '@mui/material': 5.8.0_4xriuibr7qayay6mzcpq5f43me
       '@mui/system': 5.8.0_2f7y4c3dlygqpuszd3d43oslwi
@@ -6250,7 +6252,7 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
       '@emotion/react': 11.9.0_7cpxmzzodpxnolj5zcc5cr63ji
       '@emotion/styled': 11.8.1_ycz2ostpb5cpb2s3izz5qyhrbm
       '@mui/base': 5.0.0-alpha.81_ohobp6rpsmerwlq5ipwfh5yigy
@@ -6329,7 +6331,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
       '@emotion/react': 11.9.0_7cpxmzzodpxnolj5zcc5cr63ji
       '@emotion/styled': 11.8.1_ycz2ostpb5cpb2s3izz5qyhrbm
       '@mui/private-theming': 5.8.0_7cpxmzzodpxnolj5zcc5cr63ji
@@ -18730,7 +18732,7 @@ packages:
   /i18next/21.8.2:
     resolution: {integrity: sha512-H/oQvA/OXcqurXHemlyDwdIzr9GHYg5/xBuDeFXTXJGMOJFH0ke1wgbsDjFFk2noD4cJfzicVPpUtp39Z+OzgQ==}
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
     dev: false
 
   /iconv-lite/0.4.24:
@@ -24001,7 +24003,7 @@ packages:
       react-native:
         optional: true
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
       html-escaper: 2.0.2
       html-parse-stringify: 3.0.1
       i18next: 21.8.2
