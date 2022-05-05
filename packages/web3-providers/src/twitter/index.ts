@@ -15,8 +15,8 @@ function getScriptURL(content: string, name: string) {
     return url
 }
 
-function getScriptContentMatched(content: string, regexp: RegExp) {
-    const [, matched] = content.match(regexp) ?? []
+function getScriptContentMatched(content: string, pattern: RegExp) {
+    const [, matched] = content.match(pattern) ?? []
     return matched
 }
 

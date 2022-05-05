@@ -10,10 +10,10 @@ const id = new WeakMap<ProfileIdentifier, Record<string, PostIdentifier>>()
  * e.g. a comment.
  */
 export class PostIdentifier extends Identifier {
-    static override from(str: string | null | undefined): Option<PostIdentifier> {
-        if (!str) return None
-        str = String(str)
-        if (str.startsWith('post:')) return Identifier.from(str) as Option<PostIdentifier>
+    static override from(input: string | null | undefined): Option<PostIdentifier> {
+        if (!input) return None
+        input = String(input)
+        if (input.startsWith('post:')) return Identifier.from(input) as Option<PostIdentifier>
         return None
     }
     declare readonly identifier: ProfileIdentifier
