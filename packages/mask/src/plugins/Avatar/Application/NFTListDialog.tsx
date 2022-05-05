@@ -60,9 +60,14 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const onSave = useCallback(async () => {
         if (!selectedToken?.info?.imageURL) return
         setDisabled(true)
-        const image = await downloadUrl(selectedToken.info.imageURL)
-        onSelected({ image: URL.createObjectURL(image), account: selectedAccount, token: selectedToken })
-        onNext()
+        try {
+            const image = await downloadUrl(selectedToken.info.imageURL)
+            onSelected({ image: URL.createObjectURL(image), account: selectedAccount, token: selectedToken })
+            onNext()
+            setDisabled(false)
+        } catch (error) {
+            console.log(error)
+        }
         setDisabled(false)
     }, [selectedToken, selectedAccount])
 
