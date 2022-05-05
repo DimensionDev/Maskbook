@@ -14,12 +14,12 @@ const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services
 const hmr = new EventTarget()
 
 // #region Setup services
-setup('Crypto', () => import('./crypto'))
-setup('Identity', () => import('./identity'))
-setup('Backup', () => import('./backup'))
-setup('Helper', () => import('./helper'))
+setup('Crypto', () => import(/* webpackPreload: true */ './crypto'))
+setup('Identity', () => import(/* webpackPreload: true */ './identity'))
+setup('Backup', () => import(/* webpackPreload: true */ './backup'))
+setup('Helper', () => import(/* webpackPreload: true */ './helper'))
 setup('SocialNetwork', async () => ({}))
-setup('Settings', () => import('./settings'))
+setup('Settings', () => import(/* webpackPreload: true */ './settings'))
 setup('ThirdPartyPlugin', async () => ({}))
 
 if (import.meta.webpackHot) {

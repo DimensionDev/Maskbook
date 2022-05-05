@@ -317,12 +317,12 @@ export function encodeRegionCode(codes: RegionCode[]) {
     return '+' + codes.join(',')
 }
 
-export function decodeRegionCode(str: string): RegionCode[] {
-    str = str.toUpperCase()
+export function decodeRegionCode(input: string): RegionCode[] {
+    input = input.toUpperCase()
 
-    const isReverse = str.startsWith('-')
+    const isReverse = input.startsWith('-')
 
-    const codes = str
+    const codes = input
         .slice(1)
         .split(',')
         .filter((c) => regionNameMap.has(c as RegionCode)) as RegionCode[]
