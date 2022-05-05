@@ -50,7 +50,6 @@ export function usePendingTransactions() {
 
     const transactions = pendingTransactions.slice(0, 5).filter((tx) => !meltedTxHashes.includes(tx.hash))
     // #endregion
-    console.log({ transactions, pendingTransactions })
     const summary = pendingTransactions.length ? (
         <section className={classes.summaryWrapper}>
             <div className={classnames(pendingTransactions.length ? '' : classes.hide)}>
