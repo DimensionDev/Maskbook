@@ -12,21 +12,16 @@ import { fetchERC20TokensFromTokenListsMap } from './tokenLists'
 function makeLeafHash(chainId: number, reward: Reward, rewardTokenDefn: string) {
     return keccak256(
         defaultAbiCoder.encode(
-            [
-                'bytes24',
-                'bytes24',
-                'address',
-                '(bytes32 farmHash, uint128 rewardValue, bytes24 rewardTokenDefn, uint64 effectNonce)',
-            ],
+            ['bytes24', 'bytes24', 'address', 'bytes24', '(bytes32 farmHash, uint128 rewardValue, uint128 period)'],
             [
                 toChainAddressEthers(chainId, CONFIRMATION_V1_ADDR),
                 toChainAddressEthers(chainId, REFERRAL_FARMS_V1_ADDR),
                 reward.entitlee,
+                rewardTokenDefn,
                 {
                     farmHash: reward.farmHash,
                     rewardValue: reward.rewardValue,
-                    rewardTokenDefn: rewardTokenDefn,
-                    effectNonce: reward.nonce,
+                    period: reward.period,
                 },
             ],
         ),

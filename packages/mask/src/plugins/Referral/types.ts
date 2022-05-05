@@ -195,7 +195,6 @@ export interface FarmDetailed extends Farm {
 export interface Entitlement {
     entitlee: EvmAddress
     farmHash: FarmHash
-    nonce: BigNumberish
     period: BigNumberish
     proof: string[]
     rewardValue: BigNumberish

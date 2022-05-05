@@ -187,26 +187,32 @@ export async function harvestRewards(
         }
         const rewardsSorted = rewards.sort(
             (rewardA, rewardB) =>
-                Number.parseFloat(formatUnits(rewardA.nonce, 0)) - Number.parseFloat(formatUnits(rewardB.nonce, 0)),
+                Number.parseFloat(formatUnits(rewardA.period, 0)) - Number.parseFloat(formatUnits(rewardB.period, 0)),
         )
 
-        const requests = rewardsSorted.map(({ farmHash, rewardValue, nonce }) => {
+        // TODO: add gapcheck
+        const requests = rewardsSorted.map(({ farmHash, rewardValue: value, period }) => {
             return {
-                farmHash,
-                value: rewardValue,
                 rewardTokenDefn,
-                effectNonce: nonce,
+                entitlements: [
+                    {
+                        farmHash,
+                        value,
+                        period,
+                    },
+                ],
             }
         })
+
         const proofs = rewardsSorted.map((reward) => reward.proof)
 
         const farmsAddr = REFERRAL_FARMS_V1_ADDR
         const farms = createContract(web3, farmsAddr, ReferralFarmsV1ABI as AbiItem[])
 
-        const estimatedGas = await farms?.methods.harvestRewards(requests, proofs, []).estimateGas(config)
+        const estimatedGas = await farms?.methods.harvestRewardsNoGapcheck(requests, proofs).estimateGas(config)
 
         await farms?.methods
-            .harvestRewards(requests, proofs, [])
+            .harvestRewardsNoGapcheck(requests, proofs)
             .send({
                 ...config,
                 gas: estimatedGas,
