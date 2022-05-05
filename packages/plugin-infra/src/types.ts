@@ -734,6 +734,7 @@ export enum PluginId {
     CyberConnect = 'me.cyberconnect.app',
     GoPlusSecurity = 'io.gopluslabs.security',
     CrossChainBridge = 'io.mask.cross-chain-bridge',
+    Web3Profile = 'io.mask.web3-profile',
     // @masknet/scripts: insert-here
 }
 /**

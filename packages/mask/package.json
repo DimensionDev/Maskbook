@@ -33,6 +33,7 @@
     "@masknet/plugin-rss3": "workspace:*",
     "@masknet/plugin-solana": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
+    "@masknet/plugin-web3-profile": "workspace:*",
     "@masknet/public-api": "workspace:*",
     "@masknet/sdk": "workspace:*",
     "@masknet/shared": "workspace:*",
