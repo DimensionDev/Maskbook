@@ -65,6 +65,7 @@
         "unicorn/prefer-number-properties": "error",
         "unicorn/relative-url-style": ["error", "always"],
         "unicorn/throw-new-error": "error",
+        "unicorn/prefer-string-slice": "error",
         "@dimensiondev/array/no-implicit-sort": "error",
         "@dimensiondev/browser/prefer-location-assign": "error",
         "@dimensiondev/jsx/no-class-component": "error",

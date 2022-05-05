@@ -95,7 +95,7 @@ export const TokenIconUI = memo<TokenIconUIProps>((props) => {
             src={logoURL}
             style={{ backgroundColor: logoURL ? undefined : defaultBackgroundColor }}
             {...AvatarProps}>
-            {name?.substr(0, 1).toUpperCase()}
+            {name?.slice(0, 1).toUpperCase()}
         </Avatar>
     )
 })
