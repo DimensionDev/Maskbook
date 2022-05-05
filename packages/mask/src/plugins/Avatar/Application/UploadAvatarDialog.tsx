@@ -134,11 +134,10 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const onSave = useCallback(() => {
         if (!editor) return
         editor.getImage().toBlob(async (blob) => {
-            if (!blob || !identifier?.identifier?.userId || !account || !token || !currentConnectedPersona || !proof)
-                return
+            if (!blob || !account || !token || !currentConnectedPersona?.linkedProfiles[0].identifier || !proof) return
             setDisabled(true)
 
-            const avatarData = await uploadAvatar(blob, identifier.identifier.userId)
+            const avatarData = await uploadAvatar(blob, currentConnectedPersona?.linkedProfiles[0].identifier.userId)
             if (!avatarData) {
                 setDisabled(false)
                 return
@@ -151,7 +150,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 avatarData,
                 currentConnectedPersona.identifier,
                 proof,
-                identifier.identifier,
+                currentConnectedPersona.linkedProfiles[0].identifier,
             )
 
             if (!response) {
