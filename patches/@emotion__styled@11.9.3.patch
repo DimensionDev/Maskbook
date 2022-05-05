@@ -1,0 +1,15 @@
+diff --git a/package.json b/package.json
+index 7a2fd56e301ebf2d360825a754f4a572849a9ccb..d57a3731485f4fdbefdd0813854e2a494669e738 100644
+--- a/package.json
++++ b/package.json
+@@ -50,10 +50,6 @@
+     "macro.js.flow"
+   ],
+   "umd:main": "dist/emotion-styled.umd.min.js",
+-  "browser": {
+-    "./dist/emotion-styled.cjs.js": "./dist/emotion-styled.browser.cjs.js",
+-    "./dist/emotion-styled.esm.js": "./dist/emotion-styled.browser.esm.js"
+-  },
+   "preconstruct": {
+     "umdName": "emotionStyled",
+     "entrypoints": [
