@@ -878,7 +878,7 @@
             { "internalType": "uint8", "name": "", "type": "uint8" },
             { "internalType": "address", "name": "", "type": "address" }
         ],
-        "name": "rewardSpeeds",
+        "name": "supplyRewardSpeeds",
         "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
         "payable": false,
         "stateMutability": "view",

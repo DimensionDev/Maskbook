@@ -22,7 +22,7 @@ export default class CompoundLikeFetcher {
             return [underlying, marketAddress]
         } catch (error) {
             // native token will throw error
-            console.error('failed', error)
+            console.error('CompoundLikeFetcher.lookupMeta failed', error)
         }
         return [ZERO_ADDRESS, marketAddress]
     }

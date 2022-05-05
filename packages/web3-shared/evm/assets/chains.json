@@ -2797,7 +2797,8 @@
         "nativeCurrency": {
             "name": "ONE",
             "symbol": "ONE",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/hmy_token/logo_url/0xcf664087a5bb0237a0bad6742852ec6c8d69a27a/734c003023531e31c636ae25d5a73172.png"
         },
         "infoURL": "https://www.harmony.one/",
         "shortName": "hmy-s0",
@@ -2811,7 +2812,8 @@
         "nativeCurrency": {
             "name": "ONE",
             "symbol": "ONE",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/hmy_token/logo_url/0xcf664087a5bb0237a0bad6742852ec6c8d69a27a/734c003023531e31c636ae25d5a73172.png"
         },
         "infoURL": "https://www.harmony.one/",
         "shortName": "hmy-s1",
@@ -2825,7 +2827,8 @@
         "nativeCurrency": {
             "name": "ONE",
             "symbol": "ONE",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/hmy_token/logo_url/0xcf664087a5bb0237a0bad6742852ec6c8d69a27a/734c003023531e31c636ae25d5a73172.png"
         },
         "infoURL": "https://www.harmony.one/",
         "shortName": "hmy-s2",
@@ -2839,7 +2842,8 @@
         "nativeCurrency": {
             "name": "ONE",
             "symbol": "ONE",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/hmy_token/logo_url/0xcf664087a5bb0237a0bad6742852ec6c8d69a27a/734c003023531e31c636ae25d5a73172.png"
         },
         "infoURL": "https://www.harmony.one/",
         "shortName": "hmy-s3",

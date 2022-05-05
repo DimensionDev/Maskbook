@@ -10,8 +10,10 @@ export const LDO_PAIRS: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
     ],
 ]
 
-export const BENQI_COMPTROLLER = '0x486Af39519B4Dc9a7fCcd318217352830E8AD9b4'
 export const COMPOUND_COMPTROLLER = '0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b'
+
+export const BENQI_COMPTROLLER = '0x486Af39519B4Dc9a7fCcd318217352830E8AD9b4'
+export const BENQI_ChainlinkOracle = '0x316ae55ec59e0beb2121c0e41d4bdef8bf66b32b'
 
 // from https://app.aurigami.finance/assets/vendor.1efcd1de.js  search: 'COMPTROLLER:'
 export const AURIGAMI_COMPTROLLER = '0x817af6cfAF35BdC1A634d6cC94eE9e4c68369Aeb'

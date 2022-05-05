@@ -388,7 +388,7 @@ export interface BenQiComptroller extends BaseContract {
 
         rewardQi(): NonPayableTransactionObject<string>
 
-        rewardSpeeds(arg0: number | string | BN, arg1: string): NonPayableTransactionObject<string>
+        supplyRewardSpeeds(arg0: number | string | BN, arg1: string): NonPayableTransactionObject<string>
 
         rewardSupplierIndex(arg0: number | string | BN, arg1: string, arg2: string): NonPayableTransactionObject<string>
 

@@ -15,6 +15,11 @@ export type RewardToken = {
     rewardType: number
 }
 
+export type RewardSpeed = {
+    symbol: string
+    speed: BigNumber
+}
+
 export type PairConfig = {
     oracle: string
     comptroller: string
@@ -84,11 +89,13 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
         if (comptroller === null) return []
         return Promise.all(
             this.rewardTokens.map(async ({ rewardType, symbol }) => {
-                const speed = await comptroller.methods.rewardSpeeds(rewardType, this.stakeToken.address).call()
+                // https://snowtrace.io/tx/0x68a0a82884299df30c33a4ac36d32d247db7e3fa379cd41a1a1bc2f07f4cb173
+                // `rewardSpeeds` renamed `supplyRewardSpeeds` since May-02-2022 09:47:38 AM
+                const speed = await comptroller.methods.supplyRewardSpeeds(rewardType, this.stakeToken.address).call()
                 return {
                     speed: new BigNumber(speed),
                     symbol,
-                }
+                } as RewardSpeed
             }),
         )
     }
@@ -126,8 +133,18 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
     public async loadMarketPriceAndSpeed(comptroller: BenQiComptroller, web3: Web3) {
         const { matchPairs: needLoadPricePairs, notMatchTokens: notInPairTokens } =
             await this.getAllNeedFetchPricePairs()
-        const allPrice = await this.fetchPrices(needLoadPricePairs, notInPairTokens, web3)
-        const currentMarketSpeeds = await this.fetchSpeeds(web3)
+        let allPrice: Array<MarketStatus> = []
+        try {
+            allPrice = await this.fetchPrices(needLoadPricePairs, notInPairTokens, web3)
+        } catch (error) {
+            console.error('BenQiRewardProtocol.fetchPrices', error)
+        }
+        let currentMarketSpeeds: Array<RewardSpeed> = []
+        try {
+            currentMarketSpeeds = await this.fetchSpeeds(web3)
+        } catch (error) {
+            console.error('BenQiRewardProtocol.fetchSpeeds', error)
+        }
         const indexBySymbol: IndexWithStatus = {}
         allPrice.forEach((item: MarketStatus) => {
             indexBySymbol[item.symbol] = item

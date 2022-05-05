@@ -165,7 +165,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         setTradeState({
                             type: TransactionStateType.CONFIRMED,
                             no: 1,
-                            receipt: receipt,
+                            receipt,
                         })
                         await protocol.updateBalance(chainId, web3, account)
                     }
