@@ -21,6 +21,7 @@ const FlexibleTabTabWrap = styled(Button, {
     '&:hover': {
         background: activated ? get(theme.palette.background, 'input') ?? '#F2F6FA' : 'transparent',
         color: activated ? get(theme.palette, 'public.primary') ?? '#1C68F3' : theme.palette.text.primary,
+        boxShadow: 'none',
     },
 }))
 

@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, ButtonGroupProps, styled, Tab } from '@mui/material'
+import { Box, Button, ButtonGroup, ButtonGroupProps, styled, Tab } from '@mui/material'
 import { useTabContext, getPanelId, getTabId } from '@mui/lab/TabContext'
 import {
     forwardRef,
@@ -9,6 +9,7 @@ import {
     useRef,
     useEffect,
     useImperativeHandle,
+    ForwardRefExoticComponent,
 } from 'react'
 import { BaseTab } from './BaseTab'
 import { FlexibleTab } from './FlexibleTab'
@@ -43,28 +44,51 @@ const ArrowButtonWrap = styled(Button)(({ theme }) => ({
 const ArrowBackIosNewIconWrap = styled(ArrowBackIosNewIcon)(({ theme }) => ({
     color: theme.palette.text.primary,
     width: 16,
+    borderRadius: '0 8px 8px 0',
 }))
 
 const ButtonGroupWrap = styled(ButtonGroup, {
     shouldForwardProp: (prop) => prop !== 'maskVariant' && prop !== 'isOpen' && prop !== 'isOverflow',
-})<{ maskVariant?: MaskTabVariant; isOpen: boolean; isOverflow: boolean }>(
-    ({ theme, maskVariant, isOpen, isOverflow }) => ({
+})<{ maskVariant?: MaskTabVariant; isOpen?: boolean; isOverflow?: boolean }>(
+    ({ theme, maskVariant = 'base', isOpen = false, isOverflow = false }) => ({
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
-        flexWrap: maskVariant === 'flexible' && isOpen ? 'wrap' : 'nowrap',
+        flexWrap: 'nowrap',
         overflow: 'hidden',
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
         flex: 1,
         gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
-        transform: '',
-        background:
-            maskVariant === 'flexible' && !isOpen && isOverflow
-                ? 'linear-gradient(270deg, rgba(223, 229, 244, 0.8) 36px, rgba(244, 247, 254, 0) 20%)'
-                : 'transparent',
+        background: 'transparent',
     }),
 )
+
+const FlexButtonGroupWrap = styled(ButtonGroup, {
+    shouldForwardProp: (prop) => prop !== 'maskVariant' && prop !== 'isOpen' && prop !== 'isOverflow',
+})<{ maskVariant?: MaskTabVariant; isOpen?: boolean; isOverflow?: boolean }>(
+    ({ theme, maskVariant = 'base', isOpen = false, isOverflow = false }) => ({
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: isOpen ? 'wrap' : 'nowrap',
+        overflow: 'hidden',
+        flex: 1,
+        maxWidth: '100%',
+        gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
+        borderRadius: 0,
+        background:
+            !isOpen && isOverflow
+                ? 'linear-gradient(270deg,rgba(255,255,255,1) 40px, rgba(223, 229, 244, 0.8) 40px, rgba(244, 247, 254, 0) 72px)'
+                : theme.palette.background.paper,
+    }),
+)
+
+const tabMapping: { [key in MaskTabVariant]: ForwardRefExoticComponent<any> } = {
+    flexible: FlexibleTab,
+    round: RoundTab,
+    base: BaseTab,
+}
 
 /**
  * This component is like TabList + Tabs in the @mui/material.
@@ -73,7 +97,7 @@ const ButtonGroupWrap = styled(ButtonGroup, {
  * Warning: Only a few "value" and "label" props on the @mui/material <Tab> component will work.
  *
  * @example
- *  const [currentTab, onChange, tabs, setTab] = useTab('tab1', 'tab2', 'tab3')
+ *  const [currentTab, onChange, tabs, setTab] = useTabs('tab1', 'tab2', 'tab3')
  *  return (
  *      <TabContext value={currentTab}>
  *          <MaskTabList onChange={onChange}>
@@ -115,51 +139,51 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             selected: child.props.value === context.value,
             onChange: props.onChange,
         }
-        if (child.type === Tab && variant === 'base') {
+
+        if (child.type === Tab) {
+            const C = tabMapping[variant]
             return (
-                <BaseTab value={child.props.value} {...extra}>
+                <C value={child.props.value} {...extra}>
                     {child.props.label}
-                </BaseTab>
+                </C>
             )
         }
-        if (child.type === Tab && variant === 'flexible') {
-            return (
-                <FlexibleTab value={child.props.value} {...extra}>
-                    {child.props.label}
-                </FlexibleTab>
-            )
-        }
-        if (child.type === Tab && variant === 'round') {
-            return (
-                <RoundTab value={child.props.value} {...extra}>
-                    {child.props.label}
-                </RoundTab>
-            )
-        }
+
         return cloneElement(child, extra)
     })
 
+    if (variant === 'flexible') {
+        return (
+            <Box position="relative">
+                <ButtonGroupWrap style={{ visibility: 'hidden', height: 38 }}>{[]}</ButtonGroupWrap>
+                <FlexButtonGroupWrap
+                    maskVariant={variant}
+                    isOpen={open}
+                    isOverflow={isTabsOverflow}
+                    {...rest}
+                    ref={innerRef}
+                    role="tablist">
+                    {children}
+                    {isTabsOverflow && (
+                        <ArrowButtonWrap
+                            variant="text"
+                            size="small"
+                            aria-controls={open ? 'split-button-menu' : undefined}
+                            aria-expanded={open ? 'true' : undefined}
+                            aria-label="select tabs list"
+                            aria-haspopup="menu"
+                            onClick={() => handleToggle(!open)}>
+                            <ArrowBackIosNewIconWrap sx={{ transform: open ? 'rotate(90deg)' : 'rotate(270deg)' }} />
+                        </ArrowButtonWrap>
+                    )}
+                </FlexButtonGroupWrap>
+            </Box>
+        )
+    }
+
     return (
-        <ButtonGroupWrap
-            maskVariant={variant}
-            isOpen={open}
-            isOverflow={isTabsOverflow}
-            {...rest}
-            ref={innerRef}
-            role="tablist">
+        <ButtonGroupWrap maskVariant={variant} {...rest} ref={innerRef} role="tablist">
             {children}
-            {variant === 'flexible' && isTabsOverflow && (
-                <ArrowButtonWrap
-                    variant="text"
-                    size="small"
-                    aria-controls={open ? 'split-button-menu' : undefined}
-                    aria-expanded={open ? 'true' : undefined}
-                    aria-label="select tabs list"
-                    aria-haspopup="menu"
-                    onClick={() => handleToggle(!open)}>
-                    <ArrowBackIosNewIconWrap sx={{ transform: open ? 'rotate(90deg)' : 'rotate(270deg)' }} />
-                </ArrowButtonWrap>
-            )}
         </ButtonGroupWrap>
     )
 })
