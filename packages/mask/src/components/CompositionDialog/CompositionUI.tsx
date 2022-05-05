@@ -27,6 +27,7 @@ import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { useSubscription } from 'use-subscription'
 import { PopoverListTrigger } from './PopoverListTrigger'
 import { usePopoverListDataSource } from './usePopoverListDataSource'
+import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -119,6 +120,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     const { t } = useI18N()
 
     const [currentPostSize, __updatePostSize] = useState(0)
+    const [shareWithOpen, setShareWithOpen] = useState(false)
 
     const Editor = useRef<TypedMessageEditorRef | null>(null)
     const PluginEntry = useRef<PluginEntryRenderRef>(null)
@@ -176,6 +178,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         }),
         [],
     )
+
     const MoreOptions = [
         imagePayloadVisible && (
             <ClickableChip
@@ -257,18 +260,23 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                             if (v && v === 'all') {
                                 setEncryptionKind('Everyone')
                             } else {
+                                if (v === 'share') {
+                                    setShareWithOpen(true)
+                                }
                                 setEncryptionKind('E2E')
                             }
                         }}
                     />
-                    {/* {recipientSelectorAvailable && (
+                    {recipientSelectorAvailable && (
                         <SelectRecipientsUI
+                            open={shareWithOpen}
+                            onClose={() => setShareWithOpen(false)}
                             disabled={sending}
                             items={props.recipients}
                             selected={recipients}
                             onSetSelected={setRecipients}
                         />
-                    )} */}
+                    )}
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
                     <Typography className={classes.optionTitle}>{t('post_dialog_encryption_method')}</Typography>

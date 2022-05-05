@@ -48,7 +48,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
 
     return (
         <InjectedDialog open={props.open} title={t('select_specific_friends_dialog__title')} onClose={props.onClose}>
-            <DialogContent>
+            <DialogContent sx={{ height: 500 }}>
                 <InputBase
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}

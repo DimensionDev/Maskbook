@@ -21,6 +21,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     item: {
         display: 'flex',
+        alignItems: 'center',
     },
     divider: {
         width: '100%',
@@ -53,6 +54,12 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: theme.palette.primary.main,
     },
+    rightIcon: {
+        marginLeft: 'auto',
+    },
+    pointer: {
+        cursor: 'pointer',
+    },
 }))
 interface PopoverListItem {
     type: string
@@ -73,15 +80,17 @@ interface PopoverListTriggerProp {
 
 const PopoverListItem = (props: PopoverListItem) => {
     const { title, subTitle, personaRequired, type, showDivider, hasPersona } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
+
     return (
         <>
-            <div className={classes.item}>
+            <div className={type === 'share' ? cx(classes.item, classes.pointer) : classes.item}>
                 <Radio value={type} />
                 <div>
                     <Typography className={classes.mainTitle}>{title}</Typography>
                     <Typography className={classes.subTitle}>{subTitle}</Typography>
                 </div>
+                {type === 'share' && <RightArrowIcon className={classes.rightIcon} />}
             </div>
             {personaRequired && !hasPersona && (
                 <div className={classes.flex}>
