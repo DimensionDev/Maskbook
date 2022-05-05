@@ -35,7 +35,7 @@ export const RenameDialog = memo<RenameDialogProps>(({ open, nickname, onClose, 
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
         defaultValues: {
-            nickname: nickname,
+            nickname,
         },
     })
 

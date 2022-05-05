@@ -8,8 +8,8 @@ import {
     EMPTY_LIST,
     NextIDPlatform,
     CrossIsolationMessages,
-    ProfileIdentifier,
     formatPersonaPublicKey,
+    PersonaInformation,
 } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -20,27 +20,36 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { NextIDProof } from '@masknet/web3-providers'
-import type { Persona } from '../../database'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useSetupGuideStatusState } from '../DataSource/useNextID'
 import { useMyPersonas } from '../DataSource/useMyPersonas'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
             padding: theme.spacing(1, 0.25),
-            overflowY: 'scroll',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
+            overflowY: 'auto',
+            overflowX: 'hidden',
             gridTemplateRows: '100px',
             gridGap: theme.spacing(2),
             justifyContent: 'space-between',
             height: 340,
-            '&::-webkit-scrollbar': {
-                display: 'none',
+            width: props.shouldScroll ? 575 : 560,
+            '::-webkit-scrollbar': {
+                backgroundColor: 'transparent',
+                width: 20,
+            },
+            '::-webkit-scrollbar-thumb': {
+                borderRadius: '20px',
+                width: 5,
+                border: '7px solid rgba(0, 0, 0, 0)',
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                backgroundClip: 'padding-box',
             },
             [smallQuery]: {
                 overflow: 'auto',
@@ -92,7 +101,6 @@ export function ApplicationBoard() {
     )
 }
 function ApplicationBoardContent() {
-    const { classes } = useStyles()
     const theme = useTheme()
     const { t } = useI18N()
     const [openSettings, setOpenSettings] = useState(false)
@@ -135,6 +143,7 @@ function ApplicationBoardContent() {
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
     const listedAppList = applicationList.filter((x) => !getUnlistedApp(x))
+    const { classes } = useStyles({ shouldScroll: listedAppList.length > 12 })
     return (
         <>
             <div className={classes.header}>
@@ -190,28 +199,28 @@ function RenderEntryComponentWithNextIDRequired({ application }: RenderEntryComp
     const { currentPersona } = PersonaContext.useContainer()
     const lastRecognized = useLastRecognizedIdentity()
     const username = useMemo(() => {
-        return lastState.username || (!lastRecognized.identifier.isUnknown ? lastRecognized.identifier.userId : '')
+        return lastState.username || lastRecognized.identifier?.userId
     }, [lastState, lastRecognized])
     const personas = useMyPersonas()
 
-    const checkSNSConnectToCurrentPersona = useCallback((persona: Persona) => {
-        return (
-            persona?.linkedProfiles.get(new ProfileIdentifier(ui.networkIdentifier, username))
-                ?.connectionConfirmState === 'confirmed'
-        )
+    const checkSNSConnectToCurrentPersona = useCallback((persona: PersonaInformation) => {
+        if (!username) return undefined
+        return persona.linkedProfiles.some((x) => x.identifier.userId === username)
     }, [])
 
     const { value: ApplicationCurrentStatus } = useAsync(async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
-        const currentPersona = (await Services.Identity.queryPersona(currentPersonaIdentifier!)) as Persona
-        const currentSNSConnectedPersona = personas.find((persona) =>
-            checkSNSConnectToCurrentPersona(persona as Persona),
+        const currentPersona = (await Services.Identity.queryOwnedPersonaInformation(true)).find(
+            (x) => x.identifier === currentPersonaIdentifier,
         )
+        const currentSNSConnectedPersona = personas.find(checkSNSConnectToCurrentPersona)
         return {
-            isSNSConnectToCurrentPersona: checkSNSConnectToCurrentPersona(currentPersona),
-            isNextIDVerify: await NextIDProof.queryIsBound(currentPersona.publicHexKey ?? '', platform, username),
-            currentPersonaPublicKey: currentPersona?.fingerprint,
-            currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.fingerprint,
+            isSNSConnectToCurrentPersona: currentPersona ? checkSNSConnectToCurrentPersona(currentPersona) : false,
+            isNextIDVerify: username
+                ? await NextIDProof.queryIsBound(currentPersona?.identifier.publicKeyAsHex ?? '', platform, username)
+                : false,
+            currentPersonaPublicKey: currentPersona?.identifier.rawPublicKey,
+            currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.identifier.rawPublicKey,
         }
     }, [platform, username, ui, personas, currentPersona])
     const {

@@ -15,7 +15,7 @@ import { openPopupWindow } from '../../../../background/services/helper'
 import { delay } from '@dimensiondev/kit'
 export interface SignRequest {
     /** Use that who to sign this message. */
-    identifier?: string
+    identifier?: PersonaIdentifier
     /** The message to be signed. */
     message: string
     /** Use what method to sign this message? */
@@ -38,7 +38,7 @@ export interface SignRequestResult {
 export async function signWithPersona({ message, method, identifier }: SignRequest): Promise<SignRequestResult> {
     if (method !== 'eth') throw new Error('Unknown sign method')
     const requestID = Math.random().toString(16).slice(3)
-    await openPopupWindow(PopupRoutes.PersonaSignRequest, { message, requestID, identifier })
+    await openPopupWindow(PopupRoutes.PersonaSignRequest, { message, requestID, identifier: identifier?.toText() })
 
     const waitForApprove = new Promise<PersonaIdentifier>((resolve, reject) => {
         delay(1000 * 60).then(() => reject(new Error('Timeout')))
@@ -53,7 +53,7 @@ export async function signWithPersona({ message, method, identifier }: SignReque
 }
 
 export async function generateSignResult(signer: ECKeyIdentifier, message: string) {
-    const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier.equals(signer))
+    const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === signer)
     if (!persona) throw new Error('Persona not found')
 
     // will have problem with UTF-8?

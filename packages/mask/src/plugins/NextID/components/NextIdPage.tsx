@@ -63,7 +63,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const isOwn = currentProfileIdentifier.identifier.toText() === visitingPersonaIdentifier.identifier.toText()
+    const isOwn = currentProfileIdentifier.identifier === visitingPersonaIdentifier.identifier
     const tipable = !isOwn
 
     const personaActionButton = useMemo(() => {
@@ -78,14 +78,16 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
     }, [personaConnectStatus, t])
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
-        if (!visitingPersonaIdentifier) return
+        if (!visitingPersonaIdentifier?.identifier) return
         return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
     }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
 
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
-        if (!currentPersona?.publicHexKey) return
+        if (!currentPersona?.identifier.publicKeyAsHex) return
+        if (!currentPersona.identifier) return
+        if (!visitingPersonaIdentifier.identifier) return
         return NextIDProof.queryIsBound(
-            currentPersona.publicHexKey,
+            currentPersona.identifier.publicKeyAsHex,
             platform,
             visitingPersonaIdentifier.identifier.userId,
         )
@@ -97,7 +99,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         retry: retryQueryBinding,
     } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey!)
+        return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
     }, [currentPersona, isOwn])
 
     const onVerify = async () => {
