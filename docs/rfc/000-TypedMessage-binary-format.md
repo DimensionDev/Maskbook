@@ -40,7 +40,7 @@ All Tuple in this specification MUST be treated as non-fixed length. This means 
 This is the top-most data type.
 
 ```typescript
-type Document = [version: Integer, message: TypedMessageBase]
+type Document = [version: Integer, ...message: TypedMessageBase]
 ```
 
 #### `version` field
@@ -116,23 +116,6 @@ This is an optional field that represents the interpretation of the `content` fi
 
 When decoding, lack of content field should be treated as `TextFormat.PlainText`
 
-#### Example
-
-This is an example of a `Document` that contains a text message `"Hello, world"` in Markdown format with metadata `{"com.example.test": "hi"}`.
-
-- Object format: `[0, [1, { "com.example.test": "hi" }, "Hello, world", 1]]`
-- Binary data:
-
-```plaintext
-[
-  146,   0, 148,   1, 129, 176,  99, 111,
-  109,  46, 101, 120,  97, 109, 112, 108,
-  101,  46, 116, 101, 115, 116, 162, 104,
-  105, 172,  72, 101, 108, 108, 111,  44,
-   32, 119, 111, 114, 108, 100,   1
-]
-```
-
 ### TypedMessageTuple
 
 ```typescript
@@ -147,20 +130,3 @@ type TypedMessageTuple = [
 #### `items` field
 
 This field represents an ordered list of a TypedMessage.
-
-#### Example
-
-This is an example of a `Document` that contains two text messages `"Hello, world"` with no metadata.
-
-- Object format: `[0, [0, null, [ [1, null, "Hello, world"], [1, null, "Hello, world"] ]] ]`
-- Binary data:
-
-```plaintext
-[
-  146,   0, 147,   0, 192, 146, 147,  1,
-  192, 172,  72, 101, 108, 108, 111, 44,
-   32, 119, 111, 114, 108, 100, 147,  1,
-  192, 172,  72, 101, 108, 108, 111, 44,
-   32, 119, 111, 114, 108, 100
-]
-```
