@@ -256,9 +256,14 @@
                 "internalType": "address",
                 "name": "account",
                 "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
             }
         ],
-        "name": "getAccountNonce",
+        "name": "getAccountTokenPeriodOffset",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -327,68 +332,46 @@
     {
         "inputs": [
             {
-                "internalType": "bytes32",
-                "name": "farmHash",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "bytes24",
-                "name": "referredTokenDefn",
-                "type": "bytes24"
-            }
-        ],
-        "name": "getFarmReferredTokenStatus",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "components": [
-                    {
-                        "internalType": "bytes32",
-                        "name": "farmHash",
-                        "type": "bytes32"
-                    },
-                    {
-                        "internalType": "uint128",
-                        "name": "value",
-                        "type": "uint128"
-                    },
                     {
                         "internalType": "bytes24",
                         "name": "rewardTokenDefn",
                         "type": "bytes24"
                     },
                     {
-                        "internalType": "uint64",
-                        "name": "effectNonce",
-                        "type": "uint64"
+                        "components": [
+                            {
+                                "internalType": "bytes32",
+                                "name": "farmHash",
+                                "type": "bytes32"
+                            },
+                            {
+                                "internalType": "uint128",
+                                "name": "value",
+                                "type": "uint128"
+                            },
+                            {
+                                "internalType": "uint128",
+                                "name": "period",
+                                "type": "uint128"
+                            }
+                        ],
+                        "internalType": "struct ReferralFarmsV1.TokenEntitlement[]",
+                        "name": "entitlements",
+                        "type": "tuple[]"
                     }
                 ],
-                "internalType": "struct ReferralFarmsV1.HarvestRequest[]",
+                "internalType": "struct ReferralFarmsV1.HarvestTokenRequest[]",
                 "name": "reqs",
                 "type": "tuple[]"
             },
             {
-                "internalType": "bytes32[][]",
+                "internalType": "bytes32[][][]",
                 "name": "proofs",
-                "type": "bytes32[][]"
-            },
-            {
-                "internalType": "uint64[]",
-                "name": "skipEffectNonces",
-                "type": "uint64[]"
+                "type": "bytes32[][][]"
             }
         ],
-        "name": "harvestRewards",
+        "name": "harvestRewardsNoGapcheck",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -397,7 +380,7 @@
         "inputs": [
             {
                 "internalType": "bytes24",
-                "name": "rewardToken",
+                "name": "rewardTokenDefn",
                 "type": "bytes24"
             },
             {
