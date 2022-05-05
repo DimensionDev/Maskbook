@@ -56,6 +56,7 @@ export async function setupPersona(id: PersonaIdentifier) {
     return consistentPersonaDBWriteAccess(async (t) => {
         const d = await queryPersonaDB(id, t)
         if (!d) throw new Error('cannot find persona')
+        if (!d.privateKey) throw new Error('Cannot setup a persona without a private key')
         if (d.linkedProfiles.size === 0) throw new Error('persona should link at least one profile')
         if (d.uninitialized) {
             await updatePersonaDB(

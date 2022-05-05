@@ -9,7 +9,6 @@ import {
     pluginIDSettings,
 } from '../../settings/settings'
 import { currentDataProviderSettings } from '../../plugins/Trader/settings'
-import { queryMyPersonas } from './IdentityService'
 import {
     currentAccountSettings,
     currentNetworkSettings,
@@ -21,6 +20,7 @@ import {
     currentTokenPricesSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags, MaskMessages } from '../../../shared'
+import { queryPersonasDB } from '../../../background/database/persona/db'
 
 export * from '../../../background/services/settings'
 
@@ -63,7 +63,7 @@ export async function getWalletAllowTestChain() {
 
 export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier | undefined> {
     await currentPersonaIdentifier.readyPromise
-    const personas = (await queryMyPersonas())
+    const personas = (await queryPersonasDB({ hasPrivateKey: true }))
         .sort((a, b) => (a.createdAt > b.createdAt ? 1 : 0))
         .map((x) => x.identifier)
     const newVal = ECKeyIdentifier.from(currentPersonaIdentifier.value).unwrapOr(head(personas))

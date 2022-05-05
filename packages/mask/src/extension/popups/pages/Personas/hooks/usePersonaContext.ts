@@ -15,7 +15,7 @@ function usePersonaContext() {
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { value: personas, retry } = useAsyncRetry(
-        async () => Services.Identity.queryOwnedPersonaInformation(),
+        async () => Services.Identity.queryOwnedPersonaInformation(false),
         [currentPersonaIdentifier],
     )
     const { value: avatar } = useAsync(async () => {
