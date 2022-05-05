@@ -37,30 +37,16 @@ All Tuple in this specification MUST be treated as non-fixed length. This means 
 
 ### `SignatureContainer`
 
-This is the top-most data type.
+Binary format of `SignatureContainer`:
 
-```typescript
-type SignatureContainer = [version: Integer, payload: Binary, signature: Binary | null]
-```
+If the 0th byte is `0x00`, it is a `SignatureContainer` with the following format:
 
-#### `version` field
+- 1nd byte to the end is the payload (`PayloadAlpha37` encoded by messagepack).
 
-This field represents the signature container version.
+If the 0st byte is `0x01`, it is a `SignatureContainer` with the following format:
 
-The first and the current version is `0`.
-The implementation MUST fail when the version is not `0`.
-
-#### `payload` field
-
-This field represents the `Payload37` type encoded by the MessagePack.
-
-The implementation MUST fail when the payload is not a `Payload37` after decoding.
-
-#### `signature` field
-
-This field represents the EC signature of the payload. The implementation MUST use SHA-256 algorithm.
-
-When it is `null`, it represents no this information is available (due to software defeat or user choice to opt-out).
+- 1nd byte to 32th byte is the signature (SHA-256).
+- 33th byte to the end is the payload (`PayloadAlpha37` encoded by messagepack).
 
 ### `Payload37`
 
