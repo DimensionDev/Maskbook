@@ -57,6 +57,6 @@ export function useAaveTokens(chainId: ChainId, web3: Web3) {
             error,
             retry,
         }),
-        [chainId, detailedAaveTokens, loadingTokenDetails],
+        [loading, detailedAaveTokens, loadingTokenDetails],
     )
 }

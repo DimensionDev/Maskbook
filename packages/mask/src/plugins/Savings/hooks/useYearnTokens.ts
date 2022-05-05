@@ -48,6 +48,6 @@ export function useYearnTokens(chainId: ChainId, web3: Web3) {
             error,
             retry,
         }),
-        [chainId, detailedYFITokens, loadingTokenDetails],
+        [loading, detailedYFITokens, loadingTokenDetails],
     )
 }
