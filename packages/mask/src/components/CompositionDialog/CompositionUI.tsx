@@ -1,9 +1,9 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
-import { Typography, Chip, Button, Popover } from '@mui/material'
+import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { makeStyles } from '@masknet/theme'
-import { ImagePayloadIcon, RightArrowIcon, SendIcon } from '@masknet/icons'
+import { ImagePayloadIcon, SendIcon } from '@masknet/icons'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
 import { CharLimitIndicator } from './CharLimitIndicator'
@@ -16,6 +16,8 @@ import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { Trans } from 'react-i18next'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { useSubscription } from 'use-subscription'
+import { PopoverListTrigger } from './PopoverListTrigger'
+import { usePopoverListDataSource } from './usePopoverListDataSource'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -119,7 +121,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     const updatePostSize = useCallback((size: number) => {
         startTransition(() => __updatePostSize(size))
     }, [])
-
+    const { visibilityPopperList, methodsPopperList } = usePopoverListDataSource()
     const {
         E2EDisabled,
         setEncryptionKind,
@@ -185,64 +187,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         ...useMetadataDebugger(context, Editor.current),
     ].filter(Boolean)
 
-    const renderVisibleOptions = () => (
-        <>
-            <div
-                className={classes.popperText}
-                onClick={(e) => {
-                    setVisibleAnchorEl(visibleAnchorEl ? null : e.currentTarget)
-                }}>
-                All
-                <RightArrowIcon />
-            </div>
-            <Popover
-                disablePortal
-                className={classes.popper}
-                open={Boolean(visibleAnchorEl)}
-                anchorEl={visibleAnchorEl}
-                onClose={() => setVisibleAnchorEl(null)}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}>
-                <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
-            </Popover>
-        </>
-    )
-
-    const renderMethodOptions = () => (
-        <>
-            <div
-                className={classes.popperText}
-                onClick={(e) => {
-                    setMethodAnchorEl(methodAnchorEl ? null : e.currentTarget)
-                }}>
-                Text
-                <RightArrowIcon />
-            </div>
-            <Popover
-                disablePortal
-                className={classes.popper}
-                open={Boolean(methodAnchorEl)}
-                anchorEl={methodAnchorEl}
-                onClose={() => setMethodAnchorEl(null)}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}>
-                <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
-            </Popover>
-        </>
-    )
-
     const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Number.POSITIVE_INFINITY)
     const onSubmit = useCallback(() => {
         if (!Editor.current) return
@@ -293,7 +237,12 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         label={t('post_dialog__select_recipients_end_to_end')}
                         onClick={() => setEncryptionKind('E2E')}
                     /> */}
-                    {renderVisibleOptions()}
+                    <PopoverListTrigger
+                        selected="all"
+                        renderScheme={visibilityPopperList}
+                        anchorEl={visibleAnchorEl}
+                        setAncorEl={setVisibleAnchorEl}
+                    />
                     {/* {recipientSelectorAvailable && (
                         <SelectRecipientsUI
                             disabled={sending}
@@ -305,7 +254,12 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
                     <Typography className={classes.optionTitle}>{t('post_dialog_encryption_method')}</Typography>
-                    {renderMethodOptions()}
+                    <PopoverListTrigger
+                        selected="text"
+                        renderScheme={methodsPopperList}
+                        anchorEl={methodAnchorEl}
+                        setAncorEl={setMethodAnchorEl}
+                    />
                 </div>
             </div>
             <div className={classes.actions}>
