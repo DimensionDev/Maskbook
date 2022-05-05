@@ -2,6 +2,7 @@ import { RightArrowIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Popover from '@mui/material/Popover'
 import { RadioGroup, Radio, Typography } from '@mui/material'
+import { useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     popper: {
@@ -59,16 +60,19 @@ interface PopoverListItem {
     subTitle?: string
     personaRequired?: boolean
     showDivider?: boolean
+    hasPersona?: boolean
 }
 interface PopoverListTriggerProp {
+    hasPersona?: boolean
     anchorEl: HTMLElement | null
     setAncorEl(v: HTMLElement | null): void
+    onChange(v: string): void
     renderScheme: Array<PopoverListItem>
     selected: string
 }
 
 const PopoverListItem = (props: PopoverListItem) => {
-    const { title, subTitle, personaRequired, type, showDivider } = props
+    const { title, subTitle, personaRequired, type, showDivider, hasPersona } = props
     const { classes } = useStyles()
     return (
         <>
@@ -79,7 +83,7 @@ const PopoverListItem = (props: PopoverListItem) => {
                     <Typography className={classes.subTitle}>{subTitle}</Typography>
                 </div>
             </div>
-            {personaRequired && (
+            {personaRequired && !hasPersona && (
                 <div className={classes.flex}>
                     <Typography className={classes.mainTitle}>Persona required</Typography>
                     <Typography className={classes.create}>Create</Typography>
@@ -89,8 +93,16 @@ const PopoverListItem = (props: PopoverListItem) => {
         </>
     )
 }
-export function PopoverListTrigger({ anchorEl, setAncorEl, renderScheme, selected }: PopoverListTriggerProp) {
+export function PopoverListTrigger({
+    anchorEl,
+    setAncorEl,
+    renderScheme,
+    selected,
+    onChange,
+    hasPersona,
+}: PopoverListTriggerProp) {
     const { classes } = useStyles()
+    const [selectedValue, setSelectedValue] = useState<string>(selected)
     return (
         <>
             <div
@@ -98,7 +110,7 @@ export function PopoverListTrigger({ anchorEl, setAncorEl, renderScheme, selecte
                 onClick={(e) => {
                     setAncorEl(anchorEl ? null : e.currentTarget)
                 }}>
-                All
+                {renderScheme.find((x) => x.type === selectedValue)?.title}
                 <RightArrowIcon />
             </div>
             <Popover
@@ -115,10 +127,18 @@ export function PopoverListTrigger({ anchorEl, setAncorEl, renderScheme, selecte
                     vertical: 'bottom',
                     horizontal: 'right',
                 }}>
-                <RadioGroup className={classes.paper} defaultValue={selected}>
+                <RadioGroup
+                    className={classes.paper}
+                    value={selectedValue}
+                    onChange={(e) => {
+                        const value = e.target.value
+                        setSelectedValue(value)
+                        onChange(value)
+                    }}>
                     {renderScheme.map((x, idx) => {
                         return (
                             <PopoverListItem
+                                hasPersona={hasPersona}
                                 key={idx}
                                 type={x.type}
                                 title={x.title}

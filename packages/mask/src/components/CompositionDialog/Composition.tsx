@@ -22,6 +22,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { t } = useI18N()
 
     const currentIdentity = useCurrentIdentity()?.identifier
+    const hasPersona = Boolean(useCurrentIdentity()?.fingerprint)
     /** @deprecated */
     const { value: hasLocalKey } = useAsync(
         async () => (currentIdentity ? Services.Identity.hasLocalKey(currentIdentity) : false),
@@ -92,6 +93,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 <DialogContent sx={{ height: 500 }}>
                     <CompositionDialogUI
                         ref={UI}
+                        hasPersona={hasPersona}
                         hasClipboardPermission={hasClipboardPermission}
                         onRequestClipboardPermission={onRequestClipboardPermission}
                         requireClipboardPermission={requireClipboardPermission}

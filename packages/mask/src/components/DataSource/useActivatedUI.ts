@@ -18,6 +18,7 @@ export function useCurrentVisitingIdentity() {
 export function useCurrentIdentity(): {
     identifier: ProfileIdentifier
     linkedPersona?: { nickname?: string; identifier: PersonaIdentifier; fingerprint?: string }
+    fingerprint?: string
 } | null {
     return useSubscription(CurrentIdentitySubscription)
 }

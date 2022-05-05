@@ -1,4 +1,13 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
+import {
+    forwardRef,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
+    startTransition,
+    useCallback,
+    SetStateAction,
+} from 'react'
 import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
@@ -90,6 +99,7 @@ export interface CompositionProps {
     // Requirements
     requireClipboardPermission?: boolean
     hasClipboardPermission?: boolean
+    hasPersona?: boolean
     onRequestClipboardPermission?(): void
     onQueryClipboardPermission?(): void
 }
@@ -238,10 +248,18 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         onClick={() => setEncryptionKind('E2E')}
                     /> */}
                     <PopoverListTrigger
+                        hasPersona={props.hasPersona}
                         selected="all"
                         renderScheme={visibilityPopperList}
                         anchorEl={visibleAnchorEl}
                         setAncorEl={setVisibleAnchorEl}
+                        onChange={(v) => {
+                            if (v && v === 'all') {
+                                setEncryptionKind('Everyone')
+                            } else {
+                                setEncryptionKind('E2E')
+                            }
+                        }}
                     />
                     {/* {recipientSelectorAvailable && (
                         <SelectRecipientsUI
@@ -259,6 +277,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         renderScheme={methodsPopperList}
                         anchorEl={methodAnchorEl}
                         setAncorEl={setMethodAnchorEl}
+                        onChange={(v) => setEncoding(v as SetStateAction<'text' | 'image'>)}
                     />
                 </div>
             </div>
@@ -292,20 +311,15 @@ function useSetEncryptionKind(props: Pick<CompositionProps, 'disabledRecipients'
 
     const everyoneDisabled = props.disabledRecipients === 'Everyone'
     const E2EDisabled = props.disabledRecipients === 'E2E'
-
     const everyoneSelected = props.disabledRecipients !== 'Everyone' && (E2EDisabled || encryptionKind === 'Everyone')
-    const _E2ESelected =
-        props.disabledRecipients !== 'E2E' && (props.disabledRecipients === 'Everyone' || encryptionKind === 'E2E')
     const recipientSelectorAvailable = props.recipients.hasRecipients && !everyoneSelected
 
     return {
         recipients,
         setRecipients,
         recipientSelectorAvailable,
-
         everyoneDisabled,
         E2EDisabled,
-
         encryptionKind: everyoneSelected ? ('Everyone' as const) : ('E2E' as const),
         setEncryptionKind,
     }

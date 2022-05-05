@@ -17,7 +17,7 @@ export function usePopoverListDataSource() {
                 type: 'image',
                 title: 'Image',
                 subTitle: 'Encrypt messages in images',
-                personaRequired: true,
+                personaRequired: false,
                 event: null,
             },
         ],
