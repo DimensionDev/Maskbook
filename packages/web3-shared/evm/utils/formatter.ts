@@ -77,10 +77,10 @@ export function formatKeccakHash(hash: string, size = 0) {
     return `${hash.slice(0, Math.max(0, 2 + size))}...${hash.slice(-size)}`
 }
 
-export function formatNumberString(str: string, size = 0) {
-    if (!/\d+/.test(str)) return str
-    if (size === 0) return str
-    return `${str.slice(0, Math.max(0, size))}...${str.slice(-size)}`
+export function formatNumberString(input: string, size = 0) {
+    if (!/\d+/.test(input)) return input
+    if (size === 0) return input
+    return `${input.slice(0, Math.max(0, size))}...${input.slice(-size)}`
 }
 
 export function formatWeiToGwei(value: BigNumber.Value) {
