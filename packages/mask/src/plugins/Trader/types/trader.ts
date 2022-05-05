@@ -76,8 +76,9 @@ export enum ZrxTradePool {
     Trisolaris = 'Trisolaris',
     WannaSwap = 'WannaSwap',
     Mdex = 'Mdex',
-    VenonSwap = 'VenonSwap',
+    VenomSwap = 'VenomSwap',
     OpenSwap = 'OpenSwap',
+    DefiKingdoms = 'DefiKingdoms',
 }
 
 export interface TradeComputed<T = unknown> {

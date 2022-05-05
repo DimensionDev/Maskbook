@@ -1264,7 +1264,7 @@
         "Harmony": "",
         "Harmony_Test": ""
     },
-    "VENONSWAP_ROUTER_ADDRESS": {
+    "VENOMSWAP_ROUTER_ADDRESS": {
         "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
@@ -1284,10 +1284,10 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "0xf012702a5f0e54015362cBCA26a26fc90AA832a3",
+        "Harmony": "0xf012702a5f0e54015362cbca26a26fc90aa832a3",
         "Harmony_Test": "0x8e9A3cE409B13ef459fE4448aE97a79d6Ecd8b4b"
     },
-    "VENONSWAP_FACTORY_ADDRESS": {
+    "VENOMSWAP_FACTORY_ADDRESS": {
         "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
@@ -1310,7 +1310,7 @@
         "Harmony": "0x7D02c116b98d0965ba7B642ace0183ad8b8D2196",
         "Harmony_Test": "0x066bafafC84607a956967F6f050bD14A8347952F"
     },
-    "VENONSWAP_THEGRAPH": {
+    "VENOMSWAP_THEGRAPH": {
         "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
@@ -1333,7 +1333,7 @@
         "Harmony": "",
         "Harmony_Test": ""
     },
-    "VENONSWAP_INIT_CODE_HASH": {
+    "VENOMSWAP_INIT_CODE_HASH": {
         "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
@@ -1446,6 +1446,98 @@
         "Aurora_Testnet": "",
         "Conflux": "",
         "Harmony": "0x613b6eaa34b43dcb7eb8881dd4b5af85805be104d5f2f385304ffa8bda5e219c",
+        "Harmony_Test": ""
+    },
+    "DEFIKINGDOMS_ROUTER_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Harmony": "0x24ad62502d1C652Cc7684081169D04896aC20f30",
+        "Harmony_Test": ""
+    },
+    "DEFIKINGDOMS_FACTORY_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Harmony": "0x9014B937069918bd319f80e8B3BB4A2cf6FAA5F7",
+        "Harmony_Test": ""
+    },
+    "DEFIKINGDOMS_THEGRAPH": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
+    },
+    "DEFIKINGDOMS_INIT_CODE_HASH": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Harmony": "0xf1c21a825f13eff153022ddea53156462dd79972b6f88adf06f79ca8b042c3c1",
         "Harmony_Test": ""
     }
 }

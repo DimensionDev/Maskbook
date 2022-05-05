@@ -183,8 +183,9 @@ export enum TradeProvider {
     TRADERJOE = 13,
     PANGOLIN = 14,
     MDEX = 15,
-    VENONSWAP = 16,
+    VENOMSWAP = 16,
     OPENSWAP = 17,
+    DEFIKINGDOMS = 18,
 }
 
 /** Supported language settings */

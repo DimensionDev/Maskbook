@@ -34,7 +34,8 @@
         ],
         "payable": false,
         "stateMutability": "nonpayable",
-        "type": "function"
+        "type": "function",
+        "signature": "0x095ea7b3"
     },
     {
         "constant": true,
@@ -48,7 +49,8 @@
         ],
         "payable": false,
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "signature": "0x18160ddd"
     },
     {
         "constant": false,
@@ -75,7 +77,8 @@
         ],
         "payable": false,
         "stateMutability": "nonpayable",
-        "type": "function"
+        "type": "function",
+        "signature": "0x23b872dd"
     },
     {
         "constant": true,
@@ -218,5 +221,29 @@
         ],
         "name": "Transfer",
         "type": "event"
+    },
+    {
+        "name": "increaseAllowance",
+        "inputs": [
+            {
+                "type": "address",
+                "name": "spender",
+                "internalType": "address"
+            },
+            {
+                "name": "addedValue",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "bool",
+                "internalType": "bool",
+                "name": ""
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
     }
 ]

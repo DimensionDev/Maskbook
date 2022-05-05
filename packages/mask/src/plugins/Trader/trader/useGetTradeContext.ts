@@ -21,12 +21,14 @@ import {
     WANNASWAP_CUSTOM_BASES,
     TRISOLARIS_BASE_AGAINST_TOKENS,
     TRISOLARIS_CUSTOM_BASES,
-    VENONSWAP_BASE_AGAINST_TOKENS,
-    VENONSWAP_CUSTOM_BASES,
+    VENOMSWAP_BASE_AGAINST_TOKENS,
+    VENOMSWAP_CUSTOM_BASES,
     OPENSWAP_BASE_AGAINST_TOKENS,
     OPENSWAP_CUSTOM_BASES,
     MDEX_BASE_AGAINST_TOKENS,
     MDEX_CUSTOM_BASES,
+    DEFIKINGDOMS_BASE_AGAINST_TOKENS,
+    DEFIKINGDOMS_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -179,17 +181,17 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: MDEX_CUSTOM_BASES,
                 }
-            case TradeProvider.VENONSWAP:
+            case TradeProvider.VENOMSWAP:
                 return {
                     TYPE: tradeProvider,
                     IS_UNISWAP_V2_LIKE: true,
-                    GRAPH_API: DEX_TRADE.VENONSWAP_THEGRAPH,
-                    INIT_CODE_HASH: DEX_TRADE.VENONSWAP_INIT_CODE_HASH,
-                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.VENONSWAP_ROUTER_ADDRESS,
-                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.VENONSWAP_FACTORY_ADDRESS,
-                    AGAINST_TOKENS: VENONSWAP_BASE_AGAINST_TOKENS,
+                    GRAPH_API: DEX_TRADE.VENOMSWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.VENOMSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.VENOMSWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.VENOMSWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: VENOMSWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
-                    CUSTOM_TOKENS: VENONSWAP_CUSTOM_BASES,
+                    CUSTOM_TOKENS: VENOMSWAP_CUSTOM_BASES,
                 }
             case TradeProvider.OPENSWAP:
                 return {
@@ -202,6 +204,18 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: OPENSWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: OPENSWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.DEFIKINGDOMS:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.DEFIKINGDOMS_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.DEFIKINGDOMS_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.DEFIKINGDOMS_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.DEFIKINGDOMS_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: DEFIKINGDOMS_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: DEFIKINGDOMS_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {
