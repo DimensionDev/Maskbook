@@ -1,5 +1,15 @@
 import { first, isNull } from 'lodash-unified'
-import { ChainId, NonFungibleAssetProvider, formatBalance } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    NonFungibleAssetProvider,
+    formatBalance,
+    createContract,
+    createWeb3,
+    getERC721ContractDetailed,
+    getERC721TokenDetailedFromChain,
+    ERC721TokenDetailed,
+    getERC721TokenAssetFromChain,
+} from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../../EVM/messages'
 import Services from '../../../extension/service'
 import { getOrderUnitPrice, NextIDProof, NextIDStorage, NonFungibleTokenAPI } from '@masknet/web3-providers'
@@ -9,6 +19,9 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import type { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
 import type { NextIDAvatarMeta } from '../types'
 import { PLUGIN_ID } from '../constants'
+import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
+import type { AbiItem } from 'web3-utils'
+import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 
 function getLastSalePrice(lastSale?: NonFungibleTokenAPI.AssetEvent | null) {
     if (!lastSale?.total_price || !lastSale?.payment_token?.decimals) return
@@ -40,8 +53,44 @@ export async function getNFT(address: string, tokenId: string) {
     }
 }
 
-export async function createNFT(address: string, tokenId: string) {
-    return EVM_RPC.getNFT({ address, tokenId, chainId: ChainId.Mainnet, provider: NonFungibleAssetProvider.OPENSEA })
+export async function getNFTByChain(
+    address: string,
+    tokenId: string,
+    chainId: ChainId,
+): Promise<ERC721TokenDetailed | undefined> {
+    const web3 = createWeb3(Services.Ethereum.request, () => ({
+        chainId,
+    }))
+    const contract = createContract<ERC721>(web3, address, ERC721ABI as AbiItem[])
+    if (!contract) return
+
+    const contractDetailed = await getERC721ContractDetailed(contract, address, chainId)
+    const tokenDetailedFromChain = await getERC721TokenDetailedFromChain(contractDetailed, contract, tokenId)
+    if (!tokenDetailedFromChain) return
+    const info = await getERC721TokenAssetFromChain(tokenDetailedFromChain?.info.tokenURI)
+    const owner = await contract.methods.ownerOf(tokenId).call()
+    if (info && tokenDetailedFromChain) {
+        tokenDetailedFromChain.info = {
+            ...info,
+            owner,
+            ...tokenDetailedFromChain.info,
+            hasTokenDetailed: true,
+            name: info?.name ?? tokenDetailedFromChain?.info.name ?? '',
+        }
+    }
+    return tokenDetailedFromChain
+}
+
+export async function createNFT(address: string, tokenId: string, chainId?: ChainId) {
+    console.log(chainId)
+    const token = await getNFTByChain(address, tokenId, chainId ?? ChainId.Mainnet)
+    if (token) return token
+    return EVM_RPC.getNFT({
+        address,
+        tokenId,
+        chainId: chainId ?? ChainId.Mainnet,
+        provider: chainId === ChainId.Matic ? NonFungibleAssetProvider.NFTSCAN : NonFungibleAssetProvider.OPENSEA,
+    })
 }
 
 export async function getImage(image: string): Promise<string> {

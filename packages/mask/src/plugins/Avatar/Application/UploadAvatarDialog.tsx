@@ -21,6 +21,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     cancel: {
         backgroundColor: theme.palette.background.default,
+        color: theme.palette.mode === 'dark' ? '#111418' : '#FFFFFF',
         border: 'none',
         '&:hover': {
             border: 'none',

@@ -155,7 +155,7 @@ export function NFTListPage(props: NFTListPageProps) {
                     <AddNFT
                         title={t.add_collectible()}
                         open={open}
-                        chainId={ChainId.Mainnet}
+                        chainId={ChainId.Matic}
                         onClose={() => setOpen(false)}
                         onAddClick={onAddClick}
                     />
@@ -174,6 +174,7 @@ interface NFTImageCollectibleAvatarProps {
 function NFTImageCollectibleAvatar({ token, onChange, selectedToken }: NFTImageCollectibleAvatarProps) {
     const { classes } = useStyles()
     const { value: isImageToken, loading } = useImageChecker(token.info?.imageURL)
+
     if (loading)
         return (
             <div className={classes.skeletonBox}>
