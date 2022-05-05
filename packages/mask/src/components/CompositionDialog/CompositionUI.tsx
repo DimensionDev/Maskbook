@@ -178,6 +178,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     }, [encodingKind, encryptionKind, recipients, props.onSubmit])
 
     useEffect(() => {
+        if (process.env.architecture !== 'app') return
+
         const clearAttachWatcher = MaskMessages.events.compositionAttachMetaData.on(([metaId, meta]) => {
             Editor.current?.attachMetadata(metaId, meta)
         })

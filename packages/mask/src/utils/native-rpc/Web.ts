@@ -223,10 +223,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         }
     },
     composition_attachMetaData: async ({ metaId, meta }) => {
-        MaskMessages.events.compositionAttachMetaData.sendToAll([metaId, meta])
+        MaskMessages.events.compositionAttachMetaData.sendToContentScripts([metaId, meta])
     },
     composition_dropMetaData: async ({ metaId }) => {
-        MaskMessages.events.compositionDropMetaData.sendToAll([metaId])
+        MaskMessages.events.compositionDropMetaData.sendToContentScripts([metaId])
     },
     plugin_getData: async ({ pluginId, id, type }) => {
         return Services.Helper.mobile_getPluginDataById(pluginId, type, id)
