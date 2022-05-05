@@ -1,4 +1,4 @@
-import { useState, useMemo, ReactNode } from 'react'
+import { useState, useMemo, ReactNode, Fragment } from 'react'
 import { useTimeout } from 'react-use'
 import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -12,6 +12,7 @@ import {
     Autocomplete,
     FormControlLabel,
     Checkbox,
+    CircularProgress,
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
@@ -105,8 +106,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const [isReady, cancel] = useTimeout(2000)
 
     const user = useUser()
-    const nfts = useNFTs(user, configNFTs)
-    // const extraData = useNFTsExtra(configNFTs)
+    const nfts = useNFTs(user)
     const [collection, setCollection] = useState<FilterContract>(initCollection)
     const [isCollectionsError, setCollectionsError] = useState(false)
 
@@ -175,7 +175,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             ...metaData,
             userId: user.userId,
             tokenId: v?.tokenId ?? '',
-            image: v?.mediaUrl ?? '',
+            image: v?.imageURL ?? '',
             type: v?.glbSupport ? ImageType.GLB : ImageType.NORMAL,
         })
         setImageError(false)
@@ -189,6 +189,11 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
 
     const imageChose = useMemo(() => {
         if (!metaData.image) return ''
+        const imageChosen = collection.tokens.find((item) => item.tokenId === metaData.tokenId)
+        return imageChosen?.imageURL
+    }, [metaData.image, collection.tokens])
+
+    const mediaChose = useMemo(() => {
         const imageChosen = collection.tokens.find((item) => item.tokenId === metaData.tokenId)
         return imageChosen?.mediaUrl
     }, [metaData.image, collection.tokens])
@@ -205,17 +210,18 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 disablePortal
                 id="collection-box"
                 options={nfts}
+                loading={nfts.length === 0}
                 onChange={(_event, newValue) => onCollectionChange(newValue?.name ?? '')}
                 getOptionLabel={(option) => option.name}
                 PopperComponent={ShadowRootPopper}
                 PaperComponent={({ children }) => paperComponent(children)}
                 renderOption={(props, option) => (
                     <MenuItem
-                        key={option.name}
+                        key={option.contract}
                         value={option.name}
                         disabled={!option.tokens.length}
                         className={classes.menuItem}>
-                        <Box {...props} component="li" className={classes.itemFix}>
+                        <Box {...props} component="span" className={classes.itemFix}>
                             {renderImg(option)}
                             <Typography className={classes.itemTxt}>{option.name}</Typography>
                         </Box>
@@ -228,7 +234,16 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         error={isCollectionsError}
                         className={classes.input}
                         inputProps={{ ...params.inputProps }}
-                        InputProps={{ ...params.InputProps, classes: { root: classes.inputBorder } }}
+                        InputProps={{
+                            ...params.InputProps,
+                            classes: { root: classes.inputBorder },
+                            endAdornment: (
+                                <Fragment>
+                                    {nfts.length === 0 ? <CircularProgress color="inherit" size={20} /> : null}
+                                    {params.InputProps.endAdornment}
+                                </Fragment>
+                            ),
+                        }}
                     />
                 )}
             />
@@ -248,7 +263,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 PopperComponent={ShadowRootPopper}
                 renderOption={(props, option) => (
                     <Box component="li" className={classes.itemFix} {...props}>
-                        {!option.glbSupport ? <img className={classes.thumbnail} src={option.mediaUrl} /> : null}
+                        {!option.glbSupport ? <img className={classes.thumbnail} src={option.imageURL} /> : null}
                         <Typography>{option.name}</Typography>
                         {option.glbSupport ? <img className={classes.glbIcon} src={GLB3DIcon} /> : null}
                     </Box>
@@ -272,7 +287,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             <Box>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                        <PreviewBox message={metaData.word} imageUrl={imageChose} tokenInfo={tokenInfoSelect} />
+                        <PreviewBox
+                            message={metaData.word}
+                            imageUrl={imageChose}
+                            mediaUrl={mediaChose}
+                            tokenInfo={tokenInfoSelect}
+                        />
                     </Grid>
                     <Grid item xs={8}>
                         {nftsRender}
