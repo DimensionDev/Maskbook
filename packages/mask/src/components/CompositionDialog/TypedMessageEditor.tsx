@@ -20,7 +20,7 @@ const useStyles = makeStyles()({
         boxSizing: 'border-box',
     },
     input: {
-        fontSize: 18,
+        fontSize: 15,
         minHeight: '8em',
     },
 })

@@ -3,8 +3,7 @@ import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { makeStyles } from '@masknet/theme'
-import { ImagePayloadIcon } from '@masknet/icons'
-import { Send } from '@mui/icons-material'
+import { ImagePayloadIcon, SendIcon } from '@masknet/icons'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
 import { CharLimitIndicator } from './CharLimitIndicator'
@@ -19,27 +18,41 @@ import { Trans } from 'react-i18next'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { useSubscription } from 'use-subscription'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     root: {
         '& > *': {
             marginBottom: '10px !important',
         },
     },
     flex: {
+        width: '100%',
         display: 'flex',
+        alignItems: 'center',
         flexWrap: 'wrap',
     },
     sup: {
         paddingLeft: 2,
     },
     actions: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
         display: 'flex',
+        padding: '14px 16px',
+        boxSizing: 'border-box',
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        '& > *': { marginLeft: '12px !important' },
+        boxShadow: ' 0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
+        transform: 'translateX(-16px)',
     },
-})
+    optionTitle: {
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.text.secondary,
+        marginRight: 12,
+    },
+}))
 
 export interface LazyRecipients {
     request(): void
@@ -182,19 +195,14 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         updatePostSize(Editor.current?.estimatedLength || 0)
                     }}
                 />
-                <Typography>
-                    <Trans
-                        i18nKey="post_dialog_plugins_experimental"
-                        components={{
-                            sup: <sup />,
-                        }}
-                    />
-                </Typography>
+
                 <div className={classes.flex}>
+                    <Typography className={classes.optionTitle}>{t('plugins')}</Typography>
                     <PluginEntryRender readonly={sending} ref={PluginEntry} />
                 </div>
-                <Typography>{t('post_dialog__select_recipients_title')}</Typography>
                 <div className={classes.flex}>
+                    <Typography className={classes.optionTitle}>{t('post_dialog_visible_to')}</Typography>
+
                     <ClickableChip
                         checked={encryptionKind === 'Everyone'}
                         disabled={everyoneDisabled || sending}
@@ -216,12 +224,10 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         />
                     )}
                 </div>
-                {MoreOptions.length ? (
-                    <>
-                        <Typography>{t('post_dialog__more_options_title')}</Typography>
-                        <div className={classes.flex}>{MoreOptions}</div>
-                    </>
-                ) : null}
+                <div className={classes.flex}>
+                    <Typography className={classes.optionTitle}>{t('post_dialog_encryption_method')}</Typography>
+                    <div>{MoreOptions}</div>
+                </div>
             </div>
             <div className={classes.actions}>
                 {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
@@ -234,9 +240,9 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     disabled={!submitAvailable}
                     loading={sending}
                     loadingPosition="start"
-                    variant="contained"
+                    variant="roundedContained"
                     onClick={onSubmit}
-                    startIcon={<Send />}>
+                    startIcon={<SendIcon />}>
                     {t('post_dialog__button')}
                 </LoadingButton>
             </div>
