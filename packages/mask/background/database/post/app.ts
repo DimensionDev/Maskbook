@@ -1,21 +1,15 @@
-import type { PostRecord as NativePostRecord } from '@masknet/public-api'
-import type {
-    PostRecord,
-    PostReadWriteTransaction,
-    PostReadOnlyTransaction,
-    RecipientDetail,
-    RecipientReason,
-} from './type'
+import type { MobilePostRecord as NativePostRecord } from '@masknet/public-api'
+import type { PostRecord, PostReadWriteTransaction, PostReadOnlyTransaction } from './type'
 import {
     PostIVIdentifier,
     AESJsonWebKey,
-    IdentifierMap,
     PersonaIdentifier,
     ProfileIdentifier,
     ECKeyIdentifier,
+    convertRawMapToIdentifierMap,
 } from '@masknet/shared-base'
 import { nativeAPI } from '../../../shared/native-rpc'
-import { unreachable } from '@dimensiondev/kit'
+import { isNonNull } from '@dimensiondev/kit'
 
 export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction) {
     await nativeAPI?.api.create_post({ post: postInNative(record) as NativePostRecord })
@@ -78,7 +72,7 @@ function postInNative(record: Partial<PostRecord> & Pick<PostRecord, 'identifier
                       Array.from(record.recipients).map(([identifier, detail]) => [
                           identifier.toText(),
                           {
-                              reason: Array.from(detail.reason).map<RecipientReasonJSON>(RecipientReasonToJSON),
+                              reason: RecipientReasonToJSON(detail),
                           },
                       ]),
                   )
@@ -93,16 +87,21 @@ function postInNative(record: Partial<PostRecord> & Pick<PostRecord, 'identifier
 
 function postOutNative(record: NativePostRecord): PostRecord {
     return {
-        postBy: ProfileIdentifier.fromString(record.postBy, ProfileIdentifier).unwrap(),
-        identifier: PostIVIdentifier.fromString(record.identifier, PostIVIdentifier).unwrap(),
+        postBy: ProfileIdentifier.from(record.postBy).unwrap(),
+        identifier: PostIVIdentifier.from(record.identifier).unwrap(),
         postCryptoKey: record.postCryptoKey as unknown as AESJsonWebKey,
-        recipients: new IdentifierMap<ProfileIdentifier, RecipientDetail>(
-            new Map(Object.entries(record.recipients)) as any,
+        recipients: convertRawMapToIdentifierMap(
+            Object.entries(record.recipients)
+                .map(([a, b]): [string, Date] | undefined => {
+                    const firstDate = b.reason.find((x) => x.at)?.at
+                    if (firstDate) return [a, new Date(firstDate)]
+                    return undefined
+                })
+                .filter(isNonNull),
+            ProfileIdentifier,
         ),
         foundAt: new Date(record.foundAt),
-        encryptBy: record.encryptBy
-            ? ECKeyIdentifier.fromString(record.encryptBy, ECKeyIdentifier).unwrap()
-            : undefined,
+        encryptBy: ECKeyIdentifier.from(record.encryptBy).unwrapOr(undefined),
         url: record.url,
         summary: record.summary,
         interestedMeta: record.interestedMeta,
@@ -123,13 +122,8 @@ export async function withPostDBTransaction(task: (t: PostReadWriteTransaction) 
 
 // #endregion
 
-type RecipientReasonJSON = ({ type: 'auto-share' } | { type: 'direct' }) & {
-    at: number
-}
+type RecipientReasonMobile = { type: 'auto-share'; at: number } | { type: 'direct'; at: number }
 
-function RecipientReasonToJSON(y: RecipientReason): RecipientReasonJSON {
-    if (y.type === 'direct' || y.type === 'auto-share')
-        return { at: y.at.getTime(), type: y.type } as RecipientReasonJSON
-    else if (y.type === 'group') return { at: y.at.getTime(), type: 'direct' }
-    return unreachable(y)
+function RecipientReasonToJSON(y: Date): RecipientReasonMobile {
+    return { type: 'direct', at: y.getTime() }
 }

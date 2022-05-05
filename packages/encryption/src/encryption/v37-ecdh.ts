@@ -1,4 +1,3 @@
-import { IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
 import { encryptWithAES } from '../utils'
 import {
     type EncryptTargetE2E,
@@ -27,7 +26,7 @@ export async function v37_addReceiver(
     const ecdh = Promise.allSettled(
         target.target.map(async (id): Promise<EncryptionResultE2E> => {
             const iv = postIV || fillIV(io)
-            const receiverPublicKey = id.isUnknown ? undefined : await io.queryPublicKey(id)
+            const receiverPublicKey = await io.queryPublicKey(id)
             if (!receiverPublicKey) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
             const [ephemeralPublicKey, ephemeralPrivateKey] = await getEphemeralKey(receiverPublicKey.algr)
             const aes = await crypto.subtle.deriveKey(
@@ -48,7 +47,7 @@ export async function v37_addReceiver(
         }),
     ).then((x) => x.entries())
 
-    const ecdhResult: EncryptResult['e2e'] = new IdentifierMap(new Map(), ProfileIdentifier)
+    const ecdhResult: EncryptResult['e2e'] = new Map()
     for (const [index, result] of await ecdh) {
         ecdhResult.set(target.target[index], result)
     }

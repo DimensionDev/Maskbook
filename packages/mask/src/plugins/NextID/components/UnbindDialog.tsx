@@ -2,8 +2,7 @@ import { memo, useCallback, useState } from 'react'
 import { useI18N } from '../locales'
 import { useAsyncRetry } from 'react-use'
 import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
-import type { Persona } from '../../../database'
-import type { Binding } from '@masknet/shared-base'
+import type { Binding, PersonaInformation } from '@masknet/shared-base'
 import { NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { useCustomSnackbar } from '@masknet/theme'
 import { usePersonaSign } from '../hooks/usePersonaSign'
@@ -17,7 +16,7 @@ import { MaskMessages } from '../../../../shared'
 
 interface VerifyWalletDialogProps {
     unbindAddress: string
-    persona: Persona
+    persona: PersonaInformation
     onUnBound(): void
     onClose(): void
     bounds: Binding[]
@@ -33,17 +32,17 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
     const currentIdentifier = persona.identifier
     const isBound = !!bounds.find((x) => isSameAddress(x.identity, unbindAddress))
 
-    const { value: message } = useBindPayload(NextIDAction.Delete, unbindAddress, persona.publicHexKey)
+    const { value: message } = useBindPayload(NextIDAction.Delete, unbindAddress, persona.identifier.publicKeyAsHex)
     const [personaSignState, handlePersonaSign] = usePersonaSign(message?.signPayload, currentIdentifier)
     const [walletSignState, handleWalletSign] = useWalletSign(message?.signPayload, unbindAddress)
 
     useAsyncRetry(async () => {
         if (!personaSignState.value && !walletSignState.value) return
-        if (!message || !persona.publicHexKey) return
+        if (!message || !persona.identifier.publicKeyAsHex) return
         try {
             await NextIDProof.bindProof(
                 message.uuid,
-                persona.publicHexKey,
+                persona.identifier.publicKeyAsHex,
                 NextIDAction.Delete,
                 NextIDPlatform.Ethereum,
                 unbindAddress,

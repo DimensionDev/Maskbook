@@ -57,7 +57,7 @@ async function getNftList(chainId: ChainId, account: string) {
         return {
             id: pubkey,
             tokenId: pubkey,
-            chainId: chainId,
+            chainId,
             type: TokenType.NonFungible,
             name: metadata.data.data.name,
             description: externalMeta?.description,

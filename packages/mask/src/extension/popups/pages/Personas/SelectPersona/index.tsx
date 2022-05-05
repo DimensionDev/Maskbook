@@ -14,6 +14,7 @@ const useStyles = makeStyles()({
         backgroundColor: '#F7F9FA',
         display: 'flex',
         flexDirection: 'column',
+        paddingBottom: 72,
     },
     controller: {
         padding: 16,

@@ -7,7 +7,7 @@ import { Trans } from 'react-i18next'
 import { TagInspector } from './trending/TagInspector'
 import { enhanceTag } from './cashTag'
 import { ApplicationEntry } from '@masknet/shared'
-import { SwapIcon } from '@masknet/icons'
+import { SwapColorfulIcon } from '@masknet/icons'
 import { PluginTraderMessages } from '../messages'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -25,7 +25,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     enhanceTag,
     ApplicationEntries: [
         (() => {
-            const icon = <SwapIcon />
+            const icon = <SwapColorfulIcon />
             const name = <Trans i18nKey="plugin_trader_swap" />
             return {
                 ApplicationEntryID: base.ID,
@@ -46,7 +46,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         })(),
     ],
     wrapperProps: {
-        icon: <SwapIcon />,
+        icon: <SwapColorfulIcon />,
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(254, 156, 0, 0.2) 100%), #FFFFFF;',
     },

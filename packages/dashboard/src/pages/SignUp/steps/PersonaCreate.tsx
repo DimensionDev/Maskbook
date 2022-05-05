@@ -15,7 +15,7 @@ export const PersonaCreate = () => {
     const onNext = async (personaName: string) => {
         setError('')
 
-        const personas = await Services.Identity.queryMyPersonas()
+        const personas = await Services.Identity.queryOwnedPersonaInformation(true)
         const existing = personas.some((x) => x.nickname === personaName)
 
         if (existing) {
