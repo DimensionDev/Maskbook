@@ -266,6 +266,10 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                                 setEncryptionKind('E2E')
                             }
                         }}
+                        toShare={() => {
+                            setEncryptionKind('E2E')
+                            setShareWithOpen(true)
+                        }}
                     />
                     {recipientSelectorAvailable && (
                         <SelectRecipientsUI

@@ -68,6 +68,8 @@ interface PopoverListItem {
     personaRequired?: boolean
     showDivider?: boolean
     hasPersona?: boolean
+    toShare?(): void
+    setValue?(v: 'share'): void
 }
 interface PopoverListTriggerProp {
     hasPersona?: boolean
@@ -76,15 +78,22 @@ interface PopoverListTriggerProp {
     onChange(v: string): void
     renderScheme: Array<PopoverListItem>
     selected: string
+    toShare?(): void
 }
 
 const PopoverListItem = (props: PopoverListItem) => {
-    const { title, subTitle, personaRequired, type, showDivider, hasPersona } = props
+    const { title, subTitle, personaRequired, type, showDivider, hasPersona, toShare, setValue } = props
     const { classes, cx } = useStyles()
-
+    const handleItemClick = () => {
+        if (!(type === 'share' && toShare && setValue)) return
+        setValue('share')
+        toShare()
+    }
     return (
         <>
-            <div className={type === 'share' ? cx(classes.item, classes.pointer) : classes.item}>
+            <div
+                className={type === 'share' ? cx(classes.item, classes.pointer) : classes.item}
+                onClick={handleItemClick}>
                 <Radio value={type} />
                 <div>
                     <Typography className={classes.mainTitle}>{title}</Typography>
@@ -109,6 +118,7 @@ export function PopoverListTrigger({
     selected,
     onChange,
     hasPersona,
+    toShare,
 }: PopoverListTriggerProp) {
     const { classes } = useStyles()
     const [selectedValue, setSelectedValue] = useState<string>(selected)
@@ -147,6 +157,8 @@ export function PopoverListTrigger({
                     {renderScheme.map((x, idx) => {
                         return (
                             <PopoverListItem
+                                setValue={setSelectedValue}
+                                toShare={toShare}
                                 hasPersona={hasPersona}
                                 key={idx}
                                 type={x.type}

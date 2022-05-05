@@ -137,7 +137,6 @@
     "post_dialog__button": "加密",
     "post_dialog__image_payload": "图片Payload",
     "post_dialog__placeholder": "文本在此处…",
-    "post_dialog__select_specific_e2e_target_title": "和Mask Network用户 ({{selected}} 已选择)",
     "post_dialog__title": "Mask：编辑",
     "post_dialog_enable_paste_auto": "启用自动粘贴",
     "post_modal_hint__button": "编辑加密贴文",

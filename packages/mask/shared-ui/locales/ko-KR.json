@@ -98,7 +98,6 @@
     "post_dialog__button": "끝내기",
     "post_dialog__image_payload": "이미지 페이로드",
     "post_dialog__placeholder": "여기서 텍스트 치기...",
-    "post_dialog__select_specific_e2e_target_title": "또한 Mask Network 유저 ({{selected}} selected)",
     "post_dialog__title": "Mask: 편집",
     "post_dialog_enable_paste_auto": "자동 붙이기 지원",
     "post_modal_hint__button": "암호화된 메시지를 편집하기",
