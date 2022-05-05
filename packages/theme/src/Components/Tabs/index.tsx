@@ -10,11 +10,12 @@ import {
     useEffect,
     useImperativeHandle,
     ForwardRefExoticComponent,
+    useMemo,
 } from 'react'
 import { BaseTab } from './BaseTab'
 import { FlexibleTab } from './FlexibleTab'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
-import { useWindowSize } from 'react-use'
+import { useClickAway, useWindowSize } from 'react-use'
 import { RoundTab } from './RoundTab'
 import { get } from 'lodash-unified'
 
@@ -47,28 +48,38 @@ const ArrowBackIosNewIconWrap = styled(ArrowBackIosNewIcon)(({ theme }) => ({
     borderRadius: '0 8px 8px 0',
 }))
 
+const FlexibleButtonGroupPanel = styled(Box, {
+    shouldForwardProp: (prop) => prop !== 'isOpen',
+})<{ isOpen?: boolean }>(({ theme, isOpen = false }) => ({
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 100,
+    padding: theme.spacing(1.5),
+    margin: '-12px',
+    maxWidth: '100%',
+    boxShadow: isOpen ? '0px 0px 20px rgba(0, 0, 0, 0.05)' : 'none',
+    background: theme.palette.background.paper,
+}))
+
 const ButtonGroupWrap = styled(ButtonGroup, {
-    shouldForwardProp: (prop) => prop !== 'maskVariant' && prop !== 'isOpen' && prop !== 'isOverflow',
-})<{ maskVariant?: MaskTabVariant; isOpen?: boolean; isOverflow?: boolean }>(
-    ({ theme, maskVariant = 'base', isOpen = false, isOverflow = false }) => ({
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        flexWrap: 'nowrap',
-        overflow: 'hidden',
-        flex: 1,
-        gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
-        background: 'transparent',
-    }),
-)
+    shouldForwardProp: (prop) => prop !== 'maskVariant',
+})<{ maskVariant?: MaskTabVariant }>(({ theme, maskVariant = 'base' }) => ({
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'nowrap',
+    overflow: 'hidden',
+    flex: 1,
+    gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
+    background: 'transparent',
+}))
 
 const FlexButtonGroupWrap = styled(ButtonGroup, {
     shouldForwardProp: (prop) => prop !== 'maskVariant' && prop !== 'isOpen' && prop !== 'isOverflow',
 })<{ maskVariant?: MaskTabVariant; isOpen?: boolean; isOverflow?: boolean }>(
     ({ theme, maskVariant = 'base', isOpen = false, isOverflow = false }) => ({
-        position: 'absolute',
-        top: 0,
-        left: 0,
+        position: 'relative',
         display: 'flex',
         alignItems: 'center',
         flexWrap: isOpen ? 'wrap' : 'nowrap',
@@ -113,9 +124,13 @@ const tabMapping: { [key in MaskTabVariant]: ForwardRefExoticComponent<any> } = 
  */
 export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, ref) => {
     const context = useTabContext()
+
     const [open, handleToggle] = useState<boolean>(false)
     const [isTabsOverflow, setIsTabsOverflow] = useState(false)
+    const [firstId, setFirstTabId] = useState<string>()
     const innerRef = useRef<HTMLDivElement>(null)
+    const anchorRef = useRef<HTMLDivElement>(null)
+    const flexPanelRef = useRef(null)
     const { width } = useWindowSize()
 
     if (context === null) throw new TypeError('No TabContext provided')
@@ -124,20 +139,33 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
 
     useImperativeHandle(ref, () => innerRef?.current!)
 
+    // #region hide tab should up to first when chick
     useEffect(() => {
         if (!innerRef?.current) return
 
         const current = innerRef.current
         setIsTabsOverflow(current?.scrollWidth > current?.clientWidth)
     }, [innerRef.current, width])
+    // #endregion
 
     const children = Children.map(props.children, (child) => {
-        if (!isValidElement(child)) return child
+        if (!isValidElement(child)) throw new TypeError('Invalided Children')
         const extra = {
             'aria-controls': getPanelId(context, child.props.value),
             id: getTabId(context, child.props.value),
             selected: child.props.value === context.value,
-            onChange: props.onChange,
+            // if move tab to first in flexible tabs
+            isVisitable: (top: number, right: number) => {
+                const anchor = anchorRef.current?.getBoundingClientRect()
+                return right <= (anchor?.right ?? 0) && top <= (anchor?.top ?? 0)
+            },
+            onChange: (event: object, value: string, isVisitable?: boolean) => {
+                handleToggle(false)
+                props.onChange(event, value)
+                if (variant === 'flexible' && !isVisitable) {
+                    setFirstTabId(value)
+                }
+            },
         }
 
         if (child.type === Tab) {
@@ -152,31 +180,62 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
         return cloneElement(child, extra)
     })
 
+    // #region hide tab should up to first when chick
+    const flexibleTabs = useMemo(() => {
+        if (variant !== 'flexible') return null
+        return children?.sort((a, b) => {
+            if (a.props.value === firstId) return -1
+            if (b.props.value === firstId) return 1
+            return 0
+        })
+    }, [firstId, children])
+    // #endregion
+
+    // #region Should close panel when click other area
+    useClickAway(flexPanelRef, (event) => {
+        if (variant !== 'flexible') return
+        const { left, right, top, bottom } = innerRef.current?.getBoundingClientRect() ?? {
+            right: 0,
+            left: 0,
+            top: 0,
+            bottom: 0,
+        }
+        const pointerX = get(event, 'x', 0)
+        const pointerY = get(event, 'y', 0)
+
+        if (pointerX > right || pointerX < left || pointerY < top || pointerY > bottom) handleToggle(false)
+    })
+    // #endregion
+
     if (variant === 'flexible') {
         return (
             <Box position="relative">
-                <ButtonGroupWrap style={{ visibility: 'hidden', height: 38 }}>{[]}</ButtonGroupWrap>
-                <FlexButtonGroupWrap
-                    maskVariant={variant}
-                    isOpen={open}
-                    isOverflow={isTabsOverflow}
-                    {...rest}
-                    ref={innerRef}
-                    role="tablist">
-                    {children}
-                    {isTabsOverflow && (
-                        <ArrowButtonWrap
-                            variant="text"
-                            size="small"
-                            aria-controls={open ? 'split-button-menu' : undefined}
-                            aria-expanded={open ? 'true' : undefined}
-                            aria-label="select tabs list"
-                            aria-haspopup="menu"
-                            onClick={() => handleToggle(!open)}>
-                            <ArrowBackIosNewIconWrap sx={{ transform: open ? 'rotate(90deg)' : 'rotate(270deg)' }} />
-                        </ArrowButtonWrap>
-                    )}
-                </FlexButtonGroupWrap>
+                <ButtonGroupWrap ref={anchorRef} style={{ visibility: 'hidden', height: 38 }} />
+                <FlexibleButtonGroupPanel isOpen={open && isTabsOverflow} ref={flexPanelRef}>
+                    <FlexButtonGroupWrap
+                        maskVariant={variant}
+                        isOpen={open}
+                        isOverflow={isTabsOverflow}
+                        {...rest}
+                        ref={innerRef}
+                        role="tablist">
+                        {flexibleTabs}
+                        {isTabsOverflow && (
+                            <ArrowButtonWrap
+                                variant="text"
+                                size="small"
+                                aria-controls={open ? 'split-button-menu' : undefined}
+                                aria-expanded={open ? 'true' : undefined}
+                                aria-label="select tabs list"
+                                aria-haspopup="menu"
+                                onClick={() => handleToggle(!open)}>
+                                <ArrowBackIosNewIconWrap
+                                    sx={{ transform: open ? 'rotate(90deg)' : 'rotate(270deg)' }}
+                                />
+                            </ArrowButtonWrap>
+                        )}
+                    </FlexButtonGroupWrap>
+                </FlexibleButtonGroupPanel>
             </Box>
         )
     }

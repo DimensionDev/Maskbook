@@ -1,5 +1,5 @@
 import { Button, ButtonProps, styled } from '@mui/material'
-import { forwardRef } from 'react'
+import { memo, useRef } from 'react'
 import { get } from 'lodash-unified'
 
 const FlexibleTabTabWrap = styled(Button, {
@@ -28,15 +28,21 @@ const FlexibleTabTabWrap = styled(Button, {
 export interface ButtonTabProps extends React.PropsWithChildren<Omit<ButtonProps, 'onChange' | 'value' | 'selected'>> {
     value: string
     selected?: boolean
-    onChange?(event: object, value: string): void
+    isVisitable: (top: number, right: number) => boolean
+    onChange?(event: object, value: string, isUp: boolean): void
 }
 
-export const FlexibleTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, ref) => {
+export const FlexibleTab = memo<ButtonTabProps>((props) => {
     const activated = !!props.selected
     const { onChange, onClick, value } = props
+    const ref = useRef<HTMLButtonElement>(null)
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        if (!activated && onChange) onChange(event, String(value))
+        const isVisitable = props.isVisitable(
+            ref.current?.getBoundingClientRect().top ?? 0,
+            ref.current?.getBoundingClientRect().right ?? 0,
+        )
+        if (!activated && onChange) onChange(event, String(value), isVisitable)
         if (onClick) onClick(event)
     }
 
