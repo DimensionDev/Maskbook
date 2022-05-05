@@ -95,21 +95,6 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
             theme.components = theme.components || {}
             const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
-            theme.components.MuiInputBase = {
-                styleOverrides: {
-                    root: {
-                        background: theme.palette.background.input,
-                    },
-                },
-            }
-            // theme.components.MuiDialogTitle = {
-            //     styleOverrides: {
-            //         root: {
-            //             background: theme.palette.background.modalTitle,
-            //             borderBottom: 'none',
-            //         },
-            //     },
-            // }
             theme.components.MuiButton = {
                 defaultProps: {
                     size: 'medium',
