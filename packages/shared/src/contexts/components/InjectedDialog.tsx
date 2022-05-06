@@ -26,18 +26,21 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
-        borderBottom: `1px solid ${theme.palette.divider}`,
         whiteSpace: 'nowrap',
     },
     dialogContent: {
         overscrollBehavior: 'contain',
     },
     dialogTitleTypography: {
-        marginLeft: 6,
+        flex: 1,
+        textAlign: 'center',
         verticalAlign: 'middle',
     },
     dialogCloseButton: {
         color: theme.palette.text.primary,
+        position: 'absolute',
+        padding: 0,
+        fontSize: 24,
     },
     paper: clean ? { width: 'auto', backgroundImage: 'none' } : {},
 }))
@@ -129,6 +132,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             }}>
                             <IconButton
                                 size="large"
+                                disableRipple
                                 classes={{ root: dialogCloseButton }}
                                 aria-label={t.dialog_dismiss()}
                                 onClick={onClose}>

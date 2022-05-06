@@ -79,7 +79,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
         if (!pool || !inputTokens) return
         openInvestDialog({
             open: true,
-            pool: pool,
+            pool,
             tokens: inputTokens,
         })
     }, [pool, inputTokens, openInvestDialog])
@@ -127,7 +127,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
                                         share: <span />,
                                     }}
                                     values={{
-                                        managerShare: managerShare,
+                                        managerShare,
                                     }}
                                 />
                             ) : (

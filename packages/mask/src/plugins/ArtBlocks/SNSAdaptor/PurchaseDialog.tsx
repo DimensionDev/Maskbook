@@ -87,7 +87,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                 : 'plugin_artblocks_share_no_official_account',
             {
                 name: project.name,
-                price: price,
+                price,
                 symbol: token.value?.symbol,
             },
         ),

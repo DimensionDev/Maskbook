@@ -1,5 +1,4 @@
 import { DecryptPost } from './DecryptedPost/DecryptedPost'
-import { ProfileIdentifier } from '@masknet/shared-base'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 import {
     usePostInfoDetails,
@@ -31,15 +30,15 @@ export function PostInspector(props: PostInspectorProps) {
 
     if (encryptedPost.ok || postImages.length) {
         if (!isDebugging) props.zipPost()
-        return withAdditionalContent(<DecryptPost whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown} />)
+        return withAdditionalContent(<DecryptPost whoAmI={whoAmI?.identifier || null} />)
     }
     return withAdditionalContent(null)
     function withAdditionalContent(x: JSX.Element | null) {
         const slot = encryptedPost.ok ? null : <slot />
         return (
             <>
-                {process.env.NODE_ENV === 'development' && postBy.isUnknown ? (
-                    <h2 style={{ background: 'red', color: 'white' }}>Please fix me. Post author is $unknown</h2>
+                {process.env.NODE_ENV === 'development' && !postBy ? (
+                    <h2 style={{ background: 'red', color: 'white' }}>Please fix me. Post author is not detected.</h2>
                 ) : null}
                 {props.slotPosition !== 'after' && slot}
                 {x}

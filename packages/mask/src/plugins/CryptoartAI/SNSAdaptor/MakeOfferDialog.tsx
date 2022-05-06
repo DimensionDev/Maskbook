@@ -119,10 +119,10 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                   ? 'plugin_cryptoartai_offer_share'
                   : 'plugin_cryptoartai_offer_share_no_official_account',
               {
-                  amount: amount,
+                  amount,
                   symbol: token?.value?.symbol,
                   title: assetSource?.title,
-                  assetLink: assetLink,
+                  assetLink,
                   account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
               },
           )

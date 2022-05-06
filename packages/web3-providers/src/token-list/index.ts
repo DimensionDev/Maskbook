@@ -35,7 +35,7 @@ async function fetch1inchERC20TokensFromTokenList(
         .map((x) => ({
             type: EthereumTokenType.ERC20,
             ...x,
-            chainId: chainId,
+            chainId,
             logoURI: x.logoURI ? [x.logoURI] : [],
         }))
 }

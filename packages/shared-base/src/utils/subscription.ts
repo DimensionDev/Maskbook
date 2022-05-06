@@ -1,6 +1,7 @@
 import { noop } from 'lodash-unified'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { Subscription } from 'use-subscription'
+import { None, Option, Some } from 'ts-results'
 
 export function createConstantSubscription<T>(value: T) {
     return {
@@ -15,35 +16,49 @@ export function createSubscriptionFromAsync<T>(
     onChange: (callback: () => void) => () => void,
     signal?: AbortSignal,
 ): Subscription<T> {
-    // 0 - idle, 1 - updating state, > 1 - waiting state
-    let beats = 0
-    let state = defaultValue
+    const { getCurrentValue, subscribe } = createSubscriptionFromAsyncSuspense(f, onChange, signal)
+    return {
+        subscribe,
+        getCurrentValue: () => {
+            try {
+                return getCurrentValue()
+            } catch {
+                return defaultValue
+            }
+        },
+    }
+}
+
+export function createSubscriptionFromAsyncSuspense<T>(
+    f: () => Promise<T>,
+    onChange: (callback: () => void) => () => void,
+    signal?: AbortSignal,
+): Subscription<T> {
     const { subscribe, trigger } = getEventTarget()
-    f()
-        .then((v) => (state = v))
-        .finally(trigger)
-    const flush = async () => {
-        state = await f()
-        beats -= 1
-        if (beats > 0) {
-            beats = 1
-            setTimeout(flush, 0)
-        } else if (beats < 0) {
-            beats = 0
-        }
+
+    let value: Option<T> = None
+    const setter = (v: T) => {
+        value = Some(v)
         trigger()
     }
+    // initial request
+    const promise = f().then(setter)
+
+    // follow-up updating
+    const listen = onChange(() => f().then(setter))
+    signal?.addEventListener('abort', listen, { once: true })
+
     return {
-        getCurrentValue: () => state,
-        subscribe: (sub) => {
-            if (signal?.aborted) return () => {}
-            const a = subscribe(sub)
-            const b = onChange(async () => {
-                beats += 1
-                if (beats === 1) flush()
-            })
-            signal?.addEventListener('abort', () => [a(), b()], { once: true })
-            return () => void [a(), b()]
+        getCurrentValue: () => {
+            if (value.none) throw promise
+            return value.val
+        },
+        subscribe: (sub: () => void) => {
+            if (signal?.aborted) return noop
+
+            const undo = subscribe(sub)
+            signal?.addEventListener('abort', undo, { once: true })
+            return () => void undo()
         },
     }
 }
@@ -54,8 +69,8 @@ function getEventTarget() {
     let timer: ReturnType<typeof setTimeout>
     function trigger() {
         clearTimeout(timer)
-        // delay to update state to ensure that all settings to be synced globally
-        timer = setTimeout(() => event.dispatchEvent(new Event(EVENT)), 600)
+        // delay to update state to ensure that all data to be synced globally
+        timer = setTimeout(() => event.dispatchEvent(new Event(EVENT)), 500)
     }
     function subscribe(f: () => void) {
         event.addEventListener(EVENT, f)

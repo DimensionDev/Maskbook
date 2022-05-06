@@ -44,12 +44,12 @@ function progressReducer(
 }
 
 export interface DecryptPostProps {
-    whoAmI: ProfileIdentifier
+    whoAmI: ProfileIdentifier | null
 }
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI } = props
     const deconstructedPayload = usePostInfoDetails.containingMaskPayload()
-    const authorInPayload = usePostClaimedAuthor()
+    const authorInPayload = usePostClaimedAuthor() || null
     const currentPostBy = usePostInfoDetails.author()
     const postBy = authorInPayload || currentPostBy
     const postMetadataImages = usePostInfoDetails.postMetadataImages()
@@ -140,7 +140,7 @@ export function DecryptPost(props: DecryptPostProps) {
             )
         })
         return () => signal.abort()
-    }, [deconstructedPayload.ok, postBy.toText(), postMetadataImages.join(), whoAmI.toText(), mentionedLinks.join()])
+    }, [deconstructedPayload.ok, postBy, postMetadataImages.join(), whoAmI, mentionedLinks.join()])
 
     if (!deconstructedPayload.ok && progress.every((x) => x.progress.internal)) return null
     return (
@@ -184,8 +184,8 @@ export function DecryptPost(props: DecryptPostProps) {
 type ReportProgress = (type: 'e2e' | 'error', message: string) => void
 async function makeProgress(
     postURL: string | undefined,
-    authorHint: ProfileIdentifier,
-    currentProfile: ProfileIdentifier,
+    authorHint: ProfileIdentifier | null,
+    currentProfile: ProfileIdentifier | null,
     payload: SocialNetworkEncodedPayload,
     done: (message: TypedMessage, iv: Uint8Array) => void,
     reporter: PostContext['decryptedReport'],

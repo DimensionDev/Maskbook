@@ -10,8 +10,9 @@ export const [useDefinedSocialNetworkUIs, revalidateSocialNetworkUIs] = createGl
     () => () => {},
 )
 
-export const [useOwnedPersonas] = createGlobalState(Services.Identity.queryOwnedPersonaInformation, (x) =>
-    Messages.events.ownPersonaChanged.on(x),
+export const [useOwnedPersonas] = createGlobalState(
+    () => Services.Identity.queryOwnedPersonaInformation(false),
+    (x) => Messages.events.ownPersonaChanged.on(x),
 )
 
 export const [useAppearance] = createGlobalState(Services.Settings.getTheme, (x) =>

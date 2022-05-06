@@ -11,7 +11,7 @@ export function useCollections(address: string, chainId: ChainId | null, dependR
         id: dependReady === undefined ? id : dependReady ? id : '',
         method: 'mask.fetchNonFungibleCollectionAsset',
         params: {
-            address: address,
+            address,
             pageSize: 200,
             chainId,
         },
@@ -36,7 +36,7 @@ export function useCollectibles(address: string, chainId: ChainId | null, depend
         id: dependReady === undefined ? id : dependReady ? id : '',
         method: 'mask.fetchNonFungibleCollectibleAssetV2',
         params: {
-            address: address,
+            address,
             pageSize: 30,
         },
     }

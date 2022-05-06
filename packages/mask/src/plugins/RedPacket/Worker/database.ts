@@ -1,11 +1,12 @@
 import { omit } from 'lodash-unified'
 import type { RedPacketRecord, RedPacketRecordInDatabase, RedPacketNftRecordInDatabase } from '../types'
-import { RedPacketPluginID } from '../constants'
-import { createPluginDatabase } from '../../../database/Plugin'
+import type { Plugin } from '@masknet/plugin-infra'
 
-export const RedPacketDatabase = createPluginDatabase<RedPacketRecordInDatabase | RedPacketNftRecordInDatabase>(
-    RedPacketPluginID,
-)
+export let RedPacketDatabase: Plugin.Worker.DatabaseStorage<RedPacketRecordInDatabase | RedPacketNftRecordInDatabase>
+
+export function setupDatabase(x: typeof RedPacketDatabase) {
+    RedPacketDatabase = x
+}
 
 export async function getAllRedpackets(ids: string[]) {
     const records = []
