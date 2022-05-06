@@ -2,7 +2,7 @@ import { RSS3 } from '@masknet/web3-providers'
 import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
 import { personalSign } from '../../../extension/background-script/EthereumService'
 import type { ConfigRSSNode, EssayRSSNode, PetMetaDB } from '../types'
-import { NFTS_CONFIG_ADDRESS } from '../constants'
+import { NFTS_BLOCK_ADDRESS } from '../constants'
 
 const cache = new Map<string, Record<string, Constant> | undefined>()
 
@@ -25,12 +25,12 @@ export async function saveCustomEssayToRSS(address: string, essay: PetMetaDB, si
 }
 
 export async function getConfigNFTsFromRSS() {
-    const v = cache.get(NFTS_CONFIG_ADDRESS)
+    const v = cache.get(NFTS_BLOCK_ADDRESS)
     if (v) return v
-    const rss = RSS3.createRSS3(NFTS_CONFIG_ADDRESS, async (message: string) => {
-        return personalSign(message, NFTS_CONFIG_ADDRESS)
+    const rss = RSS3.createRSS3(NFTS_BLOCK_ADDRESS, async (message: string) => {
+        return personalSign(message, NFTS_BLOCK_ADDRESS)
     })
-    const data = await RSS3.getFileData<ConfigRSSNode>(rss, NFTS_CONFIG_ADDRESS, '_pet_nfts')
-    cache.set(NFTS_CONFIG_ADDRESS, data?.essay)
+    const data = await RSS3.getFileData<ConfigRSSNode>(rss, NFTS_BLOCK_ADDRESS, '_pet_nfts')
+    cache.set(NFTS_BLOCK_ADDRESS, data?.essay)
     return data?.essay
 }
