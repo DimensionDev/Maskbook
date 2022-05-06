@@ -9,12 +9,12 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import type { NftRedPacketHistory } from '../types'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed'
 import { NftList } from './NftList'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -150,7 +150,7 @@ export interface NftRedPacketHistoryItemProps {
 export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
     ({ history, onSend, onShowPopover, onHidePopover }) => {
         const account = useAccount()
-        const { t } = useI18N()
+        const t = useI18N()
         const { classes } = useStyles()
         const {
             computed: { canSend, isPasswordValid },
@@ -175,7 +175,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             }
         }
         const handleShowPopover = (anchor: HTMLElement) => {
-            onShowPopover(anchor, t('plugin_nft_red_packet_data_broken'))
+            onShowPopover(anchor, t.nft_data_broken())
         }
 
         return (
@@ -196,10 +196,10 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                                 <Typography
                                     variant="body1"
                                     className={classNames(classes.title, classes.message, classes.ellipsis)}>
-                                    {history.message === '' ? t('plugin_red_packet_best_wishes') : history.message}
+                                    {history.message === '' ? t.best_wishes() : history.message}
                                 </Typography>
                                 <Typography variant="body1" className={classNames(classes.info, classes.message)}>
-                                    {t('plugin_red_packet_history_duration', {
+                                    {t.history_duration({
                                         startTime: dateTimeFormat(new Date(history.creation_time)),
                                         endTime: dateTimeFormat(
                                             new Date(history.creation_time + history.duration),
@@ -219,7 +219,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                                     )}
                                     variant="contained"
                                     size="large">
-                                    {t('plugin_red_packet_history_send')}
+                                    {t.send()}
                                 </ActionButton>
                             ) : null}
                         </section>
@@ -238,7 +238,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         <section className={classes.footer}>
                             <Typography variant="body1" className={classes.footerInfo}>
                                 <Trans
-                                    i18nKey="plugin_red_packet_history_claimed"
+                                    i18nKey="com.maskbook.red_packet:history_claimed"
                                     components={{
                                         strong: <strong />,
                                     }}

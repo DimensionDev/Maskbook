@@ -13,7 +13,7 @@ import {
 } from '../../../components/DataSource/useActivatedUI'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import Services from '../../../extension/service'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketMetaKey } from '../constants'
 import { DialogTabs, RedPacketJSONPayload, RpTypeTabs } from '../types'
@@ -63,7 +63,7 @@ interface RedPacketDialogProps extends withClasses<never> {
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const chainId = useChainId()
     const account = useAccount()
     const { classes } = useStyles()
@@ -134,7 +134,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: t('plugin_red_packet_create_new'),
+                label: t.create_new(),
                 children: (
                     <RedPacketCreateNew
                         origin={settings}
@@ -147,7 +147,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 sx: { p: 0 },
             },
             {
-                label: t('plugin_red_packet_select_existing'),
+                label: t.select_existing(),
                 children: <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />,
                 sx: { p: 0 },
             },
@@ -172,7 +172,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
-    const title = isCreateStep ? t('plugin_red_packet_display_name') : t('plugin_red_packet_details')
+    const title = isCreateStep ? t.display_name() : t.details()
 
     return (
         <InjectedDialog open={props.open} title={title} onClose={onClose} disableTitleBorder>

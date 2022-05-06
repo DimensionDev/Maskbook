@@ -94,9 +94,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <RedPacketIcon />
-            const name = <Trans i18nKey="plugin_red_packet_name" />
+            const name = <Trans i18nKey="com.maskbook.red_packet:name" />
             const recommendFeature = {
-                description: <Trans i18nKey="plugin_red_packet_recommend_feature_description" />,
+                description: <Trans i18nKey="com.maskbook.red_packet:recommend_feature_description" />,
                 backgroundGradient: 'linear-gradient(180.54deg, #FF9A9E 0.71%, #FECFEF 98.79%, #FECFEF 99.78%)',
             }
             return {
@@ -125,7 +125,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 1,
                 marketListSortingPriority: 1,
                 icon,
-                description: <Trans i18nKey="plugin_red_packet_description" />,
+                description: <Trans i18nKey="com.maskbook.red_packet:description" />,
                 name,
                 tutorialLink: 'https://realmasknetwork.notion.site/0a71fd421aae4563bd07caa3e2129e5b',
                 category: 'dapp',

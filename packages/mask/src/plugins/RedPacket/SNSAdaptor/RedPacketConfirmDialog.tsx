@@ -18,10 +18,10 @@ import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../../utils'
 import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -85,7 +85,7 @@ export interface ConfirmRedPacketFormProps {
 }
 
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { onBack, settings, onClose, onCreated } = props
     const { classes } = useStyles()
     const chainId = useChainId()
@@ -193,7 +193,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             </Grid>
             <Grid item xs={6}>
                 <Typography variant="body1" color="textSecondary">
-                    {t('plugin_red_packet_token')}
+                    {t.token()}
                 </Typography>
             </Grid>
             <Grid item xs={6}>
@@ -215,18 +215,18 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
 
             <Grid item xs={6}>
                 <Typography variant="body1" color="textSecondary">
-                    {t('plugin_red_packet_split_mode')}
+                    {t.split_mode()}
                 </Typography>
             </Grid>
             <Grid item xs={6}>
                 <Typography variant="body1" color="textPrimary" align="right">
-                    {settings?.isRandom ? t('plugin_red_packet_random') : t('plugin_red_packet_average')}
+                    {settings?.isRandom ? t.random() : t.average()}
                 </Typography>
             </Grid>
 
             <Grid item xs={6}>
                 <Typography variant="body1" color="textSecondary">
-                    {t('plugin_red_packet_shares')}
+                    {t.shares()}
                 </Typography>
             </Grid>
             <Grid item xs={6}>
@@ -239,7 +239,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 <>
                     <Grid item xs={6}>
                         <Typography variant="body1" color="textSecondary">
-                            {t('plugin_red_packet_amount_per_share')}
+                            {t.amount_per_share()}
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
@@ -257,7 +257,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
 
             <Grid item xs={6}>
                 <Typography variant="body1" color="textSecondary">
-                    {t('plugin_red_packet_amount_total')}
+                    {t.amount_total()}
                 </Typography>
             </Grid>
             <Grid item xs={6}>
@@ -273,21 +273,21 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             <Grid item xs={12}>
                 <Paper className={classes.hit}>
                     <Typography variant="body1" align="center" style={{ fontSize: 14, lineHeight: '20px' }}>
-                        {t('plugin_red_packet_hint')}
+                        {t.hint()}
                     </Typography>
                 </Paper>
             </Grid>
 
             <Grid item xs={6}>
                 <ActionButton disabled={isCreating} variant="contained" size="large" fullWidth onClick={onBack}>
-                    {t('plugin_red_packet_back')}
+                    {t.back()}
                 </ActionButton>
             </Grid>
             <Grid item xs={6}>
                 <ActionButton loading={isCreating} variant="contained" size="large" fullWidth onClick={createRedpacket}>
-                    {t('plugin_red_packet_send_symbol', {
+                    {t.send_symbol({
                         amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
-                        symbol: settings?.token?.symbol,
+                        symbol: settings?.token?.symbol ?? '-',
                     })}
                 </ActionButton>
             </Grid>
