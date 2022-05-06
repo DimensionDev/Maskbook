@@ -31,6 +31,15 @@ const useStyle = makeStyles()((theme) => ({
         fontSize: 16,
         cursor: 'pointer',
     },
+    badge: {
+        background: theme.palette.background.input,
+        color: theme.palette.text.strong,
+        fontSize: 10,
+        fontWeight: 700,
+        marginLeft: 12,
+        padding: '2px 4px',
+        borderRadius: 2,
+    },
 }))
 
 export interface ProfileInListProps extends withClasses<never> {
@@ -64,12 +73,15 @@ export function ProfileInList(props: ProfileInListProps) {
                     secondary: classes.overflow,
                 }}
                 primary={
-                    <Highlighter
-                        highlightClassName={classes.highlighted}
-                        searchWords={[props.search ?? '']}
-                        autoEscape
-                        textToHighlight={name}
-                    />
+                    <div className={classes.flex}>
+                        <Highlighter
+                            highlightClassName={classes.highlighted}
+                            searchWords={[props.search ?? '']}
+                            autoEscape
+                            textToHighlight={name}
+                        />
+                        {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
+                    </div>
                 }
                 secondary={
                     <div className={classes.flex}>
