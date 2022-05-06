@@ -230,20 +230,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 <div className={cx(classes.flex, classes.between)}>
                     <Typography className={classes.optionTitle}>{t('post_dialog_visible_to')}</Typography>
 
-                    {/* <ClickableChip
-                        checked={encryptionKind === 'Everyone'}
-                        disabled={everyoneDisabled || sending}
-                        label={t('post_dialog__select_recipients_share_to_everyone')}
-                        onClick={() => setEncryptionKind('Everyone')}
-                    />
-                    <ClickableChip
-                        checked={encryptionKind === 'E2E'}
-                        disabled={E2EDisabled || sending}
-                        label={t('post_dialog__select_recipients_end_to_end')}
-                        onClick={() => setEncryptionKind('E2E')}
-                    /> */}
                     <PopoverListTrigger
-                        hasPersona={false}
+                        e2eDisabled={props.e2eEncryptionDisabled}
                         selected="all"
                         renderScheme={visibilityPopperList}
                         anchorEl={visibleAnchorEl}

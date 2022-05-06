@@ -1,19 +1,15 @@
 import { useCallback } from 'react'
-import classNames from 'classnames'
-import { ListItemText, Checkbox, ListItemAvatar } from '@mui/material'
-import ListItemButton from '@mui/material/ListItemButton'
+import { ListItemText, Checkbox, ListItemAvatar, ListItem } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
-import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
 import { Avatar } from '../../../utils/components/Avatar'
 import type { CheckboxProps } from '@mui/material/Checkbox'
-import type { ListItemTypeMap } from '@mui/material/ListItem'
+import { CopyIcon } from '@masknet/icons'
 
-const useStyle = makeStyles()({
+const useStyle = makeStyles()((theme) => ({
     root: {
         maxWidth: 'calc(50% - 6px)',
-        cursor: 'pointer',
         paddingLeft: 8,
     },
     overflow: {
@@ -26,29 +22,42 @@ const useStyle = makeStyles()({
         color: 'inherit',
         fontWeight: 'bold',
     },
-})
+    flex: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    actionIcon: {
+        fontSize: 16,
+        cursor: 'pointer',
+    },
+}))
 
 export interface ProfileInListProps extends withClasses<never> {
     item: Profile
     search?: string
     checked?: boolean
     disabled?: boolean
-    onChange: (ev: React.MouseEvent<HTMLDivElement>, checked: boolean) => void
+    onChange: (ev: React.MouseEvent<HTMLButtonElement>, checked: boolean) => void
+    onCopy(v: string): void
     CheckboxProps?: Partial<CheckboxProps>
-    ListItemProps?: Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>>
 }
 export function ProfileInList(props: ProfileInListProps) {
     const classes = useStylesExtends(useStyle(), props)
     const profile = props.item
     const name = profile.nickname || profile.identifier.userId
-    const secondary = profile.fingerprint?.toLowerCase()
-    const onClick = useCallback((ev: React.MouseEvent<HTMLDivElement>) => props.onChange(ev, !props.checked), [props])
+
+    const shortStr = (v?: string) => {
+        if (!v) return ''
+        return v.slice(0, 6) + '...' + v.slice(-5)
+    }
+    const secondary = shortStr(profile.fingerprint?.toUpperCase())
+
+    const onClick = useCallback(
+        (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.checked),
+        [props],
+    )
     return (
-        <ListItemButton
-            onClick={onClick}
-            disabled={props.disabled}
-            {...props.ListItemProps}
-            className={classNames(classes.root, props.ListItemProps?.className)}>
+        <ListItem disabled={props.disabled} className={classes.root}>
             <ListItemAvatar>
                 <Avatar person={profile} />
             </ListItemAvatar>
@@ -66,15 +75,21 @@ export function ProfileInList(props: ProfileInListProps) {
                     />
                 }
                 secondary={
-                    <Highlighter
-                        highlightClassName={classes.highlighted}
-                        searchWords={[props.search ?? '']}
-                        autoEscape
-                        textToHighlight={secondary || ''}
-                    />
+                    <div className={classes.flex}>
+                        <Highlighter
+                            highlightClassName={classes.highlighted}
+                            searchWords={[props.search ?? '']}
+                            autoEscape
+                            textToHighlight={secondary || ''}
+                        />
+                        <CopyIcon
+                            className={classes.actionIcon}
+                            onClick={() => props.onCopy(profile.fingerprint?.toUpperCase() ?? '')}
+                        />
+                    </div>
                 }
             />
-            <Checkbox checked={!!props.checked} color="primary" {...props.CheckboxProps} />
-        </ListItemButton>
+            <Checkbox onClick={onClick} checked={!!props.checked} color="primary" {...props.CheckboxProps} />
+        </ListItem>
     )
 }

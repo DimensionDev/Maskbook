@@ -1,11 +1,12 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
 import { Button, DialogActions, DialogContent, InputBase } from '@mui/material'
 import Fuse from 'fuse.js'
 import { useMemo, useState } from 'react'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
+import { useCopyToClipboard } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -52,6 +53,14 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { items, disabledItems } = props
     const [search, setSearch] = useState('')
+    const [, copyToClipboard] = useCopyToClipboard()
+
+    const copyFingerprint = useSnackbarCallback({
+        executor: async (v: string) => copyToClipboard(v),
+        deps: [],
+        successText: t('public_key_copied'),
+    })
+
     const itemsAfterSearch = useMemo(() => {
         const fuse = new Fuse(items, {
             keys: ['identifier.userId', 'fingerprint', 'nickname'],
@@ -61,7 +70,9 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         })
         return search === '' ? items : fuse.search(search).map((item) => item.item)
     }, [search, items])
+
     const LIST_ITEM_HEIGHT = 56
+
     const Empty = () => <div className={classes.empty}>no result</div>
 
     return (
@@ -77,6 +88,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 <div className={classes.list}>
                     {itemsAfterSearch.map((item) => (
                         <ProfileInList
+                            onCopy={(v) => copyFingerprint(v)}
                             key={item.identifier.toText()}
                             item={item}
                             search={search}
@@ -98,14 +110,10 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             </DialogContent>
             <DialogActions sx={{ gap: '8px' }}>
                 <Button fullWidth variant="roundedFlat" disabled={props.submitDisabled} onClick={props.onSubmit}>
-                    {t('cancel')}
+                    {t('back')}
                 </Button>
-                <Button
-                    fullWidth
-                    variant="roundedContained"
-                    disabled={props.submitDisabled}
-                    onClick={() => setSearch(search)}>
-                    {t('search')}
+                <Button fullWidth variant="roundedContained" disabled={props.submitDisabled} onClick={props.onSubmit}>
+                    {t('done')}
                 </Button>
             </DialogActions>
         </InjectedDialog>

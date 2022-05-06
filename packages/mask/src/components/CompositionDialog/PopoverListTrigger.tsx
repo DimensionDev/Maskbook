@@ -3,6 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import Popover from '@mui/material/Popover'
 import { RadioGroup, Radio, Typography } from '@mui/material'
 import { useState } from 'react'
+import { DashboardRoutes } from '@masknet/shared-base'
+import Services from '../../extension/service'
 
 const useStyles = makeStyles()((theme) => ({
     popper: {
@@ -67,12 +69,12 @@ interface PopoverListItem {
     subTitle?: string
     personaRequired?: boolean
     showDivider?: boolean
-    hasPersona?: boolean
+    e2eDisabled?: number
     toShare?(): void
     setValue?(v: 'share'): void
 }
 interface PopoverListTriggerProp {
-    hasPersona?: boolean
+    e2eDisabled?: number
     anchorEl: HTMLElement | null
     setAnchorEl(v: HTMLElement | null): void
     onChange(v: string): void
@@ -83,29 +85,40 @@ interface PopoverListTriggerProp {
 }
 
 const PopoverListItem = (props: PopoverListItem) => {
-    const { title, subTitle, personaRequired, type, showDivider, hasPersona, toShare, setValue } = props
+    const { title, subTitle, personaRequired, type, showDivider, e2eDisabled, toShare, setValue } = props
     const { classes, cx } = useStyles()
     const handleItemClick = () => {
-        if (!(type === 'share' && toShare && setValue)) return
+        if (!(type === 'share' && toShare && setValue) || !!e2eDisabled) return
         setValue('share')
         toShare()
     }
+    const isDisabled = personaRequired && !!e2eDisabled
     return (
         <>
             <div
+                style={isDisabled ? { opacity: 0.5 } : {}}
                 className={type === 'share' ? cx(classes.item, classes.pointer) : classes.item}
                 onClick={handleItemClick}>
-                <Radio value={type} />
+                <Radio disabled={isDisabled} value={type} />
                 <div>
                     <Typography className={classes.mainTitle}>{title}</Typography>
                     <Typography className={classes.subTitle}>{subTitle}</Typography>
                 </div>
                 {type === 'share' && <RightArrowIcon className={classes.rightIcon} />}
             </div>
-            {personaRequired && !hasPersona && (
+            {personaRequired && e2eDisabled === 1 && (
                 <div className={classes.flex}>
                     <Typography className={classes.mainTitle}>Persona required</Typography>
-                    <Typography className={classes.create}>Create</Typography>
+                    <Typography
+                        className={classes.create}
+                        onClick={() => Services.Helper.openDashboard(DashboardRoutes.SignUp)}>
+                        Create
+                    </Typography>
+                </div>
+            )}
+            {personaRequired && e2eDisabled === 2 && (
+                <div className={classes.flex}>
+                    <Typography className={classes.mainTitle}>No Localkey</Typography>
                 </div>
             )}
             {showDivider && <div className={classes.divider} />}
@@ -118,7 +131,7 @@ export function PopoverListTrigger({
     renderScheme,
     selected,
     onChange,
-    hasPersona,
+    e2eDisabled,
     toShare,
     shareWithNum,
 }: PopoverListTriggerProp) {
@@ -166,7 +179,7 @@ export function PopoverListTrigger({
                             <PopoverListItem
                                 setValue={setSelectedValue}
                                 toShare={toShare}
-                                hasPersona={hasPersona}
+                                e2eDisabled={e2eDisabled}
                                 key={idx}
                                 type={x.type}
                                 title={x.title}
