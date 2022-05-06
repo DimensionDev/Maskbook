@@ -1,12 +1,13 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
-import { Button, DialogActions, DialogContent, InputBase } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { InjectedDialog, useSnackbarCallback, LoadingAnimation } from '@masknet/shared'
+import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
 import Fuse from 'fuse.js'
 import { useMemo, useState } from 'react'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
 import { useCopyToClipboard } from 'react-use'
+import { EmptyIcon, SearchIcon } from '@masknet/icons'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -16,7 +17,20 @@ const useStyles = makeStyles()((theme) => ({
     title: {
         marginLeft: 6,
     },
-    input: { flex: 1, width: '100%', marginLeft: 20, marginTop: theme.spacing(1) },
+    inputRoot: {
+        padding: '4px 10px',
+        marginTop: theme.spacing(1),
+        borderRadius: 8,
+        width: '100%',
+        background: theme.palette.background.input,
+        border: '1px solid transparent',
+        fontSize: 14,
+        marginBottom: 8,
+    },
+    inputFocused: {
+        background: 'none',
+        borderColor: theme.palette.text.third,
+    },
     paper: {
         height: 500,
         position: 'relative',
@@ -27,8 +41,14 @@ const useStyles = makeStyles()((theme) => ({
         left: '50%',
         transform: 'translate(-50%,-50%)',
         display: 'flex',
+        alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
+        color: theme.palette.text.secondary,
+        whiteSpace: 'nowrap',
+    },
+    mainText: {
+        color: theme.palette.text.primary,
     },
     list: {
         width: '100%',
@@ -53,11 +73,10 @@ export interface SelectRecipientsDialogUIProps extends withClasses<never> {
 }
 export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes, cx } = useStyles()
     const { items, disabledItems, onSearch } = props
     const [search, setSearch] = useState('')
     const [, copyToClipboard] = useCopyToClipboard()
-
     const copyFingerprint = useSnackbarCallback({
         executor: async (v: string) => copyToClipboard(v),
         deps: [],
@@ -74,14 +93,28 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         return search === '' ? items : fuse.search(search).map((item) => item.item)
     }, [search, items])
 
-    const LIST_ITEM_HEIGHT = 56
+    const Empty = () => (
+        <div className={classes.empty}>
+            <EmptyIcon sx={{ fontSize: 60 }} />
+            <Typography>No encrypted friends, You can try searching.</Typography>
+        </div>
+    )
 
-    const Empty = () => <div className={classes.empty}>No encrypted friends, You can try searching.</div>
+    const LoadingRender = () => (
+        <div className={cx(classes.empty, classes.mainText)}>
+            <LoadingAnimation style={{ fontSize: '2rem' }} />
+            <Typography>Loading</Typography>
+        </div>
+    )
 
     return (
         <InjectedDialog open={props.open} title={t('select_specific_friends_dialog__title')} onClose={props.onClose}>
             <DialogContent className={classes.paper}>
                 <InputBase
+                    className={classes.inputRoot}
+                    classes={{
+                        focused: classes.inputFocused,
+                    }}
                     value={search}
                     onChange={(e) => {
                         const v = e.target.value
@@ -90,11 +123,15 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                             onSearch(v)
                         }
                     }}
-                    className={classes.input}
+                    startAdornment={
+                        <InputAdornment position="start">
+                            <SearchIcon />
+                        </InputAdornment>
+                    }
                     placeholder={t('post_dialog_share_with_input_placeholder')}
                 />
                 {props.loading ? (
-                    <p>loading...</p>
+                    <LoadingRender />
                 ) : (
                     <div className={classes.list}>
                         {itemsAfterSearch.length === 0 ? <Empty /> : null}

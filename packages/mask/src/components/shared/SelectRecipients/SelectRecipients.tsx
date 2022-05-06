@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { difference } from 'lodash-unified'
-import { useI18N } from '../../../utils'
+import { cloneDeep } from 'lodash-unified'
 import { ProfileInformation as Profile, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog'
@@ -20,7 +19,6 @@ export interface SelectRecipientsUIProps {
 }
 
 export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
-    const { t } = useI18N()
     const { items, selected, onSetSelected, open, onClose } = props
     const [addressToSearch, setAddressToSearch] = useState('')
     const currentIdentity = useCurrentIdentity()
@@ -35,7 +33,6 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         ;(profileItems ?? []).push(x)
     })
 
-    console.log(profileItems, 'ggg')
     useEffect(() => void (open && items.request()), [open, items.request])
 
     return (
@@ -44,13 +41,18 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             onSearch={(v: string) => setAddressToSearch(v)}
             open={open}
             items={profileItems || EMPTY_LIST}
-            selected={profileItems?.filter((x) => selected.includes(x)) || EMPTY_LIST}
+            selected={profileItems?.filter((x) => selected.some((i) => i.identifier === x.identifier)) || EMPTY_LIST}
             disabled={false}
             submitDisabled={false}
             onSubmit={onClose}
             onClose={onClose}
             onSelect={(item) => onSetSelected([...selected, item])}
-            onDeselect={(item) => onSetSelected(difference(selected, [item]))}
+            onDeselect={(item) => {
+                const temp = cloneDeep(selected)
+                const idxToDel = temp.findIndex((x) => x.identifier === item.identifier)
+                temp.splice(idxToDel, 1)
+                onSetSelected(temp)
+            }}
         />
     )
 }
