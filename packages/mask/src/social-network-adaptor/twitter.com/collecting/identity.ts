@@ -8,6 +8,7 @@ import {
     searchSelfHandleSelector,
     searchSelfNicknameSelector,
     searchSelfAvatarSelector,
+    searchWatcherAvatarSelector,
 } from '../utils/selector'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import Services from '../../../extension/service'
@@ -19,7 +20,8 @@ function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const assign = () => {
+    const assign = async () => {
+        await delay(5000)
         const avatar = searchSelfAvatarSelector().evaluate()?.getAttribute('src') ?? ''
         const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '')
         const nickname = searchSelfNicknameSelector().evaluate()?.textContent?.trim() ?? ''
@@ -41,7 +43,7 @@ function resolveLastRecognizedIdentityInner(
                 childList: true,
                 subtree: true,
                 attributes: true,
-                attributeFilter: ['src', 'content'],
+                attributeFilter: ['src'],
             })
 
         window.addEventListener('locationchange', assign)
@@ -54,7 +56,7 @@ function resolveLastRecognizedIdentityInner(
     assign()
 
     createWatcher(searchSelfHandleSelector())
-    createWatcher(searchSelfAvatarSelector())
+    createWatcher(searchWatcherAvatarSelector())
 }
 
 function resolveLastRecognizedIdentityMobileInner(
@@ -86,7 +88,7 @@ function resolveCurrentVisitingIdentityInner(
     const avatarSelector = searchAvatarSelector()
     const avatarMetaSelector = searchAvatarMetaSelector()
     const assign = async () => {
-        await delay(500)
+        await delay(5000)
         const bio = getBio()
         const homepage = getPersonalHomepage()
         const nickname = getNickname()
