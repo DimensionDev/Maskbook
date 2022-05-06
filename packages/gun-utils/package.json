@@ -11,7 +11,7 @@
   "type": "module",
   "dependencies": {
     "event-iterator": "^2.0.0",
-    "gun": "^0.2020.1237"
+    "gun": "0.2020.1234"
   },
   "scripts": {
     "build": "node ./builder.mjs"
