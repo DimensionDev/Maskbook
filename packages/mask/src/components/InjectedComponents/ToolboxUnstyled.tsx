@@ -240,6 +240,7 @@ function useToolbox() {
                 <span style={{ marginRight: 12 }}>
                     {t('plugin_wallet_pending_transactions', {
                         count: pendingTransactions.length,
+                        plural: pendingTransactions.length > 1 ? 's' : '',
                     })}
                 </span>
                 <CircularProgress thickness={6} size={20} color="inherit" />
