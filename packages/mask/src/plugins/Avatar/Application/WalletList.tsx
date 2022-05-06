@@ -68,7 +68,7 @@ export function AddressNames(props: AddressNamesProps) {
     )
     const chainId = useChainId()
     const openPopupsWindow = useCallback(() => {
-        Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, {
+        Services.Helper.openPopupWindow(PopupRoutes.ConnectWallet, {
             chainId,
             internal: true,
         })
