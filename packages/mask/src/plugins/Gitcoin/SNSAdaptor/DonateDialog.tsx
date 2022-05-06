@@ -14,16 +14,16 @@ import {
 } from '@masknet/web3-shared-evm'
 import { DialogContent, Link, Typography } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
-import { Trans } from 'react-i18next'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { useI18N } from '../../../utils'
+import { useI18N as useBaseI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useDonateCallback } from '../hooks/useDonateCallback'
+import { Translate, useI18N } from '../locales'
 import { PluginGitcoinMessages } from '../messages'
 
 const useStyles = makeStyles()((theme) => ({
@@ -52,7 +52,8 @@ const useStyles = makeStyles()((theme) => ({
 export interface DonateDialogProps extends withClasses<never> {}
 
 export function DonateDialog(props: DonateDialogProps) {
-    const { t } = useI18N()
+    const { t: tr } = useBaseI18N()
+    const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const [title, setTitle] = useState('')
     const [address, setAddress] = useState('')
@@ -112,10 +113,11 @@ export function DonateDialog(props: DonateDialogProps) {
                   `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol}. ${
                       isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                           ? `Follow @${
-                                isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                                isTwitter(activatedSocialNetworkUI) ? tr('twitter_account') : tr('facebook_account')
                             } (mask.io) to donate Gitcoin grants.`
                           : ''
                   }`,
+                  t.promote(),
                   '#mask_io',
                   postLink,
               ].join('\n')
@@ -126,17 +128,17 @@ export function DonateDialog(props: DonateDialogProps) {
                 activatedSocialNetworkUI.utils.share?.(shareText)
             },
         })
-    }, [openShareTxDialog, token, donateCallback])
+    }, [openShareTxDialog, token, donateCallback, tr, t])
 
     // #region submit button
     const validationMessage = useMemo(() => {
-        if (!token) return t('plugin_gitcoin_select_a_token')
-        if (!account) return t('plugin_wallet_connect_a_wallet')
-        if (!address) return t('plugin_gitcoin_grant_not_available')
-        if (!amount || amount.isZero()) return t('plugin_gitcoin_enter_an_amount')
+        if (!token) return t.select_a_token()
+        if (!account) return tr('plugin_wallet_connect_a_wallet')
+        if (!address) return t.grant_not_available()
+        if (!amount || amount.isZero()) return t.enter_an_amount()
         if (amount.isGreaterThan(tokenBalance.value ?? '0'))
-            return t('plugin_gitcoin_insufficient_balance', {
-                symbol: token.symbol,
+            return t.insufficient_balance({
+                symbol: token.symbol!,
             })
         return ''
     }, [account, address, amount.toFixed(), chainId, token, tokenBalance.value ?? '0'])
@@ -164,16 +166,9 @@ export function DonateDialog(props: DonateDialogProps) {
                         />
                     </form>
                     <Typography className={classes.tip} variant="body1">
-                        <Trans
-                            i18nKey="plugin_gitcoin_readme"
+                        <Translate.gitcoin_readme
                             components={{
-                                fund: (
-                                    <Link
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        href={t('plugin_gitcoin_readme_fund_link')}
-                                    />
-                                ),
+                                fund: <Link target="_blank" rel="noopener noreferrer" href={t.readme_fund_link()} />,
                             }}
                         />
                     </Typography>
@@ -190,7 +185,7 @@ export function DonateDialog(props: DonateDialogProps) {
                                 disabled={!!validationMessage || loading}
                                 onClick={donate}
                                 variant="contained">
-                                {validationMessage || t('plugin_gitcoin_donate')}
+                                {validationMessage || t.donate()}
                             </ActionButton>
                         </EthereumERC20TokenApprovedBoundary>
                     </EthereumWalletConnectedBoundary>
