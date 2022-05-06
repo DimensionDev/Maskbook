@@ -264,15 +264,14 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })
     baseConfig.plugins!.push(
-        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', sourceMap: !!sourceMapKind, lockdown }),
-        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', sourceMap: !!sourceMapKind, lockdown }),
+        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', lockdown }),
+        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', lockdown }),
         addHTMLEntry({
             chunks: ['contentScript'],
             filename: 'generated__content__script.html',
-            sourceMap: !!sourceMapKind,
             lockdown,
         }),
-        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', sourceMap: !!sourceMapKind, lockdown }),
+        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', lockdown }),
     )
     // background
     if (runtime.manifest === 3) {
@@ -289,7 +288,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 chunks: ['background'],
                 filename: 'background.html',
                 gun: true,
-                sourceMap: !!sourceMapKind,
                 lockdown,
             }),
         )
@@ -316,7 +314,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
 }
 function addHTMLEntry(
     options: HTMLPlugin.Options & {
-        sourceMap: boolean
         gun?: boolean
         lockdown: boolean
     },
