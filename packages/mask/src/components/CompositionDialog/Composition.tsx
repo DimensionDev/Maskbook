@@ -6,12 +6,13 @@ import { MaskMessages, useI18N } from '../../utils'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRecipientsList } from './useRecipientsList'
 import { InjectedDialog } from '@masknet/shared'
-import { CompositionDialogUI, CompositionRef } from './CompositionUI'
+import { CompositionDialogUI, CompositionRef, DisabledReason as E2EUnavailableReason } from './CompositionUI'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest'
 import Services from '../../extension/service'
 import { useSubmit } from './useSubmit'
 import { useAsync } from 'react-use'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
+import { useMyPersonas } from '../DataSource/useMyPersonas'
 
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
@@ -22,7 +23,9 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { t } = useI18N()
 
     const currentIdentity = useCurrentIdentity()?.identifier
-    const hasPersona = Boolean(useCurrentIdentity()?.fingerprint)
+    const hasPersona = !!useMyPersonas().find((x) =>
+        x.linkedProfiles.some((y) => y.identifier.network === currentIdentity?.network),
+    )
     /** @deprecated */
     const { value: hasLocalKey } = useAsync(
         async () => (currentIdentity ? Services.Identity.hasLocalKey(currentIdentity) : false),
@@ -87,13 +90,17 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const UI = useRef<CompositionRef>(null)
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
+
+    let e2eEncryptionDisabled: E2EUnavailableReason | undefined = undefined
+    if (!hasPersona) e2eEncryptionDisabled = E2EUnavailableReason.NoPersona
+    else if (!hasLocalKey) e2eEncryptionDisabled = E2EUnavailableReason.NoLocalKey
+
     return (
         <DialogStackingProvider>
             <InjectedDialog keepMounted open={open} onClose={onClose} title={t('post_dialog__title')}>
                 <DialogContent sx={{ height: 500 }}>
                     <CompositionDialogUI
                         ref={UI}
-                        hasPersona={hasPersona}
                         hasClipboardPermission={hasClipboardPermission}
                         onRequestClipboardPermission={onRequestClipboardPermission}
                         requireClipboardPermission={requireClipboardPermission}
@@ -102,7 +109,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         onSubmit={onSubmit_}
                         supportImageEncoding={networkSupport?.text ?? false}
                         supportTextEncoding={networkSupport?.image ?? false}
-                        disabledRecipients={hasLocalKey === false ? 'E2E' : undefined}
+                        e2eEncryptionDisabled={e2eEncryptionDisabled}
                     />
                 </DialogContent>
             </InjectedDialog>

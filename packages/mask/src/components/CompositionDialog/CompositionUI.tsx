@@ -92,7 +92,7 @@ export interface CompositionProps {
     maxLength?: number
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
-    disabledRecipients?: undefined | 'E2E' | 'Everyone'
+    e2eEncryptionDisabled?: DisabledReason
     recipients: LazyRecipients
     // Enabled features
     supportTextEncoding: boolean
@@ -100,7 +100,6 @@ export interface CompositionProps {
     // Requirements
     requireClipboardPermission?: boolean
     hasClipboardPermission?: boolean
-    hasPersona?: boolean
     onRequestClipboardPermission?(): void
     onQueryClipboardPermission?(): void
 }
@@ -134,15 +133,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         startTransition(() => __updatePostSize(size))
     }, [])
     const { visibilityPopperList, methodsPopperList } = usePopoverListDataSource()
-    const {
-        E2EDisabled,
-        setEncryptionKind,
-        encryptionKind,
-        everyoneDisabled,
-        recipientSelectorAvailable,
-        recipients,
-        setRecipients,
-    } = useSetEncryptionKind(props)
+    const { setEncryptionKind, encryptionKind, recipientSelectorAvailable, recipients, setRecipients } =
+        useSetEncryptionKind(props)
     const { encodingKind, imagePayloadReadonly, imagePayloadSelected, imagePayloadVisible, setEncoding } =
         useEncryptionEncode(props)
 
@@ -251,7 +243,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         onClick={() => setEncryptionKind('E2E')}
                     /> */}
                     <PopoverListTrigger
-                        hasPersona={props.hasPersona}
+                        hasPersona={false}
                         selected="all"
                         renderScheme={visibilityPopperList}
                         anchorEl={visibleAnchorEl}
@@ -315,24 +307,23 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     )
 })
 
-function useSetEncryptionKind(props: Pick<CompositionProps, 'disabledRecipients' | 'recipients'>) {
-    const [encryptionKind, setEncryptionKind] = useState<'Everyone' | 'E2E'>(
-        props.disabledRecipients === 'Everyone' ? 'E2E' : 'Everyone',
-    )
+export enum DisabledReason {
+    // These reasons only applies to E2E encryption.
+    NoPersona = 1,
+    NoLocalKey = 2,
+}
+function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabled' | 'recipients'>) {
+    const [internal_encryptionKind, setEncryptionKind] = useState<'Everyone' | 'E2E'>('Everyone')
     // TODO: Change to ProfileIdentifier
     const [recipients, setRecipients] = useState<ProfileInformation[]>([])
 
-    const everyoneDisabled = props.disabledRecipients === 'Everyone'
-    const E2EDisabled = props.disabledRecipients === 'E2E'
-    const everyoneSelected = props.disabledRecipients !== 'Everyone' && (E2EDisabled || encryptionKind === 'Everyone')
+    const everyoneSelected = props.e2eEncryptionDisabled ? true : internal_encryptionKind === 'Everyone'
     const recipientSelectorAvailable = props.recipients.hasRecipients && !everyoneSelected
 
     return {
         recipients,
         setRecipients,
         recipientSelectorAvailable,
-        everyoneDisabled,
-        E2EDisabled,
         encryptionKind: everyoneSelected ? ('Everyone' as const) : ('E2E' as const),
         setEncryptionKind,
     }
