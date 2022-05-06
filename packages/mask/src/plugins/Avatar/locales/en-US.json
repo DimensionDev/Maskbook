@@ -16,7 +16,7 @@
     "persona_hint": "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe.",
     "copy_success_of_wallet_address": "Copy wallet address successfully!",
     "copied": "Copied",
-    "collectible_on_polygon": "No any collectible is available to preview. Please add your collectible here.",
+    "collectible_on_polygon": "Only NFTs on Ethereum are supported to preview. We are currently working on supporting Polygon NFTs as well.",
     "no_collectible_found": "No collectible found.",
     "retry": "Retry",
     "application_hint": "Socialize and show off your NFTs. People can bid,<br/>buy, view your valuable NFTs without leaving Twitter.",
