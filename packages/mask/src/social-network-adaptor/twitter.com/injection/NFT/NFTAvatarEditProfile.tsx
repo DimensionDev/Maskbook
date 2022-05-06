@@ -27,6 +27,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginTop: 1,
         marginRight: theme.spacing(0.5),
     },
+    text: {
+        color: theme.palette.mode === 'dark' ? '#D9D9D9' : '#0F1419',
+    },
 }))
 
 export function openNFTAvatarSettingDialog() {
@@ -56,7 +59,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const { classes } = useStyles(style)
     return (
         <>
-            <NFTAvatarButton classes={{ root: classes.root }} onClick={() => setOpen(true)} />
+            <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={() => setOpen(true)} />
             <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
         </>
     )

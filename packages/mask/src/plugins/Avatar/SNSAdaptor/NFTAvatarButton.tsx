@@ -29,11 +29,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         marginLeft: 4,
-        color: theme.palette.mode === 'dark' ? '#D9D9D9' : '#0F1419',
     },
 }))
 
-interface NFTAvatarButtonProps extends withClasses<'root'> {
+interface NFTAvatarButtonProps extends withClasses<'root' | 'text'> {
     onClick: () => void
     showSetting?: boolean
 }
