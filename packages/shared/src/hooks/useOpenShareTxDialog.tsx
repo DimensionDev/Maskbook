@@ -36,6 +36,7 @@ interface ShareTransactionOptions {
     message?: string
     content?: string
     hash: string
+    buttonLabel?: string
     // TODO Expose onShare until we have share API added our runtime
     onShare?: () => void
 }
@@ -75,7 +76,7 @@ export function useOpenShareTxDialog() {
     const showConfirm = useShowConfirm()
     const t = useSharedI18N()
 
-    return async ({ title, message, content, hash, onShare }: ShareTransactionOptions) => {
+    return async ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) => {
         let shared = false
         await showConfirm({
             title: title ?? t.share_dialog_transaction(),
@@ -86,7 +87,7 @@ export function useOpenShareTxDialog() {
                     hash={hash}
                 />
             ),
-            confirmLabel: 'Share',
+            confirmLabel: buttonLabel ?? 'Share',
             onConfirm() {
                 onShare?.()
                 shared = true

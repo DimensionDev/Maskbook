@@ -263,18 +263,18 @@ export function Trader(props: TraderProps) {
         setOpenConfirmDialog(false)
         await delay(100)
         const hash = await tradeCallback()
-        if (hash) {
-            openShareTxDialog({
-                hash,
-                onShare() {
-                    activatedSocialNetworkUI.utils.share?.(shareText)
-                },
-            })
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
-                amount: '',
-            })
-        }
+        if (!hash) return
+        openShareTxDialog({
+            hash,
+            buttonLabel: activatedSocialNetworkUI.utils.share ? 'Share' : 'Confirm',
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
+            },
+        })
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
+            amount: '',
+        })
         setTemporarySlippage(undefined)
     }, [tradeCallback, shareText])
 
