@@ -1,11 +1,27 @@
-import { AddressViewer } from '@masknet/shared'
+import { ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
-import { Box, Typography } from '@mui/material'
+import { makeStyles, ShadowRootMenu } from '@masknet/theme'
+import { AddressName, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { Button, MenuItem, Typography } from '@mui/material'
+import { first, uniqBy } from 'lodash-unified'
+import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { useI18N } from '../locales'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useDonations, useFootprints, useCurrentPersona, getKV } from './hooks'
 import { DonationPage, FootprintPage } from './pages'
+
+const useStyles = makeStyles()((theme) => ({
+    button: {
+        border: `1px solid ${theme.palette.text.primary} !important`,
+        color: `${theme.palette.text.primary} !important`,
+        borderRadius: 4,
+        background: 'transparent',
+        '&:hover': {
+            background: 'rgba(15, 20, 25, 0.1)',
+        },
+    },
+}))
 
 export enum TabCardType {
     Donation = 1,
@@ -19,16 +35,32 @@ export interface TabCardProps {
 
 export function TabCard({ type, addressNames }: TabCardProps) {
     const t = useI18N()
-    const addressName = addressNames.find((x) => x.type === AddressNameType.ADDRESS)
-    const userAddress = addressName?.resolvedAddress || ''
-    const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(userAddress)
-    const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(userAddress)
+    const { classes } = useStyles()
+
+    const [selectedAddress, setSelectedAddress] = useState(first(addressNames))
+
+    const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(
+        selectedAddress?.resolvedAddress ?? ZERO_ADDRESS,
+    )
+    const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(
+        selectedAddress?.resolvedAddress ?? ZERO_ADDRESS,
+    )
     const currentPersona = useCurrentPersona()
-    const { value } = useAsyncRetry(async () => {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+    const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
+    const onClose = () => setAnchorEl(null)
+    const onSelect = (option: AddressName) => {
+        setSelectedAddress(option)
+        onClose()
+    }
+
+    const { value: kvValue } = useAsyncRetry(async () => {
         if (!currentPersona) return
         return getKV(currentPersona?.publicKeyAsHex!)
     }, [currentPersona])
-    if (!addressName) return null
+    if (!selectedAddress) return null
+    console.log({ kvValue, donations, footprints })
 
     const isDonation = type === TabCardType.Donation
 
@@ -44,18 +76,48 @@ export function TabCard({ type, addressNames }: TabCardProps) {
     return (
         <>
             <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
-            <Box display="flex" alignItems="center" justifyContent="space-between">
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    position: 'relative',
+                }}>
                 <div>{summary}</div>
-                <AddressViewer addressName={addressName} />
-            </Box>
+                <div>
+                    <Button
+                        id="demo-positioned-button"
+                        variant="outlined"
+                        size="small"
+                        onClick={onOpen}
+                        className={classes.button}>
+                        <ReversedAddress address={selectedAddress.resolvedAddress} />
+                        <KeyboardArrowDownIcon />
+                    </Button>
+                    <ShadowRootMenu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        PaperProps={{ style: { maxHeight: 192 } }}
+                        aria-labelledby="demo-positioned-button"
+                        onClose={() => setAnchorEl(null)}>
+                        {uniqBy(addressNames ?? [], (x) => x.resolvedAddress.toLowerCase()).map((x) => {
+                            return (
+                                <MenuItem key={x.resolvedAddress} value={x.resolvedAddress} onClick={() => onSelect(x)}>
+                                    <ReversedAddress address={x.resolvedAddress} />
+                                </MenuItem>
+                            )
+                        })}
+                    </ShadowRootMenu>
+                </div>
+            </div>
             {isDonation ? (
-                <DonationPage donations={donations} loading={loadingDonations} addressLabel={addressName.label} />
+                <DonationPage donations={donations} loading={loadingDonations} addressLabel={selectedAddress.label} />
             ) : (
                 <FootprintPage
-                    address={userAddress}
+                    address={selectedAddress.resolvedAddress}
                     loading={loadingFootprints}
                     footprints={footprints}
-                    addressLabel={addressName.label}
+                    addressLabel={selectedAddress.label}
                 />
             )}
         </>

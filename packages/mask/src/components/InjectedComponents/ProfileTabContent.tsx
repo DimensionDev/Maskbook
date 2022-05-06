@@ -75,7 +75,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             })
             setAddressList([...addressNames, ...addresses])
         }
-    }, [addressNames, wallets, isOwn])
+    }, [addressNames, wallets?.length, isOwn])
     console.log({ addressList, currentConnectedPersona })
 
     const translate = usePluginI18NField()
