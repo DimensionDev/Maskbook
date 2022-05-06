@@ -1,15 +1,23 @@
 import { ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { AddressName, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { AddressName, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Button, MenuItem, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-unified'
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { useI18N } from '../locales'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { useDonations, useFootprints, useCurrentPersona, getKV } from './hooks'
+import {
+    useDonations,
+    useFootprints,
+    useCurrentPersona,
+    getKV,
+    useCurrentVisitingProfile,
+    useCollectionFilter,
+} from './hooks'
 import { DonationPage, FootprintPage } from './pages'
+import type { kvType } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -40,11 +48,12 @@ export function TabCard({ type, addressNames }: TabCardProps) {
     const [selectedAddress, setSelectedAddress] = useState(first(addressNames))
 
     const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(
-        selectedAddress?.resolvedAddress ?? ZERO_ADDRESS,
+        formatEthereumAddress(selectedAddress?.resolvedAddress ?? ZERO_ADDRESS),
     )
     const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(
-        selectedAddress?.resolvedAddress ?? ZERO_ADDRESS,
+        formatEthereumAddress(selectedAddress?.resolvedAddress ?? ZERO_ADDRESS),
     )
+    const currentVisitingProfile = useCurrentVisitingProfile()
     const currentPersona = useCurrentPersona()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -59,8 +68,21 @@ export function TabCard({ type, addressNames }: TabCardProps) {
         if (!currentPersona) return
         return getKV(currentPersona?.publicKeyAsHex!)
     }, [currentPersona])
+    const unHiddenDonations = useCollectionFilter(
+        (kvValue as kvType)?.proofs,
+        donations,
+        'Donations',
+        currentVisitingProfile,
+        selectedAddress,
+    )
+    const unHiddenFootprints = useCollectionFilter(
+        (kvValue as kvType)?.proofs,
+        footprints,
+        'Footprints',
+        currentVisitingProfile,
+        selectedAddress,
+    )
     if (!selectedAddress) return null
-    console.log({ kvValue, donations, footprints })
 
     const isDonation = type === TabCardType.Donation
 
@@ -68,7 +90,7 @@ export function TabCard({ type, addressNames }: TabCardProps) {
         isDonation && !loadingDonations ? (
             <Typography color="textPrimary" component="span">
                 {t.total_grants({
-                    count: donations.length.toString(),
+                    count: unHiddenDonations?.length.toString() ?? '0',
                 })}
             </Typography>
         ) : null
@@ -111,12 +133,16 @@ export function TabCard({ type, addressNames }: TabCardProps) {
                 </div>
             </div>
             {isDonation ? (
-                <DonationPage donations={donations} loading={loadingDonations} addressLabel={selectedAddress.label} />
+                <DonationPage
+                    donations={unHiddenDonations}
+                    loading={loadingDonations}
+                    addressLabel={selectedAddress.label}
+                />
             ) : (
                 <FootprintPage
                     address={selectedAddress.resolvedAddress}
                     loading={loadingFootprints}
-                    footprints={footprints}
+                    footprints={unHiddenFootprints}
                     addressLabel={selectedAddress.label}
                 />
             )}

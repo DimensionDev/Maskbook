@@ -1,3 +1,5 @@
+import type { NextIDPlatform } from '@masknet/shared-base'
+
 export enum PageTags {
     WalletTag = 'Wallets',
     NFTTag = 'NFTs',
@@ -47,4 +49,24 @@ export interface RSS3Profile {
 export enum AssetType {
     GitcoinDonation = 'Gitcoin-Donation',
     POAP = 'POAP',
+}
+
+export interface patch {
+    unListedCollections: Record<
+        string,
+        {
+            NFTS: string[]
+            Donations: string[]
+            Footprints: string[]
+        }
+    >
+}
+export interface kvType {
+    persona: string
+    proofs: proof[]
+}
+export interface proof {
+    platform: NextIDPlatform
+    identity: string
+    content?: Record<string, patch>
 }
