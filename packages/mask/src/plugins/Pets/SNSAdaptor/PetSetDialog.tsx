@@ -107,6 +107,8 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
 
     const user = useUser()
     const { nfts, state } = useNFTs(user, configNFTs)
+    const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
+
     const [collection, setCollection] = useState<FilterContract>(initCollection)
     const [isCollectionsError, setCollectionsError] = useState(false)
 
@@ -219,7 +221,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     <MenuItem
                         key={option.contract}
                         value={option.name}
-                        disabled={!option.tokens.length}
+                        disabled={!option.tokens.length || blacklist.includes(option.contract)}
                         className={classes.menuItem}>
                         <Box {...props} component="span" className={classes.itemFix}>
                             {renderImg(option)}

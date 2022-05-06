@@ -26,7 +26,7 @@ function useInitNFTs(config: Record<string, Constant> | undefined) {
 export function useNFTs(user: User | undefined, configNFTs: Record<string, Constant> | undefined) {
     const [nfts, setNfts] = useState<FilterContract[]>([])
     const chainId = useChainId()
-    const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
+    // const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
     // const { data: collectibles, state } = useCollectibles(user?.address ?? '', chainId)
     const { data: collectibles, state } = useCollectibles('0x141721F4D7Fd95541396E74266FF272502Ec8899', chainId)
 
@@ -34,8 +34,6 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
         const tempNFTs: FilterContract[] = []
         if (collectibles.length && (state === SocketState.done || state === SocketState.sent)) {
             for (const NFT of collectibles) {
-                if (blacklist.includes(NFT.contractDetailed.address)) continue
-
                 let sameNFT = tempNFTs.find((temp) => isSameAddress(temp.contract, NFT.contractDetailed.address))
                 if (!sameNFT) {
                     sameNFT = {
@@ -68,6 +66,11 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
                 }
             }
         }
+
+        // tempNFTs.sort(
+        //     (a: FilterContract, b: FilterContract) => blacklist.indexOf(a.contract) - blacklist.indexOf(b.contract),
+        // )
+        console.log(tempNFTs)
         setNfts(tempNFTs)
         return () => {}
     }, [JSON.stringify(user), JSON.stringify(collectibles), state])
