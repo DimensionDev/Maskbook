@@ -113,7 +113,7 @@ export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] > div')
 export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="banner"] [role="navigation"] [aria-label="Lists"] > div')
+    querySelector<E>('[role="banner"] [role="navigation"] [aria-label="Profile"] > div')
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div [role="button"][aria-label]:nth-child(6)')
 
