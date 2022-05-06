@@ -40,13 +40,11 @@ export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> 
     switchButtonStyle?: SxProps<Theme>
     children?: React.ReactNode
     isValidChainId?: (actualChainId: ChainId, expectedChainId: ChainId) => boolean
-    size?: 'small' | 'medium' | 'large'
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
 }
 
 export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const { t } = useI18N()
-    const { size = 'small' } = props
 
     const pluginID = useCurrentWeb3NetworkPluginID()
     const plugin = useActivatedPlugin(pluginID, 'any')
@@ -154,12 +152,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     const renderBox = (children?: React.ReactNode) => {
         return (
-            <Box
-                className={props.className}
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                sx={!props.disablePadding ? { paddingTop: 1, paddingBottom: 1 } : null}>
+            <Box className={props.className} display="flex" flexDirection="column" alignItems="center">
                 {children}
             </Box>
         )
@@ -172,7 +165,10 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     <span>{t('plugin_wallet_connect_wallet_tip')}</span>
                 </Typography>
                 {!props.hiddenConnectButton ? (
-                    <ActionButton size={size} sx={{ marginTop: 1.5 }} onClick={openSelectProviderDialog}>
+                    <ActionButton
+                        sx={{ marginTop: 1.5 }}
+                        onClick={openSelectProviderDialog}
+                        size={props.ActionButtonPromiseProps?.size}>
                         {t('plugin_wallet_connect_wallet')}
                     </ActionButton>
                 ) : null}
@@ -206,7 +202,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 ) : null}
                 {isAllowed ? (
                     <ActionButtonPromise
-                        size={size}
                         className={classes.switchButton}
                         sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
                         init={
@@ -246,7 +241,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             ) : null}
             {isAllowed ? (
                 <ActionButtonPromise
-                    size={size}
                     className={classes.switchButton}
                     sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
                     init={
