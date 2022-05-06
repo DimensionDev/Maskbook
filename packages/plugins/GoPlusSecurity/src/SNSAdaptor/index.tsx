@@ -12,7 +12,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <SecurityCheckerIcon />
-            const name = { i18nKey: '__plugin_name', fallback: 'Check Security' }
+            const name = { fallback: 'Check Security' }
 
             return {
                 ApplicationEntryID: base.ID,

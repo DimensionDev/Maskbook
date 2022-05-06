@@ -16,7 +16,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const name = { i18nKey: 'application_dialog_title', fallback: 'NFT PFP' }
+            const name = { fallback: 'NFT PFP' }
             const icon = <ApplicationIcon />
             return {
                 RenderEntryComponent({ disabled, tooltipHint }) {
