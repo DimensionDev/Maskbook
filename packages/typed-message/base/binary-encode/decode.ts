@@ -9,9 +9,10 @@ export function decodeTypedMessageFromDocument(bin: Uint8Array) {
     return Result.wrap(() => {
         const doc = decode(bin)
         if (!Array.isArray(doc)) throw new Error(`${HEAD}Invalid document`)
-        const [docVer, message] = doc
+        if (doc[0] === 0) return makeTypedMessageText(doc[1], decodeMetadata(doc[2]))
+        const [docVer, ...message] = doc
         if (typeof docVer !== 'number') throw new Error(`${HEAD}Invalid document`)
-        if (docVer !== 0) throw new Error(`${HEAD}Unknown document version`)
+        if (docVer !== 1) throw new Error(`${HEAD}Unknown document version`)
         const result = decodeTypedMessage(message)
         fixU8Array(result)
         return result

@@ -1,14 +1,19 @@
 import { Ok, Result } from 'ts-results'
 import type { Signature } from '..'
-import { assertArray, assertUint8Array, PayloadException } from '../types'
+import { PayloadException } from '../types'
 import { CheckedError, OptionalResult } from '@masknet/shared-base'
-import { decodeMessagePackF, encodeMessagePack } from '../utils'
+import { concatArrayBuffer } from '@dimensiondev/kit'
 
-const decode = decodeMessagePackF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
-export function encodeSignatureContainer(payload: Uint8Array, signature: Uint8Array | null) {
-    const container = [0, payload]
-    if (signature !== null) container.push(signature)
-    return encodeMessagePack(container)
+const enum SignaturePayloadFirstByte {
+    NoSignature = 0,
+    Signature = 1,
+}
+export function encodeSignatureContainer(payload: Uint8Array, signature: Uint8Array | null): Uint8Array {
+    if (signature)
+        return new Uint8Array(
+            concatArrayBuffer(new Uint8Array([SignaturePayloadFirstByte.Signature]), signature, payload),
+        )
+    return new Uint8Array(concatArrayBuffer(new Uint8Array([SignaturePayloadFirstByte.NoSignature]), payload))
 }
 export interface SignatureContainer {
     payload: Uint8Array
@@ -18,21 +23,11 @@ export interface SignatureContainer {
 export function parseSignatureContainer(
     signatureContainer: Uint8Array,
 ): Result<SignatureContainer, CheckedError<PayloadException>> {
-    return decode(signatureContainer)
-        .andThen(assertArray('SignatureContainer', PayloadException.InvalidPayload))
-        .andThen(([version, rawPayload, rawSignature]) => {
-            if (version !== 0)
-                return new CheckedError(PayloadException.UnknownVersion, 'Unknown Signature container version').toErr()
-            return assertUint8Array(rawPayload, 'SignatureContainer[1]', PayloadException.InvalidPayload).andThen(
-                (payload) => {
-                    if (!rawSignature) return Ok({ payload, signature: OptionalResult.None })
-                    const signature = assertUint8Array(
-                        rawSignature,
-                        'SignatureContainer[2]',
-                        PayloadException.InvalidPayload,
-                    ).andThen((sig) => OptionalResult.Some<Signature>({ signature: sig, signee: payload }))
-                    return Ok({ payload, signature })
-                },
-            )
-        })
+    if (signatureContainer[0] === SignaturePayloadFirstByte.NoSignature) {
+        return Ok({ payload: signatureContainer.slice(1), signature: OptionalResult.None })
+    } else if (signatureContainer[0] === SignaturePayloadFirstByte.Signature) {
+        const signature = signatureContainer.slice(1, 33)
+        const payload = signatureContainer.slice(33)
+        return Ok({ payload, signature: OptionalResult.Some<Signature>({ signature, signee: payload }) })
+    } else return new CheckedError(PayloadException.InvalidPayload, 'Invalid signature container').toErr()
 }
