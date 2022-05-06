@@ -25,7 +25,7 @@
     "react-feather": "^2.0.9",
     "react-use": "^17.3.2",
     "urlcat": "^2.0.4",
-    "use-subscription": "^1.6.0"
+    "use-subscription": "^1.7.0"
   },
   "devDependencies": {
     "@types/qrcode": "^1.4.2"

@@ -35,7 +35,7 @@
     "@msgpack/msgpack": "^2.7.2",
     "@servie/events": "^3.0.0",
     "@types/color": "^3.0.3",
-    "@types/react-avatar-editor": "^10.3.6",
+    "@types/react-avatar-editor": "^12.0.0",
     "async-call-rpc": "^6.0.2",
     "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",
@@ -53,7 +53,7 @@
     "react-use": "^17.3.2",
     "unstated-next": "^1.1.0",
     "urlcat": "^2.0.4",
-    "use-subscription": "^1.6.0",
+    "use-subscription": "^1.7.0",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
     "web3-core-helpers": "1.7.3",
@@ -61,7 +61,7 @@
     "zod": "^3.14.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.9",
+    "@babel/core": "^7.17.10",
     "@storybook/addon-actions": "^6.4.22",
     "@storybook/addon-essentials": "^6.4.22",
     "@storybook/addon-links": "^6.4.22",
