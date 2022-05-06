@@ -18,6 +18,7 @@ const useStyles = makeStyles()(() => ({
         rowGap: 12,
         flex: 1,
         backgroundColor: '#F7F9FA',
+        overflow: 'scroll',
     },
     loading: {
         flex: 1,
