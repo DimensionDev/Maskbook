@@ -42,12 +42,10 @@ const Accounts = memo(() => {
 
     const definedSocialNetworks = compact(
         getEnumAsArray(EnhanceableSite).map((x) => {
-            if (x.value === EnhanceableSite.Localhost) return null
+            if (x.value === EnhanceableSite.Localhost || x.value === EnhanceableSite.OpenSea) return null
             return x.value
         }),
     )
-
-    console.log(definedSocialNetworks)
 
     const [, onConnect] = useAsyncFn(
         async (networkIdentifier: EnhanceableSite) => {

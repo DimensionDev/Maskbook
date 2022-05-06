@@ -42,11 +42,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         DEFAULT_SUPPORTED_TWITTER_IDS,
                     ).get()
 
-                    return (
-                        !identity?.identifier.isUnknown &&
-                        (daoTabTwitterIdList ?? []).some(
-                            (x) => x.toLowerCase() === identity?.identifier.userId.toLowerCase(),
-                        )
+                    if (!identity?.identifier) return false
+                    return (daoTabTwitterIdList ?? []).some(
+                        (x) => x.toLowerCase() === identity?.identifier?.userId.toLowerCase(),
                     )
                 },
             },

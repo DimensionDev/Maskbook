@@ -2,7 +2,6 @@ import { sha3, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Transaction, TransactionConfig, TransactionReceipt } from 'web3-core'
 import {
-    isSameAddress,
     TransactionState,
     TransactionStateType,
     TransactionStatusType,
@@ -59,7 +58,6 @@ export function getReceiptStatus(receipt: TransactionReceipt | null) {
     const status = receipt.status as unknown as string
     if (receipt.status === false || ['0', '0x', '0x0'].includes(status)) return TransactionStatusType.FAILED
     if (receipt.status === true || ['1', '0x1'].includes(status)) {
-        if (isSameAddress(receipt.from, receipt.to)) return TransactionStatusType.CANCELLED
         return TransactionStatusType.SUCCEED
     }
     return TransactionStatusType.NOT_DEPEND
@@ -86,12 +84,6 @@ export function getTransactionState(receipt: TransactionReceipt): TransactionSta
                     type: TransactionStateType.FAILED,
                     receipt,
                     error: new Error('Invalid transaction status.'),
-                }
-            case TransactionStatusType.CANCELLED:
-                return {
-                    type: TransactionStateType.FAILED,
-                    receipt,
-                    error: new Error('CANCELLED'),
                 }
             default:
                 unreachable(status)

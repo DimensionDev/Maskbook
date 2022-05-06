@@ -1,12 +1,12 @@
 import { useRef } from 'react'
 import { useAsyncRetry, useUpdateEffect } from 'react-use'
 import { last } from 'lodash-unified'
-import type { PostRecord } from '@masknet/shared-base'
+import type { PostInformation } from '@masknet/shared-base'
 import { Services } from '../../../API'
 import { PersonaContext } from './usePersonaContext'
 
 export const usePostHistory = (network: string, page: number, size = 20) => {
-    const cache = useRef<Map<number, PostRecord | undefined>>(new Map([]))
+    const cache = useRef<Map<number, PostInformation | undefined>>(new Map([]))
     const { currentPersona } = PersonaContext.useContainer()
 
     useUpdateEffect(() => {

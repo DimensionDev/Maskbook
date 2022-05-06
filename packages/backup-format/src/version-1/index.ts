@@ -7,7 +7,6 @@ import {
     isEC_Public_JsonWebKey,
     isAESJsonWebKey,
     ProfileIdentifier,
-    IdentifierMap,
 } from '@masknet/shared-base'
 import { isObjectLike } from 'lodash-unified'
 import { None, Some } from 'ts-results'
@@ -39,8 +38,9 @@ export function normalizeBackupVersion1(file: BackupJSONFileVersion1): Normalize
 
     const { whoami, people } = file
     for (const { network, publicKey, userId, nickname, localKey, privateKey } of [...whoami, ...(people || [])]) {
+        const identifier = ProfileIdentifier.of(network, userId).unwrap()
         const profile: NormalizedBackup.ProfileBackup = {
-            identifier: new ProfileIdentifier(network, userId),
+            identifier,
             nickname: nickname ? Some(nickname) : None,
             createdAt: None,
             updatedAt: None,
@@ -53,7 +53,7 @@ export function normalizeBackupVersion1(file: BackupJSONFileVersion1): Normalize
             const persona: NormalizedBackup.PersonaBackup = backup.personas.get(personaID) || {
                 identifier: personaID,
                 nickname: None,
-                linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier),
+                linkedProfiles: new Map(),
                 publicKey,
                 privateKey: None,
                 localKey: None,

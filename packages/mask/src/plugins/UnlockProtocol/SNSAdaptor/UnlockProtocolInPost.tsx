@@ -31,7 +31,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                         if (!res) return
                         const requestData = {
                             lock: locks.unlocklock,
-                            address: address,
+                            address,
                             chain: locks.chainid,
                             identifier: metadata.val.iv,
                         }

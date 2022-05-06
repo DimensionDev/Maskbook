@@ -1,10 +1,11 @@
 import { memo, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     EthereumRpcType,
+    EthereumTokenType,
     formatBalance,
     formatCurrency,
     formatGweiToWei,
@@ -13,6 +14,7 @@ import {
     isEIP1559Supported,
     useChainId,
     useERC20TokenDetailed,
+    useEthereumTokenType,
     useNativeTokenDetailed,
     useNetworkType,
 } from '@masknet/web3-shared-evm'
@@ -29,7 +31,7 @@ import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Walle
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { toHex } from 'web3-utils'
 import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import { isGreaterThan, leftShift, pow10 } from '@masknet/web3-shared-base'
+import { isGreaterThan, leftShift, pow10, ZERO } from '@masknet/web3-shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useTitle } from '../../../hook/useTitle'
 
@@ -159,6 +161,7 @@ const ContractInteraction = memo(() => {
         maxPriorityFeePerGas,
         amount,
         isNativeTokenInteraction,
+        contractAddress,
     } = useMemo(() => {
         const type = request?.computedPayload?.type
         if (!type) return {}
@@ -190,6 +193,7 @@ const ContractInteraction = memo(() => {
                             maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
                             maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
                             amount: request.computedPayload.parameters?.value,
+                            contractAddress: request.computedPayload._tx.to,
                         }
                     default:
                         return {
@@ -230,6 +234,8 @@ const ContractInteraction = memo(() => {
                 unreachable(type)
         }
     }, [request, t])
+
+    const contractType = useEthereumTokenType(contractAddress)
 
     // token detailed
     const { value: nativeToken } = useNativeTokenDetailed()
@@ -289,9 +295,12 @@ const ContractInteraction = memo(() => {
     // token estimated value
     const tokenPrice = useTokenPrice(chainId, !isNativeTokenInteraction ? token?.address : undefined)
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
-    const tokenValueUSD = leftShift(tokenAmount, tokenDecimals)
-        .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
-        .toString()
+    const tokenValueUSD =
+        contractType && [EthereumTokenType.ERC721, EthereumTokenType.ERC1155].includes(contractType)
+            ? ZERO
+            : leftShift(tokenAmount, tokenDecimals)
+                  .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
+                  .toString()
 
     const totalUSD = new BigNumber(formatWeiToEther(gasFee)).times(nativeTokenPrice).plus(tokenValueUSD).toString()
     //
