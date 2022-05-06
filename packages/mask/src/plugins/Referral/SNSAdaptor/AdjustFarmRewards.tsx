@@ -157,9 +157,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
         const depositValue = Number.parseFloat(totalFarmReward) + attraceFee
 
         adjustFarmRewards(
-            (val: boolean) => {
-                val && onConfirmAdjustFarm()
-            },
+            onConfirmAdjustFarm,
             onErrorDeposit,
             onConfirmedAdjustFarm,
             web3,

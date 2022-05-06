@@ -1,28 +1,12 @@
 import { useAsync } from 'react-use'
-import {
-    useAccount,
-    useChainId,
-    useTokenListConstants,
-    useNativeTokenDetailed,
-    ERC20TokenDetailed,
-    ChainId,
-} from '@masknet/web3-shared-evm'
-import { formatUnits } from '@ethersproject/units'
+import { useAccount, useChainId, useTokenListConstants } from '@masknet/web3-shared-evm'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Grid, Typography, CircularProgress, Box, Button } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../../../utils'
-import {
-    FarmDepositChangeEvent,
-    FarmExistsEvent,
-    PageInterface,
-    PagesType,
-    TabsReferralFarms,
-    AdjustFarmRewards,
-} from '../types'
-import { toNativeRewardTokenDefn, parseChainAddress, getRequiredChainId } from '../helpers'
-import { fetchERC20TokensFromTokenListsMap } from './utils/tokenLists'
+import { PageInterface, PagesType, TabsReferralFarms, FarmDetailed } from '../types'
+import { getRequiredChainId } from '../helpers'
 import { ReferralRPC } from '../messages'
 
 import { AccordionFarm } from './shared-ui/AccordionFarm'
@@ -43,49 +27,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Farm extends FarmExistsEvent {
-    totalFarmRewards?: number
-    dailyFarmReward?: number
-    apr?: number
-}
-function groupDepositForFarms(
-    myFarms: FarmExistsEvent[],
-    farmsDeposits: FarmDepositChangeEvent[],
-    allTokens?: Map<string, ERC20TokenDetailed>,
-) {
-    const farms: Farm[] = []
-    const farmTotalDepositMap = new Map<string, number>()
-    const allFarmsMap = new Map(myFarms.map((farm) => [farm.farmHash, farm]))
-
-    farmsDeposits.forEach((deposit) => {
-        const { farmHash, delta } = deposit
-        const prevFarmState = farmTotalDepositMap.get(farmHash) || 0
-        const farm = allFarmsMap.get(farmHash)
-        const rewardTokenAddr = farm?.rewardTokenDefn && parseChainAddress(farm.rewardTokenDefn).address
-        const rewardTokenDec = rewardTokenAddr ? allTokens?.get(rewardTokenAddr)?.decimals : 18
-        const totalFarmRewards = prevFarmState + Number.parseFloat(formatUnits(delta, rewardTokenDec))
-        farmTotalDepositMap.set(farmHash, totalFarmRewards)
-    })
-
-    myFarms.forEach((farm) => {
-        farms.push({ totalFarmRewards: farmTotalDepositMap.get(farm.farmHash) || 0, ...farm })
-    })
-
-    return farms
-}
-
 type FarmListProps = {
-    chainId: ChainId
-    farms: Farm[]
+    farms: FarmDetailed[]
     loading: boolean
-    allTokens?: Map<string, ERC20TokenDetailed>
-    onAdjustRewardButtonClick: (props: AdjustFarmRewards) => void
+    onAdjustRewardButtonClick: (farm: FarmDetailed) => void
 }
-function FarmList({ chainId, loading, farms, onAdjustRewardButtonClick, allTokens }: FarmListProps) {
+function FarmList({ loading, farms, onAdjustRewardButtonClick }: FarmListProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { classes: myFarmsClasses } = useMyFarmsStyles()
-    const { value: nativeToken } = useNativeTokenDetailed()
 
     if (loading) return <CircularProgress size={50} />
 
@@ -95,17 +45,11 @@ function FarmList({ chainId, loading, farms, onAdjustRewardButtonClick, allToken
     return (
         <>
             {farms.map((farm) => {
-                const rewardToken =
-                    farm.rewardTokenDefn === toNativeRewardTokenDefn(chainId)
-                        ? nativeToken
-                        : allTokens?.get(parseChainAddress(farm.rewardTokenDefn).address)
-                const referredToken = allTokens?.get(parseChainAddress(farm.referredTokenDefn).address)
-
                 return (
                     <AccordionFarm
                         key={farm.farmHash}
-                        rewardToken={rewardToken}
-                        referredToken={referredToken}
+                        rewardToken={farm.rewardToken}
+                        referredToken={farm.referredToken}
                         totalValue={Number.parseFloat(farm?.totalFarmRewards?.toFixed(5) ?? '0')}>
                         <Box display="flex" justifyContent="flex-end">
                             <Button variant="text" disabled classes={{ disabled: classes.viewStatsDisabled }}>
@@ -123,7 +67,7 @@ function FarmList({ chainId, loading, farms, onAdjustRewardButtonClick, allToken
                                 variant="contained"
                                 size="medium"
                                 onClick={() => {
-                                    onAdjustRewardButtonClick({ farm, rewardToken, referredToken })
+                                    onAdjustRewardButtonClick(farm)
                                 }}>
                                 {t('plugin_referral_adjust_rewards')}
                             </Button>
@@ -137,7 +81,6 @@ function FarmList({ chainId, loading, farms, onAdjustRewardButtonClick, allToken
 
 export function CreatedFarms(props: PageInterface) {
     const { t } = useI18N()
-    const { classes } = useStyles()
     const { classes: sharedClasses } = useSharedStyles()
     const { classes: myFarmsClasses } = useMyFarmsStyles()
     const currentChainId = useChainId()
@@ -145,27 +88,12 @@ export function CreatedFarms(props: PageInterface) {
     const account = useAccount()
     const { ERC20 } = useTokenListConstants()
 
-    const { value: allTokens, loading: loadingAllTokens } = useAsync(
-        async () =>
-            !ERC20 || ERC20.length === 0 ? undefined : fetchERC20TokensFromTokenListsMap(ERC20, currentChainId),
-        [currentChainId, ERC20],
+    const { value: farms = EMPTY_LIST, loading } = useAsync(
+        async () => (account ? ReferralRPC.getAccountFarms(account, currentChainId, ERC20) : []),
+        [currentChainId, account, ERC20],
     )
 
-    // fetch my farms
-    const { value: myFarms = EMPTY_LIST, loading: loadingMyFarms } = useAsync(
-        async () => ReferralRPC.getMyFarms(account, currentChainId),
-        [currentChainId, account],
-    )
-
-    // fetch all deposits
-    const { value: farmsDeposits = EMPTY_LIST, loading: loadingFarmsDeposits } = useAsync(
-        async () => ReferralRPC.getFarmsDeposits(currentChainId),
-        [currentChainId],
-    )
-
-    const farms = groupDepositForFarms(myFarms, farmsDeposits, allTokens)
-
-    const onAdjustRewardButtonClick = ({ farm, rewardToken, referredToken }: AdjustFarmRewards) => {
+    const onAdjustRewardButtonClick = (farm: FarmDetailed) => {
         props.continue(
             PagesType.CREATE_FARM,
             PagesType.ADJUST_REWARDS,
@@ -173,8 +101,8 @@ export function CreatedFarms(props: PageInterface) {
             {
                 adjustFarmDialog: {
                     farm,
-                    rewardToken,
-                    referredToken,
+                    rewardToken: farm.rewardToken,
+                    referredToken: farm.referredToken,
                     continue: () => {},
                 },
             },
@@ -205,13 +133,7 @@ export function CreatedFarms(props: PageInterface) {
                 </Grid>
             </Grid>
             <div className={myFarmsClasses.content}>
-                <FarmList
-                    chainId={currentChainId}
-                    loading={loadingMyFarms || loadingFarmsDeposits || loadingAllTokens}
-                    farms={farms}
-                    allTokens={allTokens}
-                    onAdjustRewardButtonClick={onAdjustRewardButtonClick}
-                />
+                <FarmList loading={loading} farms={farms} onAdjustRewardButtonClick={onAdjustRewardButtonClick} />
             </div>
         </div>
     )

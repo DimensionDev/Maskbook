@@ -36,7 +36,7 @@ export function RewardDataWidget({ title, icon, rewardData, tokenSymbol }: Rewar
                 <Typography fontWeight={600} marginTop="4px">
                     {rewardData ? (
                         <>
-                            {Number.parseFloat(rewardData.dailyReward.toFixed(5))} {tokenSymbol ?? '-'}
+                            {Number.parseFloat(rewardData.dailyReward.toFixed(4))} {tokenSymbol ?? '-'}
                         </>
                     ) : (
                         '-'
@@ -48,7 +48,7 @@ export function RewardDataWidget({ title, icon, rewardData, tokenSymbol }: Rewar
                 <Typography fontWeight={600} marginTop="4px">
                     {rewardData ? (
                         <>
-                            {Number.parseFloat(rewardData.totalReward.toFixed(5))} {tokenSymbol ?? '-'}
+                            {Number.parseFloat(rewardData.totalReward.toFixed(4))} {tokenSymbol ?? '-'}
                         </>
                     ) : (
                         '-'

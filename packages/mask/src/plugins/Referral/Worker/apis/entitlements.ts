@@ -13,7 +13,7 @@ enum ORACLE_CHAIN_ID {
 
 const PeriodEntitlement = 'PeriodEntitlement'
 const eventsPeriodEntitlement = new Interface([
-    `event ${PeriodEntitlement}(bytes32 indexed farmHash, address indexed entitlee, uint128 period, uint64 nonce, uint128 rewardValue, bytes32[] proof)`,
+    `event ${PeriodEntitlement}(bytes32 indexed farmHash, address indexed entitlee, uint128 period, uint128 rewardValue, bytes32[] proof)`,
 ])
 const eventIdsPeriodEntitlement: any = {}
 Object.entries(eventsPeriodEntitlement.events).forEach(([k, v]) => (eventIdsPeriodEntitlement[v.name] = keccak256(k)))

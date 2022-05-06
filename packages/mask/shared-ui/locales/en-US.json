@@ -1115,6 +1115,9 @@
     "plugin_referral": "Referral Farms",
     "plugin_referral_powered_by": "Powered by",
     "plugin_referral_create_by": "Created by",
+    "plugin_referral_tab_new": "New",
+    "plugin_referral_tab_created": "Created",
+    "plugin_referral_tab_my_rewards": "My Rewards",
     "plugin_referral_referral_farming": "Referral Farming",
     "plugin_referral_referral_farms_short_desc": " distributes yield farming alike returns for successful referrals",
     "plugin_referral_how_it_works": "How it Works",
@@ -1146,11 +1149,14 @@
     "plugin_referral_transaction_complete_signature_request": "Complete signature request",
     "plugin_referral_transaction_sign_the_message_to_register_address_for_rewards": "Sign the message to register your address for rewards",
     "plugin_referral_token_to_refer": "Token to Refer",
+    "plugin_referral_reward_token": "Reward Token",
     "plugin_referral_sponsored_referral_farm_desc": "rewards in tokens chosen by the sponsor",
     "plugin_referral_select_a_token_to_refer": "Select a Token to Refer",
+    "plugin_referral_select_a_reward_token": "Select a Reward Token",
     "plugin_referral_token": "Token",
     "plugin_referral_search_placeholder_token": "Token name or contract address",
     "plugin_referral_placeholder_loading": "Loading",
+    "plugin_referral_placeholder_no_farms": "There are no any farms yet.",
     "plugin_referral_select_a_token_to_buy_and_hold": "Select a Token to Buy & Hold via Referral",
     "plugin_referral_token_to_buy_and_hold": "Token to Buy & Hold via Referral",
     "plugin_referral_select_a_token_to_buy_and_hold_and_earn_rewards": "Select a token to Buy & Hold and earn rewards!",
@@ -1184,5 +1190,6 @@
     "plugin_referral_error_token_not_select": "Token didn't select",
     "plugin_referral_error_native_token_farm": "Cannot create farm with native token.",
     "plugin_referral_buy_and_hold_referral": "Buy & Hold Referral",
-    "plugin_referral_error_insufficient_balance": "Insufficient {{symbol}} balance"
+    "plugin_referral_error_insufficient_balance": "Insufficient {{symbol}} balance",
+    "plugin_referral_reward_tokens": "Reward Tokens"
 }

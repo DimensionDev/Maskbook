@@ -70,3 +70,37 @@ export const useMyFarmsStyles = makeStyles()((theme) => ({
         fontWeight: 500,
     },
 }))
+
+export const useStylesAccordion = makeStyles()((theme) => {
+    const isDarkMode = theme.palette.mode === 'dark'
+    return {
+        accordion: {
+            marginBottom: '20px',
+            width: '100%',
+            background: 'transparent',
+            ':first-of-type': {
+                borderRadius: 0,
+            },
+            ':before': {
+                height: 0,
+                opacity: 0,
+            },
+        },
+        accordionSummary: {
+            margin: 0,
+            padding: 0,
+        },
+        accordionSummaryContent: {
+            margin: '0px!important',
+        },
+        accordionDetails: {
+            marginTop: '8px',
+            padding: '8px',
+            background: isDarkMode ? '#15171A' : theme.palette.background.default,
+            borderRadius: '4px',
+        },
+        container: {
+            fontWeight: 400,
+        },
+    }
+})

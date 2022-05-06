@@ -1,5 +1,5 @@
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import type { FarmExists, FarmDepositChange } from '@masknet/web3-contracts/types/ReferralFarmsV1'
+import type { FarmExists, FarmDepositChange, FarmMetastate } from '@masknet/web3-contracts/types/ReferralFarmsV1'
 import type { BigNumberish } from '@ethersproject/bignumber'
 
 export enum TokenType {
@@ -30,7 +30,7 @@ export enum TabsCreateFarm {
 
 export enum TabsReferAndBuy {
     NEW = 'New',
-    MY_FARMS = 'My Farms',
+    MY_REWARDS = 'My Rewards',
 }
 export interface PageHistory {
     page: PagesType
@@ -165,6 +165,13 @@ export type FarmExistsEvent = Pick<
     'farmHash' | 'sponsor' | 'referredTokenDefn' | 'rewardTokenDefn'
 >
 export type FarmDepositChangeEvent = Pick<FarmDepositChange['returnValues'], 'farmHash' | 'delta'>
+export type FarmMetastateEvent = Pick<FarmMetastate['returnValues'], 'farmHash' | 'key' | 'value'>
+
+export interface FarmMetaDataEvent extends FarmDepositChangeEvent, FarmMetastateEvent {}
+export interface FarmMetaDataLog {
+    args: FarmMetaDataEvent
+    topic: string
+}
 
 export interface RewardsHarvested {
     farmHash: FarmHash
@@ -180,10 +187,14 @@ export interface Farm extends FarmExistsEvent {
     dailyFarmReward: number
 }
 
+export interface FarmDetailed extends Farm {
+    rewardToken?: FungibleTokenDetailed
+    referredToken?: FungibleTokenDetailed
+}
+
 export interface Entitlement {
     entitlee: EvmAddress
     farmHash: FarmHash
-    nonce: BigNumberish
     period: BigNumberish
     proof: string[]
     rewardValue: BigNumberish
@@ -194,6 +205,8 @@ export interface Reward extends Entitlement {}
 export interface RewardDetailed extends Reward {
     rewardTokenDefn?: ChainAddress
     referredTokenDefn?: ChainAddress
+    rewardToken?: FungibleTokenDetailed
+    referredToken?: FungibleTokenDetailed
     claimed: boolean
 }
 
@@ -205,6 +218,7 @@ export interface RewardData {
     apr: number
     dailyReward: number
     totalReward: number
+    rewardToken?: FungibleTokenDetailed
 }
 
 // apis

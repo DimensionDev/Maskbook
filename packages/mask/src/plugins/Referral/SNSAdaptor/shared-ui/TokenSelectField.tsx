@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, CSSProperties } from 'react'
 import { TextField, InputAdornment } from '@mui/material'
 import { ChevronDown } from 'react-feather'
 import type { EthereumTokenDetailedType, EthereumTokenType } from '@masknet/web3-shared-evm'
@@ -28,10 +28,11 @@ interface TokenSelectField {
     label: string
     token?: EthereumTokenDetailedType<EthereumTokenType.Native | EthereumTokenType.ERC20>
     disabled?: boolean
+    style?: CSSProperties
     onClick: () => void
 }
 
-export function TokenSelectField({ label, token, disabled, onClick }: TokenSelectField) {
+export function TokenSelectField({ label, token, disabled, style, onClick }: TokenSelectField) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -42,7 +43,7 @@ export function TokenSelectField({ label, token, disabled, onClick }: TokenSelec
     }, [disabled])
 
     return (
-        <button onClick={handleClick} className={classes.button}>
+        <button onClick={handleClick} className={classes.button} style={style}>
             <TextField
                 label={label}
                 value={token?.symbol ?? ''}

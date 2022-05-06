@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 import { formatUnits } from '@ethersproject/units'
 import BigNumber from 'bignumber.js'
-import { useWeb3, ERC20TokenDetailed, useNativeTokenDetailed, type ChainId } from '@masknet/web3-shared-evm'
+import { useWeb3, type ChainId } from '@masknet/web3-shared-evm'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Typography, Button, Box } from '@mui/material'
 
 import { useI18N } from '../../../../utils'
-import { toNativeRewardTokenDefn, parseChainAddress, roundValue } from '../../helpers'
+import { roundValue } from '../../helpers'
 import { harvestRewards } from '../utils/referralFarm'
 import {
     PagesType,
@@ -17,28 +17,26 @@ import {
     ChangePage,
 } from '../../types'
 
-import { AccordionFarm } from '../shared-ui/AccordionFarm'
+import { AccordionReward } from './AccordionReward'
+import { ReferredTokenRewards } from './ReferredTokenRewards'
 
-interface FarmListProps {
+interface RewardsProps {
     currentChainId: ChainId
     account: string
     rewards: AccountRewards
-    allTokens?: Map<string, ERC20TokenDetailed>
     pageType?: PagesType
     onChangePage?: ChangePage
 }
 
-export function FarmList({
+export function Rewards({
     currentChainId,
     account,
     rewards,
-    allTokens,
     pageType = PagesType.REFERRAL_FARMS,
     onChangePage,
-}: FarmListProps) {
+}: RewardsProps) {
     const { t } = useI18N()
     const web3 = useWeb3({ chainId: currentChainId })
-    const { value: nativeToken } = useNativeTokenDetailed()
     const { showSnackbar } = useCustomSnackbar()
 
     const onStartHarvestRewards = useCallback(
@@ -96,7 +94,6 @@ export function FarmList({
             rewardTokenSymbol?: string,
         ) => {
             const rewardsClaimable = rewards.filter((reward) => !reward.claimed)
-
             harvestRewards(
                 onConfirmHarvestRewards,
                 () => onStartHarvestRewards(totalRewards, rewardTokenSymbol),
@@ -120,41 +117,37 @@ export function FarmList({
                     return accumulator.plus(new BigNumber(current.claimed ? formatUnits(current.rewardValue) : 0))
                 }, new BigNumber(0))
                 const claimable = totalRewards.minus(claimed).toNumber()
+                const rewardToken = rewardTokenRewards[0].rewardToken
 
-                const nativeRewardToken = toNativeRewardTokenDefn(currentChainId)
-                const rewardToken =
-                    rewardTokenDefn === nativeRewardToken
-                        ? nativeToken
-                        : allTokens?.get(parseChainAddress(rewardTokenDefn).address)
-
-                // TODO: change when we will support case: rewardTokenDefn !== referredTokenDefn
                 return (
-                    <AccordionFarm
+                    <AccordionReward
                         key={rewardTokenDefn}
                         rewardToken={rewardToken}
-                        referredToken={rewardToken}
                         totalValue={totalRewards.toNumber()}>
-                        <Box display="flex" justifyContent="flex-end">
-                            <Typography display="flex" alignItems="center" marginRight="20px" fontWeight={600}>
-                                <span style={{ marginRight: '4px' }}>{t('plugin_referral_claimable')}:</span>{' '}
-                                {roundValue(claimable, rewardToken?.decimals)} {rewardToken?.symbol}
-                            </Typography>
-                            <Button
-                                disabled={claimable <= 0}
-                                variant="contained"
-                                size="medium"
-                                onClick={() =>
-                                    onHarvestRewards(
-                                        rewardTokenRewards,
-                                        totalRewards.toNumber(),
-                                        rewardTokenDefn,
-                                        rewardToken?.symbol,
-                                    )
-                                }>
-                                {t('plugin_referral_harvest_rewards')}
-                            </Button>
+                        <Box display="flex" flexDirection="column">
+                            <ReferredTokenRewards rewards={rewardTokenRewards} />
+                            <Box display="flex" justifyContent="flex-end" marginTop="4px">
+                                <Typography display="flex" alignItems="center" marginRight="20px" fontWeight={600}>
+                                    <span style={{ marginRight: '4px' }}>{t('plugin_referral_claimable')}:</span>{' '}
+                                    {roundValue(claimable, rewardToken?.decimals)} {rewardToken?.symbol}
+                                </Typography>
+                                <Button
+                                    disabled={claimable <= 0}
+                                    variant="contained"
+                                    size="medium"
+                                    onClick={() =>
+                                        onHarvestRewards(
+                                            rewardTokenRewards,
+                                            totalRewards.toNumber(),
+                                            rewardTokenDefn,
+                                            rewardToken?.symbol,
+                                        )
+                                    }>
+                                    {t('plugin_referral_harvest_rewards')}
+                                </Button>
+                            </Box>
                         </Box>
-                    </AccordionFarm>
+                    </AccordionReward>
                 )
             })}
         </>

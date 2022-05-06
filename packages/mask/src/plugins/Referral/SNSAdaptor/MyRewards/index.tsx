@@ -5,15 +5,14 @@ import { Grid, Typography, CircularProgress } from '@mui/material'
 import { useI18N } from '../../../../utils'
 import { getRequiredChainId } from '../../helpers'
 import type { PageInterface } from '../../types'
-import { fetchERC20TokensFromTokenListsMap } from '../utils/tokenLists'
 import { ReferralRPC } from '../../messages'
 
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
-import { FarmList } from './farmList'
+import { Rewards } from './Rewards'
 
 import { useSharedStyles, useMyFarmsStyles } from '../styles'
 
-export function MyFarms(props: PageInterface) {
+export function MyRewards(props: PageInterface) {
     const { t } = useI18N()
     const { classes: sharedClasses } = useSharedStyles()
     const { classes: myFarmsClasses } = useMyFarmsStyles()
@@ -22,15 +21,9 @@ export function MyFarms(props: PageInterface) {
     const account = useAccount()
     const { ERC20 } = useTokenListConstants()
 
-    const { value: rewards, loading: loadingRewards } = useAsync(
-        async () => account && ReferralRPC.getAccountRewards(account, currentChainId),
-        [account, currentChainId],
-    )
-
-    const { value: allTokens, loading: loadingAllTokens } = useAsync(
-        async () =>
-            !ERC20 || ERC20.length === 0 ? undefined : fetchERC20TokensFromTokenListsMap(ERC20, currentChainId),
-        [currentChainId, ERC20],
+    const { value: rewards, loading } = useAsync(
+        async () => account && ERC20 && ReferralRPC.getAccountRewards(account, currentChainId, ERC20),
+        [account, currentChainId, ERC20],
     )
 
     if (currentChainId !== requiredChainId) {
@@ -46,37 +39,31 @@ export function MyFarms(props: PageInterface) {
     return (
         <div className={myFarmsClasses.container}>
             <Grid container justifyContent="space-between" rowSpacing="20px" className={myFarmsClasses.heading}>
-                <Grid item xs={6}>
+                <Grid item xs={8}>
                     <Typography fontWeight={500} className={myFarmsClasses.col}>
-                        {t('plugin_referral_referral_farm')}
+                        {t('plugin_referral_reward_tokens')}
                     </Typography>
                 </Grid>
-                <Grid item xs={2}>
-                    <Typography fontWeight={500} className={myFarmsClasses.col}>
-                        {t('plugin_referral_apr')}
-                    </Typography>
-                </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={4} paddingLeft="12px">
                     <Typography fontWeight={500} className={myFarmsClasses.col}>
                         {t('plugin_referral_rewards_earned')}
                     </Typography>
                 </Grid>
             </Grid>
             <div className={myFarmsClasses.content}>
-                {loadingRewards || loadingAllTokens ? (
+                {loading ? (
                     <CircularProgress size={50} />
                 ) : (
                     <>
-                        {!rewards ? (
+                        {!rewards || !Object.keys(rewards).length ? (
                             <Typography className={myFarmsClasses.noFarm}>
                                 {t('plugin_referral_you_have_not_joined_farm')}
                             </Typography>
                         ) : (
-                            <FarmList
+                            <Rewards
                                 currentChainId={currentChainId}
                                 account={account}
                                 rewards={rewards}
-                                allTokens={allTokens}
                                 pageType={props.pageType}
                                 onChangePage={props.onChangePage}
                             />

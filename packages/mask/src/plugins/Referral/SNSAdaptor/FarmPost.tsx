@@ -14,7 +14,6 @@ import type { Coin } from '../../Trader/types'
 import { MASK_REFERRER, META_KEY, SWAP_CHAIN_ID } from '../constants'
 import { useI18N } from '../../../utils'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import { getFarmsRewardData, getSponsoredFarmsForReferredToken } from '../helpers'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { ReferralRPC } from '../messages'
 import {
@@ -45,7 +44,6 @@ export function FarmPost(props: FarmPostProps) {
     usePluginWrapper(true)
 
     const { payload } = props
-    const token = payload.referral_token
     const chainId = payload.referral_token_chain_id
 
     const { classes } = useStyles()
@@ -55,12 +53,16 @@ export function FarmPost(props: FarmPostProps) {
     const currentIdentity = useCurrentIdentity()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     const { showSnackbar } = useCustomSnackbar()
-    const { ERC20 } = useTokenListConstants()
+    const { ERC20 } = useTokenListConstants(chainId)
 
-    const { value: farms = EMPTY_LIST } = useAsync(
-        async () => (chainId ? ReferralRPC.getAllFarms(chainId, ERC20) : []),
-        [ERC20, chainId],
+    const { value: rewards = EMPTY_LIST } = useAsync(
+        async () =>
+            chainId && ERC20
+                ? ReferralRPC.getRewardsForReferredToken(chainId, payload.referral_token, ERC20)
+                : EMPTY_LIST,
+        [chainId, ERC20],
     )
+
     const openComposeBox = useCallback(
         (message: string, selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
             CrossIsolationMessages.events.requestComposition.sendToLocal({
@@ -133,8 +135,6 @@ export function FarmPost(props: FarmPostProps) {
         }
     }, [payload, account, web3])
 
-    const sponsoredFarms = getSponsoredFarmsForReferredToken(chainId, token, farms)
-
     return (
         <>
             <Card variant="outlined" sx={{ p: 2 }} className={classes.content}>
@@ -149,14 +149,18 @@ export function FarmPost(props: FarmPostProps) {
                     </Typography>
                 </Box>
                 <Typography marginTop="8px">{t('plugin_referral_join_receive_rewards')}</Typography>
-                {sponsoredFarms?.length ? (
-                    <RewardFarmPostWidget
-                        title={t('plugin_referral_sponsored_referral_farm')}
-                        icon={<SponsoredFarmIcon />}
-                        rewardData={getFarmsRewardData(sponsoredFarms)}
-                        tokenSymbol={payload.referral_token_symbol}
-                    />
-                ) : null}
+                <Grid container>
+                    {rewards?.length &&
+                        rewards.map((reward) => (
+                            <RewardFarmPostWidget
+                                key={reward.rewardToken?.address}
+                                title={t('plugin_referral_sponsored_referral_farm')}
+                                icon={<SponsoredFarmIcon />}
+                                rewardData={reward}
+                                tokenSymbol={reward.rewardToken?.symbol}
+                            />
+                        ))}
+                </Grid>
                 <Typography marginTop="24px" variant="body2">
                     {t('plugin_referral_create_by')} <b>@realMaskNetwork</b>
                 </Typography>

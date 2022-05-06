@@ -15,11 +15,11 @@ import { useI18N } from '../../../utils'
 import { META_KEY } from '../constants'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
-import { getFarmsRewardData, getSponsoredFarmsForReferredToken, getRequiredChainId } from '../helpers'
+import { getRequiredChainId } from '../helpers'
 import { singAndPostProofOfRecommendationOrigin } from './utils/proofOfRecommendation'
 import {
     ReferralMetaData,
-    TabsCreateFarm,
+    TabsReferAndBuy,
     TransactionStatus,
     PageInterface,
     PagesType,
@@ -28,7 +28,7 @@ import {
 
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { MyFarms } from './MyFarms'
+import { MyRewards } from './MyRewards'
 import { TokenSelectField } from './shared-ui/TokenSelectField'
 import { RewardDataWidget } from './shared-ui/RewardDataWidget'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
@@ -91,7 +91,7 @@ export function ReferToFarm(props: PageInterface) {
     const { classes: sharedClasses } = useSharedStyles()
     const { ERC20 } = useTokenListConstants()
 
-    const [tab, setTab] = useState(TabsCreateFarm.NEW)
+    const [tab, setTab] = useState(TabsReferAndBuy.NEW)
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
@@ -105,10 +105,12 @@ export function ReferToFarm(props: PageInterface) {
         ),
     )
 
-    // fetch all farms
-    const { value: farms = EMPTY_LIST, loading: loadingAllFarms } = useAsync(
-        async () => ReferralRPC.getAllFarms(currentChainId, ERC20),
-        [currentChainId, ERC20],
+    const { value: tokenRewards = EMPTY_LIST, loading } = useAsync(
+        async () =>
+            token?.address && ERC20
+                ? ReferralRPC.getRewardsForReferredToken(currentChainId, token.address, ERC20)
+                : EMPTY_LIST,
+        [token?.address, currentChainId, ERC20],
     )
 
     const onClickTokenSelect = useCallback(() => {
@@ -186,7 +188,6 @@ export function ReferToFarm(props: PageInterface) {
             icon: <SponsoredFarmIcon />,
         },
     ]
-    const sponsoredFarms = getSponsoredFarmsForReferredToken(token?.chainId, token?.address, farms)
 
     return (
         <Box className={classes.container}>
@@ -197,10 +198,14 @@ export function ReferToFarm(props: PageInterface) {
                     variant="fullWidth"
                     onChange={(e, v) => setTab(v)}
                     aria-label="persona-post-contacts-button-group">
-                    <Tab value={TabsCreateFarm.NEW} label="New" classes={tabClasses} />
-                    <Tab value={TabsCreateFarm.CREATED} label="My Farms" classes={tabClasses} />
+                    <Tab value={TabsReferAndBuy.NEW} label={t('plugin_referral_tab_new')} classes={tabClasses} />
+                    <Tab
+                        value={TabsReferAndBuy.MY_REWARDS}
+                        label={t('plugin_referral_tab_my_rewards')}
+                        classes={tabClasses}
+                    />
                 </Tabs>
-                <TabPanel value={TabsCreateFarm.NEW} className={classes.tab}>
+                <TabPanel value={TabsReferAndBuy.NEW} className={classes.tab}>
                     <Typography fontWeight={600} variant="h6" marginBottom="12px">
                         {t('plugin_referral_select_token_refer')}
                     </Typography>
@@ -214,15 +219,19 @@ export function ReferToFarm(props: PageInterface) {
                                 onClick={onClickTokenSelect}
                             />
                         </Grid>
-                        {(!token || loadingAllFarms || !sponsoredFarms?.length) && <RewardDataWidget />}
-                        {sponsoredFarms?.length ? (
-                            <RewardDataWidget
-                                title={t('plugin_referral_sponsored_referral_farm')}
-                                icon={<SponsoredFarmIcon />}
-                                rewardData={getFarmsRewardData(sponsoredFarms)}
-                                tokenSymbol={token?.symbol}
-                            />
-                        ) : null}
+                        {!token || loading || !tokenRewards.length ? (
+                            <RewardDataWidget />
+                        ) : (
+                            tokenRewards.map((reward) => (
+                                <RewardDataWidget
+                                    key={reward.rewardToken?.address}
+                                    title={t('plugin_referral_sponsored_referral_farm')}
+                                    icon={<SponsoredFarmIcon />}
+                                    rewardData={reward}
+                                    tokenSymbol={reward.rewardToken?.symbol}
+                                />
+                            ))
+                        )}
                     </Grid>
                     <Grid container marginBottom="24px">
                         <Grid item xs={12} margin="24px 0 20px 0">
@@ -252,8 +261,8 @@ export function ReferToFarm(props: PageInterface) {
                         </ActionButton>
                     </EthereumChainBoundary>
                 </TabPanel>
-                <TabPanel value={TabsCreateFarm.CREATED} className={classes.tab}>
-                    <MyFarms pageType={PagesType.REFER_TO_FARM} {...props} />
+                <TabPanel value={TabsReferAndBuy.MY_REWARDS} className={classes.tab}>
+                    <MyRewards pageType={PagesType.REFER_TO_FARM} {...props} />
                 </TabPanel>
             </TabContext>
         </Box>

@@ -5,16 +5,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { createTypedMessageMetadataReader } from '@masknet/typed-message'
 
 import { META_KEY, supportedChainIds } from './constants'
-import type {
-    ReferralMetaData,
-    RewardData,
-    Farm,
-    ChainAddress,
-    ChainAddressProps,
-    EvmAddress,
-    Bytes32,
-    Bytes24,
-} from './types'
+import type { ReferralMetaData, ChainAddress, ChainAddressProps, EvmAddress, Bytes32, Bytes24 } from './types'
 import schema from './schema.json'
 
 // Fast convert internal types to Buffer
@@ -116,28 +107,6 @@ export function toChainId(addr: ChainAddress): number {
 export function toNativeRewardTokenDefn(chainId: ChainId): string {
     const nativeTokenAddr = '0x' + padStart(Number(chainId).toString(16), 40, '0')
     return toChainAddressEthers(chainId, nativeTokenAddr)
-}
-
-// farms
-export function getFarmsRewardData(farms?: Farm[]): RewardData {
-    const dailyReward = farms?.reduce(function (previousValue, currentValue) {
-        return previousValue + currentValue.dailyFarmReward
-    }, 0)
-    const totalReward = farms?.reduce(function (previousValue, currentValue) {
-        return previousValue + currentValue.totalFarmRewards
-    }, 0)
-
-    return {
-        dailyReward: dailyReward || 0,
-        totalReward: totalReward || 0,
-        // TODO: add APR in the next iteration
-        apr: 0,
-    }
-}
-export function getSponsoredFarmsForReferredToken(chainId?: number, referredToken?: string, farms?: Farm[]) {
-    if (!farms?.length || !referredToken || !chainId) return undefined
-
-    return farms.filter((farm) => farm.referredTokenDefn === toChainAddressEthers(chainId, referredToken))
 }
 
 export function roundValue(value: string | number, tokenDecimals?: number) {

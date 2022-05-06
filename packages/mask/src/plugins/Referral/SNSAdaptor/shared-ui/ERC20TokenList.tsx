@@ -33,7 +33,6 @@ export interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'>
     targetChainId?: ChainId
     whitelist?: string[]
     blacklist?: string[]
-    renderList?: string[]
     tokens?: FungibleTokenDetailed[]
     selectedTokens?: string[]
     disableSearch?: boolean
@@ -73,7 +72,6 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     const {
         whitelist: includeTokens,
         blacklist: excludeTokens = EMPTY_LIST,
-        renderList = EMPTY_LIST,
         tokens = EMPTY_LIST,
         onSelect,
         FixedSizeListProps,
@@ -100,20 +98,15 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     const { value: searchedToken, loading: searchedTokenLoading } = useERC20TokenDetailed(matchedTokenAddress ?? '')
     // #endregion
 
-    // filter by renderList
-    let filteredTokens = renderList.length
-        ? erc20TokensDetailed.filter((token) => renderList.some(currySameAddress(token.address)))
-        : erc20TokensDetailed
-
-    // filter by includeTokens and excludeTokens
-    filteredTokens = filteredTokens.filter(
+    const filteredTokens = erc20TokensDetailed.filter(
         (token) =>
             (!includeTokens || includeTokens.some(currySameAddress(token.address))) &&
             (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
     )
 
-    const renderTokens = uniqBy([...tokens, ...filteredTokens, ...(searchedToken ? [searchedToken] : [])], (x) =>
-        x.address.toLowerCase(),
+    const renderTokens = uniqBy(
+        [...tokens, ...filteredTokens, ...(searchedToken ? [searchedToken] : EMPTY_LIST)],
+        (x) => x.address.toLowerCase(),
     )
 
     const {
@@ -134,6 +127,8 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
             : keyword
             ? assets
             : [...assets].sort(makeSortAssertFn(chainId, { isMaskBoost: true }))
+
+    const loading = dataLoading || erc20TokensDetailedLoading
 
     return (
         <SearchableList<Asset>
@@ -161,13 +156,16 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
                 props.referredTokensDefn,
             )}
             placeholder={
-                dataLoading ||
-                (erc20TokensDetailedLoading && (
+                (loading || !renderAssets.length) && (
                     <Placeholder
                         height={FixedSizeListProps?.height}
-                        message={t('plugin_referral_placeholder_loading')}
+                        message={
+                            loading
+                                ? t('plugin_referral_placeholder_loading')
+                                : t('plugin_referral_placeholder_no_farms')
+                        }
                     />
-                ))
+                )
             }
             FixedSizeListProps={FixedSizeListProps}
         />
