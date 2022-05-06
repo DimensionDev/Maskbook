@@ -362,7 +362,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     chainId={chainId}
                                     classes={{ switchButton: classes.claimAllButton }}
                                     noSwitchNetworkTip
-                                    size="large"
+                                    ActionButtonPromiseProps={{
+                                        size: 'large',
+                                    }}
                                     disablePadding
                                     switchButtonStyle={{
                                         minHeight: 'auto',
