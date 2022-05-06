@@ -6,6 +6,7 @@ import { base } from '../base'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog'
 import { setupContext } from './context'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { PLUGIN_ID } from '../constants'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -37,6 +38,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 icon,
             }
         })(),
+    ],
+    ProfileTabs: [
+        {
+            ID: `${PLUGIN_ID}_web3_profile`,
+            label: 'Web3Profile',
+            priority: 3,
+            UI: {
+                TabContent: ({ addressNames = [], open = false, setOpen }) => {
+                    return <Web3ProfileDialog open={open} onClose={() => setOpen(false)} />
+                },
+            },
+        },
     ],
 }
 

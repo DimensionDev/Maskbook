@@ -46,6 +46,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [hidden, setHidden] = useState(true)
     const [addressList, setAddressList] = useState<AddressName[]>()
     const [selectedTab, setSelectedTab] = useState<string | undefined>()
+    const [profileOpen, setProfileOpen] = useState(false)
 
     const currentIdentity = useLastRecognizedIdentity()
     const identity = useCurrentVisitingIdentity()
@@ -106,7 +107,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
                 return a.priority - z.priority
             })
-            .filter((z) => z.pluginID !== PluginId.NextID)
+            .filter((z) => z.pluginID !== PluginId.NextID && z.pluginID !== PluginId.Web3Profile)
             .map((x) => ({
                 id: x.ID,
                 label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
@@ -143,6 +144,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         return getTabContent(tabId ?? '')
     }, [selectedTabId, identity.identifier?.userId])
 
+    const handleOpenDialog = () => {
+        setSelectedTab(`${PluginId.Web3Profile}_web3_profile`)
+        setProfileOpen(true)
+    }
+
     if (hidden) return null
 
     if (loadingAddressNames || loadingPersonaList)
@@ -162,7 +168,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         <div className={classes.root}>
             <div>
                 {tabs.length ? (
-                    <ConcealableTabs<string> tabs={tabs} selectedId={selectedTabId} onChange={setSelectedTab} />
+                    <ConcealableTabs<string>
+                        tabs={tabs}
+                        selectedId={selectedTabId}
+                        openDialog={handleOpenDialog}
+                        onChange={setSelectedTab}
+                    />
                 ) : (
                     <Typography variant="body2" color="textPrimary" align="center" sx={{ paddingTop: 8 }}>
                         {t('web3_tab_hint')}
@@ -174,6 +185,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                     addressNames={addressList}
                     identity={identity}
                     personaList={personaList?.map((persona) => persona.persona)}
+                    open={profileOpen}
+                    setOpen={setProfileOpen}
                 />
             </div>
         </div>

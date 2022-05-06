@@ -404,6 +404,8 @@ export namespace Plugin.SNSAdaptor {
                 identity?: ProfileIdentity
                 addressNames?: ProfileAddress[]
                 personaList?: string[]
+                open?: boolean
+                setOpen: (open: boolean) => void
             }>
         }
         Utils?: {
