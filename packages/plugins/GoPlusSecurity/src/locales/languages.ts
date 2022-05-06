@@ -25,7 +25,7 @@ if (import.meta.webpackHot) {
             globalThis.dispatchEvent?.(
                 new CustomEvent('MASK_I18N_HMR', {
                     detail: [
-                        'io.mask.debugger',
+                        'io.gopluslabs.security',
                         { en: en_US, ja: ja_JP, ko: ko_KR, qy: qya_AA, 'zh-CN': zh_CN, zh: zh_TW },
                     ],
                 }),
