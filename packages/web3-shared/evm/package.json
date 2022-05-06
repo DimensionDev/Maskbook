@@ -25,7 +25,7 @@
     "react-use": "^17.3.2",
     "unstated-next": "^1.1.0",
     "urlcat": "^2.0.4",
-    "use-subscription": "^1.7.0",
+    "use-subscription": "1.6.0",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
     "web3": "1.7.3",

@@ -192,7 +192,7 @@ importers:
       react-use: ^17.3.2
       unstated-next: ^1.1.0
       urlcat: ^2.0.4
-      use-subscription: ^1.7.0
+      use-subscription: 1.6.0
       uuid: ^8.3.2
       wallet.ts: ^1.0.1
       web3-core-helpers: 1.7.3
@@ -238,7 +238,7 @@ importers:
       react-use: 17.3.2
       unstated-next: 1.1.0
       urlcat: 2.0.4
-      use-subscription: 1.7.0
+      use-subscription: 1.6.0
       uuid: 8.3.2
       wallet.ts: 1.0.1
       web3-core-helpers: 1.7.3
@@ -439,7 +439,7 @@ importers:
       swc-loader: ^0.2.0
       unstated-next: ^1.1.0
       urlcat: ^2.0.4
-      use-subscription: ^1.7.0
+      use-subscription: 1.6.0
       uuid: ^8.3.2
       wallet.ts: ^1.0.1
       web-ext-types: ^3.1.0
@@ -571,7 +571,7 @@ importers:
       stream-http: 2.8.3
       unstated-next: 1.1.0
       urlcat: 2.0.4
-      use-subscription: 1.7.0
+      use-subscription: 1.6.0
       uuid: 8.3.2
       wallet.ts: 1.0.1
       web-ext-types: 3.2.1
@@ -633,7 +633,7 @@ importers:
       bignumber.js: ^9.0.2
       react-use: ^17.3.2
       unstated-next: ^1.1.0
-      use-subscription: ^1.7.0
+      use-subscription: 1.6.0
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@masknet/encryption': link:../encryption
@@ -648,7 +648,7 @@ importers:
       bignumber.js: 9.0.2
       react-use: 17.3.2
       unstated-next: 1.1.0
-      use-subscription: 1.7.0
+      use-subscription: 1.6.0
 
   packages/plugins/CrossChainBridge:
     specifiers:
@@ -944,13 +944,13 @@ importers:
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       react-use: ^17.3.2
-      use-subscription: ^1.7.0
+      use-subscription: 1.6.0
     dependencies:
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
       react-use: 17.3.2
-      use-subscription: 1.7.0
+      use-subscription: 1.6.0
 
   packages/polyfills:
     specifiers:
@@ -1071,7 +1071,7 @@ importers:
       react-feather: ^2.0.9
       react-use: ^17.3.2
       urlcat: ^2.0.4
-      use-subscription: ^1.7.0
+      use-subscription: 1.6.0
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@masknet/icons': link:../icons
@@ -1090,7 +1090,7 @@ importers:
       react-feather: 2.0.9
       react-use: 17.3.2
       urlcat: 2.0.4
-      use-subscription: 1.7.0
+      use-subscription: 1.6.0
     devDependencies:
       '@types/qrcode': 1.4.2
 
@@ -1118,7 +1118,7 @@ importers:
       tiny-secp256k1: ^2.2.1
       typeson: ^7.0.2
       typeson-registry: ^3.0.0
-      use-subscription: ^1.7.0
+      use-subscription: 1.6.0
       z-schema: ^5.0.3
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
@@ -1142,7 +1142,7 @@ importers:
       tiny-secp256k1: 2.2.1
       typeson: 7.0.2
       typeson-registry: 3.0.0
-      use-subscription: 1.7.0_react@packages+empty
+      use-subscription: 1.6.0_react@packages+empty
       z-schema: 5.0.3
     devDependencies:
       '@types/use-subscription': 1.0.0
@@ -1154,7 +1154,7 @@ importers:
       '@types/use-subscription': ^1.0.0
       '@types/uuid': ^8.3.4
       react-use: ^17.3.2
-      use-subscription: ^1.7.0
+      use-subscription: 1.6.0
       uuid: ^8.3.2
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
@@ -1162,7 +1162,7 @@ importers:
       '@types/use-subscription': 1.0.0
       '@types/uuid': 8.3.4
       react-use: 17.3.2
-      use-subscription: 1.7.0
+      use-subscription: 1.6.0
       uuid: 8.3.2
 
   packages/storybook-shared:
@@ -1207,7 +1207,7 @@ importers:
       tinycolor2: ^1.4.2
       tss-react: ^3.6.2
       unstated-next: ^1.1.0
-      use-subscription: ^1.7.0
+      use-subscription: 1.6.0
     dependencies:
       '@masknet/icons': link:../icons
       '@masknet/shared-base': link:../shared-base
@@ -1221,7 +1221,7 @@ importers:
       tinycolor2: 1.4.2
       tss-react: 3.6.2
       unstated-next: 1.1.0
-      use-subscription: 1.7.0
+      use-subscription: 1.6.0
     devDependencies:
       '@babel/core': 7.17.10
       '@storybook/addon-actions': 6.4.22
@@ -1344,7 +1344,7 @@ importers:
       react-use: ^17.3.2
       unstated-next: ^1.1.0
       urlcat: ^2.0.4
-      use-subscription: ^1.7.0
+      use-subscription: 1.6.0
       uuid: ^8.3.2
       wallet.ts: ^1.0.1
       web3: 1.7.3
@@ -1366,7 +1366,7 @@ importers:
       react-use: 17.3.2
       unstated-next: 1.1.0
       urlcat: 2.0.4
-      use-subscription: 1.7.0
+      use-subscription: 1.6.0
       uuid: 8.3.2
       wallet.ts: 1.0.1
       web3: 1.7.3
@@ -14491,6 +14491,7 @@ packages:
       string.prototype.trimend: 1.0.4
       string.prototype.trimstart: 1.0.4
       unbox-primitive: 1.0.1
+    dev: true
 
   /es-abstract/1.20.0:
     resolution: {integrity: sha512-URbD8tgRthKD3YcC39vbvSDrX23upXnPcnGAjQfgxXF5ID75YcENawc9ZX/9iTP9ptUyfCLIxTTuMYoRfiOVKA==}
@@ -14519,7 +14520,6 @@ packages:
       string.prototype.trimend: 1.0.5
       string.prototype.trimstart: 1.0.5
       unbox-primitive: 1.0.2
-    dev: false
 
   /es-array-method-boxes-properly/1.0.0:
     resolution: {integrity: sha512-wd6JXUmyHmt8T5a2xreUwKcGPq6f1f+WwIJkijUqiGcJz1qqnZgP6XIK+QyIWU5lT7imeNxUll48bziG+TSYcA==}
@@ -16284,7 +16284,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.1.4
-      es-abstract: 1.19.5
+      es-abstract: 1.20.0
       functions-have-names: 1.2.3
 
   /functional-red-black-tree/1.0.1:
@@ -16824,7 +16824,6 @@ packages:
 
   /has-bigints/1.0.2:
     resolution: {integrity: sha512-tSvCKtBr9lkF0Ex0aQiP9N+OpV4zi2r/Nee5VkRDbaqv35RLYMzbwQfFSZZH0kR+Rd6302UJZ2p/bJCEoR3VoQ==}
-    dev: false
 
   /has-binary2/1.0.3:
     resolution: {integrity: sha512-G1LWKhDSvhGeAQ8mPVQlqNcOB2sJdwATtZKl2pDKKHfpf/rYj24lkinxf69blJbnsvtqqNU+L3SL50vzZhXOnw==}
@@ -17748,7 +17747,7 @@ packages:
   /is-bigint/1.0.4:
     resolution: {integrity: sha512-zB9CruMamjym81i2JZ3UMn54PKGsQzsJeo6xvN3HJJ4CAsQNB6iRutp2To77OfCNuoxspsIhzaPoO1zyCEhFOg==}
     dependencies:
-      has-bigints: 1.0.1
+      has-bigints: 1.0.2
 
   /is-binary-path/1.0.1:
     resolution: {integrity: sha1-dfFmQrSA8YenEcgUFh/TpKdlWJg=}
@@ -22794,7 +22793,6 @@ packages:
       call-bind: 1.0.2
       define-properties: 1.1.4
       functions-have-names: 1.2.3
-    dev: false
 
   /regexpp/3.2.0:
     resolution: {integrity: sha512-pq2bWo9mVD43nbts2wGv17XLiNLya+GklZ8kaDLV2Z08gDCsGpnKn9BFMepvWuHCbyVvY7J5o5+BVvoQbmlJLg==}
@@ -24404,7 +24402,6 @@ packages:
       call-bind: 1.0.2
       define-properties: 1.1.4
       es-abstract: 1.20.0
-    dev: false
 
   /string.prototype.trimstart/1.0.4:
     resolution: {integrity: sha512-jh6e984OBfvxS50tdY2nRZnoC5/mLFKOREQfw8t5yytkoUsJRNxvI/E39qu1sD0OtWI3OC0XgKSmcWwziwYuZw==}
@@ -24418,7 +24415,6 @@ packages:
       call-bind: 1.0.2
       define-properties: 1.1.4
       es-abstract: 1.20.0
-    dev: false
 
   /string_decoder/0.10.31:
     resolution: {integrity: sha1-YuIDvEF2bGwoyfyEMB2rHFMQ+pQ=}
@@ -25730,7 +25726,6 @@ packages:
       has-bigints: 1.0.2
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
-    dev: false
 
   /unc-path-regex/0.1.2:
     resolution: {integrity: sha1-5z3T17DXxe2G+6xrCufYxqadUPo=}
@@ -26012,33 +26007,16 @@ packages:
       use-isomorphic-layout-effect: 1.1.2
     dev: true
 
-  /use-subscription/1.7.0:
-    resolution: {integrity: sha512-87x6MjiIVE/BWqtxfiRvM6jfvGudN+UeVOnWi7qKYp2c0YJn5+Z5Jt0kZw6Tt+8hs7kw/BWo2WBhizJSAZsQJA==}
+  /use-subscription/1.6.0:
+    resolution: {integrity: sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    dependencies:
-      use-sync-external-store: 1.1.0
+      react: ^18.0.0
     dev: false
 
-  /use-subscription/1.7.0_react@packages+empty:
-    resolution: {integrity: sha512-87x6MjiIVE/BWqtxfiRvM6jfvGudN+UeVOnWi7qKYp2c0YJn5+Z5Jt0kZw6Tt+8hs7kw/BWo2WBhizJSAZsQJA==}
+  /use-subscription/1.6.0_react@packages+empty:
+    resolution: {integrity: sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    dependencies:
-      react: link:packages\empty
-      use-sync-external-store: 1.1.0_react@packages+empty
-    dev: false
-
-  /use-sync-external-store/1.1.0:
-    resolution: {integrity: sha512-SEnieB2FPKEVne66NpXPd1Np4R1lTNKfjuy3XdIoPQKYBAFdzbzSZlSn1KJZUiihQLQC5Znot4SBz1EOTBwQAQ==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    dev: false
-
-  /use-sync-external-store/1.1.0_react@packages+empty:
-    resolution: {integrity: sha512-SEnieB2FPKEVne66NpXPd1Np4R1lTNKfjuy3XdIoPQKYBAFdzbzSZlSn1KJZUiihQLQC5Znot4SBz1EOTBwQAQ==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react: ^18.0.0
     dependencies:
       react: link:packages\empty
     dev: false

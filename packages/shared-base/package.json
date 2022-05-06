@@ -31,7 +31,7 @@
     "tiny-secp256k1": "^2.2.1",
     "typeson": "^7.0.2",
     "typeson-registry": "^3.0.0",
-    "use-subscription": "^1.7.0",
+    "use-subscription": "1.6.0",
     "z-schema": "^5.0.3"
   },
   "devDependencies": {
