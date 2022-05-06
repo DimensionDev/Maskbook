@@ -36,23 +36,25 @@ const definition: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <FileServiceIcon />
-            const name = { i18nKey: '__plugin_name', fallback: 'File Service' }
+            const name = { fallback: 'File Service' }
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     return (
                         <ApplicationEntry
                             title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                            disabled={disabled}
+                            {...EntryComponentProps}
                             icon={icon}
-                            onClick={() =>
-                                CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                    reason: 'timeline',
-                                    open: true,
-                                    options: {
-                                        startupPlugin: base.ID,
-                                    },
-                                })
+                            onClick={
+                                EntryComponentProps.onClick ??
+                                (() =>
+                                    CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                        reason: 'timeline',
+                                        open: true,
+                                        options: {
+                                            startupPlugin: base.ID,
+                                        },
+                                    }))
                             }
                         />
                     )
