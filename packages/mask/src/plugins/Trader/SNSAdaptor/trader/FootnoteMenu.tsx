@@ -4,11 +4,13 @@ import { useMenu } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
-        display: 'flex',
+        display: 'inline-flex',
         alignItems: 'center',
         cursor: 'pointer',
     },
     title: {
+        display: 'inline-flex',
+        alignItems: 'center',
         fontSize: 10,
         color: theme.palette.text.secondary,
     },

@@ -50,12 +50,8 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
                   flexDirection: 'column',
               }
             : {},
-        footer: props.isPopper
-            ? {}
-            : {
-                  borderTop: `solid 1px ${theme.palette.divider}`,
-                  borderBottom: `solid 1px ${theme.palette.divider}`,
-              },
+        // TODO: should remove this
+        footer: props.isPopper ? {} : {},
         footerSkeleton: props.isPopper
             ? {}
             : {
