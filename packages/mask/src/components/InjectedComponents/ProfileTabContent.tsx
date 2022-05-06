@@ -8,7 +8,7 @@ import { useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { ConcealableTabs } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { AddressName, AddressNameType, useAddressNames } from '@masknet/web3-shared-evm'
+import { AddressName, AddressNameType, useAddressNames, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { first } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
@@ -18,7 +18,7 @@ import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { MaskMessages, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
+import { useNextIDBoundByPlatform, usePersonaBoundPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 
 function getTabContent(tabId: string) {
@@ -56,39 +56,34 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         platform as NextIDPlatform,
         identity.identifier?.userId,
     )
+    const { value: personaProof } = usePersonaBoundPlatform(
+        currentConnectedPersona?.identifier?.publicKeyAsHex || ZERO_ADDRESS,
+    )
+    const wallets = personaProof?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
 
+    const isOwn = currentIdentity?.identifier === identity?.identifier
     useEffect(() => {
-        if (personaList.length === 0) {
+        if (wallets?.length === 0 || !wallets || !isOwn) {
             setAddressList(addressNames)
         } else {
-            const wallets: AddressName[] = []
-            personaList?.forEach((info) =>
-                info?.proofs?.forEach((proof) => {
-                    if (proof?.platform === NextIDPlatform.Ethereum) {
-                        wallets.push({
-                            type: AddressNameType.ADDRESS,
-                            label: proof?.identity,
-                            resolvedAddress: proof?.identity,
-                        })
-                    }
-                }),
-            )
-            setAddressList([...addressNames, ...wallets])
+            const addresses = wallets.map((proof) => {
+                return {
+                    type: AddressNameType.ADDRESS,
+                    label: proof?.identity,
+                    resolvedAddress: proof?.identity,
+                }
+            })
+            setAddressList([...addressNames, ...addresses])
         }
-    }, [addressNames, personaList])
-
-    const currentAccountNotConnectPersona =
-        currentIdentity.identifier === identity.identifier &&
-        personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.identifier.publicKeyAsHex) ===
-            -1
+    }, [addressNames, wallets, isOwn])
+    console.log({ addressList, currentConnectedPersona })
 
     const translate = usePluginI18NField()
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const availablePlugins = useAvailablePlugins(activatedPlugins)
     const displayPlugins = useMemo(() => {
-        return availablePlugins
-            .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
-            .filter((z) => z.Utils?.shouldDisplay?.(identity, addressList) ?? true)
+        return availablePlugins.flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
+        // .filter((z) => z.Utils?.shouldDisplay?.(identity, addressList) ?? true)
     }, [availablePlugins, identity, addressList])
     const tabs = useMemo(() => {
         return displayPlugins
@@ -111,6 +106,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
                 return a.priority - z.priority
             })
+            .filter((z) => z.pluginID !== PluginId.NextID)
             .map((x) => ({
                 id: x.ID,
                 label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
@@ -141,7 +137,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const ContentComponent = useMemo(() => {
         const tabId =
-            isTwitter(activatedSocialNetworkUI) && currentAccountNotConnectPersona
+            isTwitter(activatedSocialNetworkUI) && addressList?.length === 0 && isOwn
                 ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
                 : selectedTabId
         return getTabContent(tabId ?? '')

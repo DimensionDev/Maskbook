@@ -100,10 +100,8 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
     const { reset, isVerified } = useNextIDConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
-    const [unbindAddress, setUnBindAddress] = useState<string>()
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const isOwn = currentProfileIdentifier.identifier === visitingPersonaIdentifier.identifier
-    const tipable = !isOwn
 
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null

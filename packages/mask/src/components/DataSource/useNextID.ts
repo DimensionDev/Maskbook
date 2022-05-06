@@ -14,9 +14,11 @@ import Services from '../../extension/service'
 import { MaskMessages } from '../../utils'
 
 export const usePersonaBoundPlatform = (personaPublicKey: string) => {
-    return useAsyncRetry(() => {
+    const res = useAsyncRetry(() => {
         return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
     }, [personaPublicKey])
+    useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
+    return res
 }
 
 let isOpenedVerifyDialog = false
