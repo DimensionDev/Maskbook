@@ -37,6 +37,7 @@ const useStyles = makeStyles<{ hideBackBtn?: boolean }>()((theme, { hideBackBtn 
     title: {
         display: 'flex',
         justifyContent: 'space-between',
+        paddingLeft: '30px',
     },
     powered: {
         fontWeight: 400,
@@ -92,13 +93,13 @@ export function ReferralDialog({ open, onClose, onSwapDialogOpen }: ReferralDial
         props?: DialogInterface,
     ) => {
         setPreviousPages([...previousPages, { page: currentPage, title: currentTitle }])
-        setCurrentPage({ page: nextPage, title: title })
+        setCurrentPage({ page: nextPage, title })
         setCurrentTitle(title)
         setPropsData(props)
     }
 
     const onChangePage = (page: PagesType, title: string = t('plugin_referral'), props?: DialogInterface) => {
-        setCurrentPage({ page, title: title })
+        setCurrentPage({ page, title })
         setCurrentTitle(title)
         setPropsData(props)
     }

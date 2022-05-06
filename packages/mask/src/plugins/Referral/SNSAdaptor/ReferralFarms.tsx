@@ -54,6 +54,7 @@ const useStylesType = makeStyles()((theme) => ({
     },
     name: {
         fontSize: '0.938rem',
+        color: theme.palette.text.primary,
     },
 }))
 
