@@ -356,7 +356,7 @@ export function ITO(props: ITO_Props) {
     }, [retryPoolTradeInfo, retryAvailability])
 
     // #region claim
-    const [isClaiming, claimCallback] = useClaimCallback([pid], payload.contract_address)
+    const [{ loading: isClaiming }, claimCallback] = useClaimCallback([pid], payload.contract_address)
     const openShareTxDialog = useOpenShareTxDialog()
     const claim = useCallback(async () => {
         const hash = await claimCallback()

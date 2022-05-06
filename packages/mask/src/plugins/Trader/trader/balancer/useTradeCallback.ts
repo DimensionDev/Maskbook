@@ -7,7 +7,7 @@ import {
     useAccount,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
@@ -23,10 +23,9 @@ export function useTradeCallback(
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { BALANCER_ETH_ADDRESS } = useTraderConstants(chainId)
 
-    const [loading, setLoading] = useState(false)
     const tradeAmount = useTradeAmount(trade, allowedSlippage)
 
-    const tradeCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!trade || !trade.inputToken || !trade.outputToken || !exchangeProxyContract || !BALANCER_ETH_ADDRESS) {
             return
         }
@@ -79,7 +78,6 @@ export function useTradeCallback(
         else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === EthereumTokenType.Native)
             transactionValue = trade.outputAmount.toFixed()
 
-        setLoading(true)
         // send transaction and wait for hash
         const config = {
             from: account,
@@ -104,8 +102,6 @@ export function useTradeCallback(
                 .on(TransactionEventType.ERROR, (error) => {
                     reject(error)
                 })
-        }).finally(() => setLoading(false))
+        })
     }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS])
-
-    return [loading, tradeCallback] as const
 }

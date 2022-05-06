@@ -1,7 +1,7 @@
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import { EthereumTokenType, TransactionEventType, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { useArtBlocksContract } from './useArtBlocksContract'
 
 export function usePurchaseCallback(projectId: string, amount: string, tokenType?: number) {
@@ -9,12 +9,10 @@ export function usePurchaseCallback(projectId: string, amount: string, tokenType
     const chainId = useChainId()
 
     const genArt721MinterContract = useArtBlocksContract()
-    const [loading, setLoading] = useState(false)
 
-    const purchaseCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!genArt721MinterContract) return
 
-        setLoading(true)
         const value = new BigNumber(tokenType === EthereumTokenType.Native ? amount : 0).toFixed()
         const config = {
             from: account,
@@ -26,7 +24,6 @@ export function usePurchaseCallback(projectId: string, amount: string, tokenType
                     value,
                 })
                 .catch((error) => {
-                    setLoading(false)
                     throw error
                 }),
         }
@@ -42,8 +39,6 @@ export function usePurchaseCallback(projectId: string, amount: string, tokenType
                 .on(TransactionEventType.ERROR, (error) => {
                     reject(error)
                 })
-        }).finally(() => setLoading(false))
+        })
     }, [account, amount, chainId, genArt721MinterContract, tokenType])
-
-    return [loading, purchaseCallback] as const
 }

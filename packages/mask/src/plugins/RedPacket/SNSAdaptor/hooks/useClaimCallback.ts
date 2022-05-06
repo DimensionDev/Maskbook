@@ -2,14 +2,13 @@ import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPac
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { TransactionEventType } from '@masknet/web3-shared-evm'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
 
 export function useClaimCallback(version: number, from: string, id?: string, password?: string) {
-    const [loading, setLoading] = useState(false)
     const redPacketContract = useRedPacketContract(version)
-    const claimCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!redPacketContract || !id || !password) return
 
         // note: despite the method params type of V1 and V2 is the same,
@@ -25,7 +24,6 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                           Web3Utils.sha3(from)!,
                       )
 
-        setLoading(true)
         // estimate gas and compose transaction
         const config = {
             from,
@@ -34,7 +32,6 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                     from,
                 })
                 .catch((error) => {
-                    setLoading(false)
                     throw error
                 }),
         }
@@ -49,6 +46,4 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                 .on(TransactionEventType.ERROR, reject)
         })
     }, [id, password, from, redPacketContract])
-
-    return [loading, claimCallback] as const
 }

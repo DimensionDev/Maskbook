@@ -15,7 +15,7 @@ import {
     useChainId,
     useITOConstants,
 } from '@masknet/web3-shared-evm'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import type { JSON_PayloadInMask } from '../../types'
@@ -33,13 +33,12 @@ export function useSwapCallback(
     const chainId = useChainId()
     const { ITO_CONTRACT_ADDRESS } = useITOConstants()
     const { contract: ITO_Contract, version } = useITO_Contract(payload.contract_address)
-    const [loading, setLoading] = useState(false)
     const { contract: qualificationContract } = useQualificationContract(
         payload.qualification_address,
         payload.contract_address,
     )
 
-    const swapCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!ITO_Contract || !qualificationContract || !payload) return
 
         const { pid, password } = payload
@@ -56,7 +55,6 @@ export function useSwapCallback(
         const swapTokenAt = payload.exchange_tokens.findIndex(currySameAddress(token.address))
         if (swapTokenAt === -1) return
 
-        setLoading(true)
         // error: not qualified
         try {
             const ifQualified = await (version === 1
@@ -66,11 +64,9 @@ export function useSwapCallback(
                 from: account,
             })
             if (!ifQualified) {
-                setLoading(false)
                 return
             }
         } catch {
-            setLoading(false)
             return
         }
 
@@ -84,11 +80,9 @@ export function useSwapCallback(
                 isSameAddress(payload.contract_address, ITO_CONTRACT_ADDRESS),
             )
             if (isZero(availability.remaining)) {
-                setLoading(false)
                 return
             }
         } catch {
-            setLoading(false)
             return
         }
 
@@ -123,15 +117,10 @@ export function useSwapCallback(
                 : await (version === 1
                       ? (ITO_Contract as ITO).methods.swap(...swapParamsV1)
                       : (ITO_Contract as ITO2).methods.swap(...swapParamsV2)
-                  )
-                      .estimateGas({
-                          from: account,
-                          value,
-                      })
-                      .catch((error) => {
-                          setLoading(false)
-                          throw error
-                      }),
+                  ).estimateGas({
+                      from: account,
+                      value,
+                  }),
             value,
         }
 
@@ -150,8 +139,6 @@ export function useSwapCallback(
                 .send(config as PayableTx)
                 .on(TransactionEventType.CONFIRMATION, onSucceed)
                 .on(TransactionEventType.ERROR, onFailed)
-        }).finally(() => setLoading(false))
+        })
     }, [ITO_Contract, chainId, qualificationContract, account, payload, total, token.address, isQualificationHasLucky])
-
-    return [loading, swapCallback] as const
 }

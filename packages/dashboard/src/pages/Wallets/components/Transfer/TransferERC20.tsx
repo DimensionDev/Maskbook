@@ -71,10 +71,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const tokenType = isNativeToken ? EthereumTokenType.Native : EthereumTokenType.ERC20
 
     // balance
-    const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useFungibleTokenBalance(
-        tokenType,
-        selectedToken?.address ?? '',
-    )
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(tokenType, selectedToken?.address ?? '')
     const nativeToken = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice()
 
@@ -121,7 +118,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         return BigNumber.max(0, amount_).toFixed()
     }, [tokenBalance, gasPrice, selectedToken?.type, amount, gasLimit, maxFee, is1559Supported])
 
-    const [isTransferring, transferCallback] = useTokenTransferCallback(tokenType, selectedToken.address)
+    const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(tokenType, selectedToken.address)
 
     const onTransfer = useCallback(async () => {
         let hash: string | undefined

@@ -165,7 +165,7 @@ export const TransferERC721 = memo(() => {
     const account = useAccount()
     const nativeToken = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice()
-    const [isTransferring, transferCallback] = useTokenTransferCallback(
+    const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(
         EthereumTokenType.ERC721,
         contract?.address ?? '',
     )

@@ -256,19 +256,18 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
 
     const claimablePids = uniq(flatten(swappedTokens?.filter((t) => t.isClaimable).map((t) => t.pids)))
 
-    const [isClaiming, claimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
+    const [{ loading: isClaiming }, claimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
 
     const openShareTxDialog = useOpenShareTxDialog()
     const claim = useCallback(async () => {
         const hash = await claimCallback()
-        if (hash) {
-            openShareTxDialog({
-                hash,
-                onShare() {
-                    retry()
-                },
-            })
-        }
+        if (!hash) return
+        openShareTxDialog({
+            hash,
+            onShare() {
+                retry()
+            },
+        })
     }, [openShareTxDialog, retry])
     const showNftAirdrop = chainId === ChainId.Matic && campaignInfos && Flags.nft_airdrop_enabled
     const { classes } = useStyles({

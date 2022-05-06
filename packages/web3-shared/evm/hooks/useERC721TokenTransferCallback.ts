@@ -1,5 +1,5 @@
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { GasConfig, TransactionEventType } from '../types'
@@ -9,9 +9,8 @@ import { useAccount } from './useAccount'
 export function useERC721TokenTransferCallback(address?: string) {
     const account = useAccount()
     const erc721Contract = useERC721TokenContract(address)
-    const [loading, setLoading] = useState(false)
 
-    const transferCallback = useCallback(
+    return useAsyncFn(
         async (tokenId?: string, recipient?: string, gasConfig?: GasConfig) => {
             if (!account || !recipient || !tokenId || !erc721Contract) return
 
@@ -23,7 +22,6 @@ export function useERC721TokenTransferCallback(address?: string) {
 
             if (!ownerOf || !isSameAddress(ownerOf, account)) return
 
-            setLoading(true)
             // estimate gas and compose transaction
             const config = {
                 from: account,
@@ -33,7 +31,6 @@ export function useERC721TokenTransferCallback(address?: string) {
                         from: account,
                     })
                     .catch((error) => {
-                        setLoading(false)
                         throw error
                     }),
                 ...gasConfig,
@@ -50,10 +47,8 @@ export function useERC721TokenTransferCallback(address?: string) {
                     .on(TransactionEventType.ERROR, (error) => {
                         reject(error)
                     })
-            }).finally(() => setLoading(false))
+            })
         },
         [account, erc721Contract],
     )
-
-    return [loading, transferCallback] as const
 }

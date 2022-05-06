@@ -61,7 +61,7 @@ export function ITO_Card(props: ITO_CardProps) {
     const { value: packet, loading: packetLoading, error: packetError, retry: packetRetry } = useMaskITO_Packet()
 
     // #region claim
-    const [isClaiming, claimCallback] = useMaskClaimCallback()
+    const [{ loading: isClaiming }, claimCallback] = useMaskClaimCallback()
     const openShareTxDialog = useOpenShareTxDialog()
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const postLink = usePostLink()
@@ -79,17 +79,16 @@ export function ITO_Card(props: ITO_CardProps) {
 
     const claim = useCallback(async () => {
         const hash = await claimCallback()
-        if (hash) {
-            await openShareTxDialog({
-                hash,
-                onShare() {
-                    activatedSocialNetworkUI.utils.share?.(shareText)
-                },
-            })
+        if (!hash) return
+        await openShareTxDialog({
+            hash,
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
+            },
+        })
 
-            onUpdateBalance()
-            packetRetry()
-        }
+        onUpdateBalance()
+        packetRetry()
     }, [openShareTxDialog])
     // #endregion
 

@@ -1,30 +1,22 @@
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { TransactionEventType, useAccount, useChainId } from '@masknet/web3-shared-evm'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { useMaskITO_Contract } from './useMaskITO_Contract'
 
 export function useMaskClaimCallback() {
     const account = useAccount()
     const chainId = useChainId()
     const MaskITO_Contract = useMaskITO_Contract()
-    const [loading, setLoading] = useState(false)
 
-    const claimCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!MaskITO_Contract) return
 
-        setLoading(true)
         // estimate gas and compose transaction
         const config = {
             from: account,
-            gas: await MaskITO_Contract.methods
-                .claim()
-                .estimateGas({
-                    from: account,
-                })
-                .catch((error) => {
-                    setLoading(false)
-                    throw error
-                }),
+            gas: await MaskITO_Contract.methods.claim().estimateGas({
+                from: account,
+            }),
         }
 
         // send transaction and wait for hash
@@ -40,6 +32,4 @@ export function useMaskClaimCallback() {
                 })
         })
     }, [account, chainId, MaskITO_Contract])
-
-    return [loading, claimCallback] as const
 }

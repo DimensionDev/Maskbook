@@ -89,7 +89,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const selectedPaymentToken = first(paymentTokens)
     const { token, balance } = useFungibleTokenWatched(selectedPaymentToken)
 
-    const [isPurchasing, purchaseCallback] = usePurchaseCallback(
+    const [{ loading: isPurchasing }, purchaseCallback] = usePurchaseCallback(
         asset?.value?.editionNumber ?? '0',
         asset?.value?.priceInWei > 0
             ? asset?.value?.priceInWei
@@ -114,14 +114,13 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const openShareTxDialog = useOpenShareTxDialog()
     const purchase = useCallback(async () => {
         const hash = await purchaseCallback()
-        if (hash) {
-            await openShareTxDialog({
-                hash,
-                onShare() {
-                    activatedSocialNetworkUI.utils.share?.(shareText)
-                },
-            })
-        }
+        if (!hash) return
+        await openShareTxDialog({
+            hash,
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
+            },
+        })
     }, [purchaseCallback])
 
     const validationMessage = useMemo(() => {

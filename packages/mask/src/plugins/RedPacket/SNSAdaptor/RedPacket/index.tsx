@@ -60,7 +60,7 @@ export function RedPacket(props: RedPacketProps) {
         account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
     }
 
-    const [isClaiming, claimCallback] = useClaimCallback(
+    const [{ loading: isClaiming }, claimCallback] = useClaimCallback(
         payload.contract_version,
         account,
         payload.rpid,
@@ -77,7 +77,11 @@ export function RedPacket(props: RedPacketProps) {
             : t('plugin_red_packet_share_unclaimed_message_not_twitter', shareTextOption)
     ).trim()
 
-    const [isRefunding, isRefunded, refundCallback] = useRefundCallback(payload.contract_version, account, payload.rpid)
+    const [{ loading: isRefunding }, isRefunded, refundCallback] = useRefundCallback(
+        payload.contract_version,
+        account,
+        payload.rpid,
+    )
 
     const openShareTxDialog = useOpenShareTxDialog()
 

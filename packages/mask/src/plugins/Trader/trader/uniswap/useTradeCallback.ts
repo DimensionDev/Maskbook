@@ -2,7 +2,7 @@ import type { TradeProvider } from '@masknet/public-api'
 import { GasOptionConfig, TransactionEventType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import type { SwapParameters } from '@uniswap/v2-sdk'
 import BigNumber from 'bignumber.js'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { swapErrorToUserReadableMessage } from '../../helpers'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
@@ -37,13 +37,11 @@ export function useTradeCallback(
     const web3 = useWeb3({ chainId: targetChainId })
     const account = useAccount()
     const tradeParameters = useTradeParameters(trade, tradeProvider, allowedSlippage)
-    const [loading, setLoading] = useState(false)
 
-    const tradeCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!tradeParameters.length) {
             return
         }
-        setLoading(true)
 
         // step 1: estimate each trade parameter
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
@@ -136,8 +134,6 @@ export function useTradeCallback(
                     )
                     reject(error_)
                 })
-        }).finally(() => setLoading(false))
+        })
     }, [web3, account, tradeParameters, gasConfig])
-
-    return [loading, tradeCallback] as const
 }

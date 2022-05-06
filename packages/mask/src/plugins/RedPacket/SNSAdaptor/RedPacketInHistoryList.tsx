@@ -193,7 +193,11 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, history)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const [isRefunding, refunded, refundCallback] = useRefundCallback(history.contract_version, account, history.rpid)
+    const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(
+        history.contract_version,
+        account,
+        history.rpid,
+    )
     const tokenAddress =
         (history as RedPacketJSONPayload).token?.address ?? (history as RedPacketJSONPayloadFromChain).token_address
 

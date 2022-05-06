@@ -227,7 +227,11 @@ export function Trader(props: TraderProps) {
     // #endregion
 
     // #region blocking (swap)
-    const [isTrading, tradeCallback] = useTradeCallback(focusedTrade?.provider, focusedTrade?.value, gasConfig)
+    const [{ loading: isTrading }, tradeCallback] = useTradeCallback(
+        focusedTrade?.provider,
+        focusedTrade?.value,
+        gasConfig,
+    )
     useEffect(() => {
         setIsSwapping(isTrading)
     }, [isTrading])

@@ -1,5 +1,5 @@
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
 import { GasConfig, TransactionEventType } from '../types'
@@ -11,9 +11,8 @@ export function useNativeTransferCallback() {
     const web3 = useWeb3()
     const account = useAccount()
     const chainId = useChainId()
-    const [loading, setLoading] = useState(false)
 
-    const transferCallback = useCallback(
+    return useAsyncFn(
         async (amount?: string, recipient?: string, gasConfig?: GasConfig, memo?: string) => {
             if (!account || !recipient || !amount || isZero(amount)) return
 
@@ -25,7 +24,6 @@ export function useNativeTransferCallback() {
 
             if (isGreaterThan(amount, balance)) return
 
-            setLoading(true)
             // send transaction and wait for hash
             const config = {
                 from: account,
@@ -38,7 +36,6 @@ export function useNativeTransferCallback() {
                         data: memo ? toHex(memo) : undefined,
                     })
                     .catch((error) => {
-                        setLoading(false)
                         throw error
                     }),
                 value: amount,
@@ -56,10 +53,8 @@ export function useNativeTransferCallback() {
                     .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
                         resolve(receipt.transactionHash)
                     })
-            }).finally(() => setLoading(false))
+            })
         },
         [web3, account, chainId],
     )
-
-    return [loading, transferCallback] as const
 }

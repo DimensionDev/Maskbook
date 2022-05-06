@@ -100,7 +100,10 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         setAtLeastBidValue(price.isFinite() ? price.plus(price.gte(1) ? '0.1' : '0.01').toNumber() : 0.01)
     }, [assetSource?.latestBidVo])
 
-    const [isPlacingBid, placeBidCallback] = usePlaceBidCallback(is24Auction, assetSource?.editionNumber ?? '0')
+    const [{ loading: isPlacingBid }, placeBidCallback] = usePlaceBidCallback(
+        is24Auction,
+        assetSource?.editionNumber ?? '0',
+    )
 
     const assetLink = resolveAssetLinkOnCryptoartAI(assetSource?.creator?.username, assetSource?.token_id, chainId)
     const shareText = token

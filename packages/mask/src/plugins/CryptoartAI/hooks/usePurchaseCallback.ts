@@ -1,19 +1,17 @@
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { toFixed } from '@masknet/web3-shared-base'
 import { TransactionEventType, useAccount, useChainId } from '@masknet/web3-shared-evm'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
 
 export function usePurchaseCallback(editionNumber: string, priceInWei: number) {
     const account = useAccount()
     const chainId = useChainId()
     const { knownOriginDigitalAssetV2_contract } = useCryptoArtAI_Contract()
-    const [loading, setLoading] = useState(false)
 
-    const purchaseCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!knownOriginDigitalAssetV2_contract) return
 
-        setLoading(true)
         // estimate gas and compose transaction
         const config = {
             from: account,
@@ -25,7 +23,6 @@ export function usePurchaseCallback(editionNumber: string, priceInWei: number) {
                     value: toFixed(priceInWei),
                 })
                 .catch((error) => {
-                    setLoading(false)
                     throw error
                 }),
         }
@@ -41,8 +38,6 @@ export function usePurchaseCallback(editionNumber: string, priceInWei: number) {
                 .on(TransactionEventType.ERROR, (error) => {
                     reject(error)
                 })
-        }).finally(() => setLoading(false))
+        })
     }, [account, chainId, knownOriginDigitalAssetV2_contract])
-
-    return [loading, purchaseCallback] as const
 }

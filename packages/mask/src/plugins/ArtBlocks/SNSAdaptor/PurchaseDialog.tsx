@@ -64,7 +64,7 @@ export function PurchaseDialog(props: ActionBarProps) {
     })
 
     const [ToS_Checked, setToS_Checked] = useState(false)
-    const [isPurchasing, purchaseCallback] = usePurchaseCallback(
+    const [{ loading: isPurchasing }, purchaseCallback] = usePurchaseCallback(
         project.projectId,
         project.pricePerTokenInWei,
         token.value?.type,

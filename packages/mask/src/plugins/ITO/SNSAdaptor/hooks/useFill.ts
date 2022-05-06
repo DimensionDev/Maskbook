@@ -12,8 +12,8 @@ import {
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
-import { useCallback, useState } from 'react'
-import { useAsync } from 'react-use'
+import { useState } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants'
@@ -63,11 +63,10 @@ export function useFillCallback(poolSettings?: PoolSettings) {
     const account = useAccount()
     const chainId = useChainId()
     const { contract: ITO_Contract } = useITO_Contract()
-    const [loading, setLoading] = useState(false)
     const [fillSettings, setFillSettings] = useState(poolSettings)
     const paramResult = useFillParams(poolSettings)
 
-    const fillCallback = useCallback(async () => {
+    const [state, fillCallback] = useAsyncFn(async () => {
         if (!poolSettings) return
 
         const { password, startTime, endTime, token, unlockTime } = poolSettings
@@ -78,7 +77,6 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         if (!checkParams(paramsObj)) return
 
-        setLoading(true)
         // error: unable to sign password
         let signedPassword = ''
         try {
@@ -87,7 +85,6 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             signedPassword = ''
         }
         if (!signedPassword) {
-            setLoading(false)
             return
         }
         params[0] = Web3Utils.sha3(signedPassword)!
@@ -125,10 +122,10 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                 .on(TransactionEventType.ERROR, (error) => {
                     reject(error)
                 })
-        }).finally(() => setLoading(false))
+        })
     }, [web3, account, chainId, ITO_Contract, poolSettings, paramResult])
 
-    return [fillSettings, loading, fillCallback] as const
+    return [fillSettings, state, fillCallback] as const
 }
 
 export function useFillParams(poolSettings: PoolSettings | undefined) {

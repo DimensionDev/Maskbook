@@ -132,7 +132,7 @@ export function DepositDialog() {
     }, [pool, rawAmount])
 
     // #region blocking
-    const [isDepositing, depositCallback] = useDepositCallback(
+    const [{ loading: isDepositing }, depositCallback] = useDepositCallback(
         pool?.prizePool.address ?? '',
         amount.toFixed(),
         pool?.tokens.ticket.address ?? '',

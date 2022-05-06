@@ -1,7 +1,8 @@
 import { GasOptionConfig, TransactionEventType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { pick } from 'lodash-unified'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { useAsyncFn } from 'react-use'
 import type { TransactionConfig } from 'web3-core'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
@@ -12,7 +13,6 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
 
     const web3 = useWeb3({ chainId })
-    const [loading, setLoading] = useState(false)
 
     // compose transaction config
     const config = useMemo(() => {
@@ -24,12 +24,11 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
         } as TransactionConfig
     }, [account, tradeComputed])
 
-    const tradeCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         // validate config
         if (!account || !config || !tradeComputed) {
             return
         }
-        setLoading(true)
 
         const config_ = {
             ...config,
@@ -49,8 +48,6 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
                     resolve(receipt.transactionHash)
                 })
                 .on(TransactionEventType.ERROR, reject)
-        }).finally(() => setLoading(false))
+        })
     }, [web3, account, chainId, stringify(config), gasConfig])
-
-    return [loading, tradeCallback] as const
 }

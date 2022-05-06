@@ -35,7 +35,7 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
     const { collectiblesRetry } = useContext(CollectibleContext)
 
     // #region transfer tokens
-    const [loading, transferCallback] = useTokenTransferCallback(
+    const [{ loading }, transferCallback] = useTokenTransferCallback(
         token.contractDetailed.type,
         token.contractDetailed.address,
     )

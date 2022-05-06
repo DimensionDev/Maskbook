@@ -1,6 +1,6 @@
 import { EthereumTokenType, FungibleTokenDetailed, TransactionEventType, useAccount } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool'
 
 /**
@@ -21,13 +21,11 @@ export function useDepositCallback(
     const poolContract = usePoolTogetherPoolContract(address)
 
     const account = useAccount()
-    const [loading, setLoading] = useState(false)
 
-    const depositCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!token || !poolContract) {
             return
         }
-        setLoading(true)
 
         // step 1: estimate gas
         const config = {
@@ -38,7 +36,6 @@ export function useDepositCallback(
             .depositTo(account, amount, controlledToken, referrer)
             .estimateGas(config)
             .catch((error) => {
-                setLoading(false)
                 throw error
             })
 
@@ -56,8 +53,6 @@ export function useDepositCallback(
                 .on(TransactionEventType.ERROR, (error) => {
                     reject(error)
                 })
-        }).finally(() => setLoading(false))
+        })
     }, [address, account, amount, token, referrer, controlledToken])
-
-    return [loading, depositCallback] as const
 }

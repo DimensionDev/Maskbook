@@ -1,7 +1,7 @@
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { isSameAddress, TransactionEventType, useAccount, useChainId, useITOConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { checkAvailability } from '../../Worker/apis/checkAvailability'
 import { useITO_Contract } from './useITO_Contract'
 
@@ -10,10 +10,9 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
     const chainId = useChainId()
     const { ITO_CONTRACT_ADDRESS } = useITOConstants()
     const { contract: ITO_Contract } = useITO_Contract(contractAddress)
-    const [loading, setLoading] = useState(false)
 
     const isV1 = isSameAddress(ITO_CONTRACT_ADDRESS ?? '', contractAddress)
-    const claimCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!ITO_Contract || !contractAddress || pids.length === 0) return
 
         // check if already claimed
@@ -25,20 +24,13 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
 
             if (isClaimed) return
         } catch {
-            setLoading(false)
             return
         }
 
         // estimate gas and compose transaction
         const config = {
             from: account,
-            gas: await ITO_Contract.methods
-                .claim(pids)
-                .estimateGas({ from: account })
-                .catch((error) => {
-                    setLoading(false)
-                    throw error
-                }),
+            gas: await ITO_Contract.methods.claim(pids).estimateGas({ from: account }),
         }
 
         // send transaction and wait for hash
@@ -52,8 +44,6 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
                 .on(TransactionEventType.ERROR, (error) => {
                     reject(error)
                 })
-        }).finally(() => setLoading(false))
+        })
     }, [account, chainId, ITO_Contract, stringify(pids), isV1])
-
-    return [loading, claimCallback] as const
 }

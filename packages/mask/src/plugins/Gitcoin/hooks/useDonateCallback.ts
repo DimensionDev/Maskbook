@@ -8,7 +8,8 @@ import {
     useGitcoinConstants,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { useAsyncFn } from 'react-use'
 import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
 
 /**
@@ -23,7 +24,6 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
 
     const account = useAccount()
 
-    const [loading, setLoading] = useState(false)
     const donations = useMemo((): [string, string, string][] => {
         if (!address || !token) return []
         if (!GITCOIN_ETH_ADDRESS || !GITCOIN_TIP_PERCENTAGE) return []
@@ -43,14 +43,13 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         ]
     }, [address, amount, token])
 
-    const donateCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!token || !bulkCheckoutContract || !donations.length) {
             return
         }
 
         // estimate gas and compose transaction
         const value = toFixed(token.type === EthereumTokenType.Native ? amount : 0)
-        setLoading(true)
         const config = {
             from: account,
             gas: await bulkCheckoutContract.methods
@@ -76,8 +75,6 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
                 .on(TransactionEventType.ERROR, (error) => {
                     reject(error)
                 })
-        }).finally(() => setLoading(false))
+        })
     }, [account, amount, token, donations])
-
-    return [loading, donateCallback] as const
 }

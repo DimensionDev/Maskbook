@@ -183,7 +183,7 @@ export function SwapDialog(props: SwapDialogProps) {
         payload.contract_address,
     )
 
-    const [isSwapping, swapCallback] = useSwapCallback(
+    const [{ loading: isSwapping }, swapCallback] = useSwapCallback(
         payload,
         swapAmount.toFixed(),
         swapToken ? swapToken : { address: NATIVE_TOKEN_ADDRESS },

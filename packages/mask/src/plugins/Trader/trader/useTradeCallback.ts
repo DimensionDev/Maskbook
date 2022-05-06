@@ -25,13 +25,14 @@ import { useGetTradeContext } from './useGetTradeContext'
 import { TargetChainIdContext } from './useTargetChainIdContext'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { noop } from 'lodash-unified'
+import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn'
 
 export function useTradeCallback(
     provider?: TradeProvider,
     tradeComputed?: TradeComputed<unknown> | null,
     gasConfig?: GasOptionConfig,
     allowedSlippage?: number,
-): readonly [boolean, () => Promise<string | undefined>] {
+): AsyncFnReturn<() => Promise<string | undefined>> {
     // trade context
     const context = useGetTradeContext(provider)
     const { targetChainId } = TargetChainIdContext.useContainer()
@@ -125,6 +126,8 @@ export function useTradeCallback(
             return openocean
         default:
             if (provider) unreachable(provider)
-            return [false, noop as () => Promise<undefined>]
+            return [{ loading: false }, noop as () => Promise<undefined>] as AsyncFnReturn<
+                () => Promise<string | undefined>
+            >
     }
 }

@@ -1,17 +1,15 @@
 import { EthereumTokenType, GasOptionConfig, useNativeTokenWrapperCallback } from '@masknet/web3-shared-evm'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { TradeComputed, TradeStrategy } from '../../types'
 import type { NativeTokenWrapper } from './useTradeComputed'
 
 export function useTradeCallback(trade: TradeComputed<NativeTokenWrapper> | null, gasConfig?: GasOptionConfig) {
     const [wrapCallback, unwrapCallback] = useNativeTokenWrapperCallback()
-    const [loading, setLoading] = useState(false)
 
-    const callback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!trade?.trade_?.isNativeTokenWrapper) return
         if (!trade.inputToken || !trade.outputToken) return
 
-        setLoading(true)
         // input amount and output amount are the same value
         const tradeAmount = trade.inputAmount.toFixed()
 
@@ -24,9 +22,6 @@ export function useTradeCallback(trade: TradeComputed<NativeTokenWrapper> | null
         } else {
             result = await unwrapCallback(false, tradeAmount)
         }
-        setLoading(false)
         return result
     }, [wrapCallback, unwrapCallback])
-
-    return [loading, callback] as const
 }

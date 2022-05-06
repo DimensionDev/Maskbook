@@ -1,7 +1,8 @@
 import { GasOptionConfig, TransactionEventType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { pick } from 'lodash-unified'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { useAsyncFn } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import type { SwapBancorRequest, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
@@ -10,23 +11,20 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const web3 = useWeb3({ chainId })
     const account = useAccount()
-    const [loading, setLoading] = useState(false)
 
     const trade: SwapBancorRequest | null = useMemo(() => {
         if (!account || !tradeComputed?.trade_) return null
         return tradeComputed.trade_
     }, [account, tradeComputed])
 
-    const tradeCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!account || !trade) {
             return
         }
 
-        setLoading(true)
         const [data, err] = await PluginTraderRPC.swapTransactionBancor(trade)
         if (err) {
             const error = new Error(err.error.messages?.[0] || 'Unknown Error')
-            setLoading(false)
             throw error
         }
 
@@ -36,12 +34,9 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
         const config = pick(tradeTransaction.transaction, ['to', 'data', 'value', 'from'])
         const config_ = {
             ...config,
-            gas: await web3.eth
-                .estimateGas(config)
-                .catch((error) => {
-                    throw error
-                })
-                .finally(() => setLoading(false)),
+            gas: await web3.eth.estimateGas(config).catch((error) => {
+                throw error
+            }),
             ...gasConfig,
         }
 
@@ -53,8 +48,6 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
                 .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
                     resolve(receipt.transactionHash)
                 })
-        }).finally(() => setLoading(false))
+        })
     }, [web3, account, chainId, stringify(trade), gasConfig])
-
-    return [loading, tradeCallback] as const
 }

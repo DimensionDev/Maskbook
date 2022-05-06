@@ -99,36 +99,33 @@ export function DonateDialog(props: DonateDialogProps) {
     const amount = rightShift(rawAmount || '0', token?.decimals)
     // #endregion
 
-    const [loading, donateCallback] = useDonateCallback(address ?? '', amount.toFixed(), token)
+    const [{ loading }, donateCallback] = useDonateCallback(address ?? '', amount.toFixed(), token)
 
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
 
     const openShareTxDialog = useOpenShareTxDialog()
     const donate = useCallback(async () => {
         const hash = await donateCallback()
-        if (hash) {
-            const shareText = token
-                ? [
-                      `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${
-                          token.symbol
-                      }. ${
-                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                              ? `Follow @${
-                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                                } (mask.io) to donate Gitcoin grants.`
-                              : ''
-                      }`,
-                      '#mask_io',
-                      postLink,
-                  ].join('\n')
-                : ''
-            await openShareTxDialog({
-                hash,
-                onShare() {
-                    activatedSocialNetworkUI.utils.share?.(shareText)
-                },
-            })
-        }
+        if (!hash) return
+        const shareText = token
+            ? [
+                  `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol}. ${
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                          ? `Follow @${
+                                isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                            } (mask.io) to donate Gitcoin grants.`
+                          : ''
+                  }`,
+                  '#mask_io',
+                  postLink,
+              ].join('\n')
+            : ''
+        await openShareTxDialog({
+            hash,
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
+            },
+        })
     }, [openShareTxDialog, token, donateCallback])
 
     // #region submit button

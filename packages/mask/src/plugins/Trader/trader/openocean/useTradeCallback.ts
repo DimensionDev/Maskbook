@@ -1,7 +1,8 @@
 import { GasOptionConfig, useAccount, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { pick } from 'lodash-unified'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { useAsyncFn } from 'react-use'
 import type { TransactionConfig } from 'web3-core'
 import type { SwapOOSuccessResponse, TradeComputed } from '../../types'
 
@@ -12,7 +13,6 @@ export function useTradeCallback(
     const web3 = useWeb3()
     const account = useAccount()
     const chainId = useChainId()
-    const [loading, setLoading] = useState(false)
 
     // compose transaction config
     const config = useMemo(() => {
@@ -23,18 +23,16 @@ export function useTradeCallback(
         } as TransactionConfig
     }, [account, tradeComputed])
 
-    const tradeCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         // validate config
         if (!account || !config) {
             return
         }
 
-        setLoading(true)
         // compose transaction config
         const config_ = {
             ...config,
             gas: await web3.eth.estimateGas(config).catch((error) => {
-                setLoading(false)
                 throw error
             }),
             ...gasConfig,
@@ -49,8 +47,6 @@ export function useTradeCallback(
                     resolve(hash)
                 }
             })
-        }).finally(() => setLoading(false))
+        })
     }, [web3, account, chainId, stringify(config)])
-
-    return [loading, tradeCallback] as const
 }
