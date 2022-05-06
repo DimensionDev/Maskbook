@@ -5853,7 +5853,7 @@ packages:
       react-is: 17.0.2
     dev: false
 
-  /@mui/x-data-grid/5.5.1_621ab3b6748d201f895a234ab9a66e29:
+  /@mui/x-data-grid/5.5.1:
     resolution: {integrity: sha512-0Lf7P2wr1IoK//4KLsIIps++G6XGMdlxhGxNprM4DhQZRfccX97E3o+t15W4f4YP8IdTKmdD2TjM31xcGF+HxQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -5867,7 +5867,7 @@ packages:
       reselect: 4.1.5
     dev: false
 
-  /@mui/x-date-pickers/5.0.0-alpha.0_d79be74d1141b1f4572a79fd57afdc07:
+  /@mui/x-date-pickers/5.0.0-alpha.0_6w7d4dctfrbbtfw4csfd2vfuh4:
     resolution: {integrity: sha512-JTzTaNSWbxNi8KDUJjHCH6im0YlIEv88gPoKhGm7s6xCGT1q6FtMp/oQ40nhfwrJ73nkM5G1JXRIzI/yfsHXQQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
