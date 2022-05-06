@@ -204,7 +204,7 @@ export async function harvestRewards(
             }
         })
 
-        const proofs = rewardsSorted.map((reward) => reward.proof)
+        const proofs = rewardsSorted.map((reward) => [reward.proof])
 
         const farmsAddr = REFERRAL_FARMS_V1_ADDR
         const farms = createContract(web3, farmsAddr, ReferralFarmsV1ABI as AbiItem[])
