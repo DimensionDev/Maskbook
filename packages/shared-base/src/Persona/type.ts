@@ -16,6 +16,8 @@ export interface ProfileInformation {
     avatar?: string
     identifier: ProfileIdentifier
     fingerprint?: string
+    address?: string
+    fromNextID?: boolean
 }
 
 export enum RelationFavor {

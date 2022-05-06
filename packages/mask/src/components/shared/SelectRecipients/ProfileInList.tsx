@@ -6,6 +6,7 @@ import type { ProfileInformation as Profile } from '@masknet/shared-base'
 import { Avatar } from '../../../utils/components/Avatar'
 import type { CheckboxProps } from '@mui/material/Checkbox'
 import { CopyIcon } from '@masknet/icons'
+import { formatPersonaFingerprint } from '@masknet/shared-base'
 
 const useStyle = makeStyles()((theme) => ({
     root: {
@@ -46,11 +47,7 @@ export function ProfileInList(props: ProfileInListProps) {
     const profile = props.item
     const name = profile.nickname || profile.identifier.userId
 
-    const shortStr = (v?: string) => {
-        if (!v) return ''
-        return v.slice(0, 6) + '...' + v.slice(-5)
-    }
-    const secondary = shortStr(profile.fingerprint?.toUpperCase())
+    const secondary = formatPersonaFingerprint(profile.fingerprint?.toUpperCase() ?? '', 5)
 
     const onClick = useCallback(
         (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.checked),
