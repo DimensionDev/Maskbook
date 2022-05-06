@@ -4,7 +4,7 @@ import type { PrefixedHexString } from 'ethereumjs-util'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { createTypedMessageMetadataReader } from '@masknet/typed-message'
 
-import { META_KEY, supportedChainIds } from './constants'
+import { META_KEY, supportedChainId } from './constants'
 import type { ReferralMetaData, ChainAddress, ChainAddressProps, EvmAddress, Bytes32, Bytes24 } from './types'
 import schema from './schema.json'
 
@@ -115,5 +115,5 @@ export function roundValue(value: string | number, tokenDecimals?: number) {
 }
 
 export function getRequiredChainId(currentChainId: ChainId) {
-    return supportedChainIds.includes(currentChainId) ? currentChainId : supportedChainIds[0]
+    return supportedChainId === currentChainId ? currentChainId : supportedChainId
 }
