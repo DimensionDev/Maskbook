@@ -4,7 +4,6 @@ import type { Account } from '../type'
 import { AccountAvatar } from '../components/AccountAvatar'
 import { Button, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
-import { SOCIAL_MEDIA_NAME } from '@masknet/shared'
 import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()(() => ({
@@ -77,11 +76,11 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                 <Typography className={classes.warning}>
                     {account.is_valid
                         ? t('popups_disconnect_warning_alert', {
-                              network: SOCIAL_MEDIA_NAME[account.identifier.network],
                               account: account.identifier.userId,
-                              persona: personaName,
                           })
-                        : t('popups_verify_warning_alert')}
+                        : t('popups_verify_warning_alert', {
+                              account: account.identifier.userId,
+                          })}
                 </Typography>
                 <div className={classes.controller}>
                     {account.is_valid ? (
