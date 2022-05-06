@@ -156,11 +156,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     const onSubmit = useCallback(() => {
         if (!Editor.current) return
         setSending(true)
-        console.log({
-            editor: Editor.current.value,
-            encryptionKind,
-            onSubmit: props.onSubmit,
-        })
         props
             .onSubmit({
                 content: Editor.current.value,
