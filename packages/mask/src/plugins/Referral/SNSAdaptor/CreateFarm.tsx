@@ -123,7 +123,7 @@ export function CreateFarm(props: PageInterface) {
             setSelectTokenDialog({
                 open: true,
                 uuid: id,
-                title: title,
+                title,
             })
         },
         [id],

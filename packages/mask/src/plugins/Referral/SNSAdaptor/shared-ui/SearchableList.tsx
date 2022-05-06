@@ -126,7 +126,7 @@ export function SearchableList<T>({
                             itemSize={itemSize ?? 100}
                             itemData={{
                                 dataSet: readyToRenderData,
-                                onSelect: onSelect,
+                                onSelect,
                             }}
                             itemCount={readyToRenderData.length}
                             {...rest}>

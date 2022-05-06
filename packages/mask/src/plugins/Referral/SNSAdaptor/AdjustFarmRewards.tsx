@@ -93,7 +93,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     const onChangePageToAdjustRewards = useCallback(() => {
         props?.onChangePage?.(PagesType.ADJUST_REWARDS, TabsReferralFarms.TOKENS + ': ' + PagesType.ADJUST_REWARDS, {
             adjustFarmDialog: {
-                farm: farm,
+                farm,
                 rewardToken,
                 referredToken,
                 continue: () => {},
@@ -142,8 +142,8 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
             transactionDialog: {
                 transaction: {
                     status: TransactionStatus.CONFIRMATION,
-                    title: title,
-                    subtitle: subtitle,
+                    title,
+                    subtitle,
                 },
             },
         })
