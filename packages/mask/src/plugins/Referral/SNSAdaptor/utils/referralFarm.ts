@@ -170,6 +170,23 @@ export async function adjustFarmRewards(
     }
 }
 
+function validateRewardPeriods(rewards: Reward[]) {
+    let isValid = true
+    const arrLength = rewards.length
+
+    rewards.forEach((reward, i) => {
+        if (!(i < arrLength - 1)) return
+
+        const current = Number.parseInt(formatUnits(reward.period, 0), 10)
+        const next = Number.parseInt(formatUnits(rewards[i + 1].period, 0), 10)
+        if (next - current > 1) {
+            isValid = false
+        }
+    })
+
+    return isValid
+}
+
 export async function harvestRewards(
     onConfirm: (txHash: string) => void,
     onStart: () => void,
@@ -187,24 +204,29 @@ export async function harvestRewards(
         }
         const rewardsSorted = rewards.sort(
             (rewardA, rewardB) =>
-                Number.parseFloat(formatUnits(rewardA.period, 0)) - Number.parseFloat(formatUnits(rewardB.period, 0)),
+                Number.parseInt(formatUnits(rewardA.period, 0), 10) -
+                Number.parseInt(formatUnits(rewardB.period, 0), 10),
         )
 
-        // TODO: add gapcheck
-        const requests = rewardsSorted.map(({ farmHash, rewardValue: value, period }) => {
-            return {
+        // Check periods to ensure no periods are skipped (because skipped periods == lost funds)
+        if (!validateRewardPeriods(rewardsSorted)) {
+            return onError('You cannot harvest rewards because there is a missed period.')
+        }
+
+        const requests = [
+            {
                 rewardTokenDefn,
-                entitlements: [
-                    {
+                entitlements: rewardsSorted.map(({ farmHash, rewardValue: value, period }) => {
+                    return {
                         farmHash,
                         value,
                         period,
-                    },
-                ],
-            }
-        })
+                    }
+                }),
+            },
+        ]
 
-        const proofs = rewardsSorted.map((reward) => [reward.proof])
+        const proofs = [rewardsSorted.map((reward) => reward.proof)]
 
         const farmsAddr = REFERRAL_FARMS_V1_ADDR
         const farms = createContract(web3, farmsAddr, ReferralFarmsV1ABI as AbiItem[])

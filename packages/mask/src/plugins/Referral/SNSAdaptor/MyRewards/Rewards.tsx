@@ -62,6 +62,7 @@ export function Rewards({
     const onConfirmHarvestRewards = useCallback(
         (txHash: string) => {
             onChangePage?.(PagesType.TRANSACTION, t('plugin_referral_transaction'), {
+                hideBackBtn: true,
                 hideAttrLogo: true,
                 transactionDialog: {
                     transaction: {
