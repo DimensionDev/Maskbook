@@ -319,7 +319,6 @@
     "plugin_wallet_return_mobile_wallet_options": "crwdns4683:0crwdne4683:0",
     "plugin_wallet_view_qr_code": "crwdns4685:0crwdne4685:0",
     "plugin_wallet_switch_network": "crwdns4687:0{{network}}crwdne4687:0",
-    "plugin_wallet_switch_network_under_going": "crwdns4689:0{{network}}crwdne4689:0",
     "plugin_wallet_not_available_on": "crwdns7913:0{{network}}crwdne7913:0",
     "plugin_wallet_connect_wallet": "crwdns4693:0crwdne4693:0",
     "plugin_wallet_connect_wallet_tip": "crwdns4695:0crwdne4695:0",

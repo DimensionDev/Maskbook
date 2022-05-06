@@ -19,15 +19,13 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
-import ActionButton, {
-    ActionButtonPromise,
-    ActionButtonPromiseProps,
-} from '../../extension/options-page/DashboardComponents/ActionButton'
+import { ActionButtonPromiseProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 import Services from '../../extension/service'
 import { pluginIDSettings } from '../../settings/settings'
+import { WalletStatusBar } from '@masknet/shared'
 
 const useStyles = makeStyles()(() => ({}))
 
@@ -170,9 +168,12 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     <span>{t('plugin_wallet_connect_wallet_tip')}</span>
                 </Typography>
                 {!props.hiddenConnectButton ? (
-                    <ActionButton size="small" sx={{ marginTop: 1.5 }} onClick={openSelectProviderDialog}>
-                        {t('plugin_wallet_connect_wallet')}
-                    </ActionButton>
+                    <WalletStatusBar
+                        actionProps={{
+                            title: t('plugin_wallet_connect_wallet'),
+                            action: openSelectProviderDialog,
+                        }}
+                    />
                 ) : null}
             </>,
         )
@@ -203,28 +204,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     </Typography>
                 ) : null}
                 {isAllowed ? (
-                    <ActionButtonPromise
-                        size="small"
-                        className={classes.switchButton}
-                        sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
-                        init={
-                            <span>
-                                {t('plugin_wallet_switch_network', {
-                                    network: expectedNetwork,
-                                })}
-                            </span>
-                        }
-                        waiting={t('plugin_wallet_switch_network_under_going', {
-                            network: expectedNetwork,
-                        })}
-                        complete={t('plugin_wallet_switch_network', {
-                            network: expectedNetwork,
-                        })}
-                        failed={t('retry')}
-                        executor={onSwitchChain}
-                        completeOnClick={onSwitchChain}
-                        failedOnClick="use executor"
-                        {...props.ActionButtonPromiseProps}
+                    <WalletStatusBar
+                        actionProps={{
+                            title: t('plugin_wallet_switch_network', {
+                                network: expectedNetwork,
+                            }),
+                            action: onSwitchChain,
+                        }}
+                        classes={{ button: classes.switchButton }}
                     />
                 ) : null}
             </>,
@@ -243,28 +230,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 </Typography>
             ) : null}
             {isAllowed ? (
-                <ActionButtonPromise
-                    size="small"
-                    className={classes.switchButton}
-                    sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
-                    init={
-                        <span>
-                            {t('plugin_wallet_switch_network', {
-                                network: expectedNetwork,
-                            })}
-                        </span>
-                    }
-                    waiting={t('plugin_wallet_switch_network_under_going', {
-                        network: expectedNetwork,
-                    })}
-                    complete={t('plugin_wallet_switch_network', {
-                        network: expectedNetwork,
-                    })}
-                    failed={t('retry')}
-                    executor={onSwitchChain}
-                    completeOnClick={onSwitchChain}
-                    failedOnClick="use executor"
-                    {...props.ActionButtonPromiseProps}
+                <WalletStatusBar
+                    actionProps={{
+                        title: t('plugin_wallet_switch_network', {
+                            network: expectedNetwork,
+                        }),
+                        action: onSwitchChain,
+                    }}
+                    classes={{ button: classes.switchButton }}
                 />
             ) : null}
         </>,

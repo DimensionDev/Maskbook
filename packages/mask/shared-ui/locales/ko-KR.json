@@ -230,7 +230,6 @@
     "plugin_wallet_return_mobile_wallet_options": "모바일 월렛 옵션으로 돌아가기",
     "plugin_wallet_view_qr_code": "QR 코드 보기",
     "plugin_wallet_switch_network": "{{network}} 네트워크로 바꾸기",
-    "plugin_wallet_switch_network_under_going": "{{network}} 네트워크로 바꾸는 중...",
     "plugin_wallet_not_available_on": "{{network}} 에서는 사용할 수 없습니다.",
     "plugin_wallet_connect_wallet": "월렛 연결",
     "plugin_wallet_connect_wallet_tip": "월렛을 연결하세요.",
