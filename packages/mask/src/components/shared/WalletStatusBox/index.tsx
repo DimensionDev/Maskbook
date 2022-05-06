@@ -94,6 +94,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
 interface WalletStatusBox {
     isDashboard?: boolean
     disableChange?: boolean
+    showPendingTransaction?: boolean
 }
 export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
@@ -201,10 +202,12 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     </section>
                 )}
             </section>
-            <div>
-                {pendingSummary}
-                {transactionList}
-            </div>
+            {props.showPendingTransaction ? (
+                <div>
+                    {pendingSummary}
+                    {transactionList}
+                </div>
+            ) : null}
         </>
     ) : (
         <section className={classes.connectButtonWrapper}>

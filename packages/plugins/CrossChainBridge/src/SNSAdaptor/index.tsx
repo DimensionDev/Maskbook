@@ -12,7 +12,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <CrossBridgeIcon />
-            const name = { i18nKey: '__plugin_name', fallback: 'Cross-bridge' }
+            const name = { fallback: 'Cross-bridge' }
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {

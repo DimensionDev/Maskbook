@@ -64,7 +64,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     return (
         <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
-                <WalletStatusBox isDashboard={props.isDashboard} />
+                <WalletStatusBox isDashboard={props.isDashboard} showPendingTransaction />
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>

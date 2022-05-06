@@ -55,7 +55,10 @@ export function usePendingTransactions() {
             <div className={classnames(pendingTransactions.length ? '' : classes.hide)}>
                 {pendingTransactions.length ? (
                     <Typography className={classes.pendingSummary} variant="body2" mr={1} fontWeight={700}>
-                        {pendingTransactions.length} {t('wallet_status_pending')}
+                        {pendingTransactions.length}{' '}
+                        {t('wallet_status_pending', {
+                            plural: pendingTransactions.length > 1 ? 's' : '',
+                        })}
                     </Typography>
                 ) : null}
             </div>

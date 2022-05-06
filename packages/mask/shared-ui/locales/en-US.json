@@ -221,7 +221,7 @@
     "wallet_balance": "Balance",
     "wallet_balance_eth": "Balance(ETH)",
     "wallet_new": "New Wallet",
-    "wallet_status_pending": "Pending",
+    "wallet_status_pending": "Pending{{plural}}",
     "wallet_status_pending_clear_all": "Clear All",
     "wallet_status_pending_clear": "Clear",
     "wallet_status_button_change": "Change",
