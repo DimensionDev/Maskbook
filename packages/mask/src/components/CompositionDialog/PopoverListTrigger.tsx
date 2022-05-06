@@ -118,7 +118,7 @@ const PopoverListItem = (props: PopoverListItem) => {
             )}
             {personaRequired && e2eDisabled === 2 && (
                 <div className={classes.flex}>
-                    <Typography className={classes.mainTitle}>No Localkey</Typography>
+                    <Typography className={classes.mainTitle}>No local key</Typography>
                 </div>
             )}
             {showDivider && <div className={classes.divider} />}
