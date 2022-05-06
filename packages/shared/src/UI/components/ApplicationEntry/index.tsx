@@ -41,8 +41,8 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => (
         },
     },
     recommendFeatureApplicationBox: {
-        width: 220,
-        minWidth: 220,
+        width: 225,
+        minWidth: 225,
         height: 97,
         marginRight: 12,
         cursor: 'pointer',

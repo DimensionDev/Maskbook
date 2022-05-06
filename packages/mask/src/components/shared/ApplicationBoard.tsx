@@ -1,6 +1,6 @@
-import { useContext, createContext, PropsWithChildren, useMemo, useCallback } from 'react'
+import { useContext, createContext, PropsWithChildren, useMemo, useCallback, useState } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { Typography, Box } from '@mui/material'
+import { Typography } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, NetworkPluginID } from '@masknet/plugin-infra/web3'
@@ -14,6 +14,7 @@ import { useNextIDConnectStatus } from '../DataSource/useNextID'
 import { usePersonaConnectStatus, usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
+import { CarouselProvider, Slider, Slide } from 'pure-react-carousel'
 
 const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -79,6 +80,17 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
                 display: 'none',
             },
         },
+        carousel: {
+            height: 130,
+            overflowX: 'scroll !important',
+            '& .carousel__slider': {
+                padding: '8px 2px 0px',
+                overflowX: 'scroll !important',
+                '&::-webkit-scrollbar': {
+                    display: 'none',
+                },
+            },
+        },
     }
 })
 
@@ -136,16 +148,38 @@ function ApplicationBoardContent(props: Props) {
                 .filter((x) => Boolean(x.entry.RenderEntryComponent)),
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
+
+    const [isPlaying, setPlaying] = useState(true)
     const recommendFeatureAppList = applicationList.filter((x) => x.entry.recommendFeature)
+    const [sliderList] = useState(
+        recommendFeatureAppList.concat(recommendFeatureAppList).concat(recommendFeatureAppList),
+    )
+
     const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
     const { classes } = useStyles({ shouldScroll: listedAppList.length > 12 })
     return (
         <>
-            <Box className={classes.recommendFeatureAppListWrapper}>
-                {recommendFeatureAppList.map((application) => (
-                    <RenderEntryComponent key={application.entry.ApplicationEntryID} application={application} />
-                ))}
-            </Box>
+            <link rel="stylesheet" href={new URL('./assets/react-carousel.es.css', import.meta.url).toString()} />
+            <CarouselProvider
+                naturalSlideWidth={220}
+                naturalSlideHeight={117}
+                totalSlides={sliderList.length}
+                visibleSlides={2.2}
+                infinite={false}
+                interval={2500}
+                className={classes.carousel}
+                isPlaying={isPlaying}>
+                <Slider onScroll={(e) => setPlaying((e.target as HTMLDivElement).scrollLeft === 0)}>
+                    {sliderList.map((application, i) => (
+                        <Slide index={i} key={i}>
+                            <RenderEntryComponent
+                                key={application.entry.ApplicationEntryID}
+                                application={application}
+                            />
+                        </Slide>
+                    ))}
+                </Slider>
+            </CarouselProvider>
 
             {listedAppList.length > 0 ? (
                 <section className={classes.applicationWrapper}>
