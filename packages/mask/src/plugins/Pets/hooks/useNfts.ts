@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import {
     useChainId,
     useCollectibles,
-    ERC721TokenDetailed,
     isSameAddress,
     SocketState,
     resolveIPFSLink,
@@ -24,19 +23,19 @@ function useInitNFTs(config: Record<string, Constant> | undefined) {
     }, [config])
 }
 
-export function useNFTs(user: User | undefined) {
+export function useNFTs(user: User | undefined, configNFTs: Record<string, Constant> | undefined) {
     const [nfts, setNfts] = useState<FilterContract[]>([])
     const chainId = useChainId()
-    const [fetchTotal, setFetchTotal] = useState<ERC721TokenDetailed[]>([])
+    const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
     // const { data: collectibles, state } = useCollectibles(user?.address ?? '', chainId)
     const { data: collectibles, state } = useCollectibles('0x141721F4D7Fd95541396E74266FF272502Ec8899', chainId)
-    console.log('nfts::::', collectibles)
+
     useEffect(() => {
         const tempNFTs: FilterContract[] = []
         if (collectibles.length && (state === SocketState.done || state === SocketState.sent)) {
-            const total = [...fetchTotal, ...collectibles]
-            setFetchTotal(total)
-            for (const NFT of total) {
+            for (const NFT of collectibles) {
+                if (blacklist.includes(NFT.contractDetailed.address)) continue
+
                 let sameNFT = tempNFTs.find((temp) => isSameAddress(temp.contract, NFT.contractDetailed.address))
                 if (!sameNFT) {
                     sameNFT = {
@@ -72,5 +71,5 @@ export function useNFTs(user: User | undefined) {
         setNfts(tempNFTs)
         return () => {}
     }, [JSON.stringify(user), JSON.stringify(collectibles), state])
-    return nfts
+    return { nfts, state }
 }

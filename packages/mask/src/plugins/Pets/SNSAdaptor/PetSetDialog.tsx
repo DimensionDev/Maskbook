@@ -106,7 +106,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const [isReady, cancel] = useTimeout(2000)
 
     const user = useUser()
-    const nfts = useNFTs(user)
+    const { nfts, state } = useNFTs(user, configNFTs)
     const [collection, setCollection] = useState<FilterContract>(initCollection)
     const [isCollectionsError, setCollectionsError] = useState(false)
 
@@ -210,7 +210,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 disablePortal
                 id="collection-box"
                 options={nfts}
-                loading={nfts.length === 0}
+                loading={state !== 'done'}
                 onChange={(_event, newValue) => onCollectionChange(newValue?.name ?? '')}
                 getOptionLabel={(option) => option.name}
                 PopperComponent={ShadowRootPopper}
@@ -239,7 +239,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                             classes: { root: classes.inputBorder },
                             endAdornment: (
                                 <Fragment>
-                                    {nfts.length === 0 ? <CircularProgress color="inherit" size={20} /> : null}
+                                    {state !== 'done' ? <CircularProgress color="inherit" size={20} /> : null}
                                     {params.InputProps.endAdornment}
                                 </Fragment>
                             ),
