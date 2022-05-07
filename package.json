@@ -101,6 +101,7 @@
         "@babel/core",
         "webextension-polyfill",
         "prop-types",
+        "@mui/material",
         "see:https://github.com/solana-labs/solana-program-library/issues/3146",
         "@angular/common",
         "@angular/core",

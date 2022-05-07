@@ -32,7 +32,6 @@
     "@masknet/icons": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/storybook-shared": "workspace:*",
-    "@mui/material": "^5.6.4",
     "@types/qrcode": "^1.4.2",
     "@types/tinycolor2": "^1.4.3",
     "classnames": "^2.3.1",
