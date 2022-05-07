@@ -101,11 +101,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const web3 = useWeb3()
     const account = useAccount()
     const { address: publicKey, privateKey } = useMemo(() => web3.eth.accounts.create(), [])
-    const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback(
-        settings!,
-        contract_version,
-        publicKey,
-    )
+    const [createState, createCallback, resetCreateCallback] = useCreateCallback(settings!, contract_version, publicKey)
     const isCreating = [
         TransactionStateType.WAIT_FOR_CONFIRMING,
         TransactionStateType.HASH,
@@ -113,24 +109,17 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     ].includes(createState.type)
     const openShareTxDialog = useOpenShareTxDialog()
     const createRedpacket = useCallback(async () => {
-        const hash = await createCallback()
-        if (!hash) return
-        openShareTxDialog({
-            hash,
-            onShare() {},
+        const receipt = await createCallback()
+        if (!receipt?.transactionHash) return
+        await openShareTxDialog({
+            hash: receipt.transactionHash,
         })
         // reset state
         resetCreateCallback()
 
         // the settings is not available
-        if (!createSettings?.token) return
+        if (!settings?.token) return
 
-        // TODO:
-        // early return happened
-        // we should guide user to select the red packet in the existing list
-        if (createState.type !== TransactionStateType.CONFIRMED) return
-
-        const { receipt } = createState
         const CreationSuccess = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
             creation_time: string
             creator: string
@@ -140,21 +129,21 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         }
         payload.current.sender = {
             address: account,
-            name: createSettings.name,
-            message: createSettings.message,
+            name: settings.name,
+            message: settings.message,
         }
-        payload.current.is_random = createSettings.isRandom
-        payload.current.shares = createSettings.shares
+        payload.current.is_random = settings.isRandom
+        payload.current.shares = settings.shares
         payload.current.password = privateKey
         payload.current.rpid = CreationSuccess.id
         payload.current.total = CreationSuccess.total
-        payload.current.duration = createSettings.duration
+        payload.current.duration = settings.duration
         payload.current.creation_time = Number.parseInt(CreationSuccess.creation_time, 10) * 1000
-        payload.current.token = createSettings.token
+        payload.current.token = settings.token
 
         // output the redpacket as JSON payload
         onCreated(payload.current)
-    }, [createCallback, resetCreateCallback, createSettings, createState, openShareTxDialog, onCreated])
+    }, [createCallback, resetCreateCallback, settings, openShareTxDialog, onCreated])
     // #endregion
 
     // assemble JSON payload
@@ -177,7 +166,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     }, [chainId, networkType, contract_version, createState])
 
     useEffect(() => {
-        if (!createSettings?.token || createState.type === TransactionStateType.UNKNOWN) return
+        if (!settings?.token || createState.type === TransactionStateType.UNKNOWN) return
 
         // storing the created red packet in DB, it helps retrieve red packet password later
         // save to the database early, otherwise red-packet would lose when close the tx dialog or

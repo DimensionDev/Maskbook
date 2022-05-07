@@ -264,7 +264,7 @@ export function Trader(props: TraderProps) {
         await delay(100)
         const hash = await tradeCallback()
         if (!hash) return
-        openShareTxDialog({
+        await openShareTxDialog({
             hash,
             buttonLabel: activatedSocialNetworkUI.utils.share ? 'Share' : 'Confirm',
             onShare() {

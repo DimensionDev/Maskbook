@@ -12,7 +12,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
-import { useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
@@ -63,7 +62,6 @@ export function useFillCallback(poolSettings?: PoolSettings) {
     const account = useAccount()
     const chainId = useChainId()
     const { contract: ITO_Contract } = useITO_Contract()
-    const [fillSettings, setFillSettings] = useState(poolSettings)
     const paramResult = useFillParams(poolSettings)
 
     const [state, fillCallback] = useAsyncFn(async () => {
@@ -90,14 +88,14 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         params[0] = Web3Utils.sha3(signedPassword)!
 
         // the given settings is valid
-        setFillSettings({
+        const settings: PoolSettings = {
             ...poolSettings,
             startTime: new Date(Math.floor(startTime.getTime() / 1000) * 1000),
             endTime: new Date(Math.floor(endTime.getTime() / 1000) * 1000),
             unlockTime: unlockTime ? new Date(Math.floor(unlockTime.getTime() / 1000) * 1000) : undefined,
             password: signedPassword,
             exchangeAmounts: paramsObj.exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
-        })
+        }
 
         const config = {
             from: account,
@@ -106,18 +104,18 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                 .estimateGas({
                     from: account,
                 })
-                .catch((error: Error) => {
+                .catch(() => {
                     return
                 })) as number | undefined,
         }
 
         // send transaction and wait for hash
-        return new Promise<TransactionReceipt>(async (resolve, reject) => {
+        return new Promise<{ receipt: TransactionReceipt; settings: PoolSettings }>(async (resolve, reject) => {
             ;(ITO_Contract as ITO2).methods
                 .fill_pool(...params)
                 .send(config as NonPayableTx)
                 .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt)
+                    resolve({ receipt, settings })
                 })
                 .on(TransactionEventType.ERROR, (error) => {
                     reject(error)
@@ -125,7 +123,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         })
     }, [web3, account, chainId, ITO_Contract, poolSettings, paramResult])
 
-    return [fillSettings, state, fillCallback] as const
+    return [state, fillCallback] as const
 }
 
 export function useFillParams(poolSettings: PoolSettings | undefined) {

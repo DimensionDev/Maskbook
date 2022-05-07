@@ -12,7 +12,8 @@ import {
     useTransactionState,
 } from '@masknet/web3-shared-evm'
 import { omit } from 'lodash-unified'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
+import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
 
@@ -121,7 +122,6 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const chainId = useChainId()
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
-    const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
     const getCreateParams = useCreateParams(redPacketSettings, version, publicKey)
 
     const resetCallback = useCallback(() => {
@@ -153,9 +153,8 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                 type: TransactionStateType.FAILED,
                 error: error as Error,
             })
+            return
         }
-
-        setCreateSettings(redPacketSettings)
 
         // pre-step: start waiting for provider to confirm tx
         setCreateState({
@@ -171,7 +170,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         }
 
         // send transaction and wait for hash
-        return new Promise<string>(async (resolve, reject) => {
+        return new Promise<TransactionReceipt>(async (resolve, reject) => {
             redPacketContract.methods
                 .create_red_packet(...params)
                 .send(config)
@@ -181,7 +180,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                         no,
                         receipt,
                     })
-                    resolve(receipt.transactionHash)
+                    resolve(receipt)
                 })
                 .on(TransactionEventType.ERROR, (error: Error) => {
                     setCreateState({
@@ -193,5 +192,5 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         })
     }, [account, redPacketContract, redPacketSettings, chainId, getCreateParams])
 
-    return [createSettings, createState, createCallback, resetCallback] as const
+    return [createState, createCallback, resetCallback] as const
 }

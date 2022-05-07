@@ -76,59 +76,60 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const [poolSettings, setPoolSettings] = useState<PoolSettings>()
 
     // #region blocking
-    const [fillSettings, { loading: filling }, fillCallback] = useFillCallback(poolSettings)
+    const [{ loading: filling }, fillCallback] = useFillCallback(poolSettings)
     const openShareTxDialog = useOpenShareTxDialog()
     const fill = useCallback(async () => {
-        const receipt = await fillCallback()
-        if (!receipt?.transactionHash) return
+        const result = await fillCallback()
+        if (!result) return
+        const { receipt, settings } = result
+        if (!receipt.transactionHash) return
         await openShareTxDialog({
             hash: receipt.transactionHash,
-            onShare() {
-                // no contract is available
-                if (!ITO2_CONTRACT_ADDRESS) return
-
-                // the settings is not available
-                if (!fillSettings?.token) return
-
-                const FillSuccess = (receipt.events?.FillSuccess.returnValues ?? {}) as {
-                    total: string
-                    id: string
-                    creator: string
-                    creation_time: string
-                    token_address: string
-                    name: string
-                    message: string
-                }
-
-                // assemble JSON payload
-                const payload: JSON_PayloadInMask = {
-                    contract_address: ITO2_CONTRACT_ADDRESS,
-                    pid: FillSuccess.id,
-                    password: fillSettings.password,
-                    message: FillSuccess.message,
-                    limit: fillSettings.limit,
-                    total: FillSuccess.total,
-                    total_remaining: FillSuccess.total,
-                    seller: {
-                        address: FillSuccess.creator,
-                    },
-                    chain_id: chainId,
-                    start_time: fillSettings.startTime.getTime(),
-                    end_time: fillSettings.endTime.getTime(),
-                    unlock_time: fillSettings.unlockTime?.getTime() ?? 0,
-                    qualification_address: fillSettings.qualificationAddress,
-                    creation_time: Number.parseInt(FillSuccess.creation_time, 10) * 1000,
-                    token: fillSettings.token,
-                    exchange_amounts: fillSettings.exchangeAmounts,
-                    exchange_tokens: fillSettings.exchangeTokens,
-                    regions: fillSettings.regions,
-                }
-
-                setPoolSettings(undefined)
-                onCreateOrSelect(payload)
-                onBack()
-            },
+            onShare() {},
         })
+        // no contract is available
+        if (!ITO2_CONTRACT_ADDRESS) return
+
+        // the settings is not available
+        if (!settings?.token) return
+
+        const FillSuccess = (receipt.events?.FillSuccess.returnValues ?? {}) as {
+            total: string
+            id: string
+            creator: string
+            creation_time: string
+            token_address: string
+            name: string
+            message: string
+        }
+
+        // assemble JSON payload
+        const payload: JSON_PayloadInMask = {
+            contract_address: ITO2_CONTRACT_ADDRESS,
+            pid: FillSuccess.id,
+            password: settings.password,
+            message: FillSuccess.message,
+            limit: settings.limit,
+            total: FillSuccess.total,
+            total_remaining: FillSuccess.total,
+            seller: {
+                address: FillSuccess.creator,
+            },
+            chain_id: chainId,
+            start_time: settings.startTime.getTime(),
+            end_time: settings.endTime.getTime(),
+            unlock_time: settings.unlockTime?.getTime() ?? 0,
+            qualification_address: settings.qualificationAddress,
+            creation_time: Number.parseInt(FillSuccess.creation_time, 10) * 1000,
+            token: settings.token,
+            exchange_amounts: settings.exchangeAmounts,
+            exchange_tokens: settings.exchangeTokens,
+            regions: settings.regions,
+        }
+
+        setPoolSettings(undefined)
+        onCreateOrSelect(payload)
+        onBack()
     }, [ITO2_CONTRACT_ADDRESS, fillCallback])
     // #endregion
 

@@ -87,7 +87,7 @@ export function useOpenShareTxDialog() {
                     hash={hash}
                 />
             ),
-            confirmLabel: buttonLabel ?? 'Share',
+            confirmLabel: onShare ? buttonLabel ?? t.dialog_share() : t.dialog_dismiss(),
             onConfirm() {
                 onShare?.()
                 shared = true
