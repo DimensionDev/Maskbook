@@ -83,8 +83,10 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
         carousel: {
             height: 130,
             overflowX: 'scroll',
+            overscrollBehavior: 'contain',
             '& .carousel__slider': {
                 padding: '8px 2px 0px',
+                overscrollBehavior: 'contain',
                 overflowX: 'scroll',
                 '&::-webkit-scrollbar': {
                     display: 'none',
