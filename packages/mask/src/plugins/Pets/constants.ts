@@ -6,7 +6,7 @@ import { resolveIPFSLink } from '@masknet/web3-shared-evm'
 export const PetsPluginID = 'com.maskbook.pets'
 export const TWITTER = 'twitter.com'
 export const MASK_TWITTER = 'realMaskNetwork'
-export const NFTS_CONFIG_ADDRESS = '0x500cF2ea6755ea35eAC8727A70D997ecc3d26258'
+export const NFTS_BLOCK_ADDRESS = '0x8ed6DC7228Ec0A6aEFb4F4d55fB7f8b3A4F5D384'
 export const DEFAULT_SET_WORD =
     'Click the wallet icon on the left side of the page and set up your Non-Fungible Friend in "NFTs" tab!'
 export const DEFAULT_PUNK_MASK_WORD =
@@ -24,6 +24,7 @@ export const initMeta = {
 export const initCollection = {
     name: '',
     contract: '',
+    icon: '',
     tokens: [],
 }
 

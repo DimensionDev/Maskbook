@@ -47,5 +47,6 @@ export interface OwnerERC721TokenInfo extends ERC721TokenInfo {
 export interface FilterContract {
     name: string
     contract: string
+    icon: string
     tokens: OwnerERC721TokenInfo[]
 }
