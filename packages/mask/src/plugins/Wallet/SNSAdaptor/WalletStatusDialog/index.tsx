@@ -14,6 +14,7 @@ import { ApplicationBoard } from '../../../../components/shared/ApplicationBoard
 const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(2.5),
+        overflowX: 'hidden',
     },
     footer: {
         fontSize: 12,
