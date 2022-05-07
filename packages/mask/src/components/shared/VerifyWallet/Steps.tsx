@@ -10,13 +10,13 @@ import {
     step2ActiveIcon,
 } from './constants'
 import { ImageIcon } from '@masknet/shared'
-import { Button, Typography } from '@mui/material'
-import classNames from 'classnames'
+import { Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { useI18N } from '../../../utils'
 import type { Web3Plugin } from '@masknet/plugin-infra/src/web3-types'
 import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -188,20 +188,13 @@ export function Steps(props: StepsProps) {
             )}
 
             <div className={classes.actionBox}>
-                <Button
-                    className={classes.roundBtn}
-                    variant="outlined"
-                    size="large"
-                    fullWidth
-                    color="primary"
-                    onClick={onCustomCancel}>
+                <ActionButton variant="roundedFlat" fullWidth color="secondary" onClick={onCustomCancel}>
                     {t('cancel')}
-                </Button>
+                </ActionButton>
                 <LoadingButton
                     loading={confirmLoading}
-                    className={disableConfirm ? classNames(classes.roundBtn, classes.disableBtn) : classes.roundBtn}
-                    variant="contained"
-                    size="large"
+                    disabled={disableConfirm}
+                    variant="roundedContained"
                     fullWidth
                     onClick={onConfirm}>
                     {disableConfirm ? t('wallet_verify_persona_sign') : step === 2 ? t('done') : t('confirm')}

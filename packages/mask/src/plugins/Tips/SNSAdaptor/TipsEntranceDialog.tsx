@@ -146,10 +146,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         const changed = cloneDeep(rawPatchData)
         changed.forEach((x: any) => (x.isDefault = 0))
         changed[idx].isDefault = 1
-        const defaultItem = changed[idx]
-        changed.splice(idx, 1)
-        changed.sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
-        changed.unshift(defaultItem)
         setRawPatchData(changed)
         setHasChanged(true)
     }
@@ -315,16 +311,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         <div className={classes.actions}>
                             <ActionButton
                                 fullWidth
-                                variant="outlined"
+                                variant="roundedFlat"
                                 color="secondary"
                                 disabled={!hasChanged}
                                 onClick={onCancel}>
                                 {t('cancel')}
                             </ActionButton>
                             <LoadingButton
-                                color="primary"
-                                variant="contained"
-                                size="large"
+                                variant="roundedContained"
                                 loading={kvFetchState.loading}
                                 fullWidth
                                 disabled={!hasChanged}
