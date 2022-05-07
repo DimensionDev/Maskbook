@@ -23,7 +23,7 @@ export class ECKeyIdentifier extends Identifier {
     // private declare readonly encodedCompressedKey?: string
     // ! "curve" and "compressedPoint" cannot be renamed because they're stored in the database in it's object form.
     declare readonly curve: 'secp256k1'
-    declare readonly publicKey: string
+    declare readonly rawPublicKey: string
     constructor(curve: 'secp256k1', publicKey: string) {
         publicKey = String(publicKey)
         if (curve !== 'secp256k1') throw new Error('Only secp256k1 is supported')
@@ -32,21 +32,17 @@ export class ECKeyIdentifier extends Identifier {
 
         super()
         this.curve = 'secp256k1'
-        this.publicKey = publicKey.replace(/\|/g, '/')
+        this.rawPublicKey = publicKey.replace(/\|/g, '/')
         Object.freeze(this)
         k256Cache[publicKey] = this
         instance.add(this)
     }
     toText() {
-        const normalized = this.publicKey.replace(/\//g, '|')
+        const normalized = this.rawPublicKey.replace(/\//g, '|')
         return `ec_key:${this.curve}/${normalized}`
     }
-    /** @deprecated */
-    get compressedPoint() {
-        return this.publicKey
-    }
     get publicKeyAsHex() {
-        return '0x' + (keyAsHex[this.publicKey] ??= Convert.ToHex(decodeArrayBuffer(this.publicKey)))
+        return '0x' + (keyAsHex[this.rawPublicKey] ??= Convert.ToHex(decodeArrayBuffer(this.rawPublicKey)))
     }
     declare [Symbol.toStringTag]: string
     static [Symbol.hasInstance](x: any): boolean {

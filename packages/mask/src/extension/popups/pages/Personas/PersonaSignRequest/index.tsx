@@ -3,9 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 import { MaskMessages, useI18N } from '../../../../../utils'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { useMyPersonas } from '../../../../../components/DataSource/useMyPersonas'
-import type { Persona } from '../../../../../database'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { MethodAfterPersonaSign } from '../../Wallet/type'
 import { useAsyncFn } from 'react-use'
@@ -88,7 +87,7 @@ const PersonaSignRequest = memo(() => {
     const { classes } = useStyles()
     const [requestID, setRequestID] = useState<string>()
     const [message, setMessage] = useState<string>()
-    const [selected, setSelected] = useState<Pick<Persona, 'nickname' | 'identifier' | 'fingerprint'>>()
+    const [selected, setSelected] = useState<PersonaInformation>()
     const personas = useMyPersonas()
     const { currentPersona } = PersonaContext.useContainer()
     useEffect(() => {
@@ -143,12 +142,12 @@ const PersonaSignRequest = memo(() => {
                     !identity ||
                     !createdAt ||
                     !uuid ||
-                    !currentPersona?.publicHexKey
+                    !currentPersona?.identifier.publicKeyAsHex
                 )
                     break
                 await Services.Identity.detachProfileWithNextID(
                     uuid,
-                    currentPersona.publicHexKey,
+                    currentPersona.identifier.publicKeyAsHex,
                     platform,
                     identity,
                     createdAt,
@@ -182,7 +181,7 @@ const PersonaSignRequest = memo(() => {
                     <Typography className={classes.title}>{t('popups_persona_sign_request_title')}</Typography>
                     <Typography className={classes.personaName}>{selected?.nickname}</Typography>
                     <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
-                        {selected?.fingerprint}
+                        {selected?.identifier.rawPublicKey}
                     </Typography>
                 </div>
                 <Typography className={classes.secondary} style={{ marginTop: 20 }}>

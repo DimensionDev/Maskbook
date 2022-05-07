@@ -15,7 +15,7 @@ export async function getRecipients(whoAmI: ProfileIdentifier): Promise<ProfileI
     const profiles = (await queryProfilesDB({ hasLinkedPersona: true, network: whoAmI.network })).filter(
         (x) => x.identifier !== whoAmI && x.linkedPersona,
     )
-    return toProfileInformation(profiles)
+    return toProfileInformation(profiles).mustNotAwaitThisWithInATransaction
 }
 
 export async function getIncompleteRecipientsOfPost(id: PostIVIdentifier): Promise<ProfileInformation[]> {
@@ -29,5 +29,5 @@ export async function getIncompleteRecipientsOfPost(id: PostIVIdentifier): Promi
             hasLinkedPersona: true,
         })
     ).filter((x) => x.linkedPersona)
-    return toProfileInformation(profiles)
+    return toProfileInformation(profiles).mustNotAwaitThisWithInATransaction
 }

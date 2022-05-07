@@ -148,7 +148,7 @@ export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout
                     <div>
                         <Typography className={classes.name}>{selectedPersona?.nickname}</Typography>
                         <Typography className={classes.identifier}>
-                            {formatPersonaFingerprint(selectedPersona?.identifier.compressedPoint ?? '', 10)}
+                            {formatPersonaFingerprint(selectedPersona?.identifier.rawPublicKey ?? '', 10)}
                         </Typography>
                     </div>
                 </div>

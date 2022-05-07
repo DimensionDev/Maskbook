@@ -170,11 +170,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     <span>{t('plugin_wallet_connect_wallet_tip')}</span>
                 </Typography>
                 {!props.hiddenConnectButton ? (
-                    <ActionButton
-                        variant="contained"
-                        size="small"
-                        sx={{ marginTop: 1.5 }}
-                        onClick={openSelectProviderDialog}>
+                    <ActionButton size="small" sx={{ marginTop: 1.5 }} onClick={openSelectProviderDialog}>
                         {t('plugin_wallet_connect_wallet')}
                     </ActionButton>
                 ) : null}
@@ -208,7 +204,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 ) : null}
                 {isAllowed ? (
                     <ActionButtonPromise
-                        variant="contained"
                         size="small"
                         className={classes.switchButton}
                         sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
@@ -249,7 +244,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             ) : null}
             {isAllowed ? (
                 <ActionButtonPromise
-                    variant="contained"
                     size="small"
                     className={classes.switchButton}
                     sx={props.switchButtonStyle ?? { marginTop: 1.5 }}

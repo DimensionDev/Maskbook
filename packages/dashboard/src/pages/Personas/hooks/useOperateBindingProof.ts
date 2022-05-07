@@ -8,8 +8,13 @@ export function useDeleteBound() {
         const persona_ = await Services.Identity.queryPersona(identifier)
         const username = profile.userId.toLowerCase()
         const platform = network.split('.')[0] || NextIDPlatform.Twitter
-        if (!persona_ || !persona_.publicHexKey) throw new Error('Failed to get person')
-        const payload = await NextIDProof.createPersonaPayload(persona_.publicHexKey, action, username, platform)
+        if (!persona_) throw new Error('Failed to get persona')
+        const payload = await NextIDProof.createPersonaPayload(
+            persona_.identifier.publicKeyAsHex,
+            action,
+            username,
+            platform,
+        )
         if (!payload) throw new Error('Failed to create persona payload.')
         const signResult = await Services.Identity.signWithPersona({
             method: 'eth',
@@ -20,7 +25,7 @@ export function useDeleteBound() {
         const signature = signResult.signature.signature
         await NextIDProof.bindProof(
             payload.uuid,
-            persona_.publicHexKey,
+            persona_.identifier.publicKeyAsHex,
             action,
             platform,
             username,

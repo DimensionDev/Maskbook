@@ -124,7 +124,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         currentPersonaIdentifier?.publicKeyAsHex,
     )
     const { loading, value: proofRes, retry: retryProof } = useProvedWallets(currentPersonaIdentifier)
-    const list = useTipsWalletsList(proofRes, currentPersona?.publicHexKey, kv?.ok ? kv.val : undefined)
+    const list = useTipsWalletsList(proofRes, currentPersona?.identifier.publicKeyAsHex, kv?.ok ? kv.val : undefined)
     useMemo(() => {
         setHasChanged(false)
         setRawPatchData(list)
@@ -208,10 +208,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const [confirmState, onConfirmRelease] = useAsyncFn(
         async (wallet: BindingProof | undefined) => {
             try {
-                if (!currentPersona?.publicHexKey || !wallet) throw new Error('create payload error')
+                if (!currentPersona?.identifier.publicKeyAsHex || !wallet) throw new Error('create payload error')
 
                 const result = await NextIDProof.createPersonaPayload(
-                    currentPersona.publicHexKey,
+                    currentPersona.identifier.publicKeyAsHex,
                     NextIDAction.Delete,
                     wallet.identity,
                     wallet.platform,
@@ -226,7 +226,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 if (!signature) throw new Error('sign error')
                 await NextIDProof.bindProof(
                     result.uuid,
-                    currentPersona.publicHexKey,
+                    currentPersona.identifier.publicKeyAsHex,
                     NextIDAction.Delete,
                     wallet.platform,
                     wallet.identity,
