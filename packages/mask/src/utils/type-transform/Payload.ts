@@ -10,19 +10,19 @@ import { Payload, ProfileIdentifier } from '@masknet/shared-base'
 /**
  * Detect if there is version -40, -39 or -38 payload
  */
-function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): Payload | null {
+function deconstructAlpha40_Or_Alpha39_Or_Alpha38(input: string, throws = false): Payload | null {
     // ? payload is 🎼2/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
     // ? payload is 🎼3/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
     // ? payload is 🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?|authorIdentifier:||
     // ? if publicShared is true, that means AESKeyEncrypted is shared with public
     // ? "1" treated as true, "0" or not defined treated as false
     // ? authorIdentifier is encoded as `${network}/${id}`
-    const isVersion40 = str.includes('\u{1F3BC}2/4')
-    const isVersion39 = str.includes('\u{1F3BC}3/4')
-    const isVersion38 = str.includes('\u{1F3BC}4/4')
-    str = str.replace('\u{1F3BC}2/4', '\u{1F3BC}3/4')
-    str = str.replace('\u{1F3BC}3/4', '\u{1F3BC}4/4')
-    const [_, payloadStart] = str.split('\u{1F3BC}4/4|')
+    const isVersion40 = input.includes('\u{1F3BC}2/4')
+    const isVersion39 = input.includes('\u{1F3BC}3/4')
+    const isVersion38 = input.includes('\u{1F3BC}4/4')
+    input = input.replace('\u{1F3BC}2/4', '\u{1F3BC}3/4')
+    input = input.replace('\u{1F3BC}3/4', '\u{1F3BC}4/4')
+    const [_, payloadStart] = input.split('\u{1F3BC}4/4|')
     if (!payloadStart)
         if (throws) throw new Error(i18n.t('payload_not_found'))
         else return null
@@ -58,9 +58,9 @@ function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): 
     }
 }
 
-function deconstructAlpha41(str: string, throws = false): null | never {
+function deconstructAlpha41(input: string, throws = false): null | never {
     // 🎼1/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
-    if (str.includes('\u{1F3BC}1/4') && str.includes(':||'))
+    if (input.includes('\u{1F3BC}1/4') && input.includes(':||'))
         if (throws) throw new Error(i18n.t('payload_throw_in_alpha41'))
         else return null
     return null
@@ -73,19 +73,18 @@ const versions = new Set([deconstructAlpha40_Or_Alpha39_Or_Alpha38, deconstructA
  */
 type Decoder = SocialNetwork.PayloadEncoding['decoder'] | null
 
-export function deconstructPayload(str: string, networkDecoder?: Decoder): Result<Payload, TypeError> {
-    if (!networkDecoder) {
-        networkDecoder = isEnvironment(Environment.ContentScript) ? decodeTextPayloadUI : (x) => [x]
-    }
+export function deconstructPayload(input: string, networkDecoder?: Decoder): Result<Payload, TypeError> {
+    networkDecoder ??= isEnvironment(Environment.ContentScript) ? decodeTextPayloadUI : (x) => [x]
 
     for (const versionDecoder of versions) {
-        const results = networkDecoder(str)
+        const results = networkDecoder(input)
         for (const result of results) {
             if (!result) continue
             const payload = versionDecoder(result, false)
             if (payload) return Ok(payload)
         }
     }
-    if (str.includes('\u{1F3BC}') && str.includes(':||')) return Err(new TypeError(i18n.t('service_unknown_payload')))
+    if (input.includes('\u{1F3BC}') && input.includes(':||'))
+        return Err(new TypeError(i18n.t('service_unknown_payload')))
     return Err(new TypeError(i18n.t('payload_not_found')))
 }
