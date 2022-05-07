@@ -16,8 +16,8 @@ import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
 
-const stringToPersonaIdentifier = (str: string) => ECKeyIdentifier.from(str).unwrap()
-const stringToProfileIdentifier = (str: string) => ProfileIdentifier.from(str).unwrap()
+const stringToPersonaIdentifier = (input: string) => ECKeyIdentifier.from(input).unwrap()
+const stringToProfileIdentifier = (input: string) => ProfileIdentifier.from(input).unwrap()
 
 function profileRelationFormatter(
     p: MobileProfile,
