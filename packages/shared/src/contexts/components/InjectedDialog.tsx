@@ -46,6 +46,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     },
     dialogCloseButton: {
         color: theme.palette.text.primary,
+        position: 'absolute',
+        padding: 0,
+        fontSize: 24,
     },
     paper: clean ? { width: 'auto', backgroundImage: 'none' } : {},
 }))
@@ -139,6 +142,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             }}>
                             <IconButton
                                 size="large"
+                                disableRipple
                                 classes={{ root: dialogCloseButton }}
                                 aria-label={t.dialog_dismiss()}
                                 onClick={onClose}>

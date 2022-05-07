@@ -9,6 +9,9 @@ declare module '@mui/material/styles/createPalette.d' {
             white: string
             dark: string
             secondaryDark: string
+            line: string
+            secondaryLine: string
+            highlight: string
         }
     }
     export interface TypeText {

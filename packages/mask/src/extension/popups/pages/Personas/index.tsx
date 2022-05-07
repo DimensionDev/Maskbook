@@ -6,7 +6,7 @@ import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { Route, Routes } from 'react-router-dom'
 import { PersonaHeader } from './components/PersonaHeader'
 
-const Home = lazy(() => import('./Home'))
+const Home = lazy(() => import(/* webpackPreload: true */ './Home'))
 const Logout = lazy(() => import('./Logout'))
 const PersonaRename = lazy(() => import('./Rename'))
 const PersonaSignRequest = lazy(() => import('./PersonaSignRequest'))

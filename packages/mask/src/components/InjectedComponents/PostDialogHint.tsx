@@ -2,7 +2,6 @@ import { memo } from 'react'
 import { IconButton, Tooltip } from '@mui/material'
 import { useStylesExtends, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
-import type { BannerProps } from '../Welcomes/Banner'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
 import { MaskSharpIcon, MaskIconInMinds } from '../../resources/MaskIcon'
 import classNames from 'classnames'
@@ -50,7 +49,7 @@ const ICON_MAP: Record<string, JSX.Element> = {
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const { t } = useI18N()
-    const { size, tooltip, disableGuideTip } = props
+    const { tooltip, disableGuideTip } = props
     const classes = useStylesExtends(useStyles(), props)
 
     const getEntry = () => (
@@ -80,7 +79,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     )
 })
 
-export const PostDialogHintUI = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
+export const PostDialogHint = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
     const { onHintButtonClicked, size, ...others } = props
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
@@ -96,13 +95,3 @@ export const PostDialogHintUI = memo(function PostDialogHintUI(props: PostDialog
         </div>
     )
 })
-
-export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
-    NotSetupYetPromptProps?: Partial<BannerProps>
-    size?: number
-    disableGuideTip?: boolean
-    iconType?: string
-}
-export function PostDialogHint(props: PostDialogHintProps) {
-    return <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
-}

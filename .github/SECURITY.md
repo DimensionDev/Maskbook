@@ -2,7 +2,7 @@
 
 <!-- https://docs.github.com/en/code-security/getting-started/adding-a-security-policy-to-your-repository -->
 
-If you discover a potential security issue in this project we ask that you notify **Mask Network Security Workgroup** via email to <security@mask.io>.
+If you discover a potential security issue in this project we ask that you notify **Mask Network Security Workgroup** via email to `security (at) mask.io`.
 
 Please do **NOT** create a public GitHub issue.
 
