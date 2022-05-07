@@ -2,6 +2,7 @@ import { Button } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useGameList } from '../hook'
+import type { GameInfo } from '../types'
 
 const useStyles = makeStyles()(() => ({
     walletBar: {},
@@ -62,7 +63,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 interface Props {
-    onPlay: (gameUrl: string) => void
+    onPlay: (game: GameInfo) => void
 }
 
 const GameList = (props: Props) => {
@@ -85,7 +86,7 @@ const GameList = (props: Props) => {
                                       {t('plugin_game_list_rank')} {game.rank}
                                   </div>
                               </div>
-                              <Button className={classes.playBtn} onClick={() => props.onPlay(game.url)}>
+                              <Button className={classes.playBtn} onClick={() => props.onPlay(game)}>
                                   {t('plugin_game_list_play')}
                               </Button>
                           </li>

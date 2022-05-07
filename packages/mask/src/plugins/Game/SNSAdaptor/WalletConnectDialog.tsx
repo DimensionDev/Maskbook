@@ -9,22 +9,23 @@ import GameList from './GameList'
 import GameWindow from './GameWindow'
 
 import { WalletMessages } from '../../Wallet/messages'
+import type { GameInfo } from '../types'
 
 const WalletConnectDialog = () => {
     const [isGameShow, setGameShow] = useState(false)
-    const [gameUrl, setGameUrl] = useState('')
+    const [gameInfo, setGameInfo] = useState<GameInfo>()
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.essayDialogUpdated, () => {})
 
     const handleGameClose = () => {
         setGameShow(false)
-        setGameUrl('')
+        setGameInfo(undefined)
     }
 
-    const handleGameOpen = (url: string) => {
+    const handleGameOpen = (gameInfo: GameInfo) => {
         closeDialog()
         closeWalletDialog()
-        setGameUrl(url)
+        setGameInfo(gameInfo)
         setGameShow(true)
     }
 
@@ -40,7 +41,7 @@ const WalletConnectDialog = () => {
                     <GameList onPlay={handleGameOpen} />
                 </DialogContent>
             </InjectedDialog>
-            <GameWindow url={gameUrl} isShow={isGameShow} onClose={handleGameClose} />
+            <GameWindow gameInfo={gameInfo} isShow={isGameShow} onClose={handleGameClose} />
         </>
     )
 }
