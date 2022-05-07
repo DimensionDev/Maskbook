@@ -137,10 +137,31 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     },
                     {
                         props: {
+                            variant: 'outlined',
+                        },
+                        style: {
+                            background: theme.palette.grey.third,
+                            color: theme.palette.text.primary,
+                            ['&:hover']: {
+                                backgroundColor: theme.palette.background.paper,
+                                border: 'none',
+                                boxShadow:
+                                    theme.palette.mode === 'dark'
+                                        ? '0px 8px 25px rgba(255, 255, 255, 0.1)'
+                                        : '0px 8px 25px rgba(0, 0, 0, 0.1)',
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                opacity: 0.4,
+                                color: theme.palette.text.primary,
+                            },
+                        },
+                    },
+                    {
+                        props: {
                             variant: 'flat',
                         },
                         style: {
-                            background: theme.palette.grey.primary,
+                            background: theme.palette.grey.third,
                             color: theme.palette.text.primary,
                             ['&:hover']: {
                                 backgroundColor: theme.palette.background.paper,
@@ -163,9 +184,10 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             backgroundColor: theme.palette.text.primary,
                             ['&:hover']: {
                                 backgroundColor: theme.palette.text.primary,
-                                boxShadow: `0 9px 20px ${parseColor(theme.palette.text.primary)
-                                    .setAlpha(0.3)
-                                    .toRgbString()}`,
+                                boxShadow:
+                                    theme.palette.mode === 'dark'
+                                        ? '0px 8px 25px rgba(255, 255, 255, 0.2)'
+                                        : '0px 8px 25px rgba(0, 0, 0, 0.2)',
                             },
                             [`&.${buttonClasses.disabled}`]: {
                                 background: theme.palette.grey.primary,
@@ -181,7 +203,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                         style: {
                             color: theme.palette.text.primary,
                             ['&:hover']: {
-                                background: theme.palette.grey.primary,
+                                background: theme.palette.grey.third,
                             },
                             [`&.${buttonClasses.disabled}`]: {
                                 opacity: 0.4,
@@ -199,7 +221,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: theme.palette.public.white,
                             ['&:hover']: {
                                 background: theme.palette.public.primary,
-                                boxShadow: `0 9px 20px ${parseColor(theme.palette.public.primary)
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.public.primary)
                                     .setAlpha(0.3)
                                     .toRgbString()}`,
                             },
@@ -222,7 +244,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                                     theme.palette.mode === 'dark'
                                         ? parseColor(theme.palette.public.primary).setAlpha(0.3).toRgbString()
                                         : theme.palette.public.white,
-                                boxShadow: `0 9px 20px ${parseColor(theme.palette.public.primary)
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.public.primary)
                                     .setAlpha(0.1)
                                     .toRgbString()}`,
                             },
@@ -261,7 +283,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: theme.palette.public.white,
                             ['&:hover']: {
                                 background: theme.palette.public.warning,
-                                boxShadow: `0 9px 20px ${parseColor(theme.palette.public.warning)
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.public.warning)
                                     .setAlpha(0.3)
                                     .toRgbString()}`,
                             },
@@ -284,7 +306,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                                     theme.palette.mode === 'dark'
                                         ? parseColor(theme.palette.public.warning).setAlpha(0.3).toRgbString()
                                         : theme.palette.public.white,
-                                boxShadow: `0 9px 20px ${parseColor(theme.palette.public.warning)
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.public.warning)
                                     .setAlpha(0.1)
                                     .toRgbString()}`,
                             },
@@ -323,7 +345,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: theme.palette.public.white,
                             ['&:hover']: {
                                 background: theme.palette.public.success,
-                                boxShadow: `0 9px 20px ${parseColor(theme.palette.public.success)
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.public.success)
                                     .setAlpha(0.3)
                                     .toRgbString()}`,
                             },
@@ -346,7 +368,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                                     theme.palette.mode === 'dark'
                                         ? parseColor(theme.palette.public.success).setAlpha(0.3).toRgbString()
                                         : theme.palette.public.white,
-                                boxShadow: `0 9px 20px ${parseColor(theme.palette.public.success)
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.public.success)
                                     .setAlpha(0.1)
                                     .toRgbString()}`,
                             },
@@ -385,7 +407,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: theme.palette.public.white,
                             ['&:hover']: {
                                 background: theme.palette.public.danger,
-                                boxShadow: `0 9px 20px ${parseColor(theme.palette.public.danger)
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.public.danger)
                                     .setAlpha(0.3)
                                     .toRgbString()}`,
                             },
@@ -408,7 +430,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                                     theme.palette.mode === 'dark'
                                         ? parseColor(theme.palette.public.danger).setAlpha(0.3).toRgbString()
                                         : theme.palette.public.white,
-                                boxShadow: `0 9px 20px ${parseColor(theme.palette.public.danger)
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.public.danger)
                                     .setAlpha(0.1)
                                     .toRgbString()}`,
                             },
@@ -443,7 +465,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                         },
                         style: {
                             borderRadius: 99,
-                            background: theme.palette.grey.primary,
+                            background: theme.palette.grey.third,
                             color: theme.palette.text.primary,
                             ['&:hover']: {
                                 backgroundColor: theme.palette.background.paper,
@@ -467,7 +489,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             borderRadius: 99,
                             ['&:hover']: {
                                 backgroundColor: theme.palette.text.primary,
-                                boxShadow: `0 9px 20px ${parseColor(theme.palette.text.primary)
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.text.primary)
                                     .setAlpha(0.3)
                                     .toRgbString()}`,
                             },
@@ -486,7 +508,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: theme.palette.text.primary,
                             borderRadius: 99,
                             ['&:hover']: {
-                                background: theme.palette.grey.primary,
+                                background: theme.palette.grey.third,
                             },
                             [`&.${buttonClasses.disabled}`]: {
                                 opacity: 0.4,
@@ -504,7 +526,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             borderRadius: 99,
                             ['&:hover']: {
                                 background: theme.palette.public.primary,
-                                boxShadow: `0 9px 20px ${parseColor(theme.palette.public.primary)
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.public.primary)
                                     .setAlpha(0.3)
                                     .toRgbString()}`,
                             },
@@ -528,7 +550,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                                     theme.palette.mode === 'dark'
                                         ? parseColor(theme.palette.public.primary).setAlpha(0.3).toRgbString()
                                         : theme.palette.public.white,
-                                boxShadow: `0 9px 20px ${parseColor(theme.palette.public.primary)
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.public.primary)
                                     .setAlpha(0.1)
                                     .toRgbString()}`,
                             },
