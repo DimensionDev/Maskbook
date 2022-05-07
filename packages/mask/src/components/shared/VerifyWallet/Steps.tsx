@@ -188,13 +188,20 @@ export function Steps(props: StepsProps) {
             )}
 
             <div className={classes.actionBox}>
-                <ActionButton variant="roundedFlat" fullWidth color="secondary" onClick={onCustomCancel}>
+                <ActionButton
+                    className={notInPop ? '' : classes.roundBtn}
+                    variant="roundedFlat"
+                    fullWidth
+                    color="secondary"
+                    onClick={onCustomCancel}>
                     {t('cancel')}
                 </ActionButton>
                 <LoadingButton
+                    className={notInPop ? '' : classes.roundBtn}
+                    color={notInPop ? 'inherit' : 'primary'}
                     loading={confirmLoading}
                     disabled={disableConfirm}
-                    variant="roundedContained"
+                    variant={notInPop ? 'roundedContained' : 'contained'}
                     fullWidth
                     onClick={onConfirm}>
                     {disableConfirm ? t('wallet_verify_persona_sign') : step === 2 ? t('done') : t('confirm')}

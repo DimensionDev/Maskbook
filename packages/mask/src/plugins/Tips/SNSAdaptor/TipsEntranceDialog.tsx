@@ -15,7 +15,7 @@ import { useAccount } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
 import { Button, ButtonProps, DialogContent } from '@mui/material'
 import formatDateTime from 'date-fns/format'
-import { cloneDeep } from 'lodash-unified'
+import { cloneDeep, isEqual } from 'lodash-unified'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -144,10 +144,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
     const setAsDefault = (idx: number) => {
         const changed = cloneDeep(rawPatchData)
-        changed.forEach((x: any) => (x.isDefault = 0))
+        changed.forEach((x) => (x.isDefault = 0))
         changed[idx].isDefault = 1
+        setHasChanged(!isEqual(changed, rawWalletList))
         setRawPatchData(changed)
-        setHasChanged(true)
     }
 
     const onSwitchChange = (idx: number, v: boolean) => {
