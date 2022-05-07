@@ -1697,12 +1697,11 @@
         "network": "mainnet",
         "rpc": ["https://rpc.api.moonbeam.network"],
         "faucets": [],
-        "features": ["EIP1559"],
+        "features": [],
         "nativeCurrency": { "name": "Glimmer", "symbol": "GLMR", "decimals": 18 },
         "infoURL": "https://moonscan.io/",
         "shortName": "Moobeam",
-        "chainId": 1284,
-        "networkId": 1284
+        "chainId": 1284
     },
     {
         "name": "Moonriver Kusama",
