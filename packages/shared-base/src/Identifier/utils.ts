@@ -16,25 +16,25 @@ import { Identifier } from './base'
  * group: has removed, if you want to add a new identifier for grouping, please choose another prefix.
  * @internal
  */
-function parse(str: string | null | undefined): Option<Identifier> {
-    if (!str) return None
-    str = String(str)
-    if (str.startsWith('person:')) {
-        const [network, userID] = str.slice('person:'.length).split('/')
+function parse(input: string | null | undefined): Option<Identifier> {
+    if (!input) return None
+    input = String(input)
+    if (input.startsWith('person:')) {
+        const [network, userID] = input.slice('person:'.length).split('/')
         if (!network || !userID) return None
         return ProfileIdentifier.of(network, userID)
-    } else if (str.startsWith('post:')) {
-        const [postID, ...rest] = str.slice('post:'.length).split('/')
+    } else if (input.startsWith('post:')) {
+        const [postID, ...rest] = input.slice('post:'.length).split('/')
         const inner = parse(rest.join('/'))
         if (inner.none) return None
         if (inner.val instanceof ProfileIdentifier) return Some(new PostIdentifier(inner.val, postID))
         return None
-    } else if (str.startsWith('post_iv:')) {
-        const [network, postIV] = str.slice('post_iv:'.length).split('/')
+    } else if (input.startsWith('post_iv:')) {
+        const [network, postIV] = input.slice('post_iv:'.length).split('/')
         if (!network || !postIV) return None
         return Some(new PostIVIdentifier(network, postIV.replace(/\|/g, '/')))
-    } else if (str.startsWith('ec_key:')) {
-        const [curve, compressedPoint] = str.slice('ec_key:'.length).split('/')
+    } else if (input.startsWith('ec_key:')) {
+        const [curve, compressedPoint] = input.slice('ec_key:'.length).split('/')
         if (curve !== 'secp256k1') return None
         if (!compressedPoint) return None
         return Some(new ECKeyIdentifier(curve, compressedPoint))
@@ -65,7 +65,7 @@ Object.freeze(Identifier)
  * If you want to use it, you must first convert to something other
  * @internal
  */
-export function banSlash(str: string | undefined | null) {
-    if (!str) return
-    if (str.includes('/')) throw new TypeError('Cannot contain / in a part of identifier')
+export function banSlash(input: string | undefined | null) {
+    if (!input) return
+    if (input.includes('/')) throw new TypeError('Cannot contain / in a part of identifier')
 }
