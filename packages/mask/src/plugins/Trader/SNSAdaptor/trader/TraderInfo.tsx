@@ -167,7 +167,9 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
                                     />
                                 </Typography>
                                 <Typography fontSize={14} lineHeight="20px" component="span">
-                                    {t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
+                                    {feeValueUSD === '<$0.01'
+                                        ? t('plugin_trader_tx_cost_usd_less', { usd: feeValueUSD })
+                                        : t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
                                 </Typography>
                             </Typography>
                         ) : null}
