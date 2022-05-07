@@ -357,7 +357,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                 />
                                 <Typography component="span">
                                     {feeValueUSD === '<$0.01'
-                                        ? t('plugin_trader_tx_cost_usd_less', { usd: feeValueUSD })
+                                        ? t('plugin_trader_tx_cost_very_small', { usd: feeValueUSD })
                                         : t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
                                 </Typography>
                             </Typography>
