@@ -11,4 +11,7 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },
+    contribution: {
+        metadataKeys: new Set([PLUGIN_ID]),
+    },
 }
