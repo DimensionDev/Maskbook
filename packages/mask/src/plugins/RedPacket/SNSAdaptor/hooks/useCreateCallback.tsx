@@ -5,7 +5,6 @@ import {
     EthereumTokenType,
     FungibleTokenDetailed,
     TransactionEventType,
-    TransactionState,
     TransactionStateType,
     useAccount,
     useChainId,
@@ -41,29 +40,17 @@ type ParamsObjType = {
     token?: FungibleTokenDetailed
 }
 
-function checkParams(paramsObj: ParamsObjType, setCreateState?: (value: TransactionState) => void) {
+function checkParams(paramsObj: ParamsObjType) {
     if (isLessThan(paramsObj.total, paramsObj.shares)) {
-        setCreateState?.({
-            type: TransactionStateType.FAILED,
-            error: new Error('At least [number of lucky drops] tokens to your lucky drop.'),
-        })
-        return false
+        throw new Error('At least [number of lucky drops] tokens to your lucky drop.')
     }
 
     if (paramsObj.shares <= 0) {
-        setCreateState?.({
-            type: TransactionStateType.FAILED,
-            error: new Error('At least 1 person should be able to claim the lucky drop.'),
-        })
-        return false
+        throw new Error('At least 1 person should be able to claim the lucky drop.')
     }
 
     if (paramsObj.tokenType !== EthereumTokenType.Native && paramsObj.tokenType !== EthereumTokenType.ERC20) {
-        setCreateState?.({
-            type: TransactionStateType.FAILED,
-            error: new Error('Token not supported'),
-        })
-        return false
+        throw new Error('Token not supported')
     }
 
     return true
@@ -105,7 +92,9 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
             token,
         }
 
-        if (!checkParams(paramsObj)) {
+        try {
+            checkParams(paramsObj)
+        } catch {
             return null
         }
 
@@ -141,13 +130,11 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         })
     }, [])
     const createCallback = useCallback(async () => {
+        resetCallback()
         const { token } = redPacketSettings
         const createParams = await getCreateParams()
 
-        if (!token || !redPacketContract || !createParams) {
-            resetCallback()
-            return
-        }
+        if (!token || !redPacketContract || !createParams) return
 
         const { gas, params, paramsObj, gasError } = createParams
 
@@ -159,7 +146,14 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
             return
         }
 
-        if (!checkParams(paramsObj, setCreateState)) return
+        try {
+            checkParams(paramsObj)
+        } catch (error) {
+            setCreateState({
+                type: TransactionStateType.FAILED,
+                error: error as Error,
+            })
+        }
 
         setCreateSettings(redPacketSettings)
 
