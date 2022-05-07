@@ -7,6 +7,7 @@ import {
     formatPercentage,
     formatUSD,
     formatWeiToEther,
+    checkingValueIsLessThan_0_01,
 } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, TextField, Typography } from '@mui/material'
 import { resolveTradeProviderName } from '../../pipes'
@@ -167,8 +168,8 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
                                     />
                                 </Typography>
                                 <Typography fontSize={14} lineHeight="20px" component="span">
-                                    {feeValueUSD === '<$0.01'
-                                        ? t('plugin_trader_tx_cost_very_small', { usd: feeValueUSD })
+                                    {checkingValueIsLessThan_0_01(feeValueUSD)
+                                        ? t('plugin_trader_tx_cost_very_small')
                                         : t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
                                 </Typography>
                             </Typography>

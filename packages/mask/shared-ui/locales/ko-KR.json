@@ -349,7 +349,7 @@
     "plugin_trader_gas_setting_fast": "빠름",
     "plugin_trader_gas_setting_custom": "커스텀",
     "plugin_trader_tx_cost_usd": "(~${{usd}})",
-    "plugin_trader_tx_cost_very_small": "({{usd}})",
+    "plugin_trader_tx_cost_very_small": "(<$0.01)",
     "plugin_trader_gas_option": "{{option}} ({{value}}) Gwei",
     "plugin_trader_no_enough_liquidity": "유동성 부족",
     "plugin_trader_no_trade": "거래를 선택하세요",

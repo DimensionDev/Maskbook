@@ -484,7 +484,7 @@
     "plugin_trader_gas_setting_fast": "crwdns10473:0crwdne10473:0",
     "plugin_trader_gas_setting_custom": "crwdns10475:0crwdne10475:0",
     "plugin_trader_tx_cost_usd": "crwdns10477:0{{usd}}crwdne10477:0",
-    "plugin_trader_tx_cost_very_small": "crwdns10477:0{{usd}}crwdne10477:0",
+    "plugin_trader_tx_cost_very_small": "crwdns10477:0{{'<$0.01'}}crwdne10477:0",
     "plugin_trader_gas_option": "crwdns10479:0{{option}}crwdnd10479:0{{value}}crwdne10479:0",
     "plugin_trader_no_enough_liquidity": "crwdns10481:0crwdne10481:0",
     "plugin_trader_no_trade": "crwdns10483:0crwdne10483:0",

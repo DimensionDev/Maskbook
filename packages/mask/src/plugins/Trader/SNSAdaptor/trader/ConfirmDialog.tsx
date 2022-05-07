@@ -11,6 +11,7 @@ import {
     formatPercentage,
     formatUSD,
     formatWeiToEther,
+    checkingValueIsLessThan_0_01,
     FungibleTokenDetailed,
     resolveAddressLinkOnExplorer,
     Wallet,
@@ -356,8 +357,8 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                     formatter={formatBalance}
                                 />
                                 <Typography component="span">
-                                    {feeValueUSD === '<$0.01'
-                                        ? t('plugin_trader_tx_cost_very_small', { usd: feeValueUSD })
+                                    {checkingValueIsLessThan_0_01(feeValueUSD)
+                                        ? t('plugin_trader_tx_cost_very_small')
                                         : t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
                                 </Typography>
                             </Typography>

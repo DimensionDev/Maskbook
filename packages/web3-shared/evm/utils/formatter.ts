@@ -103,3 +103,8 @@ export function formatUSD(value: BigNumber.Value, significant = 2): string {
     const bn = new BigNumber(value)
     return bn.lt(0.01) ? '<$0.01' : bn.toFixed(significant)
 }
+
+export function checkingValueIsLessThan_0_01(value: BigNumber.Value, significant = 2): boolean {
+    const bn = new BigNumber(value)
+    return !!bn.lt(0.01)
+}
