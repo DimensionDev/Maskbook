@@ -16,7 +16,8 @@ export const useCollectionFilter = (
             proof?.platform === NextIDPlatform.Twitter &&
             proof?.identity === currentVisitingProfile?.identifier?.userId,
     )
-    const hiddenList = proof?.content?.[PluginId.Web3Profile]?.unListedCollections?.[address?.resolvedAddress]?.[type]
+    const hiddenList =
+        proof?.content?.[PluginId.Web3Profile]?.unListedCollections?.[address?.resolvedAddress]?.[type] ?? []
     return collections?.filter(
         (collection) => hiddenList?.findIndex((url) => url === collection?.info?.image_preview_url) === -1,
     )

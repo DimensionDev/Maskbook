@@ -77,7 +77,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             setAddressList([...addressNames, ...addresses])
         }
     }, [addressNames, wallets?.length, isOwn])
-    console.log({ addressList, currentConnectedPersona })
+    console.log({ addressList, currentConnectedPersona, personaList, platform, identity })
 
     const translate = usePluginI18NField()
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')

@@ -82,6 +82,7 @@ export function TabCard({ type, addressNames }: TabCardProps) {
         currentVisitingProfile,
         selectedAddress,
     )
+
     if (!selectedAddress) return null
 
     const isDonation = type === TabCardType.Donation

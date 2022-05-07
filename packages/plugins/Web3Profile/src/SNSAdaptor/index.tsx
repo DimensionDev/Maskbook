@@ -45,7 +45,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Web3Profile',
             priority: 3,
             UI: {
-                TabContent: ({ addressNames = [], open = false, setOpen }) => {
+                TabContent: ({ open = false, setOpen }) => {
                     return <Web3ProfileDialog open={open} onClose={() => setOpen(false)} />
                 },
             },
