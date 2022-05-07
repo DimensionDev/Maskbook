@@ -21,6 +21,8 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
         flexDirection: 'column',
+        maxHeight: 400,
+        overflowY: 'auto',
         gap: 12,
     },
     settingIcon: {
