@@ -66,7 +66,7 @@ export function PersonaAction(props: PersonaActionProps) {
                         className={classes.link}
                         underline="none"
                         component="button"
-                        title={t.persona_publick_key_copy()}
+                        title={t.persona_public_key_copy()}
                         onClick={onCopy}>
                         <Copy className={classes.linkIcon} size={14} />
                     </Link>

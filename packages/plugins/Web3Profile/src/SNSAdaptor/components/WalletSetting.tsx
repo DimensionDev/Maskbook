@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 480,
         height: 510,
         maxHeight: 510,
-        posotion: 'relative',
+        position: 'relative',
         paddingBottom: theme.spacing(3),
     },
     titleBox: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         flexWrap: 'wrap',
         gap: 12,
     },
-    swtichContainer: {
+    switchContainer: {
         width: 'calc(50% - 6px)',
     },
     buttonWrapper: {
@@ -123,7 +123,7 @@ const WalletSetting = memo(
                         <div className={classes.walletSwitchBox}>
                             {wallets?.map((x, idx) => {
                                 return (
-                                    <div key={idx} className={classes.swtichContainer}>
+                                    <div key={idx} className={classes.switchContainer}>
                                         <WalletSwitch
                                             hiddenItems={hiddenList.NFTs}
                                             type={0}
@@ -145,7 +145,7 @@ const WalletSetting = memo(
                         <div className={classes.walletSwitchBox}>
                             {wallets?.map((x, idx) => {
                                 return (
-                                    <div key={idx} className={classes.swtichContainer}>
+                                    <div key={idx} className={classes.switchContainer}>
                                         <WalletSwitch
                                             hiddenItems={hiddenList.footprints}
                                             type={0}
@@ -167,7 +167,7 @@ const WalletSetting = memo(
                         <div className={classes.walletSwitchBox}>
                             {wallets?.map((x, idx) => {
                                 return (
-                                    <div key={idx} className={classes.swtichContainer}>
+                                    <div key={idx} className={classes.switchContainer}>
                                         <WalletSwitch
                                             hiddenItems={hiddenList.donations}
                                             type={0}

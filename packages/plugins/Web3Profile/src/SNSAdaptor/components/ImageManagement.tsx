@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 480,
         height: 510,
         maxHeight: 510,
-        posotion: 'relative',
+        position: 'relative',
         paddingBottom: theme.spacing(3),
     },
     bottomFixed: {

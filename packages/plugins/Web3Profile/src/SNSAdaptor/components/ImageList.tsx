@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => {
             width: 480,
             height: 510,
             maxHeight: 510,
-            posotion: 'relative',
+            position: 'relative',
             paddingBottom: theme.spacing(3),
         },
         buttonWrapper: {
@@ -76,39 +76,39 @@ export function ImageListDialog(props: ImageListDialogProps) {
     const { address = ZERO_ADDRESS, open, onClose, retryData, title, accountId, currentPersona, collectionList } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const [unListedCollections, setUnListdCollections] = useState<collectionTypes[]>([])
-    const [listedCollections, setListdCollections] = useState<collectionTypes[]>([])
+    const [unListedCollections, setUnListedCollections] = useState<collectionTypes[]>([])
+    const [listedCollections, setListedCollections] = useState<collectionTypes[]>([])
     const chainId = ChainId.Mainnet
 
     useEffect(() => {
-        setListdCollections(collectionList?.filter((collection) => !collection?.hidden) || [])
-        setUnListdCollections(collectionList?.filter((collection) => collection?.hidden) || [])
+        setListedCollections(collectionList?.filter((collection) => !collection?.hidden) || [])
+        setUnListedCollections(collectionList?.filter((collection) => collection?.hidden) || [])
     }, [collectionList])
 
     const unList = (url: string | undefined) => {
         if (!url) return
         const unListingCollection = listedCollections?.find((collection) => collection?.iconURL === url)
         if (unListingCollection) {
-            setUnListdCollections((pre) => [...pre, unListingCollection])
+            setUnListedCollections((pre) => [...pre, unListingCollection])
         }
         const unListingIndex = listedCollections?.findIndex((collection) => collection?.iconURL === url)
         const currentListed = listedCollections
         currentListed?.splice(unListingIndex!, 1)
-        setListdCollections([...currentListed])
+        setListedCollections([...currentListed])
     }
     const list = (url: string | undefined) => {
         if (!url) return
         const listingCollection = unListedCollections?.find((collection) => collection?.iconURL === url)
         if (listingCollection) {
-            setListdCollections((pre) => [...pre, listingCollection])
+            setListedCollections((pre) => [...pre, listingCollection])
         }
         const listingIndex = unListedCollections?.findIndex((collection) => collection?.iconURL === url)
         const currentUnListed = unListedCollections
         currentUnListed?.splice(listingIndex!, 1)
-        setUnListdCollections([...currentUnListed])
+        setUnListedCollections([...currentUnListed])
     }
     const handleClose = () => {
-        setUnListdCollections([])
+        setUnListedCollections([])
         onClose()
     }
 
@@ -157,7 +157,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
             <DialogContent className={classes.content}>
                 <div className={classes.wrapper}>
                     <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>Listed</Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 170, overflow: 'scorll' }}>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 170, overflow: 'scroll' }}>
                         {listedCollections?.map((collection, i) => (
                             <div
                                 key={collection?.iconURL}
@@ -168,7 +168,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         ))}
                     </Box>
                     <Typography sx={{ fontSize: '16px', fontWeight: 700, marginTop: '12px' }}>Unlisted</Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 170, overflow: 'scorll' }}>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 170, overflow: 'scroll' }}>
                         {unListedCollections?.map((collection, i) => (
                             <div
                                 key={collection?.iconURL}

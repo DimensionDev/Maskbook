@@ -58,7 +58,7 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [] }: Wall
     const t = useI18N()
     const [checked, setChecked] = useState(!!isPublic)
     const getWalletName = () => {
-        return ['EVM wallet', 'Solona wallet', 'Flow wallet'][type]
+        return ['EVM wallet', 'Solana wallet', 'Flow wallet'][type]
     }
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = e.target.checked

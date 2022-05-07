@@ -2,10 +2,10 @@ import { fromHex, NextIDPlatform, toBase64 } from '@masknet/shared-base'
 import { NextIDStorage } from '@masknet/web3-providers'
 import { PLUGIN_ID } from '../../constants'
 
-export const getKvPayload = async (patchData: unknown, publicHexKey: string, accontId: string) => {
+export const getKvPayload = async (patchData: unknown, publicHexKey: string, accountId: string) => {
     try {
         const data = JSON.parse(JSON.stringify(patchData))
-        const payload = await NextIDStorage.getPayload(publicHexKey, NextIDPlatform.Twitter, accontId, data, PLUGIN_ID)
+        const payload = await NextIDStorage.getPayload(publicHexKey, NextIDPlatform.Twitter, accountId, data, PLUGIN_ID)
         return payload
     } catch (error) {
         console.error(error)

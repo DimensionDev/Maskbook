@@ -9,7 +9,7 @@ export const formatAddress = (address: string, size = 4) => {
     return `${address?.slice(0, size)}...${address?.slice(-size)}`
 }
 
-const eduplicateArray = (listA?: walletTypes[], listB?: walletTypes[]) => {
+const deduplicateArray = (listA?: walletTypes[], listB?: walletTypes[]) => {
     if (!listA || listA?.length === 0) return
     if (!listB || listB?.length === 0) return [...listA]
     return listA?.filter((l2) => listB.findIndex((l1) => l2.address === l1.address) === -1)
@@ -57,21 +57,23 @@ export const getWalletList = (
     return accounts?.map((key) => ({
         ...key,
         walletList: {
-            NFTs: eduplicateArray(wallets, hiddenObj.hiddenWallets[key?.identity]?.NFTs),
-            donations: eduplicateArray(wallets, hiddenObj.hiddenWallets[key?.identity]?.donations)?.map((wallet) => ({
+            NFTs: deduplicateArray(wallets, hiddenObj.hiddenWallets[key?.identity]?.NFTs),
+            donations: deduplicateArray(wallets, hiddenObj.hiddenWallets[key?.identity]?.donations)?.map((wallet) => ({
                 ...wallet,
                 collections: addHiddenToArray(
                     donations?.find((donation) => donation?.address === wallet?.address)?.collections,
                     hiddenObj.hiddenCollections?.[key?.identity]?.[wallet?.address]?.Donations,
                 ),
             })),
-            footprints: eduplicateArray(wallets, hiddenObj.hiddenWallets[key?.identity]?.footprints)?.map((wallet) => ({
-                ...wallet,
-                collections: addHiddenToArray(
-                    footprints?.find((footprint) => footprint?.address === wallet?.address)?.collections,
-                    hiddenObj.hiddenCollections?.[key?.identity]?.[wallet?.address]?.Footprints,
-                ),
-            })),
+            footprints: deduplicateArray(wallets, hiddenObj.hiddenWallets[key?.identity]?.footprints)?.map(
+                (wallet) => ({
+                    ...wallet,
+                    collections: addHiddenToArray(
+                        footprints?.find((footprint) => footprint?.address === wallet?.address)?.collections,
+                        hiddenObj.hiddenCollections?.[key?.identity]?.[wallet?.address]?.Footprints,
+                    ),
+                }),
+            ),
         },
     }))
 }
