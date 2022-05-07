@@ -70,6 +70,7 @@
     "@storybook/react": "^6.4.22",
     "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^8.3.4",
-    "babel-loader": "^8.2.5"
+    "babel-loader": "^8.2.5",
+    "webpack": "^5.72.0"
   }
 }
