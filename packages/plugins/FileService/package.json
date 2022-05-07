@@ -24,6 +24,7 @@
     "arweave": "^1.10.3",
     "date-fns": "^2.28.0",
     "ipfs-http-client": "^54.0.2",
+    "node-fetch": "^3.2.4",
     "react-feather": "^2.0.9",
     "react-router-dom": "^6.3.0",
     "react-use": "^17.3.2",

@@ -6,9 +6,10 @@
   "devDependencies": {
     "@storybook/addons": "^6.4.22",
     "@storybook/react": "^6.4.22",
-    "@swc/core": "^1.2.165",
+    "@swc/core": "^1.2.177",
     "stream-browserify": "3",
     "swc-loader": "^0.2.0",
+    "typescript": "4.7.0-beta",
     "webpack": "^5.72.0"
   },
   "peerDependencies": {

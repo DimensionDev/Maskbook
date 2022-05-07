@@ -14,6 +14,7 @@
     "@dimensiondev/stego-js": "0.11.1-20201027083223-8ab41be",
     "@masknet/shared-base": "workspace:*",
     "@masknet/typed-message": "workspace:*",
-    "@msgpack/msgpack": "^2.7.2"
+    "@msgpack/msgpack": "^2.7.2",
+    "canvas": "^2.9.1"
   }
 }
