@@ -25,6 +25,8 @@ export interface AuriLens extends BaseContract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions): AuriLens
     clone(): AuriLens
     methods: {
+        auTokenUnderlyingPrice(auToken: string): NonPayableTransactionObject<[string, string]>
+
         getAddresses(comptroller: string): NonPayableTransactionObject<{
             ply: string
             aurora: string

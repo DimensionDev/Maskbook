@@ -1,12 +1,17 @@
-import { FungibleTokenDetailed, createNativeToken, ChainId, EthereumTokenType } from '@masknet/web3-shared-evm'
+import {
+    FungibleTokenDetailed,
+    getAlpacaConstants,
+    createNativeToken,
+    ChainId,
+    EthereumTokenType,
+} from '@masknet/web3-shared-evm'
 import { AlpacaProtocol } from './AlpacaProtocol'
 import type Web3 from 'web3'
 import type { SavingsProtocol, ProtocolPairsResolver } from '../../types'
 import { flatten } from 'lodash-unified'
 import { getFungibleTokensDetailed, splitToPair } from '../common/tokens'
 
-// from https://docs.geist.finance/useful-info/deployments-addresses
-export const SUMMARY_API = 'https://alpaca-static-api.alpacafinance.org/bsc/v1/landing/summary.json'
+export const SUMMARY_API = getAlpacaConstants(ChainId.BSC).SUMMARY_API
 
 export class PairResolver implements ProtocolPairsResolver {
     public supportChains: ChainId[] = [ChainId.BSC]
@@ -14,6 +19,7 @@ export class PairResolver implements ProtocolPairsResolver {
         if (!this.supportChains.includes(chainId)) {
             return []
         }
+        if (!SUMMARY_API) return []
         const response = await fetch(SUMMARY_API)
         const fullResponse: {
             data: {

@@ -273,5 +273,80 @@
         "address": "0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7",
         "name": "USDt",
         "logo_url": "https://app.benqi.fi/images/assets/usdt.png"
+    },
+    {
+        "address": "0x17700282592d6917f6a73d0bf8accf4d578c131e",
+        "name": "MOO",
+        "logo_url": "https://static.debank.com/image/celo_token/logo_url/0x17700282592d6917f6a73d0bf8accf4d578c131e/7ed8826cb36d17b032528714ce908b20.png"
+    },
+    {
+        "address": "0x471ece3750da237f93b8e339c536989b8978a438",
+        "name": "CELO",
+        "logo_url": "https://static.debank.com/image/celo_token/logo_url/0x471ece3750da237f93b8e339c536989b8978a438/6f524d91db674876ba0f5767cf0124cc.png"
+    },
+    {
+        "address": "0x765de816845861e75a25fca122bb6898b8b1282a",
+        "name": "cUSD",
+        "logo_url": "https://static.debank.com/image/celo_token/logo_url/0x765de816845861e75a25fca122bb6898b8b1282a/17f6d58bd2a344a2098ef8123be88693.png"
+    },
+    {
+        "address": "0xd8763cba276a3738e6de85b4b3bf5fded6d6ca73",
+        "name": "cEUR",
+        "logo_url": "https://static.debank.com/image/celo_token/logo_url/0xd8763cba276a3738e6de85b4b3bf5fded6d6ca73/f00fcdbf2e75d1d5a8dbbe57653ecbb5.png"
+    },
+    {
+        "address": "0xe8537a3d056da446677b9e9d6c5db704eaab4787",
+        "name": "cREAL",
+        "logo_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/16385.png"
+    },
+    {
+        "address": "0x04068da6c83afcfa0e13ba15a6696662335d5b75",
+        "name": "USDC",
+        "logo_url": "https://static.debank.com/image/ftm_token/logo_url/0x04068da6c83afcfa0e13ba15a6696662335d5b75/fffcd27b9efff5a86ab942084c05924d.png"
+    },
+    {
+        "address": "0x049d68029688eabf473097a2fc38ef61633a3c7a",
+        "name": "fUSDT",
+        "logo_url": "https://static.debank.com/image/ftm_token/logo_url/0x049d68029688eabf473097a2fc38ef61633a3c7a/66eadee7b7bb16b75e02b570ab8d5c01.png"
+    },
+    {
+        "address": "0x1e4f97b9f9f913c46f1632781732927b9019c68b",
+        "name": "CRV",
+        "logo_url": "https://static.debank.com/image/ftm_token/logo_url/0x1e4f97b9f9f913c46f1632781732927b9019c68b/38f4cbac8fb4ac70c384a65ae0cca337.png"
+    },
+    {
+        "address": "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83",
+        "name": "WFTM",
+        "logo_url": "https://static.debank.com/image/ftm_token/logo_url/0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83/2b7d91858f9c62aafc8d7778b9c22f57.png"
+    },
+    {
+        "address": "0x321162cd933e2be498cd2267a90534a804051b11",
+        "name": "BTC",
+        "logo_url": "https://static.debank.com/image/ftm_token/logo_url/0x321162cd933e2be498cd2267a90534a804051b11/d3c52e7c7449afa8bd4fad1c93f50d93.png"
+    },
+    {
+        "address": "0x74b23882a30290451a17c44f4f05243b6b58c76d",
+        "name": "ETH",
+        "logo_url": "https://static.debank.com/image/ftm_token/logo_url/0x74b23882a30290451a17c44f4f05243b6b58c76d/61844453e63cf81301f845d7864236f6.png"
+    },
+    {
+        "address": "0x82f0b8b456c1a451378467398982d4834b6829c1",
+        "name": "MIM",
+        "logo_url": "https://static.debank.com/image/ftm_token/logo_url/0x82f0b8b456c1a451378467398982d4834b6829c1/7d0c0fb6eab1b7a8a9bfb7dcc04cb11e.png"
+    },
+    {
+        "address": "0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e",
+        "name": "DAI",
+        "logo_url": "https://static.debank.com/image/ftm_token/logo_url/0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e/549c4205dbb199f1b8b03af783f35e71.png"
+    },
+    {
+        "address": "0xb3654dc3d10ea7645f8319668e8f54d2574fbdc8",
+        "name": "LINK",
+        "logo_url": "https://static.debank.com/image/ftm_token/logo_url/0xb3654dc3d10ea7645f8319668e8f54d2574fbdc8/69425617db0ef93a7c21c4f9b81c7ca5.png"
+    },
+    {
+        "address": "0x09c9d464b58d96837f8d8b6f4d9fe4ad408d3a4f",
+        "name": "PLY",
+        "logo_url": "https://static.debank.com/image/aurora_token/logo_url/0x09c9d464b58d96837f8d8b6f4d9fe4ad408d3a4f/3a56718d2d1c32b1b12c95b2f1e5806c.png"
     }
 ]

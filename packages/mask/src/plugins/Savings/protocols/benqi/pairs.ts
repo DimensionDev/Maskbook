@@ -10,14 +10,17 @@ export type RewardToken = {
     rewardType: number
 }
 
+const qiQiReward = 0
+const qiAVAXReward = 1
+
 const rewardTokens: Array<RewardToken> = [
     {
         symbol: 'qiQI',
-        rewardType: 0,
+        rewardType: qiQiReward,
     },
     {
         symbol: 'qiAVAX',
-        rewardType: 1,
+        rewardType: qiAVAXReward,
     },
 ]
 

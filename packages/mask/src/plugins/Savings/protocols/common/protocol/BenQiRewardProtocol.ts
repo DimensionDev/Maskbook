@@ -10,6 +10,7 @@ import BenQiComptrollerABI from '@masknet/web3-contracts/abis/BenQiComptroller.j
 import type { BenqiChainlinkOracle } from '@masknet/web3-contracts/types/BenqiChainlinkOracle'
 import BenqiChainlinkOracleABI from '@masknet/web3-contracts/abis/BenqiChainlinkOracle.json'
 
+export const emptyRewardType = -1
 export type RewardToken = {
     symbol: string
     rewardType: number
@@ -64,6 +65,7 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
     ) {
         const oracle = getBenQiOracleComptrollerContract(this.config.oracle, web3)
         if (oracle === null) return []
+        console.log('matchPairs', matchPairs, this.config.oracle)
         return Promise.all(
             matchPairs
                 .filter((_) => _.market.symbol !== undefined)
@@ -75,6 +77,7 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
                     const defaultDecimals = 18
                     const decimalDelta = defaultDecimals - underlying.decimals
                     const divideDecimals = decimalDelta > 0 ? defaultDecimals + decimalDelta : defaultDecimals
+                    console.log('price', market.symbol, price)
                     return {
                         symbol: market.symbol,
                         price: new BigNumber(price).shiftedBy(-divideDecimals),
@@ -105,7 +108,7 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
         const allTokens = [
             {
                 symbol: this.stakeToken.symbol,
-                rewardType: -1,
+                rewardType: emptyRewardType,
             },
         ].concat(this.rewardTokens)
         const matchPairs = this.allPairs
@@ -145,6 +148,7 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
         } catch (error) {
             console.error('BenQiRewardProtocol.fetchSpeeds', error)
         }
+        console.log('allPrice', allPrice)
         const indexBySymbol: IndexWithStatus = {}
         allPrice.forEach((item: MarketStatus) => {
             indexBySymbol[item.symbol] = item
@@ -184,36 +188,40 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
             const marketPrice = this.stakeToken.symbol && symbolWithPrice[this.stakeToken.symbol].price
             const totalPrice = marketPrice ? totalSupplyAmount.times(marketPrice) : ZERO
 
-            const rewardsAPR = this.rewardTokens.map(({ symbol }) => {
-                const { price: rewardPrice } = symbolWithPrice[symbol]
-                const speedItem = currentMarketSpeeds.find((_) => _.symbol === symbol)
-                if (!speedItem)
+            const rewardsAPR = this.rewardTokens
+                .filter(({ symbol }) => symbolWithPrice[symbol])
+                .map(({ symbol }) => {
+                    const { price: rewardPrice } = symbolWithPrice[symbol]
+                    const speedItem = currentMarketSpeeds.find((_) => _.symbol === symbol)
+                    if (!speedItem)
+                        return {
+                            apr: ZERO,
+                        }
+                    const { speed: rewardSpeed } = speedItem
+                    const rewardPerDay = rewardSpeed.shiftedBy(-18).times(60 * 60 * 24)
+                    const rewardValue = rewardPerDay.times(rewardPrice)
+                    const supplyBase = rewardValue.div(totalPrice)
+                    const supply = supplyBase.times(365).times(100)
                     return {
-                        apr: ZERO,
+                        symbol,
+                        marketPrice: marketPrice ? marketPrice.toString(10) : 0,
+                        rewardPrice: rewardPrice.toString(10),
+                        rewardPerDay: rewardPerDay.toString(10),
+                        rewardValue: rewardValue.toString(10),
+                        supplyBase: supplyBase.toString(10),
+                        rewardSpeed: rewardSpeed.toString(10),
+                        totalPrice: totalPrice.toString(10),
+                        aprDisplay: supply.toString(10),
+                        apr: supply,
                     }
-                const { speed: rewardSpeed } = speedItem
-                const rewardPerDay = rewardSpeed.shiftedBy(-18).times(60 * 60 * 24)
-                const rewardValue = rewardPerDay.times(rewardPrice)
-                const supplyBase = rewardValue.div(totalPrice)
-                const supply = supplyBase.times(365).times(100)
-                return {
-                    symbol,
-                    // rewardPrice: rewardPrice.toString(10),
-                    // rewardPerDay: rewardPerDay.toString(10),
-                    // rewardValue: rewardValue.toString(10),
-                    // supplyBase: supplyBase.toString(10),
-                    // rewardSpeed: rewardSpeed.toString(10),
-                    // totalPrice: totalPrice.toString(10),
-                    // aprDisplay: supply.toString(10),
-                    apr: supply,
-                }
-            })
+                })
 
             const totalDistributionAPR = rewardsAPR
                 .filter((_) => _ !== null)
                 .reduce((total, item) => {
                     return total.plus(item.apr)
                 }, ZERO)
+            console.log('rewardsAPR', this.stakeToken.symbol, rewardsAPR, totalDistributionAPR)
             return totalDistributionAPR
         } catch (error) {
             console.error('getDistributionAPR', error)

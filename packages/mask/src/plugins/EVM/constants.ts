@@ -142,7 +142,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         type: NetworkType.Harmony,
         name: 'Harmony',
         icon: new URL('./assets/harmony.png', import.meta.url),
-        iconColor: 'rgb(53, 208, 127)',
+        iconColor: 'rgb(31, 90, 226)',
         isMainnet: true,
     },
     {

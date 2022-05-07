@@ -2,6 +2,37 @@
     {
         "inputs": [
             {
+                "internalType": "contract AuToken",
+                "name": "auToken",
+                "type": "address"
+            }
+        ],
+        "name": "auTokenUnderlyingPrice",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "address",
+                        "name": "auToken",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "underlyingPrice",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct AuriLens.AuTokenUnderlyingPrice",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "contract ComptrollerLensInterface",
                 "name": "comptroller",
                 "type": "address"

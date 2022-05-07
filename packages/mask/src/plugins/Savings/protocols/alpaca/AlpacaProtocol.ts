@@ -64,6 +64,10 @@ export class AlpacaProtocol implements SavingsProtocol {
 
     public async updateApr(chainId: ChainId, web3: Web3) {
         try {
+            if (!SUMMARY_API) {
+                this._apr = AlpacaProtocol.DEFAULT_APR
+                return
+            }
             const req = await fetch(SUMMARY_API)
             const response = await req.json()
             const { lendingPools } = response.data

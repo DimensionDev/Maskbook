@@ -6,14 +6,17 @@ import TranquilProtocol from './TranquilProtocol'
 import type { RewardToken, PairConfig } from '../common/protocol/BenQiRewardProtocol'
 import { TRANQUIL_COMPTROLLER, TRANQUIL_Oracle } from '../../constants'
 
+const TRANQ_INDEX = 0
+const tqONE_INDEX = 1
+
 export const rewardTokens: Array<RewardToken> = [
     {
         symbol: 'TRANQ',
-        rewardType: 0,
+        rewardType: TRANQ_INDEX,
     },
     {
         symbol: 'tqONE',
-        rewardType: 1,
+        rewardType: tqONE_INDEX,
     },
 ]
 
