@@ -27,14 +27,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
         whiteSpace: 'nowrap',
-        gridTemplateColumns: '50px auto 50px',
-    },
-    dialogTitleTail: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minWidth: 46,
-        minHeight: 46,
     },
     dialogContent: {
         overscrollBehavior: 'contain',
@@ -153,7 +145,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">
                                 {title}
                             </Typography>
-                            <div className={dialogTitleTail}>{titleTail}</div>
+                            {titleTail}
                         </DialogTitle>
                     ) : null}
 
