@@ -75,10 +75,11 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                 <Typography className={classes.name}>{account.identifier.userId}</Typography>
                 <Typography className={classes.warning}>
                     {account.is_valid
-                        ? t('popups_disconnect_warning_alert', {
+                        ? t('popups_verify_warning_alert', {
+                              persona: personaName,
                               account: account.identifier.userId,
                           })
-                        : t('popups_verify_warning_alert', {
+                        : t('popups_disconnect_warning_alert', {
                               account: account.identifier.userId,
                           })}
                 </Typography>

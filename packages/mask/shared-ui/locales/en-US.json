@@ -936,7 +936,7 @@
     "popups_connect_social_account": "Connect Social Account",
     "popups_disconnect_success": " Disconnect successfully. ",
     "popups_disconnect_failed": "Disconnect failed.",
-    "popups_verify_warning_alert": "Do you want to disconnect to Persona A from Twitter account @{{account}}?",
+    "popups_verify_warning_alert": "Do you want to disconnect to {{persona}} from Twitter account @{{account}}?",
     "popups_disconnect_warning_alert": "Your current Twitter account has not been verified by Next.ID. Please switch to @{{account}} to proceed.",
     "popups_verify_account": "Verify Account",
     "popups_disconnect_wallet_tip": "Are you sure to disconnect {{persona}} from wallet <strong>{{address}}<strong/>?",
