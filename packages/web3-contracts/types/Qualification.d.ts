@@ -22,7 +22,7 @@ interface EventOptions {
 }
 
 export type GasPriceOver = ContractEventLog<{}>
-export type Qualification = ContractEventLog<{
+export type QualificationEvent = ContractEventLog<{
     account: string
     qualified: boolean
     blockNumber: string
@@ -74,8 +74,8 @@ export interface Qualification extends BaseContract {
         GasPriceOver(cb?: Callback<GasPriceOver>): EventEmitter
         GasPriceOver(options?: EventOptions, cb?: Callback<GasPriceOver>): EventEmitter
 
-        Qualification(cb?: Callback<Qualification>): EventEmitter
-        Qualification(options?: EventOptions, cb?: Callback<Qualification>): EventEmitter
+        Qualification(cb?: Callback<QualificationEvent>): EventEmitter
+        Qualification(options?: EventOptions, cb?: Callback<QualificationEvent>): EventEmitter
 
         Unlucky(cb?: Callback<Unlucky>): EventEmitter
         Unlucky(options?: EventOptions, cb?: Callback<Unlucky>): EventEmitter
@@ -86,8 +86,8 @@ export interface Qualification extends BaseContract {
     once(event: 'GasPriceOver', cb: Callback<GasPriceOver>): void
     once(event: 'GasPriceOver', options: EventOptions, cb: Callback<GasPriceOver>): void
 
-    once(event: 'Qualification', cb: Callback<Qualification>): void
-    once(event: 'Qualification', options: EventOptions, cb: Callback<Qualification>): void
+    once(event: 'Qualification', cb: Callback<QualificationEvent>): void
+    once(event: 'Qualification', options: EventOptions, cb: Callback<QualificationEvent>): void
 
     once(event: 'Unlucky', cb: Callback<Unlucky>): void
     once(event: 'Unlucky', options: EventOptions, cb: Callback<Unlucky>): void

@@ -34,8 +34,7 @@
         ],
         "payable": false,
         "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0x095ea7b3"
+        "type": "function"
     },
     {
         "constant": true,
@@ -49,8 +48,7 @@
         ],
         "payable": false,
         "stateMutability": "view",
-        "type": "function",
-        "signature": "0x18160ddd"
+        "type": "function"
     },
     {
         "constant": false,
@@ -77,8 +75,7 @@
         ],
         "payable": false,
         "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0x23b872dd"
+        "type": "function"
     },
     {
         "constant": true,
