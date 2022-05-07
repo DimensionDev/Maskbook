@@ -6,10 +6,10 @@ import { banSlash } from './utils'
 const instance = new WeakSet()
 const id: Record<string, Record<string, PostIVIdentifier>> = Object.create(null)
 export class PostIVIdentifier extends Identifier {
-    static override from(str: string | null | undefined): Option<PostIVIdentifier> {
-        if (!str) return None
-        str = String(str)
-        if (str.startsWith('post_iv:')) return Identifier.from(str) as Option<PostIVIdentifier>
+    static override from(input: string | null | undefined): Option<PostIVIdentifier> {
+        if (!input) return None
+        input = String(input)
+        if (input.startsWith('post_iv:')) return Identifier.from(input) as Option<PostIVIdentifier>
         return None
     }
     declare readonly network: string
