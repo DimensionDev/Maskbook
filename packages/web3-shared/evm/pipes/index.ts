@@ -152,6 +152,24 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
     'rgb(214, 217, 220)',
 )
 
+export const resolveProviderBackgroundGradient = createLookupTableResolver<string, string>(
+    {
+        ['com.mask.evm_maskwallet']:
+            'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), #FFFFFF',
+        ['com.mask.evm_metamask']:
+            'linear-gradient(90deg, rgba(248, 156, 53, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), #FFFFFF',
+        ['com.mask.evm_walletconnect']:
+            'linear-gradient(90deg, rgba(59, 153, 252, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), #FFFFFF',
+        ['com.mask.evm_fortmatic']:
+            'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), #FFFFFF',
+        ['com.mask.flow_blocto']:
+            'linear-gradient(90deg, rgba(52, 133, 196, 0.2) 0%, rgba(0, 239, 139, 0.2) 100%), #FFFFFF',
+        ['com.mask.solana_phantom']:
+            'linear-gradient(90deg, rgba(84, 63, 196, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), #FFFFFF',
+    },
+    'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), #FFFFFF',
+)
+
 export function resolveLinkOnExplorer(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) return ''
