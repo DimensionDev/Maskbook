@@ -1,6 +1,7 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Button } from '@mui/material'
-import { IconGameSpaceHuggers, IconGameEliminateTheSquare, IconGameVeeFriends } from '../constants'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { useI18N } from '../../../utils'
+import { useGameList } from '../hook'
 
 const useStyles = makeStyles()(() => ({
     walletBar: {},
@@ -61,66 +62,35 @@ const useStyles = makeStyles()(() => ({
 }))
 
 interface Props {
-    onPlay: (id: number) => void
+    onPlay: (gameUrl: string) => void
 }
 
 const GameList = (props: Props) => {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
+    const gameList = useGameList()
 
     return (
         <div className={classes.walletBar}>
-            <h2 className={classes.title}>GameList</h2>
+            <h2 className={classes.title}>{t('plugin_game_list_title')}</h2>
             <ul className={classes.gameList}>
-                {/* <li className={classes.gameBar}>
-                    <img className={classes.logo} src={IconGame} alt="game logo" />
-                    <div className={classes.info}>
-                        <div className={classes.infoTitle}>Skiing Adcenture</div>
-                        <div className={classes.introduction}>
-                            Fead the starving little penguins - decompression game
-                        </div>
-                        <div className={classes.rank}>Rank 112</div>
-                    </div>
-                    <Button className={classes.playBtn} onClick={props.onPlay}>
-                        Play
-                    </Button>
-                </li> */}
-                <li className={classes.gameBar}>
-                    <img className={classes.logo} src={IconGameSpaceHuggers} alt="Space Huggers" />
-                    <div className={classes.info}>
-                        <div className={classes.infoTitle}>Space Huggers</div>
-                        <div className={classes.introduction}>
-                            A run and gun roguelike platformer with destructible environments
-                        </div>
-                        <div className={classes.rank}>Rank 1</div>
-                    </div>
-                    <Button className={classes.playBtn} onClick={() => props.onPlay(1)}>
-                        Play
-                    </Button>
-                </li>
-                <li className={classes.gameBar}>
-                    <img className={classes.logo} src={IconGameEliminateTheSquare} alt="Eliminate the square" />
-                    <div className={classes.info}>
-                        <div className={classes.infoTitle}>Eliminate the square</div>
-                        <div className={classes.introduction}>
-                            Eliminate as many target blocks as possible within 60 seconds
-                        </div>
-                        <div className={classes.rank}>Rank 2</div>
-                    </div>
-                    <Button className={classes.playBtn} onClick={() => props.onPlay(2)}>
-                        Play
-                    </Button>
-                </li>
-                <li className={classes.gameBar}>
-                    <img className={classes.logo} src={IconGameVeeFriends} alt="Vee Friends" />
-                    <div className={classes.info}>
-                        <div className={classes.infoTitle}>Vee Friends</div>
-                        <div className={classes.introduction}>A fun game to play before this character reveals</div>
-                        <div className={classes.rank}>Rank 3</div>
-                    </div>
-                    <Button className={classes.playBtn} onClick={() => props.onPlay(3)}>
-                        Play
-                    </Button>
-                </li>
+                {gameList
+                    ? gameList.map((game: any) => (
+                          <li className={classes.gameBar} key={game.id}>
+                              <img className={classes.logo} src={game.image} alt="" />
+                              <div className={classes.info}>
+                                  <div className={classes.infoTitle}>{game.name}</div>
+                                  <div className={classes.introduction}>{game.description}</div>
+                                  <div className={classes.rank}>
+                                      {t('plugin_game_list_rank')} {game.rank}
+                                  </div>
+                              </div>
+                              <Button className={classes.playBtn} onClick={() => props.onPlay(game.url)}>
+                                  {t('plugin_game_list_play')}
+                              </Button>
+                          </li>
+                      ))
+                    : null}
             </ul>
         </div>
     )

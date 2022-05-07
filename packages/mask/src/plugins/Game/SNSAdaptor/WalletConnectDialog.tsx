@@ -11,22 +11,20 @@ import GameWindow from './GameWindow'
 import { WalletMessages } from '../../Wallet/messages'
 
 const WalletConnectDialog = () => {
-    const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.essayDialogUpdated, () => {})
-    const handleClose = () => {
-        closeDialog()
-    }
-
     const [isGameShow, setGameShow] = useState(false)
+    const [gameUrl, setGameUrl] = useState('')
+
+    const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.essayDialogUpdated, () => {})
 
     const handleGameClose = () => {
         setGameShow(false)
-        setGameId(0)
+        setGameUrl('')
     }
 
-    const handleGameOpen = (id: number) => {
+    const handleGameOpen = (url: string) => {
         closeDialog()
         closeWalletDialog()
-        setGameId(id)
+        setGameUrl(url)
         setGameShow(true)
     }
 
@@ -34,16 +32,15 @@ const WalletConnectDialog = () => {
         WalletMessages.events.walletStatusDialogUpdated,
     )
 
-    const [gameId, setGameId] = useState(0)
     return (
         <>
-            <InjectedDialog onClose={handleClose} open={open} title="Game">
+            <InjectedDialog onClose={closeDialog} open={open} title="Game">
                 <DialogContent>
                     <WalletStatusBox />
                     <GameList onPlay={handleGameOpen} />
                 </DialogContent>
             </InjectedDialog>
-            <GameWindow id={gameId} isShow={isGameShow} onClose={handleGameClose} />
+            <GameWindow url={gameUrl} isShow={isGameShow} onClose={handleGameClose} />
         </>
     )
 }

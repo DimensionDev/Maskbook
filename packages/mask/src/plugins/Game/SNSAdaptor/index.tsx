@@ -1,11 +1,10 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { PluginGameMessages } from '../messages'
-// import { Trans } from 'react-i18next'
+import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationEntry } from '@masknet/shared'
 import WalletConnectDialog from './WalletConnectDialog'
-// import GameWindow from './GameWindow'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -13,15 +12,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection() {
         return (
             <>
-                {/* <GameWindow /> */}
                 <WalletConnectDialog />
             </>
         )
     },
     ApplicationEntries: [
         (() => {
-            const icon = <img src={new URL('../assets/icon-logo.png', import.meta.url).toString()} />
-            const name = 'Game' // <Trans i18nKey="plugin_pets_name" />
+            const icon = <img src={new URL('../assets/game.png', import.meta.url).toString()} />
+            const name = <Trans i18nKey="plugin_game_name" />
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {

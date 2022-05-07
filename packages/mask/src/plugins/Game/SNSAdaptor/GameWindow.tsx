@@ -1,10 +1,9 @@
 import { useState, useMemo } from 'react'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-// import { InjectedDialog } from '@masknet/shared'
-import { styled } from '@mui/material/styles'
-// import DialogContent from '@mui/material/DialogContent'
 import classNames from 'classnames'
+import { styled } from '@mui/material/styles'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { IconClose, IconFull } from '../constants'
+
 const useStyles = makeStyles()(() => ({
     root: {
         position: 'fixed',
@@ -74,14 +73,9 @@ const IFrame = styled('iframe')`
     width: 100%;
     height: 100%;
 `
-const gameUrls = [
-    { id: 1, url: 'https://elevenzhou.github.io/Space/' },
-    { id: 2, url: 'https://whitelist.helloweb3.io/token/1' },
-    { id: 3, url: 'https://vf-prod.strictlyfromnowhere.com/' },
-]
 
 interface Props {
-    id: number | string
+    url: string
     isShow: boolean
     onClose: () => void
 }
@@ -101,14 +95,14 @@ const GameWindow = (props: Props) => {
     }
 
     const gameUrl = useMemo(() => {
-        return gameUrls.find((item) => item.id === props.id)?.url
-    }, [props.id])
+        return props.url
+    }, [props])
 
     return props.isShow ? (
         <div className={classes.root}>
             <div className={classes.body}>
                 <div className={classNames(classes.iframeBox, { [classes.fullScreen]: isFullScreen })}>
-                    {!!gameUrl && <IFrame src={gameUrl} />}
+                    {!!props.url && <IFrame src={gameUrl} />}
                 </div>
                 <div className={classNames(classes.control, { [classes.fullControl]: isFullScreen })}>
                     <img src={IconClose} onClick={handleClose} alt="close" />
