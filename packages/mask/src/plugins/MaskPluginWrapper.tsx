@@ -35,6 +35,7 @@ const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) =
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
             margin: theme.spacing(2, 0),
             width: '100%',
+            height: 196,
             boxSizing: 'border-box',
             cursor: 'default',
             ...(isTwitter(activatedSocialNetworkUI)
@@ -49,7 +50,7 @@ const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) =
             color: theme.palette.text.primary,
             display: 'flex',
             alignItems: 'center',
-            padding: theme.spacing(1),
+            padding: 15,
         },
         title: {
             display: 'flex',
@@ -72,6 +73,12 @@ const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) =
         action: {
             textAlign: 'center',
             margin: theme.spacing(1),
+            position: 'absolute',
+            width: '100%',
+            bottom: 24,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
         },
         body: {
             padding: theme.spacing(0),
@@ -83,6 +90,7 @@ const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) =
             '&,&:hover': {
                 background: MaskColorVar.buttonPluginBackground,
             },
+            borderRadius: 9999,
         },
     }
 })

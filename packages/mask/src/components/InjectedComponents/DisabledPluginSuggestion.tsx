@@ -58,6 +58,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
     const onClick = useCallback((x: Plugin.DeferredDefinition) => {
         Services.Settings.setPluginMinimalModeEnabled(x.ID, false)
     }, [])
+    const _plugins = useActivatedPluginsSNSAdaptor('any')
     if (!plugins.length) return null
 
     return (
@@ -71,6 +72,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                         x.publisher ? <PluginI18NFieldRender pluginID={x.ID} field={x.publisher.name} /> : undefined
                     }
                     publisherLink={x.publisher?.link}
+                    wrapperProps={_plugins.filter((y) => y.ID === x.ID)?.[0]?.wrapperProps}
                     action={
                         <Button
                             size="small"
@@ -84,11 +86,12 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                                 '&:hover': {
                                     backgroundColor: MaskColorVar.buttonPluginBackground,
                                 },
+                                borderRadius: 9999,
                             }}>
                             Enable plugins
                         </Button>
                     }
-                    content={<Rectangle />}
+                    content={<Rectangle style={{ paddingLeft: 8, marginBottom: 4 }} />}
                 />
             ))}
         </>

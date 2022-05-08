@@ -169,7 +169,9 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         variant="contained"
                         size={props.ActionButtonPromiseProps?.size}
                         sx={{
+                            borderRadius: 9999,
                             marginTop: 1.5,
+                            marginBottom: 1.5,
                             backgroundColor: MaskColorVar.buttonPluginBackground,
                             width: 254,
                             color: 'white',

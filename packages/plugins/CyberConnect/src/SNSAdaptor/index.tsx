@@ -45,7 +45,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
     ],
     wrapperProps: {
-        icon: <CyberConnectIcon />,
+        icon: <CyberConnectIcon style={{ fill: 'black' }} />,
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
     },
