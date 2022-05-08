@@ -141,10 +141,6 @@ export function AccountView() {
                     <TableBody>
                         {userTokenBalances?.map((balance: UserIdeaTokenBalance) => {
                             const token = balance.token
-                            const name =
-                                balance.token.name.length > 30
-                                    ? balance.token.name.slice(0, 30).concat('...')
-                                    : balance.token.name
                             const tokenPrice = new BigNumber(balance.token.latestPricePoint.price)
                             const userTokenBalance = leftShift(balance.amount, 18)
                             const balanceValue = tokenPrice.multipliedBy(userTokenBalance)
