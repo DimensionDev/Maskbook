@@ -1,6 +1,6 @@
 import { useContext, createContext, PropsWithChildren, useMemo, useCallback, useState } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { Typography, Box } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, NetworkPluginID } from '@masknet/plugin-infra/web3'
@@ -153,35 +153,40 @@ function ApplicationBoardContent(props: Props) {
 
     const [isPlaying, setPlaying] = useState(true)
     const recommendFeatureAppList = applicationList.filter((x) => x.entry.recommendFeature)
-    const [sliderList] = useState(
-        recommendFeatureAppList.concat(recommendFeatureAppList).concat(recommendFeatureAppList),
-    )
 
     const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
     const { classes } = useStyles({ shouldScroll: listedAppList.length > 12 })
     return (
         <>
             <link rel="stylesheet" href={new URL('./assets/react-carousel.es.css', import.meta.url).toString()} />
-            <CarouselProvider
-                naturalSlideWidth={220}
-                naturalSlideHeight={117}
-                totalSlides={sliderList.length}
-                visibleSlides={2.2}
-                infinite={false}
-                interval={2500}
-                className={classes.carousel}
-                isPlaying={isPlaying}>
-                <Slider onScroll={(e) => setPlaying((e.target as HTMLDivElement).scrollLeft === 0)}>
-                    {sliderList.map((application, i) => (
-                        <Slide index={i} key={i}>
-                            <RenderEntryComponent
-                                key={application.entry.ApplicationEntryID}
-                                application={application}
-                            />
-                        </Slide>
+            {recommendFeatureAppList.length > 2 ? (
+                <CarouselProvider
+                    naturalSlideWidth={220}
+                    naturalSlideHeight={117}
+                    totalSlides={recommendFeatureAppList.length}
+                    visibleSlides={2.2}
+                    infinite={false}
+                    interval={2500}
+                    className={classes.carousel}
+                    isPlaying={isPlaying}>
+                    <Slider onScroll={(e) => setPlaying((e.target as HTMLDivElement).scrollLeft === 0)}>
+                        {recommendFeatureAppList.map((application, i) => (
+                            <Slide index={i} key={i}>
+                                <RenderEntryComponent
+                                    key={application.entry.ApplicationEntryID}
+                                    application={application}
+                                />
+                            </Slide>
+                        ))}
+                    </Slider>
+                </CarouselProvider>
+            ) : (
+                <Box className={classes.recommendFeatureAppListWrapper}>
+                    {recommendFeatureAppList.map((application) => (
+                        <RenderEntryComponent key={application.entry.ApplicationEntryID} application={application} />
                     ))}
-                </Slider>
-            </CarouselProvider>
+                </Box>
+            )}
 
             {listedAppList.length > 0 ? (
                 <section className={classes.applicationWrapper}>
