@@ -77,6 +77,7 @@ export function NFTList(props: NFTListProps) {
                     tokens={tokens.filter((x) => x.contractDetailed.chainId === ChainId.Mainnet) ?? []}
                     tokenInfo={tokenInfo}
                     chainId={ChainId.Mainnet}
+                    address={address}
                     onSelect={onSelect}
                 />
             </TabPanel>
@@ -85,6 +86,7 @@ export function NFTList(props: NFTListProps) {
                     tokens={tokens.filter((x) => x.contractDetailed.chainId === ChainId.Matic) ?? []}
                     tokenInfo={tokenInfo}
                     chainId={ChainId.Matic}
+                    address={address}
                     onSelect={onSelect}
                 />
             </TabPanel>
