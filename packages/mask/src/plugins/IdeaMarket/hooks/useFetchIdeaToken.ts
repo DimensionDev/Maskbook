@@ -1,9 +1,9 @@
 import { useAsync } from 'react-use'
-import { fetchIdeaToken } from '../apis'
+import { PluginIdeaMarketRPC } from '../messages'
 
 export function useFetchIdeaToken(marketName: string, tokenName: string) {
     return useAsync(async () => {
         if (!tokenName || !marketName) return
-        return fetchIdeaToken(marketName, tokenName)
+        return PluginIdeaMarketRPC.fetchIdeaToken(marketName, tokenName)
     }, [marketName, tokenName])
 }
