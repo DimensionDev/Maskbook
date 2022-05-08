@@ -2,20 +2,25 @@ import { makeStyles, useTabs } from '@masknet/theme'
 import { ChainId, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Tabs, Typography } from '@mui/material'
+import classNames from 'classnames'
 import { useI18N } from '../../../utils'
 import { Application_NFT_LIST_PAGE } from '../constants'
 import type { TokenInfo } from '../types'
 import { NFTListPage } from './NFTListPage'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ currentTab: Application_NFT_LIST_PAGE }>()((theme, props) => ({
     selected: {
-        backgroundColor: theme.palette.background.paper,
-        borderTop: `1px solid ${theme.palette.mode === 'dark' ? '#15171A' : '#F6F8F8'}`,
+        backgroundColor: theme.palette.mode === 'dark' ? 'black !important' : 'white !important',
+        border: 'none',
+        borderTop: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
         color: `${theme.palette.text.primary} !important`,
     },
     tab: {
         backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F6F8F8',
         color: theme.palette.text.secondary,
+        border: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
+        minHeight: 37,
+        height: 37,
     },
     tabPanel: {
         padding: theme.spacing(1),
@@ -30,7 +35,6 @@ interface NFTListProps {
 }
 
 export function NFTList(props: NFTListProps) {
-    const { classes } = useStyles()
     const { address, onSelect, tokenInfo, onChangePage, tokens = [] } = props
     const { t } = useI18N()
 
@@ -39,10 +43,12 @@ export function NFTList(props: NFTListProps) {
         Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page,
     )
 
+    const { classes } = useStyles({ currentTab })
     const _onChange = (event: unknown, value: any) => {
         onChange(event, value)
         onChangePage?.(value)
     }
+    console.log(currentTab)
     if (!address) return null
     return (
         <TabContext value={currentTab}>
@@ -51,6 +57,8 @@ export function NFTList(props: NFTListProps) {
                 variant="fullWidth"
                 onChange={_onChange}
                 sx={{
+                    minHeight: 37,
+                    height: 37,
                     '.MuiTabs-indicator': { display: 'none' },
                 }}>
                 <Tab
@@ -60,7 +68,7 @@ export function NFTList(props: NFTListProps) {
                         </Typography>
                     }
                     value={tabs.ETH}
-                    className={currentTab === tabs.ETH ? classes.selected : classes.tab}
+                    className={classNames(classes.tab, currentTab === tabs.ETH ? classes.selected : '')}
                 />
                 <Tab
                     label={
@@ -69,7 +77,7 @@ export function NFTList(props: NFTListProps) {
                         </Typography>
                     }
                     value={tabs.Polygon}
-                    className={currentTab === tabs.Polygon ? classes.selected : classes.tab}
+                    className={classNames(classes.tab, currentTab === tabs.Polygon ? classes.selected : '')}
                 />
             </Tabs>
             <TabPanel value={tabs.ETH} className={classes.tabPanel}>
@@ -77,6 +85,7 @@ export function NFTList(props: NFTListProps) {
                     tokens={tokens.filter((x) => x.contractDetailed.chainId === ChainId.Mainnet) ?? []}
                     tokenInfo={tokenInfo}
                     chainId={ChainId.Mainnet}
+                    address={address}
                     onSelect={onSelect}
                 />
             </TabPanel>
@@ -85,6 +94,7 @@ export function NFTList(props: NFTListProps) {
                     tokens={tokens.filter((x) => x.contractDetailed.chainId === ChainId.Matic) ?? []}
                     tokenInfo={tokenInfo}
                     chainId={ChainId.Matic}
+                    address={address}
                     onSelect={onSelect}
                 />
             </TabPanel>

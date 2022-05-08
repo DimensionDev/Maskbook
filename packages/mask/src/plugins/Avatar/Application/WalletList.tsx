@@ -31,10 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.secondary.main,
     },
 
-    icon: {
-        width: 24,
-        height: 24,
-    },
+    icon: {},
 }))
 
 interface AddressNamesProps extends withClasses<'root'> {
@@ -89,14 +86,18 @@ export function AddressNames(props: AddressNamesProps) {
         <MenuItem key={wallet} value={wallet} onClick={() => onClick(account)}>
             <ListItemIcon>
                 {selectedWallet === wallet ? (
-                    <CheckedIcon className={classes.icon} />
+                    <>
+                        <UncheckIcon className={classes.icon} />
+
+                        <CheckedIcon className={classes.icon} />
+                    </>
                 ) : (
                     <UncheckIcon className={classes.icon} />
                 )}
             </ListItemIcon>
             <WalletUI address={wallet} />
             {enableChange && (
-                <Button style={{ marginLeft: 16 }} onClick={onChange}>
+                <Button sx={{ marginLeft: 4, borderRadius: 9999 }} onClick={onChange}>
                     {t.change()}
                 </Button>
             )}
@@ -120,12 +121,16 @@ export function AddressNames(props: AddressNamesProps) {
                     walletItem(selectedWallet, account, Boolean(account), () => onClick(account), onConnectWallet)
                 ) : (
                     <MenuItem key="connect">
-                        <Button fullWidth onClick={onConnectWallet}>
+                        <Button
+                            fullWidth
+                            onClick={onConnectWallet}
+                            sx={{ width: 311, padding: 1.5, borderRadius: 9999 }}>
                             {t.connect_your_wallet()}
                         </Button>
                     </MenuItem>
                 )}
                 {wallets
+                    .sort((a, b) => Number(b.created_at) - Number(a.created_at))
                     ?.filter((x) => !isSameAddress(x.identity, account))
                     .map((x) => walletItem(selectedWallet, x.identity, false, () => onClick(x.identity)))}
                 <Divider />
@@ -139,7 +144,9 @@ export function AddressNames(props: AddressNamesProps) {
                     <ListItemIcon>
                         <WalletSettingIcon />
                     </ListItemIcon>
-                    {t.wallet_settings()}
+                    <Typography fontSize={14} fontWeight={700}>
+                        {t.wallet_settings()}
+                    </Typography>
                 </MenuItem>
             </ShadowRootMenu>
         </Stack>

@@ -31,8 +31,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                     arrow: true,
                                     placement: 'top',
                                 }}
-                                hint={
-                                    <Typography fontSize={12} style={{ whiteSpace: 'nowrap' }}>
+                                disabled={disabled}
+                                nextIdVerifyToolTipHint={
+                                    <Typography
+                                        fontSize={12}
+                                        sx={{ whiteSpace: 'nowrap', color: 'white', paddingTop: 1, paddingBottom: 1 }}>
                                         <Translate.application_hint
                                             components={{
                                                 br: <br />,

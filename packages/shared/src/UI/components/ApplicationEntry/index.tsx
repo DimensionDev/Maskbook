@@ -38,6 +38,12 @@ const useStyles = makeStyles()((theme) => ({
             height: 36,
         },
     },
+    tooltip: {
+        backgroundColor: 'black',
+    },
+    arrow: {
+        color: 'black',
+    },
 }))
 
 interface ApplicationEntryProps {
@@ -47,8 +53,7 @@ interface ApplicationEntryProps {
     toolTip?: string
     onClick: () => void
     tooltipProps?: Partial<TooltipProps>
-    hint?: string | React.ReactElement
-    nextIdVerifyToolTipHint?: string
+    nextIdVerifyToolTipHint?: string | React.ReactElement
 }
 
 export function ApplicationEntry(props: ApplicationEntryProps) {
@@ -61,7 +66,6 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             placement: 'top',
             arrow: true,
         },
-        hint = '',
         nextIdVerifyToolTipHint,
     } = props
 
@@ -78,9 +82,10 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
     )
     return (
         <>
-            {(hint && !disabled) || nextIdVerifyToolTipHint ? (
+            {!disabled || nextIdVerifyToolTipHint ? (
                 <ShadowRootTooltip
-                    title={<Typography>{hint || nextIdVerifyToolTipHint}</Typography>}
+                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                    title={<>{nextIdVerifyToolTipHint}</>}
                     {...tooltipProps}
                     disableHoverListener={!nextIdVerifyToolTipHint}>
                     {jsx}

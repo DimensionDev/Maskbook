@@ -1,9 +1,8 @@
 import { makeStyles } from '@masknet/theme'
 import { ChainId, ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared-evm'
-import { Button, DialogContent, Typography } from '@mui/material'
+import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { InputBox } from '../../../extension/options-page/DashboardComponents/InputBox'
 import { useI18N } from '../../../utils'
 import { createNFT } from '../utils'
 import { WalletRPC } from '../../Wallet/messages'
@@ -18,6 +17,13 @@ const useStyles = makeStyles()((theme) => ({
     input: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
+        display: 'block',
+        width: '100%',
+        border: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
+        alignItems: 'center',
+        padding: theme.spacing(1),
+        boxSizing: 'border-box',
+        borderRadius: 8,
     },
     message: {
         '&:before': {
@@ -28,6 +34,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 export interface AddNFTProps {
+    account?: string
     onClose: () => void
     chainId?: ChainId
     onAddClick?: (token: ERC721TokenDetailed) => void
@@ -40,8 +47,8 @@ export function AddNFT(props: AddNFTProps) {
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
-    const { onClose, open, onAddClick, title, chainId } = props
-    const account = useAccount()
+    const { onClose, open, onAddClick, title, chainId, account } = props
+    const _account = useAccount()
 
     const onClick = useCallback(async () => {
         if (!address) {
@@ -59,7 +66,7 @@ export function AddNFT(props: AddNFTProps) {
                     setMessage('chain does not match.')
                     return
                 }
-                if (!token || !isSameAddress(token?.info.owner, account)) {
+                if (!token || !isSameAddress(token?.info.owner, account ?? _account)) {
                     setMessage(t('nft_owner_hint'))
                     return
                 }
@@ -91,10 +98,18 @@ export function AddNFT(props: AddNFTProps) {
                     {t('nft_add_button_label')}
                 </Button>
                 <div className={classes.input}>
-                    <InputBox label="Input Contract Address" onChange={(address) => onAddressChange(address)} />
+                    <InputBase
+                        sx={{ width: '100%' }}
+                        placeholder="Input Contract Address"
+                        onChange={(e) => onAddressChange(e.target.value)}
+                    />
                 </div>
                 <div className={classes.input}>
-                    <InputBox label="Token ID" onChange={(tokenId) => onTokenIdChange(tokenId)} />
+                    <InputBase
+                        sx={{ width: '100%' }}
+                        placeholder="Token ID"
+                        onChange={(e) => onTokenIdChange(e.target.value)}
+                    />
                 </div>
                 {message ? (
                     <Typography color="error" className={classes.message}>

@@ -25,7 +25,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         fontSize: props.fontSize,
         marginBottom: props.marginBottom,
         marginTop: 1,
-        marginRight: theme.spacing(0.5),
+        marginRight: theme.spacing(2),
     },
     text: {
         color: theme.palette.mode === 'dark' ? '#D9D9D9' : '#0F1419',
