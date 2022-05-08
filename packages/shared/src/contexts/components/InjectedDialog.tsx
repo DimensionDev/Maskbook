@@ -40,7 +40,11 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         color: theme.palette.text.primary,
         position: 'absolute',
         padding: 0,
-        fontSize: 24,
+        width: 24,
+        height: 24,
+        '& > svg': {
+            fontSize: 24,
+        },
     },
     paper: clean ? { width: 'auto', backgroundImage: 'none' } : {},
 }))
