@@ -176,14 +176,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             )
             if (!signResult) throw new Error('sign error')
             await setKvPatchData(payload.val, signResult.signature.signature, rawPatchData)
-            showSnackbar(t.plugin_tips_persona_sign_success(), {
+            showSnackbar(t.tip_persona_sign_success(), {
                 variant: 'success',
                 message: nowTime,
             })
             retryKv()
             return true
         } catch (error) {
-            showSnackbar(t.plugin_tips_persona_sign_success(), {
+            showSnackbar(t.tip_persona_sign_error(), {
                 variant: 'error',
                 message: nowTime,
             })
@@ -238,12 +238,12 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     result.createdAt,
                     { signature: signature.signature.signature },
                 )
-                showSnackbar(t.plugin_tips_persona_sign_success(), {
+                showSnackbar(t.tip_persona_sign_success(), {
                     variant: 'success',
                     message: nowTime,
                 })
             } catch (error) {
-                showSnackbar(t.plugin_tips_persona_sign_success(), {
+                showSnackbar(t.tip_persona_sign_error(), {
                     variant: 'error',
                     message: nowTime,
                 })

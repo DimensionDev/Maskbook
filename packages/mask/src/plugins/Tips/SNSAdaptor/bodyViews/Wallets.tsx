@@ -61,7 +61,7 @@ const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: W
                         className={classes.emptyIcon}
                         src={new URL('../../assets/empty.png', import.meta.url).toString()}
                     />
-                    <Typography>{t.plugin_tips_wallet_add()}</Typography>
+                    <Typography>{t.tip_wallet_add()}</Typography>
                 </div>
             )}
             <DisconnectWalletDialog

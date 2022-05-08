@@ -109,7 +109,7 @@ export function WalletItem({
         undefined,
         undefined,
         undefined,
-        t.plugin_tips_copy_success_of_wallet_addr(),
+        t.tip_copy_success_of_wallet_addr(),
     )
     const wallets = useWallets()
 
@@ -131,7 +131,7 @@ export function WalletItem({
                         if (!setAsDefault) return
                         setAsDefault(nowIdx ?? 0)
                     }}>
-                    {t.plugin_tips_set_as_default()}
+                    {t.tip_set_as_default()}
                 </Typography>
             )
         if (canDelete)

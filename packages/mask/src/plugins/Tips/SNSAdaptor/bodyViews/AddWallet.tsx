@@ -78,13 +78,13 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
                 currentPersona.identifier,
                 payload.signPayload,
             )
-            showSnackbar(t.plugin_tips_persona_sign_success(), {
+            showSnackbar(t.tip_persona_sign_success(), {
                 variant: 'success',
                 message: nowTime,
             })
             return signResult.signature.signature
         } catch (error) {
-            showSnackbar(t.plugin_tips_persona_sign_error(), {
+            showSnackbar(t.tip_persona_sign_error(), {
                 variant: 'error',
                 message: nowTime,
             })
@@ -109,10 +109,10 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
                     signature,
                 },
             )
-            showSnackbar(t.plugin_tips_wallet_sign_success(), { variant: 'success', message: nowTime })
+            showSnackbar(t.tip_wallet_sign_success(), { variant: 'success', message: nowTime })
             return true
         } catch (error) {
-            showSnackbar(t.plugin_tips_wallet_sign_error(), { variant: 'error', message: nowTime })
+            showSnackbar(t.tip_wallet_sign_error(), { variant: 'error', message: nowTime })
             return false
         }
     }, [currentPersona?.identifier, payload, signature])

@@ -90,7 +90,7 @@ export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
         return (
             <InjectedDialog open={open}>
                 <DialogContent className={classes.content}>
-                    <Typography className={classes.title}>{t.plugin_tips_disconnect_dialog_title()}</Typography>
+                    <Typography className={classes.title}>{t.tip_disconnect_dialog_title()}</Typography>
                     <Typography>
                         <Trans
                             i18nKey="plugin_tips_disconnect_introduction"

@@ -70,7 +70,7 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
             </div>
             <div className={classes.content}>
                 {isAllHide ? (
-                    <Typography className={classes.empty}>{t.plugin_tips_empty_list()}</Typography>
+                    <Typography className={classes.empty}>{t.tip_empty_list()}</Typography>
                 ) : (
                     wallets
                         .filter((x) => x.isPublic)

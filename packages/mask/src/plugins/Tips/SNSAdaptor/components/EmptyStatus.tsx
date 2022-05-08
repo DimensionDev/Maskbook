@@ -111,7 +111,7 @@ export const EmptyStatus = memo(({ toAdd }: EmptyStatusProps) => {
                     alt=""
                 />
                 <Typography sx={{ fontSize: 14, lineHeight: 18, fontWeight: 700 }}>
-                    {t.plugin_tips_connect_wallet()}
+                    {t.tip_connect_your_wallet()}
                 </Typography>
             </div>
         </div>

@@ -29,7 +29,7 @@ export function VerifyAlertLine({ onClose }: VerifyAlertLineProps) {
     const { classes } = useStyles()
     return (
         <div className={classes.container}>
-            <Typography>{t.plugin_tips_verify_line_intro()}</Typography>
+            <Typography>{t.tip_verify_line_intro()}</Typography>
             <CloseIcon className={classes.closeIcon} onClick={() => onClose()} />
         </div>
     )
