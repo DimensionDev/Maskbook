@@ -374,7 +374,6 @@ importers:
       '@types/json-stable-stringify': ^1.0.34
       '@types/json2csv': ^5.0.3
       '@types/node': ^17.0.31
-      '@types/react-avatar-editor': ^10.3.6
       '@types/react-highlight-words': ^0.16.4
       '@types/react-router-dom': ^5.3.3
       '@types/react-virtualized-auto-sizer': ^1.0.1
@@ -421,7 +420,6 @@ importers:
       opensea-js: ^1.2.7
       promievent: ^0.1.4
       protobufjs: ^6.11.2
-      react-avatar-editor: ^12.0.0
       react-devtools-core: ^4.24.5
       react-dnd: ^16.0.1
       react-dnd-html5-backend: ^16.0.1
@@ -516,7 +514,6 @@ importers:
       '@types/json-stable-stringify': 1.0.34
       '@types/json2csv': 5.0.3
       '@types/node': 17.0.31
-      '@types/react-avatar-editor': 10.3.6
       '@types/react-highlight-words': 0.16.4
       '@types/react-router-dom': 5.3.3
       '@types/react-virtualized-auto-sizer': 1.0.1
@@ -560,7 +557,6 @@ importers:
       opensea-js: 1.2.7
       promievent: 0.1.5
       protobufjs: 6.11.2
-      react-avatar-editor: 12.0.0
       react-dnd: 16.0.1_@types+node@17.0.31
       react-dnd-html5-backend: 16.0.1
       react-draggable: 4.4.4
@@ -1744,21 +1740,6 @@ packages:
       '@babel/types': 7.17.0
     dev: true
 
-  /@babel/helper-compilation-targets/7.16.7:
-    resolution: {integrity: sha512-mGojBwIWcwGD6rfqgRXVlVYmPAv7eOpIemUG3dGnDdCY4Pae70ROij3XmfrH6Fa1h1aiDylpglbZyktfzyo/hA==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-    dependencies:
-      '@babel/compat-data': 7.17.0
-      '@babel/helper-validator-option': 7.16.7
-      browserslist: 4.20.3
-      semver: 6.3.0
-    dev: false
-
   /@babel/helper-compilation-targets/7.16.7_@babel+core@7.17.10:
     resolution: {integrity: sha512-mGojBwIWcwGD6rfqgRXVlVYmPAv7eOpIemUG3dGnDdCY4Pae70ROij3XmfrH6Fa1h1aiDylpglbZyktfzyo/hA==}
     engines: {node: '>=6.9.0'}
@@ -1862,26 +1843,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /@babel/helper-define-polyfill-provider/0.2.4:
-    resolution: {integrity: sha512-OrpPZ97s+aPi6h2n1OXzdhVis1SGSsMU2aMHgLcOKfsp4/v1NWpx3CWT3lBj5eeBq9cDkPkh+YCfdF7O12uNDQ==}
-    peerDependencies:
-      '@babel/core': ^7.4.0-0
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-    dependencies:
-      '@babel/helper-compilation-targets': 7.16.7
-      '@babel/helper-module-imports': 7.16.0
-      '@babel/helper-plugin-utils': 7.16.5
-      '@babel/traverse': 7.16.10
-      debug: 4.3.3
-      lodash.debounce: 4.0.8
-      resolve: 1.22.0
-      semver: 6.3.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
 
   /@babel/helper-define-polyfill-provider/0.2.4_@babel+core@7.17.10:
     resolution: {integrity: sha512-OrpPZ97s+aPi6h2n1OXzdhVis1SGSsMU2aMHgLcOKfsp4/v1NWpx3CWT3lBj5eeBq9cDkPkh+YCfdF7O12uNDQ==}
@@ -3274,25 +3235,6 @@ packages:
       '@babel/core': 7.17.10
       '@babel/helper-plugin-utils': 7.16.7
     dev: true
-
-  /@babel/plugin-transform-runtime/7.15.0:
-    resolution: {integrity: sha512-sfHYkLGjhzWTq6xsuQ01oEsUYjkHRux9fW1iUA68dC7Qd8BS1Unq4aZ8itmQp95zUzIcyR2EbNMTzAicFj+guw==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-    dependencies:
-      '@babel/helper-module-imports': 7.16.0
-      '@babel/helper-plugin-utils': 7.16.5
-      babel-plugin-polyfill-corejs2: 0.2.3
-      babel-plugin-polyfill-corejs3: 0.2.4
-      babel-plugin-polyfill-regenerator: 0.2.3
-      semver: 6.3.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
 
   /@babel/plugin-transform-runtime/7.15.0_@babel+core@7.17.10:
     resolution: {integrity: sha512-sfHYkLGjhzWTq6xsuQ01oEsUYjkHRux9fW1iUA68dC7Qd8BS1Unq4aZ8itmQp95zUzIcyR2EbNMTzAicFj+guw==}
@@ -9664,12 +9606,6 @@ packages:
   /@types/range-parser/1.2.4:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
 
-  /@types/react-avatar-editor/10.3.6:
-    resolution: {integrity: sha512-2r9+WYriqXIyjOTxy/DSiCUhr2TBiYD4Gzbyych1WUEwdPboNj0JRz9B5868TwiGgKD61jdWYyKy/OutHs7L6A==}
-    dependencies:
-      '@types/react': 18.0.9
-    dev: false
-
   /@types/react-avatar-editor/12.0.0:
     resolution: {integrity: sha512-835jSnCdQ2Kgrtz2sTYKMv9YSGJG0j2vd8C0sxWtYJoYOmYPs8nt25rTsbCOha3SVzWNiuw1TOQCVqN0iBQgrw==}
     dependencies:
@@ -11635,21 +11571,6 @@ packages:
       '@babel/core': 7.17.10
     dev: true
 
-  /babel-plugin-polyfill-corejs2/0.2.3:
-    resolution: {integrity: sha512-NDZ0auNRzmAfE1oDDPW2JhzIMXUk+FFe2ICejmt5T4ocKgiQx3e0VCRx9NCAidcMtL2RUZaWtXnmjTCkx0tcbA==}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-    dependencies:
-      '@babel/compat-data': 7.16.8
-      '@babel/helper-define-polyfill-provider': 0.2.4
-      semver: 6.3.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
   /babel-plugin-polyfill-corejs2/0.2.3_@babel+core@7.17.10:
     resolution: {integrity: sha512-NDZ0auNRzmAfE1oDDPW2JhzIMXUk+FFe2ICejmt5T4ocKgiQx3e0VCRx9NCAidcMtL2RUZaWtXnmjTCkx0tcbA==}
     peerDependencies:
@@ -11697,20 +11618,6 @@ packages:
       - supports-color
     dev: true
 
-  /babel-plugin-polyfill-corejs3/0.2.4:
-    resolution: {integrity: sha512-z3HnJE5TY/j4EFEa/qpQMSbcUJZ5JQi+3UFjXzn6pQCmIKc5Ug5j98SuYyH+m4xQnvKlMDIW4plLfgyVnd0IcQ==}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-    dependencies:
-      '@babel/helper-define-polyfill-provider': 0.2.4
-      core-js-compat: 3.20.1
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
   /babel-plugin-polyfill-corejs3/0.2.4_@babel+core@7.17.10:
     resolution: {integrity: sha512-z3HnJE5TY/j4EFEa/qpQMSbcUJZ5JQi+3UFjXzn6pQCmIKc5Ug5j98SuYyH+m4xQnvKlMDIW4plLfgyVnd0IcQ==}
     peerDependencies:
@@ -11740,19 +11647,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /babel-plugin-polyfill-regenerator/0.2.3:
-    resolution: {integrity: sha512-JVE78oRZPKFIeUqFGrSORNzQnrDwZR16oiWeGM8ZyjBn2XAT5OjP+wXx5ESuo33nUsFUEJYjtklnsKbxW5L+7g==}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-    dependencies:
-      '@babel/helper-define-polyfill-provider': 0.2.4
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
 
   /babel-plugin-polyfill-regenerator/0.2.3_@babel+core@7.17.10:
     resolution: {integrity: sha512-JVE78oRZPKFIeUqFGrSORNzQnrDwZR16oiWeGM8ZyjBn2XAT5OjP+wXx5ESuo33nUsFUEJYjtklnsKbxW5L+7g==}
@@ -14803,7 +14697,7 @@ packages:
   /dom-helpers/5.2.1:
     resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.17.2
       csstype: 3.0.11
     dev: false
 
@@ -19852,7 +19746,7 @@ packages:
       whatwg-encoding: 2.0.0
       whatwg-mimetype: 3.0.0
       whatwg-url: 10.0.0
-      ws: 8.6.0
+      ws: 8.5.0
       xml-name-validator: 4.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -22983,25 +22877,6 @@ packages:
       schema-utils: 3.1.1
       webpack: 4.46.0
     dev: true
-
-  /react-avatar-editor/12.0.0:
-    resolution: {integrity: sha512-l7NrN8CXlUXbMhnbkuduAtR3+AlDz+DzYWlYBNr7q+rNeJMZlv26ap3Dk/D1WK/MPlnoS33iITlhLkuDsYQpug==}
-    peerDependencies:
-      react: ^0.14.0 || ^17.0.0 || 18
-      react-dom: '>=0.14.0 || 18'
-    peerDependenciesMeta:
-      react:
-        optional: true
-      react-dom:
-        optional: true
-    dependencies:
-      '@babel/plugin-transform-runtime': 7.15.0
-      '@babel/runtime': 7.16.5
-      prop-types: 15.8.0
-    transitivePeerDependencies:
-      - '@babel/core'
-      - supports-color
-    dev: false
 
   /react-avatar-editor/12.0.0_@babel+core@7.17.10:
     resolution: {integrity: sha512-l7NrN8CXlUXbMhnbkuduAtR3+AlDz+DzYWlYBNr7q+rNeJMZlv26ap3Dk/D1WK/MPlnoS33iITlhLkuDsYQpug==}
@@ -28364,7 +28239,6 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
-    dev: true
 
   /ws/8.5.0_x777ijy3rhlcr2bth2wybu6y5a:
     resolution: {integrity: sha512-BWX0SWVgLPzYwF8lTzEy1egjhS4S4OEAHfsO8o65WOVsrnSRGaSiUaa9e0ggGlkMTtBlmOpEXiie9RUcBO86qg==}
@@ -28393,6 +28267,7 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dev: true
 
   /xdg-basedir/4.0.0:
     resolution: {integrity: sha512-PSNhEJDejZYV7h50BohL09Er9VaIefr2LMAf3OEmpCkjOi34eYyQYAXUTjEQtZJTKcF0E2UKTh+osDLsgNim9Q==}
@@ -28753,7 +28628,7 @@ packages:
     dev: true
 
   github.com/ProjectOpenSea/wyvern-js/6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1:
-    resolution: {commit: 6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-js.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1}
     name: wyvern-js
     version: 3.2.0
     dependencies:
@@ -28773,7 +28648,7 @@ packages:
     dev: false
 
   github.com/ProjectOpenSea/wyvern-js/fabb7660f23f2252c141077e32193d281036299e:
-    resolution: {commit: fabb7660f23f2252c141077e32193d281036299e, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-js.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/fabb7660f23f2252c141077e32193d281036299e}
     name: wyvern-js
     version: 3.2.0
     dependencies:
@@ -28805,7 +28680,7 @@ packages:
     dev: false
 
   github.com/ProjectOpenSea/wyvern-schemas/e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26:
-    resolution: {commit: e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-schemas.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-schemas/tar.gz/e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26}
     name: wyvern-schemas
     version: 0.10.7
     dependencies:
@@ -28820,7 +28695,7 @@ packages:
     dev: false
 
   github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d:
-    resolution: {commit: 3d2d89641a6ad5984929b6ca4b646452ec74f73d, repo: git+ssh://git@github.com/ProjectWyvern/ethereumjs-abi.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ProjectWyvern/ethereumjs-abi/tar.gz/3d2d89641a6ad5984929b6ca4b646452ec74f73d}
     name: ethereumjs-abi
     version: 0.6.6
     dependencies:
@@ -28829,7 +28704,7 @@ packages:
     dev: false
 
   github.com/ahultgren/async-eventemitter/fa06e39e56786ba541c180061dbf2c0a5bbf951c:
-    resolution: {commit: fa06e39e56786ba541c180061dbf2c0a5bbf951c, repo: git+ssh://git@github.com/ahultgren/async-eventemitter.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ahultgren/async-eventemitter/tar.gz/fa06e39e56786ba541c180061dbf2c0a5bbf951c}
     name: async-eventemitter
     version: 0.2.3
     dependencies:
@@ -28837,7 +28712,7 @@ packages:
     dev: false
 
   github.com/ethereumjs/ethereumjs-abi/ee3994657fa7a427238e6ba92a84d0b529bbcde0:
-    resolution: {commit: ee3994657fa7a427238e6ba92a84d0b529bbcde0, repo: git+ssh://git@github.com/ethereumjs/ethereumjs-abi.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ethereumjs/ethereumjs-abi/tar.gz/ee3994657fa7a427238e6ba92a84d0b529bbcde0}
     name: ethereumjs-abi
     version: 0.6.8
     dependencies:
@@ -28846,13 +28721,13 @@ packages:
     dev: false
 
   github.com/frozeman/bignumber.js-nolookahead/57692b3ecfc98bbdd6b3a516cb2353652ea49934:
-    resolution: {commit: 57692b3ecfc98bbdd6b3a516cb2353652ea49934, repo: git+ssh://git@github.com/frozeman/bignumber.js-nolookahead.git, type: git}
+    resolution: {tarball: https://codeload.github.com/frozeman/bignumber.js-nolookahead/tar.gz/57692b3ecfc98bbdd6b3a516cb2353652ea49934}
     name: bignumber.js
     version: 2.0.7
     dev: false
 
   github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    resolution: {commit: d463109433b2c49c74a081044f54b2a6a1ccad7c, repo: git+ssh://git@github.com/locize/html-parse-stringify2.git, type: git}
+    resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
     name: html-parse-stringify2
     version: 2.0.1
     dependencies:
