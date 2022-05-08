@@ -1085,6 +1085,7 @@
     "plugin_artblocks_smt_wrong": "Something went wrong!",
     "plugin_artblocks_share": "I just purchased a beautiful piece of art from '{{name}}' collection for {{price}} {{symbol}}. Install @realMaskNetwork to get yours.",
     "plugin_artblocks_share_no_official_account": "I just purchased a beautiful piece of art from '{{name}}' collection for {{price}} {{symbol}}. Welcome to join.",
+    "plugin_tips_disconnect_introduction": "Are you going to disconnect {{persona}} from wallet <strong>{{address}}<strong/>?",
     "plugin_tips_not_evm_alert": "The tips feature currently supports only EVM chains. Support for other chains will be added in the future.",
     "plugin_tips_sns_persona_unmatched": "Twitter ID verified persona({{currentSNSConnectedPersonaPublicKey}}) is not consistent with your current persona({{currentPersonaPublicKey}}). Please switch to persona({{currentSNSConnectedPersonaPublicKey}}) and try again.",
     "plugin_artblocks_description": "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account.",

@@ -13,7 +13,7 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
-import { Button, ButtonProps, DialogContent } from '@mui/material'
+import { Button, ButtonProps, DialogContent, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import { cloneDeep, isEqual } from 'lodash-unified'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
@@ -37,7 +37,7 @@ export interface TipsEntranceDialogProps {
 }
 const useStyles = makeStyles()((theme) => ({
     walletBtn: {
-        fontSize: '14px',
+        fontSize: 14,
     },
     alertBox: {
         marginBottom: '20px',
@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
     },
     btnContainer: {
-        width: '100%',
+        maxWidth: '30%',
         display: 'flex',
         flexDirection: 'row-reverse',
     },
@@ -67,6 +67,15 @@ const useStyles = makeStyles()((theme) => ({
         top: '50%',
         left: '50%',
         transform: 'translate(-50%,-50%)',
+    },
+    dialogTitle: {
+        fontSize: 18,
+        lineHeight: '22px',
+        fontWeight: 600,
+        flexGrow: 'unset',
+        textAlign: 'left',
+        transform: 'translateX(24px)',
+        marginLeft: 36,
     },
 }))
 
@@ -249,9 +258,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         <InjectedDialog
             open={open}
             onClose={clickBack}
-            title={bodyViewStep}
+            title={<Typography className={classes.dialogTitle}>{bodyViewStep}</Typography>}
             titleTail={
                 <WalletButton
+                    className={classes.walletBtn}
                     step={bodyViewStep}
                     onClick={() => {
                         setBodyViewStep(
@@ -323,7 +333,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                                 fullWidth
                                 disabled={!hasChanged}
                                 onClick={onConfirm}>
-                                {t.cancel()}
+                                {t.confirm()}
                             </LoadingButton>
                         </div>
                     )}
