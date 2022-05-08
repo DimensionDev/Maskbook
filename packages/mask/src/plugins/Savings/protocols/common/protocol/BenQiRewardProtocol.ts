@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import CompoundTimestampBasedProtocol from './CompoundTimestampBasedProtocol'
 import type { FungibleTokenDetailed, ChainId } from '@masknet/web3-shared-evm'
 import { createContract } from '@masknet/web3-shared-evm'
-import { ZERO } from '@masknet/web3-shared-base'
+import { isZero, ZERO } from '@masknet/web3-shared-base'
 import type { BenQiComptroller } from '@masknet/web3-contracts/types/BenQiComptroller'
 import BenQiComptrollerABI from '@masknet/web3-contracts/abis/BenQiComptroller.json'
 import type { BenqiChainlinkOracle } from '@masknet/web3-contracts/types/BenqiChainlinkOracle'
@@ -65,7 +65,6 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
     ) {
         const oracle = getBenQiOracleComptrollerContract(this.config.oracle, web3)
         if (oracle === null) return []
-        console.log('matchPairs', matchPairs, this.config.oracle)
         return Promise.all(
             matchPairs
                 .filter((_) => _.market.symbol !== undefined)
@@ -77,7 +76,6 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
                     const defaultDecimals = 18
                     const decimalDelta = defaultDecimals - underlying.decimals
                     const divideDecimals = decimalDelta > 0 ? defaultDecimals + decimalDelta : defaultDecimals
-                    console.log('price', market.symbol, price)
                     return {
                         symbol: market.symbol,
                         price: new BigNumber(price).shiftedBy(-divideDecimals),
@@ -148,7 +146,6 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
         } catch (error) {
             console.error('BenQiRewardProtocol.fetchSpeeds', error)
         }
-        console.log('allPrice', allPrice)
         const indexBySymbol: IndexWithStatus = {}
         allPrice.forEach((item: MarketStatus) => {
             indexBySymbol[item.symbol] = item
@@ -186,17 +183,29 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
                 .shiftedBy(-bareTokenDecimals)
 
             const marketPrice = this.stakeToken.symbol && symbolWithPrice[this.stakeToken.symbol].price
-            const totalPrice = marketPrice ? totalSupplyAmount.times(marketPrice) : ZERO
+            // can not fetch the price
+            if (!marketPrice) return ZERO
+            if (marketPrice && isZero(marketPrice)) {
+                return ZERO
+            }
 
+            const totalPrice = marketPrice ? totalSupplyAmount.times(marketPrice) : ZERO
             const rewardsAPR = this.rewardTokens
                 .filter(({ symbol }) => symbolWithPrice[symbol])
                 .map(({ symbol }) => {
+                    // price not found
+                    if (!symbolWithPrice[symbol]) {
+                        return {
+                            apr: ZERO,
+                        }
+                    }
                     const { price: rewardPrice } = symbolWithPrice[symbol]
                     const speedItem = currentMarketSpeeds.find((_) => _.symbol === symbol)
                     if (!speedItem)
                         return {
                             apr: ZERO,
                         }
+
                     const { speed: rewardSpeed } = speedItem
                     const rewardPerDay = rewardSpeed.shiftedBy(-18).times(60 * 60 * 24)
                     const rewardValue = rewardPerDay.times(rewardPrice)
@@ -221,7 +230,6 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
                 .reduce((total, item) => {
                     return total.plus(item.apr)
                 }, ZERO)
-            console.log('rewardsAPR', this.stakeToken.symbol, rewardsAPR, totalDistributionAPR)
             return totalDistributionAPR
         } catch (error) {
             console.error('getDistributionAPR', error)

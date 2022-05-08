@@ -7,7 +7,9 @@ import {
     ERC20TokenDetailed,
     FungibleToken,
     FungibleTokenDetailed,
+    getTraderConstants,
 } from '@masknet/web3-shared-evm'
+import { ZERO } from '@masknet/web3-shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
@@ -17,6 +19,33 @@ import PairABI from '@masknet/web3-contracts/abis/Pair.json'
 import { Pair as UniswapPair } from '@uniswap/v2-sdk'
 import { CurrencyAmount, Token } from '@uniswap/sdk-core'
 import BigNumber from 'bignumber.js'
+import { getPairAddress } from '../../../Trader/helpers/pair'
+
+export async function getPriceFromTrisolaris(
+    token0: ERC20TokenDetailed,
+    token1: ERC20TokenDetailed,
+    priceToken: ERC20TokenDetailed,
+    web3: Web3,
+) {
+    const DEX_TRADE = getTraderConstants(ChainId.Aurora)
+    if (!DEX_TRADE.TRISOLARIS_FACTORY_ADDRESS || !DEX_TRADE.TRISOLARIS_INIT_CODE_HASH) return ZERO
+    const tokenA = new Token(ChainId.Aurora, token0.address, token0.decimals, token0.symbol, token0.name)
+    const tokenB = new Token(ChainId.Aurora, token1.address, token1.decimals, token1.symbol, token1.name)
+    const priceOfToken = new Token(
+        ChainId.Aurora,
+        priceToken.address,
+        priceToken.decimals,
+        priceToken.symbol,
+        priceToken.name,
+    )
+    const pairAddress = getPairAddress(
+        DEX_TRADE.TRISOLARIS_FACTORY_ADDRESS,
+        DEX_TRADE.TRISOLARIS_INIT_CODE_HASH,
+        tokenA,
+        tokenB,
+    )
+    return getUniswapV2PairPrice(pairAddress, tokenA, tokenB, priceOfToken, web3)
+}
 
 export async function getUniswapV2PairPrice(
     pairAddress: string,
@@ -41,13 +70,6 @@ export async function getUniswapV2PairPrice(
     const curPrice = new BigNumber(
         (priceToken.symbol === token0.symbol ? uniPair.token0Price : uniPair.token1Price).toSignificant(10),
     ).shiftedBy(pricePaddingDecimals)
-    console.log('getPriceFromUniswapV2Pair', {
-        token0: token0.symbol,
-        token1: token1.symbol,
-        pairAddress,
-        reserves,
-        price: curPrice.toString(10),
-    })
     return curPrice
 }
 
