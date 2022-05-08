@@ -3,7 +3,7 @@ import type { BindingProof } from '@masknet/shared-base'
 import type { SupportedNetworkMap } from '../../hooks/useSupportedNetworks'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 import { WalletItem } from './WalletItem'
 
 const useStyles = makeStyles()((theme) => ({
@@ -56,7 +56,7 @@ interface WalletsByNetworkProps {
 }
 
 export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: WalletsByNetworkProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const isAllHide = wallets.every((x) => !x.isPublic)
     return (
@@ -70,7 +70,7 @@ export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: 
             </div>
             <div className={classes.content}>
                 {isAllHide ? (
-                    <Typography className={classes.empty}>{t('plugin_tips_empty_list')}</Typography>
+                    <Typography className={classes.empty}>{t.plugin_tips_empty_list()}</Typography>
                 ) : (
                     wallets
                         .filter((x) => x.isPublic)

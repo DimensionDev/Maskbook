@@ -5,7 +5,7 @@ import { ChainId, formatEthereumAddress, isSameAddress, useWallets } from '@mask
 import { Link, Typography } from '@mui/material'
 import { useMemo } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -96,7 +96,7 @@ export function WalletItem({
     nowIdx,
 }: WalletItemProps) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
     const { value: domain } = useReverseAddress(address)
     const { Utils } = useWeb3State() ?? {}
@@ -109,7 +109,7 @@ export function WalletItem({
         undefined,
         undefined,
         undefined,
-        t('copy_success_of_wallet_addr'),
+        t.plugin_tips_copy_success_of_wallet_addr(),
     )
     const wallets = useWallets()
 
@@ -131,7 +131,7 @@ export function WalletItem({
                         if (!setAsDefault) return
                         setAsDefault(nowIdx ?? 0)
                     }}>
-                    {t('plugin_tips_set_as_default')}
+                    {t.plugin_tips_set_as_default()}
                 </Typography>
             )
         if (canDelete)
@@ -149,7 +149,7 @@ export function WalletItem({
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
                     <Typography className={classes.accountName}>{walletName}</Typography>
-                    {isDefault && <Typography className={classes.defaultBadge}>{t('default')}</Typography>}
+                    {isDefault && <Typography className={classes.defaultBadge}>{t.default()}</Typography>}
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={address}>
@@ -159,7 +159,7 @@ export function WalletItem({
                         className={classes.link}
                         underline="none"
                         component="button"
-                        title={t('wallet_status_button_copy_address')}
+                        title={t.copy_address()}
                         onClick={onCopy}>
                         <img
                             src={new URL('../../assets/copy.png', import.meta.url).toString()}
@@ -170,7 +170,7 @@ export function WalletItem({
                         className={classes.link}
                         href={Utils?.resolveAddressLink?.(ChainId.Mainnet, address) ?? ''}
                         target="_blank"
-                        title={t('plugin_wallet_view_on_explorer')}
+                        title={t.view_on_explorer()}
                         rel="noopener noreferrer">
                         <img
                             src={new URL('../../assets/link.png', import.meta.url).toString()}

@@ -27,7 +27,7 @@ import {
     useWeb3State,
     Web3Plugin,
 } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 
 interface AddWalletViewProps {
     currentPersona: PersonaInformation
@@ -36,7 +36,7 @@ interface AddWalletViewProps {
 }
 
 const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletViewProps) => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { showSnackbar } = useCustomSnackbar()
     const providerType = useProviderType()
     const wallet = {
@@ -78,13 +78,13 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
                 currentPersona.identifier,
                 payload.signPayload,
             )
-            showSnackbar(t('plugin_tips_persona_sign_success'), {
+            showSnackbar(t.plugin_tips_persona_sign_success(), {
                 variant: 'success',
                 message: nowTime,
             })
             return signResult.signature.signature
         } catch (error) {
-            showSnackbar(t('plugin_tips_persona_sign_error'), {
+            showSnackbar(t.plugin_tips_persona_sign_error(), {
                 variant: 'error',
                 message: nowTime,
             })
@@ -109,10 +109,10 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
                     signature,
                 },
             )
-            showSnackbar(t('plugin_tips_wallet_sign_success'), { variant: 'success', message: nowTime })
+            showSnackbar(t.plugin_tips_wallet_sign_success(), { variant: 'success', message: nowTime })
             return true
         } catch (error) {
-            showSnackbar(t('plugin_tips_wallet_sign_error'), { variant: 'error', message: nowTime })
+            showSnackbar(t.plugin_tips_wallet_sign_error(), { variant: 'error', message: nowTime })
             return false
         }
     }, [currentPersona?.identifier, payload, signature])

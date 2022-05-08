@@ -20,7 +20,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import Services from '../../../extension/service'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { getKvPayload, setKvPatchData, useKvGet } from '../hooks/useKv'
 import { useTipsWalletsList } from '../hooks/useTipsWalletsList'
 import { useProvedWallets } from '../hooks/useProvedWallets'
@@ -94,15 +94,14 @@ const WalletButton: FC<WalletButtonProps> = ({ step, onClick }) => {
 }
 
 export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const [showAlert, setShowAlert] = useState(true)
     const [bodyViewStep, setBodyViewStep] = useState<BodyViewStep>(BodyViewStep.Main)
     const [hasChanged, setHasChanged] = useState(false)
     const [rawPatchData, setRawPatchData] = useState<BindingProof[]>([])
     const [rawWalletList, setRawWalletList] = useState<BindingProof[]>([])
-    const supportedNetworks = useSupportedNetworks([NetworkPluginID.PLUGIN_EVM])
-
+    const supportedNetworks = [useSupportedNetworks()[NetworkPluginID.PLUGIN_EVM]]
     const { showSnackbar } = useCustomSnackbar()
     const account = useAccount()
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
@@ -168,14 +167,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             )
             if (!signResult) throw new Error('sign error')
             await setKvPatchData(payload.val, signResult.signature.signature, rawPatchData)
-            showSnackbar(t('plugin_tips_persona_sign_success'), {
+            showSnackbar(t.plugin_tips_persona_sign_success(), {
                 variant: 'success',
                 message: nowTime,
             })
             retryKv()
             return true
         } catch (error) {
-            showSnackbar(t('plugin_tips_persona_sign_error'), {
+            showSnackbar(t.plugin_tips_persona_sign_success(), {
                 variant: 'error',
                 message: nowTime,
             })
@@ -230,12 +229,12 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     result.createdAt,
                     { signature: signature.signature.signature },
                 )
-                showSnackbar(t('plugin_tips_persona_sign_success'), {
+                showSnackbar(t.plugin_tips_persona_sign_success(), {
                     variant: 'success',
                     message: nowTime,
                 })
             } catch (error) {
-                showSnackbar(t('plugin_tips_persona_sign_error'), {
+                showSnackbar(t.plugin_tips_persona_sign_success(), {
                     variant: 'error',
                     message: nowTime,
                 })
@@ -316,7 +315,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                                 color="secondary"
                                 disabled={!hasChanged}
                                 onClick={onCancel}>
-                                {t('cancel')}
+                                {t.cancel()}
                             </ActionButton>
                             <LoadingButton
                                 variant="roundedContained"
@@ -324,7 +323,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                                 fullWidth
                                 disabled={!hasChanged}
                                 onClick={onConfirm}>
-                                {t('confirm')}
+                                {t.cancel()}
                             </LoadingButton>
                         </div>
                     )}
