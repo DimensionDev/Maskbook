@@ -1,10 +1,11 @@
 import { SettingsIcon } from '@masknet/icons'
 import type { BindingProof } from '@masknet/shared-base'
-import type { SupportedNetworkMap } from '../../hooks/useSupportedNetworks'
+import { useSupportedNetworks } from '../../hooks/useSupportedNetworks'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../locales'
 import { WalletItem } from './WalletItem'
+import type { NetworkPluginID } from '@masknet/plugin-infra/src/web3-types'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -49,16 +50,17 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface WalletsByNetworkProps {
-    network: SupportedNetworkMap
+    networkId: NetworkPluginID
     toSetting: () => void
     wallets: BindingProof[]
     setAsDefault: (idx: number) => void
 }
 
-export function WalletsByNetwork({ wallets, network, toSetting, setAsDefault }: WalletsByNetworkProps) {
+export function WalletsByNetwork({ wallets, networkId, toSetting, setAsDefault }: WalletsByNetworkProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const isAllHide = wallets.every((x) => !x.isPublic)
+    const network = useSupportedNetworks()[networkId]
     return (
         <div className={classes.container}>
             <div className={classes.topBox}>

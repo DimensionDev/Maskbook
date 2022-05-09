@@ -13,7 +13,7 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
-import { Button, ButtonProps, DialogContent, Typography } from '@mui/material'
+import { Button, ButtonProps, DialogContent } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import { cloneDeep, isEqual } from 'lodash-unified'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
@@ -24,7 +24,6 @@ import { useI18N } from '../locales'
 import { getKvPayload, setKvPatchData, useKvGet } from '../hooks/useKv'
 import { useTipsWalletsList } from '../hooks/useTipsWalletsList'
 import { useProvedWallets } from '../hooks/useProvedWallets'
-import { useSupportedNetworks } from '../hooks/useSupportedNetworks'
 import AddWalletView from './bodyViews/AddWallet'
 import SettingView from './bodyViews/Setting'
 import WalletsView from './bodyViews/Wallets'
@@ -58,24 +57,15 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
     },
     btnContainer: {
+        position: 'absolute',
+        right: 16,
         maxWidth: '30%',
-        display: 'flex',
-        flexDirection: 'row-reverse',
     },
     loading: {
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%,-50%)',
-    },
-    dialogTitle: {
-        fontSize: 18,
-        lineHeight: '22px',
-        fontWeight: 600,
-        flexGrow: 'unset',
-        textAlign: 'left',
-        transform: 'translateX(24px)',
-        marginLeft: 36,
     },
 }))
 
@@ -110,7 +100,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const [hasChanged, setHasChanged] = useState(false)
     const [rawPatchData, setRawPatchData] = useState<BindingProof[]>([])
     const [rawWalletList, setRawWalletList] = useState<BindingProof[]>([])
-    const supportedNetworks = [useSupportedNetworks()[NetworkPluginID.PLUGIN_EVM]]
+    const supportedNetworkIds = [NetworkPluginID.PLUGIN_EVM]
     const { showSnackbar } = useCustomSnackbar()
     const account = useAccount()
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
@@ -258,7 +248,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         <InjectedDialog
             open={open}
             onClose={clickBack}
-            title={<Typography className={classes.dialogTitle}>{bodyViewStep}</Typography>}
+            title={bodyViewStep}
             titleTail={
                 <WalletButton
                     className={classes.walletBtn}
@@ -286,13 +276,13 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
                     {bodyViewStep === BodyViewStep.Main && rawPatchData.length > 0 ? (
                         <div>
-                            {supportedNetworks?.map((x, idx) => {
+                            {supportedNetworkIds?.map((x, idx) => {
                                 return (
                                     <WalletsByNetwork
                                         wallets={rawPatchData}
                                         toSetting={() => setBodyViewStep(BodyViewStep.Setting)}
                                         key={idx}
-                                        network={x}
+                                        networkId={x}
                                         setAsDefault={setAsDefault}
                                     />
                                 )
