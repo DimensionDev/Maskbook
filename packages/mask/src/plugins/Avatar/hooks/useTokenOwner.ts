@@ -6,12 +6,15 @@ import {
     useERC721TokenContract,
 } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
+import { getNFTByOpensea } from '../utils'
 import { usePersonas } from './usePersonas'
 
 export function useTokenOwner(address: string, tokenId: string) {
     const ERC721Contract = useERC721TokenContract(address)
     return useAsyncRetry(async () => {
         if (!ERC721Contract || !tokenId) return
+        const nft = await getNFTByOpensea(address, tokenId)
+        if (nft) return nft
         const allSettled = await Promise.allSettled([
             safeNonPayableTransactionCall(ERC721Contract?.methods.ownerOf(tokenId)),
             safeNonPayableTransactionCall(ERC721Contract.methods.name()),

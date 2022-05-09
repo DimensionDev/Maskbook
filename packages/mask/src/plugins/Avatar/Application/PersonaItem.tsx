@@ -4,7 +4,7 @@ import { NFTAvatar } from './NFTAvatar'
 import { NFTInfo } from './NFTInfo'
 import { MoreIcon } from '../assets/more'
 import { RSS3_KEY_SNS } from '../constants'
-import { useCheckTokenOwner } from '../hooks/useTokenOwner'
+import { useCheckTokenOwner, useTokenOwner } from '../hooks/useTokenOwner'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import type { TokenInfo } from '../types'
 import { useCallback, useEffect, useState } from 'react'
@@ -12,7 +12,6 @@ import type { BindingProof } from '@masknet/shared-base'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
 import { context } from '../context'
 import { useSubscription } from 'use-subscription'
-import { useNFT } from '../hooks'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
@@ -46,7 +45,7 @@ export function PersonaItem(props: PersonaItemProps) {
     const { userId, onSelect, owner = false, proof, avatar, nickname = '' } = props
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = usePersonaNFTAvatar(userId, getAvatarId(avatar) ?? '', RSS3_KEY_SNS.TWITTER)
-    const { value: token, loading: loadingToken } = useNFT(_avatar?.address ?? '', _avatar?.tokenId ?? '')
+    const { value: token, loading: loadingToken } = useTokenOwner(_avatar?.address ?? '', _avatar?.tokenId ?? '')
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(token?.owner)
     const [haveNFT, setHaveNFT] = useState(false)
 

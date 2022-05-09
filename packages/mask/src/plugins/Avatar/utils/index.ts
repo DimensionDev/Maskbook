@@ -28,6 +28,22 @@ function getLastSalePrice(lastSale?: NonFungibleTokenAPI.AssetEvent | null) {
     return formatBalance(lastSale.total_price, lastSale.payment_token.decimals)
 }
 
+export async function getNFTByOpensea(address: string, tokenId: string) {
+    const asset = await EVM_RPC.getAsset({
+        address,
+        tokenId,
+        chainId: ChainId.Mainnet,
+        provider: NonFungibleAssetProvider.OPENSEA,
+    })
+
+    if (!asset) return
+    return {
+        name: asset?.name ?? '',
+        symbol: asset?.desktopOrder?.payment_token_contract?.symbol ?? 'ETH',
+        owner: asset?.top_ownerships[0].owner.address ?? '',
+    }
+}
+
 export async function getNFT(address: string, tokenId: string) {
     const asset = await EVM_RPC.getAsset({
         address,
