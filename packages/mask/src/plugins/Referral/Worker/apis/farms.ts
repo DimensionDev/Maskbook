@@ -30,7 +30,7 @@ import { fetchERC20TokensFromTokenListsMap } from './tokenLists'
 const REFERRAL_FARMS_V1_IFACE = new Interface(ReferralFarmsV1ABI)
 
 // Index the events name => id
-const eventIds: any = {}
+const eventIds: { [eventName: string]: string } = {}
 Object.entries(REFERRAL_FARMS_V1_IFACE.events).forEach(([k, v]) => (eventIds[v.name] = keccak256(k)))
 
 function parseEvents(items: Array<any>): Array<any> {

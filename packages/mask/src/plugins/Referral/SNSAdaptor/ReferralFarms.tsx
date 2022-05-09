@@ -89,7 +89,7 @@ export function ReferralFarms(props: PageInterface) {
     const { classes } = useStyles()
     const { classes: tabClasses } = useTabStyles()
 
-    const [tab, setTab] = useState<string>(TabsReferralFarms.TOKENS)
+    const [tab, setTab] = useState(TabsReferralFarms.TOKENS)
 
     const types = [
         {

@@ -20,7 +20,7 @@ export function SelectToken() {
 
     const [title, setTitle] = useState('')
     const [id, setId] = useState('')
-    const [onlyFarmTokens, setOnlyFarmTokens] = useState<boolean>(false)
+    const [onlyFarmTokens, setOnlyFarmTokens] = useState(false)
 
     const { open, setDialog } = useRemoteControlledDialog(PluginReferralMessages.selectTokenUpdated, (ev) => {
         if (!ev.open) return

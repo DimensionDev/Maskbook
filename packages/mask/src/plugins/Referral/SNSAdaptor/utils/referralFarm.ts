@@ -55,7 +55,7 @@ export async function runCreateERC20PairFarm(
             })
         }
         // Create farm
-        const metastate =
+        const metaState =
             dailyFarmReward > 0
                 ? [
                       // Metastate keys ideally are ascii and up to length 31 (ascii, utf8 might be less)
@@ -70,11 +70,11 @@ export async function runCreateERC20PairFarm(
                 : []
 
         const estimatedGas2 = await farms?.methods
-            .increaseReferralFarm(rewardTokenDefn, referredTokenDefn, totalFarmRewardUint128, metastate)
+            .increaseReferralFarm(rewardTokenDefn, referredTokenDefn, totalFarmRewardUint128, metaState)
             .estimateGas(config)
 
         await farms?.methods
-            .increaseReferralFarm(rewardTokenDefn, referredTokenDefn, totalFarmRewardUint128, metastate)
+            .increaseReferralFarm(rewardTokenDefn, referredTokenDefn, totalFarmRewardUint128, metaState)
             .send({
                 ...config,
                 gas: estimatedGas2,
@@ -136,7 +136,7 @@ export async function adjustFarmRewards(
             const referredTokenDefn = toChainAddressEthers(chainId, referredToken.address)
             const rewardTokenDecimals = rewardToken.decimals
             const dailyFarmRewardStr = roundValue(dailyFarmReward, rewardTokenDecimals).toString()
-            const metastate = [
+            const metaState = [
                 {
                     key: padRight(asciiToHex('periodReward'), 64),
                     value: defaultAbiCoder.encode(
@@ -146,11 +146,11 @@ export async function adjustFarmRewards(
                 },
             ]
             const estimatedGas = await farms?.methods
-                .configureMetastate(rewardTokenDefn, referredTokenDefn, metastate)
+                .configureMetastate(rewardTokenDefn, referredTokenDefn, metaState)
                 .estimateGas(config)
 
             await farms?.methods
-                .configureMetastate(rewardTokenDefn, referredTokenDefn, metastate)
+                .configureMetastate(rewardTokenDefn, referredTokenDefn, metaState)
                 .send({
                     ...config,
                     gas: estimatedGas,

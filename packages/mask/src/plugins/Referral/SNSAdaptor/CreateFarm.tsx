@@ -94,9 +94,9 @@ export function CreateFarm(props: PageInterface) {
         tokenReward?.type ?? EthereumTokenType.Native,
         tokenReward?.address ?? '',
     )
-    const [dailyFarmReward, setDailyFarmReward] = useState<string>('')
-    const [totalFarmReward, setTotalFarmReward] = useState<string>('')
-    const [attraceFee, setAttraceFee] = useState<number>(0)
+    const [dailyFarmReward, setDailyFarmReward] = useState('')
+    const [totalFarmReward, setTotalFarmReward] = useState('')
+    const [attraceFee, setAttraceFee] = useState(0)
     const [id] = useState(uuid())
 
     const onUpdateByRemote = useCallback(
