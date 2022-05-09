@@ -73,9 +73,9 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
         rewardToken?.address ?? '',
     )
 
-    const [attraceFee, setAttraceFee] = useState<number>(0)
-    const [dailyFarmReward, setDailyFarmReward] = useState<string>('')
-    const [totalFarmReward, setTotalFarmReward] = useState<string>('')
+    const [attraceFee, setAttraceFee] = useState(0)
+    const [dailyFarmReward, setDailyFarmReward] = useState('')
+    const [totalFarmReward, setTotalFarmReward] = useState('')
 
     const { value: farmsMetaState } = useAsync(
         async () => (farm?.farmHash ? ReferralRPC.getFarmsMetaState(chainId, [farm.farmHash]) : undefined),
