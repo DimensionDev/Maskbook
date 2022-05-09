@@ -12,7 +12,8 @@ import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useNextIDConnectStatus } from '../DataSource/useNextID'
-import { usePersonaConnectStatus, usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
 
@@ -216,20 +217,20 @@ function RenderEntryComponent({ application }: { application: Application }) {
         CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
     }, [])
 
-    const clickHandler =
-        application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired
-            ? openSelectProviderDialog
-            : !application.entry.nextIdRequired
-            ? undefined
-            : ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false
-            ? createOrConnectPersona
-            : ApplicationEntryStatus.shouldVerifyNextId
-            ? verifyPersona
-            : undefined
+    const clickHandler = (() => {
+        if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired)
+            return openSelectProviderDialog
+        if (!application.entry.nextIdRequired) return
+        if (ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false)
+            return createOrConnectPersona
+        if (ApplicationEntryStatus.shouldVerifyNextId) return verifyPersona
+        return
+    })()
+
     // #endregion
 
     // #region tooltip hint
-    const tooltipHint = useMemo(() => {
+    const tooltipHint = (() => {
         if (application.isWalletConnectedRequired) return t('application_tooltip_hint_connect_wallet')
         if (application.isWalletConnectedEVMRequired) return t('application_tooltip_hint_switch_to_evm_wallet')
         if (!application.entry.nextIdRequired) return
@@ -250,7 +251,7 @@ function RenderEntryComponent({ application }: { application: Application }) {
                 ),
             })
         return
-    }, [application, ApplicationEntryStatus, disabled])
+    })()
     // #endregion
 
     return <Entry disabled={disabled} tooltipHint={tooltipHint} onClick={clickHandler} />
