@@ -140,8 +140,6 @@
     "@nice-labs/emit-file-webpack-plugin": "^1.1.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.5",
     "@types/color": "^3.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.22.0",
-    "@typescript-eslint/parser": "^5.22.0",
     "binaryen": "^107.0.0",
     "copy-webpack-plugin": "^10.2.4",
     "html-webpack-plugin": "^5.5.0",

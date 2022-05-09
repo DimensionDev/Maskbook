@@ -34,7 +34,7 @@ If you need to develop in other environments (for example, Firefox), please run 
 
 ### Load the extension into your browser
 
-Mask Network has a huge codebase, and it might take time to let the webpack fully startup. It outcomes the `disk/` folder, which contains the unpacked source files of a development version of the Mask Network extension.
+Mask Network has a huge codebase, and it might take time to let the webpack fully startup. It outcomes the `dist/` folder, which contains the unpacked source files of a development version of the Mask Network extension.
 
 For Chrome,
 
