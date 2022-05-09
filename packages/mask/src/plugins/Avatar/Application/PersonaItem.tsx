@@ -51,10 +51,8 @@ export function PersonaItem(props: PersonaItemProps) {
 
     useEffect(() => {
         if (!currentIdentity) return
-        setHaveNFT(
-            Boolean(_avatar && token && isOwner && _avatar.avatarId === getAvatarId(currentIdentity?.avatar ?? '')),
-        )
-    }, [_avatar, token, isOwner, currentIdentity?.avatar])
+        setHaveNFT(Boolean(_avatar && _avatar.avatarId === getAvatarId(currentIdentity?.avatar ?? '')))
+    }, [_avatar, currentIdentity?.avatar])
 
     const onClick = useCallback(() => {
         onSelect?.(proof, _avatar ? { address: _avatar?.address, tokenId: _avatar?.tokenId } : undefined)
