@@ -1,5 +1,5 @@
 {
-    "dialog_title": "crwdns14808:0crwdne14808:0",
+    "__plugin_name": "crwdns16294:0crwdne16294:0",
     "powered_by_go_plus": "crwdns14810:0crwdne14810:0",
     "high_risk": "crwdns14812:0crwdne14812:0",
     "low_risk": "crwdns14814:0crwdne14814:0",
@@ -75,5 +75,13 @@
     "risk_is_whitelisted_title": "crwdns14944:0crwdne14944:0",
     "risk_is_whitelisted_body": "crwdns14946:0crwdne14946:0",
     "risk_not_is_whitelisted_title": "crwdns14948:0crwdne14948:0",
-    "risk_not_is_whitelisted_body": "crwdns14950:0crwdne14950:0"
+    "risk_not_is_whitelisted_body": "crwdns14950:0crwdne14950:0",
+    "risk_is_true_token_title": "crwdns15004:0crwdne15004:0",
+    "risk_is_true_token_body": "crwdns15006:0crwdne15006:0",
+    "risk_not_is_true_token_title": "crwdns15008:0crwdne15008:0",
+    "risk_not_is_true_token_body": "crwdns15010:0crwdne15010:0",
+    "risk_is_airdrop_scam_title": "crwdns15012:0crwdne15012:0",
+    "risk_is_airdrop_scam_body": "crwdns15014:0crwdne15014:0",
+    "risk_not_is_airdrop_scam_title": "crwdns15016:0crwdne15016:0",
+    "risk_not_is_airdrop_scam_body": "crwdns15018:0crwdne15018:0"
 }

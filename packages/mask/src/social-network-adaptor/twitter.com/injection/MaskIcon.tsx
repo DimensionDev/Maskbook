@@ -2,11 +2,10 @@ import { MutationObserverWatcher, DOMProxy, LiveSelector } from '@dimensiondev/h
 import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSelector } from '../utils/selector'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import Services from '../../../extension/service'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { memoizePromise } from '@dimensiondev/kit'
-import { Flags } from '../../../../shared'
 import { startWatch } from '../../../utils/watcher'
 
 function Icon(props: { size: number }) {
@@ -28,14 +27,15 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal: Ab
             let remover = () => {}
             const remove = () => remover()
             const check = () => {
-                ifUsingMask(new ProfileIdentifier('twitter.com', bioPageUserIDSelector(main).evaluate() || '')).then(
-                    () => {
-                        const root = createReactRootShadowed(meta.afterShadow, { signal })
-                        root.render(<Icon size={size} />)
-                        remover = root.destroy
-                    },
-                    remove,
-                )
+                ifUsingMask(
+                    ProfileIdentifier.of(EnhanceableSite.Twitter, bioPageUserIDSelector(main).evaluate()).unwrapOr(
+                        null,
+                    ),
+                ).then(() => {
+                    const root = createReactRootShadowed(meta.afterShadow, { signal })
+                    root.render(<Icon size={size} />)
+                    remover = root.destroy
+                }, remove)
             }
             check()
             return {
@@ -69,7 +69,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         if (signal?.aborted) return
         const node = ls.evaluate()
         if (!node) return
-        const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
+        const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
         proxy.realCurrent = node
         const root = createReactRootShadowed(proxy.afterShadow, { signal })
         root.render(<Icon size={24} />)
@@ -80,7 +80,10 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
     }
 }
 export const ifUsingMask = memoizePromise(
-    (pid: ProfileIdentifier) =>
-        Services.Identity.queryProfile(pid).then((x) => (x.linkedPersona ? Promise.resolve() : Promise.reject())),
-    (pid: ProfileIdentifier) => pid.toText(),
+    async (pid: ProfileIdentifier | null) => {
+        if (!pid) throw new Error()
+        const p = await Services.Identity.queryProfilesInformation([pid])
+        if (!p[0].fingerprint) throw new Error()
+    },
+    (x) => x,
 )

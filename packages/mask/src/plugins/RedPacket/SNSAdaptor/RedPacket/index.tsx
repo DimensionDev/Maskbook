@@ -64,7 +64,10 @@ export function RedPacket(props: RedPacketProps) {
                 : EthereumTokenType.ERC20),
         payload.token?.address ?? payload.token_address ?? '',
     )
-    const token = payload.token ?? tokenDetailed
+    const token =
+        payload.token && ['chainId', 'decimal', 'symbol'].every((k) => Reflect.has(payload.token ?? {}, k))
+            ? payload.token
+            : tokenDetailed
     // #endregion
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed

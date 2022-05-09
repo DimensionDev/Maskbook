@@ -3,10 +3,11 @@ import { memo, ReactNode, useCallback, useMemo } from 'react'
 import { FileMessageIcon, ITOIcon, MessageIcon, PollIcon, RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { Services } from '../../../../API'
-import type { PostRecord } from '@masknet/shared-base'
+import type { PostInformation } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PluginId } from '@masknet/plugin-infra'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const MSG_DELIMITER = '2c1aca02'
 
@@ -79,7 +80,7 @@ const SUPPORT_PLUGIN: Record<
 }
 
 interface PostHistoryRowProps {
-    post: PostRecord
+    post: PostInformation
     network: string
 }
 
@@ -94,7 +95,7 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
 
     const rowClickHandler = useCallback((event: React.MouseEvent<HTMLElement>) => {
         if ((event.target as HTMLElement).tagName !== 'A') {
-            post.url && Services.Settings.openTab(post.url)
+            openWindow(post?.url, '_blank')
         }
     }, [])
 
@@ -166,7 +167,7 @@ interface PostHistoryRowUIProps {
     message?: ReactNode
     operation: ReactNode
     recipients: ReactNode[]
-    post: PostRecord
+    post: PostInformation
     onClick(event: React.MouseEvent<HTMLElement>): void
 }
 

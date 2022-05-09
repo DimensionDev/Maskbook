@@ -1,4 +1,4 @@
-import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@masknet/shared-base'
+import { ECKeyIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 import { head } from 'lodash-unified'
 import type { InternalSettings } from '../../settings/createSettings'
 import {
@@ -9,7 +9,6 @@ import {
     pluginIDSettings,
 } from '../../settings/settings'
 import { currentDataProviderSettings } from '../../plugins/Trader/settings'
-import { queryMyPersonas, queryPersona } from './IdentityService'
 import {
     currentAccountSettings,
     currentNetworkSettings,
@@ -19,14 +18,11 @@ import {
     currentNonFungibleAssetDataProviderSettings,
     currentGasOptionsSettings,
     currentTokenPricesSettings,
-    currentMaskWalletLockStatusSettings,
-    currentMaskWalletAccountSettings,
-    currentMaskWalletChainIdSettings,
-    currentMaskWalletNetworkSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags, MaskMessages } from '../../../shared'
-import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../../background/database/kv-storage'
-import type { Persona } from '../../database'
+import { queryPersonasDB } from '../../../background/database/persona/db'
+
+export * from '../../../background/services/settings'
 
 function create<T>(settings: InternalSettings<T>) {
     async function get() {
@@ -53,14 +49,6 @@ export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] 
 
 export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentAccountSettings)
 
-export const [getSelectedMaskWalletAddress, setSelectedMaskWalletAddress] = create(currentMaskWalletAccountSettings)
-
-export const [getCurrentMaskWalletChainId, setCurrentMaskWalletChainId] = create(currentMaskWalletChainIdSettings)
-
-export const [getCurrentMaskWalletNetworkType, setCurrentMaskWalletNetworkType] = create(
-    currentMaskWalletNetworkSettings,
-)
-
 export const [getCurrentPortfolioDataProvider, setCurrentPortfolioDataProvider] = create(
     currentFungibleAssetDataProviderSettings,
 )
@@ -69,30 +57,18 @@ export const [getCurrentCollectibleDataProvider, setCurrentCollectibleDataProvid
     currentNonFungibleAssetDataProviderSettings,
 )
 
-export const [getCurrentMaskWalletLockedSettings, setCurrentMaskWalletLockedSettings] = create(
-    currentMaskWalletLockStatusSettings,
-)
-
 export async function getWalletAllowTestChain() {
     return Flags.wallet_allow_testnet
 }
 
-export async function getCurrentPersona(): Promise<Persona | undefined> {
-    const currentPersonaIdentifier = await getCurrentPersonaIdentifier()
-    if (!currentPersonaIdentifier) return undefined
-    return queryPersona(currentPersonaIdentifier)
-}
-
 export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier | undefined> {
     await currentPersonaIdentifier.readyPromise
-    const personas = (await queryMyPersonas())
+    const personas = (await queryPersonasDB({ hasPrivateKey: true }))
         .sort((a, b) => (a.createdAt > b.createdAt ? 1 : 0))
         .map((x) => x.identifier)
-    const newVal = Identifier.fromString<PersonaIdentifier>(currentPersonaIdentifier.value, ECKeyIdentifier).unwrapOr(
-        head(personas),
-    )
+    const newVal = ECKeyIdentifier.from(currentPersonaIdentifier.value).unwrapOr(head(personas))
     if (!newVal) return undefined
-    if (personas.find((x) => x.equals(newVal))) return newVal
+    if (personas.find((x) => x === newVal)) return newVal
     if (personas[0]) currentPersonaIdentifier.value = personas[0].toText()
     return personas[0]
 }
@@ -107,24 +83,4 @@ export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) 
     currentPluginMinimalModeNOTEnabled['plugin:' + id].value = !enabled
 
     MaskMessages.events.pluginMinimalModeChanged.sendToAll([id, enabled])
-}
-
-export async function openTab(url: string) {
-    await browser.tabs.create({ active: true, url })
-}
-
-export async function __kv_storage_write__(kind: 'indexedDB' | 'memory', key: string, value: unknown) {
-    if (kind === 'memory') {
-        return inMemory_KVStorageBackend.setValue(key, value)
-    } else {
-        return indexedDB_KVStorageBackend.setValue(key, value)
-    }
-}
-
-export async function __kv_storage_read__(kind: 'indexedDB' | 'memory', key: string) {
-    if (kind === 'memory') {
-        return inMemory_KVStorageBackend.getValue(key)
-    } else {
-        return indexedDB_KVStorageBackend.getValue(key)
-    }
 }

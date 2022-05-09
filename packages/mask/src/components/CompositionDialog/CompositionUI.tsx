@@ -1,4 +1,13 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
+import {
+    forwardRef,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
+    startTransition,
+    useCallback,
+    useEffect,
+} from 'react'
 import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
@@ -8,11 +17,11 @@ import { Send } from '@mui/icons-material'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
 import { CharLimitIndicator } from './CharLimitIndicator'
-import { useI18N } from '../../utils'
+import { MaskMessages, useI18N } from '../../utils'
 import { Flags, PersistentStorages } from '../../../shared'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
-import type { Profile } from '../../database'
+import type { ProfileInformation } from '@masknet/shared-base'
 import { CompositionContext } from '@masknet/plugin-infra/content-script'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { Trans } from 'react-i18next'
@@ -41,12 +50,17 @@ const useStyles = makeStyles()({
     },
 })
 
+export interface LazyRecipients {
+    request(): void
+    recipients?: ProfileInformation[]
+    hasRecipients: boolean
+}
 export interface CompositionProps {
     maxLength?: number
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
     disabledRecipients?: undefined | 'E2E' | 'Everyone'
-    recipients: Profile[]
+    recipients: LazyRecipients
     // Enabled features
     supportTextEncoding: boolean
     supportImageEncoding: boolean
@@ -162,6 +176,24 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
             })
             .finally(reset)
     }, [encodingKind, encryptionKind, recipients, props.onSubmit])
+
+    useEffect(() => {
+        if (process.env.architecture !== 'app') return
+
+        const clearAttachWatcher = MaskMessages.events.compositionAttachMetaData.on(([metaId, meta]) => {
+            Editor.current?.attachMetadata(metaId, meta)
+        })
+
+        const clearDropWatcher = MaskMessages.events.compositionDropMetaData.on(([metaId]) => {
+            Editor.current?.dropMetadata(metaId)
+        })
+
+        return () => {
+            clearAttachWatcher()
+            clearDropWatcher()
+        }
+    }, [])
+
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
@@ -244,7 +276,7 @@ function useSetEncryptionKind(props: Pick<CompositionProps, 'disabledRecipients'
         props.disabledRecipients === 'Everyone' ? 'E2E' : 'Everyone',
     )
     // TODO: Change to ProfileIdentifier
-    const [recipients, setRecipients] = useState<Profile[]>([])
+    const [recipients, setRecipients] = useState<ProfileInformation[]>([])
 
     const everyoneDisabled = props.disabledRecipients === 'Everyone'
     const E2EDisabled = props.disabledRecipients === 'E2E'
@@ -252,7 +284,7 @@ function useSetEncryptionKind(props: Pick<CompositionProps, 'disabledRecipients'
     const everyoneSelected = props.disabledRecipients !== 'Everyone' && (E2EDisabled || encryptionKind === 'Everyone')
     const _E2ESelected =
         props.disabledRecipients !== 'E2E' && (props.disabledRecipients === 'Everyone' || encryptionKind === 'E2E')
-    const recipientSelectorAvailable = Boolean(props.recipients.length && !everyoneSelected)
+    const recipientSelectorAvailable = props.recipients.hasRecipients && !everyoneSelected
 
     return {
         recipients,

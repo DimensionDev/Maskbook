@@ -12,6 +12,7 @@ import Services from '../../../service'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
 import urlcat from 'urlcat'
+import { WalletHeader } from './components/WalletHeader'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -32,6 +33,7 @@ const SetPaymentPassword = lazy(() => import('./SetPaymentPassword'))
 const WalletRecovery = lazy(() => import('./WalletRecovery'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction'))
+const ConnectWallet = lazy(() => import('./ConnectWallet'))
 
 const r = relativeRouteOf(PopupRoutes.Wallet)
 export default function Wallet() {
@@ -91,6 +93,7 @@ export default function Wallet() {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletContext.Provider>
+                <WalletHeader />
                 {loading ? (
                     <LoadingPlaceholder />
                 ) : (
@@ -116,6 +119,7 @@ export default function Wallet() {
                         <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
                         <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
                         <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
+                        <Route path={r(PopupRoutes.ConnectWallet)} element={<ConnectWallet />} />
                     </Routes>
                 )}
             </WalletContext.Provider>

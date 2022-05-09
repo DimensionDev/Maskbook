@@ -1,9 +1,10 @@
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
+import { readFile, writeFile } from 'node:fs/promises'
+import { spawn } from 'node:child_process'
+import { createHash } from 'node:crypto'
+import { createRequire } from 'node:module'
 import builder from 'core-js-builder'
 import { rollup } from 'rollup'
-import { readFile, writeFile } from 'fs/promises'
-import { createRequire } from 'module'
-import { createHash } from 'crypto'
 
 // https://github.com/rollup/rollup/issues/4253
 // import loadConfigFile from 'rollup/dist/loadConfigFile.js'
@@ -20,20 +21,27 @@ let polyfillVersion = '__'
     const lockfile = await readFile(lockfilePath)
     const hash = createHash('sha256')
     hash.update(lockfile)
-    polyfillVersion = 'v5' + hash.digest('hex')
+    polyfillVersion = 'v1' + hash.digest('hex')
 }
 
 const versionFilePath = fileURLToPath(new URL('./dist/version.txt', import.meta.url))
 if ((await readFile(versionFilePath, 'utf-8').catch(() => '')) === polyfillVersion) process.exit(0)
 
+// looks like pnpm 7 _may_ be skip the running of postinstall script?
+// https://github.com/pnpm/pnpm/issues/4649
+spawn('npx', ['patch-package'], {
+    cwd: fileURLToPath(new URL('../../', import.meta.url)),
+    stdio: 'inherit',
+    shell: true,
+})
+
 await builder({
-    modules: ['es', 'web'],
+    modules: ['core-js/stable'],
     targets: [
         'iOS >= 14.0',
         // Android
-        'Firefox >= 91',
-        'last 2 Chrome versions',
-        'last 2 Firefox versions',
+        'Firefox >= 99',
+        'last 3 Chrome versions',
     ],
     summary: {
         comment: { size: false, modules: true },

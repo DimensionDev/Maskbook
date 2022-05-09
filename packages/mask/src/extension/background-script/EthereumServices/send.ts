@@ -19,6 +19,7 @@ import {
     getPayloadChainId,
     getTransactionHash,
     isZeroAddress,
+    getPayloadAccount,
 } from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import * as MetaMask from './providers/MetaMask'
@@ -150,7 +151,8 @@ export async function INTERNAL_send(
     }: SendOverrides = {},
 ) {
     const chainIdFinally = getPayloadChainId(payload) ?? chainId
-    const wallet = providerType === ProviderType.MaskWallet ? await getWallet(account) : null
+    const accountFinally = getPayloadAccount(payload) ?? account
+    const wallet = providerType === ProviderType.MaskWallet ? await getWallet(accountFinally) : null
     const privKey = isSignableMethod(payload) && wallet ? await WalletRPC.exportPrivateKey(wallet.address) : undefined
     const web3 = await createWeb3({
         chainId: chainIdFinally,
@@ -337,12 +339,12 @@ export async function INTERNAL_send(
                         )
                         switch (payload.method) {
                             case EthereumMethodType.ETH_SEND_TRANSACTION:
-                                handleNonce(chainIdFinally, account, error, response)
+                                handleNonce(chainIdFinally, accountFinally, error, response)
                                 handleTransferTransaction(chainIdFinally, payload)
-                                handleRecentTransaction(chainIdFinally, account, payload, response)
+                                handleRecentTransaction(chainIdFinally, accountFinally, payload, response)
                                 break
                             case EthereumMethodType.MASK_REPLACE_TRANSACTION:
-                                handleReplaceRecentTransaction(chainIdFinally, hash, account, payload, response)
+                                handleReplaceRecentTransaction(chainIdFinally, hash, accountFinally, payload, response)
                                 break
                         }
                     },
@@ -359,7 +361,7 @@ export async function INTERNAL_send(
                             response,
                         )
                         handleTransferTransaction(chainIdFinally, payload)
-                        handleRecentTransaction(chainIdFinally, account, payload, response)
+                        handleRecentTransaction(chainIdFinally, accountFinally, payload, response)
                     })
                 } catch (error) {
                     callback(getError(error, null, EthereumErrorType.ERR_SEND_TRANSACTION))
@@ -371,7 +373,7 @@ export async function INTERNAL_send(
                     const response = await WalletConnect.sendCustomRequest(payload as IJsonRpcRequest)
                     callback(null, response)
                     handleTransferTransaction(chainIdFinally, payload)
-                    handleRecentTransaction(chainIdFinally, account, payload, response)
+                    handleRecentTransaction(chainIdFinally, accountFinally, payload, response)
                 } catch (error) {
                     callback(getError(error, null, EthereumErrorType.ERR_SEND_TRANSACTION))
                 }
@@ -388,7 +390,7 @@ export async function INTERNAL_send(
                         response,
                     )
                     handleTransferTransaction(chainIdFinally, payload)
-                    handleRecentTransaction(chainIdFinally, account, payload, response)
+                    handleRecentTransaction(chainIdFinally, accountFinally, payload, response)
                 })
                 break
             case ProviderType.Fortmatic:
@@ -400,7 +402,7 @@ export async function INTERNAL_send(
                         response,
                     )
                     handleTransferTransaction(chainIdFinally, payload)
-                    handleRecentTransaction(chainIdFinally, account, payload, response)
+                    handleRecentTransaction(chainIdFinally, accountFinally, payload, response)
                 })
                 break
             case ProviderType.CustomNetwork:
@@ -414,7 +416,7 @@ export async function INTERNAL_send(
         const [hash] = payload.params as [string]
 
         // redirect receipt queries to tx watcher
-        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, account, hash, {
+        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, accountFinally, hash, {
             receipt: true,
         })
 
@@ -439,7 +441,7 @@ export async function INTERNAL_send(
                 callback(null, {
                     id: payload.id,
                     jsonrpc: payload.jsonrpc,
-                    result: [account],
+                    result: [accountFinally],
                 } as JsonRpcResponse)
                 break
             case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
@@ -489,6 +491,7 @@ export async function INTERNAL_nativeSend(
     { account = currentAccountSettings.value, chainId = currentChainIdSettings.value }: SendOverrides = {},
 ) {
     const chainIdFinally = getPayloadChainId(payload) ?? chainId
+    const accountFinally = getPayloadAccount(payload) ?? account
     const config = getPayloadConfig(payload)
     if (config && !config.chainId) config.chainId = chainIdFinally
     if (payload.method === EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT)
@@ -504,15 +507,15 @@ export async function INTERNAL_nativeSend(
         }
         callback(null, response)
         if (payload.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
-            handleNonce(chainIdFinally, account, null, response)
+            handleNonce(chainIdFinally, accountFinally, null, response)
             handleTransferTransaction(chainIdFinally, payload)
-            handleRecentTransaction(chainIdFinally, account, payload, response)
+            handleRecentTransaction(chainIdFinally, accountFinally, payload, response)
         }
     } catch (error) {
         if (!(error instanceof Error)) return
         callback(error, undefined)
         if (payload.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
-            handleNonce(chainIdFinally, account, error, undefined)
+            handleNonce(chainIdFinally, accountFinally, error, undefined)
         }
     }
 }

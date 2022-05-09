@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import { EC_Key, PayloadParseResult, EC_KeyCurveEnum, Signature } from '../payload'
 import { CryptoException, PayloadException } from '../types'
 import { Result, Ok, Some } from 'ts-results'
@@ -17,7 +17,6 @@ import { encodeText } from '@dimensiondev/kit'
 import {
     andThenAsync,
     CheckedError,
-    Identifier,
     OptionalResult,
     ProfileIdentifier,
     decompressSecp256k1Point,
@@ -66,8 +65,9 @@ export async function parse38(payload: string): PayloadParserResult {
     if (authorUserID.err) {
         normalized.author = authorUserID.mapErr(CheckedError.mapErr(PayloadException.DecodeFailed))
     } else if (authorUserID.val.some) {
-        normalized.author = Identifier.fromString(`person:${authorUserID.val.val}`, ProfileIdentifier)
+        normalized.author = ProfileIdentifier.from(`person:${authorUserID.val.val}`)
             .map((x) => Some(x))
+            .toResult(undefined)
             .mapErr(CheckedError.mapErr(PayloadException.DecodeFailed))
     }
     if (authorPublicKey) {

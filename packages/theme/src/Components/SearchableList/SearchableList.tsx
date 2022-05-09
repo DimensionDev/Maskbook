@@ -72,7 +72,7 @@ export function SearchableList<T extends {}>({
                 shouldSort: true,
                 threshold: 0.45,
                 minMatchCharLength: 1,
-                keys: searchKey ?? data.length > 0 ? Object.keys(data[0]) : [],
+                keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : []),
             }),
         [data, searchKey],
     )
@@ -122,7 +122,7 @@ export function SearchableList<T extends {}>({
                         itemSize={itemSize ?? 100}
                         itemData={{
                             dataSet: readyToRenderData,
-                            onSelect: onSelect,
+                            onSelect,
                         }}
                         itemCount={readyToRenderData.length}
                         {...rest}>

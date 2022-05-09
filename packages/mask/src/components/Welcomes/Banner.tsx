@@ -1,14 +1,15 @@
 import { useState, useCallback } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { IconButton } from '@mui/material'
-import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskIconInMinds, MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
+import { useValueRef } from '@masknet/shared-base-ui'
 
 interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'buttonText'> {
     description?: string
@@ -56,7 +57,7 @@ export function Banner(props: BannerProps) {
     const personaConnectStatus = usePersonaConnectStatus()
     const { nextStep } = props
     const networkIdentifier = activatedSocialNetworkUI.networkIdentifier
-    const identities = useMyIdentities()
+    const identities = useValueRef(globalUIState.profiles)
     const [value, onChange] = useState('')
     const defaultNextStep = useCallback(() => {
         if (nextStep === 'hidden') return
@@ -68,13 +69,13 @@ export function Banner(props: BannerProps) {
 
         hasNativeAPI
             ? nativeAPI?.api.misc_openDashboardView()
-            : Services.Welcome.openOptionsPage(
+            : Services.Helper.openDashboard(
                   personaConnectStatus.hasPersona ? DashboardRoutes.Personas : DashboardRoutes.Setup,
               )
     }, [networkIdentifier, nextStep])
     const defaultUserName = networkIdentifier
         ? {
-              defaultValue: lastRecognizedIdentity.identifier.isUnknown ? '' : lastRecognizedIdentity.identifier.userId,
+              defaultValue: lastRecognizedIdentity.identifier?.userId ?? '',
               value,
               onChange,
               isValid: activatedSocialNetworkUI.utils.isValidUsername || (() => true),

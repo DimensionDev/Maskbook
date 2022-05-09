@@ -13,7 +13,7 @@ import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import Services from '../../../extension/service'
 import { twitterBase } from '../base'
 import { getAvatar, getBio, getNickname, getTwitterId, getPersonalHomepage } from '../utils/user'
-import { hasNativeAPI } from '../../../../shared/native-rpc'
+import { isMobileTwitter } from '../utils/isMobile'
 
 function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
@@ -28,7 +28,7 @@ function resolveLastRecognizedIdentityInner(
             ref.value = {
                 avatar,
                 nickname,
-                identifier: new ProfileIdentifier(twitterBase.networkIdentifier, handle),
+                identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
             }
         }
     }
@@ -48,18 +48,20 @@ function resolveLastRecognizedIdentityMobileInner(
 ) {
     const onLocationChange = async () => {
         const settings = await Twitter.getSettings()
+        const identifier = ProfileIdentifier.of(twitterBase.networkIdentifier, settings?.screen_name).unwrapOr(
+            undefined,
+        )
 
-        if (settings?.screen_name && (!ref.value.identifier || ref.value.identifier.isUnknown)) {
+        if (identifier && !ref.value.identifier) {
             ref.value = {
                 ...ref.value,
-                identifier: new ProfileIdentifier(twitterBase.networkIdentifier, settings.screen_name),
+                identifier,
             }
         }
     }
 
     onLocationChange()
-    window.addEventListener('locationchange', onLocationChange)
-    cancel.addEventListener('abort', () => window.removeEventListener('locationchange', onLocationChange))
+    window.addEventListener('locationchange', onLocationChange, { signal: cancel })
 }
 
 function resolveCurrentVisitingIdentityInner(
@@ -75,8 +77,9 @@ function resolveCurrentVisitingIdentityInner(
         const nickname = getNickname()
         const handle = getTwitterId()
         const avatar = getAvatar()
+
         ref.value = {
-            identifier: new ProfileIdentifier(twitterBase.networkIdentifier, handle),
+            identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
             nickname,
             avatar,
             bio,
@@ -118,7 +121,7 @@ export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolv
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveLastRecognizedIdentityInner(this.recognized, cancel)
-        if (hasNativeAPI) resolveLastRecognizedIdentityMobileInner(this.recognized, cancel)
+        if (isMobileTwitter) resolveLastRecognizedIdentityMobileInner(this.recognized, cancel)
     },
 }
 

@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import { encodeText, encodeArrayBuffer } from '@dimensiondev/kit'
 import { Ok, Option, Result } from 'ts-results'
 import type { PayloadWellFormed, Signature } from '..'

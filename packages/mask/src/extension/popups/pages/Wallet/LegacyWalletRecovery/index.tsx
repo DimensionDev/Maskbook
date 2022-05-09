@@ -17,6 +17,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { LoadingButton } from '@mui/lab'
 import Services from '../../../../service'
 import { useNavigate } from 'react-router-dom'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     container: {
@@ -131,6 +132,8 @@ const WalletRecovery = memo(() => {
         await Services.Helper.removePopupWindow()
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [onSubmit, hasPassword, legacyWallets.map((x) => x.address).join(), history])
+
+    useTitle(t('popups_recovery_wallet'))
 
     return getHasPasswordLoading || getLegacyWalletsLoading ? (
         <LoadingPlaceholder />

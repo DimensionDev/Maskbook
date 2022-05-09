@@ -3,13 +3,13 @@ import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 import { MaskMessages, useI18N } from '../../../../../utils'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { ECKeyIdentifier, Identifier, PopupRoutes } from '@masknet/shared-base'
+import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { useMyPersonas } from '../../../../../components/DataSource/useMyPersonas'
-import type { Persona } from '../../../../../database'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { MethodAfterPersonaSign } from '../../Wallet/type'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../service'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -87,7 +87,7 @@ const PersonaSignRequest = memo(() => {
     const { classes } = useStyles()
     const [requestID, setRequestID] = useState<string>()
     const [message, setMessage] = useState<string>()
-    const [selected, setSelected] = useState<Persona>()
+    const [selected, setSelected] = useState<PersonaInformation>()
     const personas = useMyPersonas()
     const { currentPersona } = PersonaContext.useContainer()
     useEffect(() => {
@@ -110,10 +110,7 @@ const PersonaSignRequest = memo(() => {
     const [, onSign] = useAsyncFn(async () => {
         const url = new URLSearchParams(location.search)
         if (!requestID || !selected) return
-        const selectedPersona = Identifier.fromString<ECKeyIdentifier>(
-            selected.identifier.toText(),
-            ECKeyIdentifier,
-        ).unwrap()
+        const selectedPersona = selected.identifier
         MaskMessages.events.personaSignRequest.sendToBackgroundPage({
             requestID,
             selectedPersona,
@@ -145,12 +142,12 @@ const PersonaSignRequest = memo(() => {
                     !identity ||
                     !createdAt ||
                     !uuid ||
-                    !currentPersona?.publicHexKey
+                    !currentPersona?.identifier.publicKeyAsHex
                 )
                     break
                 await Services.Identity.detachProfileWithNextID(
                     uuid,
-                    currentPersona.publicHexKey,
+                    currentPersona.identifier.publicKeyAsHex,
                     platform,
                     identity,
                     createdAt,
@@ -175,31 +172,35 @@ const PersonaSignRequest = memo(() => {
         navigate(-1)
     }
 
+    useTitle('')
+
     return (
-        <main className={classes.container}>
-            <div className={classes.info}>
-                <Typography className={classes.title}>{t('popups_persona_sign_request_title')}</Typography>
-                <Typography className={classes.personaName}>{selected?.nickname}</Typography>
-                <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
-                    {selected?.fingerprint}
+        <>
+            <main className={classes.container}>
+                <div className={classes.info}>
+                    <Typography className={classes.title}>{t('popups_persona_sign_request_title')}</Typography>
+                    <Typography className={classes.personaName}>{selected?.nickname}</Typography>
+                    <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
+                        {selected?.identifier.rawPublicKey}
+                    </Typography>
+                </div>
+                <Typography className={classes.secondary} style={{ marginTop: 20 }}>
+                    {t('popups_persona_sign_request_message')}:
                 </Typography>
-            </div>
-            <Typography className={classes.secondary} style={{ marginTop: 20 }}>
-                {t('popups_persona_sign_request_message')}:
-            </Typography>
-            <Typography className={classes.message}>{message}</Typography>
-            <div className={classes.controller}>
-                <Button
-                    className={classes.button}
-                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
-                    onClick={onCancel}>
-                    {t('cancel')}
-                </Button>
-                <Button className={classes.button} onClick={onSign} variant="contained">
-                    {t('sign')}
-                </Button>
-            </div>
-        </main>
+                <Typography className={classes.message}>{message}</Typography>
+                <div className={classes.controller}>
+                    <Button
+                        className={classes.button}
+                        style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
+                        onClick={onCancel}>
+                        {t('cancel')}
+                    </Button>
+                    <Button className={classes.button} onClick={onSign} variant="contained">
+                        {t('sign')}
+                    </Button>
+                </div>
+            </main>
+        </>
     )
 })
 

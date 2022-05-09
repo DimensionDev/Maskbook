@@ -16,7 +16,6 @@ export const {
     consistentPersonaDBWriteAccess,
     updatePersonaDB,
     createOrUpdatePersonaDB,
-    queryProfilesPagedDB,
     createOrUpdateProfileDB,
     createProfileDB,
     createRelationDB,
@@ -26,6 +25,7 @@ export const {
     updateRelationDB,
     queryPersonasWithPrivateKey,
     queryRelations,
+    createOrUpdateRelationDB,
 } = new Proxy({} as any as typeof import('./web'), {
     get(_, key) {
         return async function (...args: any) {
