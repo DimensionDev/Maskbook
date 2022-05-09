@@ -32,6 +32,7 @@ export async function connectWalletConnect() {
 
 export async function createWalletConnect() {
     const connector = await WalletConnect.createConnectorIfNeeded()
+
     if (connector.connected)
         return {
             account: first(connector.accounts),
@@ -46,7 +47,7 @@ export async function createWalletConnect() {
 }
 
 export async function cancelWalletConnect() {
-    rejectConnect?.(new Error('Failed to connect to WalletConnect.'))
+    rejectConnect?.(new Error('User rejected the request.'))
 }
 // #endregion
 

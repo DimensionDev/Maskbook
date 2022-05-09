@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { DialogContent, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { DialogContent } from '@mui/material'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import { safeUnreachable, delay } from '@dimensiondev/kit'
 import {
     ChainId,
@@ -19,16 +19,28 @@ import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
 import { isPopupPage } from '@masknet/shared-base'
 import { LoadingPlaceholder } from '../../../../extension/popups/components/LoadingPlaceholder'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(2.5),
+    },
+    popupDialog: {
+        width: 200,
+        margin: 'auto',
+    },
+    popupDialogPaper: {
+        backgroundColor: 'transparent',
+    },
+    popupDialogContent: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
     },
 }))
 
 export interface ConnectWalletDialogProps {}
 
 export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
@@ -155,7 +167,37 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         return true
     }, [open, connectTo, setConnectWalletDialog])
 
+    const { enqueueSnackbar } = useSnackbar()
+    useEffect(() => {
+        if (!isPopupPage() || !connection.error) return
+        setConnectWalletDialog({
+            open: false,
+        })
+        enqueueSnackbar(connection.error.message, {
+            variant: 'error',
+        })
+    }, [connection.error, enqueueSnackbar])
+
     if (!providerType) return null
+
+    if (isPopupPage()) {
+        return (
+            <InjectedDialog
+                className={classes.popupDialog}
+                open={open}
+                hideBackdrop
+                disableBackdropClick
+                PaperProps={{
+                    className: classes.popupDialogPaper,
+                    elevation: 0,
+                }}
+                BackdropProps={{}}>
+                <DialogContent className={classes.popupDialogContent}>
+                    <LoadingPlaceholder title={t('connecting')} titleColor="#ffffff" iconColor="#ffffff" />
+                </DialogContent>
+            </InjectedDialog>
+        )
+    }
 
     return (
         <InjectedDialog title={`Connect to ${resolveProviderName(providerType)}`} open={open} onClose={onClose}>
