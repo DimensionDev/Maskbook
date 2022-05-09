@@ -31,16 +31,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <FurucomboIcon />
-            const name = <Trans i18nKey="plugin_trader_swap" />
+            const name = <Trans i18nKey="plugin_furucombo_dapp_name" />
             return {
                 ApplicationEntryID: base.ID,
                 marketListSortingPriority: 18,
                 icon,
                 category: 'dapp',
                 name,
-                tutorialLink:
-                    'https://realmasknetwork.notion.site/Trade-cryptos-on-Twitter-via-Uniswap-Sushi-0x-Support-ETH-BSC-Polygon-Arbitrum-f2e7d081ee38487ca1db958393ac1edc',
-                description: <Trans i18nKey="plugin_trader_swap_description" />,
+                description: <Trans i18nKey="plugin_furucombo_dapp_description" />,
             }
         })(),
     ],
