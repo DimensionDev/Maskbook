@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
 
     icon: {
         width: 24,
-        heigth: 24,
+        height: 24,
     },
     iconShadow: {
         filter: 'drop-shadow(0px 0px 6px rgba(28, 104, 243, 0.6))',
