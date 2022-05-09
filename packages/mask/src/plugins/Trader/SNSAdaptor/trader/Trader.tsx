@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@dimensiondev/kit'
 import { useOpenShareTxDialog, usePickToken } from '@masknet/shared'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { NetworkPluginID, isSameAddress, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import {
@@ -46,7 +47,11 @@ export interface TraderProps extends withClasses<'root'> {
     chainId?: ChainId
 }
 
-export function Trader(props: TraderProps) {
+export interface TraderRef {
+    refresh: () => void
+}
+
+export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
     const { defaultOutputCoin, coin, chainId: targetChainId, defaultInputCoin } = props
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
@@ -70,6 +75,16 @@ export function Trader(props: TraderProps) {
         setTemporarySlippage,
     } = AllProviderTradeContext.useContainer()
     // #endregion
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            refresh: () => {
+                allTradeComputed.map((x) => x.retry())
+            },
+        }),
+        [allTradeComputed],
+    )
 
     // #region gas config and gas price
     const { gasPrice, gasConfig, setGasConfig } = useGasConfig(chainId)
@@ -380,4 +395,4 @@ export function Trader(props: TraderProps) {
             <SettingsDialog />
         </div>
     )
-}
+})

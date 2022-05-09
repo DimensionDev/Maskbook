@@ -98,7 +98,12 @@ export function PriceChart(props: PriceChartProps) {
             {props.loading ? (
                 <CircularProgress className={classes.progress} color="primary" size={15} />
             ) : (
-                <RefreshIcon className={classes.refresh} color="primary" onClick={props.retry} />
+                <RefreshIcon
+                    className={classes.refresh}
+                    color="primary"
+                    style={{ fill: '#1C68F3' }}
+                    onClick={props.retry}
+                />
             )}
             {props.stats.length ? (
                 <>

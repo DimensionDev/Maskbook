@@ -63,6 +63,18 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
             justifyContent: 'center',
             alignItems: 'center',
         },
+        header: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 11.5,
+        },
+        settingIcon: {
+            height: 24,
+            width: 24,
+            cursor: 'pointer',
+            fill: theme.palette.text.primary,
+        },
         placeholderWrapper: {
             display: 'flex',
             justifyContent: 'center',

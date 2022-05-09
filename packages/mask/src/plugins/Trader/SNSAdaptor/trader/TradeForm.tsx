@@ -9,7 +9,7 @@ import { FungibleToken, isLessThan, formatBalance, NetworkPluginID, rightShift }
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { FormattedBalance, SelectTokenChip } from '@masknet/shared'
+import { SelectTokenChip } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
@@ -55,7 +55,6 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         amount: {
             marginLeft: 10,
         },
-
         reverse: {
             backgroundColor: isDashboard ? MaskColorVar.lightBackground : theme.palette.background.default,
             width: 32,
@@ -64,7 +63,13 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            margin: '20px 0 16px 0',
+        },
+        reverseWrapper: {
+            backgroundColor: theme.palette.background.paper,
+            padding: 2,
+            borderRadius: 99,
+            marginTop: -16,
+            zIndex: 1,
         },
         chevron: {
             fill: 'none',
@@ -334,11 +339,6 @@ export const TradeForm = memo<AllTradeFormProps>(
 
         return (
             <Box className={classes.root}>
-                <Box display="flex" justifyContent="flex-start" mb={1} width="100%">
-                    <Typography fontSize={14} lineHeight="20px">
-                        {t('plugin_trader_swap_from')}
-                    </Typography>
-                </Box>
                 <InputTokenPanel
                     chainId={chainId}
                     amount={inputAmount}
@@ -358,31 +358,12 @@ export const TradeForm = memo<AllTradeFormProps>(
                         },
                     }}
                 />
-                <Box className={classes.reverse}>
-                    <ArrowDownward className={classes.reverseIcon} color="primary" onClick={onSwitch} />
+                <Box className={classes.reverseWrapper}>
+                    <Box className={classes.reverse}>
+                        <ArrowDownward className={classes.reverseIcon} color="primary" onClick={onSwitch} />
+                    </Box>
                 </Box>
                 <Box className={classes.section} marginBottom={2.5}>
-                    <Box display="flex" justifyContent="space-between" mb={1}>
-                        {outputToken && outputTokenBalance !== undefined ? (
-                            <>
-                                <Typography fontSize={14} lineHeight="20px">
-                                    {t('plugin_trader_swap_to')}
-                                </Typography>
-                                <Typography className={classes.balance}>
-                                    {t('plugin_ito_list_table_got')}:
-                                    <Typography component="span" className={classes.amount} color="primary">
-                                        <FormattedBalance
-                                            value={outputTokenBalance}
-                                            decimals={outputToken?.decimals}
-                                            significant={6}
-                                            formatter={formatBalance}
-                                        />
-                                    </Typography>
-                                </Typography>
-                            </>
-                        ) : null}
-                    </Box>
-
                     <Box className={classes.card}>
                         <SelectTokenChip
                             classes={{

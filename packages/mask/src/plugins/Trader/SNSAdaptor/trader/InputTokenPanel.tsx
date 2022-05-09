@@ -13,8 +13,8 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     filledInput: {
         borderRadius: 12,
         padding: 12,
-        background: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.background.default,
-        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.divider}`,
+        background: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.background.input,
+        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.background.input}`,
         position: 'relative',
     },
     balance: {

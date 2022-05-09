@@ -1,22 +1,25 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { PluginId } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useChainId, useChainIdValid, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { ChainId, useAccount, useChainId, useChainIdValid } from '@masknet/web3-shared-evm'
+import { Button, DialogContent, IconButton } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { PluginTraderMessages } from '../../messages'
-import { Trader, TraderProps } from './Trader'
+import { Trader, TraderRef, TraderProps } from './Trader'
 import { useI18N } from '../../../../utils'
 import { makeStyles } from '@masknet/theme'
-import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useUpdateEffect } from 'react-use'
 import { isDashboardPage } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { GearIcon, RefreshIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     walletStatusBox: {
@@ -58,6 +61,20 @@ const useStyles = makeStyles()((theme) => ({
         width: 535,
         margin: 'auto',
     },
+    tail: {
+        display: 'flex',
+        gap: 8,
+        '& > button': {
+            padding: 0,
+            width: 24,
+            height: 24,
+        },
+    },
+    icon: {
+        fontSize: 24,
+        fill: theme.palette.text.primary,
+        cursor: 'pointer',
+    },
 }))
 
 interface TraderDialogProps {
@@ -66,8 +83,9 @@ interface TraderDialogProps {
 }
 
 export function TraderDialog({ open, onClose }: TraderDialogProps) {
-    const isDashboard = isDashboardPage()
+    const tradeRef = useRef<TraderRef>(null)
     const pluginID = useCurrentWeb3NetworkPluginID()
+    const account = useAccount()
     const traderDefinition = useActivatedPlugin(PluginId.Trader, 'any')
     const chainIdList = traderDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
     const { t } = useI18N()
@@ -104,13 +122,18 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                         setTraderProps(undefined)
                         closeDialog()
                     }}
-                    title={t('plugin_trader_swap')}>
+                    title={t('plugin_trader_swap')}
+                    titleTail={
+                        <div className={classes.tail}>
+                            <IconButton onClick={() => tradeRef.current?.refresh()}>
+                                <RefreshIcon className={classes.icon} />
+                            </IconButton>
+                            <IconButton>
+                                <GearIcon className={classes.icon} />
+                            </IconButton>
+                        </div>
+                    }>
                     <DialogContent className={classes.content}>
-                        {!isDashboard ? (
-                            <div className={classes.walletStatusBox}>
-                                <WalletStatusBox />
-                            </div>
-                        ) : null}
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab
                                 chainId={chainId}
@@ -120,7 +143,13 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                                 chains={chainIdList}
                             />
                         </div>
-                        <Trader chainId={chainId} {...traderProps} classes={{ root: classes.tradeRoot }} />
+                        <Trader
+                            {...traderProps}
+                            chainId={chainId}
+                            classes={{ root: classes.tradeRoot }}
+                            ref={tradeRef}
+                        />
+                        {!account ? <Button fullWidth>{t('plugin_wallet_on_connect')}</Button> : null}
                     </DialogContent>
                 </InjectedDialog>
             </AllProviderTradeContext.Provider>
