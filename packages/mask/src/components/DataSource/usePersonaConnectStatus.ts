@@ -53,10 +53,11 @@ export function usePersonaAgainstSNSConnectStatus() {
     }, [lastState, lastRecognized])
     const personas = useMyPersonas()
 
-    const checkSNSConnectToCurrentPersona = useCallback((persona: PersonaInformation) => {
-        if (!username) return undefined
-        return persona.linkedProfiles.some((x) => x.identifier.userId === username)
-    }, [])
+    const checkSNSConnectToCurrentPersona = useCallback(
+        (persona: PersonaInformation) =>
+            username ? persona.linkedProfiles.some((x) => x.identifier.userId === username) : false,
+        [username],
+    )
 
     return useAsync(async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()

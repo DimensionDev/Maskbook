@@ -1,6 +1,6 @@
-import { useContext, createContext, PropsWithChildren, useMemo, useCallback, useState } from 'react'
+import { useContext, createContext, PropsWithChildren, useMemo, useCallback } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { Typography, Box } from '@mui/material'
+import { Typography } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, NetworkPluginID } from '@masknet/plugin-infra/web3'
@@ -9,12 +9,12 @@ import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
+import { ApplicationRecommendArea } from './ApplicationRecommendArea'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useNextIDConnectStatus } from '../DataSource/useNextID'
 import { usePersonaConnectStatus, usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
-import { CarouselProvider, Slider, Slide } from 'pure-react-carousel'
 
 const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -151,42 +151,16 @@ function ApplicationBoardContent(props: Props) {
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
 
-    const [isPlaying, setPlaying] = useState(true)
     const recommendFeatureAppList = applicationList.filter((x) => x.entry.recommendFeature)
 
     const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
     const { classes } = useStyles({ shouldScroll: listedAppList.length > 12 })
     return (
         <>
-            <link rel="stylesheet" href={new URL('./assets/react-carousel.es.css', import.meta.url).toString()} />
-            {recommendFeatureAppList.length > 2 ? (
-                <CarouselProvider
-                    naturalSlideWidth={220}
-                    naturalSlideHeight={117}
-                    totalSlides={recommendFeatureAppList.length}
-                    visibleSlides={2.2}
-                    infinite={false}
-                    interval={2500}
-                    className={classes.carousel}
-                    isPlaying={isPlaying}>
-                    <Slider onScroll={(e) => setPlaying((e.target as HTMLDivElement).scrollLeft === 0)}>
-                        {recommendFeatureAppList.map((application, i) => (
-                            <Slide index={i} key={i}>
-                                <RenderEntryComponent
-                                    key={application.entry.ApplicationEntryID}
-                                    application={application}
-                                />
-                            </Slide>
-                        ))}
-                    </Slider>
-                </CarouselProvider>
-            ) : (
-                <Box className={classes.recommendFeatureAppListWrapper}>
-                    {recommendFeatureAppList.map((application) => (
-                        <RenderEntryComponent key={application.entry.ApplicationEntryID} application={application} />
-                    ))}
-                </Box>
-            )}
+            <ApplicationRecommendArea
+                recommendFeatureAppList={recommendFeatureAppList}
+                RenderEntryComponent={RenderEntryComponent}
+            />
 
             {listedAppList.length > 0 ? (
                 <section className={classes.applicationWrapper}>
@@ -205,11 +179,7 @@ function ApplicationBoardContent(props: Props) {
     )
 }
 
-interface RenderEntryComponentProps {
-    application: Application
-}
-
-function RenderEntryComponent({ application }: RenderEntryComponentProps) {
+function RenderEntryComponent({ application }: { application: Application }) {
     const Entry = application.entry.RenderEntryComponent!
     const { t } = useI18N()
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -262,7 +232,7 @@ function RenderEntryComponent({ application }: RenderEntryComponentProps) {
     const tooltipHint = useMemo(() => {
         if (application.isWalletConnectedRequired) return t('application_tooltip_hint_connect_wallet')
         if (application.isWalletConnectedEVMRequired) return t('application_tooltip_hint_switch_to_evm_wallet')
-        if (!application.entry.nextIdRequired) return undefined
+        if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaCreated === false && !disabled)
             return t('application_tooltip_hint_create_persona')
         if (ApplicationEntryStatus.isPersonaConnected === false && !disabled)
@@ -279,7 +249,7 @@ function RenderEntryComponent({ application }: RenderEntryComponentProps) {
                     4,
                 ),
             })
-        return undefined
+        return
     }, [application, ApplicationEntryStatus, disabled])
     // #endregion
 
