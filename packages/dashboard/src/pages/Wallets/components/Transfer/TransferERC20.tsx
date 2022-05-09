@@ -71,7 +71,10 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const tokenType = isNativeToken ? EthereumTokenType.Native : EthereumTokenType.ERC20
 
     // balance
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(tokenType, selectedToken?.address ?? '')
+    const { value: tokenBalance = '0', retry: refetchTokenBalance } = useFungibleTokenBalance(
+        tokenType,
+        selectedToken?.address ?? '',
+    )
     const nativeToken = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice()
 
@@ -127,10 +130,11 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         } else if (Utils?.isValidDomain?.(address)) {
             hash = await transferCallback(transferAmount, registeredAddress, gasConfig, memo)
         }
-        if (hash) {
+        if (typeof hash === 'string') {
             setMemo('')
             setAddress('')
             setAmount('')
+            refetchTokenBalance()
         }
     }, [transferAmount, address, memo, selectedToken.decimals, transferCallback, gasConfig, registeredAddress, Utils])
 

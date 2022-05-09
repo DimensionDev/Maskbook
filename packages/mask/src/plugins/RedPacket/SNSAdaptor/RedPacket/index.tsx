@@ -40,10 +40,11 @@ export function RedPacket(props: RedPacketProps) {
     const networkType = useNetworkType()
 
     // #region token detailed
-    const { value: availability, computed: availabilityComputed } = useAvailabilityComputed(
-        account ?? payload.contract_address,
-        payload,
-    )
+    const {
+        value: availability,
+        computed: availabilityComputed,
+        retry: revalidateAvailability,
+    } = useAvailabilityComputed(account ?? payload.contract_address, payload)
 
     const token = payload.token
 
@@ -60,7 +61,7 @@ export function RedPacket(props: RedPacketProps) {
         account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
     }
 
-    const [{ loading: isClaiming }, claimCallback] = useClaimCallback(
+    const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(
         payload.contract_version,
         account,
         payload.rpid,
@@ -68,7 +69,7 @@ export function RedPacket(props: RedPacketProps) {
     )
 
     const shareText = (
-        listOfStatus.includes(RedPacketStatus.claimed) || !isClaiming
+        listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash
             ? isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                 ? t('plugin_red_packet_share_message_official_account', shareTextOption)
                 : t('plugin_red_packet_share_message_not_twitter', shareTextOption)
@@ -92,6 +93,7 @@ export function RedPacket(props: RedPacketProps) {
         } else if (canRefund) {
             hash = await refundCallback()
         }
+        revalidateAvailability()
         if (typeof hash !== 'string') return
         openShareTxDialog({
             hash,

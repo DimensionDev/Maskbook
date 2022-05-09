@@ -17,7 +17,7 @@ type CallableKeys<T> = keyof {
 
 /**
  * Create a manager of small UI task sessions,
- * which provide  a Context and a Provider
+ * which provide both a Context and a Provider.
  */
 export const createUITaskManager = <
     TaskOptions extends Record<string, any>,

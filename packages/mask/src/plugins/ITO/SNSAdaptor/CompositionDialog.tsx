@@ -85,7 +85,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
         if (!receipt.transactionHash) return
         await openShareTxDialog({
             hash: receipt.transactionHash,
-            onShare() {},
         })
         // no contract is available
         if (!ITO2_CONTRACT_ADDRESS) return
