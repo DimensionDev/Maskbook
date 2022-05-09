@@ -15,6 +15,5 @@ export const base: Plugin.Shared.Definition = {
     },
     contribution: {
         postContent: new Set([/https:\/\/furucombo.app\/invest\/(pool|farm)\/(137|1)\/(0x\w+)/]),
-        metadataKeys: new Set([PLUGIN_ID]),
     },
 }

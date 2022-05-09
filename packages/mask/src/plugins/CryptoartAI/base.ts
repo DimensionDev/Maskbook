@@ -12,6 +12,6 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
     },
     contribution: {
-        metadataKeys: new Set([PLUGIN_ID]),
+        postContent: new Set([/https:\/\/cryptoart.ai\/gallery\/detail/]),
     },
 }
