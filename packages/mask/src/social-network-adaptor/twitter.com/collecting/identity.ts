@@ -16,7 +16,7 @@ import { twitterBase } from '../base'
 import { getAvatar, getBio, getNickname, getTwitterId, getPersonalHomepage } from '../utils/user'
 import { isMobileTwitter } from '../utils/isMobile'
 
-function reconginzeDesktop() {
+function recognizeDesktop() {
     const collect = () => {
         const handle = selfInfoSelectors().handle.evaluate()
         const nickname = selfInfoSelectors().name.evaluate()
@@ -30,7 +30,7 @@ function reconginzeDesktop() {
     return { watcher, collect }
 }
 
-function reconginzeMobile() {
+function recognizeMobile() {
     const collect = () => {
         const avatar = searchSelfAvatarSelector().evaluate()?.getAttribute('src') ?? ''
         const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '')
@@ -48,7 +48,7 @@ function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const task = isMobileTwitter ? reconginzeMobile() : reconginzeDesktop()
+    const task = isMobileTwitter ? recognizeMobile() : recognizeDesktop()
     const assign = () => {
         const { handle, nickname, avatar } = task.collect()
 
