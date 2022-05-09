@@ -8,6 +8,3 @@ export const ToS = 'https://docs.ideamarket.io/legal/terms-of-service'
 
 export const ideaMarketHostnames = ['ideamarket.io']
 export const ideaMarketPathnameRegexMatcher = /^\/i\/(\S+)\/(\S+)/
-
-export const TWITTER_BEARER_TOKEN =
-    'AAAAAAAAAAAAAAAAAAAAAIakawEAAAAAFtDCZS2%2Fv8a8UsU3%2Bq1PdZYCY%2Bo%3DJNGDHi0EqYR11jkW9bhU27h0tXOq52BPaEYqJlA18wUBL5rydc' /* cspell: disable-line */

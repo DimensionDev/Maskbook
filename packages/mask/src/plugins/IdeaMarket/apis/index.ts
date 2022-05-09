@@ -1,6 +1,9 @@
-import { SUBGRAPH_URL, TWITTER_BEARER_TOKEN } from '../constants'
+import { SUBGRAPH_URL } from '../constants'
 import { first } from 'lodash-unified'
 import { IdeaToken, Markets } from '../types'
+
+const TWITTER_BEARER_TOKEN =
+    'AAAAAAAAAAAAAAAAAAAAAIakawEAAAAAFtDCZS2%2Fv8a8UsU3%2Bq1PdZYCY%2Bo%3DJNGDHi0EqYR11jkW9bhU27h0tXOq52BPaEYqJlA18wUBL5rydc' /* cspell: disable-line */
 
 export async function fetchIdeaToken(marketName: string, tokenName: string) {
     const body = {
