@@ -2,7 +2,6 @@ import { makeStyles, useTabs } from '@masknet/theme'
 import { ChainId, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Tabs, Typography } from '@mui/material'
-import { useI18N } from '../../../utils'
 import { Application_NFT_LIST_PAGE } from '../constants'
 import type { TokenInfo } from '../types'
 import { NFTListPage } from './NFTListPage'
@@ -38,7 +37,6 @@ interface NFTListProps {
 
 export function NFTList(props: NFTListProps) {
     const { address, onSelect, tokenInfo, onChangePage, tokens = [], children } = props
-    const { t } = useI18N()
 
     const [currentTab, onChange, tabs] = useTabs(
         Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
@@ -50,6 +48,7 @@ export function NFTList(props: NFTListProps) {
         onChange(event, value)
         onChangePage?.(value)
     }
+
     if (!address) return null
     return (
         <TabContext value={currentTab}>

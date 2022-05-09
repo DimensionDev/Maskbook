@@ -18,6 +18,7 @@ import { Translate, useI18N } from '../locales'
 import { AddressNames } from './WalletList'
 import { NFTList } from './NFTList'
 import { Application_NFT_LIST_PAGE } from '../constants'
+import { useEffectOnce } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -114,9 +115,9 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setSelectedToken(token)
     }
 
-    useEffect(() => {
+    useEffectOnce(() => {
         setTokens(currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? collectibles : [])
-    }, [collectibles, currentPage])
+    })
 
     const onSave = useCallback(async () => {
         if (!selectedToken?.info?.imageURL) return
@@ -146,11 +147,9 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
 
-    const onAddClick = useCallback(
-        (token: ERC721TokenDetailed) =>
-            setTokens((tokens) => uniqBy([token, ...tokens], (x) => x.contractDetailed.address && x.tokenId)),
-        [tokens],
-    )
+    const onAddClick = (token: ERC721TokenDetailed) => {
+        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contractDetailed.address && x.tokenId))
+    }
 
     const onChangePage = (name: Application_NFT_LIST_PAGE) => {
         setCurrentPage(name)
@@ -206,19 +205,21 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         onChangePage={onChangePage}
                         tokens={tokens}
                         children={
-                            state !== SocketState.done && tokens.length === 0
-                                ? LoadStatus
-                                : currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page
-                                ? error && tokens.length
-                                    ? Retry
-                                    : undefined
-                                : AddCollectible
+                            tokens.length === 0
+                                ? state !== SocketState.done
+                                    ? LoadStatus
+                                    : currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page
+                                    ? error && tokens.length
+                                        ? Retry
+                                        : undefined
+                                    : AddCollectible
+                                : undefined
                         }
                     />
                 )}
             </DialogContent>
             <DialogActions className={classes.actions}>
-                {!error && tokens.length ? (
+                {tokens.length ? (
                     <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
                         <Typography variant="body1" color="textPrimary">
                             {t.collectible_not_found()}
