@@ -4,41 +4,16 @@ import {
     createERC721Token,
     ERC721TokenDetailed,
     EthereumTokenType,
-    SocketState,
-    useCollectibles,
     useImageChecker,
 } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, Typography } from '@mui/material'
-import { range, uniqBy } from 'lodash-unified'
-import { useCallback, useState } from 'react'
-import { useI18N, Translate } from '../locales'
-import { AddNFT } from '../SNSAdaptor/AddNFT'
+import { Box, Skeleton } from '@mui/material'
+import { useState } from 'react'
 import { NFTImage } from '../SNSAdaptor/NFTImage'
 import type { TokenInfo } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
-    skeleton: {
-        width: 97,
-        height: 97,
-        objectFit: 'cover',
-        borderRadius: '100%',
-        boxSizing: 'border-box',
-        padding: 6,
-        margin: theme.spacing(0.5, 1),
-    },
-    skeletonBox: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
-    error: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 'auto',
-        paddingTop: 260,
-    },
+
     button: {
         textAlign: 'center',
         paddingTop: theme.spacing(1),
@@ -55,6 +30,19 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
     },
+    skeleton: {
+        width: 97,
+        height: 97,
+        objectFit: 'cover',
+        borderRadius: '100%',
+        boxSizing: 'border-box',
+        padding: 6,
+        margin: theme.spacing(0.5, 1),
+    },
+    skeletonBox: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    },
 }))
 
 interface NFTListPageProps {
@@ -63,15 +51,12 @@ interface NFTListPageProps {
     tokenInfo?: TokenInfo
     tokens: ERC721TokenDetailed[]
     onSelect?: (token: ERC721TokenDetailed) => void
+    children?: React.ReactElement
 }
 
 export function NFTListPage(props: NFTListPageProps) {
     const { classes } = useStyles()
-    const { address, onSelect, chainId, tokenInfo, tokens } = props
-    const t = useI18N()
-    const [tokens_, setTokens_] = useState<ERC721TokenDetailed[]>(tokens)
-    const [open, setOpen] = useState(false)
-    const { data: collectibles, error, retry, state } = useCollectibles(address, chainId)
+    const { onSelect, chainId, tokenInfo, tokens, children } = props
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>(
         tokenInfo
             ? createERC721Token(
@@ -94,83 +79,20 @@ export function NFTListPage(props: NFTListPageProps) {
         onSelect?.(token)
     }
 
-    const onAddClick = useCallback(
-        (token: ERC721TokenDetailed) =>
-            setTokens_((tokens) => uniqBy([token, ...tokens], (x) => x.contractDetailed.address && x.tokenId)),
-        [],
-    )
-
-    const LoadStatus = (
-        <div className={classes.gallery}>
-            {range(8).map((i) => (
-                <Skeleton key={i} animation="wave" variant="rectangular" className={classes.skeleton} />
-            ))}
-        </div>
-    )
-    const AddCollectible = (
-        <Box className={classes.error}>
-            <Typography color="textSecondary" textAlign="center">
-                <Translate.collectible_on_polygon
-                    components={{
-                        br: <br />,
-                    }}
-                />
-            </Typography>
-            <Button className={classes.button} variant="text" onClick={() => setOpen(true)}>
-                {t.add_collectible()}
-            </Button>
-        </Box>
-    )
-    const Retry = (
-        <Box className={classes.error}>
-            <Typography color="textSecondary">{t.no_collectible_found()}</Typography>
-            <Button className={classes.button} variant="text" onClick={retry}>
-                {t.retry()}
-            </Button>
-        </Box>
-    )
-
     return (
         <>
             <Box className={classes.root}>
                 <Box className={classes.gallery}>
-                    {chainId === ChainId.Mainnet
-                        ? state !== SocketState.done && collectibles.length === 0
-                            ? LoadStatus
-                            : error || collectibles.length === 0
-                            ? Retry
-                            : collectibles.map((token: ERC721TokenDetailed, i) => (
-                                  <NFTImageCollectibleAvatar
-                                      key={i}
-                                      token={token}
-                                      selectedToken={selectedToken}
-                                      onChange={(token) => onChange(token)}
-                                  />
-                              ))
-                        : null}
-                    {chainId === ChainId.Matic
-                        ? tokens_.length === 0
-                            ? AddCollectible
-                            : tokens_.map((token: ERC721TokenDetailed, i) => (
-                                  <NFTImageCollectibleAvatar
-                                      key={i}
-                                      token={token}
-                                      selectedToken={selectedToken}
-                                      onChange={(token) => onChange(token)}
-                                  />
-                              ))
-                        : null}
+                    {children ??
+                        tokens.map((token: ERC721TokenDetailed, i) => (
+                            <NFTImageCollectibleAvatar
+                                key={i}
+                                token={token}
+                                selectedToken={selectedToken}
+                                onChange={(token) => onChange(token)}
+                            />
+                        ))}
                 </Box>
-                {chainId === ChainId.Matic ? (
-                    <AddNFT
-                        account={address}
-                        title={t.add_collectible()}
-                        open={open}
-                        chainId={ChainId.Matic}
-                        onClose={() => setOpen(false)}
-                        onAddClick={onAddClick}
-                    />
-                ) : null}
             </Box>
         </>
     )

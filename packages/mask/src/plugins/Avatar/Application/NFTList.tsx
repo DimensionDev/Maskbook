@@ -33,10 +33,11 @@ interface NFTListProps {
     onSelect: (token: ERC721TokenDetailed) => void
     onChangePage?: (page: Application_NFT_LIST_PAGE) => void
     tokens?: ERC721TokenDetailed[]
+    children?: React.ReactElement
 }
 
 export function NFTList(props: NFTListProps) {
-    const { address, onSelect, tokenInfo, onChangePage, tokens = [] } = props
+    const { address, onSelect, tokenInfo, onChangePage, tokens = [], children } = props
     const { t } = useI18N()
 
     const [currentTab, onChange, tabs] = useTabs(
@@ -87,6 +88,7 @@ export function NFTList(props: NFTListProps) {
                     chainId={ChainId.Mainnet}
                     address={address}
                     onSelect={onSelect}
+                    children={children}
                 />
             </TabPanel>
             <TabPanel value={tabs.Polygon} className={classes.tabPanel}>
@@ -96,6 +98,7 @@ export function NFTList(props: NFTListProps) {
                     chainId={ChainId.Matic}
                     address={address}
                     onSelect={onSelect}
+                    children={children}
                 />
             </TabPanel>
         </TabContext>

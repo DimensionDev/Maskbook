@@ -1,13 +1,20 @@
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared-evm'
-import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
+import {
+    ChainId,
+    ERC721TokenDetailed,
+    isSameAddress,
+    SocketState,
+    useAccount,
+    useCollectibles,
+} from '@masknet/web3-shared-evm'
+import { Box, Button, DialogActions, DialogContent, Skeleton, Stack, Typography } from '@mui/material'
 import { useCallback, useState, useEffect } from 'react'
 import { downloadUrl } from '../../../utils'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import type { BindingProof } from '@masknet/shared-base'
 import type { SelectTokenInfo, TokenInfo } from '../types'
-import { uniqBy } from 'lodash-unified'
-import { useI18N } from '../locales'
+import { range, uniqBy } from 'lodash-unified'
+import { Translate, useI18N } from '../locales'
 import { AddressNames } from './WalletList'
 import { NFTList } from './NFTList'
 import { Application_NFT_LIST_PAGE } from '../constants'
@@ -31,6 +38,35 @@ const useStyles = makeStyles()((theme) => ({
         height: 612,
         padding: 0,
         backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
+    },
+    error: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 'auto',
+        paddingTop: 260,
+    },
+    skeleton: {
+        width: 97,
+        height: 97,
+        objectFit: 'cover',
+        borderRadius: '100%',
+        boxSizing: 'border-box',
+        padding: 6,
+        margin: theme.spacing(0.5, 1),
+    },
+    skeletonBox: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    },
+    gallery: {
+        display: 'flex',
+        flexFlow: 'row wrap',
+        overflowY: 'auto',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -59,6 +95,16 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [currentPage, setCurrentPage] = useState<Application_NFT_LIST_PAGE>(
         Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
     )
+    const {
+        data: collectibles,
+        error,
+        retry,
+        state,
+    } = useCollectibles(
+        selectedAccount,
+        currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? ChainId.Mainnet : ChainId.Matic,
+    )
+
     const { showSnackbar } = useCustomSnackbar()
     const onChange = useCallback((address: string) => {
         setSelectedAccount(address)
@@ -67,6 +113,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const onSelect = (token: ERC721TokenDetailed) => {
         setSelectedToken(token)
     }
+
+    useEffect(() => {
+        setTokens(currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? collectibles : [])
+    }, [collectibles, currentPage])
 
     const onSave = useCallback(async () => {
         if (!selectedToken?.info?.imageURL) return
@@ -106,6 +156,39 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setCurrentPage(name)
         setSelectedToken(undefined)
     }
+
+    const AddCollectible = (
+        <Box className={classes.error}>
+            <Typography color="textSecondary" textAlign="center">
+                <Translate.collectible_on_polygon
+                    components={{
+                        br: <br />,
+                    }}
+                />
+            </Typography>
+            <Button className={classes.button} variant="text" onClick={() => setOpen_(true)}>
+                {t.add_collectible()}
+            </Button>
+        </Box>
+    )
+
+    const LoadStatus = (
+        <div className={classes.gallery}>
+            {range(8).map((i) => (
+                <Skeleton key={i} animation="wave" variant="rectangular" className={classes.skeleton} />
+            ))}
+        </div>
+    )
+
+    const Retry = (
+        <Box className={classes.error}>
+            <Typography color="textSecondary">{t.no_collectible_found()}</Typography>
+            <Button className={classes.button} variant="text" onClick={retry}>
+                {t.retry()}
+            </Button>
+        </Box>
+    )
+
     return (
         <>
             <DialogContent className={classes.content}>
@@ -122,11 +205,20 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         onSelect={onSelect}
                         onChangePage={onChangePage}
                         tokens={tokens}
+                        children={
+                            state !== SocketState.done && tokens.length === 0
+                                ? LoadStatus
+                                : currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page
+                                ? error && tokens.length
+                                    ? Retry
+                                    : undefined
+                                : AddCollectible
+                        }
                     />
                 )}
             </DialogContent>
             <DialogActions className={classes.actions}>
-                {currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? (
+                {!error && tokens.length ? (
                     <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
                         <Typography variant="body1" color="textPrimary">
                             {t.collectible_not_found()}
@@ -145,7 +237,18 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     {!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
                 </Button>
             </DialogActions>
-            <AddNFT title={t.add_collectible()} open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
+            <AddNFT
+                account={selectedAccount}
+                chainId={
+                    currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page
+                        ? ChainId.Mainnet
+                        : ChainId.Matic
+                }
+                title={t.add_collectible()}
+                open={open_}
+                onClose={() => setOpen_(false)}
+                onAddClick={onAddClick}
+            />
         </>
     )
 }
