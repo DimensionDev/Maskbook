@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { DialogContent } from '@mui/material'
-import { makeStyles, useSnackbar } from '@masknet/theme'
+import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { safeUnreachable, delay } from '@dimensiondev/kit'
 import {
     ChainId,
@@ -167,16 +167,16 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         return true
     }, [open, connectTo, setConnectWalletDialog])
 
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = usePopupCustomSnackbar()
     useEffect(() => {
         if (!isPopupPage() || !connection.error) return
         setConnectWalletDialog({
             open: false,
         })
-        enqueueSnackbar(connection.error.message, {
+        showSnackbar(connection.error.message, {
             variant: 'error',
         })
-    }, [connection.error, enqueueSnackbar])
+    }, [connection.error, showSnackbar])
 
     if (!providerType) return null
 
