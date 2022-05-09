@@ -15,12 +15,10 @@ import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useCallback, useState, useEffect } from 'react'
 import { SearchIcon } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
-import { Trans } from 'react-i18next'
 import { useUpdate } from 'react-use'
 import { findLastIndex } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
-import { useI18N } from '../locales'
-import { PluginId } from '@masknet/plugin-infra'
+import { useI18N, Translate } from '../locales'
 
 interface StyleProps {
     isSelectSharesExceed: boolean
@@ -322,7 +320,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         onClose,
         loadingOwnerList,
     } = props
-    const { t: trans } = useBaseI18N()
+    const { t: tr } = useBaseI18N()
     const t = useI18N()
     const account = useAccount()
     const [tokenDetailed, setTokenDetailed] = useState<OrderedERC721Token>()
@@ -438,8 +436,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     }, [tokenDetailed, tokenDetailedSelectedList, setExistTokenDetailedList, onClose])
 
     const NonExistedTokenList = () => (
-        <Trans
-            i18nKey={`${PluginId.RedPacket}:nft_non_existed_tip`}
+        <Translate.nft_non_existed_tip
             components={{
                 tokenIdList: (
                     <span>
@@ -540,7 +537,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             ? t.nft_invalid_owner()
                             : isAdded
                             ? t.nft_already_added()
-                            : trans('confirm')}
+                            : tr('confirm')}
                     </Button>
                 </DialogContent>
             ) : (
@@ -595,12 +592,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                                 {selectAll ? <CheckIcon className={classes.checkIcon} /> : null}
                                             </div>
                                             <Typography className={classNames(classes.selectAllCheckBoxText)}>
-                                                {trans('select_all')}
+                                                {tr('select_all')}
                                             </Typography>
                                         </div>
                                         <Typography>
-                                            <Trans
-                                                i18nKey="plugin_red_packet_nft_shift_select_tip"
+                                            <Translate.nft_shift_select_tip
                                                 components={{
                                                     text: <span style={{ color: '#1C68F3' }} />,
                                                 }}
@@ -700,7 +696,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             ? t.nft_invalid_owner()
                             : isAdded
                             ? t.nft_already_added()
-                            : trans('confirm')}
+                            : tr('confirm')}
                     </Button>
                 </DialogContent>
             )}

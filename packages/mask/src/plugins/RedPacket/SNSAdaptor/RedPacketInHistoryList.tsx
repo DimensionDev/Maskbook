@@ -18,15 +18,13 @@ import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
 import { omit, pick } from 'lodash-unified'
 import { MouseEvent, useCallback, useState } from 'react'
-import { Trans } from 'react-i18next'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../locales'
+import { Translate, useI18N } from '../locales'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
 import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useRefundCallback } from './hooks/useRefundCallback'
-import { PluginId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -316,8 +314,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     />
                     <section className={classes.footer}>
                         <Typography variant="body1" className={classes.footerInfo}>
-                            <Trans
-                                i18nKey={`${PluginId.RedPacket}:history_claimed`}
+                            <Translate.history_claimed
                                 components={{
                                     strong: <strong />,
                                 }}
@@ -328,8 +325,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                             />
                         </Typography>
                         <Typography variant="body1" className={classes.footerInfo}>
-                            <Trans
-                                i18nKey={`${PluginId.RedPacket}:history_total_claimed_amount`}
+                            <Translate.history_total_claimed_amount
                                 components={{
                                     strong: <strong className={classes.strong} />,
                                     span: <span className={classes.span} />,
@@ -341,7 +337,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                         historyToken?.decimals,
                                         6,
                                     ),
-                                    symbol: historyToken?.symbol,
+                                    symbol: historyToken?.symbol!,
                                 }}
                             />
                         </Typography>

@@ -1,5 +1,4 @@
 import { FC, memo, MouseEventHandler, useCallback } from 'react'
-import { Trans } from 'react-i18next'
 import classNames from 'classnames'
 import { fill } from 'lodash-unified'
 import { TokenIcon } from '@masknet/shared'
@@ -14,7 +13,7 @@ import type { NftRedPacketHistory } from '../types'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed'
 import { NftList } from './NftList'
-import { useI18N } from '../locales'
+import { Translate, useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -237,14 +236,13 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         </section>
                         <section className={classes.footer}>
                             <Typography variant="body1" className={classes.footerInfo}>
-                                <Trans
-                                    i18nKey="com.maskbook.red_packet:history_claimed"
+                                <Translate.history_claimed
                                     components={{
                                         strong: <strong />,
                                     }}
                                     values={{
-                                        claimedShares: history.claimers.length,
-                                        shares: history.shares,
+                                        claimedShares: history.claimers.length.toString(),
+                                        shares: history.shares.toString(),
                                     }}
                                 />
                             </Typography>

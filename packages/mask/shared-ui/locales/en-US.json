@@ -1,4 +1,5 @@
 {
+    "promote_red_packet": "🧧🧧🧧 Try to send Lucky Drop to your friends with tokens or NFTs to share the joy now! Install Mask.io to send your first Lucky Drop.",
     "database_backup": "Backup Database",
     "database_overwrite": "Overwrite Database with backup",
     "database_clear": "Clear Database",
@@ -46,8 +47,8 @@
     "application_settings_tab_plug_app-listed-placeholder": "Click the application icon to hide in the APP list.",
     "application_settings_tab_plug_app-unlisted-placeholder": "Click the application icon to list it on the App board.",
     "additional_post_box__encrypted_post_pre": "Decrypt this post with #mask_io ! {{encrypted}}",
-    "additional_post_box__encrypted_post_pre_red_packet_twitter_official_account": "Hi, claim this lucky drop with #mask_io @{{account}} {{encrypted}}",
-    "additional_post_box__encrypted_post_pre_red_packet": "Hi, claim this lucky drop with #mask_io {{encrypted}}",
+    "additional_post_box__encrypted_post_pre_red_packet_twitter_official_account": "Hi, claim this lucky drop with #mask_io @{{account}} \n\n$t(promote_red_packet)\n {{encrypted}}",
+    "additional_post_box__encrypted_post_pre_red_packet": "Hi, claim this lucky drop with #mask_io \n\n$t(promote_red_packet) {{encrypted}}",
     "additional_post_box__steganography_post_pre": "This image is encrypted with #mask_io. 📪🔑 Install mask.io to decrypt it. {{random}}",
     "auto_paste_failed_dialog_title": "Paste manually",
     "auto_paste_failed_dialog_content": "Please copy the following text and image (if there is any) and publish it.",
