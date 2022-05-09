@@ -92,7 +92,11 @@ export function AddNFT(props: AddNFTProps) {
     }
 
     return (
-        <InjectedDialog title={title ?? t('nft_add_dialog_title')} open={open} onClose={handleClose}>
+        <InjectedDialog
+            title={title ?? t('nft_add_dialog_title')}
+            open={open}
+            onClose={handleClose}
+            titleBarIconStyle="close">
             <DialogContent>
                 <Button className={classes.addNFT} variant="contained" size="small" onClick={onClick}>
                     {t('nft_add_button_label')}

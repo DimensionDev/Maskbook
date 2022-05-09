@@ -21,6 +21,7 @@ const useStyles = makeStyles()((theme) => ({
 
     button: {
         width: 219.5,
+        borderRadius: 999,
     },
     actions: {
         padding: theme.spacing(2),

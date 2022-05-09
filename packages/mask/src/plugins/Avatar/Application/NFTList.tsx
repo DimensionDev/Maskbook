@@ -49,7 +49,6 @@ export function NFTList(props: NFTListProps) {
         onChange(event, value)
         onChangePage?.(value)
     }
-    console.log(currentTab)
     if (!address) return null
     return (
         <TabContext value={currentTab}>
