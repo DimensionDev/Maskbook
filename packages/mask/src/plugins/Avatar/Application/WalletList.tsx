@@ -16,6 +16,7 @@ import { useI18N } from '../locales/i18n_generated'
 import { useCopyToClipboard } from 'react-use'
 import { LinkIcon } from '../assets/link'
 import { CopyIcon } from '../assets/copy'
+import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -31,7 +32,13 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.secondary.main,
     },
 
-    icon: {},
+    icon: {
+        width: 24,
+        heigth: 24,
+    },
+    iconShadow: {
+        filter: 'drop-shadow(0px 0px 6px rgba(28, 104, 243, 0.6))',
+    },
 }))
 
 interface AddressNamesProps extends withClasses<'root'> {
@@ -87,9 +94,7 @@ export function AddressNames(props: AddressNamesProps) {
             <ListItemIcon>
                 {selectedWallet === wallet ? (
                     <>
-                        <UncheckIcon className={classes.icon} />
-
-                        <CheckedIcon className={classes.icon} />
+                        <CheckedIcon className={classNames(classes.icon, classes.iconShadow)} />
                     </>
                 ) : (
                     <UncheckIcon className={classes.icon} />
@@ -142,7 +147,7 @@ export function AddressNames(props: AddressNamesProps) {
                         onClose()
                     }}>
                     <ListItemIcon>
-                        <WalletSettingIcon />
+                        <WalletSettingIcon className={classes.icon} />
                     </ListItemIcon>
                     <Typography fontSize={14} fontWeight={700}>
                         {t.wallet_settings()}
