@@ -1,4 +1,4 @@
-import { Box, Link, Stack, Typography } from '@mui/material'
+import { Box, CircularProgress, Link, Stack, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ApplicationIcon } from '../assets/application'
 import { LinkIcon } from '../assets/link'
@@ -16,13 +16,15 @@ const useStyles = makeStyles()(() => ({
 interface NFTInfoProps extends withClasses<'root'> {
     nft?: { name: string; address: string; tokenId: string; symbol: string }
     owner: boolean
+    loading?: boolean
 }
 
 export function NFTInfo(props: NFTInfoProps) {
-    const { nft, owner } = props
+    const { nft, owner, loading = false } = props
     const classes = useStylesExtends(useStyles(), props)
     const t = useI18N()
 
+    if (loading) return <CircularProgress />
     return (
         <Box className={classes.root}>
             {!nft ? (

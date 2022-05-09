@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { Box, Typography, CircularProgress, ListItemButton } from '@mui/material'
+import { Box, Typography, ListItemButton } from '@mui/material'
 import { NFTAvatar } from './NFTAvatar'
 import { NFTInfo } from './NFTInfo'
 import { MoreIcon } from '../assets/more'
@@ -74,23 +74,22 @@ export function PersonaItem(props: PersonaItemProps) {
                     @{userId}
                 </Typography>
             </Box>
-            {loading || loadingToken || loadingCheckOwner ? (
-                <CircularProgress size="small" />
-            ) : (
-                <NFTInfo
-                    owner={isOwner}
-                    nft={
-                        haveNFT
-                            ? {
-                                  name: token?.name ?? '',
-                                  symbol: token?.symbol ?? '',
-                                  tokenId: _avatar?.tokenId ?? '',
-                                  address: _avatar?.address ?? '',
-                              }
-                            : undefined
-                    }
-                />
-            )}
+
+            <NFTInfo
+                loading={loading || loadingToken || loadingCheckOwner}
+                owner={isOwner}
+                nft={
+                    haveNFT
+                        ? {
+                              name: token?.name ?? '',
+                              symbol: token?.symbol ?? '',
+                              tokenId: _avatar?.tokenId ?? '',
+                              address: _avatar?.address ?? '',
+                          }
+                        : undefined
+                }
+            />
+
             <MoreIcon />
         </ListItemButton>
     )
