@@ -484,6 +484,7 @@
     "plugin_trader_gas_setting_fast": "Fast",
     "plugin_trader_gas_setting_custom": "Custom",
     "plugin_trader_tx_cost_usd": "(~${{usd}})",
+    "plugin_trader_tx_cost_very_small": "({{usd}})",
     "plugin_trader_gas_option": "{{option}} ({{value}}) Gwei",
     "plugin_trader_no_enough_liquidity": "No enough liquidity",
     "plugin_trader_no_trade": "Please select a trade",
