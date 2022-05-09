@@ -72,7 +72,7 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                     network={account.identifier.network}
                     isValid={account.is_valid}
                 />
-                <Typography className={classes.name}>{account.identifier.userId}</Typography>
+                <Typography className={classes.name}>@{account.identifier.userId}</Typography>
                 <Typography className={classes.warning}>
                     {account.is_valid
                         ? t('popups_verify_warning_alert', {
