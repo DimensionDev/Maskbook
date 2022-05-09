@@ -1,29 +1,15 @@
 import { useState } from 'react'
 import { useFetchIdeaTokensBySearch } from '../hooks/useFetchIdeaTokens'
+import { QuickSearchToolbar } from './components/QuickSearchToolbar'
 import { makeStyles } from '@masknet/theme'
-import {
-    Avatar,
-    Box,
-    Button,
-    Grid,
-    IconButton,
-    Link,
-    Stack,
-    TextField,
-    ToggleButton,
-    ToggleButtonGroup,
-    Typography,
-} from '@mui/material'
+import { Avatar, Button, Grid, Link, Stack, Typography } from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid'
 import { formatterToUSD, urlWithoutProtocol } from '../utils'
 import { formatWeiToEther } from '@masknet/web3-shared-evm'
-import { SearchIcon } from '@masknet/icons'
-import ClearIcon from '@mui/icons-material/Clear'
 import { LoadingAnimation } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { UrlIcon } from '../icons/UrlIcon'
-import { TwitterIcon } from '../icons/TwitterIcon'
 import { BASE_URL, TWITTER_BASE_URL } from '../constants'
 import { IdeaToken, Markets } from '../types'
 
@@ -50,13 +36,6 @@ const useStyles = makeStyles()((theme) => {
                 textOverflow: 'ellipsis',
             },
         },
-        box: {
-            margin: theme.spacing(1, 1.8),
-            paddingBottom: theme.spacing(0),
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-        },
         market: {
             color: 'rgba(8,87,224,1)',
         },
@@ -67,18 +46,6 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'center',
             height: '100%',
             padding: theme.spacing(8, 0),
-        },
-        textField: {
-            margin: theme.spacing(1, 0.5, 1),
-            '& .MuiSvgIcon-root': {
-                marginRight: theme.spacing(0.5),
-            },
-            '& .MuiInput-input': {
-                fontSize: 13.125,
-            },
-            '& .MuiInput-underline:before': {
-                borderColor: 'divider',
-            },
         },
         avatar: {
             marginRight: theme.spacing(0.8),
@@ -94,14 +61,6 @@ const useStyles = makeStyles()((theme) => {
             width: 30,
             height: 30,
         },
-        toolbarIcon: {
-            width: 16,
-            marginRight: theme.spacing(0.3),
-        },
-        toggleButton: {
-            textTransform: 'unset',
-            padding: theme.spacing(0.7),
-        },
         profileAvatar: {
             float: 'left',
             marginTop: theme.spacing(1.1),
@@ -109,59 +68,34 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface QuickSearchToolbarProps {
-    value: string
-    clearSearch: () => void
-    onChange: () => void
-    filters: string[]
-    setFilters: (newFilters: string[]) => void
-}
-
-function QuickSearchToolbar(props: QuickSearchToolbarProps) {
-    const { classes } = useStyles()
+function CustomLoading() {
     const { t } = useI18N()
-
-    const handleFilters = (event: React.MouseEvent<HTMLElement>, newFilters: string[]) => {
-        props.setFilters(newFilters)
-    }
+    const { classes } = useStyles()
 
     return (
-        <Box className={classes.box}>
-            <ToggleButtonGroup
-                color="primary"
-                value={props.filters}
-                onChange={handleFilters}
-                aria-label="token filter by type">
-                <ToggleButton className={classes.toggleButton} size="small" value="0x6" aria-label="url">
-                    <UrlIcon className={classes.toolbarIcon} />
-                    <Typography variant="body2">{t('plugin_ideamarket_urls')}</Typography>
-                </ToggleButton>
-                <ToggleButton className={classes.toggleButton} size="small" value="0x1" aria-label="user">
-                    <TwitterIcon className={classes.toolbarIcon} />
-                    <Typography variant="body2">{t('plugin_ideamarket_users')}</Typography>
-                </ToggleButton>
-            </ToggleButtonGroup>
-            <TextField
-                className={classes.textField}
-                variant="standard"
-                value={props.value}
-                onChange={props.onChange}
-                placeholder="Search&#x2026;"
-                InputProps={{
-                    startAdornment: <SearchIcon fontSize="small" />,
-                    endAdornment: (
-                        <IconButton
-                            title="Clear"
-                            aria-label="Clear"
-                            size="small"
-                            style={{ visibility: props.value ? 'visible' : 'hidden' }}
-                            onClick={props.clearSearch}>
-                            <ClearIcon fontSize="small" />
-                        </IconButton>
-                    ),
-                }}
-            />
-        </Box>
+        <div className={classes.empty}>
+            <LoadingAnimation />
+        </div>
+    )
+}
+
+function NoRowsCustomOverlay() {
+    const { t } = useI18N()
+
+    return (
+        <Stack height="100%" alignItems="center" justifyContent="center">
+            {t('no_data')}
+        </Stack>
+    )
+}
+
+function NoResultsCustomOverlay() {
+    const { t } = useI18N()
+
+    return (
+        <Stack height="100%" alignItems="center" justifyContent="center">
+            {t('no_data')}
+        </Stack>
     )
 }
 
@@ -293,30 +227,6 @@ export function ListingsView() {
             ),
         },
     ]
-
-    function CustomLoading() {
-        return (
-            <div className={classes.empty}>
-                <LoadingAnimation />
-            </div>
-        )
-    }
-
-    function NoRowsCustomOverlay() {
-        return (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-                {t('no_data')}
-            </Stack>
-        )
-    }
-
-    function NoResultsCustomOverlay() {
-        return (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-                {t('no_data')}
-            </Stack>
-        )
-    }
 
     function handlePageChange(newPage: number) {
         setPage(newPage)
