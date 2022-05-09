@@ -8,12 +8,10 @@ export interface SupportedNetworkMap {
     icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>
 }
 
-export function useSupportedNetworks() {
-    // todo support solana flow when NextID supported
-    const networkMap: Record<NetworkPluginID, SupportedNetworkMap> = {
-        [NetworkPluginID.PLUGIN_EVM]: { name: 'EVM Chain', icon: EVMChainsIcon },
-        [NetworkPluginID.PLUGIN_FLOW]: { name: 'Solana Chain', icon: FlowIcon },
-        [NetworkPluginID.PLUGIN_SOLANA]: { name: 'Flow Chain', icon: SolanaIcon },
-    }
-    return networkMap
+export const networkMap: Record<NetworkPluginID, SupportedNetworkMap> = {
+    [NetworkPluginID.PLUGIN_EVM]: { name: 'EVM Chain', icon: EVMChainsIcon },
+    [NetworkPluginID.PLUGIN_FLOW]: { name: 'Solana Chain', icon: FlowIcon },
+    [NetworkPluginID.PLUGIN_SOLANA]: { name: 'Flow Chain', icon: SolanaIcon },
 }
+
+// todo provide a function to support when Next.ID supports Flow and Solana
