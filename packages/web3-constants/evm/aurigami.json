@@ -15,11 +15,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "0x817af6cfAF35BdC1A634d6cC94eE9e4c68369Aeb",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "ORACLE": {
         "Mainnet": "",
@@ -37,11 +38,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "0xC6e5185438e1730959c1eF3551059A3feC744E90",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "LENS": {
         "Mainnet": "",
@@ -59,11 +61,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "0xC41a5C1625d492436600789469c1CE2eA20CEA6B",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "AURORA_ADDRESS": {
         "Mainnet": "",
@@ -81,11 +84,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "0x8BEc47865aDe3B172A928df8f990Bc7f2A3b9f79",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "PLY_ADDRESS": {
         "Mainnet": "",
@@ -103,11 +107,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "0x09c9d464b58d96837f8d8b6f4d9fe4ad408d3a4f",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "NEAR_ADDRESS": {
         "Mainnet": "",
@@ -125,11 +130,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "0xc42c30ac6cc15fac9bd938618bcaa1a1fae8501d",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "TRI_ADDRESS": {
         "Mainnet": "",
@@ -147,10 +153,11 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "0xfa94348467f64d5a457f75f8bc40495d33c65abb",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     }
 }

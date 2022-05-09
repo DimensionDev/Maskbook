@@ -30,6 +30,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Harmony,
                     ChainId.Avalanche,
                     ChainId.Fantom,
+                    ChainId.Harmony,
                 ],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },

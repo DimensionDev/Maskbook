@@ -15,11 +15,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "GET_SINGLE_ASSET_URL": {
         "Mainnet": "https://api.opensea.io/api/v1/asset",
@@ -37,11 +38,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "GET_ASSETS_URL": {
         "Mainnet": "https://api.opensea.io/api/v1/assets",
@@ -59,10 +61,11 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     }
 }

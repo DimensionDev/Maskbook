@@ -15,11 +15,12 @@
         "Avalanche": "0x486Af39519B4Dc9a7fCcd318217352830E8AD9b4",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "ORACLE": {
         "Mainnet": "",
@@ -37,10 +38,11 @@
         "Avalanche": "0x316ae55ec59e0beb2121c0e41d4bdef8bf66b32b",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     }
 }

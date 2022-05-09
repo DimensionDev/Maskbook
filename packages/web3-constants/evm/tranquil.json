@@ -15,11 +15,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "0x6a82A17B48EF6be278BBC56138F35d04594587E3",
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "0x6a82A17B48EF6be278BBC56138F35d04594587E3",
+        "Harmony_Test": ""
     },
     "ORACLE": {
         "Mainnet": "",
@@ -37,11 +38,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "0x0C99E05CD2dCb52A583a3694F4d91813eFb5B071",
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "0x0C99E05CD2dCb52A583a3694F4d91813eFb5B071",
+        "Harmony_Test": ""
     },
     "TRANQ": {
         "Mainnet": "",
@@ -59,10 +61,11 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "0xcf1709ad76a79d5a60210f23e81ce2460542a836",
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "0xcf1709ad76a79d5a60210f23e81ce2460542a836",
+        "Harmony_Test": ""
     }
 }

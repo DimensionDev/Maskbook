@@ -15,11 +15,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V2": {
         "Mainnet": "0x8D8912E1237F9FF3EF661F32743CFB276E052F98",
@@ -37,11 +38,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V3": {
         "Mainnet": "",
@@ -59,11 +61,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4": {
         "Mainnet": "0xaBBe1101FD8fa5847c452A6D70C8655532B03C33",
@@ -81,11 +84,12 @@
         "Avalanche": "0xF9F7C1496c21bC0180f4B64daBE0754ebFc8A8c0",
         "Avalanche_Fuji": "0x3f64DFB6009d138DfD7b62916f3322A438d8b00D",
         "Celo": "0xAb7B1bE4233A04e5C43a810E75657ECED8E5463B",
-        "Harmony": "",
         "Fantom": "0x578a7Fee5f0D8CEc7d00578Bf37374C5b95C4b98",
         "Aurora": "0x19f179D7e0D7d9F9d5386afFF64271D98A91615B",
         "Aurora_Testnet": "0xdB93cCd481012bB5D1E2c8d0aF7C5f2940c00fdC",
-        "Conflux": "0x96c7d011cdfd467f551605f0f5fce279f86f4186"
+        "Conflux": "0x96c7d011cdfd467f551605f0f5fce279f86f4186",
+        "Harmony": "0xab7b1be4233a04e5c43a810e75657eced8e5463b",
+        "Harmony_Test": "0x96c7d011cdfd467f551605f0f5fce279f86f4186"
     },
     "HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT": {
         "Mainnet": 12939427,
@@ -103,11 +107,12 @@
         "Avalanche": 8306507,
         "Avalanche_Fuji": 4751550,
         "Celo": 10413552,
-        "Harmony": 0,
         "Fantom": 25112473,
         "Aurora": 57552338,
         "Aurora_Testnet": 77918765,
-        "Conflux": 37670572
+        "Conflux": 37670572,
+        "Harmony": 24134162,
+        "Harmony_Test": 22701101
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mainnet",
@@ -125,10 +130,11 @@
         "Avalanche": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-avalanche",
         "Avalanche_Fuji": "",
         "Celo": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-celo",
-        "Harmony": "",
         "Fantom": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-fantom",
         "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-aurora",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-harmony",
+        "Harmony_Test": ""
     }
 }

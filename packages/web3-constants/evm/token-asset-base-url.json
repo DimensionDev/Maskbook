@@ -45,10 +45,14 @@
         ],
         "Avalanche_Fuji": [],
         "Celo": [],
-        "Harmony": [],
         "Fantom": [],
         "Aurora": [],
         "Aurora_Testnet": [],
-        "Conflux": []
+        "Conflux": [],
+        "Harmony": [
+            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/harmony",
+            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/harmony"
+        ],
+        "Harmony_Test": []
     }
 }

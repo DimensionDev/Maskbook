@@ -15,11 +15,12 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Harmony": "",
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "LIDO_REFERRAL_ADDRESS": {
         "Mainnet": "0x934b510d4c9103e6a87aef13b816fb080286d649",
@@ -37,10 +38,11 @@
         "Avalanche": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Avalanche_Fuji": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Celo": "0x934b510d4c9103e6a87aef13b816fb080286d649",
-        "Harmony": "",
         "Fantom": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Aurora": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Aurora_Testnet": "0x934b510d4c9103e6a87aef13b816fb080286d649",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     }
 }

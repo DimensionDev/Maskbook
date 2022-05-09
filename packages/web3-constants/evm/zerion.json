@@ -15,11 +15,12 @@
         "Avalanche": "avalanche-assets",
         "Avalanche_Fuji": "",
         "Celo": "celo-assets",
-        "Harmony": "",
         "Fantom": "fantom-assets",
         "Aurora": "aurora-assets",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "harmony-assets",
+        "Harmony_Test": ""
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -37,10 +38,11 @@
         "Avalanche": "avalanche-transactions",
         "Avalanche_Fuji": "",
         "Celo": "celo-transactions",
-        "Harmony": "",
         "Fantom": "fantom-transactions",
         "Aurora": "aurora-transactions",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "harmony-transactions",
+        "Harmony_Test": ""
     }
 }

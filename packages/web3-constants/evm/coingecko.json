@@ -15,11 +15,12 @@
         "Avalanche": "avalanche",
         "Avalanche_Fuji": "",
         "Celo": "celo",
-        "Harmony": "",
         "Fantom": "fantom",
         "Aurora": "aurora",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "harmony",
+        "Harmony_Test": ""
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -37,10 +38,11 @@
         "Avalanche": "avalanche-2",
         "Avalanche_Fuji": "",
         "Celo": "celo",
-        "Harmony": "",
         "Fantom": "fantom",
         "Aurora": "ethereum",
         "Aurora_Testnet": "",
-        "Conflux": "conflux-token"
+        "Conflux": "conflux-token",
+        "Harmony": "harmony",
+        "Harmony_Test": ""
     }
 }

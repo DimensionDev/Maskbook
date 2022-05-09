@@ -15,10 +15,11 @@
         "Avalanche": "avax",
         "Avalanche_Fuji": "",
         "Celo": "celo",
-        "Harmony": "",
         "Fantom": "ftm",
         "Aurora": "aurora",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "hmy",
+        "Harmony_Test": ""
     }
 }

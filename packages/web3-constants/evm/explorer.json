@@ -15,11 +15,12 @@
         "Avalanche": [],
         "Avalanche_Fuji": [],
         "Celo": [],
-        "Harmony": [],
         "Fantom": ["AST4WWPNEYDURUXG2GH32JZMYWEFDP999S"],
         "Aurora": [],
         "Aurora_Testnet": [],
-        "Conflux": []
+        "Conflux": [],
+        "Harmony": [],
+        "Harmony_Test": []
     },
     "EXPLORER_API": {
         "Mainnet": "https://api.etherscan.io/api",
@@ -37,10 +38,11 @@
         "Avalanche": "https://api.snowtrace.io/api",
         "Avalanche_Fuji": "https://api-testnet.snowtrace.io/api",
         "Celo": "https://explorer.celo.org/api",
-        "Harmony": "",
         "Fantom": "https://api.ftmscan.com/api",
         "Aurora": "https://explorer.mainnet.aurora.dev/api",
         "Aurora_Testnet": "https://explorer.testnet.aurora.dev/api",
-        "Conflux": "https://evmapi.confluxscan.net/api"
+        "Conflux": "https://evmapi.confluxscan.net/api",
+        "Harmony": "https://explorer.harmony.one",
+        "Harmony_Test": ""
     }
 }
