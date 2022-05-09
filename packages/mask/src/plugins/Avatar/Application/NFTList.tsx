@@ -2,7 +2,6 @@ import { makeStyles, useTabs } from '@masknet/theme'
 import { ChainId, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Tabs, Typography } from '@mui/material'
-import classNames from 'classnames'
 import { useI18N } from '../../../utils'
 import { Application_NFT_LIST_PAGE } from '../constants'
 import type { TokenInfo } from '../types'
@@ -10,10 +9,12 @@ import { NFTListPage } from './NFTListPage'
 
 const useStyles = makeStyles<{ currentTab: Application_NFT_LIST_PAGE }>()((theme, props) => ({
     selected: {
-        backgroundColor: theme.palette.mode === 'dark' ? 'black !important' : 'white !important',
+        backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
         border: 'none',
         borderTop: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
         color: `${theme.palette.text.primary} !important`,
+        minHeight: 37,
+        height: 37,
     },
     tab: {
         backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F6F8F8',
@@ -68,7 +69,7 @@ export function NFTList(props: NFTListProps) {
                         </Typography>
                     }
                     value={tabs.ETH}
-                    className={classNames(classes.tab, currentTab === tabs.ETH ? classes.selected : '')}
+                    className={currentTab === tabs.ETH ? classes.selected : classes.tab}
                 />
                 <Tab
                     label={
@@ -77,7 +78,7 @@ export function NFTList(props: NFTListProps) {
                         </Typography>
                     }
                     value={tabs.Polygon}
-                    className={classNames(classes.tab, currentTab === tabs.Polygon ? classes.selected : '')}
+                    className={currentTab === tabs.Polygon ? classes.selected : classes.tab}
                 />
             </Tabs>
             <TabPanel value={tabs.ETH} className={classes.tabPanel}>
