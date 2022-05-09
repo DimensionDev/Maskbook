@@ -21,7 +21,7 @@ import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { useI18N } from '../../../utils'
 import { usePendingTransactions } from './usePendingTransactions'
 
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(2, 3, 3),
     },
@@ -29,7 +29,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         padding: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
         display: 'flex',
-        backgroundColor: isDashboard ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default,
+        backgroundColor: isDashboardPage() ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default,
         borderRadius: 8,
         alignItems: 'center',
     },
@@ -100,14 +100,12 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     },
 }))
 interface WalletStatusBox {
-    isDashboard?: boolean
     disableChange?: boolean
 }
 export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
 
-    const isDashboard = isDashboardPage()
-    const { classes } = useStyles({ isDashboard })
+    const { classes } = useStyles()
     const chainId = useChainId()
     const account = useAccount()
     const wallet = useWallet()
@@ -146,7 +144,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
             className={classNames(
                 classes.statusBox,
                 classes.currentAccount,
-                props.isDashboard ? classes.dashboardBackground : '',
+                isDashboardPage() ? classes.dashboardBackground : '',
             )}>
             <WalletIcon
                 size={48}

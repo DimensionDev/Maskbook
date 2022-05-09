@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { DialogContent } from '@mui/material'
+import { DialogContent, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { safeUnreachable, delay } from '@dimensiondev/kit'
 import {
@@ -17,6 +17,8 @@ import { InjectedDialog } from '@masknet/shared'
 import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
+import { isPopupPage } from '@masknet/shared-base'
+import { LoadingPlaceholder } from '../../../../extension/popups/components/LoadingPlaceholder'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
