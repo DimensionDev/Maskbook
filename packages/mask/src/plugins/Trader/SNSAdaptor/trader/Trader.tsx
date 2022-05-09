@@ -263,7 +263,7 @@ export function Trader(props: TraderProps) {
         setOpenConfirmDialog(false)
         await delay(100)
         const hash = await tradeCallback()
-        if (!hash) return
+        if (typeof hash !== 'string') return
         await openShareTxDialog({
             hash,
             buttonLabel: activatedSocialNetworkUI.utils.share ? 'Share' : 'Confirm',

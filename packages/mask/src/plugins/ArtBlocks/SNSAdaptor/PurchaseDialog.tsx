@@ -94,15 +94,14 @@ export function PurchaseDialog(props: ActionBarProps) {
     const purchase = useCallback(async () => {
         try {
             const hash = await purchaseCallback()
-            if (hash) {
-                await openShareTxDialog({
-                    hash,
-                    onShare() {
-                        activatedSocialNetworkUI.utils.share?.(shareText)
-                    },
-                })
-                onClose()
-            }
+            if (typeof hash !== 'string') return
+            await openShareTxDialog({
+                hash,
+                onShare() {
+                    activatedSocialNetworkUI.utils.share?.(shareText)
+                },
+            })
+            onClose()
         } catch (err: any) {
             showConfirm({
                 title: 'Error',

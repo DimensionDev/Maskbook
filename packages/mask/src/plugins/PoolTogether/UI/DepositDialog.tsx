@@ -160,7 +160,7 @@ export function DepositDialog() {
     const openShareTxDialog = useOpenShareTxDialog()
     const deposit = useCallback(async () => {
         const hash = await depositCallback()
-        if (hash) {
+        if (typeof hash === 'string') {
             await openShareTxDialog({
                 hash,
                 onShare() {

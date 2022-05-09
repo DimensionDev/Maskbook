@@ -178,7 +178,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
         switch (tab) {
             case TabType.Deposit:
                 const hash = await protocol.deposit(account, chainId, web3, tokenAmount)
-                if (!hash) {
+                if (typeof hash !== 'string') {
                     throw new Error('Failed to deposit token.')
                 } else {
                     await protocol.updateBalance(chainId, web3, account)

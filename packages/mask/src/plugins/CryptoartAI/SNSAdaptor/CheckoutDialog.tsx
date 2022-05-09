@@ -114,7 +114,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const openShareTxDialog = useOpenShareTxDialog()
     const purchase = useCallback(async () => {
         const hash = await purchaseCallback()
-        if (!hash) return
+        if (typeof hash !== 'string') return
         await openShareTxDialog({
             hash,
             onShare() {

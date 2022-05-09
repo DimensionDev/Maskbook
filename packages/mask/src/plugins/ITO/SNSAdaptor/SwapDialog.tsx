@@ -192,7 +192,7 @@ export function SwapDialog(props: SwapDialogProps) {
     const openShareTxDialog = useOpenShareTxDialog()
     const onSwap = useCallback(async () => {
         const receipt = await swapCallback()
-        if (receipt?.transactionHash) {
+        if (typeof receipt?.transactionHash === 'string') {
             await openShareTxDialog({
                 hash: receipt.transactionHash,
             })

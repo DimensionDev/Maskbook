@@ -80,7 +80,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const openShareTxDialog = useOpenShareTxDialog()
     const fill = useCallback(async () => {
         const result = await fillCallback()
-        if (!result) return
+        if (!result || result instanceof Error) return
         const { receipt, settings } = result
         if (!receipt.transactionHash) return
         await openShareTxDialog({

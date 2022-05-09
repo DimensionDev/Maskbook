@@ -125,15 +125,14 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         const hash = await placeBidCallback(
             new BigNumber(amount).shiftedBy(selectedPaymentToken?.decimals ?? 18).toNumber(),
         )
-        if (hash) {
-            await openShareTxDialog({
-                hash,
-                onShare() {
-                    activatedSocialNetworkUI.utils.share?.(shareText)
-                },
-            })
-            asset?.retry()
-        }
+        if (typeof hash !== 'string') return
+        await openShareTxDialog({
+            hash,
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
+            },
+        })
+        asset?.retry()
     }, [placeBidCallback, amount, asset?.retry])
 
     useEffect(() => {

@@ -110,7 +110,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const openShareTxDialog = useOpenShareTxDialog()
     const createRedpacket = useCallback(async () => {
         const receipt = await createCallback()
-        if (!receipt?.transactionHash) return
+        if (typeof receipt?.transactionHash !== 'string') return
         await openShareTxDialog({
             hash: receipt.transactionHash,
         })

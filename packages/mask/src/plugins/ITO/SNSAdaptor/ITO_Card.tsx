@@ -79,7 +79,7 @@ export function ITO_Card(props: ITO_CardProps) {
 
     const claim = useCallback(async () => {
         const hash = await claimCallback()
-        if (!hash) return
+        if (typeof hash !== 'string') return
         await openShareTxDialog({
             hash,
             onShare() {

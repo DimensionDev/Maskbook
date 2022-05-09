@@ -261,7 +261,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const openShareTxDialog = useOpenShareTxDialog()
     const claim = useCallback(async () => {
         const hash = await claimCallback()
-        if (!hash) return
+        if (typeof hash !== 'string') return
         openShareTxDialog({
             hash,
             onShare() {

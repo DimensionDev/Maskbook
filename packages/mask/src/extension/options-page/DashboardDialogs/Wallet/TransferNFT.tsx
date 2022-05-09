@@ -43,7 +43,7 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
     const openShareTxDialog = useOpenShareTxDialog()
     const onTransfer = useCallback(async () => {
         const hash = await transferCallback(token.tokenId, address)
-        if (hash) {
+        if (typeof hash === 'string') {
             await openShareTxDialog({
                 hash,
             })

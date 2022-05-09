@@ -360,15 +360,14 @@ export function ITO(props: ITO_Props) {
     const openShareTxDialog = useOpenShareTxDialog()
     const claim = useCallback(async () => {
         const hash = await claimCallback()
-        if (hash) {
-            openShareTxDialog({
-                hash,
-                buttonLabel: t('dismiss'),
-                onShare() {
-                    window.location.reload()
-                },
-            })
-        }
+        if (typeof hash !== 'string') return
+        openShareTxDialog({
+            hash,
+            buttonLabel: t('dismiss'),
+            onShare() {
+                window.location.reload()
+            },
+        })
     }, [claimCallback, t])
 
     // #endregion

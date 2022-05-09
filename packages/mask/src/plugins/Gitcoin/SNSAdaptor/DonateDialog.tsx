@@ -106,7 +106,7 @@ export function DonateDialog(props: DonateDialogProps) {
     const openShareTxDialog = useOpenShareTxDialog()
     const donate = useCallback(async () => {
         const hash = await donateCallback()
-        if (!hash) return
+        if (typeof hash !== 'string') return
         const shareText = token
             ? [
                   `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol}. ${

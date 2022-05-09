@@ -111,16 +111,15 @@ export function InvestDialog() {
         : ''
     const invest = useCallback(async () => {
         const hash = await investCallback()
-        if (hash) {
-            await openShareTxDialog({
-                hash,
-                onShare() {
-                    activatedSocialNetworkUI.utils.share?.(shareText)
-                },
-            })
-            retryLoadTokenBalance()
-            onClose()
-        }
+        if (typeof hash !== 'string') return
+        await openShareTxDialog({
+            hash,
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
+            },
+        })
+        retryLoadTokenBalance()
+        onClose()
     }, [investCallback, openShareTxDialog, onClose])
     // #endregion
 
