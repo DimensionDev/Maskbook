@@ -21,9 +21,8 @@ export function CoinMarketPanel(props: CoinMarketPanelProps) {
     const { classes } = useStyles()
     return (
         <div className={classes.root}>
-            <CoinMetadataTable dataProvider={dataProvider} trending={trending} />
-            <br />
             <CoinMarketTable dataProvider={dataProvider} trending={trending} />
+            <CoinMetadataTable dataProvider={dataProvider} trending={trending} />
         </div>
     )
 }

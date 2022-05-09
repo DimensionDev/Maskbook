@@ -1,4 +1,13 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import {
+    Paper,
+    Stack,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+    Typography,
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
@@ -24,6 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     cell: {
         whiteSpace: 'nowrap',
         border: 'none',
+        textAlign: 'right',
     },
 }))
 
@@ -36,78 +46,84 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
     const { trending, dataProvider } = props
     const { t } = useI18N()
     const { classes } = useStyles()
+    console.log(props)
     return (
-        <TableContainer className={classes.container} component={Paper} elevation={0}>
-            <Table>
-                <TableHead>
-                    <TableRow>
+        <>
+            <Stack>
+                <Typography fontSize={14} fontWeight={700}>
+                    {t('plugin_trader_usdc_price_statistic')}
+                </Typography>
+            </Stack>
+            <TableContainer className={classes.container} component={Paper} elevation={0}>
+                <Table size="small">
+                    <TableBody>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
-                            <TableCell className={classes.head} align="center">
-                                <Typography color="textSecondary" variant="body2">
-                                    {t('plugin_trader_market_cap')}
-                                </Typography>
-                            </TableCell>
+                            <TableRow>
+                                <TableCell className={classes.head}>
+                                    <Typography color="textSecondary" variant="body2">
+                                        {t('plugin_trader_market_cap')}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell className={classes.cell}>
+                                    <FormattedCurrency
+                                        sign="$"
+                                        symbol="USD"
+                                        value={trending.market?.market_cap ?? 0}
+                                        formatter={formatCurrency}
+                                    />
+                                </TableCell>
+                            </TableRow>
                         ) : null}
-                        <TableCell className={classes.head} align="center">
-                            <Typography color="textSecondary" variant="body2">
-                                {t('plugin_trader_volume_24')}
-                            </Typography>
-                        </TableCell>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
-                            <>
-                                <TableCell className={classes.head} align="center">
+                            <TableRow>
+                                <TableCell className={classes.head}>
                                     <Typography color="textSecondary" variant="body2">
                                         {t('plugin_trader_circulating_supply')}
                                     </Typography>
                                 </TableCell>
-                                <TableCell className={classes.head} align="center">
-                                    <Typography color="textSecondary" variant="body2">
-                                        {t('plugin_trader_total_supply')}
-                                    </Typography>
-                                </TableCell>
-                            </>
-                        ) : null}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    <TableRow>
-                        {dataProvider !== DataProvider.UNISWAP_INFO ? (
-                            <TableCell className={classes.cell} align="center">
-                                <FormattedCurrency
-                                    symbol="USD"
-                                    value={trending.market?.market_cap ?? 0}
-                                    formatter={formatCurrency}
-                                />
-                            </TableCell>
-                        ) : null}
-                        <TableCell className={classes.cell} align="center">
-                            <FormattedCurrency
-                                symbol="USD"
-                                value={trending.market?.total_volume ?? 0}
-                                formatter={formatCurrency}
-                            />
-                        </TableCell>
-                        {dataProvider !== DataProvider.UNISWAP_INFO ? (
-                            <>
-                                <TableCell className={classes.cell} align="center">
+                                <TableCell className={classes.cell}>
                                     <FormattedCurrency
                                         value={trending.market?.circulating_supply ?? 0}
                                         symbol={trending.coin.symbol}
                                         formatter={formatCurrency}
                                     />
                                 </TableCell>
-                                <TableCell className={classes.cell} align="center">
+                            </TableRow>
+                        ) : null}
+                        <TableRow>
+                            <TableCell className={classes.head}>
+                                <Typography color="textSecondary" variant="body2">
+                                    {t('plugin_trader_volume_24')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cell}>
+                                <FormattedCurrency
+                                    sign="$"
+                                    symbol="USD"
+                                    value={trending.market?.total_volume ?? 0}
+                                    formatter={formatCurrency}
+                                />
+                            </TableCell>
+                        </TableRow>
+                        {dataProvider !== DataProvider.UNISWAP_INFO ? (
+                            <TableRow>
+                                <TableCell className={classes.head}>
+                                    <Typography color="textSecondary" variant="body2">
+                                        {t('plugin_trader_total_supply')}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell className={classes.cell}>
                                     <FormattedCurrency
                                         value={trending.market?.total_supply ?? 0}
                                         symbol={trending.coin.symbol}
                                         formatter={formatCurrency}
                                     />
                                 </TableCell>
-                            </>
+                            </TableRow>
                         ) : null}
-                    </TableRow>
-                </TableBody>
-            </Table>
-        </TableContainer>
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </>
     )
 }

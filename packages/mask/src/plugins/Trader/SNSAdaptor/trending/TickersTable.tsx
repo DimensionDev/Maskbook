@@ -19,7 +19,11 @@ const useStyles = makeStyles()((theme) => ({
     cell: {
         paddingLeft: theme.spacing(1.5),
         paddingRight: theme.spacing(1),
+        fontSize: 12,
+        fontWeight: 700,
         whiteSpace: 'nowrap',
+        background: theme.palette.background.paper,
+        border: 'none',
     },
     logo: {
         width: 18,

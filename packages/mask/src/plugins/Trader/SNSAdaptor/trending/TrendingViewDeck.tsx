@@ -181,7 +181,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                         <Stack flexDirection="row">
                             {typeof coin.market_cap_rank === 'number' ? (
                                 <Typography component="span" flex={0} className={classes.rank} title="Index Cap Rank">
-                                    #{coin.market_cap_rank}
+                                    Rank #{coin.market_cap_rank}
                                 </Typography>
                             ) : null}
                             <Box flex={1} />
@@ -203,7 +203,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     LinkProps={{ className: classes.name, title: coin.name.toUpperCase() }}>
                                     {coin.name.toUpperCase()}
                                 </Linking>
-                                <span className={classes.symbol}>({coin.symbol.toUpperCase()})</span>
+                                <Typography component="span" className={classes.symbol}>
+                                    ({coin.symbol.toUpperCase()})
+                                </Typography>
                             </Typography>
                             {coins.length > 1 ? (
                                 <CoinMenu
@@ -223,10 +225,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     <Stack>
                         {transakPluginEnabled && account && trending.coin.symbol && isAllowanceCoin ? (
                             <Button
-                                className={classes.buy}
                                 startIcon={<MonetizationOnOutlinedIcon />}
-                                variant="text"
-                                color="primary"
+                                variant="contained"
                                 onClick={onBuyButtonClicked}>
                                 {t('buy_now')}
                             </Button>
