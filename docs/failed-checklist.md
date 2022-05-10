@@ -1,13 +1,15 @@
-# Failed Checklist
+# Build failure / Runtime Crash Checklist
 
 ## Build failed
 
-1. Run `gulp clean`, Cleanup Caching
+1. Run `npx gulp clean`, Cleanup cache and built files
 
-## Install failed
+## CI failed
 
-1. Run `gulp fix-lockfile`, Rebuild lockfile
+1. Cannot connect to git@github.com, public key rejected
+   1. Run `npx gulp fix-lockfile`
 
 ## I18n strings error
 
-1. Run `gulp sync-languages` and `gulp i18n-codegen`
+1. Run `npx gulp sync-languages`
+1. Run `npx gulp i18n-codegen`
