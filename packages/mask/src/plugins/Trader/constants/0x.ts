@@ -14,7 +14,6 @@ export const ZRX_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Fuse]: '',
     [NetworkType.Metis]: '',
     [NetworkType.Optimistic]: '',
-    [NetworkType.Harmony]: '',
     [NetworkType.Conflux]: '',
     [NetworkType.Harmony]: '',
 }

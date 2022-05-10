@@ -27,7 +27,6 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.xDai,
                     ChainId.Aurora,
                     ChainId.Celo,
-                    ChainId.Harmony,
                     ChainId.Avalanche,
                     ChainId.Fantom,
                     ChainId.Harmony,

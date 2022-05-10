@@ -77,7 +77,6 @@ export enum ChainId {
 
     // Conflux
     Conflux = 1030,
-    Harmony = 1666600000,
 }
 
 export enum LockStatus {
@@ -664,7 +663,6 @@ export enum NetworkType {
     Fuse = 'Fuse',
     Metis = 'Metis',
     Optimistic = 'Optimistic',
-    Harmony = 'Harmony',
     Conflux = 'Conflux',
     Harmony = 'Harmony',
 }
