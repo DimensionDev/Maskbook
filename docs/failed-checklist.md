@@ -1,6 +1,6 @@
 # Build failure / Runtime Crash Checklist
 
-## Build failed
+## Runtime crash
 
 1. Run `npx gulp clean`, Cleanup cache and built files
 
