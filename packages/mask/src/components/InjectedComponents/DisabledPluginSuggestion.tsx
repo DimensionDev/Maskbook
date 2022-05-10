@@ -83,6 +83,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                                 backgroundColor: MaskColorVar.buttonPluginBackground,
                                 color: 'white',
                                 width: '254px',
+                                height: '36px',
                                 '&:hover': {
                                     backgroundColor: MaskColorVar.buttonPluginBackground,
                                 },

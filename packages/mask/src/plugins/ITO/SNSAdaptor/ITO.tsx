@@ -17,7 +17,7 @@ import {
 import { isZero, ZERO, isGreaterThan } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Box, Card, Grid, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
@@ -155,6 +155,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     actionButton: {
         width: '100%',
+        backgrundColor: MaskColorVar.buttonPluginBackground,
+        color: 'white',
     },
     textProviderErr: {
         color: '#EB5757',

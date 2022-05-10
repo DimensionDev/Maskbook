@@ -1,9 +1,7 @@
 import { Typography, SnackbarContent, Button, Link } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { activatedSocialNetworkUI } from '../social-network'
 import { MaskIcon } from '../resources/MaskIcon'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
-import { isTwitter } from '../social-network-adaptor/twitter.com/base'
 import { usePersonaConnectStatus } from '../components/DataSource/usePersonaConnectStatus'
 import { useI18N } from '../utils'
 import { Box } from '@mui/system'
@@ -37,12 +35,8 @@ const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) =
             width: '100%',
             boxSizing: 'border-box',
             cursor: 'default',
-            ...(isTwitter(activatedSocialNetworkUI)
-                ? {
-                      borderRadius: 15,
-                      overflow: 'hidden',
-                  }
-                : null),
+            borderRadius: 15,
+            overflow: 'hidden',
         },
         header: {
             backgroundColor: 'transparent',
@@ -119,7 +113,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     }, [personaConnectStatus, t])
 
     const publisherInfo = useMemo(() => {
-        if (!publisher) return null
+        if (!publisher) return
         const main = (
             <Typography variant="body1" fontSize={14} fontWeight="500" color={MaskColorVar.textPluginColor}>
                 {publisher}
@@ -146,7 +140,11 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
             style={{ display: open ? 'block' : 'none' }}
             onClick={(ev) => ev.stopPropagation()}>
             <div className={classes.header}>
-                {wrapperProps?.icon ?? <MaskIcon size={16} />}
+                {wrapperProps?.icon ?? (
+                    <MaskIcon
+                        style={{ filter: 'drop-shadow(0px 6px 12px rgba(28, 104, 243, 0.2))', width: 16, height: 16 }}
+                    />
+                )}
                 <Typography
                     sx={{ marginLeft: 0.5 }}
                     variant="body1"
