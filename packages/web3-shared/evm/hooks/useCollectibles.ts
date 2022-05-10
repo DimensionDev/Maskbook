@@ -42,6 +42,7 @@ export function useCollectibles(address: string, chainId: ChainId | null, depend
     }
 
     const { data, state, error, retry } = useSocket<ERC721TokenDetailed>(message)
+    console.log(data)
     const all = uniqWith(
         [
             ...(data ?? []),

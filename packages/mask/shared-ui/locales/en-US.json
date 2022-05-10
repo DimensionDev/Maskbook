@@ -1054,7 +1054,7 @@
     "plugin_vcent_last_offer_at": "LATEST OFFER at",
     "nft_input_address_label": "Please input contract address",
     "nft_input_tokenid_label": "Please input token ID",
-    "nft_owner_hint": "This NFT does not exist or does not belong to you.",
+    "nft_owner_hint": "The contract address is incorrect or the collection does not belong to you",
     "nft_add_dialog_title": "Add Collectible",
     "nft_add_button_label": "Add",
     "nft_list_title": "NFT Avatar Setting",

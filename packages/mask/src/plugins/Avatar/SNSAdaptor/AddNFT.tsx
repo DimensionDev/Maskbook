@@ -116,7 +116,7 @@ export function AddNFT(props: AddNFTProps) {
                     />
                 </div>
                 {message ? (
-                    <Typography color="error" className={classes.message}>
+                    <Typography color="error" className={classes.message} fontSize={12}>
                         {message}
                     </Typography>
                 ) : null}

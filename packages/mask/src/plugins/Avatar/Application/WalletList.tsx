@@ -10,13 +10,21 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { NFTWalletConnect } from './WalletConnect'
 import { BindingProof, PopupRoutes } from '@masknet/shared-base'
-import { NetworkPluginID, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
+import {
+    NetworkPluginID,
+    useCurrentWeb3NetworkPluginID,
+    useNetworkDescriptor,
+    useWeb3State,
+} from '@masknet/plugin-infra/web3'
 import { Services } from '../../../extension/service'
 import { useI18N } from '../locales/i18n_generated'
 import { useCopyToClipboard } from 'react-use'
 import { LinkIcon } from '../assets/link'
 import { CopyIcon } from '../assets/copy'
 import classNames from 'classnames'
+import { VerifyIcon } from '../assets/verify'
+import { noop } from 'lodash-unified'
+import { Verify2Icon } from '../assets/verify2'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -54,6 +62,7 @@ export function AddressNames(props: AddressNamesProps) {
     const onClose = () => setAnchorEl(null)
     const onOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
     const t = useI18N()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
 
     const [selectedWallet, setSelectedWallet] = useState(account || wallets?.[0]?.identity || '')
     const onClick = useCallback((address: string) => {
@@ -72,7 +81,7 @@ export function AddressNames(props: AddressNamesProps) {
     )
     const chainId = useChainId()
     const openPopupsWindow = useCallback(() => {
-        Services.Helper.openPopupWindow(PopupRoutes.ConnectWallet, {
+        Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
             chainId,
             internal: true,
         })
@@ -89,6 +98,8 @@ export function AddressNames(props: AddressNamesProps) {
         enableChange: boolean,
         onClick: (wallet: string) => void,
         onChange?: () => void,
+        verify?: boolean,
+        isETH?: boolean,
     ) => (
         <MenuItem key={wallet} value={wallet} onClick={() => onClick(account)}>
             <ListItemIcon>
@@ -100,15 +111,16 @@ export function AddressNames(props: AddressNamesProps) {
                     <UncheckIcon className={classes.icon} />
                 )}
             </ListItemIcon>
-            <WalletUI address={wallet} />
+            <WalletUI address={wallet} verify={verify} isETH={isETH} />
             {enableChange && (
-                <Button sx={{ marginLeft: 4, borderRadius: 9999 }} onClick={onChange}>
+                <Button size="small" sx={{ marginLeft: 4, borderRadius: 9999 }} onClick={onChange}>
                     {t.change()}
                 </Button>
             )}
         </MenuItem>
     )
-    if (!account && !wallets.length) return <NFTWalletConnect />
+
+    if (!wallets.length && (currentPluginId !== NetworkPluginID.PLUGIN_EVM || !account)) return <NFTWalletConnect />
 
     return (
         <Stack className={classes.root}>
@@ -118,12 +130,20 @@ export function AddressNames(props: AddressNamesProps) {
                 alignItems="center"
                 justifyContent="center"
                 className={classes.wrapper}>
-                <WalletUI address={selectedWallet} />
+                <WalletUI address={selectedWallet} isETH />
                 <ArrowDropDownIcon />
             </Stack>
             <ShadowRootMenu open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={onClose} disableRestoreFocus>
                 {account ? (
-                    walletItem(selectedWallet, account, Boolean(account), () => onClick(account), onConnectWallet)
+                    walletItem(
+                        selectedWallet,
+                        account,
+                        Boolean(account),
+                        () => onClick(account),
+                        onConnectWallet,
+                        false,
+                        true,
+                    )
                 ) : (
                     <MenuItem key="connect">
                         <Button
@@ -137,7 +157,17 @@ export function AddressNames(props: AddressNamesProps) {
                 {wallets
                     .sort((a, b) => Number(b.created_at) - Number(a.created_at))
                     ?.filter((x) => !isSameAddress(x.identity, account))
-                    .map((x) => walletItem(selectedWallet, x.identity, false, () => onClick(x.identity)))}
+                    .map((x) =>
+                        walletItem(
+                            selectedWallet,
+                            x.identity,
+                            false,
+                            () => onClick(x.identity),
+                            () => noop,
+                            true,
+                            true,
+                        ),
+                    )}
                 <Divider />
 
                 <MenuItem
@@ -152,6 +182,7 @@ export function AddressNames(props: AddressNamesProps) {
                     <Typography fontSize={14} fontWeight={700}>
                         {t.wallet_settings()}
                     </Typography>
+                    <Verify2Icon style={{ marginLeft: 24 }} />
                 </MenuItem>
             </ShadowRootMenu>
         </Stack>
@@ -179,12 +210,15 @@ const useWalletUIStyles = makeStyles()((theme) => ({
 
 interface WalletUIProps {
     address: string
+    verify?: boolean
+    isETH?: boolean
 }
 
 function WalletUI(props: WalletUIProps) {
     const { Utils } = useWeb3State()
-    const { address } = props
-    const networkDescriptor = useNetworkDescriptor()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const { isETH, address, verify = false } = props
+    const networkDescriptor = useNetworkDescriptor(undefined, isETH ? NetworkPluginID.PLUGIN_EVM : undefined)
     const { classes } = useWalletUIStyles()
 
     if (!address) return null
@@ -192,8 +226,9 @@ function WalletUI(props: WalletUIProps) {
         <Stack direction="row" alignItems="center" justifyContent="center">
             <ImageIcon size={30} icon={networkDescriptor?.icon} />
             <Stack direction="column" sx={{ marginLeft: 0.5 }}>
-                <Stack fontSize={14}>
-                    <ReversedAddress address={address} />
+                <Stack display="flex" fontSize={14} flexDirection="row" alignItems="center">
+                    <ReversedAddress address={address} pluginId={NetworkPluginID.PLUGIN_EVM} />
+                    {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
                 </Stack>
                 <Stack direction="row" alignItems="center">
                     <Typography variant="body2" color="textSecondary" className={classes.address}>

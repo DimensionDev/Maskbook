@@ -11,15 +11,17 @@ import { usePersonaVerify } from '../hooks/usePersonaVerified'
 import { useI18N } from '../locales/i18n_generated'
 import type { TokenInfo } from '../types'
 import { PersonaItem } from './PersonaItem'
+import { InfoIcon } from '../assets/info'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
         display: 'flex',
         borderRadius: 4,
         padding: 8,
-        backgroundColor: '#F9F9F9',
+        backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F9F9F9',
         fontSize: 14,
         alignItems: 'center',
+        color: theme.palette.text.primary,
     },
 }))
 
@@ -63,13 +65,15 @@ export function PersonaPage(props: PersonaPageProps) {
                 <>
                     {visible ? (
                         <Box className={classes.messageBox}>
-                            <Typography color="#07101B" variant="body1" fontSize={14}>
+                            <InfoIcon />
+                            <Typography
+                                color="currentColor"
+                                sx={{ marginLeft: 1, marginRight: 1 }}
+                                variant="body1"
+                                fontSize={14}>
                                 {t.persona_hint()}
                             </Typography>
-                            <CloseIcon
-                                sx={{ cursor: 'pointer', stroke: '#07101B' }}
-                                onClick={() => setVisible(false)}
-                            />
+                            <CloseIcon sx={{ cursor: 'pointer' }} onClick={() => setVisible(false)} />
                         </Box>
                     ) : null}
                     {persona?.binds?.proofs

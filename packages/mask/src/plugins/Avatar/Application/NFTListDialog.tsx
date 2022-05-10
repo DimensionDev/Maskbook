@@ -18,7 +18,7 @@ import { Translate, useI18N } from '../locales'
 import { AddressNames } from './WalletList'
 import { NFTList } from './NFTList'
 import { Application_NFT_LIST_PAGE } from '../constants'
-import { useEffectOnce } from 'react-use'
+import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -30,6 +30,10 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         width: 219.5,
         borderRadius: 999,
+    },
+    AddCollectiblesbutton: {
+        fontWeight: 600,
+        color: '#1D9BF0',
     },
     actions: {
         padding: theme.spacing(2),
@@ -96,6 +100,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [currentPage, setCurrentPage] = useState<Application_NFT_LIST_PAGE>(
         Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
     )
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const {
         data: collectibles,
         error,
@@ -114,10 +119,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const onSelect = (token: ERC721TokenDetailed) => {
         setSelectedToken(token)
     }
-
-    useEffectOnce(() => {
-        setTokens(currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? collectibles : [])
-    })
 
     const onSave = useCallback(async () => {
         if (!selectedToken?.info?.imageURL) return
@@ -165,7 +166,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     }}
                 />
             </Typography>
-            <Button className={classes.button} variant="text" onClick={() => setOpen_(true)}>
+            <Button className={classes.AddCollectiblesbutton} variant="text" onClick={() => setOpen_(true)}>
                 {t.add_collectible()}
             </Button>
         </Box>
@@ -197,19 +198,19 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     classes={{ root: classes.AddressNames }}
                     onChange={onChange}
                 />
-                {(account || Boolean(wallets?.length)) && (
+                {((account && currentPluginId === NetworkPluginID.PLUGIN_EVM) || Boolean(wallets?.length)) && (
                     <NFTList
                         tokenInfo={tokenInfo}
                         address={selectedAccount}
                         onSelect={onSelect}
                         onChangePage={onChangePage}
-                        tokens={tokens}
+                        tokens={uniqBy([...tokens, ...collectibles], (x) => x.contractDetailed.address && x.tokenId)}
                         children={
                             tokens.length === 0
                                 ? state !== SocketState.done
                                     ? LoadStatus
                                     : currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page
-                                    ? error && tokens.length
+                                    ? error
                                         ? Retry
                                         : undefined
                                     : AddCollectible
@@ -219,7 +220,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 )}
             </DialogContent>
             <DialogActions className={classes.actions}>
-                {tokens.length ? (
+                {tokens.length || collectibles.length ? (
                     <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
                         <Typography variant="body1" color="textPrimary">
                             {t.collectible_not_found()}

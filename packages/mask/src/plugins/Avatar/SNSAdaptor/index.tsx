@@ -31,7 +31,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                     arrow: true,
                                     placement: 'top',
                                 }}
-                                disabled={disabled}
                                 nextIdVerifyToolTipHint={
                                     <Typography
                                         fontSize={12}
