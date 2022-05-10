@@ -1,5 +1,4 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import type { Bytes } from '@ethersproject/bytes'
 import type { PrefixedHexString } from 'ethereumjs-util'
 
 // 32-byte buffer for hashes and 32-byte encoded strings
@@ -25,6 +24,8 @@ type Hex20 = string | TypeStub
 export type BufferTypes = Buffer | Buffer32 | Buffer24 | Buffer20
 export type HexTypes = PrefixedHexString | Hex32 | Hex24 | Hex20
 export type BigIntTypes = bigint | Uint32
+
+type Bytes = ArrayLike<number>
 
 function toEvenLength(str: string): string {
     if (str.length % 2 !== 0) {
