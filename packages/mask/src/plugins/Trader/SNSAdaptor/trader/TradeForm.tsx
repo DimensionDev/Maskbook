@@ -4,7 +4,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed, Wallet, ChainId } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
@@ -25,10 +25,11 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { HelpOutline, ArrowDownward } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
-import { useUpdateEffect } from 'react-use'
+import { useAsyncRetry, useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
+import { GoPlusLabs, SecurityAPI } from '@masknet/web3-providers'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -172,6 +173,10 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
     }
 })
 
+type TokenSecurity = SecurityAPI.ContractSecurity &
+    SecurityAPI.TokenSecurity &
+    SecurityAPI.TradingSecurity & { contract: string; chainId: ChainId }
+
 export interface AllTradeFormProps {
     wallet?: Wallet
     inputAmount: string
@@ -214,6 +219,20 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { classes } = useStyles({ isDashboard, isPopup })
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const [isExpand, setExpand] = useState(false)
+
+        const {
+            value: tokenSecurityInfo,
+            loading: searching,
+            error,
+        } = useAsyncRetry(async () => {
+            if (!outputToken) return
+            const values = await GoPlusLabs.getTokenSecurity(chainId, [outputToken.address.trim()])
+            if (!Object.keys(values ?? {}).length) throw new Error('Contract Not Found')
+            return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0], chainId }))[0] as
+                | TokenSecurity
+                | undefined
+        }, [chainId, outputToken])
+        console.log({ outputToken, chainId, tokenSecurityInfo })
 
         // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
