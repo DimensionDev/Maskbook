@@ -18,7 +18,9 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "API_URL": {
         "Mainnet": "https://api-v2.dhedge.org/graphql",
@@ -39,6 +41,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     }
 }
