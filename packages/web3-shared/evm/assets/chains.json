@@ -2790,22 +2790,26 @@
         "chainId": 1313161556
     },
     {
-        "name": "Harmony Mainnet Shard 0",
+        "name": "Harmony",
         "chain": "Harmony",
         "network": "mainnet",
-        "features": [],
-        "nativeCurrency": {
-            "name": "ONE",
-            "symbol": "ONE",
-            "decimals": 18
-        },
-        "infoURL": "https://www.harmony.one/",
-        "shortName": "hmy-s0",
-        "chainId": 1666600000
+        "features": [""],
+        "nativeCurrency": { "name": "ONE", "symbol": "ONE", "decimals": 18 },
+        "infoURL": "https://explorer.harmony.one",
+        "shortName": "hmy",
+        "chainId": 1666600000,
+        "networkId": 1666600000,
+        "explorers": [
+            {
+                "name": "harmony",
+                "url": "https://explorer.harmony.one",
+                "standard": "EIP3091"
+            }
+        ]
     },
     {
         "name": "Harmony Mainnet Shard 1",
-        "chain": "Harmony",
+        "chain": "HarmonyShard1",
         "network": "mainnet",
         "features": [],
         "nativeCurrency": {

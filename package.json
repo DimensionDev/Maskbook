@@ -20,7 +20,7 @@
     "lint": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache --fix",
     "lint:ci": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache",
     "lint:ci-report": "pnpm run lint:ci --format=junit --output-file=reports/junit/eslint-results.xml --max-warnings=0",
-    "postinstall": "patch-package",
+    "postinstall": "patch-package && gulp fix-lockfile",
     "prepare": "husky install",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "test:update": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js -u",

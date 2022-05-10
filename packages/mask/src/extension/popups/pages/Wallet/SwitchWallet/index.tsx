@@ -27,7 +27,7 @@ const useStyles = makeStyles()({
     list: {
         backgroundColor: '#F7F9FA',
         padding: 0,
-        height: 'calc(100vh - 168px)',
+        height: 'calc(100vh - 132px)',
         overflow: 'auto',
     },
     item: {

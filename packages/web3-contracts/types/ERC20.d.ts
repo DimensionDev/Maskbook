@@ -59,6 +59,8 @@ export interface ERC20 extends BaseContract {
         transfer(to: string, value: number | string | BN): NonPayableTransactionObject<boolean>
 
         allowance(_owner: string, _spender: string): NonPayableTransactionObject<string>
+
+        increaseAllowance(spender: string, addedValue: number | string | BN): NonPayableTransactionObject<boolean>
     }
     events: {
         Approval(cb?: Callback<Approval>): EventEmitter
