@@ -39,10 +39,10 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     tooltip: {
-        backgroundColor: 'black',
+        backgroundColor: '#111432',
     },
     arrow: {
-        color: 'black',
+        color: '#111432',
     },
 }))
 
