@@ -6,6 +6,7 @@ import { SelectRecipientsDialogUI } from './SelectRecipientsDialog'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { useNextIDBoundByPlatform } from '../../DataSource/useNextID'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch'
+import { isValidAddress } from '@masknet/web3-shared-evm'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -20,29 +21,40 @@ export interface SelectRecipientsUIProps {
 
 export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const { items, selected, onSetSelected, open, onClose } = props
-    const [addressToSearch, setAddressToSearch] = useState('')
+    const [valueToSearch, setValueToSearch] = useState('')
     const currentIdentity = useCurrentIdentity()
 
+    const resolveNextIDPlatformType = () => {
+        return isValidAddress(valueToSearch)
+            ? NextIDPlatform.Ethereum
+            : valueToSearch.length === 44
+            ? NextIDPlatform.NextID
+            : NextIDPlatform.Twitter
+    }
     const { loading: searchLoading, value: NextIDResults } = useNextIDBoundByPlatform(
-        NextIDPlatform.Ethereum,
-        addressToSearch,
+        resolveNextIDPlatformType(),
+        valueToSearch,
     )
-    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, addressToSearch)
+    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, valueToSearch)
     const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
-    NextIDItems.forEach((x: Profile) => {
-        ;(profileItems ?? []).push(x)
-    })
+
+    const unique = (arr: Profile[], val: string) => {
+        const res = new Map()
+        return arr.filter((item) => !res.has(item[val]) && res.set(item[val], 1))
+    }
+    const searchedList = unique(profileItems?.concat(NextIDItems) ?? [], 'nickname')
 
     useEffect(() => void (open && items.request()), [open, items.request])
-
     return (
         <SelectRecipientsDialogUI
-            searchEmptyText={addressToSearch ? 'No Result.' : undefined}
+            searchEmptyText={valueToSearch ? 'No Result.' : undefined}
             loading={searchLoading}
-            onSearch={(v: string) => setAddressToSearch(v)}
+            onSearch={(v: string) => {
+                setValueToSearch(v)
+            }}
             open={open}
-            items={profileItems || EMPTY_LIST}
-            selected={profileItems?.filter((x) => selected.some((i) => i.identifier === x.identifier)) || EMPTY_LIST}
+            items={searchedList || EMPTY_LIST}
+            selected={searchedList?.filter((x) => selected.some((i) => i.identifier === x.identifier)) || EMPTY_LIST}
             disabled={false}
             submitDisabled={false}
             onSubmit={onClose}

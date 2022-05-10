@@ -8,7 +8,6 @@ import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
 import { useCopyToClipboard } from 'react-use'
 import { SearchEmptyIcon, SearchIcon } from '@masknet/icons'
-import { isValidAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -55,6 +54,8 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
         gap: 12,
+        maxHeight: 380,
+        overflowY: 'auto',
     },
     actions: {
         position: 'absolute',
@@ -122,6 +123,10 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         </div>
     )
 
+    const onInputBlur = () => {
+        onSearch(search)
+    }
+
     return (
         <InjectedDialog open={props.open} title={t('select_specific_friends_dialog__title')} onClose={props.onClose}>
             <DialogContent className={classes.paper}>
@@ -131,13 +136,8 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         focused: classes.inputFocused,
                     }}
                     value={search}
-                    onChange={(e) => {
-                        const v = e.target.value
-                        setSearch(v)
-                        if (isValidAddress(v)) {
-                            onSearch(v)
-                        }
-                    }}
+                    onChange={(e) => setSearch(e.target.value)}
+                    onBlur={onInputBlur}
                     startAdornment={
                         <InputAdornment position="start">
                             <SearchIcon />

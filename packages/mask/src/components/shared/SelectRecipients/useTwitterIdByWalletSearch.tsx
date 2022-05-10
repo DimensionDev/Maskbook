@@ -1,9 +1,7 @@
-import { NextIDPersonaBindings, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
-import { isValidAddress } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST, NextIDPersonaBindings, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 
 export function useTwitterIdByWalletSearch(bindings: NextIDPersonaBindings[] | undefined, address: string) {
-    if (!bindings || !isValidAddress(address)) return []
-
+    if (!bindings) return EMPTY_LIST
     const temp = bindings.reduce<Record<string, any>>((pre, cur) => {
         const obj = cur.proofs.reduce<any>((obj, i) => {
             obj[i.platform] = { ...i, persona: cur.persona }
