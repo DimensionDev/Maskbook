@@ -18,6 +18,7 @@ interface StyleProps {
     minHeight: number
     fontSize: number
     marginBottom: number
+    border: string
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginBottom: props.marginBottom,
         marginTop: 1,
         marginRight: theme.spacing(2),
+        border: props.border,
     },
     text: {
         color: theme.palette.mode === 'dark' ? '#D9D9D9' : '#0F1419',
@@ -38,7 +40,12 @@ export function openNFTAvatarSettingDialog() {
 }
 
 function OpenNFTAvatarEditProfileButtonInTwitter() {
-    const [style, setStyle] = useState<StyleProps>({ minHeight: 32, fontSize: 14, marginBottom: 11 })
+    const [style, setStyle] = useState<StyleProps>({
+        minHeight: 32,
+        fontSize: 14,
+        marginBottom: 11,
+        border: 'none',
+    })
     const [open, setOpen] = useState(false)
 
     const setStyleFromEditProfileSelector = () => {
@@ -49,6 +56,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
             minHeight: Number(css.minHeight.replace('px', '')),
             fontSize: Number(css.fontSize.replace('px', '')),
             marginBottom: Number(css.marginBottom.replace('px', '')),
+            border: css.border,
         })
     }
 
