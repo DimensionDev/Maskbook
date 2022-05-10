@@ -56,7 +56,8 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        boxShadow: ' 0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
+        background: theme.palette.background.paper,
+        boxShadow: `0px 0px 20px 0px ${theme.palette.background.messageShadow}`,
         transform: 'translateX(-16px)',
     },
     optionTitle: {
@@ -287,7 +288,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     loadingPosition="start"
                     variant="roundedContained"
                     onClick={onSubmit}
-                    startIcon={<SendIcon />}>
+                    startIcon={<SendIcon style={{ width: 18, height: 18 }} />}>
                     {t('post_dialog__button')}
                 </LoadingButton>
             </div>

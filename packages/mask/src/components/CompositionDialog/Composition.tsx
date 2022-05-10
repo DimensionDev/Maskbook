@@ -98,7 +98,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     return (
         <DialogStackingProvider>
             <InjectedDialog keepMounted open={open} onClose={onClose} title={t('post_dialog__title')}>
-                <DialogContent sx={{ height: 500 }}>
+                <DialogContent sx={{ height: 520 }}>
                     <CompositionDialogUI
                         ref={UI}
                         hasClipboardPermission={hasClipboardPermission}

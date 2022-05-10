@@ -12,18 +12,19 @@ import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo, u
 import { useI18N } from '../../utils'
 import { BadgeRenderer } from './BadgeRenderer'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     root: {
         minHeight: 208,
         flexDirection: 'column',
         padding: 10,
         boxSizing: 'border-box',
+        background: theme.palette.background.input,
     },
     input: {
         fontSize: 15,
         minHeight: '8em',
     },
-})
+}))
 export interface TypedMessageEditorProps {
     defaultValue?: SerializableTypedMessages
     onChange?(message: TypedMessage): void
