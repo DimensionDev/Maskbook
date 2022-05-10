@@ -1,23 +1,10 @@
-import { useCopyToClipboard } from 'react-use'
-import {
-    TableContainer,
-    Paper,
-    Table,
-    TableRow,
-    TableCell,
-    TableBody,
-    Typography,
-    IconButton,
-    Stack,
-} from '@mui/material'
+import { TableContainer, Paper, Table, TableRow, TableCell, TableBody, Typography, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import FileCopyIcon from '@mui/icons-material/FileCopy'
 import type { DataProvider } from '@masknet/public-api'
-import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import type { Trending } from '../../types'
 import { Linking } from './Linking'
 import { useI18N } from '../../../../utils'
+import { ContractSection } from './ContractSection'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -58,11 +45,6 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const { dataProvider, trending } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [, copyToClipboard] = useCopyToClipboard()
-    const onCopyAddress = useSnackbarCallback(async () => {
-        if (!trending.coin.contract_address) return
-        copyToClipboard(trending.coin.contract_address)
-    }, [trending.coin.contract_address])
 
     const metadataLinks = [
         ['Website', trending.coin.home_urls],
@@ -79,6 +61,21 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
             <TableContainer className={classes.container} component={Paper} elevation={0}>
                 <Table className={classes.table} size="small">
                     <TableBody>
+                        {trending.coin.contract_address ? (
+                            <TableRow>
+                                <TableCell className={classes.cell}>
+                                    <Typography className={classes.label} variant="body2">
+                                        {t('contract')}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <ContractSection
+                                        logoURL={trending.coin.image_url}
+                                        address={trending.coin.contract_address}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        ) : null}
                         {metadataLinks.map(([label, links], i) => {
                             if (!links?.length) return null
                             return (
@@ -96,27 +93,6 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                 </TableRow>
                             )
                         })}
-                        {trending.coin.contract_address ? (
-                            <TableRow>
-                                <TableCell className={classes.cell}>
-                                    <Typography className={classes.label} variant="body2">
-                                        {t('contract')}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Typography variant="body2" component="span">
-                                        <FormattedAddress
-                                            address={trending.coin.contract_address}
-                                            size={4}
-                                            formatter={formatEthereumAddress}
-                                        />
-                                    </Typography>
-                                    <IconButton color="primary" size="small" onClick={onCopyAddress}>
-                                        <FileCopyIcon fontSize="small" />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ) : null}
                     </TableBody>
                 </Table>
             </TableContainer>
