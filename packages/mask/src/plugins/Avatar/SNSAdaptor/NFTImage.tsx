@@ -14,10 +14,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     icon: {
         position: 'absolute',
-        top: 5,
-        right: 5,
-        width: 24,
-        height: 24,
+        top: 2,
+        right: 2,
+        width: 20,
+        height: 20,
+        color: theme.palette.primary.main,
     },
     image: {
         width: 97,
@@ -26,11 +27,11 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '100%',
         boxSizing: 'border-box',
         '&:hover': {
-            border: '2px solid #1D9BF0',
+            border: `1px solid ${theme.palette.primary.main}`,
         },
     },
     selected: {
-        border: `2px solid ${theme.palette.action.active}`,
+        border: `1px solid ${theme.palette.primary.main}`,
     },
 }))
 

@@ -1,10 +1,10 @@
 import { Box, CircularProgress, Link, Stack, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { ApplicationIcon } from '../assets/application'
 import { LinkIcon } from '../assets/link'
 import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import { formatTokenId } from '../utils'
 import { useI18N } from '../locales/i18n_generated'
+import { ApplicationRoundIcon } from '../assets/applicationround'
 
 const useStyles = makeStyles()(() => ({
     root: {},
@@ -37,12 +37,12 @@ export function NFTInfo(props: NFTInfoProps) {
                 </Typography>
             ) : (
                 <Box className={classes.nft}>
-                    <ApplicationIcon />
+                    <ApplicationRoundIcon />
                     <Box sx={{ marginLeft: 0.5 }}>
                         <Typography variant="body1" color="textPrimary">
-                            {nft.name}
+                            {nft.name.replace(/#\d+/, '')}
                         </Typography>
-                        <Stack display="flex" flexDirection="row">
+                        <Stack display="flex" flexDirection="row" alignItems="center">
                             <Typography variant="body2" color="textSecondary">
                                 {formatTokenId(nft.symbol, nft.tokenId)}
                             </Typography>

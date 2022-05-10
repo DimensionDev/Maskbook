@@ -68,7 +68,7 @@ export function NFTWalletConnect(props: NFTWalletConnectProps) {
                     {t.provider_by()}
                 </Typography>
                 <Typography variant="body1" sx={{ marginLeft: 0.5 }} color="#07101b" fontWeight={500}>
-                    {providerType}
+                    Mask Network
                 </Typography>
                 <Link
                     className={classes.link}

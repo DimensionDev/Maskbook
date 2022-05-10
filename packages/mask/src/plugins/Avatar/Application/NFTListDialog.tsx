@@ -19,6 +19,7 @@ import { AddressNames } from './WalletList'
 import { NFTList } from './NFTList'
 import { Application_NFT_LIST_PAGE } from '../constants'
 import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NFTWalletConnect } from './WalletConnect'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -111,6 +112,11 @@ export function NFTListDialog(props: NFTListDialogProps) {
         currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? ChainId.Mainnet : ChainId.Matic,
     )
 
+    useEffect(
+        () => setTokens(currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? collectibles : []),
+        [currentPage],
+    )
+
     const { showSnackbar } = useCustomSnackbar()
     const onChange = useCallback((address: string) => {
         setSelectedAccount(address)
@@ -160,11 +166,15 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const AddCollectible = (
         <Box className={classes.error}>
             <Typography color="textSecondary" textAlign="center">
-                <Translate.collectible_on_polygon
-                    components={{
-                        br: <br />,
-                    }}
-                />
+                {currentPage !== Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? (
+                    <Translate.collectible_on_polygon
+                        components={{
+                            br: <br />,
+                        }}
+                    />
+                ) : (
+                    t.collectible_no_eth()
+                )}
             </Typography>
             <Button className={classes.AddCollectiblesbutton} variant="text" onClick={() => setOpen_(true)}>
                 {t.add_collectible()}
@@ -189,6 +199,28 @@ export function NFTListDialog(props: NFTListDialogProps) {
         </Box>
     )
 
+    const NoNFTList = () => {
+        if (currentPage !== Application_NFT_LIST_PAGE.Application_nft_tab_eth_page) return AddCollectible
+        if (state !== SocketState.done) {
+            return LoadStatus
+        }
+        if (error) {
+            return Retry
+        }
+        if (tokens.length === 0) {
+            return AddCollectible
+        }
+
+        return undefined
+    }
+
+    if (!wallets?.length && (currentPluginId !== NetworkPluginID.PLUGIN_EVM || !account))
+        return (
+            <DialogContent className={classes.content}>
+                <NFTWalletConnect />
+            </DialogContent>
+        )
+
     return (
         <>
             <DialogContent className={classes.content}>
@@ -204,23 +236,13 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         address={selectedAccount}
                         onSelect={onSelect}
                         onChangePage={onChangePage}
-                        tokens={uniqBy([...tokens, ...collectibles], (x) => x.contractDetailed.address && x.tokenId)}
-                        children={
-                            tokens.length === 0
-                                ? state !== SocketState.done
-                                    ? LoadStatus
-                                    : currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page
-                                    ? error
-                                        ? Retry
-                                        : undefined
-                                    : AddCollectible
-                                : undefined
-                        }
+                        tokens={tokens}
+                        children={NoNFTList()}
                     />
                 )}
             </DialogContent>
             <DialogActions className={classes.actions}>
-                {tokens.length || collectibles.length ? (
+                {tokens.length ? (
                     <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
                         <Typography variant="body1" color="textPrimary">
                             {t.collectible_not_found()}

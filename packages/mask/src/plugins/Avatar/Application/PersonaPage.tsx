@@ -66,11 +66,7 @@ export function PersonaPage(props: PersonaPageProps) {
                     {visible ? (
                         <Box className={classes.messageBox}>
                             <InfoIcon />
-                            <Typography
-                                color="currentColor"
-                                sx={{ marginLeft: 1, marginRight: 1 }}
-                                variant="body1"
-                                fontSize={14}>
+                            <Typography color="currentColor" variant="body1" fontSize={14}>
                                 {t.persona_hint()}
                             </Typography>
                             <CloseIcon sx={{ cursor: 'pointer' }} onClick={() => setVisible(false)} />

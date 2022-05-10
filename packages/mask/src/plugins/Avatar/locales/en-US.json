@@ -18,6 +18,7 @@
     "copy_success_of_wallet_address": "Copy wallet address successfully!",
     "copied": "Copied",
     "collectible_on_polygon": "Only NFTs on Ethereum are supported to preview. We are currently<br/>working on supporting Polygon NFTs as well. <br/>Please add your collectibles here.",
+    "collectible_no_eth": "No any collectible is available to preview. Please add your collectible here.",
     "no_collectible_found": "No collectible found.",
     "retry": "Retry",
     "application_hint": "Socialize and show off your NFTs. People can bid,<br/>buy, view your valuable NFTs without leaving Twitter.",
