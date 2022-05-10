@@ -1,4 +1,4 @@
-import { useContext, createContext, PropsWithChildren, useMemo, useCallback } from 'react'
+import { useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
@@ -16,6 +16,7 @@ import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
+import { MaskMessages } from '../../../shared'
 
 const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -285,7 +286,12 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const personaConnectStatus = usePersonaConnectStatus()
     const nextIDConnectStatus = useNextIDConnectStatus()
 
-    const { value: ApplicationCurrentStatus } = usePersonaAgainstSNSConnectStatus()
+    const { value: ApplicationCurrentStatus, retry } = usePersonaAgainstSNSConnectStatus()
+
+    useEffect(() => {
+        return MaskMessages.events.currentPersonaIdentifier.on(retry)
+    }, [])
+
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
         ApplicationCurrentStatus ?? {}
 

@@ -48,7 +48,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
 export type InjectedDialogClassKey =
     | DialogClassKey
     | 'dialogTitle'
-    | 'dialogTitleTail'
     | 'dialogContent'
     | 'dialogActions'
     | 'dialogTitleTypography'
@@ -75,7 +74,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogCloseButton,
         dialogContent,
         dialogTitle,
-        dialogTitleTail,
         dialogTitleTypography,
         dialogBackdropRoot,
         container,
