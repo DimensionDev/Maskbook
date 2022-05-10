@@ -35,7 +35,6 @@ const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) =
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
             margin: theme.spacing(2, 0),
             width: '100%',
-            height: 196,
             boxSizing: 'border-box',
             cursor: 'default',
             ...(isTwitter(activatedSocialNetworkUI)
