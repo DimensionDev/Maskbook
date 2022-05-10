@@ -5,6 +5,7 @@ import { RadioGroup, Radio, Typography } from '@mui/material'
 import { useState } from 'react'
 import { DashboardRoutes } from '@masknet/shared-base'
 import Services from '../../extension/service'
+import { CheckCircle } from '@mui/icons-material'
 
 const useStyles = makeStyles()((theme) => ({
     popper: {
@@ -99,7 +100,7 @@ const PopoverListItem = (props: PopoverListItem) => {
                 style={isDisabled ? { opacity: 0.5 } : {}}
                 className={type === 'share' ? cx(classes.item, classes.pointer) : classes.item}
                 onClick={handleItemClick}>
-                <Radio disabled={isDisabled} value={type} />
+                <Radio checkedIcon={<CheckCircle />} disabled={isDisabled} value={type} />
                 <div>
                     <Typography className={classes.mainTitle}>{title}</Typography>
                     <Typography className={classes.subTitle}>{subTitle}</Typography>

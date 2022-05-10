@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog, useSnackbarCallback, LoadingAnimation } from '@masknet/shared'
-import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
+import { Button, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
 import Fuse from 'fuse.js'
 import { useMemo, useState } from 'react'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
@@ -54,6 +54,19 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         display: 'flex',
         flexWrap: 'wrap',
+    },
+    actions: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        display: 'flex',
+        gap: 8,
+        padding: 16,
+        boxSizing: 'border-box',
+        alignItems: 'center',
+        background: theme.palette.background.paper,
+        boxShadow: `0px 0px 20px 0px ${theme.palette.background.messageShadow}`,
+        transform: 'translateX(-16px)',
     },
 }))
 
@@ -157,15 +170,19 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         ))}
                     </div>
                 )}
+                <div className={classes.actions}>
+                    <Button fullWidth variant="roundedFlat" disabled={props.submitDisabled} onClick={props.onSubmit}>
+                        Back
+                    </Button>
+                    <Button
+                        fullWidth
+                        variant="roundedContained"
+                        disabled={props.submitDisabled}
+                        onClick={props.onSubmit}>
+                        {t('done')}
+                    </Button>
+                </div>
             </DialogContent>
-            <DialogActions sx={{ gap: '8px' }}>
-                <Button fullWidth variant="roundedFlat" disabled={props.submitDisabled} onClick={props.onSubmit}>
-                    back
-                </Button>
-                <Button fullWidth variant="roundedContained" disabled={props.submitDisabled} onClick={props.onSubmit}>
-                    {t('done')}
-                </Button>
-            </DialogActions>
         </InjectedDialog>
     )
 }

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { ListItemText, Checkbox, ListItemAvatar, ListItem } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
 import { Avatar } from '../../../utils/components/Avatar'
@@ -8,10 +8,10 @@ import type { CheckboxProps } from '@mui/material/Checkbox'
 import { CopyIcon } from '@masknet/icons'
 import { formatPersonaFingerprint } from '@masknet/shared-base'
 
-const useStyle = makeStyles()((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         maxWidth: 'calc(50% - 6px)',
-        paddingLeft: 8,
+        padding: '0 0 0 8px',
     },
     overflow: {
         textOverflow: 'ellipsis',
@@ -40,6 +40,9 @@ const useStyle = makeStyles()((theme) => ({
         padding: '2px 4px',
         borderRadius: 2,
     },
+    highLightBg: {
+        background: theme.palette.background.default,
+    },
 }))
 
 export interface ProfileInListProps extends withClasses<never> {
@@ -52,7 +55,7 @@ export interface ProfileInListProps extends withClasses<never> {
     CheckboxProps?: Partial<CheckboxProps>
 }
 export function ProfileInList(props: ProfileInListProps) {
-    const classes = useStylesExtends(useStyle(), props)
+    const { classes, cx } = useStyles()
     const profile = props.item
     const name = profile.nickname || profile.identifier.userId
 
@@ -63,7 +66,9 @@ export function ProfileInList(props: ProfileInListProps) {
         [props],
     )
     return (
-        <ListItem disabled={props.disabled} className={classes.root}>
+        <ListItem
+            disabled={props.disabled}
+            className={props.checked ? cx(classes.root, classes.highLightBg) : classes.root}>
             <ListItemAvatar>
                 <Avatar person={profile} />
             </ListItemAvatar>
