@@ -521,7 +521,7 @@ importers:
       '@uniswap/v2-sdk': 3.0.0-alpha.2
       '@uniswap/v3-sdk': 3.3.2
       '@walletconnect/client': 1.4.1
-      '@yfi/sdk': 1.2.1-4_0bdb8bbbea97e2dd602ca076e59e5bac
+      '@yfi/sdk': 1.2.1-4_bpnyxo7ks7rn2ybmub3olhs3vq
       anchorme: 2.1.2
       assert: 2.0.0
       async-call-rpc: 6.0.2
@@ -9736,7 +9736,7 @@ packages:
     resolution: {integrity: sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==}
     dev: true
 
-  /@yfi/sdk/1.2.1-4_0bdb8bbbea97e2dd602ca076e59e5bac:
+  /@yfi/sdk/1.2.1-4_bpnyxo7ks7rn2ybmub3olhs3vq:
     resolution: {integrity: sha512-3frU/eEzsnge+uOVmHCdpxAURj5EDMG/YuyDPI2Zr6rzW8EEWCQDXWBSL+JXaKnugsVOqHrPR71XQS51TBMS1w==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -14255,6 +14255,10 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  /emittery/0.8.1:
+    resolution: {integrity: sha512-uDfvUjVrfGJJhymx/kz6prltenw1u7WrCg1oa94zYY8xxVpLLUu045LAT0dhDZdXG58/EpPL/5kA180fQ/qudg==}
+    engines: {node: '>=10'}
+    dev: false
 
   /emoji-regex/7.0.3:
     resolution: {integrity: sha512-CwBLREIQ7LvYFB0WyRvwhq5N5qPhc6PMjD6bYggFlI5YyDgl+0vxq5VHbMOFqLg7hfWzmu8T5Z1QofhmTIhItA==}
@@ -26043,7 +26047,7 @@ packages:
     peerDependencies:
       react: ^18.0.0
     dependencies:
-      react: link:packages\empty
+      react: link:packages/empty
     dev: false
 
   /use/3.1.1:
