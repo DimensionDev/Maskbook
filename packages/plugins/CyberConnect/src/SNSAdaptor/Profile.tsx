@@ -93,6 +93,7 @@ const Profile = ({ url }: { url: string }) => {
                 </Typography>
             )}
 
+            {/* eslint-disable-next-line no-nested-ternary */}
             {!loading ? (
                 identity ? (
                     <ConnectButton address={identity?.address} refreshFollowList={retry} />
