@@ -7,7 +7,7 @@ import type { ProfileInformation as Profile } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
 import { useCopyToClipboard } from 'react-use'
-import { EmptyIcon, SearchIcon } from '@masknet/icons'
+import { SearchEmptyIcon, SearchIcon } from '@masknet/icons'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -54,6 +54,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         display: 'flex',
         flexWrap: 'wrap',
+        gap: 12,
     },
     actions: {
         position: 'absolute',
@@ -78,6 +79,7 @@ export interface SelectRecipientsDialogUIProps extends withClasses<never> {
     disabledItems?: Profile[]
     submitDisabled: boolean
     loading?: boolean
+    searchEmptyText?: string
     onSubmit: () => void
     onClose: () => void
     onSelect: (item: Profile) => void
@@ -108,8 +110,8 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
 
     const Empty = () => (
         <div className={classes.empty}>
-            <EmptyIcon sx={{ fontSize: 60 }} />
-            <Typography>No encrypted friends, You can try searching.</Typography>
+            <SearchEmptyIcon style={{ width: 36, height: 36 }} />
+            <Typography>{props.searchEmptyText ?? 'No encrypted friends, You can try searching.'}</Typography>
         </div>
     )
 

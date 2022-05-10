@@ -1,7 +1,7 @@
 import { RightArrowIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Popover from '@mui/material/Popover'
-import { RadioGroup, Radio, Typography } from '@mui/material'
+import { RadioGroup, Radio, Typography, Box } from '@mui/material'
 import { useState } from 'react'
 import { DashboardRoutes } from '@masknet/shared-base'
 import Services from '../../extension/service'
@@ -33,11 +33,14 @@ const useStyles = makeStyles()((theme) => ({
         margin: '8px 0',
     },
     mainTitle: {
+        fontSize: 14,
         color: theme.palette.text.primary,
         fontWeight: 700,
     },
     subTitle: {
+        fontSize: 14,
         color: theme.palette.text.secondary,
+        whiteSpace: 'nowrap',
     },
     paper: {
         width: 280,
@@ -53,6 +56,7 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
     },
     create: {
+        fontSize: 14,
         cursor: 'pointer',
         fontWeight: 700,
         color: theme.palette.primary.main,
@@ -101,10 +105,10 @@ const PopoverListItem = (props: PopoverListItem) => {
                 className={type === 'share' ? cx(classes.item, classes.pointer) : classes.item}
                 onClick={handleItemClick}>
                 <Radio checkedIcon={<CheckCircle />} disabled={isDisabled} value={type} />
-                <div>
+                <Box>
                     <Typography className={classes.mainTitle}>{title}</Typography>
                     <Typography className={classes.subTitle}>{subTitle}</Typography>
-                </div>
+                </Box>
                 {type === 'share' && <RightArrowIcon className={classes.rightIcon} />}
             </div>
             {personaRequired && e2eDisabled === 1 && (

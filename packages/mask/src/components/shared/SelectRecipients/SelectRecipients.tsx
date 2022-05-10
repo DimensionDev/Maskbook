@@ -37,6 +37,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
 
     return (
         <SelectRecipientsDialogUI
+            searchEmptyText={addressToSearch ? 'No Result.' : undefined}
             loading={searchLoading}
             onSearch={(v: string) => setAddressToSearch(v)}
             open={open}
