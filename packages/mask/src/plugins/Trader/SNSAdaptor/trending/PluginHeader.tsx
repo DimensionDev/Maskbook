@@ -1,3 +1,4 @@
+import { TrendingIcon } from '@masknet/icons'
 import { useActivatedPlugin, PluginId } from '@masknet/plugin-infra/dom'
 import { Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
@@ -10,7 +11,8 @@ export const PluginHeader = ({ children }: PluginHeaderProps) => {
 
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
-            <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
+            <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
+                <TrendingIcon />
                 <Typography fontWeight="bolder">Market Trending</Typography>
             </Stack>
             <Box>{children}</Box>
