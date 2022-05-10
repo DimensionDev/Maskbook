@@ -55,7 +55,7 @@ export function PersonaItem(props: PersonaItemProps) {
     }, [_avatar, currentIdentity?.avatar])
 
     const onClick = useCallback(() => {
-        onSelect?.(proof, _avatar ? { address: _avatar?.address, tokenId: _avatar?.tokenId } : undefined)
+        onSelect?.(proof, _avatar && isOwner ? { address: _avatar?.address, tokenId: _avatar?.tokenId } : undefined)
     }, [_avatar, proof])
 
     return (

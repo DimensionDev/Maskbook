@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     selected: {
-        border: '2px solid #1D9BF0',
+        border: `2px solid ${theme.palette.action.active}`,
     },
 }))
 
