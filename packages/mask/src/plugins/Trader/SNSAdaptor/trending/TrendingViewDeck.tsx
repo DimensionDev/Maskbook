@@ -1,8 +1,6 @@
 import { useCallback } from 'react'
-import { Avatar, Button, CardContent, CardHeader, IconButton, Paper, Stack, Typography } from '@mui/material'
+import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-unified'
 import { FormattedCurrency, TokenIcon } from '@masknet/shared'
@@ -27,6 +25,7 @@ import { formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
 import { setStorage } from '../../storage'
 import { PluginHeader } from './PluginHeader'
 import { Box } from '@mui/system'
+import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -45,7 +44,6 @@ const useStyles = makeStyles()((theme) => {
         },
         cardHeader: {
             padding: theme.spacing(2),
-            height: 196,
             background: theme.palette.background.modalTitle,
         },
         header: {
@@ -79,9 +77,6 @@ const useStyles = makeStyles()((theme) => {
             marginRight: theme.spacing(0.5),
         },
         buy: {},
-        arrowIcon: {
-            color: theme.palette.text.primary,
-        },
         rank: {
             display: 'inline-flex',
             padding: theme.spacing(0.25, 0.5),
@@ -177,125 +172,54 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     />
                 </PluginHeader>
                 <Stack className={classes.headline}>
-                    <Stack>
+                    <Stack gap={2}>
                         <Stack flexDirection="row">
                             {typeof coin.market_cap_rank === 'number' ? (
-                                <Typography component="span" flex={0} className={classes.rank} title="Index Cap Rank">
-                                    Rank #{coin.market_cap_rank}
+                                <Typography component="span" className={classes.rank} title="Index Cap Rank">
+                                    {t('plugin_trader_rank', { rank: coin.market_cap_rank })}
                                 </Typography>
                             ) : null}
                             <Box flex={1} />
                         </Stack>
-                        <Stack flexDirection="row">
-                            <Linking href={first(coin.home_urls)}>
-                                <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
-                                    {trending.coin.contract_address ? (
-                                        <TokenIcon
-                                            classes={{ icon: classes.avatarFallback }}
-                                            address={trending.coin.contract_address}
-                                        />
-                                    ) : null}
-                                </Avatar>
-                            </Linking>
-                            <Typography className={classes.title} variant="h6">
-                                <Linking
-                                    href={first(coin.home_urls)}
-                                    LinkProps={{ className: classes.name, title: coin.name.toUpperCase() }}>
-                                    {coin.name.toUpperCase()}
+                        <Stack>
+                            <Stack flexDirection="row" alignItems="center" gap={0.5}>
+                                <Linking href={first(coin.home_urls)}>
+                                    <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
+                                        {trending.coin.contract_address ? (
+                                            <TokenIcon
+                                                classes={{ icon: classes.avatarFallback }}
+                                                address={trending.coin.contract_address}
+                                            />
+                                        ) : null}
+                                    </Avatar>
                                 </Linking>
-                                <Typography component="span" className={classes.symbol}>
-                                    ({coin.symbol.toUpperCase()})
+                                <Typography className={classes.title} variant="h6">
+                                    <Linking
+                                        href={first(coin.home_urls)}
+                                        LinkProps={{ className: classes.name, title: coin.name.toUpperCase() }}>
+                                        {coin.name.toUpperCase()}
+                                    </Linking>
+                                    <Typography component="span" className={classes.symbol}>
+                                        ({coin.symbol.toUpperCase()})
+                                    </Typography>
                                 </Typography>
-                            </Typography>
-                            {coins.length > 1 ? (
-                                <CoinMenu
-                                    options={coins.map((coin) => ({
-                                        coin,
-                                        value: coin.id,
-                                    }))}
-                                    selectedIndex={coins.findIndex((x) => x.id === coin.id)}
-                                    onChange={onCoinMenuChange}>
-                                    <IconButton className={classes.arrowIcon} size="small">
-                                        <ArrowDropDownIcon />
-                                    </IconButton>
-                                </CoinMenu>
-                            ) : null}
-                        </Stack>
-                    </Stack>
-                    <Stack>
-                        {transakPluginEnabled && account && trending.coin.symbol && isAllowanceCoin ? (
-                            <Button
-                                startIcon={<MonetizationOnOutlinedIcon />}
-                                variant="contained"
-                                onClick={onBuyButtonClicked}>
-                                {t('buy_now')}
-                            </Button>
-                        ) : null}
-                    </Stack>
-                </Stack>
-            </Stack>
-            <CardHeader
-                className={classes.header}
-                avatar={
-                    <Linking href={first(coin.home_urls)}>
-                        <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
-                            {trending.coin.contract_address ? (
-                                <TokenIcon
-                                    classes={{ icon: classes.avatarFallback }}
-                                    address={trending.coin.contract_address}
-                                />
-                            ) : null}
-                        </Avatar>
-                    </Linking>
-                }
-                title={
-                    <div className={classes.headline}>
-                        <Typography className={classes.title} variant="h6">
-                            <Linking
-                                href={first(coin.home_urls)}
-                                LinkProps={{ className: classes.name, title: coin.name.toUpperCase() }}>
-                                {coin.name.toUpperCase()}
-                            </Linking>
-                            <span className={classes.symbol}>({coin.symbol.toUpperCase()})</span>
-                        </Typography>
-
-                        {coins.length > 1 ? (
-                            <CoinMenu
-                                options={coins.map((coin) => ({
-                                    coin,
-                                    value: coin.id,
-                                }))}
-                                selectedIndex={coins.findIndex((x) => x.id === coin.id)}
-                                onChange={onCoinMenuChange}>
-                                <IconButton className={classes.arrowIcon} size="small">
-                                    <ArrowDropDownIcon />
-                                </IconButton>
-                            </CoinMenu>
-                        ) : null}
-
-                        {transakPluginEnabled && account && trending.coin.symbol && isAllowanceCoin ? (
-                            <Button
-                                className={classes.buy}
-                                startIcon={<MonetizationOnOutlinedIcon />}
-                                variant="text"
-                                color="primary"
-                                onClick={onBuyButtonClicked}>
-                                {t('buy_now')}
-                            </Button>
-                        ) : null}
-                    </div>
-                }
-                subheader={
-                    <>
-                        <Typography component="p" variant="body1">
-                            {market ? (
-                                <>
-                                    {typeof coin.market_cap_rank === 'number' ? (
-                                        <span className={classes.rank} title="Index Cap Rank">
-                                            #{coin.market_cap_rank}
-                                        </span>
-                                    ) : null}
-                                    <span>
+                                {coins.length > 1 ? (
+                                    <CoinMenu
+                                        options={coins.map((coin) => ({
+                                            coin,
+                                            value: coin.id,
+                                        }))}
+                                        selectedIndex={coins.findIndex((x) => x.id === coin.id)}
+                                        onChange={onCoinMenuChange}>
+                                        <IconButton sx={{ padding: 0 }} size="small">
+                                            <ArrowDropIcon />
+                                        </IconButton>
+                                    </CoinMenu>
+                                ) : null}
+                            </Stack>
+                            <Stack direction="row" gap={0.5} alignItems="center">
+                                {market ? (
+                                    <Typography fontSize={14} fontWeight={500} lineHeight="24px">
                                         <FormattedCurrency
                                             value={
                                                 (dataProvider === DataProvider.COIN_MARKET_CAP
@@ -304,19 +228,29 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             }
                                             formatter={formatCurrency}
                                         />
-                                    </span>
-                                </>
-                            ) : (
-                                <span>{t('plugin_trader_no_data')}</span>
-                            )}
-                            <PriceChanged
-                                amount={market?.price_change_percentage_1h ?? market?.price_change_percentage_24h ?? 0}
-                            />
-                        </Typography>
-                    </>
-                }
-                disableTypography
-            />
+                                    </Typography>
+                                ) : (
+                                    <Typography fontSize={14} fontWeight={500} lineHeight="24px">
+                                        {t('plugin_trader_no_data')}
+                                    </Typography>
+                                )}
+                                <PriceChanged
+                                    amount={
+                                        market?.price_change_percentage_1h ?? market?.price_change_percentage_24h ?? 0
+                                    }
+                                />
+                            </Stack>
+                        </Stack>
+                    </Stack>
+                    <Stack>
+                        {transakPluginEnabled && account && trending.coin.symbol && isAllowanceCoin ? (
+                            <Button startIcon={<BuyIcon />} variant="contained" onClick={onBuyButtonClicked}>
+                                {t('buy_now')}
+                            </Button>
+                        ) : null}
+                    </Stack>
+                </Stack>
+            </Stack>
             <CardContent className={classes.content}>
                 {dataProvider === DataProvider.UNISWAP_INFO && <CoinSafetyAlert coin={trending.coin} />}
                 <Paper className={classes.body} elevation={0}>
