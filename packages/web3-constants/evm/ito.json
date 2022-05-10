@@ -18,7 +18,9 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "MASK_ITO_CONTRACT_ADDRESS": {
         "Mainnet": "0x86812da3A623ab9606976078588b80C315E55FA3",
@@ -39,7 +41,9 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "ITO2_CONTRACT_ADDRESS": {
         "Mainnet": "0xc2CFbF22d6Dc87D0eE18d38d73733524c109Ff46",
@@ -60,7 +64,9 @@
         "Fantom": "0x981be454a930479d92C91a0092D204b64845A5D6",
         "Aurora": "0x2cf91AD8C175305EBe6970Bd8f81231585EFbd77",
         "Aurora_Testnet": "0xdcA6F476EebCDE8FE8b072e3fC80dBC28dC209b3",
-        "Conflux": "0x066804d9123bf2609ed4a4a40b1177a9c5a9ed51"
+        "Conflux": "0x066804d9123bf2609ed4a4a40b1177a9c5a9ed51",
+        "Harmony": "0x5b966f3a32db9c180843bcb40267a66b73e4f022",
+        "Harmony_Test": "0x578a7fee5f0d8cec7d00578bf37374c5b95c4b98"
     },
     "ITO2_CONTRACT_CREATION_BLOCK_HEIGHT": {
         "Mainnet": 12766513,
@@ -81,7 +87,9 @@
         "Fantom": 25071597,
         "Aurora": 57350598,
         "Aurora_Testnet": 77919102,
-        "Conflux": 37722805
+        "Conflux": 37722805,
+        "Harmony": 24133305,
+        "Harmony_Test": 22744597
     },
     "DEFAULT_QUALIFICATION_ADDRESS": {
         "Mainnet": "0x81b6ae377e360dcad63611846a2516f4ba8c88ac",
@@ -102,7 +110,9 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "DEFAULT_QUALIFICATION2_ADDRESS": {
         "Mainnet": "0x4dC5f343Fe57E4fbDA1B454d125D396A3181272c",
@@ -123,7 +133,9 @@
         "Fantom": "0x83D6b366f21e413f214EB077D5378478e71a5eD2",
         "Aurora": "0x578a7Fee5f0D8CEc7d00578Bf37374C5b95C4b98",
         "Aurora_Testnet": "",
-        "Conflux": "0x05ee315e407c21a594f807d61d6cc11306d1f149"
+        "Conflux": "0x05ee315e407c21a594f807d61d6cc11306d1f149",
+        "Harmony": "0x02Ea0720254F7fa4eca7d09A1b9C783F1020EbEF",
+        "Harmony_Test": "0x812463356F58fc8194645A1838ee6C52D8ca2D26"
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-mainnet",
@@ -144,6 +156,8 @@
         "Fantom": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-fantom",
         "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-aurora",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-harmony",
+        "Harmony_Test": ""
     }
 }
