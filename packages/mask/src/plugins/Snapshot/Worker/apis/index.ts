@@ -178,21 +178,22 @@ export async function vote(identifier: ProposalIdentifier, choice: number, addre
         types,
     }
 
-    const sig = await EVM_RPC.typedDataSign(
-        address,
-        JSON.stringify({
-            domain,
-            types: {
-                EIP712Domain: [
-                    { name: 'name', type: 'string' },
-                    { name: 'version', type: 'string' },
-                ],
-                Vote: types.Vote,
-            },
-            primaryType: 'Vote',
-            message,
-        }),
-    )
+    // const sig = await EVM_RPC.typedDataSign(
+    //     address,
+    //     JSON.stringify({
+    //         domain,
+    //         types: {
+    //             EIP712Domain: [
+    //                 { name: 'name', type: 'string' },
+    //                 { name: 'version', type: 'string' },
+    //             ],
+    //             Vote: types.Vote,
+    //         },
+    //         primaryType: 'Vote',
+    //         message,
+    //     }),
+    // )
+    const sig = ''
 
     const response = await fetch('https://hub.snapshot.org/api/msg', {
         method: 'POST',
