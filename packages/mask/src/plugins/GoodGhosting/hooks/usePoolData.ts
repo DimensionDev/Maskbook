@@ -1,6 +1,6 @@
 import { useERC20TokenContract } from '@masknet/plugin-infra/web3-evm'
-import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId, useFungibleAssets, useFungibleToken } from '@masknet/plugin-infra/web3'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { DAI, WNATIVE as WETH } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
@@ -70,7 +70,7 @@ export function usePoolAssets(): AsyncStateRetry<GameAssets> {
 
     const assets = gameTokenDetailed && rewardTokenDetailed ? [gameTokenDetailed, rewardTokenDetailed] : []
 
-    const { value, loading, error, retry } = useAssets(assets)
+    const { value, loading, error, retry } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
 
     const assetRetry = () => {
         if (gameTokenError) gameTokenRetry()
@@ -80,8 +80,8 @@ export function usePoolAssets(): AsyncStateRetry<GameAssets> {
 
     let gameAssets
     if (value?.length) {
-        const gameAsset = value.find((asset) => asset.token.address === gameToken.address)
-        const rewardAsset = value.find((asset) => asset.token.address === rewardToken.address)
+        const gameAsset = value.find((asset) => isSameAddress(asset.address , gameToken.address))
+        const rewardAsset = value.find((asset) => isSameAddress(asset.address , rewardToken.address))
         gameAssets = {
             gameAsset,
             rewardAsset,

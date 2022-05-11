@@ -60,7 +60,7 @@
       "@masknet/backup-format": ["./packages/backup-format/src"],
       "@masknet/configuration": ["./packages/configuration/src"],
       // ! dashboard is explicitly opt-out of this feature, it and the /packages/mask has circulare reference that TypeScript does not allows.
-      "@masknet/dashboard": ["./packages/dashboard/src"],
+      // "@masknet/dashboard": ["./packages/dashboard/src"],
       "@masknet/encryption": ["./packages/encryption/src"],
       "@masknet/external-plugin-previewer": ["./packages/external-plugin-previewer/src"],
       "@masknet/gun-utils": ["./packages/gun-utils/src"],

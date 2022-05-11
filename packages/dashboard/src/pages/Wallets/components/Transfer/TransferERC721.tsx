@@ -141,25 +141,24 @@ export const TransferERC721 = memo(() => {
 
     // #region check contract address and account address
     useAsync(async () => {
-        const recipient = allFormFields.recipient
-        setRecipientError(null)
-        if (!recipient && !registeredAddress) return
-        if (!isValidAddress(recipient) && !isValidAddress(registeredAddress)) return
-
-        clearErrors()
-        if (isSameAddress(recipient, account) || isSameAddress(registeredAddress, account)) {
-            setRecipientError({
-                type: 'account',
-                message: t.wallets_transfer_error_same_address_with_current_account(),
-            })
-        }
-        const result = await EVM_RPC.getCode(recipient)
-        if (result !== '0x') {
-            setRecipientError({
-                type: 'contractAddress',
-                message: t.wallets_transfer_error_is_contract_address(),
-            })
-        }
+        // const recipient = allFormFields.recipient
+        // setRecipientError(null)
+        // if (!recipient && !registeredAddress) return
+        // if (!isValidAddress(recipient) && !isValidAddress(registeredAddress)) return
+        // clearErrors()
+        // if (isSameAddress(recipient, account) || isSameAddress(registeredAddress, account)) {
+        //     setRecipientError({
+        //         type: 'account',
+        //         message: t.wallets_transfer_error_same_address_with_current_account(),
+        //     })
+        // }
+        // const result = await EVM_RPC.getCode(recipient)
+        // if (result !== '0x') {
+        //     setRecipientError({
+        //         type: 'contractAddress',
+        //         message: t.wallets_transfer_error_is_contract_address(),
+        //     })
+        // }
     }, [allFormFields.recipient, clearErrors, registeredAddress])
     // #endregion
 

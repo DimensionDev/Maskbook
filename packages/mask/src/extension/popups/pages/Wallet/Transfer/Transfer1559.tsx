@@ -2,7 +2,6 @@ import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useSt
 import { useI18N } from '../../../../../utils'
 import {
     addGasMargin,
-    Asset,
     SchemaType,
     formatBalance,
     formatEthereumAddress,
@@ -10,8 +9,9 @@ import {
     formatGweiToWei,
     NetworkType,
     explorerResolver,
+    ChainId,
 } from '@masknet/web3-shared-evm'
-import {
+import type {
     NetworkPluginID,
     isSameAddress,
     isGreaterThan,
@@ -22,6 +22,7 @@ import {
     isZero,
     multipliedBy,
     rightShift,
+    FungibleAsset,
 } from '@masknet/web3-shared-base'
 import { z as zod } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
@@ -174,7 +175,7 @@ const useStyles = makeStyles()({
 })
 const MIN_GAS_LIMIT = 21000
 export interface Transfer1559Props {
-    selectedAsset?: Asset
+    selectedAsset?: FungibleAsset<ChainId, SchemaType>
     otherWallets: { name: string; address: string }[]
     openAssetMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
 }
@@ -182,333 +183,334 @@ export interface Transfer1559Props {
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
 export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetMenu, otherWallets }) => {
-    const { t } = useI18N()
-    const { classes } = useStyles()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const network = useNetworkType(NetworkPluginID.PLUGIN_EVM)
-    const navigate = useNavigate()
+    return <></>
+    // const { t } = useI18N()
+    // const { classes } = useStyles()
+    // const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    // const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    // const network = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    // const navigate = useNavigate()
 
-    const [minGasLimitContext, setMinGasLimitContext] = useState(0)
-    const [addressTip, setAddressTip] = useState<{ type: TransferAddressError; message: string } | null>()
+    // const [minGasLimitContext, setMinGasLimitContext] = useState(0)
+    // const [addressTip, setAddressTip] = useState<{ type: TransferAddressError; message: string } | null>()
 
-    const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
+    // const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
 
-    const { value: etherPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
-        chainId: nativeToken?.chainId,
-    })
+    // const { value: etherPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+    //     chainId: nativeToken?.chainId,
+    // })
 
-    const { value: estimateGasFees } = useAsync(async () => WalletRPC.getEstimateGasFees(chainId), [chainId])
+    // const { value: estimateGasFees } = useAsync(async () => WalletRPC.getEstimateGasFees(chainId), [chainId])
 
-    const { Others } = useWeb3State()
+    // const { Others } = useWeb3State()
 
-    const schema = useMemo(() => {
-        return zod
-            .object({
-                address: zod
-                    .string()
-                    .min(1, t('wallet_transfer_error_address_absence'))
-                    .refine(
-                        (address) => EthereumAddress.isValid(address) || Others?.isValidDomain?.(address),
-                        t('wallet_transfer_error_invalid_address'),
-                    ),
-                amount: zod
-                    .string()
-                    .refine((amount) => {
-                        const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
-                        return !!transferAmount || !isZero(transferAmount)
-                    }, t('wallet_transfer_error_amount_absence'))
-                    .refine((amount) => {
-                        const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
-                        return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
-                    }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
-                gasLimit: zod
-                    .string()
-                    .min(1, t('wallet_transfer_error_gas_limit_absence'))
-                    .refine(
-                        (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimitContext),
-                        t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
-                    ),
-                maxPriorityFeePerGas: zod
-                    .string()
-                    .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
-                    .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
-                    .refine((value) => {
-                        return isGreaterThanOrEqualTo(value, estimateGasFees?.low?.suggestedMaxPriorityFeePerGas ?? 0)
-                    }, t('wallet_transfer_error_max_priority_gas_fee_too_low'))
-                    .refine(
-                        (value) =>
-                            isLessThan(
-                                value,
-                                multipliedBy(
-                                    estimateGasFees?.high?.suggestedMaxPriorityFeePerGas ?? 0,
-                                    HIGH_FEE_WARNING_MULTIPLIER,
-                                ),
-                            ),
-                        t('wallet_transfer_error_max_priority_gas_fee_too_high'),
-                    ),
-                maxFeePerGas: zod
-                    .string()
-                    .min(1, t('wallet_transfer_error_max_fee_absence'))
-                    .refine(
-                        (value) => isGreaterThanOrEqualTo(value, estimateGasFees?.low?.suggestedMaxFeePerGas ?? 0),
-                        t('wallet_transfer_error_max_fee_too_low'),
-                    )
-                    .refine(
-                        (value) =>
-                            isLessThan(
-                                value,
-                                multipliedBy(
-                                    estimateGasFees?.high?.suggestedMaxFeePerGas ?? 0,
-                                    HIGH_FEE_WARNING_MULTIPLIER,
-                                ),
-                            ),
-                        t('wallet_transfer_error_max_fee_too_high'),
-                    ),
-            })
-            .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
-                message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
-                path: ['maxFeePerGas'],
-            })
-    }, [wallet, selectedAsset, minGasLimitContext, estimateGasFees, Others])
+    // const schema = useMemo(() => {
+    //     return zod
+    //         .object({
+    //             address: zod
+    //                 .string()
+    //                 .min(1, t('wallet_transfer_error_address_absence'))
+    //                 .refine(
+    //                     (address) => EthereumAddress.isValid(address) || Others?.isValidDomain?.(address),
+    //                     t('wallet_transfer_error_invalid_address'),
+    //                 ),
+    //             amount: zod
+    //                 .string()
+    //                 .refine((amount) => {
+    //                     const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
+    //                     return !!transferAmount || !isZero(transferAmount)
+    //                 }, t('wallet_transfer_error_amount_absence'))
+    //                 .refine((amount) => {
+    //                     const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
+    //                     return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
+    //                 }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
+    //             gasLimit: zod
+    //                 .string()
+    //                 .min(1, t('wallet_transfer_error_gas_limit_absence'))
+    //                 .refine(
+    //                     (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimitContext),
+    //                     t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
+    //                 ),
+    //             maxPriorityFeePerGas: zod
+    //                 .string()
+    //                 .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
+    //                 .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
+    //                 .refine((value) => {
+    //                     return isGreaterThanOrEqualTo(value, estimateGasFees?.low?.suggestedMaxPriorityFeePerGas ?? 0)
+    //                 }, t('wallet_transfer_error_max_priority_gas_fee_too_low'))
+    //                 .refine(
+    //                     (value) =>
+    //                         isLessThan(
+    //                             value,
+    //                             multipliedBy(
+    //                                 estimateGasFees?.high?.suggestedMaxPriorityFeePerGas ?? 0,
+    //                                 HIGH_FEE_WARNING_MULTIPLIER,
+    //                             ),
+    //                         ),
+    //                     t('wallet_transfer_error_max_priority_gas_fee_too_high'),
+    //                 ),
+    //             maxFeePerGas: zod
+    //                 .string()
+    //                 .min(1, t('wallet_transfer_error_max_fee_absence'))
+    //                 .refine(
+    //                     (value) => isGreaterThanOrEqualTo(value, estimateGasFees?.low?.suggestedMaxFeePerGas ?? 0),
+    //                     t('wallet_transfer_error_max_fee_too_low'),
+    //                 )
+    //                 .refine(
+    //                     (value) =>
+    //                         isLessThan(
+    //                             value,
+    //                             multipliedBy(
+    //                                 estimateGasFees?.high?.suggestedMaxFeePerGas ?? 0,
+    //                                 HIGH_FEE_WARNING_MULTIPLIER,
+    //                             ),
+    //                         ),
+    //                     t('wallet_transfer_error_max_fee_too_high'),
+    //                 ),
+    //         })
+    //         .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
+    //             message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
+    //             path: ['maxFeePerGas'],
+    //         })
+    // }, [wallet, selectedAsset, minGasLimitContext, estimateGasFees, Others])
 
-    const methods = useForm<zod.infer<typeof schema>>({
-        shouldUnregister: false,
-        mode: 'onChange',
-        resolver: zodResolver(schema),
-        defaultValues: {
-            address: '',
-            amount: '',
-            gasLimit: selectedAsset?.token.type === SchemaType.Native ? '21000' : '0',
-            maxPriorityFeePerGas: '',
-            maxFeePerGas: '',
-        },
-        context: {
-            wallet,
-            minGasLimitContext,
-            estimateGasFees,
-            selectedAsset,
-        },
-    })
+    // const methods = useForm<zod.infer<typeof schema>>({
+    //     shouldUnregister: false,
+    //     mode: 'onChange',
+    //     resolver: zodResolver(schema),
+    //     defaultValues: {
+    //         address: '',
+    //         amount: '',
+    //         gasLimit: selectedAsset?.token.type === SchemaType.Native ? '21000' : '0',
+    //         maxPriorityFeePerGas: '',
+    //         maxFeePerGas: '',
+    //     },
+    //     context: {
+    //         wallet,
+    //         minGasLimitContext,
+    //         estimateGasFees,
+    //         selectedAsset,
+    //     },
+    // })
 
-    const [address, amount, maxFeePerGas] = methods.watch(['address', 'amount', 'maxFeePerGas'])
+    // const [address, amount, maxFeePerGas] = methods.watch(['address', 'amount', 'maxFeePerGas'])
 
-    // #region resolve ENS domain
-    const {
-        value: registeredAddress = '',
-        error: resolveDomainError,
-        loading: resolveDomainLoading,
-    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, address)
-    // #endregion
+    // // #region resolve ENS domain
+    // const {
+    //     value: registeredAddress = '',
+    //     error: resolveDomainError,
+    //     loading: resolveDomainLoading,
+    // } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, address)
+    // // #endregion
 
-    // #region check address or registered address type
-    useAsync(async () => {
-        // Only ethereum currently supports ens
-        if (address.includes('.eth') && network !== NetworkType.Ethereum) {
-            setAddressTip({
-                type: TransferAddressError.NETWORK_NOT_SUPPORT,
-                message: t('wallet_transfer_error_no_support_ens'),
-            })
-            return
-        }
+    // // #region check address or registered address type
+    // useAsync(async () => {
+    //     // Only ethereum currently supports ens
+    //     if (address.includes('.eth') && network !== NetworkType.Ethereum) {
+    //         setAddressTip({
+    //             type: TransferAddressError.NETWORK_NOT_SUPPORT,
+    //             message: t('wallet_transfer_error_no_support_ens'),
+    //         })
+    //         return
+    //     }
 
-        // The input is ens domain but the binding address cannot be found
-        if (Others?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress)) {
-            setAddressTip({
-                type: TransferAddressError.RESOLVE_FAILED,
-                message: t('wallet_transfer_error_no_address_has_been_set_name'),
-            })
-            return
-        }
+    //     // The input is ens domain but the binding address cannot be found
+    //     if (Others?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress)) {
+    //         setAddressTip({
+    //             type: TransferAddressError.RESOLVE_FAILED,
+    //             message: t('wallet_transfer_error_no_address_has_been_set_name'),
+    //         })
+    //         return
+    //     }
 
-        // clear error tip
-        setAddressTip(null)
+    //     // clear error tip
+    //     setAddressTip(null)
 
-        if (!address && !registeredAddress) return
-        if (!EthereumAddress.isValid(address) && !EthereumAddress.isValid(registeredAddress)) return
-        methods.clearErrors('address')
+    //     if (!address && !registeredAddress) return
+    //     if (!EthereumAddress.isValid(address) && !EthereumAddress.isValid(registeredAddress)) return
+    //     methods.clearErrors('address')
 
-        if (isSameAddress(address, wallet?.address) || isSameAddress(registeredAddress, wallet?.address)) {
-            setAddressTip({
-                type: TransferAddressError.SAME_ACCOUNT,
-                message: t('wallet_transfer_error_same_address_with_current_account'),
-            })
-            return
-        }
+    //     if (isSameAddress(address, wallet?.address) || isSameAddress(registeredAddress, wallet?.address)) {
+    //         setAddressTip({
+    //             type: TransferAddressError.SAME_ACCOUNT,
+    //             message: t('wallet_transfer_error_same_address_with_current_account'),
+    //         })
+    //         return
+    //     }
 
-        const result = await EVM_RPC.getCode(address)
+    //     const result = await EVM_RPC.getCode(address)
 
-        if (result !== '0x') {
-            setAddressTip({
-                type: TransferAddressError.CONTRACT_ADDRESS,
-                message: t('wallet_transfer_error_is_contract_address'),
-            })
-        }
-    }, [
-        address,
-        EthereumAddress.isValid,
-        registeredAddress,
-        methods.clearErrors,
-        wallet?.address,
-        resolveDomainError,
-        Others,
-    ])
-    // #endregion
+    //     if (result !== '0x') {
+    //         setAddressTip({
+    //             type: TransferAddressError.CONTRACT_ADDRESS,
+    //             message: t('wallet_transfer_error_is_contract_address'),
+    //         })
+    //     }
+    // }, [
+    //     address,
+    //     EthereumAddress.isValid,
+    //     registeredAddress,
+    //     methods.clearErrors,
+    //     wallet?.address,
+    //     resolveDomainError,
+    //     Others,
+    // ])
+    // // #endregion
 
-    // #region Get min gas limit with amount and recipient address
-    const { value: minGasLimit } = useGasLimit(
-        selectedAsset?.token.type,
-        selectedAsset?.token.address,
-        rightShift(amount ?? 0, selectedAsset?.token.decimals).toFixed(),
-        EthereumAddress.isValid(address) ? address : registeredAddress,
-    )
-    // #endregion
+    // // #region Get min gas limit with amount and recipient address
+    // const { value: minGasLimit } = useGasLimit(
+    //     selectedAsset?.token.type,
+    //     selectedAsset?.token.address,
+    //     rightShift(amount ?? 0, selectedAsset?.token.decimals).toFixed(),
+    //     EthereumAddress.isValid(address) ? address : registeredAddress,
+    // )
+    // // #endregion
 
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        selectedAsset?.token?.type ?? SchemaType.Native,
-        selectedAsset?.token?.address ?? '',
-    )
+    // const { value: tokenBalance = '0' } = useFungibleTokenBalance(
+    //     selectedAsset?.token?.type ?? SchemaType.Native,
+    //     selectedAsset?.token?.address ?? '',
+    // )
 
-    const maxAmount = useMemo(() => {
-        const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(addGasMargin(minGasLimit ?? MIN_GAS_LIMIT))
-        let amount_ = new BigNumber(tokenBalance ?? 0)
-        amount_ = selectedAsset?.token.type === SchemaType.Native ? amount_.minus(gasFee) : amount_
-        return formatBalance(BigNumber.max(0, amount_).toFixed(), selectedAsset?.token.decimals)
-    }, [selectedAsset, maxFeePerGas, minGasLimit, tokenBalance])
+    // const maxAmount = useMemo(() => {
+    //     const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(addGasMargin(minGasLimit ?? MIN_GAS_LIMIT))
+    //     let amount_ = new BigNumber(tokenBalance ?? 0)
+    //     amount_ = selectedAsset?.token.type === SchemaType.Native ? amount_.minus(gasFee) : amount_
+    //     return formatBalance(BigNumber.max(0, amount_).toFixed(), selectedAsset?.token.decimals)
+    // }, [selectedAsset, maxFeePerGas, minGasLimit, tokenBalance])
 
-    // #region set default gasLimit
-    useUpdateEffect(() => {
-        if (!minGasLimit) return
-        methods.setValue('gasLimit', minGasLimit.toString())
-        setMinGasLimitContext(minGasLimit)
-    }, [minGasLimit, methods.setValue])
-    // #endregion
+    // // #region set default gasLimit
+    // useUpdateEffect(() => {
+    //     if (!minGasLimit) return
+    //     methods.setValue('gasLimit', minGasLimit.toString())
+    //     setMinGasLimitContext(minGasLimit)
+    // }, [minGasLimit, methods.setValue])
+    // // #endregion
 
-    // #region set default Max priority gas fee and max fee
-    useUpdateEffect(() => {
-        if (!estimateGasFees) return
-        const { medium } = estimateGasFees
-        methods.setValue('maxFeePerGas', new BigNumber(medium?.suggestedMaxFeePerGas ?? 0).toString())
-        methods.setValue('maxPriorityFeePerGas', new BigNumber(medium?.suggestedMaxPriorityFeePerGas ?? 0).toString())
-    }, [estimateGasFees, methods.setValue])
-    // #endregion
+    // // #region set default Max priority gas fee and max fee
+    // useUpdateEffect(() => {
+    //     if (!estimateGasFees) return
+    //     const { medium } = estimateGasFees
+    //     methods.setValue('maxFeePerGas', new BigNumber(medium?.suggestedMaxFeePerGas ?? 0).toString())
+    //     methods.setValue('maxPriorityFeePerGas', new BigNumber(medium?.suggestedMaxPriorityFeePerGas ?? 0).toString())
+    // }, [estimateGasFees, methods.setValue])
+    // // #endregion
 
-    const [_, transferCallback] = useTokenTransferCallback(
-        selectedAsset?.token.type ?? SchemaType.Native,
-        selectedAsset?.token.address ?? '',
-    )
+    // const [_, transferCallback] = useTokenTransferCallback(
+    //     selectedAsset?.token.type ?? SchemaType.Native,
+    //     selectedAsset?.token.address ?? '',
+    // )
 
-    const handleMaxClick = useCallback(() => {
-        methods.setValue('amount', maxAmount)
-    }, [methods.setValue, maxAmount])
+    // const handleMaxClick = useCallback(() => {
+    //     methods.setValue('amount', maxAmount)
+    // }, [methods.setValue, maxAmount])
 
-    const [{ loading, error }, onSubmit] = useAsyncFn(
-        async (data: zod.infer<typeof schema>) => {
-            const transferAmount = rightShift(data.amount || '0', selectedAsset?.token.decimals).toFixed()
+    // const [{ loading, error }, onSubmit] = useAsyncFn(
+    //     async (data: zod.infer<typeof schema>) => {
+    //         const transferAmount = rightShift(data.amount || '0', selectedAsset?.token.decimals).toFixed()
 
-            // If input address is ens domain, use registeredAddress to transfer
-            if (Others?.isValidDomain?.(data.address)) {
-                await transferCallback(transferAmount, registeredAddress, {
-                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
-                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
-                    gas: new BigNumber(data.gasLimit).toNumber(),
-                })
-                return
-            }
+    //         // If input address is ens domain, use registeredAddress to transfer
+    //         if (Others?.isValidDomain?.(data.address)) {
+    //             await transferCallback(transferAmount, registeredAddress, {
+    //                 maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
+    //                 maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
+    //                 gas: new BigNumber(data.gasLimit).toNumber(),
+    //             })
+    //             return
+    //         }
 
-            await transferCallback(transferAmount, data.address, {
-                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
-                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
-                gas: new BigNumber(data.gasLimit).toNumber(),
-            })
-        },
-        [selectedAsset, transferCallback, registeredAddress, Others],
-    )
+    //         await transferCallback(transferAmount, data.address, {
+    //             maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
+    //             maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
+    //             gas: new BigNumber(data.gasLimit).toNumber(),
+    //         })
+    //     },
+    //     [selectedAsset, transferCallback, registeredAddress, Others],
+    // )
 
-    const [menu, openMenu] = useMenu(
-        <MenuItem className={classes.expand} key="expand">
-            <Typography className={classes.title}>{t('wallet_transfer_between_my_accounts')}</Typography>
-            <ExpandMore style={{ fontSize: 20 }} />
-        </MenuItem>,
-        <Collapse in>
-            {otherWallets.map((account, index) => (
-                <AccountItem
-                    account={account}
-                    onClick={() => methods.setValue('address', account.address)}
-                    key={index}
-                />
-            ))}
-        </Collapse>,
-    )
+    // const [menu, openMenu] = useMenu(
+    //     <MenuItem className={classes.expand} key="expand">
+    //         <Typography className={classes.title}>{t('wallet_transfer_between_my_accounts')}</Typography>
+    //         <ExpandMore style={{ fontSize: 20 }} />
+    //     </MenuItem>,
+    //     <Collapse in>
+    //         {otherWallets.map((account, index) => (
+    //             <AccountItem
+    //                 account={account}
+    //                 onClick={() => methods.setValue('address', account.address)}
+    //                 key={index}
+    //             />
+    //         ))}
+    //     </Collapse>,
+    // )
 
-    const popoverContent = useMemo(() => {
-        if (resolveDomainLoading) return
+    // const popoverContent = useMemo(() => {
+    //     if (resolveDomainLoading) return
 
-        if (addressTip) {
-            return (
-                <Box py={2.5} px={1.5}>
-                    <Typography
-                        className={
-                            addressTip.type === TransferAddressError.SAME_ACCOUNT
-                                ? classes.normalMessage
-                                : classes.errorMessage
-                        }>
-                        {addressTip.message}
-                    </Typography>
-                </Box>
-            )
-        }
+    //     if (addressTip) {
+    //         return (
+    //             <Box py={2.5} px={1.5}>
+    //                 <Typography
+    //                     className={
+    //                         addressTip.type === TransferAddressError.SAME_ACCOUNT
+    //                             ? classes.normalMessage
+    //                             : classes.errorMessage
+    //                     }>
+    //                     {addressTip.message}
+    //                 </Typography>
+    //             </Box>
+    //         )
+    //     }
 
-        if (registeredAddress && !resolveDomainError)
-            return (
-                <Box display="flex" justifyContent="space-between" alignItems="center" py={2.5} px={1.5}>
-                    <Link
-                        href={explorerResolver.domainLink(chainId, address)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        underline="none">
-                        <Box>
-                            <Typography className={classes.domainName}>{address}</Typography>
-                            <Typography className={classes.registeredAddress}>
-                                <FormattedAddress
-                                    address={registeredAddress}
-                                    size={4}
-                                    formatter={formatEthereumAddress}
-                                />
-                            </Typography>
-                        </Box>
-                    </Link>
-                    <RightIcon />
-                </Box>
-            )
+    //     if (registeredAddress && !resolveDomainError)
+    //         return (
+    //             <Box display="flex" justifyContent="space-between" alignItems="center" py={2.5} px={1.5}>
+    //                 <Link
+    //                     href={explorerResolver.domainLink(chainId, address)}
+    //                     target="_blank"
+    //                     rel="noopener noreferrer"
+    //                     underline="none">
+    //                     <Box>
+    //                         <Typography className={classes.domainName}>{address}</Typography>
+    //                         <Typography className={classes.registeredAddress}>
+    //                             <FormattedAddress
+    //                                 address={registeredAddress}
+    //                                 size={4}
+    //                                 formatter={formatEthereumAddress}
+    //                             />
+    //                         </Typography>
+    //                     </Box>
+    //                 </Link>
+    //                 <RightIcon />
+    //             </Box>
+    //         )
 
-        return
-    }, [
-        address,
-        addressTip,
-        registeredAddress,
-        methods.formState.errors.address?.type,
-        resolveDomainLoading,
-        resolveDomainError,
-    ])
+    //     return
+    // }, [
+    //     address,
+    //     addressTip,
+    //     registeredAddress,
+    //     methods.formState.errors.address?.type,
+    //     resolveDomainLoading,
+    //     resolveDomainError,
+    // ])
 
-    return (
-        <FormProvider {...methods}>
-            <Transfer1559TransferUI
-                accountName={wallet?.name ?? ''}
-                openAccountMenu={openMenu}
-                openAssetMenu={openAssetMenu}
-                handleMaxClick={handleMaxClick}
-                etherPrice={etherPrice}
-                selectedAsset={selectedAsset}
-                handleCancel={() => navigate(-1)}
-                handleConfirm={methods.handleSubmit(onSubmit)}
-                confirmLoading={loading}
-                popoverContent={popoverContent}
-            />
-            {otherWallets.length ? menu : null}
-        </FormProvider>
-    )
+    // return (
+    //     <FormProvider {...methods}>
+    //         <Transfer1559TransferUI
+    //             accountName={wallet?.name ?? ''}
+    //             openAccountMenu={openMenu}
+    //             openAssetMenu={openAssetMenu}
+    //             handleMaxClick={handleMaxClick}
+    //             etherPrice={etherPrice}
+    //             selectedAsset={selectedAsset}
+    //             handleCancel={() => navigate(-1)}
+    //             handleConfirm={methods.handleSubmit(onSubmit)}
+    //             confirmLoading={loading}
+    //             popoverContent={popoverContent}
+    //         />
+    //         {otherWallets.length ? menu : null}
+    //     </FormProvider>
+    // )
 })
 
 export interface Transfer1559UIProps {
@@ -516,7 +518,7 @@ export interface Transfer1559UIProps {
     openAccountMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
     openAssetMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
     handleMaxClick: () => void
-    selectedAsset?: Asset
+    selectedAsset?: FungibleAsset<ChainId, SchemaType>
     etherPrice: number
     handleCancel: () => void
     handleConfirm: () => void
@@ -552,10 +554,10 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
 
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
             () => ({
-                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${selectedAsset?.token.decimals}}$`), // .ddd...d
-                RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${selectedAsset?.token.decimals}}$`), // d.ddd...d
+                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${selectedAsset?.decimals}}$`), // .ddd...d
+                RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${selectedAsset?.decimals}}$`), // d.ddd...d
             }),
-            [selectedAsset?.token.decimals],
+            [selectedAsset?.decimals],
         )
 
         const {
@@ -618,8 +620,8 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                             {t('wallet_balance')}:
                             <FormattedBalance
                                 value={selectedAsset?.balance}
-                                decimals={selectedAsset?.token?.decimals}
-                                symbol={selectedAsset?.token?.symbol}
+                                decimals={selectedAsset?.decimals}
+                                symbol={selectedAsset?.symbol}
                                 significant={6}
                                 formatter={formatBalance}
                             />
@@ -665,9 +667,9 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                                     icon={
                                                         <TokenIcon
                                                             classes={{ icon: classes.icon }}
-                                                            address={selectedAsset?.token.address ?? ''}
-                                                            name={selectedAsset?.token.name}
-                                                            logoURL={selectedAsset?.token.logoURI}
+                                                            address={selectedAsset?.address ?? ''}
+                                                            name={selectedAsset?.name}
+                                                            logoURL={selectedAsset?.logoURL}
                                                         />
                                                     }
                                                     deleteIcon={<ChevronDown className={classes.icon} />}
@@ -675,7 +677,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                                     size="small"
                                                     variant="outlined"
                                                     clickable
-                                                    label={selectedAsset?.token.symbol}
+                                                    label={selectedAsset?.symbol}
                                                     onDelete={noop}
                                                 />
                                             </Box>

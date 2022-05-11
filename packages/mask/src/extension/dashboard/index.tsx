@@ -14,13 +14,13 @@ import { status } from '../../setup.ui'
 
 const msg: DashboardPluginMessages = {
     Wallet: WalletMessages,
-    Swap: PluginTraderMessages,
-    Transak: PluginTransakMessages,
-    Pets: PluginPetMessages,
+    // Swap: PluginTraderMessages,
+    // Transak: PluginTransakMessages,
+    // Pets: PluginPetMessages,
 }
 const rpc: DashboardPluginServices = {
     Wallet: WalletRPC,
-    Swap: PluginTraderRPC,
+    // Swap: PluginTraderRPC,
 }
 // @ts-ignore To avoid build failure due to the circular project reference
 setService(Services)

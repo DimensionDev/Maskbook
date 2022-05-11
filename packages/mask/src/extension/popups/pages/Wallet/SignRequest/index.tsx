@@ -91,21 +91,21 @@ const SignRequest = memo(() => {
     const [transferError, setTransferError] = useState(false)
 
     const { data, address } = useMemo(() => {
-        if (
-            value?.computedPayload?.type === TransactionDescriptorType.SIGN ||
-            value?.computedPayload?.type === TransactionDescriptorType.SIGN_TYPED_DATA
-        ) {
-            let message = value.computedPayload.data
-            try {
-                message = toUtf8(message)
-            } catch (error) {
-                console.log(error)
-            }
-            return {
-                address: value.computedPayload.to,
-                data: message,
-            }
-        }
+        // if (
+        //     value?.computedPayload?.type === TransactionDescriptorType.SIGN ||
+        //     value?.computedPayload?.type === TransactionDescriptorType.SIGN_TYPED_DATA
+        // ) {
+        //     let message = value.computedPayload.data
+        //     try {
+        //         message = toUtf8(message)
+        //     } catch (error) {
+        //         console.log(error)
+        //     }
+        //     return {
+        //         address: value.computedPayload.to,
+        //         data: message,
+        //     }
+        // }
         return {
             address: '',
             data: '',
@@ -113,16 +113,16 @@ const SignRequest = memo(() => {
     }, [value])
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-        try {
-            await EVM_RPC.confirmRequest()
-        } catch (error_) {
-            setTransferError(true)
-        }
+        // try {
+        //     await EVM_RPC.confirmRequest()
+        // } catch (error_) {
+        //     setTransferError(true)
+        // }
     }, [value, location.search, history])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!value) return
-        await EVM_RPC.rejectRequest()
+        // await EVM_RPC.rejectRequest()
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [value])
 

@@ -43,39 +43,36 @@ export default function Wallet() {
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     const { loading, retry } = useAsyncRetry(async () => {
-        if (
-            [
-                PopupRoutes.ContractInteraction,
-                PopupRoutes.WalletSignRequest,
-                PopupRoutes.GasSetting,
-                PopupRoutes.Unlock,
-            ].some((item) => item === location.pathname)
-        )
-            return
-
-        const payload = await WalletRPC.firstUnconfirmedRequest()
-        if (!payload) return
-
-        const computedPayload = await EVM_RPC.getComputedPayload(payload)
-        const value = {
-            payload,
-            computedPayload,
-        }
-
-        if (value?.computedPayload) {
-            switch (value.computedPayload.type) {
-                case TransactionDescriptorType.SIGN:
-                case TransactionDescriptorType.SIGN_TYPED_DATA:
-                    navigate(PopupRoutes.WalletSignRequest, { replace: true })
-                    break
-                case TransactionDescriptorType.INTERACTION:
-                case TransactionDescriptorType.TRANSFER:
-                    navigate(PopupRoutes.ContractInteraction, { replace: true })
-                    break
-                default:
-                    break
-            }
-        }
+        // if (
+        //     [
+        //         PopupRoutes.ContractInteraction,
+        //         PopupRoutes.WalletSignRequest,
+        //         PopupRoutes.GasSetting,
+        //         PopupRoutes.Unlock,
+        //     ].some((item) => item === location.pathname)
+        // )
+        //     return
+        // const payload = await WalletRPC.firstUnconfirmedRequest()
+        // if (!payload) return
+        // const computedPayload = await EVM_RPC.getComputedPayload(payload)
+        // const value = {
+        //     payload,
+        //     computedPayload,
+        // }
+        // if (value?.computedPayload) {
+        //     switch (value.computedPayload.type) {
+        //         case TransactionDescriptorType.SIGN:
+        //         case TransactionDescriptorType.SIGN_TYPED_DATA:
+        //             navigate(PopupRoutes.WalletSignRequest, { replace: true })
+        //             break
+        //         case TransactionDescriptorType.INTERACTION:
+        //         case TransactionDescriptorType.TRANSFER:
+        //             navigate(PopupRoutes.ContractInteraction, { replace: true })
+        //             break
+        //         default:
+        //             break
+        //     }
+        // }
     }, [location.search, location.pathname])
 
     useEffect(() => {
