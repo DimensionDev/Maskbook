@@ -1,5 +1,6 @@
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
+import { MaskMessages } from '../../../shared/messages'
 import {
     consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
@@ -104,6 +105,8 @@ async function restorePersonas(backup: NormalizedBackup.Data) {
             }
         }
     })
+
+    if (personas.size || profiles.size) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 
 function restorePosts(backup: Iterable<NormalizedBackup.PostBackup>) {
