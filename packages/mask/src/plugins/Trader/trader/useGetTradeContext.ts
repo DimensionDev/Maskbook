@@ -25,6 +25,8 @@ import {
     VENOMSWAP_CUSTOM_BASES,
     OPENSWAP_BASE_AGAINST_TOKENS,
     OPENSWAP_CUSTOM_BASES,
+    UBESWAP_BASE_AGAINST_TOKENS,
+    UBESWAP_CUSTOM_BASES,
     MDEX_BASE_AGAINST_TOKENS,
     MDEX_CUSTOM_BASES,
     DEFIKINGDOMS_BASE_AGAINST_TOKENS,
@@ -243,6 +245,18 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                 return {
                     TYPE: tradeProvider,
                     SPENDER_CONTRACT_ADDRESS: DEX_TRADE.OPENOCEAN_EXCHANGE_PROXY_ADDRESS,
+                }
+            case TradeProvider.UBESWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.UBESWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.UBESWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.UBESWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.UBESWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: UBESWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: UBESWAP_CUSTOM_BASES,
                 }
             default:
                 if (tradeProvider) unreachable(tradeProvider)

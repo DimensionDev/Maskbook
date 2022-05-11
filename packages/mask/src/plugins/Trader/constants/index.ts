@@ -17,4 +17,6 @@ export * from './venomswap'
 export * from './openswap'
 export * from './mdex'
 export * from './defikingdoms'
+export * from './ubeswap'
+
 export type { ERC20TokenCustomizedBase, ERC20AgainstToken } from './types'

@@ -122,6 +122,8 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.OPENOCEAN:
             return openocean
+        case TradeProvider.UBESWAP:
+            return uniswapV2Like
         default:
             if (provider) unreachable(provider)
             return []
