@@ -4,8 +4,8 @@
 
 import '@masknet/plugin-example'
 import '@masknet/plugin-debugger'
-// import '../plugins/Gitcoin'
-// import '../plugins/Wallet'
+import '../plugins/Gitcoin'
+import '../plugins/Wallet'
 import '@masknet/plugin-evm'
 // import '@masknet/plugin-flow'
 // import '@masknet/plugin-file-service'

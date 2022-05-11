@@ -35,7 +35,7 @@ export const FeaturePromotions = memo(() => {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const { currentPersona, connectPersona } = PersonaContext.useContainer()
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
+    // const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
 
     const isConnectedTwitter = useMemo(() => {
         if (!currentPersona) return false
@@ -47,10 +47,10 @@ export const FeaturePromotions = memo(() => {
     }, [currentPersona])
 
     const openTransakDialog = useCallback(() => {
-        setBuyDialog({
-            open: true,
-            address: account ?? '',
-        })
+        // setBuyDialog({
+        //     open: true,
+        //     address: account ?? '',
+        // })
     }, [])
 
     const openTwitter = (pluginId: string) => async () => {

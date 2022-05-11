@@ -44,7 +44,6 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                 }
             })
             .catch((error) => {
-                console.error(error)
                 setAvailableUnlockTarget([
                     {
                         lock: {

@@ -1287,6 +1287,7 @@
         "chainId": 250,
         "type": "Fantom",
         "name": "FTM",
+        "fullName": "Fantom",
         "network": "mainnet",
         "shortName": "ftm",
         "features": [],

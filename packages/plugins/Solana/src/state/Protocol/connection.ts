@@ -4,6 +4,7 @@ import { Providers } from './provider'
 import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types'
 import { NETWORK_ENDPOINTS } from '../../constants'
 import {
+    Account,
     ConnectionOptions,
     FungibleToken,
     NonFungibleToken,
@@ -16,6 +17,13 @@ class Connection implements BaseConnection {
     private connections: Map<ChainId, SolanaConnection> = new Map()
 
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
+
+    connect(options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Promise<Account<ChainId>> {
+        throw new Error('Method not implemented.')
+    }
+    disconnect(options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
     transferFungibleToken(
         address: string,
         amount: string,

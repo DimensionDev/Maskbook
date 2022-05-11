@@ -1,15 +1,15 @@
 import bs58 from 'bs58'
 import { Buffer } from 'buffer'
-import Web3, { PublicKey } from '@solana/web3.js'
+import * as Web3 from '@solana/web3.js'
 
-export function encodePublicKey(key: PublicKey) {
+export function encodePublicKey(key: Web3.PublicKey) {
     return key.toBase58()
 }
 
 export function deocdeAddress(initData: string | Buffer) {
     const data = typeof initData === 'string' ? bs58.decode(initData) : initData
-    if (!PublicKey.isOnCurve(data)) throw new Error(`Failed to create public key from ${bs58.encode(data)}.`)
-    return new PublicKey(data)
+    if (!Web3.PublicKey.isOnCurve(data)) throw new Error(`Failed to create public key from ${bs58.encode(data)}.`)
+    return new Web3.PublicKey(data)
 }
 
 export function formatAddress(address: string, size = 0) {

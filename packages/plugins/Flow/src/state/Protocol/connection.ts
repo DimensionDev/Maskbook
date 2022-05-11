@@ -3,6 +3,7 @@ import { unreachable } from '@dimensiondev/kit'
 import { CompositeSignature, TransactionStatusCode, MutateOptions, QueryOptions } from '@blocto/fcl'
 import { ChainId, ProviderType, SchemaType } from '@masknet/web3-shared-flow'
 import {
+    Account,
     ConnectionOptions,
     FungibleToken,
     NonFungibleToken,
@@ -15,6 +16,13 @@ import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from
 
 class Connection implements BaseConnection {
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
+
+    connect(options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined): Promise<Account<ChainId>> {
+        throw new Error('Method not implemented.')
+    }
+    disconnect(options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
     getGasPrice(options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined): Promise<string> {
         throw new Error('Method not implemented.')
     }

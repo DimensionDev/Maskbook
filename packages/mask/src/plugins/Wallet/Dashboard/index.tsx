@@ -15,10 +15,11 @@ const dashboard: Plugin.Dashboard.Definition = {
     GlobalInjection: function Component() {
         return (
             <>
+                <SelectProviderDialog />
                 <TransactionDialog />
                 <SelectProviderDialog />
                 <SelectNftContractDialog />
-                <WalletStatusDialog isDashboard />
+                <WalletStatusDialog />
                 <ConnectWalletDialog />
                 <WalletRiskWarningDialog />
                 <GasSettingDialog />

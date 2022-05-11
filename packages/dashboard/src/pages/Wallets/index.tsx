@@ -6,10 +6,13 @@ import {
     useWallet,
     useWallets,
     useWeb3State as useWeb3PluginState,
- useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+    useCurrentWeb3NetworkPluginID,
+    useFungibleAssets,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { useEffect, useMemo, useState } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
@@ -37,7 +40,6 @@ function Wallets() {
     const chainId = useChainId()
     const { Asset } = useWeb3PluginState()
     const account = useAccount()
-    const { portfolioProvider } = useWeb3State()
     const network = useNetworkDescriptor()
 
     const { pathname } = useLocation()
@@ -48,19 +50,21 @@ function Wallets() {
     const [receiveOpen, setReceiveOpen] = useState(false)
 
     const networks = getRegisteredWeb3Networks()
-    const networkDescriptor = useNetworkDescriptor()
     const pluginId = useCurrentWeb3NetworkPluginID()
-    const [selectedNetwork, setSelectedNetwork] = useState<NetworkDescriptor<number, string> | null>(
+    const networkDescriptor = useNetworkDescriptor() as Web3Helper.NetworkDescriptorAll
+    const [selectedNetwork, setSelectedNetwork] = useState<Web3Helper.NetworkDescriptorAll | null>(
         networkDescriptor ?? null,
     )
 
-    const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+    // const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
+    // const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
-    const { value: detailedTokens } = useAsync(
-        async () => Asset?.getFungibleAssets?.(chainId, account, portfolioProvider, network!),
-        [account, Asset, portfolioProvider, network],
-    )
+    const detailedTokens: FungibleToken<number, string>[] = []
+    // const { value: detailedTokens } = useAsync(
+    //     async () => Asset?.getFungibleAssets?.(chainId, account, network!),
+    //     [account, Asset, network],
+    // )
+    const fungibleAssets = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
     const renderNetworks = useMemo(() => {
         return networks.filter((x) => pluginId === x.networkSupporterPluginID && x.isMainnet)
     }, [networks, pluginId])
@@ -112,8 +116,10 @@ function Wallets() {
                     <Balance
                         balance={balance}
                         onSend={() => navigate(DashboardRoutes.WalletsTransfer)}
-                        onBuy={openBuyDialog}
-                        onSwap={openSwapDialog}
+                        // onBuy={openBuyDialog}
+                        // onSwap={openSwapDialog}
+                        onBuy={() => {}}
+                        onSwap={() => {}}
                         onReceive={() => setReceiveOpen(true)}
                         networks={renderNetworks}
                         selectedNetwork={selectedNetwork}

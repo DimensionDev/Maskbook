@@ -16,7 +16,7 @@ type ToBeListedSettings = { [key in keyof MaskSettingsEvents]: InternalSettings<
 export function ToBeListened(): ToBeListedSettings {
     return {
         appearanceSettings,
-        // pluginIDSettings,
+        pluginIDSettings,
         languageSettings,
         currentChainIdSettings,
         // currentTokenPricesSettings,

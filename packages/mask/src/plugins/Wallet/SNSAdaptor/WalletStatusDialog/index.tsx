@@ -4,7 +4,7 @@ import ErrorIcon from '@mui/icons-material/Error'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, isDashboardPage } from '@masknet/shared-base'
 import { useChainIdValid } from '@masknet/plugin-infra/web3'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { useI18N } from '../../../../utils'
@@ -36,9 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
     },
 }))
-export interface WalletStatusDialogProps {
-    isDashboard?: boolean
-}
+export interface WalletStatusDialogProps {}
 export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { t } = useI18N()
 
@@ -63,8 +61,8 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
         <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
                 <Typography className={classes.subTitle}>{t('wallets')}</Typography>
-                <WalletStatusBox isDashboard={props.isDashboard} />
-                {!props.isDashboard && (
+                <WalletStatusBox />
+                {!isDashboardPage() && (
                     <>
                         <Typography className={classes.subTitle}>{t('applications')}</Typography>
                         <ApplicationBoard />

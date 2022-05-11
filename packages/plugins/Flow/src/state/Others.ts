@@ -20,8 +20,6 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     constructor(context: Plugin.Shared.SharedContext) {
         super(context, {
             defaultAddress: '',
-            defaultChainId: ChainId.Mainnet,
-            defaultNetworkType: NetworkType.Flow,
             defaultBlockDelay: 15,
             chainDescriptors: CHAIN_DESCRIPTORS,
             networkDescriptors: NETWORK_DESCRIPTORS,

@@ -93,12 +93,10 @@ export class ProviderState<
             provider.emitter.on('chainId', async (chainId) => {
                 await this.setChainId(providerType, Number.parseInt(chainId, 16) as ChainId)
             })
-
             provider.emitter.on('accounts', async (accounts) => {
                 const account = first(accounts)
                 if (account && this.options.isValidAddress(account)) await this.setAccount(providerType, account)
             })
-
             provider.emitter.on('disconnect', async () => {
                 await this.setAccount(providerType, '')
                 await this.setChainId(providerType, this.options.getDefaultChainId())
@@ -156,10 +154,8 @@ export class ProviderState<
                 })(),
                 provider.switchChain(chainId),
             ])
+            account.chainId = chainId
         }
-
-        // double confirmation
-        if (chainId !== account.chainId) throw new Error('Failed to connect provider.')
 
         provider.emitter.emit('connect', account)
         return account

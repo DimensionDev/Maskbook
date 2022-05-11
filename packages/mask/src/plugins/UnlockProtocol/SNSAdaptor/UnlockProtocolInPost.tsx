@@ -20,52 +20,49 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
     const { message } = props
     const [content, setContent] = useState('')
     const address = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chain = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [redirectUrl, setRedirectUrl] = useState('')
 
     useEffect(() => {
         const metadata = UnlockProtocolMetadataReader(props.message.meta)
-        if (metadata.ok) {
-            if (address) {
-                const data: { locks: Record<string, object> } = { locks: {} }
-                metadata.val.unlockLocks.forEach((locks) => {
-                    PluginUnlockProtocolRPC.verifyPurchase(address, locks.unlocklock, locks.chainid).then((res) => {
-                        if (!res) return
-                        const requestData = {
-                            lock: locks.unlocklock,
-                            address: address,
-                            chain: locks.chainid,
-                            identifier: metadata.val.iv,
+        if (!metadata.ok || !address) return
+        const data: { locks: Record<string, object> } = { locks: {} }
+        metadata.val.unlockLocks.forEach((locks) => {
+            PluginUnlockProtocolRPC.verifyPurchase(address, locks.unlocklock, locks.chainid).then((res) => {
+                if (!res) return
+                const requestData = {
+                    lock: locks.unlocklock,
+                    address: address,
+                    chain: locks.chainid,
+                    identifier: metadata.val.iv,
+                }
+                PluginUnlockProtocolRPC.getKey(requestData)
+                    .catch((error) => {
+                        if (error.code === -1) {
+                            setContent(t('plugin_unlockprotocol_server_error'))
                         }
-                        PluginUnlockProtocolRPC.getKey(requestData)
-                            .catch((error) => {
-                                if (error.code === -1) {
-                                    setContent(t('plugin_unlockprotocol_server_error'))
-                                }
-                            })
-                            .then((response) => {
-                                setContent(response.message)
-                                PluginUnlockProtocolRPC.decryptUnlockData(
-                                    metadata.val.iv,
-                                    response.post.unlockKey,
-                                    metadata.val.post,
-                                ).then((content) => {
-                                    setContent(content.content)
-                                })
-                            })
                     })
-                    data.locks[locks.unlocklock] = { network: locks.chainid }
-                })
-                setRedirectUrl(paywallUrl + encodeURI(JSON.stringify(data)))
-            }
-        }
-    }, [chain, address])
+                    .then((response) => {
+                        setContent(response.message)
+                        PluginUnlockProtocolRPC.decryptUnlockData(
+                            metadata.val.iv,
+                            response.post.unlockKey,
+                            metadata.val.post,
+                        ).then((content) => {
+                            setContent(content.content)
+                        })
+                    })
+            })
+            data.locks[locks.unlocklock] = { network: locks.chainid }
+        })
+        setRedirectUrl(paywallUrl + encodeURI(JSON.stringify(data)))
+    }, [chainId, address])
     if (content) {
         const jsx = message
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
                       <Render>
-                          <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
+                          <EthereumChainBoundary chainId={chainId} noSwitchNetworkTip={false}>
                               <Typography color="textPrimary">{content}</Typography>
                           </EthereumChainBoundary>
                       </Render>
@@ -97,7 +94,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
                       <Render>
-                          <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
+                          <EthereumChainBoundary chainId={chainId} noSwitchNetworkTip={false}>
                               <Typography color="textPrimary">"{t('loading')}"</Typography>
                               <br />
                           </EthereumChainBoundary>

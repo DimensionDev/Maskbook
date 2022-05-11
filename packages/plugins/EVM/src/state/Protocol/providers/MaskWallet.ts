@@ -116,13 +116,20 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     }
 
     override async connect(chainId: ChainId) {
-        const provider = await this.createWeb3(chainId)
-        const accounts = await provider.eth.requestAccounts()
-        if (!accounts.length) throw new Error(`Failed to connect to ${chainId}.`)
+        const { account, chainId: actualChainId, updateAccount } = SharedContextSettings.value
+
+        if (!account.getCurrentValue()) throw new Error(`Failed to connect to ${chainId}.`)
+
+        // switch chain
+        if (actualChainId.getCurrentValue() !== chainId) {
+            await updateAccount({
+                chainId,
+            })
+        }
 
         return {
             chainId,
-            account: first(accounts)!,
+            account: account.getCurrentValue(),
         }
     }
 

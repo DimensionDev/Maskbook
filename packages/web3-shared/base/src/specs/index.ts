@@ -1,7 +1,7 @@
 import type BigNumber from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
 import type { Emitter } from '@servie/events'
-import type { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
+import type { EnhanceableSite, ExtensionSite, ProfileIdentifier } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type { createChainResolver, createExplorerResolver, createNetworkResolver, createProviderResolver } from '../utils'
 
@@ -166,7 +166,8 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
     /** Enable requirements */
     enableRequirements?: {
         supportedChainIds?: ChainId[]
-        supportedSNSIds?: EnhanceableSite[]
+        supportedEnhancebleSites?: EnhanceableSite[]
+        supportedExtensionSites?: ExtensionSite[]
     }
     /** A link to provider's home website */
     homeLink: string
@@ -602,6 +603,10 @@ export interface Connection<
     sendTransaction(transaction: Transaction, options?: Web3ConnectionOptions): Promise<string>
     /** Send a signed transaction */
     sendSignedTransaction(signature: TransactionSignature, options?: Web3ConnectionOptions): Promise<string>
+    /** Build connection */
+    connect(options?: Web3ConnectionOptions): Promise<Account<ChainId>>
+    /** Break connection */
+    disconnect(options?: Web3ConnectionOptions): Promise<void>
 }
 
 export interface SettingsState {

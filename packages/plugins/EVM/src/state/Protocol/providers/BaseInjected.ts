@@ -62,7 +62,6 @@ export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
 
         if (this.provider) return this.provider
         if (!this.inpageProvider) throw new Error('Failed to detect in-page provider.')
-        if (isExtensionSiteType()) throw new Error('Not avaiable on extension site.')
 
         this.provider = this.inpageProvider
         this.provider.on('accountsChanged', this.onAccountsChanged.bind(this))

@@ -1,10 +1,17 @@
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useWeb3State } from './useWeb3State'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId as EVM_ChainId } from '@masknet/web3-shared-evm'
+import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
+import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
+import type { Web3Helper } from '../web3-helpers'
+import { useCurrentWeb3NetworkPluginID } from './Context'
 
-export function useDefaultChainId<T extends NetworkPluginID>(pluginID?: T) {
-    const { Others } = useWeb3State(pluginID)
-    const chainId = Others?.getDefaultChainId()
+const DEFAULT_CHAIN_ID: Record<NetworkPluginID, Web3Helper.Definition[NetworkPluginID]['ChainId']> = {
+    [NetworkPluginID.PLUGIN_EVM]: EVM_ChainId.Mainnet,
+    [NetworkPluginID.PLUGIN_FLOW]: FlowChainId.Mainnet,
+    [NetworkPluginID.PLUGIN_SOLANA]: SolanaChainId.Mainnet,
+}
 
-    if (!chainId) throw new Error('No default chain id.')
-    return chainId
+export function useDefaultChainId<T extends NetworkPluginID>(expectedPluginID?: T) {
+    const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID) as T
+    return DEFAULT_CHAIN_ID[pluginID]
 }

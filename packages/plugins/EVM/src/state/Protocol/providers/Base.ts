@@ -27,9 +27,9 @@ export class BaseProvider implements EVM_Provider {
     }
 
     // Switch chain with RPC calls by default
-    switchChain(chainId?: ChainId): Promise<void> {
+    async switchChain(chainId?: ChainId): Promise<void> {
         if (chainId === ChainId.Mainnet) {
-            return this.request({
+            await this.request({
                 method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
                 params: [
                     {
@@ -37,10 +37,8 @@ export class BaseProvider implements EVM_Provider {
                     },
                 ],
             })
-        } else {
-            if (!chainId) throw new Error('Unknown chain id.')
-
-            return this.request<void>({
+        } else if (chainId) {
+            await this.request<void>({
                 method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
                 params: [
                     {
@@ -52,7 +50,17 @@ export class BaseProvider implements EVM_Provider {
                     },
                 ],
             })
+        } else {
+            throw new Error('Unknown chain id.')
         }
+
+        const actualChainId = await this.request<string>({
+            method: EthereumMethodType.ETH_CHAIN_ID,
+            params: [],
+        })
+
+        if (Number.parseInt(actualChainId) !== chainId)
+            throw new Error(`Failed to switch to ${chainResolver.chainFullName(chainId)}.`)
     }
 
     // A provider should at least implement a RPC request method.

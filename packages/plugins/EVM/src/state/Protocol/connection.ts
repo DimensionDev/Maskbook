@@ -10,6 +10,7 @@ import {
     createNativeToken,
 } from '@masknet/web3-shared-evm'
 import type {
+    Account,
     ConnectionOptions,
     FungibleToken,
     NonFungibleToken,
@@ -21,6 +22,7 @@ import { createContext, dispatch } from './composer'
 import { Providers } from './provider'
 import type { EVM_Connection, EVM_Web3ConnectionOptions } from './types'
 import { getReceiptStatus } from './utils'
+import { Web3StateSettings } from '../../settings'
 
 function isUniversalMethod(method: EthereumMethodType) {
     return [
@@ -41,6 +43,83 @@ function isUniversalMethod(method: EthereumMethodType) {
 
 class Connection implements EVM_Connection {
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
+
+    // Hijack RPC requests and process them with koa like middlewares
+    private get hijackedRequest() {
+        return <T extends unknown>(requestArguments: RequestArguments, options?: EVM_Web3ConnectionOptions) => {
+            return new Promise<T>(async (resolve, reject) => {
+                const context = createContext(this, requestArguments, {
+                    account: this.account,
+                    chainId: this.chainId,
+                    providerType: this.providerType,
+                    popupsWindow: true,
+                    ...options,
+                })
+
+                try {
+                    await dispatch(context, async () => {
+                        if (!context.writeable) return
+                        try {
+                            const provider =
+                                Providers[
+                                    isUniversalMethod(context.method) ? ProviderType.MaskWallet : this.providerType
+                                ]
+                            switch (context.method) {
+                                case EthereumMethodType.MASK_LOGIN:
+                                    context.write(
+                                        await Web3StateSettings.value.Provider?.connect(
+                                            context.chainId,
+                                            context.providerType,
+                                        ),
+                                    )
+                                    break
+                                case EthereumMethodType.MASK_LOGOUT:
+                                    context.write(
+                                        await Web3StateSettings.value.Provider?.disconect(context.providerType),
+                                    )
+                                    break
+                                default:
+                                    const web3Provider = await Providers[
+                                        isUniversalMethod(context.method) ? ProviderType.MaskWallet : this.providerType
+                                    ].createWeb3Provider(this.chainId)
+
+                                    // send request and set result in the context
+                                    context.write((await web3Provider.request(context.requestArguments)) as T)
+                            }
+                        } catch (error) {
+                            context.abort(error)
+                        }
+                    })
+                } catch (error) {
+                    context.abort(error)
+                } finally {
+                    if (context.error) reject(context.error)
+                    else resolve(context.result as T)
+                }
+            })
+        }
+    }
+
+    async connect(
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<Account<ChainId>> {
+        return this.hijackedRequest<Account<ChainId>>(
+            {
+                method: EthereumMethodType.MASK_LOGIN,
+                params: [],
+            },
+            options,
+        )
+    }
+    async disconnect(options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Promise<void> {
+        await this.hijackedRequest<void>(
+            {
+                method: EthereumMethodType.MASK_LOGOUT,
+                params: [],
+            },
+            options,
+        )
+    }
     transferFungibleToken(
         address: string,
         amount: string,
@@ -126,42 +205,6 @@ class Connection implements EVM_Connection {
         options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
-    }
-
-    // Hijack RPC requests and process them with koa like middlewares
-    private get hijackedRequest() {
-        return <T extends unknown>(requestArguments: RequestArguments, options?: EVM_Web3ConnectionOptions) => {
-            return new Promise<T>(async (resolve, reject) => {
-                const context = createContext(this, requestArguments, {
-                    account: this.account,
-                    chainId: this.chainId,
-                    providerType: this.providerType,
-                    popupsWindow: true,
-                    ...options,
-                })
-
-                try {
-                    await dispatch(context, async () => {
-                        if (!context.writeable) return
-                        try {
-                            const web3Provider = await Providers[
-                                isUniversalMethod(context.method) ? ProviderType.MaskWallet : this.providerType
-                            ].createWeb3Provider(this.chainId)
-
-                            // send request and set result in the context
-                            context.write((await web3Provider.request(context.requestArguments)) as T)
-                        } catch (error) {
-                            context.abort(error)
-                        }
-                    })
-                } catch (error) {
-                    context.abort(error)
-                } finally {
-                    if (context.error) reject(context.error)
-                    else resolve(context.result as T)
-                }
-            })
-        }
     }
 
     getWeb3(options?: EVM_Web3ConnectionOptions) {

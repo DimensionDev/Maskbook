@@ -8,4 +8,8 @@ export class MetaMaskProvider extends BaseInjectedProvider implements EVM_Provid
     protected override get inpageProvider() {
         return isExtensionSiteType() ? (createMetaMaskProvider() as Web3Provider) : super.inpageProvider
     }
+
+    override get readyPromise() {
+        return Promise.resolve()
+    }
 }

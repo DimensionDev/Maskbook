@@ -10,6 +10,7 @@ import CHAINS from './chains.json'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types'
 import { getTokenConstants } from './constants'
 import { ZERO_ADDRESS } from './primitives'
+import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
 
@@ -31,6 +32,7 @@ export const CHAIN_DESCRIPTORS: ChainDescriptor<ChainId, SchemaType, NetworkType
         url: x.infoURL,
     },
 }))
+
 export const NETWORK_DESCRIPTORS: NetworkDescriptor<ChainId, NetworkType>[] = [
     {
         ID: `${PLUGIN_ID}_ethereum`,
@@ -212,6 +214,8 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         icon: new URL('../assets/maskwallet.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
         },
         homeLink: 'https://mask.io',
         shortenLink: 'mask.io',
@@ -225,6 +229,8 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         icon: new URL('../assets/metamask.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
         },
         homeLink: 'https://metamask.io',
         shortenLink: 'metamask.io',
@@ -238,6 +244,8 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         icon: new URL('../assets/walletconnect.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
         },
         homeLink: 'https://walletconnect.com',
         shortenLink: 'walletconnect.com',
@@ -250,6 +258,7 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         icon: new URL('../assets/coin98.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
         },
         homeLink: 'https://coin98.com',
         shortenLink: 'coin98.com',
@@ -263,6 +272,7 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         icon: new URL('../assets/coinbase.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
         },
         homeLink: 'https://walletlink.org',
         shortenLink: 'walletlink.org',
@@ -276,6 +286,7 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         icon: new URL('../assets/mathwallet.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
         },
         homeLink: 'https://mathwallet.org',
         shortenLink: 'mathwallet.org',
@@ -289,6 +300,7 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         icon: new URL('../assets/fortmatic.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.BSC],
+            supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
         },
         homeLink: 'https://fortmatic.com',
         shortenLink: 'fortmatic.com',

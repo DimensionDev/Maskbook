@@ -7,6 +7,7 @@ import type {
     ProviderType,
     FungibleAssetProvider,
     NonFungibleAssetProvider,
+    NetworkPluginID,
 } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
@@ -14,7 +15,7 @@ import type { RelationFavor } from '../Persona/type'
 
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
-    pluginIDSettings: string
+    pluginIDSettings: NetworkPluginID
     languageSettings: LanguageOptions
     currentChainIdSettings: number
     // currentTokenPricesSettings: CryptoPrice

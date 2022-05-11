@@ -5,15 +5,16 @@ import { defer } from '@dimensiondev/kit'
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
 import QRCodeModal from '@walletconnect/qrcode-modal'
-import { ChainId, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { EVM_Provider } from '../types'
+import type { Account } from '@masknet/web3-shared-base'
 
 interface SessionPayload {
     event: 'connect' | 'session_update'
     params: [
         {
-            chainId: string
+            chainId: ChainId
             accounts: string[]
         },
     ]
@@ -30,26 +31,40 @@ interface ModalClosePayload {
 }
 
 export default class WalletConnectProvider extends BaseProvider implements EVM_Provider {
-    private connector = this.createConnector()
+    private connectorId = 0
+    private connector: WalletConnect = null!
 
     /**
      * The ongoing walletconnect connection which the listeners use to resolve later.
      */
     private connection: {
-        resolve: (accounts: string[]) => void
+        resolve: (account: Account<ChainId>) => void
         reject: (error: unknown) => void
     } | null = null
 
-    private createConnector() {
+    private async createConnector() {
+        // disable legacy listeners
+        this.connectorId += 1
+
+        const connectorId = this.connectorId
+        const createListener = (listener: (...args: any[]) => void) => {
+            return (...args: any) => {
+                if (connectorId !== this.connectorId) return
+                return listener(...args)
+            }
+        }
+
         const connector = new WalletConnect({
             bridge: 'https://bridge.walletconnect.org',
             qrcodeModal: QRCodeModal,
         })
 
-        connector.on('connect', this.onConnect.bind(this))
-        connector.on('disconnect', this.onDisconnect.bind(this))
-        connector.on('session_update', this.onSessionUpdate.bind(this))
-        connector.on('modal_closed', this.onModalClose.bind(this))
+        if (connector.connected) await connector.killSession()
+
+        connector.on('connect', createListener(this.onConnect.bind(this)))
+        connector.on('disconnect', createListener(this.onDisconnect.bind(this)))
+        connector.on('session_update', createListener(this.onSessionUpdate.bind(this)))
+        connector.on('modal_closed', createListener(this.onModalClose.bind(this)))
 
         return connector
     }
@@ -61,7 +76,10 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
             this.connection.reject(error)
             return
         }
-        this.connection.resolve(payload.params[0].accounts)
+        this.connection.resolve({
+            chainId: payload.params[0].chainId,
+            account: first(payload.params[0].accounts) ?? '',
+        })
     }
 
     private onDisconnect(error: Error | null, payload: DisconnectPayload) {
@@ -94,19 +112,18 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
 
     private async login(chainId?: ChainId) {
         // delay to return the result until session is updated or connected
-        const [deferred, resolve, reject] = defer<string[]>()
+        const [deferred, resolve, reject] = defer<Account<ChainId>>()
+
+        this.connector = await this.createConnector()
+
+        await this.connector.createSession({
+            chainId,
+        })
 
         this.connection = {
             resolve,
             reject,
         }
-
-        this.connector = this.createConnector()
-
-        if (this.connector.connected) await this.connector.killSession()
-        await this.connector.createSession({
-            chainId,
-        })
 
         return deferred.finally(() => {
             this.connection = null
@@ -143,13 +160,15 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
         }
     }
 
+    // It doesn't widely implement for switching chains with WalletConnect.
+    override async switchChain(chainId?: ChainId | undefined): Promise<void> {
+        throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
+    }
+
     override async connect(chainId: ChainId) {
-        const accounts = await this.login(chainId)
-        if (!accounts.length) throw new Error(`Failed to connect to ${chainId}.`)
-        return {
-            chainId,
-            account: first(accounts)!,
-        }
+        const account = await this.login(chainId)
+        if (!account.account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
+        return account
     }
 
     override async disconnect() {

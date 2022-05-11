@@ -36,17 +36,26 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     )
     // #endregion
 
-    const { Provider, Others } = useWeb3State(pluginID) as Web3Helper.Web3StateAll
+    const { Protocol, Others } = useWeb3State(pluginID) as Web3Helper.Web3StateAll
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
 
-        if (!networkType || !providerType || !Others || !Provider) throw new Error('Failed to connect to provider.')
+        if (!networkType || !providerType || !Others || !Protocol) throw new Error('Failed to connect to provider.')
 
         const chainId = Others?.networkResovler.networkChainId(networkType)
         if (!chainId) throw new Error('Failed to connect to provider.')
 
-        await Provider.connect(chainId, providerType)
+        const connection = await Protocol.getConnection?.({
+            chainId,
+            providerType,
+        })
+        if (!connection) throw new Error('Failed to build connection.')
+
+        const account = await connection.connect()
+
+        console.log('DEBUG: account')
+        console.log(account)
 
         setConnectWalletDialog({
             open: false,

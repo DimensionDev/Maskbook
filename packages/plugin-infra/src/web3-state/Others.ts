@@ -21,10 +21,6 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType>
         protected options: {
             /** Default address or nullish address */
             defaultAddress: string
-            /** Default chain id */
-            defaultChainId: ChainId
-            /** Default network type */
-            defaultNetworkType: NetworkType
             /** Default block time in seconds */
             defaultBlockDelay: number
             /** Built-in chain descriptors */
@@ -35,18 +31,18 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType>
             providerDescriptors: ProviderDescriptor<ChainId, ProviderType>[]
         },
     ) {}
+    getDefaultChainId(): ChainId {
+        throw new Error('Method not implemented.')
+    }
+    getDefaultNetworkType(): NetworkType {
+        throw new Error('Method not implemented.')
+    }
 
     chainResolver = createChainResolver(this.options.chainDescriptors)
     explorerResolver = createExplorerResolver(this.options.chainDescriptors)
     providerResolver = createProviderResolver(this.options.providerDescriptors)
     networkResovler = createNetworkResolver(this.options.networkDescriptors)
 
-    getDefaultChainId(): ChainId {
-        return this.options.defaultChainId
-    }
-    getDefaultNetworkType(): NetworkType {
-        return this.options.defaultNetworkType
-    }
     getZeroAddress(chainId?: ChainId | undefined): string {
         throw new Error('Method not implemented.')
     }

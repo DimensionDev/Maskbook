@@ -7,6 +7,7 @@ import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils'
 import { ProviderIcon } from './ProviderIcon'
+import { getSiteType } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -172,6 +173,15 @@ export function PluginProviderRender({
                     <List className={classes.wallets}>
                         {providers
                             .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)
+                            .filter((y) => y.enableRequirements?.supportedChainIds?.includes(selectedNetwork.chainId))
+                            .filter((z) => {
+                                const siteType = getSiteType()
+                                if (!siteType) return false
+                                return [
+                                    ...(z.enableRequirements?.supportedEnhancebleSites ?? []),
+                                    ...(z.enableRequirements?.supportedExtensionSites ?? []),
+                                ].includes(siteType)
+                            })
                             .map((provider) => (
                                 <ListItem
                                     className={classes.walletItem}
