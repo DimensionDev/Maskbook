@@ -96,7 +96,6 @@
     "pending": "대기 중…",
     "beta_sup": "<sup>(beta)<sup>",
     "post_dialog__button": "끝내기",
-    "post_dialog__image_payload": "이미지 페이로드",
     "post_dialog__placeholder": "여기서 텍스트 치기...",
     "post_dialog__title": "Mask: 편집",
     "post_dialog_enable_paste_auto": "자동 붙이기 지원",
