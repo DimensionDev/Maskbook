@@ -24,10 +24,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = <Trans i18nKey="plugin_pets_name" />
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
 
-                    return <ApplicationEntry disabled={disabled} title={name} icon={icon} onClick={openDialog} />
+                    return (
+                        <ApplicationEntry
+                            {...EntryComponentProps}
+                            title={name}
+                            icon={icon}
+                            onClick={EntryComponentProps.onClick ?? openDialog}
+                        />
+                    )
                 },
                 appBoardSortingDefaultPriority: 11,
                 marketListSortingPriority: 12,
