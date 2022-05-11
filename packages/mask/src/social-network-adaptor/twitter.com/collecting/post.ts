@@ -112,9 +112,9 @@ function registerPostCollectorInner(
             run()
             cancel.addEventListener(
                 'abort',
-                info.containingMaskPayload.subscribe(() => {
-                    const payload = info.containingMaskPayload.getCurrentValue()
-                    if (payload.err && refs.postMetadataImages.size === 0) return
+                info.hasMaskPayload.subscribe(() => {
+                    const payload = info.hasMaskPayload.getCurrentValue()
+                    if (!payload && refs.postMetadataImages.size === 0) return
                     updateProfileInfo(info)
                 }),
             )
