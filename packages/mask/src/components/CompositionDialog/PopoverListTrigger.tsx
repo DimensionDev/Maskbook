@@ -113,7 +113,7 @@ const PopoverListItem = (props: PopoverListItem) => {
             </div>
             {personaRequired && e2eDisabled === 1 && (
                 <div className={classes.flex}>
-                    <Typography className={classes.mainTitle}>Persona required</Typography>
+                    <Typography className={classes.mainTitle}>Persona required.</Typography>
                     <Typography
                         className={classes.create}
                         onClick={() => Services.Helper.openDashboard(DashboardRoutes.SignUp)}>

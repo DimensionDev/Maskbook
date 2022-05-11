@@ -14,9 +14,9 @@ import { BadgeRenderer } from './BadgeRenderer'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        minHeight: 208,
+        minHeight: 338,
         flexDirection: 'column',
-        padding: 10,
+        padding: 14,
         boxSizing: 'border-box',
         background: theme.palette.background.input,
     },

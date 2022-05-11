@@ -12,6 +12,7 @@ export function toProfileInformation(profiles: ProfileRecord[]) {
                     identifier: profile.identifier,
                     nickname: profile.nickname,
                     fingerprint: profile.linkedPersona?.rawPublicKey,
+                    publicHexKey: profile.linkedPersona?.publicKeyAsHex,
                 })
             }
 

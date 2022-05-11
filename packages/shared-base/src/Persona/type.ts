@@ -19,6 +19,7 @@ export interface ProfileInformation {
     fingerprint?: string
     address?: string
     fromNextID?: boolean
+    publicHexKey?: string
 }
 
 export enum RelationFavor {

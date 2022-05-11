@@ -12,17 +12,15 @@ import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { makeStyles } from '@masknet/theme'
-import { ImagePayloadIcon, SendIcon } from '@masknet/icons'
+import { SendIcon } from '@masknet/icons'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
 import { CharLimitIndicator } from './CharLimitIndicator'
 import { useI18N } from '../../utils'
-import { Flags, PersistentStorages } from '../../../shared'
-import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
+import { PersistentStorages } from '../../../shared'
 import type { ProfileInformation } from '@masknet/shared-base'
 import { CompositionContext } from '@masknet/plugin-infra/content-script'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
-import { Trans } from 'react-i18next'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { useSubscription } from 'use-subscription'
 import { PopoverListTrigger } from './PopoverListTrigger'
@@ -63,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
     optionTitle: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.text.secondary,
+        color: theme.palette.public.secondaryDark,
         marginRight: 12,
     },
     between: {
@@ -172,26 +170,26 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         [],
     )
 
-    const MoreOptions = [
-        imagePayloadVisible && (
-            <ClickableChip
-                key="image"
-                checked={imagePayloadSelected}
-                label={
-                    <>
-                        <ImagePayloadIcon style={{ width: 16, height: 16 }} />
-                        {t('post_dialog__image_payload')}
-                        {Flags.image_payload_marked_as_beta && (
-                            <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
-                        )}
-                    </>
-                }
-                onClick={() => setEncoding(encodingKind === 'image' ? 'text' : 'image')}
-                disabled={imagePayloadReadonly || sending}
-            />
-        ),
-        ...useMetadataDebugger(context, Editor.current),
-    ].filter(Boolean)
+    // const MoreOptions = [
+    //     imagePayloadVisible && (
+    //         <ClickableChip
+    //             key="image"
+    //             checked={imagePayloadSelected}
+    //             label={
+    //                 <>
+    //                     <ImagePayloadIcon style={{ width: 16, height: 16 }} />
+    //                     {t('post_dialog__image_payload')}
+    //                     {Flags.image_payload_marked_as_beta && (
+    //                         <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
+    //                     )}
+    //                 </>
+    //             }
+    //             onClick={() => setEncoding(encodingKind === 'image' ? 'text' : 'image')}
+    //             disabled={imagePayloadReadonly || sending}
+    //         />
+    //     ),
+    //     ...useMetadataDebugger(context, Editor.current),
+    // ].filter(Boolean)
 
     const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Number.POSITIVE_INFINITY)
     const onSubmit = useCallback(() => {

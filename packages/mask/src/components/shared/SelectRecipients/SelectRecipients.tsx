@@ -42,8 +42,8 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         const res = new Map()
         return arr.filter((item) => !res.has(item[val]) && res.set(item[val], 1))
     }
-    const searchedList = unique(profileItems?.concat(NextIDItems) ?? [], 'nickname')
-
+    const searchedList = unique(profileItems?.concat(NextIDItems) ?? [], 'publicHexKey')
+    console.log(searchedList, 'hhhh')
     useEffect(() => void (open && items.request()), [open, items.request])
     return (
         <SelectRecipientsDialogUI

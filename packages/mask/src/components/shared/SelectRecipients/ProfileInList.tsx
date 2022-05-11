@@ -2,11 +2,10 @@ import { useCallback } from 'react'
 import { ListItemText, Checkbox, ListItemAvatar, ListItem } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
-import type { ProfileInformation as Profile } from '@masknet/shared-base'
+import { formatPersonaPublicKey, ProfileInformation as Profile } from '@masknet/shared-base'
 import { Avatar } from '../../../utils/components/Avatar'
 import type { CheckboxProps } from '@mui/material/Checkbox'
 import { CopyIcon } from '@masknet/icons'
-import { formatPersonaFingerprint } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -59,7 +58,7 @@ export function ProfileInList(props: ProfileInListProps) {
     const profile = props.item
     const name = profile.nickname || profile.identifier.userId
 
-    const secondary = formatPersonaFingerprint(profile.fingerprint?.toUpperCase() ?? '', 5)
+    const secondary = formatPersonaPublicKey(profile.publicHexKey?.toUpperCase() ?? '', 5)
 
     const onClick = useCallback(
         (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.checked),
@@ -98,7 +97,7 @@ export function ProfileInList(props: ProfileInListProps) {
                         />
                         <CopyIcon
                             className={classes.actionIcon}
-                            onClick={() => props.onCopy(profile.fingerprint?.toUpperCase() ?? '')}
+                            onClick={() => props.onCopy(profile.publicHexKey?.toUpperCase() ?? '')}
                         />
                     </div>
                 }
