@@ -26,15 +26,19 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const hasPersona = !!useMyPersonas().find((x) =>
         x.linkedProfiles.some((y) => y.identifier.network === currentIdentity?.network),
     )
+
     /** @deprecated */
     const { value: hasLocalKey } = useAsync(
         async () => (currentIdentity ? Services.Identity.hasLocalKey(currentIdentity) : false),
         [currentIdentity],
     )
-
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     // #region Open
     const [open, setOpen] = useState(false)
+    const { value: currentPersonaIdentifier } = useAsync(() => {
+        return Services.Settings.getCurrentPersonaIdentifier()
+    }, [open])
+    console.log(currentPersonaIdentifier, 'currentPersona,identifier')
     const onClose = useCallback(() => {
         setOpen(false)
         UI.current?.reset()

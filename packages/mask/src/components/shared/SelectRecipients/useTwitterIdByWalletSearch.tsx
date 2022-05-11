@@ -5,11 +5,12 @@ export function useTwitterIdByWalletSearch(bindings: NextIDPersonaBindings[] | u
     if (!bindings) return EMPTY_LIST
     const type = isValidAddress(value)
         ? NextIDPlatform.Ethereum
-        : value.length === 44
+        : value.length >= 44
         ? NextIDPlatform.NextID
         : /^\w{1,15}$/.test(value)
         ? NextIDPlatform.Twitter
         : null
+
     if (!type) return []
     const temp = bindings.reduce<Record<string, any>>((pre, cur) => {
         const obj = cur.proofs.reduce<any>((obj, i) => {

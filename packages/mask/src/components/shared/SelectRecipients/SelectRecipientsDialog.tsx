@@ -1,5 +1,5 @@
-import { makeStyles } from '@masknet/theme'
-import { InjectedDialog, useSnackbarCallback, LoadingAnimation } from '@masknet/shared'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
 import { Button, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
 import Fuse from 'fuse.js'
 import { useMemo, useState } from 'react'
@@ -118,7 +118,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
 
     const LoadingRender = () => (
         <div className={cx(classes.empty, classes.mainText)}>
-            <LoadingAnimation style={{ fontSize: '2rem' }} />
+            <LoadingBase style={{ fontSize: '2rem' }} />
             <Typography>Loading</Typography>
         </div>
     )

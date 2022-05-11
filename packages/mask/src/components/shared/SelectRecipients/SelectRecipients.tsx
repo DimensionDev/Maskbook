@@ -27,13 +27,13 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const resolveNextIDPlatformType = () => {
         return isValidAddress(valueToSearch)
             ? NextIDPlatform.Ethereum
-            : valueToSearch.length === 44
+            : valueToSearch.length >= 44
             ? NextIDPlatform.NextID
             : NextIDPlatform.Twitter
     }
     const { loading: searchLoading, value: NextIDResults } = useNextIDBoundByPlatform(
         resolveNextIDPlatformType(),
-        valueToSearch,
+        valueToSearch.toLowerCase(),
     )
     const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, valueToSearch)
     const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
@@ -53,7 +53,9 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             }}
             open={open}
             items={searchedList || EMPTY_LIST}
-            selected={searchedList?.filter((x) => selected.some((i) => i.identifier === x.identifier)) || EMPTY_LIST}
+            selected={
+                searchedList?.filter((x) => selected.some((i) => i.publicHexKey === x.publicHexKey)) || EMPTY_LIST
+            }
             disabled={false}
             submitDisabled={false}
             onSubmit={onClose}
@@ -61,7 +63,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             onSelect={(item) => onSetSelected([...selected, item])}
             onDeselect={(item) => {
                 const temp = cloneDeep(selected)
-                const idxToDel = temp.findIndex((x) => x.identifier === item.identifier)
+                const idxToDel = temp.findIndex((x) => x.publicHexKey === item.publicHexKey)
                 temp.splice(idxToDel, 1)
                 onSetSelected(temp)
             }}
