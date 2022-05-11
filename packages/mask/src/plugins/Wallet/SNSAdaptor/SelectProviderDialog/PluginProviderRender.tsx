@@ -1,7 +1,7 @@
 import { SelectedIcon } from '@masknet/icons'
 import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ImageIcon } from '@masknet/shared'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'
 import { first } from 'lodash-unified'
 import { useI18N } from '../../../../utils'
@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => {
         root: {
             display: 'flex',
             flexDirection: 'column',
-            padding: theme.spacing(2, 4),
+            padding: theme.spacing(2, 3),
         },
         section: {
             flexGrow: 1,
@@ -23,36 +23,44 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         title: {
-            fontSize: 19,
+            fontSize: 14,
             fontWeight: 'bold',
         },
         list: {
-            marginTop: 21,
+            marginTop: 12,
             display: 'flex',
-            gap: 32,
+            gridGap: '16px 8px',
             flexWrap: 'wrap',
         },
         networkItem: {
-            width: 'auto',
-            padding: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            cursor: 'pointer',
+            alignItems: 'center',
+            width: 72,
+            padding: '12px 0px',
+            borderRadius: 12,
+            '&:hover': {
+                background: theme.palette.background.default,
+                '& p': {
+                    fontWeight: 600,
+                    color: theme.palette.text.primary,
+                },
+            },
         },
         iconWrapper: {
             position: 'relative',
-            cursor: 'pointer',
-            width: 48,
-            height: 48,
+            width: 30,
+            height: 30,
             borderRadius: '50%',
             backgroundColor: 'transparent',
         },
-        networkIcon: {
-            backgroundColor: theme.palette.background.default,
-        },
         checkedBadge: {
             position: 'absolute',
-            right: 0,
+            right: '-5px',
             bottom: 0,
-            width: 14,
-            height: 14,
+            width: 12,
+            height: 12,
             background: '#fff',
             borderRadius: '50%',
         },
@@ -65,9 +73,10 @@ const useStyles = makeStyles()((theme) => {
         wallets: {
             width: '100%',
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: 'repeat(4, 1fr)',
             gridAutoRows: '130px',
-            gridGap: theme.spacing(1),
+            height: 72,
+            gridGap: '16px 8px',
             margin: theme.spacing(2, 0, 0),
             [smallQuery]: {
                 gridAutoRows: '110px',
@@ -76,13 +85,20 @@ const useStyles = makeStyles()((theme) => {
         },
         walletItem: {
             padding: 0,
+            height: 88,
             width: '100%',
             display: 'block',
         },
         providerIcon: {
             height: '100%',
-            fontSize: 45,
+            fontSize: 36,
             display: 'flex',
+        },
+        networkName: {
+            fontSize: 12,
+            marginTop: 12,
+            whiteSpace: 'nowrap',
+            color: theme.palette.text.secondary,
         },
     }
 })
@@ -112,6 +128,7 @@ export function PluginProviderRender({
 }: PluginProviderRenderProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
+
     return (
         <>
             <Box className={classes.root}>
@@ -130,20 +147,19 @@ export function PluginProviderRender({
                                         setUndeterminedPluginID(network.networkSupporterPluginID as NetworkPluginID)
                                         setUndeterminedNetworkID(network.ID)
                                     }}>
-                                    <ShadowRootTooltip title={network.name} placement="top">
-                                        <div className={classes.iconWrapper}>
-                                            {NetworkIconClickBait ? (
-                                                <NetworkIconClickBait network={network}>
-                                                    <ImageIcon icon={network.icon} />
-                                                </NetworkIconClickBait>
-                                            ) : (
-                                                <ImageIcon icon={network.icon} />
-                                            )}
-                                            {undeterminedNetworkID === network.ID && (
-                                                <SelectedIcon className={classes.checkedBadge} />
-                                            )}
-                                        </div>
-                                    </ShadowRootTooltip>
+                                    <div className={classes.iconWrapper}>
+                                        {NetworkIconClickBait ? (
+                                            <NetworkIconClickBait network={network}>
+                                                <ImageIcon size={30} icon={network.icon} />
+                                            </NetworkIconClickBait>
+                                        ) : (
+                                            <ImageIcon size={30} icon={network.icon} />
+                                        )}
+                                        {undeterminedNetworkID === network.ID && (
+                                            <SelectedIcon className={classes.checkedBadge} />
+                                        )}
+                                    </div>
+                                    <Typography className={classes.networkName}>{network.type}</Typography>
                                 </ListItem>
                             ))}
                     </List>
