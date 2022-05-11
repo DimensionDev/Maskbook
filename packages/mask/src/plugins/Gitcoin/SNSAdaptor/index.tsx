@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { usePostInfoDetails, Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
+import { usePostInfoDetails, Plugin, usePluginWrapper, PluginId } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID, useChainId } from '@masknet/plugin-infra/web3'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
@@ -41,8 +41,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Trans i18nKey="plugin_gitcoin_description" />,
-            name: <Trans i18nKey="plugin_gitcoin_name" />,
+            description: <Trans ns={PluginId.Gitcoin} i18nKey="description" />,
+            name: <Trans ns={PluginId.Gitcoin} i18nKey="name" />,
             icon: <GitcoinIcon />,
             marketListSortingPriority: 9,
             tutorialLink: 'https://realmasknetwork.notion.site/98ed83784ed4446a8a13fa685c7bddfb',

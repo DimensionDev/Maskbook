@@ -21,7 +21,8 @@ import { useUnmount, useUpdateEffect } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
-import { useI18N } from '../../../../utils'
+import { useI18N as useBaseI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 import { isNativeTokenWrapper } from '../../helpers'
 import { PluginTraderMessages } from '../../messages'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
@@ -61,7 +62,8 @@ export function Trader(props: TraderProps) {
     const chainIdValid = useChainIdValid()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const classes = useStylesExtends(useStyles(), props)
-    const { t } = useI18N()
+    const { t: tr } = useBaseI18N()
+    const t = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
 
     // #region trade state
@@ -248,16 +250,17 @@ export function Trader(props: TraderProps) {
                   }.${
                       isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                           ? `Follow @${
-                                isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                                isTwitter(activatedSocialNetworkUI) ? tr('twitter_account') : tr('facebook_account')
                             } (mask.io) to swap cryptocurrencies on ${
                                 isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
                             }.`
                           : ''
                   }`,
                   '#mask_io',
+                  t.promote(),
               ].join('\n')
             : ''
-    }, [focusedTrade?.value, inputToken, outputToken])
+    }, [focusedTrade?.value, inputToken, outputToken, tr, t])
     const openShareTxDialog = useOpenShareTxDialog()
     const onConfirmDialogConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)

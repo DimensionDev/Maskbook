@@ -1,0 +1,13 @@
+{
+    "promote": "Share or browse Gitcoin projects you have donated or interested in.",
+    "select_a_token": "Select a token",
+    "grant_not_available": "Grant not available",
+    "enter_an_amount": "Enter an amount",
+    "insufficient_balance": "Insufficient {{symbol}} balance",
+    "gitcoin_readme": "By using this service, you will also be contributing 5% of your contribution to the <fund>Gitcoin grants development fund</fund>.",
+    "donate": "Donate",
+    "last_updated": "Last update:",
+    "by": "By",
+    "view_on": "View on Gitcoin",
+    "readme_fund_link": "https://gitcoin.co/grants/86/gitcoin-sustainability-fund"
+}

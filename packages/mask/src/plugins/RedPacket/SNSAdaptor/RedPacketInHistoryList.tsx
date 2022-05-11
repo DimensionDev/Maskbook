@@ -319,8 +319,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     strong: <strong />,
                                 }}
                                 values={{
-                                    claimedShares: history.claimers?.length ?? 0,
-                                    shares: history.shares,
+                                    claimedShares: history.claimers?.length.toString() ?? '0',
+                                    shares: history.shares.toString(),
                                 }}
                             />
                         </Typography>
