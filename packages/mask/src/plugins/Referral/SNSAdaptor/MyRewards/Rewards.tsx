@@ -7,12 +7,12 @@ import { Typography, Button, Box } from '@mui/material'
 
 import { useI18N } from '../../../../utils'
 import { roundValue } from '../../helpers'
-import { harvestRewards } from '../utils/referralFarm'
+import { harvestRewards } from '../utils/rewards'
 import {
     PagesType,
     TransactionStatus,
     TabsReferralFarms,
-    RewardTokenRewards,
+    AccountRewards,
     RewardDetailed,
     ChangePage,
 } from '../../types'
@@ -23,7 +23,7 @@ import { ReferredTokenRewards } from './ReferredTokenRewards'
 interface RewardsProps {
     currentChainId: ChainId
     account: string
-    rewards: RewardTokenRewards[]
+    rewards: AccountRewards
     pageType?: PagesType
     onChangePage?: ChangePage
 }
@@ -110,7 +110,7 @@ export function Rewards({
 
     return (
         <>
-            {rewards.map(({ rewardTokenDefn, rewardTokenRewards }) => {
+            {Object.entries(rewards).map(([rewardTokenDefn, rewardTokenRewards]) => {
                 const totalRewards = rewardTokenRewards.reduce(function (accumulator, current) {
                     return accumulator.plus(new BigNumber(formatUnits(current.rewardValue)))
                 }, new BigNumber(0))

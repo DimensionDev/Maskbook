@@ -214,11 +214,6 @@ export interface AccountRewards {
     [rewardTokenDefn: string]: RewardDetailed[]
 }
 
-export type RewardTokenRewards = {
-    rewardTokenDefn: string
-    rewardTokenRewards: RewardDetailed[]
-}
-
 export interface RewardData {
     apr: number
     dailyReward: number

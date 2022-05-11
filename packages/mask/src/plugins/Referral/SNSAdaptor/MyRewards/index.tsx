@@ -1,13 +1,11 @@
 import { useAsync } from 'react-use'
-import { useAccount, useChainId, useTokenListConstants, useWeb3 } from '@masknet/web3-shared-evm'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { useAccount, useChainId, useTokenListConstants } from '@masknet/web3-shared-evm'
 import { Grid, Typography, CircularProgress } from '@mui/material'
 
 import { useI18N } from '../../../../utils'
 import { getRequiredChainId } from '../../helpers'
 import type { PageInterface } from '../../types'
 import { ReferralRPC } from '../../messages'
-import { filterRewardsByAccountTokenPeriodOffset } from '../utils/rewards'
 
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { Rewards } from './Rewards'
@@ -22,25 +20,14 @@ export function MyRewards(props: PageInterface) {
     const requiredChainId = getRequiredChainId(currentChainId)
     const account = useAccount()
     const { ERC20 } = useTokenListConstants()
-    const web3 = useWeb3({ chainId: requiredChainId })
 
     const {
         value: accountRewards,
         loading,
-        error: accountRewardsError,
+        error,
     } = useAsync(
         async () => (account && ERC20 ? ReferralRPC.getAccountRewards(account, currentChainId, ERC20) : undefined),
         [account, currentChainId, ERC20],
-    )
-
-    // filter out the periods that oracle might still need to pick up
-    const {
-        value: rewardsFiltered = EMPTY_LIST,
-        loading: loadingOffsets,
-        error: rewardsFilteredError,
-    } = useAsync(
-        async () => account && filterRewardsByAccountTokenPeriodOffset(web3, account, accountRewards),
-        [account, accountRewards, web3],
     )
 
     if (currentChainId !== requiredChainId) {
@@ -53,7 +40,6 @@ export function MyRewards(props: PageInterface) {
         )
     }
 
-    const error = accountRewardsError || rewardsFilteredError
     return (
         <div className={myFarmsClasses.container}>
             <Grid container justifyContent="space-between" rowSpacing="20px" className={myFarmsClasses.heading}>
@@ -69,11 +55,11 @@ export function MyRewards(props: PageInterface) {
                 </Grid>
             </Grid>
             <div className={myFarmsClasses.content}>
-                {loading || loadingOffsets ? (
+                {loading ? (
                     <CircularProgress size={50} />
                 ) : (
                     <>
-                        {!rewardsFiltered || !rewardsFiltered.length || error ? (
+                        {!accountRewards || !Object.keys(accountRewards).length || error ? (
                             <Typography className={sharedClasses.msg}>
                                 {error
                                     ? t('plugin_referral_oracle_error_your_rewards')
@@ -83,7 +69,7 @@ export function MyRewards(props: PageInterface) {
                             <Rewards
                                 currentChainId={currentChainId}
                                 account={account}
-                                rewards={rewardsFiltered}
+                                rewards={accountRewards}
                                 pageType={props.pageType}
                                 onChangePage={props.onChangePage}
                             />

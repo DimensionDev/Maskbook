@@ -31,7 +31,6 @@ export const useSharedStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         borderRadius: '12px',
         background: theme.palette.background.default,
-        minHeight: '44px',
         padding: '12px 0',
         color: theme.palette.text.strong,
         fontWeight: 500,
