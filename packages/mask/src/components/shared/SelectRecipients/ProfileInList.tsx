@@ -11,6 +11,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         maxWidth: 'calc(50% - 6px)',
         padding: '0 0 0 8px',
+        borderRadius: 8,
     },
     overflow: {
         textOverflow: 'ellipsis',
@@ -42,6 +43,23 @@ const useStyles = makeStyles()((theme) => ({
     highLightBg: {
         background: theme.palette.background.default,
     },
+    avatarBox: {
+        minWidth: 46,
+    },
+    avatar: {
+        width: 36,
+        height: 36,
+    },
+    highLightBase: {
+        lineHeight: '20px',
+    },
+    highLightSecond: {
+        fontSize: 14,
+        lineHeight: '20px',
+    },
+    listItemRoot: {
+        margin: '4px 0',
+    },
 }))
 
 export interface ProfileInListProps extends withClasses<never> {
@@ -68,21 +86,31 @@ export function ProfileInList(props: ProfileInListProps) {
         <ListItem
             disabled={props.disabled}
             className={props.checked ? cx(classes.root, classes.highLightBg) : classes.root}>
-            <ListItemAvatar>
-                <Avatar person={profile} />
+            <ListItemAvatar
+                classes={{
+                    root: classes.avatarBox,
+                }}>
+                <Avatar
+                    classes={{
+                        root: classes.avatar,
+                    }}
+                    person={profile}
+                />
             </ListItemAvatar>
             <ListItemText
                 classes={{
+                    root: classes.listItemRoot,
                     primary: classes.overflow,
                     secondary: classes.overflow,
                 }}
                 primary={
                     <div className={classes.flex}>
                         <Highlighter
+                            className={classes.highLightBase}
                             highlightClassName={classes.highlighted}
                             searchWords={[props.search ?? '']}
                             autoEscape
-                            textToHighlight={name}
+                            textToHighlight={`@${name}`}
                         />
                         {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
                     </div>
@@ -90,6 +118,7 @@ export function ProfileInList(props: ProfileInListProps) {
                 secondary={
                     <div className={classes.flex}>
                         <Highlighter
+                            className={classes.highLightSecond}
                             highlightClassName={classes.highlighted}
                             searchWords={[props.search ?? '']}
                             autoEscape

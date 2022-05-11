@@ -128,7 +128,11 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     }
 
     return (
-        <InjectedDialog open={props.open} title={t('select_specific_friends_dialog__title')} onClose={props.onClose}>
+        <InjectedDialog
+            sx={{ minHeight: 600, minWidth: 600 }}
+            open={props.open}
+            title={t('select_specific_friends_dialog__title')}
+            onClose={props.onClose}>
             <DialogContent className={classes.paper}>
                 <InputBase
                     className={classes.inputRoot}

@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     subTitle: {
         fontSize: 14,
-        color: theme.palette.text.secondary,
+        color: theme.palette.public.secondaryDark,
         whiteSpace: 'nowrap',
     },
     paper: {
