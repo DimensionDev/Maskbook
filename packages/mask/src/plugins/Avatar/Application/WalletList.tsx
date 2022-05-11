@@ -61,6 +61,10 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: 16,
         marginRight: 16,
     },
+    paper: {
+        backgroundColor: 'black',
+        width: 335,
+    },
 }))
 
 interface AddressNamesProps extends withClasses<'root'> {
@@ -84,6 +88,8 @@ export function AddressNames(props: AddressNamesProps) {
         setSelectedWallet(address)
         onClose()
     }, [])
+
+    const theme = useTheme()
 
     useEffect(() => {
         if (!account && !wallets?.[0]?.identity) return
@@ -152,7 +158,9 @@ export function AddressNames(props: AddressNamesProps) {
                 anchorEl={anchorEl}
                 onClose={onClose}
                 disableRestoreFocus
-                PaperProps={{ style: { background: 'black', width: 335 } }}>
+                PaperProps={{
+                    style: { backgroundColor: theme.palette.mode === 'dark' ? '#000000' : 'white', width: 335 },
+                }}>
                 {account ? (
                     walletItem(
                         selectedWallet,
