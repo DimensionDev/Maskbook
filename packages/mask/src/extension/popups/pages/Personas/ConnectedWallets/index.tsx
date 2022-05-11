@@ -12,12 +12,15 @@ import type { ConnectedWalletInfo } from '../type'
 import { NextIDProof } from '@masknet/web3-providers'
 import Service from '../../../../service'
 import { usePopupCustomSnackbar } from '@masknet/theme'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()
     const chainId = useChainId()
     const { NameService } = useWeb3State()
     const wallets = useWallets()
+    const navigate = useNavigate()
+    const location = useLocation()
     const { proofs, currentPersona, refreshProofs, fetchProofsLoading } = PersonaContext.useContainer()
 
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -107,6 +110,13 @@ const ConnectedWallets = memo(() => {
     )
 
     const navigateToConnectWallet = async () => {
+        const params = new URLSearchParams(location.search)
+        const internal = params.get('internal')
+
+        if (internal) {
+            navigate(PopupRoutes.ConnectWallet)
+            return
+        }
         await Service.Helper.openPopupWindow(PopupRoutes.ConnectWallet)
         window.close()
     }
