@@ -127,7 +127,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                 {main}
                 {publisherLink ? (
                     <Link href={publisherLink} underline="none" target="_blank" rel="noopener">
-                        <ProviderByIcon />
+                        <ProviderByIcon style={{ width: 12, height: 12, marginLeft: 4 }} />
                     </Link>
                 ) : null}
             </Box>
@@ -142,14 +142,14 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
             <div className={classes.header}>
                 {wrapperProps?.icon ?? (
                     <MaskIcon
-                        style={{ filter: 'drop-shadow(0px 6px 12px rgba(28, 104, 243, 0.2))', width: 16, height: 16 }}
+                        style={{ filter: 'drop-shadow(0px 6px 12px rgba(28, 104, 243, 0.2))', width: 24, height: 24 }}
                     />
                 )}
                 <Typography
                     sx={{ marginLeft: 0.5 }}
                     variant="body1"
-                    fontSize={15}
-                    fontWeight="700"
+                    fontSize={16}
+                    fontWeight={700}
                     color={MaskColorVar.textPluginColor}>
                     {title ?? t('plugin_default_title')}
                 </Typography>
