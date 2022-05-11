@@ -9,7 +9,6 @@ import {
     isSameAddress,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { isCompactPayload } from './helpers'
 import { usePoolPayload } from './hooks/usePoolPayload'
 import type { JSON_PayloadInMask } from '../types'
@@ -97,9 +96,5 @@ export function PostInspector(props: PostInspectorProps) {
 
     const theme = useClassicMaskSNSPluginTheme()
 
-    return (
-        <ThemeProvider theme={theme}>
-            <EthereumChainBoundary chainId={chain_id}>{renderITO()}</EthereumChainBoundary>
-        </ThemeProvider>
-    )
+    return <ThemeProvider theme={theme}>{renderITO()}</ThemeProvider>
 }

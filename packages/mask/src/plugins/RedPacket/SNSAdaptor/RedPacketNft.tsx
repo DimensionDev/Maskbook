@@ -27,6 +27,7 @@ import { openWindow } from '@masknet/shared-base-ui'
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'relative',
+        width: '100%',
     },
     actions: {
         paddingTop: theme.spacing(2),

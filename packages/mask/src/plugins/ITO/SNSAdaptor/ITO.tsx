@@ -56,6 +56,7 @@ interface StyleProps {
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
+        width: '100%',
         position: 'relative',
         color: theme.palette.common.white,
         flexDirection: 'column',
@@ -860,7 +861,7 @@ export function ITO_Loading() {
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     const { classes } = useStyles({})
     return (
-        <div>
+        <div style={{ width: '100%' }}>
             <Card
                 className={classNames(classes.root, classes.loadingWrap)}
                 elevation={0}

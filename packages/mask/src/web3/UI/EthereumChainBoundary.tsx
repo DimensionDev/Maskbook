@@ -183,6 +183,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         {t('plugin_wallet_connect_wallet')}
                     </ActionButton>
                 ) : null}
+                {props.children}
             </>,
         )
 

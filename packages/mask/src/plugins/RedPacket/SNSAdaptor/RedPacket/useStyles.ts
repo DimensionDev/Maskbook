@@ -24,6 +24,7 @@ to {
                 padding: theme.spacing(1, 1.5),
                 height: 202,
             },
+            width: '100%',
         },
         header: {
             display: 'flex',
