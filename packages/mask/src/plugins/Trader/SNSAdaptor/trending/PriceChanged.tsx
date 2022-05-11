@@ -1,4 +1,3 @@
-import { useColorStyles } from '../../../../utils/theme'
 import { makeStyles } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { ArrowDropIcon } from '@masknet/icons'
@@ -27,7 +26,6 @@ export interface PriceChangedProps {
 }
 
 export function PriceChanged(props: PriceChangedProps) {
-    const { classes: color } = useColorStyles()
     const { classes } = useStyles()
     if (props.amount === 0) return null
     return (
