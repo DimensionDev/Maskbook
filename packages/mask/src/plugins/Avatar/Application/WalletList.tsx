@@ -1,6 +1,6 @@
 import { ImageIcon, ReversedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, MaskColorVar, ShadowRootMenu, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
-import { formatEthereumAddress, isSameAddress, useChainId } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, isSameAddress } from '@masknet/web3-shared-evm'
 import { Button, Divider, IconProps, Link, ListItemIcon, MenuItem, Stack, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useEffect, useState } from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
@@ -12,6 +12,7 @@ import { NFTWalletConnect } from './WalletConnect'
 import { BindingProof, PopupRoutes } from '@masknet/shared-base'
 import {
     NetworkPluginID,
+    useChainId,
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
     useWeb3State,
@@ -249,10 +250,10 @@ interface WalletUIProps {
 
 function WalletUI(props: WalletUIProps) {
     const { Utils } = useWeb3State()
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const { isETH, address, verify = false } = props
     const networkDescriptor = useNetworkDescriptor(undefined, isETH ? NetworkPluginID.PLUGIN_EVM : undefined)
     const { classes } = useWalletUIStyles()
+    const chainId = useChainId()
 
     if (!address) return null
     return (
@@ -278,7 +279,7 @@ function WalletUI(props: WalletUIProps) {
                     <CopyIconButton text={address} className={classes.copy} />
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(1, address) ?? ''}
+                        href={Utils?.resolveAddressLink?.(chainId, address) ?? ''}
                         target="_blank"
                         title="View on Explorer"
                         rel="noopener noreferrer">

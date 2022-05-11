@@ -1,12 +1,5 @@
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import {
-    ChainId,
-    ERC721TokenDetailed,
-    isSameAddress,
-    SocketState,
-    useAccount,
-    useCollectibles,
-} from '@masknet/web3-shared-evm'
+import { ChainId, ERC721TokenDetailed, isSameAddress, SocketState, useCollectibles } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Skeleton, Stack, Typography } from '@mui/material'
 import { useCallback, useState, useEffect } from 'react'
 import { downloadUrl } from '../../../utils'
@@ -18,7 +11,7 @@ import { Translate, useI18N } from '../locales'
 import { AddressNames } from './WalletList'
 import { NFTList } from './NFTList'
 import { Application_NFT_LIST_PAGE } from '../constants'
-import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 
 const useStyles = makeStyles()((theme) => ({
@@ -160,7 +153,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     const AddCollectible = (
         <Box className={classes.error}>
-            <Typography color="textSecondary" textAlign="center">
+            <Typography color="textSecondary" textAlign="center" fontSize={14} fontWeight={600}>
                 {currentPage !== Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? (
                     <Translate.collectible_on_polygon
                         components={{
