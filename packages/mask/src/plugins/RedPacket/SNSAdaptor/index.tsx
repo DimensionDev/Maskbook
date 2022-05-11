@@ -101,21 +101,23 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     return (
                         <ApplicationEntry
                             title={name}
                             recommendFeature={recommendFeature}
-                            disabled={disabled}
+                            {...EntryComponentProps}
                             icon={icon}
-                            onClick={() =>
-                                CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                    reason: 'timeline',
-                                    open: true,
-                                    options: {
-                                        startupPlugin: base.ID,
-                                    },
-                                })
+                            onClick={
+                                EntryComponentProps.onClick ??
+                                (() =>
+                                    CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                        reason: 'timeline',
+                                        open: true,
+                                        options: {
+                                            startupPlugin: base.ID,
+                                        },
+                                    }))
                             }
                         />
                     )

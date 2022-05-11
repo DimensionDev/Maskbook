@@ -20,7 +20,6 @@ export interface PostDialogProps {
 let openOnInitAnswered = false
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useI18N()
-
     const currentIdentity = useCurrentIdentity()?.identifier
     /** @deprecated */
     const { value: hasLocalKey } = useAsync(

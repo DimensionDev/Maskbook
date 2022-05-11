@@ -13,6 +13,7 @@ import { WalletMessages } from '../../messages'
 const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(2.5),
+        overflowX: 'hidden',
     },
     footer: {
         fontSize: 12,
@@ -64,7 +65,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     return (
         <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
-                <WalletStatusBox isDashboard={props.isDashboard} />
+                <WalletStatusBox isDashboard={props.isDashboard} showPendingTransaction />
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>

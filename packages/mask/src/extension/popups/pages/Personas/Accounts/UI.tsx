@@ -79,6 +79,7 @@ export const AccountsUI = memo<AccountsUIProps>(({ accounts, networks, onConnect
                             <div key={key} className={classes.item} onClick={() => onEnterDetail(account)}>
                                 <AccountAvatar avatar={avatar} network={identifier.network} isValid={is_valid} />
                                 <Typography className={classes.name}>
+                                    @
                                     {identifier.userId.length > 14
                                         ? `${identifier.userId.substring(0, 14)}...`
                                         : identifier.userId}

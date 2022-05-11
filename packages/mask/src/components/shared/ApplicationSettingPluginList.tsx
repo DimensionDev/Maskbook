@@ -10,6 +10,8 @@ export interface Application {
     entry: Plugin.SNSAdaptor.ApplicationEntry
     pluginId: string
     enabled?: boolean
+    isWalletConnectedRequired?: boolean
+    isWalletConnectedEVMRequired?: boolean
 }
 
 // #region kv storage
