@@ -48,13 +48,34 @@ export function useLineChart(
             .domain([min - dist * 0.05, max + dist * 0.05])
             .range([contentHeight, 0])
 
-        // add X axis
-        // graph
-        //     .append('g')
-        //     .attr('transform', `translate(0, ${contentHeight})`)
-        //     .call(d3.axisBottom(x).ticks(contentWidth / 100))
+        const minPosition = {
+            x: (x(data.find((x) => x.value === min)?.date as Date) ?? 0) - 10,
+            y: (y(min) ?? 0) + 24,
+        }
 
-        // add Y axis
+        const maxPosition = {
+            x: (x(data.find((x) => x.value === max)?.date as Date) ?? 0) - 10,
+            y: (y(max) ?? 0) - 16,
+        }
+
+        graph
+            .append('g')
+            .append('text')
+            .attr('transform', `translate(${minPosition.x}, ${minPosition.y})`)
+            .style('font-size', 14)
+            .style('font-weight', 700)
+            .attr('fill', theme.palette.text.secondary)
+            .text(formatTooltip(min))
+
+        graph
+            .append('g')
+            .append('text')
+            .attr('transform', `translate(${maxPosition.x}, ${maxPosition.y})`)
+            .style('font-size', 14)
+            .style('font-weight', 700)
+            .attr('fill', theme.palette.text.secondary)
+            .text(formatTooltip(max))
+
         graph
             .append('g')
             .attr('transform', 'translate(0, 0)')
@@ -127,8 +148,6 @@ export function useLineChart(
                         .attr('x', 0)
                         .attr('y', (d, i) => `${i * 1.2}em`)
                         .style('font-weight', (_, i) => (i ? null : 'bold'))
-                        .style('color', '#ffffff')
-                        .attr('color', '#ffffff')
                         .attr('fill', '#ffffff')
                         .text((d) => d),
                 )
