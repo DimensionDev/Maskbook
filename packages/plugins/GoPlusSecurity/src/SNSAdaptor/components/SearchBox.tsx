@@ -21,6 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         fontWeight: 400,
         borderColor: theme.palette.divider,
+        color: theme.palette.text.primary,
     },
     searchButton: {
         borderRadius: 8,

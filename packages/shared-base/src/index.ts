@@ -1,6 +1,5 @@
 export * from './serializer'
 export * from './collections'
-export * from './MaskPayload'
 export * from './Identifier'
 export * from './i18n'
 export * from './utils'

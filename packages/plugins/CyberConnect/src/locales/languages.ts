@@ -16,8 +16,6 @@ export const languages = {
     'zh-CN': zh_CN,
     zh: zh_TW,
 }
-import { createI18NBundle } from '@masknet/shared-base'
-export const add__template__I18N = createI18NBundle('__template__', languages)
 // @ts-ignore
 if (import.meta.webpackHot) {
     // @ts-ignore
@@ -27,7 +25,7 @@ if (import.meta.webpackHot) {
             globalThis.dispatchEvent?.(
                 new CustomEvent('MASK_I18N_HMR', {
                     detail: [
-                        '__template__',
+                        'com.maskbook.cyberconnect',
                         { en: en_US, ja: ja_JP, ko: ko_KR, qy: qya_AA, 'zh-CN': zh_CN, zh: zh_TW },
                     ],
                 }),

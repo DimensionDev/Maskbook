@@ -1,9 +1,10 @@
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
+import { readFile, writeFile } from 'node:fs/promises'
+import { spawn } from 'node:child_process'
+import { createHash } from 'node:crypto'
+import { createRequire } from 'node:module'
 import builder from 'core-js-builder'
 import { rollup } from 'rollup'
-import { readFile, writeFile } from 'fs/promises'
-import { createRequire } from 'module'
-import { createHash } from 'crypto'
 
 // https://github.com/rollup/rollup/issues/4253
 // import loadConfigFile from 'rollup/dist/loadConfigFile.js'

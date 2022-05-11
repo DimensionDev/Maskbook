@@ -218,5 +218,29 @@
         ],
         "name": "Transfer",
         "type": "event"
+    },
+    {
+        "name": "increaseAllowance",
+        "inputs": [
+            {
+                "type": "address",
+                "name": "spender",
+                "internalType": "address"
+            },
+            {
+                "name": "addedValue",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "bool",
+                "internalType": "bool",
+                "name": ""
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
     }
 ]
