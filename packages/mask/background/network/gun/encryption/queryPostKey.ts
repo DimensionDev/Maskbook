@@ -1,10 +1,10 @@
-import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer, encodeArrayBuffer, isNonNull } from '@dimensiondev/kit'
 import type { DecryptStaticECDH_PostKey, EncryptionResultE2EMap } from '@masknet/encryption'
 import type { EC_Public_CryptoKey, EC_Public_JsonWebKey } from '@masknet/shared-base'
 import { CryptoKeyToJsonWebKey } from '../../../../utils-pure'
 import { getGunData, pushToGunDataArray, subscribeGunMapData } from '@masknet/gun-utils'
 import { EventIterator } from 'event-iterator'
-import { noop } from 'lodash-unified'
+import { isObject, noop, uniq } from 'lodash-unified'
 import { queryPublicKey } from '../../../database/persona/helper'
 
 // !!! Change how this file access Gun will break the compatibility of v40 payload decryption.
@@ -44,23 +44,39 @@ namespace Version38Or39 {
 
         /* cspell:disable-next-line */
         // ? In this step we get something like ["jzarhbyjtexiE7aB1DvQ", "jzarhuse6xlTAtblKRx9"]
-        console.log(`[@masknet/encryption] Reading key partition [${postHash}][${keyHash}]`)
-        const internalNodeNames = Object.keys((await getGunData(postHash, keyHash)) || {}).filter((x) => x !== '_')
+        console.log(
+            `[@masknet/encryption] Reading key partition [${postHash[0]}][${keyHash}] and [${postHash[1]}][${keyHash}]`,
+        )
+        const internalNodeNames = uniq(
+            (
+                await Promise.all([
+                    //
+                    getGunData(postHash[0], keyHash),
+                    getGunData(postHash[1], keyHash),
+                ])
+            )
+                .filter(isNonNull)
+                .filter(isObject)
+                .map(Object.keys)
+                .flat()
+                .filter((x) => x !== '_'),
+        )
         // ? In this step we get all keys in this category (gun2[postHash][keyHash])
         const resultPromise = internalNodeNames.map((key) => getGunData(key))
 
         const iter = new EventIterator<DecryptStaticECDH_PostKey>((queue) => {
+            // immediate results
             for (const result of resultPromise) result.then(emit, noop)
+            // future results
+            Promise.all([
+                main(subscribeGunMapData([postHash[1]], isValidData, abortSignal)),
+                main(subscribeGunMapData([postHash[0]], isValidData, abortSignal)),
+            ]).then(() => queue.stop())
 
-            async function main() {
-                const iter = subscribeGunMapData([postHash], isValidData, abortSignal)
-                for await (const data of iter) emit(data)
-                queue.stop()
+            async function main(keyProvider: AsyncGenerator<unknown>) {
+                for await (const data of keyProvider) emit(data)
             }
-
-            main()
-
-            function emit(result: any) {
+            function emit(result: unknown) {
                 if (abortSignal.aborted) return
                 if (!isValidData(result)) return
                 queue.push({
@@ -95,7 +111,7 @@ namespace Version38Or39 {
             receiversKeys.forEach(async ({ aesKey, receiverKey }) => {
                 const keyHash = await (version === -38 ? hashKey38 : hashKey39)(receiverKey)
                 console.log(`gun[${postHash}][${keyHash}].push(`, aesKey, ')')
-                pushToGunDataArray([postHash, keyHash], aesKey)
+                pushToGunDataArray([postHash[1], keyHash], aesKey)
             })
         } else {
             if (version === -39) throw new Error('unreachable')
@@ -113,7 +129,7 @@ namespace Version38Or39 {
                         salt: encodeArrayBuffer(ivToBePublished),
                     }
                     console.log(`gun[${postHash}][${keyHash}].push(`, post, ')')
-                    pushToGunDataArray([postHash, keyHash], post)
+                    pushToGunDataArray([postHash[1], keyHash], post)
                 } catch (error) {
                     console.error('[@masknet/encryption] An error occurs when sending E2E keys', error)
                 }
@@ -148,12 +164,12 @@ namespace Version38Or39 {
         return { postHash, keyHash }
     }
 
-    async function hashIV(networkHint: string, iv: Uint8Array) {
+    async function hashIV(networkHint: string, iv: Uint8Array): Promise<[string, string]> {
         const hashPair = '9283464d-ee4e-4e8d-a7f3-cf392a88133f'
         const N = 2
 
-        const hash = await work(encodeArrayBuffer(iv), hashPair)
-        return networkHint + '-' + hash.slice(0, N)
+        const hash = (await work(encodeArrayBuffer(iv), hashPair)).slice(0, N)
+        return [`${networkHint}${hash}`, `${networkHint}-${hash}`]
     }
 
     // The difference between V38 and V39 is: V39 is not stable (JSON.stringify)
