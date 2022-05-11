@@ -3,7 +3,7 @@ import { openWindow } from '@masknet/shared-base-ui'
 import urlcat from 'urlcat'
 import type { SocialNetwork } from '../../social-network/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
-import { deconstructPayload } from '../../utils'
+import { hasPayloadLike } from '../../utils'
 import { mindsBase } from './base'
 import { usernameValidator } from './utils/user'
 
@@ -28,7 +28,7 @@ export const mindsShared: SocialNetwork.Shared & SocialNetwork.Base = {
             return new URL(url)
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
-            payloadParser: deconstructPayload,
+            hasPayloadLike,
             getURLFromPostIdentifier: getPostURL,
         }),
     },
