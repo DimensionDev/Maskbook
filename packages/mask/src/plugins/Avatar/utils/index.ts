@@ -98,7 +98,6 @@ export async function getNFTByChain(
 }
 
 export async function createNFT(address: string, tokenId: string, chainId?: ChainId) {
-    console.log(chainId)
     const token = await getNFTByChain(address, tokenId, chainId ?? ChainId.Mainnet)
     if (token) return token
     return EVM_RPC.getNFT({

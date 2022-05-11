@@ -1,6 +1,6 @@
-import type { ChainId, ERC721TokenCollectionInfo, ERC721TokenDetailed } from '../types'
+import { ChainId, ERC721TokenCollectionInfo, ERC721TokenDetailed } from '../types'
 import { useWeb3Context } from '../context'
-import { uniqWith } from 'lodash-unified'
+import { noop, uniqWith } from 'lodash-unified'
 import { isSameAddress } from '../utils'
 import { useSocket } from './useSocket'
 import { useMemo } from 'react'
@@ -54,9 +54,9 @@ export function useCollectibles(address: string, chainId: ChainId | null, depend
         (a, b) => isSameAddress(a.contractDetailed.address, b.contractDetailed.address) && a.tokenId === b.tokenId,
     )
     return {
-        data: all as ERC721TokenDetailed[],
+        data: chainId === ChainId.Mainnet ? (all as ERC721TokenDetailed[]) : [],
         state,
-        error,
-        retry,
+        error: chainId === ChainId.Mainnet ? error : undefined,
+        retry: chainId === ChainId.Mainnet ? retry : noop,
     }
 }

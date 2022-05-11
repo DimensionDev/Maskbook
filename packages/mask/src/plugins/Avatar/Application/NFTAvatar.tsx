@@ -5,7 +5,7 @@ import { TwitterIcon } from '../assets/twitter'
 import { RainbowBox } from '../SNSAdaptor/RainbowBox'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode> = {
-    [EnhanceableSite.Twitter]: <TwitterIcon />,
+    [EnhanceableSite.Twitter]: <TwitterIcon style={{ width: 15, height: 15 }} />,
     [EnhanceableSite.Localhost]: null,
 }
 
@@ -40,7 +40,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 }}>
                 {SOCIAL_MEDIA_ICON_MAPPING['twitter.com']}
             </Stack>
-            {owner ? <PointIcon sx={{ position: 'absolute', top: 0, right: -9 }} /> : null}
+            {owner ? <PointIcon sx={{ position: 'absolute', top: 0, right: -3 }} /> : null}
         </Stack>
     )
 }

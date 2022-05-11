@@ -112,11 +112,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
         currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? ChainId.Mainnet : ChainId.Matic,
     )
 
-    useEffect(
-        () => setTokens(currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? collectibles : []),
-        [currentPage],
-    )
-
     const { showSnackbar } = useCustomSnackbar()
     const onChange = useCallback((address: string) => {
         setSelectedAccount(address)
@@ -200,18 +195,20 @@ export function NFTListDialog(props: NFTListDialogProps) {
     )
 
     const NoNFTList = () => {
-        if (currentPage !== Application_NFT_LIST_PAGE.Application_nft_tab_eth_page) return AddCollectible
+        if (currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page && tokens.length === 0)
+            return AddCollectible
+        else if (currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page && tokens.length) return
         if (state !== SocketState.done) {
             return LoadStatus
         }
         if (error) {
             return Retry
         }
-        if (tokens.length === 0) {
+        if (tokens.length === 0 && collectibles.length === 0) {
             return AddCollectible
         }
 
-        return undefined
+        return
     }
 
     if (!wallets?.length && (currentPluginId !== NetworkPluginID.PLUGIN_EVM || !account))
@@ -236,13 +233,13 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         address={selectedAccount}
                         onSelect={onSelect}
                         onChangePage={onChangePage}
-                        tokens={tokens}
+                        tokens={uniqBy([...tokens, ...collectibles], (x) => x.contractDetailed.address && x.tokenId)}
                         children={NoNFTList()}
                     />
                 )}
             </DialogContent>
             <DialogActions className={classes.actions}>
-                {tokens.length ? (
+                {tokens.length || collectibles.length ? (
                     <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
                         <Typography variant="body1" color="textPrimary">
                             {t.collectible_not_found()}

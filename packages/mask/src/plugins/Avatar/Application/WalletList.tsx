@@ -1,5 +1,5 @@
 import { ImageIcon, ReversedAddress, useSnackbarCallback } from '@masknet/shared'
-import { makeStyles, ShadowRootMenu, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskColorVar, ShadowRootMenu, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
 import { formatEthereumAddress, isSameAddress, useChainId } from '@masknet/web3-shared-evm'
 import { Button, Divider, IconProps, Link, ListItemIcon, MenuItem, Stack, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useEffect, useState } from 'react'
@@ -46,6 +46,13 @@ const useStyles = makeStyles()((theme) => ({
     },
     iconShadow: {
         filter: 'drop-shadow(0px 0px 6px rgba(28, 104, 243, 0.6))',
+    },
+    change: {
+        marginLeft: theme.spacing(4),
+        backgroundColor: MaskColorVar.twitterButton,
+        borderRadius: 9999,
+        fontWeight: 600,
+        fontSize: 14,
     },
 }))
 
@@ -113,7 +120,7 @@ export function AddressNames(props: AddressNamesProps) {
             </ListItemIcon>
             <WalletUI address={wallet} verify={verify} isETH={isETH} />
             {enableChange && (
-                <Button size="small" sx={{ marginLeft: 4, borderRadius: 9999 }} onClick={onChange}>
+                <Button size="small" className={classes.change} onClick={onChange}>
                     {t.change()}
                 </Button>
             )}
