@@ -32,7 +32,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
             <Stack
                 sx={{
                     position: 'absolute',
-                    right: -9,
+                    right: -3,
                     bottom: 0,
                     overflow: 'hidden',
                     borderRadius: '100%',
@@ -40,7 +40,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 }}>
                 {SOCIAL_MEDIA_ICON_MAPPING['twitter.com']}
             </Stack>
-            {owner ? <PointIcon sx={{ position: 'absolute', top: 0, right: -3 }} /> : null}
+            {owner ? <PointIcon sx={{ position: 'absolute', top: 0, right: 3, width: 6, height: 6 }} /> : null}
         </Stack>
     )
 }

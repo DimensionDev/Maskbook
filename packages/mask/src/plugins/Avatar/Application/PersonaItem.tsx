@@ -7,11 +7,9 @@ import { RSS3_KEY_SNS } from '../constants'
 import { useCheckTokenOwner, useTokenOwner } from '../hooks/useTokenOwner'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import type { TokenInfo } from '../types'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
-import { context } from '../context'
-import { useSubscription } from 'use-subscription'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
@@ -41,18 +39,11 @@ interface PersonaItemProps {
 }
 
 export function PersonaItem(props: PersonaItemProps) {
-    const currentIdentity = useSubscription(context.lastRecognizedProfile)
     const { userId, onSelect, owner = false, proof, avatar, nickname = '' } = props
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = usePersonaNFTAvatar(userId, getAvatarId(avatar) ?? '', RSS3_KEY_SNS.TWITTER)
     const { value: token, loading: loadingToken } = useTokenOwner(_avatar?.address ?? '', _avatar?.tokenId ?? '')
-    const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(token?.owner)
-    const [haveNFT, setHaveNFT] = useState(false)
-
-    useEffect(() => {
-        if (!currentIdentity) return
-        setHaveNFT(Boolean(_avatar && _avatar.avatarId === getAvatarId(currentIdentity?.avatar ?? '')))
-    }, [_avatar, currentIdentity?.avatar])
+    const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(userId, token?.owner)
 
     const onClick = useCallback(() => {
         onSelect?.(proof, _avatar && isOwner ? { address: _avatar?.address, tokenId: _avatar?.tokenId } : undefined)
@@ -63,7 +54,7 @@ export function PersonaItem(props: PersonaItemProps) {
             <NFTAvatar
                 owner={owner}
                 avatar={avatar || _avatar?.imageUrl}
-                hasBorder={haveNFT}
+                hasBorder={!!_avatar}
                 platform={proof.platform}
             />
             <Box className={classes.userInfo}>
@@ -77,9 +68,9 @@ export function PersonaItem(props: PersonaItemProps) {
 
             <NFTInfo
                 loading={loading || loadingToken || loadingCheckOwner}
-                owner={isOwner}
+                owner={isOwner || _avatar?.avatarId === getAvatarId(avatar)}
                 nft={
-                    haveNFT
+                    _avatar
                         ? {
                               name: token?.name ?? '',
                               symbol: token?.symbol ?? '',

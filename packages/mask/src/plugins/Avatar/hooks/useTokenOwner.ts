@@ -25,9 +25,9 @@ export function useTokenOwner(address: string, tokenId: string) {
     }, [ERC721Contract, tokenId])
 }
 
-export function useCheckTokenOwner(owner?: string) {
+export function useCheckTokenOwner(userId: string, owner?: string) {
     const account = useAccount()
-    const { value: persona, loading } = usePersonas()
+    const { value: persona, loading } = usePersonas(userId)
 
     return {
         loading,
