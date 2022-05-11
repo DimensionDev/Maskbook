@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { memo } from 'react'
 import { WalletSwitch } from '../components/WalletSwitch'
-import type { accountType, walletTypes } from '../types'
+import type { accountType, WalletTypes } from '../types'
 import { getKvPayload, setKvPatchData } from '../hooks/useKV'
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface WalletSettingProp {
-    wallets?: walletTypes[]
+    wallets?: WalletTypes[]
     accountList?: accountType
     title: string
     open: boolean
@@ -80,7 +80,7 @@ const WalletSetting = memo(
             console.log({ patch })
             try {
                 const payload = await getKvPayload(patch, currentPersona.identifier.publicKeyAsHex, accountId!)
-                const signature = await context.silentSign?.(
+                const signature = await context.priviliged_silentSign()?.(
                     currentPersona?.identifier,
                     (payload?.val as NextIDStoragePayload)?.signPayload,
                 )

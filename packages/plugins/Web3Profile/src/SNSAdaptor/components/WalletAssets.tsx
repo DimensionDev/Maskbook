@@ -4,7 +4,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import type { collectionTypes } from '../types'
+import type { CollectionTypes } from '../types'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
@@ -55,7 +55,7 @@ export interface WalletAssetsCardProps extends withClasses<never | 'root'> {
     address: string
     onSetting: () => void
     type: string
-    collectionList?: collectionTypes[]
+    collectionList?: CollectionTypes[]
 }
 
 export function WalletAssetsCard(props: WalletAssetsCardProps) {

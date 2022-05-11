@@ -6,9 +6,9 @@ import type {
     ScopedStorage,
     ProfileIdentifier,
     PersonaIdentifier,
-    ECKeyIdentifier,
     PersonaInformation,
     PopupRoutes,
+    ECKeyIdentifier,
 } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
@@ -76,8 +76,6 @@ export namespace Plugin.Shared {
         personaSign(payload: PersonaSignRequest): Promise<PersonaSignResult>
         /** Sign a message with wallet */
         walletSign(message: string, address: string): Promise<string>
-        /** Sign a message silently */
-        silentSign(signer: ECKeyIdentifier, message: string): Promise<PersonaSignResult>
         currentPersona: Subscription<PersonaIdentifier | undefined>
         allPersona?: Subscription<PersonaInformation[]>
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
@@ -229,6 +227,22 @@ export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
+        /** Sign a message silently */
+        priviliged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
+    }
+    export interface PersonaSignResult {
+        /** The persona user selected to sign the message */
+        persona: PersonaIdentifier
+        signature: {
+            // type from ethereumjs-util
+            // raw: ECDSASignature
+            EIP2098: string
+            signature: string
+        }
+        /** Persona converted to a wallet address */
+        address: string
+        /** Message in hex */
+        messageHex: string
     }
     export interface Definition extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */

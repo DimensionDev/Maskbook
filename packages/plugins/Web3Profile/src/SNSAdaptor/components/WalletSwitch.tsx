@@ -5,7 +5,9 @@ import { useI18N } from '../../locales'
 import { ExternalLink } from 'react-feather'
 import { useState } from 'react'
 import { formatAddress } from '../utils'
-import type { walletTypes } from '../types'
+import type { WalletTypes } from '../types'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -48,9 +50,9 @@ const useStyles = makeStyles()((theme) => ({
 
 interface WalletSwitchProps {
     type: number
-    address: walletTypes
+    address: WalletTypes
     isPublic: boolean
-    hiddenItems?: walletTypes[]
+    hiddenItems?: WalletTypes[]
 }
 
 export function WalletSwitch({ type, address, isPublic, hiddenItems = [] }: WalletSwitchProps) {
@@ -60,6 +62,8 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [] }: Wall
     const getWalletName = () => {
         return ['EVM wallet', 'Solana wallet', 'Flow wallet'][type]
     }
+    const { Utils } = useWeb3State() ?? {}
+
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = e.target.checked
         if (!v) {
@@ -85,7 +89,7 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [] }: Wall
 
                     <Link
                         className={classes.link}
-                        href="www.baidu.com"
+                        href={Utils?.resolveAddressLink?.(ChainId.Mainnet, address.address) ?? ''}
                         target="_blank"
                         title={t.plugin_wallet_view_on_explorer()}
                         rel="noopener noreferrer">

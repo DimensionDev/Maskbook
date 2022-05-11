@@ -9,7 +9,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { PersonaAction } from './PersonaAction'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import type { accountType, walletTypes } from '../types'
+import type { accountType, WalletTypes } from '../types'
 import WalletSetting from './WalletSetting'
 
 const useStyles = makeStyles()((theme) => ({
@@ -68,7 +68,7 @@ export interface ImageManagementProps extends withClasses<never | 'root'> {
     currentVisitingProfile?: IdentityResolved
     accountList?: accountType
     accountId?: string
-    allWallets?: walletTypes[]
+    allWallets?: WalletTypes[]
     getWalletHiddenRetry: () => void
 }
 

@@ -27,7 +27,6 @@ function createWorkerContext(pluginID: string, signal: AbortSignal): Plugin.Work
         },
         personaSign: Services.Identity.signWithPersona,
         walletSign: Services.Ethereum.personalSign,
-        silentSign: Services.Identity.generateSignResult,
         currentPersona: currentPersonaSub,
         openPopupWindow: Services.Helper.openPopupWindow,
     }

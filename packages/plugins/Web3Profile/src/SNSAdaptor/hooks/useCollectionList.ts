@@ -7,9 +7,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import { uniqBy } from 'lodash-unified'
 import { getDonations, getFootprints } from '../api'
-import type { collection } from '../types'
+import type { Collection } from '../types'
 export const getDonationList = async (walletList: string[]) => {
-    const resNodeIdParams: collection[] = []
+    const resNodeIdParams: Collection[] = []
     const promises = walletList.map((address) => {
         return getDonations(formatEthereumAddress(address)).then((result) => {
             if (result) {
@@ -33,7 +33,7 @@ export const getDonationList = async (walletList: string[]) => {
 }
 
 export const getFootprintList = async (walletList: string[]) => {
-    const resNodeIdParams: collection[] = []
+    const resNodeIdParams: Collection[] = []
     const promises = walletList.map((address) => {
         return getFootprints(formatEthereumAddress(address)).then((result) => {
             if (result) {

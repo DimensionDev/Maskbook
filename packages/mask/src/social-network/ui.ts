@@ -23,6 +23,7 @@ import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
 import { SocialNetworkEnum } from '@masknet/encryption'
+import { PluginId } from '@masknet/plugin-infra'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -144,7 +145,11 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 },
                 personaSign: Services.Identity.signWithPersona,
                 walletSign: Services.Ethereum.personalSign,
-                silentSign: Services.Identity.generateSignResult,
+                priviliged_silentSign: () => {
+                    if (pluginID !== PluginId.Web3Profile)
+                        throw new TypeError("current plugin doesn't support slient sign function")
+                    return Services.Identity.generateSignResult
+                },
                 currentPersona: personaSub,
                 allPersona: allPersonaSub,
                 lastRecognizedProfile: lastRecognizedSub,

@@ -1,5 +1,5 @@
 import type { BindingProof } from '@masknet/shared-base'
-import type { collection, collectionTypes, WalletsCollection, walletTypes } from './types'
+import type { Collection, CollectionTypes, WalletsCollection, WalletTypes } from './types'
 
 export const formatPublicKey = (publicKey?: string) => {
     return `${publicKey?.slice(0, 6)}...${publicKey?.slice(-6)}`
@@ -9,13 +9,13 @@ export const formatAddress = (address: string, size = 4) => {
     return `${address?.slice(0, size)}...${address?.slice(-size)}`
 }
 
-const deduplicateArray = (listA?: walletTypes[], listB?: walletTypes[]) => {
+const deduplicateArray = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
     if (!listA || listA?.length === 0) return
     if (!listB || listB?.length === 0) return [...listA]
     return listA?.filter((l2) => listB.findIndex((l1) => l2.address === l1.address) === -1)
 }
 
-const addHiddenToArray = (listA?: collectionTypes[], listB?: string[]) => {
+const addHiddenToArray = (listA?: CollectionTypes[], listB?: string[]) => {
     if (!listA || listA?.length === 0) return
     if (!listB || listB?.length === 0) return [...listA]
     return listA?.map((x) => {
@@ -34,7 +34,7 @@ const addHiddenToArray = (listA?: collectionTypes[], listB?: string[]) => {
 
 export const getWalletList = (
     accounts: BindingProof[],
-    wallets: walletTypes[],
+    wallets: WalletTypes[],
     hiddenObj:
         | {
               hiddenWallets: Record<string, WalletsCollection>
@@ -50,8 +50,8 @@ export const getWalletList = (
               >
           }
         | undefined,
-    footprints?: collection[],
-    donations?: collection[],
+    footprints?: Collection[],
+    donations?: Collection[],
 ) => {
     if (wallets?.length === 0 || !hiddenObj || accounts?.length === 0) return
     return accounts?.map((key) => ({

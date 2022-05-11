@@ -6,7 +6,7 @@ import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
 import { InjectedDialog } from '@masknet/shared'
 import type { PersonaInformation, NextIDStoragePayload } from '@masknet/shared-base'
-import type { collectionTypes } from '../types'
+import type { CollectionTypes } from '../types'
 import { context } from '../context'
 import { getKvPayload, setKvPatchData } from '../hooks/useKV'
 
@@ -67,7 +67,7 @@ export interface ImageListDialogProps extends withClasses<never | 'root'> {
     onClose: () => void
     title: string
     currentPersona?: PersonaInformation
-    collectionList?: collectionTypes[]
+    collectionList?: CollectionTypes[]
     accountId?: string
     retryData: () => void
 }
@@ -76,8 +76,8 @@ export function ImageListDialog(props: ImageListDialogProps) {
     const { address = ZERO_ADDRESS, open, onClose, retryData, title, accountId, currentPersona, collectionList } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const [unListedCollections, setUnListedCollections] = useState<collectionTypes[]>([])
-    const [listedCollections, setListedCollections] = useState<collectionTypes[]>([])
+    const [unListedCollections, setUnListedCollections] = useState<CollectionTypes[]>([])
+    const [listedCollections, setListedCollections] = useState<CollectionTypes[]>([])
     const chainId = ChainId.Mainnet
 
     useEffect(() => {
@@ -124,7 +124,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
         try {
             const payload = await getKvPayload(patch, currentPersona.identifier.publicKeyAsHex, accountId!)
             if (!payload) throw new Error('get payload failed')
-            const signature = await context.silentSign(
+            const signature = await context.priviliged_silentSign()?.(
                 currentPersona.identifier,
                 (payload.val as NextIDStoragePayload)?.signPayload,
             )

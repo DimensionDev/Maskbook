@@ -23087,7 +23087,6 @@ packages:
         optional: true
     dependencies:
       prop-types: 15.8.1
-      react: 18.0.0
     dev: false
 
   /react-helmet-async/1.3.0:
@@ -24144,7 +24143,7 @@ packages:
   /rtl-css-js/1.15.0:
     resolution: {integrity: sha512-99Cu4wNNIhrI10xxUaABHsdDqzalrSRTie4GeCmbGVuehm4oj+fIy8fTzB+16pmKe8Bv9rl+hxIBez6KxExTew==}
     dependencies:
-      '@babel/runtime': 7.17.8
+      '@babel/runtime': 7.17.9
     dev: false
 
   /run-parallel/1.2.0:
@@ -26892,21 +26891,19 @@ packages:
   /use-subscription/1.6.0:
     resolution: {integrity: sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==}
     peerDependencies:
-      react: ^18.0.0
-    dev: false
-
-  /use-subscription/1.6.0_react@packages+empty:
-    resolution: {integrity: sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==}
-    peerDependencies:
-      react: ^18.0.0
-    dependencies:
-      react: link:packages/empty
+      react: ^18.0.0 || 18
+    peerDependenciesMeta:
+      react:
+        optional: true
     dev: false
 
   /use-subscription/1.7.0:
     resolution: {integrity: sha512-87x6MjiIVE/BWqtxfiRvM6jfvGudN+UeVOnWi7qKYp2c0YJn5+Z5Jt0kZw6Tt+8hs7kw/BWo2WBhizJSAZsQJA==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 18
+    peerDependenciesMeta:
+      react:
+        optional: true
     dependencies:
       use-sync-external-store: 1.1.0
     dev: false
@@ -26914,18 +26911,10 @@ packages:
   /use-sync-external-store/1.1.0:
     resolution: {integrity: sha512-SEnieB2FPKEVne66NpXPd1Np4R1lTNKfjuy3XdIoPQKYBAFdzbzSZlSn1KJZUiihQLQC5Znot4SBz1EOTBwQAQ==}
     peerDependencies:
-      react: ^18.0.0 || 18
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 18
     peerDependenciesMeta:
       react:
         optional: true
-    dev: false
-
-  /use-subscription/1.6.0_react@packages+empty:
-    resolution: {integrity: sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==}
-    peerDependencies:
-      react: ^18.0.0
-    dependencies:
-      react: link:packages/empty
     dev: false
 
   /use/3.1.1:

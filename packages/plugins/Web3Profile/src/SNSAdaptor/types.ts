@@ -24,11 +24,11 @@ export interface GeneralAsset {
     }
 }
 
-export interface personaKV {
+export interface PersonaKV {
     persona: string
-    proofs?: proof[]
+    proofs?: Proof[]
 }
-export interface patch {
+export interface Patch {
     hiddenAddresses: WalletsCollection
     unListedCollections: Record<
         string,
@@ -39,20 +39,20 @@ export interface patch {
         }
     >
 }
-export interface proof {
+export interface Proof {
     platform: NextIDPlatform
     identity: string
-    content?: Record<string, patch>
+    content?: Record<string, Patch>
 }
-export interface collectionTypes {
+export interface CollectionTypes {
     platform: string
     iconURL?: string
     hidden?: boolean
 }
 
-export interface collection {
+export interface Collection {
     address: string
-    collections?: collectionTypes[]
+    collections?: CollectionTypes[]
 }
 export enum AssetType {
     GitcoinDonation = 'Gitcoin-Donation',
@@ -64,15 +64,15 @@ export interface Response {
 }
 
 export interface WalletsCollection {
-    NFTs?: walletTypes[]
-    donations?: walletTypes[]
-    footprints?: walletTypes[]
+    NFTs?: WalletTypes[]
+    donations?: WalletTypes[]
+    footprints?: WalletTypes[]
 }
 
-export interface walletTypes {
+export interface WalletTypes {
     address: string
     platform?: string
-    collections?: collectionTypes[]
+    collections?: CollectionTypes[]
 }
 
 export interface accountType extends BindingProof {

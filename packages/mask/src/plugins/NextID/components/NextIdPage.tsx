@@ -1,7 +1,14 @@
 import type { NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { NewLinkOutIcon, Web3ProfileIcon, WalletIcon } from '@masknet/icons'
+import {
+    NewLinkOutIcon,
+    Web3ProfileIcon,
+    WalletUnderTabsIcon,
+    PersonaLinkIcon,
+    PersonaProfileIcon,
+    VerifyIcon,
+} from '@masknet/icons'
 import { Box, Button, Link, Skeleton, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
@@ -107,8 +114,10 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         if (!personaConnectStatus.action) return null
 
         const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
+        const buttonIcon = personaConnectStatus.hasPersona ? <PersonaLinkIcon /> : <PersonaProfileIcon />
         return (
-            <Button variant="contained" onClick={personaConnectStatus.action}>
+            <Button variant="contained" style={{ borderRadius: '99px' }} onClick={personaConnectStatus.action}>
+                {buttonIcon}
                 {button}
             </Button>
         )
@@ -166,14 +175,15 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         }
         if (!isAccountVerified) {
             return (
-                <Button variant="contained" onClick={onVerify}>
+                <Button style={{ borderRadius: '99px' }} variant="contained" onClick={onVerify}>
+                    <VerifyIcon />
                     {t.verify_Twitter_ID_button()}
                 </Button>
             )
         }
         return (
-            <Button variant="contained" onClick={() => toggleBindDialog(true)}>
-                <WalletIcon />
+            <Button style={{ borderRadius: '99px' }} variant="contained" onClick={() => toggleBindDialog(true)}>
+                <WalletUnderTabsIcon />
                 {t.verify_wallet_button()}
             </Button>
         )

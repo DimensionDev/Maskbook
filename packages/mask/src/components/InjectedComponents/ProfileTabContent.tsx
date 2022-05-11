@@ -44,7 +44,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const { t } = useI18N()
     const [hidden, setHidden] = useState(true)
-    const [addressList, setAddressList] = useState<AddressName[]>()
+    const [addressList, setAddressList] = useState<AddressName[]>([])
     const [selectedTab, setSelectedTab] = useState<string | undefined>()
     const [profileOpen, setProfileOpen] = useState(false)
 
