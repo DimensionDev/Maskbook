@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
-import { formatUnits } from '@ethersproject/units'
 import { Chip, Grid, InputAdornment, TextField, Typography } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Box } from '@mui/system'
@@ -77,9 +76,12 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     const [dailyFarmReward, setDailyFarmReward] = useState('')
     const [totalFarmReward, setTotalFarmReward] = useState('')
 
-    const { value: farmsMetaState } = useAsync(
-        async () => (farm?.farmHash ? ReferralRPC.getFarmsMetaState(chainId, [farm.farmHash]) : undefined),
-        [farm, chainId],
+    const { value: farmDetailed } = useAsync(
+        async () =>
+            farm?.farmHash && rewardToken
+                ? ReferralRPC.getDailyAndTotalRewardsFarm(chainId, farm.farmHash, rewardToken.decimals)
+                : undefined,
+        [farm, chainId, rewardToken],
     )
 
     const onChangeTotalFarmReward = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -247,11 +249,10 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
         [t],
     )
 
-    const farmMetaState = farm?.farmHash ? farmsMetaState?.get(farm.farmHash) : undefined
     const rewardData = {
         apr: APR,
-        dailyReward: roundValue(formatUnits(farmMetaState?.dailyFarmReward ?? '0', rewardToken?.decimals)),
-        totalReward: roundValue(farm?.totalFarmRewards ?? '0'),
+        dailyReward: roundValue(farmDetailed?.dailyFarmReward ?? '0'),
+        totalReward: roundValue(farmDetailed?.totalFarmRewards ?? '0'),
     }
 
     const balance = formatBalance(rewardBalance ?? '', rewardToken?.decimals, 6)

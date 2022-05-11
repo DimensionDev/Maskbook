@@ -45,13 +45,8 @@ export interface DepositProps {
     onDeposit: () => Promise<void>
 }
 
-interface AdjustFarm extends FarmExistsEvent {
-    totalFarmRewards?: number
-    apr?: number
-}
-
 export interface AdjustFarmRewards {
-    farm?: AdjustFarm
+    farm?: FarmExistsEvent
     rewardToken?: FungibleTokenDetailed
     referredToken?: FungibleTokenDetailed
 }
@@ -61,7 +56,7 @@ export interface AdjustFarmRewardsInterface extends AdjustFarmRewards, PageInter
 export interface DepositDialogInterface {
     deposit?: DepositProps
     adjustFarmData?: {
-        farm?: AdjustFarm
+        farm?: FarmExistsEvent
         rewardToken?: FungibleTokenDetailed
         referredToken?: FungibleTokenDetailed
     }

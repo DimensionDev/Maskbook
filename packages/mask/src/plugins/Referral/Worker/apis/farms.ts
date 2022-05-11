@@ -58,28 +58,7 @@ function parseFarmExistsEvents(unparsed: any) {
 
     return uniqueFarms
 }
-function parseFarmMetaStateChangeEvents(unparsed: any) {
-    const parsed = parseEvents(unparsed)
 
-    const farmMetastateMap = new Map<string, { dailyFarmReward: string }>()
-
-    parsed.forEach((e) => {
-        const { farmHash, key, value } = e.args
-
-        const periodRewardKey = padRight(asciiToHex('periodReward'), 64)
-        let dailyFarmReward = '0'
-
-        if (key === periodRewardKey) {
-            const periodReward = defaultAbiCoder.decode(['uint128', 'int128'], value)[0]
-            dailyFarmReward = periodReward.toString()
-        }
-
-        // set the last value(newest) of dailyFarmReward
-        farmMetastateMap.set(farmHash, { dailyFarmReward })
-    })
-
-    return farmMetastateMap
-}
 function parseRewardsHarvestedEvents(unparsed: any) {
     const parsed = parseEvents(unparsed)
 
@@ -210,27 +189,45 @@ export async function getAccountFarms(
     return [...farmsMap.values()]
 }
 
-type FarmsMetaStateMap = Map<string, { dailyFarmReward: string }>
-export async function getFarmsMetaState(
+type Farm = { farmHash: string; dailyFarmReward: number; totalFarmRewards: number }
+export async function getDailyAndTotalRewardsFarm(
     chainId: ChainId,
-    farmHashes?: FarmHash[],
-): Promise<FarmsMetaStateMap | undefined> {
+    farmHash: FarmHash,
+    tokenDecimals: number,
+): Promise<Farm> {
     const farmsAddr = REFERRAL_FARMS_V1_ADDR
-
-    // Allow filter by farmHash
-    let topic2
-    if (farmHashes?.length) {
-        topic2 = farmHashes.map((farmHash) => farmHash)
-    }
 
     const res = await queryIndexersWithNearestQuorum({
         addresses: [farmsAddr],
-        topic1: [eventIds.FarmMetastate],
-        topic2,
+        topic1: [eventIds.FarmMetastate, eventIds.FarmDepositChange],
+        topic2: [farmHash],
         chainId: [chainId],
     })
 
-    return parseFarmMetaStateChangeEvents(res.items)
+    const parsed = parseEvents(res.items)
+
+    let farm = { farmHash, dailyFarmReward: 0, totalFarmRewards: 0 }
+
+    parsed.forEach((e) => {
+        if (e.topic === eventIds.FarmDepositChange) {
+            const prevTotalFarmRewards = farm.totalFarmRewards || 0
+
+            const totalFarmRewards = prevTotalFarmRewards + Number.parseFloat(formatUnits(e.args.delta, tokenDecimals))
+            farm = { ...farm, totalFarmRewards }
+        }
+        if (e.topic === eventIds.FarmMetastate) {
+            const { key, value } = e.args
+
+            const periodRewardKey = padRight(asciiToHex('periodReward'), 64)
+            if (key === periodRewardKey) {
+                const periodReward = defaultAbiCoder.decode(['uint128', 'int128'], value)[0]
+
+                farm = { ...farm, dailyFarmReward: Number.parseFloat(formatUnits(periodReward, tokenDecimals)) }
+            }
+        }
+    })
+
+    return farm
 }
 
 export async function getMyRewardsHarvested(
