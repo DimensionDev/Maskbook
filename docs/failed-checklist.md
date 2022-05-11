@@ -2,7 +2,7 @@
 
 ## Build error / Runtime crash
 
-1. Run `npx gulp clean`, Cleanup cache and built files
+1. Run `npx gulp clean`, Cleanup cache and build files
 
 ## CI failed
 
