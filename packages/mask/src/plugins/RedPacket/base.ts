@@ -5,7 +5,7 @@ import { RedPacketMetaKey, RedPacketNftMetaKey, RedPacketPluginID } from './cons
 
 export const base: Plugin.Shared.Definition = {
     ID: RedPacketPluginID,
-    name: { fallback: 'Lucky drop' },
+    name: { fallback: 'Lucky Drop' },
     description: {
         fallback:
             'Lucky drop is a special feature in Mask Network which was launched in early 2020. Once users have installed the Chrome/Firefox plugin, they can claim and give out cryptocurrencies on Twitter.',

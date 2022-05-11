@@ -127,7 +127,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                 {main}
                 {publisherLink ? (
                     <Link href={publisherLink} underline="none" target="_blank" rel="noopener">
-                        <ProviderByIcon style={{ width: 12, height: 12, marginLeft: 4 }} />
+                        <ProviderByIcon style={{ width: 16, height: 16, marginLeft: 4 }} />
                     </Link>
                 ) : null}
             </Box>

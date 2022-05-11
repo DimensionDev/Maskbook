@@ -9,7 +9,7 @@ export const base: Plugin.Shared.Definition = {
     description: {
         fallback: 'A plugin for https://findtruman.io/',
     },
-    publisher: { name: { fallback: 'FindTruman' }, link: 'https://findtruman.io/' },
+    publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
