@@ -12,7 +12,7 @@ import {
     PagesType,
     TransactionStatus,
     TabsReferralFarms,
-    AccountRewards,
+    RewardTokenRewards,
     RewardDetailed,
     ChangePage,
 } from '../../types'
@@ -23,7 +23,7 @@ import { ReferredTokenRewards } from './ReferredTokenRewards'
 interface RewardsProps {
     currentChainId: ChainId
     account: string
-    rewards: AccountRewards
+    rewards: RewardTokenRewards[]
     pageType?: PagesType
     onChangePage?: ChangePage
 }
@@ -110,7 +110,7 @@ export function Rewards({
 
     return (
         <>
-            {Object.entries(rewards).map(([rewardTokenDefn, rewardTokenRewards]) => {
+            {rewards.map(({ rewardTokenDefn, rewardTokenRewards }) => {
                 const totalRewards = rewardTokenRewards.reduce(function (accumulator, current) {
                     return accumulator.plus(new BigNumber(formatUnits(current.rewardValue)))
                 }, new BigNumber(0))

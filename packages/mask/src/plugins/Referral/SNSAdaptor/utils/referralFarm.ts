@@ -8,8 +8,8 @@ import { AbiItem, asciiToHex, padRight, toWei } from 'web3-utils'
 import ReferralFarmsV1ABI from '@masknet/web3-contracts/abis/ReferralFarmsV1.json'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
-import { roundValue, toChainAddressEthers } from '../../helpers'
-import type { Reward } from '../../types'
+import { roundValue, toChainAddressEthers, parseChainAddress } from '../../helpers'
+import type { Reward, ChainAddress } from '../../types'
 import { REFERRAL_FARMS_V1_ADDR } from '../../constants'
 
 export async function runCreateERC20PairFarm(
@@ -251,4 +251,18 @@ export async function harvestRewards(
     } catch (error: any) {
         onError(error?.message)
     }
+}
+
+export async function getAccountTokenPeriodOffset(
+    web3: Web3,
+    account: string,
+    rewardTokenDefn: ChainAddress,
+): Promise<number> {
+    const referralFarmsV1Contract = createContract(web3, REFERRAL_FARMS_V1_ADDR, ReferralFarmsV1ABI as AbiItem[])
+    const tokenAddress = parseChainAddress(rewardTokenDefn).address
+
+    const offset =
+        (await referralFarmsV1Contract?.methods.getAccountTokenPeriodOffset(account, tokenAddress).call()) || 0
+
+    return Number.parseInt(offset, 10)
 }

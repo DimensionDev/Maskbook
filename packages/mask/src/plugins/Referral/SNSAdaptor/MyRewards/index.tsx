@@ -1,11 +1,13 @@
 import { useAsync } from 'react-use'
-import { useAccount, useChainId, useTokenListConstants } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useTokenListConstants, useWeb3 } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { Grid, Typography, CircularProgress } from '@mui/material'
 
 import { useI18N } from '../../../../utils'
 import { getRequiredChainId } from '../../helpers'
 import type { PageInterface } from '../../types'
 import { ReferralRPC } from '../../messages'
+import { filterRewardsByAccountTokenPeriodOffset } from '../utils/rewards'
 
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { Rewards } from './Rewards'
@@ -20,10 +22,17 @@ export function MyRewards(props: PageInterface) {
     const requiredChainId = getRequiredChainId(currentChainId)
     const account = useAccount()
     const { ERC20 } = useTokenListConstants()
+    const web3 = useWeb3({ chainId: requiredChainId })
 
-    const { value: rewards, loading } = useAsync(
-        async () => account && ERC20 && ReferralRPC.getAccountRewards(account, currentChainId, ERC20),
+    const { value: accountRewards, loading } = useAsync(
+        async () => (account && ERC20 ? ReferralRPC.getAccountRewards(account, currentChainId, ERC20) : undefined),
         [account, currentChainId, ERC20],
+    )
+
+    // filter out the periods that oracle might still need to pick up
+    const { value: rewardsFiltered = EMPTY_LIST, loading: loadingOffsets } = useAsync(
+        async () => account && filterRewardsByAccountTokenPeriodOffset(web3, account, accountRewards),
+        [account, accountRewards, web3],
     )
 
     if (currentChainId !== requiredChainId) {
@@ -51,11 +60,11 @@ export function MyRewards(props: PageInterface) {
                 </Grid>
             </Grid>
             <div className={myFarmsClasses.content}>
-                {loading ? (
+                {loading || loadingOffsets ? (
                     <CircularProgress size={50} />
                 ) : (
                     <>
-                        {!rewards || !Object.keys(rewards).length ? (
+                        {!rewardsFiltered || !rewardsFiltered.length ? (
                             <Typography className={myFarmsClasses.noFarm}>
                                 {t('plugin_referral_you_have_not_joined_farm')}
                             </Typography>
@@ -63,7 +72,7 @@ export function MyRewards(props: PageInterface) {
                             <Rewards
                                 currentChainId={currentChainId}
                                 account={account}
-                                rewards={rewards}
+                                rewards={rewardsFiltered}
                                 pageType={props.pageType}
                                 onChangePage={props.onChangePage}
                             />
