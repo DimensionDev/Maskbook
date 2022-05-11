@@ -145,7 +145,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 },
                 personaSign: Services.Identity.signWithPersona,
                 walletSign: Services.Ethereum.personalSign,
-                priviliged_silentSign: () => {
+                privileged_silentSign: () => {
                     if (pluginID !== PluginId.Web3Profile)
                         throw new TypeError("current plugin doesn't support slient sign function")
                     return Services.Identity.generateSignResult

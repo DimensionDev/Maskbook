@@ -124,7 +124,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
         try {
             const payload = await getKvPayload(patch, currentPersona.identifier.publicKeyAsHex, accountId!)
             if (!payload) throw new Error('get payload failed')
-            const signature = await context.priviliged_silentSign()?.(
+            const signature = await context.privileged_silentSign()?.(
                 currentPersona.identifier,
                 (payload.val as NextIDStoragePayload)?.signPayload,
             )

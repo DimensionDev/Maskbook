@@ -80,7 +80,7 @@ const WalletSetting = memo(
             console.log({ patch })
             try {
                 const payload = await getKvPayload(patch, currentPersona.identifier.publicKeyAsHex, accountId!)
-                const signature = await context.priviliged_silentSign()?.(
+                const signature = await context.privileged_silentSign()?.(
                     currentPersona?.identifier,
                     (payload?.val as NextIDStoragePayload)?.signPayload,
                 )

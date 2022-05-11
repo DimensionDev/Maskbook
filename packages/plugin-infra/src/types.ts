@@ -228,7 +228,7 @@ export namespace Plugin.SNSAdaptor {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         /** Sign a message silently */
-        priviliged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
+        privileged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
     }
     export interface PersonaSignResult {
         /** The persona user selected to sign the message */
