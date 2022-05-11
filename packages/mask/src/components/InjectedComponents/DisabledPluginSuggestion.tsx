@@ -76,7 +76,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                     action={
                         <Button
                             size="small"
-                            startIcon={<PluginIcon />}
+                            startIcon={<PluginIcon style={{ width: 18, height: 18 }} />}
                             variant="contained"
                             onClick={() => onClick(x)}
                             sx={{
@@ -84,6 +84,8 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                                 color: 'white',
                                 width: '254px',
                                 height: '36px',
+                                fontSize: 14,
+                                fontWeight: 700,
                                 '&:hover': {
                                     backgroundColor: MaskColorVar.buttonPluginBackground,
                                 },

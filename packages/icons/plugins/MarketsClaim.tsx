@@ -1,5 +1,5 @@
 import { createIcon } from '../utils'
-import { SvgIcon, SvgIconProps } from '@mui/material'
+import { SvgIcon } from '@mui/material'
 
 export const MarketsClaimIcon: typeof SvgIcon = createIcon(
     'Markets',
@@ -17,17 +17,18 @@ export const MarketsClaimIcon: typeof SvgIcon = createIcon(
     '0 0 36 36',
 )
 
-const svg = (
-    <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g clipPath="url(#clip0_3400_11847)" filter="url(#filter0_bd_3400_11847)">
+export const ITONewIcon = createIcon(
+    'ITONewIcon',
+    <g>
+        <g clipPath="url(#clip0_3864_11847)" filter="url(#filter0_bd_3864_11847)">
             <path
-                d="M31.4074 8.93555H16.5754C15.6634 8.93555 14.9434 9.65555 14.9434 10.5195V25.4955C14.9434 26.3595 15.6634 27.0795 16.5754 27.0795H31.4074C32.3194 27.0795 33.0394 26.3595 33.0394 25.4955V10.5195C33.0394 9.60755 32.3194 8.93555 31.4074 8.93555V8.93555Z"
-                fill="url(#paint0_linear_3400_11847)"
+                d="M31.4074 8.93555H16.5754C15.6634 8.93555 14.9434 9.65555 14.9434 10.5195V25.4955C14.9434 26.3595 15.6634 27.0795 16.5754 27.0795H31.4074C32.3194 27.0795 33.0394 26.3595 33.0394 25.4955V10.5195C33.0394 9.60755 32.3194 8.93555 31.4074 8.93555Z"
+                fill="url(#paint0_linear_3864_11847)"
             />
-            <g filter="url(#filter1_bd_3400_11847)">
+            <g filter="url(#filter1_bd_3864_11847)">
                 <path
                     d="M25.3601 26.9353C24.5921 26.9353 23.8721 26.6473 23.3441 26.1193L13.4561 16.1833C12.9281 15.6553 12.6401 14.9833 12.6401 14.2153L12.4961 9.51128C12.4961 8.74328 12.7841 7.97529 13.3121 7.39929C13.8881 6.82329 14.6081 6.53529 15.4241 6.58329L20.1761 6.67929C20.8961 6.67929 21.6161 7.01529 22.1441 7.49529L32.0321 17.3833C32.5601 17.9113 32.8481 18.6313 32.8481 19.3993C32.8481 20.1673 32.5601 20.8873 32.0321 21.4153L27.3761 26.1193C26.8481 26.6473 26.1281 26.9353 25.3601 26.9353Z"
-                    fill="url(#paint1_linear_3400_11847)"
+                    fill="url(#paint1_linear_3864_11847)"
                     fillOpacity="0.8"
                     shapeRendering="crispEdges"
                 />
@@ -48,7 +49,7 @@ const svg = (
         </g>
         <defs>
             <filter
-                id="filter0_bd_3400_11847"
+                id="filter0_bd_3864_11847"
                 x="-6"
                 y="-11"
                 width="56"
@@ -57,7 +58,7 @@ const svg = (
                 colorInterpolationFilters="sRGB">
                 <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feGaussianBlur in="BackgroundImage" stdDeviation="8" />
-                <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_3400_11847" />
+                <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_3864_11847" />
                 <feColorMatrix
                     in="SourceAlpha"
                     type="matrix"
@@ -68,11 +69,11 @@ const svg = (
                 <feGaussianBlur stdDeviation="6" />
                 <feComposite in2="hardAlpha" operator="out" />
                 <feColorMatrix type="matrix" values="0 0 0 0 0.105882 0 0 0 0 0.564706 0 0 0 0 0.933333 0 0 0 0.2 0" />
-                <feBlend mode="normal" in2="effect1_backgroundBlur_3400_11847" result="effect2_dropShadow_3400_11847" />
-                <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_3400_11847" result="shape" />
+                <feBlend mode="normal" in2="effect1_backgroundBlur_3864_11847" result="effect2_dropShadow_3864_11847" />
+                <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_3864_11847" result="shape" />
             </filter>
             <filter
-                id="filter1_bd_3400_11847"
+                id="filter1_bd_3864_11847"
                 x="8.49609"
                 y="2.57812"
                 width="28.352"
@@ -81,7 +82,7 @@ const svg = (
                 colorInterpolationFilters="sRGB">
                 <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feGaussianBlur in="BackgroundImage" stdDeviation="2" />
-                <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_3400_11847" />
+                <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_3864_11847" />
                 <feColorMatrix
                     in="SourceAlpha"
                     type="matrix"
@@ -92,11 +93,11 @@ const svg = (
                 <feGaussianBlur stdDeviation="2" />
                 <feComposite in2="hardAlpha" operator="out" />
                 <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
-                <feBlend mode="normal" in2="effect1_backgroundBlur_3400_11847" result="effect2_dropShadow_3400_11847" />
-                <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_3400_11847" result="shape" />
+                <feBlend mode="normal" in2="effect1_backgroundBlur_3864_11847" result="effect2_dropShadow_3864_11847" />
+                <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_3864_11847" result="shape" />
             </filter>
             <linearGradient
-                id="paint0_linear_3400_11847"
+                id="paint0_linear_3864_11847"
                 x1="23.9914"
                 y1="8.93555"
                 x2="23.9914"
@@ -106,7 +107,7 @@ const svg = (
                 <stop offset="1" stopColor="#28E5FF" />
             </linearGradient>
             <linearGradient
-                id="paint1_linear_3400_11847"
+                id="paint1_linear_3864_11847"
                 x1="22.6721"
                 y1="6.57812"
                 x2="22.6721"
@@ -115,10 +116,10 @@ const svg = (
                 <stop stopColor="#FF0000" />
                 <stop offset="1" stopColor="#FF2C2C" />
             </linearGradient>
-            <clipPath id="clip0_3400_11847">
+            <clipPath id="clip0_3864_11847">
                 <rect width="24" height="24" fill="white" transform="translate(10 5)" />
             </clipPath>
         </defs>
-    </svg>
+    </g>,
+    '0 0 46 46',
 )
-export const ITOIcon1 = (props: SvgIconProps) => <SvgIcon {...props}>{svg}</SvgIcon>
