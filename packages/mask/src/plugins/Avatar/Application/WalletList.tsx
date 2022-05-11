@@ -35,7 +35,9 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F6F8F8',
     },
     wrapper: {},
-    address: {},
+    address: {
+        lineHeight: 1.5,
+    },
     copy: {
         color: theme.palette.secondary.main,
     },
@@ -53,6 +55,11 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 9999,
         fontWeight: 600,
         fontSize: 14,
+    },
+    divider: {
+        borderColor: theme.palette.mode === 'dark' ? '#2F3336' : '#F2F5F6',
+        marginLeft: 16,
+        marginRight: 16,
     },
 }))
 
@@ -140,7 +147,12 @@ export function AddressNames(props: AddressNamesProps) {
                 <WalletUI address={selectedWallet} isETH />
                 <ArrowDropDownIcon />
             </Stack>
-            <ShadowRootMenu open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={onClose} disableRestoreFocus>
+            <ShadowRootMenu
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                onClose={onClose}
+                disableRestoreFocus
+                PaperProps={{ style: { background: 'black', width: 335 } }}>
                 {account ? (
                     walletItem(
                         selectedWallet,
@@ -153,29 +165,29 @@ export function AddressNames(props: AddressNamesProps) {
                     )
                 ) : (
                     <MenuItem key="connect">
-                        <Button
-                            fullWidth
-                            onClick={onConnectWallet}
-                            sx={{ width: 311, padding: 1.5, borderRadius: 9999 }}>
+                        <Button fullWidth onClick={onConnectWallet} sx={{ width: 311, padding: 1, borderRadius: 9999 }}>
                             {t.connect_your_wallet()}
                         </Button>
                     </MenuItem>
                 )}
+                <Divider className={classes.divider} />
                 {wallets
                     .sort((a, b) => Number(b.created_at) - Number(a.created_at))
                     ?.filter((x) => !isSameAddress(x.identity, account))
-                    .map((x) =>
-                        walletItem(
-                            selectedWallet,
-                            x.identity,
-                            false,
-                            () => onClick(x.identity),
-                            () => noop,
-                            true,
-                            true,
-                        ),
-                    )}
-                <Divider />
+                    .map((x) => (
+                        <>
+                            {walletItem(
+                                selectedWallet,
+                                x.identity,
+                                false,
+                                () => onClick(x.identity),
+                                () => noop,
+                                true,
+                                true,
+                            )}
+                            <Divider className={classes.divider} />
+                        </>
+                    ))}
 
                 <MenuItem
                     key="settings"
@@ -213,6 +225,12 @@ const useWalletUIStyles = makeStyles()((theme) => ({
         width: 16,
         height: 16,
     },
+    walletName: {
+        color: theme.palette.mode === 'dark' ? '#D9D9D9' : '#0F1419',
+    },
+    walletAddress: {
+        color: theme.palette.mode === 'dark' ? '#6E767D' : '#536471',
+    },
 }))
 
 interface WalletUIProps {
@@ -232,13 +250,21 @@ function WalletUI(props: WalletUIProps) {
     return (
         <Stack direction="row" alignItems="center" justifyContent="center">
             <ImageIcon size={30} icon={networkDescriptor?.icon} />
-            <Stack direction="column" sx={{ marginLeft: 0.5 }}>
+            <Stack direction="column" style={{ marginLeft: 16 }}>
                 <Stack display="flex" fontSize={14} flexDirection="row" alignItems="center">
-                    <ReversedAddress address={address} pluginId={NetworkPluginID.PLUGIN_EVM} />
+                    <Typography
+                        className={classNames(classes.address, classes.walletName)}
+                        fontWeight={700}
+                        fontSize={14}>
+                        <ReversedAddress address={address} pluginId={NetworkPluginID.PLUGIN_EVM} />
+                    </Typography>
                     {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
                 </Stack>
                 <Stack direction="row" alignItems="center">
-                    <Typography variant="body2" color="textSecondary" className={classes.address}>
+                    <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        className={classNames(classes.address, classes.walletAddress)}>
                         {formatEthereumAddress(address, 4)}
                     </Typography>
                     <CopyIconButton text={address} className={classes.copy} />
