@@ -1,14 +1,8 @@
-import { Link, Typography } from '@mui/material'
+import { Link, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { resolveDaysName } from '../../pipes'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        top: 0,
-        right: 0,
-        padding: theme.spacing(1, 2),
-        position: 'absolute',
-    },
     link: {
         cursor: 'pointer',
         marginRight: theme.spacing(1),
@@ -40,7 +34,7 @@ export interface PriceChartDaysControlProps {
 export function PriceChartDaysControl(props: PriceChartDaysControlProps) {
     const { classes } = useStyles()
     return (
-        <div className={classes.root}>
+        <Stack direction="row" gap={2}>
             {[
                 Days.ONE_DAY,
                 Days.ONE_WEEK,
@@ -59,6 +53,6 @@ export function PriceChartDaysControl(props: PriceChartDaysControlProps) {
                     </Typography>
                 </Link>
             ))}
-        </div>
+        </Stack>
     )
 }

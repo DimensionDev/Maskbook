@@ -7,7 +7,6 @@ import { DataProvider } from '@masknet/public-api'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
 import { TickersTable } from './TickersTable'
-import { PriceChangedTable } from './PriceChangedTable'
 import { PriceChart } from './PriceChart'
 import { usePriceStats } from '../../trending/usePriceStats'
 import { Days, PriceChartDaysControl } from './PriceChartDaysControl'
@@ -257,7 +256,6 @@ export function TraderView(props: TraderViewProps) {
             {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
             {tabIndex === 1 ? (
                 <>
-                    {market ? <PriceChangedTable market={market} /> : null}
                     <PriceChart
                         classes={{ root: classes.priceChartRoot }}
                         coin={coin}

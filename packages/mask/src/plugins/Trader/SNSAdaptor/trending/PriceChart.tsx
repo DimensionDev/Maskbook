@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
 import { CircularProgress, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import RefreshIcon from '@mui/icons-material/Refresh'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat } from '../../types'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
@@ -95,14 +94,9 @@ export function PriceChart(props: PriceChartProps) {
 
     return (
         <div className={classes.root} ref={rootRef}>
-            {props.loading ? (
-                <CircularProgress className={classes.progress} color="primary" size={15} />
-            ) : (
-                <RefreshIcon className={classes.refresh} color="primary" onClick={props.retry} />
-            )}
+            {props.loading && <CircularProgress className={classes.progress} color="primary" size={15} />}
             {props.stats.length ? (
                 <>
-                    {props.children}
                     <svg
                         className={classes.svg}
                         ref={svgRef}
@@ -114,6 +108,7 @@ export function PriceChart(props: PriceChartProps) {
                             props.stats.length && openWindow(props.coin?.platform_url)
                         }}
                     />
+                    {props.children}
                 </>
             ) : (
                 <Typography className={classes.placeholder} align="center" color="textSecondary">

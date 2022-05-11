@@ -49,10 +49,10 @@ export function useLineChart(
             .range([contentHeight, 0])
 
         // add X axis
-        graph
-            .append('g')
-            .attr('transform', `translate(0, ${contentHeight})`)
-            .call(d3.axisBottom(x).ticks(contentWidth / 100))
+        // graph
+        //     .append('g')
+        //     .attr('transform', `translate(0, ${contentHeight})`)
+        //     .call(d3.axisBottom(x).ticks(contentWidth / 100))
 
         // add Y axis
         graph
@@ -86,6 +86,7 @@ export function useLineChart(
             .style('stroke', 'green')
             .style('stroke-width', 1.6)
             .style('stroke-dasharray', '5,5')
+            .style('display', 'none')
             .attr('x1', 0)
             .attr('y1', 0)
             .attr('x2', 0)
