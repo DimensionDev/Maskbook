@@ -30,17 +30,25 @@ const useStyles = makeStyles()((theme) => ({
 type FarmListProps = {
     farms: FarmDetailed[]
     loading: boolean
+    error?: Error
     onAdjustRewardButtonClick: (farm: FarmDetailed) => void
 }
-function FarmList({ loading, farms, onAdjustRewardButtonClick }: FarmListProps) {
+function FarmList({ loading, error, farms, onAdjustRewardButtonClick }: FarmListProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { classes: myFarmsClasses } = useMyFarmsStyles()
+    const { classes: sharedClasses } = useSharedStyles()
 
     if (loading) return <CircularProgress size={50} />
 
+    if (error)
+        return (
+            <Typography className={sharedClasses.msg}>
+                {t('plugin_referral_blockchain_error_referral_farms')}
+            </Typography>
+        )
+
     if (!farms.length)
-        return <Typography className={myFarmsClasses.noFarm}>{t('plugin_referral_no_created_farm')}</Typography>
+        return <Typography className={sharedClasses.msg}>{t('plugin_referral_no_created_farm')}</Typography>
 
     return (
         <>
@@ -88,7 +96,11 @@ export function CreatedFarms(props: PageInterface) {
     const account = useAccount()
     const { ERC20 } = useTokenListConstants()
 
-    const { value: farms = EMPTY_LIST, loading } = useAsync(
+    const {
+        value: farms = EMPTY_LIST,
+        loading,
+        error,
+    } = useAsync(
         async () => (account ? ReferralRPC.getAccountFarms(account, currentChainId, ERC20) : []),
         [currentChainId, account, ERC20],
     )
@@ -133,7 +145,12 @@ export function CreatedFarms(props: PageInterface) {
                 </Grid>
             </Grid>
             <div className={myFarmsClasses.content}>
-                <FarmList loading={loading} farms={farms} onAdjustRewardButtonClick={onAdjustRewardButtonClick} />
+                <FarmList
+                    loading={loading}
+                    error={error}
+                    farms={farms}
+                    onAdjustRewardButtonClick={onAdjustRewardButtonClick}
+                />
             </div>
         </div>
     )

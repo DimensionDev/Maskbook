@@ -24,13 +24,21 @@ export function MyRewards(props: PageInterface) {
     const { ERC20 } = useTokenListConstants()
     const web3 = useWeb3({ chainId: requiredChainId })
 
-    const { value: accountRewards, loading } = useAsync(
+    const {
+        value: accountRewards,
+        loading,
+        error: accountRewardsError,
+    } = useAsync(
         async () => (account && ERC20 ? ReferralRPC.getAccountRewards(account, currentChainId, ERC20) : undefined),
         [account, currentChainId, ERC20],
     )
 
     // filter out the periods that oracle might still need to pick up
-    const { value: rewardsFiltered = EMPTY_LIST, loading: loadingOffsets } = useAsync(
+    const {
+        value: rewardsFiltered = EMPTY_LIST,
+        loading: loadingOffsets,
+        error: rewardsFilteredError,
+    } = useAsync(
         async () => account && filterRewardsByAccountTokenPeriodOffset(web3, account, accountRewards),
         [account, accountRewards, web3],
     )
@@ -45,6 +53,7 @@ export function MyRewards(props: PageInterface) {
         )
     }
 
+    const error = accountRewardsError || rewardsFilteredError
     return (
         <div className={myFarmsClasses.container}>
             <Grid container justifyContent="space-between" rowSpacing="20px" className={myFarmsClasses.heading}>
@@ -64,9 +73,11 @@ export function MyRewards(props: PageInterface) {
                     <CircularProgress size={50} />
                 ) : (
                     <>
-                        {!rewardsFiltered || !rewardsFiltered.length ? (
-                            <Typography className={myFarmsClasses.noFarm}>
-                                {t('plugin_referral_you_have_not_joined_farm')}
+                        {!rewardsFiltered || !rewardsFiltered.length || error ? (
+                            <Typography className={sharedClasses.msg}>
+                                {error
+                                    ? t('plugin_referral_oracle_error_your_rewards')
+                                    : t('plugin_referral_you_have_not_joined_farm')}
                             </Typography>
                         ) : (
                             <Rewards

@@ -24,6 +24,19 @@ export const useSharedStyles = makeStyles()((theme) => ({
             color: theme.palette.mode === 'dark' ? '#000000' : '#ffffff',
         },
     },
+    msg: {
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '12px',
+        background: theme.palette.background.default,
+        minHeight: '44px',
+        padding: '12px 0',
+        color: theme.palette.text.strong,
+        fontWeight: 500,
+        textAlign: 'center',
+    },
 }))
 
 export const useMyFarmsStyles = makeStyles()((theme) => ({
@@ -57,17 +70,6 @@ export const useMyFarmsStyles = makeStyles()((theme) => ({
     },
     heading: {
         paddingRight: '27px',
-    },
-    noFarm: {
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: '12px',
-        background: theme.palette.background.default,
-        height: '44px',
-        color: theme.palette.text.strong,
-        fontWeight: 500,
     },
 }))
 

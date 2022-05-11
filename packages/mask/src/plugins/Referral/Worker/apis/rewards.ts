@@ -45,7 +45,7 @@ export async function getAccountRewards(
     // Query tokens
     const tokensMap = await fetchERC20TokensFromTokenListsMap(tokenLists, chainId)
 
-    const rewards = entitlements.map((entitlement) => {
+    const rewards = entitlements?.map((entitlement) => {
         const farm = farmsMap.get(entitlement.farmHash)
 
         return {

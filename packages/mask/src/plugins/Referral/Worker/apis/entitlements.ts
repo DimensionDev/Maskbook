@@ -5,11 +5,7 @@ import { keccak256 } from 'web3-utils'
 import { expandEvmAddressToBytes32 } from '../../helpers'
 import { type Entitlement, RpcMethod } from '../../types'
 import { getOracle, rpcCall } from './oracle'
-
-enum ORACLE_CHAIN_ID {
-    testnet = 4470,
-    mainnet = 47,
-}
+import { supportedOracleChainId } from '../../constants'
 
 const PeriodEntitlement = 'PeriodEntitlement'
 const eventsPeriodEntitlement = new Interface([
@@ -29,11 +25,11 @@ function parsePeriodEntitlementEvents(items: Array<any>): Array<any> {
     return parsed
 }
 
-export async function getAccountEntitlements(account: string): Promise<Entitlement[]> {
+export async function getAccountEntitlements(account: string): Promise<Entitlement[] | undefined> {
     const host = await getOracle()
     const topics = [eventIdsPeriodEntitlement.PeriodEntitlement, '', expandEvmAddressToBytes32(account)]
 
-    const { result } = await rpcCall(host, RpcMethod.oracle_getLogs, [{ topics, chainId: [ORACLE_CHAIN_ID.testnet] }])
+    const res = await rpcCall(host, RpcMethod.oracle_getLogs, [{ topics, chainId: [supportedOracleChainId] }])
 
-    return parsePeriodEntitlementEvents(result)
+    return parsePeriodEntitlementEvents(res?.result)
 }

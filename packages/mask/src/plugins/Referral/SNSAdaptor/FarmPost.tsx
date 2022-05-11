@@ -55,7 +55,7 @@ export function FarmPost(props: FarmPostProps) {
     const { showSnackbar } = useCustomSnackbar()
     const { ERC20 } = useTokenListConstants(chainId)
 
-    const { value: rewards = EMPTY_LIST } = useAsync(
+    const { value: rewards = EMPTY_LIST, error } = useAsync(
         async () =>
             chainId && ERC20
                 ? ReferralRPC.getRewardsForReferredToken(chainId, payload.referral_token, ERC20)
@@ -148,18 +148,21 @@ export function FarmPost(props: FarmPostProps) {
                         ${payload.referral_token_symbol} {t('plugin_referral_buy_and_hold_referral')}
                     </Typography>
                 </Box>
-                <Typography marginTop="8px">{t('plugin_referral_join_receive_rewards')}</Typography>
+                {error ? (
+                    <Typography marginTop="8px">{t('plugin_referral_blockchain_error_referral_farm')}</Typography>
+                ) : (
+                    <Typography marginTop="8px">{t('plugin_referral_join_receive_rewards')}</Typography>
+                )}
                 <Grid container>
-                    {rewards?.length &&
-                        rewards.map((reward) => (
-                            <RewardFarmPostWidget
-                                key={reward.rewardToken?.address}
-                                title={t('plugin_referral_sponsored_referral_farm')}
-                                icon={<SponsoredFarmIcon />}
-                                rewardData={reward}
-                                tokenSymbol={reward.rewardToken?.symbol}
-                            />
-                        ))}
+                    {rewards?.map((reward) => (
+                        <RewardFarmPostWidget
+                            key={reward.rewardToken?.address}
+                            title={t('plugin_referral_sponsored_referral_farm')}
+                            icon={<SponsoredFarmIcon />}
+                            rewardData={reward}
+                            tokenSymbol={reward.rewardToken?.symbol}
+                        />
+                    ))}
                 </Grid>
                 <Typography marginTop="24px" variant="body2">
                     {t('plugin_referral_create_by')} <b>@realMaskNetwork</b>

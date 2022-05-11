@@ -1192,5 +1192,9 @@
     "plugin_referral_error_native_token_farm": "Cannot create farm with native token.",
     "plugin_referral_buy_and_hold_referral": "Buy & Hold Referral",
     "plugin_referral_error_insufficient_balance": "Insufficient {{symbol}} balance",
-    "plugin_referral_reward_tokens": "Reward Tokens"
+    "plugin_referral_reward_tokens": "Reward Tokens",
+    "plugin_referral_blockchain_error_your_referral_farms": "Referral farms cannot be retrieved from the blockchain at the moment. Please try latter.",
+    "plugin_referral_blockchain_error_referral_farms": "Your referral farms cannot be retrieved from the blockchain at the moment. Please try latter.",
+    "plugin_referral_blockchain_error_referral_farm": "This referral farm cannot be retrieved from the blockchain at the moment. Please try latter.",
+    "plugin_referral_oracle_error_your_rewards": "Your rewards cannot be retrieved from the oracles at the moment. Please try latter."
 }
