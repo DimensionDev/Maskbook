@@ -102,7 +102,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
 
     const itemsAfterSearch = useMemo(() => {
         const fuse = new Fuse(items, {
-            keys: ['identifier.userId', 'fingerprint', 'nickname', 'address', 'publicHexKey'],
+            keys: ['identifier.userId', 'nickname', 'address', 'publicHexKey'],
             isCaseSensitive: false,
             ignoreLocation: true,
             threshold: 0,
