@@ -5,7 +5,7 @@ import { useWeb3, type ChainId } from '@masknet/web3-shared-evm'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Typography, Button, Box } from '@mui/material'
 
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 import { roundValue } from '../../helpers'
 import { harvestRewards } from '../utils/rewards'
 import {
@@ -35,20 +35,20 @@ export function Rewards({
     pageType = PagesType.REFERRAL_FARMS,
     onChangePage,
 }: RewardsProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const web3 = useWeb3({ chainId: currentChainId })
     const { showSnackbar } = useCustomSnackbar()
 
     const onStartHarvestRewards = useCallback(
         (totalRewards: number, rewardTokenSymbol?: string) => {
-            onChangePage?.(PagesType.TRANSACTION, t('plugin_referral_transaction'), {
+            onChangePage?.(PagesType.TRANSACTION, t.transaction(), {
                 hideBackBtn: true,
                 hideAttrLogo: true,
                 transactionDialog: {
                     transaction: {
                         status: TransactionStatus.CONFIRMATION,
-                        title: t('plugin_referral_confirm_transaction'),
-                        subtitle: t('plugin_referral_confirm_transaction_harvesting', {
+                        title: t.confirm_transaction(),
+                        subtitle: t.confirm_transaction_harvesting({
                             reward: totalRewards.toFixed(4),
                             symbol: rewardTokenSymbol ?? '',
                         }),
@@ -61,14 +61,14 @@ export function Rewards({
 
     const onConfirmHarvestRewards = useCallback(
         (txHash: string) => {
-            onChangePage?.(PagesType.TRANSACTION, t('plugin_referral_transaction'), {
+            onChangePage?.(PagesType.TRANSACTION, t.transaction(), {
                 hideBackBtn: true,
                 hideAttrLogo: true,
                 transactionDialog: {
                     transaction: {
                         status: TransactionStatus.CONFIRMED,
                         actionButton: {
-                            label: t('dismiss'),
+                            label: t.dismiss(),
                             onClick: () => onChangePage?.(pageType, TabsReferralFarms.TOKENS + ': ' + pageType),
                         },
                         transactionHash: txHash,
@@ -81,7 +81,7 @@ export function Rewards({
 
     const onErrorHarvestRewards = useCallback(
         (error?: string) => {
-            showSnackbar(error || t('go_wrong'), { variant: 'error' })
+            showSnackbar(error || t.go_wrong(), { variant: 'error' })
             onChangePage?.(pageType, TabsReferralFarms.TOKENS + ': ' + pageType)
         },
         [onChangePage, t, showSnackbar],
@@ -129,7 +129,7 @@ export function Rewards({
                             <ReferredTokenRewards rewards={rewardTokenRewards} />
                             <Box display="flex" justifyContent="flex-end" marginTop="4px">
                                 <Typography display="flex" alignItems="center" marginRight="20px" fontWeight={600}>
-                                    <span style={{ marginRight: '4px' }}>{t('plugin_referral_claimable')}:</span>{' '}
+                                    <span style={{ marginRight: '4px' }}>{t.claimable()}:</span>{' '}
                                     {roundValue(claimable, rewardToken?.decimals)} {rewardToken?.symbol}
                                 </Typography>
                                 <Button
@@ -144,7 +144,7 @@ export function Rewards({
                                             rewardToken?.symbol,
                                         )
                                     }>
-                                    {t('plugin_referral_harvest_rewards')}
+                                    {t.harvest_rewards()}
                                 </Button>
                             </Box>
                         </Box>

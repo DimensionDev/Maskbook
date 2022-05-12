@@ -1,7 +1,7 @@
 import { memo, useMemo, useState } from 'react'
 import { uniqBy } from 'lodash-unified'
 
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 import {
     Asset,
     ChainId,
@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     const account = useAccount()
     const currentChainId = useChainId()
     const chainId = props.targetChainId ?? currentChainId
@@ -133,7 +133,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     return (
         <SearchableList<Asset>
             SearchFieldProps={{
-                placeholder: t('plugin_referral_search_placeholder_token'),
+                placeholder: t.search_placeholder_token(),
                 InputProps: {
                     classes: { root: classes.search },
                 },
@@ -159,11 +159,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
                 (loading || !renderAssets.length) && (
                     <Placeholder
                         height={FixedSizeListProps?.height}
-                        message={
-                            loading
-                                ? t('plugin_referral_placeholder_loading')
-                                : t('plugin_referral_placeholder_no_farms')
-                        }
+                        message={loading ? t.placeholder_loading() : t.placeholder_no_farms()}
                     />
                 )
             }

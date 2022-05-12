@@ -4,7 +4,7 @@ import { Grid, Typography, CircularProgress, Link } from '@mui/material'
 import DoneIcon from '@mui/icons-material/Done'
 
 import { TransactionStatus, TransactionDialogInterface } from '../types'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function Transaction(props: TransactionDialogInterface | undefined) {
-    const { t } = useI18N()
+    const t = useI18N()
     const currentChainId = useChainId()
     const { classes } = useStyles()
 
@@ -63,7 +63,7 @@ export function Transaction(props: TransactionDialogInterface | undefined) {
                     <DoneIcon sx={{ fontSize: 60 }} />
                 </Grid>
                 <Grid item xs={12} className={classes.title}>
-                    {t('plugin_wallet_transaction_confirmed')}
+                    {t.transaction_confirmed()}
                 </Grid>
                 <Grid item xs={12}>
                     <Link
@@ -71,7 +71,7 @@ export function Transaction(props: TransactionDialogInterface | undefined) {
                         fontSize="16px"
                         lineHeight="22px"
                         target="_blank">
-                        {t('plugin_wallet_view_on_explorer')}
+                        {t.view_on_explorer()}
                     </Link>
                 </Grid>
                 <Grid item xs={12} marginTop="40px">

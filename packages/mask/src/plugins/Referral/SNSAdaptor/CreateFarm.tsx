@@ -16,7 +16,7 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { Typography, Box, Tab, Tabs, Grid, TextField, Chip, InputAdornment, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { TabsCreateFarm, TokenType, TransactionStatus, PageInterface, PagesType, TabsReferralFarms } from '../types'
 import { ATTRACE_FEE_PERCENT, NATIVE_TOKEN, META_KEY } from '../constants'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function CreateFarm(props: PageInterface) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { classes: tabClasses } = useTabStyles()
     const { classes: sharedClasses } = useSharedStyles()
@@ -139,15 +139,18 @@ export function CreateFarm(props: PageInterface) {
     }, [])
 
     const onConfirmDeposit = useCallback(() => {
-        props?.onChangePage?.(PagesType.TRANSACTION, t('plugin_referral_transaction'), {
+        props?.onChangePage?.(PagesType.TRANSACTION, t.transaction(), {
             hideAttrLogo: true,
             hideBackBtn: true,
             transactionDialog: {
                 transaction: {
                     status: TransactionStatus.CONFIRMATION,
-                    title: t('plugin_referral_transaction_confirm_permission_deposit'),
-                    subtitle: t('plugin_referral_create_farm_transaction_confirm_desc', {
-                        reward: roundValue(Number.parseFloat(totalFarmReward) + attraceFee, tokenReward?.decimals),
+                    title: t.transaction_confirm_permission_deposit(),
+                    subtitle: t.create_farm_transaction_confirm_desc({
+                        reward: roundValue(
+                            Number.parseFloat(totalFarmReward) + attraceFee,
+                            tokenReward?.decimals,
+                        ).toString(),
                         token: tokenReward?.symbol ?? '',
                     }),
                 },
@@ -157,7 +160,7 @@ export function CreateFarm(props: PageInterface) {
 
     const onInsertData = useCallback(() => {
         if (!tokenRefer?.address) {
-            showSnackbar(t('plugin_referral_error_token_not_select'), { variant: 'error' })
+            showSnackbar(t.error_token_not_select(), { variant: 'error' })
             return
         }
 
@@ -182,14 +185,14 @@ export function CreateFarm(props: PageInterface) {
 
     const onConfirmedDeposit = useCallback(
         (txHash: string) => {
-            props?.onChangePage?.(PagesType.TRANSACTION, t('plugin_referral_transaction'), {
+            props?.onChangePage?.(PagesType.TRANSACTION, t.transaction(), {
                 hideAttrLogo: true,
                 hideBackBtn: true,
                 transactionDialog: {
                     transaction: {
                         status: TransactionStatus.CONFIRMED,
                         actionButton: {
-                            label: t('plugin_referral_publish_farm'),
+                            label: t.publish_farm(),
                             onClick: onInsertData,
                         },
                         transactionHash: txHash,
@@ -207,7 +210,7 @@ export function CreateFarm(props: PageInterface) {
 
     const onDeposit = useCallback(async () => {
         if (!tokenRefer?.address || !tokenReward?.address) {
-            showSnackbar(t('plugin_referral_error_token_not_select'), { variant: 'error' })
+            showSnackbar(t.error_token_not_select(), { variant: 'error' })
             return
         }
 
@@ -227,7 +230,7 @@ export function CreateFarm(props: PageInterface) {
                 Number.parseFloat(dailyFarmReward),
             )
         } else {
-            showSnackbar(t('plugin_referral_error_native_token_farm'), { variant: 'error' })
+            showSnackbar(t.error_native_token_farm(), { variant: 'error' })
         }
     }, [web3, account, currentChainId, tokenRefer, tokenReward, totalFarmReward, dailyFarmReward, attraceFee])
 
@@ -269,34 +272,30 @@ export function CreateFarm(props: PageInterface) {
                     variant="fullWidth"
                     onChange={(e, v) => setTab(v)}
                     aria-label="persona-post-contacts-button-group">
-                    <Tab value={TabsCreateFarm.NEW} label={t('plugin_referral_tab_new')} classes={tabClasses} />
-                    <Tab value={TabsCreateFarm.CREATED} label={t('plugin_referral_tab_created')} classes={tabClasses} />
+                    <Tab value={TabsCreateFarm.NEW} label={t.tab_new()} classes={tabClasses} />
+                    <Tab value={TabsCreateFarm.CREATED} label={t.tab_created()} classes={tabClasses} />
                 </Tabs>
                 <TabPanel value={TabsCreateFarm.NEW} className={classes.tab}>
                     <Typography fontWeight={600} variant="h6" marginBottom="12px">
-                        {t('plugin_referral_create_referral_farm_desc')}
+                        {t.create_referral_farm_desc()}
                     </Typography>
-                    <Typography marginBottom="24px">{t('plugin_referral_select_a_token_desc')}</Typography>
+                    <Typography marginBottom="24px">{t.select_a_token_desc()}</Typography>
                     <Grid container rowSpacing="24px">
                         <Grid item xs={6}>
                             <TokenSelectField
-                                label={t('plugin_referral_token_to_refer')}
+                                label={t.token_to_refer()}
                                 token={tokenRefer}
                                 disabled={currentChainId !== requiredChainId}
                                 style={{ paddingRight: 8 }}
-                                onClick={() =>
-                                    onTokenSelectClick(TokenType.REFER, t('plugin_referral_select_a_token_to_refer'))
-                                }
+                                onClick={() => onTokenSelectClick(TokenType.REFER, t.select_a_token_to_refer())}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TokenSelectField
-                                label={t('plugin_referral_reward_token')}
+                                label={t.reward_token()}
                                 token={tokenReward}
                                 disabled={currentChainId !== requiredChainId}
-                                onClick={() =>
-                                    onTokenSelectClick(TokenType.REWARD, t('plugin_referral_select_a_reward_token'))
-                                }
+                                onClick={() => onTokenSelectClick(TokenType.REWARD, t.select_a_reward_token())}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -304,7 +303,7 @@ export function CreateFarm(props: PageInterface) {
                         </Grid>
                         <Grid item xs={12} display="flex" marginBottom="24px">
                             <TextField
-                                label={t('plugin_referral_daily_farm_reward')}
+                                label={t.daily_farm_reward()}
                                 value={dailyFarmReward}
                                 placeholder="0"
                                 onChange={(e) => setDailyFarmReward(e.currentTarget.value)}
@@ -321,7 +320,7 @@ export function CreateFarm(props: PageInterface) {
                                 }}
                             />
                             <TextField
-                                label={t('plugin_referral_total_farm_rewards')}
+                                label={t.total_farm_rewards()}
                                 value={totalFarmReward}
                                 inputMode="numeric"
                                 type="number"
@@ -342,7 +341,7 @@ export function CreateFarm(props: PageInterface) {
                                                     color="textSecondary"
                                                     variant="body2"
                                                     component="span">
-                                                    {t('wallet_balance')}: {tokenReward ? balance : '-'}
+                                                    {t.wallet_balance()}: {tokenReward ? balance : '-'}
                                                 </Typography>
                                                 {tokenReward && (
                                                     <Box display="flex" alignItems="center">
@@ -376,8 +375,8 @@ export function CreateFarm(props: PageInterface) {
                             disabled={createFarmBtnDisabled}
                             onClick={onClickCreateFarm}>
                             {insufficientFunds
-                                ? t('plugin_referral_error_insufficient_balance', { symbol: tokenReward?.symbol })
-                                : t('plugin_referral_create_referral_farm')}
+                                ? t.error_insufficient_balance({ symbol: tokenReward?.symbol ?? '' })
+                                : t.create_referral_farm()}
                         </ActionButton>
                     </EthereumChainBoundary>
                 </TabPanel>

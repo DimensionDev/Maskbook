@@ -8,7 +8,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { v4 as uuid } from 'uuid'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
 import { PluginTraderMessages } from '../../Trader/messages'
 
@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function BuyToFarm(props: PageInterface) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { classes: tabClasses } = useTabStyles()
     const { classes: sharedClasses } = useSharedStyles()
@@ -92,14 +92,14 @@ export function BuyToFarm(props: PageInterface) {
         setSelectTokenDialog({
             open: true,
             uuid: id,
-            title: t('plugin_referral_select_a_token_to_buy_and_hold'),
+            title: t.select_a_token_to_buy_and_hold(),
             onlyFarmTokens: true,
         })
     }, [id])
 
     const swapToken = useCallback(() => {
         if (!token) {
-            showSnackbar(t('plugin_referral_error_token_not_select'), { variant: 'error' })
+            showSnackbar(t.error_token_not_select(), { variant: 'error' })
             return
         }
         openSwapDialog({
@@ -118,14 +118,14 @@ export function BuyToFarm(props: PageInterface) {
     }, [token, openSwapDialog])
 
     const onConfirmReferFarm = useCallback(() => {
-        props?.onChangePage?.(PagesType.TRANSACTION, t('plugin_referral_transaction'), {
+        props?.onChangePage?.(PagesType.TRANSACTION, t.transaction(), {
             hideAttrLogo: true,
             hideBackBtn: true,
             transactionDialog: {
                 transaction: {
                     status: TransactionStatus.CONFIRMATION,
-                    title: t('plugin_referral_transaction_complete_signature_request'),
-                    subtitle: t('plugin_referral_transaction_sign_the_message_to_register_address_for_rewards'),
+                    title: t.transaction_complete_signature_request(),
+                    subtitle: t.transaction_sign_the_message_to_register_address_for_rewards(),
                 },
             },
         })
@@ -133,7 +133,7 @@ export function BuyToFarm(props: PageInterface) {
 
     const onError = useCallback(
         (error?: string) => {
-            showSnackbar(error || t('go_wrong'), { variant: 'error' })
+            showSnackbar(error || t.go_wrong(), { variant: 'error' })
             props?.onChangePage?.(PagesType.BUY_TO_FARM, `${TabsReferralFarms.TOKENS}: ${PagesType.BUY_TO_FARM}`)
         },
         [props?.onChangePage, t, showSnackbar],
@@ -141,7 +141,7 @@ export function BuyToFarm(props: PageInterface) {
 
     const onClickBuyToFarm = useCallback(async () => {
         if (!token?.address) {
-            return onError(t('plugin_referral_error_token_not_select'))
+            return onError(t.error_token_not_select())
         }
 
         try {
@@ -163,22 +163,18 @@ export function BuyToFarm(props: PageInterface) {
                     variant="fullWidth"
                     onChange={(e, v) => setTab(v)}
                     aria-label="persona-post-contacts-button-group">
-                    <Tab value={TabsReferAndBuy.NEW} label={t('plugin_referral_tab_new')} classes={tabClasses} />
-                    <Tab
-                        value={TabsReferAndBuy.MY_REWARDS}
-                        label={t('plugin_referral_tab_my_rewards')}
-                        classes={tabClasses}
-                    />
+                    <Tab value={TabsReferAndBuy.NEW} label={t.tab_new()} classes={tabClasses} />
+                    <Tab value={TabsReferAndBuy.MY_REWARDS} label={t.tab_my_rewards()} classes={tabClasses} />
                 </Tabs>
                 <TabPanel value={TabsReferAndBuy.NEW} className={classes.tab}>
                     <Typography fontWeight={600} variant="h6" marginBottom="12px">
-                        {t('plugin_referral_select_a_token_to_buy_and_hold_and_earn_rewards')}
+                        {t.select_a_token_to_buy_and_hold_and_earn_rewards()}
                     </Typography>
-                    <Typography marginBottom="24px">{t('plugin_referral_join_the_farm')}</Typography>
+                    <Typography marginBottom="24px">{t.join_the_farm()}</Typography>
                     <Grid container rowSpacing="24px">
                         <Grid item xs={6}>
                             <TokenSelectField
-                                label={t('plugin_referral_token_to_buy_and_hold')}
+                                label={t.token_to_buy_and_hold()}
                                 token={token}
                                 disabled={currentChainId !== requiredChainId}
                                 onClick={onClickTokenSelect}
@@ -190,7 +186,7 @@ export function BuyToFarm(props: PageInterface) {
                             tokenRewards.map((reward) => (
                                 <RewardDataWidget
                                     key={reward.rewardToken?.address}
-                                    title={t('plugin_referral_sponsored_referral_farm')}
+                                    title={t.sponsored_referral_farm()}
                                     icon={<SponsoredFarmIcon />}
                                     rewardData={reward}
                                     tokenSymbol={reward.rewardToken?.symbol}
@@ -202,9 +198,9 @@ export function BuyToFarm(props: PageInterface) {
                             <Box marginTop="20px" display="flex" alignItems="center">
                                 <SponsoredFarmIcon />
                                 <Typography fontWeight={600} margin="0 4px 0 8px">
-                                    {t('plugin_referral_sponsored_farm')}
+                                    {t.sponsored_farm()}
                                 </Typography>
-                                {t('plugin_referral_sponsored_farm_detail')}
+                                {t.sponsored_farm_detail()}
                             </Box>
                         </Grid>
                     </Grid>
@@ -218,7 +214,7 @@ export function BuyToFarm(props: PageInterface) {
                             size="large"
                             disabled={!token}
                             onClick={onClickBuyToFarm}>
-                            {t('plugin_referral_buy_to_farm')}
+                            {t.buy_to_farm()}
                         </ActionButton>
                     </EthereumChainBoundary>
                 </TabPanel>

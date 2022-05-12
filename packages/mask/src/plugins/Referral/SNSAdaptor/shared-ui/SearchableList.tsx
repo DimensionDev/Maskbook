@@ -2,7 +2,7 @@ import { ReactNode, useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 import { Box, InputAdornment, Typography } from '@mui/material'
 import { makeStyles, MaskTextFieldProps, MaskTextField, MaskSearchableItemInList } from '@masknet/theme'
 import { SearchIcon } from '@masknet/icons'
@@ -59,7 +59,7 @@ export function SearchableList<T>({
     FixedSizeListProps = {},
     SearchFieldProps,
 }: MaskSearchableListProps<T>) {
-    const { t } = useI18N()
+    const t = useI18N()
     const [keyword, setKeyword] = useState('')
     const { classes } = useStyles()
     const { height, itemSize, ...rest } = FixedSizeListProps
@@ -115,8 +115,8 @@ export function SearchableList<T>({
             {!placeholder && (
                 <>
                     <Box display="flex" justifyContent="space-between" className={classes.listHeading}>
-                        <Typography>{t('plugin_referral_token')}</Typography>
-                        <Typography>{t('plugin_referral_estimated_apr')}</Typography>
+                        <Typography>{t.token()}</Typography>
+                        <Typography>{t.estimated_apr()}</Typography>
                     </Box>
                     <div className={classes.list}>
                         <FixedSizeList

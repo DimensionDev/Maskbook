@@ -1,5 +1,6 @@
 import { type Plugin, PluginId } from '@masknet/plugin-infra'
 import { META_KEY } from './constants'
+import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginId.Referral,
@@ -12,4 +13,5 @@ export const base: Plugin.Shared.Definition = {
         target: 'beta',
     },
     contribution: { metadataKeys: new Set([META_KEY]) },
+    i18n: languages,
 }

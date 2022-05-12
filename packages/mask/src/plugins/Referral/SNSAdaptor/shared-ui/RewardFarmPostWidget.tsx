@@ -2,7 +2,7 @@ import type { ReactElement } from 'react'
 import { Typography, Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 import { APR } from '../../constants'
 import type { RewardData } from '../../types'
 
@@ -20,7 +20,7 @@ export interface RewardFarmPostWidgetProps extends React.PropsWithChildren<{}> {
 }
 
 export function RewardFarmPostWidget({ title, icon, rewardData, tokenSymbol }: RewardFarmPostWidgetProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
     return (
@@ -36,12 +36,12 @@ export function RewardFarmPostWidget({ title, icon, rewardData, tokenSymbol }: R
             <Grid container display="flex" flexDirection="column" className={classes.dataContainer}>
                 <Grid item xs={12} display="flex" alignItems="center">
                     <Typography fontWeight={600}>
-                        {t('plugin_referral_apr')}: {rewardData ? APR : '-'}
+                        {t.apr()}: {rewardData ? APR : '-'}
                     </Typography>
                 </Grid>
                 <Grid item xs={12} display="flex" alignItems="center">
                     <Typography fontWeight={600}>
-                        {t('plugin_referral_daily_reward')}:{' '}
+                        {t.daily_reward()}:{' '}
                         {rewardData ? (
                             <>
                                 {Number.parseFloat(rewardData.dailyReward.toFixed(4))} {tokenSymbol ?? '-'}
@@ -53,7 +53,7 @@ export function RewardFarmPostWidget({ title, icon, rewardData, tokenSymbol }: R
                 </Grid>
                 <Grid item xs={12} display="flex" alignItems="center">
                     <Typography fontWeight={600}>
-                        {t('plugin_referral_total_rewards')}:{' '}
+                        {t.total_rewards()}:{' '}
                         {rewardData ? (
                             <>
                                 {Number.parseFloat(rewardData.totalReward.toFixed(4))} {tokenSymbol ?? '-'}

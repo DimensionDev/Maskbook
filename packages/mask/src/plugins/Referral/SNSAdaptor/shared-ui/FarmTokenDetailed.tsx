@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material'
 import { TokenIcon } from '@masknet/shared'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 
 import { SponsoredFarmIcon } from './icons/SponsoredFarm'
 
@@ -48,7 +48,7 @@ export interface FarmTokenDetailedProps extends React.PropsWithChildren<{}> {
 }
 
 export function FarmTokenDetailed({ token, hideFarmTypeIcon = false }: FarmTokenDetailedProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
     return (
@@ -58,8 +58,7 @@ export function FarmTokenDetailed({ token, hideFarmTypeIcon = false }: FarmToken
                     {token.logoURI ? <TokenIcon {...token} /> : <div className={classes.tokenIcon} />}
                     <Box display="flex" flexDirection="column" className={classes.tokenDetails}>
                         <Typography display="flex" alignItems="center" className={classes.farmName} fontWeight="500">
-                            {token.symbol} {t('plugin_referral_referral_farm')}{' '}
-                            {!hideFarmTypeIcon && <SponsoredFarmIcon />}
+                            {token.symbol} {t.referral_farm()} {!hideFarmTypeIcon && <SponsoredFarmIcon />}
                         </Typography>
                         <Typography className={classes.tokenName}>{token.name}</Typography>
                     </Box>

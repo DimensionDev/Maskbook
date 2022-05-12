@@ -12,7 +12,7 @@ import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import type { ReferralMetaData } from '../types'
 import type { Coin } from '../../Trader/types'
 import { MASK_REFERRER, META_KEY, SWAP_CHAIN_ID } from '../constants'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { ReferralRPC } from '../messages'
@@ -49,7 +49,7 @@ export function FarmPost(props: FarmPostProps) {
     const { classes } = useStyles()
     const web3 = useWeb3({ chainId })
     const account = useAccount()
-    const { t } = useI18N()
+    const t = useI18N()
     const currentIdentity = useCurrentIdentity()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     const { showSnackbar } = useCustomSnackbar()
@@ -74,7 +74,7 @@ export function FarmPost(props: FarmPostProps) {
     )
 
     const onError = useCallback((error?: string) => {
-        showSnackbar(error || t('go_wrong'), { variant: 'error' })
+        showSnackbar(error || t.go_wrong(), { variant: 'error' })
     }, [])
 
     const onClickReferToFarm = useCallback(async () => {
@@ -95,10 +95,7 @@ export function FarmPost(props: FarmPostProps) {
                 sender: senderName,
             })
 
-            openComposeBox(
-                t('plugin_referral_buy_refer_earn_yield', { token: payload.referral_token_symbol }),
-                metadata,
-            )
+            openComposeBox(t.buy_refer_earn_yield({ token: payload.referral_token_symbol }), metadata)
         } catch (error: any) {
             onError(error?.message)
         }
@@ -106,7 +103,7 @@ export function FarmPost(props: FarmPostProps) {
 
     const swapToken = useCallback(() => {
         if (!payload.referral_token) {
-            onError(t('plugin_referral_error_token_not_select'))
+            onError(t.error_token_not_select())
             return
         }
 
@@ -145,19 +142,19 @@ export function FarmPost(props: FarmPostProps) {
                         logoURI={payload.referral_token_icon}
                     />
                     <Typography variant="h6" fontWeight={600} marginLeft="10px">
-                        ${payload.referral_token_symbol} {t('plugin_referral_buy_and_hold_referral')}
+                        ${payload.referral_token_symbol} {t.buy_and_hold_referral()}
                     </Typography>
                 </Box>
                 {error ? (
-                    <Typography marginTop="8px">{t('plugin_referral_blockchain_error_referral_farm')}</Typography>
+                    <Typography marginTop="8px">{t.blockchain_error_referral_farm()}</Typography>
                 ) : (
-                    <Typography marginTop="8px">{t('plugin_referral_join_receive_rewards')}</Typography>
+                    <Typography marginTop="8px">{t.join_receive_rewards()}</Typography>
                 )}
                 <Grid container>
                     {rewards?.map((reward) => (
                         <RewardFarmPostWidget
                             key={reward.rewardToken?.address}
-                            title={t('plugin_referral_sponsored_referral_farm')}
+                            title={t.sponsored_referral_farm()}
                             icon={<SponsoredFarmIcon />}
                             rewardData={reward}
                             tokenSymbol={reward.rewardToken?.symbol}
@@ -165,18 +162,18 @@ export function FarmPost(props: FarmPostProps) {
                     ))}
                 </Grid>
                 <Typography marginTop="24px" variant="body2">
-                    {t('plugin_referral_create_by')} <b>@realMaskNetwork</b>
+                    {t.create_by()} <b>@realMaskNetwork</b>
                 </Typography>
             </Card>
             <Grid container className={classes.actions}>
                 <Grid item xs={6} display="flex" textAlign="center">
                     <Button variant="contained" size="large" onClick={onClickBuyToFarm}>
-                        {t('plugin_referral_buy_to_farm')}
+                        {t.buy_to_farm()}
                     </Button>
                 </Grid>
                 <Grid item xs={6} display="flex" justifyContent="end" textAlign="center">
                     <Button variant="contained" size="large" onClick={onClickReferToFarm}>
-                        {t('plugin_referral_refer_to_farm')}
+                        {t.refer_to_farm()}
                     </Button>
                 </Grid>
             </Grid>

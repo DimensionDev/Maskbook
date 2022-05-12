@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { formatUnits } from '@ethersproject/units'
 import { Grid, Typography } from '@mui/material'
 
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 import { roundValue } from '../../helpers'
 import { APR } from '../../constants'
 import type { RewardDetailed } from '../../types'
@@ -16,7 +16,7 @@ export interface ReferredTokenRewardsProps extends React.PropsWithChildren<{}> {
 }
 
 export function ReferredTokenRewards({ rewards }: ReferredTokenRewardsProps) {
-    const { t } = useI18N()
+    const t = useI18N()
 
     const referredTokenRewards = useMemo(() => {
         return Object.entries(groupBy(rewards, (reward) => reward.referredTokenDefn))
@@ -26,13 +26,13 @@ export function ReferredTokenRewards({ rewards }: ReferredTokenRewardsProps) {
         <>
             <Grid container justifyContent="space-between" marginBottom="12px">
                 <Grid item xs={6}>
-                    <Typography fontWeight={600}>{t('plugin_referral_referral_farm')}</Typography>
+                    <Typography fontWeight={600}>{t.referral_farm()}</Typography>
                 </Grid>
                 <Grid item xs={2}>
-                    <Typography fontWeight={600}>{t('plugin_referral_apr')}</Typography>
+                    <Typography fontWeight={600}>{t.apr()}</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography fontWeight={600}>{t('plugin_referral_rewards_earned')}</Typography>
+                    <Typography fontWeight={600}>{t.rewards_earned()}</Typography>
                 </Grid>
             </Grid>
             {referredTokenRewards.map(([referredTokenDefn, rewards]) => {

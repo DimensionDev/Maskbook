@@ -4,7 +4,7 @@ import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Grid, Typography, CircularProgress, Box, Button } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { PageInterface, PagesType, TabsReferralFarms, FarmDetailed } from '../types'
 import { getRequiredChainId } from '../helpers'
 import { ReferralRPC } from '../messages'
@@ -34,21 +34,15 @@ type FarmListProps = {
     onAdjustRewardButtonClick: (farm: FarmDetailed) => void
 }
 function FarmList({ loading, error, farms, onAdjustRewardButtonClick }: FarmListProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { classes: sharedClasses } = useSharedStyles()
 
     if (loading) return <CircularProgress size={50} />
 
-    if (error)
-        return (
-            <Typography className={sharedClasses.msg}>
-                {t('plugin_referral_blockchain_error_referral_farms')}
-            </Typography>
-        )
+    if (error) return <Typography className={sharedClasses.msg}>{t.blockchain_error_referral_farms()}</Typography>
 
-    if (!farms.length)
-        return <Typography className={sharedClasses.msg}>{t('plugin_referral_no_created_farm')}</Typography>
+    if (!farms.length) return <Typography className={sharedClasses.msg}>{t.no_created_farm()}</Typography>
 
     return (
         <>
@@ -61,7 +55,7 @@ function FarmList({ loading, error, farms, onAdjustRewardButtonClick }: FarmList
                         totalValue={Number.parseFloat(farm?.totalFarmRewards?.toFixed(5) ?? '0')}>
                         <Box display="flex" justifyContent="flex-end">
                             <Button variant="text" disabled classes={{ disabled: classes.viewStatsDisabled }}>
-                                {t('plugin_referral_view_stats')}
+                                {t.view_stats()}
                             </Button>
                             <Button
                                 disabled
@@ -69,7 +63,7 @@ function FarmList({ loading, error, farms, onAdjustRewardButtonClick }: FarmList
                                 size="medium"
                                 className={classes.buttonWithdraw}
                                 onClick={() => console.log('request to withdraw')}>
-                                {t('plugin_referral_request_to_withdraw')}
+                                {t.request_to_withdraw()}
                             </Button>
                             <Button
                                 variant="contained"
@@ -77,7 +71,7 @@ function FarmList({ loading, error, farms, onAdjustRewardButtonClick }: FarmList
                                 onClick={() => {
                                     onAdjustRewardButtonClick(farm)
                                 }}>
-                                {t('plugin_referral_adjust_rewards')}
+                                {t.adjust_rewards()}
                             </Button>
                         </Box>
                     </AccordionFarm>
@@ -88,7 +82,7 @@ function FarmList({ loading, error, farms, onAdjustRewardButtonClick }: FarmList
 }
 
 export function CreatedFarms(props: PageInterface) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes: sharedClasses } = useSharedStyles()
     const { classes: myFarmsClasses } = useMyFarmsStyles()
     const currentChainId = useChainId()
@@ -109,7 +103,7 @@ export function CreatedFarms(props: PageInterface) {
         props.continue(
             PagesType.CREATE_FARM,
             PagesType.ADJUST_REWARDS,
-            `${TabsReferralFarms.TOKENS}: ${t('plugin_referral_adjust_rewards')}`,
+            `${TabsReferralFarms.TOKENS}: ${t.adjust_rewards()}`,
             {
                 adjustFarmDialog: {
                     farm,
@@ -135,13 +129,13 @@ export function CreatedFarms(props: PageInterface) {
         <div className={myFarmsClasses.container}>
             <Grid container justifyContent="space-between" rowSpacing="20px" className={myFarmsClasses.heading}>
                 <Grid item xs={6} className={myFarmsClasses.col}>
-                    {t('plugin_referral_referral_farm')}
+                    {t.referral_farm()}
                 </Grid>
                 <Grid item xs={2} className={myFarmsClasses.col}>
-                    {t('plugin_referral_apr')}
+                    {t.apr()}
                 </Grid>
                 <Grid item xs={4} className={myFarmsClasses.col}>
-                    {t('plugin_referral_total_rewards')}
+                    {t.total_rewards()}
                 </Grid>
             </Grid>
             <div className={myFarmsClasses.content}>

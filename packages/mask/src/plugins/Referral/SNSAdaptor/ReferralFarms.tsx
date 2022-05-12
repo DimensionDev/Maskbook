@@ -3,7 +3,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles } from '@masknet/theme'
 import { Button, Box, Tab, Tabs, Grid, Typography } from '@mui/material'
 
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { PageInterface, PagesType, TabsReferralFarms } from '../types'
 
 import { IconURLs } from '../assets'
@@ -85,7 +85,7 @@ export function Type({ name, onClick, iconUrl }: TypeProps) {
 }
 
 export function ReferralFarms(props: PageInterface) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { classes: tabClasses } = useTabStyles()
 
@@ -93,21 +93,21 @@ export function ReferralFarms(props: PageInterface) {
 
     const types = [
         {
-            name: t('plugin_referral_refer_to_farm'),
+            name: t.refer_to_farm(),
             onClick: () => {
                 props.continue(PagesType.REFERRAL_FARMS, PagesType.REFER_TO_FARM, tab + ': ' + PagesType.REFER_TO_FARM)
             },
             iconUrl: IconURLs.referToFarm,
         },
         {
-            name: t('plugin_referral_buy_to_farm'),
+            name: t.buy_to_farm(),
             onClick: () => {
                 props.continue(PagesType.REFERRAL_FARMS, PagesType.BUY_TO_FARM, tab + ': ' + PagesType.BUY_TO_FARM)
             },
             iconUrl: IconURLs.buyToFarm,
         },
         {
-            name: t('plugin_referral_create_farms'),
+            name: t.create_farms(),
             onClick: () => {
                 props.continue(PagesType.REFERRAL_FARMS, PagesType.CREATE_FARM, tab + ': ' + PagesType.CREATE_FARM)
             },

@@ -5,7 +5,7 @@ import type { EthereumTokenDetailedType, EthereumTokenType } from '@masknet/web3
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 
 const useStyles = makeStyles()(() => ({
     button: {
@@ -33,7 +33,7 @@ interface TokenSelectField {
 }
 
 export function TokenSelectField({ label, token, disabled, style, onClick }: TokenSelectField) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
     const handleClick = useCallback(() => {
@@ -48,7 +48,7 @@ export function TokenSelectField({ label, token, disabled, style, onClick }: Tok
                 label={label}
                 value={token?.symbol ?? ''}
                 variant="standard"
-                placeholder={t('plugin_referral_select_a_token')}
+                placeholder={t.select_a_token()}
                 className={classes.textField}
                 disabled={disabled}
                 InputProps={{

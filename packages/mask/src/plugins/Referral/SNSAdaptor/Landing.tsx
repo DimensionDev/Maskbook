@@ -1,9 +1,8 @@
 import { useCallback } from 'react'
-import { Trans } from 'react-i18next'
 import { makeStyles } from '@masknet/theme'
 import { Typography, Button, Grid, Box } from '@mui/material'
 
-import { useI18N } from '../../../utils'
+import { useI18N, Translate } from '../locales'
 import { PageInterface, PagesType } from '../types'
 
 import { IconURLs } from '../assets'
@@ -47,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function Landing(props: PageInterface) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
     const onClickContinue = useCallback(async () => {
@@ -56,26 +55,25 @@ export function Landing(props: PageInterface) {
 
     const data = [
         {
-            name: t('plugin_referral_refer_to_farm'),
-            desc: t('plugin_referral_refer_to_farm_desc'),
+            name: t.refer_to_farm(),
+            desc: t.refer_to_farm_desc(),
             iconUrl: IconURLs.referToFarm,
         },
         {
-            name: t('plugin_referral_buy_to_farm'),
-            desc: t('plugin_referral_buy_to_farm_desc'),
+            name: t.buy_to_farm(),
+            desc: t.buy_to_farm_desc(),
             iconUrl: IconURLs.buyToFarm,
         },
         {
-            name: t('plugin_referral_create_farms'),
-            desc: t('plugin_referral_create_farms_desc'),
+            name: t.create_farms(),
+            desc: t.create_farms_desc(),
             iconUrl: IconURLs.createFarm,
         },
         {
             desc: (
-                <Trans
-                    i18nKey="plugin_referral_create_farms_rewards_desc"
+                <Translate.create_farms_rewards_desc
                     components={{
-                        strong: <strong />,
+                        strong: <strong>{t.rewards()}</strong>,
                     }}
                 />
             ),
@@ -90,12 +88,12 @@ export function Landing(props: PageInterface) {
                     <img src={IconURLs.referral} />
                 </Grid>
                 <Typography variant="h6" textAlign="center" fontWeight={400}>
-                    <b>{t('plugin_referral_referral_farming')}</b>
-                    {t('plugin_referral_referral_farms_short_desc')}
+                    <b>{t.referral_farming()}</b>
+                    {t.referral_farms_short_desc()}
                 </Typography>
             </Grid>
             <Typography fontWeight={600} variant="h6" marginBottom="16px">
-                {t('plugin_referral_how_it_works')}
+                {t.how_it_works()}
             </Typography>
             <Grid container direction="row" className={classes.smallText} rowSpacing="12px" textAlign="left">
                 {data.map((e, i) => {
@@ -119,7 +117,7 @@ export function Landing(props: PageInterface) {
                 })}
                 <Grid item xs={12} textAlign="right">
                     <Button onClick={onClickContinue} variant="contained">
-                        {t('plugin_referral_continue')}
+                        {t.continue()}
                     </Button>
                 </Grid>
             </Grid>

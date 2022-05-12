@@ -11,7 +11,7 @@ import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { META_KEY } from '../constants'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function ReferToFarm(props: PageInterface) {
-    const { t } = useI18N()
+    const t = useI18N()
     const currentChainId = useChainId()
     const requiredChainId = getRequiredChainId(currentChainId)
     const web3 = useWeb3()
@@ -117,20 +117,20 @@ export function ReferToFarm(props: PageInterface) {
         setSelectTokenDialog({
             open: true,
             uuid: id,
-            title: t('plugin_referral_select_a_token_to_refer'),
+            title: t.select_a_token_to_refer(),
             onlyFarmTokens: true,
         })
     }, [id, setToken])
 
     const onConfirmReferFarm = useCallback(() => {
-        props?.onChangePage?.(PagesType.TRANSACTION, t('plugin_referral_transaction'), {
+        props?.onChangePage?.(PagesType.TRANSACTION, t.transaction(), {
             hideAttrLogo: true,
             hideBackBtn: true,
             transactionDialog: {
                 transaction: {
                     status: TransactionStatus.CONFIRMATION,
-                    title: t('plugin_referral_transaction_complete_signature_request'),
-                    subtitle: t('plugin_referral_transaction_sign_the_message_to_register_address_for_rewards'),
+                    title: t.transaction_complete_signature_request(),
+                    subtitle: t.transaction_sign_the_message_to_register_address_for_rewards(),
                 },
             },
         })
@@ -151,7 +151,7 @@ export function ReferToFarm(props: PageInterface) {
 
     const onError = useCallback(
         (error?: string) => {
-            showSnackbar(error || t('go_wrong'), { variant: 'error' })
+            showSnackbar(error || t.go_wrong(), { variant: 'error' })
             props?.onChangePage?.(PagesType.REFER_TO_FARM, `${TabsReferralFarms.TOKENS}: ${PagesType.REFER_TO_FARM}`)
         },
         [props?.onChangePage, t, showSnackbar],
@@ -159,7 +159,7 @@ export function ReferToFarm(props: PageInterface) {
 
     const onClickReferFarm = useCallback(async () => {
         if (!token?.address) {
-            return onError(t('plugin_referral_error_token_not_select'))
+            return onError(t.error_token_not_select())
         }
 
         try {
@@ -183,8 +183,8 @@ export function ReferToFarm(props: PageInterface) {
 
     const farm_category_types = [
         {
-            title: t('plugin_referral_sponsored_referral_farm'),
-            desc: t('plugin_referral_sponsored_referral_farm_desc'),
+            title: t.sponsored_referral_farm(),
+            desc: t.sponsored_referral_farm_desc(),
             icon: <SponsoredFarmIcon />,
         },
     ]
@@ -198,22 +198,18 @@ export function ReferToFarm(props: PageInterface) {
                     variant="fullWidth"
                     onChange={(e, v) => setTab(v)}
                     aria-label="persona-post-contacts-button-group">
-                    <Tab value={TabsReferAndBuy.NEW} label={t('plugin_referral_tab_new')} classes={tabClasses} />
-                    <Tab
-                        value={TabsReferAndBuy.MY_REWARDS}
-                        label={t('plugin_referral_tab_my_rewards')}
-                        classes={tabClasses}
-                    />
+                    <Tab value={TabsReferAndBuy.NEW} label={t.tab_new()} classes={tabClasses} />
+                    <Tab value={TabsReferAndBuy.MY_REWARDS} label={t.tab_my_rewards()} classes={tabClasses} />
                 </Tabs>
                 <TabPanel value={TabsReferAndBuy.NEW} className={classes.tab}>
                     <Typography fontWeight={600} variant="h6" marginBottom="12px">
-                        {t('plugin_referral_select_token_refer')}
+                        {t.select_token_refer()}
                     </Typography>
-                    <Typography marginBottom="24px">{t('plugin_referral_select_token_refer_desc')}</Typography>
+                    <Typography marginBottom="24px">{t.select_token_refer_desc()}</Typography>
                     <Grid container rowSpacing="24px">
                         <Grid item xs={6}>
                             <TokenSelectField
-                                label={t('plugin_referral_token_to_refer')}
+                                label={t.token_to_refer()}
                                 token={token}
                                 disabled={currentChainId !== requiredChainId}
                                 onClick={onClickTokenSelect}
@@ -225,7 +221,7 @@ export function ReferToFarm(props: PageInterface) {
                             tokenRewards.map((reward) => (
                                 <RewardDataWidget
                                     key={reward.rewardToken?.address}
-                                    title={t('plugin_referral_sponsored_referral_farm')}
+                                    title={t.sponsored_referral_farm()}
                                     icon={<SponsoredFarmIcon />}
                                     rewardData={reward}
                                     tokenSymbol={reward.rewardToken?.symbol}
@@ -257,7 +253,7 @@ export function ReferToFarm(props: PageInterface) {
                             size="large"
                             disabled={!token}
                             onClick={onClickReferFarm}>
-                            {t('plugin_referral_refer_to_farm')}
+                            {t.refer_to_farm()}
                         </ActionButton>
                     </EthereumChainBoundary>
                 </TabPanel>

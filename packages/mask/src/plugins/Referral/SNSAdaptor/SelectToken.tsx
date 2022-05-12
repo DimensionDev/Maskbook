@@ -7,7 +7,7 @@ import { DialogContent, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { PluginReferralMessages, ReferralRPC } from '../messages'
 import { NATIVE_TOKEN } from '../constants'
 import { parseChainAddress } from '../helpers'
@@ -20,7 +20,7 @@ const DISABLED_NATIVE_TOKEN = true
 
 export function SelectToken() {
     const currentChainId = useChainId()
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes: sharedClasses } = useSharedStyles()
 
     const [title, setTitle] = useState('')
@@ -72,9 +72,7 @@ export function SelectToken() {
         <InjectedDialog titleBarIconStyle="back" open={open} onClose={onClose} title={title} maxWidth="xs">
             <DialogContent>
                 {onlyFarmTokens && error ? (
-                    <Typography className={sharedClasses.msg}>
-                        {t('plugin_referral_blockchain_error_your_referral_farms')}
-                    </Typography>
+                    <Typography className={sharedClasses.msg}>{t.blockchain_error_your_referral_farms()}</Typography>
                 ) : (
                     <ERC20TokenList
                         whitelist={onlyFarmTokens ? referredTokens : undefined}

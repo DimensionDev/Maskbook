@@ -3,7 +3,7 @@ import { resolveTransactionLinkOnExplorer, useChainId } from '@masknet/web3-shar
 import { Grid, Typography, CircularProgress, Link } from '@mui/material'
 import DoneIcon from '@mui/icons-material/Done'
 
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 import { TransactionStatus } from '../../types'
 
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
@@ -37,7 +37,7 @@ type TransactionProps =
       }
 
 export function Transaction(props: TransactionProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const currentChainId = useChainId()
     const { classes } = useStyles()
 
@@ -66,13 +66,13 @@ export function Transaction(props: TransactionProps) {
                         <DoneIcon sx={{ fontSize: 60 }} />
                     </Grid>
                     <Grid item xs={12} className={classes.heading}>
-                        {t('plugin_wallet_transaction_confirmed')}
+                        {t.transaction_confirmed()}
                     </Grid>
                     <Grid item xs={12}>
                         <Link
                             href={resolveTransactionLinkOnExplorer(currentChainId, props.transactionHash)}
                             target="_blank">
-                            {t('plugin_wallet_view_on_explorer')}
+                            {t.view_on_explorer()}
                         </Link>
                     </Grid>
 

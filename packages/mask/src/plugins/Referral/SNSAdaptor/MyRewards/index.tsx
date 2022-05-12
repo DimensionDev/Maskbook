@@ -2,7 +2,7 @@ import { useAsync } from 'react-use'
 import { useAccount, useChainId, useTokenListConstants } from '@masknet/web3-shared-evm'
 import { Grid, Typography, CircularProgress } from '@mui/material'
 
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 import { getRequiredChainId } from '../../helpers'
 import type { PageInterface } from '../../types'
 import { ReferralRPC } from '../../messages'
@@ -13,7 +13,7 @@ import { Rewards } from './Rewards'
 import { useSharedStyles, useMyFarmsStyles } from '../styles'
 
 export function MyRewards(props: PageInterface) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes: sharedClasses } = useSharedStyles()
     const { classes: myFarmsClasses } = useMyFarmsStyles()
     const currentChainId = useChainId()
@@ -45,12 +45,12 @@ export function MyRewards(props: PageInterface) {
             <Grid container justifyContent="space-between" rowSpacing="20px" className={myFarmsClasses.heading}>
                 <Grid item xs={8}>
                     <Typography fontWeight={500} className={myFarmsClasses.col}>
-                        {t('plugin_referral_reward_tokens')}
+                        {t.reward_tokens()}
                     </Typography>
                 </Grid>
                 <Grid item xs={4} paddingLeft="12px">
                     <Typography fontWeight={500} className={myFarmsClasses.col}>
-                        {t('plugin_referral_rewards_earned')}
+                        {t.rewards_earned()}
                     </Typography>
                 </Grid>
             </Grid>
@@ -61,9 +61,7 @@ export function MyRewards(props: PageInterface) {
                     <>
                         {!accountRewards || !Object.keys(accountRewards).length || error ? (
                             <Typography className={sharedClasses.msg}>
-                                {error
-                                    ? t('plugin_referral_oracle_error_your_rewards')
-                                    : t('plugin_referral_you_have_not_joined_farm')}
+                                {error ? t.oracle_error_your_rewards() : t.you_have_not_joined_farm()}
                             </Typography>
                         ) : (
                             <Rewards

@@ -3,7 +3,7 @@ import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
 import { PageHistory, PagesType, DialogInterface } from '../types'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 
 import { InjectedDialog } from '@masknet/shared'
 import { Landing } from './Landing'
@@ -77,19 +77,19 @@ const useStyles = makeStyles<{ hideBackBtn?: boolean }>()((theme, { hideBackBtn 
 export function ReferralDialog({ open, onClose, onSwapDialogOpen }: ReferralDialogProps) {
     const [propsData, setPropsData] = useState<DialogInterface>()
 
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles({ hideBackBtn: propsData?.hideBackBtn })
     const [currentPage, setCurrentPage] = useState<PageHistory>({
         page: PagesType.LANDING,
-        title: t('plugin_referral'),
+        title: t.referral_farms(),
     })
     const [previousPages, setPreviousPages] = useState<PageHistory[]>([])
-    const [currentTitle, setCurrentTitle] = useState(t('plugin_referral'))
+    const [currentTitle, setCurrentTitle] = useState(t.referral_farms())
 
     const onContinue = (
         currentPage: PagesType,
         nextPage: PagesType,
-        title: string = t('plugin_referral'),
+        title: string = t.referral_farms(),
         props?: DialogInterface,
     ) => {
         setPreviousPages([...previousPages, { page: currentPage, title: currentTitle }])
@@ -98,7 +98,7 @@ export function ReferralDialog({ open, onClose, onSwapDialogOpen }: ReferralDial
         setPropsData(props)
     }
 
-    const onChangePage = (page: PagesType, title: string = t('plugin_referral'), props?: DialogInterface) => {
+    const onChangePage = (page: PagesType, title: string = t.referral_farms(), props?: DialogInterface) => {
         setCurrentPage({ page, title })
         setCurrentTitle(title)
         setPropsData(props)
@@ -179,7 +179,7 @@ export function ReferralDialog({ open, onClose, onSwapDialogOpen }: ReferralDial
                     <span className={classes.title}>
                         {currentTitle}
                         <span className={classes.powered}>
-                            {t('plugin_referral_powered_by')}
+                            {t.powered_by()}
                             <AttraceLogoText />
                         </span>
                     </span>
