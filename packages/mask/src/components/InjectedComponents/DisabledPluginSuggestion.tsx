@@ -97,7 +97,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                             Enable plugins
                         </Button>
                     }
-                    content={<Rectangle style={{ paddingLeft: 8, marginBottom: 4 }} />}
+                    content={<Rectangle style={{ paddingLeft: 8, marginBottom: 42 }} />}
                 />
             ))}
         </>
