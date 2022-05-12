@@ -15,7 +15,7 @@ import type {
     FarmHash,
     RewardsHarvested,
     RewardData,
-    FarmDepositChangeEvent,
+    FarmDepositIncreasedEvent,
 } from '../../types'
 import {
     expandBytes24ToBytes32,
@@ -83,7 +83,7 @@ function parseFarmDepositAndFarmMetastateEvents(
 
         const rewardTokenDec = farmState.rewardToken?.decimals ?? 18
 
-        if (e.topic === eventIds.FarmDepositChange) {
+        if (e.topic === eventIds.FarmDepositIncreased) {
             const prevTotalFarmRewards = farmState.totalFarmRewards || 0
 
             const totalFarmRewards = prevTotalFarmRewards + Number.parseFloat(formatUnits(e.args.delta, rewardTokenDec))
@@ -92,13 +92,13 @@ function parseFarmDepositAndFarmMetastateEvents(
         if (e.topic === eventIds.FarmMetastate) {
             const { key, value } = e.args
 
-            const periodRewardKey = padRight(asciiToHex('periodReward'), 64)
-            if (key === periodRewardKey) {
-                const periodReward = defaultAbiCoder.decode(['uint128', 'int128'], value)[0]
+            const confirmationRewardKey = padRight(asciiToHex('confirmationReward'), 64)
+            if (key === confirmationRewardKey) {
+                const confirmationReward = defaultAbiCoder.decode(['uint128', 'int128'], value)[0]
 
                 farmsData.set(farmHash, {
                     ...farmState,
-                    dailyFarmReward: Number.parseFloat(formatUnits(periodReward, rewardTokenDec)),
+                    dailyFarmReward: Number.parseFloat(formatUnits(confirmationReward, rewardTokenDec)),
                 })
             }
         }
@@ -153,7 +153,7 @@ export async function getAccountFarms(
 
     const farmsDepositEvents = await queryIndexersWithNearestQuorum({
         addresses: [REFERRAL_FARMS_V1_ADDR],
-        topic1: [eventIds.FarmDepositChange],
+        topic1: [eventIds.FarmDepositIncreased],
         topic2: farms.map((farm) => farm.farmHash),
         chainId: [chainId],
     })
@@ -174,7 +174,7 @@ export async function getAccountFarms(
         ]),
     )
 
-    farmsDeposits.forEach((deposit: { args: FarmDepositChangeEvent }) => {
+    farmsDeposits.forEach((deposit: { args: FarmDepositIncreasedEvent }) => {
         const { farmHash, delta } = deposit.args
         const farmState = farmsMap.get(farmHash)
 
@@ -199,7 +199,7 @@ export async function getDailyAndTotalRewardsFarm(
 
     const res = await queryIndexersWithNearestQuorum({
         addresses: [farmsAddr],
-        topic1: [eventIds.FarmMetastate, eventIds.FarmDepositChange],
+        topic1: [eventIds.FarmMetastate, eventIds.FarmDepositIncreased],
         topic2: [farmHash],
         chainId: [chainId],
     })
@@ -209,7 +209,7 @@ export async function getDailyAndTotalRewardsFarm(
     let farm = { farmHash, dailyFarmReward: 0, totalFarmRewards: 0 }
 
     parsed.forEach((e) => {
-        if (e.topic === eventIds.FarmDepositChange) {
+        if (e.topic === eventIds.FarmDepositIncreased) {
             const prevTotalFarmRewards = farm.totalFarmRewards || 0
 
             const totalFarmRewards = prevTotalFarmRewards + Number.parseFloat(formatUnits(e.args.delta, tokenDecimals))
@@ -218,11 +218,11 @@ export async function getDailyAndTotalRewardsFarm(
         if (e.topic === eventIds.FarmMetastate) {
             const { key, value } = e.args
 
-            const periodRewardKey = padRight(asciiToHex('periodReward'), 64)
-            if (key === periodRewardKey) {
-                const periodReward = defaultAbiCoder.decode(['uint128', 'int128'], value)[0]
+            const confirmationRewardKey = padRight(asciiToHex('confirmationReward'), 64)
+            if (key === confirmationRewardKey) {
+                const confirmationReward = defaultAbiCoder.decode(['uint128', 'int128'], value)[0]
 
-                farm = { ...farm, dailyFarmReward: Number.parseFloat(formatUnits(periodReward, tokenDecimals)) }
+                farm = { ...farm, dailyFarmReward: Number.parseFloat(formatUnits(confirmationReward, tokenDecimals)) }
             }
         }
     })
@@ -287,7 +287,7 @@ async function getFarmsForReferredToken(
     // query farms meta data
     const farmsDataEvents = await queryIndexersWithNearestQuorum({
         addresses: [REFERRAL_FARMS_V1_ADDR],
-        topic1: [eventIds.FarmMetastate, eventIds.FarmDepositChange],
+        topic1: [eventIds.FarmMetastate, eventIds.FarmDepositIncreased],
         topic2: farms.map(({ farmHash }) => farmHash),
         chainId: [chainId],
     })

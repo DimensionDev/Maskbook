@@ -59,7 +59,7 @@ export async function runCreateERC20PairFarm(
                 ? [
                       // Metastate keys ideally are ascii and up to length 31 (ascii, utf8 might be less)
                       {
-                          key: padRight(asciiToHex('periodReward'), 64),
+                          key: padRight(asciiToHex('confirmationReward'), 64),
                           value: defaultAbiCoder.encode(
                               ['uint128', 'int128'],
                               [parseUnits(dailyFarmRewardStr, rewardTokenDecimals), '0'],
@@ -137,7 +137,7 @@ export async function adjustFarmRewards(
             const dailyFarmRewardStr = roundValue(dailyFarmReward, rewardTokenDecimals).toString()
             const metaState = [
                 {
-                    key: padRight(asciiToHex('periodReward'), 64),
+                    key: padRight(asciiToHex('confirmationReward'), 64),
                     value: defaultAbiCoder.encode(
                         ['uint128', 'int128'],
                         [parseUnits(dailyFarmRewardStr, rewardTokenDecimals), '0'],

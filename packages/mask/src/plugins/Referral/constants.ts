@@ -20,8 +20,8 @@ enum ORACLE_CHAIN_ID {
 // TODO: change to Mainnet before mainnet release
 export const supportedChainId = ChainId.Rinkeby
 export const SWAP_CHAIN_ID = ChainId.Mainnet
-export const REFERRAL_FARMS_V1_ADDR = '0x181D7ABC3CC77A0217c5780b84ba5e289fCe6292'
-export const CONFIRMATION_V1_ADDR = '0xE83f1a82756Fe4561BD42bD56D9fF8E6256dFb1A'
+export const REFERRAL_FARMS_V1_ADDR = '0xF657F4F0408AcEE64722483acf53Ae3fd7C85cB7'
+export const CONFIRMATION_V1_ADDR = '0x27B98395Ab405078387da866013fDabfcD2f0ee9'
 export const supportedOracleChainId = ORACLE_CHAIN_ID.testnet
 
 export const APR = 'N/A'

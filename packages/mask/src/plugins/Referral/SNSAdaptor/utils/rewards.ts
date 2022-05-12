@@ -17,8 +17,8 @@ function validateRewardPeriods(rewards: Reward[]) {
     rewards.forEach((reward, i) => {
         if (!(i < arrLength - 1)) return
 
-        const current = Number.parseInt(formatUnits(reward.period, 0), 10)
-        const next = Number.parseInt(formatUnits(rewards[i + 1].period, 0), 10)
+        const current = Number.parseInt(formatUnits(reward.confirmation, 0), 10)
+        const next = Number.parseInt(formatUnits(rewards[i + 1].confirmation, 0), 10)
         if (next - current > 1) {
             isValid = false
         }
@@ -27,7 +27,7 @@ function validateRewardPeriods(rewards: Reward[]) {
     return isValid
 }
 
-export async function getAccountTokenPeriodOffset(
+export async function getAccountTokenConfirmationOffset(
     web3: Web3,
     account: string,
     rewardTokenDefn: ChainAddress,
@@ -36,7 +36,7 @@ export async function getAccountTokenPeriodOffset(
     const tokenAddress = parseChainAddress(rewardTokenDefn).address
 
     const offset =
-        (await referralFarmsV1Contract?.methods.getAccountTokenPeriodOffset(account, tokenAddress).call()) || 0
+        (await referralFarmsV1Contract?.methods.getAccountTokenConfirmationOffset(account, tokenAddress).call()) || 0
 
     return Number.parseInt(offset, 10)
 }
@@ -50,8 +50,8 @@ export async function filterRewardsByAccountTokenPeriodOffset(
     const rewardsFiltered = (
         await Promise.allSettled(
             rewards.map(async (reward) => {
-                const offset = await getAccountTokenPeriodOffset(web3, account, rewardTokenDefn)
-                if (offset < Number.parseInt(formatUnits(reward.period, 0), 10)) {
+                const offset = await getAccountTokenConfirmationOffset(web3, account, rewardTokenDefn)
+                if (offset < Number.parseInt(formatUnits(reward.confirmation, 0), 10)) {
                     return reward
                 }
                 return null
@@ -83,23 +83,23 @@ export async function harvestRewards(
         const rewardsFiltered = await filterRewardsByAccountTokenPeriodOffset(web3, account, rewardTokenDefn, rewards)
         const rewardsSorted = rewardsFiltered.sort(
             (rewardA, rewardB) =>
-                Number.parseInt(formatUnits(rewardA.period, 0), 10) -
-                Number.parseInt(formatUnits(rewardB.period, 0), 10),
+                Number.parseInt(formatUnits(rewardA.confirmation, 0), 10) -
+                Number.parseInt(formatUnits(rewardB.confirmation, 0), 10),
         )
 
         // Check periods to ensure no periods are skipped (because skipped periods == lost funds)
         if (!validateRewardPeriods(rewardsSorted)) {
-            return onError('You cannot harvest rewards because there is a missed period.')
+            return onError('You cannot harvest rewards because there is a missed confirmation period.')
         }
 
         const requests = [
             {
                 rewardTokenDefn,
-                entitlements: rewardsSorted.map(({ farmHash, rewardValue: value, period }) => {
+                entitlements: rewardsSorted.map(({ farmHash, rewardValue: value, confirmation }) => {
                     return {
                         farmHash,
                         value,
-                        period,
+                        confirmation,
                     }
                 }),
             },
