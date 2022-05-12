@@ -37,7 +37,6 @@ interface ShareTransactionOptions {
     content?: string
     hash: string
     buttonLabel?: string
-    // TODO Expose onShare until we have share API added our runtime
     onShare?: () => void
 }
 
