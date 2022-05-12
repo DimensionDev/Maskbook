@@ -1,3 +1,5 @@
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import {
     ChainDescriptor,
     createFungibleToken,
@@ -91,5 +93,10 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         icon: new URL('../assets/blocto.png', import.meta.url),
         homeLink: 'https://portto.com/',
         shortenLink: 'portto.com',
+        enableRequirements: {
+            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+        },
     },
 ]

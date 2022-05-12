@@ -1,6 +1,7 @@
 import { first } from 'lodash-unified'
 import { unreachable } from '@dimensiondev/kit'
 import { CompositeSignature, TransactionStatusCode, MutateOptions, QueryOptions } from '@blocto/fcl'
+import * as FCL from '@blocto/fcl'
 import { ChainId, ProviderType, SchemaType } from '@masknet/web3-shared-flow'
 import {
     Account,
@@ -13,6 +14,9 @@ import {
 } from '@masknet/web3-shared-base'
 import { Providers } from './provider'
 import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types'
+
+console.log('DEBUG: FCL')
+console.log(FCL)
 
 class Connection implements BaseConnection {
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}

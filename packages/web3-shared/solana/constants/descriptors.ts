@@ -1,3 +1,5 @@
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import {
     ChainDescriptor,
     createFungibleToken,
@@ -123,5 +125,25 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         homeLink: 'https://phantom.app/',
         shortenLink: 'phantom.app',
         downloadLink: 'https://phantom.app/download',
+        enableRequirements: {
+            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+        },
+    },
+    {
+        ID: `${PLUGIN_ID}_sollet`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Sollet,
+        name: 'Sollet',
+        icon: new URL('../assets/sollet.png', import.meta.url),
+        homeLink: 'https://www.sollet.io/',
+        shortenLink: 'sollet.io',
+        downloadLink: 'https://www.sollet.io/',
+        enableRequirements: {
+            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+        },
     },
 ]

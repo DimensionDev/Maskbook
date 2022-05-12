@@ -40,10 +40,6 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     )
     // #endregion
 
-    console.log({
-        open,
-    })
-
     // #region native app
     useEffect(() => {
         if (!open) return

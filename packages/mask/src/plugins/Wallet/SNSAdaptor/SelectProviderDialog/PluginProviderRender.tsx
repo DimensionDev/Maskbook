@@ -2,13 +2,13 @@ import { useMemo } from 'react'
 import { first } from 'lodash-unified'
 import { SelectedIcon } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
+import { getSiteType } from '@masknet/shared-base'
 import type { Web3Helper, Web3Plugin } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils'
 import { ProviderIcon } from './ProviderIcon'
-import { getSiteType } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

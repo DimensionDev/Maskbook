@@ -5,12 +5,12 @@ import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages, isDashboardPage } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainIdValid } from '@masknet/plugin-infra/web3'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { ApplicationBoard } from '../../../../components/shared/ApplicationBoard'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -36,7 +36,9 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
     },
 }))
+
 export interface WalletStatusDialogProps {}
+
 export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { t } = useI18N()
 
