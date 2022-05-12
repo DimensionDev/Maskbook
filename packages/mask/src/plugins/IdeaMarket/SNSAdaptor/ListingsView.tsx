@@ -11,7 +11,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { UrlIcon } from '../icons/UrlIcon'
 import { BASE_URL, TWITTER_BASE_URL } from '../constants'
-import { IdeaToken, Markets } from '../types'
+import { IdeaToken, Markets, MarketsId } from '../types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -104,7 +104,7 @@ export function ListingsView() {
     const { t } = useI18N()
     const [searchText, setSearchText] = useState('')
     const [page, setPage] = useState(0)
-    const [filters, setFilters] = useState(() => ['0x1', '0x6'])
+    const [filters, setFilters] = useState(() => [MarketsId.Twitter.valueOf(), MarketsId.URL.valueOf()])
     const { tokens, loading } = useFetchIdeaTokensBySearch(searchText, page, filters)
 
     const tokensFormatted = tokens?.map((token: IdeaToken) => {

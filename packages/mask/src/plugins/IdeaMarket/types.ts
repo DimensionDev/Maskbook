@@ -47,3 +47,8 @@ export enum IdeaTokenTab {
     CHART = 1,
     BOUGHT_TOGETHER = 2,
 }
+
+export enum MarketsId {
+    Twitter = '0x1',
+    URL = '0x6',
+}
