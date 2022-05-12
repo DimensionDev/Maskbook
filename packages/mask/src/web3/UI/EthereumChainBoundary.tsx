@@ -221,19 +221,22 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                                 backgroundColor: MaskColorVar.textPluginColor,
                                 width: 254,
                                 color: 'white',
+                                '&:hover': {
+                                    backgroundColor: MaskColorVar.buttonPluginBackground,
+                                },
                             }
                         }
                         init={
                             <span>
-                                {t('plugin_wallet_connect_network', {
+                                {t('plugin_wallet_switch_network', {
                                     network: expectedNetwork,
                                 })}
                             </span>
                         }
-                        waiting={t('plugin_wallet_connect_network_under_going', {
+                        waiting={t('plugin_wallet_switch_network_under_going', {
                             network: expectedNetwork,
                         })}
-                        complete={t('plugin_wallet_connect_network', {
+                        complete={t('plugin_wallet_switch_network', {
                             network: expectedNetwork,
                         })}
                         failed={t('retry')}
@@ -243,6 +246,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         {...props.ActionButtonPromiseProps}
                     />
                 ) : null}
+                {props.children}
             </>,
         )
     }
@@ -267,19 +271,23 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                             backgroundColor: MaskColorVar.buttonPluginBackground,
                             width: 254,
                             color: 'white',
+                            marginBottom: 1,
+                            '&:hover': {
+                                backgroundColor: MaskColorVar.buttonPluginBackground,
+                            },
                         }
                     }
                     init={
                         <span>
-                            {t('plugin_wallet_switch_network', {
+                            {t('plugin_wallet_connect_network', {
                                 network: expectedNetwork,
                             })}
                         </span>
                     }
-                    waiting={t('plugin_wallet_switch_network_under_going', {
+                    waiting={t('plugin_wallet_connect_network_under_going', {
                         network: expectedNetwork,
                     })}
-                    complete={t('plugin_wallet_switch_network', {
+                    complete={t('plugin_wallet_connect_network', {
                         network: expectedNetwork,
                     })}
                     failed={t('retry')}
@@ -289,6 +297,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     {...props.ActionButtonPromiseProps}
                 />
             ) : null}
+            {props.children}
         </>,
     )
 }
