@@ -60,7 +60,7 @@ export function QuickSearchToolbar(props: QuickSearchToolbarProps) {
                 color="primary"
                 value={props.filters}
                 onChange={handleFilters}
-                aria-label="token filter by type">
+                aria-label={t('plugin_ideamarket_aria_filter')}>
                 <ToggleButton className={classes.toggleButton} size="small" value="0x6" aria-label="url">
                     <UrlIcon className={classes.toolbarIcon} />
                     <Typography variant="body2">{t('plugin_ideamarket_urls')}</Typography>

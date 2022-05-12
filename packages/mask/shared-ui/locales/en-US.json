@@ -1075,6 +1075,7 @@
     "plugin_ideamarket_buy": "Buy",
     "plugin_ideamarket_urls": "URLs",
     "plugin_ideamarket_users": "Users",
+    "plugin_ideamarket_aria_filter": "Token filter by type",
     "web3_tab_hint": "No address found.",
     "plugin_artblocks_not_active": "This project is no more active",
     "plugin_artblocks_completed": "Completed",
