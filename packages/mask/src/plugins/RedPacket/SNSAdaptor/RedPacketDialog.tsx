@@ -27,6 +27,7 @@ import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { RedPacketCreateNew } from './RedPacketCreateNew'
 import { RedPacketPast } from './RedPacketPast'
+import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -93,7 +94,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { address: publicKey, privateKey } = useMemo(() => web3.eth.accounts.create(), [])
 
     const currentIdentity = useCurrentIdentity()
-    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname
+
+    const { value: linkedPersona } = useAsync(async () => {
+        if (!currentIdentity?.linkedPersona) return
+        return Services.Identity.queryPersona(currentIdentity.linkedPersona)
+    }, [currentIdentity?.linkedPersona])
+
+    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )

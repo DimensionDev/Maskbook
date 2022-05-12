@@ -25,6 +25,9 @@ import type { PollMetaData } from '../types'
 import { PLUGIN_META_KEY } from '../constants'
 import { PluginPollRPC } from '../messages'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { useAsync } from 'react-use'
+import Services from '../../../extension/service'
+import { head } from 'lodash-unified'
 
 const useNewPollStyles = makeStyles()((theme) => ({
     menuPaper: {
@@ -259,8 +262,20 @@ export default function PollsDialog(props: PollsDialogProps) {
         props.onClose()
     }
 
-    const senderName = useCurrentIdentity()?.linkedPersona?.nickname
-    const senderFingerprint = useCurrentIdentity()?.linkedPersona?.fingerprint
+    const currentIdentity = useCurrentIdentity()
+
+    const { value } = useAsync(async () => {
+        if (!currentIdentity?.linkedPersona || !currentIdentity.identifier) return
+        const profilesInformation = await Services.Identity.queryProfilesInformation([currentIdentity?.identifier])
+        const linkedPersona = await Services.Identity.queryPersona(currentIdentity.linkedPersona)
+        return {
+            linkedPersona,
+            currentProfile: head(profilesInformation),
+        }
+    }, [currentIdentity])
+
+    const senderName = value?.linkedPersona?.nickname
+    const senderFingerprint = value?.currentProfile?.fingerprint
 
     const tabProps: AbstractTabProps = {
         tabs: [

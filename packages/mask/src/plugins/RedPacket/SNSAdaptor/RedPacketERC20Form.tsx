@@ -23,6 +23,8 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
+import { useAsync } from 'react-use'
+import Services from '../../../extension/service'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -107,7 +109,13 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const [isRandom, setRandom] = useState(origin?.isRandom ? 1 : 0)
     const [message, setMessage] = useState(origin?.message || t('plugin_red_packet_best_wishes'))
     const currentIdentity = useCurrentIdentity()
-    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
+
+    const { value: linkedPersona } = useAsync(async () => {
+        if (!currentIdentity?.linkedPersona) return
+        return Services.Identity.queryPersona(currentIdentity.linkedPersona)
+    }, [currentIdentity?.linkedPersona])
+
+    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
 
     // shares
     const [shares, setShares] = useState<number | ''>(origin?.shares || RED_PACKET_DEFAULT_SHARES)

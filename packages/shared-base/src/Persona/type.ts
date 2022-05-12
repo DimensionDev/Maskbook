@@ -15,6 +15,7 @@ export interface ProfileInformation {
     nickname?: string
     avatar?: string
     identifier: ProfileIdentifier
+    linkedPersona?: PersonaIdentifier
     fingerprint?: string
 }
 

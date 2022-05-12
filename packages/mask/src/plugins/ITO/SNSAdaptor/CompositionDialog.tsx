@@ -22,6 +22,7 @@ import { omit, set } from 'lodash-unified'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { EnhanceableSite } from '@masknet/shared-base'
+import { useAsync } from 'react-use'
 
 interface StyleProps {
     snsId: string
@@ -145,7 +146,13 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const state = useState<DialogTabs>(DialogTabs.create)
 
     const currentIdentity = useCurrentIdentity()
-    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
+
+    const { value: linkedPersona } = useAsync(async () => {
+        if (!currentIdentity?.linkedPersona) return
+        return Services.Identity.queryPersona(currentIdentity.linkedPersona)
+    }, [currentIdentity?.linkedPersona])
+
+    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
