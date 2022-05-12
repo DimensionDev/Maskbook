@@ -62,9 +62,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const actualChainId = chainId
     const actualNetwork = getChainName(actualChainId)
 
-    console.log(pluginID)
-    console.log()
-
     // if false then it will not guide the user to switch the network
     const isAllowed =
         isChainIdValid(expectedChainId, allowTestnet) &&
@@ -194,7 +191,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     if (!isAllowed)
         return renderBox(
-            <Typography color={MaskColorVar.textPluginColor}>
+            <Typography color={MaskColorVar.textPluginColor} sx={{ paddingBottom: 1 }}>
                 <span>
                     {t('plugin_wallet_not_available_on', {
                         network: actualNetwork,
