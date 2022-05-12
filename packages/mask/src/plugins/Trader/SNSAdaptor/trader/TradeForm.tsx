@@ -2,7 +2,7 @@ import { memo, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
-import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
+import { Box, chipClasses, Collapse, IconButton, Stack, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { FungibleTokenDetailed, Wallet, ChainId } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
@@ -10,7 +10,7 @@ import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { FormattedBalance, SelectTokenChip } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip, TokenSecurityBar } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
@@ -402,24 +402,27 @@ export const TradeForm = memo<AllTradeFormProps>(
                     </Box>
 
                     <Box className={classes.card}>
-                        <SelectTokenChip
-                            classes={{
-                                chip: classes.selectedTokenChip,
-                                tokenIcon: classes.chipTokenIcon,
-                                noToken: classes.noToken,
-                            }}
-                            token={outputToken}
-                            ChipProps={{
-                                onClick: () => onTokenChipClick(TokenPanelType.Output),
-                                deleteIcon: (
-                                    <DropIcon
-                                        className={classes.dropIcon}
-                                        style={{ fill: !outputToken ? '#ffffff' : undefined }}
-                                    />
-                                ),
-                                onDelete: noop,
-                            }}
-                        />
+                        <Stack justifyContent="space-between" direction="row">
+                            <SelectTokenChip
+                                classes={{
+                                    chip: classes.selectedTokenChip,
+                                    tokenIcon: classes.chipTokenIcon,
+                                    noToken: classes.noToken,
+                                }}
+                                token={outputToken}
+                                ChipProps={{
+                                    onClick: () => onTokenChipClick(TokenPanelType.Output),
+                                    deleteIcon: (
+                                        <DropIcon
+                                            className={classes.dropIcon}
+                                            style={{ fill: !outputToken ? '#ffffff' : undefined }}
+                                        />
+                                    ),
+                                    onDelete: noop,
+                                }}
+                            />
+                            {tokenSecurityInfo && <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />}
+                        </Stack>
 
                         {trades.filter((item) => !!item.value).length >= 1 ? (
                             <>
