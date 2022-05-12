@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
     optionTitle: {
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.public.secondaryDark,
+        color: theme.palette.text.secondary,
         marginRight: 12,
     },
     between: {
@@ -91,6 +91,7 @@ export interface CompositionProps {
     maxLength?: number
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
+    onConnect?(): any
     e2eEncryptionDisabled?: DisabledReason
     recipients: LazyRecipients
     // Enabled features
@@ -170,27 +171,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         [],
     )
 
-    // const MoreOptions = [
-    //     imagePayloadVisible && (
-    //         <ClickableChip
-    //             key="image"
-    //             checked={imagePayloadSelected}
-    //             label={
-    //                 <>
-    //                     <ImagePayloadIcon style={{ width: 16, height: 16 }} />
-    //                     {t('post_dialog__image_payload')}
-    //                     {Flags.image_payload_marked_as_beta && (
-    //                         <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
-    //                     )}
-    //                 </>
-    //             }
-    //             onClick={() => setEncoding(encodingKind === 'image' ? 'text' : 'image')}
-    //             disabled={imagePayloadReadonly || sending}
-    //         />
-    //     ),
-    //     ...useMetadataDebugger(context, Editor.current),
-    // ].filter(Boolean)
-
     const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Number.POSITIVE_INFINITY)
     const onSubmit = useCallback(() => {
         if (!Editor.current) return
@@ -230,6 +210,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     <Typography className={classes.optionTitle}>{t('post_dialog_visible_to')}</Typography>
 
                     <PopoverListTrigger
+                        onConnect={props.onConnect}
                         e2eDisabled={props.e2eEncryptionDisabled}
                         selected="all"
                         renderScheme={visibilityPopperList}
@@ -298,6 +279,7 @@ export enum DisabledReason {
     // These reasons only applies to E2E encryption.
     NoPersona = 1,
     NoLocalKey = 2,
+    NoConnect = 3,
 }
 function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabled' | 'recipients'>) {
     const [internal_encryptionKind, setEncryptionKind] = useState<'Everyone' | 'E2E'>('Everyone')

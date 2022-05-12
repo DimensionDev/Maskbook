@@ -3,9 +3,9 @@ import { makeStyles } from '@masknet/theme'
 import Popover from '@mui/material/Popover'
 import { RadioGroup, Radio, Typography, Box } from '@mui/material'
 import { useState } from 'react'
-import { DashboardRoutes } from '@masknet/shared-base'
-import Services from '../../extension/service'
 import { CheckCircle } from '@mui/icons-material'
+import Services from '../../extension/service'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     popper: {
@@ -77,12 +77,14 @@ interface PopoverListItem {
     e2eDisabled?: number
     toShare?(): void
     setValue?(v: 'share'): void
+    onConnect?(): void
 }
 interface PopoverListTriggerProp {
     e2eDisabled?: number
     anchorEl: HTMLElement | null
     setAnchorEl(v: HTMLElement | null): void
     onChange(v: string): void
+    onConnect?(): void
     renderScheme: Array<PopoverListItem>
     shareWithNum?: number
     selected: string
@@ -90,7 +92,7 @@ interface PopoverListTriggerProp {
 }
 
 const PopoverListItem = (props: PopoverListItem) => {
-    const { title, subTitle, personaRequired, type, showDivider, e2eDisabled, toShare, setValue } = props
+    const { title, subTitle, personaRequired, type, showDivider, e2eDisabled, toShare, setValue, onConnect } = props
     const { classes, cx } = useStyles()
     const handleItemClick = () => {
         if (!(type === 'share' && toShare && setValue) || !!e2eDisabled) return
@@ -111,13 +113,22 @@ const PopoverListItem = (props: PopoverListItem) => {
                 </Box>
                 {type === 'share' && <RightArrowIcon className={classes.rightIcon} />}
             </div>
-            {personaRequired && e2eDisabled === 1 && (
+            {personaRequired && e2eDisabled && (
                 <div className={classes.flex}>
                     <Typography className={classes.mainTitle}>Persona required.</Typography>
                     <Typography
                         className={classes.create}
-                        onClick={() => Services.Helper.openDashboard(DashboardRoutes.SignUp)}>
-                        Create
+                        onClick={() => {
+                            console.log(e2eDisabled, 'coming')
+                            if (e2eDisabled === 1) {
+                                Services.Helper.openDashboard(DashboardRoutes.SignUp)
+                            }
+                            if (e2eDisabled === 2 && onConnect) {
+                                console.log('coming one')
+                                onConnect()
+                            }
+                        }}>
+                        {e2eDisabled === 1 ? 'Create' : 'Connect'}
                     </Typography>
                 </div>
             )}
@@ -136,6 +147,7 @@ export function PopoverListTrigger({
     renderScheme,
     selected,
     onChange,
+    onConnect,
     e2eDisabled,
     toShare,
     shareWithNum,
@@ -182,6 +194,7 @@ export function PopoverListTrigger({
                     {renderScheme.map((x, idx) => {
                         return (
                             <PopoverListItem
+                                onConnect={onConnect}
                                 setValue={setSelectedValue}
                                 toShare={toShare}
                                 e2eDisabled={e2eDisabled}

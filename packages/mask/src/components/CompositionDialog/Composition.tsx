@@ -13,6 +13,7 @@ import { useSubmit } from './useSubmit'
 import { useAsync } from 'react-use'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { useMyPersonas } from '../DataSource/useMyPersonas'
+import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
@@ -23,6 +24,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { t } = useI18N()
 
     const currentIdentity = useCurrentIdentity()?.identifier
+    const connectStatus = usePersonaConnectStatus()
     const hasPersona = !!useMyPersonas().find((x) =>
         x.linkedProfiles.some((y) => y.identifier.network === currentIdentity?.network),
     )
@@ -35,10 +37,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     // #region Open
     const [open, setOpen] = useState(false)
-    const { value: currentPersonaIdentifier } = useAsync(() => {
-        return Services.Settings.getCurrentPersonaIdentifier()
-    }, [open])
-    console.log(currentPersonaIdentifier, 'currentPersona,identifier')
+
     const onClose = useCallback(() => {
         setOpen(false)
         UI.current?.reset()
@@ -94,10 +93,12 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const UI = useRef<CompositionRef>(null)
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
-
-    let e2eEncryptionDisabled: E2EUnavailableReason | undefined = undefined
-    if (!hasPersona) e2eEncryptionDisabled = E2EUnavailableReason.NoPersona
-    else if (!hasLocalKey) e2eEncryptionDisabled = E2EUnavailableReason.NoLocalKey
+    const getE2eEncryptionDisabled = () => {
+        if (!hasPersona) return E2EUnavailableReason.NoPersona
+        if (!connectStatus.connected) return E2EUnavailableReason.NoConnect
+        if (!hasLocalKey) return E2EUnavailableReason.NoLocalKey
+        return undefined
+    }
 
     return (
         <DialogStackingProvider>
@@ -109,6 +110,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 title={t('post_dialog__title')}>
                 <DialogContent sx={{ height: 520 }}>
                     <CompositionDialogUI
+                        onConnect={connectStatus.action as any}
                         ref={UI}
                         hasClipboardPermission={hasClipboardPermission}
                         onRequestClipboardPermission={onRequestClipboardPermission}
@@ -118,7 +120,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         onSubmit={onSubmit_}
                         supportImageEncoding={networkSupport?.text ?? false}
                         supportTextEncoding={networkSupport?.image ?? false}
-                        e2eEncryptionDisabled={e2eEncryptionDisabled}
+                        e2eEncryptionDisabled={getE2eEncryptionDisabled()}
                     />
                 </DialogContent>
             </InjectedDialog>
