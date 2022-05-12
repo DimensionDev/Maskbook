@@ -106,14 +106,14 @@ export function useLineChart(
         const tooltip = graph.append('g')
         const tooltipLine = graph
             .append('line')
-            .style('stroke', 'green')
-            .style('stroke-width', 1.6)
+            .style('stroke', '#E0ECFF')
+            .style('stroke-width', 1)
             .style('stroke-dasharray', '5,5')
             .style('display', 'none')
             .attr('x1', 0)
-            .attr('y1', 0)
+            .attr('y1', -top)
             .attr('x2', 0)
-            .attr('y2', contentHeight)
+            .attr('y2', height)
 
         const lineCallout = (g: d3.Selection<SVGLineElement, unknown, null, undefined>, value: any) => {
             if (!value) {

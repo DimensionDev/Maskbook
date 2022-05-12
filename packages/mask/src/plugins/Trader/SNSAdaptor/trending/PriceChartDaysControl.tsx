@@ -22,6 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 18,
         textAlign: 'center',
         color: theme.palette.text.primary,
+        textDecoration: 'none !important',
     },
 }))
 
@@ -47,7 +48,9 @@ export function PriceChartDaysControl(props: PriceChartDaysControlProps) {
                     className={classNames(classes.link, props.days === days ? classes.active : '')}
                     key={days}
                     onClick={() => props.onDaysChange?.(days)}>
-                    <Typography component="span">{resolveDaysName(days)}</Typography>
+                    <Typography sx={{ ':hover': { fontWeight: 700 } }} component="span">
+                        {resolveDaysName(days)}
+                    </Typography>
                 </Link>
             ))}
         </Stack>
