@@ -19,12 +19,12 @@ export const PersonaRecovery = () => {
     const createPersonaByPrivateKey = useCreatePersonaByPrivateKey()
     const { showSnackbar } = useCustomSnackbar()
     const { changeCurrentPersona } = PersonaContext.useContainer()
-    const { state } = useLocation() as { state: { mnemonic: string[]; privateKey: string } }
+    const state = useLocation().state as { mnemonic?: string[]; privateKey?: string }
 
     const [error, setError] = useState('')
 
     useAsync(async () => {
-        if (await Services.Identity.validateMnemonic(state.mnemonic.join(' '))) return
+        if (state.mnemonic && (await Services.Identity.validateMnemonic(state.mnemonic.join(' ')))) return
         if (state.privateKey) return
         navigate(DashboardRoutes.SignUp, { replace: true })
     }, [state.mnemonic, state.privateKey])
