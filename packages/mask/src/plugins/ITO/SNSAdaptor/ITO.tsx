@@ -152,7 +152,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         },
     },
     actionFooter: {
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(0),
     },
     actionButton: {
         width: '100%',
@@ -627,7 +627,7 @@ export function ITO(props: ITO_Props) {
     )
 
     return (
-        <div>
+        <>
             <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${PoolBackground})` }}>
                 <Box className={classes.header}>
                     <Typography variant="h5" className={classes.title}>
@@ -852,7 +852,7 @@ export function ITO(props: ITO_Props) {
                 onClose={() => setOpenClaimDialog(false)}
                 retryPayload={retryITOCard}
             />
-        </div>
+        </>
     )
 }
 
