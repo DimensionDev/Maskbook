@@ -93,7 +93,7 @@ export default function ConnectButton({
     const { classes, cx } = useStyles()
     const web3 = useWeb3()
     const myAddress = useAccount()
-    const [cc, setCc] = useState<CyberConnect | null>(null)
+    const [cc, setCC] = useState<CyberConnect | null>(null)
     const [isFollowing, setFollowing] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const blockChainNetwork = useCurrentWeb3NetworkPluginID()
@@ -111,7 +111,7 @@ export default function ConnectButton({
             env: process.env.NODE_ENV === 'production' ? Env.PRODUCTION : Env.STAGING,
         })
 
-        setCc(ccInstance)
+        setCC(ccInstance)
     }, [web3, myAddress])
 
     const handleClick = useCallback(() => {
@@ -123,40 +123,35 @@ export default function ConnectButton({
                     setFollowing(true)
                     refreshFollowList()
                 })
-                .finally(() => {
-                    setLoading(false)
-                })
+                .finally(() => setLoading(false))
         } else {
             cc.disconnect(address)
                 .then(() => {
                     setFollowing(false)
                     refreshFollowList()
                 })
-                .finally(() => {
-                    setLoading(false)
-                })
+                .finally(() => setLoading(false))
         }
     }, [cc, myAddress, isFollowing])
 
-    return blockChainNetwork !== NetworkPluginID.PLUGIN_EVM ? (
-        <Typography variant="body2" sx={{ marginTop: 2, color: MaskColorVar.cyberconnectPrimary }}>
-            Please switch to EVM-based wallet to follow
-        </Typography>
-    ) : !isSameAddress(myAddress, address) ? (
-        <div
-            className={cx(classes.button, {
-                [classes.isFollowing]: isFollowing,
-            })}
-            onClick={() => {
-                handleClick()
-            }}>
-            {!isLoading ? (
-                <>
-                    <Logo /> <Typography variant="button">{!isFollowing ? 'Follow Now' : 'Following'}</Typography>
-                </>
-            ) : (
-                <CircularProgress size={30} sx={{ marginLeft: '154px' }} />
-            )}
-        </div>
-    ) : null
+    if (blockChainNetwork !== NetworkPluginID.PLUGIN_EVM) {
+        return (
+            <Typography variant="body2" sx={{ marginTop: 2, color: MaskColorVar.cyberconnectPrimary }}>
+                Please switch to EVM-based wallet to follow
+            </Typography>
+        )
+    } else if (!isSameAddress(myAddress, address)) {
+        return (
+            <div className={cx(classes.button, { [classes.isFollowing]: isFollowing })} onClick={handleClick}>
+                {!isLoading ? (
+                    <>
+                        <Logo /> <Typography variant="button">{!isFollowing ? 'Follow Now' : 'Following'}</Typography>
+                    </>
+                ) : (
+                    <CircularProgress size={30} sx={{ marginLeft: '154px' }} />
+                )}
+            </div>
+        )
+    }
+    return null
 }
