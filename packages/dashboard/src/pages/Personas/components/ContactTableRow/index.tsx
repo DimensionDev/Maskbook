@@ -5,11 +5,11 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { StarIcon, MaskBlueIcon } from '@masknet/icons'
 import { Services } from '../../../../API'
 import { useDashboardI18N } from '../../../../locales'
-import { generateContactAvatarColor } from '../../../../utils/generateContactAvatarColor'
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useAsyncFn } from 'react-use'
 import { LoadingButton } from '@mui/lab'
+import { generateContactAvatarColor } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     favorite: {
