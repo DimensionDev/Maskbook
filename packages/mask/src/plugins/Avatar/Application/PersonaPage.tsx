@@ -12,6 +12,7 @@ import { useI18N } from '../locales/i18n_generated'
 import type { TokenInfo } from '../types'
 import { PersonaItem } from './PersonaItem'
 import { InfoIcon } from '../assets/info'
+import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -39,6 +40,7 @@ export function PersonaPage(props: PersonaPageProps) {
     const { loading, value: persona } = usePersonas()
     const { loading: loadingPersonaVerified, value: personaVerifiedStatus } = usePersonaVerify()
     const { reset } = useNextIDConnectStatus()
+    const myPersonas = useMyPersonas()
     const t = useI18N()
 
     useEffect(() => {
@@ -74,21 +76,25 @@ export function PersonaPage(props: PersonaPageProps) {
                     ) : null}
                     {persona?.binds?.proofs
                         .filter((proof) => proof.platform === NextIDPlatform.Twitter)
-                        .map((x, i) =>
-                            x.identity.toLowerCase() === currentIdentity?.identifier?.userId.toLowerCase() ? (
-                                <PersonaItem
-                                    key={i}
-                                    avatar={currentIdentity.avatar ?? ''}
-                                    owner
-                                    nickname={currentIdentity.nickname}
-                                    proof={x}
-                                    userId={currentIdentity.identifier.userId}
-                                    onSelect={onSelect}
-                                />
-                            ) : (
-                                <PersonaItem avatar="" key={i} owner={false} userId={x.identity} proof={x} />
-                            ),
-                        )}
+                        .filter((x) => x.identity.toLowerCase() !== currentIdentity?.identifier?.userId.toLowerCase())
+                        .map((x, i) => (
+                            <PersonaItem
+                                key="avatar"
+                                avatar={currentIdentity?.avatar ?? ''}
+                                owner
+                                nickname={currentIdentity?.nickname}
+                                proof={x}
+                                userId={x.identity}
+                                onSelect={onSelect}
+                            />
+                        ))}
+
+                    {persona?.binds?.proofs
+                        .filter((proof) => proof.platform === NextIDPlatform.Twitter)
+                        .filter((x) => x.identity.toLowerCase() !== currentIdentity?.identifier?.userId.toLowerCase())
+                        .map((x, i) => (
+                            <PersonaItem avatar="" key={i} owner={false} userId={x.identity} proof={x} />
+                        ))}
                 </>
             )}
         </DialogContent>
