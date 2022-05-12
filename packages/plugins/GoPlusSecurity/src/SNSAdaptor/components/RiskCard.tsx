@@ -7,8 +7,9 @@ import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     detectionCard: {
-        backgroundColor: theme.palette.background.default,
         borderRadius: 8,
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        marginTop: '8px',
     },
     icon: {
         display: 'inline-flex',

@@ -1,9 +1,11 @@
 import type { SecurityAPI } from '@masknet/web3-providers'
-import { NextIdPersonaWarningIcon, RiskIcon, SuccessIcon } from '@masknet/icons'
+import { SuccessIcon } from '@masknet/icons'
 import { memo, ReactNode } from 'react'
 import { Stack } from '@mui/material'
 import type { useI18N } from '../../locales'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { RiskIcon } from '../icons/RiskIcon'
+import { WarningIcon } from '../icons/WarningIcon'
 
 export type TokenSecurity = SecurityAPI.ContractSecurity &
     SecurityAPI.TokenSecurity &
@@ -40,9 +42,9 @@ export const DefineMapping: DefineMapping = {
     [SecurityMessageLevel.Medium]: {
         i18nKey: 'medium_risk',
         titleColor: '#FFB915',
-        bgColor: 'rgba(255, 185, 21, 0.1)',
+        bgColor: 'rgba(255, 177, 0, 0.2)',
         // TODO: Merge duplicate icon in a another PR.
-        icon: (size: number) => <NextIdPersonaWarningIcon sx={{ fontSize: size ?? 24, color: '#FFB915' }} />,
+        icon: (size: number) => <WarningIcon sx={{ fontSize: size ?? 24, color: '#FFB915' }} />,
     },
     [SecurityMessageLevel.Safe]: {
         i18nKey: 'low_risk',

@@ -1,4 +1,4 @@
-import { Box, DialogContent, Stack } from '@mui/material'
+import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
 import { makeStyles, MaskDialog, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../locales'
 import { SearchBox } from './components/SearchBox'
@@ -10,7 +10,7 @@ import { Footer } from './components/Footer'
 import { Center, TokenSecurity } from './components/Common'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder'
 import { NotFound } from './components/NotFound'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -50,6 +50,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
             | TokenSecurity
             | undefined
     }, [])
+    const { value: contractDetailed, loading: loadingToken } = useERC721ContractDetailed(value?.contract)
 
     return (
         <MaskDialog
@@ -63,24 +64,28 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
                         <SearchBox onSearch={onSearch} />
                     </Box>
                     <Stack flex={1}>
-                        {searching && (
+                        {(searching || loadingToken) && (
                             <Center>
                                 <Searching />
                             </Center>
                         )}
-                        {error && !searching && <NotFound />}
-                        {!error && !searching && value && <SecurityPanel tokenSecurity={value} />}
-                        {!error && !searching && !value && (
+                        {error && !searching && !loadingToken && <NotFound />}
+                        {!error && !searching && !loadingToken && value && (
+                            <SecurityPanel tokenInfo={contractDetailed} tokenSecurity={value} />
+                        )}
+                        {!error && !searching && !loadingToken && !value && (
                             <Center>
                                 <DefaultPlaceholder />
                             </Center>
                         )}
                     </Stack>
-                    <Box>
-                        <Footer />
-                    </Box>
                 </Stack>
             </DialogContent>
+            <DialogActions sx={{ boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)' }}>
+                <Box>
+                    <Footer />
+                </Box>
+            </DialogActions>
         </MaskDialog>
     )
 }
