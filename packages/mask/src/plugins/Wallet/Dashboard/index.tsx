@@ -17,7 +17,6 @@ const dashboard: Plugin.Dashboard.Definition = {
             <>
                 <SelectProviderDialog />
                 <TransactionDialog />
-                <SelectProviderDialog />
                 <SelectNftContractDialog />
                 <WalletStatusDialog />
                 <ConnectWalletDialog />

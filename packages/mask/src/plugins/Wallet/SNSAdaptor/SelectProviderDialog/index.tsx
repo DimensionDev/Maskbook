@@ -40,6 +40,10 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     )
     // #endregion
 
+    console.log({
+        open,
+    })
+
     // #region native app
     useEffect(() => {
         if (!open) return
@@ -50,7 +54,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
     const pluginID = useValueRef(pluginIDSettings)
-    const network = useNetworkDescriptor()
+    const network = useNetworkDescriptor() as Web3Helper.NetworkDescriptorAll
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
 
@@ -65,13 +69,13 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
 
     const onProviderIconClicked = useCallback(
         async (network: Web3Helper.NetworkDescriptorAll, provider: Web3Helper.ProviderDescriptorAll) => {
-            closeDialog()
-
             if (!(await Provider?.isReady(provider.type))) {
                 const downloadLink = Others?.providerResolver.providerHomeLink(provider.type)
                 if (downloadLink) openWindow(downloadLink)
                 return
             }
+
+            closeDialog()
 
             // TODO:
             // refactor to use react-router-dom

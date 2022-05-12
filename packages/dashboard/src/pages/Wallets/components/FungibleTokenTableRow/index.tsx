@@ -9,8 +9,9 @@ import {
     useCurrentWeb3NetworkPluginID,
     useWeb3State,
     Web3Plugin,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { CurrencyType, NetworkPluginID, pow10, toFixed } from '@masknet/web3-shared-base'
+import { CurrencyType, FungibleAsset, NetworkPluginID, pow10, toFixed } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
@@ -64,7 +65,10 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface TokenTableRowProps {
-    asset: Web3Plugin.FungibleAsset
+    asset: FungibleAsset<
+        Web3Helper.Definition[NetworkPluginID]['ChainId'],
+        Web3Helper.Definition[NetworkPluginID]['SchemaType']
+    >
     onSwap(): void
     onSend(): void
 }
@@ -88,7 +92,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                             address={asset.address}
                             name={asset.name}
                             chainId={asset.chainId}
-                            logoURL={asset.logoURI || asset.logoURI}
+                            logoURL={asset.logoURL || asset.logoURL}
                             AvatarProps={{ sx: { width: 36, height: 36 } }}
                         />
                         <Box className={classes.chainIcon}>

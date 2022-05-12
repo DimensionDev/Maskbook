@@ -15,6 +15,7 @@ import { TransactionFormatter } from './TransactionFormatter'
 import { TransactionWatcher } from './TransactionWatcher'
 import type { EVM_Web3State } from './Protocol/types'
 import { IdentityService } from './IdentityService'
+import { TokenIcon } from './TokenIcon'
 
 export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3State {
     const Provider_ = new Provider(context)
@@ -33,6 +34,7 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3S
         Token: new Token(context, {
             account: Provider_.account,
         }),
+        TokenIcon: new TokenIcon(context),
         TokenList: new TokenList(context, {
             chainId: Provider_.chainId,
         }),

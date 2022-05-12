@@ -164,6 +164,7 @@ export class ProviderState<
             account.chainId = chainId
         }
 
+        // update local storage
         await this.setAccount(providerType, account)
 
         provider.emitter.emit('connect', account)
@@ -173,6 +174,12 @@ export class ProviderState<
     async disconect(providerType: ProviderType) {
         const provider = this.providers[providerType]
         await provider.disconnect()
+
+        // update local storage
+        await this.setAccount(providerType, {
+            account: '',
+        })
+
         provider.emitter.emit('disconnect', providerType)
     }
 }

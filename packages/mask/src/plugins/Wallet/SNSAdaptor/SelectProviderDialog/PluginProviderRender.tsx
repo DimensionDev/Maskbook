@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { first } from 'lodash-unified'
 import { SelectedIcon } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
@@ -129,7 +130,9 @@ export function PluginProviderRender({
     const { classes } = useStyles()
     const { t } = useI18N()
 
-    const selectedNetwork = networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
+    const selectedNetwork = useMemo(() => {
+        return networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
+    }, [undeterminedNetworkID, networks.map((x) => x.ID).join()])
 
     return (
         <>

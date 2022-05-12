@@ -16,6 +16,7 @@ import {
     useProviderType,
     useReverseAddress,
     useWallet,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -103,7 +104,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const providerType = useProviderType()
     const providerDescriptor = useProviderDescriptor()
     const networkDescriptor = useNetworkDescriptor()
-    const { Others } = useWeb3State() ?? {}
+    const { Protocol, Others } = useWeb3State() as Web3Helper.Web3StateAll
 
     const { value: domain } = useReverseAddress(undefined, account)
 
@@ -129,21 +130,12 @@ export function WalletStatusBox(props: WalletStatusBox) {
     // #endregion
 
     const onDisconnect = useCallback(async () => {
-        // switch (providerType) {
-        //     case ProviderType.MaskWallet:
-        //     case ProviderType.MetaMask:
-        //     case ProviderType.Coin98:
-        //     case ProviderType.WalletConnect:
-        //     case ProviderType.Fortmatic:
-        //         await EVM_RPC.disconnect({
-        //             providerType,
-        //         })
-        //         await WalletRPC.resetAccount()
-        //         break
-        //     default:
-        //         break
-        // }
-    }, [chainId, providerType])
+        if (!providerType) return
+        const connection = await Protocol?.getConnection?.({
+            providerType,
+        })
+        await connection?.disconnect()
+    }, [chainId, providerType, Protocol])
 
     return account ? (
         <section className={classNames(classes.currentAccount, isDashboard ? classes.dashboardBackground : '')}>

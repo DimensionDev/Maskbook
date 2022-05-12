@@ -1,32 +1,13 @@
 import { memo } from 'react'
-import {
-    ChainId,
-    chainResolver,
-    formatEthereumAddress,
-    getTokenConstants,
-    useTokenAssetBaseURLConstants,
-} from '@masknet/web3-shared-evm'
 import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 import NO_IMAGE_COLOR from './constants'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { currySameAddress, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useImageFailOver } from '../../../hooks'
+import { useAsyncRetry } from 'react-use'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
-function getFallbackIcons(address: string, baseURIs: string[]) {
-    const checkSummedAddress = formatEthereumAddress(address)
-
-    if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
-        return baseURIs.map((x) => `${x}/info/logo.png`)
-    }
-
-    const specialIcon = SPECIAL_ICON_LIST.find(currySameAddress(address))
-    if (specialIcon) return [specialIcon.logo_url]
-
-    // load from remote
-    return baseURIs.map((x) => `${x}/assets/${checkSummedAddress}/logo.png`)
-}
 const useStyles = makeStyles()((theme) => ({
     icon: {
         backgroundColor: theme.palette.common.white,
@@ -35,31 +16,26 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface TokenIconProps extends withClasses<'icon'> {
-    name?: string
-    logoURL?: string | string[]
-    chainId?: ChainId
+    chainId?: Web3Helper.ChainIdAll
+    networkPluginID?: NetworkPluginID
     address: string
+    name?: string
+    logoURL?: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { address, logoURL, name, chainId = currentChainId, AvatarProps, classes } = props
-    let _logoURL = logoURL
+    const { address, logoURL, name, AvatarProps, classes } = props
 
-    if (!logoURL && isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, formatEthereumAddress(address))) {
-        _logoURL = chainResolver.nativeCurrency(chainId)?.logoURL
-    }
+    const chainId = useChainId() as Web3Helper.ChainIdAll
+    const { TokenIcon } = useWeb3State(props.networkPluginID) as Web3Helper.Web3StateAll
 
-    const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId)
-    const fallbackLogos = getFallbackIcons(address, TOKEN_ASSET_BASE_URI ?? [])
+    const { value: urls = EMPTY_LIST } = useAsyncRetry(async () => {
+        const logoURLs = await TokenIcon?.getFungibleTokenIconURLs?.(props.chainId ?? chainId, address)
+        return [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[]
+    }, [chainId, props.chainId, address, logoURL, TokenIcon])
 
-    const images = _logoURL
-        ? Array.isArray(_logoURL)
-            ? [..._logoURL, ...fallbackLogos]
-            : [_logoURL, ...fallbackLogos]
-        : fallbackLogos
-    const { value: trustedLogoURI, loading } = useImageFailOver(images, '')
+    const { value: trustedLogoURI, loading } = useImageFailOver(urls, '')
 
     return (
         <TokenIconUI

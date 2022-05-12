@@ -691,6 +691,12 @@ export interface TokenPriceState<ChainId> {
         currencyType?: CurrencyType,
     ) => Promise<Record<string, number>>
 }
+export interface TokenIconState<ChainId> {
+    /** get token icon urls of fungible token */
+    getFungibleTokenIconURLs?: (chainId: ChainId, address: string) => Promise<string[]>
+    /** get token icon urls of non-fungible token */
+    getNonFungibleTokenIconURLs?: (chainId: ChainId, address: string, tokenId?: string) => Promise<string[]>
+}
 export interface TokenListState<ChainId, SchemaType> {
     /** The tracked fungible token list of currently chosen sub-network */
     fungibleTokens?: Subscription<FungibleToken<ChainId, SchemaType>[]>

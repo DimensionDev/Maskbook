@@ -1,5 +1,5 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react'
-import { ChainId, Transaction } from '@masknet/web3-shared-evm'
+import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { useUpdateEffect } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'

@@ -52,10 +52,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         })
         if (!connection) throw new Error('Failed to build connection.')
 
-        const account = await connection.connect()
-
-        console.log('DEBUG: account')
-        console.log(account)
+        await connection.connect()
 
         setConnectWalletDialog({
             open: false,

@@ -115,9 +115,8 @@ const CreateMnemonic = memo(() => {
         const account = await Services.Settings.getSelectedWalletAddress()
 
         if (!account) {
-            await PluginServices.Wallet.updateAccount({
+            await PluginServices.Wallet.updateMaskAccount({
                 account: address_,
-                providerType: ProviderType.MaskWallet,
             })
             await PluginServices.Wallet.selectMaskAccount([address_])
         }

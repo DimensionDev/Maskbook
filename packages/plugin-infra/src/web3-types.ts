@@ -18,6 +18,7 @@ import type {
     WalletState,
     OthersState,
     IdentityServiceState,
+    TokenIconState,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from './types'
 import type { AssetState } from './web3-state'
@@ -44,6 +45,7 @@ export declare namespace Web3Plugin {
             Settings?: SettingsState
             GasOption?: GasOptionState<ChainId>
             Token?: TokenState<ChainId, SchemaType>
+            TokenIcon?: TokenIconState<ChainId>
             TokenPrice?: TokenPriceState<ChainId>
             TokenList?: TokenListState<ChainId, SchemaType>
             Transaction?: TransactionState<ChainId, Transaction>
