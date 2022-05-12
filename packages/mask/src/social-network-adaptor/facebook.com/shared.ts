@@ -2,7 +2,7 @@ import type { SocialNetwork } from '../../social-network/types'
 import { facebookBase } from './base'
 import { getPostUrlAtFacebook, isValidFacebookUsername } from './utils/parse-username'
 import type { PostIdentifier } from '@masknet/shared-base'
-import { deconstructPayload } from '../../utils'
+import { hasPayloadLike } from '../../utils'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
 import { openWindow } from '@masknet/shared-base-ui'
 import urlcat from 'urlcat'
@@ -29,7 +29,7 @@ export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
             return new URL(url)
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
-            payloadParser: deconstructPayload,
+            hasPayloadLike,
             getURLFromPostIdentifier: getPostURL,
         }),
     },

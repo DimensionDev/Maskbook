@@ -40,7 +40,7 @@ const Icon = styled(ListItemIcon)`
     }
 `
 
-export function ToolboxHintAtMinds() {
+export function ToolboxHintAtMinds(props: { category: 'wallet' | 'application' }) {
     const mini = useMediaQuery(`(max-width: ${mindsBreakPoint}px)`)
 
     return (
@@ -50,6 +50,7 @@ export function ToolboxHintAtMinds() {
             ListItemButton={Item}
             Typography={Text}
             ListItemIcon={Icon}
+            category={props.category}
         />
     )
 }
