@@ -2,6 +2,7 @@ import { padStart } from 'lodash-unified'
 import { BigNumber } from '@ethersproject/bignumber'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { createTypedMessageMetadataReader } from '@masknet/typed-message'
+import { Buffer } from 'buffer'
 
 import { META_KEY, supportedChainId } from '../constants'
 import type { ReferralMetaData, ChainAddress, ChainAddressProps, EvmAddress, Bytes32, Bytes24 } from '../types'

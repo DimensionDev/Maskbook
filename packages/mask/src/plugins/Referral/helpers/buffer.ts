@@ -1,4 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { Buffer } from 'buffer'
 import type { PrefixedHexString } from 'ethereumjs-util'
 
 // 32-byte buffer for hashes and 32-byte encoded strings
@@ -21,6 +22,7 @@ type Hex24 = string | TypeStub
 // 20-byte hex-encoded string
 type Hex20 = string | TypeStub
 
+// TODO: change Buffer to Uint8Array in the next release
 export type BufferTypes = Buffer | Buffer32 | Buffer24 | Buffer20
 export type HexTypes = PrefixedHexString | Hex32 | Hex24 | Hex20
 export type BigIntTypes = bigint | Uint32
