@@ -122,7 +122,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
         [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].includes(currentChainId)
     const send = useCallback(async () => {
         const hash = await sendTip()
-        if (!hash) return
+        if (typeof hash !== 'string') return
         onSent?.()
     }, [sendTip, onSent])
 

@@ -210,7 +210,7 @@ export const TransferERC721 = memo(() => {
             } else if (Utils?.isValidDomain?.(data.recipient) && EthereumAddress.isValid(registeredAddress)) {
                 hash = await transferCallback(data.tokenId, registeredAddress, gasConfig)
             }
-            if (hash) {
+            if (typeof hash === 'string') {
                 navigate(DashboardRoutes.WalletsHistory)
             }
         },
