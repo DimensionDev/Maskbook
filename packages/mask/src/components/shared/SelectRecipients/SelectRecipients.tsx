@@ -65,7 +65,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
                 const temp = cloneDeep(selected)
                 const idxToDel = temp.findIndex((x) => x.publicHexKey === item.publicHexKey)
                 temp.splice(idxToDel, 1)
-                onSetSelected(selected)
+                onSetSelected(temp)
             }}
         />
     )
