@@ -217,9 +217,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     </CoinMenu>
                                 ) : null}
                             </Stack>
-                            <Stack direction="row" gap={0.5} alignItems="center">
+                            <Stack direction="row" gap={1} alignItems="center">
                                 {market ? (
-                                    <Typography fontSize={14} fontWeight={500} lineHeight="24px">
+                                    <Typography fontSize={18} fontWeight={500} lineHeight="24px">
                                         <FormattedCurrency
                                             value={
                                                 (dataProvider === DataProvider.COIN_MARKET_CAP
