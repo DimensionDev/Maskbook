@@ -18,6 +18,9 @@ const useStyles = makeStyles()((theme) => ({
             backgroundColor: MaskColorVar.buttonPluginBackground,
         },
     },
+    grid: {
+        justifyContent: 'center',
+    },
 }))
 
 export interface EthereumWalletConnectedBoundaryProps
@@ -50,7 +53,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     if (!account)
         return (
-            <Grid container>
+            <Grid container className={classes.grid}>
                 <ActionButton
                     className={classNames(classes.button, classes.connectWallet)}
                     fullWidth
@@ -65,7 +68,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     if (!isRiskWarningConfirmed && !hideRiskWarningConfirmed)
         return (
-            <Grid container>
+            <Grid container className={classes.grid}>
                 <ActionButton
                     className={classNames(classes.button, classes.connectWallet)}
                     fullWidth
@@ -80,7 +83,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (
-            <Grid container>
+            <Grid container className={classes.grid}>
                 <ActionButton
                     className={classNames(classes.button, classes.gasFeeButton)}
                     disabled={!nativeTokenBalance.error}
@@ -96,7 +99,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     if (!chainIdValid && !offChain)
         return (
-            <Grid container>
+            <Grid container className={classes.grid}>
                 <ActionButton
                     className={classNames(classes.button, classes.invalidButton)}
                     disabled
@@ -109,5 +112,9 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </Grid>
         )
 
-    return <Grid container>{children}</Grid>
+    return (
+        <Grid container className={classes.grid}>
+            {children}
+        </Grid>
+    )
 }

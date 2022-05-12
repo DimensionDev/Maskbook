@@ -22,6 +22,7 @@ const useStyles = makeStyles()((theme) => {
             margin: `${theme.spacing(1)} auto`,
         },
         choiceButton: {
+            color: theme.palette.mode === 'dark' ? 'white' : 'black',
             transitionDuration: '0s !important',
             '&:hover': {
                 border: '2px solid rgb(29, 161, 242) !important',
@@ -31,6 +32,7 @@ const useStyles = makeStyles()((theme) => {
         buttonActive: {
             border: '2px solid rgb(29, 161, 242)',
             backgroundColor: 'transparent',
+            color: theme.palette.mode === 'dark' ? 'white' : 'black',
         },
     }
 })
