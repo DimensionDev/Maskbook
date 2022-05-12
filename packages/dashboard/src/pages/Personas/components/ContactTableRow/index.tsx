@@ -9,7 +9,7 @@ import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hoo
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useAsyncFn } from 'react-use'
 import { LoadingButton } from '@mui/lab'
-import { generateContactAvatarColor } from '@masknet/shared-base-ui'
+import { generateContactAvatarColor } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     favorite: {
