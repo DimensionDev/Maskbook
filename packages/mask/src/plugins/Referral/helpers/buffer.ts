@@ -44,17 +44,17 @@ function buf(b: BufferTypes | Bytes | Uint8Array | HexTypes | number | BigIntTyp
     if (b instanceof Uint8Array) return Buffer.from(b)
 
     if (typeof b === 'number') {
-        return Buffer.from(BigNumber.from(b).toHexString().substring(2), 'hex')
+        return Buffer.from(BigNumber.from(b).toHexString().slice(2), 'hex')
     }
 
     if (typeof b === 'bigint') return Buffer.from(toEvenLength(b.toString(16)), 'hex')
 
     if (typeof b === 'string') {
         if (!b.startsWith('0x')) throw new Error('unsupported')
-        const hex = b.substring(2)
+        const hex = b.slice(2)
         if (hex.length % 2 !== 0 || !isHexString(b)) {
             // Buffer.from(hex, 'hex') will throw on invalid hex, should we do it?
-            throw new Error('invalid hexable string')
+            throw new Error('invalid hex string')
         }
 
         return Buffer.from(hex, 'hex')
@@ -62,15 +62,15 @@ function buf(b: BufferTypes | Bytes | Uint8Array | HexTypes | number | BigIntTyp
 
     // This should return the most compact buffer version without leading zeros, so safe for RLP encodings.
     if (b instanceof BigNumber || (b as any)?._isBigNumber === true)
-        return Buffer.from((b as any).toHexString().substring(2), 'hex')
+        return Buffer.from((b as any).toHexString().slice(2), 'hex')
 
     throw new Error('unsupported: ')
 }
-export function bi(b: BufferTypes | BigIntTypes | Uint8Array | HexTypes | number | BigNumber): bigint {
+export function toBigInt(b: BufferTypes | BigIntTypes | Uint8Array | HexTypes | number | BigNumber): bigint {
     if (typeof b === 'bigint') return b
     if (typeof b === 'number') return BigInt(b)
     if (b instanceof Buffer) return BigInt('0x' + b.toString('hex'))
-    if (b instanceof Uint8Array) return bi(buf(b))
+    if (b instanceof Uint8Array) return toBigInt(buf(b))
     if (typeof b === 'string' && b.startsWith('0x')) return BigInt(b)
     if (b instanceof BigNumber || (b as any)?._isBigNumber === true) return (b as any).toBigInt() as bigint
 
