@@ -35,17 +35,17 @@ export function useGasOptions() {
             {
                 title: t.wallet_gas_fee_settings_low(),
                 gasOption: GasOption.Low,
-                gasPrice: gasOptions?.low ?? 0,
+                gasPrice: gasOptions?.low,
             },
             {
                 title: t.wallet_gas_fee_settings_medium(),
                 gasOption: GasOption.Medium,
-                gasPrice: gasOptions?.medium ?? 0,
+                gasPrice: gasOptions?.medium,
             },
             {
                 title: t.wallet_gas_fee_settings_high(),
                 gasOption: GasOption.High,
-                gasPrice: gasOptions?.high ?? 0,
+                gasPrice: gasOptions?.high,
             },
         ]
     }, [is1559Supported, gasOptions])

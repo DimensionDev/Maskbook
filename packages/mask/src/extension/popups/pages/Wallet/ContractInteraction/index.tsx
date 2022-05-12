@@ -141,6 +141,10 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
+function formatGas(val?: BigNumber.Value) {
+    return typeof val !== 'undefined' ? toHex(formatGweiToWei(val).toFixed(0)) : undefined
+}
+
 const ContractInteraction = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -247,10 +251,8 @@ const ContractInteraction = memo(() => {
             const response = await WalletRPC.getEstimateGasFees(chainId)
             // Gwei to wei
             return {
-                maxPriorityFeePerGas: toHex(
-                    formatGweiToWei(response?.medium?.suggestedMaxPriorityFeePerGas ?? 0).toFixed(0),
-                ),
-                maxFeePerGas: toHex(formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toFixed(0)),
+                maxPriorityFeePerGas: formatGas(response?.medium?.suggestedMaxPriorityFeePerGas),
+                maxFeePerGas: formatGas(response?.medium?.suggestedMaxFeePerGas),
             }
         } else if (!gasPrice) {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
