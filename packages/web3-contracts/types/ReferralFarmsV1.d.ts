@@ -21,13 +21,25 @@ interface EventOptions {
     topics?: string[]
 }
 
-export type FarmDepositChange = ContractEventLog<{
+export type FarmDepositDecreaseClaimed = ContractEventLog<{
     farmHash: string
     delta: string
-    isNegative: boolean
     0: string
     1: string
-    2: boolean
+}>
+export type FarmDepositDecreaseRequested = ContractEventLog<{
+    farmHash: string
+    value: string
+    confirmation: string
+    0: string
+    1: string
+    2: string
+}>
+export type FarmDepositIncreased = ContractEventLog<{
+    farmHash: string
+    delta: string
+    0: string
+    1: string
 }>
 export type FarmExists = ContractEventLog<{
     sponsor: string
@@ -43,14 +55,6 @@ export type FarmMetastate = ContractEventLog<{
     farmHash: string
     key: string
     value: string
-    0: string
-    1: string
-    2: string
-}>
-export type FarmTokenChange = ContractEventLog<{
-    farmHash: string
-    token: string
-    change: string
     0: string
     1: string
     2: string
@@ -78,6 +82,14 @@ export interface ReferralFarmsV1 extends BaseContract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions): ReferralFarmsV1
     clone(): ReferralFarmsV1
     methods: {
+        claimReferralFarmDecrease(
+            rewardTokenDefn: string | number[],
+            referredTokenDefn: string | number[],
+            confirmation: number | string | BN,
+            value: number | string | BN,
+            proof: (string | number[])[],
+        ): NonPayableTransactionObject<void>
+
         configure(confirmationsAddr_: string): NonPayableTransactionObject<void>
 
         configureMetastate(
@@ -90,28 +102,22 @@ export interface ReferralFarmsV1 extends BaseContract {
 
         devRescueNative(value: number | string | BN, to: string): NonPayableTransactionObject<void>
 
-        getAccountNonce(account: string): NonPayableTransactionObject<string>
+        getAccountTokenConfirmationOffset(account: string, token: string): NonPayableTransactionObject<string>
 
-        getFarmDepositRemaining(farmHash: string | number[]): NonPayableTransactionObject<string>
-
-        getFarmPeriodReward(
+        getFarmConfirmationReward(
             farmHash: string | number[],
             idx: number | string | BN,
         ): NonPayableTransactionObject<[string, string]>
 
-        getFarmReferredTokenStatus(
-            farmHash: string | number[],
-            referredTokenDefn: string | number[],
-        ): NonPayableTransactionObject<string>
+        getFarmDepositRemaining(farmHash: string | number[]): NonPayableTransactionObject<string>
 
-        harvestRewards(
-            reqs: [string | number[], number | string | BN, string | number[], number | string | BN][],
-            proofs: (string | number[])[][],
-            skipEffectNonces: (number | string | BN)[],
+        harvestRewardsNoGapcheck(
+            reqs: [string | number[], [string | number[], number | string | BN, number | string | BN][]][],
+            proofs: (string | number[])[][][],
         ): NonPayableTransactionObject<void>
 
         increaseReferralFarm(
-            rewardToken: string | number[],
+            rewardTokenDefn: string | number[],
             referredTokenDefn: string | number[],
             rewardDeposit: number | string | BN,
             metastate: [string | number[], string | number[]][],
@@ -121,20 +127,29 @@ export interface ReferralFarmsV1 extends BaseContract {
 
         renounceOwnership(): NonPayableTransactionObject<void>
 
+        requestDecreaseReferralFarm(
+            rewardTokenDefn: string | number[],
+            referredTokenDefn: string | number[],
+            value: number | string | BN,
+        ): NonPayableTransactionObject<void>
+
         transferOwnership(newOwner: string): NonPayableTransactionObject<void>
     }
     events: {
-        FarmDepositChange(cb?: Callback<FarmDepositChange>): EventEmitter
-        FarmDepositChange(options?: EventOptions, cb?: Callback<FarmDepositChange>): EventEmitter
+        FarmDepositDecreaseClaimed(cb?: Callback<FarmDepositDecreaseClaimed>): EventEmitter
+        FarmDepositDecreaseClaimed(options?: EventOptions, cb?: Callback<FarmDepositDecreaseClaimed>): EventEmitter
+
+        FarmDepositDecreaseRequested(cb?: Callback<FarmDepositDecreaseRequested>): EventEmitter
+        FarmDepositDecreaseRequested(options?: EventOptions, cb?: Callback<FarmDepositDecreaseRequested>): EventEmitter
+
+        FarmDepositIncreased(cb?: Callback<FarmDepositIncreased>): EventEmitter
+        FarmDepositIncreased(options?: EventOptions, cb?: Callback<FarmDepositIncreased>): EventEmitter
 
         FarmExists(cb?: Callback<FarmExists>): EventEmitter
         FarmExists(options?: EventOptions, cb?: Callback<FarmExists>): EventEmitter
 
         FarmMetastate(cb?: Callback<FarmMetastate>): EventEmitter
         FarmMetastate(options?: EventOptions, cb?: Callback<FarmMetastate>): EventEmitter
-
-        FarmTokenChange(cb?: Callback<FarmTokenChange>): EventEmitter
-        FarmTokenChange(options?: EventOptions, cb?: Callback<FarmTokenChange>): EventEmitter
 
         OwnershipTransferred(cb?: Callback<OwnershipTransferred>): EventEmitter
         OwnershipTransferred(options?: EventOptions, cb?: Callback<OwnershipTransferred>): EventEmitter
@@ -145,17 +160,20 @@ export interface ReferralFarmsV1 extends BaseContract {
         allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
 
-    once(event: 'FarmDepositChange', cb: Callback<FarmDepositChange>): void
-    once(event: 'FarmDepositChange', options: EventOptions, cb: Callback<FarmDepositChange>): void
+    once(event: 'FarmDepositDecreaseClaimed', cb: Callback<FarmDepositDecreaseClaimed>): void
+    once(event: 'FarmDepositDecreaseClaimed', options: EventOptions, cb: Callback<FarmDepositDecreaseClaimed>): void
+
+    once(event: 'FarmDepositDecreaseRequested', cb: Callback<FarmDepositDecreaseRequested>): void
+    once(event: 'FarmDepositDecreaseRequested', options: EventOptions, cb: Callback<FarmDepositDecreaseRequested>): void
+
+    once(event: 'FarmDepositIncreased', cb: Callback<FarmDepositIncreased>): void
+    once(event: 'FarmDepositIncreased', options: EventOptions, cb: Callback<FarmDepositIncreased>): void
 
     once(event: 'FarmExists', cb: Callback<FarmExists>): void
     once(event: 'FarmExists', options: EventOptions, cb: Callback<FarmExists>): void
 
     once(event: 'FarmMetastate', cb: Callback<FarmMetastate>): void
     once(event: 'FarmMetastate', options: EventOptions, cb: Callback<FarmMetastate>): void
-
-    once(event: 'FarmTokenChange', cb: Callback<FarmTokenChange>): void
-    once(event: 'FarmTokenChange', options: EventOptions, cb: Callback<FarmTokenChange>): void
 
     once(event: 'OwnershipTransferred', cb: Callback<OwnershipTransferred>): void
     once(event: 'OwnershipTransferred', options: EventOptions, cb: Callback<OwnershipTransferred>): void

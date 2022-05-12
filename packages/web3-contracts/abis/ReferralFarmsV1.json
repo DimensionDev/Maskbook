@@ -13,15 +13,53 @@
                 "internalType": "uint128",
                 "name": "delta",
                 "type": "uint128"
+            }
+        ],
+        "name": "FarmDepositDecreaseClaimed",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "farmHash",
+                "type": "bytes32"
             },
             {
                 "indexed": false,
-                "internalType": "bool",
-                "name": "isNegative",
-                "type": "bool"
+                "internalType": "uint128",
+                "name": "value",
+                "type": "uint128"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint128",
+                "name": "confirmation",
+                "type": "uint128"
             }
         ],
-        "name": "FarmDepositChange",
+        "name": "FarmDepositDecreaseRequested",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "farmHash",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint128",
+                "name": "delta",
+                "type": "uint128"
+            }
+        ],
+        "name": "FarmDepositIncreased",
         "type": "event"
     },
     {
@@ -85,31 +123,6 @@
         "inputs": [
             {
                 "indexed": true,
-                "internalType": "bytes32",
-                "name": "farmHash",
-                "type": "bytes32"
-            },
-            {
-                "indexed": true,
-                "internalType": "bytes24",
-                "name": "token",
-                "type": "bytes24"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint8",
-                "name": "change",
-                "type": "uint8"
-            }
-        ],
-        "name": "FarmTokenChange",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
                 "internalType": "address",
                 "name": "previousOwner",
                 "type": "address"
@@ -160,6 +173,39 @@
         ],
         "name": "RewardsHarvested",
         "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes24",
+                "name": "rewardTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "internalType": "bytes24",
+                "name": "referredTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "internalType": "uint128",
+                "name": "confirmation",
+                "type": "uint128"
+            },
+            {
+                "internalType": "uint128",
+                "name": "value",
+                "type": "uint128"
+            },
+            {
+                "internalType": "bytes32[]",
+                "name": "proof",
+                "type": "bytes32[]"
+            }
+        ],
+        "name": "claimReferralFarmDecrease",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
     },
     {
         "inputs": [
@@ -263,26 +309,7 @@
                 "type": "address"
             }
         ],
-        "name": "getAccountTokenPeriodOffset",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "farmHash",
-                "type": "bytes32"
-            }
-        ],
-        "name": "getFarmDepositRemaining",
+        "name": "getAccountTokenConfirmationOffset",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -306,7 +333,7 @@
                 "type": "int256"
             }
         ],
-        "name": "getFarmPeriodReward",
+        "name": "getFarmConfirmationReward",
         "outputs": [
             {
                 "components": [
@@ -317,13 +344,32 @@
                     },
                     {
                         "internalType": "uint128",
-                        "name": "activationPeriod",
+                        "name": "activationConfirmation",
                         "type": "uint128"
                     }
                 ],
-                "internalType": "struct FarmPeriodReward",
+                "internalType": "struct FarmConfirmationReward",
                 "name": "",
                 "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "farmHash",
+                "type": "bytes32"
+            }
+        ],
+        "name": "getFarmDepositRemaining",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -352,16 +398,16 @@
                             },
                             {
                                 "internalType": "uint128",
-                                "name": "period",
+                                "name": "confirmation",
                                 "type": "uint128"
                             }
                         ],
-                        "internalType": "struct ReferralFarmsV1.TokenEntitlement[]",
+                        "internalType": "struct TokenEntitlement[]",
                         "name": "entitlements",
                         "type": "tuple[]"
                     }
                 ],
-                "internalType": "struct ReferralFarmsV1.HarvestTokenRequest[]",
+                "internalType": "struct HarvestTokenRequest[]",
                 "name": "reqs",
                 "type": "tuple[]"
             },
@@ -432,6 +478,29 @@
     {
         "inputs": [],
         "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes24",
+                "name": "rewardTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "internalType": "bytes24",
+                "name": "referredTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "internalType": "uint128",
+                "name": "value",
+                "type": "uint128"
+            }
+        ],
+        "name": "requestDecreaseReferralFarm",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
