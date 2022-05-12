@@ -1,5 +1,4 @@
 import bs58 from 'bs58'
-import { Buffer } from 'buffer'
 import * as Web3 from '@solana/web3.js'
 
 export function encodePublicKey(key: Web3.PublicKey) {
@@ -13,12 +12,9 @@ export function deocdeAddress(initData: string | Buffer) {
 }
 
 export function formatAddress(address: string, size = 0) {
-    if (!isValidAddress(address)) return address
-    const address_ = bs58.encode(Buffer.from(address, 'hex'))
-    if (size === 0 || size > 21) return address_
-    return `${address_.substring(0, size)}...${address_.substring(-size)}`
+    if (size === 0 || size >= 22) return address
+    return `${address.substr(0, size)}...${address.substr(-size)}`
 }
-
 export function isValidAddress(address?: string) {
     return !!(address && Web3.PublicKey.isOnCurve(bs58.decode(address)))
 }

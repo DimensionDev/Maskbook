@@ -18,6 +18,7 @@ export enum NetworkType {
 
 export enum ProviderType {
     Phantom = 'Phantom',
+    Solflare = 'Solflare',
     Sollet = 'Sollet',
     Coin98 = 'Coin98',
 }
@@ -48,6 +49,7 @@ export interface Payload {
 
 export type Web3 = typeof import('@solana/web3.js')
 export type Web3Provider = {
+    publicKey: PublicKey
     on(name: string, callback: () => void): void
     request: <T>(payload: Payload) => Promise<T>
     connect(): Promise<{

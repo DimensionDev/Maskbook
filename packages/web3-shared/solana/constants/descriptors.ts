@@ -128,7 +128,37 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
             supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
-            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+            supportedExtensionSites: [],
+        },
+    },
+    {
+        ID: `${PLUGIN_ID}_solflare`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Solflare,
+        name: 'Solflare',
+        icon: new URL('../assets/solflare.png', import.meta.url),
+        homeLink: 'https://solflare.com/',
+        shortenLink: 'solflare.com',
+        downloadLink: 'https://solflare.com/download',
+        enableRequirements: {
+            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: [],
+        },
+    },
+    {
+        ID: `${PLUGIN_ID}_coin98`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Coin98,
+        name: 'Coin98',
+        icon: new URL('../assets/coin98.png', import.meta.url),
+        homeLink: 'https://coin98.com/',
+        shortenLink: 'solflare.com',
+        downloadLink: 'https://solflare.com/download',
+        enableRequirements: {
+            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: [],
         },
     },
     {

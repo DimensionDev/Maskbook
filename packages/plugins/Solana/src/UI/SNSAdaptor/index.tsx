@@ -13,7 +13,6 @@ import type {
 } from '@masknet/web3-shared-solana'
 import { base } from '../../base'
 import { createWeb3State } from '../../state'
-import { Web3UI } from '../Web3UI'
 import { SharedContextSettings, Web3StateSettings } from '../../settings'
 
 const sns: Plugin.SNSAdaptor.Definition<
@@ -36,7 +35,6 @@ const sns: Plugin.SNSAdaptor.Definition<
         Web3StateSettings.value = Web3State
         SharedContextSettings.value = context
     },
-    Web3UI,
 }
 
 export default sns

@@ -14,7 +14,6 @@ import type {
 import { base } from '../../base'
 import { SharedContextSettings, Web3StateSettings } from '../../settings'
 import { createWeb3State } from '../../state'
-import { Web3UI } from '../Web3UI'
 
 const dashboard: Plugin.Dashboard.Definition<
     ChainId,
@@ -36,7 +35,6 @@ const dashboard: Plugin.Dashboard.Definition<
         Web3StateSettings.value = Web3State
         SharedContextSettings.value = context
     },
-    Web3UI,
 }
 
 export default dashboard

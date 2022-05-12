@@ -44,6 +44,7 @@ export class SolletProvider extends BaseProvider implements SolanaProvider {
     }
 
     override async disconnect() {
+        this.solanaProvider = new Wallet(this.providerURL, '')
         await this.solanaProvider.disconnect()
         this.emitter.emit('disconnect', ProviderType.Sollet)
 
