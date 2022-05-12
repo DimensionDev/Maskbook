@@ -3,6 +3,7 @@
     "promote_ito": "Launch decentralized assets freely and participate in token launch directly on Twitter! Install Mask.io to participate in your first token launch activity.",
     "promote_ito_short": "Install Mask.io to launch dencentralized assests freely on Twitter!",
     "promote_file_service": "📃📃📃 Try to permanently use decentralized file storage on Twitter. Install Mask.io to upload and share first permanent decentralized file, powered by mainstream decentralized storage solutions.",
+    "promote_savings": "Hi friends, I just deposit {{amount}} {{symbol}} on {{chain}}. Follow @{{account}} to find more staking projects.",
     "database_backup": "Backup Database",
     "database_overwrite": "Overwrite Database with backup",
     "database_clear": "Clear Database",
