@@ -1,5 +1,5 @@
 import { first, groupBy, uniq } from 'lodash-unified'
-import type { Coin, Currency, Stat, TagType, Trending } from '../../types'
+import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import * as coinGeckoAPI from '../coingecko'
 import * as coinMarketCapAPI from '../coinmarketcap'
@@ -127,6 +127,17 @@ function isCacheExpired(dataProvider: DataProvider) {
     return Date.now() - lastUpdated > CRYPTOCURRENCY_MAP_EXPIRES_AT
 }
 
+function getCommunityLink(links: string[]): CommunityUrls {
+    return links.map((x) => {
+        if (x.includes('twitter')) return { type: 'twitter', link: x }
+        if (x.includes('t.me')) return { type: 'telegram', link: x }
+        if (x.includes('facebook')) return { type: 'facebook', link: x }
+        if (x.includes('discord')) return { type: 'discord', link: x }
+        if (x.includes('reddit')) return { type: 'reddit', link: x }
+        return { type: 'other', link: x }
+    })
+}
+
 export async function checkAvailabilityOnDataProvider(
     chainId: ChainId,
     keyword: string,
@@ -213,14 +224,16 @@ async function getCoinTrending(
                     image_url: info.image.small,
                     tags: info.categories.filter(Boolean),
                     announcement_urls: info.links.announcement_url.filter(Boolean),
-                    community_urls: [
-                        twitter_url,
-                        facebook_url,
-                        telegram_url,
-                        info.links.subreddit_url,
-                        ...info.links.chat_url,
-                        ...info.links.official_forum_url,
-                    ].filter(Boolean),
+                    community_urls: getCommunityLink(
+                        [
+                            twitter_url,
+                            facebook_url,
+                            telegram_url,
+                            info.links.subreddit_url,
+                            ...info.links.chat_url,
+                            ...info.links.official_forum_url,
+                        ].filter(Boolean),
+                    ),
                     source_code_urls: Object.values(info.links.repos_url).flatMap((x) => x),
                     home_urls: info.links.homepage.filter(Boolean),
                     blockchain_urls: uniq(
@@ -278,11 +291,13 @@ async function getCoinTrending(
                     tech_docs_urls: coinInfo.urls.technical_doc?.filter(Boolean),
                     message_board_urls: coinInfo.urls.message_board?.filter(Boolean),
                     source_code_urls: coinInfo.urls.source_code?.filter(Boolean),
-                    community_urls: [
-                        ...(coinInfo.urls.twitter ?? []),
-                        ...(coinInfo.urls.reddit ?? []),
-                        ...(coinInfo.urls.chat ?? []),
-                    ].filter(Boolean),
+                    community_urls: getCommunityLink(
+                        [
+                            ...(coinInfo.urls.twitter ?? []),
+                            ...(coinInfo.urls.reddit ?? []),
+                            ...(coinInfo.urls.chat ?? []),
+                        ].filter(Boolean),
+                    ),
                     home_urls: coinInfo.urls.website?.filter(Boolean),
                     blockchain_urls: [
                         `https://coinmarketcap.com/currencies/${coinInfo.slug}/`,

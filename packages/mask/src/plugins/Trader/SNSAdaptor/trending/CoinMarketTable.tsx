@@ -39,7 +39,7 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
     const { classes } = useStyles()
 
     return (
-        <>
+        <Stack>
             <Stack>
                 <Typography fontSize={14} fontWeight={700}>
                     {t('plugin_trader_usdc_price_statistic')}
@@ -115,6 +115,6 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </>
+        </Stack>
     )
 }
