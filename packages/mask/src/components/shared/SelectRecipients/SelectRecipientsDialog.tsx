@@ -102,7 +102,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
 
     const itemsAfterSearch = useMemo(() => {
         const fuse = new Fuse(items, {
-            keys: ['identifier.userId', 'fingerprint', 'nickname', 'address'],
+            keys: ['identifier.userId', 'fingerprint', 'nickname', 'address', 'publicHexKey'],
             isCaseSensitive: false,
             ignoreLocation: true,
             threshold: 0,
@@ -158,10 +158,10 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 ) : (
                     <div className={classes.list}>
                         {itemsAfterSearch.length === 0 ? <Empty /> : null}
-                        {itemsAfterSearch.map((item) => (
+                        {itemsAfterSearch.map((item, idx) => (
                             <ProfileInList
                                 onCopy={(v) => copyFingerprint(v)}
-                                key={item.identifier.toText()}
+                                key={idx}
                                 item={item}
                                 search={search}
                                 checked={

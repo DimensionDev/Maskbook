@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 import { DialogActions, DialogContent } from '@mui/material'
-import { DialogStackingProvider } from '@masknet/theme'
+import { DialogStackingProvider, makeStyles } from '@masknet/theme'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { MaskMessages, useI18N } from '../../utils'
 import { CrossIsolationMessages } from '@masknet/shared-base'
@@ -15,6 +15,15 @@ import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { useMyPersonas } from '../DataSource/useMyPersonas'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 
+const useStyles = makeStyles()((theme) => ({
+    dialogRoot: {
+        minWidth: 400,
+        width: 600,
+        boxShadow: 'none',
+        backgroundImage: 'none',
+        maxWidth: 'none',
+    },
+}))
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
     requireClipboardPermission?: boolean
@@ -22,7 +31,7 @@ export interface PostDialogProps {
 let openOnInitAnswered = false
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useI18N()
-
+    const { classes } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
     const connectStatus = usePersonaConnectStatus()
     const hasPersona = !!useMyPersonas().find((x) =>
@@ -102,7 +111,14 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     return (
         <DialogStackingProvider>
-            <InjectedDialog keepMounted open={open} onClose={onClose} title={t('post_dialog__title')}>
+            <InjectedDialog
+                classes={{
+                    paper: classes.dialogRoot,
+                }}
+                keepMounted
+                open={open}
+                onClose={onClose}
+                title={t('post_dialog__title')}>
                 <DialogContent>
                     <CompositionDialogUI
                         onConnect={connectStatus.action as any}
