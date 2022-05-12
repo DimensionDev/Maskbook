@@ -31,7 +31,7 @@ export const ContractSection = ({ logoURL, address }: ContractSectionProps) => {
     }, [address])
 
     return (
-        <Stack direction="row" gap={0.5} display="inline-flex" alignItems="center">
+        <Stack direction="row" gap={0.5} display="flex" alignItems="center" justifyContent="flex-end">
             <TokenIcon
                 classes={{
                     icon: classes.icon,
@@ -39,7 +39,7 @@ export const ContractSection = ({ logoURL, address }: ContractSectionProps) => {
                 logoURI={logoURL}
                 address={address}
             />
-            <Typography variant="body2" component="span">
+            <Typography variant="body2" component="span" fontWeight={700}>
                 <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
             </Typography>
             <IconButton sx={{ padding: 0 }} color="primary" size="small" onClick={onCopyAddress}>

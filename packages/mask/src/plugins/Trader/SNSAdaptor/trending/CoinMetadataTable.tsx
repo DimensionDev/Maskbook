@@ -29,6 +29,7 @@ const useStyles = makeStyles()((theme) => ({
         border: 'none',
         padding: 0,
         lineHeight: 1.2,
+        fontWeight: 700,
     },
     label: {
         color: theme.palette.text.secondary,
@@ -40,6 +41,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         gap: theme.spacing(0.25),
         whiteSpace: 'nowrap',
+        fontWeight: 700,
         '&:last-child': {
             paddingRight: 0,
         },
@@ -103,7 +105,12 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                     </TableCell>
                                     <TableCell align="right">
                                         {links.map((x, i) => (
-                                            <Linking key={i} href={x} LinkProps={{ className: classes.link }} />
+                                            <Linking
+                                                key={i}
+                                                href={x}
+                                                LinkProps={{ className: classes.link }}
+                                                TypographyProps={{ fontWeight: 700 }}
+                                            />
                                         ))}
                                     </TableCell>
                                 </TableRow>

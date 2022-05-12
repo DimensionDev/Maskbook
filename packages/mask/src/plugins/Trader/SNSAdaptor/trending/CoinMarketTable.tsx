@@ -25,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         border: 'none',
         textAlign: 'right',
+        fontWeight: 700,
     },
 }))
 
