@@ -17,6 +17,7 @@ import {
     useAllowTestnet,
     useChainId,
 } from '@masknet/web3-shared-evm'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
 import ActionButton, {
@@ -82,7 +83,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.connectWalletDialogUpdated,
+        CrossIsolationMessages.events.connectWalletDialogUpdated,
     )
     // #endregion
 
@@ -146,6 +147,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 open: true,
                 providerType: ProviderType.MetaMask,
                 networkType,
+                networkPluginId: pluginID as string,
             })
         }
     }, [account, isAllowed, isChainMatched, isPluginMatched, providerType, expectedChainId])

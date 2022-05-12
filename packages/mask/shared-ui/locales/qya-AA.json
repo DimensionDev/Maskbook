@@ -272,7 +272,6 @@
     "plugin_wallet_connect_with": "crwdns12981:0crwdne12981:0",
     "plugin_wallet_connect_with_retry": "crwdns12983:0crwdne12983:0",
     "plugin_wallet_connected_with": "crwdns12985:0crwdne12985:0",
-    "plugin_wallet_connecting_with": "crwdns14612:0crwdne14612:0",
     "plugin_wallet_metamask_error_already_request": "crwdns12987:0crwdne12987:0",
     "plugin_wallet_connect_tip": "crwdns12989:0{{providerName}}crwdnd12989:0{{providerShortenLink}}crwdne12989:0",
     "plugin_wallet_collections": "crwdns8141:0crwdne8141:0",

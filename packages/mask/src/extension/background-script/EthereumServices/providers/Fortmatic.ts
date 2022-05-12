@@ -75,7 +75,7 @@ export function createWeb3() {
     return web3
 }
 
-export async function requestAccounts(expectedChainId: ChainId) {
+export async function requestAccounts(expectedChainId: number) {
     const provider = createProvider()
     const response = await provider.request({
         method: EthereumMethodType.MASK_LOGIN_FORTMATIC,

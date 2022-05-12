@@ -5,7 +5,7 @@ import {
     FilterTransactionType,
     NetworkType,
     FungibleAssetProvider,
-    getChainIdFromNetworkType,
+    resolveChainIdFromNetworkType,
     getZerionConstants,
 } from '@masknet/web3-shared-evm'
 import type { SocketRequestAssetScope } from '../types'
@@ -33,11 +33,11 @@ export function resolveDebankTransactionType(category: string) {
 }
 
 export function resolveZerionAssetsScopeName(networkType: NetworkType) {
-    return getZerionConstants(getChainIdFromNetworkType(networkType)).ASSETS_SCOPE_NAME ?? ''
+    return getZerionConstants(resolveChainIdFromNetworkType(networkType)).ASSETS_SCOPE_NAME ?? ''
 }
 
 export function resolveZerionTransactionsScopeName(networkType: NetworkType) {
-    return getZerionConstants(getChainIdFromNetworkType(networkType)).TRANSACTIONS_SCOPE_NAME ?? ''
+    return getZerionConstants(resolveChainIdFromNetworkType(networkType)).TRANSACTIONS_SCOPE_NAME ?? ''
 }
 
 export const resolveChainByScope = createLookupTableResolver<

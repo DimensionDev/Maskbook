@@ -1,6 +1,7 @@
 import type { Web3Plugin } from '@masknet/plugin-infra/web3'
-import { isDashboardPage } from '@masknet/shared-base'
-import { ProviderType } from '@masknet/web3-shared-solana'
+import { isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { ProviderType, NetworkType } from '@masknet/web3-shared-solana'
 import { cloneElement, isValidElement, useCallback } from 'react'
 import { connectWallet } from '../../wallet'
 
@@ -11,8 +12,29 @@ export function ProviderIconClickBait({
     onSubmit,
     onClick,
 }: Web3Plugin.UI.ProviderIconClickBaitProps) {
+    const providerType = provider.type as ProviderType
+    const networkType = network.type as NetworkType
+
+    // #region connect wallet dialog
+    const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
+        CrossIsolationMessages.events.connectWalletDialogUpdated,
+        (ev) => {
+            if (ev.open) return
+            if (!ev.result) return
+            if (ev.result?.providerType === providerType && ev.result?.networkType === networkType)
+                onSubmit?.(network, provider, ev.result)
+        },
+    )
+    // #endregion
+
     const onLogIn = useCallback(async () => {
         onClick?.(network, provider)
+        setConnectWalletDialog({
+            open: true,
+            providerType,
+            networkType,
+            networkPluginId: provider.providerAdaptorPluginID,
+        })
         const publicKey = await connectWallet()
         if (publicKey) {
             onSubmit?.(network, provider)
@@ -20,7 +42,7 @@ export function ProviderIconClickBait({
     }, [provider, onClick, onSubmit])
 
     const isDashboard = isDashboardPage()
-    const disabled = isDashboard && provider.type === ProviderType.Phantom
+    const disabled = isDashboard && providerType === ProviderType.Phantom
     const disabledStyled = {
         opacity: 0.5,
     }
@@ -32,7 +54,7 @@ export function ProviderIconClickBait({
                       style: disabled ? disabledStyled : undefined,
                       ...children.props,
                       onClick: disabled ? undefined : onLogIn,
-                  })
+                  } as object)
                 : children}
         </>
     )

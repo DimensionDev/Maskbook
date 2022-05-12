@@ -88,6 +88,9 @@ const useStyles = makeStyles()((theme) => {
             height: 88,
             width: '100%',
             display: 'block',
+            '& > div': {
+                borderRadius: 8,
+            },
         },
         providerIcon: {
             height: '100%',

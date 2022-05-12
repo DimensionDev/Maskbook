@@ -1,5 +1,5 @@
 import {
-    getChainIdFromNetworkType,
+    resolveChainIdFromNetworkType,
     getCoinGeckoConstants,
     getCoinMarketCapConstants,
     NetworkType,
@@ -105,7 +105,7 @@ const NETWORK_ID_MAP: {
 }
 
 getEnumAsArray(NetworkType).map(({ value: networkType }) => {
-    const chainId = getChainIdFromNetworkType(networkType)
+    const chainId = resolveChainIdFromNetworkType(networkType)
     NETWORK_ID_MAP[DataProvider.COIN_GECKO][networkType] = getCoinGeckoConstants(chainId).PLATFORM_ID ?? ''
     NETWORK_ID_MAP[DataProvider.COIN_MARKET_CAP][networkType] = getCoinMarketCapConstants(chainId).CHAIN_ID ?? ''
 })

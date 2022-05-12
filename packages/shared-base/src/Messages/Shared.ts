@@ -1,5 +1,5 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import type { CompositionRequest } from './Mask'
+import type { CompositionRequest, ConnectWalletDialogEvent } from './Mask'
 
 /**
  * @deprecated
@@ -17,5 +17,9 @@ export const CrossIsolationMessages = new WebExtensionMessage<CrossIsolationEven
 
 export interface CrossIsolationEvents {
     requestComposition: CompositionRequest
+    /**
+     * Connect wallet dialog
+     */
+    connectWalletDialogUpdated: ConnectWalletDialogEvent
     verifyNextID: void
 }

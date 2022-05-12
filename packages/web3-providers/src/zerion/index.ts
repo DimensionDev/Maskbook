@@ -10,7 +10,7 @@ import type {
     SocketRequestAssetScope,
 } from './type'
 import { values } from 'lodash-unified'
-import { getChainIdFromNetworkType, getZerionConstants, NetworkType } from '@masknet/web3-shared-evm'
+import { resolveChainIdFromNetworkType, getZerionConstants, NetworkType } from '@masknet/web3-shared-evm'
 import { formatAssets } from './format'
 import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 
@@ -21,7 +21,7 @@ const ZERION_TOKEN = 'Mask.yEUEfDnoxgLBwNEcYPVussxxjdrGwapj'
 let socket: SocketIOClient.Socket | null = null
 
 export function resolveZerionAssetsScopeName(networkType: NetworkType) {
-    return getZerionConstants(getChainIdFromNetworkType(networkType)).ASSETS_SCOPE_NAME ?? ''
+    return getZerionConstants(resolveChainIdFromNetworkType(networkType)).ASSETS_SCOPE_NAME ?? ''
 }
 
 function createSocket() {

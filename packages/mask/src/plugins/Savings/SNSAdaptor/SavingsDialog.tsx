@@ -7,7 +7,7 @@ import {
     createContract,
     ChainId,
     FungibleTokenDetailed,
-    getChainIdFromNetworkType,
+    resolveChainIdFromNetworkType,
     useChainId,
     useWeb3,
     EthereumTokenType,
@@ -65,7 +65,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
 
     const { value: chains = EMPTY_LIST } = useAsync(async () => {
         const networks = await WalletRPC.getSupportedNetworks()
-        return networks.map((network) => getChainIdFromNetworkType(network))
+        return networks.map((network) => resolveChainIdFromNetworkType(network))
     }, [])
 
     const { value: aaveTokens } = useAsync(async () => {

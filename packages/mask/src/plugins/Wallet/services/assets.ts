@@ -16,7 +16,7 @@ import {
     NetworkType,
     FungibleAssetProvider,
     getChainShortName,
-    getChainIdFromNetworkType,
+    resolveChainIdFromNetworkType,
     ERC721TokenCollectionInfo,
     isNativeTokenSymbol as isNativeToken,
 } from '@masknet/web3-shared-evm'
@@ -144,7 +144,7 @@ export async function getAssetsList(
 function formatAssetsFromDebank(data: WalletTokenRecord[], network?: NetworkType) {
     return data
         .filter((x) => getChainIdFromName(x.chain))
-        .filter((x) => !network || getChainIdFromName(x.chain) === getChainIdFromNetworkType(network))
+        .filter((x) => !network || getChainIdFromName(x.chain) === resolveChainIdFromNetworkType(network))
         .filter((x) => x.is_verified)
         .map((y): Asset => {
             const chainIdFromChain = getChainIdFromName(y.chain) ?? ChainId.Mainnet

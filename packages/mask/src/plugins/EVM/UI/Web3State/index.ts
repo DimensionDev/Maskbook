@@ -6,6 +6,7 @@ import {
     formatCurrency,
     formatEthereumAddress,
     getChainDetailed,
+    resolveChainIdFromNetworkType,
     isChainIdValid,
     isSameAddress,
     isValidAddress,
@@ -25,6 +26,8 @@ import {
     isZeroAddress,
     createWeb3,
     createExternalProvider,
+    resolveNetworkName,
+    resolveProviderName,
 } from '@masknet/web3-shared-evm'
 import { getStorage } from '../../storage'
 
@@ -138,9 +141,13 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         formatCurrency,
         formatBalance,
 
+        resolveChainIdFromNetworkType,
+
         resolveChainName,
+        resolveProviderName,
         resolveChainFullName,
         resolveChainColor,
+        resolveNetworkName,
 
         resolveTransactionLink: resolveTransactionLinkOnExplorer,
         resolveAddressLink: resolveAddressLinkOnExplorer,

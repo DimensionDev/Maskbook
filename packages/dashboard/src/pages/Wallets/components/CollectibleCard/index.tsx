@@ -128,7 +128,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
         <Box className={`${classes.container} ${isHovering || isHoveringTooltip ? classes.hover : ''}`} ref={ref}>
             <div className={classes.card}>
                 <Box className={classes.chainIcon}>
-                    <WalletIcon networkIcon={networkDescriptor?.icon} size={20} />
+                    <WalletIcon mainIcon={networkDescriptor?.icon} size={20} />
                 </Box>
                 {(token.metadata?.assetURL || token.metadata?.iconURL) && token.contract ? (
                     <Link

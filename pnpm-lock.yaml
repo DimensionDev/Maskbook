@@ -881,6 +881,7 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -903,6 +904,7 @@ importers:
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
       '@masknet/theme': link:../../theme
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-base': link:../../web3-shared/base
@@ -28181,14 +28183,6 @@ packages:
     peerDependenciesMeta:
       react:
         optional: true
-    dev: false
-
-  /use-subscription/1.6.0_react@packages+empty:
-    resolution: {integrity: sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==}
-    peerDependencies:
-      react: ^18.0.0
-    dependencies:
-      react: link:packages/empty
     dev: false
 
   /use/3.1.1:

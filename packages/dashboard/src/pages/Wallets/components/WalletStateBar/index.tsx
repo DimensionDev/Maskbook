@@ -160,7 +160,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
             )}
             <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
                 <Stack mx={1} justifyContent="center">
-                    <WalletIcon providerIcon={provider.icon} inverse size={38} />
+                    <WalletIcon mainIcon={provider.icon} size={38} />
                 </Stack>
                 <Box sx={{ userSelect: 'none' }}>
                     {provider.type !== ProviderType.MaskWallet ? (

@@ -84,7 +84,7 @@ export function getChainIdFromName(name: string) {
         : undefined
 }
 
-export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, ChainId>(
+export const resolveChainIdFromNetworkType = createLookupTableResolver<string, number>(
     {
         [NetworkType.Ethereum]: ChainId.Mainnet,
         [NetworkType.Arbitrum]: ChainId.Arbitrum,

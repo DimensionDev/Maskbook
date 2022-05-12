@@ -2,7 +2,7 @@ import { leftShift, multipliedBy } from '@masknet/web3-shared-base'
 import {
     ChainId,
     createLookupTableResolver,
-    getChainIdFromNetworkType,
+    resolveChainIdFromNetworkType,
     getTokenConstants,
     getZerionConstants,
     NetworkType,
@@ -20,7 +20,7 @@ import { type Web3Plugin, TokenType } from '@masknet/plugin-infra/web3'
 type Asset = Web3Plugin.Asset<Web3Plugin.FungibleToken>
 
 export function resolveZerionAssetsScopeName(networkType: NetworkType) {
-    return getZerionConstants(getChainIdFromNetworkType(networkType)).ASSETS_SCOPE_NAME ?? ''
+    return getZerionConstants(resolveChainIdFromNetworkType(networkType)).ASSETS_SCOPE_NAME ?? ''
 }
 
 export const resolveChainByScope = createLookupTableResolver<

@@ -67,7 +67,7 @@ export async function connectMetaMask() {
 }
 
 // #region fortmatic
-export async function connectFortmatic(expectedChainId: ChainId) {
+export async function connectFortmatic(expectedChainId: number) {
     const { accounts, chainId } = await Fortmatic.requestAccounts(expectedChainId)
     return {
         account: first(accounts),

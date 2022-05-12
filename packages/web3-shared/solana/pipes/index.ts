@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { createLookupTableResolver } from '@masknet/web3-shared-base'
-import { ChainId, ProviderType } from '../types'
+import { ChainId, ProviderType, NetworkType } from '../types'
 
 export const resolveChainName = createLookupTableResolver<ChainId, string>(
     {
@@ -11,12 +11,12 @@ export const resolveChainName = createLookupTableResolver<ChainId, string>(
     () => 'Unknown chain id',
 )
 
-export const resolveProviderName = createLookupTableResolver<ProviderType, string>(
+export const resolveProviderName = createLookupTableResolver<string, string>(
     {
         [ProviderType.Phantom]: 'Phantom',
         [ProviderType.Sollet]: 'Sollet',
     },
-    () => 'Unknown provider type',
+    () => 'Unknown Network',
 )
 
 export const resolveLinkOnExplorer = createLookupTableResolver<ChainId, string>(
@@ -43,3 +43,33 @@ export function resolveAddressLinkOnExplorer(chainId: ChainId, address: string) 
 export function resolveBlockLinkOnExplorer(chainId: ChainId, blockNumber: string) {
     return ''
 }
+
+export const resolveNetworkName = createLookupTableResolver<string, string>(
+    {
+        [NetworkType.Solana]: 'Solana',
+    },
+    () => 'Unknown',
+)
+
+export const resolveChainIdFromNetworkType = createLookupTableResolver<string, number>(
+    {
+        [NetworkType.Solana]: ChainId.Mainnet,
+    },
+    () => ChainId.Mainnet,
+)
+
+export const resolveProviderShortenLink = createLookupTableResolver<string, string>(
+    {
+        [ProviderType.Phantom]: 'phantom.app',
+        [ProviderType.Sollet]: 'sollet.io',
+    },
+    'website',
+)
+
+export const resolveProviderHomeLink = createLookupTableResolver<string, string>(
+    {
+        [ProviderType.Phantom]: 'https://phantom.app/',
+        [ProviderType.Sollet]: 'https://www.sollet.io/',
+    },
+    '',
+)
