@@ -144,6 +144,11 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         focused: classes.inputFocused,
                     }}
                     value={search}
+                    onKeyUp={(e) => {
+                        if (e.keyCode === 13) {
+                            onInputBlur()
+                        }
+                    }}
                     onChange={(e) => setSearch(e.target.value)}
                     onBlur={onInputBlur}
                     startAdornment={
