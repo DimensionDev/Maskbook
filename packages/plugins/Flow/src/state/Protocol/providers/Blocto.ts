@@ -9,11 +9,12 @@ export class BloctoProvider extends BaseProvider implements FlowProvider {
 
     override async connect(chainId = ChainId.Mainnet) {
         const fcl = await this.createWeb3(chainId)
-        fcl.logIn()
+
+        const user = await fcl.logIn()
 
         return {
             chainId,
-            account: fcl.currentUser().addr ?? '',
+            account: user.addr,
         }
     }
 

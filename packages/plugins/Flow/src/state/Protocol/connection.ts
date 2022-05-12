@@ -1,8 +1,7 @@
 import { first } from 'lodash-unified'
 import { unreachable } from '@dimensiondev/kit'
-import { CompositeSignature, TransactionStatusCode, MutateOptions, QueryOptions } from '@blocto/fcl'
-import * as FCL from '@blocto/fcl'
-import { ChainId, ProviderType, SchemaType } from '@masknet/web3-shared-flow'
+import type { CompositeSignature, MutateOptions, QueryOptions } from '@blocto/fcl'
+import { ChainId, ProviderType, SchemaType, TransactionStatusCode } from '@masknet/web3-shared-flow'
 import {
     Account,
     ConnectionOptions,
@@ -14,18 +13,25 @@ import {
 } from '@masknet/web3-shared-base'
 import { Providers } from './provider'
 import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types'
-
-console.log('DEBUG: FCL')
-console.log(FCL)
+import { Web3StateSettings } from '../../settings'
 
 class Connection implements BaseConnection {
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
 
-    connect(options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined): Promise<Account<ChainId>> {
-        throw new Error('Method not implemented.')
+    async connect(
+        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
+    ): Promise<Account<ChainId>> {
+        return {
+            account: '',
+            chainId: ChainId.Mainnet,
+            ...(await Web3StateSettings.value.Provider?.connect(
+                options?.chainId ?? this.chainId,
+                options?.providerType ?? this.providerType,
+            )),
+        }
     }
-    disconnect(options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined): Promise<void> {
-        throw new Error('Method not implemented.')
+    async disconnect(options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined): Promise<void> {
+        await Web3StateSettings.value.Provider?.disconect(options?.providerType ?? this.providerType)
     }
     getGasPrice(options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined): Promise<string> {
         throw new Error('Method not implemented.')
@@ -135,7 +141,8 @@ class Connection implements BaseConnection {
     async getTransactionStatus(id: string, options?: FlowConnectionOptions): Promise<TransactionStatusType> {
         const web3 = await this.getWeb3(options)
         const { status } = await web3.getTransactionStatus(id)
-        switch (status) {
+        const status_ = status as TransactionStatusCode
+        switch (status_) {
             case TransactionStatusCode.UNKNOWN:
                 return TransactionStatusType.NOT_DEPEND
             case TransactionStatusCode.PENDING:
@@ -147,7 +154,7 @@ class Connection implements BaseConnection {
             case TransactionStatusCode.EXPIRED:
                 return TransactionStatusType.FAILED
             default:
-                unreachable(status)
+                unreachable(status_)
         }
     }
     async getTransactionNonce(address: string, options?: FlowConnectionOptions): Promise<number> {

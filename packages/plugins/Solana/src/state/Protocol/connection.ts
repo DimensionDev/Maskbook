@@ -12,17 +12,27 @@ import {
     NonFungibleTokenContract,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
+import { Web3StateSettings } from '../../settings'
 
 class Connection implements BaseConnection {
     private connections: Map<ChainId, SolanaConnection> = new Map()
 
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
 
-    connect(options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Promise<Account<ChainId>> {
-        throw new Error('Method not implemented.')
+    async connect(
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<Account<ChainId>> {
+        return {
+            account: '',
+            chainId: ChainId.Mainnet,
+            ...(await Web3StateSettings.value.Provider?.connect(
+                options?.chainId ?? this.chainId,
+                options?.providerType ?? this.providerType,
+            )),
+        }
     }
-    disconnect(options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Promise<void> {
-        throw new Error('Method not implemented.')
+    async disconnect(options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Promise<void> {
+        await Web3StateSettings.value.Provider?.disconect(options?.providerType ?? this.providerType)
     }
     transferFungibleToken(
         address: string,

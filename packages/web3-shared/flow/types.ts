@@ -26,6 +26,20 @@ export enum AssetProviderType {
     Default = 'Default',
 }
 
+export enum TransactionStatusCode {
+    UNKNOWN = 0,
+    /** Transaction Pending - Awaiting Finalization */
+    PENDING = 1,
+    /** Transaction Finalized - Awaiting Execution */
+    FINALIZED = 2,
+    /** Transaction Executed - Awaiting Sealing */
+    EXECUTED = 3,
+    /** Transaction Sealed - Transaction Complete. At this point the transaction * result has been committed to the blockchain. */
+    SEALED = 4,
+    /** Transaction Expired */
+    EXPIRED = 5,
+}
+
 export type Web3 = typeof import('@blocto/fcl')
 // export type Web3 = never
 export type Web3Provider = {}

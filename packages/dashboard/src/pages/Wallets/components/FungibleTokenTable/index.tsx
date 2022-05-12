@@ -80,11 +80,6 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         value: fungibleAssets,
     } = useAsync(async () => Asset?.getFungibleAssets?.(account), [account, Asset])
 
-    console.log('DEBUG: fungible token table')
-    console.log({
-        fungibleAssets,
-    })
-
     useEffect(() => {
         // PluginMessages.Wallet.events.erc20TokensUpdated.on(() =>
         //     setTimeout(() => setTokenUpdateCount((prev) => prev + 1), 100),

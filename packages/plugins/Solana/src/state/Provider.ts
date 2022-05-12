@@ -4,7 +4,15 @@ import { Account, isSameAddress } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import { ProviderState } from '@masknet/plugin-infra/web3'
-import { chainResolver, ChainId, NetworkType, ProviderType, Web3Provider, Web3 } from '@masknet/web3-shared-solana'
+import {
+    chainResolver,
+    ChainId,
+    NetworkType,
+    ProviderType,
+    Web3Provider,
+    Web3,
+    providerResolver,
+} from '@masknet/web3-shared-solana'
 import { Providers } from './Protocol/provider'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {

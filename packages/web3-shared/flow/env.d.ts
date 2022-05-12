@@ -162,7 +162,9 @@ declare module '@blocto/fcl' {
      * A **convenience method** that calls and is equivalent to {@link authenticate}.
      * @see {@link https://docs.onflow.org/fcl/reference/api/#login}
      */
-    export function logIn(): void
+    export function logIn(): Promise<{
+        addr: string
+    }>
 
     /**
      * A **convenience method** that produces the needed authorization details for the

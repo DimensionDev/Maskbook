@@ -34,12 +34,11 @@ const r = relativeRouteOf(DashboardRoutes.Wallets)
 
 function Wallets() {
     const t = useDashboardI18N()
-    const wallet = useWallet()
     const wallets = useWallets()
     const navigate = useNavigate()
     const chainId = useChainId()
-    const { Asset } = useWeb3State() as Web3Helper.Web3StateAll
     const account = useAccount()
+    const { Asset } = useWeb3State() as Web3Helper.Web3StateAll
     const network = useNetworkDescriptor()
 
     const { pathname } = useLocation()
@@ -111,7 +110,7 @@ function Wallets() {
 
     return (
         <PageFrame title={pateTitle} noBackgroundFill primaryAction={<WalletStateBar />}>
-            {!wallet ? (
+            {!account ? (
                 <StartUp />
             ) : (
                 <>
@@ -138,12 +137,8 @@ function Wallets() {
                     </Routes>
                 </>
             )}
-            {wallet ? (
-                <ReceiveDialog
-                    open={receiveOpen}
-                    address={wallet.address ?? ''}
-                    onClose={() => setReceiveOpen(false)}
-                />
+            {account ? (
+                <ReceiveDialog open={receiveOpen} address={account} onClose={() => setReceiveOpen(false)} />
             ) : null}
         </PageFrame>
     )

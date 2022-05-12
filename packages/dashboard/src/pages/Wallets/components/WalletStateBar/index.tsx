@@ -12,15 +12,12 @@ import {
     useReverseAddress,
     useTransactions,
     Web3Helper,
+    useAccount,
 } from '@masknet/plugin-infra/web3'
 import { PluginMessages } from '../../../../API'
 import { useDashboardI18N } from '../../../../locales'
 import { useNetworkSelector } from './useNetworkSelector'
-import {
-    NetworkPluginID,
-    TransactionStatusType,
-    Wallet,
-} from '@masknet/web3-shared-base'
+import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     bar: {
@@ -67,6 +64,7 @@ const useStyles = makeStyles()((theme) => ({
 export const WalletStateBar = memo(() => {
     const t = useDashboardI18N()
 
+    const account = useAccount()
     const wallet = useWallet()
     const networkDescriptor = useNetworkDescriptor() as Web3Helper.NetworkDescriptorAll
     const providerDescriptor = useProviderDescriptor() as Web3Helper.ProviderDescriptorAll
@@ -82,15 +80,16 @@ export const WalletStateBar = memo(() => {
 
     const [menu, openMenu] = useNetworkSelector()
 
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.address)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account)
 
-    if (!wallet) {
+    if (!account) {
         return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
     }
     return (
         <WalletStateBarUI
             isPending={!!pendingTransactions.length}
-            wallet={wallet}
+            name={wallet?.name ?? providerDescriptor.name}
+            address={account}
             domain={domain}
             network={networkDescriptor}
             provider={providerDescriptor}
@@ -105,7 +104,8 @@ interface WalletStateBarUIProps {
     isPending: boolean
     network?: Web3Helper.NetworkDescriptorAll
     provider?: Web3Helper.ProviderDescriptorAll
-    wallet?: Wallet
+    name?: string
+    address?: string
     domain?: string
     openConnectWalletDialog(): void
     openMenu: ReturnType<typeof useNetworkSelector>[1]
@@ -115,7 +115,8 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
     isPending,
     network,
     provider,
-    wallet,
+    name,
+    address,
     domain,
     openConnectWalletDialog,
     openMenu,
@@ -125,7 +126,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
     const { classes } = useStyles()
     const { Others } = useWeb3State()
 
-    if (!wallet || !network || !provider) return null
+    if (!network || !provider) return null
 
     return (
         <Stack justifyContent="center" direction="row" alignItems="center">
@@ -171,7 +172,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                         </Box>
                     ) : (
                         <Box fontSize={16} display="flex" alignItems="center">
-                            {wallet.name}
+                            {name}
                             {domain && Others?.formatDomainName ? (
                                 <Typography className={classes.domain}>{Others.formatDomainName(domain)}</Typography>
                             ) : null}
@@ -179,7 +180,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                     )}
 
                     <Box fontSize={12}>
-                        <FormattedAddress address={wallet.address} size={10} formatter={Others?.formatAddress} />
+                        <FormattedAddress address={address} size={10} formatter={Others?.formatAddress} />
                     </Box>
                 </Box>
             </Stack>

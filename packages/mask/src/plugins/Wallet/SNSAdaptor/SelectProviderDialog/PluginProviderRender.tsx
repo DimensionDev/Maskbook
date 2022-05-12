@@ -197,13 +197,11 @@ export function PluginProviderRender({
                                             key={provider.ID}
                                             network={selectedNetwork}
                                             provider={provider}>
-                                            <ListItem className={classes.walletItem} key={provider.ID}>
-                                                <ProviderIcon
-                                                    className={classes.providerIcon}
-                                                    icon={provider.icon}
-                                                    name={provider.name}
-                                                />
-                                            </ListItem>
+                                            <ProviderIcon
+                                                className={classes.providerIcon}
+                                                icon={provider.icon}
+                                                name={provider.name}
+                                            />
                                         </ProviderIconClickBait>
                                     ) : (
                                         <ProviderIcon
