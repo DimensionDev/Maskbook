@@ -28,7 +28,7 @@ export function useTransakURL(config?: Partial<TransakConfig>) {
     const search = useMemo(() => {
         const config_: TransakConfig = {
             ...DEFAULT_PARAMETERS,
-            themeColor: rgbToHex(theme.palette.primary.main).substr(1),
+            themeColor: rgbToHex(theme.palette.primary.main).slice(1),
             exchangeScreenTitle: config?.walletAddress
                 ? `Buy Crypto to ${formatEthereumAddress(config.walletAddress, 4)}`
                 : void 0,
