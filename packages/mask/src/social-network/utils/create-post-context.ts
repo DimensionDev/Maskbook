@@ -110,14 +110,15 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             rawMessage: opt.rawMessage,
 
             hasMaskPayload: (() => {
+                const hasMaskPayload = new ValueRef(false)
                 function evaluate() {
                     const msg =
                         extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr('') +
                         '\n' +
                         [...linksSubscribe.getCurrentValue()].join('\n')
-                    return create.hasPayloadLike(msg)
+                    hasMaskPayload.value = create.hasPayloadLike(msg)
                 }
-                const hasMaskPayload = new ValueRef(evaluate())
+                evaluate()
                 cancel.push(linksSubscribe.subscribe(evaluate))
                 cancel.push(opt.rawMessage.subscribe(evaluate))
                 return createSubscriptionFromValueRef(hasMaskPayload)
