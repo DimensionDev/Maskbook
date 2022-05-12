@@ -71,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: 400,
         fontSize: 14,
         lineHeight: '18px',
-        paddding: 10,
+        padding: 10,
         boxSizing: 'border-box',
         zIndex: '99999 !important',
         borderRadius: 4,

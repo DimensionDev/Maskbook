@@ -165,7 +165,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                 item={item}
                                 search={search}
                                 checked={
-                                    props.selected.some((x) => x.identifier === item.identifier) ||
+                                    props.selected.some((x) => x.publicHexKey === item.publicHexKey) ||
                                     disabledItems?.includes(item)
                                 }
                                 disabled={props.disabled || disabledItems?.includes(item)}
