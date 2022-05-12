@@ -1,7 +1,7 @@
 import { registerPlugin } from '@masknet/plugin-infra'
 import { base } from './base'
 
-export * from './helpers'
+export { FileInfoMetadataReader } from './helpers'
 
 registerPlugin({
     ...base,
