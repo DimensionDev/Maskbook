@@ -49,9 +49,7 @@ export const PersonaRecovery = () => {
                 await delay(300)
                 navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
             } catch (error) {
-                if (error instanceof Error) {
-                    setError(error.message)
-                }
+                setError((error as Error).message)
             }
         },
         [state?.mnemonic, state?.privateKey],
