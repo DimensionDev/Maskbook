@@ -68,7 +68,7 @@ export function PersonaItem(props: PersonaItemProps) {
 
             <NFTInfo
                 loading={loading || loadingToken || loadingCheckOwner}
-                owner={isOwner || _avatar?.avatarId === getAvatarId(avatar)}
+                owner={owner ? isOwner && _avatar?.avatarId === getAvatarId(avatar) : true}
                 nft={
                     _avatar
                         ? {

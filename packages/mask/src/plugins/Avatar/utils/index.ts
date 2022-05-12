@@ -174,7 +174,7 @@ export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBi
     return 1
 }
 
-export async function getNFTAvatarByUserId(userId: string): Promise<NextIDAvatarMeta | undefined> {
+export async function getNFTAvatarByUserId(userId: string, avatarId: string): Promise<NextIDAvatarMeta | undefined> {
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const bindings = await NextIDProof.queryExistedBindingByPlatform(platform, userId.toLowerCase())
 
@@ -185,7 +185,8 @@ export async function getNFTAvatarByUserId(userId: string): Promise<NextIDAvatar
             userId.toLowerCase(),
             PLUGIN_ID,
         )
-        if (response.ok) return response.val
+        if (!avatarId && response.ok) return response.val
+        if (response.ok && response.val.avatarId === avatarId) return response.val
     }
     return
 }

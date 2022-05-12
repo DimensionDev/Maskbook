@@ -6,8 +6,8 @@ import { getNFTAvatarByUserId } from '../utils'
 
 export function usePersonaNFTAvatar(userId: string, avatarId: string, snsKey: RSS3_KEY_SNS) {
     return useAsyncRetry(async () => {
-        const avatarMetaFromPersona = await getNFTAvatarByUserId(userId)
-        if (avatarMetaFromPersona && avatarMetaFromPersona.avatarId === avatarId) return avatarMetaFromPersona
+        const avatarMetaFromPersona = await getNFTAvatarByUserId(userId, avatarId)
+        if (avatarMetaFromPersona) return avatarMetaFromPersona
 
         const avatarMeta = await PluginNFTAvatarRPC.getNFTAvatar(
             userId,

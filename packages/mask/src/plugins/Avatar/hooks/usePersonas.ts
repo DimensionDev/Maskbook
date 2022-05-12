@@ -27,11 +27,11 @@ export function usePersonas(userId?: string) {
         )
         if (!currentPersonaBinding) return
 
-        const isOwner =
-            (currentIdentifier?.identifier &&
-                identifier.identifier &&
-                currentIdentifier?.identifier.toText() === identifier.identifier.toText()) ||
-            (currentIdentifier?.identifier && userId && currentIdentifier?.identifier.toText() === userId.toLowerCase())
+        const isOwner = userId
+            ? currentIdentifier?.identifier?.toText() === userId.toLowerCase()
+            : currentIdentifier?.identifier &&
+              identifier.identifier &&
+              currentIdentifier?.identifier.toText() === identifier.identifier.toText()
         const wallets = currentPersonaBinding?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
         return { wallets, isOwner, binds: currentPersonaBinding, status: personaConnectStatus }
     }, [currentIdentifier, identifier, personaConnectStatus.hasPersona, platform, userId])
