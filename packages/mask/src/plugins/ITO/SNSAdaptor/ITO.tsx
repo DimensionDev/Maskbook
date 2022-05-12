@@ -44,6 +44,8 @@ import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { WalletConnectIcon } from '../assets/connect'
+import { SharedIcon } from '../assets/shared'
 
 export interface IconProps {
     size?: number
@@ -69,17 +71,14 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         backgroundRepeat: 'no-repeat',
         backgroundColor: '#FF5238',
         borderRadius: theme.spacing(1),
-        paddingLeft: theme.spacing(4),
-        paddingRight: theme.spacing(1),
-        paddingTop: theme.spacing(4),
-        paddingBottom: theme.spacing(2),
+        padding: theme.spacing(2),
     },
     header: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'end',
         width: props.snsId === EnhanceableSite.Facebook ? '98%' : '100%',
-        maxWidth: props.snsId === EnhanceableSite.Facebook ? 'auto' : 470,
+        maxWidth: props.snsId === EnhanceableSite.Facebook ? 'auto' : '100%',
     },
     title: {
         fontSize: props.titleLength! > 31 ? '1.3rem' : '1.6rem',
@@ -152,12 +151,18 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         },
     },
     actionFooter: {
-        marginTop: theme.spacing(0),
+        padding: 12,
     },
     actionButton: {
         width: '100%',
-        backgrundColor: MaskColorVar.buttonPluginBackground,
+        backgroundColor: MaskColorVar.buttonPluginBackground,
         color: 'white',
+        fontSize: 14,
+        paddingTop: 10,
+        paddingBottom: 10,
+        '&:hover': {
+            backgroundColor: MaskColorVar.buttonPluginBackground,
+        },
     },
     textProviderErr: {
         color: '#EB5757',
@@ -628,7 +633,10 @@ export function ITO(props: ITO_Props) {
 
     return (
         <>
-            <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${PoolBackground})` }}>
+            <Card
+                className={classes.root}
+                elevation={0}
+                style={{ backgroundImage: `url(${PoolBackground})`, backgroundRepeat: 'repeat' }}>
                 <Box className={classes.header}>
                     <Typography variant="h5" className={classes.title}>
                         {title}
@@ -737,6 +745,7 @@ export function ITO(props: ITO_Props) {
                     if (!account || !chainIdValid) {
                         return (
                             <ActionButton
+                                startIcon={<WalletConnectIcon style={{ width: 18, height: 18 }} />}
                                 onClick={openSelectProviderDialog}
                                 variant="contained"
                                 size="large"
@@ -799,6 +808,7 @@ export function ITO(props: ITO_Props) {
                                 {shareText ? (
                                     <Grid item xs={6}>
                                         <ActionButton
+                                            startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
                                             onClick={onShare}
                                             variant="contained"
                                             size="large"
@@ -825,6 +835,7 @@ export function ITO(props: ITO_Props) {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <ActionButton
+                                        startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
                                         onClick={onShareSuccess}
                                         variant="contained"
                                         size="large"

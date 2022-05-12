@@ -68,6 +68,9 @@ const useStyles = makeStyles()((theme) => ({
         '-webkit-line-clamp': '4',
         '-webkit-box-orient': 'vertical',
     },
+    button: {
+        color: theme.palette.mode === 'dark' ? 'white' : 'black',
+    },
 }))
 
 interface PreviewCardProps {
@@ -147,7 +150,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     <Button
                         variant="outlined"
                         fullWidth
-                        sx={{ color: 'white' }}
+                        className={classes.button}
                         target="_blank"
                         rel="noopener noreferrer"
                         href={urlcat('https://gitcoin.co', grant.url)}>
