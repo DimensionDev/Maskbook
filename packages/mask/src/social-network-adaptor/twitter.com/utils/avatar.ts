@@ -1,5 +1,6 @@
 import { getAvatarId } from './user'
 
+// cspell:disable-line
 const ClipPath = 'url("#hex-hw-shapeclip-clipconfig")'
 
 export function getInjectNodeInfo(ele: HTMLElement) {
