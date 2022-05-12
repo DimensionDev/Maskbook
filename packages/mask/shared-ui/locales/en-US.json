@@ -4,6 +4,8 @@
     "promote_ito_short": "Install Mask.io to launch dencentralized assests freely on Twitter!",
     "promote_file_service": "📃📃📃 Try to permanently use decentralized file storage on Twitter. Install Mask.io to upload and share first permanent decentralized file, powered by mainstream decentralized storage solutions.",
     "promote_savings": "Hi friends, I just deposit {{amount}} {{symbol}} on {{chain}}. Follow @{{account}} to find more staking projects.",
+    "promote_collectible": "Display collectibles in variable NFT marketplaces, make an offer directly on social media. Install Mask.io to try to browse NFTs directly on Twitter.",
+    "promote_snapshot": "Want to actively participate in proposal vote and move projects forward? Install Mask.io to vote proposals directly on Twitter.",
     "database_backup": "Backup Database",
     "database_overwrite": "Overwrite Database with backup",
     "database_clear": "Clear Database",
