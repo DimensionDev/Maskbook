@@ -147,7 +147,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     <Button
                         variant="outlined"
                         fullWidth
-                        color="primary"
+                        sx={{ color: 'white' }}
                         target="_blank"
                         rel="noopener noreferrer"
                         href={urlcat('https://gitcoin.co', grant.url)}>
