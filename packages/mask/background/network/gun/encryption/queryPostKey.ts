@@ -198,8 +198,7 @@ namespace Version38Or39 {
             let binary = ''
             const bytes = new Uint8Array(buffer)
             const len = bytes.byteLength
-            // eslint-disable-next-line no-plusplus
-            for (let i = 0; i < len; i++) {
+            for (let i = 0; i < len; i += 1) {
                 binary += String.fromCharCode(bytes[i])
             }
             return window.btoa(binary)
