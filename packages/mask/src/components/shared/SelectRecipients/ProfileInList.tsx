@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { ListItemText, Checkbox, ListItemAvatar, ListItem } from '@mui/material'
+import { ListItemText, Checkbox, ListItemAvatar, ListItem, Tooltip } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
 import { formatPersonaPublicKey, ProfileInformation as Profile } from '@masknet/shared-base'
@@ -60,6 +60,11 @@ const useStyles = makeStyles()((theme) => ({
     listItemRoot: {
         margin: '4px 0',
     },
+    columnReverse: {
+        margin: '4px 0',
+        display: 'flex',
+        flexDirection: 'column-reverse',
+    },
 }))
 
 export interface ProfileInListProps extends withClasses<never> {
@@ -76,7 +81,7 @@ export function ProfileInList(props: ProfileInListProps) {
     const profile = props.item
     const name = profile.nickname || profile.identifier.userId
 
-    const secondary = formatPersonaPublicKey(profile.publicHexKey?.toUpperCase() ?? '', 5)
+    const secondary = formatPersonaPublicKey(profile.publicHexKey?.toUpperCase() ?? '', 4)
 
     const onClick = useCallback(
         (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.checked),
@@ -99,7 +104,7 @@ export function ProfileInList(props: ProfileInListProps) {
             </ListItemAvatar>
             <ListItemText
                 classes={{
-                    root: classes.listItemRoot,
+                    root: profile.fromNextID ? classes.columnReverse : classes.listItemRoot,
                     primary: classes.overflow,
                     secondary: classes.overflow,
                 }}
@@ -112,23 +117,25 @@ export function ProfileInList(props: ProfileInListProps) {
                             autoEscape
                             textToHighlight={`@${name}`}
                         />
-                        {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
                     </div>
                 }
                 secondary={
-                    <div className={classes.flex}>
-                        <Highlighter
-                            className={classes.highLightSecond}
-                            highlightClassName={classes.highlighted}
-                            searchWords={[props.search ?? '']}
-                            autoEscape
-                            textToHighlight={secondary || ''}
-                        />
-                        <CopyIcon
-                            className={classes.actionIcon}
-                            onClick={() => props.onCopy(profile.publicHexKey?.toUpperCase() ?? '')}
-                        />
-                    </div>
+                    <Tooltip title="sxqsxqsxq" placement="top" arrow>
+                        <div className={classes.flex}>
+                            <Highlighter
+                                className={classes.highLightSecond}
+                                highlightClassName={classes.highlighted}
+                                searchWords={[props.search ?? '']}
+                                autoEscape
+                                textToHighlight={secondary || ''}
+                            />
+                            <CopyIcon
+                                className={classes.actionIcon}
+                                onClick={() => props.onCopy(profile.publicHexKey?.toUpperCase() ?? '')}
+                            />
+                            {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
+                        </div>
+                    </Tooltip>
                 }
             />
             <Checkbox onClick={onClick} checked={!!props.checked} color="primary" {...props.CheckboxProps} />

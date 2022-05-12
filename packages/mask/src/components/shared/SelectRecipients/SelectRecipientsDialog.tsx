@@ -31,6 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         borderColor: theme.palette.text.third,
     },
     paper: {
+        minHeight: 500,
         height: 500,
         position: 'relative',
     },
@@ -129,7 +130,10 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
 
     return (
         <InjectedDialog
-            sx={{ minHeight: 600, minWidth: 600 }}
+            sx={{
+                minHeight: 600,
+                minWidth: 600,
+            }}
             open={props.open}
             title={t('select_specific_friends_dialog__title')}
             onClose={props.onClose}>

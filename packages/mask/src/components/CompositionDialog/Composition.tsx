@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
-import { DialogContent } from '@mui/material'
+import { DialogActions, DialogContent } from '@mui/material'
 import { DialogStackingProvider } from '@masknet/theme'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { MaskMessages, useI18N } from '../../utils'
@@ -102,13 +102,8 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     return (
         <DialogStackingProvider>
-            <InjectedDialog
-                sx={{ minHeight: 600, minWidth: 600 }}
-                keepMounted
-                open={open}
-                onClose={onClose}
-                title={t('post_dialog__title')}>
-                <DialogContent sx={{ height: 520 }}>
+            <InjectedDialog keepMounted open={open} onClose={onClose} title={t('post_dialog__title')}>
+                <DialogContent>
                     <CompositionDialogUI
                         onConnect={connectStatus.action as any}
                         ref={UI}
@@ -123,6 +118,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         e2eEncryptionDisabled={getE2eEncryptionDisabled()}
                     />
                 </DialogContent>
+                <DialogActions sx={{ height: 68 }} />
             </InjectedDialog>
         </DialogStackingProvider>
     )

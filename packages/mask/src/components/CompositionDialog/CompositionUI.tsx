@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         '& > *': {
             marginBottom: '18px !important',
         },
-        maxHeight: 450,
+        minHeight: 450,
         overflowY: 'auto',
     },
     flex: {
