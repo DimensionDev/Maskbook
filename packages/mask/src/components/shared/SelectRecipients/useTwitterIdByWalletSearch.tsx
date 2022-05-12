@@ -1,5 +1,6 @@
 import { EMPTY_LIST, NextIDPersonaBindings, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
+import { uniq } from 'lodash-unified'
 
 export function useTwitterIdByWalletSearch(bindings: NextIDPersonaBindings[] | undefined, value: string) {
     if (!bindings) return EMPTY_LIST
@@ -13,10 +14,21 @@ export function useTwitterIdByWalletSearch(bindings: NextIDPersonaBindings[] | u
 
     if (!type) return []
     const temp = bindings.reduce<Record<string, any>>((pre, cur) => {
-        const obj = cur.proofs.reduce<any>((obj, i) => {
-            obj[i.platform] = { ...i, persona: cur.persona }
-            return obj
-        }, {})
+        const boundTwitterNames = cur.proofs.reduce<string[]>((res, x) => {
+            if (x.platform === NextIDPlatform.Twitter) {
+                res.push(x.identity)
+            }
+            return uniq(res)
+        }, [])
+        const obj = cur.proofs.reduce<any>(
+            (obj, i, idx) => {
+                obj[i.platform] = { ...i, persona: cur.persona }
+                return obj
+            },
+            {
+                linkedTwitterNames: boundTwitterNames,
+            },
+        )
         if (NextIDPlatform.Twitter in obj) {
             pre.push(obj)
         }
@@ -30,6 +42,7 @@ export function useTwitterIdByWalletSearch(bindings: NextIDPersonaBindings[] | u
             publicHexKey: _identity.persona,
             address: value,
             fromNextID: true,
+            linkedTwitterNames: x.linkedTwitterNames,
         })
         return res
     }, [])

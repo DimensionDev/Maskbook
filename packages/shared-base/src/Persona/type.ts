@@ -20,6 +20,7 @@ export interface ProfileInformation {
     address?: string
     fromNextID?: boolean
     publicHexKey?: string
+    linkedTwitterNames?: string[]
 }
 
 export enum RelationFavor {

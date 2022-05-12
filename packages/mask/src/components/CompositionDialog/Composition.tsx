@@ -34,6 +34,9 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { classes } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
     const connectStatus = usePersonaConnectStatus()
+    const { value: currentPersonaIdentifier } = useAsync(() => {
+        return Services.Settings.getCurrentPersonaIdentifier()
+    }, [])
     const hasPersona = !!useMyPersonas().find((x) =>
         x.linkedProfiles.some((y) => y.identifier.network === currentIdentity?.network),
     )
@@ -116,7 +119,13 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 title={t('post_dialog__title')}>
                 <DialogContent>
                     <CompositionDialogUI
-                        onConnect={connectStatus.action as any}
+                        onConnect={() =>
+                            Services.SocialNetwork.connectSocialNetwork(
+                                currentPersonaIdentifier!,
+                                currentIdentity?.network ?? 'twitter.com',
+                                'local',
+                            )
+                        }
                         ref={UI}
                         hasClipboardPermission={hasClipboardPermission}
                         onRequestClipboardPermission={onRequestClipboardPermission}

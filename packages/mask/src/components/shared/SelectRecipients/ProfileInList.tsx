@@ -1,11 +1,12 @@
 import { useCallback } from 'react'
-import { ListItemText, Checkbox, ListItemAvatar, ListItem } from '@mui/material'
+import { ListItemText, Checkbox, ListItemAvatar, ListItem, Tooltip } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
 import { formatPersonaPublicKey, ProfileInformation as Profile } from '@masknet/shared-base'
 import { Avatar } from '../../../utils/components/Avatar'
 import type { CheckboxProps } from '@mui/material/Checkbox'
 import { CopyIcon } from '@masknet/icons'
+import { truncate } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -24,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 'bold',
     },
     flex: {
+        zIndex: 999,
         display: 'flex',
         alignItems: 'center',
     },
@@ -65,6 +67,17 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column-reverse',
     },
+    toolTip: {
+        maxWidth: 400,
+        fontSize: 14,
+        lineHeight: '18px',
+        paddding: 10,
+        boxSizing: 'border-box',
+        zIndex: '99999 !important',
+        borderRadius: 4,
+        background: theme.palette.public.primary,
+        color: theme.palette.text.secondary,
+    },
 }))
 
 export interface ProfileInListProps extends withClasses<never> {
@@ -79,10 +92,22 @@ export interface ProfileInListProps extends withClasses<never> {
 export function ProfileInList(props: ProfileInListProps) {
     const { classes, cx } = useStyles()
     const profile = props.item
-    const name = profile.nickname || profile.identifier.userId
 
     const secondary = formatPersonaPublicKey(profile.publicHexKey?.toUpperCase() ?? '', 4)
+    const resolvePrimaryText = () => {
+        if (profile.fromNextID) {
+            const rawStr = profile.linkedTwitterNames!.map((x) => '@' + x).join('')
+            if (rawStr.length > 15) {
+                return truncate(rawStr, { length: 15 }) + profile.linkedTwitterNames?.length
+            }
+            return rawStr
+        }
+        return `@${profile.identifier.userId || profile.nickname}`
+    }
 
+    const ToolTipText = profile.fromNextID
+        ? `The Persona is connect to accounts ${profile.linkedTwitterNames!.map((x) => '@' + x).join(',')}`
+        : ''
     const onClick = useCallback(
         (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.checked),
         [props],
@@ -109,15 +134,25 @@ export function ProfileInList(props: ProfileInListProps) {
                     secondary: classes.overflow,
                 }}
                 primary={
-                    <div className={classes.flex}>
-                        <Highlighter
-                            className={classes.highLightBase}
-                            highlightClassName={classes.highlighted}
-                            searchWords={[props.search ?? '']}
-                            autoEscape
-                            textToHighlight={`@${name}`}
-                        />
-                    </div>
+                    <Tooltip
+                        title={ToolTipText}
+                        placement="top"
+                        arrow
+                        classes={{
+                            popper: classes.toolTip,
+                            tooltip: classes.toolTip,
+                            popperInteractive: classes.toolTip,
+                        }}>
+                        <div className={classes.flex}>
+                            <Highlighter
+                                className={classes.highLightBase}
+                                highlightClassName={classes.highlighted}
+                                searchWords={[props.search ?? '']}
+                                autoEscape
+                                textToHighlight={resolvePrimaryText()}
+                            />
+                        </div>
+                    </Tooltip>
                 }
                 secondary={
                     <div className={classes.flex}>

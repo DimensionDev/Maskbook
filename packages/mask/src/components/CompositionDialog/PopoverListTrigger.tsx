@@ -119,12 +119,10 @@ const PopoverListItem = (props: PopoverListItem) => {
                     <Typography
                         className={classes.create}
                         onClick={() => {
-                            console.log(e2eDisabled, 'coming')
                             if (e2eDisabled === 1) {
                                 Services.Helper.openDashboard(DashboardRoutes.SignUp)
                             }
-                            if (e2eDisabled === 2 && onConnect) {
-                                console.log('coming one')
+                            if (e2eDisabled === 3 && onConnect) {
                                 onConnect()
                             }
                         }}>
