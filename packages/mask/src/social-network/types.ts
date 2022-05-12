@@ -111,7 +111,7 @@ export namespace SocialNetworkUI {
             /** Add custom actions buttons to the post */
             postActions?(signal: AbortSignal, author: PostInfo): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */
-            toolbox?(signal: AbortSignal): void
+            toolbox?(signal: AbortSignal, category: 'wallet' | 'application'): void
             /** Inject the UI that used to notify if the user has not completely setup the current network. */
             setupPrompt?(signal: AbortSignal): void
             /**

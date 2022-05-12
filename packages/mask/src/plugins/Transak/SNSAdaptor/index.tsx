@@ -19,10 +19,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = <Trans i18nKey="plugin_transak_name" />
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const { openDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
-                    return <ApplicationEntry title={name} icon={icon} disabled={disabled} onClick={openDialog} />
+                    return (
+                        <ApplicationEntry
+                            title={name}
+                            icon={icon}
+                            {...EntryComponentProps}
+                            onClick={EntryComponentProps.onClick ?? openDialog}
+                        />
+                    )
                 },
                 appBoardSortingDefaultPriority: 10,
                 marketListSortingPriority: 6,
