@@ -1,5 +1,5 @@
-import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
-import { makeStyles, MaskDialog, useStylesExtends } from '@masknet/theme'
+import { DialogActions, DialogContent, Stack } from '@mui/material'
+import { makeStyles, MaskDialog } from '@masknet/theme'
 import { useSharedI18N } from '../../../locales'
 import { SecurityPanel } from './components/SecurityPanel'
 import { Footer } from './components/Footer'
@@ -14,9 +14,7 @@ const useStyles = makeStyles()((theme) => ({
     paperRoot: {
         backgroundImage: 'none',
         '&>h2': {
-            height: 30,
             border: `1px solid ${theme.palette.divider}`,
-            padding: theme.spacing(1.875, 2.5, 1.875, 2.5),
             marginBottom: 24,
         },
     },
@@ -31,6 +29,8 @@ const useStyles = makeStyles()((theme) => ({
             theme.palette.mode === 'light'
                 ? '0px 0px 20px rgba(0, 0, 0, 0.05)'
                 : '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        padding: '8px',
+        justifyContent: 'flex-end',
     },
 }))
 
@@ -42,7 +42,7 @@ export interface BuyTokenDialogProps extends withClasses<never | 'root'> {
 
 export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     const t = useSharedI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
     const { open, onClose, tokenSecurity } = props
 
     const { value: contractDetailed, loading: loadingToken } = useERC721ContractDetailed(tokenSecurity?.contract)
@@ -66,9 +66,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
                 </Stack>
             </DialogContent>
             <DialogActions className={classes.footer}>
-                <Box>
-                    <Footer />
-                </Box>
+                <Footer />
             </DialogActions>
         </MaskDialog>
     )
