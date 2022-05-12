@@ -30,7 +30,7 @@ export const CHAIN_DESCRIPTORS: ChainDescriptor<ChainId, SchemaType, NetworkType
             8,
             'https://static.flowscan.org/mainnet/icons/A.1654653399040a61.FlowToken.png',
         ),
-        infoURL: {
+        explorerURL: {
             url: 'https://flowscan.org/',
         },
     },
@@ -54,7 +54,7 @@ export const CHAIN_DESCRIPTORS: ChainDescriptor<ChainId, SchemaType, NetworkType
             8,
             'https://static.flowscan.org/mainnet/icons/A.1654653399040a61.FlowToken.png',
         ),
-        infoURL: {
+        explorerURL: {
             url: 'https://testnet.flowscan.org/',
         },
     },

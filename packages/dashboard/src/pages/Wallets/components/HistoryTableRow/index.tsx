@@ -12,7 +12,7 @@ import {
 import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
 import classNames from 'classnames'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
@@ -54,11 +54,11 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface HistoryTableRowProps {
     transaction: Transaction
-    selectedChainId: ChainId
+    selectedChainId: Web3Helper.ChainIdAll
 }
 
 export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction, selectedChainId }) => {
-    const { value: domain } = useReverseAddress(transaction.toAddress)
+    const { value: domain } = useReverseAddress(undefined, transaction.to)
 
     const transactionType = useMemo(() => {
         if (transaction.type === TransactionType.CREATE_RED_PACKET) {
@@ -78,7 +78,7 @@ export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction, select
 })
 
 export interface HistoryTableRowUIProps extends HistoryTableRowProps {
-    selectedChainId: ChainId
+    selectedChainId: Web3Helper.ChainIdAll
     formattedType: string
     domain?: string
 }

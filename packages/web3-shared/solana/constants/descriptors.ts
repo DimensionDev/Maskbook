@@ -31,7 +31,7 @@ export const CHAIN_DESCRIPTORS: ChainDescriptor<ChainId, SchemaType, NetworkType
             9,
             'https://assets.coingecko.com/coins/images/4128/small/solana.png',
         ),
-        infoURL: {
+        explorerURL: {
             url: 'https://explorer.solana.com/',
         },
     },
@@ -55,7 +55,7 @@ export const CHAIN_DESCRIPTORS: ChainDescriptor<ChainId, SchemaType, NetworkType
             9,
             'https://assets.coingecko.com/coins/images/4128/small/solana.png',
         ),
-        infoURL: {
+        explorerURL: {
             url: 'https://explorer.solana.com/',
             parameters: {
                 cluster: 'devnet',
@@ -82,7 +82,7 @@ export const CHAIN_DESCRIPTORS: ChainDescriptor<ChainId, SchemaType, NetworkType
             9,
             'https://assets.coingecko.com/coins/images/4128/small/solana.png',
         ),
-        infoURL: {
+        explorerURL: {
             url: 'https://explorer.solana.com/',
             parameters: {
                 cluster: 'testnet',

@@ -7,7 +7,14 @@ import { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
-import { useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
+import {
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useNetworkDescriptor,
+    useWeb3State,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
+import { explorerResolver } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -89,20 +96,23 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CollectibleCardProps {
-    chainId: number
-    token: NonFungibleAsset<number, string>
+    token: NonFungibleAsset<
+        Web3Helper.Definition[NetworkPluginID]['ChainId'],
+        Web3Helper.Definition[NetworkPluginID]['SchemaType']
+    >
     onSend(): void
     renderOrder: number
 }
 
-export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onSend, renderOrder }) => {
+export const CollectibleCard = memo<CollectibleCardProps>(({ token, onSend, renderOrder }) => {
     const t = useDashboardI18N()
+    const chainId = useChainId()
     const { Others } = useWeb3State()
     const { classes } = useStyles()
     const ref = useRef(null)
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
-    const networkDescriptor = useNetworkDescriptor(token.contract?.chainId)
+    const networkDescriptor = useNetworkDescriptor(undefined, token.contract?.chainId)
     const isOnCurrentChain = useMemo(() => chainId === token.contract?.chainId, [chainId, token])
     const currentPluginId = useCurrentWeb3NetworkPluginID()
 
@@ -114,10 +124,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
     const sendable = currentPluginId === NetworkPluginID.PLUGIN_EVM
     const showSendButton = (isHovering || isHoveringTooltip) && sendable
 
-    let nftLink
-    if (Others?.resolveNonFungibleTokenLink && token.contract) {
-        nftLink = Others?.resolveNonFungibleTokenLink?.(token.contract?.chainId, token.contract.address, token.tokenId)
-    }
+    const nftLink = explorerResolver.nonFungibleTokenLink(token.chainId as number, token.address, token.tokenId)
 
     return (
         <Box className={`${classes.container} ${isHovering || isHoveringTooltip ? classes.hover : ''}`} ref={ref}>
@@ -125,7 +132,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                 <Box className={classes.chainIcon}>
                     <WalletIcon networkIcon={networkDescriptor?.icon} size={20} />
                 </Box>
-                {(token.metadata?.assetURL || token.metadata?.iconURL) && token.contract ? (
+                {(token.metadata?.mediaURL || token.metadata?.imageURL) && token.contract ? (
                     <Link
                         target={nftLink ? '_blank' : '_self'}
                         rel="noopener noreferrer"
@@ -137,7 +144,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                                 contractAddress={token.contract.address}
                                 chainId={token.contract.chainId}
                                 renderOrder={renderOrder}
-                                url={token.metadata.assetURL || token.metadata.iconURL}
+                                url={token.metadata.imageURL || token.metadata.mediaURL}
                                 tokenId={token.tokenId}
                                 classes={{
                                     loadingFailImage: classes.loadingFailImage,
@@ -178,7 +185,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                         </Box>
                     ) : (
                         <Typography className={classes.name} color="textPrimary" variant="body2" onClick={onSend}>
-                            {token.name || token.tokenId}
+                            {token.metadata?.name || token.tokenId}
                         </Typography>
                     )}
                 </Box>

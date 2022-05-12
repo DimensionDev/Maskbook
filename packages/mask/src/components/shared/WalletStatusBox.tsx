@@ -146,7 +146,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     }, [chainId, providerType])
 
     return account ? (
-        <section className={classNames(classes.currentAccount, props.isDashboard ? classes.dashboardBackground : '')}>
+        <section className={classNames(classes.currentAccount, isDashboard ? classes.dashboardBackground : '')}>
             <WalletIcon
                 size={48}
                 badgeSize={16}

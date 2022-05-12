@@ -22,13 +22,14 @@ function installService() {
 function installPluginService() {
     const channelOf = (id: string) => new WebExtensionExternalChannel('@plugin/' + id)
     const Wallet = channelOf('com.maskbook.wallet')
-    const Transak = channelOf('com.maskbook.transak')
-    const Swap = channelOf('com.maskbook.trader')
-    const Pets = channelOf('com.maskbook.pets')
-    setPluginMessages({ Wallet, Transak, Swap, Pets })
+    // const Transak = channelOf('com.maskbook.transak')
+    // const Swap = channelOf('com.maskbook.trader')
+    // const Pets = channelOf('com.maskbook.pets')
+    // setPluginMessages({ Wallet, Transak, Swap, Pets })
+    setPluginMessages({ Wallet })
     setPluginServices({
         Wallet: initRPCBridge(PluginMessages.Wallet.events.rpc),
-        Swap: initRPCBridge(PluginMessages.Swap.rpc),
+        // Swap: initRPCBridge(PluginMessages.Swap.rpc),
     })
 }
 

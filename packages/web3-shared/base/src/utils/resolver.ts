@@ -31,8 +31,9 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
         chainFullName: (chainId?: ChainId) => getChainDescriptor(chainId)?.fullName,
         chainShortName: (chainId?: ChainId) => getChainDescriptor(chainId)?.shortName,
         chainColor: (chainId?: ChainId) => getChainDescriptor(chainId)?.color,
+        chainPrefix: (chainId?: ChainId) => 'ETH:',
         chainNetworkType: (chainId?: ChainId) => getChainDescriptor(chainId)?.type,
-        infoURL: (chainId?: ChainId) => getChainDescriptor(chainId)?.infoURL,
+        infoURL: (chainId?: ChainId) => getChainDescriptor(chainId)?.explorerURL,
         nativeCurrency: (chainId?: ChainId) => getChainDescriptor(chainId)?.nativeCurrency,
         isValid: (chainId?: ChainId, testnet = false) => getChainDescriptor(chainId)?.network === 'mainnet' || testnet,
         isMainnet: (chainId?: ChainId) => getChainDescriptor(chainId)?.network === 'mainnet',
@@ -59,42 +60,42 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
         nonFungibleTokenPathname?: string
     } = {},
 ) {
-    const getInfoURL = (chainId: ChainId) => {
+    const getExploroerURL = (chainId: ChainId) => {
         const chainDescriptor = descriptors.find((x) => x.chainId === chainId)
-        return chainDescriptor?.infoURL ?? { url: '' }
+        return chainDescriptor?.explorerURL ?? { url: '' }
     }
 
     return {
-        infoURL: getInfoURL,
+        explorerURL: getExploroerURL,
         addressLink: (chainId: ChainId, address: string) =>
-            urlcat(getInfoURL(chainId).url, addressPathname, {
+            urlcat(getExploroerURL(chainId).url, addressPathname, {
                 address,
-                ...getInfoURL(chainId)?.parameters,
+                ...getExploroerURL(chainId)?.parameters,
             }),
         blockLink: (chainId: ChainId, blockNumber: number) =>
-            urlcat(getInfoURL(chainId).url, blockPathname, {
+            urlcat(getExploroerURL(chainId).url, blockPathname, {
                 blockNumber,
-                ...getInfoURL(chainId)?.parameters,
+                ...getExploroerURL(chainId)?.parameters,
             }),
         transactionLink: (chainId: ChainId, id: string) =>
-            urlcat(getInfoURL(chainId).url, transactionPathname, {
+            urlcat(getExploroerURL(chainId).url, transactionPathname, {
                 id,
-                ...getInfoURL(chainId)?.parameters,
+                ...getExploroerURL(chainId)?.parameters,
             }),
         domainLink: (chainId: ChainId, domain: string) =>
-            urlcat(getInfoURL(chainId).url, domainPathname, {
+            urlcat(getExploroerURL(chainId).url, domainPathname, {
                 domain,
-                ...getInfoURL(chainId)?.parameters,
+                ...getExploroerURL(chainId)?.parameters,
             }),
         fungibleTokenLink: (chainId: ChainId, address: string) =>
-            urlcat(getInfoURL(chainId).url, fungibleTokenPathname, {
+            urlcat(getExploroerURL(chainId).url, fungibleTokenPathname, {
                 address,
-                ...getInfoURL(chainId)?.parameters,
+                ...getExploroerURL(chainId)?.parameters,
             }),
-        nonFungibleTokenLink: (chainId: ChainId, address: string) =>
-            urlcat(getInfoURL(chainId).url, nonFungibleTokenPathname, {
+        nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) =>
+            urlcat(getExploroerURL(chainId).url, nonFungibleTokenPathname, {
                 address,
-                ...getInfoURL(chainId)?.parameters,
+                ...getExploroerURL(chainId)?.parameters,
             }),
     }
 }

@@ -16,6 +16,7 @@ import {
     useWeb3State as useWeb3PluginState,
     useAccount,
     useCurrentWeb3NetworkPluginID,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
@@ -36,7 +37,10 @@ const useStyles = makeStyles()({
 })
 
 interface CollectibleListProps {
-    selectedNetwork: NetworkDescriptor<number, string> | null
+    selectedNetwork: NetworkDescriptor<
+        Web3Helper.Definition[NetworkPluginID]['ChainId'],
+        Web3Helper.Definition[NetworkPluginID]['NetworkType']
+    > | null
 }
 
 const ITEM_SIZE = {
@@ -51,7 +55,12 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const { Asset } = useWeb3PluginState()
     const network = useNetworkDescriptor()
     const [loadingSize, setLoadingSize] = useState(0)
-    const [renderData, setRenderData] = useState<NonFungibleToken<number, string>[]>([])
+    const [renderData, setRenderData] = useState<
+        NonFungibleToken<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['SchemaType']
+        >[]
+    >([])
 
     const {
         value = { data: EMPTY_LIST, hasNextPage: false },
@@ -59,21 +68,20 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         loading: isQuerying,
         retry,
     } = useAsyncRetry(
-        async () =>
-            Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }, undefined, selectedNetwork || undefined),
-        [account, Asset?.getNonFungibleAssets, network, selectedNetwork],
+        async () => Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }),
+        [account, Asset?.getNonFungibleAssets],
     )
     useEffect(() => {
-        const unsubscribeTokens = PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
-        const unsubscribeSocket = PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
-            if (!info.done) {
-                retry()
-            }
-        })
-        return () => {
-            unsubscribeTokens()
-            unsubscribeSocket()
-        }
+        // const unsubscribeTokens = PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
+        // const unsubscribeSocket = PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
+        //     if (!info.done) {
+        //         retry()
+        //     }
+        // })
+        // return () => {
+        //     unsubscribeTokens()
+        //     unsubscribeSocket()
+        // }
     }, [retry])
 
     useEffect(() => {
@@ -84,7 +92,12 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
 
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const onSend = useCallback(
-        (detail: NonFungibleToken<number, string>) => {
+        (
+            detail: NonFungibleToken<
+                Web3Helper.Definition[NetworkPluginID]['ChainId'],
+                Web3Helper.Definition[NetworkPluginID]['SchemaType']
+            >,
+        ) => {
             // Sending NFT is only available on EVM currently.
             if (currentPluginId !== NetworkPluginID.PLUGIN_EVM) return
             navigate(DashboardRoutes.WalletsTransfer, {
@@ -109,7 +122,6 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
             hasNextPage={hasNextPage}
             showPagination={!isQuerying && !(page === 0 && !hasNextPage)}
             dataSource={renderData}
-            chainId={network?.chainId ?? 1}
             onSend={onSend}
             setLoadingSize={(size) => setLoadingSize(size)}
         />
@@ -118,30 +130,27 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
 
 export interface CollectibleListUIProps {
     page: number
-    onPageChange: Dispatch<SetStateAction<number>>
     hasNextPage: boolean
     isLoading: boolean
     isEmpty: boolean
     showPagination: boolean
-    chainId: number
-    dataSource: NonFungibleToken<number, string>[]
-    onSend(detail: NonFungibleToken<number, string>): void
+    chainId?: Web3Helper.ChainIdAll
+    dataSource: NonFungibleToken<
+        Web3Helper.Definition[NetworkPluginID]['ChainId'],
+        Web3Helper.Definition[NetworkPluginID]['SchemaType']
+    >[]
+    onSend(
+        detail: NonFungibleToken<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['SchemaType']
+        >,
+    ): void
+    onPageChange: Dispatch<SetStateAction<number>>
     setLoadingSize(fn: (pre: number | undefined) => number): void
 }
 
 export const CollectibleListUI = memo<CollectibleListUIProps>(
-    ({
-        page,
-        onPageChange,
-        isLoading,
-        isEmpty,
-        hasNextPage,
-        showPagination,
-        chainId,
-        dataSource,
-        onSend,
-        setLoadingSize,
-    }) => {
+    ({ page, onPageChange, isLoading, isEmpty, hasNextPage, showPagination, dataSource, onSend, setLoadingSize }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
         const ref = useRef<HTMLDivElement>(null)
@@ -167,7 +176,6 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                             {dataSource.map((x, index) => (
                                 <div className={classes.card} key={index}>
                                     <CollectibleCard
-                                        chainId={chainId}
                                         token={x}
                                         renderOrder={index}
                                         // TODO: transfer not support multi chain, should remove is after supported

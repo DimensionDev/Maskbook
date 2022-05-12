@@ -126,7 +126,7 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     network: 'mainnet' | 'testnet' | Omit<string, 'mainnet' | 'testnet'>
     nativeCurrency: FungibleToken<ChainId, SchemaType>
     // EIP3091
-    infoURL: {
+    explorerURL: {
         url: string
         parameters?: Record<string, string | number | boolean>
     }

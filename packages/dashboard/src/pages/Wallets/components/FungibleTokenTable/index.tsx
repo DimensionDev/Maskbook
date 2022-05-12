@@ -11,12 +11,13 @@ import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
 import { FungibleAsset, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginMessages } from '../../../../API'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import {
     useNetworkDescriptor,
     useWeb3State,
     useAccount,
     useCurrentWeb3NetworkPluginID,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
@@ -68,40 +69,41 @@ interface TokenTableProps {
 export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
     const account = useAccount()
-    const { Asset } = useWeb3State()
-    // const { portfolioProvider } = useWeb3State()
+    const { Asset } = useWeb3State() as Web3Helper.Web3StateAll
     const network = useNetworkDescriptor()
     const [tokenUpdateCount, setTokenUpdateCount] = useState(0)
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+    // const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     const {
-        error: detailedTokensError,
-        loading: detailedTokensLoading,
-        value: detailedTokens,
-    } = useAsync(
-        async () => Asset?.getFungibleAssets?.(account, portfolioProvider, network!),
-        [account, Asset, portfolioProvider, tokenUpdateCount],
-    )
+        error: fungibleAssetsError,
+        loading: fungibleAssetsLoading,
+        value: fungibleAssets,
+    } = useAsync(async () => Asset?.getFungibleAssets?.(account), [account, Asset])
+
+    console.log('DEBUG: fungible token table')
+    console.log({
+        fungibleAssets,
+    })
 
     useEffect(() => {
-        PluginMessages.Wallet.events.erc20TokensUpdated.on(() =>
-            setTimeout(() => setTokenUpdateCount((prev) => prev + 1), 100),
-        )
+        // PluginMessages.Wallet.events.erc20TokensUpdated.on(() =>
+        //     setTimeout(() => setTokenUpdateCount((prev) => prev + 1), 100),
+        // )
     }, [])
 
     const onSwap = useCallback((token: FungibleToken<number, string>) => {
-        openSwapDialog({
-            open: true,
-            traderProps: {
-                defaultInputCoin: {
-                    id: token.id,
-                    name: token.name || '',
-                    symbol: token.symbol || '',
-                    contract_address: token.address,
-                    decimals: token.decimals,
-                },
-            },
-        })
+        // openSwapDialog({
+        //     open: true,
+        //     traderProps: {
+        //         defaultInputCoin: {
+        //             id: token.id,
+        //             name: token.name || '',
+        //             symbol: token.symbol || '',
+        //             contract_address: token.address,
+        //             decimals: token.decimals,
+        //         },
+        //     },
+        // })
     }, [])
 
     const onSend = useCallback(
@@ -111,9 +113,11 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
 
     return (
         <TokenTableUI
-            isLoading={detailedTokensLoading}
-            isEmpty={!detailedTokensLoading && (!!detailedTokensError || !detailedTokens?.length)}
-            dataSource={(detailedTokens ?? []).filter((x) => !selectedChainId || x.chainId === selectedChainId)}
+            isLoading={fungibleAssetsLoading}
+            isEmpty={!fungibleAssetsLoading && (!!fungibleAssetsError || !fungibleAssets?.data?.length)}
+            dataSource={(fungibleAssets?.data ?? EMPTY_LIST).filter(
+                (x) => !selectedChainId || x.chainId === selectedChainId,
+            )}
             onSwap={onSwap}
             onSend={onSend}
         />
@@ -123,7 +127,10 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
 export interface TokenTableUIProps {
     isLoading: boolean
     isEmpty: boolean
-    dataSource: FungibleAsset<number, string>[]
+    dataSource: FungibleAsset<
+        Web3Helper.Definition[NetworkPluginID]['ChainId'],
+        Web3Helper.Definition[NetworkPluginID]['SchemaType']
+    >[]
     onSwap(token: FungibleToken<number, string>): void
     onSend(token: FungibleToken<number, string>): void
 }

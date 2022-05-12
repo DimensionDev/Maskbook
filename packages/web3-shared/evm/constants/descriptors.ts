@@ -28,8 +28,8 @@ export const CHAIN_DESCRIPTORS: ChainDescriptor<ChainId, SchemaType, NetworkType
         schema: SchemaType.Native,
         ...x.nativeCurrency,
     },
-    infoURL: {
-        url: x.infoURL,
+    explorerURL: {
+        url: x.explorers?.[0]?.url ?? x.infoURL,
     },
 }))
 

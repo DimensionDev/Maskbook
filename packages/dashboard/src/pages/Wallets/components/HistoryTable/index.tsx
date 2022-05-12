@@ -8,7 +8,7 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { HistoryTableRow } from '../HistoryTableRow'
 import { noop } from 'lodash-unified'
-import { useAccount, useTransactions } from '@masknet/plugin-infra/web3'
+import { useAccount, useTransactions, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -45,19 +45,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface HistoryTableProps {
-    selectedChainId: ChainId
+    selectedChainId: Web3Helper.ChainIdAll
 }
 
 export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const {
-        value = { transactions: [], hasNextPage: false },
-        loading: transactionLoading,
-        error: transactionError,
-    } = useTransactions(NetworkPluginID.PLUGIN_EVM, account, page, 50, selectedChainId)
-
-    const { transactions = [], hasNextPage } = value
+    const transactions = useTransactions(NetworkPluginID.PLUGIN_EVM)
 
     useUpdateEffect(() => {
         setPage(0)
@@ -67,9 +61,9 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
         <HistoryTableUI
             page={page}
             onPageChange={setPage}
-            hasNextPage={hasNextPage}
-            isLoading={transactionLoading}
-            isEmpty={!!transactionError || !transactions.length}
+            hasNextPage={false}
+            isLoading={false}
+            isEmpty={!!transactions.length}
             dataSource={transactions}
             selectedChainId={selectedChainId}
         />
@@ -83,7 +77,7 @@ export interface HistoryTableUIProps {
     isLoading: boolean
     isEmpty: boolean
     dataSource: Transaction[]
-    selectedChainId: ChainId
+    selectedChainId: Web3Helper.ChainIdAll
 }
 
 export const HistoryTableUI = memo<HistoryTableUIProps>(

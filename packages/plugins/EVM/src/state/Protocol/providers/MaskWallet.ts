@@ -1,6 +1,5 @@
 import Web3 from 'web3'
 import { toHex } from 'web3-utils'
-import { first } from 'lodash-unified'
 import type { HttpProvider, RequestArguments } from 'web3-core'
 import type { JsonRpcResponse } from 'web3-core-helpers'
 import { ChainId, createWeb3Provider, createPayload, getRPCConstants } from '@masknet/web3-shared-evm'

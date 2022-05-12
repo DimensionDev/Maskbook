@@ -1,9 +1,8 @@
 import classNames from 'classnames'
 import { CircularProgress, useTheme } from '@mui/material'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { AssetPlayer } from '../AssetPlayer'
-import { useImageChecker, useNonFungibleToken } from '@masknet/plugin-infra/web3'
+import { useImageChecker, useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -33,9 +32,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder' | 'imgWrapper'> {
-    chainId?: ChainId
-    contractAddress?: string
+    chainId?: Web3Helper.ChainIdAll
     tokenId?: string
+    contractAddress?: string
     url?: string
     fallbackImage?: URL
     fallbackResourceLoader?: JSX.Element
@@ -50,7 +49,7 @@ const assetPlayerFallbackImageLight = new URL('./nft_token_fallback.png', import
 
 export function NFTCardStyledAssetPlayer(props: Props) {
     const {
-        chainId = ChainId.Mainnet,
+        chainId,
         contractAddress = '',
         tokenId = '',
         isNative = false,

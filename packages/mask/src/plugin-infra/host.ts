@@ -53,7 +53,7 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
         ),
 
         wallets: createSubscriptionFromAsync(
-            () => WalletRPC.getWallets(ProviderType.MaskWallet),
+            () => WalletRPC.getWallets(),
             EMPTY_LIST,
             WalletMessages.events.walletsUpdated.on,
         ),

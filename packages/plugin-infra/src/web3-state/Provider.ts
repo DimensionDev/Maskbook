@@ -91,41 +91,48 @@ export class ProviderState<
             ]
 
             provider.emitter.on('chainId', async (chainId) => {
-                await this.setChainId(providerType, Number.parseInt(chainId, 16) as ChainId)
+                await this.setAccount(providerType, {
+                    chainId: Number.parseInt(chainId, 16) as ChainId,
+                })
             })
             provider.emitter.on('accounts', async (accounts) => {
                 const account = first(accounts)
-                if (account && this.options.isValidAddress(account)) await this.setAccount(providerType, account)
+                if (account && this.options.isValidAddress(account))
+                    await this.setAccount(providerType, {
+                        account,
+                    })
             })
             provider.emitter.on('disconnect', async () => {
-                await this.setAccount(providerType, '')
-                await this.setChainId(providerType, this.options.getDefaultChainId())
+                await this.setAccount(providerType, {
+                    account: '',
+                    chainId: this.options.getDefaultChainId(),
+                })
             })
         })
     }
 
-    private async setAccount(providerType: ProviderType, account: string) {
-        const account_ = this.storage.accounts.value[providerType]
-        if (this.options.isSameAddress(account_.account, account)) return
-        await this.storage.accounts.setValue({
-            ...this.storage.accounts.value,
-            [providerType]: {
-                ...account_,
-                account,
-            },
-        })
-    }
+    private async setAccount(providerType: ProviderType, account: Partial<Account<ChainId>>) {
+        const siteType = getSiteType()
+        if (!siteType) return
 
-    private async setChainId(providerType: ProviderType, chainId: ChainId) {
-        const account = this.storage.accounts.value[providerType]
-        if (account.chainId === chainId) return
-        await this.storage.accounts.setValue({
-            ...this.storage.accounts.value,
-            [providerType]: {
-                ...account,
-                chainId,
-            },
-        })
+        const account_ = this.storage.accounts.value[providerType]
+
+        if (!this.options.isSameAddress(account_.account, account.account) || account_.chainId !== account.chainId) {
+            await this.storage.accounts.setValue({
+                ...this.storage.accounts.value,
+                [providerType]: {
+                    ...account_,
+                    ...account,
+                },
+            })
+        }
+
+        if (this.storage.providers.value[siteType] !== providerType) {
+            await this.storage.providers.setValue({
+                ...this.storage.providers.value,
+                [siteType]: providerType,
+            })
+        }
     }
 
     isReady(providerType: ProviderType) {
@@ -156,6 +163,8 @@ export class ProviderState<
             ])
             account.chainId = chainId
         }
+
+        await this.setAccount(providerType, account)
 
         provider.emitter.emit('connect', account)
         return account

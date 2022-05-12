@@ -76,12 +76,12 @@ function createAssetLink(account: OpenSeaCustomAccount | undefined) {
 
 function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleToken<ChainId, SchemaType> {
     return {
-        id: asset.token_address,
+        id: asset.token_address ?? asset.asset_contract.address,
         chainId,
         type: TokenType.NonFungible,
         schema: SchemaType.ERC721,
         tokenId: asset.token_id,
-        address: asset.token_address,
+        address: asset.token_address ?? asset.asset_contract.address,
         metadata: {
             chainId,
             name: asset.name ?? asset.collection.name,
@@ -96,7 +96,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
         contract: {
             chainId,
             schema: SchemaType.ERC721,
-            address: asset.token_address,
+            address: asset.token_address ?? asset.asset_contract.address,
             name: asset.name ?? asset.collection.name,
             symbol: asset.asset_contract.token_symbol,
         },

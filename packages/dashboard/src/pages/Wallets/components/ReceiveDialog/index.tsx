@@ -3,12 +3,10 @@ import { useCopyToClipboard } from 'react-use'
 import { MaskColorVar, MaskDialog, makeStyles } from '@masknet/theme'
 import { QRCode, useSnackbarCallback } from '@masknet/shared'
 import { DialogContent, Typography, DialogActions, Button } from '@mui/material'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { NetworkType } from '@masknet/web3-shared-evm'
+import { useChainId, useReverseAddress, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { chainResolver } from '@masknet/web3-shared-evm'
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
 import { useDashboardI18N } from '../../../../locales'
-import { useCurrentSelectedWalletNetwork } from '../../api'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -31,84 +29,82 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ReceiveDialogProps {
     open: boolean
-    chainName: string
-    walletAddress: string
+    address: string
     onClose: () => void
 }
 
-export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, walletAddress, onClose }) => {
-    const currentSelectedWalletNetwork = useCurrentSelectedWalletNetwork()
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, walletAddress)
+export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, address, onClose }) => {
     const { Others } = useWeb3State()
+
+    const chainId = useChainId()
+    const { value: domain } = useReverseAddress(undefined, address)
+
     return (
         <ReceiveDialogUI
             open={open}
-            chainName={chainName}
-            walletAddress={walletAddress}
-            domain={domain}
+            chainId={chainId}
+            address={address}
+            domain={Others?.formatDomainName(domain)}
             onClose={onClose}
-            currentNetworkType={currentSelectedWalletNetwork}
-            formatDomainName={Others?.formatDomainName}
         />
     )
 })
 
 export interface ReceiveDialogUIProps extends ReceiveDialogProps {
-    currentNetworkType: NetworkType
+    chainId: Web3Helper.ChainIdAll
     domain?: string
-    formatDomainName?: (domain?: string, size?: number) => string | undefined
 }
 
-export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
-    ({ open, currentNetworkType, chainName, onClose, walletAddress, domain, formatDomainName }) => {
-        const { classes } = useStyles()
-        const t = useDashboardI18N()
-        const [, copyToClipboard] = useCopyToClipboard()
-        const copyWalletAddress = useSnackbarCallback({
-            executor: async (address: string) => copyToClipboard(address),
-            deps: [],
-            successText: t.wallets_address_copied(),
-        })
-        // TODO: The <QRCode /> text prop protocol maybe correct and requires confirmation
-        return (
-            <MaskDialog
-                open={open}
-                title={t.wallets_balance_Receive()}
-                onClose={onClose}
-                DialogProps={{
-                    classes: { paper: classes.paper },
-                }}>
-                <DialogContent className={classes.container}>
-                    <Typography sx={{ marginBottom: 3.5 }}>{t.wallets_receive_tips({ chainName })}</Typography>
-                    <WalletQRCodeContainer width={286} height={286} border={{ borderWidth: 15, borderHeight: 2 }}>
-                        <QRCode
-                            text={`${resolveNetworkAddressPrefix(currentNetworkType)}:${walletAddress}`}
-                            options={{ width: 282 }}
-                            canvasProps={{
-                                style: { display: 'block', margin: 'auto' },
-                            }}
-                        />
-                    </WalletQRCodeContainer>
-                    <Typography variant="body2" className={classes.addressTitle}>
-                        {t.wallets_address()}
-                    </Typography>
+export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(({ open, chainId, address, domain, onClose }) => {
+    const t = useDashboardI18N()
+    const { classes } = useStyles()
+    const [, copyToClipboard] = useCopyToClipboard()
+    const copyaddress = useSnackbarCallback({
+        executor: async (address: string) => copyToClipboard(address),
+        deps: [],
+        successText: t.wallets_address_copied(),
+    })
+    // TODO: The <QRCode /> text prop protocol maybe correct and requires confirmation
+    return (
+        <MaskDialog
+            open={open}
+            title={t.wallets_balance_Receive()}
+            onClose={onClose}
+            DialogProps={{
+                classes: { paper: classes.paper },
+            }}>
+            <DialogContent className={classes.container}>
+                <Typography sx={{ marginBottom: 3.5 }}>
+                    {t.wallets_receive_tips({ chainName: chainResolver.chainName(chainId as number) ?? '' })}
+                </Typography>
+                <WalletQRCodeContainer width={286} height={286} border={{ borderWidth: 15, borderHeight: 2 }}>
+                    <QRCode
+                        text={`${chainResolver.chainPrefix(chainId as number)}:${address}`}
+                        options={{ width: 282 }}
+                        canvasProps={{
+                            style: { display: 'block', margin: 'auto' },
+                        }}
+                    />
+                </WalletQRCodeContainer>
+                <Typography variant="body2" className={classes.addressTitle}>
+                    {t.wallets_address()}
+                </Typography>
 
-                    {domain && formatDomainName ? (
-                        <Typography variant="body2" className={classes.address}>
-                            {formatDomainName(domain)}
-                        </Typography>
-                    ) : null}
-
+                {domain ? (
                     <Typography variant="body2" className={classes.address}>
-                        {walletAddress}
+                        {domain}
                     </Typography>
-                </DialogContent>
-                <DialogActions>
-                    <Button size="medium" onClick={() => copyWalletAddress(walletAddress)}>
-                        {t.wallets_address_copy()}
-                    </Button>
-                </DialogActions>
-            </MaskDialog>
-        )
-    },
-)
+                ) : null}
+
+                <Typography variant="body2" className={classes.address}>
+                    {address}
+                </Typography>
+            </DialogContent>
+            <DialogActions>
+                <Button size="medium" onClick={() => copyaddress(address)}>
+                    {t.wallets_address_copy()}
+                </Button>
+            </DialogActions>
+        </MaskDialog>
+    )
+})

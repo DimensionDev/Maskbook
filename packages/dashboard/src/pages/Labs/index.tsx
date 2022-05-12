@@ -203,21 +203,21 @@ export default function Plugins() {
     ]
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
+    // const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
     const openTransakDialog = useCallback(
         (code?: string) => {
-            setBuyDialog({
-                open: true,
-                address: account,
-                code,
-            })
+            // setBuyDialog({
+            //     open: true,
+            //     address: account,
+            //     code,
+            // })
         },
         [account],
     )
 
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+    // const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
-    const { openDialog: openEssayDialog } = useRemoteControlledDialog(PluginMessages.Pets.events.essayDialogUpdated)
+    // const { openDialog: openEssayDialog } = useRemoteControlledDialog(PluginMessages.Pets.events.essayDialogUpdated)
 
     async function onSwitch(id: string, checked: boolean) {
         await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
@@ -248,18 +248,18 @@ export default function Plugins() {
         })
     }, [])
 
-    useEffect(() => {
-        const search = new URLSearchParams(location.search)
-        const open = search.get('open')
-        const code = search.get('code')
-        if (open === 'Transak') {
-            openTransakDialog(code ?? '')
-        } else if (open === 'Swap') {
-            openSwapDialog()
-        } else if (open === 'Pets') {
-            openEssayDialog()
-        }
-    }, [location.search, openTransakDialog, openSwapDialog, openEssayDialog])
+    // useEffect(() => {
+    //     const search = new URLSearchParams(location.search)
+    //     const open = search.get('open')
+    //     const code = search.get('code')
+    //     if (open === 'Transak') {
+    //         openTransakDialog(code ?? '')
+    //     } else if (open === 'Swap') {
+    //         openSwapDialog()
+    //     } else if (open === 'Pets') {
+    //         openEssayDialog()
+    //     }
+    // }, [location.search, openTransakDialog, openSwapDialog, openEssayDialog])
 
     return (
         <PageFrame title={t.labs()} primaryAction={<WalletStateBar />}>

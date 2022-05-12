@@ -11,7 +11,9 @@ import {
     Web3,
     Web3Provider,
     chainResolver,
+    providerResolver,
 } from '@masknet/web3-shared-evm'
+import { SharedContextSettings } from '../settings'
 import { Providers } from './Protocol/provider'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
@@ -41,5 +43,16 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             getNetworkTypeFromChainId: (chainId: ChainId) =>
                 chainResolver.chainNetworkType(chainId) ?? NetworkType.Ethereum,
         })
+    }
+
+    override async connect(chainId: ChainId, providerType: ProviderType): Promise<Account<ChainId>> {
+        const account = await super.connect(chainId, providerType)
+
+        // add wallet into db
+        await SharedContextSettings.value.updateWallet(account.account, {
+            name: providerResolver.providerName(providerType)!,
+        })
+
+        return account
     }
 }

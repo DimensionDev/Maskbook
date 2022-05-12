@@ -44,10 +44,10 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType>
     networkResovler = createNetworkResolver(this.options.networkDescriptors)
 
     getZeroAddress(chainId?: ChainId | undefined): string {
-        throw new Error('Method not implemented.')
+        return this.options.defaultAddress
     }
     getNativeTokenAddress(chainId?: ChainId | undefined): string {
-        throw new Error('Method not implemented.')
+        return this.options.defaultAddress
     }
     getAverageBlockDelay(chainId: ChainId, scale = 1): number {
         return this.options.defaultBlockDelay * scale
