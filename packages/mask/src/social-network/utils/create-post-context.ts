@@ -16,7 +16,6 @@ import {
     ObservableMap,
     ObservableSet,
     parseURL,
-    Payload,
     PostIdentifier,
     ProfileIdentifier,
     createSubscriptionFromValueRef,
@@ -26,7 +25,6 @@ import {
     PostIVIdentifier,
     EnhanceableSite,
 } from '@masknet/shared-base'
-import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../ui'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink'
@@ -37,59 +35,24 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
         const cancel: (Function | undefined)[] = []
         opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))
 
-        // #region Post text content
-        const postContent = new ValueRef(extractText())
-        cancel.push(opt.rawMessage.subscribe(() => (postContent.value = extractText())))
-        function extractText() {
-            return extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr('')
-        }
-        // #endregion
-
         // #region Mentioned links
-        const isFacebook = activatedSocialNetworkUI.networkIdentifier === EnhanceableSite.Facebook
-        const links = new ObservableSet<string>()
-        cancel.push(
-            postContent.addListener((post) => {
-                links.clear()
-                parseURL(post).forEach((link) => links.add(isFacebook ? resolveFacebookLink(link) : link))
-                opt.postMentionedLinksProvider
-                    ?.getCurrentValue()
-                    .forEach((link) => links.add(isFacebook ? resolveFacebookLink(link) : link))
-            }),
-        )
-        cancel.push(
-            opt.postMentionedLinksProvider?.subscribe(() => {
-                // Not clean old links cause post content not changed
-                opt.postMentionedLinksProvider
-                    ?.getCurrentValue()
-                    .forEach((link) => links.add(isFacebook ? resolveFacebookLink(link) : link))
-            }),
-        )
-        const linksSubscribe: Subscription<string[]> = debug({
-            getCurrentValue: () => (links.size ? [...links] : EMPTY_LIST),
-            subscribe: (sub) => links.event.on(ALL_EVENTS, sub),
-        })
-        // #endregion
+        const linksSubscribe: Subscription<string[]> = (() => {
+            const isFacebook = activatedSocialNetworkUI.networkIdentifier === EnhanceableSite.Facebook
+            const links = new ValueRef<string[]>(EMPTY_LIST)
 
-        // #region Parse payload
-        const postPayload = new ValueRef<Result<Payload, unknown>>(Err(new Error('Empty')))
-        parsePayload()
-        cancel.push(postContent.addListener(parsePayload))
-        cancel.push(linksSubscribe.subscribe(parsePayload))
-        function parsePayload() {
-            // TODO: Also parse for payload in the image.
-            let lastResult: Result<Payload, unknown> = Err(new Error('No candidate'))
-            for (const each of (create.payloadDecoder || ((x) => [x]))(
-                postContent.value + linksSubscribe.getCurrentValue().join('\n'),
-            )) {
-                lastResult = create.payloadParser(each)
-                if (lastResult.ok) {
-                    postPayload.value = lastResult
-                    return
-                }
+            function evaluate() {
+                const text = parseURL(extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr(''))
+                    .concat(opt.postMentionedLinksProvider?.getCurrentValue() || EMPTY_LIST)
+                    .map(isFacebook ? resolveFacebookLink : (x) => x)
+                // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
+                if (text.sort().join(';') === links.value.join(';')) return
+                if (!text.length) links.value = EMPTY_LIST
+                else links.value = text
             }
-            if (postPayload.value.err) postPayload.value = lastResult
-        }
+            cancel.push(opt.rawMessage.subscribe(evaluate))
+            cancel.push(opt.postMentionedLinksProvider?.subscribe(evaluate))
+            return createSubscriptionFromValueRef(links)
+        })()
         // #endregion
         const author: PostContextAuthor = {
             avatarURL: opt.avatarURL,
@@ -132,13 +95,9 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             decryptComment: new ValueRef(null),
 
             identifier: postIdentifier,
-            url: debug({
-                getCurrentValue: () => {
-                    const id = postIdentifier.getCurrentValue()
-                    if (id) return create.getURLFromPostIdentifier?.(id) || null
-                    return null
-                },
-                subscribe: (sub) => postIdentifier.subscribe(sub),
+            url: mapSubscription(postIdentifier, (id) => {
+                if (id) return create.getURLFromPostIdentifier?.(id) || null
+                return null
             }),
 
             mentionedLinks: linksSubscribe,
@@ -151,7 +110,20 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
 
             rawMessage: opt.rawMessage,
 
-            containingMaskPayload: createSubscriptionFromValueRef(postPayload),
+            hasMaskPayload: (() => {
+                const hasMaskPayload = new ValueRef(false)
+                function evaluate() {
+                    const msg =
+                        extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr('') +
+                        '\n' +
+                        [...linksSubscribe.getCurrentValue()].join('\n')
+                    hasMaskPayload.value = create.hasPayloadLike(msg)
+                }
+                evaluate()
+                cancel.push(linksSubscribe.subscribe(evaluate))
+                cancel.push(opt.rawMessage.subscribe(evaluate))
+                return createSubscriptionFromValueRef(hasMaskPayload)
+            })(),
             postIVIdentifier: createSubscriptionFromValueRef(postIVIdentifier),
             publicShared: createSubscriptionFromValueRef(isPublicShared),
             isAuthorOfPost: createSubscriptionFromValueRef(isAuthorOfPost),

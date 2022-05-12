@@ -153,7 +153,7 @@ function FtgItem(props: { ftg: FtgInfo }) {
                         value={
                             <Box display="flex">
                                 <Typography variant="body1" color="text.secondary" mr={1}>
-                                    {consts.ftgAddress.substring(0, 7)}...{consts.ftgAddress.substring(38, 42)}
+                                    {consts.ftgAddress.slice(0, 7)}...{consts.ftgAddress.slice(38, 42)}
                                 </Typography>
                                 <Link
                                     href={`https://etherscan.io/address/${consts.ftgAddress}`}
