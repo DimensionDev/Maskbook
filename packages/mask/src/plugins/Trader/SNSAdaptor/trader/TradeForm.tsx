@@ -220,11 +220,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
-        const {
-            value: tokenSecurityInfo,
-            loading: searching,
-            error,
-        } = useAsyncRetry(async () => {
+        const { value: tokenSecurityInfo, error } = useAsyncRetry(async () => {
             if (!outputToken) return
             const values = await GoPlusLabs.getTokenSecurity(chainId, [outputToken.address.trim()])
             if (!Object.keys(values ?? {}).length) throw new Error('Contract Not Found')
@@ -232,7 +228,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                 | TokenSecurity
                 | undefined
         }, [chainId, outputToken])
-        console.log({ outputToken, chainId, tokenSecurityInfo })
 
         // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
@@ -421,7 +416,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     onDelete: noop,
                                 }}
                             />
-                            {tokenSecurityInfo && <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />}
+                            {tokenSecurityInfo && !error && <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />}
                         </Stack>
 
                         {trades.filter((item) => !!item.value).length >= 1 ? (

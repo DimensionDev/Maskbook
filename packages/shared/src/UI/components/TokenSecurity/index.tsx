@@ -1,8 +1,8 @@
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
-import { makeStyles } from '@masknet/theme'
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
+import { CheckSecurityDialog } from './CheckSecurityDialog'
 import { SecurityMessages } from './rules'
 import { RightArrowIcon } from '@masknet/icons'
 
@@ -10,39 +10,9 @@ interface TokenCardProps {
     tokenSecurity: TokenSecurity
 }
 
-const useStyles = makeStyles()((theme) => ({
-    header: {
-        fontWeight: 500,
-        fontSize: 18,
-    },
-    root: {
-        width: '600px',
-    },
-    detectionCard: {
-        backgroundColor: theme.palette.background.default,
-    },
-    detectionCollection: {
-        overflowY: 'auto',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    icon: {
-        width: '48px',
-        height: '48px',
-    },
-    tokenName: {
-        fontSize: '16px',
-        fontWeight: 700,
-    },
-    tokenPrice: {
-        fontSize: '16px',
-        fontWeight: 700,
-    },
-}))
-
 export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
     const t = useSharedI18N()
+    const [open, setOpen] = useState(false)
 
     const makeMessageList =
         tokenSecurity.is_whitelisted === '1'
@@ -104,6 +74,8 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
                     borderRadius="4px"
                     padding="4px 8px"
                     bgcolor="rgba(28, 104, 243, 0.1)"
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() => setOpen(true)}
                     spacing={0.5}>
                     <Typography component="span" fontSize="12px" color="#1C68F3">
                         {t.more()}
@@ -111,6 +83,7 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
                     <RightArrowIcon sx={{ fontSize: '14px', color: '#1C68F3' }} />
                 </Stack>
             )}
+            <CheckSecurityDialog tokenSecurity={tokenSecurity} open={open} onClose={() => setOpen(false)} />
         </Stack>
     )
 })
