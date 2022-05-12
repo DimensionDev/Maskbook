@@ -1,13 +1,4 @@
-import {
-    Paper,
-    Stack,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableRow,
-    Typography,
-} from '@mui/material'
+import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
@@ -46,7 +37,7 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
     const { trending, dataProvider } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    console.log(props)
+
     return (
         <>
             <Stack>
