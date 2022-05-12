@@ -26,6 +26,7 @@ import { setStorage } from '../../storage'
 import { PluginHeader } from './PluginHeader'
 import { Box } from '@mui/system'
 import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
+import { TrendingTokenSecurity } from './TrendingTokenSecurity'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -44,7 +45,8 @@ const useStyles = makeStyles()((theme) => {
         },
         cardHeader: {
             padding: theme.spacing(2),
-            background: theme.palette.background.modalTitle,
+            background:
+                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
         },
         header: {
             display: 'flex',
@@ -69,10 +71,12 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'hidden',
             fontSize: 18,
             fontWeight: 700,
+            color: theme.palette.public.dark,
         },
         symbol: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
+            fontWeight: 700,
+            fontSize: 18,
+            color: theme.palette.public.dark,
             marginLeft: theme.spacing(0.5),
             marginRight: theme.spacing(0.5),
         },
@@ -217,28 +221,34 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     </CoinMenu>
                                 ) : null}
                             </Stack>
-                            <Stack direction="row" gap={1} alignItems="center">
-                                {market ? (
-                                    <Typography fontSize={18} fontWeight={500} lineHeight="24px">
-                                        <FormattedCurrency
-                                            value={
-                                                (dataProvider === DataProvider.COIN_MARKET_CAP
-                                                    ? last(stats)?.[1] ?? market.current_price
-                                                    : market.current_price) ?? 0
-                                            }
-                                            formatter={formatCurrency}
-                                        />
-                                    </Typography>
-                                ) : (
-                                    <Typography fontSize={14} fontWeight={500} lineHeight="24px">
-                                        {t('plugin_trader_no_data')}
-                                    </Typography>
-                                )}
-                                <PriceChanged
-                                    amount={
-                                        market?.price_change_percentage_1h ?? market?.price_change_percentage_24h ?? 0
-                                    }
-                                />
+                            <Stack direction="row" justifyContent="space-between">
+                                <Stack direction="row" gap={1} alignItems="center">
+                                    {market ? (
+                                        <Typography fontSize={18} fontWeight={500} lineHeight="24px">
+                                            <FormattedCurrency
+                                                value={
+                                                    (dataProvider === DataProvider.COIN_MARKET_CAP
+                                                        ? last(stats)?.[1] ?? market.current_price
+                                                        : market.current_price) ?? 0
+                                                }
+
+                                                formatter={formatCurrency}
+                                            />
+                                        </Typography>
+                                    ) : (
+                                        <Typography fontSize={14} fontWeight={500} lineHeight="24px">
+                                            {t('plugin_trader_no_data')}
+                                        </Typography>
+                                    )}
+                                    <PriceChanged
+                                        amount={
+                                            market?.price_change_percentage_1h ??
+                                            market?.price_change_percentage_24h ??
+                                            0
+                                        }
+                                    />
+                                </Stack>
+                                <TrendingTokenSecurity />
                             </Stack>
                         </Stack>
                     </Stack>

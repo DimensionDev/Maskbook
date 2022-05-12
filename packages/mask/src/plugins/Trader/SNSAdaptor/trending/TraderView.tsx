@@ -268,7 +268,11 @@ export function TraderView(props: TraderViewProps) {
                     </PriceChart>
                 </Box>
             ) : null}
-            {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
+            {tabIndex === 2 ? (
+                <Box p={2}>
+                    <TickersTable tickers={tickers} dataProvider={dataProvider} />
+                </Box>
+            ) : null}
             {tabIndex === 3 && isSwappable ? (
                 <TradeView
                     classes={{ root: classes.tradeViewRoot }}
