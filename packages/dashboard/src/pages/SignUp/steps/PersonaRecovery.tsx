@@ -39,6 +39,7 @@ export const PersonaRecovery = () => {
                 } else if (state.privateKey) {
                     identifier = await createPersonaByPrivateKey(state.privateKey, personaName)
                 } else {
+                    setError('no available identifier')
                     return
                 }
 
@@ -48,7 +49,9 @@ export const PersonaRecovery = () => {
                 await delay(300)
                 navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
             } catch (error) {
-                setError((error as Error).message)
+                if (error instanceof Error) {
+                    setError(error.message)
+                }
             }
         },
         [state?.mnemonic, state?.privateKey],
