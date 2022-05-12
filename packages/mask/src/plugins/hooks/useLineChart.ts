@@ -64,6 +64,7 @@ export function useLineChart(
             .attr('transform', `translate(${minPosition.x}, ${minPosition.y})`)
             .style('font-size', 14)
             .style('font-weight', 700)
+            .style('font-family', 'Helvetica')
             .attr('fill', theme.palette.text.secondary)
             .text(formatTooltip(min))
 
@@ -73,6 +74,7 @@ export function useLineChart(
             .attr('transform', `translate(${maxPosition.x}, ${maxPosition.y})`)
             .style('font-size', 14)
             .style('font-weight', 700)
+            .style('font-family', 'Helvetica')
             .attr('fill', theme.palette.text.secondary)
             .text(formatTooltip(max))
 

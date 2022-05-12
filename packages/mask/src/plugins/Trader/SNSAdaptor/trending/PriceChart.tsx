@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { CircularProgress, Typography } from '@mui/material'
+import { CircularProgress, Stack, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat } from '../../types'
@@ -96,7 +96,7 @@ export function PriceChart(props: PriceChartProps) {
         <div className={classes.root} ref={rootRef}>
             {props.loading && <CircularProgress className={classes.progress} color="primary" size={15} />}
             {props.stats.length ? (
-                <>
+                <Stack gap={2}>
                     <svg
                         className={classes.svg}
                         ref={svgRef}
@@ -109,7 +109,7 @@ export function PriceChart(props: PriceChartProps) {
                         }}
                     />
                     {props.children}
-                </>
+                </Stack>
             ) : (
                 <Typography className={classes.placeholder} align="center" color="textSecondary">
                     {t('plugin_trader_no_data')}

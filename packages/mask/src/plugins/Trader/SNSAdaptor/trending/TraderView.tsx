@@ -23,6 +23,7 @@ import { useChainIdValid, useFungibleToken, useNetworkType } from '@masknet/plug
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { setStorage } from '../../storage'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { Box } from '@mui/system'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
@@ -255,7 +256,7 @@ export function TraderView(props: TraderViewProps) {
             </Tabs>
             {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
             {tabIndex === 1 ? (
-                <>
+                <Box p={4}>
                     <PriceChart
                         classes={{ root: classes.priceChartRoot }}
                         coin={coin}
@@ -265,7 +266,7 @@ export function TraderView(props: TraderViewProps) {
                         loading={loadingStats}>
                         <PriceChartDaysControl days={days} onDaysChange={setDays} />
                     </PriceChart>
-                </>
+                </Box>
             ) : null}
             {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
             {tabIndex === 3 && isSwappable ? (
