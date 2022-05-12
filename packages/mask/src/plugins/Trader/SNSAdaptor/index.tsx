@@ -29,10 +29,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = <Trans i18nKey="plugin_trader_swap" />
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
-                    return <ApplicationEntry disabled={disabled} title={name} icon={icon} onClick={openDialog} />
+                    return (
+                        <ApplicationEntry
+                            {...EntryComponentProps}
+                            title={name}
+                            icon={icon}
+                            onClick={EntryComponentProps.onClick ?? openDialog}
+                        />
+                    )
                 },
                 appBoardSortingDefaultPriority: 9,
                 marketListSortingPriority: 5,

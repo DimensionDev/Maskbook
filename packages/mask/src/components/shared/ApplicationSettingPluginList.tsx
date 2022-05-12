@@ -10,6 +10,8 @@ export interface Application {
     entry: Plugin.SNSAdaptor.ApplicationEntry
     pluginId: string
     enabled?: boolean
+    isWalletConnectedRequired?: boolean
+    isWalletConnectedEVMRequired?: boolean
 }
 
 // #region kv storage
@@ -85,7 +87,9 @@ export function ApplicationSettingPluginList() {
                 .reduce<Application[]>((acc, cur) => {
                     if (!cur.ApplicationEntries) return acc
                     return acc.concat(
-                        cur.ApplicationEntries.filter((x) => x.appBoardSortingDefaultPriority).map((x) => {
+                        cur.ApplicationEntries.filter(
+                            (x) => x.appBoardSortingDefaultPriority && !x.recommendFeature,
+                        ).map((x) => {
                             return {
                                 entry: x,
                                 pluginId: cur.ID,
