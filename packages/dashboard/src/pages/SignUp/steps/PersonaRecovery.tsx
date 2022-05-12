@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, ECKeyIdentifier } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
 import { Services } from '../../../API'
@@ -33,9 +33,14 @@ export const PersonaRecovery = () => {
         async (personaName: string) => {
             setError('')
             try {
-                const identifier = state?.mnemonic
-                    ? await createPersona(state?.mnemonic.join(' '), personaName)
-                    : await createPersonaByPrivateKey(state?.privateKey, personaName)
+                let identifier: ECKeyIdentifier
+                if (state.mnemonic) {
+                    identifier = await createPersona(state?.mnemonic.join(' '), personaName)
+                } else if (state.privateKey) {
+                    identifier = await createPersonaByPrivateKey(state.privateKey, personaName)
+                } else {
+                    return
+                }
 
                 await changeCurrentPersona(identifier)
                 showSnackbar(t.create_account_persona_successfully(), { variant: 'success' })

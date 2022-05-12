@@ -50,7 +50,7 @@ async function onMessage(message: {
 }
 
 export async function createProvider() {
-    if (!provider?.chainId) return provider
+    if (provider?.chainId) return provider
     provider = createMetaMaskProvider()
 
     // wait for building the connection
