@@ -3,7 +3,7 @@ import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginId.FileService,
-    name: { fallback: 'File Service' },
+    name: { fallback: 'Files Service' },
     description: {
         fallback: 'Upload and share files on top of Arweave network. Store data, permanently.',
         i18nKey: '__description',
