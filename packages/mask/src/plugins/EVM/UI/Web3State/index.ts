@@ -28,6 +28,8 @@ import {
     createExternalProvider,
     resolveNetworkName,
     resolveProviderName,
+    resolveProviderShortenLink,
+    resolveProviderHomeLink,
 } from '@masknet/web3-shared-evm'
 import { getStorage } from '../../storage'
 
@@ -152,6 +154,9 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         resolveTransactionLink: resolveTransactionLinkOnExplorer,
         resolveAddressLink: resolveAddressLinkOnExplorer,
         resolveBlockLink: resolveBlockLinkOnExplorer,
+        resolveProviderShortenLink,
+        resolveProviderHomeLink,
+
         isValidDomain,
         resolveDomainLink,
         formatDomainName,
