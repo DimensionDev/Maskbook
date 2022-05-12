@@ -81,7 +81,7 @@ export const AccountsUI = memo<AccountsUIProps>(({ accounts, networks, onConnect
                                 <Typography className={classes.name}>
                                     @
                                     {identifier.userId.length > 14
-                                        ? `${identifier.userId.substring(0, 14)}...`
+                                        ? `${identifier.userId.slice(0, 14)}...`
                                         : identifier.userId}
                                 </Typography>
                             </div>
