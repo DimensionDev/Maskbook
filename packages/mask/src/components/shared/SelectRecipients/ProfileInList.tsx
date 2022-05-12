@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { ListItemText, Checkbox, ListItemAvatar, ListItem, Tooltip } from '@mui/material'
+import { ListItemText, Checkbox, ListItemAvatar, ListItem } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
 import { formatPersonaPublicKey, ProfileInformation as Profile } from '@masknet/shared-base'
@@ -120,22 +120,20 @@ export function ProfileInList(props: ProfileInListProps) {
                     </div>
                 }
                 secondary={
-                    <Tooltip title="sxqsxqsxq" placement="top" arrow>
-                        <div className={classes.flex}>
-                            <Highlighter
-                                className={classes.highLightSecond}
-                                highlightClassName={classes.highlighted}
-                                searchWords={[props.search ?? '']}
-                                autoEscape
-                                textToHighlight={secondary || ''}
-                            />
-                            <CopyIcon
-                                className={classes.actionIcon}
-                                onClick={() => props.onCopy(profile.publicHexKey?.toUpperCase() ?? '')}
-                            />
-                            {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
-                        </div>
-                    </Tooltip>
+                    <div className={classes.flex}>
+                        <Highlighter
+                            className={classes.highLightSecond}
+                            highlightClassName={classes.highlighted}
+                            searchWords={[props.search ?? '']}
+                            autoEscape
+                            textToHighlight={secondary || ''}
+                        />
+                        <CopyIcon
+                            className={classes.actionIcon}
+                            onClick={() => props.onCopy(profile.publicHexKey?.toUpperCase() ?? '')}
+                        />
+                        {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
+                    </div>
                 }
             />
             <Checkbox onClick={onClick} checked={!!props.checked} color="primary" {...props.CheckboxProps} />
