@@ -8,7 +8,25 @@ import { PersonaPage } from './PersonaPage'
 import { DialogContent } from '@mui/material'
 import { useI18N } from '../locales/i18n_generated'
 import { isSameAddress } from '@masknet/web3-shared-evm'
+import { makeStyles } from '@masknet/theme'
 
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        margin: 0,
+        padding: '1px !important',
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
+        },
+    },
+}))
 enum CreateNFTAvatarStep {
     Persona = 'persona',
     NFTList = 'NFTList',
@@ -27,6 +45,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
     const [tokenInfo, setTokenInfo] = useState<TokenInfo>()
     const [proof, setProof] = useState<BindingProof>()
     const t = useI18N()
+    const { classes } = useStyles()
 
     const onPersonaChange = (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: TokenInfo) => {
         setWallets(wallets)
@@ -63,7 +82,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
             }
             open={props.open}
             onClose={onBack}>
-            <DialogContent sx={{ margin: 0, padding: '1px !important', overflowY: 'hidden' }}>
+            <DialogContent className={classes.root}>
                 {step === CreateNFTAvatarStep.Persona ? (
                     <PersonaPage onClose={onClose} onNext={onNext} onChange={onPersonaChange} />
                 ) : null}
