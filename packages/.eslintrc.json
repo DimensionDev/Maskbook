@@ -103,7 +103,8 @@
         {
             "files": ["./plugins/**/*"],
             "rules": {
-                "@typescript-eslint/no-explicit-any": "error"
+                "@typescript-eslint/no-explicit-any": "error",
+                "no-nested-ternary": "error"
             }
         }
     ]
