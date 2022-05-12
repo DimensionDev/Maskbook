@@ -66,12 +66,11 @@ const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) =
         action: {
             textAlign: 'center',
             margin: theme.spacing(1),
-            position: 'absolute',
             width: '100%',
-            bottom: 24,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            marginBottoma: 48,
         },
         body: {
             padding: theme.spacing(0),

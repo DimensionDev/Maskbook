@@ -86,6 +86,9 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                                 height: '36px',
                                 fontSize: 14,
                                 fontWeight: 700,
+                                paddingTop: 1,
+                                paddingBottom: 1.125,
+                                lineHeight: 1.5,
                                 '&:hover': {
                                     backgroundColor: MaskColorVar.buttonPluginBackground,
                                 },

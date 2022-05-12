@@ -62,6 +62,9 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const actualChainId = chainId
     const actualNetwork = getChainName(actualChainId)
 
+    console.log(pluginID)
+    console.log()
+
     // if false then it will not guide the user to switch the network
     const isAllowed =
         isChainIdValid(expectedChainId, allowTestnet) &&
@@ -225,15 +228,15 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         }
                         init={
                             <span>
-                                {t('plugin_wallet_switch_network', {
+                                {t('plugin_wallet_connect_network', {
                                     network: expectedNetwork,
                                 })}
                             </span>
                         }
-                        waiting={t('plugin_wallet_switch_network_under_going', {
+                        waiting={t('plugin_wallet_connect_network_under_going', {
                             network: expectedNetwork,
                         })}
-                        complete={t('plugin_wallet_switch_network', {
+                        complete={t('plugin_wallet_connect_network', {
                             network: expectedNetwork,
                         })}
                         failed={t('retry')}

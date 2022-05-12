@@ -1,7 +1,6 @@
 import { createIcon } from '../utils'
-import { SvgIcon } from '@mui/material'
 
-export const MarketsClaimIcon: typeof SvgIcon = createIcon(
+export const MarketsClaimIcon = createIcon(
     'Markets',
     <>
         <path d="M5.98291 10.8867H31.8683V16.2617H5.98291V10.8867Z" fill="#FF4A4A" />

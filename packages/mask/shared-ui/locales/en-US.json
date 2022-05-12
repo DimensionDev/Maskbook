@@ -319,6 +319,8 @@
     "plugin_wallet_view_qr_code": "View QR Code",
     "plugin_wallet_switch_network": "Switch to {{network}} Network",
     "plugin_wallet_switch_network_under_going": "Switching to {{network}} Network…",
+    "plugin_wallet_connect_network": "Connect {{network}} wallet",
+    "plugin_wallet_connect_network_under_going": "Connect {{network}} wallet",
     "plugin_wallet_not_available_on": "Not available on {{network}} Network.",
     "plugin_wallet_connect_wallet": "Connect Wallet",
     "plugin_wallet_connect_wallet_tip": "Please connect to a wallet.",
