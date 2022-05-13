@@ -18,7 +18,7 @@ import addDate from 'date-fns/add'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
 import type { PollMetaData } from '../types'
@@ -263,19 +263,16 @@ export default function PollsDialog(props: PollsDialogProps) {
     }
 
     const currentIdentity = useCurrentIdentity()
-
-    const { value } = useAsync(async () => {
+    const { value: linkedPersona } = useCurrentLinkedPersona()
+    const { value: currentProfile } = useAsync(async () => {
         if (!currentIdentity?.linkedPersona || !currentIdentity.identifier) return
         const profilesInformation = await Services.Identity.queryProfilesInformation([currentIdentity?.identifier])
-        const linkedPersona = await Services.Identity.queryPersona(currentIdentity.linkedPersona)
-        return {
-            linkedPersona,
-            currentProfile: head(profilesInformation),
-        }
+
+        return head(profilesInformation)
     }, [currentIdentity])
 
-    const senderName = value?.linkedPersona?.nickname
-    const senderFingerprint = value?.currentProfile?.fingerprint
+    const senderName = linkedPersona?.nickname
+    const senderFingerprint = currentProfile?.fingerprint
 
     const tabProps: AbstractTabProps = {
         tabs: [

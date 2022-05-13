@@ -15,7 +15,7 @@ import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { usePickToken } from '@masknet/shared'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -23,8 +23,6 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
-import { useAsync } from 'react-use'
-import Services from '../../../extension/service'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -110,10 +108,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const [message, setMessage] = useState(origin?.message || t('plugin_red_packet_best_wishes'))
     const currentIdentity = useCurrentIdentity()
 
-    const { value: linkedPersona } = useAsync(async () => {
-        if (!currentIdentity?.linkedPersona) return
-        return Services.Identity.queryPersona(currentIdentity.linkedPersona)
-    }, [currentIdentity?.linkedPersona])
+    const { value: linkedPersona } = useCurrentLinkedPersona()
 
     const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
 

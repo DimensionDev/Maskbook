@@ -3,7 +3,7 @@ import Web3Utils from 'web3-utils'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
@@ -22,7 +22,6 @@ import { omit, set } from 'lodash-unified'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { useAsync } from 'react-use'
 
 interface StyleProps {
     snsId: string
@@ -147,10 +146,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const currentIdentity = useCurrentIdentity()
 
-    const { value: linkedPersona } = useAsync(async () => {
-        if (!currentIdentity?.linkedPersona) return
-        return Services.Identity.queryPersona(currentIdentity.linkedPersona)
-    }, [currentIdentity?.linkedPersona])
+    const { value: linkedPersona } = useCurrentLinkedPersona()
 
     const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
     const onCreateOrSelect = useCallback(

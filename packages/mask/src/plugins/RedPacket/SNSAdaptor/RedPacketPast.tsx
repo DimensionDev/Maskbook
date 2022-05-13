@@ -9,10 +9,8 @@ import { NftRedPacketHistoryList } from './NftRedPacketHistoryList'
 import type { NftRedPacketHistory, RedPacketJSONPayload } from '../types'
 import { RedPacketNftMetaKey } from '../constants'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
-import { useAsync } from 'react-use'
-import Services from '../../../extension/service'
 
 enum RpTypeTabs {
     ERC20 = 0,
@@ -67,10 +65,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
 
     const currentIdentity = useCurrentIdentity()
 
-    const { value: linkedPersona } = useAsync(async () => {
-        if (!currentIdentity?.linkedPersona) return
-        return Services.Identity.queryPersona(currentIdentity.linkedPersona)
-    }, [currentIdentity?.linkedPersona])
+    const { value: linkedPersona } = useCurrentLinkedPersona()
 
     const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
     const { attachMetadata } = useCompositionContext()

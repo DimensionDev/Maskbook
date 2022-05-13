@@ -15,7 +15,7 @@ import {
 import { DialogContent } from '@mui/material'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Web3Utils from 'web3-utils'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import Services from '../../../extension/service'
 import { useI18N } from '../../../utils'
@@ -27,7 +27,6 @@ import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { RedPacketCreateNew } from './RedPacketCreateNew'
 import { RedPacketPast } from './RedPacketPast'
-import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -95,10 +94,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const currentIdentity = useCurrentIdentity()
 
-    const { value: linkedPersona } = useAsync(async () => {
-        if (!currentIdentity?.linkedPersona) return
-        return Services.Identity.queryPersona(currentIdentity.linkedPersona)
-    }, [currentIdentity?.linkedPersona])
+    const { value: linkedPersona } = useCurrentLinkedPersona()
 
     const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
