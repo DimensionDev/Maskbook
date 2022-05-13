@@ -43,6 +43,7 @@ export function PersonaPage(props: PersonaPageProps) {
     const myPersonas = useMyPersonas()
     const t = useI18N()
 
+    console.log(myPersonas)
     useEffect(() => {
         if (!personaVerifiedStatus || personaVerifiedStatus?.isVerified) return
         if (reset) reset()
@@ -76,7 +77,7 @@ export function PersonaPage(props: PersonaPageProps) {
                     ) : null}
                     {persona?.binds?.proofs
                         .filter((proof) => proof.platform === NextIDPlatform.Twitter)
-                        .filter((x) => x.identity.toLowerCase() !== currentIdentity?.identifier?.userId.toLowerCase())
+                        .filter((x) => x.identity.toLowerCase() === currentIdentity?.identifier?.userId.toLowerCase())
                         .map((x, i) => (
                             <PersonaItem
                                 key="avatar"
@@ -89,6 +90,12 @@ export function PersonaPage(props: PersonaPageProps) {
                             />
                         ))}
 
+                    {myPersonas?.[0] &&
+                        myPersonas[0].linkedProfiles.map((x, i) =>
+                            persona?.binds.proofs.some((y) => y.identity === x.identifier.userId) ? null : (
+                                <PersonaItem avatar="" key={`persona${i}`} owner={false} userId={x.identifier.userId} />
+                            ),
+                        )}
                     {persona?.binds?.proofs
                         .filter((proof) => proof.platform === NextIDPlatform.Twitter)
                         .filter((x) => x.identity.toLowerCase() !== currentIdentity?.identifier?.userId.toLowerCase())

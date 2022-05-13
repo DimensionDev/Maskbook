@@ -34,7 +34,7 @@ interface PersonaItemProps {
     avatar: string
     userId: string
     nickname?: string
-    proof: BindingProof
+    proof?: BindingProof
     onSelect?: (proof: BindingProof, tokenInfo?: TokenInfo) => void
 }
 
@@ -46,16 +46,17 @@ export function PersonaItem(props: PersonaItemProps) {
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(userId, token?.owner)
 
     const onClick = useCallback(() => {
+        if (!proof) return
         onSelect?.(proof, _avatar && isOwner ? { address: _avatar?.address, tokenId: _avatar?.tokenId } : undefined)
     }, [_avatar, proof])
 
     return (
-        <ListItemButton className={classes.root} onClick={onClick} disabled={!owner}>
+        <ListItemButton className={classes.root} onClick={onClick} disabled={!owner || !proof}>
             <NFTAvatar
                 owner={owner}
                 avatar={avatar || _avatar?.imageUrl}
                 hasBorder={!!_avatar}
-                platform={proof.platform}
+                platform={proof?.platform}
             />
             <Box className={classes.userInfo}>
                 <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
