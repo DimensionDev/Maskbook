@@ -7,7 +7,7 @@ import { Trans } from 'react-i18next'
 import { TagInspector } from './trending/TagInspector'
 import { enhanceTag } from './cashTag'
 import { ApplicationEntry } from '@masknet/shared'
-import { SwapIcon } from '@masknet/icons'
+import { SwapColorfulIcon } from '@masknet/icons'
 import { PluginTraderMessages } from '../messages'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -25,14 +25,21 @@ const sns: Plugin.SNSAdaptor.Definition = {
     enhanceTag,
     ApplicationEntries: [
         (() => {
-            const icon = <SwapIcon />
+            const icon = <SwapColorfulIcon />
             const name = <Trans i18nKey="plugin_trader_swap" />
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
-                    return <ApplicationEntry disabled={disabled} title={name} icon={icon} onClick={openDialog} />
+                    return (
+                        <ApplicationEntry
+                            {...EntryComponentProps}
+                            title={name}
+                            icon={icon}
+                            onClick={EntryComponentProps.onClick ?? openDialog}
+                        />
+                    )
                 },
                 appBoardSortingDefaultPriority: 9,
                 marketListSortingPriority: 5,

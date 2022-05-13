@@ -9,17 +9,16 @@ import { makeTypedMessageText } from '@masknet/typed-message'
 import {
     PersonaIdentifier,
     ProfileIdentifier,
-    Identifier,
-    ECKeyIdentifier,
     NextIDPlatform,
     toBase64,
     fromHex,
     NextIDAction,
     EnhanceableSite,
+    CrossIsolationMessages,
 } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import { useAsync, useCopyToClipboard } from 'react-use'
+import { useAsync } from 'react-use'
 import stringify from 'json-stable-stringify'
 import type { NextIDPayload } from '@masknet/shared-base'
 import { SetupGuideStep } from './SetupGuide/types'
@@ -45,12 +44,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const { t } = useI18N()
     const { persona } = props
     const ui = activatedSocialNetworkUI
-    const [, copyToClipboard] = useCopyToClipboard()
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
     const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
     const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
-
     // #region parse setup status
     const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
     const lastState_ = useValueRef(lastStateRef)
@@ -68,18 +65,17 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     // #region setup username
     const lastRecognized = useLastRecognizedIdentity()
-    const getUsername = () =>
-        lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
+    const getUsername = () => lastState.username || lastRecognized.identifier?.userId || ''
     const [username, setUsername] = useState(getUsername)
 
     const disableVerify =
-        lastRecognized.identifier.isUnknown || !lastState.username
+        !lastRecognized.identifier || !lastState.username
             ? false
             : lastRecognized.identifier.userId !== lastState.username
 
     useEffect(() => {
         const handler = (val: IdentityResolved) => {
-            if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
+            if (username === '' && val.identifier) setUsername(val.identifier.userId)
         }
         ui.collecting.identityProvider?.recognized.addListener(handler)
 
@@ -106,31 +102,40 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     // #endregion
 
     const { value: persona_ } = useAsync(async () => {
-        return Services.Identity.queryPersona(Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap())
+        return Services.Identity.queryPersona(persona)
     }, [persona])
 
+    useEffect(() => {
+        return CrossIsolationMessages.events.verifyNextID.on(() => {
+            setStep(SetupGuideStep.VerifyOnNextID)
+        })
+    }, [])
+
     const onConnect = async () => {
+        const id = ProfileIdentifier.of(ui.networkIdentifier, username)
+        if (!id.some) return
         // attach persona with SNS profile
-        await Services.Identity.attachProfile(new ProfileIdentifier(ui.networkIdentifier, username), persona, {
+        await Services.Identity.attachProfile(id.val, persona, {
             connectionConfirmState: 'confirmed',
         })
 
         // auto-finish the setup process
-        if (!persona_?.hasPrivateKey) throw new Error('invalid persona')
+        if (!persona_) throw new Error('invalid persona')
         await Services.Identity.setupPersona(persona_?.identifier)
     }
 
     const onVerify = async () => {
-        if (!persona_?.publicHexKey) return
+        if (!username) return
+        if (!persona_) return
         const collectVerificationPost = ui.configuration.nextIDConfig?.collectVerificationPost
 
         const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
         if (!platform) return
 
-        const isBound = await NextIDProof.queryIsBound(persona_.publicHexKey, platform, username)
+        const isBound = await NextIDProof.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
         if (!isBound) {
             const payload = await NextIDProof.createPersonaPayload(
-                persona_.publicHexKey,
+                persona_.identifier.publicKeyAsHex,
                 NextIDAction.Create,
                 username,
                 platform,
@@ -140,7 +145,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             const signResult = await Services.Identity.signWithPersona({
                 method: 'eth',
                 message: payload.signPayload,
-                identifier: persona_.identifier.toText(),
+                identifier: persona_.identifier,
             })
             if (!signResult) throw new Error('Failed to sign by persona.')
             const signature = signResult.signature.signature
@@ -150,11 +155,11 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             const waitingPost = new Promise<void>((resolve, reject) => {
                 verifyPostCollectTimer.current = setInterval(async () => {
                     const post = collectVerificationPost?.(postContent)
-                    if (post && persona_.publicHexKey) {
+                    if (post && persona_.identifier.publicKeyAsHex) {
                         clearInterval(verifyPostCollectTimer.current!)
                         await NextIDProof.bindProof(
                             payload.uuid,
-                            persona_.publicHexKey,
+                            persona_.identifier.publicKeyAsHex,
                             NextIDAction.Create,
                             platform,
                             username,
@@ -175,7 +180,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             })
 
             await waitingPost
-            const isBound = await NextIDProof.queryIsBound(persona_.publicHexKey, platform, username)
+            const isBound = await NextIDProof.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
             if (!isBound) throw new Error('Failed to verify.')
             MaskMessages.events.ownProofChanged.sendToAll(undefined)
         }
@@ -187,8 +192,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }
 
     const onConnected = async () => {
-        if (enableNextID && persona_?.publicHexKey && platform && username) {
-            const isBound = await NextIDProof.queryIsBound(persona_.publicHexKey, platform, username)
+        if (enableNextID && persona_?.identifier.publicKeyAsHex && platform && username) {
+            const isBound = await NextIDProof.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
             if (!isBound) {
                 currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.VerifyOnNextID,

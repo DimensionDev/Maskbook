@@ -102,7 +102,13 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.JUGGLERRED:
             return uniswapV2Like
+        case TradeProvider.VENOMSWAP:
+            return uniswapV2Like
+        case TradeProvider.OPENSWAP:
+            return uniswapV2Like
         case TradeProvider.MDEX:
+            return uniswapV2Like
+        case TradeProvider.DEFIKINGDOMS:
             return uniswapV2Like
         case TradeProvider.ZRX:
             return zrx

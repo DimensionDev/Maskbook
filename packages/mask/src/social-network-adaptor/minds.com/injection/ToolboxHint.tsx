@@ -4,8 +4,10 @@ import { startWatch } from '../../../utils/watcher'
 import { toolBoxInSideBarSelector } from '../utils/selector'
 import { ToolboxHintAtMinds } from './ToolboxHint_UI'
 
-export function injectToolboxHintAtMinds(signal: AbortSignal) {
+export function injectToolboxHintAtMinds(signal: AbortSignal, category: 'wallet' | 'application') {
     const watcher = new MutationObserverWatcher(toolBoxInSideBarSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ToolboxHintAtMinds />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+        <ToolboxHintAtMinds category={category} />,
+    )
 }

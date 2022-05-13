@@ -45,7 +45,7 @@ export const PhoneNumberField = ({
         const prefix = inputValue.startsWith('+') ? '' : '+'
 
         setCountryCode(prefix + inputValue)
-        onChange?.({ country: inputValue, phone: phone })
+        onChange?.({ country: inputValue, phone })
     }
 
     const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {

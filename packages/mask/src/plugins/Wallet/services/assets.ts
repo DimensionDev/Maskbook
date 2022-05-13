@@ -89,7 +89,7 @@ export async function getAssetsListNFT(
     })
     return {
         assets: data,
-        hasNextPage: hasNextPage,
+        hasNextPage,
     }
 }
 

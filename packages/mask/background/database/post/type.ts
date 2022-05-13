@@ -1,42 +1,20 @@
-import type {
-    AESJsonWebKey,
-    GroupIdentifier,
-    IdentifierMap,
-    PersonaIdentifier,
-    PostIVIdentifier,
-    ProfileIdentifier,
-} from '@masknet/shared-base'
+import type { AESJsonWebKey, PersonaIdentifier, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { DBSchema } from 'idb/with-async-ittr'
-import type { PrototypeLess } from '../../../utils-pure'
 import type { IDBPSafeTransaction } from '../utils/openDB'
+import type { LatestPostDBRecord } from './dbType'
 
-export type RecipientReason = (
-    | { type: 'auto-share' }
-    | { type: 'direct' }
-    | { type: 'group'; group: GroupIdentifier }
-) & {
-    /**
-     * When we send the key to them by this reason?
-     * If the unix timestamp of this Date is 0,
-     * should display it as "unknown" or "before Nov 2019"
-     */
-    at: Date
-}
-export interface RecipientDetail {
-    /** Why they're able to receive this message? */
-    reason: RecipientReason[]
-}
+/**
+ * @internal
+ * This type represented the deserialized data type of LatestPostDBRecord.
+ *
+ * This type should not be exposed in the API too. They should use PostInformation exported from @masknet/shared-base package.
+ */
 export interface PostRecord {
-    /**
-     * For old data stored before version 3, this identifier may be ProfileIdentifier.unknown
-     */
-    postBy: ProfileIdentifier
+    postBy: ProfileIdentifier | undefined
     identifier: PostIVIdentifier
     postCryptoKey?: AESJsonWebKey
-    /**
-     * Receivers
-     */
-    recipients: 'everyone' | IdentifierMap<ProfileIdentifier, RecipientDetail>
+    /** Receivers */
+    recipients: 'everyone' | Map<ProfileIdentifier, Date>
     /** @deprecated */
     recipientGroups?: unknown
     /**
@@ -54,17 +32,10 @@ export interface PostRecord {
     interestedMeta?: ReadonlyMap<string, unknown>
 }
 
-export interface PostDBRecord extends Omit<PostRecord, 'postBy' | 'identifier' | 'recipients' | 'encryptBy'> {
-    postBy: PrototypeLess<ProfileIdentifier>
-    identifier: string
-    recipients: true | Map<string, RecipientDetail>
-    encryptBy?: string
-}
-
 export interface PostDB extends DBSchema {
     /** Use inline keys */
     post: {
-        value: PostDBRecord
+        value: LatestPostDBRecord
         key: string
         indexes: {
             'persona, date': [string, Date]

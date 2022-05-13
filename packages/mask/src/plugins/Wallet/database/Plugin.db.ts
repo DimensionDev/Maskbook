@@ -1,5 +1,3 @@
-import { PLUGIN_ID } from '../constants'
-import { createPluginDatabase } from '../../../database/Plugin'
 import type { AddressBookChunk } from '../services/addressBook'
 import type { RecentTransactionChunk } from '../services/transaction/database'
 import type {
@@ -9,8 +7,9 @@ import type {
     SecretRecord,
     WalletRecord,
 } from '../services/wallet/type'
+import type { Plugin } from '@masknet/plugin-infra'
 
-export const PluginDB = createPluginDatabase<
+export let PluginDB: Plugin.Worker.DatabaseStorage<
     | AddressBookChunk
     | RecentTransactionChunk
     | WalletRecord
@@ -18,4 +17,8 @@ export const PluginDB = createPluginDatabase<
     | ERC20TokenRecord
     | ERC721TokenRecord
     | ERC1155TokenRecord
->(PLUGIN_ID)
+>
+
+export function setupDatabase(x: typeof PluginDB) {
+    PluginDB = x
+}

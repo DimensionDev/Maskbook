@@ -21,7 +21,9 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "",
@@ -45,6 +47,8 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     }
 }

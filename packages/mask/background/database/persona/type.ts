@@ -1,34 +1,36 @@
 import type { IDBPSafeTransaction } from '../utils/openDB'
 import type { DBSchema } from 'idb/with-async-ittr'
-import type { PrototypeLess } from '../../../utils-pure'
 import type {
     PersonaIdentifier,
     AESJsonWebKey,
     EC_Private_JsonWebKey,
     EC_Public_JsonWebKey,
-    IdentifierMap,
     ProfileIdentifier,
     RelationFavor,
 } from '@masknet/shared-base'
 
+/** @internal */
 export type FullPersonaDBTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSafeTransaction<
     PersonaDB,
     ['personas', 'profiles', 'relations'],
     Mode
 >
 
+/** @internal */
 export type ProfileTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSafeTransaction<
     PersonaDB,
     ['profiles'],
     Mode
 >
 
+/** @internal */
 export type PersonasTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSafeTransaction<
     PersonaDB,
     ['personas'],
     Mode
 >
 
+/** @internal */
 export type RelationTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSafeTransaction<
     PersonaDB,
     ['relations'],
@@ -36,6 +38,7 @@ export type RelationTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSaf
 >
 
 // #region Type
+/** @internal */
 export type PersonaRecordDB = Omit<PersonaRecord, 'identifier' | 'linkedProfiles'> & {
     identifier: string
     linkedProfiles: Map<string, LinkedProfileDetails>
@@ -45,18 +48,28 @@ export type PersonaRecordDB = Omit<PersonaRecord, 'identifier' | 'linkedProfiles
     hasPrivateKey: 'no' | 'yes'
 }
 
-export type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey'> & {
+/** @internal */
+export type ProfileRecordDB = Omit<ProfileRecord, 'identifier' | 'hasPrivateKey' | 'linkedPersona'> & {
     identifier: string
     network: string
-    linkedPersona?: PrototypeLess<PersonaIdentifier>
+    linkedPersona?: PersonaIdentifierStoredInDB
+}
+/** @internal */
+type PersonaIdentifierStoredInDB = {
+    compressedPoint?: string
+    encodedCompressedKey?: string
+    type: 'ec_key'
+    curve: 'secp256k1'
 }
 
+/** @internal */
 export type RelationRecordDB = Omit<RelationRecord, 'profile' | 'linked'> & {
     network: string
     profile: string
     linked: string
 }
 
+/** @internal */
 export interface PersonaDB extends DBSchema {
     /** Use inline keys */
     personas: {
@@ -93,6 +106,7 @@ export interface RelationRecord {
     favor: RelationFavor
 }
 
+/** @internal */
 export interface ProfileRecord {
     identifier: ProfileIdentifier
     nickname?: string
@@ -116,7 +130,7 @@ export interface PersonaRecord {
     privateKey?: EC_Private_JsonWebKey
     localKey?: AESJsonWebKey
     nickname?: string
-    linkedProfiles: IdentifierMap<ProfileIdentifier, LinkedProfileDetails>
+    linkedProfiles: Map<ProfileIdentifier, LinkedProfileDetails>
     createdAt: Date
     updatedAt: Date
     hasLogout?: boolean
@@ -127,10 +141,12 @@ export interface PersonaRecord {
     uninitialized?: boolean
 }
 
+/** @internal */
 export interface LinkedProfileDetails {
-    connectionConfirmState: 'confirmed' | 'pending' | 'denied'
+    connectionConfirmState: 'confirmed' | 'pending'
 }
 
+/** @internal */
 export type PersonaRecordWithPrivateKey = PersonaRecord & Required<Pick<PersonaRecord, 'privateKey'>>
 
 // #endregion

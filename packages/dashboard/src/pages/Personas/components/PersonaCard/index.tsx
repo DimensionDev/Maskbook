@@ -103,7 +103,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                         {nickname}
                     </Typography>
                     <Typography variant="caption" sx={{ cursor: 'pointer' }} onClick={onClick}>
-                        {formatPersonaFingerprint(identifier.compressedPoint, 4)}
+                        {formatPersonaFingerprint(identifier.rawPublicKey, 4)}
                     </Typography>
                 </div>
                 <div className={classes.content}>

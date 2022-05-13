@@ -23,7 +23,7 @@ const Icon = styled(ListItemIcon)`
     }
 `
 
-export function ToolboxAtFacebook() {
+export function ToolboxAtFacebook(props: { category: 'wallet' | 'application' }) {
     const isSmall = useMediaQuery(`(max-height: ${fbBreakPoint}px)`)
     return (
         <ToolboxHintUnstyled
@@ -32,6 +32,7 @@ export function ToolboxAtFacebook() {
             ListItemButton={Item}
             Typography={Text}
             ListItemIcon={Icon}
+            category={props.category}
         />
     )
 }

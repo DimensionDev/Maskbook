@@ -42,7 +42,7 @@ const VerifyWallet = memo(() => {
     }, [wallet])
     const isBound = useMemo(() => {
         if (!bounds || !bounds.length) return false
-        const res = bounds.filter((x) => x.persona === currentPersona?.publicHexKey)
+        const res = bounds.filter((x) => x.persona === currentPersona?.identifier.publicKeyAsHex)
         if (res.length > 0) {
             const final = res[0].proofs.filter((x) => {
                 return isSameAddress(x.identity, wallet?.account)
@@ -61,15 +61,15 @@ const VerifyWallet = memo(() => {
     }, [request, wallet])
 
     const { value: payload } = useAsync(async () => {
-        if (!currentPersona?.publicHexKey || !wallet) return
+        if (!currentPersona?.identifier.publicKeyAsHex || !wallet) return
         return NextIDProof.createPersonaPayload(
-            currentPersona.publicHexKey,
+            currentPersona.identifier.publicKeyAsHex,
             NextIDAction.Create,
             wallet.account,
             NextIDPlatform.Ethereum,
             'default',
         )
-    }, [currentPersona?.publicHexKey, wallet])
+    }, [currentPersona?.identifier.publicKeyAsHex, wallet])
 
     const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier) return
@@ -78,15 +78,17 @@ const VerifyWallet = memo(() => {
                 currentPersona.identifier,
                 payload.signPayload,
             )
+            showSnackbar(t('popups_verify_persona_sign_success'), { variant: 'success' })
             return signResult.signature.signature
         } catch (error) {
+            showSnackbar(t('popups_verify_persona_sign_failed'), { variant: 'error' })
             console.error(error)
             return
         }
     }, [currentPersona?.identifier, payload?.signPayload])
 
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
-        if (!payload || !currentPersona?.publicHexKey) return false
+        if (!payload || !currentPersona?.identifier.publicKeyAsHex) return false
         try {
             const walletSig = await Services.Ethereum.personalSign(
                 payload.signPayload,
@@ -103,24 +105,25 @@ const VerifyWallet = memo(() => {
             if (!walletSig) throw new Error('Wallet sign failed')
             await NextIDProof.bindProof(
                 payload.uuid,
-                currentPersona.publicHexKey,
+                currentPersona.identifier.publicKeyAsHex,
                 NextIDAction.Create,
                 NextIDPlatform.Ethereum,
                 wallet.account,
                 payload.createdAt,
                 {
                     walletSignature: walletSig,
-                    signature: signature,
+                    signature,
                 },
             )
+            showSnackbar(t('popups_verify_wallet_sign_success'), { variant: 'success' })
             setSigned(true)
             refreshProofs()
             return true
         } catch (error) {
-            console.error(error)
+            showSnackbar(t('popups_verify_wallet_sign_failed'), { variant: 'error' })
             return false
         }
-    }, [currentPersona?.publicHexKey, payload, wallet, signature])
+    }, [currentPersona?.identifier.publicKeyAsHex, payload, wallet, signature])
 
     const changeWallet = () => {
         navigate(PopupRoutes.ConnectWallet)
@@ -130,19 +133,17 @@ const VerifyWallet = memo(() => {
         try {
             if (signed) Services.Helper.removePopupWindow()
 
-            // first Step
             if (!signature && !walletSignState) {
                 await personaSilentSign()
                 return SignSteps.FirstStepDone
             } else if (signature && !walletSignState) {
-                await walletSign()
-                return SignSteps.SecondStepDone
+                const walletSignRes = await walletSign()
+                return walletSignRes ? SignSteps.SecondStepDone : SignSteps.FirstStepDone
             } else {
                 await Services.Helper.removePopupWindow()
                 return
             }
         } catch {
-            // err step
             showSnackbar('Connect error', { variant: 'error' })
             return SignSteps.Ready
         }
@@ -156,12 +157,13 @@ const VerifyWallet = memo(() => {
         <div className={classes.container}>
             <Steps
                 disableConfirm={isBound && !signed}
-                persona={currentPersona}
+                nickname={currentPersona.nickname}
                 wallet={wallet}
                 step={signed ? SignSteps.SecondStepDone : step}
                 changeWallet={changeWallet}
                 onConfirm={handleConfirm}
                 confirmLoading={confirmLoading}
+                onCustomCancel={() => navigate(-1)}
             />
         </div>
     )

@@ -1,30 +1,47 @@
-import { useState, useMemo } from 'react'
+import { useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { Typography, useTheme } from '@mui/material'
+import { Typography } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { useCurrentWeb3NetworkPluginID, useAccount, NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { EMPTY_LIST, CrossIsolationMessages, formatPersonaPublicKey } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
-import { ApplicationSettingDialog } from './ApplicationSettingDialog'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
+import { ApplicationRecommendArea } from './ApplicationRecommendArea'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useNextIDConnectStatus } from '../DataSource/useNextID'
+import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
+import { WalletMessages } from '../../plugins/Wallet/messages'
+import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
+import { MaskMessages } from '../../../shared'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
             padding: theme.spacing(1, 0.25),
-            overflowY: 'scroll',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
+            overflowY: 'auto',
+            overflowX: 'hidden',
             gridTemplateRows: '100px',
-            gridGap: theme.spacing(2),
+            gridGap: 10,
             justifyContent: 'space-between',
-            height: 340,
-            '&::-webkit-scrollbar': {
-                display: 'none',
+            height: 320,
+            width: props.shouldScroll ? 575 : 562,
+            '::-webkit-scrollbar': {
+                backgroundColor: 'transparent',
+                width: 20,
+            },
+            '::-webkit-scrollbar-thumb': {
+                borderRadius: '20px',
+                width: 5,
+                border: '7px solid rgba(0, 0, 0, 0)',
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                backgroundClip: 'padding-box',
             },
             [smallQuery]: {
                 overflow: 'auto',
@@ -34,6 +51,7 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         subTitle: {
+            cursor: 'default',
             fontSize: 18,
             lineHeight: '24px',
             fontWeight: 600,
@@ -45,17 +63,6 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'center',
             alignItems: 'center',
         },
-        header: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 11.5,
-        },
-        settingIcon: {
-            height: 24,
-            width: 24,
-            cursor: 'pointer',
-        },
         placeholderWrapper: {
             display: 'flex',
             justifyContent: 'center',
@@ -66,31 +73,58 @@ const useStyles = makeStyles()((theme) => {
         placeholder: {
             color: getMaskColor(theme).textLight,
         },
+        recommendFeatureAppListWrapper: {
+            display: 'flex',
+            overflowX: 'scroll',
+            margin: '0px 2px 4px 2px',
+            padding: '8px 2px 0 2px',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
+        carousel: {
+            height: 130,
+            overflowX: 'scroll',
+            overscrollBehavior: 'contain',
+            '& .carousel__slider': {
+                padding: '8px 2px 0px',
+                overscrollBehavior: 'contain',
+                overflowX: 'scroll',
+                '&::-webkit-scrollbar': {
+                    display: 'none',
+                },
+            },
+        },
     }
 })
 
-export function ApplicationBoard() {
-    const { classes } = useStyles()
-    const theme = useTheme()
+interface Props {
+    closeDialog(): void
+}
+
+export function ApplicationBoard(props: Props) {
+    return (
+        <PersonaContext.Provider>
+            <ApplicationEntryStatusProvider>
+                <ApplicationBoardContent {...props} />
+            </ApplicationEntryStatusProvider>
+        </PersonaContext.Provider>
+    )
+}
+
+function ApplicationBoardContent(props: Props) {
     const { t } = useI18N()
-    const [openSettings, setOpenSettings] = useState(false)
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId()
     const account = useAccount()
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
-    const SettingIconDarkModeUrl = new URL('./assets/settings_dark_mode.png', import.meta.url).toString()
-    const SettingIconLightModeUrl = new URL('./assets/settings_light_mode.png', import.meta.url).toString()
     const applicationList = useMemo(
         () =>
             snsAdaptorPlugins
                 .reduce<Application[]>((acc, cur) => {
                     if (!cur.ApplicationEntries) return acc
                     const currentWeb3NetworkSupportedChainIds = cur.enableRequirement.web3?.[currentWeb3Network]
-                    const isWeb3Enabled = Boolean(
-                        currentWeb3NetworkSupportedChainIds === undefined ||
-                            currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
-                    )
                     const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
                     const currentSNSIsSupportedNetwork = cur.enableRequirement.networks.networks[currentSNSNetwork]
                     const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
@@ -99,8 +133,14 @@ export function ApplicationBoard() {
                         cur.ApplicationEntries.map((x) => {
                             return {
                                 entry: x,
-                                enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
+                                enabled: isSNSEnabled,
                                 pluginId: cur.ID,
+                                isWalletConnectedRequired: !account && isWalletConnectedRequired,
+                                isWalletConnectedEVMRequired: Boolean(
+                                    account &&
+                                        currentWeb3Network !== NetworkPluginID.PLUGIN_EVM &&
+                                        isWalletConnectedRequired,
+                                ),
                             }
                         }) ?? EMPTY_LIST,
                     )
@@ -112,25 +152,22 @@ export function ApplicationBoard() {
                 .filter((x) => Boolean(x.entry.RenderEntryComponent)),
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
-    const listedAppList = applicationList.filter((x) => !getUnlistedApp(x))
+
+    const recommendFeatureAppList = applicationList.filter((x) => x.entry.recommendFeature)
+
+    const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
+    const { classes } = useStyles({ shouldScroll: listedAppList.length > 12 })
     return (
         <>
-            <div className={classes.header}>
-                <Typography className={classes.subTitle}>{t('applications')}</Typography>
-                <img
-                    src={theme.palette.mode === 'dark' ? SettingIconDarkModeUrl : SettingIconLightModeUrl}
-                    className={classes.settingIcon}
-                    onClick={() => setOpenSettings(true)}
-                />
-            </div>
+            <ApplicationRecommendArea
+                recommendFeatureAppList={recommendFeatureAppList}
+                RenderEntryComponent={RenderEntryComponent}
+            />
 
             {listedAppList.length > 0 ? (
                 <section className={classes.applicationWrapper}>
                     {listedAppList.map((application) => (
-                        <RenderEntryComponentWrapper
-                            key={application.entry.ApplicationEntryID}
-                            application={application}
-                        />
+                        <RenderEntryComponent key={application.entry.ApplicationEntryID} application={application} />
                     ))}
                 </section>
             ) : (
@@ -140,18 +177,143 @@ export function ApplicationBoard() {
                     </Typography>
                 </div>
             )}
-            {openSettings ? (
-                <ApplicationSettingDialog open={openSettings} onClose={() => setOpenSettings(false)} />
-            ) : null}
         </>
     )
 }
 
-interface RenderEntryComponentWrapperProps {
-    application: Application
+function RenderEntryComponent({ application }: { application: Application }) {
+    const Entry = application.entry.RenderEntryComponent!
+    const { t } = useI18N()
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
+    const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
+    )
+    const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
+
+    // #region entry disabled
+    const disabled = useMemo(() => {
+        if (!application.enabled) return true
+
+        if (application.entry.nextIdRequired) {
+            return Boolean(
+                ApplicationEntryStatus.isLoading ||
+                    ApplicationEntryStatus.isNextIDVerify === undefined ||
+                    (!ApplicationEntryStatus.isSNSConnectToCurrentPersona && ApplicationEntryStatus.isPersonaConnected),
+            )
+        } else {
+            return false
+        }
+    }, [application, ApplicationEntryStatus])
+    // #endregion
+
+    // #region entry click effect
+    const createOrConnectPersona = useCallback(() => {
+        closeApplicationBoard()
+        ApplicationEntryStatus.personaConnectAction?.()
+    }, [ApplicationEntryStatus])
+
+    const verifyPersona = useCallback(() => {
+        closeApplicationBoard()
+        CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
+    }, [])
+
+    const clickHandler = (() => {
+        if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired)
+            return openSelectProviderDialog
+        if (!application.entry.nextIdRequired) return
+        if (ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false)
+            return createOrConnectPersona
+        if (ApplicationEntryStatus.shouldVerifyNextId) return verifyPersona
+        return
+    })()
+
+    // #endregion
+
+    // #region tooltip hint
+    const tooltipHint = (() => {
+        if (application.isWalletConnectedRequired) return t('application_tooltip_hint_connect_wallet')
+        if (application.isWalletConnectedEVMRequired) return t('application_tooltip_hint_switch_to_evm_wallet')
+        if (!application.entry.nextIdRequired) return
+        if (ApplicationEntryStatus.isPersonaCreated === false && !disabled)
+            return t('application_tooltip_hint_create_persona')
+        if (ApplicationEntryStatus.isPersonaConnected === false && !disabled)
+            return t('application_tooltip_hint_connect_persona')
+        if (ApplicationEntryStatus.shouldVerifyNextId && !disabled) return t('application_tooltip_hint_verify')
+        if (ApplicationEntryStatus.shouldDisplayTooltipHint)
+            return t('application_tooltip_hint_sns_persona_unmatched', {
+                currentPersonaPublicKey: formatPersonaPublicKey(
+                    ApplicationEntryStatus.currentPersonaPublicKey ?? '',
+                    4,
+                ),
+                currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
+                    ApplicationEntryStatus.currentSNSConnectedPersonaPublicKey ?? '',
+                    4,
+                ),
+            })
+        return
+    })()
+    // #endregion
+
+    return <Entry disabled={disabled} tooltipHint={tooltipHint} onClick={clickHandler} />
 }
 
-function RenderEntryComponentWrapper({ application }: RenderEntryComponentWrapperProps) {
-    const RenderEntryComponent = application.entry.RenderEntryComponent!
-    return <RenderEntryComponent disabled={!application.enabled} />
+interface ApplicationEntryStatusContextProps {
+    isPersonaConnected: boolean | undefined
+    isPersonaCreated: boolean | undefined
+    isNextIDVerify: boolean | undefined
+    isSNSConnectToCurrentPersona: boolean | undefined
+    shouldDisplayTooltipHint: boolean | undefined
+    shouldVerifyNextId: boolean | undefined
+    currentPersonaPublicKey: string | undefined
+    currentSNSConnectedPersonaPublicKey: string | undefined
+    personaConnectAction: (() => void) | undefined
+    isLoading: boolean
+}
+
+const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContextProps>({
+    isPersonaConnected: undefined,
+    isPersonaCreated: undefined,
+    isNextIDVerify: undefined,
+    isSNSConnectToCurrentPersona: undefined,
+    shouldDisplayTooltipHint: undefined,
+    shouldVerifyNextId: undefined,
+    currentPersonaPublicKey: undefined,
+    currentSNSConnectedPersonaPublicKey: undefined,
+    personaConnectAction: undefined,
+    isLoading: false,
+})
+
+function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
+    const personaConnectStatus = usePersonaConnectStatus()
+    const nextIDConnectStatus = useNextIDConnectStatus()
+
+    const { value: ApplicationCurrentStatus, retry } = usePersonaAgainstSNSConnectStatus()
+
+    useEffect(() => {
+        return MaskMessages.events.currentPersonaIdentifier.on(retry)
+    }, [])
+
+    const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
+        ApplicationCurrentStatus ?? {}
+
+    return (
+        <ApplicationEntryStatusContext.Provider
+            value={{
+                personaConnectAction: personaConnectStatus.action ?? undefined,
+                isPersonaCreated: personaConnectStatus.hasPersona,
+                isPersonaConnected: personaConnectStatus.connected,
+                isNextIDVerify: nextIDConnectStatus.isVerified,
+                isSNSConnectToCurrentPersona,
+                shouldDisplayTooltipHint:
+                    ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected,
+                shouldVerifyNextId: Boolean(!nextIDConnectStatus.isVerified && ApplicationCurrentStatus),
+                currentPersonaPublicKey,
+                currentSNSConnectedPersonaPublicKey,
+                isLoading: nextIDConnectStatus.loading,
+            }}>
+            {props.children}
+        </ApplicationEntryStatusContext.Provider>
+    )
 }

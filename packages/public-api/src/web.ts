@@ -23,9 +23,16 @@ export interface MaskNetworkAPIs {
     settings_createBackupJson(params: Partial<BackupOptions>): Promise<unknown>
     settings_getBackupPreviewInfo(params: { backupInfo: string }): Promise<BackupPreview>
     settings_restoreBackup(params: { backupInfo: string }): Promise<void>
-    persona_createPersonaByMnemonic(params: { mnemonic: string; nickname: string; password: string }): Promise<Persona>
-    persona_queryPersonas(params: { identifier?: PersonaIdentifier_string; hasPrivateKey: boolean }): Promise<Persona[]>
-    persona_queryMyPersonas(params: { network?: string }): Promise<Persona[]>
+    persona_createPersonaByMnemonic(params: {
+        mnemonic: string
+        nickname: string
+        password: string
+    }): Promise<MobilePersona>
+    persona_queryPersonas(params: {
+        identifier?: PersonaIdentifier_string
+        hasPrivateKey: boolean
+    }): Promise<MobilePersona[]>
+    persona_queryMyPersonas(params: { network?: string }): Promise<MobilePersona[]>
     persona_updatePersonaInfo(params: {
         identifier: PersonaIdentifier_string
         data: { nickname: string }
@@ -33,19 +40,19 @@ export interface MaskNetworkAPIs {
     persona_removePersona(params: { identifier: PersonaIdentifier_string }): Promise<void>
     /** @deprecated It's an alias of settings_restoreBackup */
     persona_restoreFromJson(params: { backup: string }): Promise<void>
-    persona_restoreFromPrivateKey(params: { privateKey: string; nickname: string }): Promise<Persona>
+    persona_restoreFromPrivateKey(params: { privateKey: string; nickname: string }): Promise<MobilePersona>
     persona_connectProfile(params: {
         profileIdentifier: ProfileIdentifier_string
         personaIdentifier: PersonaIdentifier_string
     }): Promise<void>
     persona_disconnectProfile(params: { identifier: ProfileIdentifier_string }): Promise<void>
     persona_backupPrivateKey(params: { identifier: PersonaIdentifier_string }): Promise<string | undefined>
-    persona_queryPersonaByPrivateKey(params: { privateKey: string }): Promise<Persona | undefined>
+    persona_queryPersonaByPrivateKey(params: { privateKey: string }): Promise<MobilePersona | undefined>
     persona_getCurrentPersonaIdentifier(): Promise<string | undefined>
     persona_setCurrentPersonaIdentifier(params: { identifier: PersonaIdentifier_string }): Promise<void>
     persona_logout(params: { identifier: PersonaIdentifier_string }): Promise<void>
-    profile_queryProfiles(params: { network: string }): Promise<Profile[]>
-    profile_queryMyProfiles(params: { network: string }): Promise<Profile[]>
+    profile_queryProfiles(params: { network: string }): Promise<MobileProfile[]>
+    profile_queryMyProfiles(params: { network: string }): Promise<MobileProfile[]>
     profile_updateProfileInfo(params: {
         identifier: ProfileIdentifier_string
         data: { nickname?: string; avatarURL?: string }
@@ -56,7 +63,11 @@ export interface MaskNetworkAPIs {
         linked: PersonaIdentifier_string
         favor: RelationFavor
     }): Promise<void>
-    profile_queryRelationPaged(params: { network: string; after?: RelationRecord; count: number }): Promise<Profile[]>
+    profile_queryRelationPaged(params: {
+        network: string
+        after?: RelationRecord
+        count: number
+    }): Promise<MobileProfileRelation[]>
     wallet_updateEthereumAccount(params: { account: string }): Promise<void>
     wallet_updateEthereumChainId(params: { chainId: number }): Promise<void>
     wallet_getLegacyWalletInfo(): Promise<WalletInfo[]>
@@ -80,7 +91,7 @@ export interface WalletInfo {
     updatedAt: number
 }
 
-export interface Profile {
+export interface MobileProfile {
     identifier: string
     nickname?: string
     linkedPersona: boolean
@@ -90,7 +101,7 @@ export interface Profile {
     updatedAt: number
 }
 
-export interface ProfileRelation {
+export interface MobileProfileRelation {
     identifier: string
     nickname?: string
     linkedPersona: boolean
@@ -106,7 +117,7 @@ export interface ProfileState {
     [key: string]: 'pending' | 'confirmed'
 }
 
-export interface Persona {
+export interface MobilePersona {
     identifier: string
     nickname?: string
     linkedProfiles: ProfileState
@@ -117,13 +128,13 @@ export interface Persona {
     updatedAt: number
 }
 
-export interface PersonaInformation {
+export interface MobilePersonaInformation {
     nickname?: string
     identifier: string
-    linkedProfiles: ProfileInformation[]
+    linkedProfiles: MobileProfileInformation[]
 }
 
-export interface ProfileInformation {
+export interface MobileProfileInformation {
     nickname?: string
     avatar?: string
     identifier: string
@@ -183,7 +194,10 @@ export enum TradeProvider {
     TRADERJOE = 13,
     PANGOLIN = 14,
     MDEX = 15,
-    JUGGLERRED = 16,
+    VENOMSWAP = 16,
+    OPENSWAP = 17,
+    DEFIKINGDOMS = 18,
+    JUGGLERRED = 19,
 }
 
 /** Supported language settings */
@@ -222,6 +236,7 @@ export enum NetworkType {
     Fuse = 'Fuse',
     Metis = 'Metis',
     Optimistic = 'Optimistic',
+    Harmony = 'Harmony',
     Conflux = 'Conflux',
 }
 

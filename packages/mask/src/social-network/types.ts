@@ -2,19 +2,17 @@ import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
 import type { IdentityResolved, PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
-    Identifier,
     ObservableWeakMap,
     PersonaIdentifier,
     PostIdentifier,
     ProfileIdentifier,
-    ReadonlyIdentifierMap,
+    ProfileInformation,
 } from '@masknet/shared-base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import type { SharedComponentOverwrite } from '@masknet/shared'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { Subscription } from 'use-subscription'
-import type { Profile } from '../database'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
 
 // Don't define values in namespaces
@@ -33,7 +31,7 @@ export namespace SocialNetwork {
         /** @returns the profile url. e.g.: https://twitter.com/realMaskNetwork */
         getProfilePage?(userId?: string): string
         /** @returns post URL from PostIdentifier */
-        getPostURL?(post: PostIdentifier<Identifier>): URL | null
+        getPostURL?(post: PostIdentifier): URL | null
         /** Is this username valid in this network */
         isValidUsername?(username: string): boolean
         /** How to encode/decode text payload (e.g. make it into a link so it will be shortened by SNS). */
@@ -90,10 +88,8 @@ export namespace SocialNetworkUI {
     }
     /** The init() should setup watcher for those states */
     export interface AutonomousState {
-        /** @deprecated Performance. Don't use it. */
-        readonly friends: ValueRef<ReadonlyIdentifierMap<ProfileIdentifier, Profile>>
         /** My profiles at current network */
-        readonly profiles: ValueRef<readonly Profile[]>
+        readonly profiles: ValueRef<readonly ProfileInformation[]>
     }
     export interface RuntimePermission {
         /** This function should check if Mask has the permission to the site */
@@ -115,7 +111,7 @@ export namespace SocialNetworkUI {
             /** Add custom actions buttons to the post */
             postActions?(signal: AbortSignal, author: PostInfo): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */
-            toolbox?(signal: AbortSignal): void
+            toolbox?(signal: AbortSignal, category: 'wallet' | 'application'): void
             /** Inject the UI that used to notify if the user has not completely setup the current network. */
             setupPrompt?(signal: AbortSignal): void
             /**

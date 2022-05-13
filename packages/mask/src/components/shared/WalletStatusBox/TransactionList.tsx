@@ -11,7 +11,7 @@ import {
     useChainId,
     useWeb3,
 } from '@masknet/web3-shared-evm'
-import { Button, Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } from '@mui/material'
+import { Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } from '@mui/material'
 import classnames from 'classnames'
 import format from 'date-fns/format'
 import { noop } from 'lodash-unified'
@@ -31,6 +31,7 @@ const useStyles = makeStyles()((theme) => ({
     listItem: {
         height: 54,
         backgroundColor: theme.palette.background.paper,
+        padding: theme.spacing(1, 1),
         '&:nth-child(even)': {
             backgroundColor: theme.palette.background.default,
         },
@@ -46,22 +47,30 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         whiteSpace: 'nowrap',
     },
+    timestamp: {
+        fontSize: 12,
+    },
     cell: {
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
-        padding: theme.spacing(0, 0.5),
         color: theme.palette.text.primary,
         boxSizing: 'border-box',
     },
     link: {
+        display: 'flex',
         fill: 'none',
     },
     linkIcon: {
         fill: 'none',
-        width: 12,
-        height: 12,
+        width: 16,
+        height: 16,
         marginLeft: theme.spacing(0.5),
+    },
+    clear: {
+        fontSize: 14,
+        color: theme.palette.primary.main,
+        cursor: 'pointer',
     },
 }))
 
@@ -138,10 +147,10 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
                         className={classes.methodName}
                         title={functionName || ''}
                         variant="body1"
-                        component="strong">
+                        fontWeight={500}>
                         {functionName}
                     </Typography>
-                    <Typography variant="body1" color={theme.palette.text.secondary}>
+                    <Typography className={classes.timestamp} variant="body1" color={theme.palette.text.secondary}>
                         {format(tx.at, 'yyyy.MM.dd hh:mm')}
                     </Typography>
                 </Stack>
@@ -161,15 +170,15 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
                 </Link>
             </Grid>
             <Grid item className={classes.cell} md={2} justifyContent="center">
-                <Typography justifyContent="center" color={statusTextColorMap[txStatus]}>
+                <Typography fontWeight={300} justifyContent="center" color={statusTextColorMap[txStatus]}>
                     {statusTextMap[txStatus]}
                 </Typography>
             </Grid>
-            <Grid item className={classes.cell} md={2} justifyContent="center">
+            <Grid item className={classes.cell} md={2} justifyContent="right">
                 {txStatus === TransactionStatusType.NOT_DEPEND ? (
-                    <Button variant="text" size="small" onClick={handleClear}>
+                    <Typography fontWeight={300} className={classes.clear} onClick={handleClear}>
                         {t('wallet_status_pending_clear')}
-                    </Button>
+                    </Typography>
                 ) : null}
             </Grid>
         </Grid>

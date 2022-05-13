@@ -129,7 +129,7 @@ export const getFungibleAssetsFn =
 
             return {
                 chainId: x,
-                price: price,
+                price,
                 balance,
             }
         })
