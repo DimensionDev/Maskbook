@@ -36,7 +36,7 @@ export interface Token {
     id: string
     collection: Collection
     _owners: [string]
-    filters: [string]
+    filters: string[]
     floorPrice: string
     listings: Listing
     metadata: Metadata
@@ -108,7 +108,7 @@ export interface Listing {
     collection: Collection
     collectionName: string
     expires: string
-    filters: [string]
+    filters: string[]
     nicePrice: string
     pricePerItem: string
     quantity: string
@@ -211,7 +211,7 @@ interface TreasureTokenMetadata {
     description: string
     image: string
     name: string
-    metadata?: Record<string, any>
+    metadata?: Record<string, unknown>
 }
 
 export interface TreasureTokenWithMetadata {
