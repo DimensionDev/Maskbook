@@ -35,7 +35,7 @@ function requestSNSAdaptorsPermission(uis: SocialNetworkUI.Definition[]) {
     })
 }
 
-export async function setupSocialNetwork(defaultNetwork: string) {
+export async function setupSocialNetwork(defaultNetwork: string, newTab = true) {
     const ui = await loadSocialNetworkUI(defaultNetwork)
     const home = ui.utils.getHomePage?.()
 
@@ -46,7 +46,11 @@ export async function setupSocialNetwork(defaultNetwork: string) {
 
     userGuideStatus[defaultNetwork].value = '1'
     await delay(100)
-    home && browser.tabs.create({ active: true, url: home })
+    if (!home) return
+    if (!newTab) return home
+
+    browser.tabs.create({ active: true, url: home })
+    return
 }
 
 export async function connectSocialNetwork(
