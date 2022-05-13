@@ -53,7 +53,7 @@ export type Web3Provider = {
     on(name: string, callback: () => void): void
     request: <T>(payload: Payload) => Promise<T>
     connect(): Promise<{
-        publicKey: PublicKey
+        publicKey: string
     }>
     disconnect(): Promise<void>
 }

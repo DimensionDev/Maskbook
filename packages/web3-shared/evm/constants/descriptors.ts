@@ -249,6 +249,7 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         },
         homeLink: 'https://walletconnect.com',
         shortenLink: 'walletconnect.com',
+        downloadLink: 'https://walletconnect.com',
     },
     {
         ID: `${PLUGIN_ID}_coin98`,
@@ -285,7 +286,7 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         name: 'MathWallet',
         icon: new URL('../assets/mathwallet.png', import.meta.url),
         enableRequirements: {
-            supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
+            supportedChainIds: [ChainId.Mainnet, ChainId.BSC],
             supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
         },
         homeLink: 'https://mathwallet.org',
@@ -304,5 +305,6 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         },
         homeLink: 'https://fortmatic.com',
         shortenLink: 'fortmatic.com',
+        downloadLink: 'https://fortmatic.com',
     },
 ]

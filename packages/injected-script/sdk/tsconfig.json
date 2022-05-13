@@ -7,9 +7,13 @@
   },
   "files": [
     "index.ts",
-    "injectedCoin98Provider.ts",
-    "injectedEthereumProvider.ts",
-    "injectedSolanaProvider.ts",
+    "Base.ts",
+    "Phantom.ts",
+    "Solflare.ts",
+    "Coin98.ts",
+    "MetaMask.ts",
+    "MathWallet.ts",
+    "WalletLink.ts",
     "utils.ts"
   ],
   "references": [{ "path": "../shared/" }]

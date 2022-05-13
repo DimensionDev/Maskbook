@@ -12,6 +12,7 @@ import {
     Web3Provider,
     chainResolver,
     providerResolver,
+    isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { SharedContextSettings } from '../settings'
 import { Providers } from './Protocol/provider'
@@ -38,6 +39,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
         super(context, Providers, defaultValue, {
             isSameAddress,
             isValidAddress,
+            isValidChainId,
             getDefaultChainId: () => ChainId.Mainnet,
             getDefaultNetworkType: () => NetworkType.Ethereum,
             getNetworkTypeFromChainId: (chainId: ChainId) =>

@@ -54,7 +54,17 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
 
-    const { Others, Provider } = useWeb3State(undeterminedPluginID) as Web3Helper.Web3StateAll
+    const Web3State = useWeb3State(undeterminedPluginID) as Web3Helper.Web3StateAll
+    const { Others, Provider } = Web3State
+
+    console.log('DEBUG: select provider dialog')
+    console.log({
+        Web3State,
+        undeterminedPluginID,
+        Others,
+        Provider,
+    })
+
     const { NetworkIconClickBait, ProviderIconClickBait } =
         (useWeb3UI(undeterminedPluginID) as Web3Helper.Web3UIAll).SelectProviderDialog ?? {}
 
@@ -66,7 +76,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const onProviderIconClicked = useCallback(
         async (network: Web3Helper.NetworkDescriptorAll, provider: Web3Helper.ProviderDescriptorAll) => {
             if (!(await Provider?.isReady(provider.type))) {
-                const downloadLink = Others?.providerResolver.providerHomeLink(provider.type)
+                const downloadLink = Others?.providerResolver.providerDownloadLink(provider.type)
                 if (downloadLink) openWindow(downloadLink)
                 return
             }

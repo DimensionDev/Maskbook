@@ -1,14 +1,21 @@
 import { CustomEventId, decodeEvent } from '../shared'
-import { onEthEvent } from './injectedEthereumProvider'
-import { onCoin98Event } from './injectedCoin98Provider'
-import { onSolanaEvent } from './injectedSolanaProvider'
+import { Coin98Provider, Coin98ProviderType } from './Coin98'
+import { PhantomProvider } from './Phantom'
+import { SolflareProvider } from './Solflare'
+import { MetaMaskProvider } from './MetaMask'
 import { sendEvent, rejectPromise, resolvePromise } from './utils'
+import { MathWalletProvider } from './MathWallet'
+import { WalletLinkProvider } from './WalletLink'
 
 export * from '../shared'
 
-export { injectedEthereumProvider } from './injectedEthereumProvider'
-export { injectedCoin98Provider } from './injectedCoin98Provider'
-export { injectedSolanaProvider } from './injectedSolanaProvider'
+export const injectedCoin98EVMProvider = new Coin98Provider(Coin98ProviderType.EVM)
+export const injectedCoin98SolanaProvider = new Coin98Provider(Coin98ProviderType.Solana)
+export const injectedPhantomProvider = new PhantomProvider()
+export const injectedSolflareProvider = new SolflareProvider()
+export const injectedMetaMaskProvider = new MetaMaskProvider()
+export const injectedMathWalletProvider = new MathWalletProvider()
+export const injectedWalletLinkProvider = new WalletLinkProvider()
 
 export function pasteText(text: string) {
     sendEvent('paste', text)
@@ -41,29 +48,29 @@ document.addEventListener(CustomEventId, (e) => {
         case 'rejectPromise':
             return rejectPromise(...r[1])
 
-        case 'ethBridgeOnEvent':
-            return onEthEvent(...r[1])
-        case 'coin98BridgeOnEvent':
-            return onCoin98Event(...r[1])
-        case 'solanaBridgeOnEvent':
-            return onSolanaEvent(...r[1])
-        case 'ethBridgeSendRequest':
-        case 'ethBridgePrimitiveAccess':
-        case 'ethBridgeRequestListen':
-        case 'coin98BridgeSendRequest':
-        case 'coin98BridgePrimitiveAccess':
-        case 'coin98BridgeRequestListen':
-        case 'solanaBridgeSendRequest':
-        case 'solanaBridgePrimitiveAccess':
-        case 'solanaBridgeRequestListen':
-        case 'solanaBridgeExecute':
+        case 'web3BrdigeEmitEvent':
+            const [pathname, eventName, data] = r[1]
+            const provider = [
+                injectedCoin98EVMProvider,
+                injectedCoin98SolanaProvider,
+                injectedPhantomProvider,
+                injectedMetaMaskProvider,
+                injectedMathWalletProvider,
+                injectedWalletLinkProvider,
+            ].find((x) => x.pathname === pathname)
+
+            provider?.emit(eventName, data)
+            return
+
+        case 'web3BridgeBindEvent':
+        case 'web3BridgeSendRequest':
+        case 'web3BridgeExecute':
+        case 'web3UntilBridgeOnline':
+        case 'web3BridgePrimitiveAccess':
         case 'input':
         case 'paste':
         case 'pasteImage':
         case 'instagramUpload':
-        case 'untilEthBridgeOnline':
-        case 'untilCoin98BridgeOnline':
-        case 'untilSolanaBridgeOnline':
         case 'hookInputUploadOnce':
             break
         default:

@@ -13,6 +13,10 @@ export function isValidAddress(address?: string) {
     return EthereumAddress.isValid(address)
 }
 
+export function isValidChainId(chainId: number) {
+    return getEnumAsArray(ChainId).some((x) => x.value === chainId)
+}
+
 export const isZeroAddress = currySameAddress(ZERO_ADDRESS)
 
 export const isNativeTokenAddress = currySameAddress(

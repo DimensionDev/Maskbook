@@ -1,5 +1,7 @@
 import bs58 from 'bs58'
 import * as Web3 from '@solana/web3.js'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { ChainId } from '../types'
 
 export function encodePublicKey(key: Web3.PublicKey) {
     return key.toBase58()
@@ -17,4 +19,8 @@ export function formatAddress(address: string, size = 0) {
 }
 export function isValidAddress(address?: string) {
     return !!(address && Web3.PublicKey.isOnCurve(bs58.decode(address)))
+}
+
+export function isValidChainId(chainId: number) {
+    return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }

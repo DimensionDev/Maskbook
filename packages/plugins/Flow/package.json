@@ -9,7 +9,7 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@blocto/fcl": "^0.0.78-alpha.8",
+    "@blocto/fcl": "^0.0.78-alpha.10",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared": "workspace:*",

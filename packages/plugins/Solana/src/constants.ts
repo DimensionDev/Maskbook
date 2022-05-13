@@ -2,7 +2,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-solana'
 import { PublicKey } from '@solana/web3.js'
 
-export const PLUGIN_META_KEY = 'com.mask.solana'
+export const PLUGIN_META_KEY = NetworkPluginID.PLUGIN_SOLANA
 export const PLUGIN_ID = NetworkPluginID.PLUGIN_SOLANA
 export const PLUGIN_NAME = 'Solana Chain'
 export const PLUGIN_DESCRIPTION = ''

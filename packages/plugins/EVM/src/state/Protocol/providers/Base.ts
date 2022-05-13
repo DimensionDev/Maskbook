@@ -12,6 +12,7 @@ import {
     getRPCConstants,
 } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types'
+import { delay } from '@dimensiondev/kit'
 
 export class BaseProvider implements EVM_Provider {
     emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()
@@ -53,6 +54,9 @@ export class BaseProvider implements EVM_Provider {
         } else {
             throw new Error('Unknown chain id.')
         }
+
+        // Delay to make sure the provider will return the newest chain id.
+        await delay(1000)
 
         const actualChainId = await this.request<string>({
             method: EthereumMethodType.ETH_CHAIN_ID,

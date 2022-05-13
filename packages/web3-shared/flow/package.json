@@ -9,7 +9,7 @@
     }
   },
   "dependencies": {
-    "@blocto/fcl": "^0.0.78-alpha.8",
+    "@blocto/fcl": "^0.0.78-alpha.10",
     "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",

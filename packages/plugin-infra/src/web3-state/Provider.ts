@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { clone, first } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 import { delay } from '@dimensiondev/kit'
 import {
@@ -41,6 +41,7 @@ export class ProviderState<
         protected defaultValue: ProviderStorage<Account<ChainId>, ProviderType>,
         protected options: {
             isValidAddress(a?: string): boolean
+            isValidChainId(a?: number): boolean
             isSameAddress(a?: string, b?: string): boolean
             getDefaultChainId(): ChainId
             getDefaultNetworkType(): NetworkType
@@ -116,22 +117,31 @@ export class ProviderState<
         if (!siteType) return
 
         const account_ = this.storage.accounts.value[providerType]
+        const accountCopied = clone(account)
 
-        if (!this.options.isSameAddress(account_.account, account.account) || account_.chainId !== account.chainId) {
+        if (!this.options.isValidAddress(accountCopied.account)) delete accountCopied.account
+        if (!this.options.isValidChainId(accountCopied.chainId ?? 0)) delete accountCopied.chainId
+
+        const needToUpdateAccount =
+            accountCopied.account && !this.options.isSameAddress(account_.account, account.account)
+        const needToUpdateChainId = accountCopied.chainId && account_.chainId !== accountCopied.chainId
+        const needToUpdateProviderType = this.storage.providers.value[siteType] !== providerType
+
+        if (needToUpdateAccount || needToUpdateChainId) {
             await this.storage.accounts.setValue({
                 ...this.storage.accounts.value,
                 [providerType]: {
                     ...account_,
-                    ...account,
+                    ...accountCopied,
                 },
             })
-        }
 
-        if (this.storage.providers.value[siteType] !== providerType) {
-            await this.storage.providers.setValue({
-                ...this.storage.providers.value,
-                [siteType]: providerType,
-            })
+            if (needToUpdateProviderType) {
+                await this.storage.providers.setValue({
+                    ...this.storage.providers.value,
+                    [siteType]: providerType,
+                })
+            }
         }
     }
 

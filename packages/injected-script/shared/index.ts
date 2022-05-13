@@ -1,6 +1,15 @@
 import type { RequestArguments } from 'web3-core'
 
 export const CustomEventId = 'c8a6c18e-f6a3-472a-adf3-5335deb80db6'
+
+export enum Web3BrdigeType {
+    MetaMask = 'MetaMask',
+    Coin98 = 'Coin98',
+    Phantom = 'Phantom',
+    MathWallet = 'MathWallet',
+    WalletLink = 'WalletLink',
+}
+
 export interface InternalEvents {
     /** Simulate a paste event on the activeElement */
     paste: [text: string]
@@ -18,45 +27,19 @@ export interface InternalEvents {
      */
     hookInputUploadOnce: [format: string, fileName: string, file: number[], triggerOnActiveElementNow: boolean]
 
-    // #region Eth inpage provider bridge
+    // #region web3 brdige
     /** Request the bridge to listen on an event. */
-    ethBridgeRequestListen: [eventName: string]
+    web3BridgeBindEvent: [path: string, responseEventName: keyof InternalEvents, eventName: string]
     /** When a event happened. */
-    ethBridgeOnEvent: [eventName: string, data: unknown[]]
+    web3BrdigeEmitEvent: [path: string, eventName: string, data: unknown[]]
     /** Send JSON RPC request. */
-    ethBridgeSendRequest: [req_id: number, request: unknown]
+    web3BridgeSendRequest: [path: string, req_id: number, request: unknown]
     /** Access primitive property on the window.ethereum object. */
-    ethBridgePrimitiveAccess: [req_id: number, property: string]
+    web3BridgePrimitiveAccess: [path: string, req_id: number, property: string]
     /** Wait until window.ethereum appears */
-    untilEthBridgeOnline: [req_id: number]
-    // #endregion
-
-    // #region Eth inpage provider bridge
-    /** Request the bridge to listen on an event. */
-    coin98BridgeRequestListen: [eventName: string]
-    /** When a event happened. */
-    coin98BridgeOnEvent: [eventName: string, data: unknown[]]
-    /** Send JSON RPC request. */
-    coin98BridgeSendRequest: [req_id: number, request: unknown]
-    /** Access primitive property on the window.ethereum object. */
-    coin98BridgePrimitiveAccess: [req_id: number, property: string]
-    /** Wait until window.ethereum appears */
-    untilCoin98BridgeOnline: [req_id: number]
-    // #endregion
-
-    // #region Solana inpage provider bridge
+    web3UntilBridgeOnline: [path: string, req_id: number]
     /** Request the bridge to call function. */
-    solanaBridgeExecute: [path: string, req_id: number, opts?: { onlyIfTrusted: boolean }]
-    /** Request the bridge to listen on an event. */
-    solanaBridgeRequestListen: [eventName: string]
-    /** When a event happened. */
-    solanaBridgeOnEvent: [eventName: string, data: unknown[]]
-    /** Send JSON RPC request. */
-    solanaBridgeSendRequest: [req_id: number, request: unknown]
-    /** Access primitive property on the window.solana object. */
-    solanaBridgePrimitiveAccess: [req_id: number, property: string]
-    /** Wait until window.solana appears */
-    untilSolanaBridgeOnline: [req_id: number]
+    web3BridgeExecute: [path: string, req_id: number, opts?: unknown]
     // #endregion
 
     /** A simple RPC. */
