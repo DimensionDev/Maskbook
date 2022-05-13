@@ -2,15 +2,15 @@ import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
 import { makeStyles, MaskDialog, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../locales'
 import { SearchBox } from './components/SearchBox'
-import { useAsyncFn } from 'react-use'
-import { GoPlusLabs } from '@masknet/web3-providers'
+import { useAsync, useAsyncFn } from 'react-use'
+import { GoPlusLabs, TokenPrice } from '@masknet/web3-providers'
 import { Searching } from './components/Searching'
 import { SecurityPanel } from './components/SecurityPanel'
 import { Footer } from './components/Footer'
 import { Center, TokenSecurity } from './components/Common'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder'
 import { NotFound } from './components/NotFound'
-import { ChainId, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { ChainId, CurrencyType, getCoinGeckoPlatformId, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -30,6 +30,14 @@ const useStyles = makeStyles()((theme) => ({
         height: 510,
         maxHeight: 510,
         paddingBottom: theme.spacing(3),
+    },
+    footer: {
+        boxShadow:
+            theme.palette.mode === 'light'
+                ? '0px 0px 20px rgba(0, 0, 0, 0.05)'
+                : '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        padding: '8px',
+        justifyContent: 'flex-end',
     },
 }))
 
@@ -51,7 +59,11 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
             | undefined
     }, [])
     const { value: contractDetailed, loading: loadingToken } = useERC721ContractDetailed(value?.contract)
-
+    const { value: tokenPrice } = useAsync(async () => {
+        if (!value) return
+        const platformId = getCoinGeckoPlatformId(value.chainId)
+        return TokenPrice.getTokenPrices(platformId, [value.contract], CurrencyType.USD)
+    }, [value])
     return (
         <MaskDialog
             DialogProps={{ classes: { paper: classes.paperRoot } }}
@@ -71,7 +83,11 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
                         )}
                         {error && !searching && !loadingToken && <NotFound />}
                         {!error && !searching && !loadingToken && value && (
-                            <SecurityPanel tokenInfo={contractDetailed} tokenSecurity={value} />
+                            <SecurityPanel
+                                tokenInfo={contractDetailed}
+                                tokenSecurity={value}
+                                tokenPrice={tokenPrice?.[value?.contract]}
+                            />
                         )}
                         {!error && !searching && !loadingToken && !value && (
                             <Center>
@@ -81,10 +97,8 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
                     </Stack>
                 </Stack>
             </DialogContent>
-            <DialogActions sx={{ boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)' }}>
-                <Box>
-                    <Footer />
-                </Box>
+            <DialogActions className={classes.footer}>
+                <Footer />
             </DialogActions>
         </MaskDialog>
     )

@@ -19,5 +19,5 @@ export const RiskIcon = createIcon(
             fill="white"
         />
     </g>,
-    '0 0 29 24',
+    '0 3 29 24',
 )

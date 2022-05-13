@@ -28,7 +28,7 @@ type DefineMapping = {
 export const DefineMapping: DefineMapping = {
     [SecurityMessageLevel.High]: {
         i18nKey: 'high_risk',
-        titleColor: '#FF3545',
+        titleColor: '#FF5F5F',
         bgColor: 'rgba(255, 53, 69, 0.1)',
         icon: (size: number) => <RiskIcon sx={{ fontSize: size ?? 24 }} />,
     },

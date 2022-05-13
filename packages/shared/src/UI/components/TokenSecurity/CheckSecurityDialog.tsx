@@ -4,8 +4,10 @@ import { useSharedI18N } from '../../../locales'
 import { SecurityPanel } from './components/SecurityPanel'
 import { Footer } from './components/Footer'
 import { Center, TokenSecurity } from './components/Common'
-import { useERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { CurrencyType, getCoinGeckoPlatformId, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import { Searching } from './components/Searching'
+import { useAsync } from 'react-use'
+import { TokenPrice } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -46,7 +48,10 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     const { open, onClose, tokenSecurity } = props
 
     const { value: contractDetailed, loading: loadingToken } = useERC721ContractDetailed(tokenSecurity?.contract)
-
+    const { value: tokenPrice } = useAsync(async () => {
+        const platformId = getCoinGeckoPlatformId(tokenSecurity.chainId)
+        return TokenPrice.getTokenPrices(platformId, [tokenSecurity.contract], CurrencyType.USD)
+    }, [tokenSecurity])
     return (
         <MaskDialog
             DialogProps={{ classes: { paper: classes.paperRoot } }}
@@ -61,7 +66,13 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
                                 <Searching />
                             </Center>
                         )}
-                        {!loadingToken && <SecurityPanel tokenInfo={contractDetailed} tokenSecurity={tokenSecurity} />}
+                        {!loadingToken && (
+                            <SecurityPanel
+                                tokenInfo={contractDetailed}
+                                tokenPrice={tokenPrice?.[tokenSecurity?.contract]}
+                                tokenSecurity={tokenSecurity}
+                            />
+                        )}
                     </Stack>
                 </Stack>
             </DialogContent>

@@ -17,7 +17,10 @@ const useStyles = makeStyles()((theme) => ({
     card: {
         padding: theme.spacing(1.5),
         borderRadius: 9,
-        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        boxShadow:
+            theme.palette.mode === 'light'
+                ? '0px 0px 20px rgba(0, 0, 0, 0.05)'
+                : '0px 0px 20px rgba(255, 255, 255, 0.12)',
     },
     subtitle: {
         color: theme.palette.text.secondary,
@@ -73,7 +76,8 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
                     <Stack direction="row" justifyContent="space-between">
                         <Typography className={classes.subtitle}>{t.token_info_token_name()}</Typography>
                         <Typography className={classes.cardValue}>
-                            {tokenSecurity.token_symbol}({tokenSecurity.token_name})
+                            {tokenSecurity.token_symbol}
+                            {tokenSecurity.token_name && `(${tokenSecurity.token_name})`}{' '}
                         </Typography>
                     </Stack>
                     <Stack direction="row" justifyContent="space-between">

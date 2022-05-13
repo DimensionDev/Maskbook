@@ -76,7 +76,8 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
                     <Stack direction="row" justifyContent="space-between">
                         <Typography className={classes.subtitle}>{t.token_info_token_name()}</Typography>
                         <Typography className={classes.cardValue}>
-                            {tokenSecurity.token_symbol}({tokenSecurity.token_name})
+                            {tokenSecurity.token_symbol}
+                            {tokenSecurity.token_name && `(${tokenSecurity.token_name})`}
                         </Typography>
                     </Stack>
                     <Stack direction="row" justifyContent="space-between">

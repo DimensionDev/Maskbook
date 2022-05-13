@@ -11,11 +11,12 @@ import { useTheme } from '@mui/system'
 import { resolveGoLabLink } from '../../utils/helper'
 import { TokenPanel } from './TokenPanel'
 import { TokenIcon } from '@masknet/shared'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed, PriceRecord } from '@masknet/web3-shared-evm'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
     tokenInfo?: ERC721ContractDetailed
+    tokenPrice?: PriceRecord
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -46,6 +47,7 @@ const useStyles = makeStyles()((theme) => ({
     tokenPrice: {
         fontSize: '16px',
         fontWeight: 700,
+        color: theme.palette.text.secondary,
     },
 }))
 
@@ -54,7 +56,7 @@ const LIST_HEIGHT = {
     max: 308,
 }
 
-export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo }) => {
+export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, tokenPrice }) => {
     const { classes } = useStyles()
     const t = useI18N()
     const theme = useTheme()
@@ -86,17 +88,28 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo })
                 spacing={1}
                 direction="row"
                 justifyContent="space-between"
-                sx={{ boxShadow: ' 0px 0px 20px rgba(0, 0, 0, 0.05)', padding: '16px', borderRadius: '16px' }}>
+                boxShadow={(theme) =>
+                    theme.palette.mode === 'light'
+                        ? ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
+                        : '0px 0px 20px rgba(255, 255, 255, 0.12);'
+                }
+                padding="16px"
+                borderRadius="16px">
                 <Stack direction="row" spacing={0.8}>
                     <TokenIcon
                         classes={{ icon: classes.icon }}
-                        address={tokenInfo?.address ?? ''}
-                        name={tokenInfo?.name ?? '-'}
+                        address={(tokenSecurity?.contract || tokenInfo?.address) ?? ''}
+                        name={(tokenSecurity?.token_name || tokenInfo?.name) ?? '-'}
                         logoURI={tokenInfo?.iconURL}
                     />
                     <Stack>
-                        <Typography className={classes.tokenName}>{tokenInfo?.name ?? '-'}</Typography>
-                        <Typography className={classes.tokenPrice}>12</Typography>
+                        <Typography className={classes.tokenName}>
+                            {(tokenSecurity?.token_name || tokenInfo?.name) ?? '-'}
+                        </Typography>
+                        <Typography className={classes.tokenPrice}>
+                            {' '}
+                            {tokenPrice?.usd ? `$${tokenPrice?.usd} USD` : '--'}
+                        </Typography>
                     </Stack>
                 </Stack>
                 <Stack>
@@ -115,7 +128,13 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo })
                             {DefineMapping[
                                 riskyFactors !== 0 ? SecurityMessageLevel.High : SecurityMessageLevel.Medium
                             ].icon(24)}
-                            <Typography sx={{ fontSize: '16px', fontWeight: 500, marginLeft: '8px', color: '#ffb100' }}>
+                            <Typography
+                                sx={{ fontSize: '16px', fontWeight: 500, marginLeft: '8px' }}
+                                color={
+                                    DefineMapping[
+                                        riskyFactors !== 0 ? SecurityMessageLevel.High : SecurityMessageLevel.Medium
+                                    ].titleColor
+                                }>
                                 {' '}
                                 {riskyFactors !== 0 ? t.high_risk() : t.medium_risk()}
                             </Typography>
