@@ -187,17 +187,19 @@ export function WalletStatusBox(props: WalletStatusBox) {
 
                 {!props.disableChange && (
                     <section>
-                        <Button
-                            className={classNames(classes.actionButton)}
-                            variant="contained"
-                            size="small"
-                            onClick={() => {
-                                resetAccount()
-                                closeWalletStatusDialog()
-                                openSelectProviderDialog()
-                            }}>
-                            {t('plugin_wallet_disconnect')}
-                        </Button>
+                        {networkDescriptor?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM ? (
+                            <Button
+                                className={classNames(classes.actionButton)}
+                                variant="contained"
+                                size="small"
+                                onClick={() => {
+                                    resetAccount()
+                                    closeWalletStatusDialog()
+                                    openSelectProviderDialog()
+                                }}>
+                                {t('plugin_wallet_disconnect')}
+                            </Button>
+                        ) : null}
                         <Button
                             className={classNames(classes.actionButton)}
                             variant="contained"
