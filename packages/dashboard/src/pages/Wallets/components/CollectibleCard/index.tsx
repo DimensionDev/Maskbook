@@ -14,9 +14,6 @@ import {
     useWeb3State,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { explorerResolver } from '@masknet/web3-shared-evm'
-import { explorerResolver as solExplorerResolver } from '@masknet/web3-shared-solana'
-import { explorerResolver as flowExplorerResolver } from '@masknet/web3-shared-flow'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -109,9 +106,9 @@ export interface CollectibleCardProps {
 export const CollectibleCard = memo<CollectibleCardProps>(({ token, onSend, renderOrder }) => {
     const t = useDashboardI18N()
     const chainId = useChainId()
-    const { Others } = useWeb3State()
     const { classes } = useStyles()
     const ref = useRef(null)
+    const { Others } = useWeb3State() as Web3Helper.Web3StateAll
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
     const networkDescriptor = useNetworkDescriptor(undefined, token.contract?.chainId)
@@ -127,14 +124,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ token, onSend, rend
     const showSendButton = (isHovering || isHoveringTooltip) && sendable
 
     const nftLink = useMemo(() => {
-        switch (currentPluginId) {
-            case NetworkPluginID.PLUGIN_EVM:
-                return explorerResolver.nonFungibleTokenLink(token.chainId as number, token.address, token.tokenId)
-            case NetworkPluginID.PLUGIN_SOLANA:
-                return solExplorerResolver.nonFungibleTokenLink(token.chainId as number, token.address, token.tokenId)
-            case NetworkPluginID.PLUGIN_FLOW:
-                return flowExplorerResolver.nonFungibleTokenLink(token.chainId as number, token.address, token.tokenId)
-        }
+        return Others?.explorerResolver.nonFungibleTokenLink(token.chainId, token.address, token.tokenId)
     }, [currentPluginId, token.chainId, token.address, token.tokenId])
 
     return (
