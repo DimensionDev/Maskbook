@@ -71,6 +71,13 @@ const useStyles = makeStyles()((theme) => ({
     roundBtn: {
         borderRadius: 99,
     },
+    cancelBtn: {
+        padding: '8px 22px',
+        borderRadius: 99,
+        border: '1px solid #EBEEF0',
+        color: '#1C68F3',
+        fontSize: 14,
+    },
     disableBtn: {
         pointerEvents: 'none',
         opacity: 0.5,
@@ -190,8 +197,8 @@ export function Steps(props: StepsProps) {
 
             <div className={classes.actionBox}>
                 <ActionButton
-                    className={notInPop ? '' : classes.roundBtn}
-                    variant={notInPop ? 'roundedFlat' : 'outlined'}
+                    className={notInPop ? '' : classes.cancelBtn}
+                    variant="roundedFlat"
                     fullWidth
                     color="secondary"
                     onClick={onCustomCancel}>
@@ -201,6 +208,7 @@ export function Steps(props: StepsProps) {
                     className={notInPop ? '' : classes.roundBtn}
                     color={notInPop ? 'inherit' : 'primary'}
                     loading={confirmLoading}
+                    size={notInPop ? 'medium' : 'large'}
                     disabled={disableConfirm}
                     variant={notInPop ? 'roundedContained' : 'contained'}
                     fullWidth
