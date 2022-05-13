@@ -42,6 +42,15 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
     }
 }
 
+interface ExplorerRoutes {
+    addressPathname?: string
+    blockPathname?: string
+    transactionPathname?: string
+    domainPathname?: string
+    fungibleTokenPathname?: string
+    nonFungibleTokenPathname?: string
+}
+
 export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
     descriptors: ChainDescriptor<ChainId, SchemaType, NetworkType>[],
     {
@@ -51,14 +60,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
         domainPathname = '/address/:domain',
         fungibleTokenPathname = '/address/:address',
         nonFungibleTokenPathname = '/address/:address',
-    }: {
-        addressPathname?: string
-        blockPathname?: string
-        transactionPathname?: string
-        domainPathname?: string
-        fungibleTokenPathname?: string
-        nonFungibleTokenPathname?: string
-    } = {},
+    }: ExplorerRoutes = {},
 ) {
     const getExploroerURL = (chainId: ChainId) => {
         const chainDescriptor = descriptors.find((x) => x.chainId === chainId)
@@ -95,6 +97,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
         nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) =>
             urlcat(getExploroerURL(chainId).url, nonFungibleTokenPathname, {
                 address,
+                tokenId,
                 ...getExploroerURL(chainId)?.parameters,
             }),
     }
