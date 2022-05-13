@@ -85,7 +85,7 @@ export function PersonaPage(props: PersonaPageProps) {
                                 owner
                                 nickname={currentIdentity?.nickname}
                                 proof={x}
-                                userId={x.identity}
+                                userId={currentIdentity?.identifier?.userId ?? x.identity}
                                 onSelect={onSelect}
                             />
                         ))}
