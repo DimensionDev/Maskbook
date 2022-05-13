@@ -44,6 +44,8 @@ export function PostInspector(props: PostInspectorProps) {
     } = useFungibleTokenDetailed(
         EthereumTokenType.ERC20,
         typeof token === 'string' ? (token as string) : (token as FungibleTokenDetailed).address,
+        undefined,
+        _payload.chain_id,
     )
 
     const exchangeFungibleTokens = useMemo(
@@ -55,6 +57,7 @@ export function PostInspector(props: PostInspectorProps) {
                         type: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS)
                             ? EthereumTokenType.Native
                             : EthereumTokenType.ERC20,
+                        chainId: _payload.chain_id,
                     } as Pick<FungibleTokenInitial, 'address' | 'type'>),
             ),
         [JSON.stringify(_payload.exchange_tokens)],
@@ -64,7 +67,7 @@ export function PostInspector(props: PostInspectorProps) {
         value: exchangeTokensDetailed,
         loading: loadingExchangeTokensDetailed,
         retry: retryExchangeTokensDetailed,
-    } = useFungibleTokensDetailed(exchangeFungibleTokens)
+    } = useFungibleTokensDetailed(exchangeFungibleTokens, _payload.chain_id)
 
     const retry = useCallback(() => {
         retryPayload()
