@@ -1,4 +1,3 @@
-import Fuse from 'fuse.js'
 import { openDB } from 'idb/with-async-ittr'
 import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
@@ -35,7 +34,7 @@ import { isEmpty } from 'lodash-unified'
  * # ObjectStore `persona`:
  * @description Store Personas.
  * @type {PersonaRecordDB}
- * @keys inline, {@link PersonaRecordDb.identifier}
+ * @keys inline, {@link PersonaRecordDB.identifier}
  *
  * # ObjectStore `profiles`:
  * @description Store profiles.
@@ -139,11 +138,13 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
 type V1To2 = { version: 2; data: Map<string, AESJsonWebKey> }
 type Knowledge = V1To2
 
+/** @internal */
 export async function createRelationsTransaction() {
     const database = await db()
     return createTransaction(database, 'readwrite')('relations')
 }
 
+/** @internal */
 export async function createPersonaDBReadonlyAccess(
     action: (t: FullPersonaDBTransaction<'readonly'>) => Promise<void>,
 ) {
@@ -151,7 +152,8 @@ export async function createPersonaDBReadonlyAccess(
     const transaction = createTransaction(database, 'readonly')('personas', 'profiles', 'relations')
     await action(transaction)
 }
-// @deprecated Please create a transaction directly
+
+/** @internal */
 export async function consistentPersonaDBWriteAccess(
     action: (t: FullPersonaDBTransaction<'readwrite'>) => Promise<void>,
     tryToAutoFix = true,
@@ -189,17 +191,19 @@ export async function consistentPersonaDBWriteAccess(
     }
 }
 
+/** @internal */
 export async function createReadonlyPersonaTransaction() {
     return createTransaction(await db(), 'readonly')
 }
 
 // #region Plain methods
-/** Create a new Persona. */
+/** @internal */
 export async function createPersonaDB(record: PersonaRecord, t: PersonasTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('personas').add(personaRecordToDB(record))
     record.privateKey && MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 
+/** @internal */
 export async function queryPersonaByProfileDB(
     query: ProfileIdentifier,
     t?: FullPersonaDBTransaction<'readonly'>,
@@ -216,9 +220,7 @@ export async function queryPersonaByProfileDB(
     )
 }
 
-/**
- * Query a Persona.
- */
+/** @internal */
 export async function queryPersonaDB(
     query: PersonaIdentifier,
     t?: PersonasTransaction<'readonly'>,
@@ -230,9 +232,6 @@ export async function queryPersonaDB(
     return null
 }
 
-/**
- * Query many Personas.
- */
 export async function queryPersonasDB(
     query?: {
         identifiers?: PersonaIdentifier[]
@@ -260,9 +259,7 @@ export async function queryPersonasDB(
     return records
 }
 
-/**
- * Query many Personas.
- */
+/** @internal */
 export async function queryPersonasWithPrivateKey(
     t?: FullPersonaDBTransaction<'readonly'>,
 ): Promise<PersonaRecordWithPrivateKey[]> {
@@ -281,6 +278,7 @@ export async function queryPersonasWithPrivateKey(
  * @param nextRecord The partial record to be merged
  * @param howToMerge How to merge linkedProfiles and `field: undefined`
  * @param t transaction
+ * @internal
  */
 export async function updatePersonaDB(
     // Do a copy here. We need to delete keys from it.
@@ -318,6 +316,7 @@ export async function updatePersonaDB(
     ;(next.privateKey || old.privateKey) && MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 
+/** @internal */
 export async function createOrUpdatePersonaDB(
     record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier' | 'publicKey'>,
     howToMerge: Parameters<typeof updatePersonaDB>[1],
@@ -337,9 +336,7 @@ export async function createOrUpdatePersonaDB(
         )
 }
 
-/**
- * Delete a Persona
- */
+/** @internal */
 export async function deletePersonaDB(
     id: PersonaIdentifier,
     confirm: 'delete even with private' | "don't delete if have private key",
@@ -355,6 +352,7 @@ export async function deletePersonaDB(
 /**
  * Delete a Persona
  * @returns a boolean. true: the record no longer exists; false: the record is kept.
+ * @internal
  */
 export async function safeDeletePersonaDB(
     id: PersonaIdentifier,
@@ -369,16 +367,12 @@ export async function safeDeletePersonaDB(
     return true
 }
 
-/**
- * Create a new profile.
- */
+/** @internal */
 export async function createProfileDB(record: ProfileRecord, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').add(profileToDB(record))
 }
 
-/**
- * Query a profile.
- */
+/** @internal */
 export async function queryProfileDB(
     id: ProfileIdentifier,
     t?: ProfileTransaction<'readonly'>,
@@ -389,9 +383,7 @@ export async function queryProfileDB(
     return null
 }
 
-/**
- * Query many profiles.
- */
+/** @internal */
 export async function queryProfilesDB(
     query: {
         network?: string
@@ -436,19 +428,7 @@ export async function queryProfilesDB(
     return result
 }
 
-const fuse = new Fuse([] as ProfileRecord[], {
-    shouldSort: true,
-    threshold: 0.45,
-    minMatchCharLength: 1,
-    keys: [
-        { name: 'nickname', weight: 0.8 },
-        { name: 'identifier.network', weight: 0.2 },
-    ],
-})
-
-/**
- * Update a profile.
- */
+/** @internal */
 export async function updateProfileDB(
     updating: Partial<ProfileRecord> & Pick<ProfileRecord, 'identifier'>,
     t: FullPersonaDBTransaction<'readwrite'>,
@@ -500,16 +480,14 @@ export async function updateProfileDB(
     })
     await t.objectStore('profiles').put(nextRecord)
 }
+
+/** @internal */
 export async function createOrUpdateProfileDB(rec: ProfileRecord, t: FullPersonaDBTransaction<'readwrite'>) {
     if (await queryProfileDB(rec.identifier, t)) return updateProfileDB(rec, t)
     else return createProfileDB(rec, t)
 }
 
-/**
- * Detach a profile from it's linking persona.
- * @param identifier The profile want to detach
- * @param t A living transaction
- */
+/** @internal */
 export async function detachProfileDB(
     identifier: ProfileIdentifier,
     t?: FullPersonaDBTransaction<'readwrite'>,
@@ -530,9 +508,7 @@ export async function detachProfileDB(
     await updateProfileDB(profile, t)
 }
 
-/**
- * attach a profile.
- */
+/** @internal */
 export async function attachProfileDB(
     identifier: ProfileIdentifier,
     attachTo: PersonaIdentifier,
@@ -560,16 +536,12 @@ export async function attachProfileDB(
     if (persona.privateKey) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 
-/**
- * Delete a profile
- */
+/** @internal */
 export async function deleteProfileDB(id: ProfileIdentifier, t: ProfileTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('profiles').delete(id.toText())
 }
 
-/**
- * Create a new Relation
- */
+/** @internal */
 export async function createRelationDB(
     record: Omit<RelationRecord, 'network'>,
     t: RelationTransaction<'readwrite'>,
@@ -580,6 +552,7 @@ export async function createRelationDB(
         MaskMessages.events.relationsChanged.sendToAll([{ of: record.profile, reason: 'update', favor: record.favor }])
 }
 
+/** @internal */
 export async function queryRelations(query: (record: RelationRecord) => boolean, t?: RelationTransaction<'readonly'>) {
     t = t || createTransaction(await db(), 'readonly')('relations')
     const records: RelationRecord[] = []
@@ -592,9 +565,7 @@ export async function queryRelations(query: (record: RelationRecord) => boolean,
     return records
 }
 
-/**
- * Query relations by paged
- */
+/** @internal */
 export async function queryRelationsPagedDB(
     linked: PersonaIdentifier,
     options: {
@@ -636,12 +607,7 @@ export async function queryRelationsPagedDB(
     return data
 }
 
-/**
- * Update a relation
- * @param updating
- * @param t
- * @param silent
- */
+/** @internal */
 export async function updateRelationDB(
     updating: Omit<RelationRecord, 'network'>,
     t: RelationTransaction<'readwrite'>,
@@ -666,6 +632,7 @@ export async function updateRelationDB(
     }
 }
 
+/** @internal */
 export async function createOrUpdateRelationDB(
     record: Omit<RelationRecord, 'network'>,
     t: RelationTransaction<'readwrite'>,

@@ -5,9 +5,9 @@
             "300": "#b9cad3",
             "200": "#cfd9de",
             "50": "#eff3f4",
-            "primary": "linear-gradient(0deg, rgba(7, 16, 27, 0.3), rgba(7, 16, 27, 0.3)), #FFFFFF",
-            "secondary": "linear-gradient(0deg, rgba(7, 16, 27, 0.2), rgba(7, 16, 27, 0.2)), #FFFFFF",
-            "third": "linear-gradient(0deg, rgba(7, 16, 27, 0.05), rgba(7, 16, 27, 0.05)), #FFFFFF"
+            "primary": "#B5B7BB",
+            "secondary": "#CDCFD1",
+            "third": "#F3F3F4"
         },
         "public": {
             "primary": "#1C68F3",
@@ -16,11 +16,14 @@
             "danger": "#FF3545",
             "white": "#ffffff",
             "dark": "#07101B",
-            "secondaryDark": "#767F8D"
+            "secondaryDark": "#767F8D",
+            "line": "#F2F5F6",
+            "secondaryLine": "#E6E7E8",
+            "highlight": "#1C68F3"
         },
         "text": {
             "primary": "#07101B",
-            "secondary": "#536471",
+            "secondary": "#767F8D",
             "third": "#ACB4C1",
             "strong": "#111418",
             "buttonText": "#FFFFFF"
@@ -50,9 +53,9 @@
             "300": "#697987",
             "200": "#697987",
             "50": "#cfd9de",
-            "primary": "linear-gradient(0deg, rgba(7, 16, 27, 0.3), rgba(7, 16, 27, 0.3)), #FFFFFF",
-            "secondary": "linear-gradient(0deg, rgba(7, 16, 27, 0.2), rgba(7, 16, 27, 0.2)), #FFFFFF",
-            "third": "linear-gradient(0deg, rgba(7, 16, 27, 0.05), rgba(7, 16, 27, 0.05)), #FFFFFF"
+            "primary": "#B5B7BB",
+            "secondary": "#CDCFD1",
+            "third": "#F3F3F4"
         },
         "text": {
             "primary": "#07101B",
@@ -68,7 +71,10 @@
             "danger": "#FF3545",
             "white": "#ffffff",
             "dark": "#07101B",
-            "secondaryDark": "#767F8D"
+            "secondaryDark": "#767F8D",
+            "line": "#F2F5F6",
+            "secondaryLine": "#E6E7E8",
+            "highlight": "#1C68F3"
         },
         "background": {
             "default": "#F9F9F9",
@@ -95,9 +101,9 @@
             "300": "#6b7d8c",
             "200": "#3d5466",
             "50": "#253341",
-            "primary": "linear-gradient(0deg, rgba(245, 245, 245, 0.3), rgba(245, 245, 245, 0.3)), #000000",
-            "secondary": "linear-gradient(0deg, rgba(245, 245, 245, 0.1), rgba(245, 245, 245, 0.1)), #000000",
-            "third": "linear-gradient(0deg, rgba(245, 245, 245, 0.1), rgba(245, 245, 245, 0.1)), #000000"
+            "primary": "#494949",
+            "secondary": "#181818",
+            "third": "#151515"
         },
         "public": {
             "primary": "#1C68F3",
@@ -106,11 +112,14 @@
             "danger": "#FF3545",
             "white": "#ffffff",
             "dark": "#07101B",
-            "secondaryDark": "#767F8D"
+            "secondaryDark": "#767F8D",
+            "line": "#2F2F2F",
+            "secondaryLine": "#6F6F6F",
+            "highlight": "#ffffff"
         },
         "text": {
             "primary": "#F5F5F5",
-            "secondary": "#8899A6",
+            "secondary": "#C4C7CD",
             "third": "#666C75",
             "strong": "#FFFFFF",
             "buttonText": "#0F1419"
@@ -140,9 +149,9 @@
             "300": "#92a4b3",
             "200": "#697987",
             "50": "#10171e",
-            "primary": "linear-gradient(0deg, rgba(245, 245, 245, 0.3), rgba(245, 245, 245, 0.3)), #000000",
-            "secondary": "linear-gradient(0deg, rgba(245, 245, 245, 0.1), rgba(245, 245, 245, 0.1)), #000000",
-            "third": "linear-gradient(0deg, rgba(245, 245, 245, 0.1), rgba(245, 245, 245, 0.1)), #000000"
+            "primary": "#494949",
+            "secondary": "#181818",
+            "third": "#151515"
         },
         "public": {
             "primary": "#1C68F3",
@@ -151,7 +160,10 @@
             "danger": "#FF3545",
             "white": "#ffffff",
             "dark": "#07101B",
-            "secondaryDark": "#767F8D"
+            "secondaryDark": "#767F8D",
+            "line": "#2F2F2F",
+            "secondaryLine": "#6F6F6F",
+            "highlight": "#ffffff"
         },
         "text": {
             "primary": "#F5F5F5",

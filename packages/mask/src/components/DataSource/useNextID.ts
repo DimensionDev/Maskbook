@@ -67,7 +67,11 @@ export function useNextIDConnectStatus() {
     const lastRecognized = useLastRecognizedIdentity()
     const [username] = useState(lastState.username || lastRecognized.identifier?.userId || '')
 
-    const { value: VerificationStatus = NextIDVerificationStatus.Other, retry } = useAsyncRetry(async () => {
+    const {
+        value: VerificationStatus = NextIDVerificationStatus.Other,
+        retry,
+        loading,
+    } = useAsyncRetry(async () => {
         // Whether in connect to {platform} process
         if (lastState.status === SetupGuideStep.FindUsername) return NextIDVerificationStatus.WaitingLocalConnect
 
@@ -85,7 +89,7 @@ export function useNextIDConnectStatus() {
         if (currentPersonaIdentity !== currentConnectedPersona?.identifier)
             return NextIDVerificationStatus.WaitingLocalConnect
 
-        if (!currentConnectedPersona?.publicHexKey) return NextIDVerificationStatus.WaitingLocalConnect
+        if (!currentConnectedPersona) return NextIDVerificationStatus.WaitingLocalConnect
 
         // Whether used 'Don't show me again
         if (
@@ -100,7 +104,11 @@ export function useNextIDConnectStatus() {
         const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
         if (!platform) return NextIDVerificationStatus.Other
 
-        const isBound = await NextIDProof.queryIsBound(currentConnectedPersona.publicHexKey, platform, username)
+        const isBound = await NextIDProof.queryIsBound(
+            currentConnectedPersona.identifier.publicKeyAsHex,
+            platform,
+            username,
+        )
         if (isBound) return NextIDVerificationStatus.Verified
 
         if (isOpenedFromButton) {
@@ -114,6 +122,7 @@ export function useNextIDConnectStatus() {
     return {
         isVerified: VerificationStatus === NextIDVerificationStatus.Verified,
         status: VerificationStatus,
+        loading,
         reset: () => {
             isOpenedVerifyDialog = false
             isOpenedFromButton = true

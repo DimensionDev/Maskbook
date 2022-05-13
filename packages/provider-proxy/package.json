@@ -16,11 +16,11 @@
     "@rollup/plugin-alias": "^3.1.8",
     "@rollup/plugin-commonjs": "^22.0.0",
     "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.2.1",
+    "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-replace": "^4.0.0",
     "@rollup/plugin-sucrase": "^4.0.3",
     "date-fns": "^2.28.0",
-    "rollup": "^2.70.2",
+    "rollup": "^2.72.0",
     "rollup-plugin-dts": "4.2.1"
   }
 }

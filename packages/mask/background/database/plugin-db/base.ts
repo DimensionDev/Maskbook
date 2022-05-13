@@ -1,13 +1,12 @@
 import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { createDBAccess } from '../../../background/database/utils/openDB'
+import { createDBAccess } from '../utils/openDB'
 
 type InStore = {
     plugin_id: string
     value: unknown
 }
 
-// #region Schema
-
+/** @internal */
 export interface PluginDatabase extends DBSchema {
     PluginStore: {
         value: InStore
@@ -17,7 +16,6 @@ export interface PluginDatabase extends DBSchema {
         key: string
     }
 }
-// #endregion
 
 const db = createDBAccess(() => {
     return openDB<PluginDatabase>('maskbook-plugin-data', 2, {
@@ -42,6 +40,7 @@ const db = createDBAccess(() => {
     })
 })
 // cause key path error in "add" will cause transaction fail, we need to check them first
+/** @internal */
 export function pluginDataHasValidKeyPath(value: unknown): value is InStore {
     try {
         if (typeof value !== 'object' || value === null) return false

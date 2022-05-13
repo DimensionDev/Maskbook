@@ -1,4 +1,4 @@
-import { BindingProof, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
+import { BindingProof, NextIDAction, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
@@ -27,27 +27,16 @@ import {
     useWeb3State,
     Web3Plugin,
 } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../../utils'
-import type { Persona } from '../../../../database'
+import { useI18N } from '../../locales'
 
 interface AddWalletViewProps {
-    currentPersona: Pick<
-        Persona,
-        | 'publicHexKey'
-        | 'identifier'
-        | 'hasPrivateKey'
-        | 'mnemonic'
-        | 'createdAt'
-        | 'updatedAt'
-        | 'linkedProfiles'
-        | 'nickname'
-    >
+    currentPersona: PersonaInformation
     bindings: BindingProof[]
     onCancel: () => void
 }
 
 const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletViewProps) => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { showSnackbar } = useCustomSnackbar()
     const providerType = useProviderType()
     const wallet = {
@@ -72,15 +61,15 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
     }
 
     const { value: payload, loading: payloadLoading } = useAsync(async () => {
-        if (!currentPersona?.publicHexKey || !wallet.account) return
+        if (!currentPersona || !wallet.account) return
         return NextIDProof.createPersonaPayload(
-            currentPersona.publicHexKey,
+            currentPersona.identifier.publicKeyAsHex,
             NextIDAction.Create,
             wallet.account,
             NextIDPlatform.Ethereum,
             'default',
         )
-    }, [currentPersona?.publicHexKey, wallet.address])
+    }, [currentPersona?.identifier, wallet.address])
 
     const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier) return
@@ -89,13 +78,13 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
                 currentPersona.identifier,
                 payload.signPayload,
             )
-            showSnackbar(t('plugin_tips_persona_sign_success'), {
+            showSnackbar(t.tip_persona_sign_success(), {
                 variant: 'success',
                 message: nowTime,
             })
             return signResult.signature.signature
         } catch (error) {
-            showSnackbar(t('plugin_tips_persona_sign_error'), {
+            showSnackbar(t.tip_persona_sign_error(), {
                 variant: 'error',
                 message: nowTime,
             })
@@ -104,13 +93,13 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
     }, [currentPersona?.identifier, payload])
 
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
-        if (!payload || !currentPersona?.publicHexKey || !wallet.account) return false
+        if (!payload || !currentPersona || !wallet.account) return false
         try {
             const walletSig = await Services.Ethereum.personalSign(payload.signPayload, wallet.account)
             if (!walletSig) throw new Error('Wallet sign failed')
             await NextIDProof.bindProof(
                 payload.uuid,
-                currentPersona.publicHexKey,
+                currentPersona.identifier.publicKeyAsHex,
                 NextIDAction.Create,
                 NextIDPlatform.Ethereum,
                 wallet.account,
@@ -120,13 +109,13 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
                     signature,
                 },
             )
-            showSnackbar(t('plugin_tips_wallet_sign_success'), { variant: 'success', message: nowTime })
+            showSnackbar(t.tip_wallet_sign_success(), { variant: 'success', message: nowTime })
             return true
         } catch (error) {
-            showSnackbar(t('plugin_tips_wallet_sign_error'), { variant: 'error', message: nowTime })
+            showSnackbar(t.tip_wallet_sign_error(), { variant: 'error', message: nowTime })
             return false
         }
-    }, [currentPersona?.publicHexKey, payload, signature])
+    }, [currentPersona?.identifier, payload, signature])
     const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {
         try {
             if (walletSignState) {
