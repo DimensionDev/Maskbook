@@ -4,7 +4,7 @@ import { NFTAvatar } from './NFTAvatar'
 import { NFTInfo } from './NFTInfo'
 import { MoreIcon } from '../assets/more'
 import { RSS3_KEY_SNS } from '../constants'
-import { useCheckTokenOwner } from '../hooks/useTokenOwner'
+import { useCheckTokenOwner, useTokenOwner } from '../hooks/useTokenOwner'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import type { TokenInfo } from '../types'
 import { useCallback } from 'react'
@@ -43,7 +43,7 @@ export function PersonaItem(props: PersonaItemProps) {
     const { userId, onSelect, owner = false, proof, avatar, nickname = '' } = props
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = usePersonaNFTAvatar(userId, getAvatarId(avatar) ?? '', RSS3_KEY_SNS.TWITTER)
-    const { value: token, loading: loadingToken } = useNFT(
+    const { value: token, loading: loadingToken } = useTokenOwner(
         _avatar?.address ?? '',
         _avatar?.tokenId ?? '',
         _avatar?.chainId,
