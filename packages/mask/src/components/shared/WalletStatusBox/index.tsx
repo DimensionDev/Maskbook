@@ -18,6 +18,7 @@ import { Copy } from 'react-feather'
 import { LinkOutIcon } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
+import { resetAccount } from '../../../plugins/Wallet/services'
 import { useI18N } from '../../../utils'
 import { usePendingTransactions } from './usePendingTransactions'
 
@@ -124,6 +125,10 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
+
+    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
     // #endregion
 
     const { summary: pendingSummary, transactionList } = usePendingTransactions()
@@ -182,6 +187,17 @@ export function WalletStatusBox(props: WalletStatusBox) {
 
                 {!props.disableChange && (
                     <section>
+                        <Button
+                            className={classNames(classes.actionButton)}
+                            variant="contained"
+                            size="small"
+                            onClick={() => {
+                                resetAccount()
+                                closeWalletStatusDialog()
+                                openSelectProviderDialog()
+                            }}>
+                            {t('plugin_wallet_disconnect')}
+                        </Button>
                         <Button
                             className={classNames(classes.actionButton)}
                             variant="contained"
