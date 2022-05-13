@@ -6,11 +6,13 @@ import {
     useERC721TokenContract,
 } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { PluginNFTAvatarRPC } from '../messages'
 import { getNFTByOpensea } from '../utils'
 import { usePersonas } from './usePersonas'
 
 export function useTokenOwner(address: string, tokenId: string, chainId?: ChainId) {
-    const ERC721Contract = useERC721TokenContract(address, chainId)
+    const ERC721Contract = useERC721TokenContract(address, chainId ?? ChainId.Mainnet)
     return useAsyncRetry(async () => {
         if (!ERC721Contract || !tokenId) return
         const nft = await getNFTByOpensea(address, tokenId)
@@ -28,11 +30,15 @@ export function useTokenOwner(address: string, tokenId: string, chainId?: ChainI
 export function useCheckTokenOwner(userId: string, owner?: string) {
     const account = useAccount()
     const { value: persona, loading } = usePersonas(userId)
+    const { value: address, loading: loadingAddress } = useAsyncRetry(
+        () => PluginNFTAvatarRPC.getAddress(userId, activatedSocialNetworkUI.networkIdentifier),
+        [userId],
+    )
 
     return {
-        loading,
+        loading: loading || loadingAddress,
         isOwner: Boolean(
-            (account && owner && isSameAddress(account, owner)) ||
+            (address && owner && isSameAddress(address, owner)) ||
                 persona?.wallets.some((x) => isSameAddress(x.identity, owner)),
         ),
     }

@@ -46,7 +46,7 @@ export function PersonaItem(props: PersonaItemProps) {
     const { value: token, loading: loadingToken } = useTokenOwner(
         _avatar?.address ?? '',
         _avatar?.tokenId ?? '',
-        _avatar?.chainId ?? ChainId.Mainnet,
+        _avatar?.chainId,
     )
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(userId, token?.owner)
 
