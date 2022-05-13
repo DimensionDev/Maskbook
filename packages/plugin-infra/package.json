@@ -75,7 +75,6 @@
     "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
-    "@masknet/web3-shared-flow": "workspace:*",
     "@masknet/web3-shared-solana": "workspace:*",
     "@servie/events": "^3.0.0",
     "@types/ethereum-blockies": "^0.1.0",
