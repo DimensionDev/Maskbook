@@ -162,7 +162,7 @@ export function formatText(name: string, tokenId: string) {
 
 export function formatTokenId(symbol: string, tokenId: string) {
     const name = `#${tokenId}`
-    return name.length > 18 ? name.slice(0, 18) + '...' : name
+    return name.length > 18 ? name.slice(0, 12) + '...' : name
 }
 
 export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBindings, userId: string): number => {

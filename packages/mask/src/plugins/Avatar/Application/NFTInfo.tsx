@@ -5,9 +5,12 @@ import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import { formatTokenId } from '../utils'
 import { useI18N } from '../locales/i18n_generated'
 import { ApplicationRoundIcon } from '../assets/applicationround'
+import { formatPersonaName } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
-    root: {},
+    root: {
+        width: 160,
+    },
     nft: {
         display: 'flex',
         alignItems: 'center',
@@ -40,7 +43,7 @@ export function NFTInfo(props: NFTInfoProps) {
                     <ApplicationRoundIcon />
                     <Box sx={{ marginLeft: 0.5 }}>
                         <Typography variant="body1" color="textPrimary">
-                            {nft.name.replace(/#\d+/, '')}
+                            {formatPersonaName(nft.name.replace(/#\d+/, ''))}
                         </Typography>
                         <Stack display="flex" flexDirection="row" alignItems="center">
                             <Typography variant="body2" color="textSecondary">
