@@ -3,7 +3,6 @@ import { BackupPreview, getBackupPreviewInfo, normalizeBackup, NormalizedBackup 
 import { PopupRoutes } from '@masknet/shared-base'
 import { Result } from 'ts-results'
 import { v4 as uuid } from 'uuid'
-import { MaskMessages } from '../../../shared/messages'
 import { openPopupWindow } from '../helper/popup-opener'
 import { requestHostPermission } from '../helper/request-permission'
 import { restoreNormalizedBackup } from './internal_restore'
