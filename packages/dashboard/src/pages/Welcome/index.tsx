@@ -79,7 +79,7 @@ export default function Welcome() {
             iframeLoadHandler={handleIFrameLoad}
             agreeHandler={async () => {
                 const url = await Services.SocialNetwork.setupSocialNetwork('twitter.com', false)
-                url && location.assign(url)
+                if (url) location.assign(url)
             }}
             cancelHandler={() => window.close()}
         />
