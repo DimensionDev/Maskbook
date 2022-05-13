@@ -92,7 +92,9 @@ export function PersonaPage(props: PersonaPageProps) {
 
                     {myPersonas?.[0] &&
                         myPersonas[0].linkedProfiles.map((x, i) =>
-                            persona?.binds.proofs.some((y) => y.identity === x.identifier.userId) ? null : (
+                            persona?.binds.proofs.some(
+                                (y) => y.identity === x.identifier.userId.toLowerCase(),
+                            ) ? null : (
                                 <PersonaItem avatar="" key={`persona${i}`} owner={false} userId={x.identifier.userId} />
                             ),
                         )}
