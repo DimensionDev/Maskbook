@@ -68,15 +68,14 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column-reverse',
     },
     toolTip: {
-        maxWidth: 400,
+        maxWidth: 250,
         fontSize: 14,
         lineHeight: '18px',
         padding: 10,
         boxSizing: 'border-box',
-        zIndex: '99999 !important',
         borderRadius: 4,
-        background: theme.palette.public.primary,
-        color: theme.palette.text.secondary,
+        whiteSpace: 'unset',
+        transform: 'translate3d(4px,-20px,0px)',
     },
 }))
 
@@ -135,13 +134,16 @@ export function ProfileInList(props: ProfileInListProps) {
                 }}
                 primary={
                     <Tooltip
+                        PopperProps={{
+                            disablePortal: true,
+                        }}
                         title={ToolTipText}
-                        placement="top"
+                        placement="top-start"
                         arrow
+                        open
                         classes={{
-                            popper: classes.toolTip,
+                            // popper: classes.toolTip,
                             tooltip: classes.toolTip,
-                            popperInteractive: classes.toolTip,
                         }}>
                         <div className={classes.flex}>
                             <Highlighter
