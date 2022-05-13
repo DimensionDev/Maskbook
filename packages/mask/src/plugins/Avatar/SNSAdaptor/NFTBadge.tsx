@@ -34,6 +34,7 @@ export function NFTBadge(props: NFTBadgeProps) {
     const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading } = useNFT(
         avatar.address,
         avatar.tokenId,
+        avatar.chainId,
     )
 
     const { amount, symbol, name, slug } = value
