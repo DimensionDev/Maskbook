@@ -39,6 +39,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     dialogTitle: {
         height: 60,
+        paddingTop: '0 !important',
+        paddingBottom: '0 !important',
     },
     content: {
         display: 'flex',
