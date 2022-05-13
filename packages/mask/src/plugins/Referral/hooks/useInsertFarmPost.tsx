@@ -9,8 +9,8 @@ import { useCurrentIdentity } from '../../../components/DataSource/useActivatedU
 import { META_KEY } from '../constants'
 
 export function useInsertFarmPost(token: FungibleTokenDetailed | undefined, chainId: ChainId, onClose?: () => void) {
-    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
     )
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
@@ -39,6 +39,6 @@ export function useInsertFarmPost(token: FungibleTokenDetailed | undefined, chai
         dropMetadata(META_KEY)
     }
 
-    closeWalletStatusDialog()
+    closeApplicationBoardDialog()
     onClose?.()
 }

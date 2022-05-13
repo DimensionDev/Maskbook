@@ -82,8 +82,8 @@ export function CreateFarm(props: PageInterface) {
     const currentIdentity = useCurrentIdentity()
     const { showSnackbar } = useCustomSnackbar()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
-    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
     )
 
     const [tab, setTab] = useState(TabsCreateFarm.NEW)
@@ -179,7 +179,7 @@ export function CreateFarm(props: PageInterface) {
             dropMetadata(META_KEY)
         }
 
-        closeWalletStatusDialog()
+        closeApplicationBoardDialog()
         props.onClose?.()
     }, [tokenRefer, showSnackbar, currentChainId, senderName, props.onClose])
 

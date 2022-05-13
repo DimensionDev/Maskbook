@@ -80,8 +80,8 @@ export function ReferToFarm(props: PageInterface) {
     const account = useAccount()
     const { showSnackbar } = useCustomSnackbar()
     const { attachMetadata, dropMetadata } = useCompositionContext()
-    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
     )
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
@@ -143,7 +143,7 @@ export function ReferToFarm(props: PageInterface) {
             } else {
                 dropMetadata(META_KEY)
             }
-            closeWalletStatusDialog()
+            closeApplicationBoardDialog()
             props.onClose?.()
         },
         [props],
