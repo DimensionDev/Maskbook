@@ -4,8 +4,6 @@ import Popover from '@mui/material/Popover'
 import { RadioGroup, Radio, Typography, Box } from '@mui/material'
 import { useState } from 'react'
 import { CheckCircle } from '@mui/icons-material'
-import Services from '../../extension/service'
-import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     popper: {
@@ -76,6 +74,7 @@ interface PopoverListItem {
     showDivider?: boolean
     e2eDisabled?: number
     toShare?(): void
+    onCreate?(): void
     setValue?(v: 'share'): void
     onConnect?(): void
 }
@@ -84,6 +83,7 @@ interface PopoverListTriggerProp {
     anchorEl: HTMLElement | null
     setAnchorEl(v: HTMLElement | null): void
     onChange(v: string): void
+    onCreate?(): void
     onConnect?(): void
     renderScheme: Array<PopoverListItem>
     shareWithNum?: number
@@ -92,7 +92,8 @@ interface PopoverListTriggerProp {
 }
 
 const PopoverListItem = (props: PopoverListItem) => {
-    const { title, subTitle, personaRequired, type, showDivider, e2eDisabled, toShare, setValue, onConnect } = props
+    const { title, subTitle, personaRequired, type, showDivider, e2eDisabled, toShare, setValue, onConnect, onCreate } =
+        props
     const { classes, cx } = useStyles()
     const handleItemClick = () => {
         if (!(type === 'share' && toShare && setValue) || !!e2eDisabled) return
@@ -119,8 +120,8 @@ const PopoverListItem = (props: PopoverListItem) => {
                     <Typography
                         className={classes.create}
                         onClick={() => {
-                            if (e2eDisabled === 1) {
-                                Services.Helper.openDashboard(DashboardRoutes.SignUp)
+                            if (e2eDisabled === 1 && onCreate) {
+                                onCreate()
                             }
                             if (e2eDisabled === 3 && onConnect) {
                                 onConnect()

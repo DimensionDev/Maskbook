@@ -3,7 +3,7 @@ import { DialogActions, DialogContent } from '@mui/material'
 import { DialogStackingProvider, makeStyles } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { MaskMessages, useI18N } from '../../utils'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, DashboardRoutes } from '@masknet/shared-base'
 import { useRecipientsList } from './useRecipientsList'
 import { InjectedDialog } from '@masknet/shared'
 import { CompositionDialogUI, CompositionRef, DisabledReason as E2EUnavailableReason } from './CompositionUI'
@@ -121,6 +121,10 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                     <CompositionDialogUI
                         onConnect={() => {
                             ;(connectStatus as any).action()
+                            setOpen(false)
+                        }}
+                        onCreate={() => {
+                            Services.Helper.openDashboard(DashboardRoutes.Setup)
                             setOpen(false)
                         }}
                         ref={UI}

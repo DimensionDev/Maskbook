@@ -92,6 +92,7 @@ export interface CompositionProps {
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
     onConnect?(): any
+    onCreate?(): any
     e2eEncryptionDisabled?: DisabledReason
     recipients: LazyRecipients
     // Enabled features
@@ -211,6 +212,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
 
                     <PopoverListTrigger
                         onConnect={props.onConnect}
+                        onCreate={props.onCreate}
                         e2eDisabled={props.e2eEncryptionDisabled}
                         selected="all"
                         renderScheme={visibilityPopperList}
@@ -232,16 +234,16 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                             setShareWithOpen(true)
                         }}
                     />
-                    {recipientSelectorAvailable && (
-                        <SelectRecipientsUI
-                            open={shareWithOpen}
-                            onClose={() => setShareWithOpen(false)}
-                            disabled={sending}
-                            items={props.recipients}
-                            selected={recipients}
-                            onSetSelected={setRecipients}
-                        />
-                    )}
+                    {/* {recipientSelectorAvailable && ( */}
+                    <SelectRecipientsUI
+                        open={shareWithOpen}
+                        onClose={() => setShareWithOpen(false)}
+                        disabled={sending}
+                        items={props.recipients}
+                        selected={recipients}
+                        onSetSelected={setRecipients}
+                    />
+                    {/* )} */}
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
                     <Typography className={classes.optionTitle}>{t('post_dialog_encryption_method')}</Typography>

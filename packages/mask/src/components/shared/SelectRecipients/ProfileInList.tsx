@@ -92,7 +92,7 @@ export interface ProfileInListProps extends withClasses<never> {
 export function ProfileInList(props: ProfileInListProps) {
     const { classes, cx } = useStyles()
     const profile = props.item
-    const resolveSeconderyText = () => {
+    const resolveSecondaryText = () => {
         if (profile.publicHexKey) return formatPersonaPublicKey(profile.publicHexKey?.toUpperCase() ?? '', 4)
         return formatPersonaFingerprint(profile.fingerprint ?? '', 5)
     }
@@ -166,11 +166,11 @@ export function ProfileInList(props: ProfileInListProps) {
                             highlightClassName={classes.highlighted}
                             searchWords={[props.search ?? '']}
                             autoEscape
-                            textToHighlight={resolveSeconderyText()}
+                            textToHighlight={resolveSecondaryText()}
                         />
                         <CopyIcon
                             className={classes.actionIcon}
-                            onClick={() => props.onCopy(resolveSeconderyText() ?? '')}
+                            onClick={() => props.onCopy(resolveSecondaryText() ?? '')}
                         />
                         {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
                     </div>
