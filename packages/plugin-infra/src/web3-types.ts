@@ -96,6 +96,8 @@ export declare namespace Web3Plugin {
         icon: URL
         /** The provider name */
         name: string
+        /** The provider bar background gradient color */
+        backgroundGradient?: string
     }
 
     export interface ConnectionResult<ChainId = number, NetworkType = string, ProviderType = string> {
@@ -341,6 +343,11 @@ export declare namespace Web3Plugin {
             resolveChainName?: (chainId: number) => string
             resolveChainFullName?: (chainId: number) => string
             resolveChainColor?: (chainId: number) => string
+            resolveNetworkName?: (networkType: string) => string
+            resolveProviderName?: (providerType: string) => string
+            resolveChainIdFromNetworkType?: (networkType: string) => number
+            resolveProviderShortenLink?: (providerType: string) => string
+            resolveProviderHomeLink?: (providerType: string) => string
 
             resolveTransactionLink?: (chainId: number, transactionId: string) => string
             resolveAddressLink?: (chainId: number, address: string) => string

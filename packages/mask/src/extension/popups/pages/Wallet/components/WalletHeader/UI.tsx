@@ -98,7 +98,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                         if (!disabled) onOpenNetworkSelector(event)
                     }}>
                     {currentNetwork.isMainnet ? (
-                        <WalletIcon networkIcon={currentNetwork.icon} size={30} />
+                        <WalletIcon mainIcon={currentNetwork.icon} size={30} />
                     ) : (
                         <ChainIcon
                             color={currentNetwork.iconColor}

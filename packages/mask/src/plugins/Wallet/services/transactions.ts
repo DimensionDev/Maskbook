@@ -1,5 +1,5 @@
 import { leftShift, multipliedBy } from '@masknet/web3-shared-base'
-import { NetworkType, FungibleAssetProvider, getChainIdFromNetworkType } from '@masknet/web3-shared-evm'
+import { NetworkType, FungibleAssetProvider, resolveChainIdFromNetworkType } from '@masknet/web3-shared-evm'
 import { isNil } from 'lodash-unified'
 import * as DeBankAPI from '../apis/debank'
 import * as ZerionApi from '../apis/zerion'
@@ -24,7 +24,7 @@ export async function getTransactionList(
     hasNextPage: boolean
 }> {
     if (provider === FungibleAssetProvider.DEBANK) {
-        const response = await DeBankAPI.getTransactionList(address, getChainIdFromNetworkType(network))
+        const response = await DeBankAPI.getTransactionList(address, resolveChainIdFromNetworkType(network))
         if (!response)
             return {
                 transactions: [],

@@ -101,7 +101,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
                         onClick={() => onChainChange(chainId)}
                         selected={chainId === currentNetwork.chainId}>
                         {network.isMainnet ? (
-                            <WalletIcon size={20} networkIcon={network.icon} />
+                            <WalletIcon size={20} mainIcon={network.icon} />
                         ) : Flags.support_testnet_switch ? (
                             <ChainIcon color={network.iconColor} />
                         ) : null}
@@ -119,7 +119,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
             <Box className={classes.root} onClick={openMenu}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     {currentNetwork.isMainnet ? (
-                        <WalletIcon size={20} networkIcon={currentNetwork.icon} />
+                        <WalletIcon size={20} mainIcon={currentNetwork.icon} />
                     ) : (
                         <div className={classes.iconWrapper}>
                             <ChainIcon color={currentNetwork.iconColor} />

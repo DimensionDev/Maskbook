@@ -91,6 +91,24 @@ export enum EncryptionTargetType {
     E2E = 'e2e',
 }
 
+export type ConnectWalletDialogEvent =
+    | {
+          open: true
+          networkType: string
+          providerType: string
+          networkPluginId: string
+      }
+    | {
+          open: false
+          result?: {
+              account: string
+              chainId: number
+              networkType: string
+              providerType: string
+              networkPluginId: string
+          }
+      }
+
 export interface NFTAvatarSettingDialogEvent {
     open: boolean
 }

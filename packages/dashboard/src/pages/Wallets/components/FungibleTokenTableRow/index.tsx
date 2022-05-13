@@ -96,7 +96,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                         <Box className={classes.chainIcon}>
                             <WalletIcon
                                 size={16}
-                                networkIcon={networkDescriptors.find((x) => x.chainId === asset.token.chainId)?.icon}
+                                mainIcon={networkDescriptors.find((x) => x.chainId === asset.token.chainId)?.icon}
                             />
                         </Box>
                     </Box>

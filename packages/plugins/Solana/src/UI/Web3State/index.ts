@@ -8,6 +8,11 @@ import {
     resolveAddressLinkOnExplorer,
     resolveBlockLinkOnExplorer,
     resolveTransactionLinkOnExplorer,
+    resolveNetworkName,
+    resolveProviderName,
+    resolveChainIdFromNetworkType,
+    resolveProviderShortenLink,
+    resolveProviderHomeLink,
 } from '@masknet/web3-shared-solana'
 import { getFungibleAssets, getNonFungibleAssets, lookup, reverse } from '../../apis'
 import { formatAddress, formatCurrency } from '../../helpers'
@@ -54,9 +59,14 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
 
             isChainIdValid: () => true,
 
+            resolveChainIdFromNetworkType,
             resolveTransactionLink: resolveTransactionLinkOnExplorer,
             resolveAddressLink: resolveAddressLinkOnExplorer,
             resolveBlockLink: resolveBlockLinkOnExplorer,
+            resolveProviderShortenLink,
+            resolveProviderHomeLink,
+            resolveNetworkName,
+            resolveProviderName,
         },
         NameService: {
             lookup: (domain: string) => lookup(domain, chainId),

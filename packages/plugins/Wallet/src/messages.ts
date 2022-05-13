@@ -6,7 +6,6 @@ import type {
     GasOption,
     GasOptions,
     NetworkType,
-    ProviderType,
     TransactionState,
     Wallet,
 } from '@masknet/web3-shared-evm'
@@ -39,22 +38,6 @@ export type SelectProviderDialogEvent =
     | {
           open: false
           address?: string
-      }
-
-export type ConnectWalletDialogEvent =
-    | {
-          open: true
-          networkType: NetworkType
-          providerType: ProviderType
-      }
-    | {
-          open: false
-          result?: {
-              account: string
-              chainId: ChainId
-              networkType: NetworkType
-              providerType: ProviderType
-          }
       }
 
 export type SelectWalletDialogEvent =
@@ -150,11 +133,6 @@ export interface WalletMessage {
      * Select provider dialog
      */
     selectProviderDialogUpdated: SelectProviderDialogEvent
-
-    /**
-     * Connect wallet dialog
-     */
-    connectWalletDialogUpdated: ConnectWalletDialogEvent
 
     /**
      * Wallet status dialog

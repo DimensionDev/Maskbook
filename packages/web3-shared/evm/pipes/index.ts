@@ -12,7 +12,7 @@ import {
 } from '../types'
 import { getChainDetailed, createLookupTableResolver } from '../utils'
 
-export const resolveProviderName = createLookupTableResolver<ProviderType, string>(
+export const resolveProviderName = createLookupTableResolver<string, string>(
     {
         [ProviderType.MaskWallet]: 'Mask Network',
         [ProviderType.MetaMask]: 'MetaMask',
@@ -26,7 +26,7 @@ export const resolveProviderName = createLookupTableResolver<ProviderType, strin
     'Unknown Network',
 )
 
-export const resolveProviderShortenLink = createLookupTableResolver<ProviderType, string>(
+export const resolveProviderShortenLink = createLookupTableResolver<string, string>(
     {
         [ProviderType.MaskWallet]: 'Mask.io',
         [ProviderType.MetaMask]: 'Metamask.io',
@@ -40,7 +40,7 @@ export const resolveProviderShortenLink = createLookupTableResolver<ProviderType
     'website',
 )
 
-export const resolveProviderHomeLink = createLookupTableResolver<ProviderType, string>(
+export const resolveProviderHomeLink = createLookupTableResolver<string, string>(
     {
         [ProviderType.MaskWallet]: 'https://mask.io',
         [ProviderType.MetaMask]: 'https://metamask.io',
@@ -106,7 +106,7 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
     'ethereum',
 )
 
-export const resolveNetworkName = createLookupTableResolver<NetworkType, string>(
+export const resolveNetworkName = createLookupTableResolver<string, string>(
     {
         [NetworkType.Ethereum]: 'Ethereum',
         [NetworkType.Binance]: 'Binance Smart Chain',

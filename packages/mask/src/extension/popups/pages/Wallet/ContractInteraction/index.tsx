@@ -10,7 +10,7 @@ import {
     formatCurrency,
     formatGweiToWei,
     formatWeiToEther,
-    getChainIdFromNetworkType,
+    resolveChainIdFromNetworkType,
     isEIP1559Supported,
     useChainId,
     useERC20TokenDetailed,
@@ -283,7 +283,9 @@ const ContractInteraction = memo(() => {
     // Wei
     const gasPriceEIP1559 = new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0, 16)
     const gasPricePriorEIP1559 = new BigNumber((gasPrice as string) ?? defaultPrices?.gasPrice ?? 0)
-    const gasFee = (isEIP1559Supported(getChainIdFromNetworkType(networkType)) ? gasPriceEIP1559 : gasPricePriorEIP1559)
+    const gasFee = (
+        isEIP1559Supported(resolveChainIdFromNetworkType(networkType)) ? gasPriceEIP1559 : gasPricePriorEIP1559
+    )
         .multipliedBy(gas ?? 0)
         .integerValue()
         .toFixed()

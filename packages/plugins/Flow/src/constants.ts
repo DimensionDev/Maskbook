@@ -34,5 +34,7 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
         type: ProviderType.Blocto,
         name: 'Blocto',
         icon: new URL('./assets/blocto.png', import.meta.url),
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(52, 133, 196, 0.2) 0%, rgba(0, 239, 139, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
 ]

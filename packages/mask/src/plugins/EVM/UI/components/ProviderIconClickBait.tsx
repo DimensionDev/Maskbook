@@ -2,16 +2,15 @@ import { useCallback, cloneElement, isValidElement } from 'react'
 import { unreachable } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
+import { isDashboardPage, isPopupPage, CrossIsolationMessages } from '@masknet/shared-base'
 import {
-    getChainIdFromNetworkType,
+    resolveChainIdFromNetworkType,
     isFortmaticSupported,
     isInjectedProvider,
     NetworkType,
     ProviderType,
     resolveProviderDownloadLink,
 } from '@masknet/web3-shared-evm'
-import { WalletMessages } from '../../../Wallet/messages'
 import { useInjectedProviderType } from '../../hooks'
 
 export function ProviderIconClickBait({
@@ -22,11 +21,12 @@ export function ProviderIconClickBait({
     onSubmit,
 }: Web3Plugin.UI.ProviderIconClickBaitProps) {
     const providerType = provider.type as ProviderType
+    const networkPluginId = provider.providerAdaptorPluginID
     const networkType = network.type as NetworkType
 
     // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.connectWalletDialogUpdated,
+        CrossIsolationMessages.events.connectWalletDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (!ev.result) return
@@ -73,6 +73,7 @@ export function ProviderIconClickBait({
                     open: true,
                     providerType,
                     networkType,
+                    networkPluginId,
                 })
                 break
             case ProviderType.CustomNetwork:
@@ -87,7 +88,7 @@ export function ProviderIconClickBait({
     if (isInjectedProvider(providerType) && isDashboardPage()) return null
 
     // hide fortmatic for some networks because of incomplete supporting
-    if (providerType === ProviderType.Fortmatic && !isFortmaticSupported(getChainIdFromNetworkType(networkType)))
+    if (providerType === ProviderType.Fortmatic && !isFortmaticSupported(resolveChainIdFromNetworkType(networkType)))
         return null
 
     // hide coin98

@@ -107,8 +107,8 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
             <WalletIcon
                 size={30}
                 badgeSize={12}
-                networkIcon={providerDescriptor?.icon}
-                providerIcon={networkDescriptor?.icon}
+                mainIcon={providerDescriptor?.icon}
+                badgeIcon={networkDescriptor?.icon}
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>

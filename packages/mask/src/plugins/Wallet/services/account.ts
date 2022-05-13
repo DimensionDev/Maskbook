@@ -2,7 +2,7 @@ import { first } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import {
     ChainId,
-    getChainIdFromNetworkType,
+    resolveChainIdFromNetworkType,
     getNetworkTypeFromChainId,
     NetworkType,
     ProviderType,
@@ -30,7 +30,7 @@ export async function updateAccount(
     } = {},
 ) {
     if (options.chainId && !options.networkType) options.networkType = getNetworkTypeFromChainId(options.chainId)
-    if (!options.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
+    if (!options.chainId && options.networkType) options.chainId = resolveChainIdFromNetworkType(options.networkType)
 
     // make sure account and provider type to be updating both
     if ((options.account && !options.providerType) || (options.account === undefined && options.providerType))
@@ -70,7 +70,7 @@ export async function updateAccount(
 
 export async function updateMaskAccount(options: { account?: string; chainId?: ChainId; networkType?: NetworkType }) {
     if (options.chainId && !options.networkType) options.networkType = getNetworkTypeFromChainId(options.chainId)
-    if (!options.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
+    if (!options.chainId && options.networkType) options.chainId = resolveChainIdFromNetworkType(options.networkType)
 
     const { account, chainId, networkType } = options
     if (chainId) currentMaskWalletChainIdSettings.value = chainId

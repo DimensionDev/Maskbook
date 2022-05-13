@@ -9,7 +9,7 @@ import {
     formatGweiToEther,
     formatGweiToWei,
     formatWeiToGwei,
-    getChainIdFromNetworkType,
+    resolveChainIdFromNetworkType,
     isEIP1559Supported,
     useNativeTokenDetailed,
     useNetworkType,
@@ -80,7 +80,7 @@ const ReplaceTransaction = memo(() => {
     const { value: nativeToken } = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
     const networkType = useNetworkType()
-    const is1559 = isEIP1559Supported(getChainIdFromNetworkType(networkType))
+    const is1559 = isEIP1559Supported(resolveChainIdFromNetworkType(networkType))
 
     const schema = useMemo(() => {
         return zod

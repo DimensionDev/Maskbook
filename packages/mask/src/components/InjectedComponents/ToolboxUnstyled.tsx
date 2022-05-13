@@ -162,9 +162,8 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
                                 <WalletIcon
                                     size={iconSize}
                                     badgeSize={badgeSize}
-                                    networkIcon={providerDescriptor?.icon} // switch the icon to meet design
-                                    providerIcon={networkDescriptor?.icon}
-                                    isBorderColorNotDefault
+                                    mainIcon={providerDescriptor?.icon} // switch the icon to meet design
+                                    badgeIcon={networkDescriptor?.icon}
                                 />
                             ) : (
                                 <AccountBalanceWalletIcon />

@@ -3,25 +3,25 @@ import {
     useChainId,
     useNetworkDescriptor,
     useProviderDescriptor,
-    useProviderType,
     useReverseAddress,
-    useWallet,
     useWeb3State,
+    NetworkPluginID,
 } from '@masknet/plugin-infra/web3'
+import { useBalance, useNativeTokenDetailed, ProviderType } from '@masknet/web3-shared-evm'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import classNames from 'classnames'
-import { Copy, ExternalLink } from 'react-feather'
+import { Copy } from 'react-feather'
+import { LinkOutIcon } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { useI18N } from '../../../utils'
 import { usePendingTransactions } from './usePendingTransactions'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { contentBackground }) => ({
     content: {
         padding: theme.spacing(2, 3, 3),
     },
@@ -29,7 +29,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
         display: 'flex',
-        backgroundColor: isDashboardPage() ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default,
+        background:
+            contentBackground ??
+            (isDashboardPage() ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
         borderRadius: 8,
         alignItems: 'center',
     },
@@ -39,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
     accountInfo: {
         fontSize: 16,
         flexGrow: 1,
-        marginLeft: theme.spacing(1),
+        marginLeft: theme.spacing(1.5),
     },
     accountName: {
         fontSize: 16,
@@ -65,9 +67,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-    linkIcon: {
-        marginRight: theme.spacing(1),
-    },
     twitterProviderBorder: {
         width: 14,
         height: 14,
@@ -78,14 +77,11 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         margin: theme.spacing(2, 0),
     },
-    domain: {
-        fontSize: 16,
-        lineHeight: '18px',
-        marginLeft: 6,
-        padding: 4,
-        borderRadius: 8,
-        backgroundColor: '#ffffff',
-        color: theme.palette.common.black,
+    linkIcon: {
+        fill: 'none',
+        width: 16,
+        height: 16,
+        marginLeft: theme.spacing(0.5),
     },
     statusBox: {
         position: 'relative',
@@ -98,15 +94,15 @@ interface WalletStatusBox {
 export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
 
-    const { classes } = useStyles()
+    const providerDescriptor = useProviderDescriptor()
+    const { classes } = useStyles({ contentBackground: providerDescriptor?.backgroundGradient })
     const chainId = useChainId()
     const account = useAccount()
-    const wallet = useWallet()
-    const providerType = useProviderType()
-    const providerDescriptor = useProviderDescriptor()
+    const { value: balance = '0' } = useBalance()
+    const { value: nativeToken } = useNativeTokenDetailed()
+
     const networkDescriptor = useNetworkDescriptor()
     const { Utils } = useWeb3State() ?? {}
-
     const { value: domain } = useReverseAddress(account)
 
     // #region copy addr to clipboard
@@ -141,33 +137,22 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     isDashboardPage() ? classes.dashboardBackground : '',
                 )}>
                 <WalletIcon
-                    size={48}
-                    badgeSize={16}
-                    networkIcon={providerDescriptor?.icon} // switch providerIcon and networkIcon to meet design
-                    providerIcon={networkDescriptor?.icon}
+                    size={30}
+                    badgeSize={12}
+                    mainIcon={providerDescriptor?.icon}
+                    badgeIcon={networkDescriptor?.icon}
                 />
                 <div className={classes.accountInfo}>
-                    <div className={classes.infoRow} style={{ marginBottom: 6 }}>
-                        {providerType !== ProviderType.MaskWallet ? (
-                            <Typography className={classes.accountName}>
-                                {domain && Utils?.formatDomainName
-                                    ? Utils.formatDomainName(domain)
-                                    : providerDescriptor?.name}
-                            </Typography>
-                        ) : (
-                            <>
-                                <Typography className={classes.accountName}>
-                                    {wallet?.name ?? providerDescriptor?.name}
-                                </Typography>
-                                {domain && Utils?.formatDomainName ? (
-                                    <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
-                                ) : null}
-                            </>
-                        )}
-                    </div>
+                    {[ProviderType.MaskWallet, 'Phantom', 'Blocto'].includes(providerDescriptor?.type ?? '') ? (
+                        <Typography className={classes.accountName}>{providerDescriptor?.name}</Typography>
+                    ) : null}
                     <div className={classes.infoRow}>
-                        <Typography className={classes.address} variant="body2" title={account}>
-                            <FormattedAddress address={account} size={4} formatter={Utils?.formatAddress} />
+                        <Typography className={classes.accountName}>
+                            {domain && Utils?.formatDomainName ? (
+                                Utils.formatDomainName(domain)
+                            ) : (
+                                <FormattedAddress address={account} size={4} formatter={Utils?.formatAddress} />
+                            )}
                         </Typography>
                         <Link
                             className={classes.link}
@@ -175,7 +160,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             component="button"
                             title={t('wallet_status_button_copy_address')}
                             onClick={onCopy}>
-                            <Copy className={classes.linkIcon} size={14} />
+                            <Copy size={14} />
                         </Link>
                         <Link
                             className={classes.link}
@@ -183,9 +168,16 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             target="_blank"
                             title={t('plugin_wallet_view_on_explorer')}
                             rel="noopener noreferrer">
-                            <ExternalLink className={classes.linkIcon} size={14} />
+                            <LinkOutIcon className={classes.linkIcon} />
                         </Link>
                     </div>
+                    {networkDescriptor?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM ? (
+                        <div className={classes.infoRow}>
+                            <Typography className={classes.accountName}>
+                                {Utils?.formatBalance?.(balance, nativeToken?.decimals, 3)} {nativeToken?.symbol}
+                            </Typography>
+                        </div>
+                    ) : null}
                 </div>
 
                 {!props.disableChange && (

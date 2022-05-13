@@ -2,24 +2,17 @@ import { useCallback, useEffect, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { DialogContent } from '@mui/material'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { safeUnreachable, delay } from '@dimensiondev/kit'
-import {
-    ChainId,
-    getChainDetailedCAIP,
-    getChainIdFromNetworkType,
-    NetworkType,
-    ProviderType,
-    resolveNetworkName,
-    resolveProviderName,
-} from '@masknet/web3-shared-evm'
+import { delay } from '@dimensiondev/kit'
+import { ChainId, getChainDetailedCAIP, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import { Web3Plugin, useWeb3State, NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
+import { CrossIsolationMessages, isPopupPage } from '@masknet/shared-base'
 import { WalletMessages } from '../../messages'
+import { useI18N } from '../../../../utils'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
-import { isPopupPage } from '@masknet/shared-base'
 import { LoadingPlaceholder } from '../../../../extension/popups/components/LoadingPlaceholder'
-import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -37,23 +30,23 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ConnectWalletDialogProps {}
-
-export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
-    const { t } = useI18N()
+export function ConnectWalletDialog() {
     const { classes } = useStyles()
-    const [providerType, setProviderType] = useState<ProviderType | undefined>()
-    const [networkType, setNetworkType] = useState<NetworkType | undefined>()
-
+    const { t } = useI18N()
+    const [networkPluginId, setNetworkPluginId] = useState<NetworkPluginID | undefined>()
+    const [providerType, setProviderType] = useState<Web3Plugin.ProviderDescriptor['type'] | undefined>()
+    const [networkType, setNetworkType] = useState<Web3Plugin.NetworkDescriptor['type'] | undefined>()
+    const { Utils, Shared } = useWeb3State(networkPluginId)
     // #region remote controlled dialog
     const {
         open,
         closeDialog,
         setDialog: setConnectWalletDialog,
-    } = useRemoteControlledDialog(WalletMessages.events.connectWalletDialogUpdated, (ev) => {
+    } = useRemoteControlledDialog(CrossIsolationMessages.events.connectWalletDialogUpdated, (ev) => {
         if (!ev.open) return
         setProviderType(ev.providerType)
         setNetworkType(ev.networkType)
+        setNetworkPluginId(ev.networkPluginId as NetworkPluginID)
     })
     // #endregion
 
@@ -66,9 +59,10 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const connectTo = useCallback(async () => {
         if (!networkType) throw new Error('Unknown network type.')
         if (!providerType) throw new Error('Unknown provider type.')
+        if (!networkPluginId) throw new Error('Unknown network plugin id.')
 
         // read the chain detailed from the built-in chain list
-        const expectedChainId = getChainIdFromNetworkType(networkType)
+        const expectedChainId = Utils?.resolveChainIdFromNetworkType?.(networkType) ?? ChainId.Mainnet
         const chainDetailedCAIP = getChainDetailedCAIP(expectedChainId)
         if (!chainDetailedCAIP) throw new Error('Unknown network type.')
 
@@ -106,15 +100,19 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             case ProviderType.Fortmatic:
                 ;({ account, chainId } = await Services.Ethereum.connectFortmatic(expectedChainId))
                 break
+            case 'Phantom' as ProviderType:
+                account = Shared?.account?.getCurrentValue()
+                chainId = Shared?.chainId?.getCurrentValue()
+                break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
             default:
-                safeUnreachable(providerType)
-                break
+                throw new Error('To be implemented.')
         }
 
         // connection failed
-        if (!account || !networkType) throw new Error(`Failed to connect to ${resolveProviderName(providerType)}.`)
+        if (!account || !networkType)
+            throw new Error(`Failed to connect to ${Utils?.resolveProviderName?.(providerType)}.`)
 
         // switch to the expected chain
         if (chainId !== expectedChainId) {
@@ -141,7 +139,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                 const chainIdHex = await Services.Ethereum.getChainId(overrides)
                 if (Number.parseInt(chainIdHex, 16) !== expectedChainId) throw new Error('Failed to switch chain.')
             } catch {
-                throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
+                throw new Error(`Make sure your wallet is on the ${Utils?.resolveNetworkName?.(networkType)} network.`)
             }
         }
 
@@ -149,9 +147,10 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             account,
             chainId: expectedChainId,
             networkType,
-            providerType,
+            providerType: providerType as string,
+            networkPluginId: networkPluginId as string,
         }
-    }, [networkType, providerType])
+    }, [networkType, providerType, networkPluginId])
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
@@ -175,7 +174,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         })
     }, [connection.error, showSnackbar])
 
-    if (!providerType) return null
+    if (!providerType || !networkPluginId || !networkType) return null
 
     if (isPopupPage()) {
         return (
@@ -197,9 +196,14 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     }
 
     return (
-        <InjectedDialog title={`Connect to ${resolveProviderName(providerType)}`} open={open} onClose={closeDialog}>
+        <InjectedDialog title={t('plugin_wallet_connecting_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
-                <ConnectionProgress providerType={providerType} connection={connection} />
+                <ConnectionProgress
+                    networkPluginId={networkPluginId}
+                    networkType={networkType}
+                    providerType={providerType}
+                    connection={connection}
+                />
             </DialogContent>
         </InjectedDialog>
     )

@@ -21,6 +21,7 @@ import {
     useAllowTestnet,
     useChainId,
 } from '@masknet/web3-shared-evm'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
 import ActionButton, {
@@ -102,6 +103,12 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     )
 
     const networkDescriptor = useNetworkDescriptor(expectedChainId, NetworkPluginID.PLUGIN_EVM)
+    // #region connect wallet dialog
+    const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
+        CrossIsolationMessages.events.connectWalletDialogUpdated,
+    )
+    // #endregion
+
     // request ethereum-compatible network
     const networkType = getNetworkTypeFromChainId(expectedChainId)
 
@@ -245,8 +252,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         className={classes.switchButton}
                         startIcon={
                             <WalletIcon
-                                networkIcon={networkDescriptor?.icon} // switch the icon to meet design
-                                isBorderColorNotDefault
+                                mainIcon={networkDescriptor?.icon} // switch the icon to meet design
                                 size={18}
                             />
                         }
@@ -291,8 +297,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 <ActionButtonPromise
                     startIcon={
                         <WalletIcon
-                            networkIcon={networkDescriptor?.icon} // switch the icon to meet design
-                            isBorderColorNotDefault
+                            mainIcon={networkDescriptor?.icon} // switch the icon to meet design
                             size={18}
                         />
                     }

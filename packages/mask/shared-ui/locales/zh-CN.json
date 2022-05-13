@@ -244,7 +244,6 @@
     "plugin_wallet_connect_with": "连接到",
     "plugin_wallet_connect_with_retry": "再试一次",
     "plugin_wallet_connected_with": "连接到",
-    "plugin_wallet_connecting_with": "连接到",
     "plugin_wallet_metamask_error_already_request": "您已打开弹出窗口，请确认。",
     "plugin_wallet_connect_tip": "请确保您的 {{providerName}} 钱包是由官方 <providerLink>{{providerShortenLink}}</providerLink> 提供的。",
     "plugin_wallet_collections": "收藏品",
