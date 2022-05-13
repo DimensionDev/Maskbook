@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
-import { Avatar, Button, CardContent, CardHeader, IconButton, Paper, Typography } from '@mui/material'
+import { Avatar, Button, CardContent, CardHeader, IconButton, Paper, Stack, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-unified'
-import { FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon, TokenSecurityBar } from '@masknet/shared'
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat, Trending } from '../../types'
@@ -14,7 +14,7 @@ import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
-import { useAccount, formatCurrency } from '@masknet/web3-shared-evm'
+import { useAccount, formatCurrency, ChainId } from '@masknet/web3-shared-evm'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeFooter } from '../trader/TradeFooter'
 import { currentDataProviderSettings, getCurrentPreferredCoinIdSettings } from '../../settings'
@@ -23,6 +23,9 @@ import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowa
 import { CoinSafetyAlert } from './CoinSafetyAlert'
 import { PluginId } from '@masknet/plugin-infra'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { GoPlusLabs, SecurityAPI } from '@masknet/web3-providers'
+import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -87,7 +90,9 @@ const useStyles = makeStyles()((theme) => {
         },
     }
 })
-
+type TokenSecurity = SecurityAPI.ContractSecurity &
+    SecurityAPI.TokenSecurity &
+    SecurityAPI.TradingSecurity & { contract: string; chainId: ChainId }
 export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content'> {
     stats: Stat[]
     coins: Coin[]
@@ -122,6 +127,16 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const account = useAccount()
     const isAllowanceCoin = useTransakAllowanceCoin(coin)
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+
+    const { value: tokenSecurityInfo, error } = useAsyncRetry(async () => {
+        if (!coin?.contract_address) return
+        const values = await GoPlusLabs.getTokenSecurity(chainId, [coin.contract_address.trim()])
+        if (!Object.keys(values ?? {}).length) throw new Error('Contract Not Found')
+        return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0], chainId }))[0] as
+            | TokenSecurity
+            | undefined
+    }, [chainId, coin])
 
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
@@ -204,7 +219,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     </div>
                 }
                 subheader={
-                    <>
+                    <Stack direction="row" justifyContent="space-between">
                         <Typography component="p" variant="body1">
                             {market ? (
                                 <>
@@ -232,7 +247,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 amount={market?.price_change_percentage_1h ?? market?.price_change_percentage_24h ?? 0}
                             />
                         </Typography>
-                    </>
+                        {tokenSecurityInfo && !error && <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />}
+                    </Stack>
                 }
                 disableTypography
             />
