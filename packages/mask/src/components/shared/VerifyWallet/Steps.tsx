@@ -67,6 +67,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
+
     roundBtn: {
         borderRadius: 99,
     },
@@ -190,7 +191,7 @@ export function Steps(props: StepsProps) {
             <div className={classes.actionBox}>
                 <ActionButton
                     className={notInPop ? '' : classes.roundBtn}
-                    variant="roundedFlat"
+                    variant={notInPop ? 'roundedFlat' : 'outlined'}
                     fullWidth
                     color="secondary"
                     onClick={onCustomCancel}>
