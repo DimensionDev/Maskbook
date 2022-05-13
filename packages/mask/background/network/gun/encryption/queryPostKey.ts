@@ -177,32 +177,13 @@ namespace Version38Or39 {
     }
 
     // This is a self contained Gun.SEA.work implementation that only contains code path we used.
-    async function work(data: string, salt: string) {
-        const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(data), { name: 'PBKDF2' }, false, [
-            'deriveBits',
-        ])
-        const work = await crypto.subtle.deriveBits(
-            {
-                name: 'PBKDF2',
-                iterations: 100000,
-                salt: new TextEncoder().encode(salt),
-                hash: { name: 'SHA-256' },
-            },
-            key,
-            512,
-        )
-        const result = arrayBufferToBase64(work)
-        return result
-
-        function arrayBufferToBase64(buffer: ArrayBuffer) {
-            let binary = ''
-            const bytes = new Uint8Array(buffer)
-            const len = bytes.byteLength
-            for (let i = 0; i < len; i += 1) {
-                binary += String.fromCharCode(bytes[i])
-            }
-            return window.btoa(binary)
-        }
+    async function work(data: Uint8Array | string, salt: Uint8Array | string) {
+        if (typeof data === 'string') data = new TextEncoder().encode(data)
+        if (typeof salt === 'string') salt = new TextEncoder().encode(salt)
+        const key = await crypto.subtle.importKey('raw', data, { name: 'PBKDF2' }, false, ['deriveBits'])
+        const params: Pbkdf2Params = { name: 'PBKDF2', iterations: 100000, salt, hash: { name: 'SHA-256' } }
+        const derived = await crypto.subtle.deriveBits(params, key, 512)
+        return window.btoa(String.fromCharCode(...new Uint8Array(derived)))
     }
 }
 
