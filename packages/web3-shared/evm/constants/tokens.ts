@@ -50,6 +50,9 @@ export const STELLA = createERC20Tokens('STELLA_ADDRESS', 'StellaSwap', 'STELLA'
 export const PAD = createERC20Tokens('PAD_ADDRESS', 'Glmr Pad', 'PAD', 18)
 export const FLARE = createERC20Tokens('FLARE_ADDRESS', 'Flare Token', 'FLARE', 18)
 export const ZLK = createERC20Tokens('ZLK_ADDRESS', 'Zenlink Network Token ', 'ZLK', 18)
+export const VIPER = createERC20Tokens('VIPER_ADDRESS', 'Viper', 'VIPER', 18)
+export const OPENX = createERC20Tokens('OPENX_ADDRESS', 'OpenSwap Token', 'OpenX', 18)
+export const JEWEL = createERC20Tokens('JEWEL_ADDRESS', 'Jewels', 'JEWEL', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
@@ -78,4 +81,5 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.Aurora]: [WNATIVE[ChainId.Aurora]],
     [ChainId.Aurora_Testnet]: [WNATIVE[ChainId.Aurora_Testnet]],
     [ChainId.Moonbeam]: [WNATIVE[ChainId.Moonbeam]],
+    [ChainId.Harmony]: [WNATIVE[ChainId.Harmony]],
 }

@@ -81,6 +81,9 @@ export enum ZrxTradePool {
     Mdex = 'Mdex',
     ZenLink = 'ZenLink',
     SolFlare = 'SolFlare',
+    VenomSwap = 'VenomSwap',
+    OpenSwap = 'OpenSwap',
+    DefiKingdoms = 'DefiKingdoms',
 }
 
 export interface TradeComputed<T = unknown> {

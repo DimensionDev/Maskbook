@@ -74,6 +74,10 @@ export enum ChainId {
     // Moonbeam
     Moonbeam = 1284,
 
+    // Harmony
+    Harmony = 1666600000,
+    Harmony_Test = 1666700000,
+
     // Conflux
     Conflux = 1030,
 }
@@ -663,6 +667,7 @@ export enum NetworkType {
     Metis = 'Metis',
     Optimistic = 'Optimistic',
     Moonbeam = 'Moonbeam',
+    Harmony = 'Harmony',
     Conflux = 'Conflux',
 }
 

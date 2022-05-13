@@ -19,6 +19,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": "",
         "Moonbeam": ""
     },
     "UNISWAP_V2_HEALTH_URL": {
@@ -41,6 +43,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": "",
         "Moonbeam": ""
     },
     "ETHEREUM_BLOCKS_SUBGRAPH_URL": {
@@ -63,6 +67,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": "",
         "Moonbeam": ""
     }
 }

@@ -34,4 +34,5 @@ export const SUSHISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     [ChainId.Fantom]: [WNATIVE, DAI, USDC, fUSDT, WBTC].map((x) => x[ChainId.Fantom]),
     [ChainId.Avalanche]: [WNATIVE, DAI, USDC, WBTC, USDT].map((x) => x[ChainId.Avalanche]),
     [ChainId.Moonbeam]: [WNATIVE, DAI, USDC, WBTC, USDT].map((x) => x[ChainId.Moonbeam]),
+    [ChainId.Harmony]: [WNATIVE, DAI, USDC, WBTC, USDT].map((x) => x[ChainId.Harmony]),
 }

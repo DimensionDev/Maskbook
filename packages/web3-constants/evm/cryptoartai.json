@@ -19,7 +19,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Moonbeam": ""
+        "Moonbeam": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "ARTIST_ACCEPTING_BIDS_V2": {
         "Mainnet": "0x78C889749f29D2965a76Ede3BBb232A9729Ccf0b",
@@ -41,7 +43,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Moonbeam": ""
+        "Moonbeam": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "CANFT_MARKET": {
         "Mainnet": "0x72d081953957723e540780a0C6bA31725469238E",
@@ -63,6 +67,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Moonbeam": ""
+        "Moonbeam": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     }
 }

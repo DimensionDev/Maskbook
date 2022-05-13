@@ -19,6 +19,8 @@
         "Aurora": ["https://tokens.r2d2.to/latest/1313161554/tokens.json"],
         "Aurora_Testnet": [],
         "Conflux": ["https://tokens.r2d2.to/latest/1030/tokens.json"],
-        "Moonbeam": ["https://tokens.r2d2.to/latest/1284/tokens.json"]
+        "Moonbeam": ["https://tokens.r2d2.to/latest/1284/tokens.json"],
+        "Harmony": ["https://tokens.r2d2.to/latest/1666600000/tokens.json"],
+        "Harmony_Test": ["https://tokens.r2d2.to/latest/1666700000/tokens.json"]
     }
 }

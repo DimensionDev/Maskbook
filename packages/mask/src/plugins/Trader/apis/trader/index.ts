@@ -62,6 +62,13 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.ZENLINK,
                 TradeProvider.SOLFLARE,
             ]
+        case NetworkType.Harmony:
+            return [
+                TradeProvider.SUSHISWAP,
+                TradeProvider.VENOMSWAP,
+                TradeProvider.OPENSWAP,
+                TradeProvider.DEFIKINGDOMS,
+            ]
         case NetworkType.Boba:
         case NetworkType.Fuse:
         case NetworkType.Metis:

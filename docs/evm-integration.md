@@ -119,4 +119,5 @@ Here is the chain abilities checklist. If you are working on a bounty task, plea
 | xDai      | <https://github.com/DimensionDev/Maskbook/pull/4140> |
 | Arbitrum  | <https://github.com/DimensionDev/Maskbook/pull/3558> |
 | Avalanche | <https://github.com/DimensionDev/Maskbook/pull/5289> |
+| Harmony   | <https://github.com/DimensionDev/Maskbook/pull/5835> |
 | Moonbeam  | <https://github.com/DimensionDev/Maskbook/pull/5842> |

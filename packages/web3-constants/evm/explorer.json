@@ -19,7 +19,9 @@
         "Aurora": [],
         "Aurora_Testnet": [],
         "Conflux": [],
-        "Moonbeam": []
+        "Moonbeam": [],
+        "Harmony": [],
+        "Harmony_Test": []
     },
     "EXPLORER_API": {
         "Mainnet": "https://api.etherscan.io/api",
@@ -41,6 +43,8 @@
         "Aurora": "https://explorer.mainnet.aurora.dev/api",
         "Aurora_Testnet": "https://explorer.testnet.aurora.dev/api",
         "Conflux": "https://evmapi.confluxscan.net/api",
-        "Moonbeam": "https://api-moonbeam.moonscan.io/api"
+        "Moonbeam": "https://api-moonbeam.moonscan.io/api",
+        "Harmony": "https://explorer.harmony.one",
+        "Harmony_Test": ""
     }
 }

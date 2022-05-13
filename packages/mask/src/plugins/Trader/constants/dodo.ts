@@ -17,5 +17,6 @@ export const networkNames: Record<NetworkType, string> = {
     [NetworkType.Metis]: '',
     [NetworkType.Optimistic]: '',
     [NetworkType.Moonbeam]: '',
+    [NetworkType.Harmony]: 'harmony',
     [NetworkType.Conflux]: '',
 }

@@ -24,6 +24,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Avalanche,
                     ChainId.Fantom,
                     ChainId.Moonbeam,
+                    ChainId.Harmony,
                 ],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },

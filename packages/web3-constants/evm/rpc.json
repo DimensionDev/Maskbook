@@ -61,7 +61,15 @@
         "Aurora": ["https://mainnet.aurora.dev"],
         "Aurora_Testnet": ["https://testnet.aurora.dev"],
         "Conflux": ["https://evm.confluxrpc.com"],
-        "Moonbeam": ["https://rpc.api.moonbeam.network"]
+        "Moonbeam": ["https://rpc.api.moonbeam.network"],
+        "Harmony": [
+            "https://harmony-0-rpc.gateway.pokt.network",
+            "https://api.harmony.one",
+            "https://a.api.s0.t.hmny.io",
+            "https://api.s0.t.hmny.io",
+            "https://rpc.hermesdefi.io/"
+        ],
+        "Harmony_Test": ["https://api.s0.b.hmny.io/"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 1, 2, 3, 4],
@@ -83,6 +91,8 @@
         "Aurora": [0, 0, 0, 0, 0],
         "Aurora_Testnet": [0, 0, 0, 0, 0],
         "Conflux": [0, 0, 0, 0, 0],
-        "Moonbeam": [0, 0, 0, 0, 0]
+        "Moonbeam": [0, 0, 0, 0, 0],
+        "Harmony": [0, 0, 0, 0, 0],
+        "Harmony_Test": [0, 0, 0, 0, 0]
     }
 }

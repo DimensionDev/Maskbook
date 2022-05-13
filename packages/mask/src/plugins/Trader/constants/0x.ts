@@ -15,6 +15,7 @@ export const ZRX_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Metis]: '',
     [NetworkType.Optimistic]: '',
     [NetworkType.Moonbeam]: '',
+    [NetworkType.Harmony]: '',
     [NetworkType.Conflux]: '',
 }
 

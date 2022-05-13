@@ -35,6 +35,7 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Avalanche:
         case NetworkType.Optimistic:
         case NetworkType.Moonbeam:
+        case NetworkType.Harmony:
         case NetworkType.Conflux:
             return NATIVE_TOKEN_ADDRESS
         default:

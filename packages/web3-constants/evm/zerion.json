@@ -19,6 +19,8 @@
         "Aurora": "aurora-assets",
         "Aurora_Testnet": "",
         "Conflux": "",
+        "Harmony": "harmony-assets",
+        "Harmony_Test": "",
         "Moonbeam": "moonbeam-assets"
     },
     "TRANSACTIONS_SCOPE_NAME": {
@@ -41,6 +43,8 @@
         "Aurora": "aurora-transactions",
         "Aurora_Testnet": "",
         "Conflux": "",
+        "Harmony": "harmony-transactions",
+        "Harmony_Test": "",
         "Moonbeam": "moonbeam-assets"
     }
 }

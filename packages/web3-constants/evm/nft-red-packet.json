@@ -19,7 +19,9 @@
         "Aurora": "0x05ee315E407C21a594f807D61d6CC11306D1F149",
         "Aurora_Testnet": "0x97369fEE7db34E0BfE47861f2ec44b4378d13eB4",
         "Conflux": "0x5b966f3a32db9c180843bcb40267a66b73e4f022",
-        "Moonbeam": "0xF9F7C1496c21bC0180f4B64daBE0754ebFc8A8c0"
+        "Moonbeam": "0xF9F7C1496c21bC0180f4B64daBE0754ebFc8A8c0",
+        "Harmony": "0x83d6b366f21e413f214eb077d5378478e71a5ed2",
+        "Harmony_Test": "0x981be454a930479d92c91a0092d204b64845a5d6"
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-mainnet",
@@ -41,6 +43,8 @@
         "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-aurora",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Moonbeam": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-moonbeam"
+        "Moonbeam": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-moonbeam",
+        "Harmony": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-harmony",
+        "Harmony_Test": ""
     }
 }

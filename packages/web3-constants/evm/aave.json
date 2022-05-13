@@ -19,6 +19,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": "",
         "Moonbeam": ""
     },
     "AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS": {
@@ -41,6 +43,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": "",
         "Moonbeam": ""
     },
     "AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS": {
@@ -63,6 +67,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": "",
         "Moonbeam": ""
     }
 }

@@ -9,7 +9,6 @@ import { EMPTY_LIST, ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender'
 import { usePostInfo, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { usePostClaimedAuthor } from '../../DataSource/usePostInfo'
 import { useRecipientsList } from '../../CompositionDialog/useRecipientsList'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
@@ -28,8 +27,9 @@ export interface DecryptPostSuccessProps {
 function useCanAppendShareTarget(whoAmI: ProfileIdentifier | null): whoAmI is ProfileIdentifier {
     const version = usePostInfoDetails.version()
     const sharedPublic = usePostInfoDetails.publicShared()
-    const authorInPayload = usePostClaimedAuthor()
     const currentPostBy = usePostInfoDetails.author()
+    // TODO: this should be read from the payload.
+    const authorInPayload = currentPostBy
     const postAuthor = authorInPayload || currentPostBy
 
     if (sharedPublic) return false

@@ -199,6 +199,9 @@ export enum TradeProvider {
     PADSWAP = 18,
     SOLFLARE = 19,
     ZENLINK = 20,
+    VENOMSWAP = 16,
+    OPENSWAP = 17,
+    DEFIKINGDOMS = 18,
 }
 
 /** Supported language settings */
@@ -238,6 +241,7 @@ export enum NetworkType {
     Metis = 'Metis',
     Optimistic = 'Optimistic',
     Moonbeam = 'Moonbeam',
+    Harmony = 'Harmony',
     Conflux = 'Conflux',
 }
 
