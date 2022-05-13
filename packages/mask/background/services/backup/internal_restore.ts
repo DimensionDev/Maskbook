@@ -27,6 +27,8 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     await restoreWallets(wallets)
     await restorePosts(posts.values())
     await restorePlugins(plugins)
+
+    if (backup.personas.size || backup.profiles.size) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 
 async function restorePersonas(backup: NormalizedBackup.Data) {
@@ -105,8 +107,6 @@ async function restorePersonas(backup: NormalizedBackup.Data) {
             }
         }
     })
-
-    if (personas.size || profiles.size) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 
 function restorePosts(backup: Iterable<NormalizedBackup.PostBackup>) {
