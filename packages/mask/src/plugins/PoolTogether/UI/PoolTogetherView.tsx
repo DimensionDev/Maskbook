@@ -18,6 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         backgroundColor: '#290b5a',
         textAlign: 'center',
+        width: '100%',
     },
     message: {
         color: theme.palette.text.primary,
