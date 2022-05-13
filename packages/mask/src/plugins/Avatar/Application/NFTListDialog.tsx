@@ -94,16 +94,16 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [currentPage, setCurrentPage] = useState<Application_NFT_LIST_PAGE>(
         Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
     )
+
+    const POLYGON_PAGE = Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page
+
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const {
         data: collectibles,
         error,
         retry,
         state,
-    } = useCollectibles(
-        selectedAccount,
-        currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? ChainId.Mainnet : ChainId.Matic,
-    )
+    } = useCollectibles(selectedAccount, currentPage !== POLYGON_PAGE ? ChainId.Mainnet : ChainId.Matic)
 
     const { showSnackbar } = useCustomSnackbar()
     const onChange = useCallback((address: string) => {
@@ -154,7 +154,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const AddCollectible = (
         <Box className={classes.error}>
             <Typography color="textSecondary" textAlign="center" fontSize={14} fontWeight={600}>
-                {currentPage !== Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? (
+                {currentPage === POLYGON_PAGE ? (
                     <Translate.collectible_on_polygon
                         components={{
                             br: <br />,
@@ -188,9 +188,8 @@ export function NFTListDialog(props: NFTListDialogProps) {
     )
 
     const NoNFTList = () => {
-        if (currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page && tokens.length === 0)
-            return AddCollectible
-        else if (currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page && tokens.length) return
+        if (currentPage === POLYGON_PAGE && tokens.length === 0) return AddCollectible
+        else if (currentPage === POLYGON_PAGE && tokens.length) return
         if (state !== SocketState.done) {
             return LoadStatus
         }
@@ -253,11 +252,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
             </DialogActions>
             <AddNFT
                 account={selectedAccount}
-                chainId={
-                    currentPage === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page
-                        ? ChainId.Mainnet
-                        : ChainId.Matic
-                }
+                chainId={currentPage !== POLYGON_PAGE ? ChainId.Mainnet : ChainId.Matic}
                 title={t.add_collectible()}
                 open={open_}
                 onClose={() => setOpen_(false)}
