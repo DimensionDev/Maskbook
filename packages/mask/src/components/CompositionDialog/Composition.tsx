@@ -119,13 +119,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 title={t('post_dialog__title')}>
                 <DialogContent>
                     <CompositionDialogUI
-                        onConnect={() =>
-                            Services.SocialNetwork.connectSocialNetwork(
-                                currentPersonaIdentifier!,
-                                currentIdentity?.network ?? 'twitter.com',
-                                'local',
-                            )
-                        }
+                        onConnect={connectStatus.action as any}
                         ref={UI}
                         hasClipboardPermission={hasClipboardPermission}
                         onRequestClipboardPermission={onRequestClipboardPermission}

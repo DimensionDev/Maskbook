@@ -10,6 +10,10 @@ import { useCopyToClipboard } from 'react-use'
 import { SearchEmptyIcon, SearchIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
+    root: {
+        minHeight: 400,
+        minWidth: 400,
+    },
     content: {
         padding: '0 !important',
     },
@@ -31,8 +35,6 @@ const useStyles = makeStyles()((theme) => ({
         borderColor: theme.palette.text.third,
     },
     paper: {
-        minHeight: 500,
-        height: 500,
         position: 'relative',
     },
     empty: {
@@ -59,9 +61,6 @@ const useStyles = makeStyles()((theme) => ({
         overflowY: 'auto',
     },
     actions: {
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
         display: 'flex',
         gap: 8,
         padding: 16,
@@ -69,7 +68,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         background: theme.palette.background.paper,
         boxShadow: `0px 0px 20px 0px ${theme.palette.background.messageShadow}`,
-        transform: 'translateX(-16px)',
     },
 }))
 
@@ -130,10 +128,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
 
     return (
         <InjectedDialog
-            sx={{
-                minHeight: 600,
-                minWidth: 600,
-            }}
+            className={classes.root}
             open={props.open}
             title={t('select_specific_friends_dialog__title')}
             onClose={props.onClose}>
@@ -185,18 +180,14 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         ))}
                     </div>
                 )}
-                <div className={classes.actions}>
-                    <Button fullWidth variant="roundedFlat" disabled={props.submitDisabled} onClick={props.onSubmit}>
-                        Back
-                    </Button>
-                    <Button
-                        fullWidth
-                        variant="roundedContained"
-                        disabled={props.submitDisabled}
-                        onClick={props.onSubmit}>
-                        {t('done')}
-                    </Button>
-                </div>
+            </DialogContent>
+            <DialogContent className={classes.actions}>
+                <Button fullWidth variant="roundedFlat" disabled={props.submitDisabled} onClick={props.onSubmit}>
+                    Back
+                </Button>
+                <Button fullWidth variant="roundedContained" disabled={props.submitDisabled} onClick={props.onSubmit}>
+                    {t('done')}
+                </Button>
             </DialogContent>
         </InjectedDialog>
     )

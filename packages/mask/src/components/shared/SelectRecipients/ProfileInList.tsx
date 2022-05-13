@@ -74,8 +74,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 10,
         boxSizing: 'border-box',
         borderRadius: 4,
-        whiteSpace: 'unset',
-        transform: 'translate3d(4px,-20px,0px)',
+        whiteSpace: 'normal',
     },
 }))
 
@@ -138,7 +137,7 @@ export function ProfileInList(props: ProfileInListProps) {
                             disablePortal: true,
                         }}
                         title={ToolTipText}
-                        placement="top-start"
+                        placement="top"
                         arrow
                         open
                         classes={{
