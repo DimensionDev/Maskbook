@@ -24,8 +24,8 @@ import {
     EMPTY_LIST,
     PostIVIdentifier,
     EnhanceableSite,
+    type Subscription,
 } from '@masknet/shared-base'
-import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../ui'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink'
 import type { SupportedPayloadVersions } from '@masknet/encryption'

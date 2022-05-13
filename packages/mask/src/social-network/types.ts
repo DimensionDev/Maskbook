@@ -7,12 +7,12 @@ import type {
     PostIdentifier,
     ProfileIdentifier,
     ProfileInformation,
+    Subscription,
 } from '@masknet/shared-base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import type { SharedComponentOverwrite } from '@masknet/shared'
 import type { PaletteMode, Theme } from '@mui/material'
-import type { Subscription } from 'use-subscription'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
 
 // Don't define values in namespaces

@@ -37,7 +37,7 @@ import { ITO_Status, JSON_PayloadFromChain, JSON_PayloadInMask, PoolFromNetwork 
 import { useDestructCallback } from './hooks/useDestructCallback'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { omit } from 'lodash-unified'
-import { useSubscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 import { PersistentStorages } from '../../../../shared'
 
 const useStyles = makeStyles()((theme) => {
@@ -141,7 +141,12 @@ export function PoolInList(props: PoolInListProps) {
     const { classes } = useStyles()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
-    const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
+    const isDebugging = useSyncExternalStoreWithSelector(
+        PersistentStorages.Settings.storage.debugging.subscription.subscribe,
+        PersistentStorages.Settings.storage.debugging.subscription.getCurrentValue,
+        PersistentStorages.Settings.storage.debugging.subscription.getCurrentValue,
+        (s) => s,
+    )
     // #region Fetch tokens detailed
     const { value: _tokenDetailed } = useFungibleTokenDetailed(
         EthereumTokenType.ERC20,

@@ -1,4 +1,5 @@
-import { useSubscription, Subscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector'
+import type { Subscription } from '@masknet/shared-base'
 import { createManager } from './manage'
 import { getPluginDefine } from './store'
 import type { CurrentSNSNetwork, Plugin } from '../types'
@@ -16,8 +17,18 @@ const minimalModeSub: Subscription<string[]> = {
     subscribe: (f) => events.on('minimalModeChanged', f),
 }
 export function useActivatedPluginsSNSAdaptor(minimalModeEqualsTo: 'any' | boolean) {
-    const minimalMode = useSubscription(minimalModeSub)
-    const result = useSubscription(activatedSub)
+    const minimalMode = useSyncExternalStoreWithSelector(
+        minimalModeSub.subscribe,
+        minimalModeSub.getCurrentValue,
+        minimalModeSub.getCurrentValue,
+        (s) => s,
+    )
+    const result = useSyncExternalStoreWithSelector(
+        activatedSub.subscribe,
+        activatedSub.getCurrentValue,
+        activatedSub.getCurrentValue,
+        (s) => s,
+    )
     if (minimalModeEqualsTo === 'any') return result
     else if (minimalModeEqualsTo === true) return result.filter((x) => minimalMode.includes(x.ID))
     else if (minimalModeEqualsTo === false) return result.filter((x) => !minimalMode.includes(x.ID))
@@ -30,7 +41,12 @@ useActivatedPluginsSNSAdaptor.visibility = {
 }
 
 export function useIsMinimalMode(pluginID: string) {
-    return useSubscription(minimalModeSub).includes(pluginID)
+    return useSyncExternalStoreWithSelector(
+        minimalModeSub.subscribe,
+        minimalModeSub.getCurrentValue,
+        minimalModeSub.getCurrentValue,
+        (s) => s.includes(pluginID),
+    )
 }
 
 /**
@@ -41,7 +57,12 @@ export function useIsMinimalMode(pluginID: string) {
  */
 export function useActivatedPluginSNSAdaptor(pluginID: string, minimalModeEqualsTo: 'any' | boolean) {
     const plugins = useActivatedPluginsSNSAdaptor(minimalModeEqualsTo)
-    const minimalMode = useSubscription(minimalModeSub)
+    const minimalMode = useSyncExternalStoreWithSelector(
+        minimalModeSub.subscribe,
+        minimalModeSub.getCurrentValue,
+        minimalModeSub.getCurrentValue,
+        (s) => s,
+    )
     const result = plugins.find((x) => x.ID === pluginID)
     if (!result) return result
     if (minimalModeEqualsTo === 'any') return result

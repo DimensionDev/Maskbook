@@ -1,5 +1,6 @@
 import { ALL_EVENTS } from '@servie/events'
-import { useSubscription, Subscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector'
+import type { Subscription } from '@masknet/shared-base'
 import { createManager } from './manage'
 import type { Plugin } from '../types'
 
@@ -11,11 +12,21 @@ const subscription: Subscription<Plugin.Dashboard.Definition[]> = {
 }
 
 export function useActivatedPluginsDashboard() {
-    return useSubscription(subscription)
+    return useSyncExternalStoreWithSelector(
+        subscription.subscribe,
+        subscription.getCurrentValue,
+        subscription.getCurrentValue,
+        (s) => s,
+    )
 }
 
 export function useActivatedPluginDashboard(pluginID: string) {
-    const plugins = useSubscription(subscription)
+    const plugins = useSyncExternalStoreWithSelector(
+        subscription.subscribe,
+        subscription.getCurrentValue,
+        subscription.getCurrentValue,
+        (s) => s,
+    )
     return plugins.find((x) => x.ID === pluginID)
 }
 

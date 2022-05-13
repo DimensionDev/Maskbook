@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { Subscription, useSubscription } from 'use-subscription'
+import type { Subscription } from '@masknet/shared-base'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
 
 export function useValueRef<T>(ref: ValueRef<T>) {
@@ -11,7 +12,12 @@ export function useValueRef<T>(ref: ValueRef<T>) {
         [ref],
     )
 
-    return useSubscription(subscription)
+    return useSyncExternalStoreWithSelector(
+        subscription.subscribe,
+        subscription.getCurrentValue,
+        subscription.getCurrentValue,
+        (s) => s,
+    )
 }
 
 export function useValueRefDelayed<T>(ref: ValueRef<T>, latency = 500) {
@@ -27,5 +33,10 @@ export function useValueRefDelayed<T>(ref: ValueRef<T>, latency = 500) {
         [ref, latency],
     )
 
-    return useSubscription(subscription)
+    return useSyncExternalStoreWithSelector(
+        subscription.subscribe,
+        subscription.getCurrentValue,
+        subscription.getCurrentValue,
+        (s) => s,
+    )
 }

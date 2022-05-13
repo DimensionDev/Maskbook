@@ -1,5 +1,4 @@
 import { noop } from 'lodash-unified'
-import type { Subscription } from 'use-subscription'
 import {
     ERC20TokenDetailed,
     ERC721TokenDetailed,
@@ -15,7 +14,7 @@ import {
     createContract,
     isSameAddress,
 } from '@masknet/web3-shared-evm'
-import { isPopupPage } from '@masknet/shared-base'
+import { isPopupPage, type Subscription } from '@masknet/shared-base'
 import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
 import {
     currentAccountSettings,

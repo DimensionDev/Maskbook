@@ -7,7 +7,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
 import { MaskPostExtraPluginWrapper } from '../../plugins/MaskPluginWrapper'
-import { useSubscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 import { PersistentStorages } from '../../../shared'
 
 const PluginHooksRenderer = createInjectHooksRenderer(
@@ -25,7 +25,12 @@ export function PostInspector(props: PostInspectorProps) {
     const postBy = usePostInfoDetails.author()
     const hasEncryptedPost = usePostInfoDetails.hasMaskPayload()
     const postImages = usePostInfoDetails.postMetadataImages()
-    const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
+    const isDebugging = useSyncExternalStoreWithSelector(
+        PersistentStorages.Settings.storage.debugging.subscription.subscribe,
+        PersistentStorages.Settings.storage.debugging.subscription.getCurrentValue,
+        PersistentStorages.Settings.storage.debugging.subscription.getCurrentValue,
+        (s) => s,
+    )
     const whoAmI = useCurrentIdentity()
 
     if (hasEncryptedPost || postImages.length) {

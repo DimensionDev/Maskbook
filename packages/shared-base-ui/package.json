@@ -12,10 +12,12 @@
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@masknet/shared-base": "workspace:*",
-    "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^8.3.4",
     "react-use": "^17.3.2",
-    "use-subscription": "1.6.0",
+    "use-sync-external-store": "^1.1.0",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/use-sync-external-store": "^0.0.3"
   }
 }

@@ -17,7 +17,7 @@ import { CompositionContext } from '@masknet/plugin-infra/content-script'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { Trans } from 'react-i18next'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
-import { useSubscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 
 const useStyles = makeStyles()({
     root: {
@@ -293,7 +293,12 @@ function useEncryptionEncode(props: Pick<CompositionProps, 'supportImageEncoding
 }
 
 function useMetadataDebugger(context: CompositionContext, Editor: TypedMessageEditorRef | null) {
-    const isDebug = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
+    const isDebug = useSyncExternalStoreWithSelector(
+        PersistentStorages.Settings.storage.debugging.subscription.subscribe,
+        PersistentStorages.Settings.storage.debugging.subscription.getCurrentValue,
+        PersistentStorages.Settings.storage.debugging.subscription.getCurrentValue,
+        (s) => s,
+    )
     const [__MetadataDebuggerMeta, __configureMetadataDebugger] = useState<TypedMessage['meta'] | null>(null)
 
     const __syncMetadataDebugger = () => {

@@ -1,4 +1,4 @@
-import type { Subscription } from 'use-subscription'
+import type { Subscription } from '@masknet/shared-base'
 import {
     ChainId,
     ERC1155TokenDetailed,

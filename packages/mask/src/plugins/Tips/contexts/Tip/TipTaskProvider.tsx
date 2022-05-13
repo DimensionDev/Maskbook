@@ -6,7 +6,7 @@ import {
     useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { FC, useContext, useEffect, useMemo, useState } from 'react'
-import { useSubscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 import { getStorage } from '../../storage'
 import { TipTask, TipType } from '../../types'
 import { TargetChainIdContext } from '../TargetChainIdContext'
@@ -28,7 +28,12 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     const { value: nativeTokenDetailed = null } = useNativeTokenDetailed(targetChainId)
     const [token, setToken] = useState<ContextOptions['token']>(nativeTokenDetailed)
     const [erc721TokenId, setErc721TokenId] = useState<ContextOptions['erc721TokenId']>(null)
-    const storedTokens = useSubscription(getStorage().addedTokens.subscription)
+    const storedTokens = useSyncExternalStoreWithSelector(
+        getStorage().addedTokens.subscription.subscribe,
+        getStorage().addedTokens.subscription.getCurrentValue,
+        getStorage().addedTokens.subscription.getCurrentValue,
+        (s) => s,
+    )
 
     const { value: erc721Contract } = useERC721ContractDetailed(erc721Address)
 

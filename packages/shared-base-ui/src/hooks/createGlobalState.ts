@@ -1,4 +1,5 @@
-import { useSubscription, Subscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
+import type { Subscription } from '@masknet/shared-base'
 import { Some, None, Err, Result, Ok, Option } from 'ts-results'
 /**
  * Create a new global state.
@@ -38,7 +39,7 @@ export function createGlobalState<T>(f: () => Promise<T>, subscribe: (callback: 
         },
     }
     function useData() {
-        return useSubscription(sub)
+        return useSyncExternalStoreWithSelector(sub.subscribe, sub.getCurrentValue, sub.getCurrentValue, (s) => s)
     }
     function revalidate() {
         return f()

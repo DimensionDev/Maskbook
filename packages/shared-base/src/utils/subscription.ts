@@ -1,7 +1,20 @@
 import { noop } from 'lodash-unified'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import type { Subscription } from 'use-subscription'
 import { None, Option, Some } from 'ts-results'
+
+type Unsubscribe = () => void
+
+export interface Subscription<T> {
+    /**
+     * (Synchronously) returns the current value of our subscription.
+     */
+    getCurrentValue: () => T
+    /**
+     * This function is passed an event handler to attach to the subscription.
+     * It must return an unsubscribe function that removes the handler.
+     */
+    subscribe: (callback: () => void) => Unsubscribe
+}
 
 export function createConstantSubscription<T>(value: T) {
     return {

@@ -8,7 +8,7 @@ import {
     TransformationContextProvider,
 } from '@masknet/typed-message/dom'
 import { TypedMessageRenderRegistry } from './registry'
-import { useSubscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 import { useMemo } from 'react'
 import { Container, Link } from './Components/Text'
 import { TypedMessageTransformers } from './transformer'
@@ -20,8 +20,18 @@ export interface TypedMessageRenderContextProps extends React.PropsWithChildren<
 }
 
 export function TypedMessageRenderContext(props: TypedMessageRenderContextProps) {
-    const registry = useSubscription(TypedMessageRenderRegistry.subscription)
-    const transformerFunction = useSubscription(TypedMessageTransformers.subscription)
+    const registry = useSyncExternalStoreWithSelector(
+        TypedMessageRenderRegistry.subscription.subscribe,
+        TypedMessageRenderRegistry.subscription.getCurrentValue,
+        TypedMessageRenderRegistry.subscription.getCurrentValue,
+        (s) => s,
+    )
+    const transformerFunction = useSyncExternalStoreWithSelector(
+        TypedMessageTransformers.subscription.subscribe,
+        TypedMessageTransformers.subscription.getCurrentValue,
+        TypedMessageTransformers.subscription.getCurrentValue,
+        (s) => s,
+    )
     const Provider = useMemo((): RenderFragmentsContextType => {
         return { Container, Link, Metadata: props.metadataRender, ...props.renderFragments }
     }, [props.metadataRender, props.renderFragments])

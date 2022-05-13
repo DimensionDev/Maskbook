@@ -40,7 +40,7 @@
     "tinycolor2": "^1.4.2",
     "tss-react": "^3.6.2",
     "unstated-next": "^1.1.0",
-    "use-subscription": "1.6.0"
+    "use-sync-external-store": "^1.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",

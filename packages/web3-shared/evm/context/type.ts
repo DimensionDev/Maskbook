@@ -1,5 +1,5 @@
 import type { RequestArguments } from 'web3-core'
-import type { Subscription } from 'use-subscription'
+import type { Subscription } from '@masknet/shared-base'
 import type {
     ChainId,
     ERC20TokenDetailed,

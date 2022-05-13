@@ -1,6 +1,6 @@
 import type { UnboundedRegistry as MessageChannel } from '@dimensiondev/holoflows-kit'
 import { combineAbortSignal } from '@dimensiondev/kit'
-import type { Subscription } from 'use-subscription'
+import type { Subscription } from '../utils/subscription'
 import type { KVStorageBackend } from './types'
 
 export { createInMemoryKVStorageBackend } from './in-memory'

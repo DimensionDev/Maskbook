@@ -1,5 +1,5 @@
 import type { BigNumber } from 'bignumber.js'
-import type { Subscription } from 'use-subscription'
+import type { Subscription } from '@masknet/shared-base'
 import type { Plugin } from './types'
 
 export interface Pagination {

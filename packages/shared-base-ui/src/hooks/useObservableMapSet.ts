@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { useSubscription, Subscription } from 'use-subscription'
+import type { Subscription } from '@masknet/shared-base'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 import { ALL_EVENTS, ObservableMap, ObservableSet } from '@masknet/shared-base'
 
 export function useObservableValues<T>(map: ObservableMap<any, T> | ObservableSet<T>) {
@@ -13,5 +14,10 @@ export function useObservableValues<T>(map: ObservableMap<any, T> | ObservableSe
         [map],
     )
 
-    return useSubscription(subscription)
+    return useSyncExternalStoreWithSelector(
+        subscription.subscribe,
+        subscription.getCurrentValue,
+        subscription.getCurrentValue,
+        (s) => s,
+    )
 }

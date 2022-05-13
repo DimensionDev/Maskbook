@@ -1,6 +1,6 @@
 import { useMemo, useContext, createContext } from 'react'
 import { createContainer } from 'unstated-next'
-import { useSubscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 import type { Web3ProviderType } from './type'
 import { getChainDetailed, isChainIdValid } from '../utils'
 
@@ -17,19 +17,79 @@ export function useWeb3Context() {
 
 export function useWeb3State() {
     const _ = useWeb3Context()
-    const account = useSubscription(_.account)
-    const allowTestnet = useSubscription(_.allowTestnet)
-    const tokenPrices = useSubscription(_.tokenPrices)
-    const networkType = useSubscription(_.networkType)
-    const providerType = useSubscription(_.providerType)
-    const walletPrimary = useSubscription(_.walletPrimary)
-    const wallets = useSubscription(_.wallets)
-    const chainId = useSubscription(_.chainId)
+    const account = useSyncExternalStoreWithSelector(
+        _.account.subscribe,
+        _.account.getCurrentValue,
+        _.account.getCurrentValue,
+        (s) => s,
+    )
+    const allowTestnet = useSyncExternalStoreWithSelector(
+        _.allowTestnet.subscribe,
+        _.allowTestnet.getCurrentValue,
+        _.allowTestnet.getCurrentValue,
+        (s) => s,
+    )
+    const tokenPrices = useSyncExternalStoreWithSelector(
+        _.tokenPrices.subscribe,
+        _.tokenPrices.getCurrentValue,
+        _.tokenPrices.getCurrentValue,
+        (s) => s,
+    )
+    const networkType = useSyncExternalStoreWithSelector(
+        _.networkType.subscribe,
+        _.networkType.getCurrentValue,
+        _.networkType.getCurrentValue,
+        (s) => s,
+    )
+    const providerType = useSyncExternalStoreWithSelector(
+        _.providerType.subscribe,
+        _.providerType.getCurrentValue,
+        _.providerType.getCurrentValue,
+        (s) => s,
+    )
+    const walletPrimary = useSyncExternalStoreWithSelector(
+        _.walletPrimary.subscribe,
+        _.walletPrimary.getCurrentValue,
+        _.walletPrimary.getCurrentValue,
+        (s) => s,
+    )
+    const wallets = useSyncExternalStoreWithSelector(
+        _.wallets.subscribe,
+        _.wallets.getCurrentValue,
+        _.wallets.getCurrentValue,
+        (s) => s,
+    )
+    const chainId = useSyncExternalStoreWithSelector(
+        _.chainId.subscribe,
+        _.chainId.getCurrentValue,
+        _.chainId.getCurrentValue,
+        (s) => s,
+    )
     const chainDetailed = useMemo(() => getChainDetailed(chainId), [chainId])
-    const erc20Tokens = useSubscription(_.erc20Tokens)
-    const erc721Tokens = useSubscription(_.erc721Tokens)
-    const erc1155Tokens = useSubscription(_.erc1155Tokens)
-    const portfolioProvider = useSubscription(_.portfolioProvider)
+    const erc20Tokens = useSyncExternalStoreWithSelector(
+        _.erc20Tokens.subscribe,
+        _.erc20Tokens.getCurrentValue,
+        _.erc20Tokens.getCurrentValue,
+        (s) => s,
+    )
+    const erc721Tokens = useSyncExternalStoreWithSelector(
+        _.erc721Tokens.subscribe,
+        _.erc721Tokens.getCurrentValue,
+        _.erc721Tokens.getCurrentValue,
+        (s) => s,
+    )
+    const erc1155Tokens = useSyncExternalStoreWithSelector(
+        _.erc1155Tokens.subscribe,
+        _.erc1155Tokens.getCurrentValue,
+        _.erc1155Tokens.getCurrentValue,
+        (s) => s,
+    )
+    const portfolioProvider = useSyncExternalStoreWithSelector(
+        _.portfolioProvider.subscribe,
+        _.portfolioProvider.getCurrentValue,
+        _.portfolioProvider.getCurrentValue,
+        (s) => s,
+    )
     return {
         allowTestnet,
         account,

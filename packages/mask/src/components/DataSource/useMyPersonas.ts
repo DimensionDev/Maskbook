@@ -1,7 +1,7 @@
 import Services from '../../extension/service'
 import { MaskMessages } from '../../utils/messages'
 import { createSubscriptionFromAsyncSuspense } from '@masknet/shared-base'
-import { useSubscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 
 const personas = createSubscriptionFromAsyncSuspense(
     () => Services.Identity.queryOwnedPersonaInformation(true),
@@ -9,5 +9,10 @@ const personas = createSubscriptionFromAsyncSuspense(
 )
 
 export function useMyPersonas() {
-    return useSubscription(personas)
+    return useSyncExternalStoreWithSelector(
+        personas.subscribe,
+        personas.getCurrentValue,
+        personas.getCurrentValue,
+        (s) => s,
+    )
 }

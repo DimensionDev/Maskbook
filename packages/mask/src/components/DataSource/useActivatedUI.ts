@@ -1,8 +1,8 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
-import type { PersonaIdentifier, ProfileIdentifier, ProfileInformation } from '@masknet/shared-base'
+import type { PersonaIdentifier, ProfileIdentifier, ProfileInformation, Subscription } from '@masknet/shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
-import { Subscription, useSubscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { isEqual } from 'lodash-unified'
 
@@ -19,7 +19,12 @@ export function useCurrentIdentity(): {
     identifier: ProfileIdentifier
     linkedPersona?: { nickname?: string; identifier: PersonaIdentifier; fingerprint?: string }
 } | null {
-    return useSubscription(CurrentIdentitySubscription)
+    return useSyncExternalStoreWithSelector(
+        CurrentIdentitySubscription.subscribe,
+        CurrentIdentitySubscription.getCurrentValue,
+        CurrentIdentitySubscription.getCurrentValue,
+        (s) => s,
+    )
 }
 
 const CurrentIdentitySubscription: Subscription<ProfileInformation> = {

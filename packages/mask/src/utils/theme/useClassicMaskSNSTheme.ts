@@ -2,7 +2,7 @@ import { unstable_createMuiStrictModeTheme } from '@mui/material'
 import type { Theme } from '@mui/material/styles/createTheme'
 import { useRef } from 'react'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { useSubscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 import { MaskDarkTheme, MaskLightTheme } from './MaskTheme'
 import { useThemeLanguage } from './useThemeLanguage'
 import { createSubscriptionFromValueRef } from '@masknet/shared-base'
@@ -19,7 +19,12 @@ const defaultUseTheme = (t: Theme) => t
 export function useClassicMaskSNSTheme() {
     const provider = useRef(activatedSocialNetworkUI.customization.paletteMode?.current || staticRef).current
     const usePostTheme = useRef(activatedSocialNetworkUI.customization.useTheme || defaultUseTheme).current
-    const palette = useSubscription(provider)
+    const palette = useSyncExternalStoreWithSelector(
+        provider.subscribe,
+        provider.getCurrentValue,
+        provider.getCurrentValue,
+        (s) => s,
+    )
     const baseTheme = palette === 'dark' ? MaskDarkTheme : MaskLightTheme
 
     // TODO: support RTL?

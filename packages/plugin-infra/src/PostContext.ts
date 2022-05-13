@@ -4,13 +4,14 @@ import {
     PostIVIdentifier,
     type PostIdentifier,
     type ProfileIdentifier,
+    type Subscription,
 } from '@masknet/shared-base'
 import { useObservableValues, useValueRef } from '@masknet/shared-base-ui'
 import type { TypedMessageTuple } from '@masknet/typed-message'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { Some } from 'ts-results'
 import { createContext, createElement, memo, useContext } from 'react'
-import { Subscription, useSubscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
 export interface PostContextSNSActions {
     hasPayloadLike(content: string): boolean
@@ -120,8 +121,14 @@ export const usePostInfoDetails: {
             if (k instanceof ObservableMap) return useObservableValues<any>(k)
             // eslint-disable-next-line react-hooks/rules-of-hooks
             if (k instanceof ObservableSet) return useObservableValues<any>(k)
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            if (isSubscription(k)) return useSubscription<any>(k)
+            if (isSubscription(k))
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                return useSyncExternalStoreWithSelector<any, any>(
+                    k.subscribe,
+                    k.getCurrentValue,
+                    k.getCurrentValue,
+                    (s) => s,
+                )
             return k
         }
         return _[key]

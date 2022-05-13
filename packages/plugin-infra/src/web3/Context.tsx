@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from 'react'
 import { createContainer } from 'unstated-next'
-import { useSubscription } from 'use-subscription'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector'
 import { CurrencyType, NetworkPluginID, Web3Plugin } from '../web3-types'
 import { createConstantSubscription } from '@masknet/shared-base'
 
@@ -28,21 +28,96 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
     const pluginContext = context[pluginID]
 
     const { Shared, Utils } = pluginContext ?? {}
-    const allowTestnet = useSubscription(Shared?.allowTestnet ?? FALSE)
-    const chainId = useSubscription(Shared?.chainId ?? ZERO)
-    const account = useSubscription(Shared?.account ?? EMPTY_STRING)
-    const networkType = useSubscription(Shared?.networkType ?? EMPTY_STRING)
-    const providerType = useSubscription(Shared?.providerType ?? EMPTY_STRING)
-    const assetType = useSubscription(Shared?.assetType ?? EMPTY_STRING)
-    const nameType = useSubscription(Shared?.nameType ?? EMPTY_STRING)
-    const collectibleType = useSubscription(Shared?.collectibleType ?? EMPTY_STRING)
-    const transactionType = useSubscription(Shared?.transactionType ?? EMPTY_STRING)
-    const currencyType = useSubscription(Shared?.currencyType ?? USD_CURRENCY)
-    const prices = useSubscription(Shared?.prices ?? NULL)
-    const walletPrimary = useSubscription(Shared?.walletPrimary ?? NULL)
-    const wallets = useSubscription(Shared?.wallets ?? EMPTY_ARRAY)
-    const fungibleTokens = useSubscription(Shared?.fungibleTokens ?? EMPTY_ARRAY)
-    const nonFungibleTokens = useSubscription(Shared?.nonFungibleTokens ?? EMPTY_ARRAY)
+    const allowTestnet = useSyncExternalStoreWithSelector(
+        (Shared?.allowTestnet ?? FALSE).subscribe,
+        (Shared?.allowTestnet ?? FALSE).getCurrentValue,
+        (Shared?.allowTestnet ?? FALSE).getCurrentValue,
+        (s) => s,
+    )
+    const chainId = useSyncExternalStoreWithSelector(
+        (Shared?.chainId ?? ZERO).subscribe,
+        (Shared?.chainId ?? ZERO).getCurrentValue,
+        (Shared?.chainId ?? ZERO).getCurrentValue,
+        (s) => s,
+    )
+    const account = useSyncExternalStoreWithSelector(
+        (Shared?.account ?? EMPTY_STRING).subscribe,
+        (Shared?.account ?? EMPTY_STRING).getCurrentValue,
+        (Shared?.account ?? EMPTY_STRING).getCurrentValue,
+        (s) => s,
+    )
+    const networkType = useSyncExternalStoreWithSelector(
+        (Shared?.networkType ?? EMPTY_STRING).subscribe,
+        (Shared?.networkType ?? EMPTY_STRING).getCurrentValue,
+        (Shared?.networkType ?? EMPTY_STRING).getCurrentValue,
+        (s) => s,
+    )
+    const providerType = useSyncExternalStoreWithSelector(
+        (Shared?.providerType ?? EMPTY_STRING).subscribe,
+        (Shared?.providerType ?? EMPTY_STRING).getCurrentValue,
+        (Shared?.providerType ?? EMPTY_STRING).getCurrentValue,
+        (s) => s,
+    )
+    const assetType = useSyncExternalStoreWithSelector(
+        (Shared?.assetType ?? EMPTY_STRING).subscribe,
+        (Shared?.assetType ?? EMPTY_STRING).getCurrentValue,
+        (Shared?.assetType ?? EMPTY_STRING).getCurrentValue,
+        (s) => s,
+    )
+    const nameType = useSyncExternalStoreWithSelector(
+        (Shared?.nameType ?? EMPTY_STRING).subscribe,
+        (Shared?.nameType ?? EMPTY_STRING).getCurrentValue,
+        (Shared?.nameType ?? EMPTY_STRING).getCurrentValue,
+        (s) => s,
+    )
+    const collectibleType = useSyncExternalStoreWithSelector(
+        (Shared?.collectibleType ?? EMPTY_STRING).subscribe,
+        (Shared?.collectibleType ?? EMPTY_STRING).getCurrentValue,
+        (Shared?.collectibleType ?? EMPTY_STRING).getCurrentValue,
+        (s) => s,
+    )
+    const transactionType = useSyncExternalStoreWithSelector(
+        (Shared?.transactionType ?? EMPTY_STRING).subscribe,
+        (Shared?.transactionType ?? EMPTY_STRING).getCurrentValue,
+        (Shared?.transactionType ?? EMPTY_STRING).getCurrentValue,
+        (s) => s,
+    )
+    const currencyType = useSyncExternalStoreWithSelector(
+        (Shared?.currencyType ?? USD_CURRENCY).subscribe,
+        (Shared?.currencyType ?? USD_CURRENCY).getCurrentValue,
+        (Shared?.currencyType ?? USD_CURRENCY).getCurrentValue,
+        (s) => s,
+    )
+    const prices = useSyncExternalStoreWithSelector(
+        (Shared?.prices ?? NULL).subscribe,
+        (Shared?.prices ?? NULL).getCurrentValue,
+        (Shared?.prices ?? NULL).getCurrentValue,
+        (s) => s,
+    )
+    const walletPrimary = useSyncExternalStoreWithSelector(
+        (Shared?.walletPrimary ?? NULL).subscribe,
+        (Shared?.walletPrimary ?? NULL).getCurrentValue,
+        (Shared?.walletPrimary ?? NULL).getCurrentValue,
+        (s) => s,
+    )
+    const wallets = useSyncExternalStoreWithSelector(
+        (Shared?.wallets ?? EMPTY_ARRAY).subscribe,
+        (Shared?.wallets ?? EMPTY_ARRAY).getCurrentValue,
+        (Shared?.wallets ?? EMPTY_ARRAY).getCurrentValue,
+        (s) => s,
+    )
+    const fungibleTokens = useSyncExternalStoreWithSelector(
+        (Shared?.fungibleTokens ?? EMPTY_ARRAY).subscribe,
+        (Shared?.fungibleTokens ?? EMPTY_ARRAY).getCurrentValue,
+        (Shared?.fungibleTokens ?? EMPTY_ARRAY).getCurrentValue,
+        (s) => s,
+    )
+    const nonFungibleTokens = useSyncExternalStoreWithSelector(
+        (Shared?.nonFungibleTokens ?? EMPTY_ARRAY).subscribe,
+        (Shared?.nonFungibleTokens ?? EMPTY_ARRAY).getCurrentValue,
+        (Shared?.nonFungibleTokens ?? EMPTY_ARRAY).getCurrentValue,
+        (s) => s,
+    )
 
     return {
         allowTestnet,
