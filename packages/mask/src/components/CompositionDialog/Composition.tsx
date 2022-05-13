@@ -119,7 +119,10 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 title={t('post_dialog__title')}>
                 <DialogContent>
                     <CompositionDialogUI
-                        onConnect={connectStatus.action as any}
+                        onConnect={() => {
+                            ;(connectStatus as any).action()
+                            setOpen(false)
+                        }}
                         ref={UI}
                         hasClipboardPermission={hasClipboardPermission}
                         onRequestClipboardPermission={onRequestClipboardPermission}

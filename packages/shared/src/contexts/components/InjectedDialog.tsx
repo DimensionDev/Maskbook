@@ -38,7 +38,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         fontSize: 18,
         lineHeight: '22px',
         fontWeight: 700,
-        margin: '7px 0',
     },
     dialogCloseButton: {
         color: theme.palette.text.primary,

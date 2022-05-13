@@ -1,6 +1,6 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
-import { Button, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
+import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
 import Fuse from 'fuse.js'
 import { useMemo, useState } from 'react'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
@@ -13,6 +13,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         minHeight: 400,
         minWidth: 400,
+        overflow: 'hidden',
     },
     content: {
         padding: '0 !important',
@@ -35,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         borderColor: theme.palette.text.third,
     },
     paper: {
+        height: 450,
         position: 'relative',
     },
     empty: {
@@ -181,14 +183,14 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     </div>
                 )}
             </DialogContent>
-            <DialogContent className={classes.actions}>
+            <DialogActions className={classes.actions}>
                 <Button fullWidth variant="roundedFlat" disabled={props.submitDisabled} onClick={props.onSubmit}>
                     Back
                 </Button>
                 <Button fullWidth variant="roundedContained" disabled={props.submitDisabled} onClick={props.onSubmit}>
                     {t('done')}
                 </Button>
-            </DialogContent>
+            </DialogActions>
         </InjectedDialog>
     )
 }

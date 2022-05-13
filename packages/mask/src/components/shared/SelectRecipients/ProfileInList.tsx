@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { ListItemText, Checkbox, ListItemAvatar, ListItem, Tooltip } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
-import { formatPersonaPublicKey, ProfileInformation as Profile } from '@masknet/shared-base'
+import { formatPersonaFingerprint, formatPersonaPublicKey, ProfileInformation as Profile } from '@masknet/shared-base'
 import { Avatar } from '../../../utils/components/Avatar'
 import type { CheckboxProps } from '@mui/material/Checkbox'
 import { CopyIcon } from '@masknet/icons'
@@ -75,6 +75,8 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         borderRadius: 4,
         whiteSpace: 'normal',
+        marginTop: 0,
+        transform: 'translate(5px,45px,0px)',
     },
 }))
 
@@ -90,8 +92,10 @@ export interface ProfileInListProps extends withClasses<never> {
 export function ProfileInList(props: ProfileInListProps) {
     const { classes, cx } = useStyles()
     const profile = props.item
-
-    const secondary = formatPersonaPublicKey(profile.publicHexKey?.toUpperCase() ?? '', 4)
+    const resolveSeconderyText = () => {
+        if (profile.publicHexKey) return formatPersonaPublicKey(profile.publicHexKey?.toUpperCase() ?? '', 4)
+        return formatPersonaFingerprint(profile.fingerprint ?? '', 5)
+    }
     const resolvePrimaryText = () => {
         if (profile.fromNextID) {
             const rawStr = profile.linkedTwitterNames!.map((x) => '@' + x).join('')
@@ -135,11 +139,11 @@ export function ProfileInList(props: ProfileInListProps) {
                     <Tooltip
                         PopperProps={{
                             disablePortal: true,
+                            placement: 'auto',
                         }}
+                        followCursor
                         title={ToolTipText}
-                        placement="top"
                         arrow
-                        open
                         classes={{
                             // popper: classes.toolTip,
                             tooltip: classes.toolTip,
@@ -162,11 +166,11 @@ export function ProfileInList(props: ProfileInListProps) {
                             highlightClassName={classes.highlighted}
                             searchWords={[props.search ?? '']}
                             autoEscape
-                            textToHighlight={secondary || ''}
+                            textToHighlight={resolveSeconderyText()}
                         />
                         <CopyIcon
                             className={classes.actionIcon}
-                            onClick={() => props.onCopy(profile.publicHexKey?.toUpperCase() ?? '')}
+                            onClick={() => props.onCopy(resolveSeconderyText() ?? '')}
                         />
                         {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
                     </div>
