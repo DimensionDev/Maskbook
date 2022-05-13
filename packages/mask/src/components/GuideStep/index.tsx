@@ -219,7 +219,7 @@ export default function GuideStep({
                                         <div className={classes.buttonContainer}>
                                             {step === total ? (
                                                 <NextButton style={{ width: '100%' }} onClick={onTry}>
-                                                    {t('try')}
+                                                    {t('ok')}
                                                 </NextButton>
                                             ) : (
                                                 <>
