@@ -25,7 +25,6 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 'bold',
     },
     flex: {
-        zIndex: 999,
         display: 'flex',
         alignItems: 'center',
     },
@@ -100,7 +99,8 @@ export function ProfileInList(props: ProfileInListProps) {
         if (profile.fromNextID) {
             const rawStr = profile.linkedTwitterNames!.map((x) => '@' + x).join('')
             if (rawStr.length > 15) {
-                return truncate(rawStr, { length: 15 }) + profile.linkedTwitterNames?.length
+                const len = profile.linkedTwitterNames?.length
+                return truncate(rawStr, { length: 15 }) + (len! > 1 ? len : '')
             }
             return rawStr
         }
@@ -145,7 +145,6 @@ export function ProfileInList(props: ProfileInListProps) {
                         title={ToolTipText}
                         arrow
                         classes={{
-                            // popper: classes.toolTip,
                             tooltip: classes.toolTip,
                         }}>
                         <div className={classes.flex}>
@@ -170,7 +169,9 @@ export function ProfileInList(props: ProfileInListProps) {
                         />
                         <CopyIcon
                             className={classes.actionIcon}
-                            onClick={() => props.onCopy(resolveSecondaryText() ?? '')}
+                            onClick={() =>
+                                props.onCopy((profile.publicHexKey ?? profile.fingerprint)?.toUpperCase() ?? '')
+                            }
                         />
                         {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
                     </div>

@@ -36,7 +36,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const connectStatus = usePersonaConnectStatus()
     const { value: currentPersonaIdentifier } = useAsync(() => {
         return Services.Settings.getCurrentPersonaIdentifier()
-    }, [])
+    }, [connectStatus])
     const hasPersona = !!useMyPersonas().find((x) =>
         x.linkedProfiles.some((y) => y.identifier.network === currentIdentity?.network),
     )
@@ -101,8 +101,9 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
     const getE2eEncryptionDisabled = () => {
-        if (!hasPersona) return E2EUnavailableReason.NoPersona
-        if (!connectStatus.connected) return E2EUnavailableReason.NoConnect
+        if (!connectStatus.currentConnectedPersona && !connectStatus.hasPersona && !hasPersona)
+            return E2EUnavailableReason.NoPersona
+        if (!connectStatus.connected && connectStatus.hasPersona) return E2EUnavailableReason.NoConnect
         if (!hasLocalKey) return E2EUnavailableReason.NoLocalKey
         return undefined
     }
@@ -120,10 +121,12 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 <DialogContent>
                     <CompositionDialogUI
                         onConnect={() => {
+                            console.log('connect')
                             ;(connectStatus as any).action()
                             setOpen(false)
                         }}
                         onCreate={() => {
+                            console.log('create')
                             Services.Helper.openDashboard(DashboardRoutes.Setup)
                             setOpen(false)
                         }}

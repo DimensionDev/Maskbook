@@ -136,8 +136,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     const { visibilityPopperList, methodsPopperList } = usePopoverListDataSource()
     const { setEncryptionKind, encryptionKind, recipientSelectorAvailable, recipients, setRecipients } =
         useSetEncryptionKind(props)
-    const { encodingKind, imagePayloadReadonly, imagePayloadSelected, imagePayloadVisible, setEncoding } =
-        useEncryptionEncode(props)
+    const { encodingKind, setEncoding } = useEncryptionEncode(props)
 
     const reset = useCallback(() => {
         startTransition(() => {

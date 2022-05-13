@@ -17,7 +17,6 @@ export function useRecipientsList(): LazyRecipients {
         if (recipients) return
         Services.Crypto.getRecipients(current).then(setRecipients)
     }, [current, !!recipients])
-
     return useMemo(
         () => ({
             request,

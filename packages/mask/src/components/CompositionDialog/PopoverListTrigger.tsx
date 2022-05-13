@@ -153,6 +153,7 @@ export function PopoverListTrigger({
 }: PopoverListTriggerProp) {
     const { classes } = useStyles()
     const [selectedValue, setSelectedValue] = useState<string>(selected)
+
     const getName = () => {
         return selectedValue === 'share'
             ? `${shareWithNum} friends`
@@ -195,7 +196,12 @@ export function PopoverListTrigger({
                             <PopoverListItem
                                 onConnect={onConnect}
                                 setValue={setSelectedValue}
-                                toShare={toShare}
+                                toShare={() => {
+                                    if (toShare) {
+                                        toShare()
+                                    }
+                                    setAnchorEl(null)
+                                }}
                                 e2eDisabled={e2eDisabled}
                                 key={idx}
                                 type={x.type}

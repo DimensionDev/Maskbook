@@ -23,13 +23,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     inputRoot: {
         padding: '4px 10px',
-        marginTop: theme.spacing(1),
         borderRadius: 8,
         width: '100%',
         background: theme.palette.background.input,
         border: '1px solid transparent',
         fontSize: 14,
-        marginBottom: 8,
+        marginBottom: 16,
     },
     inputFocused: {
         background: 'none',
@@ -58,7 +57,9 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         display: 'flex',
         flexWrap: 'wrap',
+        alignContent: 'baseline',
         gap: 12,
+        minHeight: 300,
         maxHeight: 380,
         overflowY: 'auto',
     },
@@ -99,7 +100,9 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         deps: [],
         successText: 'public key copied',
     })
-
+    useMemo(() => {
+        setSearch('')
+    }, [props.open])
     const itemsAfterSearch = useMemo(() => {
         const fuse = new Fuse(items, {
             keys: ['identifier.userId', 'nickname', 'address', 'publicHexKey'],
@@ -107,7 +110,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             ignoreLocation: true,
             threshold: 0,
         })
-        return search === '' ? items : fuse.search(search).map((item) => item.item)
+        return items
     }, [search, items])
 
     const Empty = () => (
@@ -159,27 +162,30 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     <LoadingRender />
                 ) : (
                     <div className={classes.list}>
-                        {itemsAfterSearch.length === 0 ? <Empty /> : null}
-                        {itemsAfterSearch.map((item, idx) => (
-                            <ProfileInList
-                                onCopy={(v) => copyFingerprint(v)}
-                                key={idx}
-                                item={item}
-                                search={search}
-                                checked={
-                                    props.selected.some((x) => x.publicHexKey === item.publicHexKey) ||
-                                    disabledItems?.includes(item)
-                                }
-                                disabled={props.disabled || disabledItems?.includes(item)}
-                                onChange={(_, checked) => {
-                                    if (checked) {
-                                        props.onSelect(item)
-                                    } else {
-                                        props.onDeselect(item)
+                        {itemsAfterSearch.length === 0 ? (
+                            <Empty />
+                        ) : (
+                            itemsAfterSearch.map((item, idx) => (
+                                <ProfileInList
+                                    onCopy={(v) => copyFingerprint(v)}
+                                    key={idx}
+                                    item={item}
+                                    search={search}
+                                    checked={
+                                        props.selected.some((x) => x.publicHexKey === item.publicHexKey) ||
+                                        disabledItems?.includes(item)
                                     }
-                                }}
-                            />
-                        ))}
+                                    disabled={props.disabled || disabledItems?.includes(item)}
+                                    onChange={(_, checked) => {
+                                        if (checked) {
+                                            props.onSelect(item)
+                                        } else {
+                                            props.onDeselect(item)
+                                        }
+                                    }}
+                                />
+                            ))
+                        )}
                     </div>
                 )}
             </DialogContent>
