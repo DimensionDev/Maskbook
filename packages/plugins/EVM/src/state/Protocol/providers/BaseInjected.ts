@@ -1,52 +1,23 @@
 import { first } from 'lodash-unified'
 import type { RequestArguments } from 'web3-core'
-import { delay } from '@dimensiondev/kit'
 import { isExtensionSiteType } from '@masknet/shared-base'
+import type { EthereumProvider } from '@masknet/injected-script'
 import { ChainId, EthereumMethodType, Web3Provider } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types'
 import { BaseProvider } from './Base'
 
 export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
-    private provider: Web3Provider | null = null
-
-    constructor(protected path = ['ethereum']) {
+    constructor(protected bridge: EthereumProvider) {
         super()
     }
 
-    // Retrieve the in-page provider instance from the global variable.
-    protected get inpageProvider() {
-        if (!this.path.length) return null
-
-        let result: unknown = window
-
-        for (const name of this.path) {
-            // @ts-ignore
-            result = Reflect.has(result, name)
-            if (!result) return null
-        }
-        return result as Web3Provider
-    }
-
     override get ready() {
-        return !!this.inpageProvider
+        return !!this.bridge
     }
 
     override get readyPromise() {
         if (isExtensionSiteType()) return Promise.reject(new Error('Not avaiable on extension site.'))
-
-        return new Promise<void>(async (resolve, reject) => {
-            let i = 60 // wait for 60 iteration, total 60s
-
-            while (i > 0) {
-                i -= 1
-                if (this.ready) {
-                    resolve()
-                    return
-                }
-                await delay(1000)
-            }
-            reject('Failed to detect in-page provider instance.')
-        })
+        return this.bridge.untilAvailable().then(() => undefined)
     }
 
     protected onAccountsChanged(accounts: string[]) {
@@ -60,13 +31,11 @@ export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
     override async createWeb3Provider(chainId?: ChainId) {
         await this.readyPromise
 
-        if (this.provider) return this.provider
-        if (!this.inpageProvider) throw new Error('Failed to detect in-page provider.')
+        if (!this.bridge) throw new Error('Failed to detect in-page provider.')
 
-        this.provider = this.inpageProvider
-        this.provider.on('accountsChanged', this.onAccountsChanged.bind(this))
-        this.provider.on('chainChanged', this.onChainChanged.bind(this))
-        return this.provider
+        this.bridge.on('accountsChanged', this.onAccountsChanged.bind(this))
+        this.bridge.on('chainChanged', this.onChainChanged.bind(this))
+        return this.bridge as unknown as Web3Provider
     }
 
     override async request<T extends unknown>(requestArguments: RequestArguments): Promise<T> {

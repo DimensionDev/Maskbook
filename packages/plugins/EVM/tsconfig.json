@@ -8,6 +8,7 @@
   "include": ["src", "src/**/*.json"],
   "references": [
     { "path": "../../icons" },
+    { "path": "../../injected-script/sdk" },
     { "path": "../../plugin-infra" },
     { "path": "../../theme" },
     { "path": "../../shared" },
