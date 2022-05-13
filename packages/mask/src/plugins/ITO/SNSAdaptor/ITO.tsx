@@ -274,7 +274,6 @@ export function ITO(props: ITO_Props) {
     const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime, endTime, qualificationAddress } =
         availabilityComputed
     // #endregion
-
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(availability?.remaining ?? '0')
     const sold = total.minus(total_remaining)
@@ -744,14 +743,28 @@ export function ITO(props: ITO_Props) {
 
                     if (!account || !chainIdValid) {
                         return (
-                            <ActionButton
-                                startIcon={<WalletConnectIcon style={{ width: 18, height: 18 }} />}
-                                onClick={openSelectProviderDialog}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_wallet_connect_a_wallet')}
-                            </ActionButton>
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <ActionButton
+                                        startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
+                                        onClick={onShareSuccess}
+                                        variant="contained"
+                                        size="large"
+                                        className={classes.actionButton}>
+                                        {t('plugin_ito_share')}
+                                    </ActionButton>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <ActionButton
+                                        startIcon={<WalletConnectIcon style={{ width: 18, height: 18 }} />}
+                                        onClick={openSelectProviderDialog}
+                                        variant="contained"
+                                        size="large"
+                                        className={classes.actionButton}>
+                                        {t('plugin_wallet_connect_a_wallet')}
+                                    </ActionButton>
+                                </Grid>
+                            </Grid>
                         )
                     }
 
