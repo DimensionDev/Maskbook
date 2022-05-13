@@ -150,7 +150,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                     fontSize={16}
                     fontWeight={700}
                     color={MaskColorVar.textPluginColor}>
-                    {title ?? t('plugin_default_title')}
+                    {wrapperProps?.title ?? title ?? t('plugin_default_title')}
                 </Typography>
                 <div className={classes.publish}>{publisherInfo}</div>
             </div>

@@ -346,6 +346,7 @@ export namespace Plugin.SNSAdaptor {
 
     export interface PluginWrapperProps {
         icon?: React.ReactNode
+        title?: string
         backgroundGradient?: string
     }
 
