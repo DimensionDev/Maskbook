@@ -17,12 +17,15 @@ export async function createConnectionURI() {
 
 // step2:
 // If user confirmed the request we will receive the 'connect' event
-let resolveConnect: ((result: { account?: string; chainId: ChainId }) => void) | undefined
+type Account = { account?: string; chainId: ChainId }
+let deferredConnect: Promise<Account> | null = null
+let resolveConnect: ((result: Account) => void) | undefined
 let rejectConnect: ((error: Error) => void) | undefined
 
 export async function connectWalletConnect() {
-    const [deferred, resolve, reject] = defer<{ account?: string; chainId: ChainId }>()
+    const [deferred, resolve, reject] = defer<Account>()
 
+    deferredConnect = deferred
     resolveConnect = resolve
     rejectConnect = reject
     createWalletConnect().then(resolve, reject)
@@ -44,6 +47,11 @@ export async function createWalletConnect() {
         account: first(accounts),
         chainId,
     }
+}
+
+export async function untilWalletConnect() {
+    if (!deferredConnect) throw new Error('No connection.')
+    return deferredConnect
 }
 
 export async function cancelWalletConnect() {

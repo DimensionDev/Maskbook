@@ -27,6 +27,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
         whiteSpace: 'nowrap',
+        display: 'flex',
     },
     dialogContent: {
         overscrollBehavior: 'contain',
