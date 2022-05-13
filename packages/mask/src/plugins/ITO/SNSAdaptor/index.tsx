@@ -121,6 +121,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ],
     wrapperProps: {
         icon: <MarketsIcon style={{ filter: 'drop-shadow(0px 6px 12px rgba(27, 144, 238, 0.2))', fontSize: 24 }} />,
+        title: 'ITO (Initial Twitter Offering)',
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(41, 228, 253, 0.2) 100%), #FFFFFF;',
     },
