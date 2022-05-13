@@ -25,7 +25,6 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
-        padding: theme.spacing(1, 2),
         whiteSpace: 'nowrap',
     },
     dialogContent: {
@@ -38,7 +37,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     },
     dialogCloseButton: {
         color: theme.palette.text.primary,
-        position: 'absolute',
         padding: 0,
         width: 24,
         height: 24,
