@@ -19,7 +19,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": ""
+        "Astar": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "API_URL": {
         "Mainnet": "https://api-v2.dhedge.org/graphql",
@@ -41,6 +43,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": ""
+        "Astar": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     }
 }

@@ -199,6 +199,27 @@ export function useAllTradeComputed(
         traderEstimateGas: wannaSwapEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.WANNASWAP, inputAmount_, inputToken, outputToken)
 
+    // Venom Swap
+    const {
+        trader_: venomswap_,
+        trader: venomswap,
+        traderEstimateGas: venomswapEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.VENOMSWAP, inputAmount_, inputToken, outputToken)
+
+    // Open Swap
+    const {
+        trader_: openswap_,
+        trader: openswap,
+        traderEstimateGas: openswapEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.OPENSWAP, inputAmount_, inputToken, outputToken)
+
+    // Defi Kingdoms
+    const {
+        trader_: defikingdoms_,
+        trader: defikingdoms,
+        traderEstimateGas: defikingdomsEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.DEFIKINGDOMS, inputAmount_, inputToken, outputToken)
+
     // Mdex
     const {
         trader_: mdex_,
@@ -243,6 +264,8 @@ export function useAllTradeComputed(
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
+        { provider: TradeProvider.VENOMSWAP, ...venomswap_, value: venomswap, gas: venomswapEstimateGas },
+        { provider: TradeProvider.OPENSWAP, ...openswap_, value: openswap, gas: openswapEstimateGas },
         { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
         { provider: TradeProvider.ARTHSWAP, ...arthswap_, value: arthswap, gas: arthswapEstimateGas },
         { provider: TradeProvider.VERSA, ...versa_, value: versa, gas: versaEstimateGas },

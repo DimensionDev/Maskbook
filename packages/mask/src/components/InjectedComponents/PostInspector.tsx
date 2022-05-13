@@ -23,18 +23,18 @@ export interface PostInspectorProps {
 }
 export function PostInspector(props: PostInspectorProps) {
     const postBy = usePostInfoDetails.author()
-    const encryptedPost = usePostInfoDetails.containingMaskPayload()
+    const hasEncryptedPost = usePostInfoDetails.hasMaskPayload()
     const postImages = usePostInfoDetails.postMetadataImages()
     const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
     const whoAmI = useCurrentIdentity()
 
-    if (encryptedPost.ok || postImages.length) {
+    if (hasEncryptedPost || postImages.length) {
         if (!isDebugging) props.zipPost()
         return withAdditionalContent(<DecryptPost whoAmI={whoAmI?.identifier || null} />)
     }
     return withAdditionalContent(null)
     function withAdditionalContent(x: JSX.Element | null) {
-        const slot = encryptedPost.ok ? null : <slot />
+        const slot = hasEncryptedPost ? null : <slot />
         return (
             <>
                 {process.env.NODE_ENV === 'development' && !postBy ? (

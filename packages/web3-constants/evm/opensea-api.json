@@ -19,7 +19,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": ""
+        "Astar": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "GET_SINGLE_ASSET_URL": {
         "Mainnet": "https://api.opensea.io/api/v1/asset",
@@ -41,7 +43,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": ""
+        "Astar": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "GET_ASSETS_URL": {
         "Mainnet": "https://api.opensea.io/api/v1/assets",
@@ -63,6 +67,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": ""
+        "Astar": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     }
 }

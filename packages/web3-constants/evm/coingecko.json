@@ -19,7 +19,9 @@
         "Aurora": "aurora",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": "astar"
+        "Astar": "astar",
+        "Harmony": "harmony",
+        "Harmony_Test": ""
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -41,6 +43,8 @@
         "Aurora": "ethereum",
         "Aurora_Testnet": "",
         "Conflux": "conflux-token",
-        "Astar": "astar-token"
+        "Astar": "astar-token",
+        "Harmony": "harmony",
+        "Harmony_Test": ""
     }
 }

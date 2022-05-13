@@ -194,9 +194,12 @@ export enum TradeProvider {
     TRADERJOE = 13,
     PANGOLIN = 14,
     MDEX = 15,
-    ARTHSWAP = 16,
-    VERSA = 17,
-    ASTAREXCHANGE = 18,
+    VENOMSWAP = 16,
+    OPENSWAP = 17,
+    DEFIKINGDOMS = 18,
+    ARTHSWAP = 19,
+    VERSA = 20,
+    ASTAREXCHANGE = 21,
 }
 
 /** Supported language settings */
@@ -235,6 +238,7 @@ export enum NetworkType {
     Fuse = 'Fuse',
     Metis = 'Metis',
     Optimistic = 'Optimistic',
+    Harmony = 'Harmony',
     Conflux = 'Conflux',
     Astar = 'Astar',
 }

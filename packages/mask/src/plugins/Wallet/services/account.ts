@@ -129,5 +129,6 @@ export async function getSupportedNetworks() {
         Flags.avalanche_enabled ? NetworkType.Avalanche : undefined,
         Flags.aurora_enabled ? NetworkType.Aurora : undefined,
         Flags.astar_enabled ? NetworkType.Astar : undefined,
+        Flags.harmony_enabled ? NetworkType.Harmony : undefined,
     ].filter(Boolean) as NetworkType[]
 }

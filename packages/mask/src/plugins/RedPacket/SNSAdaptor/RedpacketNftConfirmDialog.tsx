@@ -178,8 +178,8 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         contract.address,
         tokenIdList,
     )
-    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
     )
 
     const isSending = [TransactionStateType.WAIT_FOR_CONFIRMING, TransactionStateType.HASH].includes(createState.type)
@@ -200,7 +200,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 privateKey,
                 chainId: contract.chainId,
             })
-            closeWalletStatusDialog()
+            closeApplicationBoardDialog()
         },
         [duration, message, senderName, contract, privateKey, txid],
     )

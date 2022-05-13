@@ -19,7 +19,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": ""
+        "Astar": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "GOOD_GHOSTING_INCENTIVES_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -41,6 +43,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": ""
+        "Astar": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     }
 }

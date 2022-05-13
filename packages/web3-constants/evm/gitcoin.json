@@ -19,7 +19,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": ""
+        "Astar": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
         "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
@@ -41,7 +43,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": ""
+        "Astar": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "GITCOIN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -63,7 +67,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": ""
+        "Astar": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
         "Mainnet": 5,
@@ -85,6 +91,8 @@
         "Aurora": 0,
         "Aurora_Testnet": 0,
         "Conflux": 0,
-        "Astar": 0
+        "Astar": 0,
+        "Harmony": 0,
+        "Harmony_Test": 0
     }
 }

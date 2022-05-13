@@ -19,7 +19,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": ""
+        "Astar": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "",
@@ -41,6 +43,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": ""
+        "Astar": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     }
 }
