@@ -26,7 +26,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
-        const link = usePostInfoDetails.mentionedLinks().find(isMaskBox)
+        const links = usePostInfoDetails.mentionedLinks()
+        const link = links.find(isMaskBox)
         if (!link) return null
         return <Renderer url={link} />
     },

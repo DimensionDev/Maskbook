@@ -50,22 +50,17 @@ export function PreviewCard(props: PreviewCardProps) {
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)
 
     const {
-        boxId,
         boxState,
         boxStateMessage,
         boxInfo,
         boxMetadata,
         contractDetailed,
-        paymentCount,
         setPaymentCount,
         paymentTokenAddress,
         setPaymentTokenAddress,
         paymentTokenPrice,
-        paymentTokenBalance,
         paymentTokenDetailed,
 
-        // token ids
-        lastPurchasedTokenIds,
         refreshLastPurchasedTokenIds,
 
         // transaction

@@ -40,7 +40,7 @@ export const TokenCard = memo<TokenCardProps>((props: TokenCardProps) => {
             />
             <div className={classes.title}>
                 <Typography className={classes.name} color="textSecondary" variant="body2">
-                    {tokenDetailed.info.name ?? tokenId}
+                    {tokenDetailed.contract?.name ?? tokenId}
                 </Typography>
             </div>
         </>
