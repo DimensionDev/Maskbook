@@ -5,7 +5,6 @@ import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { useDashboardI18N } from '../../locales'
 import links from '../../components/FooterLine/links.json'
 import { openWindow } from '@masknet/shared-base-ui'
-import { useSetupSocialNetwork } from './hooks/useSetupSocialNetwork'
 import { Services } from '../../API'
 
 const Content = styled('div')(({ theme }) => ({
@@ -33,7 +32,6 @@ const IFrame = styled('iframe')(({ theme }) => ({
 export default function Welcome() {
     const iframeRef = useRef<HTMLIFrameElement | null>(null)
     const mode = useTheme().palette.mode
-    const [, setupSocialNetwork] = useSetupSocialNetwork()
 
     const agreementContentPageURL = new URL('./en.html', import.meta.url).toString()
     const privacyPolicyDocument = useMemo(() => () => iframeRef?.current?.contentWindow?.document, [iframeRef])
