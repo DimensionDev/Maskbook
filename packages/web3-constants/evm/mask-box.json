@@ -18,7 +18,9 @@
         "Fantom": "",
         "Aurora": "0xf5056B96ab242C566002852d0b98ce0BcDf1af51",
         "Aurora_Testnet": "0xB4D669bc117735FdA44e90e52795132187705B21",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "0xDc0905F2Dac875E29A36f22F1Ea046e063875D3e",
+        "Harmony_Test": "0x4Fda6d9Bb68Af18E5d686555b18cCeA7C82E0A3F"
     },
     "MASK_BOX_CONTRACT_FROM_BLOCK": {
         "Mainnet": 13687866,
@@ -39,6 +41,8 @@
         "Fantom": 0,
         "Aurora": 57259004,
         "Aurora_Testnet": 77919118,
-        "Conflux": 0
+        "Conflux": 0,
+        "Harmony": 24172689,
+        "Harmony_Test": 22787067
     }
 }

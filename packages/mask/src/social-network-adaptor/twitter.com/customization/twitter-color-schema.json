@@ -23,7 +23,7 @@
         },
         "text": {
             "primary": "#07101B",
-            "secondary": "#536471",
+            "secondary": "#767F8D",
             "third": "#ACB4C1",
             "strong": "#111418",
             "buttonText": "#FFFFFF"
@@ -119,7 +119,7 @@
         },
         "text": {
             "primary": "#F5F5F5",
-            "secondary": "#8899A6",
+            "secondary": "#C4C7CD",
             "third": "#666C75",
             "strong": "#FFFFFF",
             "buttonText": "#0F1419"

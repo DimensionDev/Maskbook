@@ -35,7 +35,7 @@ const Icon = styled(ListItemIcon)`
     min-width: 0;
 `
 
-export function ToolboxHintAtTwitter() {
+export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application' }) {
     const mini = useMediaQuery(`(max-width: ${twitterBreakPoint}px)`)
     return (
         <ToolboxHintUnstyled
@@ -44,6 +44,7 @@ export function ToolboxHintAtTwitter() {
             Typography={Text}
             ListItemButton={ListItem}
             Container={Container}
+            category={props.category}
         />
     )
 }

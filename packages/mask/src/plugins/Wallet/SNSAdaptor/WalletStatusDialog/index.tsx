@@ -9,7 +9,6 @@ import { makeStyles } from '@masknet/theme'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
-import { ApplicationBoard } from '../../../../components/shared/ApplicationBoard'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -64,9 +63,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     return (
         <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
-                <Typography className={classes.subTitle}>{t('wallets')}</Typography>
-                <WalletStatusBox />
-                {!isDashboardPage() && <ApplicationBoard />}
+                <WalletStatusBox showPendingTransaction />
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>
