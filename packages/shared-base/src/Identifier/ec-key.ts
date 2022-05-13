@@ -25,14 +25,14 @@ export class ECKeyIdentifier extends Identifier {
     declare readonly curve: 'secp256k1'
     declare readonly rawPublicKey: string
     constructor(curve: 'secp256k1', publicKey: string) {
-        publicKey = String(publicKey)
+        publicKey = String(publicKey).replace(/\|/g, '/')
         if (curve !== 'secp256k1') throw new Error('Only secp256k1 is supported')
 
         if (k256Cache[publicKey]) return k256Cache[publicKey]
 
         super()
         this.curve = 'secp256k1'
-        this.rawPublicKey = publicKey.replace(/\|/g, '/')
+        this.rawPublicKey = publicKey
         Object.freeze(this)
         k256Cache[publicKey] = this
         instance.add(this)
