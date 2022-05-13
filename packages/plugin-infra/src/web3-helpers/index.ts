@@ -8,7 +8,7 @@ import {
     ProviderState,
 } from '@masknet/web3-shared-base'
 import type * as EVM from '@masknet/web3-shared-evm'
-// import type * as Flow from '@masknet/web3-shared-flow'
+import type * as Flow from '@masknet/web3-shared-flow'
 import type * as Solana from '@masknet/web3-shared-solana'
 import type { Web3Plugin } from '../web3-types'
 
@@ -28,31 +28,18 @@ export declare namespace Web3Helper {
             Web3: EVM.Web3
         }
         [NetworkPluginID.PLUGIN_FLOW]: {
-            ChainId: unknown
-            SchemaType: unknown
-            ProviderType: unknown
-            NetworkType: unknown
-            Signature: unknown
-            Transaction: unknown
-            TransactionDetailed: unknown
-            TransactionSignature: unknown
-            TransactionParameter: unknown
-            Web3Provider: unknown
-            Web3: unknown
+            ChainId: Flow.ChainId
+            SchemaType: Flow.SchemaType
+            ProviderType: Flow.ProviderType
+            NetworkType: Flow.NetworkType
+            Signature: Flow.Signature
+            Transaction: Flow.Transaction
+            TransactionDetailed: Flow.TransactionDetailed
+            TransactionSignature: Flow.TransactionSignature
+            TransactionParameter: Flow.TransactionParameter
+            Web3Provider: Flow.Web3Provider
+            Web3: Flow.Web3
         }
-        // [NetworkPluginID.PLUGIN_FLOW]: {
-        //     ChainId: Flow.ChainId
-        //     SchemaType: Flow.SchemaType
-        //     ProviderType: Flow.ProviderType
-        //     NetworkType: Flow.NetworkType
-        //     Signature: Flow.Signature
-        //     Transaction: Flow.Transaction
-        //     TransactionDetailed: Flow.TransactionDetailed
-        //     TransactionSignature: Flow.TransactionSignature
-        //     TransactionParameter: Flow.TransactionParameter
-        //     Web3Provider: Flow.Web3Provider
-        //     Web3: Flow.Web3
-        // }
         [NetworkPluginID.PLUGIN_SOLANA]: {
             ChainId: Solana.ChainId
             SchemaType: Solana.SchemaType
