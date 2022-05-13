@@ -218,11 +218,11 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         anchorEl={visibleAnchorEl}
                         setAnchorEl={setVisibleAnchorEl}
                         shareWithNum={recipients.length}
-                        onChange={(v) => {
-                            if (v && v === 'all') {
+                        onChange={(event) => {
+                            if (event === 'all') {
                                 setEncryptionKind('Everyone')
                             } else {
-                                if (v === 'share') {
+                                if (event === 'share') {
                                     setShareWithOpen(true)
                                 }
                                 setEncryptionKind('E2E')
@@ -251,7 +251,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         renderScheme={methodsPopperList}
                         anchorEl={methodAnchorEl}
                         setAnchorEl={setMethodAnchorEl}
-                        onChange={(v) => setEncoding(v as SetStateAction<'text' | 'image'>)}
+                        onChange={(event) => setEncoding(event as SetStateAction<'text' | 'image'>)}
                     />
                 </div>
             </div>

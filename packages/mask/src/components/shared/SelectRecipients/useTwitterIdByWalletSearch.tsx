@@ -21,7 +21,7 @@ export function useTwitterIdByWalletSearch(bindings: NextIDPersonaBindings[] | u
             return uniq(res)
         }, [])
         const obj = cur.proofs.reduce<any>(
-            (obj, i, idx) => {
+            (obj, i) => {
                 obj[i.platform] = { ...i, persona: cur.persona }
                 return obj
             },
