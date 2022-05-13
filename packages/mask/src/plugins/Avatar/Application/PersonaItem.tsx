@@ -82,6 +82,7 @@ export function PersonaItem(props: PersonaItemProps) {
                               symbol: token?.symbol ?? '',
                               tokenId: _avatar?.tokenId ?? '',
                               address: _avatar?.address ?? '',
+                              chainId: _avatar.chainId ?? ChainId.Mainnet,
                           }
                         : undefined
                 }

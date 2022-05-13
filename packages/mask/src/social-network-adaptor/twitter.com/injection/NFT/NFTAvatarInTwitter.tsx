@@ -200,7 +200,7 @@ function NFTAvatarInTwitter() {
         if (!avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
-            openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId))
+            openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId, avatar.chainId))
         }
 
         linkParentDom.addEventListener('click', handler)

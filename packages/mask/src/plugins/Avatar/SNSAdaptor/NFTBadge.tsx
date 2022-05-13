@@ -45,7 +45,10 @@ export function NFTBadge(props: NFTBadgeProps) {
                 e.preventDefault()
                 openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId))
             }}>
-            <Link href={resolveOpenSeaLink(avatar.address, avatar.tokenId)} target="_blank" rel="noopener noreferrer">
+            <Link
+                href={resolveOpenSeaLink(avatar.address, avatar.tokenId, avatar.chainId)}
+                target="_blank"
+                rel="noopener noreferrer">
                 <NFTAvatarRing
                     id="NFTAvatarRing"
                     width={size}

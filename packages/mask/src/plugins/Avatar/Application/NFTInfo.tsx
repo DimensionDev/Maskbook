@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Link, Stack, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { LinkIcon } from '../assets/link'
-import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
+import { ChainId, resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import { formatTokenId } from '../utils'
 import { useI18N } from '../locales/i18n_generated'
 import { ApplicationRoundIcon } from '../assets/applicationround'
@@ -17,7 +17,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 interface NFTInfoProps extends withClasses<'root'> {
-    nft?: { name: string; address: string; tokenId: string; symbol: string }
+    nft?: { name: string; address: string; tokenId: string; symbol: string; chainId: ChainId }
     owner: boolean
     loading?: boolean
 }
@@ -51,7 +51,7 @@ export function NFTInfo(props: NFTInfoProps) {
                             </Typography>
                             <Link
                                 sx={{ marginLeft: 0.5, lineHeight: 0 }}
-                                href={resolveOpenSeaLink(nft.address, nft.tokenId)}
+                                href={resolveOpenSeaLink(nft.address, nft.tokenId, nft.chainId)}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 <LinkIcon sx={{ width: 16, height: 16 }} />
