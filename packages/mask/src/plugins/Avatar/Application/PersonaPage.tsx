@@ -43,7 +43,6 @@ export function PersonaPage(props: PersonaPageProps) {
     const myPersonas = useMyPersonas()
     const t = useI18N()
 
-    console.log(myPersonas)
     useEffect(() => {
         if (!personaVerifiedStatus || personaVerifiedStatus?.isVerified) return
         if (reset) reset()

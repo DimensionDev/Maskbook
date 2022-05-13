@@ -99,6 +99,7 @@ async function Save(
         avatarId: data.avatarId,
         address: token.contractDetailed.address,
         tokenId: token.tokenId,
+        chainId: token.contractDetailed.chainId,
     }
 
     if (isBindAccount) {

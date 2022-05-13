@@ -10,6 +10,7 @@ import type { TokenInfo } from '../types'
 import { useCallback } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
@@ -42,7 +43,11 @@ export function PersonaItem(props: PersonaItemProps) {
     const { userId, onSelect, owner = false, proof, avatar, nickname = '' } = props
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = usePersonaNFTAvatar(userId, getAvatarId(avatar) ?? '', RSS3_KEY_SNS.TWITTER)
-    const { value: token, loading: loadingToken } = useTokenOwner(_avatar?.address ?? '', _avatar?.tokenId ?? '')
+    const { value: token, loading: loadingToken } = useTokenOwner(
+        _avatar?.address ?? '',
+        _avatar?.tokenId ?? '',
+        _avatar?.chainId ?? ChainId.Mainnet,
+    )
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(userId, token?.owner)
 
     const onClick = useCallback(() => {

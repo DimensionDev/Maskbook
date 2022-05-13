@@ -1,5 +1,5 @@
-import { NextIDPlatform } from '@masknet/shared-base'
 import {
+    ChainId,
     isSameAddress,
     safeNonPayableTransactionCall,
     useAccount,
@@ -9,8 +9,8 @@ import { useAsyncRetry } from 'react-use'
 import { getNFTByOpensea } from '../utils'
 import { usePersonas } from './usePersonas'
 
-export function useTokenOwner(address: string, tokenId: string) {
-    const ERC721Contract = useERC721TokenContract(address)
+export function useTokenOwner(address: string, tokenId: string, chainId?: ChainId) {
+    const ERC721Contract = useERC721TokenContract(address, chainId)
     return useAsyncRetry(async () => {
         if (!ERC721Contract || !tokenId) return
         const nft = await getNFTByOpensea(address, tokenId)
@@ -32,12 +32,8 @@ export function useCheckTokenOwner(userId: string, owner?: string) {
     return {
         loading,
         isOwner: Boolean(
-            account &&
-                owner &&
-                (isSameAddress(account, owner) ||
-                    persona?.binds?.proofs
-                        .filter((x) => x.platform === NextIDPlatform.Ethereum)
-                        .filter((x) => isSameAddress(x.identity, owner))),
+            (account && owner && isSameAddress(account, owner)) ||
+                persona?.wallets.some((x) => isSameAddress(x.identity, owner)),
         ),
     }
 }

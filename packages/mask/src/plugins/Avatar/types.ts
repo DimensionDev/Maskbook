@@ -1,10 +1,11 @@
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import type { ChainId, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 
 export interface AvatarMetaDB {
     userId: string
     tokenId: string
     address: string
     avatarId: string
+    chainId?: ChainId
 }
 
 export interface NFT {
