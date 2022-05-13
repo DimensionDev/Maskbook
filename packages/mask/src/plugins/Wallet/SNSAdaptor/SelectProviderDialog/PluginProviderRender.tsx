@@ -150,7 +150,9 @@ export function PluginProviderRender({
                                         setUndeterminedPluginID(network.networkSupporterPluginID as NetworkPluginID)
                                         setUndeterminedNetworkID(network.ID)
                                     }}>
-                                    <div className={classes.iconWrapper}>
+                                    <div
+                                        className={classes.iconWrapper}
+                                        style={{ boxShadow: `3px 10px 15px -8px ${network.iconColor}` }}>
                                         {NetworkIconClickBait ? (
                                             <NetworkIconClickBait network={network}>
                                                 <ImageIcon size={30} icon={network.icon} />
