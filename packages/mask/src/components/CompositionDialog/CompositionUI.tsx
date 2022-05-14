@@ -215,6 +215,9 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                                 if (event === 'share') {
                                     setShareWithOpen(true)
                                 }
+                                if (event === 'private') {
+                                    setRecipients([])
+                                }
                                 setEncryptionKind('E2E')
                             }
                         }}
