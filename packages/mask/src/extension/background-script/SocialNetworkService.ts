@@ -29,7 +29,7 @@ function requestSNSAdaptorPermission(ui: SocialNetworkUI.Definition) {
 
 function requestSNSAdaptorsPermission(uis: SocialNetworkUI.Definition[]) {
     return requestExtensionPermission({
-        origins: [...uis.map((x) => x.declarativePermissions.origins).flat()],
+        origins: uis.map((x) => x.declarativePermissions.origins).flat(),
     })
 }
 
