@@ -135,13 +135,13 @@ export class ProviderState<
                     ...accountCopied,
                 },
             })
+        }
 
-            if (needToUpdateProviderType) {
-                await this.storage.providers.setValue({
-                    ...this.storage.providers.value,
-                    [siteType]: providerType,
-                })
-            }
+        if (needToUpdateProviderType) {
+            await this.storage.providers.setValue({
+                ...this.storage.providers.value,
+                [siteType]: providerType,
+            })
         }
     }
 
