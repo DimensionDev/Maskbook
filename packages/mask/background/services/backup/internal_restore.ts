@@ -1,5 +1,6 @@
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
+import { MaskMessages } from '../../../shared/messages'
 import {
     consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
@@ -26,6 +27,8 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     await restoreWallets(wallets)
     await restorePosts(posts.values())
     await restorePlugins(plugins)
+
+    if (backup.personas.size || backup.profiles.size) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 
 async function restorePersonas(backup: NormalizedBackup.Data) {

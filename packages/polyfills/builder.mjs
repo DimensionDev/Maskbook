@@ -27,14 +27,6 @@ let polyfillVersion = '__'
 const versionFilePath = fileURLToPath(new URL('./dist/version.txt', import.meta.url))
 if ((await readFile(versionFilePath, 'utf-8').catch(() => '')) === polyfillVersion) process.exit(0)
 
-// looks like pnpm 7 _may_ be skip the running of postinstall script?
-// https://github.com/pnpm/pnpm/issues/4649
-spawn('npx', ['patch-package'], {
-    cwd: fileURLToPath(new URL('../../', import.meta.url)),
-    stdio: 'inherit',
-    shell: true,
-})
-
 await builder({
     modules: ['core-js/stable'],
     targets: [

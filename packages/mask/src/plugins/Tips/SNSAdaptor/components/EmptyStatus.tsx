@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo } from 'react'
 import { ExternalLink } from 'react-feather'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 const useStyles = makeStyles()((theme) => ({
     container: {
         position: 'relative',
@@ -78,7 +78,7 @@ interface EmptyStatusProps {
     toAdd: () => void
 }
 export const EmptyStatus = memo(({ toAdd }: EmptyStatusProps) => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     return (
         <div className={classes.container}>
@@ -111,7 +111,7 @@ export const EmptyStatus = memo(({ toAdd }: EmptyStatusProps) => {
                     alt=""
                 />
                 <Typography sx={{ fontSize: 14, lineHeight: 18, fontWeight: 700 }}>
-                    {t('plugin_tips_connect_wallet')}
+                    {t.tip_connect_your_wallet()}
                 </Typography>
             </div>
         </div>

@@ -66,20 +66,22 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = <Trans i18nKey="plugin_ito_name" />
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     return (
                         <ApplicationEntry
-                            disabled={disabled}
+                            {...EntryComponentProps}
                             title={name}
                             icon={icon}
-                            onClick={() =>
-                                CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                    reason: 'timeline',
-                                    open: true,
-                                    options: {
-                                        startupPlugin: base.ID,
-                                    },
-                                })
+                            onClick={
+                                EntryComponentProps.onClick ??
+                                (() =>
+                                    CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                        reason: 'timeline',
+                                        open: true,
+                                        options: {
+                                            startupPlugin: base.ID,
+                                        },
+                                    }))
                             }
                         />
                     )
@@ -99,15 +101,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = <Trans i18nKey="plugin_ito_claim" />
             return {
                 ApplicationEntryID: `${base.ID}_claim`,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
                     return (
                         <>
                             <ApplicationEntry
                                 title={name}
                                 icon={icon}
-                                disabled={disabled}
-                                onClick={() => setOpen(true)}
+                                {...EntryComponentProps}
+                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
                             />
                             <ClaimAllDialog open={open} onClose={() => setOpen(false)} />
                         </>
