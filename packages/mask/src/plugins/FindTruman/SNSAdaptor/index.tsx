@@ -94,15 +94,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = <Trans i18nKey="plugin_find_truman_name" />
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
                     return (
                         <>
                             <ApplicationEntry
-                                disabled={disabled}
+                                {...EntryComponentProps}
                                 title={name}
                                 icon={icon}
-                                onClick={() => setOpen(true)}
+                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
                             />
                             <FindTrumanDialog open={open} onClose={() => setOpen(false)} />
                         </>

@@ -10,6 +10,7 @@ import {
     DialogProps,
     DialogTitle,
     IconButton,
+    Stack,
     Typography,
     useMediaQuery,
     useTheme,
@@ -25,8 +26,15 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
-        padding: theme.spacing(1, 2),
         whiteSpace: 'nowrap',
+        gridTemplateColumns: '50px auto 50px',
+    },
+    dialogTitleEndingContent: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minWidth: 46,
+        minHeight: 46,
     },
     dialogContent: {
         overscrollBehavior: 'contain',
@@ -38,9 +46,12 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     },
     dialogCloseButton: {
         color: theme.palette.text.primary,
-        position: 'absolute',
         padding: 0,
-        fontSize: 24,
+        width: 24,
+        height: 24,
+        '& > svg': {
+            fontSize: 24,
+        },
     },
     paper: clean ? { width: 'auto', backgroundImage: 'none' } : {},
 }))
@@ -48,6 +59,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
 export type InjectedDialogClassKey =
     | DialogClassKey
     | 'dialogTitle'
+    | 'dialogTitleEndingContent'
     | 'dialogContent'
     | 'dialogActions'
     | 'dialogTitleTypography'
@@ -74,6 +86,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogCloseButton,
         dialogContent,
         dialogTitle,
+        dialogTitleEndingContent,
         dialogTitleTypography,
         dialogBackdropRoot,
         container,
@@ -143,7 +156,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">
                                 {title}
                             </Typography>
-                            {titleTail}
+                            <Stack className={dialogTitleEndingContent}>{titleTail}</Stack>
                         </DialogTitle>
                     ) : null}
 

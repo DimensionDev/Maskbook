@@ -74,7 +74,7 @@ function registerPostCollectorInner(
                 avatarURL: info.avatarURL.getCurrentValue()?.toString(),
             })
             if (currentProfile?.linkedPersona) {
-                Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona.identifier)
+                Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona)
             }
         },
         (info: PostInfo) => info.author.getCurrentValue(),
@@ -112,9 +112,9 @@ function registerPostCollectorInner(
             run()
             cancel.addEventListener(
                 'abort',
-                info.containingMaskPayload.subscribe(() => {
-                    const payload = info.containingMaskPayload.getCurrentValue()
-                    if (payload.err && refs.postMetadataImages.size === 0) return
+                info.hasMaskPayload.subscribe(() => {
+                    const payload = info.hasMaskPayload.getCurrentValue()
+                    if (!payload && refs.postMetadataImages.size === 0) return
                     updateProfileInfo(info)
                 }),
             )

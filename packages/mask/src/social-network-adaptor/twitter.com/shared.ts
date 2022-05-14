@@ -3,7 +3,7 @@ import { openWindow } from '@masknet/shared-base-ui'
 import urlcat from 'urlcat'
 import type { SocialNetwork } from '../../social-network/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
-import { deconstructPayload } from '../../utils'
+import { hasPayloadLike } from '../../utils'
 import { twitterBase } from './base'
 import { TwitterDecoder, __TwitterEncoder } from '@masknet/encryption'
 import { usernameValidator } from './utils/user'
@@ -54,11 +54,9 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
             return new URL(url)
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
-            payloadParser: deconstructPayload,
-            payloadDecoder: (x) =>
-                TwitterDecoder(x)
-                    .map((x) => [x])
-                    .unwrapOr([]),
+            hasPayloadLike: (text) => {
+                return TwitterDecoder(text).map(hasPayloadLike).unwrapOr(false)
+            },
             getURLFromPostIdentifier: getPostURL,
         }),
     },
