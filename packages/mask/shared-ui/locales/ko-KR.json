@@ -602,7 +602,6 @@
     "plugin_dhedge_buy_token": "{{symbol}} 획득",
     "plugin_dhedge_enter_an_amount": "수액 입력",
     "plugin_dhedge_insufficient_balance": "{{symbol}} 잔액 부족",
-    "plugin_dhedge_loading": "로딩 중",
     "plugin_dhedge_pool_not_found": "무효한 풀 주소!",
     "plugin_dhedge_smt_wrong": "오류가 발생합니다.",
     "plugin_pooltogether_tab_pools": "풀(Pools)",

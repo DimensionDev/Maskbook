@@ -745,7 +745,6 @@
     "plugin_dhedge_buy_token": "获得 {{symbol}}",
     "plugin_dhedge_enter_an_amount": "输入数额",
     "plugin_dhedge_insufficient_balance": "{{symbol}} 余额不足",
-    "plugin_dhedge_loading": "加载中...",
     "plugin_dhedge_pool_not_found": "无效的池子地址。",
     "plugin_dhedge_smt_wrong": "发生了一些错误！",
     "plugin_pooltogether_tab_pools": "池子",

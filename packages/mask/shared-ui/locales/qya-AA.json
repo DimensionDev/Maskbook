@@ -798,7 +798,6 @@
     "plugin_dhedge_buy_token": "crwdns5423:0{{symbol}}crwdne5423:0",
     "plugin_dhedge_enter_an_amount": "crwdns5425:0crwdne5425:0",
     "plugin_dhedge_insufficient_balance": "crwdns5427:0{{symbol}}crwdne5427:0",
-    "plugin_dhedge_loading": "crwdns5429:0crwdne5429:0",
     "plugin_dhedge_pool_not_found": "crwdns5431:0crwdne5431:0",
     "plugin_dhedge_smt_wrong": "crwdns5433:0crwdne5433:0",
     "plugin_pooltogether_tab_pools": "crwdns5435:0crwdne5435:0",

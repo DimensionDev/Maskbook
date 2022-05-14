@@ -803,7 +803,6 @@
     "plugin_dhedge_buy_token": "GET {{symbol}}",
     "plugin_dhedge_enter_an_amount": "Enter an amount",
     "plugin_dhedge_insufficient_balance": "Insufficient {{symbol}} balance",
-    "plugin_dhedge_loading": "Loading...",
     "plugin_dhedge_pool_not_found": "Invalid pool address.",
     "plugin_dhedge_smt_wrong": "Something went wrong!",
     "plugin_pooltogether_tab_pools": "Pools",

@@ -387,7 +387,6 @@
     "plugin_dhedge_buy_token": "{{symbol}} を得る",
     "plugin_dhedge_enter_an_amount": "量を入力",
     "plugin_dhedge_insufficient_balance": "{{symbol}} の残高が不十分です",
-    "plugin_dhedge_loading": "ロード中…",
     "plugin_dhedge_pool_not_found": "無効なプールアドレスです！",
     "plugin_dhedge_smt_wrong": "何か間違いが発生しました！"
 }
