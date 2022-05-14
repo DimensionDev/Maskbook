@@ -34,6 +34,7 @@ import { AccountBalanceWalletIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { NextIDVerificationStatus, useNextIDConnectStatus } from '../DataSource/useNextID'
+import { MaskIcon } from '../../resources/MaskIcon'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -103,13 +104,7 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
         <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
             <Container>
                 <ListItemButton onClick={openDialog}>
-                    <img
-                        src={new URL('../../plugins/EVM/assets/maskwallet.png', import.meta.url).toString()}
-                        style={{
-                            width: iconSize,
-                            height: iconSize,
-                        }}
-                    />
+                    <MaskIcon style={{ width: iconSize, height: iconSize }} />
                     {mini ? null : (
                         <ListItemText
                             primary={

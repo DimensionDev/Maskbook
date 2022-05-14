@@ -10,6 +10,7 @@ import {
     DialogProps,
     DialogTitle,
     IconButton,
+    Stack,
     Typography,
     useMediaQuery,
     useTheme,
@@ -29,7 +30,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         whiteSpace: 'nowrap',
         gridTemplateColumns: '50px auto 50px',
     },
-    dialogTitleTail: {
+    dialogTitleEndingContent: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -60,7 +61,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
 export type InjectedDialogClassKey =
     | DialogClassKey
     | 'dialogTitle'
-    | 'dialogTitleTail'
+    | 'dialogTitleEndingContent'
     | 'dialogContent'
     | 'dialogActions'
     | 'dialogTitleTypography'
@@ -87,7 +88,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogCloseButton,
         dialogContent,
         dialogTitle,
-        dialogTitleTail,
+        dialogTitleEndingContent,
         dialogTitleTypography,
         dialogBackdropRoot,
         container,
@@ -157,7 +158,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">
                                 {title}
                             </Typography>
-                            <div className={dialogTitleTail}>{titleTail}</div>
+                            <Stack className={dialogTitleEndingContent}>{titleTail}</Stack>
                         </DialogTitle>
                     ) : null}
 

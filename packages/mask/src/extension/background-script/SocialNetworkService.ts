@@ -28,10 +28,8 @@ function requestSNSAdaptorPermission(ui: SocialNetworkUI.Definition) {
 }
 
 function requestSNSAdaptorsPermission(uis: SocialNetworkUI.Definition[]) {
-    const req = uis.filter((x) => !x.permission?.request())
-    if (!req.length) return req
     return requestExtensionPermission({
-        origins: [...req.map((x) => x.declarativePermissions.origins).flat()],
+        origins: [...uis.map((x) => x.declarativePermissions.origins).flat()],
     })
 }
 
