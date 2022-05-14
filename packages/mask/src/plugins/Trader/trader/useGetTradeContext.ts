@@ -31,6 +31,8 @@ import {
     JUGGLERRED_CUSTOM_BASES,
     DEFIKINGDOMS_BASE_AGAINST_TOKENS,
     DEFIKINGDOMS_CUSTOM_BASES,
+    ELKFINANCE_BASE_AGAINST_TOKENS,
+    ELKFINANCE_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -234,6 +236,19 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: DEFIKINGDOMS_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: DEFIKINGDOMS_CUSTOM_BASES,
+                }
+            case TradeProvider.ELKFINANCE:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.ELKFINANCE_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.ELKFINANCE_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.ELKFINANCE_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.ELKFINANCE_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.ELKFINANCE_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: ELKFINANCE_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: ELKFINANCE_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {

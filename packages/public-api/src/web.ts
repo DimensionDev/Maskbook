@@ -198,6 +198,7 @@ export enum TradeProvider {
     OPENSWAP = 17,
     DEFIKINGDOMS = 18,
     JUGGLERRED = 19,
+    ELKFINANCE = 20,
 }
 
 /** Supported language settings */

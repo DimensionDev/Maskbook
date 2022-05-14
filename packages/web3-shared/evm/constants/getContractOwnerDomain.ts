@@ -47,6 +47,7 @@ const domainAddressMap: Record<string, string[]> = {
         'WANNASWAP_ROUTER_ADDRESS',
         'WANNASWAP_FACTORY_ADDRESS',
     ]),
+    'elk.finance': collect(Trader, ['ELKFINANCE_ROUTER_ADDRESS', 'ELKFINANCE_FACTORY_ADDRESS']),
     'www.trisolaris.io': collect(Trader, ['TRISOLARIS_ROUTER_ADDRESS', 'TRISOLARIS_FACTORY_ADDRESS']),
     'mdex.com': collect(Trader, ['MDEX_ROUTER_ADDRESS', 'MDEX_FACTORY_ADDRESS']),
     'aave.com': collect(Aave, ['AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS']),
