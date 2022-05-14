@@ -99,12 +99,12 @@ export function ProfileInList(props: ProfileInListProps) {
     }
     const resolvePrimaryText = () => {
         if (profile.fromNextID) {
-            const rawStr = profile.linkedTwitterNames!.map((x) => '@' + x).join(' ')
-            if (rawStr.length > 15) {
+            const mentions = profile.linkedTwitterNames!.map((x) => '@' + x).join(' ')
+            if (mentions.length > 15) {
                 const len = profile.linkedTwitterNames?.length
-                return truncate(rawStr, { length: 15 }) + (len! > 1 ? `(${len})` : '')
+                return truncate(mentions, { length: 15 }) + (len! > 1 ? `(${len})` : '')
             }
-            return rawStr
+            return mentions
         }
         return `@${profile.identifier.userId || profile.nickname}`
     }

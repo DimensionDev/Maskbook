@@ -132,7 +132,11 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     const { setEncryptionKind, encryptionKind, recipientSelectorAvailable, recipients, setRecipients } =
         useSetEncryptionKind(props)
     const { encodingKind, setEncoding } = useEncryptionEncode(props)
-
+    const visibilitySelected = useMemo(() => {
+        if (encryptionKind === 'Everyone') return 'all'
+        if (recipients.length > 0) return 'share'
+        return 'private'
+    }, [encryptionKind, recipients])
     const reset = useCallback(() => {
         startTransition(() => {
             Editor.current?.reset()
@@ -203,7 +207,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
                     <VisibleToRow
-                        selected={encryptionKind === 'Everyone' ? 'all' : recipients.length ? 'share' : 'private'}
+                        selected={visibilitySelected}
                         onConnect={props.onConnect}
                         onCreate={props.onCreate}
                         e2eDisabled={props.e2eEncryptionDisabled}

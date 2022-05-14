@@ -119,7 +119,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 <DialogContent>
                     <CompositionDialogUI
                         onConnect={() => {
-                            ;(connectStatus as any).action()
+                            if (connectStatus.action) connectStatus.action()
                             setOpen(false)
                         }}
                         onCreate={() => {

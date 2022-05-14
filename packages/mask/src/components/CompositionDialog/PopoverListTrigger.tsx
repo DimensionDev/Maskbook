@@ -155,9 +155,8 @@ export function PopoverListTrigger({
     const { classes } = useStyles()
 
     const getName = () => {
-        return selected === 'share'
-            ? `${shareWithNum} friend${shareWithNum! > 1 ? 's' : ''}`
-            : renderScheme.find((x) => x.type === selected)?.title
+        if (selected === 'share') return `${shareWithNum} friend${shareWithNum! > 1 ? 's' : ''}`
+        return renderScheme.find((x) => x.type === selected)?.title
     }
     return (
         <>

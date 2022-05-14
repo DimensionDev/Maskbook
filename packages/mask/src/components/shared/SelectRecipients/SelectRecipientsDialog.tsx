@@ -142,9 +142,8 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     }}
                     value={search}
                     onKeyUp={(e) => {
-                        if (e.keyCode === 13) {
-                            onSearch(search)
-                        }
+                        if (e.code !== 'Enter') return
+                        onSearch(search)
                     }}
                     onChange={(e) => setSearch(e.target.value)}
                     onBlur={() => onSearch(search)}
