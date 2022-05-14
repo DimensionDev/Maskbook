@@ -198,7 +198,8 @@ function RenderEntryComponent({ application }: { application: Application }) {
 
         if (application.entry.nextIdRequired) {
             return Boolean(
-                ApplicationEntryStatus.isNextIDVerify === undefined ||
+                ApplicationEntryStatus.isLoading ||
+                    ApplicationEntryStatus.isNextIDVerify === undefined ||
                     (!ApplicationEntryStatus.isSNSConnectToCurrentPersona && ApplicationEntryStatus.isPersonaConnected),
             )
         } else {
@@ -268,6 +269,7 @@ interface ApplicationEntryStatusContextProps {
     currentPersonaPublicKey: string | undefined
     currentSNSConnectedPersonaPublicKey: string | undefined
     personaConnectAction: (() => void) | undefined
+    isLoading: boolean
 }
 
 const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContextProps>({
@@ -280,6 +282,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
     currentPersonaPublicKey: undefined,
     currentSNSConnectedPersonaPublicKey: undefined,
     personaConnectAction: undefined,
+    isLoading: false,
 })
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
@@ -308,6 +311,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
                 shouldVerifyNextId: Boolean(!nextIDConnectStatus.isVerified && ApplicationCurrentStatus),
                 currentPersonaPublicKey,
                 currentSNSConnectedPersonaPublicKey,
+                isLoading: nextIDConnectStatus.loading,
             }}>
             {props.children}
         </ApplicationEntryStatusContext.Provider>
