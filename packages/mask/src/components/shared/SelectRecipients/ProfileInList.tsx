@@ -111,7 +111,7 @@ export function ProfileInList(props: ProfileInListProps) {
 
     const ToolTipText =
         profile.fromNextID && profile.linkedTwitterNames?.length! > 1
-            ? `${t('select_freinds_dialog_persona_connect')} ${profile
+            ? `${t('select_friends_dialog_persona_connect')} ${profile
                   .linkedTwitterNames!.map((x) => '@' + x)
                   .join(', ')}`
             : ''
