@@ -21,6 +21,7 @@ export interface ProfileInformation {
     fromNextID?: boolean
     publicHexKey?: string
     linkedTwitterNames?: string[]
+    linkedPersona?: PersonaIdentifier
 }
 
 export enum RelationFavor {

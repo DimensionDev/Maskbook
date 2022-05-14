@@ -13,6 +13,7 @@ export function toProfileInformation(profiles: ProfileRecord[]) {
                     nickname: profile.nickname,
                     fingerprint: profile.linkedPersona?.rawPublicKey,
                     publicHexKey: profile.linkedPersona?.publicKeyAsHex,
+                    linkedPersona: profile.linkedPersona,
                 })
             }
 
@@ -26,7 +27,8 @@ export function toProfileInformation(profiles: ProfileRecord[]) {
 /** @internal */
 export function toPersonaInformation(personas: PersonaRecord[], t: FullPersonaDBTransaction<'readonly'>) {
     const personaInfo: PersonaInformation[] = []
-    const extraPromises: Promise<void>[] = personas.map(async (persona) => {
+    const dbQueryPass2: Promise<void>[] = []
+    const dbQuery: Promise<void>[] = personas.map(async (persona) => {
         const map: ProfileInformation[] = []
         personaInfo.push({
             nickname: persona.nickname,
@@ -37,13 +39,16 @@ export function toPersonaInformation(personas: PersonaRecord[], t: FullPersonaDB
         if (persona.linkedProfiles.size) {
             const profiles = await queryProfilesDB({ identifiers: [...persona.linkedProfiles.keys()] }, t)
             // we must not await toProfileInformation cause it is tx of another db.
-            extraPromises.push(
+            dbQueryPass2.push(
                 toProfileInformation(profiles).mustNotAwaitThisWithInATransaction.then((x) => void map.push(...x)),
             )
         }
     })
 
     return {
-        mustNotAwaitThisWithInATransaction: Promise.all(extraPromises).then(() => personaInfo),
+        // we have to split two arrays for them and await them one by one, otherwise it will be race condition
+        mustNotAwaitThisWithInATransaction: Promise.all(dbQuery)
+            .then(() => Promise.all(dbQueryPass2))
+            .then(() => personaInfo),
     }
 }
