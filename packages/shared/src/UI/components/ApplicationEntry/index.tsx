@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import type { Plugin } from '@masknet/plugin-infra'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { TooltipProps, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => ({
     applicationBox: {
@@ -84,16 +84,13 @@ interface ApplicationEntryProps {
     icon: React.ReactNode
     title: React.ReactNode
     disabled?: boolean
-    toolTip?: string
     recommendFeature?: Plugin.SNSAdaptor.ApplicationEntry['recommendFeature']
-    tooltipHint?: string
+    tooltipHint?: string | React.ReactElement
     onClick: () => void
-    tooltipProps?: Partial<TooltipProps>
-    nextIdVerifyToolTipHint?: string | React.ReactElement
 }
 
 export function ApplicationEntry(props: ApplicationEntryProps) {
-    const { title, onClick, disabled = false, icon, tooltipProps, nextIdVerifyToolTipHint, recommendFeature } = props
+    const { title, onClick, disabled = false, icon, tooltipHint, recommendFeature } = props
     const { classes } = useStyles({ disabled })
     const jsx = recommendFeature ? (
         <div
@@ -123,19 +120,20 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             </Typography>
         </div>
     )
-    return (
-        <>
-            {!disabled || nextIdVerifyToolTipHint ? (
-                <ShadowRootTooltip
-                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-                    title={<>{nextIdVerifyToolTipHint}</>}
-                    {...tooltipProps}
-                    disableHoverListener={!nextIdVerifyToolTipHint}>
-                    {jsx}
-                </ShadowRootTooltip>
-            ) : (
-                jsx
-            )}
-        </>
+    return tooltipHint ? (
+        <ShadowRootTooltip
+            PopperProps={{
+                disablePortal: true,
+                placement: 'top',
+            }}
+            classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+            placement="top"
+            arrow
+            disableHoverListener={!tooltipHint}
+            title={<Typography>{tooltipHint}</Typography>}>
+            {jsx}
+        </ShadowRootTooltip>
+    ) : (
+        jsx
     )
 }

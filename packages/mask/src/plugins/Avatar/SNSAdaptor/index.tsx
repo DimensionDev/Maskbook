@@ -27,11 +27,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 icon={icon}
                                 onClick={() => setOpen(true)}
-                                tooltipProps={{
-                                    arrow: true,
-                                    placement: 'top',
-                                }}
-                                nextIdVerifyToolTipHint={
+                                tooltipHint={
                                     <Typography
                                         fontSize={12}
                                         sx={{ whiteSpace: 'nowrap', color: 'white', paddingTop: 1, paddingBottom: 1 }}>
