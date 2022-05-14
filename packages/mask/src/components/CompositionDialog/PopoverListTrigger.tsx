@@ -2,7 +2,6 @@ import { RightArrowIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Popover from '@mui/material/Popover'
 import { RadioGroup, Radio, Typography, Box } from '@mui/material'
-import { useState } from 'react'
 import { CheckCircle } from '@mui/icons-material'
 
 const useStyles = makeStyles()((theme) => ({
@@ -76,7 +75,7 @@ interface PopoverListItem {
     e2eDisabled?: number
     toShare?(): void
     onCreate?(): void
-    setValue?(v: 'share'): void
+    onChange?(v: string): void
     onConnect?(): void
 }
 export interface PopoverListTriggerProp {
@@ -93,12 +92,12 @@ export interface PopoverListTriggerProp {
 }
 
 const PopoverListItem = (props: PopoverListItem) => {
-    const { title, subTitle, personaRequired, type, showDivider, e2eDisabled, toShare, setValue, onConnect, onCreate } =
+    const { title, subTitle, personaRequired, type, showDivider, e2eDisabled, toShare, onChange, onConnect, onCreate } =
         props
     const { classes, cx } = useStyles()
     const handleItemClick = () => {
-        if (!(type === 'share' && toShare && setValue) || !!e2eDisabled) return
-        setValue('share')
+        if (!(type === 'share' && toShare && onChange) || !!e2eDisabled) return
+        onChange('share')
         toShare()
     }
     const isDisabled = personaRequired && !!e2eDisabled
@@ -154,12 +153,9 @@ export function PopoverListTrigger({
     shareWithNum,
 }: PopoverListTriggerProp) {
     const { classes } = useStyles()
-    const [selectedValue, setSelectedValue] = useState<string>(selected)
 
     const getName = () => {
-        return selectedValue === 'share'
-            ? `${shareWithNum} friends`
-            : renderScheme.find((x) => x.type === selectedValue)?.title
+        return selected === 'share' ? `${shareWithNum} friends` : renderScheme.find((x) => x.type === selected)?.title
     }
     return (
         <>
@@ -187,10 +183,9 @@ export function PopoverListTrigger({
                 }}>
                 <RadioGroup
                     className={classes.paper}
-                    value={selectedValue}
+                    value={selected}
                     onChange={(e) => {
                         const value = e.target.value
-                        setSelectedValue(value)
                         onChange(value)
                     }}>
                     {renderScheme.map((x, idx) => {
@@ -198,7 +193,7 @@ export function PopoverListTrigger({
                             <PopoverListItem
                                 onConnect={onConnect}
                                 onCreate={onCreate}
-                                setValue={setSelectedValue}
+                                onChange={onChange}
                                 toShare={() => {
                                     if (toShare) {
                                         toShare()
