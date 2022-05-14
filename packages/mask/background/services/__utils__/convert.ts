@@ -11,7 +11,6 @@ export function toProfileInformation(profiles: ProfileRecord[]) {
                 result.push({
                     identifier: profile.identifier,
                     nickname: profile.nickname,
-                    fingerprint: profile.linkedPersona?.rawPublicKey,
                     linkedPersona: profile.linkedPersona,
                 })
             }

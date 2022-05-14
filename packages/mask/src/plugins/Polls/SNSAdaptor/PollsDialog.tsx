@@ -272,7 +272,7 @@ export default function PollsDialog(props: PollsDialogProps) {
     }, [currentIdentity])
 
     const senderName = linkedPersona?.nickname
-    const senderFingerprint = currentProfile?.fingerprint
+    const senderFingerprint = currentProfile?.linkedPersona?.rawPublicKey
 
     const tabProps: AbstractTabProps = {
         tabs: [
