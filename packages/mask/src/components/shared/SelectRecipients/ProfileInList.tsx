@@ -109,12 +109,22 @@ export function ProfileInList(props: ProfileInListProps) {
         return `@${profile.identifier.userId || profile.nickname}`
     }
 
-    const ToolTipText =
-        profile.fromNextID && profile.linkedTwitterNames?.length! > 1
-            ? `${t('select_friends_dialog_persona_connect')} ${profile
-                  .linkedTwitterNames!.map((x) => '@' + x)
-                  .join(', ')}.`
-            : ''
+    const ToolTipText = () => {
+        const linkedNames = profile.linkedTwitterNames!
+        const len = linkedNames?.length!
+        if (profile.fromNextID) {
+            if (len === 1 && linkedNames[0]?.length > 15) {
+                return `${t('select_friends_dialog_persona_connect')} ${linkedNames}.`
+            }
+            if (len > 1) {
+                return `${t('select_friends_dialog_persona_connect')} ${profile
+                    .linkedTwitterNames!.map((x) => '@' + x)
+                    .join(', ')}.`
+            }
+        }
+        return ''
+    }
+
     const onClick = useCallback(
         (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.checked),
         [props],
@@ -143,7 +153,7 @@ export function ProfileInList(props: ProfileInListProps) {
                 primary={
                     <div className={classes.flex}>
                         <ShadowRootTooltip
-                            title={ToolTipText}
+                            title={ToolTipText()}
                             arrow
                             classes={{
                                 tooltip: classes.toolTip,

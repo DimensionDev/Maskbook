@@ -79,7 +79,7 @@ interface PopoverListItem {
     setValue?(v: 'share'): void
     onConnect?(): void
 }
-interface PopoverListTriggerProp {
+export interface PopoverListTriggerProp {
     e2eDisabled?: number
     anchorEl: HTMLElement | null
     setAnchorEl(v: HTMLElement | null): void

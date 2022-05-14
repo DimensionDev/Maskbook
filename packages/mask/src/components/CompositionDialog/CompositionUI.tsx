@@ -23,9 +23,9 @@ import { CompositionContext } from '@masknet/plugin-infra/content-script'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { useSubscription } from 'use-subscription'
-import { PopoverListTrigger } from './PopoverListTrigger'
-import { usePopoverListDataSource } from './usePopoverListDataSource'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
+import { VisibleToRow } from './VisibleToRow'
+import { EncryptionMethodRow } from './EncryptionMethodRow'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -58,12 +58,7 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: `0px 0px 20px 0px ${theme.palette.background.messageShadow}`,
         transform: 'translateX(-16px)',
     },
-    optionTitle: {
-        fontSize: 14,
-        lineHeight: '18px',
-        color: theme.palette.text.secondary,
-        marginRight: 12,
-    },
+
     between: {
         justifyContent: 'space-between',
     },
@@ -79,6 +74,12 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         gap: 4,
         cursor: 'pointer',
+    },
+    optionTitle: {
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.text.secondary,
+        marginRight: 12,
     },
 }))
 
@@ -121,19 +122,14 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
 
     const [currentPostSize, __updatePostSize] = useState(0)
     const [shareWithOpen, setShareWithOpen] = useState(false)
-
     const Editor = useRef<TypedMessageEditorRef | null>(null)
     const PluginEntry = useRef<PluginEntryRenderRef>(null)
 
     const [sending, setSending] = useState(false)
 
-    const [visibleAnchorEl, setVisibleAnchorEl] = useState<HTMLElement | null>(null)
-    const [methodAnchorEl, setMethodAnchorEl] = useState<HTMLElement | null>(null)
-
     const updatePostSize = useCallback((size: number) => {
         startTransition(() => __updatePostSize(size))
     }, [])
-    const { visibilityPopperList, methodsPopperList } = usePopoverListDataSource()
     const { setEncryptionKind, encryptionKind, recipientSelectorAvailable, recipients, setRecipients } =
         useSetEncryptionKind(props)
     const { encodingKind, setEncoding } = useEncryptionEncode(props)
@@ -207,16 +203,10 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     <PluginEntryRender readonly={sending} ref={PluginEntry} />
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
-                    <Typography className={classes.optionTitle}>{t('post_dialog_visible_to')}</Typography>
-
-                    <PopoverListTrigger
+                    <VisibleToRow
                         onConnect={props.onConnect}
                         onCreate={props.onCreate}
                         e2eDisabled={props.e2eEncryptionDisabled}
-                        selected="all"
-                        renderScheme={visibilityPopperList}
-                        anchorEl={visibleAnchorEl}
-                        setAnchorEl={setVisibleAnchorEl}
                         shareWithNum={recipients.length}
                         onChange={(event) => {
                             if (event === 'all') {
@@ -233,6 +223,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                             setShareWithOpen(true)
                         }}
                     />
+
                     <SelectRecipientsUI
                         open={shareWithOpen}
                         onClose={() => setShareWithOpen(false)}
@@ -243,14 +234,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     />
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
-                    <Typography className={classes.optionTitle}>{t('post_dialog_encryption_method')}</Typography>
-                    <PopoverListTrigger
-                        selected="text"
-                        renderScheme={methodsPopperList}
-                        anchorEl={methodAnchorEl}
-                        setAnchorEl={setMethodAnchorEl}
-                        onChange={(event) => setEncoding(event as SetStateAction<'text' | 'image'>)}
-                    />
+                    <EncryptionMethodRow onChange={(event) => setEncoding(event as SetStateAction<'text' | 'image'>)} />
                 </div>
             </div>
             <div className={classes.actions}>
