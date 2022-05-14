@@ -1,6 +1,6 @@
 import { RefreshIcon } from '@masknet/icons'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { Card, CardContent, CardHeader, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Card, CardContent, CardHeader, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -8,6 +8,7 @@ import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool'
 import { PerformanceChart } from './PerformanceChart'
 import { PoolStats } from './PoolStats'
 import { PoolViewDeck } from './PoolViewDeck'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -85,8 +86,8 @@ export function PoolView(props: PoolViewProps) {
 
     if (loading || loadingAllowedTokens)
         return (
-            <Typography className={classes.message} color="textPrimary">
-                {t('plugin_dhedge_loading')}
+            <Typography className={classes.message} textAlign="center" sx={{ padding: 2 }}>
+                <CircularProgress />
             </Typography>
         )
     if (!pool)
@@ -107,28 +108,33 @@ export function PoolView(props: PoolViewProps) {
         )
 
     return (
-        <Card className={classes.root} elevation={0}>
-            <CardHeader subheader={<PoolViewDeck pool={pool} inputTokens={allowedTokens} link={props.link} />} />
-            <CardContent className={classes.content}>
-                <Tabs
-                    className={classes.tabs}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    variant="fullWidth"
-                    value={tabIndex}
-                    onChange={(_, newValue: number) => setTabIndex(newValue)}
-                    TabIndicatorProps={{
-                        style: {
-                            display: 'none',
-                        },
-                    }}>
-                    {tabs}
-                </Tabs>
-                <Paper className={classes.body}>
-                    {tabIndex === 0 ? <PoolStats pool={pool} /> : null}
-                    {tabIndex === 1 ? <PerformanceChart pool={pool} /> : null}
-                </Paper>
-            </CardContent>
-        </Card>
+        <>
+            <Card className={classes.root} elevation={0}>
+                <CardHeader subheader={<PoolViewDeck pool={pool} inputTokens={allowedTokens} link={props.link} />} />
+                <CardContent className={classes.content}>
+                    <Tabs
+                        className={classes.tabs}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="fullWidth"
+                        value={tabIndex}
+                        onChange={(_, newValue: number) => setTabIndex(newValue)}
+                        TabIndicatorProps={{
+                            style: {
+                                display: 'none',
+                            },
+                        }}>
+                        {tabs}
+                    </Tabs>
+                    <Paper className={classes.body}>
+                        {tabIndex === 0 ? <PoolStats pool={pool} /> : null}
+                        {tabIndex === 1 ? <PerformanceChart pool={pool} /> : null}
+                    </Paper>
+                </CardContent>
+            </Card>
+            <Box style={{ padding: 12 }}>
+                <EthereumChainBoundary chainId={pool.chainId} />
+            </Box>
+        </>
     )
 }

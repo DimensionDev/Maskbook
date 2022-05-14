@@ -154,16 +154,15 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                 </Typography>
                 <div className={classes.publish}>{publisherInfo}</div>
             </div>
-            {personaConnectStatus.connected && children ? (
-                <div className={classes.body}>{children}</div>
-            ) : (
+            {!personaConnectStatus.hasPersona || !personaConnectStatus.connected ? (
                 <>
                     <Typography variant="body1" color={MaskColorVar.errorPlugin} sx={{ padding: 1 }} textAlign="center">
                         {content ?? name}
                     </Typography>
                     <div className={classes.action}>{actionButton || action || publisherInfo}</div>
                 </>
-            )}
+            ) : null}
+            {children ? <div className={classes.body}>{children}</div> : null}
         </div>
     )
 

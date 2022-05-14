@@ -1,4 +1,4 @@
-import { resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
+import { resolveAddressLinkOnExplorer, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Button, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
@@ -9,7 +9,6 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useAvatar } from '../hooks/useManager'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -66,6 +65,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
 
     const blockie = useAvatar(pool.managerAddress)
     const chainId = useChainId()
+    const account = useAccount()
 
     // #region manager share
     const managerShare = new BigNumber(pool.balanceOfManager)
@@ -139,11 +139,11 @@ export function PoolViewDeck(props: PoolDeckProps) {
                 </Grid>
             </Grid>
             <Grid item alignSelf="right" xs={4} textAlign="center">
-                <EthereumChainBoundary chainId={pool.chainId}>
+                {account ? (
                     <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
                         {t('plugin_dhedge_invest')}
                     </Button>
-                </EthereumChainBoundary>
+                ) : null}
             </Grid>
         </Grid>
     )

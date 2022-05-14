@@ -10,10 +10,8 @@ import { PluginSnapshotRPC } from '../messages'
 import { SnapshotCard } from './SnapshotCard'
 import { useProposal } from './hooks/useProposal'
 import { usePower } from './hooks/usePower'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { VoteConfirmDialog } from './VoteConfirmDialog'
 import { useRetry } from './hooks/useRetry'
-import { PluginWalletConnectIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -49,6 +47,7 @@ export function VotingCard() {
     const [choice, setChoice] = useState(0)
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
+
     const retry = useRetry()
     const onVoteConfirm = useSnackbarCallback(
         () => {
@@ -72,31 +71,30 @@ export function VotingCard() {
 
     return (
         <SnapshotCard title={t('plugin_snapshot_vote_title')}>
-            <EthereumWalletConnectedBoundary
-                startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-                classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}
-                offChain>
-                {choices.map((choiceText, i) => (
-                    <Button
-                        key={i}
-                        onClick={() => setChoice(i + 1)}
-                        className={classNames([
-                            classes.button,
-                            classes.choiceButton,
-                            ...(choice === i + 1 ? [classes.buttonActive] : []),
-                        ])}
-                        variant="outlined">
-                        {choiceText}
-                    </Button>
-                ))}
+            {account ? (
+                <>
+                    {choices.map((choiceText, i) => (
+                        <Button
+                            key={i}
+                            onClick={() => setChoice(i + 1)}
+                            className={classNames([
+                                classes.button,
+                                classes.choiceButton,
+                                ...(choice === i + 1 ? [classes.buttonActive] : []),
+                            ])}
+                            variant="outlined">
+                            {choiceText}
+                        </Button>
+                    ))}
 
-                <Button
-                    className={classes.button}
-                    disabled={choice === 0 || !account || !power}
-                    onClick={() => setOpen(true)}>
-                    {Boolean(power) && Boolean(account) ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
-                </Button>
-            </EthereumWalletConnectedBoundary>
+                    <Button
+                        className={classes.button}
+                        disabled={choice === 0 || !account || !power}
+                        onClick={() => setOpen(true)}>
+                        {Boolean(power) && Boolean(account) ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
+                    </Button>
+                </>
+            ) : null}
             <VoteConfirmDialog
                 open={open}
                 loading={loading}

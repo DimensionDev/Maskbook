@@ -141,7 +141,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                     </Paper>
                 </CardContent>
             </Card>
-            <Box style={{ padding: 16 }}>
+            <Box style={{ padding: 12 }}>
                 <EthereumChainBoundary
                     chainId={ChainId.Mainnet}
                     isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}

@@ -257,10 +257,12 @@ export function FindTruman(props: FindTrumanProps) {
                 <Footer />
             </Card>
 
-            <EthereumWalletConnectedBoundary
-                hideRiskWarningConfirmed
-                startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-            />
+            <Box style={{ paddingLeft: 4, paddingRight: 4 }}>
+                <EthereumWalletConnectedBoundary
+                    hideRiskWarningConfirmed
+                    startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                />
+            </Box>
         </>
     )
 }

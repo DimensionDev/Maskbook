@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Box, Card, Typography, Button, Grid, Avatar } from '@mui/material'
+import { Box, Card, Typography, Button, Grid, Avatar, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
@@ -59,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
         margin: theme.spacing(0, 1),
     },
     buttons: {
-        padding: theme.spacing(4, 0, 0),
+        padding: 12,
     },
     verified: {
         borderRadius: 50,
@@ -101,7 +101,12 @@ export function PreviewCard(props: PreviewCardProps) {
     }, [grant, setDonationDialog])
     // #endregion
 
-    if (loading) return <Typography color="textPrimary">{t('loading')}</Typography>
+    if (loading)
+        return (
+            <Typography color="textPrimary" textAlign="center" sx={{ padding: 2 }}>
+                <CircularProgress />
+            </Typography>
+        )
     if (error)
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
@@ -114,42 +119,44 @@ export function PreviewCard(props: PreviewCardProps) {
     if (!grant) return null
 
     return (
-        <Card variant="outlined" className={classes.root} elevation={0}>
-            <div className={classes.logo}>
-                <img src={grant.logo_url} />
-            </div>
-            <div className={classes.title}>
-                <Typography variant="h6" color="textPrimary">
-                    {grant.title}
-                </Typography>
-                {grant.verified ? <VerifiedUserIcon fontSize="small" color="primary" /> : null}
-            </div>
-            <div className={classes.description}>
-                <Typography variant="body2" color="textSecondary" className={classes.text}>
-                    {grant.description}
-                </Typography>
-            </div>
-            <div className={classes.data}>
-                <div className={classes.meta}>
-                    <QueryBuilderIcon fontSize="small" color="disabled" />
-                    <Typography variant="body2" color="textSecondary">
-                        {t('plugin_gitcoin_last_updated')} {grant.last_update_natural}
+        <>
+            <Card variant="outlined" className={classes.root} elevation={0}>
+                <div className={classes.logo}>
+                    <img src={grant.logo_url} />
+                </div>
+                <div className={classes.title}>
+                    <Typography variant="h6" color="textPrimary">
+                        {grant.title}
+                    </Typography>
+                    {grant.verified ? <VerifiedUserIcon fontSize="small" color="primary" /> : null}
+                </div>
+                <div className={classes.description}>
+                    <Typography variant="body2" color="textSecondary" className={classes.text}>
+                        {grant.description}
                     </Typography>
                 </div>
-                <div className={classes.meta}>
-                    <Typography variant="body2" color="textSecondary">
-                        {t('plugin_gitcoin_by')}
-                    </Typography>
-                    <Avatar
-                        alt={grant.admin_profile.handle}
-                        src={grant.admin_profile.avatar_url}
-                        className={classes.avatar}
-                    />
-                    <Typography variant="body2" color="textSecondary">
-                        {grant.admin_profile.handle}
-                    </Typography>
+                <div className={classes.data}>
+                    <div className={classes.meta}>
+                        <QueryBuilderIcon fontSize="small" color="disabled" />
+                        <Typography variant="body2" color="textSecondary">
+                            {t('plugin_gitcoin_last_updated')} {grant.last_update_natural}
+                        </Typography>
+                    </div>
+                    <div className={classes.meta}>
+                        <Typography variant="body2" color="textSecondary">
+                            {t('plugin_gitcoin_by')}
+                        </Typography>
+                        <Avatar
+                            alt={grant.admin_profile.handle}
+                            src={grant.admin_profile.avatar_url}
+                            className={classes.avatar}
+                        />
+                        <Typography variant="body2" color="textSecondary">
+                            {grant.admin_profile.handle}
+                        </Typography>
+                    </div>
                 </div>
-            </div>
+            </Card>
             <Grid container className={classes.buttons} spacing={2}>
                 <Grid item xs={6}>
                     <Button
@@ -170,6 +177,6 @@ export function PreviewCard(props: PreviewCardProps) {
                     </EthereumChainBoundary>
                 </Grid>
             </Grid>
-        </Card>
+        </>
     )
 }
