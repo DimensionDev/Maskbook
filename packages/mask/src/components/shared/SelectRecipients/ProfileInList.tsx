@@ -113,7 +113,7 @@ export function ProfileInList(props: ProfileInListProps) {
         profile.fromNextID && profile.linkedTwitterNames?.length! > 1
             ? `${t('select_friends_dialog_persona_connect')} ${profile
                   .linkedTwitterNames!.map((x) => '@' + x)
-                  .join(', ')}`
+                  .join(', ')}.`
             : ''
     const onClick = useCallback(
         (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.checked),
