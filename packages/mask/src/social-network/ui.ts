@@ -90,7 +90,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         ui.injection.toolbox?.(signal, 'wallet')
         ui.injection.toolbox?.(signal, 'application')
     }
-    ui.injection.setupPrompt?.(signal)
     ui.injection.newPostComposition?.start?.(signal)
     ui.injection.searchResult?.(signal)
     ui.injection.userBadge?.(signal)
@@ -227,6 +226,19 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         currentSetupGuideStatus[network].readyPromise.then(onStatusUpdate)
         onStatusUpdate(id)
     }
+}
+
+export async function loadSocialNetworkUIs(): Promise<SocialNetworkUI.Definition[]> {
+    const defines = [...definedSocialNetworkUIs.values()].map(async (x) => x.load())
+    const uis = (await Promise.all(defines)).map((x) => x.default)
+
+    if (!defines) throw new Error('SNS adaptor load failed')
+
+    for (const ui of uis) {
+        definedSocialNetworkUIsResolved.set(ui.networkIdentifier, ui)
+    }
+
+    return uis
 }
 
 export async function loadSocialNetworkUI(identifier: string): Promise<SocialNetworkUI.Definition> {
