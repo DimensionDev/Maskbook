@@ -121,10 +121,8 @@ export default function GuideStep({
         setOpen(open)
 
         if (!open) return
-        const url = new URL(location.href)
-        if (url.pathname === '/home') return
-        url.pathname = '/home'
-        location.href = url.href
+        if (location.pathname === '/home') return
+        location.assign('/home')
     }, [lastStep])
 
     useEffect(() => {
