@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 219.5,
         borderRadius: 999,
     },
-    AddCollectiblesbutton: {
+    AddCollectiblesButton: {
         fontWeight: 600,
         color: '#1D9BF0',
     },
@@ -164,7 +164,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     t.collectible_no_eth()
                 )}
             </Typography>
-            <Button className={classes.AddCollectiblesbutton} variant="text" onClick={() => setOpen_(true)}>
+            <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
                 {t.add_collectible()}
             </Button>
         </Box>
