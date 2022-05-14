@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { ListItemText, Checkbox, ListItemAvatar, ListItem, Tooltip } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { ListItemText, Checkbox, ListItemAvatar, ListItem } from '@mui/material'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
 import { formatPersonaFingerprint, formatPersonaPublicKey, ProfileInformation as Profile } from '@masknet/shared-base'
 import { Avatar } from '../../../utils/components/Avatar'
@@ -136,27 +136,24 @@ export function ProfileInList(props: ProfileInListProps) {
                     secondary: classes.overflow,
                 }}
                 primary={
-                    <Tooltip
-                        PopperProps={{
-                            disablePortal: true,
-                            placement: 'auto',
-                        }}
-                        followCursor
-                        title={ToolTipText}
-                        arrow
-                        classes={{
-                            tooltip: classes.toolTip,
-                        }}>
-                        <div className={classes.flex}>
-                            <Highlighter
-                                className={classes.highLightBase}
-                                highlightClassName={classes.highlighted}
-                                searchWords={[props.search ?? '']}
-                                autoEscape
-                                textToHighlight={resolvePrimaryText()}
-                            />
-                        </div>
-                    </Tooltip>
+                    <div className={classes.flex}>
+                        <ShadowRootTooltip
+                            title={ToolTipText}
+                            arrow
+                            classes={{
+                                tooltip: classes.toolTip,
+                            }}>
+                            <div>
+                                <Highlighter
+                                    className={classes.highLightBase}
+                                    highlightClassName={classes.highlighted}
+                                    searchWords={[props.search ?? '']}
+                                    autoEscape
+                                    textToHighlight={resolvePrimaryText()}
+                                />
+                            </div>
+                        </ShadowRootTooltip>
+                    </div>
                 }
                 secondary={
                     <div className={classes.flex}>

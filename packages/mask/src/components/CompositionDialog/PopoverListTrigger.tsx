@@ -147,6 +147,7 @@ export function PopoverListTrigger({
     renderScheme,
     selected,
     onChange,
+    onCreate,
     onConnect,
     e2eDisabled,
     toShare,
@@ -196,6 +197,7 @@ export function PopoverListTrigger({
                         return (
                             <PopoverListItem
                                 onConnect={onConnect}
+                                onCreate={onCreate}
                                 setValue={setSelectedValue}
                                 toShare={() => {
                                     if (toShare) {
