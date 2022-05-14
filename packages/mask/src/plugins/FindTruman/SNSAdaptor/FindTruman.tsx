@@ -257,7 +257,7 @@ export function FindTruman(props: FindTrumanProps) {
                 <Footer />
             </Card>
 
-            <Box style={{ paddingLeft: 4, paddingRight: 4 }}>
+            <Box style={{ padding: 12 }}>
                 <EthereumWalletConnectedBoundary
                     hideRiskWarningConfirmed
                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}

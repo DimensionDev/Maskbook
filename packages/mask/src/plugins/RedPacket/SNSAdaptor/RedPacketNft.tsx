@@ -100,7 +100,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     buttonWrapper: {
-        marginTop: 4,
+        marginTop: 0,
     },
     loadingBox: {
         borderRadius: theme.spacing(1),

@@ -60,6 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     buttons: {
         padding: 12,
+        lineHeight: '16px',
     },
     verified: {
         borderRadius: 50,

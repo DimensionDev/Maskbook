@@ -76,19 +76,21 @@ export function OperationFooter({
     }
 
     return (
-        <EthereumWalletConnectedBoundary
-            startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-            classes={{
-                connectWallet: classes.connectWallet,
-            }}>
-            <Box className={classes.footer}>
-                {canRefund ? null : (
-                    <ActionButton variant="contained" fullWidth size="large" onClick={onShare}>
-                        {t('share')}
-                    </ActionButton>
-                )}
-                <ObtainButton />
-            </Box>
-        </EthereumWalletConnectedBoundary>
+        <Box style={{ padding: '0 12px 12px 12px' }}>
+            <EthereumWalletConnectedBoundary
+                startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                classes={{
+                    connectWallet: classes.connectWallet,
+                }}>
+                <Box className={classes.footer}>
+                    {canRefund ? null : (
+                        <ActionButton variant="contained" fullWidth size="large" onClick={onShare}>
+                            {t('share')}
+                        </ActionButton>
+                    )}
+                    <ObtainButton />
+                </Box>
+            </EthereumWalletConnectedBoundary>
+        </Box>
     )
 }

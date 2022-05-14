@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Box, Typography, Theme } from '@mui/material'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
@@ -28,9 +28,29 @@ import { useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 import Services from '../../extension/service'
 import { pluginIDSettings } from '../../settings/settings'
+import { usePersonaConnectStatus } from '../../components/DataSource/usePersonaConnectStatus'
 import { PluginWalletConnectIcon } from '@masknet/icons'
 
-const useStyles = makeStyles()(() => ({}))
+const useStyles = makeStyles()((theme) => ({
+    button: {
+        backgroundColor: MaskColorVar.buttonPluginBackground,
+        color: 'white',
+        width: 254,
+        '&,&:hover': {
+            background: MaskColorVar.buttonPluginBackground,
+        },
+        borderRadius: 9999,
+    },
+    action: {
+        textAlign: 'center',
+        margin: theme.spacing(1),
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottoma: 48,
+    },
+}))
 
 export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> {
     className?: string
@@ -46,6 +66,7 @@ export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> 
 
 export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const { t } = useI18N()
+    const personaConnectStatus = usePersonaConnectStatus()
 
     const pluginID = useCurrentWeb3NetworkPluginID()
     const plugin = useActivatedPlugin(pluginID, 'any')
@@ -86,6 +107,28 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         WalletMessages.events.connectWalletDialogUpdated,
     )
     // #endregion
+
+    const actionButton = useMemo(() => {
+        if (!personaConnectStatus.action) return null
+
+        const button = personaConnectStatus.hasPersona ? t('connect_persona') : t('create_persona')
+        return (
+            <ActionButton
+                variant="contained"
+                sx={{
+                    margin: '0 !important',
+                    backgroundColor: MaskColorVar.buttonPluginBackground,
+                    width: '100%',
+                    color: 'white',
+                    '&:hover': {
+                        backgroundColor: MaskColorVar.buttonPluginBackground,
+                    },
+                }}
+                onClick={personaConnectStatus.action}>
+                {button}
+            </ActionButton>
+        )
+    }, [personaConnectStatus, t])
 
     // request ethereum-compatible network
     const networkType = getNetworkTypeFromChainId(expectedChainId)
@@ -157,6 +200,10 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 {children}
             </Box>
         )
+    }
+
+    if (!personaConnectStatus.hasPersona || !personaConnectStatus.connected) {
+        return renderBox(<>{actionButton}</>)
     }
 
     if (!account)

@@ -8,14 +8,16 @@ import { useI18N } from '../../utils'
 import { useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared-evm'
 import { isZero } from '@masknet/web3-shared-base'
 import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
+import { usePersonaConnectStatus } from '../../components/DataSource/usePersonaConnectStatus'
+import { useMemo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
-        margin: theme.spacing(1.5, 1),
         backgroundColor: MaskColorVar.buttonPluginBackground,
         color: 'white',
         fontSize: 14,
         fontWeight: 700,
+        width: '100%',
         '&:hover': {
             backgroundColor: MaskColorVar.buttonPluginBackground,
         },
@@ -32,10 +34,11 @@ export interface EthereumWalletConnectedBoundaryProps
     hideRiskWarningConfirmed?: boolean
     ActionButtonProps?: ActionButtonProps
     startIcon?: React.ReactNode
+    hiddenPersonaVerified?: boolean
 }
 
 export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
-    const { children = null, offChain = false, hideRiskWarningConfirmed = false } = props
+    const { children = null, offChain = false, hideRiskWarningConfirmed = false, hiddenPersonaVerified = false } = props
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -43,6 +46,8 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const account = useAccount()
     const chainIdValid = useChainIdValid()
     const nativeTokenBalance = useNativeTokenBalance()
+
+    const personaConnectStatus = usePersonaConnectStatus()
 
     // #region remote controlled confirm risk warning
     const { isConfirmed: isRiskWarningConfirmed, openDialog: openRiskWarningDialog } = useWalletRiskWarningDialog()
@@ -53,6 +58,24 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
         WalletMessages.events.selectProviderDialogUpdated,
     )
     // #endregion
+
+    const actionButton = useMemo(() => {
+        if (!personaConnectStatus.action) return null
+
+        const button = personaConnectStatus.hasPersona ? t('connect_persona') : t('create_persona')
+        return (
+            <ActionButton
+                variant="contained"
+                className={classNames(classes.button, classes.connectWallet)}
+                onClick={personaConnectStatus.action}>
+                {button}
+            </ActionButton>
+        )
+    }, [personaConnectStatus, t])
+
+    if (!hiddenPersonaVerified && (!personaConnectStatus.hasPersona || !personaConnectStatus.connected)) {
+        return <>{actionButton}</>
+    }
 
     if (!account)
         return (
