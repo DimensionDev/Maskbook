@@ -117,7 +117,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const Empty = () => (
         <div className={classes.empty}>
             <SearchEmptyIcon style={{ width: 36, height: 36 }} />
-            <Typography>{props.searchEmptyText ?? 'No encrypted friends, You can try searching.'}</Typography>
+            <Typography>{props.searchEmptyText ?? 'No encrypted friends, you can try searching.'}</Typography>
         </div>
     )
 

@@ -71,6 +71,7 @@ interface MetaBadgeProps {
 
 function MetaBadge({ title, children, onDelete, readonly }: React.PropsWithChildren<MetaBadgeProps>) {
     const { classes } = useStyles()
+    console.log(title, 'ggg', children)
     return (
         <Box sx={{ display: 'inline-block' }}>
             <ShadowRootTooltip title={title}>

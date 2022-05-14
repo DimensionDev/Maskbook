@@ -237,7 +237,10 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     />
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
-                    <EncryptionMethodRow onChange={(event) => setEncoding(event as SetStateAction<'text' | 'image'>)} />
+                    <EncryptionMethodRow
+                        selected={encodingKind}
+                        onChange={(event) => setEncoding(event as SetStateAction<'text' | 'image'>)}
+                    />
                 </div>
             </div>
             <div className={classes.actions}>

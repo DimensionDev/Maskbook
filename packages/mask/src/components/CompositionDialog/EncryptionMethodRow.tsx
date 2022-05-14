@@ -27,7 +27,6 @@ const useStyles = makeStyles()((theme) => ({
 export function EncryptionMethodRow(props: Partial<PopoverListTriggerProp>) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [selected, setSelected] = useState<'text' | 'image'>('text')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     return (
@@ -37,7 +36,7 @@ export function EncryptionMethodRow(props: Partial<PopoverListTriggerProp>) {
             <PopoverListTrigger
                 onConnect={props.onConnect}
                 onCreate={props.onCreate}
-                selected={selected}
+                selected={props.selected ?? 'text'}
                 renderScheme={renderScheme}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}

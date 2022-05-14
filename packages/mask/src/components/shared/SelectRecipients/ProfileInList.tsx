@@ -102,7 +102,7 @@ export function ProfileInList(props: ProfileInListProps) {
             const rawStr = profile.linkedTwitterNames!.map((x) => '@' + x).join(' ')
             if (rawStr.length > 15) {
                 const len = profile.linkedTwitterNames?.length
-                return truncate(rawStr, { length: 15 }) + (len! > 1 ? len : '')
+                return truncate(rawStr, { length: 15 }) + (len! > 1 ? `(${len})` : '')
             }
             return rawStr
         }
