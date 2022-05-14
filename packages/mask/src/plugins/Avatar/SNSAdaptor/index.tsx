@@ -19,14 +19,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = { fallback: 'NFT PFP' }
             const icon = <ApplicationIcon />
             return {
-                RenderEntryComponent({ disabled, tooltipHint }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
                     return (
                         <>
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 icon={icon}
-                                onClick={() => setOpen(true)}
+                                {...EntryComponentProps}
+                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
                                 tooltipHint={
                                     <Typography
                                         fontSize={12}

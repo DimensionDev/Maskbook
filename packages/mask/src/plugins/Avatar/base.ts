@@ -1,8 +1,6 @@
 import { PLUGIN_ID } from './constants'
 import { languages } from './locales/languages'
 import { Plugin, CurrentSNSNetwork } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { ChainId } from '@masknet/web3-shared-evm'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -22,13 +20,6 @@ export const base: Plugin.Shared.Definition = {
             },
         },
         target: 'stable',
-        web3: {
-            [NetworkPluginID.PLUGIN_EVM]: {
-                supportedChainIds: [ChainId.Mainnet],
-            },
-            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
-            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
-        },
     },
 
     i18n: languages,
