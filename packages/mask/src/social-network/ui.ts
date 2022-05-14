@@ -15,7 +15,7 @@ import {
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentityResolved, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
+import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
@@ -108,8 +108,11 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     // Update user avatar
     ui.collecting.currentVisitingIdentityProvider?.recognized.addListener((ref) => {
-        if (ref.avatar && ref.identifier) {
-            Services.Identity.updateProfileInfo(ref.identifier, { avatarURL: ref.avatar })
+        if (!(ref.avatar && ref.identifier)) return
+        Services.Identity.updateProfileInfo(ref.identifier, { avatarURL: ref.avatar, nickname: ref.nickname })
+        const currentProfile = getCurrentIdentifier()
+        if (currentProfile?.linkedPersona) {
+            Services.Identity.createNewRelation(ref.identifier, currentProfile.linkedPersona)
         }
     })
 
