@@ -9,6 +9,9 @@ import { useGrant } from '../hooks/useGrant'
 import { PluginGitcoinMessages } from '../messages'
 import urlcat from 'urlcat'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra/web3'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -81,6 +84,8 @@ export function PreviewCard(props: PreviewCardProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.id)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const isGitCoinSupported = (chainId: ChainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)
 
     // #region the donation dialog
     const postLink = usePostLink()
@@ -158,9 +163,11 @@ export function PreviewCard(props: PreviewCardProps) {
                     </Button>
                 </Grid>
                 <Grid item xs={6}>
-                    <Button variant="contained" fullWidth color="primary" onClick={onDonate}>
-                        {t('plugin_gitcoin_donate')}
-                    </Button>
+                    <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
+                        <Button variant="contained" fullWidth color="primary" onClick={onDonate}>
+                            {t('plugin_gitcoin_donate')}
+                        </Button>
+                    </EthereumChainBoundary>
                 </Grid>
             </Grid>
         </Card>

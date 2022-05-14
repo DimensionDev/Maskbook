@@ -28,6 +28,7 @@ import { useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 import Services from '../../extension/service'
 import { pluginIDSettings } from '../../settings/settings'
+import { PluginWalletConnectIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()(() => ({}))
 
@@ -161,19 +162,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     if (!account)
         return renderBox(
             <>
-                <Typography color={MaskColorVar.errorPlugin}>
-                    <span>{t('plugin_wallet_connect_wallet_tip')}</span>
-                </Typography>
                 {!props.hiddenConnectButton ? (
                     <ActionButton
+                        startIcon={<PluginWalletConnectIcon />}
                         variant="contained"
                         size={props.ActionButtonPromiseProps?.size}
                         sx={{
-                            borderRadius: 9999,
-                            marginTop: 1.5,
-                            marginBottom: 1.5,
                             backgroundColor: MaskColorVar.buttonPluginBackground,
-                            width: 254,
+                            width: '100%',
                             color: 'white',
                             '&:hover': {
                                 backgroundColor: MaskColorVar.buttonPluginBackground,
@@ -183,7 +179,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         {t('plugin_wallet_connect_wallet')}
                     </ActionButton>
                 ) : null}
-                {props.children}
             </>,
         )
 
@@ -217,7 +212,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         className={classes.switchButton}
                         sx={
                             props.switchButtonStyle ?? {
-                                marginTop: 1.5,
                                 backgroundColor: MaskColorVar.textPluginColor,
                                 width: 254,
                                 color: 'white',
@@ -246,7 +240,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         {...props.ActionButtonPromiseProps}
                     />
                 ) : null}
-                {props.children}
             </>,
         )
     }
@@ -267,7 +260,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     className={classes.switchButton}
                     sx={
                         props.switchButtonStyle ?? {
-                            marginTop: 1.5,
                             backgroundColor: MaskColorVar.buttonPluginBackground,
                             width: 254,
                             color: 'white',
@@ -297,7 +289,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     {...props.ActionButtonPromiseProps}
                 />
             ) : null}
-            {props.children}
         </>,
     )
 }

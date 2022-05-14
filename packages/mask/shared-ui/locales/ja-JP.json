@@ -257,8 +257,6 @@
     "plugin_ito_list_table_got": "バランス",
     "plugin_ito_list_button_send": "送る",
     "plugin_ito_withdraw": "取り消す",
-    "plugin_ito_qualification_loading": "資格認証中…",
-    "plugin_ito_qualification_failed": "ウォレットアドレスがリストにありません。",
     "plugin_ito_withdrawn": "取り消しました",
     "plugin_ito_your_swapped_amount": "あなたは {{amount}} {{symbol}} を獲得しました",
     "plugin_ito_your_claimed_amount": "あなたは {{amount}} {{symbol}} を請求しました",

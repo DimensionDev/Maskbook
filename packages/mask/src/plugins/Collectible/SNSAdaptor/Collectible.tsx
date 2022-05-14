@@ -158,7 +158,7 @@ export function Collectible(props: CollectibleProps) {
                             fullWidth
                             onClick={() => asset.retry()}
                             sx={{
-                                marginTop: 1.5,
+                                marginTop: 1,
                                 backgroundColor: MaskColorVar.textPluginColor,
                                 color: 'white',
                                 '&:hover': {

@@ -3,9 +3,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Card, Typography } from '@mui/material'
 import {
-    ChainId,
     formatBalance,
-    getChainIdFromName,
     resolveNetworkName,
     TransactionStateType,
     useAccount,
@@ -21,7 +19,6 @@ import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { useI18N } from '../../../../utils'
-import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { WalletMessages } from '../../../Wallet/messages'
 import type { RedPacketAvailability, RedPacketJSONPayload } from '../../types'
 import { RedPacketStatus } from '../../types'
@@ -180,17 +177,15 @@ export function RedPacket(props: RedPacketProps) {
     // the red packet can fetch without account
     if (!availability || !token)
         return (
-            <EthereumChainBoundary chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}>
-                <Card className={classes.root} component="article" elevation={0}>
-                    <Typography className={classes.loadingText} variant="body2">
-                        {t('loading')}
-                    </Typography>
-                </Card>
-            </EthereumChainBoundary>
+            <Card className={classes.root} component="article" elevation={0}>
+                <Typography className={classes.loadingText} variant="body2">
+                    {t('loading')}
+                </Typography>
+            </Card>
         )
 
     return (
-        <EthereumChainBoundary chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}>
+        <>
             <Card className={classNames(classes.root)} component="article" elevation={0}>
                 <div className={classes.header}>
                     {/* it might be fontSize: 12 on twitter based on theme? */}
@@ -227,7 +222,7 @@ export function RedPacket(props: RedPacketProps) {
                     onClaimOrRefund={onClaimOrRefund}
                 />
             )}
-        </EthereumChainBoundary>
+        </>
     )
 }
 

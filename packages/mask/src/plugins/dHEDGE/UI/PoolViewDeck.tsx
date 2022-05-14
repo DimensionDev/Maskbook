@@ -9,6 +9,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useAvatar } from '../hooks/useManager'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -138,9 +139,11 @@ export function PoolViewDeck(props: PoolDeckProps) {
                 </Grid>
             </Grid>
             <Grid item alignSelf="right" xs={4} textAlign="center">
-                <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
-                    {t('plugin_dhedge_invest')}
-                </Button>
+                <EthereumChainBoundary chainId={pool.chainId}>
+                    <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
+                        {t('plugin_dhedge_invest')}
+                    </Button>
+                </EthereumChainBoundary>
             </Grid>
         </Grid>
     )

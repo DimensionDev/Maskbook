@@ -23,6 +23,7 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
+import { PluginWalletConnectIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -434,6 +435,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     {availability.isClaimed ? null : (
                         <Grid item xs={6}>
                             <EthereumWalletConnectedBoundary
+                                startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                                 classes={{
                                     connectWallet: classes.button,
                                     unlockMetaMask: classes.button,

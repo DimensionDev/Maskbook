@@ -14,6 +14,8 @@ const useStyles = makeStyles()((theme) => ({
         margin: theme.spacing(1.5, 1),
         backgroundColor: MaskColorVar.buttonPluginBackground,
         color: 'white',
+        fontSize: 14,
+        fontWeight: 700,
         '&:hover': {
             backgroundColor: MaskColorVar.buttonPluginBackground,
         },
@@ -29,6 +31,7 @@ export interface EthereumWalletConnectedBoundaryProps
     children?: React.ReactNode
     hideRiskWarningConfirmed?: boolean
     ActionButtonProps?: ActionButtonProps
+    startIcon?: React.ReactNode
 }
 
 export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
@@ -55,10 +58,10 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
         return (
             <Grid container className={classes.grid}>
                 <ActionButton
+                    startIcon={props.startIcon}
                     className={classNames(classes.button, classes.connectWallet)}
                     fullWidth
                     variant="contained"
-                    size="large"
                     onClick={openSelectProviderDialog}
                     {...props.ActionButtonProps}>
                     {t('plugin_wallet_connect_a_wallet')}

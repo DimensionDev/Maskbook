@@ -1,3 +1,4 @@
+import { PluginWalletConnectIcon } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
@@ -76,6 +77,7 @@ export function OperationFooter({
 
     return (
         <EthereumWalletConnectedBoundary
+            startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
             classes={{
                 connectWallet: classes.connectWallet,
             }}>

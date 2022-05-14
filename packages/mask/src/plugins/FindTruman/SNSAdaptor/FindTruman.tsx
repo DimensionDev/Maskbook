@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { FindTrumanContext } from '../context'
-import { Alert, Avatar, Box, Card, CardHeader, CardMedia, Chip, Skeleton, Tooltip, Typography } from '@mui/material'
+import { Avatar, Box, Card, CardHeader, CardMedia, Chip, Skeleton, Tooltip, Typography } from '@mui/material'
 import type {
     CompletionQuestionAnswer,
     PollResult,
@@ -18,6 +18,8 @@ import Footer from './Footer'
 import StageCard from './StageCard'
 import EncryptionCard from './EncryptionCard'
 import CompletionCard from './CompletionCard'
+import { PluginWalletConnectIcon } from '@masknet/icons'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -182,74 +184,83 @@ export function FindTruman(props: FindTrumanProps) {
     }
 
     return (
-        <Card className={classes.root} elevation={0}>
-            {postType !== PostType.Encryption ? (
-                <>
-                    <CardMedia
-                        onLoad={() => {
-                            setLoadImg(false)
-                        }}
-                        alt=""
-                        component="img"
-                        height={140}
-                        sx={{
-                            visibility: loadImg ? 'hidden' : 'unset',
-                        }}
-                        image={storyInfo?.img}
-                    />
-                    {loadImg && (
-                        <Box sx={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '100%' }}>
-                            <Skeleton animation="wave" variant="rectangular" height={140} width="100%" />
-                        </Box>
-                    )}
-                    <CardHeader
-                        title={
-                            storyInfo && (
-                                <Box display="flex" flexWrap="wrap" alignItems="center" justifyContent="space-between">
-                                    <Typography className={classes.title} component="b" sx={{ marginRight: 0.5 }}>
-                                        {storyInfo.name}
-                                    </Typography>
-                                    <Box display="flex" columnGap={1}>
-                                        <Tooltip
-                                            PopperProps={{
-                                                disablePortal: true,
-                                            }}
-                                            arrow
-                                            placement="top"
-                                            title={
-                                                isCritical
-                                                    ? t('plugin_find_truman_status_critical')
-                                                    : isNoncritical
-                                                    ? t('plugin_find_truman_status_noncritical')
-                                                    : ''
-                                            }>
-                                            <Box>
-                                                {isCritical && <Avatar className={classes.critical}>C</Avatar>}
-                                                {isNoncritical && <Avatar className={classes.nonCritical}>N</Avatar>}
-                                            </Box>
-                                        </Tooltip>
-                                        <Chip
-                                            className={classes.chip}
-                                            color="primary"
-                                            size="small"
-                                            label={getPostTypeTitle(t, postType)}
-                                        />
+        <>
+            <Card className={classes.root} elevation={0}>
+                {postType !== PostType.Encryption ? (
+                    <>
+                        <CardMedia
+                            onLoad={() => {
+                                setLoadImg(false)
+                            }}
+                            alt=""
+                            component="img"
+                            height={140}
+                            sx={{
+                                visibility: loadImg ? 'hidden' : 'unset',
+                            }}
+                            image={storyInfo?.img}
+                        />
+                        {loadImg && (
+                            <Box sx={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '100%' }}>
+                                <Skeleton animation="wave" variant="rectangular" height={140} width="100%" />
+                            </Box>
+                        )}
+                        <CardHeader
+                            title={
+                                storyInfo && (
+                                    <Box
+                                        display="flex"
+                                        flexWrap="wrap"
+                                        alignItems="center"
+                                        justifyContent="space-between">
+                                        <Typography className={classes.title} component="b" sx={{ marginRight: 0.5 }}>
+                                            {storyInfo.name}
+                                        </Typography>
+                                        <Box display="flex" columnGap={1}>
+                                            <Tooltip
+                                                PopperProps={{
+                                                    disablePortal: true,
+                                                }}
+                                                arrow
+                                                placement="top"
+                                                title={
+                                                    isCritical
+                                                        ? t('plugin_find_truman_status_critical')
+                                                        : isNoncritical
+                                                        ? t('plugin_find_truman_status_noncritical')
+                                                        : ''
+                                                }>
+                                                <Box>
+                                                    {isCritical && <Avatar className={classes.critical}>C</Avatar>}
+                                                    {isNoncritical && (
+                                                        <Avatar className={classes.nonCritical}>N</Avatar>
+                                                    )}
+                                                </Box>
+                                            </Tooltip>
+                                            <Chip
+                                                className={classes.chip}
+                                                color="primary"
+                                                size="small"
+                                                label={getPostTypeTitle(t, postType)}
+                                            />
+                                        </Box>
                                     </Box>
-                                </Box>
-                            )
-                        }
-                    />
-                    {renderCard()}
-                </>
-            ) : (
-                <EncryptionCard clueId={clueId} />
-            )}
-            {!address && (
-                <Box sx={{ padding: '0 16px' }}>
-                    <Alert severity="info">{t('plugin_find_truman_connect_wallet_tip')}</Alert>
-                </Box>
-            )}
-            <Footer />
-        </Card>
+                                )
+                            }
+                        />
+                        {renderCard()}
+                    </>
+                ) : (
+                    <EncryptionCard clueId={clueId} />
+                )}
+
+                <Footer />
+            </Card>
+
+            <EthereumWalletConnectedBoundary
+                hideRiskWarningConfirmed
+                startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+            />
+        </>
     )
 }

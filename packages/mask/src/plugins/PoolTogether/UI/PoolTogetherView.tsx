@@ -1,7 +1,7 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/base'
-import { usePoolTogetherConstants } from '@masknet/web3-shared-evm'
-import { Card, CardContent, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { ChainId, usePoolTogetherConstants } from '@masknet/web3-shared-evm'
+import { Box, Card, CardContent, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import React, { useState, useEffect } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -9,6 +9,7 @@ import { usePool, usePools } from '../hooks/usePools'
 import type { Pool } from '../types'
 import { Account } from './Account'
 import { PoolsView } from './PoolsView'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -117,27 +118,35 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     }
 
     return (
-        <Card className={classes.root} elevation={0}>
-            <CardContent className={classes.content}>
-                <Tabs
-                    className={classes.tabs}
-                    indicatorColor="primary"
-                    textColor="inherit"
-                    variant="fullWidth"
-                    value={tabIndex}
-                    onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
-                    TabIndicatorProps={{
-                        style: {
-                            display: 'none',
-                        },
-                    }}>
-                    {tabs}
-                </Tabs>
-                <Paper className={classes.body}>
-                    {tabIndex === 0 ? <PoolsView pools={pools} /> : null}
-                    {tabIndex === 1 ? <Account pools={pools} /> : null}
-                </Paper>
-            </CardContent>
-        </Card>
+        <>
+            <Card className={classes.root} elevation={0}>
+                <CardContent className={classes.content}>
+                    <Tabs
+                        className={classes.tabs}
+                        indicatorColor="primary"
+                        textColor="inherit"
+                        variant="fullWidth"
+                        value={tabIndex}
+                        onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
+                        TabIndicatorProps={{
+                            style: {
+                                display: 'none',
+                            },
+                        }}>
+                        {tabs}
+                    </Tabs>
+                    <Paper className={classes.body}>
+                        {tabIndex === 0 ? <PoolsView pools={pools} /> : null}
+                        {tabIndex === 1 ? <Account pools={pools} /> : null}
+                    </Paper>
+                </CardContent>
+            </Card>
+            <Box style={{ padding: 16 }}>
+                <EthereumChainBoundary
+                    chainId={ChainId.Mainnet}
+                    isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
+                />
+            </Box>
+        </>
     )
 }

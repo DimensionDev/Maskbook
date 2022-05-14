@@ -23,7 +23,6 @@ import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import urlcat from 'urlcat'
-import { startCase } from 'lodash-unified'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -44,8 +43,10 @@ import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { WalletConnectIcon } from '../assets/connect'
 import { SharedIcon } from '../assets/shared'
+import { PluginWalletConnectIcon } from '@masknet/icons'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { startCase } from 'lodash-unified'
 
 export interface IconProps {
     size?: number
@@ -159,7 +160,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         color: 'white',
         fontSize: 14,
         paddingTop: 10,
+        fontWeight: 700,
+        margin: '0 !important',
         paddingBottom: 10,
+        lineHeight: '20px',
         '&:hover': {
             backgroundColor: MaskColorVar.buttonPluginBackground,
         },
@@ -741,33 +745,6 @@ export function ITO(props: ITO_Props) {
                         )
                     }
 
-                    if (!account || !chainIdValid) {
-                        return (
-                            <Grid container spacing={2}>
-                                <Grid item xs={6}>
-                                    <ActionButton
-                                        startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
-                                        onClick={onShareSuccess}
-                                        variant="contained"
-                                        size="large"
-                                        className={classes.actionButton}>
-                                        {t('plugin_ito_share')}
-                                    </ActionButton>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <ActionButton
-                                        startIcon={<WalletConnectIcon style={{ width: 18, height: 18 }} />}
-                                        onClick={openSelectProviderDialog}
-                                        variant="contained"
-                                        size="large"
-                                        className={classes.actionButton}>
-                                        {t('plugin_wallet_connect_a_wallet')}
-                                    </ActionButton>
-                                </Grid>
-                            </Grid>
-                        )
-                    }
-
                     if (isBuyer) return FooterBuyerButton
 
                     if (canWithdraw) {
@@ -787,20 +764,39 @@ export function ITO(props: ITO_Props) {
                         !isNativeTokenAddress(qualificationAddress)
                     ) {
                         return (
-                            <ActionButton
-                                onClick={retryIfQualified}
-                                loading={loadingIfQualified}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {loadingIfQualified
-                                    ? t('plugin_ito_qualification_loading')
-                                    : !ifQualified
-                                    ? t('plugin_ito_qualification_failed')
-                                    : !(ifQualified as Qual_V2).qualified
-                                    ? startCase((ifQualified as Qual_V2).errorMsg)
-                                    : null}
-                            </ActionButton>
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <ActionButton
+                                        startIcon={<SharedIcon style={{ fontSize: 18 }} />}
+                                        onClick={onShareSuccess}
+                                        variant="contained"
+                                        size="large"
+                                        className={classes.actionButton}>
+                                        {t('plugin_ito_share')}
+                                    </ActionButton>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <EthereumWalletConnectedBoundary
+                                        hideRiskWarningConfirmed
+                                        startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                                        classes={{ button: classes.actionButton }}>
+                                        <ActionButton
+                                            onClick={retryIfQualified}
+                                            loading={loadingIfQualified}
+                                            variant="contained"
+                                            size="large"
+                                            className={classes.actionButton}>
+                                            {loadingIfQualified
+                                                ? t('plugin_ito_qualification_loading')
+                                                : !ifQualified
+                                                ? t('plugin_ito_qualification_failed')
+                                                : !(ifQualified as Qual_V2).qualified
+                                                ? startCase((ifQualified as Qual_V2).errorMsg)
+                                                : null}
+                                        </ActionButton>
+                                    </EthereumWalletConnectedBoundary>
+                                </Grid>
+                            </Grid>
                         )
                     }
 

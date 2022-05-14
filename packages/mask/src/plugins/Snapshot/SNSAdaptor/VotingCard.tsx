@@ -13,6 +13,7 @@ import { usePower } from './hooks/usePower'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { VoteConfirmDialog } from './VoteConfirmDialog'
 import { useRetry } from './hooks/useRetry'
+import { PluginWalletConnectIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -71,22 +72,24 @@ export function VotingCard() {
 
     return (
         <SnapshotCard title={t('plugin_snapshot_vote_title')}>
-            {choices.map((choiceText, i) => (
-                <Button
-                    key={i}
-                    onClick={() => setChoice(i + 1)}
-                    className={classNames([
-                        classes.button,
-                        classes.choiceButton,
-                        ...(choice === i + 1 ? [classes.buttonActive] : []),
-                    ])}
-                    variant="outlined">
-                    {choiceText}
-                </Button>
-            ))}
             <EthereumWalletConnectedBoundary
+                startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                 classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}
                 offChain>
+                {choices.map((choiceText, i) => (
+                    <Button
+                        key={i}
+                        onClick={() => setChoice(i + 1)}
+                        className={classNames([
+                            classes.button,
+                            classes.choiceButton,
+                            ...(choice === i + 1 ? [classes.buttonActive] : []),
+                        ])}
+                        variant="outlined">
+                        {choiceText}
+                    </Button>
+                ))}
+
                 <Button
                     className={classes.button}
                     disabled={choice === 0 || !account || !power}

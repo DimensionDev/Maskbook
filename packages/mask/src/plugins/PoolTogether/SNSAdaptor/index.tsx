@@ -2,13 +2,11 @@ import { useMemo } from 'react'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { DepositDialog } from '../UI/DepositDialog'
 import { Trans } from 'react-i18next'
 import { URL_PATTERN } from '../constants'
 import { PoolTogetherView } from '../UI/PoolTogetherView'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { PoolTogetherIcon } from '@masknet/icons'
 
 const isPoolTogetherUrl = (url: string) => URL_PATTERN.test(url)
@@ -62,11 +60,5 @@ export default sns
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     usePluginWrapper(true)
-    return (
-        <EthereumChainBoundary
-            chainId={ChainId.Mainnet}
-            isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}>
-            <PoolTogetherView />
-        </EthereumChainBoundary>
-    )
+    return <PoolTogetherView />
 }

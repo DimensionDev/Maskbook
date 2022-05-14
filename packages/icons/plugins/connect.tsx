@@ -1,6 +1,6 @@
 import { createIcon } from '@masknet/icons'
-export const WalletConnectIcon = createIcon(
-    'WalletConnectIconNew',
+export const PluginWalletConnectIcon = createIcon(
+    'PluginWalletConnectIcon',
     <g>
         <path
             fillRule="evenodd"
