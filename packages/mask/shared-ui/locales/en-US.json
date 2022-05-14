@@ -156,6 +156,7 @@
     "select_none": "Select None",
     "all_friends": "All Friends",
     "select_specific_friends_dialog__title": "Share with",
+    "select_freinds_dialog_persona_connect": "This Persona connects to",
     "service_decryption_failed": "Decryption failed.",
     "service_username_invalid": "Invalid Username",
     "speed_up": "Speed up",

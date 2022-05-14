@@ -7,6 +7,7 @@ import { Avatar } from '../../../utils/components/Avatar'
 import type { CheckboxProps } from '@mui/material/Checkbox'
 import { CopyIcon } from '@masknet/icons'
 import { truncate } from 'lodash-unified'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -89,6 +90,7 @@ export interface ProfileInListProps extends withClasses<never> {
     CheckboxProps?: Partial<CheckboxProps>
 }
 export function ProfileInList(props: ProfileInListProps) {
+    const { t } = useI18N()
     const { classes, cx } = useStyles()
     const profile = props.item
     const resolveSecondaryText = () => {
@@ -107,9 +109,12 @@ export function ProfileInList(props: ProfileInListProps) {
         return `@${profile.identifier.userId || profile.nickname}`
     }
 
-    const ToolTipText = profile.fromNextID
-        ? `The Persona is connect to accounts ${profile.linkedTwitterNames!.map((x) => '@' + x).join(', ')}`
-        : ''
+    const ToolTipText =
+        profile.fromNextID && profile.linkedTwitterNames?.length! > 1
+            ? `${t('select_freinds_dialog_persona_connect')} ${profile
+                  .linkedTwitterNames!.map((x) => '@' + x)
+                  .join(', ')}`
+            : ''
     const onClick = useCallback(
         (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.checked),
         [props],
