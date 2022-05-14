@@ -102,6 +102,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     })
     useMemo(() => {
         setSearch('')
+        onSearch('')
     }, [props.open])
     const itemsAfterSearch = useMemo(() => {
         const fuse = new Fuse(items, {
@@ -127,10 +128,6 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         </div>
     )
 
-    const onInputBlur = () => {
-        onSearch(search)
-    }
-
     return (
         <InjectedDialog
             className={classes.root}
@@ -146,11 +143,11 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     value={search}
                     onKeyUp={(e) => {
                         if (e.keyCode === 13) {
-                            onInputBlur()
+                            onSearch(search)
                         }
                     }}
                     onChange={(e) => setSearch(e.target.value)}
-                    onBlur={onInputBlur}
+                    onBlur={() => onSearch(search)}
                     startAdornment={
                         <InputAdornment position="start">
                             <SearchIcon />

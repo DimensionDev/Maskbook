@@ -97,7 +97,7 @@ export function ProfileInList(props: ProfileInListProps) {
     }
     const resolvePrimaryText = () => {
         if (profile.fromNextID) {
-            const rawStr = profile.linkedTwitterNames!.map((x) => '@' + x).join('')
+            const rawStr = profile.linkedTwitterNames!.map((x) => '@' + x).join(' ')
             if (rawStr.length > 15) {
                 const len = profile.linkedTwitterNames?.length
                 return truncate(rawStr, { length: 15 }) + (len! > 1 ? len : '')
@@ -108,7 +108,7 @@ export function ProfileInList(props: ProfileInListProps) {
     }
 
     const ToolTipText = profile.fromNextID
-        ? `The Persona is connect to accounts ${profile.linkedTwitterNames!.map((x) => '@' + x).join(',')}`
+        ? `The Persona is connect to accounts ${profile.linkedTwitterNames!.map((x) => '@' + x).join(', ')}`
         : ''
     const onClick = useCallback(
         (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.checked),

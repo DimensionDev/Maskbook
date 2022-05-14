@@ -233,7 +233,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                             setShareWithOpen(true)
                         }}
                     />
-                    {/* {recipientSelectorAvailable && ( */}
                     <SelectRecipientsUI
                         open={shareWithOpen}
                         onClose={() => setShareWithOpen(false)}
@@ -242,7 +241,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         selected={recipients}
                         onSetSelected={setRecipients}
                     />
-                    {/* )} */}
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
                     <Typography className={classes.optionTitle}>{t('post_dialog_encryption_method')}</Typography>
