@@ -12,7 +12,10 @@
         "Arbitrum": ["https://tokens.r2d2.to/latest/42161/tokens.json"],
         "Arbitrum_Rinkeby": ["https://tokens.r2d2.to/latest/421611/tokens.json"],
         "xDai": ["https://tokens.r2d2.to/latest/100/tokens.json"],
-        "Optimistic": ["https://tokens.r2d2.to/latest/10/tokens.json"],
+        "Optimistic": [
+            "https://static.optimism.io/optimism.tokenlist.json",
+            "https://tokens.r2d2.to/latest/10/tokens.json"
+        ],
         "Optimistic_Kovan": [],
         "Optimistic_Goerli": [],
         "Avalanche": ["https://tokens.r2d2.to/latest/43114/tokens.json"],
