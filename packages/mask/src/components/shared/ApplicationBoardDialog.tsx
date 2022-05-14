@@ -20,6 +20,7 @@ const useStyles = makeStyles()((theme) => {
         settingIcon: {
             height: 24,
             width: 24,
+            fill: theme.palette.text.primary,
             cursor: 'pointer',
         },
     }
