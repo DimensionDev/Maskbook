@@ -73,7 +73,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     return disableGuideTip ? (
         getEntry()
     ) : (
-        <GuideStep step={4} total={4} tip={t('user_guide_tip_4')}>
+        <GuideStep step={4} total={4} tip={t('user_guide_tip_4')} onComplete={props.onHintButtonClicked}>
             {getEntry()}
         </GuideStep>
     )
