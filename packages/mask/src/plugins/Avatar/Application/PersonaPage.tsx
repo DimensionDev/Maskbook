@@ -1,13 +1,11 @@
 import { BindingProof, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, CircularProgress, DialogContent, Stack, Typography } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useSubscription } from 'use-subscription'
-import { useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
 import { CloseIcon } from '../assets/close'
 import { context } from '../context'
 import { usePersonas } from '../hooks/usePersonas'
-import { usePersonaVerify } from '../hooks/usePersonaVerified'
 import { useI18N } from '../locales/i18n_generated'
 import type { TokenInfo } from '../types'
 import { PersonaItem } from './PersonaItem'
@@ -38,16 +36,8 @@ export function PersonaPage(props: PersonaPageProps) {
     const currentIdentity = useSubscription(context.lastRecognizedProfile)
     const { classes } = useStyles()
     const { loading, value: persona } = usePersonas()
-    const { loading: loadingPersonaVerified, value: personaVerifiedStatus } = usePersonaVerify()
-    const { reset } = useNextIDConnectStatus()
     const myPersonas = useMyPersonas()
     const t = useI18N()
-
-    useEffect(() => {
-        if (!personaVerifiedStatus || personaVerifiedStatus?.isVerified) return
-        if (reset) reset()
-        onClose()
-    }, [personaVerifiedStatus, onClose, reset])
 
     const onSelect = useCallback(
         (proof: BindingProof, tokenInfo?: TokenInfo) => {
@@ -59,7 +49,7 @@ export function PersonaPage(props: PersonaPageProps) {
 
     return (
         <DialogContent sx={{ height: 612, padding: 2 }}>
-            {loading || loadingPersonaVerified ? (
+            {loading ? (
                 <Stack justifyContent="center" alignItems="center">
                     <CircularProgress />
                 </Stack>
