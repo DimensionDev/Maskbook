@@ -34,9 +34,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { classes } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
     const connectStatus = usePersonaConnectStatus()
-    const { value: currentPersonaIdentifier } = useAsync(() => {
-        return Services.Settings.getCurrentPersonaIdentifier()
-    }, [connectStatus])
+
     const hasPersona = !!useMyPersonas().find((x) =>
         x.linkedProfiles.some((y) => y.identifier.network === currentIdentity?.network),
     )
@@ -44,7 +42,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     /** @deprecated */
     const { value: hasLocalKey } = useAsync(
         async () => (currentIdentity ? Services.Identity.hasLocalKey(currentIdentity) : false),
-        [currentIdentity],
+        [currentIdentity, connectStatus],
     )
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     // #region Open
@@ -121,12 +119,10 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 <DialogContent>
                     <CompositionDialogUI
                         onConnect={() => {
-                            console.log('connect')
                             ;(connectStatus as any).action()
                             setOpen(false)
                         }}
                         onCreate={() => {
-                            console.log('create')
                             Services.Helper.openDashboard(DashboardRoutes.Setup)
                             setOpen(false)
                         }}

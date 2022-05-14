@@ -113,8 +113,8 @@ export function ProfileInList(props: ProfileInListProps) {
         const linkedNames = profile.linkedTwitterNames!
         const len = linkedNames?.length!
         if (profile.fromNextID) {
-            if (len === 1 && linkedNames[0]?.length > 15) {
-                return `${t('select_friends_dialog_persona_connect')} ${linkedNames}.`
+            if (len === 1 && linkedNames[0]?.length > 14) {
+                return `${t('select_friends_dialog_persona_connect')} @${linkedNames}.`
             }
             if (len > 1) {
                 return `${t('select_friends_dialog_persona_connect')} ${profile

@@ -125,6 +125,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     const Editor = useRef<TypedMessageEditorRef | null>(null)
     const PluginEntry = useRef<PluginEntryRenderRef>(null)
 
+    const [visibleTo, setVisibleTo] = useState<'all' | 'private' | 'share'>('all')
+
     const [sending, setSending] = useState(false)
 
     const updatePostSize = useCallback((size: number) => {
@@ -138,6 +140,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         startTransition(() => {
             Editor.current?.reset()
             setEncryptionKind('Everyone')
+            setVisibleTo('all')
             setRecipients([])
             // Don't clean up the image/text selection across different encryption.
             // setEncoding('text')
@@ -204,6 +207,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
                     <VisibleToRow
+                        selected={visibleTo}
                         onConnect={props.onConnect}
                         onCreate={props.onCreate}
                         e2eDisabled={props.e2eEncryptionDisabled}

@@ -28,7 +28,6 @@ const useStyles = makeStyles()((theme) => ({
 export function VisibleToRow(props: Partial<PopoverListTriggerProp>) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [selected, setSelected] = useState<'all' | 'share' | 'private'>('all')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     return (
@@ -39,7 +38,7 @@ export function VisibleToRow(props: Partial<PopoverListTriggerProp>) {
                 onConnect={props.onConnect}
                 onCreate={props.onCreate}
                 e2eDisabled={props.e2eDisabled}
-                selected={selected}
+                selected={props.selected ?? 'all'}
                 renderScheme={renderScheme}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
