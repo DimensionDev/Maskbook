@@ -98,7 +98,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const copyFingerprint = useSnackbarCallback({
         executor: async (v: string) => copyToClipboard(v),
         deps: [],
-        successText: 'public key copied',
+        successText: t('compose_encrypt_public_key_copied'),
     })
     useMemo(() => {
         setSearch('')
@@ -106,25 +106,25 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     }, [props.open])
     const itemsAfterSearch = useMemo(() => {
         const fuse = new Fuse(items, {
-            keys: ['identifier.userId', 'nickname', 'address', 'publicHexKey'],
+            keys: ['identifier.userId', 'nickname', 'walletAddress', 'publicHexKey'],
             isCaseSensitive: false,
             ignoreLocation: true,
             threshold: 0,
         })
-        return items
+        return search === '' ? items : fuse.search(search).map((item) => item.item)
     }, [search, items])
 
     const Empty = () => (
         <div className={classes.empty}>
             <SearchEmptyIcon style={{ width: 36, height: 36 }} />
-            <Typography>{props.searchEmptyText ?? 'No encrypted friends, you can try searching.'}</Typography>
+            <Typography>{props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}</Typography>
         </div>
     )
 
     const LoadingRender = () => (
         <div className={cx(classes.empty, classes.mainText)}>
             <LoadingBase style={{ fontSize: '2rem' }} />
-            <Typography>Loading</Typography>
+            <Typography>{t('loading')}</Typography>
         </div>
     )
 
@@ -187,7 +187,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <Button fullWidth variant="roundedFlat" disabled={props.submitDisabled} onClick={props.onSubmit}>
-                    Back
+                    {t('back')}
                 </Button>
                 <Button fullWidth variant="roundedContained" disabled={props.submitDisabled} onClick={props.onSubmit}>
                     {t('done')}

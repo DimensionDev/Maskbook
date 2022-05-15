@@ -1,46 +1,60 @@
-import { EMPTY_LIST, NextIDPersonaBindings, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
-import { isValidAddress } from '@masknet/web3-shared-evm'
+import {
+    BindingProof,
+    EMPTY_LIST,
+    EMPTY_OBJECT,
+    NextIDPersonaBindings,
+    NextIDPlatform,
+    ProfileIdentifier,
+    ProfileInformation,
+} from '@masknet/shared-base'
 import { uniq } from 'lodash-unified'
 
-export function useTwitterIdByWalletSearch(bindings: NextIDPersonaBindings[] | undefined, value: string) {
-    if (!bindings) return EMPTY_LIST
-    const type = isValidAddress(value)
-        ? NextIDPlatform.Ethereum
-        : value.length >= 44
-        ? NextIDPlatform.NextID
-        : /^\w{1,15}$/.test(value)
-        ? NextIDPlatform.Twitter
-        : null
+interface ExpandedNextIDBindings extends BindingProof {
+    persona: string
+}
 
-    if (!type) return []
-    const temp = bindings.reduce<Record<string, any>>((pre, cur) => {
+type ResolvedBindingsByPlatform = {
+    [key in NextIDPlatform]: ExpandedNextIDBindings
+}
+interface ResolvedBindings extends ResolvedBindingsByPlatform {
+    linkedTwitterNames: string[]
+}
+
+export function useTwitterIdByWalletSearch(
+    bindings: NextIDPersonaBindings[] | undefined,
+    value: string,
+    type?: NextIDPlatform,
+) {
+    if (!bindings || !type) return EMPTY_LIST
+    const temp = bindings.reduce<ResolvedBindings[]>((pre, cur) => {
         const boundTwitterNames = cur.proofs.reduce<string[]>((res, x) => {
             if (x.platform === NextIDPlatform.Twitter) {
                 res.push(x.identity)
             }
             return uniq(res)
         }, [])
-        const obj = cur.proofs.reduce<any>(
-            (obj, i) => {
-                obj[i.platform] = { ...i, persona: cur.persona }
-                return obj
+        const obj = cur.proofs.reduce<Partial<ResolvedBindings>>(
+            (j, i) => {
+                if (![NextIDPlatform.Twitter, NextIDPlatform.Ethereum].includes(i.platform)) return EMPTY_OBJECT
+                j[i.platform] = { ...i, persona: cur.persona }
+                return j
             },
             {
                 linkedTwitterNames: boundTwitterNames,
             },
         )
         if (NextIDPlatform.Twitter in obj) {
-            pre.push(obj)
+            pre.push(obj as ResolvedBindings)
         }
         return pre
     }, [])
-    return temp.reduce((res: any, x: any) => {
+    return temp.reduce<ProfileInformation[]>((res, x) => {
         const _identity = x[NextIDPlatform.Twitter]
         res.push({
             nickname: _identity.identity,
             identifier: ProfileIdentifier.of('twitter.com', _identity.identity).unwrap(),
             publicHexKey: _identity.persona,
-            address: value,
+            walletAddress: value,
             fromNextID: true,
             linkedTwitterNames: x.linkedTwitterNames,
         })

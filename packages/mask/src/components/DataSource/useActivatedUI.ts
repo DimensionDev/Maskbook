@@ -19,7 +19,6 @@ export function useCurrentVisitingIdentity() {
 }
 export function useCurrentIdentity(): {
     identifier: ProfileIdentifier
-    fingerprint?: string
     linkedPersona?: PersonaIdentifier
 } | null {
     return useSubscription(CurrentIdentitySubscription)

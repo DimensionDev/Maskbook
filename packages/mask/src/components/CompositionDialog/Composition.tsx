@@ -103,7 +103,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             return E2EUnavailableReason.NoPersona
         if (!connectStatus.connected && connectStatus.hasPersona) return E2EUnavailableReason.NoConnect
         if (!hasLocalKey) return E2EUnavailableReason.NoLocalKey
-        return undefined
+        return
     }
 
     return (

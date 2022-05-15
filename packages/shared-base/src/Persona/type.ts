@@ -11,13 +11,12 @@ export interface PersonaInformation {
     linkedProfiles: ProfileInformation[]
 }
 export interface ProfileInformation {
-    [index: string]: unknown
     /** The nickname of the profile. Should be used in prior. */
     nickname?: string
     avatar?: string
     identifier: ProfileIdentifier
     fingerprint?: string
-    address?: string
+    walletAddress?: string
     fromNextID?: boolean
     publicHexKey?: string
     linkedTwitterNames?: string[]

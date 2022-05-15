@@ -3,6 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import Popover from '@mui/material/Popover'
 import { RadioGroup, Radio, Typography, Box } from '@mui/material'
 import { CheckCircle } from '@mui/icons-material'
+import { useI18N } from '../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     popper: {
@@ -66,8 +67,16 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+export enum PopoverListItemType {
+    All = 'all',
+    Private = 'private',
+    Share = 'share',
+    Text = 'text',
+    Image = 'image',
+}
+
 interface PopoverListItem {
-    type: string
+    type: Partial<PopoverListItemType>
     title: string
     subTitle?: string
     personaRequired?: boolean
@@ -94,6 +103,7 @@ export interface PopoverListTriggerProp {
 const PopoverListItem = (props: PopoverListItem) => {
     const { title, subTitle, personaRequired, type, showDivider, e2eDisabled, toShare, onChange, onConnect, onCreate } =
         props
+    const { t } = useI18N()
     const { classes, cx } = useStyles()
     const handleItemClick = () => {
         if (!(type === 'share' && toShare && onChange) || !!e2eDisabled) return
@@ -116,7 +126,7 @@ const PopoverListItem = (props: PopoverListItem) => {
             </div>
             {personaRequired && e2eDisabled && (
                 <div className={classes.flex}>
-                    <Typography className={classes.mainTitle}>Persona required.</Typography>
+                    <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
                     <Typography
                         className={classes.create}
                         onClick={() => {
@@ -127,13 +137,13 @@ const PopoverListItem = (props: PopoverListItem) => {
                                 onConnect()
                             }
                         }}>
-                        {e2eDisabled === 1 ? 'Create' : 'Connect'}
+                        {e2eDisabled === 1 ? t('create') : t('connect')}
                     </Typography>
                 </div>
             )}
             {personaRequired && e2eDisabled === 2 && (
                 <div className={classes.flex}>
-                    <Typography className={classes.mainTitle}>No local key</Typography>
+                    <Typography className={classes.mainTitle}>{t('compose_no_local_key')}</Typography>
                 </div>
             )}
             {showDivider && <div className={classes.divider} />}

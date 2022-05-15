@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { cloneDeep } from 'lodash-unified'
 import { ProfileInformation as Profile, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog'
@@ -7,6 +6,7 @@ import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
 import { useNextIDBoundByPlatform } from '../../DataSource/useNextID'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch'
 import { isValidAddress } from '@masknet/web3-shared-evm'
+import { useI18N } from '../../../utils'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -18,35 +18,35 @@ export interface SelectRecipientsUIProps {
     onClose(): void
     onSetSelected(selected: Profile[]): void
 }
+const resolveNextIDPlatform = (value: string) => {
+    if (isValidAddress(value)) return NextIDPlatform.Ethereum
+    if (value.length >= 44) return NextIDPlatform.NextID
+    if (/^\w{1,15}$/.test(value)) return NextIDPlatform.Twitter
+    return undefined
+}
 
 export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const { items, selected, onSetSelected, open, onClose } = props
+    const { t } = useI18N()
     const [valueToSearch, setValueToSearch] = useState('')
     const currentIdentity = useCurrentIdentity()
-
-    const resolveNextIDPlatformType = () => {
-        return isValidAddress(valueToSearch)
-            ? NextIDPlatform.Ethereum
-            : valueToSearch.length >= 44
-            ? NextIDPlatform.NextID
-            : NextIDPlatform.Twitter
-    }
+    const type = resolveNextIDPlatform(valueToSearch)
     const { loading: searchLoading, value: NextIDResults } = useNextIDBoundByPlatform(
-        resolveNextIDPlatformType(),
+        type ?? NextIDPlatform.NextID,
         valueToSearch.toLowerCase(),
     )
-    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, valueToSearch)
+    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, valueToSearch, type)
     const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
 
-    const unique = (arr: Profile[], val: string) => {
+    const unique = (arr: Profile[]) => {
         const res = new Map()
-        return arr.filter((item) => !res.has(item[val]) && res.set(item[val], 1))
+        return arr.filter((item) => !res.has(item.publicHexKey) && res.set(item.publicHexKey, 1))
     }
-    const searchedList = unique(profileItems?.concat(NextIDItems) ?? [], 'publicHexKey')
+    const searchedList = unique(profileItems?.concat(NextIDItems) ?? [])
     useEffect(() => void (open && items.request()), [open, items.request])
     return (
         <SelectRecipientsDialogUI
-            searchEmptyText={valueToSearch ? 'No Result.' : undefined}
+            searchEmptyText={valueToSearch ? t('wallet_search_no_result') : undefined}
             loading={searchLoading}
             onSearch={(v: string) => {
                 setValueToSearch(v)
@@ -62,10 +62,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             onClose={onClose}
             onSelect={(item) => onSetSelected([...selected, item])}
             onDeselect={(item) => {
-                const temp = cloneDeep(selected)
-                const idxToDel = temp.findIndex((x) => x.publicHexKey === item.publicHexKey)
-                temp.splice(idxToDel, 1)
-                onSetSelected(temp)
+                onSetSelected(selected.filter((x) => x.publicHexKey !== item.publicHexKey))
             }}
         />
     )
