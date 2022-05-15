@@ -81,6 +81,13 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.secondary,
         marginRight: 12,
     },
+    editorWrapper: {
+        minHeight: 338,
+        background: theme.palette.background.input,
+        padding: 14,
+        boxSizing: 'border-box',
+        borderRadius: 8,
+    },
 }))
 
 export interface LazyRecipients {
@@ -188,18 +195,20 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
-                <TypedMessageEditor
-                    autoFocus
-                    readonly={sending}
-                    ref={(e) => {
-                        Editor.current = e
-                        if (e) updatePostSize(e.estimatedLength)
-                    }}
-                    onChange={(message) => {
-                        startTransition(() => props.onChange?.(message))
-                        updatePostSize(Editor.current?.estimatedLength || 0)
-                    }}
-                />
+                <div className={classes.editorWrapper}>
+                    <TypedMessageEditor
+                        autoFocus
+                        readonly={sending}
+                        ref={(e) => {
+                            Editor.current = e
+                            if (e) updatePostSize(e.estimatedLength)
+                        }}
+                        onChange={(message) => {
+                            startTransition(() => props.onChange?.(message))
+                            updatePostSize(Editor.current?.estimatedLength || 0)
+                        }}
+                    />
+                </div>
 
                 <div className={classes.flex}>
                     <Typography className={classes.optionTitle}>{t('plugins')}</Typography>

@@ -13,13 +13,6 @@ import { useI18N } from '../../utils'
 import { BadgeRenderer } from './BadgeRenderer'
 
 const useStyles = makeStyles()((theme) => ({
-    container: {
-        minHeight: 338,
-        background: theme.palette.background.input,
-        padding: 14,
-        boxSizing: 'border-box',
-        borderRadius: 8,
-    },
     root: {
         padding: 0,
     },
@@ -123,7 +116,7 @@ export const TypedMessageEditor = memo(
             )
         }
         return (
-            <div className={classes.container}>
+            <>
                 <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
                 <InputBase
                     readOnly={readonly}
@@ -138,7 +131,7 @@ export const TypedMessageEditor = memo(
                     multiline
                     placeholder={t('post_dialog__placeholder')}
                 />
-            </div>
+            </>
         )
     }),
 )
