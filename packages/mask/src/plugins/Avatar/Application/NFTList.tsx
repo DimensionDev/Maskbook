@@ -14,6 +14,7 @@ const useStyles = makeStyles<{ currentTab: Application_NFT_LIST_PAGE }>()((theme
         color: `${theme.palette.text.primary} !important`,
         minHeight: 37,
         height: 37,
+        zIndex: 1,
     },
     tab: {
         backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F6F8F8',
@@ -21,9 +22,11 @@ const useStyles = makeStyles<{ currentTab: Application_NFT_LIST_PAGE }>()((theme
         border: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
         minHeight: 37,
         height: 37,
+        zIndex: 1,
     },
     tabPanel: {
         padding: theme.spacing(1),
+        paddingTop: 50,
     },
 }))
 interface NFTListProps {
@@ -60,6 +63,8 @@ export function NFTList(props: NFTListProps) {
                     minHeight: 37,
                     height: 37,
                     '.MuiTabs-indicator': { display: 'none' },
+                    position: 'absolute',
+                    width: '100%',
                 }}>
                 <Tab
                     label={
