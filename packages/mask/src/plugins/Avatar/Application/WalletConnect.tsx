@@ -8,6 +8,7 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N } from '../locales/i18n_generated'
 import type { HTMLProps } from 'react'
 import { ApplicationSmallIcon } from '../assets/applicationsmall'
+import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -49,7 +50,7 @@ export function NFTWalletConnect(props: NFTWalletConnectProps) {
     const providerType = useProviderType()
     const t = useI18N()
 
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+    const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
     return (
@@ -82,7 +83,7 @@ export function NFTWalletConnect(props: NFTWalletConnectProps) {
             <Rectangle className={classes.rectangle} />
             <Box className={classes.button}>
                 <Button
-                    onClick={openSelectProviderDialog}
+                    onClick={() => openSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM })}
                     style={{ width: 254, backgroundColor: '#07101b', color: 'white', borderRadius: 9999 }}
                     startIcon={<WalletIcon style={{ width: 18, height: 18 }} />}>
                     {t.connect_your_wallet()}

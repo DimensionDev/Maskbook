@@ -151,10 +151,28 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setSelectedToken(undefined)
     }
 
+    const WalletNonEVMMessage =
+        currentPluginId !== NetworkPluginID.PLUGIN_EVM ? (
+            <Translate.wallet_non_evm_warning
+                components={{
+                    br: <br />,
+                }}
+            />
+        ) : null
     const AddCollectible = (
         <Box className={classes.error}>
-            <Typography color="textSecondary" textAlign="center" fontSize={14} fontWeight={600}>
-                {currentPage === POLYGON_PAGE ? (
+            <Typography
+                color={currentPluginId !== NetworkPluginID.PLUGIN_EVM ? 'error' : 'textSecondary'}
+                textAlign="center"
+                fontSize={14}
+                fontWeight={600}>
+                {currentPluginId !== NetworkPluginID.PLUGIN_EVM ? (
+                    <Translate.wallet_non_evm_warning
+                        components={{
+                            br: <br />,
+                        }}
+                    />
+                ) : currentPage === POLYGON_PAGE ? (
                     <Translate.collectible_on_polygon
                         components={{
                             br: <br />,
@@ -164,9 +182,11 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     t.collectible_no_eth()
                 )}
             </Typography>
-            <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
-                {t.add_collectible()}
-            </Button>
+            {currentPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
+                    {t.add_collectible()}
+                </Button>
+            ) : null}
         </Box>
     )
 
@@ -203,6 +223,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         return
     }
 
+    console.log(wallets)
     if (!wallets?.length && (currentPluginId !== NetworkPluginID.PLUGIN_EVM || !account))
         return (
             <DialogContent className={classes.content}>

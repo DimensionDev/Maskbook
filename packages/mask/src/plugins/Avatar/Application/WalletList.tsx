@@ -1,6 +1,6 @@
 import { ImageIcon, ReversedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, MaskColorVar, ShadowRootMenu, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
-import { formatEthereumAddress, isSameAddress } from '@masknet/web3-shared-evm'
+import { formatNFT_TokenId, isSameAddress } from '@masknet/web3-shared-evm'
 import { Button, Divider, IconProps, Link, ListItemIcon, MenuItem, Stack, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useEffect, useState } from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
@@ -274,7 +274,7 @@ function WalletUI(props: WalletUIProps) {
                         variant="body2"
                         color="textSecondary"
                         className={classNames(classes.address, classes.walletAddress)}>
-                        {formatEthereumAddress(address, 4)}
+                        {formatNFT_TokenId(address, 4)}
                     </Typography>
                     <CopyIconButton text={address} className={classes.copy} />
                     <Link
