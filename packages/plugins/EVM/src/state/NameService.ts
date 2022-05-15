@@ -7,11 +7,7 @@ import { ChainId, formatEthereumAddress, isValidAddress, isZeroAddress, Provider
 import { Providers } from './Protocol/provider'
 
 export class NameService extends NameServiceState<ChainId> {
-    private ens = new ENS({
-        // @ts-ignore
-        provider: Providers[ProviderType.MaskWallet].createWeb3Provider(ChainId.Mainnet),
-        network: ChainId.Mainnet,
-    })
+    private ens: ENS | null = null
 
     constructor(
         context: Plugin.Shared.SharedContext,
@@ -31,13 +27,24 @@ export class NameService extends NameServiceState<ChainId> {
         })
     }
 
+    private async createENS() {
+        if (this.ens) return this.ens
+        this.ens = new ENS({
+            // @ts-ignore
+            provider: await Providers[ProviderType.MaskWallet].createWeb3Provider(ChainId.Mainnet),
+            network: ChainId.Mainnet,
+        })
+        return this.ens
+    }
+
     override async lookup(chainId: ChainId, name: string) {
         if (chainId !== ChainId.Mainnet) return
 
         const cachedAddress = await super.lookup(chainId, name)
         if (cachedAddress) return cachedAddress
 
-        await super.addAddress(chainId, name, await this.ens.lookup(name))
+        const ens = await this.createENS()
+        await super.addAddress(chainId, name, await ens.lookup(name))
         return super.lookup(chainId, name)
     }
 
@@ -47,7 +54,8 @@ export class NameService extends NameServiceState<ChainId> {
         const cachedDomain = await super.reverse(chainId, address)
         if (cachedDomain) return cachedDomain
 
-        await super.addName(chainId, address, await this.ens.reverse(address))
+        const ens = await this.createENS()
+        await super.addName(chainId, address, await ens.reverse(address))
         return super.reverse(chainId, address)
     }
 }
