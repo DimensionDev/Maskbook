@@ -27,6 +27,7 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
         whiteSpace: 'nowrap',
+        display: 'flex',
         gridTemplateColumns: '50px auto 50px',
     },
     dialogTitleEndingContent: {
