@@ -10,7 +10,7 @@ import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { FormattedBalance, SelectTokenChip, TokenSecurityBar } from '@masknet/shared'
+import { FormattedBalance, isHighRisk, SelectTokenChip, TokenSecurityBar } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
@@ -30,6 +30,7 @@ import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { GoPlusLabs, SecurityAPI } from '@masknet/web3-providers'
+import { RiskWarningDialog } from './RiskWarningDialog'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -219,6 +220,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { classes } = useStyles({ isDashboard, isPopup })
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const [isExpand, setExpand] = useState(false)
+        const [isWarningOpen, setIsWarningOpen] = useState(false)
 
         const { value: tokenSecurityInfo, error } = useAsyncRetry(async () => {
             if (!outputToken) return
@@ -228,6 +230,8 @@ export const TradeForm = memo<AllTradeFormProps>(
                 | TokenSecurity
                 | undefined
         }, [chainId, outputToken])
+
+        const isRisky = isHighRisk(tokenSecurityInfo)
 
         // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
@@ -522,7 +526,19 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         </Box>
                                     }
                                     render={(disable: boolean) =>
-                                        isGreatThanSlippageSetting ? (
+                                        isRisky ? (
+                                            <ActionButton
+                                                fullWidth
+                                                variant="contained"
+                                                color="error"
+                                                disabled={focusedTrade?.loading || !focusedTrade?.value || disable}
+                                                classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                                onClick={() => setIsWarningOpen(true)}>
+                                                {t('plugin_trader_risk_warning', {
+                                                    percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
+                                                })}
+                                            </ActionButton>
+                                        ) : isGreatThanSlippageSetting ? (
                                             <ActionButton
                                                 fullWidth
                                                 variant="contained"
@@ -556,6 +572,17 @@ export const TradeForm = memo<AllTradeFormProps>(
                         </Box>
                     ) : null}
                 </Box>
+                {tokenSecurityInfo && (
+                    <RiskWarningDialog
+                        open={isWarningOpen}
+                        onClose={() => setIsWarningOpen(false)}
+                        onConfirm={() => {
+                            onSwap()
+                            setIsWarningOpen(false)
+                        }}
+                        tokenInfo={tokenSecurityInfo}
+                    />
+                )}
             </Box>
         )
     },

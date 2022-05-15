@@ -1,13 +1,31 @@
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
 import { memo, useState } from 'react'
-import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
+import { DefineMapping, SecurityMessageLevel } from './Common'
 import { CheckSecurityDialog } from './CheckSecurityDialog'
 import { SecurityMessages } from './rules'
 import { RightArrowIcon } from '@masknet/icons'
+import type { SecurityAPI } from '@masknet/web3-providers'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
+}
+
+export type TokenSecurity = SecurityAPI.ContractSecurity &
+    SecurityAPI.TokenSecurity &
+    SecurityAPI.TradingSecurity & { contract: string; chainId: ChainId }
+
+export const isHighRisk = (tokenSecurity?: TokenSecurity) => {
+    if (!tokenSecurity) return false
+    return tokenSecurity.is_whitelisted === '1'
+        ? false
+        : SecurityMessages.filter(
+              (x) =>
+                  x.condition(tokenSecurity) && x.level !== SecurityMessageLevel.Safe && !x.shouldHide(tokenSecurity),
+          )
+              .sort((a) => (a.level === SecurityMessageLevel.High ? -1 : 1))
+              .filter((x) => x.level === SecurityMessageLevel.High).length > 0
 }
 
 export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {

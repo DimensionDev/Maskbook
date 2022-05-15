@@ -1,6 +1,7 @@
-import { SecurityMessageLevel, TokenSecurity } from './Common'
+import { SecurityMessageLevel } from './Common'
 import type { useSharedI18N } from '../../../locales'
 import parseInt from 'lodash-es/parseInt'
+import type { TokenSecurity } from './index'
 
 export type I18nOptions = 'rate' | 'quantity'
 
