@@ -59,8 +59,9 @@ const useStyles = makeStyles()((theme) => ({
         margin: theme.spacing(0, 1),
     },
     buttons: {
-        padding: 12,
-        lineHeight: '16px',
+        width: '100%',
+        padding: 0,
+        margin: 0,
     },
     verified: {
         borderRadius: 50,
@@ -170,7 +171,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         {t('plugin_gitcoin_view_on')}
                     </Button>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={6} style={{ padding: 4 }}>
                     <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
                         <Button variant="contained" fullWidth color="primary" onClick={onDonate}>
                             {t('plugin_gitcoin_donate')}
