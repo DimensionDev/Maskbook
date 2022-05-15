@@ -34,6 +34,7 @@ import { AccountBalanceWalletIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { NextIDVerificationStatus, useNextIDConnectStatus } from '../DataSource/useNextID'
+import { MaskIcon } from '../../resources/MaskIcon'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -100,31 +101,27 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
     const { t } = useI18N()
     const { openDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
     return (
-        <Container>
-            <ListItemButton onClick={openDialog}>
-                <img
-                    src={new URL('../../plugins/EVM/assets/maskwallet.png', import.meta.url).toString()}
-                    style={{
-                        width: iconSize,
-                        height: iconSize,
-                    }}
-                />
-                {mini ? null : (
-                    <ListItemText
-                        primary={
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                }}>
-                                <Typography className={classes.title}>{t('mask_network')}</Typography>
-                            </Box>
-                        }
-                    />
-                )}
-            </ListItemButton>
-        </Container>
+        <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
+            <Container>
+                <ListItemButton onClick={openDialog}>
+                    <MaskIcon style={{ width: iconSize, height: iconSize }} />
+                    {mini ? null : (
+                        <ListItemText
+                            primary={
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                    }}>
+                                    <Typography className={classes.title}>{t('mask_network')}</Typography>
+                                </Box>
+                            }
+                        />
+                    )}
+                </ListItemButton>
+            </Container>
+        </GuideStep>
     )
 }
 
@@ -157,8 +154,8 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
 
     return (
         <>
-            <GuideStep step={1} total={3} tip={t('user_guide_tip_1')}>
-                <Container>
+            <Container>
+                <GuideStep step={2} total={4} tip={t('user_guide_tip_2')}>
                     <ListItemButton onClick={openWallet}>
                         <ListItemIcon>
                             {isWalletValid ? (
@@ -196,8 +193,8 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
                             />
                         )}
                     </ListItemButton>
-                </Container>
-            </GuideStep>
+                </GuideStep>
+            </Container>
         </>
     )
 }

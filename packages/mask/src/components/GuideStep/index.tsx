@@ -119,6 +119,10 @@ export default function GuideStep({
         if (disabled) return
         const open = +lastStep === step
         setOpen(open)
+
+        if (!open) return
+        if (location.pathname === '/home') return
+        location.assign('/home')
     }, [lastStep])
 
     useEffect(() => {
@@ -169,7 +173,7 @@ export default function GuideStep({
         return () => {
             window.removeEventListener('resize', onResize)
         }
-    }, [childrenRef])
+    }, [childrenRef, lastStep, open])
 
     return (
         <>
