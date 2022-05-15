@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST, CrossIsolationMessages, formatPersonaPublicKey } from '@masknet/shared-base'
+import { EMPTY_LIST, formatPersonaPublicKey } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
@@ -217,7 +217,8 @@ function RenderEntryComponent({ application }: { application: Application }) {
 
     const verifyPersona = useCallback(() => {
         closeApplicationBoard()
-        CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
+        // CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
+        ApplicationEntryStatus.personaNextIDReset?.()
     }, [])
 
     const clickHandler = (() => {
@@ -270,6 +271,7 @@ interface ApplicationEntryStatusContextProps {
     currentPersonaPublicKey: string | undefined
     currentSNSConnectedPersonaPublicKey: string | undefined
     personaConnectAction: (() => void) | undefined
+    personaNextIDReset: (() => void) | undefined
     isLoading: boolean
 }
 
@@ -283,6 +285,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
     currentPersonaPublicKey: undefined,
     currentSNSConnectedPersonaPublicKey: undefined,
     personaConnectAction: undefined,
+    personaNextIDReset: undefined,
     isLoading: false,
 })
 
@@ -303,6 +306,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
         <ApplicationEntryStatusContext.Provider
             value={{
                 personaConnectAction: personaConnectStatus.action ?? undefined,
+                personaNextIDReset: nextIDConnectStatus.reset ?? undefined,
                 isPersonaCreated: personaConnectStatus.hasPersona,
                 isPersonaConnected: personaConnectStatus.connected,
                 isNextIDVerify: nextIDConnectStatus.isVerified,
