@@ -1,7 +1,8 @@
 import { useI18N } from '../../utils'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { PopoverListItemType, PopoverListTrigger, PopoverListTriggerProp } from './PopoverListTrigger'
+import { PopoverListTrigger, PopoverListTriggerProp } from './PopoverListTrigger'
+import { PopoverListItem, PopoverListItemType } from './PopoverListItem'
 import { useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -11,6 +12,9 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.text.secondary,
         marginRight: 12,
+    },
+    rightIcon: {
+        marginLeft: 'auto',
     },
 }))
 
@@ -35,19 +39,37 @@ export function EncryptionMethodRow(props: Partial<PopoverListTriggerProp>) {
         },
     ]
 
+    const PopoverlistRender = () => {
+        return (
+            <>
+                {renderScheme.map((x, idx) => {
+                    return (
+                        <div key={x.type + idx}>
+                            <PopoverListItem
+                                showDivider={idx < renderScheme.length - 1}
+                                value={x.type}
+                                title={x.title}
+                                subTitle={x.subTitle}
+                            />
+                        </div>
+                    )
+                })}
+            </>
+        )
+    }
+
     return (
         <>
             <Typography className={classes.optionTitle}>{t('post_dialog_encryption_method')}</Typography>
 
             <PopoverListTrigger
-                onConnectPersona={props.onConnectPersona}
-                onCreatePersona={props.onCreatePersona}
                 selected={props.selected ?? PopoverListItemType.Text}
-                renderScheme={renderScheme}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
                 onChange={props.onChange!}
-            />
+                selectedTitle={renderScheme.find((x) => x.type === props.selected)?.title}>
+                {PopoverlistRender()}
+            </PopoverListTrigger>
         </>
     )
 }

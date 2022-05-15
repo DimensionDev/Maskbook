@@ -26,6 +26,7 @@ import { useSubscription } from 'use-subscription'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
 import { VisibleToRow } from './VisibleToRow'
 import { EncryptionMethodRow } from './EncryptionMethodRow'
+import { PopoverListItemType } from './PopoverListItem'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -99,9 +100,9 @@ export interface CompositionProps {
     maxLength?: number
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
-    onConnectPersona?(): any
-    onCreatePersona?(): any
-    e2eEncryptionDisabled?: DisabledReason
+    onConnectPersona(): void
+    onCreatePersona(): void
+    e2eEncryptionDisabled: DisabledReason | undefined
     recipients: LazyRecipients
     // Enabled features
     supportTextEncoding: boolean
@@ -140,9 +141,9 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         useSetEncryptionKind(props)
     const { encodingKind, setEncoding } = useEncryptionEncode(props)
     const visibilitySelected = useMemo(() => {
-        if (encryptionKind === 'Everyone') return 'all'
-        if (recipients.length > 0) return 'share'
-        return 'private'
+        if (encryptionKind === 'Everyone') return PopoverListItemType.All
+        if (recipients.length > 0) return PopoverListItemType.Share
+        return PopoverListItemType.Private
     }, [encryptionKind, recipients])
     const reset = useCallback(() => {
         startTransition(() => {
@@ -222,21 +223,17 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         e2eDisabled={props.e2eEncryptionDisabled}
                         shareWithNum={recipients.length}
                         onChange={(event) => {
-                            if (event === 'all') {
+                            if (event === PopoverListItemType.All) {
                                 setEncryptionKind('Everyone')
                             } else {
-                                if (event === 'share') {
+                                if (event === PopoverListItemType.Share) {
                                     setShareWithOpen(true)
                                 }
-                                if (event === 'private') {
+                                if (event === PopoverListItemType.Private) {
                                     setRecipients([])
                                 }
                                 setEncryptionKind('E2E')
                             }
-                        }}
-                        toShare={() => {
-                            setEncryptionKind('E2E')
-                            setShareWithOpen(true)
                         }}
                     />
 

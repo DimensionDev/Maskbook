@@ -1,12 +1,11 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
+import { InjectedDialog } from '@masknet/shared'
 import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
 import Fuse from 'fuse.js'
 import { useMemo, useState } from 'react'
-import type { ProfileInformation as Profile } from '@masknet/shared-base'
+import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
-import { useCopyToClipboard } from 'react-use'
 import { SearchEmptyIcon, SearchIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -94,12 +93,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { classes, cx } = useStyles()
     const { items, disabledItems, onSearch } = props
     const [search, setSearch] = useState('')
-    const [, copyToClipboard] = useCopyToClipboard()
-    const copyFingerprint = useSnackbarCallback({
-        executor: async (v: string) => copyToClipboard(v),
-        deps: [],
-        successText: t('compose_encrypt_public_key_copied'),
-    })
+
     useMemo(() => {
         setSearch('')
         onSearch('')
@@ -163,9 +157,8 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         ) : (
                             itemsAfterSearch.map((item, idx) => (
                                 <ProfileInList
-                                    onCopy={(v) => copyFingerprint(v)}
                                     key={idx}
-                                    item={item}
+                                    item={item as ProfileInformationFromNextID}
                                     highlightText={search}
                                     selected={
                                         props.selected.some(

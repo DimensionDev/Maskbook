@@ -7,6 +7,7 @@ import { useNextIDBoundByPlatform } from '../../DataSource/useNextID'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
+import { cloneDeep } from 'lodash-unified'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -67,7 +68,9 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             onSelect={(item) => onSetSelected([...selected, item])}
             onDeselect={(item) => {
                 onSetSelected(
-                    selected.filter((x) => x.linkedPersona?.publicKeyAsHex !== item.linkedPersona?.publicKeyAsHex),
+                    cloneDeep(selected).filter(
+                        (x) => x.linkedPersona?.publicKeyAsHex !== item.linkedPersona?.publicKeyAsHex,
+                    ),
                 )
             }}
         />

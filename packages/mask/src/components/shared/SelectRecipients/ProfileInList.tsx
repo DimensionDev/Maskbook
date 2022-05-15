@@ -7,6 +7,8 @@ import { Avatar } from '../../../utils/components/Avatar'
 import { CopyIcon } from '@masknet/icons'
 import { truncate } from 'lodash-unified'
 import { useI18N } from '../../../utils'
+import { useSnackbarCallback } from '@masknet/shared'
+import { useCopyToClipboard } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -85,12 +87,18 @@ export interface ProfileInListProps extends withClasses<never> {
     selected?: boolean
     disabled?: boolean
     onChange: (ev: React.MouseEvent<HTMLButtonElement>, checked: boolean) => void
-    onCopy(v: string): void
 }
 export function ProfileInList(props: ProfileInListProps) {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const profile = props.item
+
+    const [, copyToClipboard] = useCopyToClipboard()
+    const copyFingerprint = useSnackbarCallback({
+        executor: async (v: string) => copyToClipboard(v),
+        deps: [],
+        successText: t('compose_encrypt_public_key_copied'),
+    })
     const resolveSecondaryText = () => {
         return formatPersonaPublicKey(profile.linkedPersona?.publicKeyAsHex?.toUpperCase() ?? '', 4)
     }
@@ -179,7 +187,7 @@ export function ProfileInList(props: ProfileInListProps) {
                         <CopyIcon
                             className={classes.actionIcon}
                             onClick={() =>
-                                props.onCopy(
+                                copyToClipboard(
                                     (
                                         profile.linkedPersona?.publicKeyAsHex ?? profile.linkedPersona?.rawPublicKey
                                     )?.toUpperCase() ?? '',
