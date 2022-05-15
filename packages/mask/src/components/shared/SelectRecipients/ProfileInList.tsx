@@ -4,7 +4,6 @@ import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
 import { formatPersonaFingerprint, formatPersonaPublicKey, ProfileInformation as Profile } from '@masknet/shared-base'
 import { Avatar } from '../../../utils/components/Avatar'
-import type { CheckboxProps } from '@mui/material/Checkbox'
 import { CopyIcon } from '@masknet/icons'
 import { truncate } from 'lodash-unified'
 import { useI18N } from '../../../utils'
@@ -87,7 +86,6 @@ export interface ProfileInListProps extends withClasses<never> {
     disabled?: boolean
     onChange: (ev: React.MouseEvent<HTMLButtonElement>, checked: boolean) => void
     onCopy(v: string): void
-    CheckboxProps?: Partial<CheckboxProps>
 }
 export function ProfileInList(props: ProfileInListProps) {
     const { t } = useI18N()
@@ -191,7 +189,7 @@ export function ProfileInList(props: ProfileInListProps) {
                     </div>
                 }
             />
-            <Checkbox onClick={onClick} checked={!!props.selected} color="primary" {...props.CheckboxProps} />
+            <Checkbox onClick={onClick} checked={!!props.selected} color="primary" />
         </ListItem>
     )
 }
