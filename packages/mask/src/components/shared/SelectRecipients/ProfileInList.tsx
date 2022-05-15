@@ -95,7 +95,7 @@ export function ProfileInList(props: ProfileInListProps) {
     const profile = props.item
     const resolveSecondaryText = () => {
         if (profile.publicHexKey) return formatPersonaPublicKey(profile.publicHexKey?.toUpperCase() ?? '', 4)
-        return formatPersonaFingerprint(profile.fingerprint ?? '', 5)
+        return formatPersonaFingerprint(profile.linkedPersona?.rawPublicKey ?? '', 5)
     }
     const resolvePrimaryText = () => {
         if (profile.fromNextID) {
@@ -182,7 +182,9 @@ export function ProfileInList(props: ProfileInListProps) {
                         <CopyIcon
                             className={classes.actionIcon}
                             onClick={() =>
-                                props.onCopy((profile.publicHexKey ?? profile.fingerprint)?.toUpperCase() ?? '')
+                                props.onCopy(
+                                    (profile.publicHexKey ?? profile.linkedPersona?.rawPublicKey)?.toUpperCase() ?? '',
+                                )
                             }
                         />
                         {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}

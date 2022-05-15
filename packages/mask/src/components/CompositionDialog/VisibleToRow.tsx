@@ -6,6 +6,7 @@ import { useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {
+        fontFamily: 'sans-serif',
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.text.secondary,

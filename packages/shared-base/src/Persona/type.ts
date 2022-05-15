@@ -15,7 +15,6 @@ export interface ProfileInformation {
     nickname?: string
     avatar?: string
     identifier: ProfileIdentifier
-    fingerprint?: string
     walletAddress?: string
     fromNextID?: boolean
     publicHexKey?: string
