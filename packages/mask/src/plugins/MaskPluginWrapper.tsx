@@ -1,8 +1,7 @@
-import { Typography, SnackbarContent, Button, Link } from '@mui/material'
+import { Typography, SnackbarContent, Link } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { MaskIcon } from '../resources/MaskIcon'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
-import { usePersonaConnectStatus } from '../components/DataSource/usePersonaConnectStatus'
 import { useI18N } from '../utils'
 import { Box } from '@mui/system'
 import {
@@ -91,25 +90,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const { open, title, children, action, publisher, publisherLink, content, wrapperProps } = props
     const { classes } = useStyles({ backgroundGradient: wrapperProps?.backgroundGradient })
 
-    const personaConnectStatus = usePersonaConnectStatus()
     const { t } = useI18N()
-
-    const name = !personaConnectStatus.hasPersona
-        ? t('please_create_persona')
-        : !personaConnectStatus.connected
-        ? t('please_connect_persona')
-        : title
-
-    const actionButton = useMemo(() => {
-        if (!personaConnectStatus.action) return null
-
-        const button = personaConnectStatus.hasPersona ? t('connect_persona') : t('create_persona')
-        return (
-            <Button variant="contained" className={classes.button} onClick={personaConnectStatus.action}>
-                {button}
-            </Button>
-        )
-    }, [personaConnectStatus, t])
 
     const publisherInfo = useMemo(() => {
         if (!publisher) return
@@ -154,7 +135,14 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                 </Typography>
                 <div className={classes.publish}>{publisherInfo}</div>
             </div>
-
+            {action ? (
+                <>
+                    <Typography variant="body1" color="#FF3545" sx={{ padding: 1 }} textAlign="center">
+                        {content}
+                    </Typography>
+                    <div className={classes.action}>{action}</div>
+                </>
+            ) : null}
             {children ? <div className={classes.body}>{children}</div> : null}
         </div>
     )

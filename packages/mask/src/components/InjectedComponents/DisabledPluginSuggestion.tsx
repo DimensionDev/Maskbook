@@ -92,7 +92,6 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                                 '&:hover': {
                                     backgroundColor: MaskColorVar.buttonPluginBackground,
                                 },
-                                borderRadius: 9999,
                             }}>
                             Enable plugins
                         </Button>
