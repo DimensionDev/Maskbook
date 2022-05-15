@@ -94,7 +94,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const recipients = useRecipientsList()
     const isE2E_Disabled = (() => {
         if (!connectStatus.currentConnectedPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona
-        if (!connectStatus.connected && connectStatus.hasPersona) return E2EUnavailableReason.NoConnect
+        if (!connectStatus.connected && connectStatus.hasPersona) return E2EUnavailableReason.NoConnection
         if (!hasLocalKey) return E2EUnavailableReason.NoLocalKey
         return
     })()

@@ -96,11 +96,11 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
             <Typography
                 className={classes.create}
                 onClick={() => {
-                    if (props.e2eDisabled === E2EUnavailableReason.NoPersona && props.onCreatePersona) {
+                    if (
+                        props.e2eDisabled === E2EUnavailableReason.NoPersona ||
+                        props.e2eDisabled === E2EUnavailableReason.NoConnection
+                    ) {
                         props.onCreatePersona()
-                    }
-                    if (props.e2eDisabled === E2EUnavailableReason.NoConnect && props.onConnectPersona) {
-                        props.onConnectPersona()
                     }
                 }}>
                 {props.e2eDisabled === E2EUnavailableReason.NoPersona ? t('create') : t('connect')}

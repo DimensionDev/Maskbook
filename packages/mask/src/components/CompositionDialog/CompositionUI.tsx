@@ -251,7 +251,7 @@ export enum E2EUnavailableReason {
     // These reasons only applies to E2E encryption.
     NoPersona = 1,
     NoLocalKey = 2,
-    NoConnect = 3,
+    NoConnection = 3,
 }
 function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabled'>) {
     const [internal_encryptionKind, setEncryptionKind] = useState<EncryptionTargetType>(EncryptionTargetType.Public)
