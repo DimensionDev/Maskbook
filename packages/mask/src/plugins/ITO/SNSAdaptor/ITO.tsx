@@ -46,6 +46,7 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { SharedIcon } from '../assets/shared'
 import { PluginWalletConnectIcon } from '@masknet/icons'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { startCase } from 'lodash-unified'
 
 export interface IconProps {
@@ -776,25 +777,27 @@ export function ITO(props: ITO_Props) {
                                     </ActionButton>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <EthereumWalletConnectedBoundary
-                                        hideRiskWarningConfirmed
-                                        startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-                                        classes={{ button: classes.actionButton }}>
-                                        <ActionButton
-                                            onClick={retryIfQualified}
-                                            loading={loadingIfQualified}
-                                            variant="contained"
-                                            size="large"
-                                            className={classes.actionButton}>
-                                            {loadingIfQualified
-                                                ? t('plugin_ito_qualification_loading')
-                                                : !ifQualified
-                                                ? t('plugin_ito_qualification_failed')
-                                                : !(ifQualified as Qual_V2).qualified
-                                                ? startCase((ifQualified as Qual_V2).errorMsg)
-                                                : null}
-                                        </ActionButton>
-                                    </EthereumWalletConnectedBoundary>
+                                    <EthereumChainBoundary chainId={payload.chain_id}>
+                                        <EthereumWalletConnectedBoundary
+                                            hideRiskWarningConfirmed
+                                            startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                                            classes={{ button: classes.actionButton }}>
+                                            <ActionButton
+                                                onClick={retryIfQualified}
+                                                loading={loadingIfQualified}
+                                                variant="contained"
+                                                size="large"
+                                                className={classes.actionButton}>
+                                                {loadingIfQualified
+                                                    ? t('plugin_ito_qualification_loading')
+                                                    : !ifQualified
+                                                    ? t('plugin_ito_qualification_failed')
+                                                    : !(ifQualified as Qual_V2).qualified
+                                                    ? startCase((ifQualified as Qual_V2).errorMsg)
+                                                    : null}
+                                            </ActionButton>
+                                        </EthereumWalletConnectedBoundary>
+                                    </EthereumChainBoundary>
                                 </Grid>
                             </Grid>
                         )

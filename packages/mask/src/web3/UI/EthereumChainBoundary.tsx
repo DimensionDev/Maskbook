@@ -1,9 +1,14 @@
 import React, { useCallback } from 'react'
 import { Box, Typography, Theme } from '@mui/material'
-import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { NetworkPluginID, useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
+import {
+    NetworkPluginID,
+    useCurrentWeb3NetworkPluginID,
+    useAccount,
+    useNetworkDescriptor,
+} from '@masknet/plugin-infra/web3'
 import {
     ChainId,
     getChainDetailedCAIP,
@@ -28,6 +33,7 @@ import { useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 import Services from '../../extension/service'
 import { pluginIDSettings } from '../../settings/settings'
+import { WalletIcon } from '@masknet/shared'
 import { PluginWalletConnectIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -51,6 +57,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const PLUGINID_NAME: Record<NetworkPluginID, string> = {
+    'com.mask.evm': 'EVM',
+    'com.mask.flow': 'Flow',
+    'com.mask.solana': 'Solana',
+}
+
 export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> {
     className?: string
     chainId: ChainId
@@ -71,10 +83,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     const account = useAccount()
     const chainId = useChainId()
+
     const allowTestnet = useAllowTestnet()
     const providerType = useValueRef(currentProviderSettings)
 
-    const { noSwitchNetworkTip = false } = props
+    const { noSwitchNetworkTip = true } = props
     const classes = useStylesExtends(useStyles(), props)
     const expectedChainId = props.chainId
     const expectedNetwork = getChainName(expectedChainId)
@@ -105,7 +118,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         WalletMessages.events.connectWalletDialogUpdated,
     )
     // #endregion
-
+    const networkDescriptor = useNetworkDescriptor(expectedChainId, NetworkPluginID.PLUGIN_EVM)
     // request ethereum-compatible network
     const networkType = getNetworkTypeFromChainId(expectedChainId)
 
@@ -170,11 +183,13 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         }
     }, [account, isAllowed, isChainMatched, isPluginMatched, providerType, expectedChainId])
 
-    const renderBox = (children?: React.ReactNode) => {
+    const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
-            <Box className={props.className} display="flex" flexDirection="column" alignItems="center">
-                {children}
-            </Box>
+            <ShadowRootTooltip title={tips ?? ''} arrow>
+                <Box className={props.className} display="flex" flexDirection="column" alignItems="center">
+                    {children}
+                </Box>
+            </ShadowRootTooltip>
         )
     }
 
@@ -229,10 +244,16 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 {isAllowed ? (
                     <ActionButtonPromise
                         className={classes.switchButton}
+                        startIcon={
+                            <WalletIcon
+                                networkIcon={networkDescriptor?.icon} // switch the icon to meet design
+                                isBorderColorNotDefault
+                            />
+                        }
                         sx={
                             props.switchButtonStyle ?? {
                                 backgroundColor: MaskColorVar.textPluginColor,
-                                width: 254,
+                                width: '100%',
                                 color: 'white',
                                 '&:hover': {
                                     backgroundColor: MaskColorVar.buttonPluginBackground,
@@ -241,16 +262,16 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         }
                         init={
                             <span>
-                                {t('plugin_wallet_switch_network', {
-                                    network: expectedNetwork,
+                                {t('plugin_wallet_connect_network', {
+                                    network: PLUGINID_NAME[NetworkPluginID.PLUGIN_EVM],
                                 })}
                             </span>
                         }
-                        waiting={t('plugin_wallet_switch_network_under_going', {
-                            network: expectedNetwork,
+                        waiting={t('plugin_wallet_connect_network_under_going', {
+                            network: PLUGINID_NAME[NetworkPluginID.PLUGIN_EVM],
                         })}
-                        complete={t('plugin_wallet_switch_network', {
-                            network: expectedNetwork,
+                        complete={t('plugin_wallet_connect_network', {
+                            network: PLUGINID_NAME[NetworkPluginID.PLUGIN_EVM],
                         })}
                         failed={t('retry')}
                         executor={onSwitchChain}
@@ -276,31 +297,27 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             ) : null}
             {isAllowed ? (
                 <ActionButtonPromise
-                    className={classes.switchButton}
+                    startIcon={
+                        <WalletIcon
+                            networkIcon={networkDescriptor?.icon} // switch the icon to meet design
+                            isBorderColorNotDefault
+                        />
+                    }
                     sx={
                         props.switchButtonStyle ?? {
                             backgroundColor: MaskColorVar.buttonPluginBackground,
-                            width: 254,
+                            width: '100%',
                             color: 'white',
-                            marginBottom: 1,
                             '&:hover': {
                                 backgroundColor: MaskColorVar.buttonPluginBackground,
                             },
+                            padding: 1,
                         }
                     }
-                    init={
-                        <span>
-                            {t('plugin_wallet_connect_network', {
-                                network: expectedNetwork,
-                            })}
-                        </span>
-                    }
-                    waiting={t('plugin_wallet_connect_network_under_going', {
-                        network: expectedNetwork,
-                    })}
-                    complete={t('plugin_wallet_connect_network', {
-                        network: expectedNetwork,
-                    })}
+                    style={{ borderRadius: 10 }}
+                    init={<span>{t('plugin_wallet_switch_network')}</span>}
+                    waiting={t('plugin_wallet_switch_network_under_going')}
+                    complete={t('plugin_wallet_switch_network')}
                     failed={t('retry')}
                     executor={onSwitchChain}
                     completeOnClick={onSwitchChain}
@@ -309,5 +326,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 />
             ) : null}
         </>,
+        providerType === ProviderType.WalletConnect ? t('plugin_wallet_connect_tips') : '',
     )
 }

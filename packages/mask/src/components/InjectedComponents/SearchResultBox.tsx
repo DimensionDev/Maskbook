@@ -8,6 +8,5 @@ const PluginRenderer = createInjectHooksRenderer(
 export interface SearchResultBoxProps {}
 
 export function SearchResultBox(props: SearchResultBoxProps) {
-    console.log(props)
     return <PluginRenderer />
 }
