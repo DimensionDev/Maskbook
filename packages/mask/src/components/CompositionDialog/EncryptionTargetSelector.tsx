@@ -116,7 +116,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const selectedTitle = (() => {
         const selected = props.target
         const shareWithNum = props.selectedRecipientLength
-        if (selected === EncryptionTargetType.E2E) return `${shareWithNum} friend${shareWithNum! > 1 ? 's' : ''}`
+        if (selected === EncryptionTargetType.E2E) return `${shareWithNum} friend${shareWithNum > 1 ? 's' : ''}`
         else if (selected === EncryptionTargetType.Public) return t('compose_encrypt_visible_to_all')
         else if (selected === EncryptionTargetType.Self) return t('compose_encrypt_visible_to_private')
         unreachable(selected)

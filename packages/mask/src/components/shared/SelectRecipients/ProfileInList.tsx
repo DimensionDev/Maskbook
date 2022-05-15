@@ -93,33 +93,32 @@ export function ProfileInList(props: ProfileInListProps) {
     const profile = props.item
 
     const [, copyToClipboard] = useCopyToClipboard()
-    const resolvePrimaryText = () => {
+    const highlightText = (() => {
         if (profile.fromNextID) {
-            const mentions = profile.linkedTwitterNames!.map((x) => '@' + x).join(' ')
+            const mentions = profile.linkedTwitterNames.map((x) => '@' + x).join(' ')
             if (mentions.length > 15) {
-                const len = profile.linkedTwitterNames?.length
-                return truncate(mentions, { length: 15 }) + (len! > 1 ? `(${len})` : '')
+                const len = profile.linkedTwitterNames.length
+                return truncate(mentions, { length: 15 }) + (len > 1 ? `(${len})` : '')
             }
             return mentions
         }
         return `@${profile.identifier.userId || profile.nickname}`
-    }
+    })()
 
-    const ToolTipText = () => {
-        const linkedNames = profile.linkedTwitterNames!
-        const len = linkedNames?.length!
+    const tooltipTitle = (() => {
+        const linkedNames = profile.linkedTwitterNames
         if (profile.fromNextID) {
-            if (len === 1 && linkedNames[0]?.length > 14) {
+            if (linkedNames.length === 1 && linkedNames[0].length > 14) {
                 return `${t('select_friends_dialog_persona_connect')} @${linkedNames}.`
             }
-            if (len > 1) {
-                return `${t('select_friends_dialog_persona_connect')} ${profile
-                    .linkedTwitterNames!.map((x) => '@' + x)
+            if (linkedNames.length > 1) {
+                return `${t('select_friends_dialog_persona_connect')} ${profile.linkedTwitterNames
+                    .map((x) => '@' + x)
                     .join(', ')}.`
             }
         }
         return ''
-    }
+    })()
 
     const onClick = useCallback(
         (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.selected),
@@ -141,14 +140,14 @@ export function ProfileInList(props: ProfileInListProps) {
                 }}
                 primary={
                     <div className={classes.flex}>
-                        <ShadowRootTooltip title={ToolTipText()} arrow classes={{ tooltip: classes.toolTip }}>
+                        <ShadowRootTooltip title={tooltipTitle} arrow classes={{ tooltip: classes.toolTip }}>
                             <div>
                                 <Highlighter
                                     className={classes.highLightBase}
                                     highlightClassName={classes.highlighted}
                                     searchWords={[props.highlightText ?? '']}
                                     autoEscape
-                                    textToHighlight={resolvePrimaryText()}
+                                    textToHighlight={highlightText}
                                 />
                             </div>
                         </ShadowRootTooltip>
