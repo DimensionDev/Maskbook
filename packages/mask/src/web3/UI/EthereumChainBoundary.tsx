@@ -53,15 +53,9 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottoma: 48,
+        marginBottom: 48,
     },
 }))
-
-const PLUGINID_NAME: Record<NetworkPluginID, string> = {
-    'com.mask.evm': 'EVM',
-    'com.mask.flow': 'Flow',
-    'com.mask.solana': 'Solana',
-}
 
 export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> {
     className?: string
@@ -273,15 +267,15 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         init={
                             <span>
                                 {t('plugin_wallet_connect_network', {
-                                    network: PLUGINID_NAME[NetworkPluginID.PLUGIN_EVM],
+                                    network: 'EVM',
                                 })}
                             </span>
                         }
                         waiting={t('plugin_wallet_connect_network_under_going', {
-                            network: PLUGINID_NAME[NetworkPluginID.PLUGIN_EVM],
+                            network: 'EVM',
                         })}
                         complete={t('plugin_wallet_connect_network', {
-                            network: PLUGINID_NAME[NetworkPluginID.PLUGIN_EVM],
+                            network: 'EVM',
                         })}
                         failed={t('retry')}
                         executor={onSwitchChain}
