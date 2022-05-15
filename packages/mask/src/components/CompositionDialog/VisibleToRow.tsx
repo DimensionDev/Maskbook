@@ -47,8 +47,8 @@ export function VisibleToRow(props: Partial<PopoverListTriggerProp>) {
             <Typography className={classes.optionTitle}>{t('post_dialog_visible_to')}</Typography>
 
             <PopoverListTrigger
-                onConnect={props.onConnect}
-                onCreate={props.onCreate}
+                onConnectPersona={props.onConnectPersona}
+                onCreatePersona={props.onCreatePersona}
                 e2eDisabled={props.e2eDisabled}
                 selected={props.selected ?? PopoverListItemType.All}
                 renderScheme={renderScheme}

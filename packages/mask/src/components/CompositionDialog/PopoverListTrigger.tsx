@@ -4,6 +4,7 @@ import Popover from '@mui/material/Popover'
 import { RadioGroup, Radio, Typography, Box } from '@mui/material'
 import { CheckCircle } from '@mui/icons-material'
 import { useI18N } from '../../utils'
+import { DisabledReason } from './CompositionUI'
 
 const useStyles = makeStyles()((theme) => ({
     popper: {
@@ -83,17 +84,17 @@ interface PopoverListItem {
     showDivider?: boolean
     e2eDisabled?: number
     toShare?(): void
-    onCreate?(): void
+    onCreatePersona?(): void
     onChange?(v: string): void
-    onConnect?(): void
+    onConnectPersona?(): void
 }
 export interface PopoverListTriggerProp {
-    e2eDisabled?: number
+    e2eDisabled?: DisabledReason
     anchorEl: HTMLElement | null
     setAnchorEl(v: HTMLElement | null): void
     onChange(v: string): void
-    onCreate?(): void
-    onConnect?(): void
+    onCreatePersona?(): void
+    onConnectPersona?(): void
     renderScheme: Array<PopoverListItem>
     shareWithNum?: number
     selected: string
@@ -101,8 +102,18 @@ export interface PopoverListTriggerProp {
 }
 
 const PopoverListItem = (props: PopoverListItem) => {
-    const { title, subTitle, personaRequired, type, showDivider, e2eDisabled, toShare, onChange, onConnect, onCreate } =
-        props
+    const {
+        title,
+        subTitle,
+        personaRequired,
+        type,
+        showDivider,
+        e2eDisabled,
+        toShare,
+        onChange,
+        onConnectPersona,
+        onCreatePersona,
+    } = props
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const handleItemClick = () => {
@@ -130,14 +141,14 @@ const PopoverListItem = (props: PopoverListItem) => {
                     <Typography
                         className={classes.create}
                         onClick={() => {
-                            if (e2eDisabled === 1 && onCreate) {
-                                onCreate()
+                            if (e2eDisabled === DisabledReason.NoPersona && onCreatePersona) {
+                                onCreatePersona()
                             }
-                            if (e2eDisabled === 3 && onConnect) {
-                                onConnect()
+                            if (e2eDisabled === DisabledReason.NoConnect && onConnectPersona) {
+                                onConnectPersona()
                             }
                         }}>
-                        {e2eDisabled === 1 ? t('create') : t('connect')}
+                        {e2eDisabled === DisabledReason.NoPersona ? t('create') : t('connect')}
                     </Typography>
                 </div>
             )}
@@ -156,8 +167,8 @@ export function PopoverListTrigger({
     renderScheme,
     selected,
     onChange,
-    onCreate,
-    onConnect,
+    onCreatePersona,
+    onConnectPersona,
     e2eDisabled,
     toShare,
     shareWithNum,
@@ -202,8 +213,8 @@ export function PopoverListTrigger({
                     {renderScheme.map((x, idx) => {
                         return (
                             <PopoverListItem
-                                onConnect={onConnect}
-                                onCreate={onCreate}
+                                onConnectPersona={onConnectPersona}
+                                onCreatePersona={onCreatePersona}
                                 onChange={onChange}
                                 toShare={() => {
                                     if (toShare) {

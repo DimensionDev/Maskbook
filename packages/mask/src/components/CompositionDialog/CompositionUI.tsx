@@ -99,8 +99,8 @@ export interface CompositionProps {
     maxLength?: number
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
-    onConnect?(): any
-    onCreate?(): any
+    onConnectPersona?(): any
+    onCreatePersona?(): any
     e2eEncryptionDisabled?: DisabledReason
     recipients: LazyRecipients
     // Enabled features
@@ -217,8 +217,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 <div className={cx(classes.flex, classes.between)}>
                     <VisibleToRow
                         selected={visibilitySelected}
-                        onConnect={props.onConnect}
-                        onCreate={props.onCreate}
+                        onConnectPersona={props.onConnectPersona}
+                        onCreatePersona={props.onCreatePersona}
                         e2eDisabled={props.e2eEncryptionDisabled}
                         shareWithNum={recipients.length}
                         onChange={(event) => {
