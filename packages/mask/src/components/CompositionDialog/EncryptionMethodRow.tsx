@@ -20,15 +20,15 @@ export function EncryptionMethodRow(props: Partial<PopoverListTriggerProp>) {
     const renderScheme = [
         {
             type: PopoverListItemType.Text,
-            title: t('compose_encryp_method_text'),
-            subTitle: t('compose_encryp_method_text_sub_title'),
+            title: t('compose_encrypt_method_text'),
+            subTitle: t('compose_encrypt_method_text_sub_title'),
             personaRequired: false,
             event: null,
         },
         {
             type: PopoverListItemType.Image,
-            title: t('compose_encryp_method_image'),
-            subTitle: t('compose_encryp_method_image_sub_title'),
+            title: t('compose_encrypt_method_image'),
+            subTitle: t('compose_encrypt_method_image_sub_title'),
             personaRequired: false,
             event: null,
         },

@@ -18,10 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         background: theme.palette.background.input,
         padding: 14,
         boxSizing: 'border-box',
-    },
-    root: {
-        paddingTop: 14,
-        flexDirection: 'column',
+        borderRadius: 8,
     },
     input: {
         fontSize: 15,
@@ -128,7 +125,6 @@ export const TypedMessageEditor = memo(
                 <InputBase
                     readOnly={readonly}
                     classes={{
-                        root: classes.root,
                         input: classes.input,
                     }}
                     autoFocus={props.autoFocus}
