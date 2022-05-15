@@ -80,13 +80,20 @@ export function PersonaPage(props: PersonaPageProps) {
                         ))}
 
                     {myPersonas?.[0] &&
-                        myPersonas[0].linkedProfiles.map((x, i) =>
-                            persona?.binds.proofs.some(
-                                (y) => y.identity === x.identifier.userId.toLowerCase(),
-                            ) ? null : (
-                                <PersonaItem avatar="" key={`persona${i}`} owner={false} userId={x.identifier.userId} />
-                            ),
-                        )}
+                        myPersonas[0].linkedProfiles
+                            .filter((x) => x.identifier.network === currentIdentity?.identifier?.network)
+                            .map((x, i) =>
+                                persona?.binds.proofs.some(
+                                    (y) => y.identity === x.identifier.userId.toLowerCase(),
+                                ) ? null : (
+                                    <PersonaItem
+                                        avatar=""
+                                        key={`persona${i}`}
+                                        owner={false}
+                                        userId={x.identifier.userId}
+                                    />
+                                ),
+                            )}
                     {persona?.binds?.proofs
                         .filter((proof) => proof.platform === NextIDPlatform.Twitter)
                         .filter((x) => x.identity.toLowerCase() !== currentIdentity?.identifier?.userId.toLowerCase())
