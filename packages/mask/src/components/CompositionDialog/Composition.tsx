@@ -109,11 +109,11 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 title={t('post_dialog__title')}>
                 <DialogContent>
                     <CompositionDialogUI
-                        onConnect={() => {
+                        onConnectPersona={() => {
                             if (connectStatus.action) connectStatus.action()
                             setOpen(false)
                         }}
-                        onCreate={() => {
+                        onCreatePersona={() => {
                             Services.Helper.openDashboard(DashboardRoutes.Setup)
                             setOpen(false)
                         }}

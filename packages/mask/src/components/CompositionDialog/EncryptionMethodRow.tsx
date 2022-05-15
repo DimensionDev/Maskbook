@@ -40,8 +40,8 @@ export function EncryptionMethodRow(props: Partial<PopoverListTriggerProp>) {
             <Typography className={classes.optionTitle}>{t('post_dialog_encryption_method')}</Typography>
 
             <PopoverListTrigger
-                onConnect={props.onConnect}
-                onCreate={props.onCreate}
+                onConnectPersona={props.onConnectPersona}
+                onCreatePersona={props.onCreatePersona}
                 selected={props.selected ?? PopoverListItemType.Text}
                 renderScheme={renderScheme}
                 anchorEl={anchorEl}
