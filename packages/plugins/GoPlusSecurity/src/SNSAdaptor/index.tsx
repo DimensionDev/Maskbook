@@ -32,6 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 },
                 name,
                 icon,
+                category: 'dapp',
                 appBoardSortingDefaultPriority: 13,
                 marketListSortingPriority: 16,
             }
