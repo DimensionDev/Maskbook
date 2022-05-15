@@ -21,8 +21,7 @@ import { currentDataProviderSettings, getCurrentPreferredCoinIdSettings } from '
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
-import { PluginId } from '@masknet/plugin-infra'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSNSAdaptor, PluginId } from '@masknet/plugin-infra/content-script'
 import { GoPlusLabs, SecurityAPI } from '@masknet/web3-providers'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { useAsyncRetry } from 'react-use'
@@ -129,14 +128,17 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
 
+    const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
+    const isTokenSecurityClosed = snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
     const { value: tokenSecurityInfo, error } = useAsyncRetry(async () => {
+        if (isTokenSecurityClosed) return
         if (!coin?.contract_address) return
         const values = await GoPlusLabs.getTokenSecurity(chainId, [coin.contract_address.trim()])
         if (!Object.keys(values ?? {}).length) throw new Error('Contract Not Found')
         return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0], chainId }))[0] as
             | TokenSecurity
             | undefined
-    }, [chainId, coin])
+    }, [chainId, coin, isTokenSecurityClosed])
 
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
@@ -247,7 +249,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 amount={market?.price_change_percentage_1h ?? market?.price_change_percentage_24h ?? 0}
                             />
                         </Typography>
-                        {tokenSecurityInfo && !error && <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />}
+                        {!isTokenSecurityClosed && tokenSecurityInfo && !error && (
+                            <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
+                        )}
                     </Stack>
                 }
                 disableTypography

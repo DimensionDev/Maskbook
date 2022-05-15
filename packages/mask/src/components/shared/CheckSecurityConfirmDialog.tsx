@@ -27,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface CheckSecurityConfirmDialogProps extends withClasses<never> {
     open: boolean
     onConfirm: () => void
-    onClose?: () => void
+    onClose: () => void
 }
 
 export function CheckSecurityConfirmDialog(props: CheckSecurityConfirmDialogProps) {

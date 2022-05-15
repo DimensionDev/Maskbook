@@ -31,6 +31,7 @@ import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { GoPlusLabs, SecurityAPI } from '@masknet/web3-providers'
 import { RiskWarningDialog } from './RiskWarningDialog'
+import { useActivatedPluginsSNSAdaptor, PluginId } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -222,14 +223,17 @@ export const TradeForm = memo<AllTradeFormProps>(
         const [isExpand, setExpand] = useState(false)
         const [isWarningOpen, setIsWarningOpen] = useState(false)
 
+        const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
+        const isTokenSecurityClosed = snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
         const { value: tokenSecurityInfo, error } = useAsyncRetry(async () => {
+            if (isTokenSecurityClosed) return
             if (!outputToken) return
             const values = await GoPlusLabs.getTokenSecurity(chainId, [outputToken.address.trim()])
             if (!Object.keys(values ?? {}).length) throw new Error('Contract Not Found')
             return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0], chainId }))[0] as
                 | TokenSecurity
                 | undefined
-        }, [chainId, outputToken])
+        }, [chainId, outputToken, isTokenSecurityClosed])
 
         const isRisky = isHighRisk(tokenSecurityInfo)
 
@@ -420,7 +424,9 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     onDelete: noop,
                                 }}
                             />
-                            {tokenSecurityInfo && !error && <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />}
+                            {!isTokenSecurityClosed && tokenSecurityInfo && !error && (
+                                <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
+                            )}
                         </Stack>
 
                         {trades.filter((item) => !!item.value).length >= 1 ? (
@@ -526,7 +532,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         </Box>
                                     }
                                     render={(disable: boolean) =>
-                                        isRisky ? (
+                                        !isTokenSecurityClosed && isRisky ? (
                                             <ActionButton
                                                 fullWidth
                                                 variant="contained"
@@ -572,7 +578,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         </Box>
                     ) : null}
                 </Box>
-                {tokenSecurityInfo && (
+                {!isTokenSecurityClosed && tokenSecurityInfo && (
                     <RiskWarningDialog
                         open={isWarningOpen}
                         onClose={() => setIsWarningOpen(false)}
