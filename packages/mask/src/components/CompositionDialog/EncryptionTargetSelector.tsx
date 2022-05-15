@@ -114,7 +114,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
         const shareWithNum = props.selectedRecipientLength
         if (selected === EncryptionTargetType.E2E)
             return shareWithNum > 1
-                ? t('compose_shared_friends_mutiple', { count: shareWithNum })
+                ? t('compose_shared_friends_multiple', { count: shareWithNum })
                 : t('compose_shared_friends_single')
         else if (selected === EncryptionTargetType.Public) return t('compose_encrypt_visible_to_all')
         else if (selected === EncryptionTargetType.Self) return t('compose_encrypt_visible_to_private')
