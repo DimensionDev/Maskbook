@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { ListItemText, Checkbox, ListItemAvatar, ListItem } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
-import { formatPersonaFingerprint, formatPersonaPublicKey, ProfileInformation as Profile } from '@masknet/shared-base'
+import { formatPersonaPublicKey, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { Avatar } from '../../../utils/components/Avatar'
 import type { CheckboxProps } from '@mui/material/Checkbox'
 import { CopyIcon } from '@masknet/icons'
@@ -81,7 +81,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ProfileInListProps extends withClasses<never> {
-    item: Profile
+    item: ProfileInformationFromNextID
     search?: string
     checked?: boolean
     disabled?: boolean
@@ -94,8 +94,7 @@ export function ProfileInList(props: ProfileInListProps) {
     const { classes, cx } = useStyles()
     const profile = props.item
     const resolveSecondaryText = () => {
-        if (profile.publicHexKey) return formatPersonaPublicKey(profile.publicHexKey?.toUpperCase() ?? '', 4)
-        return formatPersonaFingerprint(profile.linkedPersona?.rawPublicKey ?? '', 5)
+        return formatPersonaPublicKey(profile.linkedPersona?.publicKeyAsHex?.toUpperCase() ?? '', 4)
     }
     const resolvePrimaryText = () => {
         if (profile.fromNextID) {
@@ -183,7 +182,9 @@ export function ProfileInList(props: ProfileInListProps) {
                             className={classes.actionIcon}
                             onClick={() =>
                                 props.onCopy(
-                                    (profile.publicHexKey ?? profile.linkedPersona?.rawPublicKey)?.toUpperCase() ?? '',
+                                    (
+                                        profile.linkedPersona?.publicKeyAsHex ?? profile.linkedPersona?.rawPublicKey
+                                    )?.toUpperCase() ?? '',
                                 )
                             }
                         />

@@ -106,7 +106,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     }, [props.open])
     const itemsAfterSearch = useMemo(() => {
         const fuse = new Fuse(items, {
-            keys: ['identifier.userId', 'nickname', 'walletAddress', 'publicHexKey'],
+            keys: ['identifier.userId', 'nickname', 'walletAddress', 'linkedPersona.publicKeyAsHex'],
             isCaseSensitive: false,
             ignoreLocation: true,
             threshold: 0,
@@ -168,8 +168,10 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                     item={item}
                                     search={search}
                                     checked={
-                                        props.selected.some((x) => x.publicHexKey === item.publicHexKey) ||
-                                        disabledItems?.includes(item)
+                                        props.selected.some(
+                                            (x) =>
+                                                x.linkedPersona?.publicKeyAsHex === item.linkedPersona?.publicKeyAsHex,
+                                        ) || disabledItems?.includes(item)
                                     }
                                     disabled={props.disabled || disabledItems?.includes(item)}
                                     onChange={(_, checked) => {

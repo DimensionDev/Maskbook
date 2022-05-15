@@ -1,11 +1,12 @@
 import {
     BindingProof,
+    ECKeyIdentifier,
     EMPTY_LIST,
     EMPTY_OBJECT,
     NextIDPersonaBindings,
     NextIDPlatform,
     ProfileIdentifier,
-    ProfileInformation,
+    ProfileInformationFromNextID,
 } from '@masknet/shared-base'
 import { uniq } from 'lodash-unified'
 
@@ -48,15 +49,15 @@ export function useTwitterIdByWalletSearch(
         }
         return pre
     }, [])
-    return temp.reduce<ProfileInformation[]>((res, x) => {
+    return temp.reduce<ProfileInformationFromNextID[]>((res, x) => {
         const _identity = x[NextIDPlatform.Twitter]
         res.push({
             nickname: _identity.identity,
             identifier: ProfileIdentifier.of('twitter.com', _identity.identity).unwrap(),
-            publicHexKey: _identity.persona,
             walletAddress: value,
             fromNextID: true,
             linkedTwitterNames: x.linkedTwitterNames,
+            linkedPersona: ECKeyIdentifier.fromHexPublicKeyK256(_identity.persona).unwrap(),
         })
         return res
     }, [])

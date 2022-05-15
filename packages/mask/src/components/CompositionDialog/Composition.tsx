@@ -12,7 +12,6 @@ import Services from '../../extension/service'
 import { useSubmit } from './useSubmit'
 import { useAsync } from 'react-use'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
-import { useMyPersonas } from '../DataSource/useMyPersonas'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 
 const useStyles = makeStyles()((theme) => ({
@@ -34,10 +33,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { classes } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
     const connectStatus = usePersonaConnectStatus()
-
-    const hasPersona = !!useMyPersonas().find((x) =>
-        x.linkedProfiles.some((y) => y.identifier.network === currentIdentity?.network),
-    )
 
     /** @deprecated */
     const { value: hasLocalKey } = useAsync(
@@ -99,8 +94,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
     const getE2eEncryptionDisabled = () => {
-        if (!connectStatus.currentConnectedPersona && !connectStatus.hasPersona && !hasPersona)
-            return E2EUnavailableReason.NoPersona
+        if (!connectStatus.currentConnectedPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona
         if (!connectStatus.connected && connectStatus.hasPersona) return E2EUnavailableReason.NoConnect
         if (!hasLocalKey) return E2EUnavailableReason.NoLocalKey
         return

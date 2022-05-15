@@ -40,7 +40,9 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
 
     const unique = (arr: Profile[]) => {
         const res = new Map()
-        return arr.filter((item) => !res.has(item.publicHexKey) && res.set(item.publicHexKey, 1))
+        return arr.filter(
+            (item) => !res.has(item.linkedPersona?.publicKeyAsHex) && res.set(item.linkedPersona?.publicKeyAsHex, 1),
+        )
     }
     const searchedList = unique(profileItems?.concat(NextIDItems) ?? [])
     useEffect(() => void (open && items.request()), [open, items.request])
@@ -54,7 +56,9 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             open={open}
             items={searchedList || EMPTY_LIST}
             selected={
-                searchedList?.filter((x) => selected.some((i) => i.publicHexKey === x.publicHexKey)) || EMPTY_LIST
+                searchedList?.filter((x) =>
+                    selected.some((i) => i.linkedPersona?.publicKeyAsHex === x.linkedPersona?.publicKeyAsHex),
+                ) || EMPTY_LIST
             }
             disabled={false}
             submitDisabled={false}
@@ -62,7 +66,9 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             onClose={onClose}
             onSelect={(item) => onSetSelected([...selected, item])}
             onDeselect={(item) => {
-                onSetSelected(selected.filter((x) => x.publicHexKey !== item.publicHexKey))
+                onSetSelected(
+                    selected.filter((x) => x.linkedPersona?.publicKeyAsHex !== item.linkedPersona?.publicKeyAsHex),
+                )
             }}
         />
     )
