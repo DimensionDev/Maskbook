@@ -169,7 +169,7 @@ export function AddressNames(props: AddressNamesProps) {
                         Boolean(account),
                         () => onClick(account),
                         onConnectWallet,
-                        false,
+                        wallets.some((x) => isSameAddress(x.identity, account)),
                         true,
                     )
                 ) : (
