@@ -156,11 +156,10 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
                 )
 
                 await approvalTx.wait().then(
-                    (msg) =>
-                        showSnackbar(
-                            `Approved ${assetsToSwapUserA[0]?.tokenAddress} contract to swap with 0x (txHash: ${msg.transactionHash})`,
-                            { variant: 'success' },
-                        ),
+                    (msg) => {
+                        const message = `Approved ${assetsToSwapUserA[0]?.tokenAddress} contract to swap with 0x (txHash: ${msg.transactionHash})`
+                        showSnackbar(message, { variant: 'success' })
+                    },
                     (error) => showSnackbar(t.submit_order_submit_error_message() + error, { variant: 'error' }),
                 )
             }
@@ -170,12 +169,10 @@ export function PostPreview({ info }: { info: TradeMetaData }) {
                     const fillTxReceipt = await nftSwapSdk.awaitTransactionHash(fillTx?.hash).then(
                         (fillTxReceipt) => {
                             if (fillTxReceipt.status !== 0) {
-                                showSnackbar(
-                                    `\u{1F389} \u{1F973} ${t.submit_order_filled_message()} ${
-                                        fillTxReceipt?.transactionHash
-                                    }`,
-                                    { variant: 'success' },
-                                )
+                                const message = `\u{1F389} \u{1F973} ${t.submit_order_filled_message()} ${
+                                    fillTxReceipt?.transactionHash
+                                }`
+                                showSnackbar(message, { variant: 'success' })
                             } else {
                                 showSnackbar(
                                     t.submit_order_submit_error_message() + fillTxReceipt?.transactionHash + ' failed',

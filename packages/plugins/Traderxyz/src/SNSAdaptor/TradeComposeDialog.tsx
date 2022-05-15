@@ -185,8 +185,8 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
     const nftSwapSdk = useTraderApi(selectedChainId)
     const account = useAccount()
     const { attachMetadata, dropMetadata } = useCompositionContext()
-    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
     )
     // #endregion
 
@@ -328,7 +328,7 @@ const TradeComposeDialog: React.FC<Props> = ({ onClose, open }) => {
                                     signedOrder: result,
                                 }
                                 attachMetadata(META_KEY, d)
-                                closeWalletStatusDialog()
+                                closeApplicationBoardDialog()
                                 onClose()
                             },
                             function (error) {

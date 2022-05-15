@@ -61,11 +61,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 category: 'dapp',
                 description: {
                     i18nKey: '__plugin_description',
-                    fallback: 'Traderxyz plugin, sell NFT faster and cheaper.',
+                    fallback: 'Buy and Sell NFT through social media platform in few clicks faster and chaper.',
                 },
                 name,
-                tutorialLink:
-                    'https://realmasknetwork.notion.site/Use-File-Service-via-Arweave-IPFS-SIA-Swarm-soon-8c8fe1efce5a48b49739a38f4ea8c60f',
             }
         })(),
     ],
@@ -74,5 +72,5 @@ const sns: Plugin.SNSAdaptor.Definition = {
 export default sns
 
 function onAttachedFile() {
-    return 'Trader XYZ NFR Attached'
+    return 'Trader XYZ NFT Attached'
 }
