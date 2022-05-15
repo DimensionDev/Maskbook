@@ -8,6 +8,7 @@ import { WalletLinkProvider } from './providers/WalletLink'
 import { Coin98Provider } from './providers/Coin98'
 import { MathWalletProvider } from './providers/MathWallet'
 import FortmaticProvider from './providers/Fortmatic'
+import TorusProvider from './providers/Torus'
 
 /**
  * Register all supported providers
@@ -20,5 +21,6 @@ export const Providers: Record<ProviderType, BaseProvider> = {
     [ProviderType.WalletLink]: new WalletLinkProvider(),
     [ProviderType.MathWallet]: new MathWalletProvider(),
     [ProviderType.Fortmatic]: new FortmaticProvider(),
+    [ProviderType.Torus]: new TorusProvider(),
     [ProviderType.CustomNetwork]: new CustomNetworkProvider(),
 }

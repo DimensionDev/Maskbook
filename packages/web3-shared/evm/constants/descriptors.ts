@@ -307,4 +307,27 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         shortenLink: 'fortmatic.com',
         downloadLink: 'https://fortmatic.com',
     },
+    {
+        ID: `${PLUGIN_ID}_torus`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Torus,
+        name: 'Torus',
+        icon: new URL('../assets/torus.png', import.meta.url),
+        enableRequirements: {
+            supportedChainIds: [
+                ChainId.Mainnet,
+                ChainId.BSC,
+                ChainId.Matic,
+                ChainId.xDai,
+                ChainId.Optimistic,
+                ChainId.Arbitrum,
+                ChainId.Avalanche,
+            ],
+            supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+        },
+        homeLink: 'https://app.tor.us/',
+        shortenLink: 'tor.us',
+        downloadLink: 'https://app.tor.us/',
+    },
 ]
