@@ -276,7 +276,11 @@ function WalletUI(props: WalletUIProps) {
                         className={classNames(classes.address, classes.walletName)}
                         fontWeight={700}
                         fontSize={14}>
-                        <ReversedAddress address={address} pluginId={NetworkPluginID.PLUGIN_EVM} />
+                        {currentPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                            <ReversedAddress address={address} pluginId={NetworkPluginID.PLUGIN_EVM} />
+                        ) : (
+                            formatAddress(address, 4)
+                        )}
                     </Typography>
                     {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
                 </Stack>

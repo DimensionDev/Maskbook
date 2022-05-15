@@ -32,6 +32,10 @@ const useStyles = makeStyles()((theme) => ({
     actions: {
         padding: theme.spacing(2),
         backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
+        position: 'absolute',
+        left: 0,
+        bottom: 0,
+        width: 'calc(100% - 32px)',
     },
     content: {
         height: 612,
