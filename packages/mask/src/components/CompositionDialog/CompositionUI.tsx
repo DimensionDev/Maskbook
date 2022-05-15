@@ -9,15 +9,14 @@ import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
 import { CharLimitIndicator } from './CharLimitIndicator'
 import { useI18N } from '../../utils'
 import { PersistentStorages } from '../../../shared'
-import type { ProfileInformation } from '@masknet/shared-base'
+import { ProfileInformation, EncryptionTargetType } from '@masknet/shared-base'
 import { CompositionContext } from '@masknet/plugin-infra/content-script'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { useSubscription } from 'use-subscription'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
-import { EncryptionTargetSelector, EncryptionTargetType } from './EncryptionTargetSelector'
+import { EncryptionTargetSelector } from './EncryptionTargetSelector'
 import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector'
-import { safeUnreachable } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -91,7 +90,7 @@ export interface CompositionProps {
     onChange?(message: TypedMessage): void
     onConnectPersona(): void
     onCreatePersona(): void
-    e2eEncryptionDisabled: DisabledReason | undefined
+    e2eEncryptionDisabled: E2EUnavailableReason | undefined
     recipients: LazyRecipients
     // Enabled features
     supportTextEncoding: boolean
@@ -109,7 +108,7 @@ export interface SubmitComposition {
 }
 export interface CompositionRef {
     setMessage(message: SerializableTypedMessages): void
-    setEncryptionKind(kind: 'E2E' | 'Everyone'): void
+    setEncryptionKind(kind: EncryptionTargetType): void
     startPlugin(id: string): void
     reset(): void
 }
@@ -131,15 +130,10 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
 
     const { setEncryptionKind, encryptionKind, recipients, setRecipients } = useSetEncryptionKind(props)
     const { encodingKind, setEncoding } = useEncryptionEncode(props)
-    const encryptionTarget = (() => {
-        if (encryptionKind === 'Everyone') return EncryptionTargetType.Public
-        if (recipients.length > 0) return EncryptionTargetType.E2E
-        return EncryptionTargetType.Self
-    })()
     const reset = useCallback(() => {
         startTransition(() => {
             Editor.current?.reset()
-            setEncryptionKind('Everyone')
+            setEncryptionKind(EncryptionTargetType.Public)
             setRecipients([])
             // Don't clean up the image/text selection across different encryption.
             // setEncoding('text')
@@ -178,9 +172,9 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 content: Editor.current.value,
                 encode: encodingKind,
                 target:
-                    encryptionKind === 'E2E'
-                        ? { type: 'E2E', target: recipients.map((x) => x.identifier) }
-                        : { type: 'public' },
+                    encryptionKind === EncryptionTargetType.Public
+                        ? { type: 'public' }
+                        : { type: 'E2E', target: recipients.map((x) => x.identifier) },
             })
             .finally(reset)
     }, [encodingKind, encryptionKind, recipients, props.onSubmit])
@@ -208,20 +202,14 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
                     <EncryptionTargetSelector
-                        target={encryptionTarget}
+                        target={encryptionKind}
                         onConnectPersona={props.onConnectPersona}
                         onCreatePersona={props.onCreatePersona}
                         e2eDisabled={props.e2eEncryptionDisabled}
                         selectedRecipientLength={recipients.length}
                         onChange={(target) => {
-                            if (target === EncryptionTargetType.Public) {
-                                setEncryptionKind('Everyone')
-                            } else {
-                                if (target === EncryptionTargetType.E2E) setSelectRecipientOpen(true)
-                                else if (target === EncryptionTargetType.Self) setRecipients([])
-                                else safeUnreachable(target)
-                                setEncryptionKind('E2E')
-                            }
+                            setEncryptionKind(target)
+                            if (target === EncryptionTargetType.E2E) setSelectRecipientOpen(true)
                         }}
                     />
 
@@ -259,23 +247,26 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     )
 })
 
-export enum DisabledReason {
+export enum E2EUnavailableReason {
     // These reasons only applies to E2E encryption.
     NoPersona = 1,
     NoLocalKey = 2,
     NoConnect = 3,
 }
-function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabled' | 'recipients'>) {
-    const [internal_encryptionKind, setEncryptionKind] = useState<'Everyone' | 'E2E'>('Everyone')
+function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabled'>) {
+    const [internal_encryptionKind, setEncryptionKind] = useState<EncryptionTargetType>(EncryptionTargetType.Public)
     // TODO: Change to ProfileIdentifier
     const [recipients, setRecipients] = useState<ProfileInformation[]>([])
 
-    const everyoneSelected = props.e2eEncryptionDisabled ? true : internal_encryptionKind === 'Everyone'
+    let encryptionKind = internal_encryptionKind
+    if (encryptionKind === EncryptionTargetType.E2E && recipients.length === 0)
+        encryptionKind = EncryptionTargetType.Self
+    if (props.e2eEncryptionDisabled) encryptionKind = EncryptionTargetType.Public
 
     return {
         recipients,
         setRecipients,
-        encryptionKind: everyoneSelected ? ('Everyone' as const) : ('E2E' as const),
+        encryptionKind,
         setEncryptionKind,
     }
 }

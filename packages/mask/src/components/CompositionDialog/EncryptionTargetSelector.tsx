@@ -4,8 +4,9 @@ import { Typography } from '@mui/material'
 import { PopoverListTrigger } from './PopoverListTrigger'
 import { useState } from 'react'
 import { PopoverListItem } from './PopoverListItem'
-import { DisabledReason } from './CompositionUI'
+import { E2EUnavailableReason } from './CompositionUI'
 import { RightArrowIcon } from '@masknet/icons'
+import { EncryptionTargetType } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {
@@ -78,16 +79,11 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface EncryptionTargetSelectorProps {
     target: EncryptionTargetType
-    e2eDisabled: DisabledReason | undefined
+    e2eDisabled: E2EUnavailableReason | undefined
     onCreatePersona(): void
     onConnectPersona(): void
     onChange(v: EncryptionTargetType): void
     selectedRecipientLength: number
-}
-export enum EncryptionTargetType {
-    Public = 'public',
-    Self = 'self',
-    E2E = 'e2e',
 }
 export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const { t } = useI18N()
@@ -143,18 +139,24 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                                 <Typography
                                     className={classes.create}
                                     onClick={() => {
-                                        if (props.e2eDisabled === DisabledReason.NoPersona && props.onCreatePersona) {
+                                        if (
+                                            props.e2eDisabled === E2EUnavailableReason.NoPersona &&
+                                            props.onCreatePersona
+                                        ) {
                                             props.onCreatePersona()
                                         }
-                                        if (props.e2eDisabled === DisabledReason.NoConnect && props.onConnectPersona) {
+                                        if (
+                                            props.e2eDisabled === E2EUnavailableReason.NoConnect &&
+                                            props.onConnectPersona
+                                        ) {
                                             props.onConnectPersona()
                                         }
                                     }}>
-                                    {props.e2eDisabled === DisabledReason.NoPersona ? t('create') : t('connect')}
+                                    {props.e2eDisabled === E2EUnavailableReason.NoPersona ? t('create') : t('connect')}
                                 </Typography>
                             </div>
                         )}
-                        {x.personaRequired && props.e2eDisabled === DisabledReason.NoLocalKey && (
+                        {x.personaRequired && props.e2eDisabled === E2EUnavailableReason.NoLocalKey && (
                             <div className={classes.flex}>
                                 <Typography className={classes.mainTitle}>{t('compose_no_local_key')}</Typography>
                             </div>
