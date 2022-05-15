@@ -16,6 +16,7 @@
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
+    "@toruslabs/torus-embed": "^1.22.6",
     "@walletconnect/client": "^1.7.5",
     "@walletconnect/qrcode-modal": "^1.7.5",
     "bignumber.js": "9.0.2",
@@ -37,7 +38,7 @@
   "devDependencies": {
     "@masknet/injected-script": "*",
     "@types/ethereum-blockies": "^0.1.0",
-    "@types/use-subscription": "^1.0.0",
-    "@types/punycode": "^2.1.0"
+    "@types/punycode": "^2.1.0",
+    "@types/use-subscription": "^1.0.0"
   }
 }
