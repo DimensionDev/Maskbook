@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { PopoverListTrigger } from './PopoverListTrigger'
 import { useState } from 'react'
-import { PopoverListItem, EncryptionTargetType } from './PopoverListItem'
+import { PopoverListItem } from './PopoverListItem'
 import { DisabledReason } from './CompositionUI'
 import { RightArrowIcon } from '@masknet/icons'
 
@@ -77,35 +77,39 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface EncryptionTargetSelectorProps {
-    target: Partial<EncryptionTargetType>
+    target: EncryptionTargetType
     e2eDisabled: DisabledReason | undefined
     onCreatePersona(): void
     onConnectPersona(): void
-    onChange(v: string): void
+    onChange(v: EncryptionTargetType): void
     selectedRecipientLength: number
 }
-
+export enum EncryptionTargetType {
+    Public = 'public',
+    Self = 'self',
+    E2E = 'e2e',
+}
 export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const renderScheme = [
         {
-            type: EncryptionTargetType.All,
+            type: EncryptionTargetType.Public,
             title: t('compose_encrypt_visible_to_all'),
             subTitle: t('compose_encrypt_visible_to_all_sub'),
             personaRequired: false,
             event: null,
         },
         {
-            type: EncryptionTargetType.Private,
+            type: EncryptionTargetType.Self,
             title: t('compose_encrypt_visible_to_private'),
             subTitle: t('compose_encrypt_visible_to_private_sub'),
             personaRequired: true,
             event: null,
         },
         {
-            type: EncryptionTargetType.Share,
+            type: EncryptionTargetType.E2E,
             title: t('compose_encrypt_visible_to_share'),
             subTitle: t('compose_encrypt_visible_to_share_sub'),
             personaRequired: true,
@@ -120,14 +124,12 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     <div key={x.type + idx}>
                         <PopoverListItem
                             onItemClick={() => {
-                                if (x.type === EncryptionTargetType.Share) {
-                                    props.onChange(EncryptionTargetType.Share)
+                                if (x.type === EncryptionTargetType.E2E) {
+                                    props.onChange(EncryptionTargetType.E2E)
                                 }
                             }}
                             itemTail={
-                                x.type === EncryptionTargetType.Share && (
-                                    <RightArrowIcon className={classes.rightIcon} />
-                                )
+                                x.type === EncryptionTargetType.E2E && <RightArrowIcon className={classes.rightIcon} />
                             }
                             disabled={x.personaRequired && !!props.e2eDisabled}
                             value={x.type}
@@ -165,7 +167,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const getTitle = () => {
         const selected = props.target
         const shareWithNum = props.selectedRecipientLength
-        if (selected === EncryptionTargetType.Share) return `${shareWithNum} friend${shareWithNum! > 1 ? 's' : ''}`
+        if (selected === EncryptionTargetType.E2E) return `${shareWithNum} friend${shareWithNum! > 1 ? 's' : ''}`
         return renderScheme.find((x) => x.type === selected)?.title
     }
     return (
@@ -173,7 +175,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
             <Typography className={classes.optionTitle}>{t('post_dialog_visible_to')}</Typography>
 
             <PopoverListTrigger
-                selected={props.target ?? EncryptionTargetType.All}
+                selected={props.target ?? EncryptionTargetType.Public}
                 selectedTitle={getTitle()}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}

@@ -28,15 +28,8 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
 }))
-export enum EncryptionTargetType {
-    All = 'all',
-    Private = 'private',
-    Share = 'share',
-    Text = 'text',
-    Image = 'image',
-}
 interface PopoverListItemProps {
-    value: Partial<EncryptionTargetType>
+    value: string
     itemTail?: ReactNode
     title: string
     subTitle?: string

@@ -1,13 +1,4 @@
-import {
-    forwardRef,
-    useImperativeHandle,
-    useMemo,
-    useRef,
-    useState,
-    startTransition,
-    useCallback,
-    SetStateAction,
-} from 'react'
+import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
 import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
@@ -24,9 +15,9 @@ import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { useSubscription } from 'use-subscription'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
-import { EncryptionTargetSelector } from './EncryptionTargetSelector'
-import { EncryptionMethodSelector } from './EncryptionMethodSelector'
-import { EncryptionTargetType as EncryptionTargetType } from './PopoverListItem'
+import { EncryptionTargetSelector, EncryptionTargetType } from './EncryptionTargetSelector'
+import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector'
+import { safeUnreachable } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -141,9 +132,9 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     const { setEncryptionKind, encryptionKind, recipients, setRecipients } = useSetEncryptionKind(props)
     const { encodingKind, setEncoding } = useEncryptionEncode(props)
     const encryptionTarget = (() => {
-        if (encryptionKind === 'Everyone') return EncryptionTargetType.All
-        if (recipients.length > 0) return EncryptionTargetType.Share
-        return EncryptionTargetType.Private
+        if (encryptionKind === 'Everyone') return EncryptionTargetType.Public
+        if (recipients.length > 0) return EncryptionTargetType.E2E
+        return EncryptionTargetType.Self
     })()
     const reset = useCallback(() => {
         startTransition(() => {
@@ -222,16 +213,13 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         onCreatePersona={props.onCreatePersona}
                         e2eDisabled={props.e2eEncryptionDisabled}
                         selectedRecipientLength={recipients.length}
-                        onChange={(event) => {
-                            if (event === EncryptionTargetType.All) {
+                        onChange={(target) => {
+                            if (target === EncryptionTargetType.Public) {
                                 setEncryptionKind('Everyone')
                             } else {
-                                if (event === EncryptionTargetType.Share) {
-                                    setSelectRecipientOpen(true)
-                                }
-                                if (event === EncryptionTargetType.Private) {
-                                    setRecipients([])
-                                }
+                                if (target === EncryptionTargetType.E2E) setSelectRecipientOpen(true)
+                                else if (target === EncryptionTargetType.Self) setRecipients([])
+                                else safeUnreachable(target)
                                 setEncryptionKind('E2E')
                             }
                         }}
@@ -247,10 +235,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     />
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
-                    <EncryptionMethodSelector
-                        selected={encodingKind}
-                        onChange={(event) => setEncoding(event as 'text' | 'image')}
-                    />
+                    <EncryptionMethodSelector selected={encodingKind} onChange={setEncoding} />
                 </div>
             </div>
             <div className={classes.actions}>
@@ -296,15 +281,18 @@ function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabl
 }
 
 function useEncryptionEncode(props: Pick<CompositionProps, 'supportImageEncoding' | 'supportTextEncoding'>) {
-    const [encoding, setEncoding] = useState<'text' | 'image'>(props.supportTextEncoding ? 'text' : 'image')
+    const [encoding, setEncoding] = useState<EncryptionMethodType>(
+        props.supportTextEncoding ? EncryptionMethodType.Text : EncryptionMethodType.Image,
+    )
 
-    const imagePayloadSelected = props.supportImageEncoding && (encoding === 'image' || !props.supportTextEncoding)
+    const imagePayloadSelected =
+        props.supportImageEncoding && (encoding === EncryptionMethodType.Image || !props.supportTextEncoding)
     // XOR
     const imagePayloadReadonly =
         (props.supportImageEncoding && !props.supportTextEncoding) ||
         (!props.supportImageEncoding && props.supportTextEncoding)
     const imagePayloadVisible = props.supportImageEncoding
-    const encodingKind: typeof encoding = imagePayloadSelected ? 'image' : 'text'
+    const encodingKind = imagePayloadSelected ? EncryptionMethodType.Image : EncryptionMethodType.Text
 
     return {
         encodingKind,

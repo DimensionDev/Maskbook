@@ -2,8 +2,8 @@ import { useI18N } from '../../utils'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { PopoverListTrigger, PopoverListTriggerProp } from './PopoverListTrigger'
-import { PopoverListItem, EncryptionTargetType } from './PopoverListItem'
-import { useState } from 'react'
+import { PopoverListItem } from './PopoverListItem'
+import { PropsWithChildren, useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {
@@ -18,20 +18,28 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function EncryptionMethodSelector(props: Partial<PopoverListTriggerProp>) {
+export interface EncryptionMethodSelectorProps extends PropsWithChildren<{}> {
+    onChange(v: EncryptionMethodType): void
+    selected: EncryptionMethodType
+}
+export enum EncryptionMethodType {
+    Text = 'text',
+    Image = 'image',
+}
+export function EncryptionMethodSelector(props: Partial<EncryptionMethodSelectorProps>) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const renderScheme = [
         {
-            type: EncryptionTargetType.Text,
+            type: EncryptionMethodType.Text,
             title: t('compose_encrypt_method_text'),
             subTitle: t('compose_encrypt_method_text_sub_title'),
             personaRequired: false,
             event: null,
         },
         {
-            type: EncryptionTargetType.Image,
+            type: EncryptionMethodType.Image,
             title: t('compose_encrypt_method_image'),
             subTitle: t('compose_encrypt_method_image_sub_title'),
             personaRequired: false,
@@ -63,7 +71,7 @@ export function EncryptionMethodSelector(props: Partial<PopoverListTriggerProp>)
             <Typography className={classes.optionTitle}>{t('post_dialog_encryption_method')}</Typography>
 
             <PopoverListTrigger
-                selected={props.selected ?? EncryptionTargetType.Text}
+                selected={props.selected ?? EncryptionMethodType.Text}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
                 onChange={props.onChange!}
