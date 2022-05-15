@@ -4,7 +4,6 @@ import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
 import { formatPersonaPublicKey, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { Avatar } from '../../../utils/components/Avatar'
-import type { CheckboxProps } from '@mui/material/Checkbox'
 import { CopyIcon } from '@masknet/icons'
 import { truncate } from 'lodash-unified'
 import { useI18N } from '../../../utils'
@@ -82,12 +81,11 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ProfileInListProps extends withClasses<never> {
     item: ProfileInformationFromNextID
-    search?: string
-    checked?: boolean
+    highlightText?: string
+    selected?: boolean
     disabled?: boolean
     onChange: (ev: React.MouseEvent<HTMLButtonElement>, checked: boolean) => void
     onCopy(v: string): void
-    CheckboxProps?: Partial<CheckboxProps>
 }
 export function ProfileInList(props: ProfileInListProps) {
     const { t } = useI18N()
@@ -125,13 +123,13 @@ export function ProfileInList(props: ProfileInListProps) {
     }
 
     const onClick = useCallback(
-        (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.checked),
+        (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.selected),
         [props],
     )
     return (
         <ListItem
             disabled={props.disabled}
-            className={props.checked ? cx(classes.root, classes.highLightBg) : classes.root}>
+            className={props.selected ? cx(classes.root, classes.highLightBg) : classes.root}>
             <ListItemAvatar
                 classes={{
                     root: classes.avatarBox,
@@ -161,7 +159,7 @@ export function ProfileInList(props: ProfileInListProps) {
                                 <Highlighter
                                     className={classes.highLightBase}
                                     highlightClassName={classes.highlighted}
-                                    searchWords={[props.search ?? '']}
+                                    searchWords={[props.highlightText ?? '']}
                                     autoEscape
                                     textToHighlight={resolvePrimaryText()}
                                 />
@@ -174,7 +172,7 @@ export function ProfileInList(props: ProfileInListProps) {
                         <Highlighter
                             className={classes.highLightSecond}
                             highlightClassName={classes.highlighted}
-                            searchWords={[props.search ?? '']}
+                            searchWords={[props.highlightText ?? '']}
                             autoEscape
                             textToHighlight={resolveSecondaryText()}
                         />
@@ -192,7 +190,7 @@ export function ProfileInList(props: ProfileInListProps) {
                     </div>
                 }
             />
-            <Checkbox onClick={onClick} checked={!!props.checked} color="primary" {...props.CheckboxProps} />
+            <Checkbox onClick={onClick} checked={!!props.selected} color="primary" />
         </ListItem>
     )
 }

@@ -14,7 +14,7 @@ import { useAsync } from 'react-use'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     dialogRoot: {
         minWidth: 400,
         width: 600,
@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundImage: 'none',
         maxWidth: 'none',
     },
-}))
+})
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
     requireClipboardPermission?: boolean
@@ -42,7 +42,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     // #region Open
     const [open, setOpen] = useState(false)
-
     const onClose = useCallback(() => {
         setOpen(false)
         UI.current?.reset()
@@ -93,7 +92,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const UI = useRef<CompositionRef>(null)
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
-    const getE2eEncryptionDisabled = () => {
+    const isE2E_Disabled = () => {
         if (!connectStatus.currentConnectedPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona
         if (!connectStatus.connected && connectStatus.hasPersona) return E2EUnavailableReason.NoConnect
         if (!hasLocalKey) return E2EUnavailableReason.NoLocalKey
@@ -103,9 +102,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     return (
         <DialogStackingProvider>
             <InjectedDialog
-                classes={{
-                    paper: classes.dialogRoot,
-                }}
+                classes={{ paper: classes.dialogRoot }}
                 keepMounted
                 open={open}
                 onClose={onClose}
@@ -129,7 +126,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         onSubmit={onSubmit_}
                         supportImageEncoding={networkSupport?.text ?? false}
                         supportTextEncoding={networkSupport?.image ?? false}
-                        e2eEncryptionDisabled={getE2eEncryptionDisabled()}
+                        e2eEncryptionDisabled={isE2E_Disabled()}
                     />
                 </DialogContent>
                 <DialogActions sx={{ height: 68 }} />

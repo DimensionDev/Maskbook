@@ -166,8 +166,8 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                     onCopy={(v) => copyFingerprint(v)}
                                     key={idx}
                                     item={item}
-                                    search={search}
-                                    checked={
+                                    highlightText={search}
+                                    selected={
                                         props.selected.some(
                                             (x) =>
                                                 x.linkedPersona?.publicKeyAsHex === item.linkedPersona?.publicKeyAsHex,
