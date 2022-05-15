@@ -153,7 +153,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         },
     },
     actionFooter: {
-        padding: 12,
+        padding: 0,
     },
     actionButton: {
         width: '100%',
@@ -197,6 +197,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     claimDate: {
         marginTop: 16,
         color: '#F4212E',
+    },
+    grid: {
+        width: '100%',
+        margin: 0,
     },
 }))
 
@@ -765,8 +769,8 @@ export function ITO(props: ITO_Props) {
                         !isNativeTokenAddress(qualificationAddress)
                     ) {
                         return (
-                            <Grid container spacing={2}>
-                                <Grid item xs={6}>
+                            <Grid container spacing={2} className={classes.grid}>
+                                <Grid item xs={6} style={{ padding: 12 }}>
                                     <ActionButton
                                         startIcon={<SharedIcon style={{ fontSize: 18 }} />}
                                         onClick={onShareSuccess}
@@ -776,7 +780,7 @@ export function ITO(props: ITO_Props) {
                                         {t('plugin_ito_share')}
                                     </ActionButton>
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={6} style={{ padding: 0 }}>
                                     <EthereumChainBoundary chainId={payload.chain_id}>
                                         <EthereumWalletConnectedBoundary
                                             hideRiskWarningConfirmed

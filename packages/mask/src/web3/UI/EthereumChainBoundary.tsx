@@ -171,6 +171,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             pluginIDSettings.value = NetworkPluginID.PLUGIN_EVM
         }
 
+        if (providerType === ProviderType.WalletConnect && networkType) {
+            openSelectProviderDialog()
+            return
+        }
+
         if (!isChainMatched) await switchToChain()
         if (!isPluginMatched) {
             await switchToPlugin()
@@ -317,6 +322,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                                 backgroundColor: MaskColorVar.buttonPluginBackground,
                             },
                             padding: 1,
+                            margin: 0,
                         }
                     }
                     style={{ borderRadius: 10 }}

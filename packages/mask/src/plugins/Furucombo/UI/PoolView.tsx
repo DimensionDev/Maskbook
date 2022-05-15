@@ -1,4 +1,5 @@
 import { makeStyles } from '@masknet/theme'
+import { useChainId, useAccount } from '@masknet/web3-shared-evm'
 import { Button, Divider, Grid, Typography, Container } from '@mui/material'
 import { FurucomboIcon } from '../../../resources/FurucomboIcon'
 import { useI18N } from '../../../utils'
@@ -87,6 +88,8 @@ export function PoolView(props: PoolProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { category, chainId, address, name, protocol, liquidity, apy, angels } = props.investable
+    const account = useAccount()
+    const _chainId = useChainId()
 
     const displayRewardIcon = (rewardToken: Token) => {
         if (rewardToken.symbol === 'WMATIC') return <WmaticIcon />
@@ -114,14 +117,16 @@ export function PoolView(props: PoolProps) {
                         </Grid>
                     </Grid>
                     <Grid item>
-                        <Button
-                            size="small"
-                            className={classes.invest}
-                            variant="outlined"
-                            href={`${BASE_URL}/${category}/${chainId}/${address}`}
-                            target="_blank">
-                            {t('plugin_furucombo_invest')}
-                        </Button>
+                        {_chainId === chainId && account ? (
+                            <Button
+                                size="small"
+                                className={classes.invest}
+                                variant="outlined"
+                                href={`${BASE_URL}/${category}/${chainId}/${address}`}
+                                target="_blank">
+                                {t('plugin_furucombo_invest')}
+                            </Button>
+                        ) : null}
                     </Grid>
                 </Grid>
             </Container>
