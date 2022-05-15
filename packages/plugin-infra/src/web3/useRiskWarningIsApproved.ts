@@ -8,5 +8,5 @@ export function useRiskWarningIsApproved<T extends NetworkPluginID>(pluginID?: T
     return useAsyncRetry(async () => {
         if (!address || !RiskWarning?.isApproved) return false
         return RiskWarning.isApproved(address)
-    }, [address])
+    }, [address, RiskWarning])
 }

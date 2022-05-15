@@ -13,5 +13,5 @@ export function useBalance<T extends NetworkPluginID>(pluginID?: T, options?: We
     return useAsyncRetry(async () => {
         if (!connection) return '0'
         return (connection.getBalance as GetBalance)(account)
-    }, [account, options, connection])
+    }, [account, connection])
 }

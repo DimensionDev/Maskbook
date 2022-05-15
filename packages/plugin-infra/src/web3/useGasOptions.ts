@@ -16,5 +16,5 @@ export function useGasOptions<T extends NetworkPluginID>(pluginID?: T, currencyT
     return useAsyncRetry(async () => {
         if (!chainId || !GasOption) return
         return (GasOption.getGasOptions as GetGasOptions)(chainId, currencyType)
-    }, [chainId, currencyType])
+    }, [chainId, currencyType, GasOption])
 }

@@ -15,5 +15,5 @@ export function useTransactions<T extends NetworkPluginID, ChainId = Web3Helper.
     )
     return useMemo(() => {
         return status ? transactions.filter((x) => status === x.status) : transactions
-    }, [status, transactions])
+    }, [status, transactions.map((x) => x.id).join()])
 }

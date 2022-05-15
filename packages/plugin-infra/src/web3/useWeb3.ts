@@ -11,7 +11,7 @@ export function useWeb3<T extends NetworkPluginID>(pluginID?: T, options?: Web3H
     const { value: web3 = null } = useAsyncRetry(async () => {
         if (!Protocol?.getWeb3) return null
         return (Protocol.getWeb3 as GetWeb3)(options)
-    }, [options, Protocol])
+    }, [Protocol, JSON.stringify(options)])
 
     return web3
 }

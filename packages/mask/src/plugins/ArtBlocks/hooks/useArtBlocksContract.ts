@@ -5,7 +5,7 @@ import type { ArtBlocksMinterContract } from '@masknet/web3-contracts/types/ArtB
 import { useContract } from '@masknet/plugin-infra/web3-evm'
 
 export function useArtBlocksContract(chainId?: ChainId) {
-    const { GEN_ART_721_MINTER } = useArtBlocksConstants()
+    const { GEN_ART_721_MINTER } = useArtBlocksConstants(chainId)
     const art721MinterContract = useContract<ArtBlocksMinterContract>(
         chainId,
         GEN_ART_721_MINTER,

@@ -5,6 +5,6 @@ import { ChainId, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { useContract } from '@masknet/plugin-infra/web3-evm'
 
 export function useBulkCheckoutContract(chainId: ChainId) {
-    const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants()
+    const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants(chainId)
     return useContract<BulkCheckout>(chainId, BULK_CHECKOUT_ADDRESS, BulkCheckoutABI as AbiItem[])
 }

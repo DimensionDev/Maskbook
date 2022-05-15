@@ -22,5 +22,5 @@ export function useNonFungibleAssets<T extends NetworkPluginID>(
         if (!account || !Asset) return []
         const assets = await asyncIteratorToArray((Asset.getAllFungibleAssets as GetAllNonFungibleAssets)(account))
         return assets.length && schemaType ? assets.filter((x) => x.schema === schemaType) : assets
-    }, [account, Asset])
+    }, [account, schemaType, Asset])
 }

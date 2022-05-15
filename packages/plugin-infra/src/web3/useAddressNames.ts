@@ -16,5 +16,5 @@ export function useAddressNames<T extends NetworkPluginID>(
         if (!identity || !IdentityService?.lookup) return EMPTY_LIST
         const listOfAddress = (await (IdentityService.lookup as Lookup)(identity)) ?? EMPTY_LIST
         return sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
-    }, [identity, IdentityService])
+    }, [identity, sorter, IdentityService])
 }
