@@ -54,7 +54,7 @@ export function useTwitterIdByWalletSearch(
         res.push({
             nickname: _identity.identity,
             identifier: ProfileIdentifier.of('twitter.com', _identity.identity).unwrap(),
-            walletAddress: value,
+            walletAddress: type === NextIDPlatform.Ethereum ? value : undefined,
             fromNextID: true,
             linkedTwitterNames: x.linkedTwitterNames,
             linkedPersona: ECKeyIdentifier.fromHexPublicKeyK256(_identity.persona).unwrap(),

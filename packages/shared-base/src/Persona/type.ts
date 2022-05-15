@@ -19,9 +19,9 @@ export interface ProfileInformation {
 }
 
 export interface ProfileInformationFromNextID extends ProfileInformation {
-    walletAddress: string
     fromNextID: boolean
     linkedTwitterNames: string[]
+    walletAddress?: string
 }
 
 export enum RelationFavor {
