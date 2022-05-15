@@ -40,7 +40,7 @@ export function ProfileInList(props: ProfileInListProps) {
     const classes = useStylesExtends(useStyle(), props)
     const profile = props.item
     const name = profile.nickname || profile.identifier.userId
-    const secondary = profile.fingerprint?.toLowerCase()
+    const secondary = profile.linkedPersona?.rawPublicKey?.toLowerCase()
     const onClick = useCallback((ev: React.MouseEvent<HTMLDivElement>) => props.onChange(ev, !props.checked), [props])
     return (
         <ListItemButton

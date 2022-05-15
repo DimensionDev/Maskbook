@@ -15,7 +15,7 @@ export interface ProfileInformation {
     nickname?: string
     avatar?: string
     identifier: ProfileIdentifier
-    fingerprint?: string
+    linkedPersona?: PersonaIdentifier
 }
 
 export enum RelationFavor {
