@@ -4,7 +4,7 @@ import Popover from '@mui/material/Popover'
 import { RadioGroup } from '@mui/material'
 import type { PropsWithChildren } from 'react'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     popper: {
         overflow: 'visible',
         boxShadow: '0px 0px 16px 0px rgba(101, 119, 134, 0.2)',
@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 12,
         boxSizing: 'border-box',
     },
-}))
+})
 
 export interface PopoverListTriggerProp extends PropsWithChildren<{}> {
     anchorEl: HTMLElement | null
@@ -60,21 +60,9 @@ export function PopoverListTrigger({
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
                 onClose={() => setAnchorEl(null)}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}>
-                <RadioGroup
-                    className={classes.paper}
-                    value={selected}
-                    onChange={(e) => {
-                        const value = e.target.value
-                        onChange(value)
-                    }}>
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                <RadioGroup className={classes.paper} value={selected} onChange={(e) => onChange(e.target.value)}>
                     {children}
                 </RadioGroup>
             </Popover>

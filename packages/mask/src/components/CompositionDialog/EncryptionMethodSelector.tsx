@@ -1,7 +1,7 @@
 import { useI18N } from '../../utils'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { PopoverListTrigger, PopoverListTriggerProp } from './PopoverListTrigger'
+import { PopoverListTrigger } from './PopoverListTrigger'
 import { PopoverListItem } from './PopoverListItem'
 import { PropsWithChildren, useState } from 'react'
 
@@ -20,13 +20,13 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface EncryptionMethodSelectorProps extends PropsWithChildren<{}> {
     onChange(v: EncryptionMethodType): void
-    selected: EncryptionMethodType
+    method: EncryptionMethodType
 }
 export enum EncryptionMethodType {
     Text = 'text',
     Image = 'image',
 }
-export function EncryptionMethodSelector(props: Partial<EncryptionMethodSelectorProps>) {
+export function EncryptionMethodSelector(props: EncryptionMethodSelectorProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -71,11 +71,11 @@ export function EncryptionMethodSelector(props: Partial<EncryptionMethodSelector
             <Typography className={classes.optionTitle}>{t('post_dialog_encryption_method')}</Typography>
 
             <PopoverListTrigger
-                selected={props.selected ?? EncryptionMethodType.Text}
+                selected={props.method ?? EncryptionMethodType.Text}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
-                onChange={props.onChange!}
-                selectedTitle={renderScheme.find((x) => x.type === props.selected)?.title}>
+                onChange={props.onChange}
+                selectedTitle={renderScheme.find((x) => x.type === props.method)?.title}>
                 {PopoverListRender()}
             </PopoverListTrigger>
         </>

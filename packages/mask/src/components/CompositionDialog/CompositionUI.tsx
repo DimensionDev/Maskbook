@@ -235,7 +235,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     />
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
-                    <EncryptionMethodSelector selected={encodingKind} onChange={setEncoding} />
+                    <EncryptionMethodSelector method={encodingKind} onChange={setEncoding} />
                 </div>
             </div>
             <div className={classes.actions}>
