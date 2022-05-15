@@ -66,7 +66,6 @@
     "compose_encrypt_visible_to_private_sub": "Just Me",
     "compose_encrypt_visible_to_share": "Share with",
     "compose_encrypt_visible_to_share_sub": "Just Selected Contacts",
-    "compose_encrypt_public_key_copied": "Public key copied",
     "compose_encrypt_share_dialog_empty": "No encrypted friends, you can try searching.",
     "automation_request_click_post_button": "Please click the “Post” button to open the compose dialog.",
     "try_again": "Try Again",

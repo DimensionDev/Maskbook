@@ -39,7 +39,7 @@ export function EncryptionMethodRow(props: Partial<PopoverListTriggerProp>) {
         },
     ]
 
-    const PopoverlistRender = () => {
+    const PopoverListRender = () => {
         return (
             <>
                 {renderScheme.map((x, idx) => {
@@ -68,7 +68,7 @@ export function EncryptionMethodRow(props: Partial<PopoverListTriggerProp>) {
                 setAnchorEl={setAnchorEl}
                 onChange={props.onChange!}
                 selectedTitle={renderScheme.find((x) => x.type === props.selected)?.title}>
-                {PopoverlistRender()}
+                {PopoverListRender()}
             </PopoverListTrigger>
         </>
     )

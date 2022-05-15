@@ -113,7 +113,7 @@ export function VisibleToRow(props: VisibleToRowProps) {
         },
     ]
 
-    const PopoverlistRender = () => {
+    const PopoverListRender = () => {
         return (
             <>
                 {renderScheme.map((x, idx) => (
@@ -176,7 +176,7 @@ export function VisibleToRow(props: VisibleToRowProps) {
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
                 onChange={props.onChange!}>
-                {PopoverlistRender()}
+                {PopoverListRender()}
             </PopoverListTrigger>
         </>
     )
