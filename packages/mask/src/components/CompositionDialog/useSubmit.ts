@@ -9,6 +9,7 @@ import { SteganographyTextPayload } from '../InjectedComponents/SteganographyTex
 import type { SubmitComposition } from './CompositionUI'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
     const { t } = useI18N()
@@ -17,9 +18,15 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
     return useCallback(
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
-            const currentProfile = globalUIState.profiles.value?.[0].identifier
+            const currentProfile: ProfileIdentifier | undefined = globalUIState.profiles.value[0]?.identifier
+            if (encode === 'image' && !currentProfile) throw new Error()
 
-            const _encrypted = await Services.Crypto.encryptTo(content, target, whoAmI?.identifier ?? currentProfile)
+            const _encrypted = await Services.Crypto.encryptTo(
+                content,
+                target,
+                whoAmI?.identifier ?? currentProfile,
+                activatedSocialNetworkUI.networkIdentifier,
+            )
             const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, _encrypted)
 
             const redPacketPreText =
