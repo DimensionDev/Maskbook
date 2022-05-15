@@ -1,6 +1,6 @@
 import { ImageIcon, ReversedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, MaskColorVar, ShadowRootMenu, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
-import { formatNFT_TokenId, isSameAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import { Button, Divider, IconProps, Link, ListItemIcon, MenuItem, Stack, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useEffect, useState } from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
@@ -26,6 +26,7 @@ import classNames from 'classnames'
 import { VerifyIcon } from '../assets/verify'
 import { noop } from 'lodash-unified'
 import { Verify2Icon } from '../assets/verify2'
+import { formatAddress } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -151,7 +152,14 @@ export function AddressNames(props: AddressNamesProps) {
                 alignItems="center"
                 justifyContent="center"
                 className={classes.wrapper}>
-                <WalletUI address={selectedWallet} isETH />
+                <WalletUI
+                    address={selectedWallet}
+                    isETH={
+                        wallets.some((x) => isSameAddress(x.identity, account))
+                            ? true
+                            : currentPluginId === NetworkPluginID.PLUGIN_EVM
+                    }
+                />
                 <ArrowDropDownIcon />
             </Stack>
             <ShadowRootMenu
@@ -170,7 +178,9 @@ export function AddressNames(props: AddressNamesProps) {
                         () => onClick(account),
                         onConnectWallet,
                         wallets.some((x) => isSameAddress(x.identity, account)),
-                        true,
+                        wallets.some((x) => isSameAddress(x.identity, account))
+                            ? true
+                            : currentPluginId === NetworkPluginID.PLUGIN_EVM,
                     )
                 ) : (
                     <MenuItem key="connect">
@@ -251,10 +261,11 @@ interface WalletUIProps {
 function WalletUI(props: WalletUIProps) {
     const { Utils } = useWeb3State()
     const { isETH, address, verify = false } = props
-    const networkDescriptor = useNetworkDescriptor(undefined, isETH ? NetworkPluginID.PLUGIN_EVM : undefined)
+
     const { classes } = useWalletUIStyles()
     const chainId = useChainId()
-
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const networkDescriptor = useNetworkDescriptor(chainId, isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
     if (!address) return null
     return (
         <Stack direction="row" alignItems="center" justifyContent="center">
@@ -274,7 +285,7 @@ function WalletUI(props: WalletUIProps) {
                         variant="body2"
                         color="textSecondary"
                         className={classNames(classes.address, classes.walletAddress)}>
-                        {formatNFT_TokenId(address, 4)}
+                        {formatAddress(address, 4)}
                     </Typography>
                     <CopyIconButton text={address} className={classes.copy} />
                     <Link

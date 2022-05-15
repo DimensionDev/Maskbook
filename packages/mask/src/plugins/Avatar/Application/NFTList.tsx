@@ -64,7 +64,8 @@ export function NFTList(props: NFTListProps) {
                     height: 37,
                     '.MuiTabs-indicator': { display: 'none' },
                     position: 'absolute',
-                    width: '100%',
+                    width: '99.5%',
+                    justifyContent: 'center',
                 }}>
                 <Tab
                     label={

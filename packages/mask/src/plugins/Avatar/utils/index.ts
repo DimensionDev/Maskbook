@@ -165,6 +165,11 @@ export function formatTokenId(symbol: string, tokenId: string) {
     return name.length > 18 ? name.slice(0, 12) + '...' : name
 }
 
+export function formatAddress(address: string, size = 0) {
+    if (size === 0 || size >= 20) return address
+    return `${address.slice(0, Math.max(0, 2 + size))}...${address.slice(-size)}`
+}
+
 export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBindings, userId: string): number => {
     const p_a = first(a.proofs.filter((x) => x.identity === userId.toLowerCase()))
     const p_b = first(b.proofs.filter((x) => x.identity === userId.toLowerCase()))
