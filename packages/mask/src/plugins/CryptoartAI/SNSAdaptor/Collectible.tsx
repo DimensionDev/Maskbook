@@ -266,7 +266,7 @@ export function Collectible(props: CollectibleProps) {
                     </Paper>
                 </CardContent>
             </CollectibleCard>
-            <EthereumChainBoundary chainId={expectChainId}>
+            <EthereumChainBoundary chainId={expectChainId ?? chainId}>
                 <ActionBar />
             </EthereumChainBoundary>
         </>
