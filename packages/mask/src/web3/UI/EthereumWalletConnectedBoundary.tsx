@@ -22,6 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     grid: {
         justifyContent: 'center',
+        padding: 8,
     },
 }))
 

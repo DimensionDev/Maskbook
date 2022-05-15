@@ -1,6 +1,6 @@
 import { RefreshIcon } from '@masknet/icons'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { Box, Card, CardContent, CardHeader, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { Card, CardContent, CardHeader, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -132,9 +132,8 @@ export function PoolView(props: PoolViewProps) {
                     </Paper>
                 </CardContent>
             </Card>
-            <Box style={{ padding: 12 }}>
-                <EthereumChainBoundary chainId={pool.chainId} />
-            </Box>
+
+            <EthereumChainBoundary chainId={pool.chainId} />
         </>
     )
 }

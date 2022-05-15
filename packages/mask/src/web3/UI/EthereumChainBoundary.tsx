@@ -186,7 +186,12 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
             <ShadowRootTooltip title={tips ?? ''} arrow>
-                <Box className={props.className} display="flex" flexDirection="column" alignItems="center">
+                <Box
+                    className={props.className}
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    style={{ padding: 12 }}>
                     {children}
                 </Box>
             </ShadowRootTooltip>
