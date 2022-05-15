@@ -2,7 +2,7 @@ import { useI18N } from '../../utils'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { PopoverListTrigger, PopoverListTriggerProp } from './PopoverListTrigger'
-import { PopoverListItem, PopoverListItemType } from './PopoverListItem'
+import { PopoverListItem, EncryptionTargetType } from './PopoverListItem'
 import { useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -18,20 +18,20 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function EncryptionMethodRow(props: Partial<PopoverListTriggerProp>) {
+export function EncryptionMethodSelector(props: Partial<PopoverListTriggerProp>) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const renderScheme = [
         {
-            type: PopoverListItemType.Text,
+            type: EncryptionTargetType.Text,
             title: t('compose_encrypt_method_text'),
             subTitle: t('compose_encrypt_method_text_sub_title'),
             personaRequired: false,
             event: null,
         },
         {
-            type: PopoverListItemType.Image,
+            type: EncryptionTargetType.Image,
             title: t('compose_encrypt_method_image'),
             subTitle: t('compose_encrypt_method_image_sub_title'),
             personaRequired: false,
@@ -63,7 +63,7 @@ export function EncryptionMethodRow(props: Partial<PopoverListTriggerProp>) {
             <Typography className={classes.optionTitle}>{t('post_dialog_encryption_method')}</Typography>
 
             <PopoverListTrigger
-                selected={props.selected ?? PopoverListItemType.Text}
+                selected={props.selected ?? EncryptionTargetType.Text}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
                 onChange={props.onChange!}

@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { PopoverListTrigger } from './PopoverListTrigger'
 import { useState } from 'react'
-import { PopoverListItem, PopoverListItemType } from './PopoverListItem'
+import { PopoverListItem, EncryptionTargetType } from './PopoverListItem'
 import { DisabledReason } from './CompositionUI'
 import { RightArrowIcon } from '@masknet/icons'
 
@@ -76,36 +76,36 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface VisibleToRowProps {
-    selected: Partial<PopoverListItemType>
+export interface EncryptionTargetSelectorProps {
+    target: Partial<EncryptionTargetType>
     e2eDisabled: DisabledReason | undefined
     onCreatePersona(): void
     onConnectPersona(): void
     onChange(v: string): void
-    shareWithNum: number
+    selectedRecipientLength: number
 }
 
-export function VisibleToRow(props: VisibleToRowProps) {
+export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const renderScheme = [
         {
-            type: PopoverListItemType.All,
+            type: EncryptionTargetType.All,
             title: t('compose_encrypt_visible_to_all'),
             subTitle: t('compose_encrypt_visible_to_all_sub'),
             personaRequired: false,
             event: null,
         },
         {
-            type: PopoverListItemType.Private,
+            type: EncryptionTargetType.Private,
             title: t('compose_encrypt_visible_to_private'),
             subTitle: t('compose_encrypt_visible_to_private_sub'),
             personaRequired: true,
             event: null,
         },
         {
-            type: PopoverListItemType.Share,
+            type: EncryptionTargetType.Share,
             title: t('compose_encrypt_visible_to_share'),
             subTitle: t('compose_encrypt_visible_to_share_sub'),
             personaRequired: true,
@@ -120,12 +120,14 @@ export function VisibleToRow(props: VisibleToRowProps) {
                     <div key={x.type + idx}>
                         <PopoverListItem
                             onItemClick={() => {
-                                if (x.type === PopoverListItemType.Share) {
-                                    props.onChange(PopoverListItemType.Share)
+                                if (x.type === EncryptionTargetType.Share) {
+                                    props.onChange(EncryptionTargetType.Share)
                                 }
                             }}
                             itemTail={
-                                x.type === PopoverListItemType.Share && <RightArrowIcon className={classes.rightIcon} />
+                                x.type === EncryptionTargetType.Share && (
+                                    <RightArrowIcon className={classes.rightIcon} />
+                                )
                             }
                             disabled={x.personaRequired && !!props.e2eDisabled}
                             value={x.type}
@@ -161,9 +163,9 @@ export function VisibleToRow(props: VisibleToRowProps) {
         )
     }
     const getTitle = () => {
-        const selected = props.selected
-        const shareWithNum = props.shareWithNum
-        if (selected === PopoverListItemType.Share) return `${shareWithNum} friend${shareWithNum! > 1 ? 's' : ''}`
+        const selected = props.target
+        const shareWithNum = props.selectedRecipientLength
+        if (selected === EncryptionTargetType.Share) return `${shareWithNum} friend${shareWithNum! > 1 ? 's' : ''}`
         return renderScheme.find((x) => x.type === selected)?.title
     }
     return (
@@ -171,7 +173,7 @@ export function VisibleToRow(props: VisibleToRowProps) {
             <Typography className={classes.optionTitle}>{t('post_dialog_visible_to')}</Typography>
 
             <PopoverListTrigger
-                selected={props.selected ?? PopoverListItemType.All}
+                selected={props.target ?? EncryptionTargetType.All}
                 selectedTitle={getTitle()}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}

@@ -24,9 +24,9 @@ import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { useSubscription } from 'use-subscription'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
-import { VisibleToRow } from './VisibleToRow'
-import { EncryptionMethodRow } from './EncryptionMethodRow'
-import { PopoverListItemType } from './PopoverListItem'
+import { EncryptionTargetSelector } from './EncryptionTargetSelector'
+import { EncryptionMethodSelector } from './EncryptionMethodSelector'
+import { EncryptionTargetType as EncryptionTargetType } from './PopoverListItem'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -93,7 +93,6 @@ const useStyles = makeStyles()((theme) => ({
 export interface LazyRecipients {
     request(): void
     recipients?: ProfileInformation[]
-    hasRecipients: boolean
 }
 export interface CompositionProps {
     maxLength?: number
@@ -139,13 +138,12 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         startTransition(() => __updatePostSize(size))
     }, [])
 
-    const { setEncryptionKind, encryptionKind, recipientSelectorAvailable, recipients, setRecipients } =
-        useSetEncryptionKind(props)
+    const { setEncryptionKind, encryptionKind, recipients, setRecipients } = useSetEncryptionKind(props)
     const { encodingKind, setEncoding } = useEncryptionEncode(props)
-    const visibilitySelected = (() => {
-        if (encryptionKind === 'Everyone') return PopoverListItemType.All
-        if (recipients.length > 0) return PopoverListItemType.Share
-        return PopoverListItemType.Private
+    const encryptionTarget = (() => {
+        if (encryptionKind === 'Everyone') return EncryptionTargetType.All
+        if (recipients.length > 0) return EncryptionTargetType.Share
+        return EncryptionTargetType.Private
     })()
     const reset = useCallback(() => {
         startTransition(() => {
@@ -218,20 +216,20 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     <PluginEntryRender readonly={sending} ref={PluginEntry} />
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
-                    <VisibleToRow
-                        selected={visibilitySelected}
+                    <EncryptionTargetSelector
+                        target={encryptionTarget}
                         onConnectPersona={props.onConnectPersona}
                         onCreatePersona={props.onCreatePersona}
                         e2eDisabled={props.e2eEncryptionDisabled}
-                        shareWithNum={recipients.length}
+                        selectedRecipientLength={recipients.length}
                         onChange={(event) => {
-                            if (event === PopoverListItemType.All) {
+                            if (event === EncryptionTargetType.All) {
                                 setEncryptionKind('Everyone')
                             } else {
-                                if (event === PopoverListItemType.Share) {
+                                if (event === EncryptionTargetType.Share) {
                                     setSelectRecipientOpen(true)
                                 }
-                                if (event === PopoverListItemType.Private) {
+                                if (event === EncryptionTargetType.Private) {
                                     setRecipients([])
                                 }
                                 setEncryptionKind('E2E')
@@ -249,7 +247,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     />
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
-                    <EncryptionMethodRow
+                    <EncryptionMethodSelector
                         selected={encodingKind}
                         onChange={(event) => setEncoding(event as 'text' | 'image')}
                     />
@@ -288,12 +286,10 @@ function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabl
     const [recipients, setRecipients] = useState<ProfileInformation[]>([])
 
     const everyoneSelected = props.e2eEncryptionDisabled ? true : internal_encryptionKind === 'Everyone'
-    const recipientSelectorAvailable = props.recipients.hasRecipients && !everyoneSelected
 
     return {
         recipients,
         setRecipients,
-        recipientSelectorAvailable,
         encryptionKind: everyoneSelected ? ('Everyone' as const) : ('E2E' as const),
         setEncryptionKind,
     }
