@@ -33,12 +33,12 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { classes } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
     const connectStatus = usePersonaConnectStatus()
-
     /** @deprecated */
     const { value: hasLocalKey } = useAsync(
         async () => (currentIdentity ? Services.Identity.hasLocalKey(currentIdentity) : false),
         [currentIdentity, connectStatus],
     )
+
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     // #region Open
     const [open, setOpen] = useState(false)
@@ -92,12 +92,12 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const UI = useRef<CompositionRef>(null)
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
-    const isE2E_Disabled = () => {
+    const isE2E_Disabled = (() => {
         if (!connectStatus.currentConnectedPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona
         if (!connectStatus.connected && connectStatus.hasPersona) return E2EUnavailableReason.NoConnect
         if (!hasLocalKey) return E2EUnavailableReason.NoLocalKey
         return
-    }
+    })()
 
     return (
         <DialogStackingProvider>
@@ -126,7 +126,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         onSubmit={onSubmit_}
                         supportImageEncoding={networkSupport?.text ?? false}
                         supportTextEncoding={networkSupport?.image ?? false}
-                        e2eEncryptionDisabled={isE2E_Disabled()}
+                        e2eEncryptionDisabled={isE2E_Disabled}
                     />
                 </DialogContent>
                 <DialogActions sx={{ height: 68 }} />

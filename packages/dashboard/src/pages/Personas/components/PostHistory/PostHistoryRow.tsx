@@ -135,13 +135,12 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
     const allRecipients = useMemo(() => {
         const { recipients, postBy } = post
         if (recipients === 'everyone') return ['Everyone']
-        const userIds = Array.from(recipients.keys()).map((x) => {
-            return (
-                <span key={x.userId} onClick={(e) => recipientClickHandler(e, x.userId)}>
-                    @{x.userId}
-                </span>
-            )
-        })
+
+        const userIds = Array.from(recipients.keys()).map((x) => (
+            <span key={x.userId} onClick={(e) => recipientClickHandler(e, x.userId)}>
+                @{x.userId}
+            </span>
+        ))
         return userIds.length
             ? userIds
             : [

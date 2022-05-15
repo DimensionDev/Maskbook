@@ -59,7 +59,6 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: `0px 0px 20px 0px ${theme.palette.background.messageShadow}`,
         transform: 'translateX(-16px)',
     },
-
     between: {
         justifyContent: 'space-between',
     },
@@ -129,22 +128,25 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     const { t } = useI18N()
 
     const [currentPostSize, __updatePostSize] = useState(0)
-    const [shareWithOpen, setShareWithOpen] = useState(false)
+
+    const [isSelectRecipientOpen, setSelectRecipientOpen] = useState(false)
     const Editor = useRef<TypedMessageEditorRef | null>(null)
     const PluginEntry = useRef<PluginEntryRenderRef>(null)
+
     const [sending, setSending] = useState(false)
 
     const updatePostSize = useCallback((size: number) => {
         startTransition(() => __updatePostSize(size))
     }, [])
+
     const { setEncryptionKind, encryptionKind, recipientSelectorAvailable, recipients, setRecipients } =
         useSetEncryptionKind(props)
     const { encodingKind, setEncoding } = useEncryptionEncode(props)
-    const visibilitySelected = useMemo(() => {
+    const visibilitySelected = (() => {
         if (encryptionKind === 'Everyone') return PopoverListItemType.All
         if (recipients.length > 0) return PopoverListItemType.Share
         return PopoverListItemType.Private
-    }, [encryptionKind, recipients])
+    })()
     const reset = useCallback(() => {
         startTransition(() => {
             Editor.current?.reset()
@@ -227,7 +229,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                                 setEncryptionKind('Everyone')
                             } else {
                                 if (event === PopoverListItemType.Share) {
-                                    setShareWithOpen(true)
+                                    setSelectRecipientOpen(true)
                                 }
                                 if (event === PopoverListItemType.Private) {
                                     setRecipients([])
@@ -238,8 +240,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     />
 
                     <SelectRecipientsUI
-                        open={shareWithOpen}
-                        onClose={() => setShareWithOpen(false)}
+                        open={isSelectRecipientOpen}
+                        onClose={() => setSelectRecipientOpen(false)}
                         disabled={sending}
                         items={props.recipients}
                         selected={recipients}
@@ -249,7 +251,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 <div className={cx(classes.flex, classes.between)}>
                     <EncryptionMethodRow
                         selected={encodingKind}
-                        onChange={(event) => setEncoding(event as SetStateAction<'text' | 'image'>)}
+                        onChange={(event) => setEncoding(event as 'text' | 'image')}
                     />
                 </div>
             </div>
