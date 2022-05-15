@@ -20,6 +20,9 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         borderRadius: 8,
     },
+    root: {
+        padding: 0,
+    },
     input: {
         fontSize: 15,
         minHeight: '8em',
@@ -125,6 +128,7 @@ export const TypedMessageEditor = memo(
                 <InputBase
                     readOnly={readonly}
                     classes={{
+                        root: classes.root,
                         input: classes.input,
                     }}
                     autoFocus={props.autoFocus}
