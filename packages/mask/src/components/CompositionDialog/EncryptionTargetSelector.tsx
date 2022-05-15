@@ -96,12 +96,8 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
             <Typography
                 className={classes.create}
                 onClick={() => {
-                    if (
-                        props.e2eDisabled === E2EUnavailableReason.NoPersona ||
-                        props.e2eDisabled === E2EUnavailableReason.NoConnection
-                    ) {
-                        props.onCreatePersona()
-                    }
+                    if (props.e2eDisabled === E2EUnavailableReason.NoLocalKey) return
+                    props.onCreatePersona()
                 }}>
                 {props.e2eDisabled === E2EUnavailableReason.NoPersona ? t('create') : t('connect')}
             </Typography>
@@ -113,21 +109,24 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
         </div>
     )
 
-    const selectedTitle = (() => {
+    const selectedTitle = () => {
         const selected = props.target
         const shareWithNum = props.selectedRecipientLength
-        if (selected === EncryptionTargetType.E2E) return `${shareWithNum} friend${shareWithNum > 1 ? 's' : ''}`
+        if (selected === EncryptionTargetType.E2E)
+            return shareWithNum > 1
+                ? t('compose_shared_friends_mutiple', { count: shareWithNum })
+                : t('compose_shared_friends_single')
         else if (selected === EncryptionTargetType.Public) return t('compose_encrypt_visible_to_all')
         else if (selected === EncryptionTargetType.Self) return t('compose_encrypt_visible_to_private')
         unreachable(selected)
-    })()
+    }
     return (
         <>
             <Typography className={classes.optionTitle}>{t('post_dialog_visible_to')}</Typography>
 
             <PopoverListTrigger
                 selected={props.target}
-                selectedTitle={selectedTitle}
+                selectedTitle={selectedTitle()}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
                 onChange={props.onChange}>
@@ -136,6 +135,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     value={EncryptionTargetType.Public}
                     title={t('compose_encrypt_visible_to_all')}
                     subTitle={t('compose_encrypt_visible_to_all_sub')}
+                    showDivider
                 />
                 <PopoverListItem
                     onItemClick={() => props.onChange(EncryptionTargetType.Self)}
@@ -143,6 +143,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     value={EncryptionTargetType.Self}
                     title={t('compose_encrypt_visible_to_private')}
                     subTitle={t('compose_encrypt_visible_to_private_sub')}
+                    showDivider
                 />
                 {e2eDisabledMessage}
                 {noLocalKeyMessage}
@@ -153,7 +154,6 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     value={EncryptionTargetType.E2E}
                     title={t('compose_encrypt_visible_to_share')}
                     subTitle={t('compose_encrypt_visible_to_share_sub')}
-                    showDivider
                 />
                 {e2eDisabledMessage}
                 {noLocalKeyMessage}

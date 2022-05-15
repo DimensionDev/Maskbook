@@ -164,13 +164,13 @@ export function ProfileInList(props: ProfileInListProps) {
                         />
                         <CopyIcon
                             className={classes.actionIcon}
-                            onClick={() =>
-                                copyToClipboard(
+                            onClick={() => {
+                                const copyContent =
                                     (
                                         profile.linkedPersona?.publicKeyAsHex ?? profile.linkedPersona?.rawPublicKey
-                                    )?.toUpperCase() ?? '',
-                                )
-                            }
+                                    )?.toUpperCase() ?? ''
+                                copyToClipboard(copyContent)
+                            }}
                         />
                         {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
                     </div>

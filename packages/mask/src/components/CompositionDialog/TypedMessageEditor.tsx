@@ -20,6 +20,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 15,
         minHeight: '8em',
     },
+    badge: {
+        marginBottom: 12,
+    },
 }))
 export interface TypedMessageEditorProps {
     defaultValue?: SerializableTypedMessages
@@ -117,7 +120,11 @@ export const TypedMessageEditor = memo(
         }
         return (
             <>
-                <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
+                {value.meta && (
+                    <div className={classes.badge}>
+                        <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
+                    </div>
+                )}
                 <InputBase
                     readOnly={readonly}
                     classes={{

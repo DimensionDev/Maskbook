@@ -37,7 +37,7 @@ export async function encryptTo(
                 return result[0]
             },
             encryptByLocalKey: async (content, iv) => {
-                if (!whoAmI) throw new Error()
+                if (!whoAmI) throw new Error('No Profile found')
                 return encryptByLocalKey(whoAmI, content, iv)
             },
             queryPublicKey: (id) =>

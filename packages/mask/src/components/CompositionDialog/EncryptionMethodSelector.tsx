@@ -48,9 +48,9 @@ export function EncryptionMethodSelector(props: EncryptionMethodSelectorProps) {
                     value={EncryptionMethodType.Text}
                     title={t('compose_encrypt_method_text')}
                     subTitle={t('compose_encrypt_method_text_sub_title')}
+                    showDivider
                 />
                 <PopoverListItem
-                    showDivider
                     value={EncryptionMethodType.Image}
                     title={t('compose_encrypt_method_image')}
                     subTitle={t('compose_encrypt_method_image_sub_title')}
