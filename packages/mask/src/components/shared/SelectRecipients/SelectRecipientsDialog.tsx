@@ -2,7 +2,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
 import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
 import Fuse from 'fuse.js'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
@@ -94,7 +94,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { items, disabledItems, onSearch } = props
     const [search, setSearch] = useState('')
 
-    useMemo(() => {
+    useEffect(() => {
         setSearch('')
         onSearch('')
     }, [props.open])
@@ -107,20 +107,6 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         })
         return search === '' ? items : fuse.search(search).map((item) => item.item)
     }, [search, items])
-
-    const Empty = () => (
-        <div className={classes.empty}>
-            <SearchEmptyIcon style={{ width: 36, height: 36 }} />
-            <Typography>{props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}</Typography>
-        </div>
-    )
-
-    const LoadingRender = () => (
-        <div className={cx(classes.empty, classes.mainText)}>
-            <LoadingBase style={{ fontSize: '2rem' }} />
-            <Typography>{t('loading')}</Typography>
-        </div>
-    )
 
     return (
         <InjectedDialog
@@ -149,11 +135,19 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     placeholder={t('post_dialog_share_with_input_placeholder')}
                 />
                 {props.loading ? (
-                    <LoadingRender />
+                    <div className={cx(classes.empty, classes.mainText)}>
+                        <LoadingBase style={{ fontSize: '2rem' }} />
+                        <Typography>{t('loading')}</Typography>
+                    </div>
                 ) : (
                     <div className={classes.list}>
                         {itemsAfterSearch.length === 0 ? (
-                            <Empty />
+                            <div className={classes.empty}>
+                                <SearchEmptyIcon style={{ width: 36, height: 36 }} />
+                                <Typography>
+                                    {props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}
+                                </Typography>
+                            </div>
                         ) : (
                             itemsAfterSearch.map((item, idx) => (
                                 <ProfileInList
