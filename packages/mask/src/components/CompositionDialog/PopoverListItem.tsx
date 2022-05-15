@@ -34,7 +34,7 @@ interface PopoverListItemProps {
     title: string
     subTitle?: string
     disabled?: boolean
-    showDivider: boolean
+    showDivider?: boolean
     onItemClick?(): void
 }
 export function PopoverListItem(props: PopoverListItemProps) {

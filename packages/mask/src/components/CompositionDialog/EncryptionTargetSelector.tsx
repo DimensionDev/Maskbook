@@ -7,6 +7,7 @@ import { PopoverListItem } from './PopoverListItem'
 import { E2EUnavailableReason } from './CompositionUI'
 import { RightArrowIcon } from '@masknet/icons'
 import { EncryptionTargetType } from '@masknet/shared-base'
+import { unreachable } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {
@@ -89,100 +90,73 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const renderScheme = [
-        {
-            type: EncryptionTargetType.Public,
-            title: t('compose_encrypt_visible_to_all'),
-            subTitle: t('compose_encrypt_visible_to_all_sub'),
-            personaRequired: false,
-            event: null,
-        },
-        {
-            type: EncryptionTargetType.Self,
-            title: t('compose_encrypt_visible_to_private'),
-            subTitle: t('compose_encrypt_visible_to_private_sub'),
-            personaRequired: true,
-            event: null,
-        },
-        {
-            type: EncryptionTargetType.E2E,
-            title: t('compose_encrypt_visible_to_share'),
-            subTitle: t('compose_encrypt_visible_to_share_sub'),
-            personaRequired: true,
-            event: null,
-        },
-    ]
+    const e2eDisabledMessage = props.e2eDisabled ? (
+        <div className={classes.flex}>
+            <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
+            <Typography
+                className={classes.create}
+                onClick={() => {
+                    if (props.e2eDisabled === E2EUnavailableReason.NoPersona && props.onCreatePersona) {
+                        props.onCreatePersona()
+                    }
+                    if (props.e2eDisabled === E2EUnavailableReason.NoConnect && props.onConnectPersona) {
+                        props.onConnectPersona()
+                    }
+                }}>
+                {props.e2eDisabled === E2EUnavailableReason.NoPersona ? t('create') : t('connect')}
+            </Typography>
+        </div>
+    ) : null
+    const noLocalKeyMessage = props.e2eDisabled === E2EUnavailableReason.NoLocalKey && (
+        <div className={classes.flex}>
+            <Typography className={classes.mainTitle}>{t('compose_no_local_key')}</Typography>
+        </div>
+    )
 
-    const PopoverListRender = () => {
-        return (
-            <>
-                {renderScheme.map((x, idx) => (
-                    <div key={x.type + idx}>
-                        <PopoverListItem
-                            onItemClick={() => {
-                                if (x.type === EncryptionTargetType.E2E) {
-                                    props.onChange(EncryptionTargetType.E2E)
-                                }
-                            }}
-                            itemTail={
-                                x.type === EncryptionTargetType.E2E && <RightArrowIcon className={classes.rightIcon} />
-                            }
-                            disabled={x.personaRequired && !!props.e2eDisabled}
-                            value={x.type}
-                            title={x.title}
-                            subTitle={x.subTitle}
-                            showDivider={idx < renderScheme.length - 1}
-                        />
-                        {x.personaRequired && props.e2eDisabled && (
-                            <div className={classes.flex}>
-                                <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
-                                <Typography
-                                    className={classes.create}
-                                    onClick={() => {
-                                        if (
-                                            props.e2eDisabled === E2EUnavailableReason.NoPersona &&
-                                            props.onCreatePersona
-                                        ) {
-                                            props.onCreatePersona()
-                                        }
-                                        if (
-                                            props.e2eDisabled === E2EUnavailableReason.NoConnect &&
-                                            props.onConnectPersona
-                                        ) {
-                                            props.onConnectPersona()
-                                        }
-                                    }}>
-                                    {props.e2eDisabled === E2EUnavailableReason.NoPersona ? t('create') : t('connect')}
-                                </Typography>
-                            </div>
-                        )}
-                        {x.personaRequired && props.e2eDisabled === E2EUnavailableReason.NoLocalKey && (
-                            <div className={classes.flex}>
-                                <Typography className={classes.mainTitle}>{t('compose_no_local_key')}</Typography>
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </>
-        )
-    }
-    const getTitle = () => {
+    const selectedTitle = (() => {
         const selected = props.target
         const shareWithNum = props.selectedRecipientLength
         if (selected === EncryptionTargetType.E2E) return `${shareWithNum} friend${shareWithNum! > 1 ? 's' : ''}`
-        return renderScheme.find((x) => x.type === selected)?.title
-    }
+        else if (selected === EncryptionTargetType.Public) return t('compose_encrypt_visible_to_all')
+        else if (selected === EncryptionTargetType.Self) return t('compose_encrypt_visible_to_private')
+        unreachable(selected)
+    })()
     return (
         <>
             <Typography className={classes.optionTitle}>{t('post_dialog_visible_to')}</Typography>
 
             <PopoverListTrigger
-                selected={props.target ?? EncryptionTargetType.Public}
-                selectedTitle={getTitle()}
+                selected={props.target}
+                selectedTitle={selectedTitle}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
-                onChange={props.onChange!}>
-                {PopoverListRender()}
+                onChange={props.onChange}>
+                <PopoverListItem
+                    onItemClick={() => props.onChange(EncryptionTargetType.Public)}
+                    value={EncryptionTargetType.Public}
+                    title={t('compose_encrypt_visible_to_all')}
+                    subTitle={t('compose_encrypt_visible_to_all_sub')}
+                />
+                <PopoverListItem
+                    onItemClick={() => props.onChange(EncryptionTargetType.Self)}
+                    disabled={!!props.e2eDisabled}
+                    value={EncryptionTargetType.Self}
+                    title={t('compose_encrypt_visible_to_private')}
+                    subTitle={t('compose_encrypt_visible_to_private_sub')}
+                />
+                {e2eDisabledMessage}
+                {noLocalKeyMessage}
+                <PopoverListItem
+                    onItemClick={() => props.onChange(EncryptionTargetType.E2E)}
+                    itemTail={<RightArrowIcon className={classes.rightIcon} />}
+                    disabled={!!props.e2eDisabled}
+                    value={EncryptionTargetType.E2E}
+                    title={t('compose_encrypt_visible_to_share')}
+                    subTitle={t('compose_encrypt_visible_to_share_sub')}
+                    showDivider
+                />
+                {e2eDisabledMessage}
+                {noLocalKeyMessage}
             </PopoverListTrigger>
         </>
     )
