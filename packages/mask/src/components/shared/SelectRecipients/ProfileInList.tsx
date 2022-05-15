@@ -7,7 +7,6 @@ import { Avatar } from '../../../utils/components/Avatar'
 import { CopyIcon } from '@masknet/icons'
 import { truncate } from 'lodash-unified'
 import { useI18N } from '../../../utils'
-import { useSnackbarCallback } from '@masknet/shared'
 import { useCopyToClipboard } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
@@ -81,7 +80,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ProfileInListProps extends withClasses<never> {
+export interface ProfileInListProps {
     item: ProfileInformationFromNextID
     highlightText?: string
     selected?: boolean
@@ -94,14 +93,6 @@ export function ProfileInList(props: ProfileInListProps) {
     const profile = props.item
 
     const [, copyToClipboard] = useCopyToClipboard()
-    const copyFingerprint = useSnackbarCallback({
-        executor: async (v: string) => copyToClipboard(v),
-        deps: [],
-        successText: t('compose_encrypt_public_key_copied'),
-    })
-    const resolveSecondaryText = () => {
-        return formatPersonaPublicKey(profile.linkedPersona?.publicKeyAsHex?.toUpperCase() ?? '', 4)
-    }
     const resolvePrimaryText = () => {
         if (profile.fromNextID) {
             const mentions = profile.linkedTwitterNames!.map((x) => '@' + x).join(' ')
@@ -134,20 +125,13 @@ export function ProfileInList(props: ProfileInListProps) {
         (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.selected),
         [props],
     )
+    const textToHighlight = formatPersonaPublicKey(profile.linkedPersona?.publicKeyAsHex?.toUpperCase() ?? '', 4)
     return (
         <ListItem
             disabled={props.disabled}
             className={props.selected ? cx(classes.root, classes.highLightBg) : classes.root}>
-            <ListItemAvatar
-                classes={{
-                    root: classes.avatarBox,
-                }}>
-                <Avatar
-                    classes={{
-                        root: classes.avatar,
-                    }}
-                    person={profile}
-                />
+            <ListItemAvatar classes={{ root: classes.avatarBox }}>
+                <Avatar classes={{ root: classes.avatar }} person={profile} />
             </ListItemAvatar>
             <ListItemText
                 classes={{
@@ -157,12 +141,7 @@ export function ProfileInList(props: ProfileInListProps) {
                 }}
                 primary={
                     <div className={classes.flex}>
-                        <ShadowRootTooltip
-                            title={ToolTipText()}
-                            arrow
-                            classes={{
-                                tooltip: classes.toolTip,
-                            }}>
+                        <ShadowRootTooltip title={ToolTipText()} arrow classes={{ tooltip: classes.toolTip }}>
                             <div>
                                 <Highlighter
                                     className={classes.highLightBase}
@@ -182,7 +161,7 @@ export function ProfileInList(props: ProfileInListProps) {
                             highlightClassName={classes.highlighted}
                             searchWords={[props.highlightText ?? '']}
                             autoEscape
-                            textToHighlight={resolveSecondaryText()}
+                            textToHighlight={textToHighlight}
                         />
                         <CopyIcon
                             className={classes.actionIcon}
