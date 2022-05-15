@@ -8,8 +8,6 @@ import { useI18N } from '../../utils'
 import { useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared-evm'
 import { isZero } from '@masknet/web3-shared-base'
 import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
-import { usePersonaConnectStatus } from '../../components/DataSource/usePersonaConnectStatus'
-import { useMemo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -47,8 +45,6 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const chainIdValid = useChainIdValid()
     const nativeTokenBalance = useNativeTokenBalance()
 
-    const personaConnectStatus = usePersonaConnectStatus()
-
     // #region remote controlled confirm risk warning
     const { isConfirmed: isRiskWarningConfirmed, openDialog: openRiskWarningDialog } = useWalletRiskWarningDialog()
     // #endregion
@@ -58,24 +54,6 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
         WalletMessages.events.selectProviderDialogUpdated,
     )
     // #endregion
-
-    const actionButton = useMemo(() => {
-        if (!personaConnectStatus.action) return null
-
-        const button = personaConnectStatus.hasPersona ? t('connect_persona') : t('create_persona')
-        return (
-            <ActionButton
-                variant="contained"
-                className={classNames(classes.button, classes.connectWallet)}
-                onClick={personaConnectStatus.action}>
-                {button}
-            </ActionButton>
-        )
-    }, [personaConnectStatus, t])
-
-    if (!hiddenPersonaVerified && (!personaConnectStatus.hasPersona || !personaConnectStatus.connected)) {
-        return <>{actionButton}</>
-    }
 
     if (!account)
         return (
