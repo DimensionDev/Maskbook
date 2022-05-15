@@ -30,53 +30,32 @@ export function EncryptionMethodSelector(props: EncryptionMethodSelectorProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const renderScheme = [
-        {
-            type: EncryptionMethodType.Text,
-            title: t('compose_encrypt_method_text'),
-            subTitle: t('compose_encrypt_method_text_sub_title'),
-            personaRequired: false,
-            event: null,
-        },
-        {
-            type: EncryptionMethodType.Image,
-            title: t('compose_encrypt_method_image'),
-            subTitle: t('compose_encrypt_method_image_sub_title'),
-            personaRequired: false,
-            event: null,
-        },
-    ]
-
-    const PopoverListRender = () => {
-        return (
-            <>
-                {renderScheme.map((x, idx) => {
-                    return (
-                        <div key={x.type + idx}>
-                            <PopoverListItem
-                                showDivider={idx < renderScheme.length - 1}
-                                value={x.type}
-                                title={x.title}
-                                subTitle={x.subTitle}
-                            />
-                        </div>
-                    )
-                })}
-            </>
-        )
-    }
 
     return (
         <>
             <Typography className={classes.optionTitle}>{t('post_dialog_encryption_method')}</Typography>
-
             <PopoverListTrigger
                 selected={props.method ?? EncryptionMethodType.Text}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
                 onChange={props.onChange}
-                selectedTitle={renderScheme.find((x) => x.type === props.method)?.title}>
-                {PopoverListRender()}
+                selectedTitle={
+                    props.method === EncryptionMethodType.Text
+                        ? t('compose_encrypt_method_text')
+                        : t('compose_encrypt_method_image')
+                }>
+                <PopoverListItem
+                    showDivider={false}
+                    value={EncryptionMethodType.Text}
+                    title={t('compose_encrypt_method_text')}
+                    subTitle={t('compose_encrypt_method_text_sub_title')}
+                />
+                <PopoverListItem
+                    showDivider
+                    value={EncryptionMethodType.Image}
+                    title={t('compose_encrypt_method_image')}
+                    subTitle={t('compose_encrypt_method_image_sub_title')}
+                />
             </PopoverListTrigger>
         </>
     )
