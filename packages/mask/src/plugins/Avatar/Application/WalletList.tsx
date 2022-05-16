@@ -1,4 +1,4 @@
-import { ImageIcon, ReversedAddress, useSnackbarCallback } from '@masknet/shared'
+import { ImageIcon, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, MaskColorVar, ShadowRootMenu, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { Button, Divider, IconProps, Link, ListItemIcon, MenuItem, Stack, Typography, useTheme } from '@mui/material'
@@ -15,6 +15,7 @@ import {
     useChainId,
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
+    useReverseAddress,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { Services } from '../../../extension/service'
@@ -266,6 +267,7 @@ function WalletUI(props: WalletUIProps) {
     const chainId = useChainId()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const networkDescriptor = useNetworkDescriptor(chainId, isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
+    const { value: domain } = useReverseAddress(address, NetworkPluginID.PLUGIN_EVM)
     if (!address) return null
     return (
         <Stack direction="row" alignItems="center" justifyContent="center">
@@ -276,11 +278,9 @@ function WalletUI(props: WalletUIProps) {
                         className={classNames(classes.address, classes.walletName)}
                         fontWeight={700}
                         fontSize={14}>
-                        {currentPluginId === NetworkPluginID.PLUGIN_EVM ? (
-                            <ReversedAddress address={address} pluginId={NetworkPluginID.PLUGIN_EVM} />
-                        ) : (
-                            formatAddress(address, 4)
-                        )}
+                        {currentPluginId === NetworkPluginID.PLUGIN_EVM
+                            ? domain ?? formatAddress(address, 4)
+                            : formatAddress(address, 4)}
                     </Typography>
                     {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
                 </Stack>
