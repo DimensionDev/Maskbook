@@ -16,13 +16,13 @@ export function useTwitterIdByWalletSearch(
 
     return bindings
         .map((cur) => {
-            const obj = uniqBy(cur.proofs, (proof) => proof.platform && proof.identity).filter((x) =>
-                [NextIDPlatform.Twitter].includes(x.platform),
+            const proofs = uniqBy(cur.proofs, (proof) => proof.platform && proof.identity).filter(
+                (x) => x.platform === NextIDPlatform.Twitter,
             )
             return {
-                linkedTwitterNames: obj.map((x) => x.identity),
+                linkedTwitterNames: proofs.map((x) => x.identity),
                 persona: cur.persona,
-                detail: obj,
+                detail: proofs,
             }
         })
         .map((x) => ({
