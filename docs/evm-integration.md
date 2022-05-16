@@ -114,12 +114,12 @@ Here is the chain abilities checklist. If you are working on a bounty task, plea
 
 ## Examples
 
-| Chain      | Pull Request Link                                    |
-| ---------- | ---------------------------------------------------- |
-| CELO       | <https://github.com/DimensionDev/Maskbook/pull/5052> |
-| Fantom     | <https://github.com/DimensionDev/Maskbook/pull/5036> |
-| xDai       | <https://github.com/DimensionDev/Maskbook/pull/4140> |
-| Arbitrum   | <https://github.com/DimensionDev/Maskbook/pull/3558> |
-| Avalanche  | <https://github.com/DimensionDev/Maskbook/pull/5289> |
-| Harmony    | <https://github.com/DimensionDev/Maskbook/pull/5835> |
-| Optimistic | <https://github.com/DimensionDev/Maskbook/pull/5284> |
+| Chain     | Pull Request Link                                    |
+| --------- | ---------------------------------------------------- |
+| CELO      | <https://github.com/DimensionDev/Maskbook/pull/5052> |
+| Fantom    | <https://github.com/DimensionDev/Maskbook/pull/5036> |
+| xDai      | <https://github.com/DimensionDev/Maskbook/pull/4140> |
+| Arbitrum  | <https://github.com/DimensionDev/Maskbook/pull/3558> |
+| Avalanche | <https://github.com/DimensionDev/Maskbook/pull/5289> |
+| Harmony   | <https://github.com/DimensionDev/Maskbook/pull/5835> |
+| Optimism  | <https://github.com/DimensionDev/Maskbook/pull/5284> |

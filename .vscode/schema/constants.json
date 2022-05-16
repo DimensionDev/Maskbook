@@ -31,9 +31,9 @@
                 "Mumbai",
                 "Arbitrum",
                 "Arbitrum_Rinkeby",
-                "Optimistic",
-                "Optimistic_Kovan",
-                "Optimistic_Goerli"
+                "Optimism",
+                "Optimism_Kovan",
+                "Optimism_Goerli"
             ]
         },
         "primitive": {

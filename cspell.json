@@ -130,7 +130,7 @@
         "opensea",
         "openswap",
         "openx",
-        "optimistic",
+        "optimism",
         "overridable",
         "overscan",
         "pageable",
@@ -214,6 +214,7 @@
         "xdai",
         "xlarge",
         "zerion",
+        "zipswap",
         "zora",
         "zubin"
     ],
