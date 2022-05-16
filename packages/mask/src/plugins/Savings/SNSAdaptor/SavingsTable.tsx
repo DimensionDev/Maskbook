@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme, props) => ({
         marginBottom: theme.spacing(1),
 
         '&:last-child': {
-            marginBottom: '0',
+            marginBottom: 0,
         },
     },
     tableItem: {

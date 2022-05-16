@@ -105,7 +105,7 @@ export async function getCampaignInfo(id: number): Promise<CampaignInfo> {
 }
 
 // (Matic) Mask Social Defi Alliance
-// https://bulletlabs.notion.site/Matic-Mask-Social-Defi-Alliance-f798356212604dc7b3c6f8fbf066de21
+// https://bulletlabs.notion.site/f798356212604dc7b3c6f8fbf066de21
 export async function getAccountClaimSignature(
     userSignature: string,
     account: string,

@@ -59,7 +59,7 @@ const StyledTab = styled(Tab)`
         min-width: 165px;
         padding: 7px 0;
         background-color: #f7f9fa;
-        border-radius: 4px 4px 0px 0px;
+        border-radius: 4px 4px 0 0;
         color: #15181b;
     }
     &.${tabClasses.selected} {
