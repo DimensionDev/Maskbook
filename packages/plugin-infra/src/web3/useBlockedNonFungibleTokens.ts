@@ -5,13 +5,13 @@ import type { Web3Helper } from '../web3-helpers'
 import { useWeb3State } from './useWeb3State'
 import { EMPTY_ARRAY } from '../utils/subscription'
 
-export function useTrustedNonFungibleTokens<T extends NetworkPluginID>(
+export function useBlockedNonFungibleTokens<T extends NetworkPluginID>(
     pluginID?: T,
     schemaType?: Web3Helper.Definition[T]['SchemaType'],
 ) {
     const { Token } = useWeb3State(pluginID)
     const nonFungibleTokens = useSubscription(
-        (Token?.trustedNonFungibleTokens ?? EMPTY_ARRAY) as Subscription<
+        (Token?.blockedNonFungibleTokens ?? EMPTY_ARRAY) as Subscription<
             NonFungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>[]
         >,
     )

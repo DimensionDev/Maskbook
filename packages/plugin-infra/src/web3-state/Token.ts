@@ -20,8 +20,10 @@ export interface TokenStorage<ChainId, SchemaType> {
 export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, SchemaType> {
     protected storage: StorageObject<TokenStorage<ChainId, SchemaType>> = null!
 
-    public fungibleTokens?: Subscription<FungibleToken<ChainId, SchemaType>[]>
-    public nonFungibleTokens?: Subscription<NonFungibleToken<ChainId, SchemaType>[]>
+    public trustedFungibleTokens?: Subscription<FungibleToken<ChainId, SchemaType>[]>
+    public trustedNonFungibleTokens?: Subscription<NonFungibleToken<ChainId, SchemaType>[]>
+    public blockedFungibleTokens?: Subscription<FungibleToken<ChainId, SchemaType>[]>
+    public blockedNonFungibleTokens?: Subscription<NonFungibleToken<ChainId, SchemaType>[]>
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
@@ -39,7 +41,7 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
         this.storage = storage
 
         if (this.subscriptions.account) {
-            this.fungibleTokens = mapSubscription(
+            this.trustedFungibleTokens = mapSubscription(
                 mergeSubscription<[string, FungibleToken<ChainId, SchemaType>[], Record<string, string[]>]>(
                     this.subscriptions.account,
                     this.storage.fungibleTokens.subscription,
@@ -47,13 +49,29 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
                 ),
                 ([account, tokens, blockedBy]) => tokens.filter((x) => !blockedBy[account]?.includes(x.address)),
             )
-            this.nonFungibleTokens = mapSubscription(
+            this.trustedNonFungibleTokens = mapSubscription(
                 mergeSubscription<[string, NonFungibleToken<ChainId, SchemaType>[], Record<string, string[]>]>(
                     this.subscriptions.account,
                     this.storage.nonFungibleTokens.subscription,
                     this.storage.nonFungibleTokenBlockedBy.subscription,
                 ),
                 ([account, tokens, blockedBy]) => tokens.filter((x) => !blockedBy[account]?.includes(x.address)),
+            )
+            this.blockedFungibleTokens = mapSubscription(
+                mergeSubscription<[string, FungibleToken<ChainId, SchemaType>[], Record<string, string[]>]>(
+                    this.subscriptions.account,
+                    this.storage.fungibleTokens.subscription,
+                    this.storage.fungibleTokenBlockedBy.subscription,
+                ),
+                ([account, tokens, blockedBy]) => tokens.filter((x) => blockedBy[account]?.includes(x.address)),
+            )
+            this.blockedNonFungibleTokens = mapSubscription(
+                mergeSubscription<[string, NonFungibleToken<ChainId, SchemaType>[], Record<string, string[]>]>(
+                    this.subscriptions.account,
+                    this.storage.nonFungibleTokens.subscription,
+                    this.storage.nonFungibleTokenBlockedBy.subscription,
+                ),
+                ([account, tokens, blockedBy]) => tokens.filter((x) => blockedBy[account]?.includes(x.address)),
             )
         }
     }

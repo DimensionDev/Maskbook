@@ -671,10 +671,14 @@ export interface GasOptionsState<ChainId> {
     getGasOptions?: (chainId: ChainId, currencyType?: CurrencyType) => Promise<GasOptions>
 }
 export interface TokenState<ChainId, SchemaType> {
-    /** The user added fungible tokens. */
-    fungibleTokens?: Subscription<FungibleToken<ChainId, SchemaType>[]>
-    /** The user added non-fungible tokens. */
-    nonFungibleTokens?: Subscription<NonFungibleToken<ChainId, SchemaType>[]>
+    /** The user trusted fungible tokens. */
+    trustedFungibleTokens?: Subscription<FungibleToken<ChainId, SchemaType>[]>
+    /** The user trusted non-fungible tokens. */
+    trustedNonFungibleTokens?: Subscription<NonFungibleToken<ChainId, SchemaType>[]>
+    /** The user blocked fungible tokens. */
+    blockedFungibleTokens?: Subscription<FungibleToken<ChainId, SchemaType>[]>
+    /** The user blocked non-fungible tokens. */
+    blockedNonFungibleTokens?: Subscription<NonFungibleToken<ChainId, SchemaType>[]>
 
     /** Add a token */
     addToken?: (token: Token<ChainId, SchemaType>) => Promise<void>
