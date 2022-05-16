@@ -18,10 +18,10 @@ import WarningIcon from '@mui/icons-material/Warning'
 import InfoIcon from '@mui/icons-material/Info'
 import DoneIcon from '@mui/icons-material/Done'
 import { LoadingIcon, RiskIcon } from '@masknet/icons'
-import { makeStyles } from '../../UIHelper/makeStyles'
-import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
+import { makeStyles, useStylesExtends } from '../../UIHelper'
 import { MaskColorVar } from '../../CSSVariables'
 
+export { PopupSnackbarProvider, usePopupCustomSnackbar } from './PopupSnackbar'
 export { SnackbarProvider, useSnackbar } from 'notistack'
 export type { VariantType, OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack'
 
@@ -104,7 +104,7 @@ to {
     return {
         root: {
             zIndex: 9999,
-            transform: typeof offsetY !== undefined ? `translateY(${offsetY}px)` : 'none',
+            transform: typeof offsetY !== 'undefined' ? `translateY(${offsetY}px)` : 'none',
             color: MaskColorVar.textLight,
             pointerEvents: 'inherit',
         },
@@ -216,7 +216,7 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
 
 export const CustomSnackbarProvider = memo<SnackbarProviderProps & { offsetY?: number }>(({ offsetY, ...rest }) => {
     const ref = useRef<SnackbarProvider>(null)
-    const { classes } = useStyles({ offsetY: offsetY })
+    const { classes } = useStyles({ offsetY })
     const onDismiss = (key: string | number) => () => {
         ref.current?.closeSnackbar(key)
     }

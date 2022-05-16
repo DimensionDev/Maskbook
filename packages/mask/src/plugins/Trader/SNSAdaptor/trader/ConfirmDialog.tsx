@@ -1,31 +1,56 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ExternalLink } from 'react-feather'
-import BigNumber from 'bignumber.js'
-import { Alert, Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
-import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
+import { CramIcon, InfoIcon, RetweetIcon } from '@masknet/icons'
+import { FormattedAddress, FormattedBalance, InjectedDialog, TokenIcon } from '@masknet/shared'
+import { isDashboardPage } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
+<<<<<<< HEAD
 import { InjectedDialog, FormattedAddress, FormattedBalance, TokenIcon } from '@masknet/shared'
 import type { TradeComputed } from '../../types'
 import type { ChainId, SchemaType, Wallet } from '@masknet/web3-shared-evm'
+=======
+import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
+import { isZero, multipliedBy } from '@masknet/web3-shared-base'
+>>>>>>> develop
 import {
     createNativeToken,
     formatBalance,
     formatEthereumAddress,
     formatPercentage,
+    formatUSD,
     formatWeiToEther,
+<<<<<<< HEAD
     explorerResolver,
+=======
+    FungibleTokenDetailed,
+    resolveAddressLinkOnExplorer,
+    Wallet,
+>>>>>>> develop
 } from '@masknet/web3-shared-evm'
+import { Alert, Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
+import BigNumber from 'bignumber.js'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { ExternalLink } from 'react-feather'
+import { useUpdateEffect } from 'react-use'
 import { useI18N } from '../../../../utils'
+<<<<<<< HEAD
 import { InfoIcon, RetweetIcon, CramIcon } from '@masknet/icons'
 import { FungibleToken, isZero, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import { isDashboardPage } from '@masknet/shared-base'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { currentSlippageSettings } from '../../settings'
 import { useUpdateEffect } from 'react-use'
+=======
+import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
+>>>>>>> develop
 import { ONE_BIPS } from '../../constants'
-import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
+import { currentSlippageSettings } from '../../settings'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+<<<<<<< HEAD
 import { useNativeTokenPrice } from '@masknet/plugin-infra/web3'
+=======
+import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import type { TradeComputed } from '../../types'
+import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
+>>>>>>> develop
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     section: {
@@ -156,10 +181,10 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
         return gas && gasPrice ? multipliedBy(gasPrice, gas).integerValue().toFixed() : '0'
     }, [gas, gasPrice])
 
-    const feeValueUSD = useMemo(
-        () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2)) : '0'),
-        [gasFee, tokenPrice],
-    )
+    const feeValueUSD = useMemo(() => {
+        if (!gasFee) return '0'
+        return formatUSD(formatWeiToEther(gasFee).times(tokenPrice))
+    }, [gasFee, tokenPrice])
     // #endregion
 
     const staled = !!(executionPrice && !executionPrice.isEqualTo(cacheTrade?.executionPrice ?? 0))
@@ -354,7 +379,9 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                     formatter={formatBalance}
                                 />
                                 <Typography component="span">
-                                    {t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
+                                    {feeValueUSD === '<$0.01'
+                                        ? t('plugin_trader_tx_cost_very_small', { usd: feeValueUSD })
+                                        : t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
                                 </Typography>
                             </Typography>
                         </Box>

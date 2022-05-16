@@ -2,14 +2,18 @@ import { memo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { Button, styled, Tab, tabClasses, Tabs, tabsClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { NetworkSelector } from '../../../components/NetworkSelector'
 import { TabContext, TabPanel } from '@mui/lab'
 import { File as FileIcon } from '@masknet/icons'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
-import Services from '../../../../service'
 import { useWallet } from '@masknet/plugin-infra/web3'
+import { WalletContext } from '../hooks/useWalletContext'
+import { useTitle } from '../../../hook/useTitle'
+import formatDateTime from 'date-fns/format'
+import { saveFileFromBuffer } from '../../../../../../shared'
+import { encodeText } from '@dimensiondev/kit'
+import { MimeTypes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     header: {
@@ -95,7 +99,7 @@ const StyledTab = styled(Tab)`
         min-width: 165px;
         padding: 7px 0;
         background-color: #f7f9fa;
-        border-radius: 4px 4px 0px 0px;
+        border-radius: 4px 4px 0 0;
         color: #15181b;
     }
     &.${tabClasses.selected} {
@@ -112,7 +116,10 @@ enum BackupTabs {
 const BackupWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const wallet = useWallet()
+    const { selectedWallet } = WalletContext.useContainer()
+    const currentWallet = useWallet()
+    const wallet = selectedWallet ?? currentWallet
+
     const [currentTab, setCurrentTab] = useState(BackupTabs.JsonFile)
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
@@ -137,9 +144,14 @@ const BackupWallet = memo(() => {
         privateKey: '',
     }
 
-    const [{ value: downloadValue }, onExport] = useAsyncFn(async () => {
+    const [, onExport] = useAsyncFn(async () => {
         try {
-            await Services.Welcome.downloadBackup(jsonFile, 'json')
+            const now = formatDateTime(Date.now(), 'yyyy-MM-dd')
+            await saveFileFromBuffer({
+                fileContent: encodeText(JSON.stringify(jsonFile)),
+                fileName: `mask-network-keystore-backup-${now}.json`,
+                mimeType: MimeTypes.JSON,
+            })
             return true
         } catch (error) {
             if (error instanceof Error) {
@@ -149,12 +161,10 @@ const BackupWallet = memo(() => {
         }
     }, [jsonFile])
 
+    useTitle(t('popups_back_up_the_wallet'))
+
     return (
         <>
-            <div className={classes.header}>
-                <Typography className={classes.title}>{t('popups_wallet_backup_wallet')}</Typography>
-                <NetworkSelector />
-            </div>
             <div className={classes.content}>
                 <TabContext value={currentTab}>
                     <StyledTabs value={currentTab} onChange={(event, tab) => setCurrentTab(tab)}>
@@ -165,7 +175,7 @@ const BackupWallet = memo(() => {
                         <TabPanel
                             value={BackupTabs.JsonFile}
                             className={classes.tabPanel}
-                            style={{ flex: currentTab === BackupTabs.JsonFile ? '1' : '0' }}>
+                            style={{ flex: currentTab === BackupTabs.JsonFile ? 1 : 0 }}>
                             <div className={classes.placeholder}>
                                 <FileIcon style={{ fontSize: 32, width: 32, height: 32 }} />
                             </div>
@@ -178,7 +188,7 @@ const BackupWallet = memo(() => {
                         <TabPanel
                             value={BackupTabs.PrivateKey}
                             className={classes.tabPanel}
-                            style={{ flex: currentTab === BackupTabs.PrivateKey ? '1' : '0' }}>
+                            style={{ flex: currentTab === BackupTabs.PrivateKey ? 1 : 0 }}>
                             <Typography className={classes.privateKey}>{privateKey ?? ''}</Typography>
                             <Typography className={classes.tip}>{t('popups_wallet_backup_private_key_tip')}</Typography>
                         </TabPanel>

@@ -88,7 +88,6 @@ export function VotingCard() {
                 offChain>
                 <Button
                     className={classes.button}
-                    variant="contained"
                     disabled={choice === 0 || !account || !power}
                     onClick={() => setOpen(true)}>
                     {Boolean(power) && Boolean(account) ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}

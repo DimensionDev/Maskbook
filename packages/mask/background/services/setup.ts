@@ -1,6 +1,8 @@
 // Notice, this module itself is not HMR ready.
 // If you change this file to add a new service, you need to reload.
 // This file should not rely on any other in-project files unless it is HMR ready.
+/// <reference path="../env.d.ts" />
+
 import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { assertEnvironment, Environment, MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { getLocalImplementation, serializer } from '@masknet/shared-base'
@@ -12,11 +14,29 @@ const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services
 const hmr = new EventTarget()
 
 // #region Setup services
-setup('Crypto', () => import('./crypto'))
-import.meta.webpackHot && import.meta.webpackHot.accept(['./crypto'], () => hmr.dispatchEvent(new Event('crypto')))
+setup('Crypto', () => import(/* webpackPreload: true */ './crypto'))
+setup('Identity', () => import(/* webpackPreload: true */ './identity'))
+setup('Backup', () => import(/* webpackPreload: true */ './backup'))
+setup('Helper', () => import(/* webpackPreload: true */ './helper'))
+setup('SocialNetwork', () =>
+    Promise.resolve({
+        // TODO: migration in process
+        getDefinedSocialNetworkUIs() {
+            return [{ networkIdentifier: 'twitter.com' }]
+        },
+        setupSocialNetwork() {},
+    }),
+)
+setup('Settings', () => import(/* webpackPreload: true */ './settings'))
+setup('ThirdPartyPlugin', () => Promise.resolve({}))
 
-setup('Helper', () => import('./helper'))
-import.meta.webpackHot && import.meta.webpackHot.accept(['./helper'], () => hmr.dispatchEvent(new Event('helper')))
+if (import.meta.webpackHot) {
+    import.meta.webpackHot.accept(['./crypto'], () => hmr.dispatchEvent(new Event('crypto')))
+    import.meta.webpackHot.accept(['./identity'], () => hmr.dispatchEvent(new Event('identity')))
+    import.meta.webpackHot.accept(['./backup'], () => hmr.dispatchEvent(new Event('backup')))
+    import.meta.webpackHot.accept(['./helper'], () => hmr.dispatchEvent(new Event('helper')))
+    import.meta.webpackHot.accept(['./settings'], () => hmr.dispatchEvent(new Event('settings')))
+}
 
 function setup<K extends keyof Services>(key: K, implementation: () => Promise<Services[K]>) {
     const channel = message.events[key].bind(MessageTarget.Broadcast)
@@ -28,23 +48,25 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
         }
         return val
     }
-    load()
-
     if (import.meta.webpackHot) hmr.addEventListener(key, load)
 
     // setup server
-    AsyncCall(load, {
+    AsyncCall(load(), {
         key,
         serializer,
         channel,
         log: {
-            beCalled: false,
+            beCalled: true,
             remoteError: false,
             type: 'pretty',
             requestReplay: debugMode,
         },
         preferLocalImplementation: true,
-        strict: true,
+        strict: {
+            // temporally
+            methodNotFound: false,
+            unknownMessage: true,
+        },
         thenable: false,
     })
 }

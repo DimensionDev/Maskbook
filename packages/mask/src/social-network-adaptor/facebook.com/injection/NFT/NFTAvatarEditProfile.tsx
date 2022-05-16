@@ -34,12 +34,13 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
 }))
 
+export function openNFTAvatarSettingDialog() {
+    const editDom = searchFacebookEditProfileSelector().evaluate()
+    editDom?.click()
+}
+
 function OpenNFTAvatarEditProfileButtonInFaceBook() {
     const [style, setStyle] = useState<StyleProps>({ minHeight: 36, fontSize: 15, marginTop: 6 })
-    const onClick = () => {
-        const editDom = searchFacebookEditProfileSelector().evaluate()
-        editDom?.click()
-    }
 
     const setStyleWithSelector = () => {
         const editDom = searchFacebookProfileSettingButtonSelector().evaluate()
@@ -72,5 +73,5 @@ function OpenNFTAvatarEditProfileButtonInFaceBook() {
     const { classes } = useStyles(style)
 
     return null
-    // return <NFTAvatarButton classes={classes} onClick={onClick} showSetting={false} />
+    // return <NFTAvatarButton classes={classes} onClick={openNFTAvatarSettingDialog} showSetting={false} />
 }

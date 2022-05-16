@@ -1,39 +1,39 @@
 import { memo, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
-import { toHex } from 'web3-utils'
-import BigNumber from 'bignumber.js'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
-import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
-import {
-    chainResolver,
-    formatBalance,
-    formatCurrency,
-    formatGweiToWei,
-    formatWeiToEther,
-    networkResolver,
-} from '@masknet/web3-shared-evm'
-import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
-import { LoadingButton } from '@mui/lab'
-import { Link, Typography } from '@mui/material'
-import { PopupRoutes } from '@masknet/shared-base'
-import { isGreaterThan, leftShift, pow10, NetworkPluginID, TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { unreachable } from '@dimensiondev/kit'
-import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
-import {
-    useChainId,
-    useFungibleToken,
-    useFungibleTokenPrice,
-    useNativeToken,
-    useNativeTokenPrice,
-    useNetworkType,
-    useReverseAddress,
-    useWeb3State,
-} from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../../../utils'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
-import { CopyIconButton } from '../../../components/CopyIconButton'
+// import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
+// import {
+//     EthereumRpcType,
+//     EthereumTokenType,
+//     formatBalance,
+//     formatCurrency,
+//     formatGweiToWei,
+//     formatWeiToEther,
+//     getChainIdFromNetworkType,
+//     isEIP1559Supported,
+//     useChainId,
+//     useERC20TokenDetailed,
+//     useEthereumTokenType,
+//     useNativeTokenDetailed,
+//     useNetworkType,
+// } from '@masknet/web3-shared-evm'
+// import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
+// import { Link, Typography } from '@mui/material'
+// import { useI18N } from '../../../../../utils'
+// import { PopupRoutes } from '@masknet/shared-base'
+// import { LoadingButton } from '@mui/lab'
+// import { unreachable } from '@dimensiondev/kit'
+// import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+// import Services from '../../../../service'
+// import BigNumber from 'bignumber.js'
+// import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
+// import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
+// import { toHex } from 'web3-utils'
+// import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+// import { isGreaterThan, leftShift, pow10, ZERO } from '@masknet/web3-shared-base'
+// import { CopyIconButton } from '../../../components/CopyIconButton'
+// import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -86,14 +86,14 @@ const useStyles = makeStyles()(() => ({
         color: '#FF5F5F',
         fontSize: 12,
         lineHeight: '16px',
-        padding: '0px 16px 20px 16px',
+        padding: '0 16px 20px 16px',
         wordBreak: 'break-all',
     },
     controller: {
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
         gap: 20,
-        padding: '0px 16px 16px 16px',
+        padding: '0 16px 16px 16px',
     },
     button: {
         fontWeight: 600,
@@ -136,7 +136,7 @@ const useStyles = makeStyles()(() => ({
     },
     copy: {
         fontSize: 12,
-        stroke: '#7B8192',
+        fill: '#7B8192',
         cursor: 'pointer',
     },
 }))
@@ -147,8 +147,8 @@ const ContractInteraction = memo(() => {
     // const { classes } = useStyles()
     // const location = useLocation()
     // const navigate = useNavigate()
-    // const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    // const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    // const chainId = useChainId()
+    // const networkType = useNetworkType()
     // const [transferError, setTransferError] = useState(false)
     // const { value: request, loading: requestLoading } = useUnconfirmedRequest()
 
@@ -162,12 +162,13 @@ const ContractInteraction = memo(() => {
     //     maxPriorityFeePerGas,
     //     amount,
     //     isNativeTokenInteraction,
+    //     contractAddress,
     // } = useMemo(() => {
     //     const type = request?.computedPayload?.type
     //     if (!type) return {}
 
     //     switch (type) {
-    //         case TransactionDescriptorType.INTERACTION:
+    //         case EthereumRpcType.CONTRACT_INTERACTION:
     //             switch (request.computedPayload.name) {
     //                 case 'approve':
     //                     return {
@@ -193,6 +194,7 @@ const ContractInteraction = memo(() => {
     //                         maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
     //                         maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
     //                         amount: request.computedPayload.parameters?.value,
+    //                         contractAddress: request.computedPayload._tx.to,
     //                     }
     //                 default:
     //                     return {
@@ -207,7 +209,7 @@ const ContractInteraction = memo(() => {
     //                         amount: request.computedPayload._tx.value,
     //                     }
     //             }
-    //         case TransactionDescriptorType.TRANSFER:
+    //         case EthereumRpcType.SEND_ETHER:
     //             return {
     //                 isNativeTokenInteraction: true,
     //                 typeName: t('wallet_transfer_send'),
@@ -219,22 +221,30 @@ const ContractInteraction = memo(() => {
     //                 maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
     //                 amount: request.computedPayload._tx.value,
     //             }
-    //         case TransactionDescriptorType.DEPLOYMENT:
-    //         case TransactionDescriptorType.CANCEL:
-    //         case TransactionDescriptorType.RETRY:
+    //         case EthereumRpcType.CONTRACT_DEPLOYMENT:
+    //         case EthereumRpcType.ETH_DECRYPT:
+    //         case EthereumRpcType.ETH_GET_ENCRYPTION_PUBLIC_KEY:
+    //         case EthereumRpcType.WATCH_ASSET:
+    //         case EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN:
+    //         case EthereumRpcType.CANCEL:
+    //         case EthereumRpcType.RETRY:
+    //         case EthereumRpcType.SIGN:
+    //         case EthereumRpcType.SIGN_TYPED_DATA:
     //             throw new Error('To be implemented.')
     //         default:
     //             unreachable(type)
     //     }
     // }, [request, t])
 
+    // const contractType = useEthereumTokenType(contractAddress)
+
     // // token detailed
-    // const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    // const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, isNativeTokenInteraction ? '' : tokenAddress)
+    // const { value: nativeToken } = useNativeTokenDetailed()
+    // const { value: token } = useERC20TokenDetailed(isNativeTokenInteraction ? '' : tokenAddress)
 
     // // gas price
     // const { value: defaultPrices } = useAsync(async () => {
-    //     if (chainResolver.isSupport(chainId, 'EIP1559') && !maxFeePerGas && !maxPriorityFeePerGas) {
+    //     if (isEIP1559Supported(chainId) && !maxFeePerGas && !maxPriorityFeePerGas) {
     //         const response = await WalletRPC.getEstimateGasFees(chainId)
     //         // Gwei to wei
     //         return {
@@ -254,27 +264,27 @@ const ContractInteraction = memo(() => {
 
     // // handlers
     // const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-    //     try {
-    //         await EVM_RPC.confirmRequest()
-    //         navigate(-1)
-    //     } catch (error_) {
-    //         setTransferError(true)
+    //     if (request) {
+    //         try {
+    //             await Services.Ethereum.confirmRequest(request.payload)
+    //             navigate(-1)
+    //         } catch (error_) {
+    //             setTransferError(true)
+    //         }
     //     }
+    //     return
     // }, [request, location.search, history])
 
     // const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-    //     await EVM_RPC.rejectRequest()
+    //     if (!request) return
+    //     await Services.Ethereum.rejectRequest(request.payload)
     //     navigate(PopupRoutes.Wallet, { replace: true })
-    // }, [])
+    // }, [request])
 
     // // Wei
     // const gasPriceEIP1559 = new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0, 16)
     // const gasPricePriorEIP1559 = new BigNumber((gasPrice as string) ?? defaultPrices?.gasPrice ?? 0)
-    // const gasFee = (
-    //     chainResolver.isSupport(networkResolver.networkChainId(networkType), 'EIP1559')
-    //         ? gasPriceEIP1559
-    //         : gasPricePriorEIP1559
-    // )
+    // const gasFee = (isEIP1559Supported(getChainIdFromNetworkType(networkType)) ? gasPriceEIP1559 : gasPricePriorEIP1559)
     //     .multipliedBy(gas ?? 0)
     //     .integerValue()
     //     .toFixed()
@@ -284,21 +294,31 @@ const ContractInteraction = memo(() => {
     // const tokenDecimals = isNativeTokenInteraction ? nativeToken?.decimals : token?.decimals
 
     // // token estimated value
-    // const { value: tokenPrice = 0 } = useFungibleTokenPrice(
-    //     NetworkPluginID.PLUGIN_EVM,
-    //     !isNativeTokenInteraction ? token?.address : undefined,
-    //     {
-    //         chainId,
-    //     },
-    // )
-    // const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
-    //     chainId: nativeToken?.chainId,
-    // })
-    // const tokenValueUSD = leftShift(tokenAmount, tokenDecimals)
-    //     .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
-    //     .toString()
+    // const tokenPrice = useTokenPrice(chainId, !isNativeTokenInteraction ? token?.address : undefined)
+    // const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
+    // const tokenValueUSD =
+    //     contractType && [EthereumTokenType.ERC721, EthereumTokenType.ERC1155].includes(contractType)
+    //         ? ZERO
+    //         : leftShift(tokenAmount, tokenDecimals)
+    //               .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
+    //               .toString()
 
     // const totalUSD = new BigNumber(formatWeiToEther(gasFee)).times(nativeTokenPrice).plus(tokenValueUSD).toString()
+    // //
+    // console.log('DEBUG: ContractInteraction')
+    // console.log({
+    //     amount,
+    //     gasFee,
+    //     gas,
+    //     maxPriorityFeePerGas: maxPriorityFeePerGas ?? defaultPrices?.maxPriorityFeePerGas,
+    //     maxFeePerGas: maxFeePerGas ?? defaultPrices?.maxFeePerGas,
+    //     defaultPrice: (gasPrice as string) ?? defaultPrices?.gasPrice,
+    //     request,
+    //     tokenPrice,
+    //     tokenAmount,
+    //     tokenDecimals,
+    //     nativeTokenPrice,
+    // })
 
     // useUpdateEffect(() => {
     //     if (!request && !requestLoading) {
@@ -306,8 +326,10 @@ const ContractInteraction = memo(() => {
     //     }
     // }, [request, requestLoading])
 
+    // useTitle(typeName ?? t('popups_wallet_contract_interaction'))
+
     // const { value: domain } = useReverseAddress(to, NetworkPluginID.PLUGIN_EVM)
-    // const { Others } = useWeb3State()
+    // const { Utils } = useWeb3State()
     // return requestLoading ? (
     //     <LoadingPlaceholder />
     // ) : (
@@ -315,12 +337,12 @@ const ContractInteraction = memo(() => {
     //         <main className={classes.container}>
     //             <div className={classes.info}>
     //                 <Typography className={classes.title}>{typeName}</Typography>
-    //                 {domain && Others?.formatDomainName ? (
-    //                     <Typography className={classes.domain}>{Others?.formatDomainName(domain)}</Typography>
+    //                 {domain && Utils?.formatDomainName ? (
+    //                     <Typography className={classes.domain}>{Utils?.formatDomainName(domain)}</Typography>
     //                 ) : null}
     //                 <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
     //                     {to}
-    //                     {request?.computedPayload?.type === TransactionDescriptorType.INTERACTION &&
+    //                     {request?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
     //                     request.computedPayload.name === 'approve' &&
     //                     to ? (
     //                         <CopyIconButton text={to} className={classes.copy} />

@@ -1,7 +1,6 @@
 import { startPluginWorker, Plugin } from '@masknet/plugin-infra/background-worker'
-import { createPluginDatabase } from '../../../database/Plugin'
+import { createPluginDatabase } from '../../../../background/database/plugin-db'
 import { createPluginHost, createSharedContext } from '../../../plugin-infra/host'
-
 export default function (signal: AbortSignal) {
     startPluginWorker(createPluginHost(signal, createWorkerContext))
 }

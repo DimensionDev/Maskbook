@@ -96,6 +96,7 @@ export interface PluginProviderRenderProps {
     providers: Web3Helper.ProviderDescriptorAll[]
     undeterminedPluginID?: NetworkPluginID
     undeterminedNetworkID?: string
+<<<<<<< HEAD
     onNetworkIconClicked: (network: Web3Helper.NetworkDescriptorAll) => void
     onProviderIconClicked: (
         network: Web3Helper.NetworkDescriptorAll,
@@ -115,6 +116,13 @@ export interface PluginProviderRenderProps {
             Web3Helper.Definition[NetworkPluginID]['NetworkType']
         >
     >
+=======
+    setUndeterminedPluginID: (id: NetworkPluginID) => void
+    setUndeterminedNetworkID: (id: string) => void
+    NetworkIconClickBait?: React.ComponentType<Web3Plugin.UI.NetworkIconClickBaitProps>
+    ProviderIconClickBait?: React.ComponentType<Web3Plugin.UI.ProviderIconClickBaitProps>
+    onSubmit: (result?: Web3Plugin.ConnectionResult) => Promise<void>
+>>>>>>> develop
 }
 
 export function PluginProviderRender({
@@ -129,11 +137,14 @@ export function PluginProviderRender({
 }: PluginProviderRenderProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
+<<<<<<< HEAD
 
     const selectedNetwork = useMemo(() => {
         return networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
     }, [undeterminedNetworkID, networks.map((x) => x.ID).join()])
 
+=======
+>>>>>>> develop
     return (
         <>
             <Box className={classes.root}>
@@ -176,6 +187,7 @@ export function PluginProviderRender({
                     <List className={classes.wallets}>
                         {providers
                             .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)
+<<<<<<< HEAD
                             .filter((y) => y.enableRequirements?.supportedChainIds?.includes(selectedNetwork.chainId))
                             .filter((z) => {
                                 const siteType = getSiteType()
@@ -197,6 +209,20 @@ export function PluginProviderRender({
                                             key={provider.ID}
                                             network={selectedNetwork}
                                             provider={provider}>
+=======
+                            .map((provider) =>
+                                ProviderIconClickBait ? (
+                                    <ProviderIconClickBait
+                                        key={provider.ID}
+                                        network={
+                                            networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
+                                        }
+                                        provider={provider}
+                                        onSubmit={(network, provider, result) => {
+                                            onSubmit(result)
+                                        }}>
+                                        <ListItem className={classes.walletItem} key={provider.ID}>
+>>>>>>> develop
                                             <ProviderIcon
                                                 className={classes.providerIcon}
                                                 icon={provider.icon}

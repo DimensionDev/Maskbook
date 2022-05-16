@@ -86,7 +86,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     searchWrapper: {
         display: 'flex',
         justifyContent: 'space-between',
-        padding: '0',
+        padding: 0,
     },
     searchWrapperSingle: {
         display: 'flex',
@@ -207,7 +207,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         color: '#1C68F3',
     },
     loadingFailImage: {
-        minHeight: '0px !important',
+        minHeight: '0 !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
         width: 64,

@@ -9,7 +9,7 @@ import { NftRedPacketHistoryList } from './NftRedPacketHistoryList'
 import type { NftRedPacketHistory, RedPacketJSONPayload } from '../types'
 import { RedPacketNftMetaKey } from '../constants'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
 
 enum RpTypeTabs {
@@ -64,7 +64,10 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const currentIdentity = useCurrentIdentity()
-    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
+
+    const { value: linkedPersona } = useCurrentLinkedPersona()
+
+    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
     const { attachMetadata } = useCompositionContext()
     const handleSendNftRedpacket = useCallback(
         (history: NftRedPacketHistory, contractDetailed: ERC721ContractDetailed) => {
@@ -72,8 +75,8 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
             attachMetadata(RedPacketNftMetaKey, {
                 id: rpid,
                 txid,
-                duration: duration,
-                message: message,
+                duration,
+                message,
                 senderName,
                 contractName: contractDetailed.name,
                 contractAddress: contractDetailed.address,

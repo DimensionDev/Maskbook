@@ -6,12 +6,11 @@ import { LoadingButton } from '@mui/lab'
 import DoneIcon from '@mui/icons-material/Done'
 import { useI18N } from '../locales'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
-import type { Persona } from '../../../database'
 import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { formatPersonaFingerprint } from '@masknet/shared-base'
+import { formatPersonaFingerprint, PersonaInformation } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     persona: {
@@ -67,7 +66,7 @@ const useStyles = makeStyles()((theme) => ({
 interface BindPanelUIProps {
     title: string
     open: boolean
-    currentPersona: Persona
+    currentPersona: PersonaInformation
     signature: {
         persona: {
             value?: string
@@ -117,7 +116,7 @@ export const UnbindPanelUI = memo<BindPanelUIProps>(
                                 <div>
                                     <Typography className={classes.name}>{currentPersona?.nickname}</Typography>
                                     <Typography className={classes.identifier}>
-                                        {formatPersonaFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
+                                        {formatPersonaFingerprint(currentPersona?.identifier.rawPublicKey ?? '', 10)}
                                     </Typography>
                                 </div>
                             </Stack>

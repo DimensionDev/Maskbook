@@ -114,7 +114,7 @@ export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] > div')
 export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="banner"] [role="navigation"] [aria-label="Lists"] > div')
+    querySelector<E>('[role="banner"] [role="navigation"] [aria-label="Profile"] > div')
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div [role="button"][aria-label]:nth-child(6)')
 
@@ -216,6 +216,7 @@ export const postsContentSelector = () =>
 
 export const postAvatarsContentSelector = () =>
     querySelectorAll('[data-testid="tweet"] > div > div > div > :nth-child(2)')
+
 const base = querySelector<HTMLScriptElement>('#react-root + script')
 const handle = /"screen_name":"(.*?)"/
 const name = /"name":"(.*?)"/
@@ -234,6 +235,36 @@ export const selfInfoSelectors = () => ({
     bio: p(bio, 1),
     userAvatar: p(avatar, 1),
 })
+
+// #region self info
+export const searchSelfHandleSelector = () => {
+    return querySelector<HTMLSpanElement>(
+        [
+            '[data-testid="SideNav_AccountSwitcher_Button"] [dir="ltr"] span', // desktop
+            '#layers [role="group"] [role="dialog"] [role="link"] [dir="ltr"] span', // sidebar opened in mobile
+        ].join(),
+    )
+}
+
+export const searchSelfNicknameSelector = () => {
+    return querySelector<HTMLSpanElement>(
+        [
+            '[data-testid="SideNav_AccountSwitcher_Button"] [dir="auto"] span span', // desktop
+            '#layers [role="group"] [role="dialog"] [role="link"] span span', // sidebar opened in mobile
+        ].join(),
+    )
+}
+
+export const searchSelfAvatarSelector = () => {
+    return querySelector<HTMLImageElement>(
+        [
+            '#layers ~ div [role="banner"] [role="button"] img', // desktop
+            '[data-testid="DashButton_ProfileIcon_Link"] [role="presentation"] img', // topbar in mobile
+            '#layers [role="group"] [role="dialog"] [role="link"] img', // sidebar opened in mobile
+        ].join(),
+    )
+}
+// #endregion
 
 // #region twitter nft avatar
 export const searchProfileAvatarSelector = () => {

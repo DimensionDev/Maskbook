@@ -103,7 +103,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             borderRadius: isDashboard ? 8 : 24,
             height: 'auto',
             padding: '13px 0',
-            marginTop: '0px !important',
+            marginTop: '0 !important',
         },
         disabledButton: {
             fontSize: 18,

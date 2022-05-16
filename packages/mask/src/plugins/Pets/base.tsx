@@ -15,7 +15,17 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-in', networks: { [CurrentSNSNetwork.Twitter]: true } },
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {
-                supportedChainIds: [ChainId.Mainnet],
+                supportedChainIds: [
+                    ChainId.Mainnet,
+                    ChainId.BSC,
+                    ChainId.Matic,
+                    ChainId.Arbitrum,
+                    ChainId.xDai,
+                    ChainId.Fantom,
+                    ChainId.Avalanche,
+                    ChainId.Aurora,
+                    ChainId.Conflux,
+                ],
             },
         },
         target: 'stable',

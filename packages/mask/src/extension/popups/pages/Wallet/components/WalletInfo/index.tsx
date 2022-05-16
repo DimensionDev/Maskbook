@@ -46,7 +46,7 @@ const useStyles = makeStyles()({
     },
     copy: {
         fontSize: 12,
-        stroke: '#1C68F3',
+        fill: '#1C68F3',
         marginLeft: 4,
         cursor: 'pointer',
     },
@@ -109,16 +109,15 @@ export const WalletInfoUI = memo<WalletInfoUIProps>(
                         <MaskWalletIcon />
                     </div>
                     <div>
-                        {name && (
-                            <Box display="flex" justifyContent="space-between" alignItems="center">
-                                <Typography className={classes.name}>
-                                    {name} <EditIcon onClick={onEditClick} className={classes.edit} />
-                                </Typography>
-                                {domain && formatDomainName ? (
-                                    <Typography className={classes.name}>{formatDomainName(domain)}</Typography>
-                                ) : null}
-                            </Box>
-                        )}
+                        <Box display="flex" justifyContent="space-between" alignItems="center">
+                            <Typography className={classes.name}>
+                                {name} <EditIcon onClick={onEditClick} className={classes.edit} />
+                            </Typography>
+                            {domain && formatDomainName ? (
+                                <Typography className={classes.name}>{formatDomainName(domain)}</Typography>
+                            ) : null}
+                        </Box>
+
                         <Typography className={classes.address}>
                             <FormattedAddress address={address} size={16} formatter={formatEthereumAddress} />
                             <CopyIconButton text={address ?? ''} className={classes.copy} />

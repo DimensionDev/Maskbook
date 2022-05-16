@@ -53,6 +53,21 @@ export function getPayloadChainId(payload: JsonRpcPayload) {
     return typeof config?.chainId === 'string' ? Number.parseInt(config.chainId, 16) || undefined : undefined
 }
 
+export function getPayloadAccount(payload: JsonRpcPayload): string | undefined {
+    switch (payload.method) {
+        case EthereumMethodType.ETH_SIGN:
+            return first(payload.params)
+        case EthereumMethodType.PERSONAL_SIGN:
+            return payload.params?.[1]
+        case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+            return first(payload.params)
+        case EthereumMethodType.ETH_SEND_TRANSACTION:
+            return getPayloadConfig(payload)?.from as string | undefined
+        default:
+            return
+    }
+}
+
 export function getPayloadConfig(payload: JsonRpcPayload) {
     switch (payload.method) {
         case EthereumMethodType.ETH_CALL:

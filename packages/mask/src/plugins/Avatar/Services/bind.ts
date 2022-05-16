@@ -89,7 +89,6 @@ export async function setUserAddress(
         await NFTAvatarDBStorage(network).set(userId, {
             [getKey(networkPluginId, chainId)]: address,
         })
-
         await NFTAvatarDB(network).set(userId, {
             networkPluginId: networkPluginId ?? NetworkPluginID.PLUGIN_EVM,
             chainId: chainId ?? ChainId.Mainnet,
@@ -97,9 +96,8 @@ export async function setUserAddress(
         })
     } catch {
         // do nothing
-    } finally {
-        const _address = await getUserAddress(userId, network, networkPluginId, chainId)
-        if (!isSameAddress(_address, address))
-            throw new Error('Network issues, please make sure you are connected to the appropriate internet.')
     }
+    const userAddress = await getUserAddress(userId, network, networkPluginId, chainId)
+    if (isSameAddress(userAddress, address)) return
+    throw new Error('Network issues, please make sure you are connected to the appropriate internet.')
 }

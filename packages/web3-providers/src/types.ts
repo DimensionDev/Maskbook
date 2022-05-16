@@ -2,7 +2,7 @@ import type { Result } from 'ts-results'
 import type RSS3 from 'rss3-next'
 import type { Transaction as Web3Transaction } from 'web3-core'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
-import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
+import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform, NextIDStorageInfo } from '@masknet/shared-base'
 import type {
     Transaction,
     FungibleAsset,
@@ -206,13 +206,15 @@ export namespace NextIDBaseAPI {
             identity: string,
             createdAt: string,
             patchData: unknown,
+            pluginId: string,
         ): Promise<Result<T, string>>
-        get<T>(key: string): Promise<Result<T, string>>
+        get(key: string): Promise<Result<NextIDStorageInfo, string>>
         getPayload(
             personaPublicKey: string,
             platform: NextIDPlatform,
             identity: string,
             patchData: unknown,
+            pluginId: string,
         ): Promise<Result<NextIDStoragePayload, string>>
     }
     export interface Proof {
@@ -348,7 +350,13 @@ export namespace TwitterBaseAPI {
             }[]
         }
     }
+
+    export interface Settings {
+        screen_name: string
+    }
+
     export interface Provider {
+        getSettings: () => Promise<Settings | undefined>
         getUserNftContainer: (screenName: string) => Promise<
             | {
                   address: string

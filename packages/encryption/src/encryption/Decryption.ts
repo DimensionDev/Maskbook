@@ -151,7 +151,7 @@ async function* v38To40StaticECDH(
     report: ((message: TypedMessage) => void) | undefined,
 ): AsyncIterableIterator<DecryptProgress> {
     const postKey = {
-        '-40': async function* (iv: Uint8Array) {
+        async *'-40'(iv: Uint8Array) {
             const val = await io.queryPostKey_version40(iv)
             if (val) yield val
         },

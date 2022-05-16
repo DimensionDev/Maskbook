@@ -1,15 +1,26 @@
-import { memo, useCallback, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { first } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import { Button, List, Typography } from '@mui/material'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useI18N } from '../../../../../utils'
-import Services from '../../../../service'
-import { WalletItem } from './WalletItem'
-import { useAccount, useChainIdValid, useWallets } from '@masknet/plugin-infra/web3'
+// import {
+//     ChainId,
+//     getNetworkName,
+//     getNetworkTypeFromChainId,
+//     isSameAddress,
+//     ProviderType,
+//     useAccount,
+//     useChainIdValid,
+//     useWallets,
+// } from '@masknet/web3-shared-evm'
+// import { Button, List, Typography } from '@mui/material'
+// import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+// import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
+// import { useI18N } from '../../../../../utils'
+// import Services from '../../../../service'
+// import { WalletItem } from './WalletItem'
+// import { ChainIcon, WalletIcon } from '@masknet/shared'
+// import { PopupRoutes } from '@masknet/shared-base'
+// import { getRegisteredWeb3Networks } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     content: {
@@ -48,12 +59,12 @@ const useStyles = makeStyles()({
         width: 20,
         height: 20,
         borderRadius: 20,
-        marginRight: 10,
+        marginRight: 6,
     },
     list: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#F7F9FA',
         padding: 0,
-        height: 'calc(100vh - 168px)',
+        height: 'calc(100vh - 132px)',
         overflow: 'auto',
     },
     controller: {
@@ -74,81 +85,131 @@ const useStyles = makeStyles()({
         fontSize: 14,
         lineHeight: '20px',
     },
+    colorChainICon: {
+        borderRadius: '999px!important',
+        margin: '0 !important',
+    },
 })
 
 const SelectWallet = memo(() => {
-    const { t } = useI18N()
-    const { classes } = useStyles()
-    const location = useLocation()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    return <></>
+    // const { t } = useI18N()
+    // const { classes } = useStyles()
+    // const location = useLocation()
+    // const navigate = useNavigate()
+    // const wallet = useAccount()
+    // const wallets = useWallets(ProviderType.MaskWallet)
 
-    const [selected, setSelected] = useState(account)
+    // const [selected, setSelected] = useState(wallet)
 
-    const search = new URLSearchParams(location.search)
+    // const search = new URLSearchParams(location.search)
 
-    const chainIdSearched = search.get('chainId')
-    const chainId = chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined
+    // const chainIdSearched = search.get('chainId')
+    // // The previous page is popup page
+    // const isPopup = search.get('popup')
+    // // Swap page also uses SelectWallet, but changing wallet in Swap page
+    // // should not affect other pages, for example, dashboard.
+    // // So we make Swap page 'internal' for popups
+    // const isInternal = search.get('internal')
 
-    const handleCancel = useCallback(async () => {
-        await WalletRPC.selectMaskAccount([])
-        await Services.Helper.removePopupWindow()
-    }, [])
+    // const chainId = chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : ChainId.Mainnet
+    // const chainIdValid = useChainIdValid()
 
-    const handleConfirm = useCallback(async () => {
-        await WalletRPC.updateMaskAccount({
-            chainId,
-            account: selected,
-        })
-        if (chainId) {
-            await WalletRPC.selectMaskAccount([selected])
-        }
-        return Services.Helper.removePopupWindow()
-    }, [chainId, selected])
+    // const networks = getRegisteredWeb3Networks()
+    // const currentNetwork = useMemo(
+    //     () => networks.find((x) => x.chainId === chainId) ?? networks[0],
+    //     [networks, chainId],
+    // )
 
-    useEffect(() => {
-        if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
-    }, [selected, wallets])
+    // const handleCancel = useCallback(async () => {
+    //     if (isPopup) {
+    //         navigate(-1)
+    //     } else {
+    //         await WalletRPC.selectAccount([], ChainId.Mainnet)
+    //         await Services.Helper.removePopupWindow()
+    //     }
+    // }, [isPopup])
 
-    return chainId && chainIdValid ? (
-        <>
-            <div className={classes.content}>
-                <div className={classes.header}>
-                    <div className={classes.network}>
-                        <div className={classes.iconWrapper}>{/* <ChainIcon chainId={chainId} /> */}</div>
-                        <Typography className={classes.title}>{getNetworkName(chainId)}</Typography>
-                    </div>
-                </div>
-                <List dense className={classes.list}>
-                    {wallets.map((item, index) => (
-                        <WalletItem
-                            key={index}
-                            wallet={item}
-                            onClick={() => setSelected(item.address)}
-                            isSelected={isSameAddress(item.address, selected)}
-                        />
-                    ))}
-                </List>
-            </div>
-            <div className={classes.controller}>
-                <Button
-                    variant="contained"
-                    className={classes.button}
-                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
-                    onClick={handleCancel}>
-                    {t('cancel')}
-                </Button>
-                <Button variant="contained" disabled={!selected} className={classes.button} onClick={handleConfirm}>
-                    {t('confirm')}
-                </Button>
-            </div>
-        </>
-    ) : (
-        <div className={classes.placeholder}>
-            <Typography>{t('popups_wallet_unsupported_network')}</Typography>
-        </div>
-    )
+    // const handleConfirm = useCallback(async () => {
+    //     if (isPopup) {
+    //         navigate(PopupRoutes.VerifyWallet, {
+    //             state: {
+    //                 chainId,
+    //                 account: selected,
+    //                 networkType: getNetworkTypeFromChainId(chainId),
+    //                 providerType: ProviderType.MaskWallet,
+    //             },
+    //         })
+    //         return
+    //     }
+
+    //     await WalletRPC.updateMaskAccount({
+    //         chainId,
+    //         account: selected,
+    //     })
+    //     if (currentProviderSettings.value === ProviderType.MaskWallet || !isInternal) {
+    //         await WalletRPC.updateAccount({
+    //             chainId,
+    //             account: selected,
+    //             providerType: ProviderType.MaskWallet,
+    //         })
+    //     }
+    //     await WalletRPC.selectAccount([selected], chainId)
+    //     return Services.Helper.removePopupWindow()
+    // }, [chainId, selected, isPopup, isInternal])
+
+    // useEffect(() => {
+    //     if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
+    // }, [selected, wallets, location.state])
+
+    // return chainIdValid ? (
+    //     <>
+    //         <div className={classes.content}>
+    //             <div className={classes.header}>
+    //                 <div className={classes.network}>
+    //                     <div className={classes.iconWrapper}>
+    //                         {currentNetwork.isMainnet ? (
+    //                             <WalletIcon networkIcon={currentNetwork.icon} size={20} />
+    //                         ) : (
+    //                             <ChainIcon
+    //                                 color={currentNetwork.iconColor}
+    //                                 size={20}
+    //                                 classes={{ point: classes.colorChainICon }}
+    //                             />
+    //                         )}
+    //                     </div>
+    //                     <Typography className={classes.title}>{getNetworkName(chainId)}</Typography>
+    //                 </div>
+    //             </div>
+    //             <List dense className={classes.list}>
+    //                 {wallets.map((item, index) => (
+    //                     <WalletItem
+    //                         key={index}
+    //                         wallet={item}
+    //                         onClick={() => setSelected(item.address)}
+    //                         isSelected={isSameAddress(item.address, selected)}
+    //                     />
+    //                 ))}
+    //             </List>
+    //         </div>
+    //         <div className={classes.controller}>
+    //             <Button
+    //                 variant="contained"
+    //                 className={classes.button}
+    //                 style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
+    //                 onClick={handleCancel}>
+    //                 {t('cancel')}
+    //             </Button>
+    //             <Button variant="contained" disabled={!selected} className={classes.button} onClick={handleConfirm}>
+    //                 {t('confirm')}
+    //             </Button>
+    //         </div>
+    //     </>
+    // ) : (
+    //     <div className={classes.placeholder}>
+    //         <Typography>{t('popups_wallet_unsupported_network')}</Typography>
+    //     </div>
+    // )
 })
 
 export default SelectWallet

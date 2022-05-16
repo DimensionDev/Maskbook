@@ -7,6 +7,7 @@ import { GasSetting1559 } from './GasSetting1559'
 import { Prior1559GasSetting } from './Prior1559GasSetting'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -31,9 +32,12 @@ const GasSetting = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    useTitle(t('popups_gas_fee_settings'))
     return (
         <main className={classes.container}>
-            <Typography className={classes.title}>{t('popups_wallet_gas_fee_settings')}</Typography>
+            <Typography className={classes.title} style={{ marginTop: 0 }}>
+                {t('popups_wallet_gas_fee_settings')}
+            </Typography>
             <Typography className={classes.description}>{t('popups_wallet_gas_fee_settings_description')}</Typography>
             {chainResolver.isSupport(chainId, 'EIP1559') ? <GasSetting1559 /> : <Prior1559GasSetting />}
         </main>

@@ -2,30 +2,33 @@ import { memo, useMemo, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { ReplaceType } from '../type'
 import { makeStyles } from '@masknet/theme'
-import { Box, Typography } from '@mui/material'
-import {
-    Transaction,
-    formatGweiToEther,
-    formatGweiToWei,
-    formatWeiToGwei,
-    chainResolver,
-    networkResolver,
-} from '@masknet/web3-shared-evm'
-import { z as zod } from 'zod'
-import BigNumber from 'bignumber.js'
-import { useI18N } from '../../../../../utils'
-import { hexToNumber, toHex } from 'web3-utils'
-import { Controller, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { StyledInput } from '../../../components/StyledInput'
-import { LoadingButton } from '@mui/lab'
-import { isEmpty } from 'lodash-unified'
-import { useAsyncFn } from 'react-use'
-import { useContainer } from 'unstated-next'
-import { WalletContext } from '../hooks/useWalletContext'
-import { isPositive, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
-import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
-import { useFungibleToken, useNativeTokenPrice, useNetworkType } from '@masknet/plugin-infra/web3'
+// import { Box, Typography } from '@mui/material'
+// import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
+// import {
+//     EthereumTransactionConfig,
+//     formatGweiToEther,
+//     formatGweiToWei,
+//     formatWeiToGwei,
+//     getChainIdFromNetworkType,
+//     isEIP1559Supported,
+//     useNativeTokenDetailed,
+//     useNetworkType,
+// } from '@masknet/web3-shared-evm'
+// import { z as zod } from 'zod'
+// import BigNumber from 'bignumber.js'
+// import { useI18N } from '../../../../../utils'
+// import { hexToNumber, toHex } from 'web3-utils'
+// import { Controller, useForm } from 'react-hook-form'
+// import { zodResolver } from '@hookform/resolvers/zod'
+// import { StyledInput } from '../../../components/StyledInput'
+// import { LoadingButton } from '@mui/lab'
+// import { isEmpty } from 'lodash-unified'
+// import { useAsyncFn } from 'react-use'
+// import { useContainer } from 'unstated-next'
+// import { WalletContext } from '../hooks/useWalletContext'
+// import Services from '../../../../service'
+// import { isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
+// import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     container: {
@@ -71,37 +74,41 @@ const ReplaceTransaction = memo(() => {
     // const defaultGas = transaction?.computedPayload?._tx.gas ?? 0
     // const defaultGasPrice = transaction?.computedPayload?._tx.gasPrice ?? 0
 
-    // const defaultMaxFeePerGas = (transaction?.computedPayload?._tx as Transaction).maxFeePerGas ?? 0
-    // const defaultMaxPriorityFeePerGas = (transaction?.computedPayload?._tx as Transaction).maxPriorityFeePerGas ?? 0
+    // const defaultMaxFeePerGas = (transaction?.computedPayload?._tx as EthereumTransactionConfig).maxFeePerGas ?? 0
+    // const defaultMaxPriorityFeePerGas =
+    //     (transaction?.computedPayload?._tx as EthereumTransactionConfig).maxPriorityFeePerGas ?? 0
 
-    // const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
-    // const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
-    //     chainId: nativeToken?.chainId,
-    // })
-    // const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
-    // const is1559 = chainResolver.isSupport(networkResolver.networkChainId(networkType), 'EIP1559')
+    // const { value: nativeToken } = useNativeTokenDetailed()
+    // const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
+    // const networkType = useNetworkType()
+    // const is1559 = isEIP1559Supported(getChainIdFromNetworkType(networkType))
 
     // const schema = useMemo(() => {
-    //     return zod.object({
-    //         gas: zod
-    //             .string()
-    //             .refine(
-    //                 (gas) => new BigNumber(gas).gte(hexToNumber(defaultGas) ?? 0),
-    //                 t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: hexToNumber(defaultGas) }),
-    //             ),
-    //         gasPrice: is1559
-    //             ? zod.string().optional()
-    //             : zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
-    //         maxPriorityFeePerGas: is1559
-    //             ? zod
-    //                   .string()
-    //                   .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
-    //                   .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
-    //             : zod.string().optional(),
-    //         maxFeePerGas: is1559
-    //             ? zod.string().min(1, t('wallet_transfer_error_max_fee_absence'))
-    //             : zod.string().optional(),
-    //     })
+    //     return zod
+    //         .object({
+    //             gas: zod
+    //                 .string()
+    //                 .refine(
+    //                     (gas) => new BigNumber(gas).gte(hexToNumber(defaultGas) ?? 0),
+    //                     t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: hexToNumber(defaultGas) }),
+    //                 ),
+    //             gasPrice: is1559
+    //                 ? zod.string().optional()
+    //                 : zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
+    //             maxPriorityFeePerGas: is1559
+    //                 ? zod
+    //                       .string()
+    //                       .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
+    //                       .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
+    //                 : zod.string().optional(),
+    //             maxFeePerGas: is1559
+    //                 ? zod.string().min(1, t('wallet_transfer_error_max_fee_absence'))
+    //                 : zod.string().optional(),
+    //         })
+    //         .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas ?? 0, data.maxFeePerGas ?? 0), {
+    //             message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
+    //             path: ['maxFeePerGas'],
+    //         })
     // }, [defaultGas, is1559])
 
     // const {
@@ -132,17 +139,16 @@ const ReplaceTransaction = memo(() => {
     // const gasPriceEIP1559 = new BigNumber(maxFeePerGas ? maxFeePerGas : 0)
     // const gasPricePrior1559 = new BigNumber(gasPrice ? gasPrice : 0)
 
-    // const gasFee = multipliedBy(is1559 ? gasPriceEIP1559 : gasPricePrior1559, gas ?? 0)
+    // const gasFee = multipliedBy(is1559 ? gasPriceEIP1559 : gasPricePrior1559, gas ? gas : 0)
     //     .integerValue()
     //     .toFixed()
 
     // const [{ loading }, handleConfirm] = useAsyncFn(
     //     async (data: zod.infer<typeof schema>) => {
     //         try {
-    //             const config_ = transaction?.candidates[transaction.hash]
-    //             if (config_) {
-    //                 const config = {
-    //                     ...config_,
+    //             if (transaction?.payload) {
+    //                 const config = transaction.payload.params!.map((param) => ({
+    //                     ...param,
     //                     gas: toHex(new BigNumber(data.gas).toString()),
     //                     ...(is1559
     //                         ? {
@@ -152,18 +158,28 @@ const ReplaceTransaction = memo(() => {
     //                               maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas ?? 0).toString()),
     //                           }
     //                         : { gasPrice: toHex(formatGweiToWei(data.gasPrice ?? 0).toString()) }),
-    //                 }
+    //                 }))
 
     //                 if (type === ReplaceType.CANCEL) {
-    //                     await EVM_RPC.cancelRequest(transaction.hash, config)
+    //                     await Services.Ethereum.cancelRequest(transaction.hash, {
+    //                         ...transaction.payload,
+    //                         params: config,
+    //                     })
     //                 } else {
-    //                     await EVM_RPC.replaceRequest(transaction.hash, config)
+    //                     await Services.Ethereum.replaceRequest(transaction.hash, {
+    //                         ...transaction.payload,
+    //                         params: config,
+    //                     })
     //                 }
 
     //                 navigate(-1)
     //             }
     //         } catch (error) {
     //             if (error instanceof Error) {
+    //                 if (error.message.includes('maxFeePerGas cannot be less thant maxPriorityFeePerGas')) {
+    //                     setErrorMessage(t('wallet_transfer_error_max_fee_too_low'))
+    //                     return
+    //                 }
     //                 setErrorMessage(error.message)
     //             }
     //         }
@@ -173,112 +189,31 @@ const ReplaceTransaction = memo(() => {
 
     // const onSubmit = handleSubmit((data) => handleConfirm(data))
 
+    // useTitle(type === ReplaceType.CANCEL ? t('cancel') : t('speed_up'))
+
     // return (
-    //     <Box component="main" p={2}>
-    //         <Typography fontSize={18} lineHeight="24px" fontWeight={500}>
-    //             {type === ReplaceType.CANCEL ? 'Cancel Transaction' : 'Speed up transaction'}
-    //         </Typography>
-    //         <Box display="flex" flexDirection="column" alignItems="center" style={{ padding: '14.5px 0' }}>
-    //             <Typography fontWeight={500} fontSize={24} lineHeight="30px">
-    //                 {formatGweiToEther(gasFee ?? 0).toString()} {nativeToken?.symbol}
+    //     <>
+    //         <Box component="main" p={2}>
+    //             <Typography fontSize={18} lineHeight="24px" fontWeight={500}>
+    //                 {type === ReplaceType.CANCEL ? t('popups_cancel_transaction') : t('popups_speed_up_transaction')}
     //             </Typography>
-    //             <Typography>
-    //                 {t('popups_wallet_gas_fee_settings_usd', {
-    //                     usd: formatGweiToEther(gasFee).times(nativeTokenPrice).toPrecision(3),
-    //                 })}
-    //             </Typography>
-    //         </Box>
-    //         {is1559 ? (
-    //             <form onSubmit={onSubmit}>
-    //                 <Typography className={classes.label}>{t('popups_wallet_gas_fee_settings_gas_limit')}</Typography>
-    //                 <Controller
-    //                     control={control}
-    //                     render={({ field }) => (
-    //                         <StyledInput
-    //                             {...field}
-    //                             error={!!errors.gas?.message}
-    //                             helperText={errors.gas?.message}
-    //                             inputProps={{
-    //                                 pattern: '^[0-9]*[.,]?[0-9]*$',
-    //                             }}
-    //                         />
-    //                     )}
-    //                     name="gas"
-    //                 />
-    //                 <Typography className={classes.label}>
-    //                     {t('popups_wallet_gas_fee_settings_max_priority_fee')}
-    //                     <Typography component="span" className={classes.unit}>
-    //                         ({t('wallet_transfer_gwei')})
-    //                     </Typography>
+    //             <Box display="flex" flexDirection="column" alignItems="center" style={{ padding: '14.5px 0' }}>
+    //                 <Typography fontWeight={500} fontSize={24} lineHeight="30px">
+    //                     {formatGweiToEther(gasFee ?? 0).toString()} {nativeToken?.symbol}
     //                 </Typography>
-    //                 <Controller
-    //                     control={control}
-    //                     render={({ field }) => (
-    //                         <StyledInput
-    //                             {...field}
-    //                             error={!!errors.maxPriorityFeePerGas?.message}
-    //                             helperText={errors.maxPriorityFeePerGas?.message}
-    //                             inputProps={{
-    //                                 pattern: '^[0-9]*[.,]?[0-9]*$',
-    //                             }}
-    //                         />
-    //                     )}
-    //                     name="maxPriorityFeePerGas"
-    //                 />
-
-    //                 <Typography className={classes.label}>
-    //                     {t('popups_wallet_gas_fee_settings_max_fee')}
-    //                     <Typography component="span" className={classes.unit}>
-    //                         ({t('wallet_transfer_gwei')})
-    //                     </Typography>
+    //                 <Typography>
+    //                     {t('popups_wallet_gas_fee_settings_usd', {
+    //                         usd: formatGweiToEther(gasFee).times(nativeTokenPrice).toPrecision(3),
+    //                     })}
     //                 </Typography>
-
-    //                 <Controller
-    //                     control={control}
-    //                     render={({ field }) => (
-    //                         <StyledInput
-    //                             {...field}
-    //                             error={!!errors.maxFeePerGas?.message}
-    //                             helperText={errors.maxFeePerGas?.message}
-    //                             inputProps={{
-    //                                 pattern: '^[0-9]*[.,]?[0-9]*$',
-    //                             }}
-    //                         />
-    //                     )}
-    //                     name="maxFeePerGas"
-    //                 />
-    //             </form>
-    //         ) : (
-    //             <form style={{ display: 'flex', gap: 10 }} onSubmit={onSubmit}>
-    //                 <Box>
-    //                     <Typography className={classes.label}>
-    //                         {t('popups_wallet_gas_price')}
-    //                         <Typography component="span" className={classes.unit}>
-    //                             ({t('wallet_transfer_gwei')})
-    //                         </Typography>
-    //                     </Typography>
-    //                     <Controller
-    //                         control={control}
-    //                         name="gasPrice"
-    //                         render={({ field }) => (
-    //                             <StyledInput
-    //                                 {...field}
-    //                                 error={!!errors.gasPrice?.message}
-    //                                 helperText={errors.gasPrice?.message}
-    //                                 inputProps={{
-    //                                     pattern: '^[0-9]*[.,]?[0-9]*$',
-    //                                 }}
-    //                             />
-    //                         )}
-    //                     />
-    //                 </Box>
-    //                 <Box>
+    //             </Box>
+    //             {is1559 ? (
+    //                 <form onSubmit={onSubmit}>
     //                     <Typography className={classes.label}>
     //                         {t('popups_wallet_gas_fee_settings_gas_limit')}
     //                     </Typography>
     //                     <Controller
     //                         control={control}
-    //                         name="gas"
     //                         render={({ field }) => (
     //                             <StyledInput
     //                                 {...field}
@@ -289,25 +224,112 @@ const ReplaceTransaction = memo(() => {
     //                                 }}
     //                             />
     //                         )}
+    //                         name="gas"
     //                     />
-    //                 </Box>
-    //             </form>
-    //         )}
-    //         {errorMessage ? (
-    //             <Typography color="#FF5F5F" fontSize={12} py={0.5}>
-    //                 {errorMessage}
-    //             </Typography>
-    //         ) : null}
-    //         <LoadingButton
-    //             loading={loading}
-    //             variant="contained"
-    //             fullWidth
-    //             classes={{ root: classes.button, disabled: classes.disabled }}
-    //             disabled={!isEmpty(errors)}
-    //             onClick={onSubmit}>
-    //             {t('confirm')}
-    //         </LoadingButton>
-    //     </Box>
+    //                     <Typography className={classes.label}>
+    //                         {t('popups_wallet_gas_fee_settings_max_priority_fee')}
+    //                         <Typography component="span" className={classes.unit}>
+    //                             ({t('wallet_transfer_gwei')})
+    //                         </Typography>
+    //                     </Typography>
+    //                     <Controller
+    //                         control={control}
+    //                         render={({ field }) => (
+    //                             <StyledInput
+    //                                 {...field}
+    //                                 error={!!errors.maxPriorityFeePerGas?.message}
+    //                                 helperText={errors.maxPriorityFeePerGas?.message}
+    //                                 inputProps={{
+    //                                     pattern: '^[0-9]*[.,]?[0-9]*$',
+    //                                 }}
+    //                             />
+    //                         )}
+    //                         name="maxPriorityFeePerGas"
+    //                     />
+
+    //                     <Typography className={classes.label}>
+    //                         {t('popups_wallet_gas_fee_settings_max_fee')}
+    //                         <Typography component="span" className={classes.unit}>
+    //                             ({t('wallet_transfer_gwei')})
+    //                         </Typography>
+    //                     </Typography>
+
+    //                     <Controller
+    //                         control={control}
+    //                         render={({ field }) => (
+    //                             <StyledInput
+    //                                 {...field}
+    //                                 error={!!errors.maxFeePerGas?.message}
+    //                                 helperText={errors.maxFeePerGas?.message}
+    //                                 inputProps={{
+    //                                     pattern: '^[0-9]*[.,]?[0-9]*$',
+    //                                 }}
+    //                             />
+    //                         )}
+    //                         name="maxFeePerGas"
+    //                     />
+    //                 </form>
+    //             ) : (
+    //                 <form style={{ display: 'flex', gap: 10 }} onSubmit={onSubmit}>
+    //                     <Box>
+    //                         <Typography className={classes.label}>
+    //                             {t('popups_wallet_gas_price')}
+    //                             <Typography component="span" className={classes.unit}>
+    //                                 ({t('wallet_transfer_gwei')})
+    //                             </Typography>
+    //                         </Typography>
+    //                         <Controller
+    //                             control={control}
+    //                             name="gasPrice"
+    //                             render={({ field }) => (
+    //                                 <StyledInput
+    //                                     {...field}
+    //                                     error={!!errors.gasPrice?.message}
+    //                                     helperText={errors.gasPrice?.message}
+    //                                     inputProps={{
+    //                                         pattern: '^[0-9]*[.,]?[0-9]*$',
+    //                                     }}
+    //                                 />
+    //                             )}
+    //                         />
+    //                     </Box>
+    //                     <Box>
+    //                         <Typography className={classes.label}>
+    //                             {t('popups_wallet_gas_fee_settings_gas_limit')}
+    //                         </Typography>
+    //                         <Controller
+    //                             control={control}
+    //                             name="gas"
+    //                             render={({ field }) => (
+    //                                 <StyledInput
+    //                                     {...field}
+    //                                     error={!!errors.gas?.message}
+    //                                     helperText={errors.gas?.message}
+    //                                     inputProps={{
+    //                                         pattern: '^[0-9]*[.,]?[0-9]*$',
+    //                                     }}
+    //                                 />
+    //                             )}
+    //                         />
+    //                     </Box>
+    //                 </form>
+    //             )}
+    //             {errorMessage ? (
+    //                 <Typography color="#FF5F5F" fontSize={12} py={0.5}>
+    //                     {errorMessage}
+    //                 </Typography>
+    //             ) : null}
+    //             <LoadingButton
+    //                 loading={loading}
+    //                 variant="contained"
+    //                 fullWidth
+    //                 classes={{ root: classes.button, disabled: classes.disabled }}
+    //                 disabled={!isEmpty(errors)}
+    //                 onClick={onSubmit}>
+    //                 {t('confirm')}
+    //             </LoadingButton>
+    //         </Box>
+    //     </>
     // )
 })
 

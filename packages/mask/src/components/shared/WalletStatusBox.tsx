@@ -90,9 +90,11 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         color: theme.palette.common.black,
     },
 }))
-interface WalletStatusBox {
+
+export interface WalletStatusBox {
     disableChange?: boolean
 }
+
 export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
 

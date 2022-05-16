@@ -1,22 +1,47 @@
-import { Fragment } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
-import { useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
+import { useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
+import { makeStyles, getMaskColor } from '@masknet/theme'
+import { Typography } from '@mui/material'
+import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { useCurrentWeb3NetworkPluginID, useAccount, useChainId, NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { EMPTY_LIST, CrossIsolationMessages, formatPersonaPublicKey } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
+import { useI18N } from '../../utils'
+import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
+import { ApplicationRecommendArea } from './ApplicationRecommendArea'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useNextIDConnectStatus } from '../DataSource/useNextID'
+import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
+import { WalletMessages } from '../../plugins/Wallet/messages'
+import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
+import { MaskMessages } from '../../../shared'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            marginTop: theme.spacing(0.5),
+            padding: theme.spacing(1, 0.25),
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
+            overflowY: 'auto',
+            overflowX: 'hidden',
             gridTemplateRows: '100px',
-            gridGap: theme.spacing(1.5),
+            gridGap: 10,
             justifyContent: 'space-between',
-            height: 324,
+            height: 320,
+            width: props.shouldScroll ? 575 : 562,
+            '::-webkit-scrollbar': {
+                backgroundColor: 'transparent',
+                width: 20,
+            },
+            '::-webkit-scrollbar-thumb': {
+                borderRadius: '20px',
+                width: 5,
+                border: '7px solid rgba(0, 0, 0, 0)',
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                backgroundClip: 'padding-box',
+            },
             [smallQuery]: {
                 overflow: 'auto',
                 overscrollBehavior: 'contain',
@@ -24,50 +49,270 @@ const useStyles = makeStyles()((theme) => {
                 gridGap: theme.spacing(1),
             },
         },
+        subTitle: {
+            cursor: 'default',
+            fontSize: 18,
+            lineHeight: '24px',
+            fontWeight: 600,
+            color: theme.palette.text.primary,
+        },
+        loadingWrapper: {
+            display: 'flex',
+            height: 324,
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        placeholderWrapper: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingRight: 24,
+            height: 324,
+        },
+        placeholder: {
+            color: getMaskColor(theme).textLight,
+        },
+        recommendFeatureAppListWrapper: {
+            display: 'flex',
+            overflowX: 'scroll',
+            margin: '0 2px 4px 2px',
+            padding: '8px 2px 0 2px',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
+        carousel: {
+            height: 130,
+            overflowX: 'scroll',
+            overscrollBehavior: 'contain',
+            '& .carousel__slider': {
+                padding: '8px 2px 0',
+                overscrollBehavior: 'contain',
+                overflowX: 'scroll',
+                '&::-webkit-scrollbar': {
+                    display: 'none',
+                },
+            },
+        },
     }
 })
 
-export function ApplicationBoard() {
-    const { classes } = useStyles()
+interface Props {
+    closeDialog(): void
+}
+
+export function ApplicationBoard(props: Props) {
+    return (
+        <PersonaContext.Provider>
+            <ApplicationEntryStatusProvider>
+                <ApplicationBoardContent {...props} />
+            </ApplicationEntryStatusProvider>
+        </PersonaContext.Provider>
+    )
+}
+
+function ApplicationBoardContent(props: Props) {
+    const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const currentWeb3Network = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId()
     const account = useAccount()
     const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
+    const applicationList = useMemo(
+        () =>
+            snsAdaptorPlugins
+                .reduce<Application[]>((acc, cur) => {
+                    if (!cur.ApplicationEntries) return acc
+                    const currentWeb3NetworkSupportedChainIds = cur.enableRequirement.web3?.[currentWeb3Network]
+                    const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
+                    const currentSNSIsSupportedNetwork = cur.enableRequirement.networks.networks[currentSNSNetwork]
+                    const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
+
+                    return acc.concat(
+                        cur.ApplicationEntries.map((x) => {
+                            return {
+                                entry: x,
+                                enabled: isSNSEnabled,
+                                pluginId: cur.ID,
+                                isWalletConnectedRequired: !account && isWalletConnectedRequired,
+                                isWalletConnectedEVMRequired: Boolean(
+                                    account &&
+                                        currentWeb3Network !== NetworkPluginID.PLUGIN_EVM &&
+                                        isWalletConnectedRequired,
+                                ),
+                            }
+                        }) ?? EMPTY_LIST,
+                    )
+                }, EMPTY_LIST)
+                .sort(
+                    (a, b) =>
+                        (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0),
+                )
+                .filter((x) => Boolean(x.entry.RenderEntryComponent)),
+        [snsAdaptorPlugins, currentWeb3Network, chainId, account],
+    )
+
+    const recommendFeatureAppList = applicationList.filter((x) => x.entry.recommendFeature)
+
+    const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
+    const { classes } = useStyles({ shouldScroll: listedAppList.length > 12 })
+    return (
+        <>
+            <ApplicationRecommendArea
+                recommendFeatureAppList={recommendFeatureAppList}
+                RenderEntryComponent={RenderEntryComponent}
+            />
+
+            {listedAppList.length > 0 ? (
+                <section className={classes.applicationWrapper}>
+                    {listedAppList.map((application) => (
+                        <RenderEntryComponent key={application.entry.ApplicationEntryID} application={application} />
+                    ))}
+                </section>
+            ) : (
+                <div className={classes.placeholderWrapper}>
+                    <Typography className={classes.placeholder}>
+                        {t('application_settings_tab_plug_app-unlisted-placeholder')}
+                    </Typography>
+                </div>
+            )}
+        </>
+    )
+}
+
+function RenderEntryComponent({ application }: { application: Application }) {
+    const Entry = application.entry.RenderEntryComponent!
+    const { t } = useI18N()
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
+    const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
+    )
+    const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
+
+    // #region entry disabled
+    const disabled = useMemo(() => {
+        if (!application.enabled) return true
+
+        if (application.entry.nextIdRequired) {
+            return Boolean(
+                ApplicationEntryStatus.isLoading ||
+                    ApplicationEntryStatus.isNextIDVerify === undefined ||
+                    (!ApplicationEntryStatus.isSNSConnectToCurrentPersona && ApplicationEntryStatus.isPersonaConnected),
+            )
+        } else {
+            return false
+        }
+    }, [application, ApplicationEntryStatus])
+    // #endregion
+
+    // #region entry click effect
+    const createOrConnectPersona = useCallback(() => {
+        closeApplicationBoard()
+        ApplicationEntryStatus.personaConnectAction?.()
+    }, [ApplicationEntryStatus])
+
+    const verifyPersona = useCallback(() => {
+        closeApplicationBoard()
+        CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
+    }, [])
+
+    const clickHandler = (() => {
+        if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired)
+            return openSelectProviderDialog
+        if (!application.entry.nextIdRequired) return
+        if (ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false)
+            return createOrConnectPersona
+        if (ApplicationEntryStatus.shouldVerifyNextId) return verifyPersona
+        return
+    })()
+
+    // #endregion
+
+    // #region tooltip hint
+    const tooltipHint = (() => {
+        if (application.isWalletConnectedRequired) return t('application_tooltip_hint_connect_wallet')
+        if (application.isWalletConnectedEVMRequired) return t('application_tooltip_hint_switch_to_evm_wallet')
+        if (!application.entry.nextIdRequired) return
+        if (ApplicationEntryStatus.isPersonaCreated === false && !disabled)
+            return t('application_tooltip_hint_create_persona')
+        if (ApplicationEntryStatus.isPersonaConnected === false && !disabled)
+            return t('application_tooltip_hint_connect_persona')
+        if (ApplicationEntryStatus.shouldVerifyNextId && !disabled) return t('application_tooltip_hint_verify')
+        if (ApplicationEntryStatus.shouldDisplayTooltipHint)
+            return t('application_tooltip_hint_sns_persona_unmatched', {
+                currentPersonaPublicKey: formatPersonaPublicKey(
+                    ApplicationEntryStatus.currentPersonaPublicKey ?? '',
+                    4,
+                ),
+                currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
+                    ApplicationEntryStatus.currentSNSConnectedPersonaPublicKey ?? '',
+                    4,
+                ),
+            })
+        return
+    })()
+    // #endregion
+
+    return <Entry disabled={disabled} tooltipHint={tooltipHint} onClick={clickHandler} />
+}
+
+interface ApplicationEntryStatusContextProps {
+    isPersonaConnected: boolean | undefined
+    isPersonaCreated: boolean | undefined
+    isNextIDVerify: boolean | undefined
+    isSNSConnectToCurrentPersona: boolean | undefined
+    shouldDisplayTooltipHint: boolean | undefined
+    shouldVerifyNextId: boolean | undefined
+    currentPersonaPublicKey: string | undefined
+    currentSNSConnectedPersonaPublicKey: string | undefined
+    personaConnectAction: (() => void) | undefined
+    isLoading: boolean
+}
+
+const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContextProps>({
+    isPersonaConnected: undefined,
+    isPersonaCreated: undefined,
+    isNextIDVerify: undefined,
+    isSNSConnectToCurrentPersona: undefined,
+    shouldDisplayTooltipHint: undefined,
+    shouldVerifyNextId: undefined,
+    currentPersonaPublicKey: undefined,
+    currentSNSConnectedPersonaPublicKey: undefined,
+    personaConnectAction: undefined,
+    isLoading: false,
+})
+
+function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
+    const personaConnectStatus = usePersonaConnectStatus()
+    const nextIDConnectStatus = useNextIDConnectStatus()
+
+    const { value: ApplicationCurrentStatus, retry } = usePersonaAgainstSNSConnectStatus()
+
+    useEffect(() => {
+        return MaskMessages.events.currentPersonaIdentifier.on(retry)
+    }, [])
+
+    const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
+        ApplicationCurrentStatus ?? {}
 
     return (
-        <section className={classes.applicationWrapper}>
-            {snsAdaptorPlugins
-                .reduce<{ entry: Plugin.SNSAdaptor.ApplicationEntry; enabled: boolean; pluginId: string }[]>(
-                    (acc, cur) => {
-                        if (!cur.ApplicationEntries) return acc
-                        const currentWeb3NetworkSupportedChainIds = cur.enableRequirement.web3?.[currentWeb3Network]
-                        const isWeb3Enabled = Boolean(
-                            currentWeb3NetworkSupportedChainIds === undefined ||
-                                currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
-                        )
-                        const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
-                        const currentSNSIsSupportedNetwork = cur.enableRequirement.networks.networks[currentSNSNetwork]
-                        const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
-
-                        return acc.concat(
-                            cur.ApplicationEntries.map((x) => {
-                                return {
-                                    entry: x,
-                                    enabled: isSNSEnabled && (account ? isWeb3Enabled : !isWalletConnectedRequired),
-                                    pluginId: cur.ID,
-                                }
-                            }) ?? [],
-                        )
-                    },
-                    [],
-                )
-                .sort((a, b) => a.entry.defaultSortingPriority - b.entry.defaultSortingPriority)
-                .map(({ entry, enabled }, index) => (
-                    <Fragment key={index}>
-                        <entry.RenderEntryComponent disabled={!enabled} />
-                    </Fragment>
-                ))}
-        </section>
+        <ApplicationEntryStatusContext.Provider
+            value={{
+                personaConnectAction: personaConnectStatus.action ?? undefined,
+                isPersonaCreated: personaConnectStatus.hasPersona,
+                isPersonaConnected: personaConnectStatus.connected,
+                isNextIDVerify: nextIDConnectStatus.isVerified,
+                isSNSConnectToCurrentPersona,
+                shouldDisplayTooltipHint:
+                    ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected,
+                shouldVerifyNextId: Boolean(!nextIDConnectStatus.isVerified && ApplicationCurrentStatus),
+                currentPersonaPublicKey,
+                currentSNSConnectedPersonaPublicKey,
+                isLoading: nextIDConnectStatus.loading,
+            }}>
+            {props.children}
+        </ApplicationEntryStatusContext.Provider>
     )
 }

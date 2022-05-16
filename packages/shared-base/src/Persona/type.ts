@@ -1,4 +1,4 @@
-import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier/type'
+import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier'
 import type { NextIDPersonaBindings } from '../NextID/type'
 /**
  * This interface contains the minimal information for UI display
@@ -7,7 +7,6 @@ export interface PersonaInformation {
     proof?: NextIDPersonaBindings
     /** The nickname of the persona. Should use profile.nickname if it presents. */
     nickname?: string
-    publicHexKey?: string
     identifier: PersonaIdentifier
     linkedProfiles: ProfileInformation[]
 }
@@ -16,6 +15,7 @@ export interface ProfileInformation {
     nickname?: string
     avatar?: string
     identifier: ProfileIdentifier
+    linkedPersona?: PersonaIdentifier
 }
 
 export enum RelationFavor {

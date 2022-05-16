@@ -39,7 +39,7 @@ export function formatAssets(data: WalletTokenRecord[]): FungibleAsset<ChainId, 
                 value: {
                     [CurrencyType.USD]: multipliedBy(y.price ?? 0, y.amount).toFixed(),
                 },
-                logoURI: y.logo_url,
+                logoURL: y.logo_url,
             },
         ]
     }, [])

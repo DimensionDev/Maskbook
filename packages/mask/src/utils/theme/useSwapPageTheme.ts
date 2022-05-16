@@ -38,22 +38,6 @@ export function useSwapPageTheme() {
             },
             variants: [
                 {
-                    props: { variant: 'sns' },
-                    style: {
-                        backgroundColor: theme.palette.primary.main,
-                        color: theme.palette.common.white,
-                        '&:hover': {
-                            backgroundColor: theme.palette.primary.dark,
-                            color: theme.palette.common.white,
-                        },
-                        '&.Mui-disabled': {
-                            opacity: 0.5,
-                            backgroundColor: theme.palette.primary.main,
-                            color: theme.palette.common.white,
-                        },
-                    },
-                },
-                {
                     props: { color: 'error' },
                     style: {
                         backgroundColor: theme.palette.error.main,
@@ -205,7 +189,7 @@ export function useSwapPageTheme() {
         theme.components.MuiSnackbar = {
             styleOverrides: {
                 root: {
-                    filter: `drop-shadow(0px 0px 16px ${theme.palette.background.messageShadow});`,
+                    filter: `drop-shadow(0 0 16px ${theme.palette.background.messageShadow});`,
                 },
             },
         }

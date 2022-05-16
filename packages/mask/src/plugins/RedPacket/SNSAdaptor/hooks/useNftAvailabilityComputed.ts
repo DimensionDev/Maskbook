@@ -45,7 +45,7 @@ export function useNftAvailabilityComputed(account: string, payload: NftRedPacke
                 canFetch: isSameChain,
                 canClaim: isClaimable && isPasswordValid,
                 canSend: isSendable,
-                isPasswordValid: isPasswordValid,
+                isPasswordValid,
                 listOfStatus: compact([
                     isClaimed ? RedPacketStatus.claimed : undefined,
                     isEmpty ? RedPacketStatus.empty : undefined,

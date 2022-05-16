@@ -5,7 +5,7 @@ import {
     searchInstagramProfileEditButton,
 } from '../../utils/selector'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 // import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog'
@@ -40,11 +40,12 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
+export function openNFTAvatarSettingDialog() {
+    MaskMessages.events.nftAvatarSettingDialogUpdated.sendToLocal({ open: true })
+}
+
 function OpenNFTAvatarEditProfileButtonInInstagram() {
     const location = useLocation()
-    const onClick = useCallback(() => {
-        MaskMessages.events.nftAvatarSettingDialogUpdated.sendToLocal({ open: true })
-    }, [])
 
     const { classes } = useStyles()
 
@@ -53,5 +54,5 @@ function OpenNFTAvatarEditProfileButtonInInstagram() {
     if (location.pathname?.includes('/edit') || !editButton) return null
 
     return null
-    // return <NFTAvatarButton onClick={onClick} classes={classes} />
+    // return <NFTAvatarButton onClick={openNFTAvatarSettingDialog} classes={classes} />
 }

@@ -1,7 +1,13 @@
 import { memo, useMemo } from 'react'
 import type { TradeInfo } from '../../types'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { createNativeToken, formatBalance, formatPercentage, formatWeiToEther } from '@masknet/web3-shared-evm'
+import {
+    createNativeToken,
+    formatBalance,
+    formatPercentage,
+    formatUSD,
+    formatWeiToEther,
+} from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, TextField, Typography } from '@mui/material'
 import { resolveTradeProviderName } from '../../pipes'
 import { FormattedBalance } from '@masknet/shared'
@@ -13,7 +19,11 @@ import { BestTradeIcon, TriangleWarning } from '@masknet/icons'
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { TradeProvider } from '@masknet/public-api'
+<<<<<<< HEAD
 import BigNumber from 'bignumber.js'
+=======
+import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
+>>>>>>> develop
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { useNativeTokenPrice } from '@masknet/plugin-infra/web3'
@@ -106,10 +116,10 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
         return trade.gas.value && gasPrice ? multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed() : 0
     }, [trade.gas?.value, gasPrice])
 
-    const feeValueUSD = useMemo(
-        () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2)) : '0'),
-        [gasFee, tokenPrice],
-    )
+    const feeValueUSD = useMemo(() => {
+        if (!gasFee) return '0'
+        return formatUSD(formatWeiToEther(gasFee).times(tokenPrice))
+    }, [gasFee, tokenPrice])
 
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade.value?.priceImpact)
 
@@ -162,7 +172,9 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
                                     />
                                 </Typography>
                                 <Typography fontSize={14} lineHeight="20px" component="span">
-                                    {t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
+                                    {feeValueUSD === '<$0.01'
+                                        ? t('plugin_trader_tx_cost_very_small', { usd: feeValueUSD })
+                                        : t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
                                 </Typography>
                             </Typography>
                         ) : null}

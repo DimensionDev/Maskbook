@@ -10,7 +10,7 @@ import { CopyIconButton } from './CopyIconButton'
 import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../locales'
 import { ImageIcon } from '@masknet/shared'
-import { TipButton } from './Tip'
+import { TipButton } from '../../../plugins/Tips/components'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 
 const useStyles = makeStyles()((theme) => ({
@@ -74,13 +74,7 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
 
     if (platform === NextIDPlatform.Ethereum) {
         return (
-            <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                mx={1}
-                mb={4}
-                className={classes.item}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" className={classes.item}>
                 <Stack direction="row" alignItems="center" gap="12px">
                     <ImageIcon size={18} icon={networkDescriptor?.icon} />
                     <Typography className={classes.address}>{formatEthereumAddress(identity, 4)}</Typography>

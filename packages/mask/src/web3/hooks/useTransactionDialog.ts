@@ -24,7 +24,7 @@ export function useTransactionDialog(
         if (state.type === TransactionStateType.UNKNOWN) return
         setDialog({
             open: open || state.type === TransactionStateType.WAIT_FOR_CONFIRMING,
-            state: state,
+            state,
             ...event,
         })
     }, [state /* update tx dialog only if state changed */])

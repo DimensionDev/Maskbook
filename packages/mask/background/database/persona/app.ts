@@ -12,12 +12,12 @@ import type {
 import {
     ProfileIdentifier,
     PersonaIdentifier,
-    Identifier,
-    IdentifierMap,
     ECKeyIdentifier,
     EC_Public_JsonWebKey,
     EC_Private_JsonWebKey,
     AESJsonWebKey,
+    convertRawMapToIdentifierMap,
+    convertIdentifierMapToRawMap,
 } from '@masknet/shared-base'
 import { nativeAPI } from '../../../shared/native-rpc'
 import type {
@@ -29,7 +29,6 @@ import type {
     AESJsonWebKey as Native_AESJsonWebKey,
 } from '@masknet/public-api'
 import { MaskMessages } from '../../../shared'
-import { convertPersonaHexPublicKey } from './util'
 
 export async function createPersonaDBReadonlyAccess(action: () => Promise<void>) {
     await action()
@@ -126,7 +125,7 @@ export async function updatePersonaDB( // Do a copy here. We need to delete keys
 
 export async function createOrUpdatePersonaDB(
     record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier' | 'publicKey'>,
-    howToMerge: Parameters<typeof updatePersonaDB>[1] & { protectPrivateKey?: boolean },
+    howToMerge: Parameters<typeof updatePersonaDB>[1],
     t?: PersonasTransaction<'readwrite'>,
 ): Promise<void> {
     return nativeAPI?.api.update_persona({
@@ -134,7 +133,6 @@ export async function createOrUpdatePersonaDB(
         options: {
             linkedProfileMergePolicy: howToMerge.linkedProfiles === 'replace' ? 0 : 1,
             deleteUndefinedFields: howToMerge.explicitUndefinedField !== 'ignore',
-            protectPrivateKey: howToMerge.protectPrivateKey,
             createWhenNotExist: true,
         },
     })
@@ -174,7 +172,6 @@ export async function createProfileDB(record: ProfileRecord, t?: ProfileTransact
     await nativeAPI?.api.create_profile({
         profile: profileRecordToDB(record),
     })
-    MaskMessages.events.profilesChanged.sendToAll([{ of: record.identifier, reason: 'update' }])
 }
 
 /**
@@ -214,22 +211,6 @@ export async function queryProfilesDB(
 
     if (!profiles) return []
     return profiles.map((x) => profileRecordOutDB(x))
-}
-
-/**
- * @deprecated
- * query profiles with paged
- * @param options
- * @param count
- */
-export async function queryProfilesPagedDB(
-    options: {
-        after?: ProfileIdentifier
-        query?: string
-    },
-    count: number,
-): Promise<ProfileRecord[]> {
-    return []
 }
 
 /**
@@ -293,7 +274,6 @@ export async function deleteProfileDB(id: ProfileIdentifier, t?: ProfileTransact
     await nativeAPI?.api.delete_profile({
         identifier: id.toText(),
     })
-    MaskMessages.events.profilesChanged.sendToAll([{ reason: 'delete', of: id }])
 }
 
 /**
@@ -368,6 +348,25 @@ export async function updateRelationDB(
     }
 }
 
+// TODO: should have a batch API for this.
+export async function createOrUpdateRelationDB(
+    record: Omit<RelationRecord, 'network'>,
+    t: RelationTransaction<'readwrite'>,
+    silent = false,
+) {
+    const old = await nativeAPI?.api.query_relations({
+        options: {
+            personaIdentifier: record.linked.toText(),
+        },
+    })
+
+    if (old?.length) {
+        await updateRelationDB(record, t, silent)
+    } else {
+        await createRelationDB(record, t, silent)
+    }
+}
+
 // #region out db & to db
 function personaRecordToDB(x: PersonaRecord): NativePersonaRecord {
     return {
@@ -376,7 +375,7 @@ function personaRecordToDB(x: PersonaRecord): NativePersonaRecord {
         privateKey: x.privateKey as JsonWebKey as unknown as Native_EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
         identifier: x.identifier.toText(),
-        linkedProfiles: Object.fromEntries(x.linkedProfiles.__raw_map__),
+        linkedProfiles: Object.fromEntries(convertIdentifierMapToRawMap(x.linkedProfiles)),
         createdAt: x.createdAt.getTime(),
         updatedAt: x.createdAt.getTime(),
     }
@@ -390,22 +389,22 @@ function partialPersonaRecordToDB(
         privateKey: x.privateKey as JsonWebKey as unknown as Native_EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
         identifier: x.identifier.toText(),
-        linkedProfiles: x.linkedProfiles?.__raw_map__ ? Object.fromEntries(x.linkedProfiles.__raw_map__) : {},
+        linkedProfiles: x.linkedProfiles ? Object.fromEntries(x.linkedProfiles) : {},
         createdAt: x.createdAt?.getTime(),
         updatedAt: x.createdAt?.getTime(),
     }
 }
 
 function personaRecordOutDB(x: NativePersonaRecord): PersonaRecord {
-    const identifier = Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap()
+    const identifier = ECKeyIdentifier.from(x.identifier).unwrap()
 
     return {
         publicKey: x.publicKey as JsonWebKey as unknown as EC_Public_JsonWebKey,
-        publicHexKey: convertPersonaHexPublicKey(identifier),
+        publicHexKey: identifier.publicKeyAsHex,
         privateKey: x.privateKey as JsonWebKey as unknown as EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as AESJsonWebKey,
         identifier,
-        linkedProfiles: new IdentifierMap(new Map(Object.entries(x.linkedProfiles)), ProfileIdentifier),
+        linkedProfiles: convertRawMapToIdentifierMap(Object.entries(x.linkedProfiles), ProfileIdentifier),
         createdAt: new Date(x.createdAt),
         updatedAt: new Date(x.updatedAt),
     }
@@ -425,8 +424,8 @@ function profileRecordToDB(x: ProfileRecord): NativeProfileRecord {
 function profileRecordOutDB(x: NativeProfileRecord): ProfileRecord {
     return {
         localKey: x.localKey as JsonWebKey as unknown as AESJsonWebKey,
-        identifier: Identifier.fromString(x.identifier, ProfileIdentifier).unwrap(),
-        linkedPersona: x.linkedPersona ? Identifier.fromString(x.linkedPersona, ECKeyIdentifier).unwrap() : undefined,
+        identifier: ProfileIdentifier.from(x.identifier).unwrap(),
+        linkedPersona: ECKeyIdentifier.from(x.linkedPersona).unwrapOr(undefined),
         createdAt: new Date(x.createdAt),
         updatedAt: new Date(x.updatedAt),
     }
@@ -456,8 +455,8 @@ function relationRecordToDB(x: Omit<RelationRecord, 'network'>): Omit<NativeRela
 function relationRecordOutDB(x: NativeRelationRecord): RelationRecord {
     return {
         ...x,
-        profile: Identifier.fromString(x.profile, ProfileIdentifier).unwrap(),
-        linked: Identifier.fromString(x.linked, ECKeyIdentifier).unwrap(),
+        profile: ProfileIdentifier.from(x.profile).unwrap(),
+        linked: ECKeyIdentifier.from(x.linked).unwrap(),
     }
 }
 // #endregion

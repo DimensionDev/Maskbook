@@ -10,11 +10,12 @@ import { LoadingButton } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes, formatPersonaFingerprint, type PersonaInformation } from '@masknet/shared-base'
 import { PasswordField } from '../../../components/PasswordField'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
         flex: 1,
-        padding: '30px 16px 0px 16px',
+        padding: '30px 16px 0 16px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -36,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         linHeight: '18px',
     },
     controller: {
-        padding: '0px 16px 16px 16px',
+        padding: '0 16px 16px 16px',
         display: 'grid',
         gridTemplateColumns: 'repeat(2,1fr)',
         gap: 20,
@@ -81,7 +82,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const Logout = memo(() => {
-    const { deletingPersona } = PersonaContext.useContainer()
+    const { selectedPersona } = PersonaContext.useContainer()
     const navigate = useNavigate()
     const backupPassword = useMemo(() => {
         try {
@@ -94,18 +95,18 @@ const Logout = memo(() => {
     }, [])
 
     const [{ loading }, onLogout] = useAsyncFn(async () => {
-        if (!deletingPersona) return
-        await Services.Identity.logoutPersona(deletingPersona.identifier)
+        if (!selectedPersona) return
+        await Services.Identity.logoutPersona(selectedPersona.identifier)
         const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
         if (!currentPersona) {
             const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
             if (lastCreatedPersona) await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona)
         }
         navigate(PopupRoutes.Personas, { replace: true })
-    }, [deletingPersona, history])
+    }, [selectedPersona, history])
     return (
         <LogoutUI
-            deletingPersona={deletingPersona}
+            selectedPersona={selectedPersona}
             backupPassword={backupPassword ?? ''}
             loading={loading}
             onLogout={onLogout}
@@ -115,18 +116,20 @@ const Logout = memo(() => {
 })
 
 export interface LogoutUIProps {
-    deletingPersona?: PersonaInformation
+    selectedPersona?: PersonaInformation
     backupPassword: string
     loading: boolean
     onCancel: () => void
     onLogout: () => void
 }
 
-export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout, onCancel, deletingPersona }) => {
+export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout, onCancel, selectedPersona }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
     const [error, setError] = useState(false)
+
+    useTitle(t('popups_log_out'))
 
     const onConfirm = useCallback(() => {
         if (!backupPassword || backupPassword === password) onLogout()
@@ -143,9 +146,9 @@ export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout
                         <MasksIcon />
                     </div>
                     <div>
-                        <Typography className={classes.name}>{deletingPersona?.nickname}</Typography>
+                        <Typography className={classes.name}>{selectedPersona?.nickname}</Typography>
                         <Typography className={classes.identifier}>
-                            {formatPersonaFingerprint(deletingPersona?.identifier.compressedPoint ?? '', 10)}
+                            {formatPersonaFingerprint(selectedPersona?.identifier.rawPublicKey ?? '', 10)}
                         </Typography>
                     </div>
                 </div>

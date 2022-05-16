@@ -16,6 +16,7 @@
   "references": [
     { "path": "../../public-api" },
     { "path": "../../shared" },
+    { "path": "../../backup-format" },
     { "path": "../../shared-base" },
     { "path": "../../shared-base-ui" },
     { "path": "../../typed-message/base" },

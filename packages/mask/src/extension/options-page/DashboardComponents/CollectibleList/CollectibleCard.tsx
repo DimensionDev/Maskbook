@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         opacity: 0.1,
     },
     loadingFailImage: {
-        minHeight: '0px !important',
+        minHeight: '0 !important',
         maxWidth: 'none',
         width: 64,
         height: 64,

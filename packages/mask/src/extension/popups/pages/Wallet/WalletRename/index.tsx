@@ -1,7 +1,7 @@
 import { memo } from 'react'
-import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { StyledInput } from '../../../components/StyledInput'
+import { useWallet } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useNavigate } from 'react-router-dom'
 import { useI18N } from '../../../../../utils'
@@ -10,8 +10,8 @@ import { LoadingButton } from '@mui/lab'
 import type { z as zod } from 'zod'
 import { Controller } from 'react-hook-form'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
-import { useWallet } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { WalletContext } from '../hooks/useWalletContext'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     header: {
@@ -46,7 +46,9 @@ const WalletRename = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
     const { classes } = useStyles()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const { selectedWallet } = WalletContext.useContainer()
+    const currentWallet = useWallet()
+    const wallet = selectedWallet ?? currentWallet
 
     const {
         control,
@@ -66,11 +68,10 @@ const WalletRename = memo(() => {
 
     const onSubmit = handleSubmit(renameWallet)
 
+    useTitle(t('popups_rename'))
+
     return (
         <>
-            <div className={classes.header}>
-                <Typography className={classes.title}>{t('rename')}</Typography>
-            </div>
             <div className={classes.content}>
                 <Controller
                     name="name"

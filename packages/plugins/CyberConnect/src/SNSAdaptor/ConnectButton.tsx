@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback } from 'react'
-import { useAsync } from 'react-use'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
-import { useWeb3, useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useWeb3, isSameAddress } from '@masknet/web3-shared-evm'
+import { useAccount, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra/web3'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
-import { CircularProgress, useTheme, Typography } from '@mui/material'
 import { PluginCyberConnectRPC } from '../messages'
+import { CircularProgress, useTheme, Typography } from '@mui/material'
+import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()(() => ({
     button: {
@@ -29,11 +29,11 @@ const useStyles = makeStyles()(() => ({
             '>svg': {
                 '&:nth-of-type(1)': {
                     transformOrigin: 'calc(100% + 1px) center',
-                    transform: 'rotate(-45deg) translate(2px,0px)',
+                    transform: 'rotate(-45deg) translate(2px,0)',
                 },
                 '&:nth-of-type(2)': {
                     transformOrigin: '-1px center',
-                    transform: 'rotate(135deg) translate(-8px,0px)',
+                    transform: 'rotate(135deg) translate(-8px,0)',
                 },
             },
         },
@@ -45,11 +45,11 @@ const useStyles = makeStyles()(() => ({
         '>svg': {
             '&:nth-of-type(1)': {
                 transformOrigin: 'calc(100% + 1px) center',
-                transform: 'rotate(-45deg) translate(2px,0px)',
+                transform: 'rotate(-45deg) translate(2px,0)',
             },
             '&:nth-of-type(2)': {
                 transformOrigin: '-1px center',
-                transform: 'rotate(135deg) translate(-8px,0px)',
+                transform: 'rotate(135deg) translate(-8px,0)',
             },
         },
     },
@@ -91,28 +91,28 @@ export default function ConnectButton({
     refreshFollowList: () => void
 }) {
     const { classes, cx } = useStyles()
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const [cc, setCc] = useState<CyberConnect | null>(null)
+    const web3 = useWeb3()
+    const myAddress = useAccount()
+    const [cc, setCC] = useState<CyberConnect | null>(null)
     const [isFollowing, setFollowing] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const blockChainNetwork = useCurrentWeb3NetworkPluginID()
     useAsync(async () => {
-        if (isSameAddress(account, address)) return
-        const res = await PluginCyberConnectRPC.fetchFollowStatus(account, address)
+        if (isSameAddress(myAddress, address)) return
+        const res = await PluginCyberConnectRPC.fetchFollowStatus(myAddress, address)
         setFollowing(res.data.followStatus.isFollowing)
-    }, [address, account])
+    }, [address, myAddress])
 
     useEffect(() => {
-        if (!web3?.eth.currentProvider) return
+        if (!web3.eth.currentProvider) return
         const ccInstance = new CyberConnect({
             provider: web3.eth.currentProvider,
             namespace: 'Mask',
             env: process.env.NODE_ENV === 'production' ? Env.PRODUCTION : Env.STAGING,
         })
 
-        setCc(ccInstance)
-    }, [web3, account])
+        setCC(ccInstance)
+    }, [web3, myAddress])
 
     const handleClick = useCallback(() => {
         if (!cc) return
@@ -123,40 +123,35 @@ export default function ConnectButton({
                     setFollowing(true)
                     refreshFollowList()
                 })
-                .finally(() => {
-                    setLoading(false)
-                })
+                .finally(() => setLoading(false))
         } else {
             cc.disconnect(address)
                 .then(() => {
                     setFollowing(false)
                     refreshFollowList()
                 })
-                .finally(() => {
-                    setLoading(false)
-                })
+                .finally(() => setLoading(false))
         }
-    }, [cc, account, isFollowing])
+    }, [cc, myAddress, isFollowing])
 
-    return blockChainNetwork !== NetworkPluginID.PLUGIN_EVM ? (
-        <Typography variant="body2" sx={{ marginTop: 2, color: MaskColorVar.cyberconnectPrimary }}>
-            Please switch to EVM-based wallet to follow
-        </Typography>
-    ) : !isSameAddress(account, address) ? (
-        <div
-            className={cx(classes.button, {
-                [classes.isFollowing]: isFollowing,
-            })}
-            onClick={() => {
-                handleClick()
-            }}>
-            {!isLoading ? (
-                <>
-                    <Logo /> <Typography variant="button">{!isFollowing ? 'Follow Now' : 'Following'}</Typography>
-                </>
-            ) : (
-                <CircularProgress size={30} sx={{ marginLeft: '154px' }} />
-            )}
-        </div>
-    ) : null
+    if (blockChainNetwork !== NetworkPluginID.PLUGIN_EVM) {
+        return (
+            <Typography variant="body2" sx={{ marginTop: 2, color: MaskColorVar.cyberconnectPrimary }}>
+                Please switch to EVM-based wallet to follow
+            </Typography>
+        )
+    } else if (!isSameAddress(myAddress, address)) {
+        return (
+            <div className={cx(classes.button, { [classes.isFollowing]: isFollowing })} onClick={handleClick}>
+                {!isLoading ? (
+                    <>
+                        <Logo /> <Typography variant="button">{!isFollowing ? 'Follow Now' : 'Following'}</Typography>
+                    </>
+                ) : (
+                    <CircularProgress size={30} sx={{ marginLeft: '154px' }} />
+                )}
+            </div>
+        )
+    }
+    return null
 }

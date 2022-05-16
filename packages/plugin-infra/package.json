@@ -92,9 +92,6 @@
     "web3-core-helpers": "1.7.3",
     "web3-utils": "1.7.3"
   },
-  "devDependencies": {
-    "react-i18next": "^11.16.5"
-  },
   "peerDependencies": {
     "react-i18next": "^11.15.3"
   }

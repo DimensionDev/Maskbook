@@ -2,7 +2,6 @@ import { memo, useCallback, useRef, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { TableContainer, TablePagination, tablePaginationClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { NetworkSelector } from '../../../components/NetworkSelector'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import { useAsync, useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
@@ -15,6 +14,7 @@ import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../
 import { first } from 'lodash-unified'
 import { useWallets } from '@masknet/plugin-infra/web3'
 import { currySameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     container: {
@@ -155,12 +155,10 @@ const AddDeriveWallet = memo(() => {
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [mnemonic, walletName, wallets.length])
 
+    useTitle(t('popups_add_derive'))
+
     return (
         <div className={classes.container}>
-            <div className={classes.header}>
-                <Typography className={classes.title}>{t('plugin_wallet_import_wallet')}</Typography>
-                <NetworkSelector />
-            </div>
             <Typography className={classes.path}>
                 {t('popups_wallet_derivation_path', {
                     path: HD_PATH_WITHOUT_INDEX_ETHEREUM,

@@ -70,6 +70,7 @@ function NFTAvatarInTwitter() {
     //     if (!token.info.imageURL) return
     //     const image = await toPNG(token.info.imageURL)
     //     if (!image) return
+    //     if (!identity.identifier) return
     //     changeImageToActiveElements(image)
 
     //     setAvatarEvent({
@@ -81,6 +82,7 @@ function NFTAvatarInTwitter() {
     // }
 
     const handler = () => {
+        if (!identity.identifier) return
         MaskMessages.events.NFTAvatarUpdated.sendToLocal(
             avatarEvent ?? {
                 userId: identity.identifier.userId,

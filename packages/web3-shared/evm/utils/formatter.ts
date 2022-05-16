@@ -56,12 +56,12 @@ export function formatEthereumAddress(address: string, size = 0) {
     if (!isValidAddress(address)) return address
     const address_ = EthereumAddress.checksumAddress(address)
     if (size === 0 || size >= 20) return address_
-    return `${address_.substr(0, 2 + size)}...${address_.substr(-size)}`
+    return `${address_.slice(0, Math.max(0, 2 + size))}...${address_.slice(-size)}`
 }
 
 export function formatTokenId(tokenId: string, size = 0) {
     if (tokenId.length < 9) return `#${tokenId}`
-    return `#${tokenId.substr(0, 2 + size)}...${tokenId.substr(-size)}`
+    return `#${tokenId.slice(0, Math.max(0, 2 + size))}...${tokenId.slice(-size)}`
 }
 
 export function formatDomainName(domain: string, size = 4) {
@@ -69,19 +69,19 @@ export function formatDomainName(domain: string, size = 4) {
     const [domainName, company] = domain.split('.')
     if (domainName.length < 13) return domain
 
-    return `${domainName.substr(0, size)}...${domainName.substr(-size)}.${company}`
+    return `${domainName.slice(0, Math.max(0, size))}...${domainName.slice(-size)}.${company}`
 }
 
 export function formatKeccakHash(hash: string, size = 0) {
     if (!/0x\w{64}/.test(hash)) return hash
     if (size === 0) return hash
-    return `${hash.substr(0, 2 + size)}...${hash.substr(-size)}`
+    return `${hash.slice(0, Math.max(0, 2 + size))}...${hash.slice(-size)}`
 }
 
-export function formatNumberString(str: string, size = 0) {
-    if (!/\d+/.test(str)) return str
-    if (size === 0) return str
-    return `${str.substr(0, size)}...${str.substr(-size)}`
+export function formatNumberString(input: string, size = 0) {
+    if (!/\d+/.test(input)) return input
+    if (size === 0) return input
+    return `${input.slice(0, Math.max(0, size))}...${input.slice(-size)}`
 }
 
 export function formatWeiToGwei(value: BigNumber.Value) {
@@ -98,4 +98,9 @@ export function formatGweiToWei(value: BigNumber.Value) {
 
 export function formatGweiToEther(value: BigNumber.Value) {
     return new BigNumber(value).shiftedBy(-9)
+}
+
+export function formatUSD(value: BigNumber.Value, significant = 2): string {
+    const bn = new BigNumber(value)
+    return bn.lt(0.01) ? '<$0.01' : bn.toFixed(significant)
 }

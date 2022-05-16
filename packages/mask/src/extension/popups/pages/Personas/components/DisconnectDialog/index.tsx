@@ -12,6 +12,7 @@ const useStyles = makeStyles()(() => ({
         fontSize: 16,
         lineHeight: '22px',
         color: '#0F1419',
+        textAlign: 'center',
     },
     content: {
         marginTop: 24,
@@ -24,7 +25,7 @@ const useStyles = makeStyles()(() => ({
         flexDirection: 'column',
         gap: 16,
         '& > *': {
-            marginLeft: '0px !important',
+            marginLeft: '0 !important',
         },
     },
     button: {
@@ -36,10 +37,10 @@ const useStyles = makeStyles()(() => ({
         lineHeight: '20px',
     },
     confirmButton: {
-        backgroundColor: '#F4212E',
+        backgroundColor: '#FFB100',
         color: '#ffffff',
         '&:hover': {
-            backgroundColor: '#dc1e2a',
+            backgroundColor: '#ef9f00',
         },
     },
     cancelButton: {
@@ -71,7 +72,7 @@ export const DisconnectDialog = memo<DisconnectDialogProps>(
                     </Typography>
                     <Typography className={classes.content}>
                         {t('popups_persona')}:{' '}
-                        {formatPersonaFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
+                        {formatPersonaFingerprint(currentPersona?.identifier.rawPublicKey ?? '', 10)}
                         <br />
                         {t('popups_twitter_id')}: @{unbundledIdentity.userId}
                     </Typography>

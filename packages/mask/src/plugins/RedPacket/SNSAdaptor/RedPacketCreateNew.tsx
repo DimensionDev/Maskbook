@@ -1,14 +1,19 @@
 import { makeStyles } from '@masknet/theme'
+<<<<<<< HEAD
 import { MINDS_ID } from '@masknet/shared'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId } from '@masknet/plugin-infra/web3'
+=======
+import { useChainId, ChainId } from '@masknet/web3-shared-evm'
+>>>>>>> develop
 import { RedPacketFormProps, RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../../../utils'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { IconURLs } from './IconURL'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 interface StyleProps {
     snsId: string
@@ -23,7 +28,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     tabs: {
         height: 36,
         minHeight: 36,
-        margin: `0 ${snsId === MINDS_ID ? '12px' : 'auto'}`,
+        margin: `0 ${snsId === EnhanceableSite.Minds ? '12px' : 'auto'}`,
         borderRadius: 4,
         backgroundColor: theme.palette.background.default,
         '& .Mui-selected': {

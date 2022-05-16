@@ -1,4 +1,4 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
 import { ERC20TokenList, useSharedI18N } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
@@ -7,7 +7,6 @@ import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import type { FC } from 'react'
 import { useBaseUIRuntime } from '../../base'
-import { MINDS_ID } from '../../../constants'
 import { InjectedDialog } from '../../components'
 import { useRowSize } from './useRowSize'
 import type { FungibleToken } from '@masknet/web3-shared-base'
@@ -65,6 +64,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     disableSearchBar,
     disableNativeToken,
     tokens,
+    whitelist,
     blacklist = EMPTY_LIST,
     selectedTokens = EMPTY_LIST,
     onSelect,
@@ -74,7 +74,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     const t = useSharedI18N()
     const isDashboard = location.href.includes('dashboard.html')
     const { networkIdentifier } = useBaseUIRuntime()
-    const compact = networkIdentifier === MINDS_ID
+    const compact = networkIdentifier === EnhanceableSite.Minds
     const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     // eslint-disable-next-line import/no-deprecated
@@ -93,6 +93,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     onSelect={onSelect}
                     tokens={tokens ?? []}
+                    whitelist={whitelist}
                     blacklist={
                         disableNativeToken && NATIVE_TOKEN_ADDRESS ? [NATIVE_TOKEN_ADDRESS, ...blacklist] : blacklist
                     }

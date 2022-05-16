@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 import { DialogContent } from '@mui/material'
 import { DialogStackingProvider } from '@masknet/theme'
-import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
+import { activatedSocialNetworkUI } from '../../social-network'
 import { MaskMessages, useI18N } from '../../utils'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useFriendsList as useRecipientsList } from '../DataSource/useActivatedUI'
+import { useRecipientsList } from './useRecipientsList'
 import { InjectedDialog } from '@masknet/shared'
 import { CompositionDialogUI, CompositionRef } from './CompositionUI'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest'
 import Services from '../../extension/service'
 import { useSubmit } from './useSubmit'
+import { useAsync } from 'react-use'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
@@ -18,6 +20,12 @@ export interface PostDialogProps {
 let openOnInitAnswered = false
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useI18N()
+    const currentIdentity = useCurrentIdentity()?.identifier
+    /** @deprecated */
+    const { value: hasLocalKey } = useAsync(
+        async () => (currentIdentity ? Services.Identity.hasLocalKey(currentIdentity) : false),
+        [currentIdentity],
+    )
 
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     // #region Open
@@ -47,12 +55,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     useEffect(() => {
         return CrossIsolationMessages.events.requestComposition.on(({ reason, open, content, options }) => {
-            if (
-                (reason !== 'reply' && reason !== type) ||
-                (reason === 'reply' && type === 'popup') ||
-                globalUIState.profiles.value.length <= 0
-            )
-                return
+            if ((reason !== 'reply' && reason !== type) || (reason === 'reply' && type === 'popup')) return
             setOpen(open)
             setReason(reason)
             if (content) UI.current?.setMessage(content)
@@ -91,6 +94,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         onSubmit={onSubmit_}
                         supportImageEncoding={networkSupport?.text ?? false}
                         supportTextEncoding={networkSupport?.image ?? false}
+                        disabledRecipients={hasLocalKey === false ? 'E2E' : undefined}
                     />
                 </DialogContent>
             </InjectedDialog>

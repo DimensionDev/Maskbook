@@ -19,6 +19,7 @@ import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types'
 import RedPacketDialog from './RedPacketDialog'
 import { RedPacketInPost } from './RedPacketInPost'
 import { RedPacketNftInPost } from './RedPacketNftInPost'
+import { Trans } from 'react-i18next'
 import { RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
@@ -88,32 +89,51 @@ const sns: Plugin.SNSAdaptor.Definition = {
         label: (
             <>
                 <RedPacketIcon style={badgeSvgIconSize} />
-                Lucky drop
+                Lucky Drop
             </>
         ),
     },
     ApplicationEntries: [
-        {
-            RenderEntryComponent({ disabled }) {
-                return (
-                    <ApplicationEntry
-                        title="Lucky Drop"
-                        disabled={disabled}
-                        icon={new URL('./assets/lucky_drop.png', import.meta.url).toString()}
-                        onClick={() =>
-                            CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                reason: 'timeline',
-                                open: true,
-                                options: {
-                                    startupPlugin: base.ID,
-                                },
-                            })
-                        }
-                    />
-                )
-            },
-            defaultSortingPriority: 1,
-        },
+        (() => {
+            const icon = <RedPacketIcon />
+            const name = <Trans i18nKey="plugin_red_packet_name" />
+            const recommendFeature = {
+                description: <Trans i18nKey="plugin_red_packet_recommend_feature_description" />,
+                backgroundGradient: 'linear-gradient(180.54deg, #FF9A9E 0.71%, #FECFEF 98.79%, #FECFEF 99.78%)',
+            }
+            return {
+                ApplicationEntryID: base.ID,
+                RenderEntryComponent(EntryComponentProps) {
+                    return (
+                        <ApplicationEntry
+                            title={name}
+                            recommendFeature={recommendFeature}
+                            {...EntryComponentProps}
+                            icon={icon}
+                            onClick={
+                                EntryComponentProps.onClick ??
+                                (() =>
+                                    CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                        reason: 'timeline',
+                                        open: true,
+                                        options: {
+                                            startupPlugin: base.ID,
+                                        },
+                                    }))
+                            }
+                        />
+                    )
+                },
+                appBoardSortingDefaultPriority: 1,
+                marketListSortingPriority: 1,
+                icon,
+                description: <Trans i18nKey="plugin_red_packet_description" />,
+                name,
+                tutorialLink: 'https://realmasknetwork.notion.site/0a71fd421aae4563bd07caa3e2129e5b',
+                category: 'dapp',
+                recommendFeature,
+            }
+        })(),
     ],
 }
 interface ERC20RedpacketBadgeProps {
@@ -122,6 +142,7 @@ interface ERC20RedpacketBadgeProps {
 
 function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const { payload } = props
+<<<<<<< HEAD
     const { value: fetchedToken } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
         payload.token?.address ?? payload.token?.address,
@@ -129,6 +150,14 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const chainId = networkResolver.networkChainId((payload.network ?? '') as NetworkType) ?? ChainId.Mainnet
     const nativeCurrency = chainResolver.nativeCurrency(chainId)
     const tokenDetailed = payload.token?.schema === SchemaType.Native ? nativeCurrency : payload.token ?? fetchedToken
+=======
+    const { value: fetchedToken } = useERC20TokenDetailed(payload.token?.address ?? payload.token_address)
+    const chainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
+    const chainDetailed = getChainDetailed(chainId)
+    const tokenDetailed =
+        payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : fetchedToken ?? payload.token
+
+>>>>>>> develop
     return (
         <div style={containerStyle}>
             <RedPacketIcon style={badgeSvgIconSize} /> A Lucky Drop with{' '}

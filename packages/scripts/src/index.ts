@@ -8,11 +8,11 @@ export {
     resourceCopy,
     resourceCopyWatch,
 } from './codegen'
-export { ciBuild } from './extension'
+export { ciBuild, extensionWatch } from './extension'
 export { buildNetlify } from './netlify'
 
 // Tools
-export { clean, help, createPackageInteractive, fixLockfile } from './commands'
+export { clean, help, createPackageInteractive, fixLockfile, syncDevelop } from './commands'
 export { localeKit } from './locale-kit'
 export { syncLanguages } from './locale-kit-next'
 export { reorderSpellcheck } from './spellcheck'

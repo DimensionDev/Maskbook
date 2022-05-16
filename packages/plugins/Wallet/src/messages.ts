@@ -1,13 +1,17 @@
-import type BigNumber from 'bignumber.js'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import type {
-    GasOptionType,
-    NetworkPluginID,
-    NonFungibleTokenContract,
-    TransactionStatusType,
-} from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType, TransactionState } from '@masknet/web3-shared-evm'
+    ChainId,
+    ERC721ContractDetailed,
+    GasOption,
+    GasOptions,
+    NetworkType,
+    ProviderType,
+    TransactionState,
+    Wallet,
+} from '@masknet/web3-shared-evm'
+import type BigNumber from 'bignumber.js'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import { PLUGIN_ID } from './constants'
 
 export type TransactionDialogEvent =
@@ -22,9 +26,15 @@ export type TransactionDialogEvent =
           open: false
       }
 
+export type GasPriceDialogEvent = {
+    open: boolean
+    type?: keyof GasOptions
+}
+
 export type SelectProviderDialogEvent =
     | {
           open: true
+          pluginID?: NetworkPluginID
       }
     | {
           open: false
@@ -34,14 +44,33 @@ export type SelectProviderDialogEvent =
 export type ConnectWalletDialogEvent =
     | {
           open: true
-          network: Web3Helper.NetworkDescriptorAll
-          provider: Web3Helper.ProviderDescriptorAll
+          networkType: NetworkType
+          providerType: ProviderType
+      }
+    | {
+          open: false
+          result?: {
+              account: string
+              chainId: ChainId
+              networkType: NetworkType
+              providerType: ProviderType
+          }
+      }
+
+export type SelectWalletDialogEvent =
+    | {
+          open: true
+          networkType: NetworkType
       }
     | {
           open: false
       }
 
 export type WalletStatusDialogEvent = {
+    open: boolean
+}
+
+export type ApplicationDialogEvent = {
     open: boolean
 }
 
@@ -52,14 +81,32 @@ export type GasSettingDialogEvent = {
     gasPrice?: BigNumber.Value
     maxFee?: BigNumber.Value
     priorityFee?: BigNumber.Value
-    gasOption?: GasOptionType | null
+    gasOption?: GasOption | null
+}
+
+export type WalletRenameDialogEvent = {
+    open: boolean
+    wallet: Wallet | null
 }
 
 export type WalletRiskWarningDialogEvent =
     | {
           open: true
-          account: string
-          pluginID: NetworkPluginID
+          wallet?: Wallet
+      }
+    | {
+          open: false
+          type: 'cancel' | 'confirm'
+      }
+
+export type RestoreLegacyWalletDialogEvent = {
+    open: boolean
+}
+
+export type WalletConnectQRCodeDialogEvent =
+    | {
+          open: true
+          uri: string
       }
     | {
           open: false
@@ -73,29 +120,31 @@ export type SelectNftContractDialogEvent = {
     /**
      * The selected detailed nft contract.
      */
-    contract?: NonFungibleTokenContract<ChainId, SchemaType>
+    contract?: ERC721ContractDetailed
 }
 
-export interface SocketMessageUpdatedEvent {
+export type SocketMessageUpdatedEvent = {
     id: string
     done: boolean
     error?: unknown
     from: 'cache' | 'remote'
 }
 
-export interface TransactionProgressEvent {
-    pluginID: NetworkPluginID
-    chainId: Web3Helper.ChainIdAll
-    status: TransactionStatusType
-    transactionId: string
-    transaction: Web3Helper.TransactionAll
-}
-
-export interface WalletMessage<ChainId, Transaction> {
+export interface WalletMessage {
     /**
      * Transaction dialog
      */
     transactionDialogUpdated: TransactionDialogEvent
+
+    /**
+     * Gas price dialog
+     */
+    gasPriceDialogUpdated: GasPriceDialogEvent
+
+    /**
+     * Select wallet dialog
+     */
+    selectWalletDialogUpdated: SelectWalletDialogEvent
 
     /**
      * Select provider dialog
@@ -113,6 +162,16 @@ export interface WalletMessage<ChainId, Transaction> {
     walletStatusDialogUpdated: WalletStatusDialogEvent
 
     /**
+     * Application dialog
+     */
+    ApplicationDialogUpdated: ApplicationDialogEvent
+
+    /**
+     * Wallet status dialog
+     */
+    walletRenameDialogUpdated: WalletRenameDialogEvent
+
+    /**
      * Gas setting dialog
      */
     gasSettingDialogUpdated: GasSettingDialogEvent
@@ -123,16 +182,33 @@ export interface WalletMessage<ChainId, Transaction> {
     selectNftContractDialogUpdated: SelectNftContractDialogEvent
 
     /**
+     * WalletConnect QR Code dialog
+     */
+    walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
+
+    /**
      * Wallet Risk Warning dialog
      */
     walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
+
+    /**
+     * Restore Legacy Wallet Dialog
+     */
+    restoreLegacyWalletDialogUpdated: RestoreLegacyWalletDialogEvent
 
     walletsUpdated: void
     phrasesUpdated: void
     addressBookUpdated: void
     transactionsUpdated: void
-    transactionProgressUpdated: TransactionProgressEvent
+    transactionStateUpdated: TransactionState
+    transactionProgressUpdated: {
+        state: TransactionState
+        payload: JsonRpcPayload
+    }
     requestsUpdated: { hasRequest: boolean }
+    erc20TokensUpdated: void
+    erc721TokensUpdated: void
+    erc1155TokensUpdated: void
     /** true: Now locked; false: Now unlocked */
     walletLockStatusUpdated: boolean
     socketMessageUpdated: SocketMessageUpdatedEvent
@@ -141,7 +217,6 @@ export interface WalletMessage<ChainId, Transaction> {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-
-export const WalletMessages: { events: PluginMessageEmitter<WalletMessage<number, unknown>> } = {
-    events: createPluginMessage<WalletMessage<number, unknown>>(PLUGIN_ID),
+export const WalletMessages: { events: PluginMessageEmitter<WalletMessage> } = {
+    events: createPluginMessage<WalletMessage>(PLUGIN_ID),
 }

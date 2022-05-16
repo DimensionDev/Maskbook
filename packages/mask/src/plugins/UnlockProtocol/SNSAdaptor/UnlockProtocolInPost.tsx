@@ -25,6 +25,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
 
     useEffect(() => {
         const metadata = UnlockProtocolMetadataReader(props.message.meta)
+<<<<<<< HEAD
         if (!metadata.ok || !address) return
         const data: { locks: Record<string, object> } = { locks: {} }
         metadata.val.unlockLocks.forEach((locks) => {
@@ -40,6 +41,19 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                     .catch((error) => {
                         if (error.code === -1) {
                             setContent(t('plugin_unlockprotocol_server_error'))
+=======
+        if (metadata.ok) {
+            if (address) {
+                const data: { locks: Record<string, object> } = { locks: {} }
+                metadata.val.unlockLocks.forEach((locks) => {
+                    PluginUnlockProtocolRPC.verifyPurchase(address, locks.unlocklock, locks.chainid).then((res) => {
+                        if (!res) return
+                        const requestData = {
+                            lock: locks.unlocklock,
+                            address,
+                            chain: locks.chainid,
+                            identifier: metadata.val.iv,
+>>>>>>> develop
                         }
                     })
                     .then((response) => {

@@ -1,26 +1,26 @@
 import {
     createInjectHooksRenderer,
-    Plugin,
     PluginId,
     useActivatedPluginsSNSAdaptor,
+    usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAddressNames, useAvailablePlugins } from '@masknet/plugin-infra/web3'
+import { ConcealableTabs } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { Box, CircularProgress } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { first } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { MaskMessages } from '../../utils'
+import { MaskMessages, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { PageTab } from '../InjectedComponents/PageTab'
 
 function getTabContent(tabId: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -32,13 +32,9 @@ function getTabContent(tabId: string) {
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
-    tags: {
-        padding: theme.spacing(2),
-    },
-    metadata: {},
     content: {
         position: 'relative',
-        padding: theme.spacing(1),
+        padding: theme.spacing(2, 1),
     },
 }))
 
@@ -47,8 +43,9 @@ export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 
 export function ProfileTabContent(props: ProfileTabContentProps) {
     const classes = useStylesExtends(useStyles(), props)
 
+    const { t } = useI18N()
     const [hidden, setHidden] = useState(true)
-    const [selectedTab, setSelectedTab] = useState<Plugin.SNSAdaptor.ProfileTab<ChainId> | undefined>()
+    const [selectedTab, setSelectedTab] = useState<string | undefined>()
 
     const currentIdentity = useLastRecognizedIdentity()
     const identity = useCurrentVisitingIdentity()
@@ -60,38 +57,50 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     )
     const { value: personaList = EMPTY_LIST, loading: loadingPersonaList } = useNextIDBoundByPlatform(
         platform as NextIDPlatform,
-        identity.identifier.userId,
+        identity.identifier?.userId,
     )
 
     const currentAccountNotConnectPersona =
-        currentIdentity.identifier.userId === identity.identifier.userId &&
-        personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.publicHexKey) === -1
+        currentIdentity.identifier === identity.identifier &&
+        personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.identifier.publicKeyAsHex) ===
+            -1
 
+    const translate = usePluginI18NField()
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
-    const tabs = useAvailablePlugins(activatedPlugins)
-        .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
-        .filter((z) => z.Utils?.shouldDisplay?.(identity, addressNames) ?? true)
-        .sort((a, z) => {
-            // order those tabs from next id first
-            if (a.pluginID === PluginId.NextID) return -1
-            if (z.pluginID === PluginId.NextID) return 1
+    const availablePlugins = useAvailablePlugins(activatedPlugins)
+    const displayPlugins = useMemo(() => {
+        return availablePlugins
+            .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
+            .filter((z) => z.Utils?.shouldDisplay?.(identity, addressNames) ?? true)
+    }, [availablePlugins, identity, addressNames])
+    const tabs = useMemo(() => {
+        return displayPlugins
+            .sort((a, z) => {
+                // order those tabs from next id first
+                if (a.pluginID === PluginId.NextID) return -1
+                if (z.pluginID === PluginId.NextID) return 1
 
-            // order those tabs from collectible first
-            if (a.pluginID === PluginId.Collectible) return -1
-            if (z.pluginID === PluginId.Collectible) return 1
+                // order those tabs from collectible first
+                if (a.pluginID === PluginId.Collectible) return -1
+                if (z.pluginID === PluginId.Collectible) return 1
 
-            // place those tabs from debugger last
-            if (a.pluginID === PluginId.Debugger) return 1
-            if (z.pluginID === PluginId.Debugger) return -1
+                // place those tabs from debugger last
+                if (a.pluginID === PluginId.Debugger) return 1
+                if (z.pluginID === PluginId.Debugger) return -1
 
-            // place those tabs from dao before the last
-            if (a.pluginID === PluginId.DAO) return 1
-            if (z.pluginID === PluginId.DAO) return -1
+                // place those tabs from dao before the last
+                if (a.pluginID === PluginId.DAO) return 1
+                if (z.pluginID === PluginId.DAO) return -1
 
-            return a.priority - z.priority
-        })
+                return a.priority - z.priority
+            })
+            .map((x) => ({
+                id: x.ID,
+                label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
+            }))
+    }, [displayPlugins, translate])
 
-    const selectedTabComputed = selectedTab ?? first(tabs)
+    const selectedTabId = selectedTab ?? first(tabs)?.id
 
     useLocationChange(() => {
         setSelectedTab(undefined)
@@ -99,27 +108,27 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     useUpdateEffect(() => {
         setSelectedTab(undefined)
-    }, [identity.identifier])
+    }, [identity.identifier?.userId])
 
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
             if (data.hidden) setHidden(data.hidden)
         })
-    }, [identity])
+    }, [identity.identifier?.userId])
 
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
             setHidden(!data.show)
         })
-    }, [identity])
+    }, [identity.identifier?.userId])
 
     const ContentComponent = useMemo(() => {
-        const tab =
+        const tabId =
             isTwitter(activatedSocialNetworkUI) && currentAccountNotConnectPersona
-                ? tabs?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
-                : selectedTabComputed?.ID
-        return getTabContent(tab ?? '')
-    }, [selectedTabComputed?.ID, identity.identifier.userId])
+                ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
+                : selectedTabId
+        return getTabContent(tabId ?? '')
+    }, [selectedTabId, identity.identifier?.userId])
 
     if (hidden) return null
 
@@ -138,8 +147,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     return (
         <div className={classes.root}>
-            <div className={classes.tags}>
-                <PageTab tabs={tabs} selectedTab={selectedTabComputed} onChange={setSelectedTab} />
+            <div>
+                {tabs.length ? (
+                    <ConcealableTabs<string> tabs={tabs} selectedId={selectedTabId} onChange={setSelectedTab} />
+                ) : (
+                    <Typography variant="body2" color="textPrimary" align="center" sx={{ paddingTop: 8 }}>
+                        {t('web3_tab_hint')}
+                    </Typography>
+                )}
             </div>
             <div className={classes.content}>
                 <ContentComponent

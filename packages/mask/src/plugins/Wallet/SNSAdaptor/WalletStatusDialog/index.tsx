@@ -10,18 +10,22 @@ import { useChainIdValid } from '@masknet/plugin-infra/web3'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
-import { ApplicationBoard } from '../../../../components/shared/ApplicationBoard'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: theme.spacing(2, 3, 3),
+        padding: theme.spacing(2.5),
+        overflowX: 'hidden',
     },
     footer: {
         fontSize: 12,
+        marginRight: 16,
         textAlign: 'left',
         padding: theme.spacing(2),
         borderTop: `1px solid ${theme.palette.divider}`,
         justifyContent: 'flex-start',
+    },
+    walletStatusWrapper: {
+        marginRight: 16,
     },
     address: {
         fontSize: 16,
@@ -62,14 +66,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     return (
         <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
-                <Typography className={classes.subTitle}>{t('wallets')}</Typography>
-                <WalletStatusBox />
-                {!isDashboardPage() && (
-                    <>
-                        <Typography className={classes.subTitle}>{t('applications')}</Typography>
-                        <ApplicationBoard />
-                    </>
-                )}
+                <WalletStatusBox showPendingTransaction />
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>

@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1),
     },
     button: {
-        marginTop: '0px !important',
+        marginTop: '0 !important',
         minHeight: 38,
         height: 38,
     },
@@ -377,7 +377,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 ) : (
                     <CardMedia className={classes.image} component="div" image={rpNftImg}>
                         <Typography className={classes.remain}>
-                            {availability.claimedAmount}/{availability.totalAmount} {t('dashboard_tab_collectibles')}
+                            {availability.claimedAmount}/{availability.totalAmount} {t('collectibles_name')}
                         </Typography>
                     </CardMedia>
                 )}

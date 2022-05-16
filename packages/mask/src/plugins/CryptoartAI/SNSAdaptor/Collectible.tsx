@@ -225,7 +225,7 @@ export function Collectible(props: CollectibleProps) {
                                         <Trans
                                             i18nKey="plugin_cryptoartai_sold_description"
                                             values={{
-                                                soldPrice: soldPrice,
+                                                soldPrice,
                                                 symbol: ' \u039E',
                                                 soldNum:
                                                     assetSource?.soldNum === assetSource?.totalAvailable

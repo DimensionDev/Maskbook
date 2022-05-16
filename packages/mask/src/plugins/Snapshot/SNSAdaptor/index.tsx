@@ -4,8 +4,10 @@ import { useMemo, Suspense } from 'react'
 import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { PostInspector } from './PostInspector'
+import { Trans } from 'react-i18next'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
+import { SnapshotIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -62,6 +64,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    ApplicationEntries: [
+        {
+            ApplicationEntryID: base.ID,
+            category: 'dapp',
+            description: <Trans i18nKey="plugin_snapshot_description" />,
+            tutorialLink: 'https://realmasknetwork.notion.site/10c08ed9629942dd852d9afbfab61208',
+            name: <Trans i18nKey="plugin_snapshot_info_snapshot" />,
+            marketListSortingPriority: 8,
+            icon: <SnapshotIcon />,
+        },
+    ],
 }
 
 export default sns

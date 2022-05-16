@@ -21,9 +21,9 @@ const log: AsyncCallOptions['log'] = {
 }
 
 export const Services = {
-    Crypto: add(() => import('./background-script/CryptoService'), 'Crypto'),
-    Identity: add(() => import('./background-script/IdentityService'), 'Identity'),
-    Welcome: add(() => import('./background-script/WelcomeService'), 'Welcome'),
+    Crypto: add(() => import('../../background/services/crypto'), 'Crypto'),
+    Identity: add(() => import('../../background/services/identity'), 'Identity'),
+    Backup: add(() => import('./background-script/BackupService'), 'Backup'),
     Helper: add(() => import('../../background/services/helper'), 'Helper'),
     SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
     Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
@@ -39,10 +39,10 @@ export const ServicesWithProgress: _AsyncGeneratorVersionOf<typeof import('./ser
 if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
     import.meta.webpackHot.accept(
         [
+            '../../background/services/crypto',
+            '../../background/services/identity',
+            './background-script/BackupService',
             '../../background/services/helper',
-            './background-script/CryptoService',
-            './background-script/IdentityService',
-            './background-script/WelcomeService',
             './background-script/SettingsService',
             './background-script/ThirdPartyPlugin',
             './background-script/SocialNetworkService',

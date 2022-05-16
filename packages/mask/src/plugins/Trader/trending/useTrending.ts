@@ -25,7 +25,7 @@ export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProv
     } as Coin
     return {
         value: {
-            currency: currency,
+            currency,
             trending: trending
                 ? {
                       ...trending,
@@ -33,8 +33,8 @@ export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProv
                   }
                 : null,
         },
-        loading: loading,
-        error: error,
+        loading,
+        error,
     }
 }
 
@@ -60,7 +60,7 @@ export function useTrendingById(id: string, dataProvider: DataProvider) {
 
     return {
         value: {
-            currency: currency,
+            currency,
             trending: trending
                 ? {
                       ...trending,
@@ -68,7 +68,7 @@ export function useTrendingById(id: string, dataProvider: DataProvider) {
                   }
                 : null,
         },
-        loading: loading,
-        error: error,
+        loading,
+        error,
     }
 }

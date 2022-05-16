@@ -4,10 +4,25 @@ import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, CircularProgress, Typography, Paper, Link } from '@mui/material'
 import { useStylesExtends, makeStyles, MaskColorVar } from '@masknet/theme'
+<<<<<<< HEAD
 import { useProviderDescriptor, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
 import { FlashIcon } from '../../../../resources/FlashIcon'
+=======
+import { ImageIcon } from '@masknet/shared'
+import { WarningTriangleIcon } from '@masknet/icons'
+import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra/web3'
+import {
+    ProviderType,
+    resolveProviderName,
+    resolveProviderShortenLink,
+    resolveProviderHomeLink,
+} from '@masknet/web3-shared-evm'
+import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { useI18N } from '../../../../utils'
+import { Trans } from 'react-i18next'
+>>>>>>> develop
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -20,17 +35,17 @@ const useStyles = makeStyles()((theme) => ({
         flexWrap: 'nowrap',
         alignItems: 'center',
         marginTop: 10,
-        backgroundColor: MaskColorVar.errorBackground,
+        backgroundColor: MaskColorVar.warningBackground,
         padding: theme.spacing(2, 0, 2, 1.5),
         borderRadius: 8,
     },
     tipContentText: {
-        color: MaskColorVar.redMain,
+        color: MaskColorVar.warning,
         fontSize: 12,
         marginLeft: 10,
     },
     tipLink: {
-        color: MaskColorVar.redMain,
+        color: MaskColorVar.warning,
         textDecoration: 'underline',
     },
     error: {
@@ -97,7 +112,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                 </Card>
             </Paper>
             <Card className={classes.tipContent} elevation={0}>
-                <FlashIcon />
+                <WarningTriangleIcon />
                 <Typography className={classes.tipContentText} variant="body2">
                     <Trans
                         i18nKey="plugin_wallet_connect_tip"

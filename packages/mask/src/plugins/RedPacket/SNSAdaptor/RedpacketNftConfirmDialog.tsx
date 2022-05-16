@@ -23,8 +23,13 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { RedPacketNftMetaKey } from '../constants'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
+<<<<<<< HEAD
 import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+=======
+import { useAsync } from 'react-use'
+import Services from '../../../extension/service'
+>>>>>>> develop
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -131,7 +136,7 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translateY(1px)',
     },
     loadingFailImage: {
-        minHeight: '0px !important',
+        minHeight: '0 !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
         width: 64,
@@ -167,7 +172,13 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     const { address: publicKey, privateKey } = useMemo(() => web3?.eth.accounts.create(), [])
     const duration = 60 * 60 * 24
     const currentIdentity = useCurrentIdentity()
-    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
+
+    const { value: linkedPersona } = useAsync(async () => {
+        if (!currentIdentity?.linkedPersona) return
+        return Services.Identity.queryPersona(currentIdentity.linkedPersona)
+    }, [currentIdentity?.linkedPersona])
+
+    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
     const tokenIdList = tokenList.map((value) => value.tokenId)
     const [createState, createCallback, resetCallback] = useCreateNftRedpacketCallback(
         duration,
@@ -176,8 +187,8 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         contract.address,
         tokenIdList,
     )
-    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
     )
 
     const isSending = [TransactionStateType.WAIT_FOR_CONFIRMING, TransactionStateType.HASH].includes(createState.type)
@@ -198,7 +209,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 privateKey,
                 chainId: contract.chainId,
             })
-            closeWalletStatusDialog()
+            closeApplicationBoardDialog()
         },
         [duration, message, senderName, contract, privateKey, txid],
     )

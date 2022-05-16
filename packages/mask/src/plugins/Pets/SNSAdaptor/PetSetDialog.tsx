@@ -1,6 +1,10 @@
 import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
+<<<<<<< HEAD
 import { Constant, isSameAddress } from '@masknet/web3-shared-base'
+=======
+import { isSameAddress, ChainId } from '@masknet/web3-shared-evm'
+>>>>>>> develop
 import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
@@ -23,6 +27,7 @@ import { useUser, useNFTs, useNFTsExtra } from '../hooks'
 import { useI18N } from '../../../utils'
 import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -300,17 +305,25 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     label={t('plugin_pets_dialog_check_title')}
                     sx={{ marginTop: '4px' }}
                 />
-                <LoadingButton
-                    loading={loading}
-                    color="inherit"
-                    size="large"
-                    fullWidth
-                    variant="contained"
-                    className={classes.btn}
-                    onClick={saveHandle}
-                    disabled={!collection.name || !metaData.image}>
-                    {t('plugin_pets_dialog_btn')}
-                </LoadingButton>
+                <EthereumChainBoundary
+                    chainId={ChainId.Mainnet}
+                    noSwitchNetworkTip
+                    ActionButtonPromiseProps={{
+                        size: 'large',
+                        fullWidth: true,
+                    }}>
+                    <LoadingButton
+                        loading={loading}
+                        color="inherit"
+                        size="large"
+                        fullWidth
+                        variant="contained"
+                        className={classes.btn}
+                        onClick={saveHandle}
+                        disabled={!collection.name || !metaData.image}>
+                        {t('plugin_pets_dialog_btn')}
+                    </LoadingButton>
+                </EthereumChainBoundary>
                 <Box className={classes.desBox}>
                     <Typography className={classes.des}>{t('plugin_pets_dialog_created')}</Typography>
                     <Typography className={classes.des}>{t('plugin_pets_dialog_powered')}</Typography>

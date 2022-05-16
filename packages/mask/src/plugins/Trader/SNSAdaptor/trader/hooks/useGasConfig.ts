@@ -8,6 +8,7 @@ export function useGasConfig(chainId: ChainId) {
     const [gasConfig, setGasConfig] = useState<GasOptionConfig | undefined>()
     const { value: gasPrice } = useAsync(async () => {
         try {
+<<<<<<< HEAD
             if (gasConfig) {
                 return new BigNumber(
                     (chainResolver.isSupport(chainId, 'EIP1559') ? gasConfig.maxFeePerGas : gasConfig.gasPrice) ?? 0,
@@ -23,22 +24,36 @@ export function useGasConfig(chainId: ChainId) {
                         maxFeePerGas,
                         maxPriorityFeePerGas,
                     })
+=======
+            if (isEIP1559Supported(chainId)) {
+                const response = await WalletRPC.getEstimateGasFees(chainId)
+                const maxFeePerGas = formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toFixed(0)
+                const maxPriorityFeePerGas = formatGweiToWei(
+                    response?.medium?.suggestedMaxPriorityFeePerGas ?? 0,
+                ).toFixed(0)
+                setGasConfig({
+                    maxFeePerGas,
+                    maxPriorityFeePerGas,
+                })
+>>>>>>> develop
 
-                    return maxFeePerGas
-                } else {
-                    const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-                    const gasPrice = new BigNumber(response?.data.normal.price ?? 0).toString()
-                    setGasConfig({
-                        gasPrice,
-                    })
+                return maxFeePerGas
+            } else {
+                const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+                const gasPrice = response?.data.normal.price
+                    ? new BigNumber(response.data.normal.price).toString()
+                    : undefined
+                setGasConfig({
+                    gasPrice,
+                })
 
-                    return gasPrice
-                }
+                return gasPrice
             }
-        } catch {
-            return '0'
+        } catch (err) {
+            setGasConfig(undefined)
+            return
         }
-    }, [chainId, gasConfig])
+    }, [chainId])
 
     return { gasPrice, gasConfig, setGasConfig }
 }

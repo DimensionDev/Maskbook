@@ -1,7 +1,7 @@
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
+import { PaletteMode, Theme, unstable_createMuiStrictModeTheme, buttonClasses } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
 import type { SocialNetworkUI } from '../../../social-network'
@@ -9,8 +9,8 @@ import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB }
 import { isMobileTwitter } from '../utils/isMobile'
 import { composeAnchorSelector, composeAnchorTextSelector, headingTextSelector } from '../utils/selector'
 import twitterColorSchema from './twitter-color-schema.json'
-import { parseColor } from '@masknet/theme'
 import { noop } from 'lodash-unified'
+import { parseColor } from '@masknet/theme'
 
 const themeColorRef = new ValueRef('rgb(29, 161, 242)')
 const textColorRef = new ValueRef('rgb(255, 255, 255)')
@@ -71,21 +71,14 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
         setAutoFreeze(false)
 
         const TwitterTheme = produce(baseTheme, (theme) => {
-            theme.palette.background.paper = backgroundColor
             const isDark = theme.palette.mode === 'dark'
-            const isDarker = backgroundColor === 'rgb(0,0,0)'
             theme.palette.primary = {
                 light: toRGB(shade(primaryColorRGB, 10)),
                 main: toRGB(primaryColorRGB),
                 dark: toRGB(shade(primaryColorRGB, -10)),
                 contrastText: toRGB(primaryContrastColorRGB),
             }
-            const themeName = isDark ? (isDarker ? 'darker' : 'dark') : 'light'
-
-            // Just for design
-            if (themeName === 'dark') {
-                theme.palette.background.paper = '#151D26'
-            }
+            const themeName = isDark ? 'dark' : 'light'
 
             const colorSchema = twitterColorSchema[themeName]
             const colors = Object.keys(colorSchema) as Array<keyof typeof colorSchema>
@@ -94,6 +87,8 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     Object.assign(theme.palette[color], colorSchema[color])
                 }
             })
+
+            theme.palette.maskColor = colorSchema.maskColor
             theme.palette.divider = colorSchema.divider
             theme.palette.secondaryDivider = colorSchema.secondaryDivider
             theme.shape.borderRadius = isMobileTwitter ? 0 : 15
@@ -108,124 +103,491 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                 },
                 variants: [
                     {
-                        props: { variant: 'sns' },
+                        props: {
+                            size: 'small',
+                        },
                         style: {
-                            backgroundColor: theme.palette.primary.main,
-                            color: theme.palette.common.white,
-                            '&:hover': {
-                                backgroundColor: theme.palette.primary.dark,
-                                color: theme.palette.common.white,
+                            padding: '8px 12px',
+                            borderRadius: 6,
+                            fontSize: 12,
+                            lineHeight: '16px',
+                        },
+                    },
+                    {
+                        props: {
+                            size: 'medium',
+                        },
+                        style: {
+                            padding: '11px 18px',
+                            borderRadius: 8,
+                            fontSize: 14,
+                            lineHeight: '18px',
+                        },
+                    },
+                    {
+                        props: {
+                            size: 'large',
+                        },
+                        style: {
+                            padding: '14px 20px',
+                            borderRadius: 10,
+                            fontSize: 16,
+                            lineHeight: '20px',
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'outlined',
+                        },
+                        style: {
+                            background: theme.palette.maskColor.thirdMain,
+                            color: theme.palette.text.primary,
+                            ['&:hover']: {
+                                backgroundColor: theme.palette.background.paper,
+                                border: 'none',
+                                boxShadow:
+                                    theme.palette.mode === 'dark'
+                                        ? '0 8px 25px rgba(255, 255, 255, 0.1)'
+                                        : '0 8px 25px rgba(0, 0, 0, 0.1)',
                             },
-                            '&.Mui-disabled': {
-                                opacity: 0.5,
-                                backgroundColor: theme.palette.primary.main,
-                                color: theme.palette.common.white,
+                            [`&.${buttonClasses.disabled}`]: {
+                                opacity: 0.4,
+                                color: theme.palette.text.primary,
                             },
                         },
                     },
                     {
-                        props: { color: 'error' },
+                        props: {
+                            variant: 'flat',
+                        },
                         style: {
-                            backgroundColor: theme.palette.error.main,
-                            color: theme.palette.common.white,
-                            '&:hover': {
-                                backgroundColor: '#f53b47',
+                            background: theme.palette.maskColor.thirdMain,
+                            color: theme.palette.text.primary,
+                            ['&:hover']: {
+                                backgroundColor: theme.palette.background.paper,
+                                boxShadow:
+                                    theme.palette.mode === 'dark'
+                                        ? '0 8px 25px rgba(255, 255, 255, 0.1)'
+                                        : '0 8px 25px rgba(0, 0, 0, 0.1)',
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                opacity: 0.4,
+                                color: theme.palette.text.primary,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'contained',
+                        },
+                        style: {
+                            backgroundColor: theme.palette.text.primary,
+                            ['&:hover']: {
+                                backgroundColor: theme.palette.text.primary,
+                                boxShadow:
+                                    theme.palette.mode === 'dark'
+                                        ? '0 8px 25px rgba(255, 255, 255, 0.2)'
+                                        : '0 8px 25px rgba(0, 0, 0, 0.2)',
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                background: theme.palette.maskColor.primaryMain,
+                                opacity: 0.6,
+                                color: theme.palette.background.paper,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'text',
+                        },
+                        style: {
+                            color: theme.palette.text.primary,
+                            ['&:hover']: {
+                                background: theme.palette.maskColor.thirdMain,
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                opacity: 0.4,
+                            },
+                        },
+                    },
+                    // info button
+                    {
+                        props: {
+                            variant: 'contained',
+                            color: 'info',
+                        },
+                        style: {
+                            background: theme.palette.maskColor.primary,
+                            color: theme.palette.maskColor.white,
+                            ['&:hover']: {
+                                background: theme.palette.maskColor.primary,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.primary)
+                                    .setAlpha(0.3)
+                                    .toRgbString()}`,
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                background: parseColor(theme.palette.maskColor.primary).setAlpha(0.3).toRgbString(),
+                                opacity: 0.6,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'flat',
+                            color: 'info',
+                        },
+                        style: {
+                            backgroundColor: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
+                            color: theme.palette.maskColor.primary,
+                            ['&:hover']: {
+                                background:
+                                    theme.palette.mode === 'dark'
+                                        ? parseColor(theme.palette.maskColor.primary).setAlpha(0.3).toRgbString()
+                                        : theme.palette.maskColor.white,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.primary)
+                                    .setAlpha(0.1)
+                                    .toRgbString()}`,
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                color: theme.palette.maskColor.primary,
+                                background: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
+                                opacity: 0.4,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'text',
+                            color: 'info',
+                        },
+                        style: {
+                            color: theme.palette.maskColor.primary,
+                            ['&:hover']: {
+                                background: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                color: theme.palette.maskColor.primary,
+                                opacity: 0.4,
+                            },
+                        },
+                    },
+
+                    // warn button
+                    {
+                        props: {
+                            variant: 'contained',
+                            color: 'warning',
+                        },
+                        style: {
+                            backgroundColor: theme.palette.maskColor.warn,
+                            color: theme.palette.maskColor.white,
+                            ['&:hover']: {
+                                background: theme.palette.maskColor.warn,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.warn)
+                                    .setAlpha(0.3)
+                                    .toRgbString()}`,
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                background: parseColor(theme.palette.maskColor.warn).setAlpha(0.5).toRgbString(),
+                                opacity: 0.6,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'flat',
+                            color: 'warning',
+                        },
+                        style: {
+                            backgroundColor: parseColor(theme.palette.maskColor.warn).setAlpha(0.1).toRgbString(),
+                            color: theme.palette.maskColor.warn,
+                            ['&:hover']: {
+                                background:
+                                    theme.palette.mode === 'dark'
+                                        ? parseColor(theme.palette.maskColor.warn).setAlpha(0.3).toRgbString()
+                                        : theme.palette.maskColor.white,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.warn)
+                                    .setAlpha(0.1)
+                                    .toRgbString()}`,
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                color: theme.palette.maskColor.warn,
+                                background: parseColor(theme.palette.maskColor.warn).setAlpha(0.1).toRgbString(),
+                                opacity: 0.4,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'text',
+                            color: 'warning',
+                        },
+                        style: {
+                            color: theme.palette.maskColor.warn,
+                            ['&:hover']: {
+                                background: parseColor(theme.palette.maskColor.warn).setAlpha(0.1).toRgbString(),
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                color: theme.palette.maskColor.warn,
+                                opacity: 0.4,
+                            },
+                        },
+                    },
+
+                    // success button
+                    {
+                        props: {
+                            variant: 'contained',
+                            color: 'success',
+                        },
+                        style: {
+                            background: theme.palette.maskColor.success,
+                            color: theme.palette.maskColor.white,
+                            ['&:hover']: {
+                                background: theme.palette.maskColor.success,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.success)
+                                    .setAlpha(0.3)
+                                    .toRgbString()}`,
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                background: parseColor(theme.palette.maskColor.success).setAlpha(0.5).toRgbString(),
+                                opacity: 0.6,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'flat',
+                            color: 'success',
+                        },
+                        style: {
+                            background: parseColor(theme.palette.maskColor.success).setAlpha(0.1).toRgbString(),
+                            color: theme.palette.maskColor.warn,
+                            ['&:hover']: {
+                                background:
+                                    theme.palette.mode === 'dark'
+                                        ? parseColor(theme.palette.maskColor.success).setAlpha(0.3).toRgbString()
+                                        : theme.palette.maskColor.white,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.success)
+                                    .setAlpha(0.1)
+                                    .toRgbString()}`,
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                color: theme.palette.maskColor.success,
+                                background: parseColor(theme.palette.maskColor.success).setAlpha(0.1).toRgbString(),
+                                opacity: 0.4,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'text',
+                            color: 'success',
+                        },
+                        style: {
+                            color: theme.palette.maskColor.success,
+                            ['&:hover']: {
+                                background: parseColor(theme.palette.maskColor.success).setAlpha(0.1).toRgbString(),
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                color: theme.palette.maskColor.success,
+                                opacity: 0.4,
+                            },
+                        },
+                    },
+
+                    // error button
+                    {
+                        props: {
+                            variant: 'contained',
+                            color: 'error',
+                        },
+                        style: {
+                            backgroundColor: theme.palette.maskColor.danger,
+                            color: theme.palette.maskColor.white,
+                            ['&:hover']: {
+                                background: theme.palette.maskColor.danger,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.danger)
+                                    .setAlpha(0.3)
+                                    .toRgbString()}`,
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                background: parseColor(theme.palette.maskColor.danger).setAlpha(0.5).toRgbString(),
+                                opacity: 0.6,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'flat',
+                            color: 'error',
+                        },
+                        style: {
+                            backgroundColor: parseColor(theme.palette.maskColor.danger).setAlpha(0.1).toRgbString(),
+                            color: theme.palette.maskColor.danger,
+                            ['&:hover']: {
+                                background:
+                                    theme.palette.mode === 'dark'
+                                        ? parseColor(theme.palette.maskColor.danger).setAlpha(0.3).toRgbString()
+                                        : theme.palette.maskColor.white,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.danger)
+                                    .setAlpha(0.1)
+                                    .toRgbString()}`,
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                color: theme.palette.maskColor.danger,
+                                background: parseColor(theme.palette.maskColor.danger).setAlpha(0.1).toRgbString(),
+                                opacity: 0.4,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'text',
+                            color: 'error',
+                        },
+                        style: {
+                            color: theme.palette.maskColor.danger,
+                            ['&:hover']: {
+                                background: parseColor(theme.palette.maskColor.danger).setAlpha(0.1).toRgbString(),
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                color: theme.palette.maskColor.danger,
+                                opacity: 0.4,
+                            },
+                        },
+                    },
+
+                    // rounded button
+                    {
+                        props: {
+                            variant: 'roundedFlat',
+                        },
+                        style: {
+                            borderRadius: 99,
+                            background: theme.palette.maskColor.thirdMain,
+                            color: theme.palette.text.primary,
+                            ['&:hover']: {
+                                backgroundColor: theme.palette.background.paper,
+                                boxShadow:
+                                    theme.palette.mode === 'dark'
+                                        ? '0 8px 25px rgba(255, 255, 255, 0.1)'
+                                        : '0 8px 25px rgba(0, 0, 0, 0.1)',
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                opacity: 0.4,
+                                color: theme.palette.text.primary,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'roundedContained',
+                        },
+                        style: {
+                            backgroundColor: theme.palette.text.primary,
+                            borderRadius: 99,
+                            ['&:hover']: {
+                                backgroundColor: theme.palette.text.primary,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.text.primary)
+                                    .setAlpha(0.3)
+                                    .toRgbString()}`,
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                background: theme.palette.maskColor.primaryMain,
+                                opacity: 0.6,
+                                color: theme.palette.background.paper,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'roundedText',
+                        },
+                        style: {
+                            color: theme.palette.text.primary,
+                            borderRadius: 99,
+                            ['&:hover']: {
+                                background: theme.palette.maskColor.thirdMain,
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                opacity: 0.4,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'roundedContained',
+                            color: 'info',
+                        },
+                        style: {
+                            background: theme.palette.maskColor.primary,
+                            color: theme.palette.maskColor.white,
+                            borderRadius: 99,
+                            ['&:hover']: {
+                                background: theme.palette.maskColor.primary,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.primary)
+                                    .setAlpha(0.3)
+                                    .toRgbString()}`,
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                background: parseColor(theme.palette.maskColor.primary).setAlpha(0.3).toRgbString(),
+                                opacity: 0.6,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'roundedFlat',
+                            color: 'info',
+                        },
+                        style: {
+                            backgroundColor: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
+                            color: theme.palette.maskColor.primary,
+                            borderRadius: 99,
+                            ['&:hover']: {
+                                background:
+                                    theme.palette.mode === 'dark'
+                                        ? parseColor(theme.palette.maskColor.primary).setAlpha(0.3).toRgbString()
+                                        : theme.palette.maskColor.white,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.primary)
+                                    .setAlpha(0.1)
+                                    .toRgbString()}`,
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                color: theme.palette.maskColor.primary,
+                                background: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
+                                opacity: 0.4,
+                            },
+                        },
+                    },
+                    {
+                        props: {
+                            variant: 'roundedText',
+                            color: 'info',
+                        },
+                        style: {
+                            color: theme.palette.maskColor.primary,
+                            borderRadius: 99,
+                            ['&:hover']: {
+                                background: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
+                            },
+                            [`&.${buttonClasses.disabled}`]: {
+                                color: theme.palette.maskColor.primary,
+                                opacity: 0.4,
                             },
                         },
                     },
                 ],
                 styleOverrides: {
                     root: {
-                        borderRadius: 500,
                         textTransform: 'initial',
-                        fontWeight: 600,
-                        minHeight: 39,
-                        paddingLeft: 15,
-                        paddingRight: 15,
-                        boxShadow: 'none',
-                        [smallQuery]: {
-                            '&': {
-                                height: 30,
-                                minHeight: 'auto !important',
-                                padding: '0 14px !important',
-                            },
-                        },
-                    },
-                    contained: {
-                        backgroundColor: theme.palette.text.primary,
-                        color: theme.palette.text.buttonText,
-                        '&.Mui-disabled': {
-                            opacity: 0.5,
-                            backgroundColor: theme.palette.text.primary,
-                            color: theme.palette.text.buttonText,
-                        },
-                        '&:hover': {
-                            backgroundColor: theme.palette.action.buttonHover,
-                        },
-                        [smallQuery]: {
-                            '&': {
-                                height: 30,
-                                minHeight: 'auto !important',
-                                padding: '0 14px !important',
-                            },
-                        },
-                    },
-                    containedSecondary: {
-                        backgroundColor: theme.palette.background.default,
-                        color: theme.palette.text.strong,
-                        '&:hover': {
-                            color: theme.palette.action.buttonHover,
-                            backgroundColor: theme.palette.action.bgHover,
-                        },
-                        '&.Mui-disabled': {
-                            opacity: 0.5,
-                            backgroundColor: theme.palette.background.default,
-                            color: theme.palette.text.strong,
-                        },
-                    },
-                    outlined: {
-                        color: theme.palette.text.strong,
-                        borderColor: theme.palette.secondaryDivider,
-                        backgroundColor: 'transparent',
-                        '&:hover': {
-                            color: theme.palette.action.buttonHover,
-                            borderColor: theme.palette.secondaryDivider,
-                            backgroundColor: parseColor(theme.palette.text.primary).setAlpha(0.1).toRgbString(),
-                        },
-                        '&.Mui-disabled': {
-                            opacity: 0.5,
-                            color: theme.palette.text.strong,
-                            backgroundColor: 'transparent',
-                        },
-                    },
-                    sizeLarge: {
-                        minHeight: 40,
-                        paddingLeft: 30,
-                        paddingRight: 30,
-                        [smallQuery]: {
-                            '&': {
-                                height: 28,
-                                minHeight: 28,
-                                paddingLeft: 15,
-                                paddingRight: 15,
-                            },
-                        },
-                    },
-                    sizeSmall: {
-                        minHeight: 30,
-                        paddingLeft: 15,
-                        paddingRight: 15,
-                        [smallQuery]: {
-                            '&': {
-                                height: 25,
-                                minHeight: 29,
-                                paddingLeft: 10,
-                                paddingRight: 10,
-                            },
-                        },
+                        fontWeight: 700,
+                        color: theme.palette.background.paper,
                     },
                 },
             }
+
             theme.components.MuiPaper = {
                 defaultProps: {
                     elevation: 0,
@@ -282,7 +644,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
             theme.components.MuiSnackbar = {
                 styleOverrides: {
                     root: {
-                        filter: `drop-shadow(0px 0px 16px ${theme.palette.background.messageShadow});`,
+                        filter: `drop-shadow(0 0 16px ${theme.palette.background.messageShadow});`,
                     },
                 },
             }

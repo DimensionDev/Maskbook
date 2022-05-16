@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         backgroundAttachment: 'local',
-        backgroundPosition: '0',
+        backgroundPosition: 0,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         width: 475,

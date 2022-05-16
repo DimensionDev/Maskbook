@@ -1,16 +1,17 @@
 import { memo, useMemo, useState } from 'react'
-import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
-import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
-import { useI18N } from '../../../../../utils'
-import { useAsyncFn, useUpdateEffect } from 'react-use'
+import { useAsyncFn, useLocation } from 'react-use'
+import { useLocation as useRouteLocation, useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
-import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
-import { useWallet } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
+import { makeStyles } from '@masknet/theme'
+// import { Typography } from '@mui/material'
+// import { useI18N } from '../../../../../utils'
+// import { ChainId, EthereumRpcType, NetworkType, ProviderType, useWallet } from '@masknet/web3-shared-evm'
+// import Services from '../../../../service'
+// import { PopupRoutes } from '@masknet/shared-base'
+// import { useTitle } from '../../../hook/useTitle'
+// import type { Web3Plugin } from '@masknet/plugin-infra/dist/web3-types'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -76,93 +77,98 @@ const useStyles = makeStyles()(() => ({
         color: '#FF5F5F',
         fontSize: 12,
         lineHeight: '16px',
-        padding: '0px 16px 20px 16px',
+        padding: '0 16px 20px 16px',
         wordBreak: 'break-all',
     },
 }))
 
 const SignRequest = memo(() => {
-    const { t } = useI18N()
-    const navigate = useNavigate()
-    const location = useLocation()
-    const { classes } = useStyles()
-    const { value, loading: requestLoading } = useUnconfirmedRequest()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const [transferError, setTransferError] = useState(false)
+    return <></>
+    // const { t } = useI18N()
+    // const location = useLocation()
+    // const routeLocation = useRouteLocation()
+    // const navigate = useNavigate()
+    // const { classes } = useStyles()
+    // const { value } = useUnconfirmedRequest()
+    // const wallet = useWallet()
+    // const [transferError, setTransferError] = useState(false)
 
-    const { data, address } = useMemo(() => {
-        // if (
-        //     value?.computedPayload?.type === TransactionDescriptorType.SIGN ||
-        //     value?.computedPayload?.type === TransactionDescriptorType.SIGN_TYPED_DATA
-        // ) {
-        //     let message = value.computedPayload.data
-        //     try {
-        //         message = toUtf8(message)
-        //     } catch (error) {
-        //         console.log(error)
-        //     }
-        //     return {
-        //         address: value.computedPayload.to,
-        //         data: message,
-        //     }
-        // }
-        return {
-            address: '',
-            data: '',
-        }
-    }, [value])
+    // const selectedWallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
 
-    const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-        // try {
-        //     await EVM_RPC.confirmRequest()
-        // } catch (error_) {
-        //     setTransferError(true)
-        // }
-    }, [value, location.search, history])
+    // const { data, address } = useMemo(() => {
+    //     if (
+    //         value?.computedPayload?.type === EthereumRpcType.SIGN ||
+    //         value?.computedPayload?.type === EthereumRpcType.SIGN_TYPED_DATA
+    //     ) {
+    //         let message = value.computedPayload.data
+    //         try {
+    //             message = toUtf8(value.computedPayload.data)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //         return {
+    //             address: value.computedPayload.to,
+    //             data: message,
+    //         }
+    //     }
+    //     return {
+    //         address: '',
+    //         data: '',
+    //     }
+    // }, [value])
 
-    const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-        if (!value) return
-        // await EVM_RPC.rejectRequest()
-        navigate(PopupRoutes.Wallet, { replace: true })
-    }, [value])
+    // const [{ loading }, handleConfirm] = useAsyncFn(async () => {
+    //     const goBack = new URLSearchParams(routeLocation.search).get('goBack')
 
-    useUpdateEffect(() => {
-        if (!value && !requestLoading) {
-            navigate(PopupRoutes.Wallet, { replace: true })
-        }
-    }, [value, requestLoading])
+    //     if (value) {
+    //         try {
+    //             await Services.Ethereum.confirmRequest(value.payload, !!goBack)
+    //             navigate(-1)
+    //         } catch (error_) {
+    //             setTransferError(true)
+    //         }
+    //     }
+    // }, [value, routeLocation.search, selectedWallet])
 
-    return (
-        <main className={classes.container}>
-            <div className={classes.info}>
-                <Typography className={classes.title}>{t('popups_wallet_signature_request')}</Typography>
-                <Typography className={classes.walletName}>{wallet?.name ?? ''}</Typography>
-                <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
-                    {address}
-                </Typography>
-            </div>
-            <Typography className={classes.secondary} style={{ marginTop: 20 }}>
-                {t('popups_wallet_signature_request_message')}:
-            </Typography>
-            <Typography className={classes.message}>{data}</Typography>
-            {transferError ? (
-                <Typography className={classes.error}>{t('popups_wallet_transfer_error_tip')}</Typography>
-            ) : null}
-            <div className={classes.controller}>
-                <LoadingButton
-                    loading={rejectLoading}
-                    variant="contained"
-                    className={classes.button}
-                    style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
-                    onClick={handleReject}>
-                    {t('cancel')}
-                </LoadingButton>
-                <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
-                    {t('confirm')}
-                </LoadingButton>
-            </div>
-        </main>
-    )
+    // const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
+    //     if (!value) return
+    //     await Services.Ethereum.rejectRequest(value.payload)
+    //     navigate(PopupRoutes.Wallet, { replace: true })
+    // }, [value])
+
+    // useTitle(t('popups_wallet_signature_request_title'))
+
+    // return (
+    //     <main className={classes.container}>
+    //         <div className={classes.info}>
+    //             <Typography className={classes.title}>{t('popups_wallet_signature_request')}</Typography>
+    //             <Typography className={classes.walletName}>{wallet?.name ?? ''}</Typography>
+    //             <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
+    //                 {address}
+    //             </Typography>
+    //         </div>
+    //         <Typography className={classes.secondary} style={{ marginTop: 20 }}>
+    //             {t('popups_wallet_signature_request_message')}:
+    //         </Typography>
+    //         <Typography className={classes.message}>{data}</Typography>
+    //         {transferError ? (
+    //             <Typography className={classes.error}>{t('popups_wallet_transfer_error_tip')}</Typography>
+    //         ) : null}
+    //         <div className={classes.controller}>
+    //             <LoadingButton
+    //                 loading={rejectLoading}
+    //                 variant="contained"
+    //                 className={classes.button}
+    //                 style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
+    //                 onClick={handleReject}>
+    //                 {t('cancel')}
+    //             </LoadingButton>
+    //             <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
+    //                 {t('confirm')}
+    //             </LoadingButton>
+    //         </div>
+    //     </main>
+    // )
 })
 
 export default SignRequest

@@ -20,8 +20,6 @@ import { DashboardContext } from './context'
 import {
     MaskBannerIcon,
     MaskNotSquareIcon,
-    MenuLabsActiveIcon,
-    MenuLabsIcon,
     MenuPersonasActiveIcon,
     MenuPersonasIcon,
     MenuSettingsActiveIcon,
@@ -72,7 +70,7 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
                 display: 'inline-block',
                 width: 5,
                 height: 40,
-                boxShadow: '-2px 0px 10px 2px rgba(0, 56, 255, 0.15)',
+                boxShadow: '-2px 0 10px 2px rgba(0, 56, 255, 0.15)',
                 borderRadius: 50,
                 background: MaskColorVar.textLink,
                 position: 'absolute',
@@ -168,10 +166,6 @@ export function Navigation({ onClose }: NavigationProps) {
                     )}
                 </List>
             </Collapse>
-            <ListItemLink to={DashboardRoutes.Labs}>
-                <ItemIcon>{useMatch(DashboardRoutes.Labs) ? <MenuLabsActiveIcon /> : <MenuLabsIcon />}</ItemIcon>
-                <ListItemText primary={t.labs()} />
-            </ListItemLink>
             <ListItemLink to={DashboardRoutes.Settings}>
                 <ItemIcon sx={{ fontSize: 36 }}>
                     {useMatch(DashboardRoutes.Settings) ? <MenuSettingsActiveIcon /> : <MenuSettingsIcon />}

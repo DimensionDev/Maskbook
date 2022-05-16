@@ -15,7 +15,7 @@ import { LoadingButton } from '../../../../components/LoadingButton'
 const StyledFormControlLabel = styled(FormControlLabel)({
     [`&.${formControlLabelClasses.root}`]: {
         background: MaskColorVar.lightBackground,
-        margin: '0',
+        margin: 0,
         padding: '2px 0',
         borderRadius: 8,
     },
@@ -57,15 +57,12 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
             const encrypted = await fetchBackupValue(info.downloadURL)
             const decrypted = await decryptBackup(encode(account + backupPassword), encrypted)
             const backupText = JSON.stringify(decode(decrypted))
-            const data = await Services.Welcome.parseBackupStr(backupText)
+            const data = (await Services.Backup.addUnconfirmedBackup(backupText)).unwrap()
 
-            if (data?.info.wallets) {
-                await Services.Welcome.checkPermissionAndOpenWalletRecovery(data.id)
-                return
+            if (data.info.wallets) {
+                await Services.Backup.restoreUnconfirmedBackup({ id: data.id, action: 'wallet' })
             } else {
-                if (data?.id) {
-                    await Services.Welcome.checkPermissionsAndRestore(data.id)
-                }
+                await Services.Backup.restoreUnconfirmedBackup({ id: data.id, action: 'confirm' })
 
                 restoreCallback()
                 setBackupPassword('')

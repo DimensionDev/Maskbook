@@ -2,32 +2,25 @@ import {
     ObservableMap,
     ObservableSet,
     PostIVIdentifier,
-    type Payload,
     type PostIdentifier,
     type ProfileIdentifier,
 } from '@masknet/shared-base'
 import { useObservableValues, useValueRef } from '@masknet/shared-base-ui'
 import type { TypedMessageTuple } from '@masknet/typed-message'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
-import type { Result, Some } from 'ts-results'
+import type { Some } from 'ts-results'
 import { createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
 
 export interface PostContextSNSActions {
-    /** Parse payload into Payload */
-    payloadParser(raw: string): Result<Payload, Error>
-    /**
-     * It will run before parser.
-     * @returns a list of candidates of payload string.
-     */
-    payloadDecoder?(postContent: string): string[]
+    hasPayloadLike(content: string): boolean
     getURLFromPostIdentifier?(post: PostIdentifier): URL | null
 }
 export interface PostContextAuthor {
     readonly nickname: Subscription<string | null>
     readonly avatarURL: Subscription<URL | null>
-    readonly author: Subscription<ProfileIdentifier>
+    readonly author: Subscription<ProfileIdentifier | null>
     /** ID on the SNS network. */
     readonly snsID: Subscription<string | null>
 }
@@ -64,7 +57,7 @@ export interface PostContext extends PostContextAuthor {
     readonly comment: undefined | PostContextComment
     // #region Metadata of a post (author, mentioned items, ...)
     /** Auto computed */
-    readonly identifier: Subscription<null | PostIdentifier<ProfileIdentifier>>
+    readonly identifier: Subscription<null | PostIdentifier>
     readonly url: Subscription<URL | null>
     // Meta
     readonly mentionedLinks: Subscription<string[]>
@@ -77,7 +70,7 @@ export interface PostContext extends PostContextAuthor {
     readonly decryptComment: ValueRef<null | ((commentEncrypted: string) => Promise<string | null>)>
     // #endregion
     // #region Post payload discovered in the rawMessage
-    readonly containingMaskPayload: Subscription<Result<Payload, unknown>>
+    readonly hasMaskPayload: Subscription<boolean>
     readonly postIVIdentifier: Subscription<PostIVIdentifier | null>
     /**
      * undefined => payload not found

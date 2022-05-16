@@ -12,6 +12,8 @@ import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { useWallet } from '@masknet/plugin-infra/web3'
+import { WalletContext } from '../hooks/useWalletContext'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
     content: {
@@ -97,7 +99,10 @@ const useStyles = makeStyles()({
 const DeleteWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const wallet = useWallet()
+    const { selectedWallet } = WalletContext.useContainer()
+    const currentWallet = useWallet()
+    const wallet = selectedWallet ?? currentWallet
+
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
@@ -132,6 +137,8 @@ const DeleteWallet = memo(() => {
             }
         }
     }, [wallet, password])
+
+    useTitle(t('popups_delete_wallet'))
 
     return (
         <>

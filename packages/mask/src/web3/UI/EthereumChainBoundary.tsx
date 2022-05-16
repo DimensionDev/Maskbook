@@ -58,7 +58,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     // if false then it will not guide the user to switch the network
     const isAllowed =
-        chainResolver.isValid(expectedChainId, allowTestnet) && !!account && providerType !== ProviderType.Coin98
+        chainResolver.isValid(expectedChainId, allowTestnet) && !!account && providerType !== ProviderType.Coin98 && providerType !== ProviderType.Fortmatic
 
     // is the actual chain id matched with the expected one?
     const isChainMatched = actualChainId === expectedChainId
@@ -74,9 +74,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-        },
     )
     // #endregion
 
@@ -145,12 +142,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
     const renderBox = (children?: React.ReactNode) => {
         return (
-            <Box
-                className={props.className}
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                sx={!props.disablePadding ? { paddingTop: 1, paddingBottom: 1 } : null}>
+            <Box className={props.className} display="flex" flexDirection="column" alignItems="center">
                 {children}
             </Box>
         )
@@ -164,10 +156,9 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 </Typography>
                 {!props.hiddenConnectButton ? (
                     <ActionButton
-                        variant="contained"
-                        size="small"
                         sx={{ marginTop: 1.5 }}
-                        onClick={openSelectProviderDialog}>
+                        onClick={openSelectProviderDialog}
+                        size={props.ActionButtonPromiseProps?.size}>
                         {t('plugin_wallet_connect_wallet')}
                     </ActionButton>
                 ) : null}
@@ -201,8 +192,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 ) : null}
                 {isAllowed ? (
                     <ActionButtonPromise
-                        variant="contained"
-                        size="small"
                         className={classes.switchButton}
                         sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
                         init={
@@ -242,8 +231,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             ) : null}
             {isAllowed ? (
                 <ActionButtonPromise
-                    variant="contained"
-                    size="small"
                     className={classes.switchButton}
                     sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
                     init={

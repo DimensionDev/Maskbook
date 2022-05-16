@@ -5,8 +5,13 @@ import { isCompactPayload } from './helpers'
 import { usePoolPayload } from './hooks/usePoolPayload'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO, ITO_Error, ITO_Loading } from './ITO'
+<<<<<<< HEAD
 import { NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
 import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
+=======
+import { useClassicMaskSNSPluginTheme } from '../../../utils'
+import { ThemeProvider } from '@mui/material'
+>>>>>>> develop
 
 export interface PostInspectorProps {
     payload: JSON_PayloadInMask
@@ -83,5 +88,12 @@ export function PostInspector(props: PostInspectorProps) {
             />
         )
     }
-    return <EthereumChainBoundary chainId={chain_id}>{renderITO()}</EthereumChainBoundary>
+
+    const theme = useClassicMaskSNSPluginTheme()
+
+    return (
+        <ThemeProvider theme={theme}>
+            <EthereumChainBoundary chainId={chain_id}>{renderITO()}</EthereumChainBoundary>
+        </ThemeProvider>
+    )
 }

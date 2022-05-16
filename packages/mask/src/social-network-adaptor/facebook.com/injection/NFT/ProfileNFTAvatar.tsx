@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
-// import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
+import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import {
     searchFacebookAvatarListSelector,
@@ -12,8 +12,8 @@ import {
     searchFacebookSaveAvatarButtonSelector,
 } from '../../utils/selector'
 import { useCallback, useEffect } from 'react'
-// import { toPNG } from '../../../../plugins/Avatar/utils'
-// import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { toPNG } from '../../../../plugins/Avatar/utils'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
 import { isMobileFacebook } from '../../utils/isMobile'
@@ -56,30 +56,30 @@ async function changeImageToActiveElements(image: File | Blob): Promise<void> {
 }
 
 function NFTAvatarInFacebookFirstStep() {
-    return null
-    // const { classes } = useStyles()
+    const { classes } = useStyles()
 
-    // const identity = useCurrentVisitingIdentity()
+    const identity = useCurrentVisitingIdentity()
 
-    // const onChange = useCallback(
-    //     async (token: ERC721TokenDetailed) => {
-    //         if (!token.info.imageURL) return
-    //         const image = await toPNG(token.info.imageURL)
-    //         if (!image) return
+    const onChange = useCallback(
+        async (token: ERC721TokenDetailed) => {
+            if (!token.info.imageURL) return
+            const image = await toPNG(token.info.imageURL)
+            if (!image) return
+            if (!identity.identifier) return
 
-    //         await changeImageToActiveElements(image)
+            await changeImageToActiveElements(image)
 
-    //         MaskMessages.events.NFTAvatarUpdated.sendToLocal({
-    //             userId: identity.identifier.userId,
-    //             avatarId: '',
-    //             address: token.contractDetailed.address,
-    //             tokenId: token.tokenId,
-    //         })
-    //     },
-    //     [identity],
-    // )
+            MaskMessages.events.NFTAvatarUpdated.sendToLocal({
+                userId: identity.identifier.userId,
+                avatarId: '',
+                address: token.contractDetailed.address,
+                tokenId: token.tokenId,
+            })
+        },
+        [identity],
+    )
 
-    // return <NFTAvatar onChange={onChange} classes={classes} />
+    return <NFTAvatar onChange={onChange} classes={classes} />
 }
 
 function NFTAvatarInFacebookSecondStep() {
@@ -136,24 +136,24 @@ const useMobileStyles = makeStyles()({
 })
 
 function NFTAvatarListInFaceBookMobile() {
-    return null
-    // const { classes } = useMobileStyles()
-    // const identity = useCurrentVisitingIdentity()
+    const { classes } = useMobileStyles()
+    const identity = useCurrentVisitingIdentity()
 
-    // const onChange = useCallback(
-    //     async (token: ERC721TokenDetailed) => {
-    //         if (!token.info.imageURL) return
-    //         const image = await toPNG(token.info.imageURL)
-    //         if (!image) return
+    const onChange = useCallback(
+        async (token: ERC721TokenDetailed) => {
+            if (!token.info.imageURL) return
+            const image = await toPNG(token.info.imageURL)
+            if (!image) return
 
-    //         await changeImageToActiveElementsOnMobile(image)
+            await changeImageToActiveElementsOnMobile(image)
 
-    //         InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue(identity.identifier.userId)
-    //         InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(token.contractDetailed.address)
-    //         InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(token.tokenId)
-    //     },
-    //     [identity],
-    // )
+            identity.identifier &&
+                InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue(identity.identifier.userId)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(token.contractDetailed.address)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(token.tokenId)
+        },
+        [identity],
+    )
 
-    // return <NFTAvatar onChange={onChange} classes={classes} />
+    return <NFTAvatar onChange={onChange} classes={classes} />
 }

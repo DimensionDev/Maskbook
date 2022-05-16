@@ -8,6 +8,7 @@ import { ConnectWalletDialog } from './ConnectWalletDialog'
 import { WalletRiskWarningDialog } from './RiskWarningDialog'
 import { GasSettingDialog } from './GasSettingDialog'
 import { TransactionSnackbar } from './TransactionSnackbar'
+import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBoardDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -19,6 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 <SelectProviderDialog />
                 <SelectNftContractDialog />
                 <WalletStatusDialog />
+                <ApplicationBoardDialog />
                 <ConnectWalletDialog />
                 <WalletRiskWarningDialog />
                 <GasSettingDialog />
