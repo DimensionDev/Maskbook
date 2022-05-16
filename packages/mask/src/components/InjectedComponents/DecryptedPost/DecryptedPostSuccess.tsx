@@ -73,7 +73,7 @@ const DecryptPostSuccessAppendShare = memo(function DecryptPostSuccessAppendShar
     const { t } = useI18N()
     const [showDialog, setShowDialog] = useState(false)
     const recipients = useRecipientsList()
-    const canAppendShareTarget = useCanAppendShareTarget(props.whoAmI) && recipients.hasRecipients
+    const canAppendShareTarget = useCanAppendShareTarget(props.whoAmI)
 
     const rightActions = canAppendShareTarget ? (
         <>
