@@ -336,12 +336,12 @@
             "logoURI": "https://static.debank.com/image/chain/logo_url/op/01ae734fe781c9c2ae6a4cc7e9244056.png"
         },
         "infoURL": "https://optimism.io",
-        "shortName": "gor",
+        "shortName": "kor",
         "chainId": 69
     },
     {
         "name": "Optimism Ethereum Testnet Goerli",
-        "chain": "OP",
+        "chain": "Goerli",
         "network": "testnet",
         "rpc": ["https://goerli.optimism.io/"],
         "faucets": [],

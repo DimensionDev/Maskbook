@@ -14,7 +14,8 @@
         "xDai": ["https://tokens.r2d2.to/latest/100/tokens.json"],
         "Optimism": [
             "https://static.optimism.io/optimism.tokenlist.json",
-            "https://tokens.r2d2.to/latest/10/tokens.json"
+            "https://tokens.r2d2.to/latest/10/tokens.json",
+            "https://token-list.sushi.com"
         ],
         "Optimism_Kovan": [],
         "Optimism_Goerli": [],

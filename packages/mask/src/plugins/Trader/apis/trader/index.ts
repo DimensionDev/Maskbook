@@ -58,7 +58,13 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
         case NetworkType.Fantom:
             return [TradeProvider.SUSHISWAP]
         case NetworkType.Optimism:
-            return [TradeProvider.UNISWAP_V3, TradeProvider.JUGGLERRED, TradeProvider.ELKFINANCE, TradeProvider.ZIPSWAP]
+            return [
+                TradeProvider.UNISWAP_V3,
+                TradeProvider.SUSHISWAP,
+                TradeProvider.JUGGLERRED,
+                TradeProvider.ELKFINANCE,
+                TradeProvider.ZIPSWAP,
+            ]
         case NetworkType.Aurora:
             return [TradeProvider.DODO, TradeProvider.WANNASWAP, TradeProvider.TRISOLARIS]
         case NetworkType.Harmony:
