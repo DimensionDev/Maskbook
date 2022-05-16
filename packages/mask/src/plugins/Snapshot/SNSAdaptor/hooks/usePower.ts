@@ -3,7 +3,7 @@ import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginSnapshotRPC } from '../../messages'
 import type { ProposalIdentifier } from '../../types'
 import { useProposal } from './useProposal'
-import { mapKeys } from 'lodash-unified'
+import { find, sum } from 'lodash-unified'
 
 export function usePower(identifier: ProposalIdentifier) {
     const { payload: proposal } = useProposal(identifier.id)
@@ -18,8 +18,6 @@ export function usePower(identifier: ProposalIdentifier) {
             identifier.space,
             proposal.strategies,
         )
-        return scores
-            .map((score) => mapKeys(score, (_value, key) => key.toLowerCase()) as Record<string, number>)
-            .map((record) => record[account.toLowerCase()] ?? 0)
+        return sum(scores.map((score) => find(score, (_, key) => key.toLowerCase() === account.toLowerCase()) ?? 0))
     }, [account])
 }
