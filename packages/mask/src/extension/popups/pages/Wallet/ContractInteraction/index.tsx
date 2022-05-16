@@ -2,38 +2,24 @@ import { memo, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
-// import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
-// import {
-//     EthereumRpcType,
-//     EthereumTokenType,
-//     formatBalance,
-//     formatCurrency,
-//     formatGweiToWei,
-//     formatWeiToEther,
-//     getChainIdFromNetworkType,
-//     isEIP1559Supported,
-//     useChainId,
-//     useERC20TokenDetailed,
-//     useEthereumTokenType,
-//     useNativeTokenDetailed,
-//     useNetworkType,
-// } from '@masknet/web3-shared-evm'
-// import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
-// import { Link, Typography } from '@mui/material'
-// import { useI18N } from '../../../../../utils'
-// import { PopupRoutes } from '@masknet/shared-base'
-// import { LoadingButton } from '@mui/lab'
-// import { unreachable } from '@dimensiondev/kit'
-// import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-// import Services from '../../../../service'
-// import BigNumber from 'bignumber.js'
-// import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
-// import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
-// import { toHex } from 'web3-utils'
-// import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-// import { isGreaterThan, leftShift, pow10, ZERO } from '@masknet/web3-shared-base'
-// import { CopyIconButton } from '../../../components/CopyIconButton'
-// import { useTitle } from '../../../hook/useTitle'
+import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
+import { formatBalance, formatCurrency, formatGweiToWei, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { Link, Typography } from '@mui/material'
+import { useI18N } from '../../../../../utils'
+import { PopupRoutes } from '@masknet/shared-base'
+import { LoadingButton } from '@mui/lab'
+import { unreachable } from '@dimensiondev/kit'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import Services from '../../../../service'
+import BigNumber from 'bignumber.js'
+import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
+import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
+import { toHex } from 'web3-utils'
+import { useReverseAddress, useWeb3State, useChainId, useNetworkType } from '@masknet/plugin-infra/web3'
+import { isGreaterThan, leftShift, NetworkPluginID, pow10, ZERO } from '@masknet/web3-shared-base'
+import { CopyIconButton } from '../../../components/CopyIconButton'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -142,16 +128,16 @@ const useStyles = makeStyles()(() => ({
 }))
 
 const ContractInteraction = memo(() => {
-    return <></>
+    return null
     // const { t } = useI18N()
     // const { classes } = useStyles()
     // const location = useLocation()
     // const navigate = useNavigate()
-    // const chainId = useChainId()
-    // const networkType = useNetworkType()
+    // const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    // const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     // const [transferError, setTransferError] = useState(false)
     // const { value: request, loading: requestLoading } = useUnconfirmedRequest()
-
+    //
     // const {
     //     tokenAddress,
     //     typeName,
@@ -166,7 +152,7 @@ const ContractInteraction = memo(() => {
     // } = useMemo(() => {
     //     const type = request?.computedPayload?.type
     //     if (!type) return {}
-
+    //
     //     switch (type) {
     //         case EthereumRpcType.CONTRACT_INTERACTION:
     //             switch (request.computedPayload.name) {
@@ -235,13 +221,13 @@ const ContractInteraction = memo(() => {
     //             unreachable(type)
     //     }
     // }, [request, t])
-
+    //
     // const contractType = useEthereumTokenType(contractAddress)
-
+    //
     // // token detailed
     // const { value: nativeToken } = useNativeTokenDetailed()
     // const { value: token } = useERC20TokenDetailed(isNativeTokenInteraction ? '' : tokenAddress)
-
+    //
     // // gas price
     // const { value: defaultPrices } = useAsync(async () => {
     //     if (isEIP1559Supported(chainId) && !maxFeePerGas && !maxPriorityFeePerGas) {
@@ -261,7 +247,7 @@ const ContractInteraction = memo(() => {
     //     }
     //     return {}
     // }, [gasPrice, maxPriorityFeePerGas, maxFeePerGas, networkType, chainId])
-
+    //
     // // handlers
     // const [{ loading }, handleConfirm] = useAsyncFn(async () => {
     //     if (request) {
@@ -274,13 +260,13 @@ const ContractInteraction = memo(() => {
     //     }
     //     return
     // }, [request, location.search, history])
-
+    //
     // const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
     //     if (!request) return
     //     await Services.Ethereum.rejectRequest(request.payload)
     //     navigate(PopupRoutes.Wallet, { replace: true })
     // }, [request])
-
+    //
     // // Wei
     // const gasPriceEIP1559 = new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0, 16)
     // const gasPricePriorEIP1559 = new BigNumber((gasPrice as string) ?? defaultPrices?.gasPrice ?? 0)
@@ -288,11 +274,11 @@ const ContractInteraction = memo(() => {
     //     .multipliedBy(gas ?? 0)
     //     .integerValue()
     //     .toFixed()
-
+    //
     // // token decimals
     // const tokenAmount = (amount ?? 0) as number
     // const tokenDecimals = isNativeTokenInteraction ? nativeToken?.decimals : token?.decimals
-
+    //
     // // token estimated value
     // const tokenPrice = useTokenPrice(chainId, !isNativeTokenInteraction ? token?.address : undefined)
     // const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
@@ -302,7 +288,7 @@ const ContractInteraction = memo(() => {
     //         : leftShift(tokenAmount, tokenDecimals)
     //               .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
     //               .toString()
-
+    //
     // const totalUSD = new BigNumber(formatWeiToEther(gasFee)).times(nativeTokenPrice).plus(tokenValueUSD).toString()
     // //
     // console.log('DEBUG: ContractInteraction')
@@ -319,15 +305,15 @@ const ContractInteraction = memo(() => {
     //     tokenDecimals,
     //     nativeTokenPrice,
     // })
-
+    //
     // useUpdateEffect(() => {
     //     if (!request && !requestLoading) {
     //         navigate(PopupRoutes.Wallet, { replace: true })
     //     }
     // }, [request, requestLoading])
-
+    //
     // useTitle(typeName ?? t('popups_wallet_contract_interaction'))
-
+    //
     // const { value: domain } = useReverseAddress(to, NetworkPluginID.PLUGIN_EVM)
     // const { Utils } = useWeb3State()
     // return requestLoading ? (
@@ -377,7 +363,7 @@ const ContractInteraction = memo(() => {
     //                         </>
     //                     ) : null}
     //                 </div>
-
+    //
     //                 <div className={classes.item}>
     //                     <Typography className={classes.label}>
     //                         {t('popups_wallet_contract_interaction_gas_fee')}
@@ -398,13 +384,13 @@ const ContractInteraction = memo(() => {
     //                         </Link>
     //                     </Typography>
     //                 </div>
-
+    //
     //                 {!isGreaterThan(totalUSD, pow10(9)) ? (
     //                     <div className={classes.item} style={{ marginTop: 10 }}>
     //                         <Typography className={classes.label}>
     //                             {t('popups_wallet_contract_interaction_total')}
     //                         </Typography>
-
+    //
     //                         <Typography className={classes.gasPrice}>
     //                             <FormattedCurrency value={totalUSD} sign="$" formatter={formatCurrency} />
     //                         </Typography>

@@ -27,7 +27,6 @@ import { z as zod } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
 import BigNumber from 'bignumber.js'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { makeStyles } from '@masknet/theme'
@@ -50,9 +49,9 @@ import {
     useNetworkType,
     useWallet,
     useWeb3State,
+    useWeb3Connection,
 } from '@masknet/plugin-infra/web3'
 import { AccountItem } from './AccountItem'
-import Services from '../../../../service'
 import { TransferAddressError } from '../type'
 import { useI18N } from '../../../../../utils'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
@@ -194,6 +193,8 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const network = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const { Others, GasOptions } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
 
     const navigate = useNavigate()
@@ -201,11 +202,11 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const [addressTip, setAddressTip] = useState<{ type: TransferAddressError; message: string } | null>()
 
-    const etherPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, nativeToken?.chainId)
+    const { value: etherPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+        chainId: nativeToken?.chainId,
+    })
 
-    const { value: estimateGasFees } = useAsync(async () => WalletRPC.getEstimateGasFees(chainId), [chainId])
-
-    const { Others } = useWeb3State()
+    const { value: estimateGasFees } = useAsync(async () => GasOptions?.getGasOptions?.(chainId), [chainId])
 
     const schema = useMemo(() => {
         return zod
@@ -239,14 +240,17 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
                     .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
                     .refine((value) => {
-                        return isGreaterThanOrEqualTo(value, estimateGasFees?.low?.suggestedMaxPriorityFeePerGas ?? 0)
+                        return isGreaterThanOrEqualTo(
+                            value,
+                            estimateGasFees?.options.slow?.suggestedMaxPriorityFeePerGas ?? 0,
+                        )
                     }, t('wallet_transfer_error_max_priority_gas_fee_too_low'))
                     .refine(
                         (value) =>
                             isLessThan(
                                 value,
                                 multipliedBy(
-                                    estimateGasFees?.high?.suggestedMaxPriorityFeePerGas ?? 0,
+                                    estimateGasFees?.options.fast?.suggestedMaxPriorityFeePerGas ?? 0,
                                     HIGH_FEE_WARNING_MULTIPLIER,
                                 ),
                             ),
@@ -256,7 +260,8 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .string()
                     .min(1, t('wallet_transfer_error_max_fee_absence'))
                     .refine(
-                        (value) => isGreaterThanOrEqualTo(value, estimateGasFees?.low?.suggestedMaxFeePerGas ?? 0),
+                        (value) =>
+                            isGreaterThanOrEqualTo(value, estimateGasFees?.options.slow?.suggestedMaxFeePerGas ?? 0),
                         t('wallet_transfer_error_max_fee_too_low'),
                     )
                     .refine(
@@ -264,7 +269,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                             isLessThan(
                                 value,
                                 multipliedBy(
-                                    estimateGasFees?.high?.suggestedMaxFeePerGas ?? 0,
+                                    estimateGasFees?.options.fast?.suggestedMaxFeePerGas ?? 0,
                                     HIGH_FEE_WARNING_MULTIPLIER,
                                 ),
                             ),
@@ -341,7 +346,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             return
         }
 
-        const result = await Services.Ethereum.getCode(address)
+        const result = await connection?.getCode?.(address)
 
         if (result !== '0x') {
             setAddressTip({
@@ -392,9 +397,9 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     // #region set default Max priority gas fee and max fee
     useUpdateEffect(() => {
         if (!estimateGasFees) return
-        const { medium } = estimateGasFees
-        methods.setValue('maxFeePerGas', new BigNumber(medium?.suggestedMaxFeePerGas ?? 0).toString())
-        methods.setValue('maxPriorityFeePerGas', new BigNumber(medium?.suggestedMaxPriorityFeePerGas ?? 0).toString())
+        const { normal } = estimateGasFees.options
+        methods.setValue('maxFeePerGas', new BigNumber(normal?.suggestedMaxFeePerGas ?? 0).toString())
+        methods.setValue('maxPriorityFeePerGas', new BigNumber(normal?.suggestedMaxPriorityFeePerGas ?? 0).toString())
     }, [estimateGasFees, methods.setValue])
     // #endregion
 
@@ -509,7 +514,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 openAccountMenu={openMenu}
                 openAssetMenu={openAssetMenu}
                 handleMaxClick={handleMaxClick}
-                etherPrice={etherPrice}
+                etherPrice={etherPrice ?? 0}
                 selectedAsset={selectedAsset}
                 handleCancel={() => navigate(-1)}
                 handleConfirm={methods.handleSubmit(onSubmit)}

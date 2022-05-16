@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
@@ -15,7 +15,7 @@ import {
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { PopupContext } from '../../../hook/usePopupContext'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkDescriptor, NetworkPluginID, ProviderDescriptor } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -72,19 +72,22 @@ const ConnectWalletPage = memo(() => {
     )
     const { ProviderIconClickBait } = useWeb3UI(NetworkPluginID.PLUGIN_EVM).SelectProviderDialog ?? {}
 
-    const onClick = useCallback((network: Web3Plugin.NetworkDescriptor, provider: Web3Plugin.ProviderDescriptor) => {
-        if (provider.type !== ProviderType.MaskWallet) return
-        navigate(
-            urlcat(PopupRoutes.SelectWallet, {
-                popup: true,
-            }),
-        )
-    }, [])
+    const onClick = useCallback(
+        (network: NetworkDescriptor<ChainId, NetworkType>, provider: ProviderDescriptor<ChainId, ProviderType>) => {
+            if (provider.type !== ProviderType.MaskWallet) return
+            navigate(
+                urlcat(PopupRoutes.SelectWallet, {
+                    popup: true,
+                }),
+            )
+        },
+        [],
+    )
 
     const onSubmit = useCallback(
         async (
-            network: Web3Plugin.NetworkDescriptor,
-            provider: Web3Plugin.ProviderDescriptor,
+            network: NetworkDescriptor<ChainId, NetworkType>,
+            provider: ProviderDescriptor<ChainId, ProviderType>,
             result?: Web3Plugin.ConnectionResult,
         ) => {
             navigate(PopupRoutes.VerifyWallet, {

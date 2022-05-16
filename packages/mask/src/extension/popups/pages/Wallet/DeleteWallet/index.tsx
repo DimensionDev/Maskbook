@@ -10,7 +10,7 @@ import { FormattedAddress } from '@masknet/shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
-import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { useWallet } from '@masknet/plugin-infra/web3'
 import { WalletContext } from '../hooks/useWalletContext'
 import { useTitle } from '../../../hook/useTitle'
@@ -123,12 +123,6 @@ const DeleteWallet = memo(() => {
                     currentMaskWalletAccountSettings.value = ''
                 }
 
-                if (currentAccountSettings.value === wallet.address) {
-                    await WalletRPC.updateAccount({
-                        account: first(wallets)?.address ?? '',
-                        providerType: ProviderType.MaskWallet,
-                    })
-                }
                 navigate(PopupRoutes.Wallet, { replace: true })
             } catch (error) {
                 if (error instanceof Error) {

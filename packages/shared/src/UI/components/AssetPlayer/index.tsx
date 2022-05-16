@@ -1,17 +1,18 @@
 import { first } from 'lodash-unified'
 import { memo, useRef, useCallback, useState, useEffect, useMemo } from 'react'
-import { ChainId, getRPCConstants } from '@masknet/web3-shared-evm'
+import { getRPCConstants } from '@masknet/web3-shared-evm'
 import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
 import { mediaViewerUrl } from '../../../constants'
 import { useUpdateEffect } from 'react-use'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, SvgIconProps } from '@mui/material'
 import { AssetLoadingIcon, MaskPlaceholder } from '@masknet/icons'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 interface ERC721TokenQuery {
     contractAddress: string
     tokenId: string
-    chainId: ChainId
+    chainId?: Web3Helper.ChainIdAll
 }
 
 interface AssetPlayerProps

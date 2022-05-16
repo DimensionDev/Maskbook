@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
-import { Asset, formatBalance } from '@masknet/web3-shared-evm'
+import { ChainId, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { List, ListItem, ListItemText } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -9,6 +9,7 @@ import { ArrowRightIcon } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'
 import { WalletContext } from '../../hooks/useWalletContext'
 import { isNaN } from 'lodash-unified'
+import type { FungibleAsset } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     list: {
@@ -41,6 +42,11 @@ const useStyles = makeStyles()({
     },
 })
 
+type Asset = FungibleAsset<
+    ChainId,
+    SchemaType
+>
+
 export const AssetsList = memo(() => {
     const navigate = useNavigate()
     const { assets, setCurrentToken } = useContainer(WalletContext)
@@ -65,18 +71,18 @@ export const AssetsListUI = memo<AssetsListUIProps>(({ dataSource, onItemClick }
                     <ListItem key={index} className={classes.item} onClick={() => onItemClick(asset)}>
                         <TokenIcon
                             classes={{ icon: classes.tokenIcon }}
-                            address={asset.token.address}
-                            name={asset.token.name}
-                            chainId={asset.token.chainId}
-                            logoURL={asset.token.logoURI}
+                            address={asset.address}
+                            name={asset.name}
+                            chainId={asset.chainId}
+                            logoURL={asset.logoURL}
                             AvatarProps={{ sx: { width: 20, height: 20 } }}
                         />
                         <ListItemText className={classes.text}>
                             <FormattedBalance
                                 classes={{ symbol: classes.symbol, balance: classes.balance }}
                                 value={isNaN(asset.balance) ? 0 : asset.balance}
-                                decimals={isNaN(asset.token.decimals) ? 0 : asset.token.decimals}
-                                symbol={asset.token.symbol}
+                                decimals={isNaN(asset.decimals) ? 0 : asset.decimals}
+                                symbol={asset.symbol}
                                 significant={6}
                                 formatter={formatBalance}
                             />

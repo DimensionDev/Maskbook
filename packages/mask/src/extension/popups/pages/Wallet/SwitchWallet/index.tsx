@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { NetworkSelector } from '../../../components/NetworkSelector'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { WalletItem } from './WalletItem'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
@@ -27,9 +28,9 @@ const useStyles = makeStyles()({
         flexDirection: 'column',
     },
     list: {
-        backgroundColor: '#F7F9FA',
+        backgroundColor: '#ffffff',
         padding: 0,
-        height: 'calc(100vh - 132px)',
+        height: 'calc(100vh - 168px)',
         overflow: 'auto',
     },
     item: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles()({
     },
     copy: {
         fontSize: 12,
-        fill: '#1C68F3',
+        stroke: '#1C68F3',
         marginLeft: 4,
         cursor: 'pointer',
     },
@@ -77,15 +78,13 @@ const useStyles = makeStyles()({
     secondaryButton: {
         backgroundColor: '#F7F9FA',
         color: '#1C68F3',
-        '&: hover': {
-            backgroundColor: '#dee0e1',
-        },
     },
 })
 
 const SwitchWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
+
     const navigate = useNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
@@ -100,21 +99,24 @@ const SwitchWallet = memo(() => {
         } else {
             navigate(PopupRoutes.CreateWallet)
         }
-    }, [walletPrimary])
+    }, [walletPrimary, history])
 
-    const handleSelect = useCallback(async (address: string) => {
-        await WalletRPC.updateMaskAccount({
-            account: address,
-        })
+    const handleSelect = useCallback(
+        async (address: string | undefined) => {
+            await WalletRPC.updateMaskAccount({
+                account: address,
+            })
 
-        if (currentProviderSettings.value === ProviderType.MaskWallet)
-            await WalletRPC.updateAccount({ account: address, providerType: ProviderType.MaskWallet })
-
-        navigate(PopupRoutes.Wallet, { replace: true })
-    }, [])
+            navigate(PopupRoutes.Wallet, { replace: true })
+        },
+        [history],
+    )
 
     return (
         <>
+            <div className={classes.header}>
+                <NetworkSelector />
+            </div>
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     {wallets.map((item, index) => (

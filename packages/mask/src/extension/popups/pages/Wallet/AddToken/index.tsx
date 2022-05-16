@@ -45,7 +45,7 @@ const AddToken = memo(() => {
     const navigate = useNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
 
-    const excludeTokens = Array.from(wallet?.erc20_token_whitelist ?? [])
+    // const excludeTokens = Array.from(wallet?.erc20_token_whitelist ?? [])
 
     useTitle(t('add_token'))
 
@@ -53,7 +53,7 @@ const AddToken = memo(() => {
         <>
             <div className={classes.content}>
                 <Typography className={classes.label}>{t('popups_wallet_token')}</Typography>
-                <ERC20TokenList FixedSizeListProps={{ height: 340, itemSize: 54 }} blacklist={excludeTokens} />
+                <ERC20TokenList FixedSizeListProps={{ height: 340, itemSize: 54 }} />
             </div>
             <Stack height="100%" sx={{ px: 2, pb: 2 }} justifyContent="center" alignItems="center">
                 <Button fullWidth className={classes.button} onClick={() => navigate(-1)}>

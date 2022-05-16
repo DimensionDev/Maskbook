@@ -6,11 +6,10 @@ import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import { useAsync, useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { DeriveWalletTable } from '../components/DeriveWalletTable'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
 import { LoadingButton } from '@mui/lab'
 import { PopupRoutes } from '@masknet/shared-base'
-import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { first } from 'lodash-unified'
 import { useWallets } from '@masknet/plugin-infra/web3'
 import { currySameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
@@ -143,12 +142,6 @@ const AddDeriveWallet = memo(() => {
             if (!currentMaskWalletAccountSettings.value) {
                 await WalletRPC.updateMaskAccount({
                     account: firstWallet,
-                })
-            }
-            if (!currentAccountSettings.value) {
-                await WalletRPC.updateAccount({
-                    account: firstWallet,
-                    providerType: ProviderType.MaskWallet,
                 })
             }
         }

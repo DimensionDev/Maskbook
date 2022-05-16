@@ -3,7 +3,7 @@ import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../../shared'
 import { ChainId, ProviderType, NetworkType } from '@masknet/web3-shared-evm'
-import { getRegisteredWeb3Networks, useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { getRegisteredWeb3Networks, useAccount, useChainId, Web3Helper, useWeb3State } from '@masknet/plugin-infra/web3'
 import { currentMaskWalletAccountSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 import { ChainIcon, useMenuConfig, WalletIcon } from '@masknet/shared'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -51,16 +51,18 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const NetworkSelector = memo(() => {
-    const networks = getRegisteredWeb3Networks()
+    const networks = getRegisteredWeb3Networks().filter(
+        (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
+    ) as NetworkDescriptor<ChainId, NetworkType>[]
+
+    const web3State = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const providerType = useValueRef(currentProviderSettings)
     const onChainChange = useCallback(
-        async (chainId: ChainId) => {
+        async (chainId: Web3Helper.Definition[NetworkPluginID.PLUGIN_EVM]['ChainId']) => {
             if (providerType === ProviderType.MaskWallet) {
-                await WalletRPC.updateAccount({
-                    chainId,
-                })
+                await web3State.Provider?.connect(chainId, ProviderType.MaskWallet)
             }
             return WalletRPC.updateMaskAccount({
                 chainId,
@@ -85,9 +87,8 @@ export interface NetworkSelectorUIProps {
     onChainChange: (chainId: ChainId) => void
 }
 
-export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork, onChainChange }) => {
+export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork, onChainChange, networks }) => {
     const { classes } = useStyles()
-    const networks = getRegisteredWeb3Networks()
 
     const [menu, openMenu] = useMenuConfig(
         networks

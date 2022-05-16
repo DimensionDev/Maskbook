@@ -45,13 +45,13 @@ const Transfer = memo(() => {
             return (
                 <MenuItem key={index} className={classes.assetItem} onClick={() => setSelectedAsset(asset)}>
                     <div className={classes.assetSymbol}>
-                        <TokenIcon address={asset.token.address} />
-                        <Typography>{asset.token.symbol}</Typography>
+                        <TokenIcon address={asset.address} />
+                        <Typography>{asset.symbol}</Typography>
                     </div>
                     <Typography>
                         <FormattedBalance
                             value={asset.balance}
-                            decimals={asset.token.decimals}
+                            decimals={asset.decimals}
                             significant={4}
                             formatter={formatBalance}
                         />

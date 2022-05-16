@@ -25,7 +25,7 @@ import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-fo
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Box, Button, Chip, Collapse, MenuItem, Popover, Typography } from '@mui/material'
-// import { StyledInput } from '../../../components/StyledInput'
+import { StyledInput } from '../../../components/StyledInput'
 import { UserIcon } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
@@ -34,11 +34,9 @@ import { makeStyles } from '@masknet/theme'
 import { ExpandMore } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { toHex } from 'web3-utils'
-import Services from '../../../../service'
 import { TransferAddressError } from '../type'
-import { useChainId, useFungibleTokenBalance, useWallet } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleTokenBalance, useWallet, useWeb3State, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()({
@@ -158,8 +156,10 @@ export interface Prior1559TransferProps {
 export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, openAssetMenu, otherWallets }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const web3State = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const navigate = useNavigate()
 
@@ -231,25 +231,27 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             })
             return
         }
-        // const result = await Services.Ethereum.getCode(address)
 
-        // if (result !== '0x') {
-        //     setAddressTip({
-        //         type: TransferAddressError.CONTRACT_ADDRESS,
-        //         message: t('wallet_transfer_error_is_contract_address'),
-        //     })
-        // }
-    }, [address, EthereumAddress.isValid, methods.clearErrors])
+        const result = await connection?.getCode(address)
+
+        if (result !== '0x') {
+            setAddressTip({
+                type: TransferAddressError.CONTRACT_ADDRESS,
+                message: t('wallet_transfer_error_is_contract_address'),
+            })
+        }
+    }, [address, EthereumAddress.isValid, methods.clearErrors, connection])
 
     // #region Set default gas price
     useAsync(async () => {
-        // const gasOptions = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-        // const gasPrice = methods.getValues('gasPrice')
-        // if (gasOptions && !gasPrice) {
-        //     const gasPrice = new BigNumber(gasOptions.data.fast.price)
-        //     methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toString())
-        // }
-    }, [methods.setValue, methods.getValues, chainId])
+        const gasOptions = await web3State.GasOptions?.getGasOptions?.(chainId)
+
+        const gasPrice = methods.getValues('gasPrice')
+        if (gasOptions && !gasPrice) {
+            const gasPrice = new BigNumber(gasOptions.options.fast.suggestedMaxFeePerGas)
+            methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toString())
+        }
+    }, [methods.setValue, methods.getValues, chainId, web3State])
     // #endregion
 
     // #region Get min gas limit with amount and recipient address

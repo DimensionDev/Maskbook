@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
@@ -20,6 +20,8 @@ import { PageHeader } from '../components/PageHeader'
 import { PasswordField } from '../../../components/PasswordField'
 import { currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { useTitle } from '../../../hook/useTitle'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     container: {
@@ -110,7 +112,9 @@ const useStyles = makeStyles()({
 const ImportWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const chainId = useChainId()
+    // const chainId = useChainId()
+    // const web3State = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'json', 'privateKey')
     const [mnemonic, setMnemonic] = useState('')
@@ -186,8 +190,13 @@ const ImportWallet = memo(() => {
                                     account: privateKeyWallet,
                                 })
                             }
-
                             await WalletRPC.selectMaskAccount([privateKeyWallet])
+
+                            await connection?.connect({
+                                account: privateKeyWallet,
+                                providerType: ProviderType.MaskWallet,
+                            })
+
                             await Services.Helper.removePopupWindow()
                             navigate(PopupRoutes.Wallet, { replace: true })
                             break

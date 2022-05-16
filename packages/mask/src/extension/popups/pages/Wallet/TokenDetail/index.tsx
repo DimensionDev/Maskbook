@@ -84,12 +84,12 @@ const TokenDetail = memo(() => {
             PluginTransakMessages.buyTokenDialogUpdated.sendToVisiblePages({
                 open: true,
                 address: wallet?.address ?? '',
-                code: currentToken?.token.symbol ?? currentToken?.token.name,
+                code: currentToken?.symbol ?? currentToken?.name,
             })
         } else {
             const url = urlcat('dashboard.html#', 'labs', {
                 open: 'Transak',
-                code: currentToken?.token.symbol ?? currentToken?.token.name,
+                code: currentToken?.symbol ?? currentToken?.name,
             })
             openWindow(browser.runtime.getURL(url), 'BUY_DIALOG')
         }
@@ -99,13 +99,13 @@ const TokenDetail = memo(() => {
         const url = urlcat(
             'popups.html#/',
             PopupRoutes.Swap,
-            !isSameAddress(nativeToken?.address, currentToken?.token.address)
+            !isSameAddress(nativeToken?.address, currentToken?.address)
                 ? {
-                      id: currentToken?.token.address,
-                      name: currentToken?.token.name,
-                      symbol: currentToken?.token.symbol,
-                      contract_address: currentToken?.token.address,
-                      decimals: currentToken?.token.decimals,
+                      id: currentToken?.address,
+                      name: currentToken?.name,
+                      symbol: currentToken?.symbol,
+                      contract_address: currentToken?.address,
+                      decimals: currentToken?.decimals,
                   }
                 : {},
         )
@@ -120,18 +120,18 @@ const TokenDetail = memo(() => {
         <>
             <div className={classes.content}>
                 <TokenIcon
-                    classes={{ icon: classes.tokenIcon }}
-                    address={currentToken.token.address}
-                    name={currentToken.token.name}
-                    chainId={currentToken.token.chainId}
-                    logoURI={currentToken.token.logoURI}
+                    classes={{ icon:  classes.tokenIcon }}
+                    address={currentToken.address}
+                    name={currentToken.name}
+                    chainId={currentToken.chainId}
+                    logoURL={currentToken.logoURL}
                     AvatarProps={{ sx: { width: 24, height: 24 } }}
                 />
                 <Typography className={classes.balance}>
                     <FormattedBalance
                         value={currentToken.balance}
-                        decimals={currentToken.token.decimals}
-                        symbol={currentToken.token.symbol}
+                        decimals={currentToken.decimals}
+                        symbol={currentToken.symbol}
                         significant={4}
                         formatter={formatBalance}
                     />
@@ -154,7 +154,7 @@ const TokenDetail = memo(() => {
                     </div>
                 </div>
             </div>
-            <ActivityList tokenAddress={currentToken.token.address} />
+            <ActivityList tokenAddress={currentToken.address} />
         </>
     )
 })

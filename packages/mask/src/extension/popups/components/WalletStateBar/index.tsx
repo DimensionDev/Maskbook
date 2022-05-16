@@ -6,7 +6,7 @@ import { useProviderDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Stack, StackProps, Typography } from '@mui/material'
-import { NetworkSelector } from '../../components/NetworkSelector'
+import { NetworkSelector } from '../NetworkSelector'
 import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
@@ -42,7 +42,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
         const { t } = useI18N()
         const { classes } = useStyles()
         const { Others } = useWeb3State()
-        const providerDescriptor = useProviderDescriptor(ProviderType.MaskWallet, NetworkPluginID.PLUGIN_EVM)
+        const providerDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, ProviderType.MaskWallet)
 
         if (!providerDescriptor) return null
 

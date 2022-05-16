@@ -4,7 +4,7 @@ import { PageHeader } from '../components/PageHeader'
 import { MaskMessages, useI18N } from '../../../../../utils'
 import { useLocation } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import Services from '../../../../service'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { Typography } from '@mui/material'
@@ -18,7 +18,8 @@ import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { LoadingButton } from '@mui/lab'
 import { currentPersonaIdentifier } from '../../../../../settings/settings'
-import { useTitle } from '../../../hook/useTitle'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, ProviderType } from '@masknet/public-api'
 
 const useStyles = makeStyles()({
     container: {
@@ -78,6 +79,8 @@ const WalletRecovery = memo(() => {
     const { classes } = useStyles()
     const location = useLocation()
 
+    const web3State = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+
     const currentPersona = useValueRef(currentPersonaIdentifier)
 
     const backupId = new URLSearchParams(location.search).get('backupId')
@@ -124,17 +127,14 @@ const WalletRecovery = memo(() => {
                 await Services.Backup.restoreUnconfirmedBackup({ id: backupId, action: 'confirm' })
 
                 // Set default wallet
-                if (json.wallets) await WalletRPC.setDefaultWallet()
-
+                if (json.wallets) await web3State.Provider?.connect(ChainId.Mainnet, ProviderType.MaskWallet)
                 // Send event after successful recovery
                 MaskMessages.events.restoreSuccess.sendToAll(undefined)
 
                 await Services.Helper.removePopupWindow()
             }
         }
-    }, [onSubmit, hasPassword, currentPersona, backupId])
-
-    useTitle(t('popups_recovery_wallet'))
+    }, [onSubmit, hasPassword, currentPersona, backupId, web3State])
 
     return loading || getHasPasswordLoading ? (
         <LoadingPlaceholder />

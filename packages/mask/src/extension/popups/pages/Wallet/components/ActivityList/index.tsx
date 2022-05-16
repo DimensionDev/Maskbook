@@ -4,16 +4,17 @@ import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
 import { Button, Link, List } from '@mui/material'
-import { isSameAddress, NetworkPluginID, TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { ChainId, explorerResolver, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import {
+    NetworkPluginID,
+    RecentTransaction,
+} from '@masknet/web3-shared-base'
+import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext'
-import type { RecentTransaction } from '../../../../../../plugins/Wallet/services'
 import { useI18N } from '../../../../../../utils'
 import { ReplaceType } from '../../type'
 import { ActivityListItem } from './ActivityListItem'
-import type { ComputedPayload } from '../../../../../../plugins/Wallet/SNSAdaptor/WalletStatusDialog/type'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     list: {
@@ -94,32 +95,25 @@ export interface ActivityListProps {
 
 export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
     const { transactions } = useContainer(WalletContext)
-
-    const dataSource =
-        transactions?.filter((transaction) => {
-            if (!tokenAddress) return true
-            else if (isNativeTokenAddress(tokenAddress))
-                return transaction.computedPayload?.type === TransactionDescriptorType.TRANSFER
-            else if (
-                transaction.computedPayload?.type === TransactionDescriptorType.INTERACTION &&
-                (transaction.computedPayload?.name === 'transfer' ||
-                    transaction.computedPayload?.name === 'transferFrom')
-            ) {
-                return isSameAddress(transaction.computedPayload?._tx?.to, tokenAddress)
-            }
-            return false
-        }) ?? []
-
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    return <ActivityListUI dataSource={dataSource} chainId={chainId} />
+
+    return (
+        <ActivityListUI
+            dataSource={transactions ?? []}
+            chainId={chainId}
+            formatterTransactionLink={Others?.explorerResolver.transactionLink}
+        />
+    )
 })
 
 export interface ActivityListUIProps {
-    dataSource: RecentTransaction[]
+    dataSource: (RecentTransaction<ChainId, Transaction> & { _tx: Transaction })[]
     chainId: ChainId
+    formatterTransactionLink?: (chainId: ChainId, id: string) => string
 }
 
-export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }) => {
+export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId, formatterTransactionLink }) => {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [isExpand, setExpand] = useState(!(dataSource.length > 3))
@@ -132,17 +126,16 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
         <>
             <List dense className={classes.list}>
                 {dataSource.slice(0, !isExpand ? 3 : undefined).map((transaction, index) => {
-                    const toAddress = getToAddress(transaction.computedPayload)
                     return (
                         <Link
-                            href={explorerResolver.transactionLink(chainId, transaction.hash)}
+                            href={formatterTransactionLink?.(chainId, transaction.id)}
                             target="_blank"
                             rel="noopener noreferrer"
                             key={index}
                             style={{ textDecoration: 'none' }}>
                             <ActivityListItem
                                 transaction={transaction}
-                                toAddress={toAddress}
+                                toAddress={transaction._tx.to}
                                 onSpeedUpClick={(e) => {
                                     e.preventDefault()
                                     setTransaction(transaction)
@@ -176,25 +169,3 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
         </>
     )
 })
-
-function getToAddress(computedPayload?: ComputedPayload | null) {
-    if (!computedPayload) return undefined
-    switch (computedPayload.type) {
-        case TransactionDescriptorType.TRANSFER:
-            return computedPayload._tx.to
-        case TransactionDescriptorType.INTERACTION:
-            switch (computedPayload.name) {
-                case 'transfer':
-                case 'transferFrom':
-                    return computedPayload.parameters?.to
-                case 'approve':
-                default:
-                    return computedPayload._tx.to
-            }
-        case TransactionDescriptorType.CONTRACT_DEPLOYMENT:
-            return computedPayload._tx.to
-        case TransactionDescriptorType.CANCEL:
-        default:
-            return undefined
-    }
-}

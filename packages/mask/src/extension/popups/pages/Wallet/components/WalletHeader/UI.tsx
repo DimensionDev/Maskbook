@@ -3,9 +3,9 @@ import { memo, MouseEvent } from 'react'
 import { Box, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
 import { ChainIcon, FormattedAddress, WalletIcon } from '@masknet/shared'
-import { ChainId, Wallet, formatEthereumAddress, explorerResolver, NetworkType } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, explorerResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { ArrowDropIcon, MaskBlueIcon, PopupLinkIcon } from '@masknet/icons'
-import type { NetworkDescriptor } from '@masknet/web3-shared-base'
+import type {NetworkDescriptor, Wallet} from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
