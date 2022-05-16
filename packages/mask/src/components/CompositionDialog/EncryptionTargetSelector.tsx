@@ -97,7 +97,9 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                 className={classes.create}
                 onClick={() => {
                     if (props.e2eDisabled === E2EUnavailableReason.NoLocalKey) return
-                    props.onCreatePersona()
+                    props.e2eDisabled === E2EUnavailableReason.NoPersona
+                        ? props.onCreatePersona()
+                        : props.onConnectPersona()
                 }}>
                 {props.e2eDisabled === E2EUnavailableReason.NoPersona ? t('create') : t('connect')}
             </Typography>
@@ -112,10 +114,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const selectedTitle = () => {
         const selected = props.target
         const shareWithNum = props.selectedRecipientLength
-        if (selected === EncryptionTargetType.E2E)
-            return shareWithNum > 1
-                ? t('compose_shared_friends_other', { count: shareWithNum })
-                : t('compose_shared_friends_one')
+        if (selected === EncryptionTargetType.E2E) return t('compose_shared_friends', { count: shareWithNum })
         else if (selected === EncryptionTargetType.Public) return t('compose_encrypt_visible_to_all')
         else if (selected === EncryptionTargetType.Self) return t('compose_encrypt_visible_to_private')
         unreachable(selected)

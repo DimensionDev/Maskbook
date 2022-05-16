@@ -2,6 +2,7 @@ import {
     BindingProof,
     ECKeyIdentifier,
     EMPTY_LIST,
+    EMPTY_OBJECT,
     NextIDPersonaBindings,
     NextIDPlatform,
     ProfileIdentifier,
@@ -25,9 +26,15 @@ export function useTwitterIdByWalletSearch(
         const boundTwitterNames = uniq(
             cur.proofs.filter((x) => x.platform === NextIDPlatform.Twitter).map((x) => x.identity),
         )
-        const obj: Partial<ResolvedBindings> = Object.assign(
-            { linkedTwitterNames: boundTwitterNames },
-            ...cur.proofs.filter((x) => [NextIDPlatform.Twitter, NextIDPlatform.Ethereum].includes(x.platform)),
+        const obj = cur.proofs.reduce<Partial<ResolvedBindings>>(
+            (j, i) => {
+                if (![NextIDPlatform.Twitter, NextIDPlatform.Ethereum].includes(i.platform)) return EMPTY_OBJECT
+                j[i.platform] = { ...i, persona: cur.persona }
+                return j
+            },
+            {
+                linkedTwitterNames: boundTwitterNames,
+            },
         )
         pre.push(obj as ResolvedBindings)
         return pre

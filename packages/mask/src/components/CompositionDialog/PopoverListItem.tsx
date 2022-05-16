@@ -43,7 +43,7 @@ export function PopoverListItem(props: PopoverListItemProps) {
     return (
         <>
             <div
-                style={disabled ? { opacity: 0.5 } : {}}
+                style={disabled ? { opacity: 0.5, pointerEvents: 'none' } : {}}
                 className={itemTail ? cx(classes.item, classes.pointer) : classes.item}
                 onClick={onItemClick}>
                 <Radio checkedIcon={<CheckCircle />} disabled={disabled} value={value} />

@@ -105,6 +105,7 @@ export function ProfileInList(props: ProfileInListProps) {
 
     const tooltipTitle = (() => {
         const linkedNames = profile.linkedTwitterNames
+        if (!profile.linkedTwitterNames) return ''
         if (linkedNames.length === 1 && linkedNames[0].length > 14) {
             return `${t('select_friends_dialog_persona_connect')} @${linkedNames}.`
         }
