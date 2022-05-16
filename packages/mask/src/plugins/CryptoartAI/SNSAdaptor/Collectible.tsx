@@ -266,7 +266,7 @@ export function Collectible(props: CollectibleProps) {
                     </Paper>
                 </CardContent>
             </CollectibleCard>
-            <Box sx={{ display: 'flex', width: '100%', padding: 1.5 }}>
+            <Box sx={{ display: 'flex', width: 'calc(100% - 24px)', padding: 1.5 }}>
                 <EthereumChainBoundary chainId={expectChainId ?? chainId}>
                     <ActionBar />
                 </EthereumChainBoundary>
