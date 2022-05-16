@@ -25,9 +25,9 @@ export async function getLocalImplementation<T extends object>(
     for (const key of Object.keys(localImpl) as Array<keyof typeof localImpl>) {
         if (!Reflect.has(result, key)) {
             delete localImpl[key]
-            isUpdate && console.log(`[HMR] ${name}.${key} removed.`)
+            isUpdate && console.log(`[HMR] ${name}.${String(key)} removed.`)
         } else if (result[key] !== localImpl[key]) {
-            isUpdate && console.log(`[HMR] ${name}.${key} updated.`)
+            isUpdate && console.log(`[HMR] ${name}.${String(key)} updated.`)
         }
     }
     for (const key of Object.keys(result)) {
