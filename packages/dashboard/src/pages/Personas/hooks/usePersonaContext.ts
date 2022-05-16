@@ -1,21 +1,21 @@
 import { createContainer } from 'unstated-next'
 import { useCallback, useState } from 'react'
-import { useConnectSocialNetwork, useDisconnectSocialNetwork, useOpenProfilePage } from './useConnectSocialNetwork'
+import { useConnectSite, useDisconnectSite, useOpenProfilePage } from './useConnectSite'
 import { Services } from '../../../API'
-import { useOwnedPersonas, useDefinedSocialNetworkUIs, SocialNetwork, useCurrentPersonaIdentifier } from '../api'
+import { useOwnedPersonas, useSupportedSites, SocialNetwork, useCurrentPersonaIdentifier } from '../api'
 import { useCreatePersona } from './useCreatePersona'
 import { useDeleteBound } from './useOperateBindingProof'
 
 function usePersonaContext() {
     const currentPersonaIdentifier = useCurrentPersonaIdentifier()
-    const definedSocialNetworks: SocialNetwork[] = useDefinedSocialNetworkUIs()
+    const definedSocialNetworks: SocialNetwork[] = useSupportedSites()
     const personas = useOwnedPersonas()
     const currentPersona = personas.find((x) => x.identifier === currentPersonaIdentifier)
     const [open, setOpen] = useState(false)
 
-    const [, connectPersona] = useConnectSocialNetwork()
+    const [, connectPersona] = useConnectSite()
     const [, openProfilePage] = useOpenProfilePage()
-    const [, disconnectPersona] = useDisconnectSocialNetwork()
+    const [, disconnectPersona] = useDisconnectSite()
     const [, createPersona] = useCreatePersona()
     const [, deleteBound] = useDeleteBound()
     const renamePersona = Services.Identity.renamePersona
