@@ -125,7 +125,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
                 onComplete?.()
             },
             (error) => {
-                if (error.message.includes('Switch Chain Error')) setState('init')
+                if (error?.message?.includes('Switch Chain Error')) setState('init')
                 else setState('fail')
             },
         )

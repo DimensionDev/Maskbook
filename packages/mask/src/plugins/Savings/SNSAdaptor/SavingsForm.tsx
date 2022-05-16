@@ -199,7 +199,8 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         })
                     }))
                 ) {
-                    throw new Error('Failed to deposit token.')
+                    // eslint-disable-next-line
+                    return Promise.reject(Promise.reject('Failed to deposit token.'))
                 } else {
                     await protocol.updateBalance(chainId, web3, account)
                 }
@@ -212,7 +213,8 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         return
                     default:
                         if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {
-                            throw new Error('Failed to withdraw token.')
+                            // eslint-disable-next-line
+                            return Promise.reject(Promise.reject('Failed to withdraw token.'))
                         } else {
                             await protocol.updateBalance(chainId, web3, account)
                         }
