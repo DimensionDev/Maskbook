@@ -147,8 +147,8 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                                 border: 'none',
                                 boxShadow:
                                     theme.palette.mode === 'dark'
-                                        ? '0px 8px 25px rgba(255, 255, 255, 0.1)'
-                                        : '0px 8px 25px rgba(0, 0, 0, 0.1)',
+                                        ? '0 8px 25px rgba(255, 255, 255, 0.1)'
+                                        : '0 8px 25px rgba(0, 0, 0, 0.1)',
                             },
                             [`&.${buttonClasses.disabled}`]: {
                                 opacity: 0.4,
@@ -167,8 +167,8 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                                 backgroundColor: theme.palette.background.paper,
                                 boxShadow:
                                     theme.palette.mode === 'dark'
-                                        ? '0px 8px 25px rgba(255, 255, 255, 0.1)'
-                                        : '0px 8px 25px rgba(0, 0, 0, 0.1)',
+                                        ? '0 8px 25px rgba(255, 255, 255, 0.1)'
+                                        : '0 8px 25px rgba(0, 0, 0, 0.1)',
                             },
                             [`&.${buttonClasses.disabled}`]: {
                                 opacity: 0.4,
@@ -186,8 +186,8 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                                 backgroundColor: theme.palette.text.primary,
                                 boxShadow:
                                     theme.palette.mode === 'dark'
-                                        ? '0px 8px 25px rgba(255, 255, 255, 0.2)'
-                                        : '0px 8px 25px rgba(0, 0, 0, 0.2)',
+                                        ? '0 8px 25px rgba(255, 255, 255, 0.2)'
+                                        : '0 8px 25px rgba(0, 0, 0, 0.2)',
                             },
                             [`&.${buttonClasses.disabled}`]: {
                                 background: theme.palette.grey.primary,
@@ -471,8 +471,8 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                                 backgroundColor: theme.palette.background.paper,
                                 boxShadow:
                                     theme.palette.mode === 'dark'
-                                        ? '0px 8px 25px rgba(255, 255, 255, 0.1)'
-                                        : '0px 8px 25px rgba(0, 0, 0, 0.1)',
+                                        ? '0 8px 25px rgba(255, 255, 255, 0.1)'
+                                        : '0 8px 25px rgba(0, 0, 0, 0.1)',
                             },
                             [`&.${buttonClasses.disabled}`]: {
                                 opacity: 0.4,
@@ -644,7 +644,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
             theme.components.MuiSnackbar = {
                 styleOverrides: {
                     root: {
-                        filter: `drop-shadow(0px 0px 16px ${theme.palette.background.messageShadow});`,
+                        filter: `drop-shadow(0 0 16px ${theme.palette.background.messageShadow});`,
                     },
                 },
             }

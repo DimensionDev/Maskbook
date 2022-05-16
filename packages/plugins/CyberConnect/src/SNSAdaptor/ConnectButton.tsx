@@ -29,11 +29,11 @@ const useStyles = makeStyles()(() => ({
             '>svg': {
                 '&:nth-of-type(1)': {
                     transformOrigin: 'calc(100% + 1px) center',
-                    transform: 'rotate(-45deg) translate(2px,0px)',
+                    transform: 'rotate(-45deg) translate(2px,0)',
                 },
                 '&:nth-of-type(2)': {
                     transformOrigin: '-1px center',
-                    transform: 'rotate(135deg) translate(-8px,0px)',
+                    transform: 'rotate(135deg) translate(-8px,0)',
                 },
             },
         },
@@ -45,11 +45,11 @@ const useStyles = makeStyles()(() => ({
         '>svg': {
             '&:nth-of-type(1)': {
                 transformOrigin: 'calc(100% + 1px) center',
-                transform: 'rotate(-45deg) translate(2px,0px)',
+                transform: 'rotate(-45deg) translate(2px,0)',
             },
             '&:nth-of-type(2)': {
                 transformOrigin: '-1px center',
-                transform: 'rotate(135deg) translate(-8px,0px)',
+                transform: 'rotate(135deg) translate(-8px,0)',
             },
         },
     },

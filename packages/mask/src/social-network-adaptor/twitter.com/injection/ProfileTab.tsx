@@ -107,7 +107,7 @@ async function hideTwitterActivatedContent() {
     const elePage = searchProfileTabPageSelector().evaluate()
     if (elePage) {
         elePage.style.visibility = 'hidden'
-        elePage.style.height = '0px'
+        elePage.style.height = '0'
     }
 }
 
