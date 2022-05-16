@@ -96,24 +96,16 @@ export function ProfileInList(props: ProfileInListProps) {
     const highlightText = (() => {
         if (!profile.fromNextID) return `@${profile.identifier.userId || profile.nickname}`
         const mentions = profile.linkedTwitterNames.map((x) => '@' + x).join(' ')
-        if (mentions.length > 15) {
-            const len = profile.linkedTwitterNames.length
-            return truncate(mentions, { length: 15 }) + (len > 1 ? `(${len})` : '')
-        }
-        return mentions
+        if (mentions.length < 15) return mentions
+        const len = profile.linkedTwitterNames.length
+        return truncate(mentions, { length: 15 }) + (len > 1 ? `(${len})` : '')
     })()
 
     const tooltipTitle = (() => {
         const linkedNames = profile.linkedTwitterNames
-        if (!profile.linkedTwitterNames) return ''
-        if (linkedNames.length === 1 && linkedNames[0].length > 14) {
-            return `${t('select_friends_dialog_persona_connect')} @${linkedNames}.`
-        }
-        if (linkedNames.length > 1) {
-            const mentions = profile.linkedTwitterNames.map((username) => '@' + username)
-            return `${t('select_friends_dialog_persona_connect')} ${mentions.join(', ')}.`
-        }
-        return ''
+        if (!linkedNames || !linkedNames.length) return ''
+        const mentions = profile.linkedTwitterNames.map((username) => '@' + username)
+        return `${t('select_friends_dialog_persona_connect')} ${mentions.join(', ')}.`
     })()
 
     const onClick = useCallback(
