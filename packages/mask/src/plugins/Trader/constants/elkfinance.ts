@@ -32,6 +32,6 @@ export const ELKFINANCE_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     [ChainId.Fantom]: [WNATIVE, DAI, USDC, fUSDT, WBTC, ELK].map((x) => x[ChainId.Fantom]),
     [ChainId.Avalanche]: [WNATIVE, DAI, USDC, WBTC, USDT, ELK].map((x) => x[ChainId.Avalanche]),
     [ChainId.Harmony]: [WNATIVE, DAI, USDC, WBTC, USDT, ELK].map((x) => x[ChainId.Harmony]),
-    [ChainId.Optimistic]: [WNATIVE, DAI, USDC, WBTC, USDT, ELK].map((x) => x[ChainId.Optimistic]),
+    [ChainId.Optimism]: [WNATIVE, DAI, USDC, WBTC, USDT, ELK].map((x) => x[ChainId.Optimism]),
     [ChainId.Arbitrum]: [WNATIVE, DAI, USDC, WBTC, USDT, ELK].map((x) => x[ChainId.Arbitrum]),
 }

@@ -1,4 +1,4 @@
-import { ChainId, AMPL, DAI, USDC, USDT, WBTC, WNATIVE, WNATIVE_ONLY } from '@masknet/web3-shared-evm'
+import { ChainId, AMPL, DAI, USDC, USDT, WBTC, OP, WNATIVE, WNATIVE_ONLY } from '@masknet/web3-shared-evm'
 import { Percent } from '@uniswap/sdk-core'
 import JSBI from 'jsbi'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
@@ -20,7 +20,7 @@ export const UNISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WNATIVE_ONLY,
     [ChainId.Mainnet]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Mainnet]),
     [ChainId.Matic]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Matic]),
-    [ChainId.Optimistic]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Optimistic]),
+    [ChainId.Optimism]: [WNATIVE, DAI, USDC, USDT, WBTC, OP].map((x) => x[ChainId.Optimism]),
 }
 
 export const MAX_HOP = 3

@@ -9,6 +9,6 @@ export const JUGGLERRED_CUSTOM_BASES: ERC20TokenCustomizedBase = {}
 
 export const JUGGLERRED_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WNATIVE_ONLY,
-    [ChainId.Optimistic]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Optimistic]),
-    [ChainId.Optimistic_Kovan]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Optimistic_Kovan]),
+    [ChainId.Optimism]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Optimism]),
+    [ChainId.Optimism_Kovan]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Optimism_Kovan]),
 }

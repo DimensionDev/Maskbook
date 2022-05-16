@@ -39,12 +39,12 @@
         "Arbitrum": [],
         "Arbitrum_Rinkeby": [],
         "xDai": [],
-        "Optimistic": [
+        "Optimism": [
             "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/optimism",
             "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/optimism"
         ],
-        "Optimistic_Kovan": [],
-        "Optimistic_Goerli": [],
+        "Optimism_Kovan": [],
+        "Optimism_Goerli": [],
         "Avalanche": [
             "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/avalanchec",
             "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/avalanchec"

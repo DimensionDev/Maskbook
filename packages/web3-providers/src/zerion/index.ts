@@ -103,7 +103,7 @@ type Asset = Web3Plugin.Asset<Web3Plugin.FungibleToken>
 
 export async function getAssetListByZerion(address: string) {
     let result: Asset[] = []
-    const scopes = ['assets', 'bsc-assets', 'polygon-assets', 'arbitrum-assets', 'optimistic-assets']
+    const scopes = ['assets', 'bsc-assets', 'polygon-assets', 'arbitrum-assets', 'Optimism-assets']
     for (const scope of scopes) {
         const { meta, payload } = await getAssetsList(address, scope)
         if (meta.status !== 'ok') throw new Error('Fail to load assets.')

@@ -303,8 +303,8 @@
         "chainId": 9
     },
     {
-        "name": "Optimistic Ethereum",
-        "chain": "Optimistic",
+        "name": "Optimism Ethereum",
+        "chain": "Optimism",
         "network": "mainnet",
         "features": [],
         "nativeCurrency": {
@@ -312,18 +312,18 @@
             "symbol": "OETH",
             "decimals": 18
         },
-        "infoURL": "https://optimistic.etherscan.io/",
-        "shortName": "oeth",
+        "infoURL": "https://Optimistic.etherscan.io/",
+        "shortName": "op",
         "chainId": 10,
         "explorers": [
             {
                 "name": "optimisc",
-                "url": "https://optimistic.etherscan.io/"
+                "url": "https://Optimistic.etherscan.io/"
             }
         ]
     },
     {
-        "name": "Optimistic Ethereum Testnet Kovan",
+        "name": "Optimism Ethereum Testnet Kovan",
         "chain": "KOR",
         "network": "testnet",
         "rpc": ["https://kovan.optimism.io/"],
@@ -340,7 +340,7 @@
         "chainId": 69
     },
     {
-        "name": "Optimistic Ethereum Testnet Goerli",
+        "name": "Optimism Ethereum Testnet Goerli",
         "chain": "OP",
         "network": "testnet",
         "rpc": ["https://goerli.optimism.io/"],
@@ -898,7 +898,7 @@
         "chainId": 68
     },
     {
-        "name": "Optimistic Ethereum Testnet Kovan",
+        "name": "Optimism Ethereum Testnet Kovan",
         "chain": "OPT",
         "network": "kovan",
         "features": [],
@@ -1406,7 +1406,7 @@
         "chainId": 385
     },
     {
-        "name": "Optimistic Ethereum Testnet Goerli",
+        "name": "Optimism Ethereum Testnet Goerli",
         "chain": "OPT",
         "network": "goerli",
         "features": [],

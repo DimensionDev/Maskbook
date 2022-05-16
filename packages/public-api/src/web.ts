@@ -237,7 +237,7 @@ export enum NetworkType {
     Boba = 'Boba',
     Fuse = 'Fuse',
     Metis = 'Metis',
-    Optimistic = 'Optimistic',
+    Optimism = 'Optimism',
     Harmony = 'Harmony',
     Conflux = 'Conflux',
 }

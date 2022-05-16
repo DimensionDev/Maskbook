@@ -50,6 +50,7 @@ export const OPENX = createERC20Tokens('OPENX_ADDRESS', 'OpenSwap Token', 'OpenX
 export const JEWEL = createERC20Tokens('JEWEL_ADDRESS', 'Jewels', 'JEWEL', 18)
 export const ELK = createERC20Tokens('ELK_ADDRESS', 'Elk finance', 'ELK', 18)
 export const ZIP = createERC20Tokens('ZIP_ADDRESS', 'ZipSwap', 'ZIP', 18)
+export const OP = createERC20Tokens('OP_ADDRESS', 'Optimism', 'OP', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
@@ -77,7 +78,7 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.Fantom]: [WNATIVE[ChainId.Fantom]],
     [ChainId.Aurora]: [WNATIVE[ChainId.Aurora]],
     [ChainId.Aurora_Testnet]: [WNATIVE[ChainId.Aurora_Testnet]],
-    [ChainId.Optimistic]: [WNATIVE[ChainId.Optimistic]],
-    [ChainId.Optimistic_Goerli]: [WNATIVE[ChainId.Optimistic_Goerli]],
+    [ChainId.Optimism]: [WNATIVE[ChainId.Optimism]],
+    [ChainId.Optimism_Goerli]: [WNATIVE[ChainId.Optimism_Goerli]],
     [ChainId.Harmony]: [WNATIVE[ChainId.Harmony]],
 }

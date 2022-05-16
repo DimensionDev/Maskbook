@@ -33,7 +33,7 @@ export const Flags = {
     polygon_enabled: true,
     arbitrum_enabled: true,
     xdai_enabled: true,
-    optimistic_enabled: true,
+    Optimism_enabled: true,
     avalanche_enabled: true,
     fantom_enabled: true,
     celo_enabled: true,

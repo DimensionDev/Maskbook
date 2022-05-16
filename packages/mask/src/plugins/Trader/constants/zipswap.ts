@@ -10,6 +10,6 @@ export const ZIPSWAP_CUSTOM_BASES: ERC20TokenCustomizedBase = {}
 
 export const ZIPSWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WNATIVE_ONLY,
-    [ChainId.Optimistic]: [WNATIVE, DAI, USDC, WBTC, USDT, ZIP].map((x) => x[ChainId.Optimistic]),
+    [ChainId.Optimism]: [WNATIVE, DAI, USDC, WBTC, USDT, ZIP].map((x) => x[ChainId.Optimism]),
     [ChainId.Arbitrum]: [WNATIVE, DAI, USDC, WBTC, USDT, ZIP].map((x) => x[ChainId.Arbitrum]),
 }

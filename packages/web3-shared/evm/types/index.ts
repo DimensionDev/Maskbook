@@ -68,10 +68,10 @@ export enum ChainId {
     // Metis
     Metis = 1088,
 
-    // Optimistic
-    Optimistic = 10,
-    Optimistic_Kovan = 69,
-    Optimistic_Goerli = 420,
+    // Optimism
+    Optimism = 10,
+    Optimism_Kovan = 69,
+    Optimism_Goerli = 420,
 
     // Harmony
     Harmony = 1666600000,
@@ -664,7 +664,7 @@ export enum NetworkType {
     Boba = 'Boba',
     Fuse = 'Fuse',
     Metis = 'Metis',
-    Optimistic = 'Optimistic',
+    Optimism = 'Optimism',
     Harmony = 'Harmony',
     Conflux = 'Conflux',
 }

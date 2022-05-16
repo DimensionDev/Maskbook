@@ -14,7 +14,7 @@ export const base: Plugin.Shared.Definition = {
         target: 'insider',
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {
-                supportedChainIds: [ChainId.Mainnet, ChainId.xDai, ChainId.Matic, ChainId.Rinkeby, ChainId.Optimistic],
+                supportedChainIds: [ChainId.Mainnet, ChainId.xDai, ChainId.Matic, ChainId.Rinkeby, ChainId.Optimism],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
             [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
