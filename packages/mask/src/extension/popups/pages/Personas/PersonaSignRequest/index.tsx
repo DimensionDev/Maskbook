@@ -75,7 +75,7 @@ const useStyles = makeStyles()(() => ({
         color: '#FF5F5F',
         fontSize: 12,
         lineHeight: '16px',
-        padding: '0px 16px 20px 16px',
+        padding: '0 16px 20px 16px',
         wordBreak: 'break-all',
     },
 }))

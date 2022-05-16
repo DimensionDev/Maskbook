@@ -75,8 +75,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             name: <Trans i18nKey="plugin_collectibles_name" />,
             icon: <CollectiblesIcon />,
             marketListSortingPriority: 7,
-            tutorialLink:
-                'https://realmasknetwork.notion.site/Purchase-or-bid-for-NFTs-via-OpenSea-or-Rarible-on-Twitter-c388746f11774ecfa17914c900d3ed97',
+            tutorialLink: 'https://realmasknetwork.notion.site/c388746f11774ecfa17914c900d3ed97',
         },
     ],
 }

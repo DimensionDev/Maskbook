@@ -223,8 +223,7 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
 
 // ISO 3166-1 alpha-2
 function countryToFlag(isoCode: string) {
-    if (!Flags.using_emoji_flag) {
-        return ''
-    }
-    return isoCode.toUpperCase().replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397))
+    if (!Flags.using_emoji_flag) return ''
+    const modifiedPoints = [...isoCode.toUpperCase()].map((point) => 0x1f1a5 + point.codePointAt(0)!)
+    return String.fromCodePoint(...modifiedPoints)
 }

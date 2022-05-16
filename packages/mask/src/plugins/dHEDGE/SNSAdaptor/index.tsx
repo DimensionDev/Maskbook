@@ -53,8 +53,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             name: <Trans i18nKey="plugin_dhedge_name" />,
             icon: <DHEDGEIcon />,
             marketListSortingPriority: 11,
-            tutorialLink:
-                'https://realmasknetwork.notion.site/Invest-in-your-favourite-fund-manager-via-dHEDGE-on-Twitter-ETH-and-Polygon-fb00ff2e626949279c83b59ed9207b9a',
+            tutorialLink: 'https://realmasknetwork.notion.site/fb00ff2e626949279c83b59ed9207b9a',
         },
     ],
 }

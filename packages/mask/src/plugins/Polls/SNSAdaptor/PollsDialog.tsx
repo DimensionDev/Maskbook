@@ -56,7 +56,7 @@ const useNewPollStyles = makeStyles()((theme) => ({
     },
     addButton: {
         position: 'absolute',
-        bottom: '0',
+        bottom: 0,
         right: '10px',
     },
     loading: {

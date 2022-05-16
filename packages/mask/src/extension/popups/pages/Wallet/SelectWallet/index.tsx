@@ -87,7 +87,7 @@ const useStyles = makeStyles()({
     },
     colorChainICon: {
         borderRadius: '999px!important',
-        margin: '0px !important',
+        margin: '0 !important',
     },
 })
 

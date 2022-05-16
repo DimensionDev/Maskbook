@@ -57,7 +57,7 @@ export function WalletRenameWalletDialog() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder={t('plugin_wallet_name_placeholder')}
-                    onKeyPress={(e) => e.key === 'Enter' && handleRename()}
+                    onKeyPress={(event) => event.key === 'Enter' && handleRename()}
                 />
             </DialogContent>
             <DialogActions className={classes.dialogActions}>
