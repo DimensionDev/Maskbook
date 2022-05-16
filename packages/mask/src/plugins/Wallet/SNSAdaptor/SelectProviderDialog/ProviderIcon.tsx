@@ -38,15 +38,24 @@ const useStyles = makeStyles()((theme) => ({
 export interface ProviderIconProps extends CardProps {
     icon: URL
     name: React.ReactNode
+    iconFilterColor?: string
     ButtonBaseProps?: Partial<ButtonBaseProps>
 }
 
-export function ProviderIcon({ icon, name, onClick, className, ButtonBaseProps }: ProviderIconProps) {
+export function ProviderIcon({ icon, name, iconFilterColor, onClick, className, ButtonBaseProps }: ProviderIconProps) {
     const { classes } = useStyles()
     return (
         <Card className={classnames(classes.root, className)} elevation={0} onClick={onClick}>
             <ButtonBase className={`${classes.content} dashboard-style`} {...ButtonBaseProps}>
-                <img src={icon.toString()} className={classes.icon} />
+                <img
+                    src={icon.toString()}
+                    className={classes.icon}
+                    style={
+                        iconFilterColor
+                            ? { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`, backdropFilter: 'blur(16px)' }
+                            : {}
+                    }
+                />
                 <Typography className={classes.name}>{name}</Typography>
             </ButtonBase>
         </Card>

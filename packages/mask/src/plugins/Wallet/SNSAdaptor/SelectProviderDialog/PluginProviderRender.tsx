@@ -192,6 +192,7 @@ export function PluginProviderRender({
                                                 className={classes.providerIcon}
                                                 icon={provider.icon}
                                                 name={provider.name}
+                                                iconFilterColor={provider.iconFilterColor}
                                             />
                                         </ListItem>
                                     </ProviderIconClickBait>

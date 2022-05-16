@@ -98,6 +98,8 @@ export declare namespace Web3Plugin {
         name: string
         /** The provider bar background gradient color */
         backgroundGradient?: string
+        /** The provider icon filter color */
+        iconFilterColor?: string
     }
 
     export interface ConnectionResult<ChainId = number, NetworkType = string, ProviderType = string> {

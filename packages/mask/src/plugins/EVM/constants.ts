@@ -193,6 +193,7 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
         type: ProviderType.MaskWallet,
         name: 'Mask Network',
         icon: new URL('./assets/maskwallet.png', import.meta.url),
+        iconFilterColor: 'rgba(28, 104, 243, 0.2)',
         backgroundGradient:
             'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
@@ -202,6 +203,7 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
         type: ProviderType.MetaMask,
         name: 'MetaMask',
         icon: new URL('./assets/metamask.png', import.meta.url),
+        iconFilterColor: 'rgba(216, 124, 48, 0.3)',
         backgroundGradient:
             'linear-gradient(90deg, rgba(248, 156, 53, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
@@ -211,6 +213,7 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
         type: ProviderType.WalletConnect,
         name: 'WalletConnect',
         icon: new URL('./assets/walletconnect.png', import.meta.url),
+        iconFilterColor: 'rgba(59, 153, 252, 0.2)',
         backgroundGradient:
             'linear-gradient(90deg, rgba(59, 153, 252, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
@@ -241,6 +244,7 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
         type: ProviderType.Fortmatic,
         name: 'Fortmatic',
         icon: new URL('./assets/fortmatic.png', import.meta.url),
+        iconFilterColor: 'rgba(104, 81, 255, 0.2)',
         backgroundGradient:
             'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },

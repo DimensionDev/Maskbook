@@ -35,6 +35,7 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
         type: ProviderType.Phantom,
         name: 'Phantom',
         icon: new URL('./assets/phantom.png', import.meta.url),
+        iconFilterColor: 'rgba(85, 27, 249, 0.2)',
         backgroundGradient:
             'linear-gradient(90deg, rgba(84, 63, 196, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
