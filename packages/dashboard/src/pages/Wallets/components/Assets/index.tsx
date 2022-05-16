@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     tab: {
         flex: 1,
-        padding: '0px',
+        padding: 0,
         display: 'flex',
         flexDirection: 'column',
     },

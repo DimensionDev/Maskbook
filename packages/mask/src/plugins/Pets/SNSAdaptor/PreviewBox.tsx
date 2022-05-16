@@ -48,7 +48,7 @@ export const useStyles = makeStyles()((theme) => ({
 
         '@keyframes word-show': {
             '0%': {
-                opacity: '0',
+                opacity: 0,
                 transform: 'scale3d(1, 1, 1)',
             },
             '30%': {
@@ -83,11 +83,11 @@ export const useStyles = makeStyles()((theme) => ({
     image: {
         borderRadius: '4px',
         width: '100%',
-        opacity: '0',
+        opacity: 0,
         transition: 'all 200ms',
         '@keyframes image-show': {
             '0%': {
-                opacity: '0',
+                opacity: 0,
             },
             '100%': {
                 opacity: '1',
