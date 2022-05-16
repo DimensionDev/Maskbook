@@ -326,6 +326,7 @@
     "plugin_wallet_name_placeholder": "Enter 1-12 characters",
     "plugin_wallet_fail_to_sign": "Failed to sign password.",
     "plugin_wallet_cancel_sign": "Signature canceled.",
+    "plugin_nft_avatar_recommend_feature_description": "Set your NFT as profile picture with exclusive aura",
     "plugin_red_packet_display_name": "Plugin: Lucky Drop",
     "plugin_red_packet_claimed": "Claimed",
     "plugin_red_packet_erc20_tab_title": "Token",

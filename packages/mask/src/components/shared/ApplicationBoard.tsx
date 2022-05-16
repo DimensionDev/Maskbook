@@ -154,7 +154,9 @@ function ApplicationBoardContent(props: Props) {
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
 
-    const recommendFeatureAppList = applicationList.filter((x) => x.entry.recommendFeature)
+    const recommendFeatureAppList = applicationList
+        .filter((x) => x.entry.recommendFeature)
+        .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
 
     const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
     const { classes } = useStyles({ shouldScroll: listedAppList.length > 12 })
