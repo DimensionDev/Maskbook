@@ -43,8 +43,8 @@ const useStyles = makeStyles()((theme) => {
         },
         content: {
             width: 480,
-            height: 510,
-            maxHeight: 510,
+            height: 420,
+            maxHeight: 420,
             position: 'relative',
             paddingBottom: theme.spacing(3),
         },
