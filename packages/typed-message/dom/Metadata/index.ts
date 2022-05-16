@@ -1,6 +1,6 @@
 import { Result, Ok, Err, Some, Option, None } from 'ts-results'
 import type { ReactElement, ReactNode } from 'react'
-import type { TypedMessage } from '../base.js'
+import type { TypedMessage } from '../../base/index.js'
 import z_schema from 'z-schema'
 import draft, { enableMapSet, Draft } from 'immer'
 enableMapSet()
