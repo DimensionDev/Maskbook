@@ -5,7 +5,7 @@ import { Typography, Button, Grid, Box } from '@mui/material'
 import { useI18N, Translate } from '../locales'
 import { PageInterface, PagesType } from '../types'
 
-import { IconURLs } from '../assets'
+import { ReferralFarmsIcon, ReferToFarmIcon, CreateFarmIcon, BuyToFarmIcon, RewardsIcon } from './shared-ui/icons'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -57,17 +57,17 @@ export function Landing(props: PageInterface) {
         {
             name: t.refer_to_farm(),
             desc: t.refer_to_farm_desc(),
-            iconUrl: IconURLs.referToFarm,
+            icon: <ReferToFarmIcon />,
         },
         {
             name: t.buy_to_farm(),
             desc: t.buy_to_farm_desc(),
-            iconUrl: IconURLs.buyToFarm,
+            icon: <BuyToFarmIcon />,
         },
         {
             name: t.create_farms(),
             desc: t.create_farms_desc(),
-            iconUrl: IconURLs.createFarm,
+            icon: <CreateFarmIcon />,
         },
         {
             desc: (
@@ -77,7 +77,7 @@ export function Landing(props: PageInterface) {
                     }}
                 />
             ),
-            iconUrl: IconURLs.rewards,
+            icon: <RewardsIcon />,
         },
     ]
 
@@ -85,7 +85,7 @@ export function Landing(props: PageInterface) {
         <div className={classes.wrapper}>
             <Grid container className={classes.heading} display="flex" justifyContent="center">
                 <Grid item xs={12} display="flex" justifyContent="center">
-                    <img src={IconURLs.referral} />
+                    <ReferralFarmsIcon />
                 </Grid>
                 <Typography variant="h6" textAlign="center" fontWeight={400}>
                     <b>{t.referral_farming()}</b>
@@ -106,9 +106,7 @@ export function Landing(props: PageInterface) {
                             alignContent="center"
                             justifyItems="flex-start"
                             className={classes.dataItem}>
-                            <Box className={classes.icon}>
-                                <img src={e.iconUrl} alt={e.name} />
-                            </Box>
+                            <Box className={classes.icon}>{e.icon}</Box>
                             <Typography>
                                 <b>{e.name}</b> {e.name && '-'} {e.desc}
                             </Typography>

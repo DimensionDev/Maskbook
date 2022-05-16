@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles } from '@masknet/theme'
 import { Button, Box, Tab, Tabs, Grid, Typography } from '@mui/material'
@@ -6,7 +6,8 @@ import { Button, Box, Tab, Tabs, Grid, Typography } from '@mui/material'
 import { useI18N } from '../locales'
 import { PageInterface, PagesType, TabsReferralFarms } from '../types'
 
-import { IconURLs } from '../assets'
+import { ReferToFarmIcon, CreateFarmIcon, BuyToFarmIcon } from './shared-ui/icons'
+
 import { useTabStyles } from './styles'
 
 const useStyles = makeStyles()((theme) => ({
@@ -61,9 +62,9 @@ const useStylesType = makeStyles()((theme) => ({
 interface TypeProps {
     name: string
     onClick?: () => void
-    iconUrl: string
+    icon: ReactNode
 }
-export function Type({ name, onClick, iconUrl }: TypeProps) {
+export function Type({ name, onClick, icon }: TypeProps) {
     const { classes } = useStylesType()
     return (
         <Grid item xs={4} key={name}>
@@ -74,7 +75,7 @@ export function Type({ name, onClick, iconUrl }: TypeProps) {
                 }}
                 className={classes.root}>
                 <Grid>
-                    <img src={iconUrl} />
+                    {icon}
                     <Typography fontWeight={400} className={classes.name}>
                         {name}
                     </Typography>
@@ -97,21 +98,21 @@ export function ReferralFarms(props: PageInterface) {
             onClick: () => {
                 props.continue(PagesType.REFERRAL_FARMS, PagesType.REFER_TO_FARM, tab + ': ' + PagesType.REFER_TO_FARM)
             },
-            iconUrl: IconURLs.referToFarm,
+            icon: <ReferToFarmIcon />,
         },
         {
             name: t.buy_to_farm(),
             onClick: () => {
                 props.continue(PagesType.REFERRAL_FARMS, PagesType.BUY_TO_FARM, tab + ': ' + PagesType.BUY_TO_FARM)
             },
-            iconUrl: IconURLs.buyToFarm,
+            icon: <BuyToFarmIcon />,
         },
         {
             name: t.create_farms(),
             onClick: () => {
                 props.continue(PagesType.REFERRAL_FARMS, PagesType.CREATE_FARM, tab + ': ' + PagesType.CREATE_FARM)
             },
-            iconUrl: IconURLs.createFarm,
+            icon: <CreateFarmIcon />,
         },
     ]
 
@@ -131,14 +132,14 @@ export function ReferralFarms(props: PageInterface) {
                     <TabPanel value={TabsReferralFarms.TOKENS} className={classes.tab}>
                         <Grid container spacing="20px">
                             {types.map((type) => (
-                                <Type key={type.name} name={type.name} onClick={type.onClick} iconUrl={type.iconUrl} />
+                                <Type key={type.name} name={type.name} onClick={type.onClick} icon={type.icon} />
                             ))}
                         </Grid>
                     </TabPanel>
                     <TabPanel value={TabsReferralFarms.NFT} className={classes.tab}>
                         <Grid container spacing="20px">
                             {types.map((type) => (
-                                <Type key={type.name} name={type.name} onClick={type.onClick} iconUrl={type.iconUrl} />
+                                <Type key={type.name} name={type.name} onClick={type.onClick} icon={type.icon} />
                             ))}
                         </Grid>
                     </TabPanel>
