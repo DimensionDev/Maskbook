@@ -49,6 +49,7 @@ const domainAddressMap: Record<string, string[]> = {
     ]),
     'legacy.elk.finance': collect(Trader, ['ELKFINANCE_ROUTER_ADDRESS', 'ELKFINANCE_FACTORY_ADDRESS']),
     'app.elk.finance': collect(Trader, ['ELKFINANCE_ROUTER_ADDRESS', 'ELKFINANCE_FACTORY_ADDRESS']),
+    'zipswap.fi': collect(Trader, ['ZIPSWAP_ROUTER_ADDRESS', 'ZIPSWAP_FACTORY_ADDRESS']),
     'www.trisolaris.io': collect(Trader, ['TRISOLARIS_ROUTER_ADDRESS', 'TRISOLARIS_FACTORY_ADDRESS']),
     'mdex.com': collect(Trader, ['MDEX_ROUTER_ADDRESS', 'MDEX_FACTORY_ADDRESS']),
     'aave.com': collect(Aave, ['AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS']),

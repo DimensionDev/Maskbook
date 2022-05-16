@@ -112,6 +112,8 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.ELKFINANCE:
             return uniswapV2Like
+        case TradeProvider.ZIPSWAP:
+            return uniswapV2Like
         case TradeProvider.ZRX:
             return zrx
         case TradeProvider.BALANCER:

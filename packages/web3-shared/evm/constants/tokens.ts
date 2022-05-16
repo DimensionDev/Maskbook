@@ -49,6 +49,7 @@ export const VIPER = createERC20Tokens('VIPER_ADDRESS', 'Viper', 'VIPER', 18)
 export const OPENX = createERC20Tokens('OPENX_ADDRESS', 'OpenSwap Token', 'OpenX', 18)
 export const JEWEL = createERC20Tokens('JEWEL_ADDRESS', 'Jewels', 'JEWEL', 18)
 export const ELK = createERC20Tokens('ELK_ADDRESS', 'Elk finance', 'ELK', 18)
+export const ZIP = createERC20Tokens('ZIP_ADDRESS', 'ZipSwap', 'ZIP', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',

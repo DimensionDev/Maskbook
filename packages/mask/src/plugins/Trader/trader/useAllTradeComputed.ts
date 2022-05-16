@@ -241,6 +241,13 @@ export function useAllTradeComputed(
         traderEstimateGas: elkfinanceEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.ELKFINANCE, inputAmount_, inputToken, outputToken)
 
+    // ZipSwap
+    const {
+        trader_: zipswap_,
+        trader: zipswap,
+        traderEstimateGas: zipswapEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.ZIPSWAP, inputAmount_, inputToken, outputToken)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -262,6 +269,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.OPENSWAP, ...openswap_, value: openswap, gas: openswapEstimateGas },
         { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
         { provider: TradeProvider.ELKFINANCE, ...elkfinance_, value: elkfinance, gas: elkfinanceEstimateGas },
+        { provider: TradeProvider.ZIPSWAP, ...zipswap_, value: zipswap, gas: zipswapEstimateGas },
     ]
 
     return nativeToken_.value
