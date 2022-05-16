@@ -55,7 +55,7 @@
     "@types/elliptic": "^6.4.14",
     "@types/json-stable-stringify": "^1.0.34",
     "@types/json2csv": "^5.0.3",
-    "@types/node": "^17.0.26",
+    "@types/node": "^17.0.31",
     "@types/react-avatar-editor": "^10.3.6",
     "@types/react-highlight-words": "^0.16.4",
     "@types/react-router-dom": "^5.3.3",

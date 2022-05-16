@@ -161,7 +161,7 @@ export function formatText(name: string, tokenId: string) {
 }
 
 export function formatTokenId(symbol: string, tokenId: string) {
-    const name = `#${tokenId}`
+    const name = tokenId
     return name.length > 18 ? name.slice(0, 12) + '...' : name
 }
 

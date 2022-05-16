@@ -75,7 +75,7 @@ function resolveLastRecognizedIdentityInner(
                 attributeFilter: ['src'],
             })
 
-        window.addEventListener('locationchange', assign, { signal: cancel })
+        window.addEventListener('locationchange', assign)
         cancel.addEventListener('abort', () => {
             window.removeEventListener('locationchange', assign)
             watcher.stopWatch()
@@ -149,7 +149,7 @@ function resolveCurrentVisitingIdentityInner(
                 attributeFilter: ['src', 'content'],
             })
 
-        window.addEventListener('locationchange', assign, { signal: cancel })
+        window.addEventListener('locationchange', assign)
         cancel.addEventListener('abort', () => {
             window.removeEventListener('locationchange', assign)
             watcher.stopWatch()

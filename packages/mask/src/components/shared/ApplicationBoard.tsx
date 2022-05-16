@@ -219,7 +219,6 @@ function RenderEntryComponent({ application }: { application: Application }) {
 
     const verifyPersona = useCallback(() => {
         closeApplicationBoard()
-        // CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
         ApplicationEntryStatus.personaNextIDReset?.()
     }, [])
 

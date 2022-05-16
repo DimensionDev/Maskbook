@@ -7,7 +7,7 @@ import { WalletIcon } from '../assets/wallet'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N } from '../locales/i18n_generated'
 import type { HTMLProps } from 'react'
-import { ApplicationSmallIcon } from '../assets/applicationsmall'
+import { ApplicationSmallIcon } from '../assets/application'
 import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({

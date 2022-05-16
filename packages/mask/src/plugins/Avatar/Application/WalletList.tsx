@@ -272,12 +272,9 @@ function WalletUI(props: WalletUIProps) {
     return (
         <Stack direction="row" alignItems="center" justifyContent="center">
             <ImageIcon size={30} icon={networkDescriptor?.icon} />
-            <Stack direction="column" style={{ marginLeft: 16 }}>
+            <Stack direction="column" style={{ marginLeft: 0.5 }}>
                 <Stack display="flex" fontSize={14} flexDirection="row" alignItems="center">
-                    <Typography
-                        className={classNames(classes.address, classes.walletName)}
-                        fontWeight={700}
-                        fontSize={14}>
+                    <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
                         {currentPluginId === NetworkPluginID.PLUGIN_EVM
                             ? domain ?? formatAddress(address, 4)
                             : formatAddress(address, 4)}
