@@ -89,6 +89,6 @@
     "wallet_balance": "Balance",
     "view_on_explorer": "View on Explorer",
     "transaction_confirmed": "Your transaction was confirmed!",
-    "try_later": "Please try later.",
+    "try_in_few_minutes": "Please try in a few minutes.",
     "oops": "Oops!"
 }

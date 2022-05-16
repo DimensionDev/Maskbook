@@ -172,7 +172,7 @@ export function FarmPost(props: FarmPostProps) {
                                 {t.oops()}
                             </Typography>
                             <Typography marginTop="12px">{t.blockchain_error_referral_farm()}</Typography>
-                            <Typography marginTop="4px">{t.try_later()}</Typography>
+                            <Typography marginTop="4px">{t.try_in_few_minutes()}</Typography>
                         </Box>
                     </Box>
                 ) : (

@@ -26,5 +26,9 @@ export const supportedOracleChainId = ORACLE_CHAIN_ID.testnet
 
 export const APR = 'N/A'
 
+export const errors = {
+    rpc: 'Failed to fetch',
+}
+
 // set DISABLE_PLUGIN = false to test it
 export const DISABLE_PLUGIN = true
