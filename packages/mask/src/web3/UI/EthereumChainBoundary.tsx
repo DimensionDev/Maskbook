@@ -325,9 +325,15 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         }
                     }
                     style={{ borderRadius: 10, paddingTop: 11, paddingBottom: 11 }}
-                    init={<span>{t('plugin_wallet_switch_network', { network: expectedNetwork })}</span>}
-                    waiting={t('plugin_wallet_switch_network_under_going', { network: expectedNetwork })}
-                    complete={t('plugin_wallet_switch_network', { network: expectedNetwork })}
+                    init={
+                        <span>
+                            {t('plugin_wallet_switch_network', { network: expectedNetwork.replace('Mainnet', '') })}
+                        </span>
+                    }
+                    waiting={t('plugin_wallet_switch_network_under_going', {
+                        network: expectedNetwork.replace('Mainnet', ''),
+                    })}
+                    complete={t('plugin_wallet_switch_network', { network: expectedNetwork.replace('Mainnet', '') })}
                     failed={t('retry')}
                     executor={onSwitchChain}
                     completeOnClick={onSwitchChain}
