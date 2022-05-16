@@ -15,22 +15,17 @@ export function useTwitterIdByWalletSearch(
     if (!bindings || !type) return EMPTY_LIST
 
     return bindings
-        .map((cur) => {
-            const proofs = uniqBy(cur.proofs, (proof) => proof.platform && proof.identity).filter(
-                (x) => x.platform === NextIDPlatform.Twitter,
-            )
+        .map((binding) => {
+            let proofs = binding.proofs.filter((x) => x.platform === NextIDPlatform.Twitter)
+            proofs = uniqBy(cur.proofs, (proof) => proof.identity)
+            const linkedTwitterNames = proofs.map((x) => x.identity)
             return {
-                linkedTwitterNames: proofs.map((x) => x.identity),
-                persona: cur.persona,
-                detail: proofs,
+                nickname: proofs[0].identity,
+                identifier: ProfileIdentifier.of('twitter.com', proofs[0].identity).unwrap(),
+                walletAddress: type === NextIDPlatform.Ethereum ? value : undefined,
+                fromNextID: true,
+                linkedTwitterNames,
+                linkedPersona: ECKeyIdentifier.fromHexPublicKeyK256(binding.persona).unwrap(),
             }
         })
-        .map((x) => ({
-            nickname: x.detail[0].identity,
-            identifier: ProfileIdentifier.of('twitter.com', x.detail[0].identity).unwrap(),
-            walletAddress: type === NextIDPlatform.Ethereum ? value : undefined,
-            fromNextID: true,
-            linkedTwitterNames: x.linkedTwitterNames,
-            linkedPersona: ECKeyIdentifier.fromHexPublicKeyK256(x.persona).unwrap(),
-        }))
 }
