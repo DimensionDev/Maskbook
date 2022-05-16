@@ -13,18 +13,18 @@ import type { ProfileIdentifier } from '@masknet/shared-base'
 
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
     const { t } = useI18N()
-    const whoAmI = useLastRecognizedIdentity()
+    const lastRecognizedIdentity = useLastRecognizedIdentity()
 
     return useCallback(
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
-            const currentProfile: ProfileIdentifier | undefined = globalUIState.profiles.value[0]?.identifier
-            if (encode === 'image' && !currentProfile) throw new Error('No Current Profile')
+            const fallbackProfile: ProfileIdentifier | undefined = globalUIState.profiles.value[0]?.identifier
+            if (encode === 'image' && !lastRecognizedIdentity) throw new Error('No Current Profile')
 
             const _encrypted = await Services.Crypto.encryptTo(
                 content,
                 target,
-                whoAmI?.identifier ?? currentProfile,
+                lastRecognizedIdentity?.identifier ?? fallbackProfile,
                 activatedSocialNetworkUI.networkIdentifier,
             )
             const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, _encrypted)
@@ -57,7 +57,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
             }
             onClose()
         },
-        [t, whoAmI, onClose, reason],
+        [t, lastRecognizedIdentity, onClose, reason],
     )
 }
 
