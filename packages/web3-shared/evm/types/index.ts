@@ -123,6 +123,7 @@ export enum EthereumMethodType {
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_GET_CODE = 'eth_getCode',
     ETH_GAS_PRICE = 'eth_gasPrice',
+    ETH_GET_BLOCK_BY_NUMBER = 'eth_getBlockByNumber',
     ETH_BLOCK_NUMBER = 'eth_blockNumber',
     ETH_GET_BALANCE = 'eth_getBalance',
     ETH_GET_TRANSACTION_BY_HASH = 'eth_getTransactionByHash',
@@ -322,6 +323,11 @@ export type Web3Provider = {
     removeListener(name: string, listener: (event: any) => void): Web3Provider
 }
 export type Signature = string
+export type Block = {
+    hash: string
+    nonce: string
+    timestamp: string
+}
 export type Transaction = TransactionConfig_ & {
     // CELO
     feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee

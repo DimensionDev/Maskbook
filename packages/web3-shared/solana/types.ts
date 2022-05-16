@@ -1,4 +1,4 @@
-import type { PublicKey, Transaction as SolanaTransaction, TransactionResponse } from '@solana/web3.js'
+import type { PublicKey, BlockResponse, Transaction as SolanaTransaction, TransactionResponse } from '@solana/web3.js'
 
 export enum ChainId {
     Mainnet = 101,
@@ -58,6 +58,7 @@ export type Web3Provider = {
     disconnect(): Promise<void>
 }
 export type Signature = string
+export type Block = BlockResponse
 export type Transaction = SolanaTransaction
 export type TransactionDetailed = TransactionResponse
 export type TransactionSignature = SolanaTransaction

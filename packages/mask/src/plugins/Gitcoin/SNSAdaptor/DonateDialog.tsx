@@ -86,7 +86,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     console.log('DEBUG: tokenBalance')
     console.log({
-        tokenBalance
+        tokenBalance,
     })
 
     // #region select token dialog

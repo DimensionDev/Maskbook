@@ -20,6 +20,7 @@ export declare namespace Web3Helper {
             ProviderType: EVM.ProviderType
             NetworkType: EVM.NetworkType
             Signature: EVM.Signature
+            Block: EVM.Block
             Transaction: EVM.Transaction
             TransactionDetailed: EVM.TransactionDetailed
             TransactionSignature: EVM.TransactionSignature
@@ -33,6 +34,7 @@ export declare namespace Web3Helper {
             ProviderType: Flow.ProviderType
             NetworkType: Flow.NetworkType
             Signature: Flow.Signature
+            Block: Flow.Block
             Transaction: Flow.Transaction
             TransactionDetailed: Flow.TransactionDetailed
             TransactionSignature: Flow.TransactionSignature
@@ -46,6 +48,7 @@ export declare namespace Web3Helper {
             ProviderType: Solana.ProviderType
             NetworkType: Solana.NetworkType
             Signature: Solana.Signature
+            Block: Solana.Block
             Transaction: Solana.Transaction
             TransactionDetailed: Solana.TransactionDetailed
             TransactionSignature: Solana.TransactionSignature
@@ -85,6 +88,7 @@ export declare namespace Web3Helper {
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
               Definition[T]['Signature'],
+              Definition[T]['Block'],
               Definition[T]['Transaction'],
               Definition[T]['TransactionDetailed'],
               Definition[T]['TransactionSignature'],
@@ -136,6 +140,7 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['SchemaType'],
         Definition[NetworkPluginID]['ProviderType'],
         Definition[NetworkPluginID]['Signature'],
+        Definition[NetworkPluginID]['Block'],
         Definition[NetworkPluginID]['Transaction'],
         Definition[NetworkPluginID]['TransactionDetailed'],
         Definition[NetworkPluginID]['TransactionSignature'],

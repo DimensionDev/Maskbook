@@ -35,9 +35,9 @@ export function createNativeToken(chainId: ChainId) {
 export function createERC20Token(
     chainId: ChainId,
     address: string,
-    name: string,
-    symbol: string,
-    decimals: number,
+    name = 'Unknown Token',
+    symbol = '',
+    decimals = 0,
     logoURI?: string,
 ) {
     return createFungibleToken(chainId, SchemaType.ERC20, address, name, symbol, decimals, logoURI)

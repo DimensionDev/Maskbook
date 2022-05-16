@@ -522,6 +522,7 @@ export interface Connection<
     SchemaType,
     ProviderType,
     Signature,
+    Block,
     Transaction,
     TransactionDetailed,
     TransactionSignature,
@@ -533,7 +534,7 @@ export interface Connection<
     /** Get gas price */
     getGasPrice(options?: Web3ConnectionOptions): Promise<string>
     /** Get schema type of given token address. */
-    getSchemaType(address: string, options?: Web3ConnectionOptions): Promise<SchemaType>
+    getSchemaType(address: string, options?: Web3ConnectionOptions): Promise<SchemaType | undefined>
     /** Get a native fungible token. */
     getNativeToken(options?: Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>>
     /** Get a fungible token. */
@@ -547,6 +548,7 @@ export interface Connection<
     /** Get an non-fungible token contract. */
     getNonFungibleTokenContract(
         address: string,
+        id: string,
         options?: Web3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>>
     /** Get an non-fungible token collection. */
@@ -564,6 +566,8 @@ export interface Connection<
     getAccount(options?: Web3ConnectionOptions): Promise<string>
     /** Get the currently chain id. */
     getChainId(options?: Web3ConnectionOptions): Promise<ChainId>
+    /** Get the latest block by number. */
+    getBlock(no: number, options?: Web3ConnectionOptions): Promise<Block>
     /** Get the latest block number. */
     getBlockNumber(options?: Web3ConnectionOptions): Promise<number>
     /** Get the latest block timestamp. */
@@ -590,9 +594,9 @@ export interface Connection<
         options?: Web3ConnectionOptions,
     ): Promise<boolean>
     /** Transfer fungible token to */
-    transferFungibleToken(address: string, amount: string, recipient: string, options?: Web3ConnectionOptions): Promise<string>
+    transferFungibleToken(address: string, recipient: string, amount: string, memo?: string, options?: Web3ConnectionOptions): Promise<string>
     /** Transfer non-fungible token to */
-    transferNonFungibleToken(address: string, tokenId: string, amount: string, recipient: string, options?: Web3ConnectionOptions): Promise<string>
+    transferNonFungibleToken(address: string, recipient: string, tokenId: string, amount: string, options?: Web3ConnectionOptions): Promise<string>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, options?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */
