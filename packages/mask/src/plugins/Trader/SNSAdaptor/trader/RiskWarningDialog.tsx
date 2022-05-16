@@ -92,7 +92,7 @@ export function RiskWarningDialog(props: RiskWarningDialogProps) {
                 DialogProps={{ classes: { paper: classes.paperRoot } }}
                 maxWidth="xs"
                 fullWidth
-                title="Swaping Risk">
+                title="Swapping Risk">
                 <DialogContent className={classes.content}>
                     <Stack alignItems="center">
                         <SecurityRiskIcon sx={{ fontSize: '68px' }} />
