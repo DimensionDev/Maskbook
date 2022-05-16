@@ -26,6 +26,8 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Harmony,
                 ],
             },
+            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
+            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
     },
 }

@@ -1,30 +1,16 @@
-<<<<<<< HEAD:packages/mask/src/plugins/NextID/contexts/Tip/useTokenTip.ts
 import { rightShift, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useTokenConstants, useTokenTransferCallback } from '@masknet/web3-shared-evm'
-=======
-import { rightShift } from '@masknet/web3-shared-base'
 import {
-    EthereumTokenType,
-    FungibleTokenDetailed,
     GasConfig,
-    isSameAddress,
-    useTokenConstants,
-    useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
->>>>>>> develop:packages/mask/src/plugins/Tips/contexts/Tip/useTokenTip.ts
 import { useCallback } from 'react'
 import type { TipTuple } from './type'
 
 export function useTokenTip(
     recipient: string,
-<<<<<<< HEAD:packages/mask/src/plugins/NextID/contexts/Tip/useTokenTip.ts
     token: FungibleToken<ChainId, SchemaType> | null,
     amount: string,
-=======
-    token: FungibleTokenDetailed | null,
-    amount: string,
     gasConfig?: GasConfig,
->>>>>>> develop:packages/mask/src/plugins/Tips/contexts/Tip/useTokenTip.ts
 ): TipTuple {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 

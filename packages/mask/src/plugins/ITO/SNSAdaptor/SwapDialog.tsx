@@ -296,7 +296,7 @@ export function SwapDialog(props: SwapDialogProps) {
                     <EthereumERC20TokenApprovedBoundary
                         amount={swapAmount.toFixed()}
                         spender={payload.contract_address}
-                        token={swapToken.type === SchemaType.ERC20 ? swapToken : undefined}>
+                        token={swapToken.schema === SchemaType.ERC20 ? swapToken : undefined}>
                         <ActionButton
                             className={classes.button}
                             fullWidth

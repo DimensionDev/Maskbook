@@ -1,25 +1,19 @@
 import { memo, useCallback, useState } from 'react'
 import { useI18N } from '../locales'
 import { useAsyncRetry } from 'react-use'
-<<<<<<< HEAD
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import { Binding, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
-=======
-import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
 import type { Binding, PersonaInformation } from '@masknet/shared-base'
 import { NextIDAction, NextIDPlatform } from '@masknet/shared-base'
->>>>>>> develop
 import { useCustomSnackbar } from '@masknet/theme'
-import { delay } from '@dimensiondev/kit'
-import { NextIDProof } from '@masknet/web3-providers'
-import type { Persona } from '../../../database'
 import { usePersonaSign } from '../hooks/usePersonaSign'
 import { useWalletSign } from '../hooks/useWalletSign'
 import { useBindPayload } from '../hooks/useBindPayload'
+import { delay } from '@dimensiondev/kit'
 import { UnbindPanelUI } from './UnbindPanelUI'
 import { UnbindConfirm } from './UnbindConfirm'
+import { NextIDProof } from '@masknet/web3-providers'
 import { MaskMessages } from '../../../../shared'
+import { useAccount } from '@masknet/plugin-infra/src/web3'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface VerifyWalletDialogProps {
     unbindAddress: string

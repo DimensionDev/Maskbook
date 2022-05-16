@@ -79,9 +79,6 @@ export function PreviewCard(props: PreviewCardProps) {
     const { classes } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.id)
 
-    console.log('DEBUG: previewcard')
-    console.log(props)
-
     // #region the donation dialog
     const postLink = usePostLink()
     const { setDialog: setDonationDialog } = useRemoteControlledDialog(PluginGitcoinMessages.donationDialogUpdated)

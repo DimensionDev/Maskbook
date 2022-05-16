@@ -1,14 +1,7 @@
 import { memo } from 'react'
 import { useI18N } from '../locales'
 import { useAsyncRetry } from 'react-use'
-<<<<<<< HEAD
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Persona } from '../../../database'
-import type { Binding } from '@masknet/shared-base'
-=======
-import { isSameAddress } from '@masknet/web3-shared-evm'
 import type { Binding, PersonaInformation } from '@masknet/shared-base'
->>>>>>> develop
 import { NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { BindPanelUI } from './BindPanelUI'
 import { useAccount } from '@masknet/plugin-infra/web3'
@@ -19,6 +12,7 @@ import { usePersonaSign } from '../hooks/usePersonaSign'
 import { useWalletSign } from '../hooks/useWalletSign'
 import { NextIDProof } from '@masknet/web3-providers'
 import { MaskMessages } from '../../../../shared'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface BindDialogProps {
     open: boolean
@@ -29,8 +23,8 @@ interface BindDialogProps {
 }
 
 export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBound, bounds }) => {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const t = useI18N()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { showSnackbar } = useCustomSnackbar()
     const currentIdentifier = persona.identifier
     const isBound = !!bounds.find((x) => isSameAddress(x.identity, account))

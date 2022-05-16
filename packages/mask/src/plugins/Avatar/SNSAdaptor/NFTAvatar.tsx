@@ -13,6 +13,7 @@ import { useAccount, useChainId, useImageChecker, useWeb3State } from '@masknet/
 import { ReversedAddress } from '@masknet/shared'
 import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
+
 const useStyles = makeStyles()((theme) => ({
     root: {},
     title: {
@@ -90,13 +91,13 @@ export function NFTAvatar(props: NFTAvatarProps) {
     return null
     // const { onChange, hideWallet } = props
     // const classes = useStylesExtends(useStyles(), props)
-    // const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    // const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    // const [selectedToken, setSelectedToken] = useState< NonFungibleToken<ChainId, SchemaType> | undefined>()
+    // const account = useAccount()
+    // const chainId = useChainId()
+    // const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>()
     // const [open_, setOpen_] = useState(false)
-    // const [collectibles_, setCollectibles_] = useState< NonFungibleToken<ChainId, SchemaType>[]>([])
+    // const [collectibles_, setCollectibles_] = useState<ERC721TokenDetailed[]>([])
     // const { t } = useI18N()
-    // const { Others } = useWeb3State()
+    // const { Utils } = useWeb3State()
     // const { data: collectibles, error, retry, state } = useCollectibles(account, ChainId.Mainnet)
 
     // const onClick = useCallback(async () => {
@@ -105,7 +106,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     //     setSelectedToken(undefined)
     // }, [onChange, selectedToken])
 
-    // const onAddClick = useCallback((token: NonFungibleToken<ChainId, SchemaType>) => {
+    // const onAddClick = useCallback((token: ERC721TokenDetailed) => {
     //     setSelectedToken(token)
     //     setCollectibles_((tokens) => uniqBy([token, ...tokens], (x) => x.contractDetailed.address && x.tokenId))
     // }, [])
@@ -161,7 +162,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     //                             : uniqBy(
     //                                   [...collectibles_, ...collectibles],
     //                                   (x) => x.contractDetailed.address && x.tokenId,
-    //                               ).map((token:  NonFungibleToken<ChainId, SchemaType>, i) => (
+    //                               ).map((token: ERC721TokenDetailed, i) => (
     //                                   <NFTImageCollectibleAvatar
     //                                       key={i}
     //                                       token={token}
@@ -187,9 +188,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
     // )
 }
 // interface NFTImageCollectibleAvatarProps {
-//     token: NonFungibleToken<ChainId, SchemaType>
-//     setSelectedToken: React.Dispatch<React.SetStateAction<NonFungibleToken<ChainId, SchemaType> | undefined>>
-//     selectedToken?: NonFungibleToken<ChainId, SchemaType>
+//     token: ERC721TokenDetailed
+//     setSelectedToken: React.Dispatch<React.SetStateAction<ERC721TokenDetailed | undefined>>
+//     selectedToken?: ERC721TokenDetailed
 // }
 
 // function NFTImageCollectibleAvatar({ token, setSelectedToken, selectedToken }: NFTImageCollectibleAvatarProps) {

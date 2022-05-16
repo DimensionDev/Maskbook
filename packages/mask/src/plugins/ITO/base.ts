@@ -31,6 +31,8 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Harmony,
                 ],
             },
+            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
+            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
     },
     contribution: { metadataKeys: new Set([ITO_MetaKey_1, ITO_MetaKey_2]) },

@@ -1,6 +1,7 @@
+import { remove } from 'lodash-unified'
 import type { ScopedStorage } from '@masknet/shared-base'
 import { NonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
-import { remove } from 'lodash-unified'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 interface StorageValue {
     addedTokens: NonFungibleToken<number, string>[]
@@ -25,7 +26,7 @@ export function getTokens() {
     return storage.storage.addedTokens.value
 }
 
-export function storeToken(token: NonFungibleToken<number, string>) {
+export function storeToken(token: NonFungibleToken<ChainId, SchemaType>) {
     const tokens = [token, ...getTokens()]
     storage.storage.addedTokens.setValue(tokens)
 }

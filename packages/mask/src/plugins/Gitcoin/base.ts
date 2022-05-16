@@ -16,6 +16,8 @@ export const base: Plugin.Shared.Definition = {
             [NetworkPluginID.PLUGIN_EVM]: {
                 supportedChainIds: [ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic, ChainId.Mumbai],
             },
+            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
+            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
     },
     contribution: { postContent: new Set([/https:\/\/gitcoin.co\/grants\/\d+/]) },

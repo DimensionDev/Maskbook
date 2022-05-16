@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import { FC, HTMLProps, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3-types'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -93,7 +93,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface NftItemProps extends HTMLProps<HTMLDivElement> {
-    contract: Web3Plugin.NonFungibleToken<ChainId, SchemaType.ERC721>['contract']
+    contract: NonFungibleTokenContract<ChainId, SchemaType>
     tokenId: string
     claimed?: boolean
     renderOrder: number
@@ -123,7 +123,7 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
 }
 
 interface NftListProps extends ListProps {
-    contract: ERC721ContractDetailed
+    contract: NonFungibleTokenContract<ChainId, SchemaType>
     statusList: boolean[]
     tokenIds: string[]
 }

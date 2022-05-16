@@ -1,8 +1,8 @@
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import {
-    ERC721ContractDetailed,
-    FungibleTokenDetailed,
+    ChainId,
     GasConfig,
+    SchemaType,
     TransactionState,
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
@@ -17,19 +17,19 @@ export interface ContextOptions {
     tipType: TipType
     setTipType: Dispatch<SetStateAction<TipType>>
     recipients: string[]
-    token: FungibleTokenDetailed | null
-    setToken: Dispatch<SetStateAction<FungibleTokenDetailed | null>>
+    token: NonFungibleToken<ChainId, SchemaType> | null
+    setToken: Dispatch<SetStateAction<NonFungibleToken<ChainId, SchemaType> | null>>
     amount: string
     setAmount: Dispatch<SetStateAction<string>>
     erc721TokenId: string | null
     setErc721TokenId: Dispatch<SetStateAction<string | null>>
-    erc721Contract: ERC721ContractDetailed | null
+    erc721Contract: NonFungibleTokenContract<ChainId, SchemaType> | null
     erc721Address: string
     setErc721Address: Dispatch<SetStateAction<string>>
     sendTip: () => Promise<void>
     isSending: boolean
     sendState: TransactionState
-    storedTokens: NonFungibleToken[]
+    storedTokens: NonFungibleToken<ChainId, SchemaType>[]
     reset: () => void
     setGasConfig: Dispatch<SetStateAction<GasConfig | undefined>>
 }

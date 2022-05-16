@@ -1,12 +1,7 @@
 import { makeStyles } from '@masknet/theme'
-<<<<<<< HEAD
-import { MINDS_ID } from '@masknet/shared'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId } from '@masknet/plugin-infra/web3'
-=======
-import { useChainId, ChainId } from '@masknet/web3-shared-evm'
->>>>>>> develop
 import { RedPacketFormProps, RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'

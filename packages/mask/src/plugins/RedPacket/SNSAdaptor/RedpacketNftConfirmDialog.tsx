@@ -23,13 +23,10 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { RedPacketNftMetaKey } from '../constants'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
-<<<<<<< HEAD
 import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-=======
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
->>>>>>> develop
 
 const useStyles = makeStyles()((theme) => ({
     root: {

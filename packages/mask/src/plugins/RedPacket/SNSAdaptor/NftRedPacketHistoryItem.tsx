@@ -159,18 +159,12 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
         const {
             computed: { canSend, isPasswordValid },
         } = useNftAvailabilityComputed(account, history.payload)
-<<<<<<< HEAD
         const { value: contractDetailed } = useNonFungibleTokenContract(
             NetworkPluginID.PLUGIN_EVM,
             history.contract_address.address,
         )
         const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
-            WalletMessages.events.walletStatusDialogUpdated,
-=======
-        const { value: contractDetailed } = useERC721ContractDetailed(history.token_contract.address)
-        const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
             WalletMessages.events.ApplicationDialogUpdated,
->>>>>>> develop
         )
         const handleSend = useCallback(() => {
             if (!(canSend && contractDetailed && isPasswordValid)) return

@@ -438,15 +438,9 @@ function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles({ shortITOwrapper: false })
-<<<<<<< HEAD
-    const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, swappedToken.token.address)
-
-    return token ? (
-=======
-    const { value: _token } = useERC20TokenDetailed(swappedToken.token.address, undefined, chainId)
+    const { value: _token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, swappedToken.token.address, undefined, chainId)
     const token = _token ?? swappedToken.token
     return (
->>>>>>> develop
         <ListItem key={i} className={classes.tokenCard}>
             <div
                 className={classNames(

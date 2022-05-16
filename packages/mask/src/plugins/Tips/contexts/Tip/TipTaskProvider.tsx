@@ -1,16 +1,9 @@
-<<<<<<< HEAD:packages/mask/src/plugins/NextID/contexts/Tip/TipTaskProvider.tsx
 import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { TransactionStateType } from '@masknet/web3-shared-evm'
-=======
 import {
     GasConfig,
     TransactionStateType,
-    useChainId,
-    useERC721ContractDetailed,
-    useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
->>>>>>> develop:packages/mask/src/plugins/Tips/contexts/Tip/TipTaskProvider.tsx
 import { FC, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage'

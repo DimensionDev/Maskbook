@@ -7,7 +7,7 @@ import { NextIDPlatform } from '@masknet/shared-base'
 import { DeleteIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { CopyIconButton } from './CopyIconButton'
-import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useNetworkDescriptor,  } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../locales'
 import { ImageIcon } from '@masknet/shared'
 import { TipButton } from '../../../plugins/Tips/components'
@@ -67,7 +67,6 @@ interface Item {
 
 export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable, onUnBind }) => {
     const t = useI18N()
-    const { Others } = useWeb3State() ?? {}
     const { classes } = useStyles()
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mainnet)
     const visitingPersona = useCurrentVisitingIdentity()

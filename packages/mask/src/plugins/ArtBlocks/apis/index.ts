@@ -1,5 +1,4 @@
 import { resolveSubgraphLinkOnArtBlocks } from '../pipes'
-import type { Project, Token } from '../types'
 
 export async function fetchProject(chainId: number, projectId: string) {
     const body = {
@@ -13,6 +12,7 @@ export async function fetchProject(chainId: number, projectId: string) {
                 additionalPayee
                 complete
                 paused
+                currencyAddress
                 artistName
                 artistAddress
                 pricePerTokenInWei
@@ -38,9 +38,7 @@ export async function fetchProject(chainId: number, projectId: string) {
 
     const result = (await response.json())?.data
 
-    return result as {
-        projects: Project[]
-    }
+    return result
 }
 
 export async function fetchToken(chainId: number, tokenId: number) {
@@ -67,7 +65,5 @@ export async function fetchToken(chainId: number, tokenId: number) {
 
     const result = (await response.json())?.data
 
-    return result as {
-        tokens: Token[]
-    }
+    return result
 }

@@ -13,6 +13,7 @@ import AbstractTab, { AbstractTabProps } from '../../../components/shared/Abstra
 import { payloadOutMask } from './helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
+import Services from '../../../extension/service'
 import { formatBalance, TransactionStateType, useITOConstants } from '@masknet/web3-shared-evm'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
@@ -20,13 +21,9 @@ import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-unified'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { activatedSocialNetworkUI } from '../../../social-network'
-<<<<<<< HEAD
-import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-=======
 import { EnhanceableSite } from '@masknet/shared-base'
->>>>>>> develop
+import { useAccount, useChainId } from '@masknet/plugin-infra/src/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface StyleProps {
     snsId: string
@@ -158,7 +155,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
                 const [, title] = payload.message.split(MSG_DELIMITER)
-                payload.password = await EVM_RPC.personalSign(Web3Utils.sha3(title) ?? '', account)
+                payload.password = await Services.Ethereum.personalSign(Web3Utils.sha3(title) ?? '', account)
             }
             if (!payload.password) {
                 alert('Failed to sign the password.')

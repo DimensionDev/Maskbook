@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import AddIcon from '@mui/icons-material/AddOutlined'
 import RemoveIcon from '@mui/icons-material/RemoveOutlined'
 import { IconButton, Paper } from '@mui/material'
@@ -8,7 +8,7 @@ import { usePickToken } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import type { FungibleToken } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
@@ -100,7 +100,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
 
     // #region balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        exchangeToken?.schema ?? SchemaType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         exchangeToken?.address ?? '',
     )
     // #endregion

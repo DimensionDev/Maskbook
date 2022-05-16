@@ -8,24 +8,7 @@ export function useGasConfig(chainId: ChainId) {
     const [gasConfig, setGasConfig] = useState<GasOptionConfig | undefined>()
     const { value: gasPrice } = useAsync(async () => {
         try {
-<<<<<<< HEAD
-            if (gasConfig) {
-                return new BigNumber(
-                    (chainResolver.isSupport(chainId, 'EIP1559') ? gasConfig.maxFeePerGas : gasConfig.gasPrice) ?? 0,
-                ).toString()
-            } else {
-                if (chainResolver.isSupport(chainId, 'EIP1559')) {
-                    const response = await WalletRPC.getEstimateGasFees(chainId)
-                    const maxFeePerGas = formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toFixed(0)
-                    const maxPriorityFeePerGas = formatGweiToWei(
-                        response?.medium?.suggestedMaxPriorityFeePerGas ?? 0,
-                    ).toFixed(0)
-                    setGasConfig({
-                        maxFeePerGas,
-                        maxPriorityFeePerGas,
-                    })
-=======
-            if (isEIP1559Supported(chainId)) {
+            if (chainResolver.isSupport(chainId, 'EIP1559')) {
                 const response = await WalletRPC.getEstimateGasFees(chainId)
                 const maxFeePerGas = formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toFixed(0)
                 const maxPriorityFeePerGas = formatGweiToWei(
@@ -35,7 +18,6 @@ export function useGasConfig(chainId: ChainId) {
                     maxFeePerGas,
                     maxPriorityFeePerGas,
                 })
->>>>>>> develop
 
                 return maxFeePerGas
             } else {

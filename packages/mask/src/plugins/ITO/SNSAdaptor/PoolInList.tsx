@@ -235,12 +235,8 @@ export function PoolInList(props: PoolInListProps) {
                     <TokenIcon
                         classes={{ icon: classes.icon }}
                         address={poolToken.address}
-<<<<<<< HEAD
-                        logoURL={poolToken.logoURI}
-=======
-                        logoURI={poolToken.logoURI}
                         name={poolToken.symbol}
->>>>>>> develop
+                        logoURL={poolToken.logoURI}
                     />
                 </Box>
                 <Box className={classes.content}>

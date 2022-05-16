@@ -1,6 +1,6 @@
+import { isGreaterThan, isLessThanOrEqualTo, rightShift } from '@masknet/web3-shared-base'
+import { EthereumTokenType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import { useContext, useMemo } from 'react'
-import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { isGreaterThan, isLessThanOrEqualTo, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales'
 import { TipType } from '../../types'
 import { TipContext } from './TipContext'
@@ -9,7 +9,7 @@ type ValidationTuple = [isValid: boolean, message?: string]
 
 export function useTipValidate(): ValidationTuple {
     const { tipType, amount, token, erc721TokenId, erc721Address } = useContext(TipContext)
-    const { value: balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
+    const { value: balance = '0' } = useFungibleTokenBalance(token?.type || EthereumTokenType.Native, token?.address)
     const t = useI18N()
 
     const result: ValidationTuple = useMemo(() => {

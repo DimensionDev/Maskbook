@@ -2,16 +2,13 @@ import { useAsync } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
+import { CircleLoadingIcon, DirectIcon } from '@masknet/icons'
 import { isZero, rightShift, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatBalance } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
 import { SavingsProtocol, TabType } from '../types'
-<<<<<<< HEAD
 import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
-=======
-import { CircleLoadingIcon, DirectIcon } from '@masknet/icons'
->>>>>>> develop
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {

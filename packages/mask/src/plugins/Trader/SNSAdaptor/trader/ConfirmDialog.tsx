@@ -2,14 +2,9 @@ import { CramIcon, InfoIcon, RetweetIcon } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, InjectedDialog, TokenIcon } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-<<<<<<< HEAD
-import { InjectedDialog, FormattedAddress, FormattedBalance, TokenIcon } from '@masknet/shared'
 import type { TradeComputed } from '../../types'
 import type { ChainId, SchemaType, Wallet } from '@masknet/web3-shared-evm'
-=======
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
-import { isZero, multipliedBy } from '@masknet/web3-shared-base'
->>>>>>> develop
 import {
     createNativeToken,
     formatBalance,
@@ -17,13 +12,7 @@ import {
     formatPercentage,
     formatUSD,
     formatWeiToEther,
-<<<<<<< HEAD
     explorerResolver,
-=======
-    FungibleTokenDetailed,
-    resolveAddressLinkOnExplorer,
-    Wallet,
->>>>>>> develop
 } from '@masknet/web3-shared-evm'
 import { Alert, Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
@@ -31,26 +20,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ExternalLink } from 'react-feather'
 import { useUpdateEffect } from 'react-use'
 import { useI18N } from '../../../../utils'
-<<<<<<< HEAD
-import { InfoIcon, RetweetIcon, CramIcon } from '@masknet/icons'
 import { FungibleToken, isZero, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
-import { isDashboardPage } from '@masknet/shared-base'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { currentSlippageSettings } from '../../settings'
-import { useUpdateEffect } from 'react-use'
-=======
-import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
->>>>>>> develop
-import { ONE_BIPS } from '../../constants'
-import { currentSlippageSettings } from '../../settings'
-import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-<<<<<<< HEAD
 import { useNativeTokenPrice } from '@masknet/plugin-infra/web3'
-=======
-import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
-import type { TradeComputed } from '../../types'
+import { ONE_BIPS } from '../../constants'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
->>>>>>> develop
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     section: {

@@ -142,7 +142,6 @@ interface ERC20RedpacketBadgeProps {
 
 function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const { payload } = props
-<<<<<<< HEAD
     const { value: fetchedToken } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
         payload.token?.address ?? payload.token?.address,
@@ -150,14 +149,6 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const chainId = networkResolver.networkChainId((payload.network ?? '') as NetworkType) ?? ChainId.Mainnet
     const nativeCurrency = chainResolver.nativeCurrency(chainId)
     const tokenDetailed = payload.token?.schema === SchemaType.Native ? nativeCurrency : payload.token ?? fetchedToken
-=======
-    const { value: fetchedToken } = useERC20TokenDetailed(payload.token?.address ?? payload.token_address)
-    const chainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
-    const chainDetailed = getChainDetailed(chainId)
-    const tokenDetailed =
-        payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : fetchedToken ?? payload.token
-
->>>>>>> develop
     return (
         <div style={containerStyle}>
             <RedPacketIcon style={badgeSvgIconSize} /> A Lucky Drop with{' '}

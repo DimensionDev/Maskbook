@@ -19,11 +19,6 @@ import { BestTradeIcon, TriangleWarning } from '@masknet/icons'
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { TradeProvider } from '@masknet/public-api'
-<<<<<<< HEAD
-import BigNumber from 'bignumber.js'
-=======
-import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
->>>>>>> develop
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { useNativeTokenPrice } from '@masknet/plugin-infra/web3'
