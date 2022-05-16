@@ -71,7 +71,7 @@ function collectValue(val: any): any {
         }
 
         const result: Record<string, any> = {}
-        for (const key in val) {
+        for (const key of Object.keys(val)) {
             if (typeof key !== 'string') throw new TypeError(`${HEAD}Unsupported type symbol.`)
             const v = val[key]
             result[key] = collectValue(v)

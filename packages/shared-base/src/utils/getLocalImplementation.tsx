@@ -22,7 +22,7 @@ export async function getLocalImplementation<T extends object>(
     RPCCache.set(ref, localImpl)
 
     const result: any = await impl()
-    for (const key in localImpl) {
+    for (const key of Object.keys(localImpl) as Array<keyof typeof localImpl>) {
         if (!Reflect.has(result, key)) {
             delete localImpl[key]
             isUpdate && console.log(`[HMR] ${name}.${key} removed.`)
@@ -30,7 +30,7 @@ export async function getLocalImplementation<T extends object>(
             isUpdate && console.log(`[HMR] ${name}.${key} updated.`)
         }
     }
-    for (const key in result) {
+    for (const key of Object.keys(result)) {
         if (!Reflect.has(localImpl, key)) isUpdate && console.log(`[HMR] ${name}.${key} added.`)
         Object.defineProperty(localImpl, key, { configurable: true, enumerable: true, value: result[key] })
     }
