@@ -3,8 +3,8 @@ import type { Option } from 'ts-results'
 export function collectTwitterEmoji(points: readonly number[]) {
     if (points.length === 0) return ''
     if (points[0] < 0x23 || points[0] > 0x39) return String.fromCodePoint(...points)
-    const modifiedPoints = points.includes(0xfe0f) ? points : [points[0], 0xfe0f, ...points.slice(1)]
-    return String.fromCodePoint(...modifiedPoints)
+    if (points.includes(0xfe0f)) return String.fromCodePoint(...points)
+    return String.fromCodePoint(points[0], 0xfe0f, ...points.slice(1))
 }
 
 export interface CollectNodeTextOptions {
