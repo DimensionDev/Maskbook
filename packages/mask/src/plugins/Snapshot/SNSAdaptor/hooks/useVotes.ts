@@ -2,6 +2,7 @@ import { PluginSnapshotRPC } from '../../messages'
 import type { VoteItem, ProposalIdentifier } from '../../types'
 import { useSuspense } from '../../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
+import { sum } from 'lodash-unified'
 
 const cache = new Map<string, [0, Promise<void>] | [1, VoteItem[]] | [2, Error]>()
 export function votesRetry() {
@@ -50,13 +51,11 @@ async function Suspender(identifier: ProposalIdentifier) {
                 totalWeight: choices
                     ? Array.isArray(v.choice)
                         ? v.choice.length
-                        : choices.reduce((acc, choice) => {
-                              return acc + choice.weight
-                          }, 0)
+                        : sum(choices.map((choice) => choice.weight))
                     : undefined,
                 address: v.voter,
                 authorIpfsHash: v.id,
-                balance: scores.reduce((a, b) => a + (b[v.voter.toLowerCase()] ? b[v.voter.toLowerCase()] : 0), 0),
+                balance: sum(scores.map((score) => score[v.voter.toLowerCase()] ?? 0)),
                 scores: strategies.map((_strategy, i) => scores[i][v.voter] || 0),
                 strategySymbol: proposal.space.symbol ?? strategies[0].params.symbol,
                 authorName: profileEntries[v.voter.toLowerCase()]?.name,

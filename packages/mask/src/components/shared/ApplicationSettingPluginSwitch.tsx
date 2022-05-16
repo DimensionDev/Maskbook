@@ -72,13 +72,9 @@ export function ApplicationSettingPluginSwitch(props: Props) {
     return (
         <List>
             {snsAdaptorPlugins
-                .flatMap((plugin) => {
-                    const entries = plugin.ApplicationEntries?.map((entry) => ({
-                        entry,
-                        pluginId: plugin.ID,
-                    }))
-                    return entries ?? []
-                })
+                .flatMap(({ ID, ApplicationEntries: entries }) =>
+                    (entries ?? []).map((entry) => ({ entry, pluginId: ID })),
+                )
                 .filter((x) => x.entry.category === 'dapp')
                 .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
                 .map((x) => (

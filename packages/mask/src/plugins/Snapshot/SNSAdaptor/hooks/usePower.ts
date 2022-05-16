@@ -11,18 +11,15 @@ export function usePower(identifier: ProposalIdentifier) {
     const account = useAccount()
     return useAsyncRetry(async () => {
         if (!account) return 0
-        return (
-            await PluginSnapshotRPC.getScores(
-                proposal.snapshot,
-                [account],
-                proposal.network,
-                identifier.space,
-                proposal.strategies,
-            )
+        const scores = await PluginSnapshotRPC.getScores(
+            proposal.snapshot,
+            [account],
+            proposal.network,
+            identifier.space,
+            proposal.strategies,
         )
-            .map((v) => mapKeys(v, (_value, key) => key.toLowerCase()) as { [x: string]: number })
-            .reduce((acc, cur) => {
-                return acc + (cur[account.toLowerCase()] ?? 0)
-            }, 0)
+        return scores
+            .map((score) => mapKeys(score, (_value, key) => key.toLowerCase()) as Record<string, number>)
+            .map((record) => record[account.toLowerCase()] ?? 0)
     }, [account])
 }

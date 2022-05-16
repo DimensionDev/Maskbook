@@ -59,7 +59,7 @@
         "unicorn/no-new-buffer": "error",
         "unicorn/no-thenable": "error",
         "unicorn/no-useless-promise-resolve-reject": "error",
-        "unicorn/no-array-reduce": "error",
+        "unicorn/no-array-reduce": ["error", { "allowSimpleOperations": false }],
         "unicorn/prefer-add-event-listener": "error",
         "unicorn/prefer-date-now": "error",
         "unicorn/prefer-dom-node-dataset": "error",

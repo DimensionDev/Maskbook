@@ -2,7 +2,6 @@ import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/con
 import { useMemo, useState, useCallback } from 'react'
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { useI18N } from '../../utils'
 import { PersistentStorages } from '../../../shared'
 
@@ -81,20 +80,17 @@ export function ApplicationSettingPluginList() {
     const { classes } = useStyles()
     const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
-    const applicationList = useMemo(
-        () =>
-            snsAdaptorPlugins
-                .flatMap((plugin) => {
-                    const entries = plugin.ApplicationEntries?.filter(
-                        (entry) => entry.appBoardSortingDefaultPriority && !entry.recommendFeature,
-                    ).map((entry) => ({ entry, pluginId: plugin.ID }))
-                    return entries ?? EMPTY_LIST
-                })
-                .sort((a, b) => {
-                    return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
-                }),
-        [snsAdaptorPlugins],
-    )
+    const applicationList = useMemo(() => {
+        return snsAdaptorPlugins
+            .flatMap(({ ID, ApplicationEntries: entries }) =>
+                (entries ?? [])
+                    .filter((entry) => entry.appBoardSortingDefaultPriority && !entry.recommendFeature)
+                    .map((entry) => ({ entry, pluginId: ID })),
+            )
+            .sort((a, b) => {
+                return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
+            })
+    }, [snsAdaptorPlugins])
     const [listedAppList, setListedAppList] = useState(applicationList.filter((x) => !getUnlistedApp(x)))
     const [unlistedAppList, setUnListedAppList] = useState(applicationList.filter((x) => getUnlistedApp(x)))
 

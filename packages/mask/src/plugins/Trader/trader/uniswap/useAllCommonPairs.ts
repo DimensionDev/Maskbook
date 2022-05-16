@@ -75,7 +75,8 @@ export function useAllCommonPairs(tradeProvider: TradeProvider, currencyA?: Curr
         const filtered = new Map<string, Pair>()
         for (const [state, pair] of allPairs as [PairState.EXISTS, Pair][]) {
             // filter out invalid pairs
-            if (!(state === PairState.EXISTS && pair)) continue
+            if (state !== PairState.EXISTS) continue
+            if (!pair) continue
             // filter out duplicated pairs
             const { address } = pair.liquidityToken
             if (filtered.has(address)) continue
