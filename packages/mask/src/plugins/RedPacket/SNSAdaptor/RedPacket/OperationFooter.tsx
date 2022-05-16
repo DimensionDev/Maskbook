@@ -89,6 +89,7 @@ export function OperationFooter({
                         variant="contained"
                         fullWidth
                         size="large"
+                        sx={{ padding: 1.125 }}
                         onClick={onShare}>
                         {t('share')}
                     </ActionButton>

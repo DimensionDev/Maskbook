@@ -60,7 +60,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     buttons: {
         width: '100%',
-        padding: 0,
         margin: 0,
     },
     verified: {
@@ -75,6 +74,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     button: {
         color: theme.palette.mode === 'dark' ? 'white' : 'black',
+        width: '100%',
     },
 }))
 
@@ -160,18 +160,22 @@ export function PreviewCard(props: PreviewCardProps) {
                 </div>
             </Card>
             <Grid container className={classes.buttons} spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={6} sx={{ padding: 1.25 }}>
                     <Button
                         variant="outlined"
                         fullWidth
                         className={classes.button}
+                        style={{
+                            lineHeight: 0,
+                            padding: 19,
+                        }}
                         target="_blank"
                         rel="noopener noreferrer"
                         href={urlcat('https://gitcoin.co', grant.url)}>
                         {t('plugin_gitcoin_view_on')}
                     </Button>
                 </Grid>
-                <Grid item xs={6} style={{ padding: 4 }}>
+                <Grid item xs={6} sx={{ padding: 1.25 }}>
                     <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
                         <Button variant="contained" fullWidth color="primary" onClick={onDonate}>
                             {t('plugin_gitcoin_donate')}

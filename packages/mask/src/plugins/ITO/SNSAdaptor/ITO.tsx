@@ -152,7 +152,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         },
     },
     actionFooter: {
-        padding: 0,
+        padding: 12,
     },
     actionButton: {
         width: '100%',

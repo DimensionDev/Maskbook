@@ -22,8 +22,8 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
     },
     message: {
-        color: theme.palette.text.primary,
         textAlign: 'center',
+        padding: 16,
     },
     refresh: {
         bottom: theme.spacing(1),
@@ -114,7 +114,11 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     }
 
     if (pools.length === 0) {
-        return <Typography className={classes.message}>{t('plugin_pooltogether_no_pool')}</Typography>
+        return (
+            <Typography color="error" className={classes.message}>
+                {t('plugin_pooltogether_no_pool')}
+            </Typography>
+        )
     }
 
     return (

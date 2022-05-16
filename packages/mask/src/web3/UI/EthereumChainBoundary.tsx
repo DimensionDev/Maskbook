@@ -55,6 +55,10 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         marginBottom: 48,
     },
+    tooltip: {
+        borderRadius: 4,
+        padding: 10,
+    },
 }))
 
 export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> {
@@ -170,21 +174,17 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             return
         }
 
-        if (!isChainMatched) await switchToChain()
         if (!isPluginMatched) {
-            await switchToPlugin()
             if (!networkType || networkType !== NetworkType.Ethereum || isValidEthereumAddress(account)) return
-            setConnectWalletDialog({
-                open: true,
-                providerType: ProviderType.MetaMask,
-                networkType,
-            })
+            openSelectProviderDialog()
+            return
         }
+        if (!isChainMatched) await switchToChain()
     }, [account, isAllowed, isChainMatched, isPluginMatched, providerType, expectedChainId])
 
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
-            <ShadowRootTooltip title={tips ?? ''} arrow>
+            <ShadowRootTooltip title={tips ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
                 <Box
                     className={props.className}
                     display="flex"
@@ -305,6 +305,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         <WalletIcon
                             networkIcon={networkDescriptor?.icon} // switch the icon to meet design
                             isBorderColorNotDefault
+                            size={18}
                         />
                     }
                     sx={
@@ -319,10 +320,10 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                             margin: 0,
                         }
                     }
-                    style={{ borderRadius: 10 }}
-                    init={<span>{t('plugin_wallet_switch_network')}</span>}
-                    waiting={t('plugin_wallet_switch_network_under_going')}
-                    complete={t('plugin_wallet_switch_network')}
+                    style={{ borderRadius: 10, paddingTop: 11, paddingBottom: 11 }}
+                    init={<span>{t('plugin_wallet_switch_network', { network: expectedNetwork })}</span>}
+                    waiting={t('plugin_wallet_switch_network_under_going', { network: expectedNetwork })}
+                    complete={t('plugin_wallet_switch_network', { network: expectedNetwork })}
                     failed={t('retry')}
                     executor={onSwitchChain}
                     completeOnClick={onSwitchChain}
