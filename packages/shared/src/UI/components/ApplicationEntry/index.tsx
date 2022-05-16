@@ -45,14 +45,14 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
                 : {}),
         },
         tooltip: {
-            backgroundColor: theme.palette.common.black,
+            backgroundColor: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white,
         },
         tooltipHint: {
             fontSize: 14,
-            color: theme.palette.common.white,
+            color: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black,
         },
         arrow: {
-            color: theme.palette.common.black,
+            color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white,
         },
         recommendFeatureApplicationBox: {
             width: 260,
