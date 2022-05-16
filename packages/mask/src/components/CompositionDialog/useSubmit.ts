@@ -19,7 +19,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
             const currentProfile: ProfileIdentifier | undefined = globalUIState.profiles.value[0]?.identifier
-            if (encode === 'image' && !currentProfile) throw new Error()
+            if (encode === 'image' && !currentProfile) throw new Error('No Current Profile')
 
             const _encrypted = await Services.Crypto.encryptTo(
                 content,

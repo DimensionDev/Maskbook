@@ -7,7 +7,7 @@ import { useNextIDBoundByPlatform } from '../../DataSource/useNextID'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
-import { cloneDeep } from 'lodash-unified'
+import { cloneDeep, uniqBy } from 'lodash-unified'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -38,14 +38,11 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     )
     const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, valueToSearch, type)
     const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
+    const searchedList = uniqBy(
+        profileItems?.concat(NextIDItems) ?? [],
+        ({ linkedPersona }) => linkedPersona?.publicKeyAsHex,
+    )
 
-    const unique = (arr: Profile[]) => {
-        const res = new Map()
-        return arr.filter(
-            (item) => !res.has(item.linkedPersona?.publicKeyAsHex) && res.set(item.linkedPersona?.publicKeyAsHex, 1),
-        )
-    }
-    const searchedList = unique(profileItems?.concat(NextIDItems) ?? [])
     useEffect(() => void (open && items.request()), [open, items.request])
     return (
         <SelectRecipientsDialogUI

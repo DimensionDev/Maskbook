@@ -94,28 +94,23 @@ export function ProfileInList(props: ProfileInListProps) {
 
     const [, copyToClipboard] = useCopyToClipboard()
     const highlightText = (() => {
-        if (profile.fromNextID) {
-            const mentions = profile.linkedTwitterNames.map((x) => '@' + x).join(' ')
-            if (mentions.length > 15) {
-                const len = profile.linkedTwitterNames.length
-                return truncate(mentions, { length: 15 }) + (len > 1 ? `(${len})` : '')
-            }
-            return mentions
+        if (!profile.fromNextID) return `@${profile.identifier.userId || profile.nickname}`
+        const mentions = profile.linkedTwitterNames.map((x) => '@' + x).join(' ')
+        if (mentions.length > 15) {
+            const len = profile.linkedTwitterNames.length
+            return truncate(mentions, { length: 15 }) + (len > 1 ? `(${len})` : '')
         }
-        return `@${profile.identifier.userId || profile.nickname}`
+        return mentions
     })()
 
     const tooltipTitle = (() => {
         const linkedNames = profile.linkedTwitterNames
-        if (profile.fromNextID) {
-            if (linkedNames.length === 1 && linkedNames[0].length > 14) {
-                return `${t('select_friends_dialog_persona_connect')} @${linkedNames}.`
-            }
-            if (linkedNames.length > 1) {
-                return `${t('select_friends_dialog_persona_connect')} ${profile.linkedTwitterNames
-                    .map((x) => '@' + x)
-                    .join(', ')}.`
-            }
+        if (linkedNames.length === 1 && linkedNames[0].length > 14) {
+            return `${t('select_friends_dialog_persona_connect')} @${linkedNames}.`
+        }
+        if (linkedNames.length > 1) {
+            const mentions = profile.linkedTwitterNames.map((username) => '@' + username)
+            return `${t('select_friends_dialog_persona_connect')} ${mentions.join(', ')}.`
         }
         return ''
     })()
@@ -165,10 +160,7 @@ export function ProfileInList(props: ProfileInListProps) {
                         <CopyIcon
                             className={classes.actionIcon}
                             onClick={() => {
-                                const copyContent =
-                                    (
-                                        profile.linkedPersona?.publicKeyAsHex ?? profile.linkedPersona?.rawPublicKey
-                                    )?.toUpperCase() ?? ''
+                                const copyContent = profile.linkedPersona?.publicKeyAsHex?.toUpperCase() ?? ''
                                 copyToClipboard(copyContent)
                             }}
                         />

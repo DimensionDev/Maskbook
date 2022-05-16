@@ -185,9 +185,9 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     <TypedMessageEditor
                         autoFocus
                         readonly={sending}
-                        ref={(e) => {
-                            Editor.current = e
-                            if (e) updatePostSize(e.estimatedLength)
+                        ref={(element) => {
+                            Editor.current = element
+                            if (element) updatePostSize(element.estimatedLength)
                         }}
                         onChange={(message) => {
                             startTransition(() => props.onChange?.(message))
