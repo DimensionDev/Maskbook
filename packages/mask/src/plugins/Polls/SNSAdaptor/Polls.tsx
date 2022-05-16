@@ -38,8 +38,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     bar: {
         position: 'absolute',
-        top: '0',
-        left: '0',
+        top: 0,
+        left: 0,
         zIndex: 100,
         backgroundColor: theme.palette.primary.main,
         opacity: 0.6,

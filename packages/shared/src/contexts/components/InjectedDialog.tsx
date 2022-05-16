@@ -33,9 +33,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitleEndingContent: {
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
-        minWidth: 46,
-        minHeight: 46,
+        alignItems: 'flex-end',
     },
     dialogContent: {
         overscrollBehavior: 'contain',

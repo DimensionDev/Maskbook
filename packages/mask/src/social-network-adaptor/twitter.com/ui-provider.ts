@@ -84,9 +84,6 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
                 padding: '7px 14px 6px 11px !important',
             },
         },
-        dialogTitleTail: {
-            gridColumn: 3,
-        },
         dialogContent: {
             padding: 16,
             [smallQuery]: {

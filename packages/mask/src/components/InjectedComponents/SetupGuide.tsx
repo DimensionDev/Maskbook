@@ -3,7 +3,13 @@ import { makeStyles } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useI18N, MaskMessages } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { currentSetupGuideStatus, languageSettings, userGuideStatus, userPinExtension } from '../../settings/settings'
+import {
+    currentSetupGuideStatus,
+    languageSettings,
+    userGuideStatus,
+    userGuideVersion,
+    userPinExtension,
+} from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import {
@@ -225,7 +231,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onDone = async () => {
         const network = ui.networkIdentifier
-        if (network === EnhanceableSite.Twitter && userGuideStatus[network].value !== 'completed') {
+        if (network === EnhanceableSite.Twitter && userGuideStatus[network].value !== userGuideVersion.value) {
             userGuideStatus[network].value = '1'
         } else {
             onCreate()

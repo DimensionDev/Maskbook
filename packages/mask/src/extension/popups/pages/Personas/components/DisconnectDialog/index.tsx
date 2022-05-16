@@ -25,7 +25,7 @@ const useStyles = makeStyles()(() => ({
         flexDirection: 'column',
         gap: 16,
         '& > *': {
-            marginLeft: '0px !important',
+            marginLeft: '0 !important',
         },
     },
     button: {
