@@ -27,14 +27,13 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
         whiteSpace: 'nowrap',
+        display: 'flex',
         gridTemplateColumns: '50px auto 50px',
     },
     dialogTitleEndingContent: {
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
-        minWidth: 46,
-        minHeight: 46,
+        alignItems: 'flex-end',
     },
     dialogContent: {
         overscrollBehavior: 'contain',

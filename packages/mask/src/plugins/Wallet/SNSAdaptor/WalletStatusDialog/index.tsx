@@ -39,9 +39,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
     },
 }))
-export interface WalletStatusDialogProps {
-    isDashboard?: boolean
-}
+export interface WalletStatusDialogProps {}
 export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { t } = useI18N()
 
@@ -65,7 +63,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     return (
         <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
-                <WalletStatusBox isDashboard={props.isDashboard} showPendingTransaction />
+                <WalletStatusBox showPendingTransaction />
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>

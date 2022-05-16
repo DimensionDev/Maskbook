@@ -69,8 +69,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
                         'Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network.',
                 },
                 name,
-                tutorialLink:
-                    'https://realmasknetwork.notion.site/Use-File-Service-via-Arweave-IPFS-SIA-Swarm-soon-8c8fe1efce5a48b49739a38f4ea8c60f',
+                tutorialLink: 'https://realmasknetwork.notion.site/8c8fe1efce5a48b49739a38f4ea8c60f',
             }
         })(),
     ],
