@@ -142,7 +142,7 @@ export function useTradeCallback(
                     data: calldata,
                     ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
-                    ...gasConfig,
+                    ...(targetChainId === 10 ? { gasPrice: 15000000, gas: 820000 } : { ...gasConfig }),
                 },
                 async (error, hash) => {
                     if (error) {
