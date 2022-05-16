@@ -31,7 +31,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
             gridGap: 10,
             justifyContent: 'space-between',
             height: 320,
-            width: props.shouldScroll ? 575 : 562,
+            width: props.shouldScroll ? 589 : 576,
             '::-webkit-scrollbar': {
                 backgroundColor: 'transparent',
                 width: 20,
