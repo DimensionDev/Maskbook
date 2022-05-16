@@ -2,6 +2,7 @@ import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ProtocolState } from '@masknet/plugin-infra/web3'
 import type {
+    Block,
     ChainId,
     ProviderType,
     SchemaType,
@@ -18,6 +19,7 @@ export class Protocol extends ProtocolState<
     SchemaType,
     ProviderType,
     Signature,
+    Block,
     Transaction,
     TransactionDetailed,
     TransactionSignature,

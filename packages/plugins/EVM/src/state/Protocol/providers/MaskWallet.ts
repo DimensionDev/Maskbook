@@ -75,9 +75,10 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         return newInstance
     }
 
-    private async createProvider(chainId?: ChainId) {
+    private async createProvider(chainId = ChainId.Mainnet) {
         await this.readyPromise
 
+        const { RPC_URLS = [], RPC_WEIGHTS = [] } = getRPCConstants(chainId)
         const url = RPC_URLS[RPC_WEIGHTS[this.seed]]
         if (!url) throw new Error('Failed to create provider.')
         return this.createProviderInstance(url)

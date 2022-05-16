@@ -6,7 +6,14 @@ import { usePickToken, InjectedDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, TransactionStateType, useGitcoinConstants, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useFungibleToken, useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
+import {
+    useAccount,
+    useChainId,
+    useFungibleToken,
+    useFungibleTokenBalance,
+    useWeb3Connection,
+    useWeb3State,
+} from '@masknet/plugin-infra/web3'
 import { DialogContent, Link, Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -79,13 +86,11 @@ export function DonateDialog(props: DonateDialogProps) {
         nativeTokenDetailed.value,
     )
 
-    const tokenBalance = useAsyncRetry(async () => {
-        return connection?.getFungibleTokenBalance(token?.address ?? ZERO_ADDRESS)
-    }, [connection])
-    // #endregion
+    const tokenBalance = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM)
 
     console.log('DEBUG: tokenBalance')
     console.log({
+        token,
         tokenBalance,
     })
 

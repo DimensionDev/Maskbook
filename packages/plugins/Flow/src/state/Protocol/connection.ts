@@ -1,6 +1,6 @@
 import { first } from 'lodash-unified'
 import { unreachable } from '@dimensiondev/kit'
-import type { CompositeSignature, MutateOptions, QueryOptions } from '@blocto/fcl'
+import type { BlockObject, CompositeSignature, MutateOptions, QueryOptions } from '@blocto/fcl'
 import { ChainId, ProviderType, SchemaType, TransactionStatusCode } from '@masknet/web3-shared-flow'
 import {
     Account,
@@ -17,6 +17,13 @@ import { Web3StateSettings } from '../../settings'
 
 class Connection implements BaseConnection {
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
+
+    getBlock(
+        no: number,
+        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
+    ): Promise<BlockObject> {
+        throw new Error('Method not implemented.')
+    }
 
     async connect(
         options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
@@ -44,6 +51,7 @@ class Connection implements BaseConnection {
     }
     getNonFungibleTokenContract(
         address: string,
+        id: string,
         options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
@@ -59,17 +67,18 @@ class Connection implements BaseConnection {
     }
     transferFungibleToken(
         address: string,
-        amount: string,
         recipient: string,
+        amount: string,
+        memo?: string,
         options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
     transferNonFungibleToken(
         address: string,
+        recipient: string,
         tokenId: string,
         amount: string,
-        recipient: string,
         options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
     ): Promise<string> {
         throw new Error('Method not implemented.')

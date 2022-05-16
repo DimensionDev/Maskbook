@@ -88,10 +88,6 @@ class Connection implements EVM_Connection {
                     await dispatch(context, async () => {
                         if (!context.writeable) return
                         try {
-                            const provider =
-                                Providers[
-                                    isUniversalMethod(context.method) ? ProviderType.MaskWallet : this.providerType
-                                ]
                             switch (context.method) {
                                 case EthereumMethodType.MASK_LOGIN:
                                     context.write(
@@ -154,7 +150,7 @@ class Connection implements EVM_Connection {
         options?: EVM_Web3ConnectionOptions,
     ): Promise<string> {
         // Native
-        if (isNativeTokenAddress(this.chainId, address)) {
+        if (!address || isNativeTokenAddress(this.chainId, address)) {
             const tx = {
                 from: this.account,
                 to: recipient,
@@ -266,7 +262,7 @@ class Connection implements EVM_Connection {
     }
     async getFungibleTokenBalance(address: string, options?: EVM_Web3ConnectionOptions): Promise<string> {
         // Native
-        if (isNativeTokenAddress(this.chainId, address)) return this.getNativeTokenBalance(options)
+        if (!address || isNativeTokenAddress(this.chainId, address)) return this.getNativeTokenBalance(options)
 
         // ERC20
         const contract = await this.getWeb3Contract<ERC20>(address, ERC20ABI as AbiItem[], options)
@@ -288,7 +284,7 @@ class Connection implements EVM_Connection {
         options?: EVM_Web3ConnectionOptions,
     ): Promise<FungibleToken<ChainId, SchemaType>> {
         // Native
-        if (isNativeTokenAddress(this.chainId, address)) return this.getNativeToken(options)
+        if (!address || isNativeTokenAddress(this.chainId, address)) return this.getNativeToken(options)
 
         // ERC20
         const contract = await this.getWeb3Contract<ERC20>(address, ERC20ABI as AbiItem[], options)

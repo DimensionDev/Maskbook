@@ -1,4 +1,9 @@
-import { Connection as SolanaConnection, sendAndConfirmRawTransaction, Transaction } from '@solana/web3.js'
+import {
+    BlockResponse,
+    Connection as SolanaConnection,
+    sendAndConfirmRawTransaction,
+    Transaction,
+} from '@solana/web3.js'
 import { ChainId, deocdeAddress, ProviderType, SchemaType } from '@masknet/web3-shared-solana'
 import { Providers } from './provider'
 import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types'
@@ -18,6 +23,12 @@ class Connection implements BaseConnection {
     private connections: Map<ChainId, SolanaConnection> = new Map()
 
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
+    getBlock(
+        no: number,
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<BlockResponse> {
+        throw new Error('Method not implemented.')
+    }
 
     async connect(
         options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
@@ -36,8 +47,9 @@ class Connection implements BaseConnection {
     }
     transferFungibleToken(
         address: string,
-        amount: string,
         recipient: string,
+        amount: string,
+        memo?: string,
         options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ): Promise<string> {
         throw new Error('Method not implemented.')
@@ -62,6 +74,7 @@ class Connection implements BaseConnection {
     }
     getNonFungibleTokenContract(
         address: string,
+        id: string,
         options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')

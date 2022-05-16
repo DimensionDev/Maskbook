@@ -4,6 +4,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { ProtocolState } from '@masknet/plugin-infra/web3'
 import type { ChainId, ProviderType, SchemaType, Web3 } from '@masknet/web3-shared-flow'
 import { createConnection } from './Protocol/connection'
+import type { BlockResponse } from '@solana/web3.js'
 
 export interface ProtocolStorage {
     chainId: ChainId
@@ -15,6 +16,7 @@ export class Protocol extends ProtocolState<
     SchemaType,
     ProviderType,
     CompositeSignature[],
+    BlockResponse,
     MutateOptions,
     TransactionObject,
     never,
