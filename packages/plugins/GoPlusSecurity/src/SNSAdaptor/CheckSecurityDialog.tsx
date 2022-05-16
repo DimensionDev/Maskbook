@@ -1,5 +1,5 @@
 import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
-import { makeStyles, MaskDialog, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../locales'
 import { SearchBox } from './components/SearchBox'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -11,6 +11,7 @@ import { Center, TokenSecurity } from './components/Common'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder'
 import { NotFound } from './components/NotFound'
 import { ChainId, CurrencyType, getCoinGeckoPlatformId, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { InjectedDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -18,15 +19,20 @@ const useStyles = makeStyles()((theme) => ({
     },
     paperRoot: {
         backgroundImage: 'none',
+        display: 'flex',
+        width: 584,
         '&>h2': {
             height: 30,
-            border: `1px solid ${theme.palette.divider}`,
+            border: theme.palette.mode === 'light' ? undefined : `1px solid ${theme.palette.divider}`,
             padding: theme.spacing(1.875, 2.5, 1.875, 2.5),
-            marginBottom: 24,
+            justifySelf: 'center',
+            background:
+                theme.palette.mode === 'light'
+                    ? 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
+                    : undefined,
         },
     },
     content: {
-        width: 552,
         height: 510,
         maxHeight: 510,
         paddingBottom: theme.spacing(3),
@@ -65,11 +71,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
         return TokenPrice.getTokenPrices(platformId, [value.contract], CurrencyType.USD)
     }, [value])
     return (
-        <MaskDialog
-            DialogProps={{ classes: { paper: classes.paperRoot } }}
-            title={t.__plugin_name()}
-            open={open}
-            onBack={onClose}>
+        <InjectedDialog title={t.__plugin_name()} classes={{ paper: classes.paperRoot }} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Stack height="100%" spacing={2}>
                     <Box>
@@ -100,6 +102,6 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
             <DialogActions className={classes.footer}>
                 <Footer />
             </DialogActions>
-        </MaskDialog>
+        </InjectedDialog>
     )
 }
