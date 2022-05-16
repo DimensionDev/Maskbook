@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
 import { base } from '../base'
 import { setupContext } from '../context'
-import { Translate } from '../locales'
 import { Trans } from 'react-i18next'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationIcon } from '../assets/application'
@@ -33,15 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 recommendFeature={recommendFeature}
                                 {...EntryComponentProps}
                                 onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
-                                tooltipHint={
-                                    EntryComponentProps.tooltipHint ?? (
-                                        <Translate.application_hint
-                                            components={{
-                                                br: <br />,
-                                            }}
-                                        />
-                                    )
-                                }
+                                tooltipHint={EntryComponentProps.tooltipHint ?? <Trans i18nKey="application_hint" />}
                             />
 
                             <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
