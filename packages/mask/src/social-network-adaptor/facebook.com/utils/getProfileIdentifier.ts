@@ -39,7 +39,7 @@ export function getProfileIdentifierAtFacebook(links: link[] | link, allowCollec
                 if (allowCollectInfo && image.getAttribute('aria-label') === nickname && nickname) {
                     Services.Identity.updateProfileInfo(identifier, { nickname, avatarURL: image.src })
                     if (currentProfile?.linkedPersona) {
-                        Services.Identity.createNewRelation(identifier, currentProfile.linkedPersona.identifier)
+                        Services.Identity.createNewRelation(identifier, currentProfile.linkedPersona)
                     }
                 }
             } catch {}
@@ -49,7 +49,7 @@ export function getProfileIdentifierAtFacebook(links: link[] | link, allowCollec
                 if (allowCollectInfo && avatar) {
                     Services.Identity.updateProfileInfo(identifier, { nickname, avatarURL: image.src })
                     if (currentProfile?.linkedPersona) {
-                        Services.Identity.createNewRelation(identifier, currentProfile.linkedPersona.identifier)
+                        Services.Identity.createNewRelation(identifier, currentProfile.linkedPersona)
                     }
                 }
             } catch {}
@@ -59,7 +59,7 @@ export function getProfileIdentifierAtFacebook(links: link[] | link, allowCollec
                 if (allowCollectInfo && avatar) {
                     Services.Identity.updateProfileInfo(identifier, { nickname, avatarURL: avatar })
                     if (currentProfile?.linkedPersona) {
-                        Services.Identity.createNewRelation(identifier, currentProfile.linkedPersona.identifier)
+                        Services.Identity.createNewRelation(identifier, currentProfile.linkedPersona)
                     }
                 }
             } catch {}

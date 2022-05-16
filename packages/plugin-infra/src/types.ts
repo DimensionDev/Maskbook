@@ -365,6 +365,14 @@ export namespace Plugin.SNSAdaptor {
         category?: 'dapp' | 'other'
 
         nextIdRequired?: boolean
+
+        /**
+         * Display using an eye-catching card and unable to be unlisted.
+         */
+        recommendFeature?: {
+            description: React.ReactNode
+            backgroundGradient: string
+        }
     }
 
     export interface ProfileIdentity {

@@ -95,22 +95,29 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <RedPacketIcon />
             const name = <Trans i18nKey="plugin_red_packet_name" />
+            const recommendFeature = {
+                description: <Trans i18nKey="plugin_red_packet_recommend_feature_description" />,
+                backgroundGradient: 'linear-gradient(180.54deg, #FF9A9E 0.71%, #FECFEF 98.79%, #FECFEF 99.78%)',
+            }
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     return (
                         <ApplicationEntry
                             title={name}
-                            disabled={disabled}
+                            recommendFeature={recommendFeature}
+                            {...EntryComponentProps}
                             icon={icon}
-                            onClick={() =>
-                                CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                    reason: 'timeline',
-                                    open: true,
-                                    options: {
-                                        startupPlugin: base.ID,
-                                    },
-                                })
+                            onClick={
+                                EntryComponentProps.onClick ??
+                                (() =>
+                                    CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                        reason: 'timeline',
+                                        open: true,
+                                        options: {
+                                            startupPlugin: base.ID,
+                                        },
+                                    }))
                             }
                         />
                     )
@@ -120,9 +127,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 icon,
                 description: <Trans i18nKey="plugin_red_packet_description" />,
                 name,
-                tutorialLink:
-                    'https://realmasknetwork.notion.site/Gift-token-NFTs-to-your-friends-Support-ETH-BSC-and-Polygon-0a71fd421aae4563bd07caa3e2129e5b',
+                tutorialLink: 'https://realmasknetwork.notion.site/0a71fd421aae4563bd07caa3e2129e5b',
                 category: 'dapp',
+                recommendFeature,
             }
         })(),
     ],

@@ -29,18 +29,24 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = <Trans i18nKey="plugin_trader_swap" />
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
-                    return <ApplicationEntry disabled={disabled} title={name} icon={icon} onClick={openDialog} />
+                    return (
+                        <ApplicationEntry
+                            {...EntryComponentProps}
+                            title={name}
+                            icon={icon}
+                            onClick={EntryComponentProps.onClick ?? openDialog}
+                        />
+                    )
                 },
                 appBoardSortingDefaultPriority: 9,
                 marketListSortingPriority: 5,
                 icon,
                 category: 'dapp',
                 name,
-                tutorialLink:
-                    'https://realmasknetwork.notion.site/Trade-cryptos-on-Twitter-via-Uniswap-Sushi-0x-Support-ETH-BSC-Polygon-Arbitrum-f2e7d081ee38487ca1db958393ac1edc',
+                tutorialLink: 'https://realmasknetwork.notion.site/f2e7d081ee38487ca1db958393ac1edc',
                 description: <Trans i18nKey="plugin_trader_swap_description" />,
             }
         })(),

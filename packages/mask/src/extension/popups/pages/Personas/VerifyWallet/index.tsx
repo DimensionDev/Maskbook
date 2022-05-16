@@ -78,8 +78,10 @@ const VerifyWallet = memo(() => {
                 currentPersona.identifier,
                 payload.signPayload,
             )
+            showSnackbar(t('popups_verify_persona_sign_success'), { variant: 'success' })
             return signResult.signature.signature
         } catch (error) {
+            showSnackbar(t('popups_verify_persona_sign_failed'), { variant: 'error' })
             console.error(error)
             return
         }
@@ -113,11 +115,12 @@ const VerifyWallet = memo(() => {
                     signature,
                 },
             )
+            showSnackbar(t('popups_verify_wallet_sign_success'), { variant: 'success' })
             setSigned(true)
             refreshProofs()
             return true
         } catch (error) {
-            console.error(error)
+            showSnackbar(t('popups_verify_wallet_sign_failed'), { variant: 'error' })
             return false
         }
     }, [currentPersona?.identifier.publicKeyAsHex, payload, wallet, signature])
@@ -130,19 +133,17 @@ const VerifyWallet = memo(() => {
         try {
             if (signed) Services.Helper.removePopupWindow()
 
-            // first Step
             if (!signature && !walletSignState) {
                 await personaSilentSign()
                 return SignSteps.FirstStepDone
             } else if (signature && !walletSignState) {
-                await walletSign()
-                return SignSteps.SecondStepDone
+                const walletSignRes = await walletSign()
+                return walletSignRes ? SignSteps.SecondStepDone : SignSteps.FirstStepDone
             } else {
                 await Services.Helper.removePopupWindow()
                 return
             }
         } catch {
-            // err step
             showSnackbar('Connect error', { variant: 'error' })
             return SignSteps.Ready
         }

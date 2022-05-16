@@ -64,7 +64,7 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
             value.map<RelationProfile>((profile) => ({
                 favorite: profile.favor === RelationFavor.COLLECTED,
                 name: profile.nickname || profile.identifier.userId || '',
-                fingerprint: profile.fingerprint,
+                fingerprint: profile.linkedPersona?.rawPublicKey,
                 identifier: profile.identifier,
                 avatar: profile.avatar,
             })),

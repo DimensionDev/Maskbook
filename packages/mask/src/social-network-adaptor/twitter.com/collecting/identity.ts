@@ -8,6 +8,7 @@ import {
     searchSelfHandleSelector,
     searchSelfNicknameSelector,
     searchSelfAvatarSelector,
+    selfInfoSelectors,
 } from '../utils/selector'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import Services from '../../../extension/service'
@@ -15,14 +16,41 @@ import { twitterBase } from '../base'
 import { getAvatar, getBio, getNickname, getTwitterId, getPersonalHomepage } from '../utils/user'
 import { isMobileTwitter } from '../utils/isMobile'
 
+function recognizeDesktop() {
+    const collect = () => {
+        const handle = selfInfoSelectors().handle.evaluate()
+        const nickname = selfInfoSelectors().name.evaluate()
+        const avatar = selfInfoSelectors().userAvatar.evaluate()
+
+        return { handle, nickname, avatar }
+    }
+
+    const watcher = new MutationObserverWatcher(selfInfoSelectors().handle)
+
+    return { watcher, collect }
+}
+
+function recognizeMobile() {
+    const collect = () => {
+        const avatar = searchSelfAvatarSelector().evaluate()?.getAttribute('src') ?? ''
+        const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '')
+        const nickname = searchSelfNicknameSelector().evaluate()?.textContent?.trim() ?? ''
+
+        return { handle, nickname, avatar }
+    }
+
+    const watcher = new MutationObserverWatcher(searchSelfHandleSelector())
+
+    return { watcher, collect }
+}
+
 function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
+    const task = isMobileTwitter ? recognizeMobile() : recognizeDesktop()
     const assign = () => {
-        const avatar = searchSelfAvatarSelector().evaluate()?.getAttribute('src') ?? ''
-        const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '')
-        const nickname = searchSelfNicknameSelector().evaluate()?.textContent?.trim() ?? ''
+        const { handle, nickname, avatar } = task.collect()
 
         if (handle) {
             ref.value = {
@@ -32,7 +60,7 @@ function resolveLastRecognizedIdentityInner(
             }
         }
     }
-    const watcher = new MutationObserverWatcher(searchSelfHandleSelector())
+    const watcher = task.watcher
         .addListener('onAdd', () => assign())
         .addListener('onChange', () => assign())
         .startWatch({

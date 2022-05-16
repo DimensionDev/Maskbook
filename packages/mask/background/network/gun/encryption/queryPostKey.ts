@@ -153,7 +153,7 @@ namespace Version38Or39 {
         const N = 2
 
         const hash = await work(encodeArrayBuffer(iv), hashPair)
-        return networkHint + '-' + hash.substring(0, N)
+        return networkHint + '-' + hash.slice(0, N)
     }
 
     // The difference between V38 and V39 is: V39 is not stable (JSON.stringify)
@@ -165,7 +165,7 @@ namespace Version38Or39 {
 
         const jwk = JSON.stringify(key)
         const hash = await work(jwk, hashPair)
-        return hash.substring(0, N)
+        return hash.slice(0, N)
     }
 
     async function hashKey38(jwk: EC_Public_JsonWebKey) {
@@ -173,37 +173,17 @@ namespace Version38Or39 {
         const N = 2
 
         const hash = await work(jwk.x! + jwk.y!, hashPair)
-        return hash.substring(0, N)
+        return hash.slice(0, N)
     }
 
     // This is a self contained Gun.SEA.work implementation that only contains code path we used.
-    async function work(data: string, salt: string) {
-        const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(data), { name: 'PBKDF2' }, false, [
-            'deriveBits',
-        ])
-        const work = await crypto.subtle.deriveBits(
-            {
-                name: 'PBKDF2',
-                iterations: 100000,
-                salt: new TextEncoder().encode(salt),
-                hash: { name: 'SHA-256' },
-            },
-            key,
-            512,
-        )
-        const result = arrayBufferToBase64(work)
-        return result
-
-        function arrayBufferToBase64(buffer: ArrayBuffer) {
-            let binary = ''
-            const bytes = new Uint8Array(buffer)
-            const len = bytes.byteLength
-            // eslint-disable-next-line no-plusplus
-            for (let i = 0; i < len; i++) {
-                binary += String.fromCharCode(bytes[i])
-            }
-            return window.btoa(binary)
-        }
+    async function work(data: Uint8Array | string, salt: Uint8Array | string) {
+        if (typeof data === 'string') data = new TextEncoder().encode(data)
+        if (typeof salt === 'string') salt = new TextEncoder().encode(salt)
+        const key = await crypto.subtle.importKey('raw', data, { name: 'PBKDF2' }, false, ['deriveBits'])
+        const params: Pbkdf2Params = { name: 'PBKDF2', iterations: 100000, salt, hash: { name: 'SHA-256' } }
+        const derived = await crypto.subtle.deriveBits(params, key, 512)
+        return window.btoa(String.fromCharCode(...new Uint8Array(derived)))
     }
 }
 

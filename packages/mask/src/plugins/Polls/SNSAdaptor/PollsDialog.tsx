@@ -18,13 +18,16 @@ import addDate from 'date-fns/add'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
 import type { PollMetaData } from '../types'
 import { PLUGIN_META_KEY } from '../constants'
 import { PluginPollRPC } from '../messages'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { useAsync } from 'react-use'
+import Services from '../../../extension/service'
+import { head } from 'lodash-unified'
 
 const useNewPollStyles = makeStyles()((theme) => ({
     menuPaper: {
@@ -259,8 +262,17 @@ export default function PollsDialog(props: PollsDialogProps) {
         props.onClose()
     }
 
-    const senderName = useCurrentIdentity()?.linkedPersona?.nickname
-    const senderFingerprint = useCurrentIdentity()?.linkedPersona?.fingerprint
+    const currentIdentity = useCurrentIdentity()
+    const { value: linkedPersona } = useCurrentLinkedPersona()
+    const { value: currentProfile } = useAsync(async () => {
+        if (!currentIdentity?.linkedPersona || !currentIdentity.identifier) return
+        const profilesInformation = await Services.Identity.queryProfilesInformation([currentIdentity?.identifier])
+
+        return head(profilesInformation)
+    }, [currentIdentity])
+
+    const senderName = linkedPersona?.nickname
+    const senderFingerprint = currentProfile?.linkedPersona?.rawPublicKey
 
     const tabProps: AbstractTabProps = {
         tabs: [

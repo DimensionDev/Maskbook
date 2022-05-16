@@ -65,6 +65,7 @@
         "unicorn/prefer-number-properties": "error",
         "unicorn/relative-url-style": ["error", "always"],
         "unicorn/throw-new-error": "error",
+        "unicorn/prefer-string-slice": "error",
         "@dimensiondev/array/no-implicit-sort": "error",
         "@dimensiondev/browser/prefer-location-assign": "error",
         "@dimensiondev/jsx/no-class-component": "error",
@@ -102,7 +103,8 @@
         {
             "files": ["./plugins/**/*"],
             "rules": {
-                "@typescript-eslint/no-explicit-any": "error"
+                "@typescript-eslint/no-explicit-any": "error",
+                "no-nested-ternary": "error"
             }
         }
     ]

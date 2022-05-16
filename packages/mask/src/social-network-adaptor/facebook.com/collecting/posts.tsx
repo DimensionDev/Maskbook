@@ -86,8 +86,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
             function collectPostInfo() {
                 rootProxy.realCurrent = root.evaluate()[0] as HTMLElement
                 const nextTypedMessage: TypedMessage[] = []
-                info.postBy.value =
-                    getPostBy(metadata, postInfo.containingMaskPayload.getCurrentValue() !== null).identifier || null
+                info.postBy.value = getPostBy(metadata, postInfo.hasMaskPayload.getCurrentValue()).identifier || null
                 info.postID.value = getPostID(metadata, rootProxy.realCurrent)
                 // parse text
                 const text = collectNodeText(node, {
