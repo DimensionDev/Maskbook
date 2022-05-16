@@ -84,18 +84,11 @@ export function ApplicationSettingPluginList() {
     const applicationList = useMemo(
         () =>
             snsAdaptorPlugins
-                .reduce<Application[]>((acc, cur) => {
-                    if (!cur.ApplicationEntries) return acc
-                    return acc.concat(
-                        cur.ApplicationEntries.filter(
-                            (x) => x.appBoardSortingDefaultPriority && !x.recommendFeature,
-                        ).map((x) => {
-                            return {
-                                entry: x,
-                                pluginId: cur.ID,
-                            }
-                        }) ?? EMPTY_LIST,
-                    )
+                .flatMap((plugin) => {
+                    const entries = plugin.ApplicationEntries?.filter(
+                        (entry) => entry.appBoardSortingDefaultPriority && !entry.recommendFeature,
+                    ).map((entry) => ({ entry, pluginId: plugin.ID }))
+                    return entries ?? EMPTY_LIST
                 }, EMPTY_LIST)
                 .sort(
                     (a, b) =>

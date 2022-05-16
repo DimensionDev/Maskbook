@@ -69,56 +69,58 @@ export async function getAllPoolsAsSeller(
         _unlock_time: BigNumber
     }
 
-    const payloadList: { payload: JSON_PayloadFromChain; hash: string }[] = (await response.json()).result?.reduce(
-        (acc: { payload: JSON_PayloadFromChain; hash: string }[], cur: TxType) => {
-            if (!isSameAddress(cur.from, sellerAddress)) return acc
-            try {
-                const decodedInputParam = interFace.decodeFunctionData(
-                    'fill_pool',
-                    cur.input,
-                ) as unknown as FillPoolInputParam
+    interface Payload {
+        result?: TxType[]
+    }
 
-                const [sellerName = '', message = '', regions = '-'] = decodedInputParam._message.split(MSG_DELIMITER)
+    const payload: Payload = await response.json()
 
-                const payload: JSON_PayloadFromChain = {
-                    end_time: (decodedInputParam._end.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000) * 1000,
-                    exchange_token_addresses: decodedInputParam._exchange_addrs,
-                    limit: decodedInputParam._limit.toString(),
-                    message,
-                    qualification_address: decodedInputParam._qualification,
-                    exchange_amounts: decodedInputParam._ratios.map((v) => v.toString()),
-                    start_time: (decodedInputParam._start.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000) * 1000,
-                    token_address: decodedInputParam._token_addr,
-                    total: decodedInputParam._total_tokens.toString(),
-                    unlock_time:
-                        (decodedInputParam._unlock_time.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000) * 1000,
-                    seller: {
-                        address: cur.from,
-                        name: sellerName,
-                    },
-                    contract_address: cur.to,
-                    chain_id: chainId,
-                    regions,
-                    block_number: Number(cur.blockNumber),
-                    // #region Retrieve at step 3
-                    pid: '',
-                    creation_time: 0,
-                    // #endregion
-                    // #region Retrieve at step 4
-                    total_remaining: '',
-                    // #endregion
-                    // #region Retrieve from database
-                    password: '',
-                    // #endregion
-                }
+    const payloadList = (payload.result ?? []).flatMap((txType: TxType) => {
+        if (!isSameAddress(txType.from, sellerAddress)) return []
+        try {
+            const decodedInputParam = interFace.decodeFunctionData(
+                'fill_pool',
+                txType.input,
+            ) as unknown as FillPoolInputParam
 
-                return acc.concat({ payload, hash: cur.hash })
-            } catch {
-                return acc
+            const [sellerName = '', message = '', regions = '-'] = decodedInputParam._message.split(MSG_DELIMITER)
+
+            const payload: JSON_PayloadFromChain = {
+                end_time: (decodedInputParam._end.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000) * 1000,
+                exchange_token_addresses: decodedInputParam._exchange_addrs,
+                limit: decodedInputParam._limit.toString(),
+                message,
+                qualification_address: decodedInputParam._qualification,
+                exchange_amounts: decodedInputParam._ratios.map((v) => v.toString()),
+                start_time: (decodedInputParam._start.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000) * 1000,
+                token_address: decodedInputParam._token_addr,
+                total: decodedInputParam._total_tokens.toString(),
+                unlock_time: (decodedInputParam._unlock_time.toNumber() + ITO_CONTRACT_BASE_TIMESTAMP / 1000) * 1000,
+                seller: {
+                    address: txType.from,
+                    name: sellerName,
+                },
+                contract_address: txType.to,
+                chain_id: chainId,
+                regions,
+                block_number: Number(txType.blockNumber),
+                // #region Retrieve at step 3
+                pid: '',
+                creation_time: 0,
+                // #endregion
+                // #region Retrieve at step 4
+                total_remaining: '',
+                // #endregion
+                // #region Retrieve from database
+                password: '',
+                // #endregion
             }
-        },
-        [],
-    )
+
+            return { payload, hash: txType.hash }
+        } catch {
+            return []
+        }
+    })
     // #endregion
 
     // #region
@@ -212,18 +214,18 @@ export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapp
 
     if (!Array.isArray(result)) return []
 
-    const swapRawData: SwapRawType[] = result.reduce((acc: SwapRawType[], cur: TxType) => {
-        if (!isSameAddress(cur.from, swapperAddress)) return acc
+    const swapRawData: SwapRawType[] = result.flatMap((txType: TxType) => {
+        if (!isSameAddress(txType.from, swapperAddress)) return []
         try {
-            const decodedInputParam = interFace.decodeFunctionData('swap', cur.input) as unknown as SwapInputParam
-            return acc.concat({
-                txHash: cur.hash,
+            const decodedInputParam = interFace.decodeFunctionData('swap', txType.input) as unknown as SwapInputParam
+            return {
+                txHash: txType.hash,
                 pid: decodedInputParam.id,
-            })
+            }
         } catch {
-            return acc
+            return []
         }
-    }, [])
+    })
 
     // 3. filter out pools that have unlock_time.
     const swapRawFilteredData = (
@@ -273,6 +275,7 @@ export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapp
         .filter((v) => Boolean(v)) as SwappedTokenType[]
 
     // 5. merge same swap token pools into one
+    // eslint-disable-next-line unicorn/no-array-reduce
     const swappedTokenList = swappedTokenUnmergedList.reduce((acc: SwappedTokenType[], cur) => {
         if (acc.some(checkClaimable(cur)) && cur.isClaimable) {
             // merge same claimable tokens to one

@@ -26,6 +26,7 @@ async function Suspender(identifier: ProposalIdentifier) {
     const { payload: votes } = useVotes(identifier)
     const strategies = proposal.strategies
     const powerOfChoices = proposal.choices.map((_choice, i) =>
+        // eslint-disable-next-line unicorn/no-array-reduce
         voteForChoice(votes, i).reduce((a, b) => {
             if (b.choiceIndex) {
                 return a + b.balance

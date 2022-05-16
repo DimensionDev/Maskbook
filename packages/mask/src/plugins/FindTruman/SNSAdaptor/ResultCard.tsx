@@ -49,12 +49,7 @@ export default function ResultCard(props: ResultViewProps) {
 
     const { t } = useContext(FindTrumanContext)
 
-    const total =
-        result?.count && result.count.length > 0
-            ? result.count.reduce((total, e) => {
-                  return { choice: -1, value: total.value + e.value }
-              }).value
-            : 1
+    const total = result?.count?.reduce((total, status) => total + status.value, 0) ?? 1
 
     const answer = result
         ? type === PostType.PuzzleResult

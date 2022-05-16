@@ -92,11 +92,7 @@ export default function OptionsCard(props: OptionsViewProps) {
 
     const renderOptions = (userStatus: UserPollStatus) => {
         const showCount = !!userStatus.count
-        const total = userStatus.count
-            ? userStatus.count.reduce((total, e) => {
-                  return { choice: -1, value: total.value + e.value }
-              }).value
-            : 0
+        const total = userStatus.count?.reduce((total, status) => total + status.value, 0) ?? 0
         return userStatus.options.map((option, index) => {
             const count = userStatus.count ? userStatus.count.find((e) => e.choice === index)?.value || 0 : 0
             const percent = (total > 0 ? (count * 100) / total : 0).toFixed(2)

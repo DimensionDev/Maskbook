@@ -310,7 +310,7 @@ export async function getBulkPairData(pairList: string[]) {
 
     const oneDayResult = await fetchPairsHistoricalBulk(pairList, oneDayBlock)
 
-    const oneDayData = oneDayResult.reduce<Record<string, Data>>((obj, cur) => ({ ...obj, [cur.id]: cur }), {})
+    const oneDayData = Object.fromEntries(oneDayResult.map((pair): [string, Data] => [pair.id, pair]))
 
     const pairsData = await Promise.all(
         current?.map(async (pair) => {
@@ -340,9 +340,11 @@ export async function getBulkPairData(pairList: string[]) {
         }),
     )
 
-    return pairsData.reduce<Record<string, Data & { oneDayVolumeUSD: number; oneDayVolumeUntracked: number }>>(
-        (obj, cur) => ({ ...obj, [cur.id]: cur }),
-        {},
+    return Object.fromEntries(
+        pairsData.map((pair): [string, Data & { oneDayVolumeUSD: number; oneDayVolumeUntracked: number }] => [
+            pair.id,
+            pair,
+        ]),
     )
 }
 

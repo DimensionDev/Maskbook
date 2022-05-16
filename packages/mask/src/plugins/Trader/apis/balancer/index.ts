@@ -73,6 +73,7 @@ export async function getSwaps(
 
     // compose routes
     // learn more: https://github.com/balancer-labs/balancer-frontend/blob/develop/src/components/swap/Routing.vue
+    // eslint-disable-next-line unicorn/no-array-reduce
     const totalSwapAmount = swaps.reduce((total, rawHops) => total.plus(first(rawHops)?.swapAmount || '0'), ZERO)
 
     const pools = sor.onChainCache.pools
