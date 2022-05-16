@@ -328,6 +328,7 @@
     "plugin_wallet_cancel_sign": "Signature canceled.",
     "plugin_nft_avatar_recommend_feature_description": "Set your NFT as profile picture with exclusive aura",
     "plugin_red_packet_display_name": "Plugin: Lucky Drop",
+    "application_hint": "Socialize and show off your NFTs. People can bid,buy, view your valuable NFTs without leaving Twitter.",
     "plugin_red_packet_claimed": "Claimed",
     "plugin_red_packet_erc20_tab_title": "Token",
     "plugin_red_packet_erc721_tab_title": "Collectibles",
