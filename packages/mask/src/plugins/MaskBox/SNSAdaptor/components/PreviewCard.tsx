@@ -14,7 +14,7 @@ import { DetailsTab } from './DetailsTab'
 import { DrawResultDialog } from './DrawResultDialog'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../../Wallet/messages'
-import { useTransactionCallback } from '@masknet/plugin-infra/src/entry-web3-evm'
+import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {

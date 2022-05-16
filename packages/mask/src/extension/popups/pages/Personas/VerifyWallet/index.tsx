@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { EMPTY_LIST, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { ChainId, EthereumRpcType, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import type { Web3Plugin } from '@masknet/plugin-infra/dist/web3-types'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps'
 import Services from '../../../../service'
@@ -26,148 +26,149 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 const VerifyWallet = memo(() => {
-    const { t } = useI18N()
-    const { classes } = useStyles()
-    const { currentPersona, refreshProofs } = PersonaContext.useContainer()
-    const { signed, setSigned } = PopupContext.useContainer()
-    const navigate = useNavigate()
-    const location = useLocation()
-    const { showSnackbar } = usePopupCustomSnackbar()
-    const { value: request } = useUnconfirmedRequest()
+    return <></>
+    // const { t } = useI18N()
+    // const { classes } = useStyles()
+    // const { currentPersona, refreshProofs } = PersonaContext.useContainer()
+    // const { signed, setSigned } = PopupContext.useContainer()
+    // const navigate = useNavigate()
+    // const location = useLocation()
+    // const { showSnackbar } = usePopupCustomSnackbar()
+    // const { value: request } = useUnconfirmedRequest()
 
-    const wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
+    // const wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
 
-    const { value: bounds } = useAsync(async () => {
-        if (!wallet.account) return EMPTY_LIST
-        return NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, wallet.account)
-    }, [wallet])
-    const isBound = useMemo(() => {
-        if (!bounds || !bounds.length) return false
-        const res = bounds.filter((x) => x.persona === currentPersona?.identifier.publicKeyAsHex)
-        if (res.length > 0) {
-            const final = res[0].proofs.filter((x) => {
-                return isSameAddress(x.identity, wallet?.account)
-            })
-            if (final.length > 0) return true
-        }
-        return false
-    }, [bounds])
+    // const { value: bounds } = useAsync(async () => {
+    //     if (!wallet.account) return EMPTY_LIST
+    //     return NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, wallet.account)
+    // }, [wallet])
+    // const isBound = useMemo(() => {
+    //     if (!bounds || !bounds.length) return false
+    //     const res = bounds.filter((x) => x.persona === currentPersona?.identifier.publicKeyAsHex)
+    //     if (res.length > 0) {
+    //         const final = res[0].proofs.filter((x) => {
+    //             return isSameAddress(x.identity, wallet?.account)
+    //         })
+    //         if (final.length > 0) return true
+    //     }
+    //     return false
+    // }, [bounds])
 
-    useEffect(() => {
-        if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
+    // useEffect(() => {
+    //     if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
 
-        navigate(urlcat(PopupRoutes.WalletSignRequest, { goBack: true }), {
-            state: wallet,
-        })
-    }, [request, wallet])
+    //     navigate(urlcat(PopupRoutes.WalletSignRequest, { goBack: true }), {
+    //         state: wallet,
+    //     })
+    // }, [request, wallet])
 
-    const { value: payload } = useAsync(async () => {
-        if (!currentPersona?.identifier.publicKeyAsHex || !wallet) return
-        return NextIDProof.createPersonaPayload(
-            currentPersona.identifier.publicKeyAsHex,
-            NextIDAction.Create,
-            wallet.account,
-            NextIDPlatform.Ethereum,
-            'default',
-        )
-    }, [currentPersona?.identifier.publicKeyAsHex, wallet])
+    // const { value: payload } = useAsync(async () => {
+    //     if (!currentPersona?.identifier.publicKeyAsHex || !wallet) return
+    //     return NextIDProof.createPersonaPayload(
+    //         currentPersona.identifier.publicKeyAsHex,
+    //         NextIDAction.Create,
+    //         wallet.account,
+    //         NextIDPlatform.Ethereum,
+    //         'default',
+    //     )
+    // }, [currentPersona?.identifier.publicKeyAsHex, wallet])
 
-    const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
-        if (!payload || !currentPersona?.identifier) return
-        try {
-            const signResult = await Services.Identity.generateSignResult(
-                currentPersona.identifier,
-                payload.signPayload,
-            )
-            showSnackbar(t('popups_verify_persona_sign_success'), { variant: 'success' })
-            return signResult.signature.signature
-        } catch (error) {
-            showSnackbar(t('popups_verify_persona_sign_failed'), { variant: 'error' })
-            console.error(error)
-            return
-        }
-    }, [currentPersona?.identifier, payload?.signPayload])
+    // const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
+    //     if (!payload || !currentPersona?.identifier) return
+    //     try {
+    //         const signResult = await Services.Identity.generateSignResult(
+    //             currentPersona.identifier,
+    //             payload.signPayload,
+    //         )
+    //         showSnackbar(t('popups_verify_persona_sign_success'), { variant: 'success' })
+    //         return signResult.signature.signature
+    //     } catch (error) {
+    //         showSnackbar(t('popups_verify_persona_sign_failed'), { variant: 'error' })
+    //         console.error(error)
+    //         return
+    //     }
+    // }, [currentPersona?.identifier, payload?.signPayload])
 
-    const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
-        if (!payload || !currentPersona?.identifier.publicKeyAsHex) return false
-        try {
-            const walletSig = await Services.Ethereum.personalSign(
-                payload.signPayload,
-                wallet.account,
-                '',
-                {
-                    chainId: wallet.chainId,
-                    account: wallet.account,
-                    providerType: wallet.providerType,
-                },
-                { popupsWindow: false },
-            )
+    // const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
+    //     if (!payload || !currentPersona?.identifier.publicKeyAsHex) return false
+    //     try {
+    //         const walletSig = await Services.Ethereum.personalSign(
+    //             payload.signPayload,
+    //             wallet.account,
+    //             '',
+    //             {
+    //                 chainId: wallet.chainId,
+    //                 account: wallet.account,
+    //                 providerType: wallet.providerType,
+    //             },
+    //             { popupsWindow: false },
+    //         )
 
-            if (!walletSig) throw new Error('Wallet sign failed')
-            await NextIDProof.bindProof(
-                payload.uuid,
-                currentPersona.identifier.publicKeyAsHex,
-                NextIDAction.Create,
-                NextIDPlatform.Ethereum,
-                wallet.account,
-                payload.createdAt,
-                {
-                    walletSignature: walletSig,
-                    signature,
-                },
-            )
-            showSnackbar(t('popups_verify_wallet_sign_success'), { variant: 'success' })
-            setSigned(true)
-            refreshProofs()
-            return true
-        } catch (error) {
-            showSnackbar(t('popups_verify_wallet_sign_failed'), { variant: 'error' })
-            return false
-        }
-    }, [currentPersona?.identifier.publicKeyAsHex, payload, wallet, signature])
+    //         if (!walletSig) throw new Error('Wallet sign failed')
+    //         await NextIDProof.bindProof(
+    //             payload.uuid,
+    //             currentPersona.identifier.publicKeyAsHex,
+    //             NextIDAction.Create,
+    //             NextIDPlatform.Ethereum,
+    //             wallet.account,
+    //             payload.createdAt,
+    //             {
+    //                 walletSignature: walletSig,
+    //                 signature,
+    //             },
+    //         )
+    //         showSnackbar(t('popups_verify_wallet_sign_success'), { variant: 'success' })
+    //         setSigned(true)
+    //         refreshProofs()
+    //         return true
+    //     } catch (error) {
+    //         showSnackbar(t('popups_verify_wallet_sign_failed'), { variant: 'error' })
+    //         return false
+    //     }
+    // }, [currentPersona?.identifier.publicKeyAsHex, payload, wallet, signature])
 
-    const changeWallet = () => {
-        navigate(PopupRoutes.ConnectWallet)
-    }
+    // const changeWallet = () => {
+    //     navigate(PopupRoutes.ConnectWallet)
+    // }
 
-    const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {
-        try {
-            if (signed) Services.Helper.removePopupWindow()
+    // const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {
+    //     try {
+    //         if (signed) Services.Helper.removePopupWindow()
 
-            if (!signature && !walletSignState) {
-                await personaSilentSign()
-                return SignSteps.FirstStepDone
-            } else if (signature && !walletSignState) {
-                const walletSignRes = await walletSign()
-                return walletSignRes ? SignSteps.SecondStepDone : SignSteps.FirstStepDone
-            } else {
-                await Services.Helper.removePopupWindow()
-                return
-            }
-        } catch {
-            showSnackbar('Connect error', { variant: 'error' })
-            return SignSteps.Ready
-        }
-    }, [signature, walletSignState, walletSign, personaSilentSign, signed])
+    //         if (!signature && !walletSignState) {
+    //             await personaSilentSign()
+    //             return SignSteps.FirstStepDone
+    //         } else if (signature && !walletSignState) {
+    //             const walletSignRes = await walletSign()
+    //             return walletSignRes ? SignSteps.SecondStepDone : SignSteps.FirstStepDone
+    //         } else {
+    //             await Services.Helper.removePopupWindow()
+    //             return
+    //         }
+    //     } catch {
+    //         showSnackbar('Connect error', { variant: 'error' })
+    //         return SignSteps.Ready
+    //     }
+    // }, [signature, walletSignState, walletSign, personaSilentSign, signed])
 
-    useTitle(t('popups_add_wallet'))
+    // useTitle(t('popups_add_wallet'))
 
-    if (!currentPersona || !wallet) return null
+    // if (!currentPersona || !wallet) return null
 
-    return (
-        <div className={classes.container}>
-            <Steps
-                disableConfirm={isBound && !signed}
-                nickname={currentPersona.nickname}
-                wallet={wallet}
-                step={signed ? SignSteps.SecondStepDone : step}
-                changeWallet={changeWallet}
-                onConfirm={handleConfirm}
-                confirmLoading={confirmLoading}
-                onCustomCancel={() => navigate(-1)}
-            />
-        </div>
-    )
+    // return (
+    //     <div className={classes.container}>
+    //         <Steps
+    //             disableConfirm={isBound && !signed}
+    //             nickname={currentPersona.nickname}
+    //             wallet={wallet}
+    //             step={signed ? SignSteps.SecondStepDone : step}
+    //             changeWallet={changeWallet}
+    //             onConfirm={handleConfirm}
+    //             confirmLoading={confirmLoading}
+    //             onCustomCancel={() => navigate(-1)}
+    //         />
+    //     </div>
+    // )
 })
 
 export default VerifyWallet

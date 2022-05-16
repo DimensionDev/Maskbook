@@ -10,14 +10,7 @@ import {
     multipliedBy,
     NetworkPluginID,
 } from '@masknet/web3-shared-base'
-import {
-    SchemaType,
-    formatWeiToEther,
-    isValidAddress,
-    TransactionStateType,
-    ChainId,
-    explorerResolver,
-} from '@masknet/web3-shared-evm'
+import { SchemaType, formatWeiToEther, TransactionStateType, ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 // import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
 import { FormattedAddress } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
@@ -48,7 +41,6 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { NetworkType } from '@masknet/public-api'
 import { RightIcon } from '@masknet/icons'
-import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -71,10 +63,10 @@ export const TransferERC721 = memo(() => {
     const anchorEl = useRef<HTMLDivElement | null>(null)
 
     const { state } = useLocation() as {
-        state: { erc721Token?: NonFungibleToken<ChainId, SchemaType.ERC721>; type?: TransferTab } | null
+        state: { erc721Token?: NonFungibleToken<ChainId, SchemaType>; type?: TransferTab } | null
     }
     const { classes } = useStyles()
-    const [defaultToken, setDefaultToken] = useState<NonFungibleToken<ChainId, SchemaType.ERC721> | null>(null)
+    const [defaultToken, setDefaultToken] = useState<NonFungibleToken<ChainId, SchemaType> | null>(null)
     const navigate = useNavigate()
     const [popoverOpen, setPopoverOpen] = useState(false)
     const [recipientError, setRecipientError] = useState<{
@@ -82,7 +74,7 @@ export const TransferERC721 = memo(() => {
         message: string
     } | null>(null)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
-    const [contract, setContract] = useState<NonFungibleTokenContract<ChainId, SchemaType.ERC721>>()
+    const [contract, setContract] = useState<NonFungibleTokenContract<ChainId, SchemaType>>()
     const [id] = useState(uuid)
     const [gasLimit_, setGasLimit_] = useState(0)
     const network = useNetworkDescriptor()

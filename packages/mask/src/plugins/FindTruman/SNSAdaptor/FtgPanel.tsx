@@ -10,7 +10,7 @@ import { FindTrumanContext } from '../context'
 import { getPartName } from './PartsPanel'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useERC721TokenContract } from '@masknet/plugin-infra/src/entry-web3-evm'
+import { useERC721TokenContract } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()((theme) => ({
     ftgCover: {

@@ -1,4 +1,4 @@
-import { useFungibleTokenBalance } from '@masknet/plugin-infra/src/web3'
+import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { isGreaterThan, isLessThanOrEqualTo, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { SchemaType } from '@masknet/web3-shared-evm'
 import { useContext, useMemo } from 'react'

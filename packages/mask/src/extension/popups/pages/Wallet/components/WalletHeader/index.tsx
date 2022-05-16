@@ -2,9 +2,9 @@ import { memo, useCallback, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { ChainId, useChainId, ProviderType, useWallet } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { WalletHeaderUI } from './UI'
-import { getRegisteredWeb3Networks, NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
+import { getRegisteredWeb3Networks, useAccount, useChainId, useWallet } from '@masknet/plugin-infra/web3'
 import { Flags } from '../../../../../../../shared'
 import { MenuItem, Typography } from '@mui/material'
 import { useMenuConfig, WalletIcon, ChainIcon } from '@masknet/shared'
@@ -12,6 +12,7 @@ import { currentMaskWalletAccountSettings, currentProviderSettings } from '../..
 import { WalletRPC } from '../../../../../../plugins/Wallet/messages'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { NormalHeader } from '../../../../components/NormalHeader'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     menu: {
@@ -25,9 +26,9 @@ const useStyles = makeStyles()({
 export const WalletHeader = memo(() => {
     const { classes } = useStyles()
 
-    const account = useAccount()
-    const chainId = useChainId()
-    const wallet = useWallet()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
     const providerType = useValueRef(currentProviderSettings)
 

@@ -3,8 +3,7 @@ import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { asyncIteratorToArray } from '@masknet/shared-base'
 import { currySameAddress, isSameAddress } from '@masknet/web3-shared-base'
-import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { EthereumAddress } from 'wallet.ts'
+import { formatEthereumAddress, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { PluginDB } from '../../../database/Plugin.db'
 import { currentMaskWalletAccountSettings, currentAccountSettings, currentProviderSettings } from '../../../settings'
 import type { WalletRecord } from '../type'
@@ -20,7 +19,7 @@ function WalletRecordOutDB(record: WalletRecord) {
 
 export async function getWallet(address = currentMaskWalletAccountSettings.value) {
     if (!address) return null
-    if (!EthereumAddress.isValid(address)) throw new Error('Not a valid address.')
+    if (!isValidAddress(address)) throw new Error('Not a valid address.')
     const wallet = (await PluginDB.get('wallet', formatEthereumAddress(address))) ?? null
     return wallet ? WalletRecordOutDB(wallet) : null
 }

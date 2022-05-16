@@ -2,7 +2,6 @@ import ss from '@snapshot-labs/snapshot.js'
 import type { Proposal, Profile3Box, ProposalIdentifier, VoteSuccess, RawVote, Strategy } from '../../types'
 import { transform } from 'lodash-unified'
 import { SNAPSHOT_GET_SCORE_API } from '../../constants'
-import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 export async function fetchProposal(id: string) {
     const { votes, proposal } = await fetchProposalFromGraphql(id)

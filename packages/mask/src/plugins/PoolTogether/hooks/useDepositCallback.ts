@@ -4,7 +4,7 @@ import { TransactionStateType, TransactionEventType, ChainId, SchemaType } from 
 import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { useTransactionState } from '@masknet/plugin-infra/src/entry-web3-evm'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 
 /**
  * A callback for deposit into pool

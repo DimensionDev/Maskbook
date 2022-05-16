@@ -1,19 +1,14 @@
 import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
-import { useI18N } from '../../../../../Others'
 import {
     addGasMargin,
-    Asset,
     ChainId,
+    explorerResolver,
     formatBalance,
     formatEthereumAddress,
     formatGweiToEther,
     formatGweiToWei,
     NetworkType,
     SchemaType,
-    useGasLimit,
-    useNativeTokenDetailed,
-    useTokenTransferCallback,
-    useWallet,
 } from '@masknet/web3-shared-evm'
 import {
     FungibleAsset,
@@ -45,18 +40,22 @@ import { noop } from 'lodash-unified'
 import { ExpandMore } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
-import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { toHex } from 'web3-utils'
 import {
     useChainId,
+    useFungibleToken,
     useFungibleTokenBalance,
     useLookupAddress,
+    useNativeTokenPrice,
     useNetworkType,
+    useWallet,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { AccountItem } from './AccountItem'
 import Services from '../../../../service'
 import { TransferAddressError } from '../type'
+import { useI18N } from '../../../../../utils'
+import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()({
     container: {
@@ -195,14 +194,14 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const network = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
+
     const navigate = useNavigate()
 
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const [addressTip, setAddressTip] = useState<{ type: TransferAddressError; message: string } | null>()
 
-    const { value: nativeToken } = useNativeTokenDetailed()
-
-    const etherPrice = useNativeTokenPrice(nativeToken?.chainId)
+    const etherPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, nativeToken?.chainId)
 
     const { value: estimateGasFees } = useAsync(async () => WalletRPC.getEstimateGasFees(chainId), [chainId])
 
@@ -470,11 +469,11 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             )
         }
 
-        if (registeredAddress && !resolveDomainError && Others?.resolveDomainLink)
+        if (registeredAddress && !resolveDomainError)
             return (
                 <Box display="flex" justifyContent="space-between" alignItems="center" py={2.5} px={1.5}>
                     <Link
-                        href={Others.resolveDomainLink(address)}
+                        href={explorerResolver.domainLink(ChainId.Mainnet, address)}
                         target="_blank"
                         rel="noopener noreferrer"
                         underline="none">
@@ -498,7 +497,6 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         address,
         addressTip,
         registeredAddress,
-        Others?.resolveDomainLink,
         methods.formState.errors.address?.type,
         resolveDomainLoading,
         resolveDomainError,
@@ -528,7 +526,7 @@ export interface Transfer1559UIProps {
     openAccountMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
     openAssetMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
     handleMaxClick: () => void
-    selectedAsset?: Asset
+    selectedAsset?: FungibleAsset<ChainId, SchemaType>
     etherPrice: number
     handleCancel: () => void
     handleConfirm: () => void
@@ -564,10 +562,10 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
 
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
             () => ({
-                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${selectedAsset?.token.decimals}}$`), // .ddd...d
-                RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${selectedAsset?.token.decimals}}$`), // d.ddd...d
+                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${selectedAsset?.decimals}}$`), // .ddd...d
+                RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${selectedAsset?.decimals}}$`), // d.ddd...d
             }),
-            [selectedAsset?.token.decimals],
+            [selectedAsset?.decimals],
         )
 
         const {
@@ -632,8 +630,8 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                             {t('wallet_balance')}:
                             <FormattedBalance
                                 value={selectedAsset?.balance}
-                                decimals={selectedAsset?.token?.decimals}
-                                symbol={selectedAsset?.token?.symbol}
+                                decimals={selectedAsset?.decimals}
+                                symbol={selectedAsset?.symbol}
                                 significant={6}
                                 formatter={formatBalance}
                             />
@@ -680,7 +678,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                                         <TokenIcon
                                                             classes={{ icon: classes.icon }}
                                                             address={selectedAsset?.address ?? ''}
-                                                            name={selectedAsset?.token.name}
+                                                            name={selectedAsset?.name}
                                                             logoURL={selectedAsset?.logoURL}
                                                         />
                                                     }
@@ -689,7 +687,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                                     size="small"
                                                     variant="outlined"
                                                     clickable
-                                                    label={selectedAsset?.token.symbol}
+                                                    label={selectedAsset?.symbol}
                                                     onDelete={noop}
                                                 />
                                             </Box>

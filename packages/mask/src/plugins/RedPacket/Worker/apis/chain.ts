@@ -7,7 +7,7 @@ import { Interface } from '@ethersproject/abi'
 import type { RedPacketJSONPayloadFromChain } from '../../types'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import { checkAvailability } from './checkAvailability'
-import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
+// import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const interFace = new Interface(REDPACKET_ABI)
 

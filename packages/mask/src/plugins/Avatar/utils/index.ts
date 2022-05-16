@@ -1,43 +1,45 @@
 import BigNumber from 'bignumber.js'
 import { isNull } from 'lodash-unified'
 import { ChainId, NonFungibleAssetProvider, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
-import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
+// import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 import Services from '../../../extension/service'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
 import { NonFungibleTokenEvent, ZERO } from '@masknet/web3-shared-base'
 
-function getLastSalePrice(lastSale?: NonFungibleTokenEvent<ChainId, SchemaType> | null) {
-    if (!lastSale?.total_price || !lastSale?.payment_token?.decimals) return
-    return formatBalance(lastSale.total_price, lastSale.payment_token.decimals)
-}
+// function getLastSalePrice(lastSale?: NonFungibleTokenEvent<ChainId, SchemaType> | null) {
+//     if (!lastSale?.total_price || !lastSale?.payment_token?.decimals) return
+//     return formatBalance(lastSale.total_price, lastSale.payment_token.decimals)
+// }
 
 export async function getNFT(address: string, tokenId: string) {
-    const asset = await EVM_RPC.getAsset({
-        address,
-        tokenId,
-        chainId: ChainId.Mainnet,
-        provider: NonFungibleAssetProvider.OPENSEA,
-    })
-    const amount =
-        getOrderUnitPrice(
-            asset?.desktopOrder?.current_price,
-            asset?.desktopOrder?.payment_token_contract?.decimals ?? 0,
-            asset?.desktopOrder?.quantity ?? '1',
-        ) ??
-        getLastSalePrice(asset?.last_sale) ??
-        ZERO
-    return {
-        amount: new BigNumber(amount).toFixed(),
-        name: asset?.name ?? '',
-        symbol: asset?.desktopOrder?.payment_token_contract?.symbol ?? 'ETH',
-        image: asset?.image_url ?? '',
-        owner: asset?.top_ownerships[0].owner.address ?? '',
-        slug: asset?.slug ?? '',
-    }
+    return null
+    // const asset = await EVM_RPC.getAsset({
+    //     address,
+    //     tokenId,
+    //     chainId: ChainId.Mainnet,
+    //     provider: NonFungibleAssetProvider.OPENSEA,
+    // })
+    // const amount =
+    //     getOrderUnitPrice(
+    //         asset?.desktopOrder?.current_price,
+    //         asset?.desktopOrder?.payment_token_contract?.decimals ?? 0,
+    //         asset?.desktopOrder?.quantity ?? '1',
+    //     ) ??
+    //     getLastSalePrice(asset?.last_sale) ??
+    //     ZERO
+    // return {
+    //     amount: new BigNumber(amount).toFixed(),
+    //     name: asset?.name ?? '',
+    //     symbol: asset?.desktopOrder?.payment_token_contract?.symbol ?? 'ETH',
+    //     image: asset?.image_url ?? '',
+    //     owner: asset?.top_ownerships[0].owner.address ?? '',
+    //     slug: asset?.slug ?? '',
+    // }
 }
 
 export async function createNFT(address: string, tokenId: string) {
-    return EVM_RPC.getNFT({ address, tokenId, chainId: ChainId.Mainnet, provider: NonFungibleAssetProvider.OPENSEA })
+    return null
+    // return EVM_RPC.getNFT({ address, tokenId, chainId: ChainId.Mainnet, provider: NonFungibleAssetProvider.OPENSEA })
 }
 
 export async function getImage(image: string): Promise<string> {

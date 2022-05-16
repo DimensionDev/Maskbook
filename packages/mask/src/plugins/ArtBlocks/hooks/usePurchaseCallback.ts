@@ -1,4 +1,4 @@
-import { useTransactionState } from '@masknet/plugin-infra/src/entry-web3-evm'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import { NetworkPluginID } from '@masknet/web3-shared-base'

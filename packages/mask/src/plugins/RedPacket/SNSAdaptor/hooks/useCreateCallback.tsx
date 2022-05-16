@@ -15,7 +15,7 @@ import {
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
 import { useRedPacketContract } from './useRedPacketContract'
-import { useTransactionState } from '@masknet/plugin-infra/src/entry-web3-evm'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 
 export interface RedPacketSettings {
     shares: number

@@ -6,7 +6,7 @@ import { TransactionStateType, TransactionEventType } from '@masknet/web3-shared
 import { useNftRedPacketContract } from './useNftRedPacketContract'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
-import { useTransactionState } from '@masknet/plugin-infra/src/entry-web3-evm'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 
 const EXTRA_GAS_PER_NFT = 335
 

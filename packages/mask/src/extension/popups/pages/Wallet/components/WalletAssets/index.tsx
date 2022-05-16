@@ -11,7 +11,8 @@ import { useContainer } from 'unstated-next'
 import { WalletContext } from '../../hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { Navigator } from '../../../../components/Navigator'
-import { useWallet } from '@masknet/web3-shared-evm'
+import { useWallet } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     content: {
@@ -75,7 +76,7 @@ enum WalletTabs {
 
 export const WalletAssets = memo(() => {
     const navigate = useNavigate()
-    const wallet = useWallet()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     return wallet ? <WalletAssetsUI onAddTokenClick={() => navigate(PopupRoutes.AddToken)} /> : null
 })
 

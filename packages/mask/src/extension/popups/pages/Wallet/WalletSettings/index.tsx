@@ -5,13 +5,14 @@ import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
-import { formatEthereumAddress, resolveAddressLinkOnExplorer, useChainId, useWallet } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { useChainId, useReverseAddress, useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
 import { FormattedAddress } from '@masknet/shared'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { WalletContext } from '../hooks/useWalletContext'
 import { Navigator } from '../../../components/Navigator'
 import { useTitle } from '../../../hook/useTitle'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -69,15 +70,15 @@ const useStyles = makeStyles()((theme) => ({
 const WalletSettings = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const currentWallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { selectedWallet } = WalletContext.useContainer()
-    const currentWallet = useWallet()
 
     const wallet = selectedWallet ?? currentWallet
 
     const { classes } = useStyles()
 
-    const { value: domain } = useReverseAddress(wallet?.address ?? '', NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.address ?? '')
     const { Others } = useWeb3State()
 
     useTitle(t('popups_wallet_setting'))
@@ -116,7 +117,7 @@ const WalletSettings = memo(() => {
                         </ListItem>
                     ) : null}
                     <Link
-                        href={resolveAddressLinkOnExplorer(chainId, wallet?.address ?? '')}
+                        href={explorerResolver.addressLink(chainId, wallet?.address ?? '')}
                         target="_blank"
                         rel="noopener noreferrer">
                         <ListItem className={classes.item}>

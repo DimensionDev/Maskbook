@@ -8,9 +8,6 @@ import {
     formatGweiToWei,
     formatWeiToGwei,
     formatEthereumAddress,
-    useGasLimit,
-    useTokenTransferCallback,
-    useFungibleTokenBalance,
     ChainId,
     SchemaType,
 } from '@masknet/web3-shared-evm'
@@ -28,7 +25,7 @@ import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-fo
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Box, Button, Chip, Collapse, MenuItem, Popover, Typography } from '@mui/material'
-import { StyledInput } from '../../../components/StyledInput'
+// import { StyledInput } from '../../../components/StyledInput'
 import { UserIcon } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
@@ -41,7 +38,8 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { toHex } from 'web3-utils'
 import Services from '../../../../service'
 import { TransferAddressError } from '../type'
-import { useChainId, useWallet } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleTokenBalance, useWallet } from '@masknet/plugin-infra/web3'
+import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()({
     container: {
@@ -233,30 +231,30 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             })
             return
         }
-        const result = await Services.Ethereum.getCode(address)
+        // const result = await Services.Ethereum.getCode(address)
 
-        if (result !== '0x') {
-            setAddressTip({
-                type: TransferAddressError.CONTRACT_ADDRESS,
-                message: t('wallet_transfer_error_is_contract_address'),
-            })
-        }
+        // if (result !== '0x') {
+        //     setAddressTip({
+        //         type: TransferAddressError.CONTRACT_ADDRESS,
+        //         message: t('wallet_transfer_error_is_contract_address'),
+        //     })
+        // }
     }, [address, EthereumAddress.isValid, methods.clearErrors])
 
     // #region Set default gas price
     useAsync(async () => {
-        const gasOptions = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-        const gasPrice = methods.getValues('gasPrice')
-        if (gasOptions && !gasPrice) {
-            const gasPrice = new BigNumber(gasOptions.data.fast.price)
-            methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toString())
-        }
+        // const gasOptions = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+        // const gasPrice = methods.getValues('gasPrice')
+        // if (gasOptions && !gasPrice) {
+        //     const gasPrice = new BigNumber(gasOptions.data.fast.price)
+        //     methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toString())
+        // }
     }, [methods.setValue, methods.getValues, chainId])
     // #endregion
 
     // #region Get min gas limit with amount and recipient address
     const { value: minGasLimit, error } = useGasLimit(
-        selectedAsset?.type,
+        selectedAsset?.schema,
         selectedAsset?.address,
         rightShift(amount ? amount : 0, selectedAsset?.decimals).toFixed(),
         EthereumAddress.isValid(address) ? address : '',
@@ -264,7 +262,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     // #endregion
 
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        selectedAsset?.type ?? SchemaType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         selectedAsset?.address ?? '',
     )
 
@@ -284,7 +282,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     // #endregion
 
     const [_, transferCallback] = useTokenTransferCallback(
-        selectedAsset?.type ?? SchemaType.Native,
+        selectedAsset?.schema ?? SchemaType.Native,
         selectedAsset?.address ?? '',
     )
 

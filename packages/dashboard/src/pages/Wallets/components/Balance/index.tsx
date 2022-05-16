@@ -8,7 +8,7 @@ import type { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-ba
 import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales'
 import { useIsMatched } from '../../hooks'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 const BalanceContainer = styled('div')(
     ({ theme }) => `
