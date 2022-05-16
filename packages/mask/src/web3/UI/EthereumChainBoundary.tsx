@@ -44,7 +44,6 @@ const useStyles = makeStyles()((theme) => ({
         '&,&:hover': {
             background: MaskColorVar.buttonPluginBackground,
         },
-        borderRadius: 9999,
     },
     action: {
         textAlign: 'center',
@@ -266,8 +265,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                                 '&:hover': {
                                     backgroundColor: MaskColorVar.buttonPluginBackground,
                                 },
+                                padding: 1,
+                                margin: 0,
                             }
                         }
+                        style={{ borderRadius: 10 }}
                         init={
                             <span>
                                 {t('plugin_wallet_connect_network', {
