@@ -12,6 +12,7 @@ import { useProposal } from './hooks/useProposal'
 import { usePower } from './hooks/usePower'
 import { VoteConfirmDialog } from './VoteConfirmDialog'
 import { useRetry } from './hooks/useRetry'
+import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -48,6 +49,7 @@ export function VotingCard() {
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
 
+    const networkPluginId = useCurrentWeb3NetworkPluginID()
     const retry = useRetry()
     const onVoteConfirm = useSnackbarCallback(
         () => {
@@ -71,7 +73,7 @@ export function VotingCard() {
 
     return (
         <SnapshotCard title={t('plugin_snapshot_vote_title')}>
-            {account ? (
+            {account && networkPluginId === NetworkPluginID.PLUGIN_EVM ? (
                 <>
                     {choices.map((choiceText, i) => (
                         <Button

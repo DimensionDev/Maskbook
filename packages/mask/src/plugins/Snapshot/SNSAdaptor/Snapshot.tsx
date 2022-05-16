@@ -5,8 +5,8 @@ import { SnapshotContext } from '../context'
 import { useProposal } from './hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { PluginWalletConnectIcon } from '@masknet/icons'
+import { useChainId } from '@masknet/web3-shared-evm'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -75,7 +75,7 @@ export function Snapshot() {
     const { classes } = useStyles()
     const identifier = useContext(SnapshotContext)
     const { payload: proposal } = useProposal(identifier.id)
-
+    const chainId = useChainId()
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
         <Tab className={classes.tab} key="proposal" label="Proposal" />,
@@ -128,11 +128,7 @@ export function Snapshot() {
                 </CardContent>
             </Card>
             <Box style={{ padding: 12 }}>
-                <EthereumWalletConnectedBoundary
-                    startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-                    classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}
-                    offChain
-                />
+                <EthereumChainBoundary chainId={chainId} />
             </Box>
         </>
     )

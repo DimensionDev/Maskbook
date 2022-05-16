@@ -86,7 +86,7 @@ export function FurucomboView(props: PoolViewProps) {
             investable.category === props.category,
     )
 
-    if (investable)
+    if (!investable)
         return (
             <>
                 <Typography align="center" color="error">
