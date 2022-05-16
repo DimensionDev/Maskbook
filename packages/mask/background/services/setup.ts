@@ -18,9 +18,17 @@ setup('Crypto', () => import(/* webpackPreload: true */ './crypto'))
 setup('Identity', () => import(/* webpackPreload: true */ './identity'))
 setup('Backup', () => import(/* webpackPreload: true */ './backup'))
 setup('Helper', () => import(/* webpackPreload: true */ './helper'))
-setup('SocialNetwork', async () => ({}))
+setup('SocialNetwork', () =>
+    Promise.resolve({
+        // TODO: migration in process
+        getDefinedSocialNetworkUIs() {
+            return [{ networkIdentifier: 'twitter.com' }]
+        },
+        setupSocialNetwork() {},
+    }),
+)
 setup('Settings', () => import(/* webpackPreload: true */ './settings'))
-setup('ThirdPartyPlugin', async () => ({}))
+setup('ThirdPartyPlugin', () => Promise.resolve({}))
 
 if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(['./crypto'], () => hmr.dispatchEvent(new Event('crypto')))
@@ -48,13 +56,17 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
         serializer,
         channel,
         log: {
-            beCalled: false,
+            beCalled: true,
             remoteError: false,
             type: 'pretty',
             requestReplay: debugMode,
         },
         preferLocalImplementation: true,
-        strict: true,
+        strict: {
+            // temporally
+            methodNotFound: false,
+            unknownMessage: true,
+        },
         thenable: false,
     })
 }

@@ -1017,7 +1017,6 @@
     "popups_wallet_gas_fee_settings_max_priority_fee": "crwdns7857:0crwdne7857:0",
     "popups_wallet_gas_fee_settings_max_fee": "crwdns7859:0crwdne7859:0",
     "popups_wallet_gas_fee_settings_min_gas_limit_tips": "crwdns8993:0{{limit}}crwdne8993:0",
-    "popups_wallet_unsupported_network": "crwdns8995:0crwdne8995:0",
     "popups_wallet_signature_request_title": "crwdns16386:0crwdne16386:0",
     "popups_wallet_signature_request": "crwdns7861:0crwdne7861:0",
     "popups_wallet_signature_request_message": "crwdns8059:0crwdne8059:0",

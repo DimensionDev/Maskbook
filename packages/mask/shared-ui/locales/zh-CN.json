@@ -850,7 +850,6 @@
     "popups_wallet_gas_fee_settings_max_priority_fee": "Max priority fee",
     "popups_wallet_gas_fee_settings_max_fee": "Max fee",
     "popups_wallet_gas_fee_settings_min_gas_limit_tips": "Gas limit 必须至少 {{limit}}",
-    "popups_wallet_unsupported_network": "不支持的网络类型",
     "popups_wallet_signature_request": "签名请求",
     "popups_wallet_signature_request_message": "信息",
     "popups_wallet_contract_interaction": "合约交互",
