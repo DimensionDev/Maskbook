@@ -14,22 +14,23 @@ export function useTwitterIdByWalletSearch(
 ) {
     if (!bindings || !type) return EMPTY_LIST
 
-    const temp = bindings.map((cur) => {
-        const obj = uniqBy(cur.proofs, (proof) => proof.platform && proof.identity).filter((x) =>
-            [NextIDPlatform.Twitter].includes(x.platform),
-        )
-        return {
-            linkedTwitterNames: obj.map((x) => x.identity),
-            persona: cur.persona,
-            detail: obj,
-        }
-    })
-    return temp.map((x) => ({
-        nickname: x.detail[0].identity,
-        identifier: ProfileIdentifier.of('twitter.com', x.detail[0].identity).unwrap(),
-        walletAddress: type === NextIDPlatform.Ethereum ? value : undefined,
-        fromNextID: true,
-        linkedTwitterNames: x.linkedTwitterNames,
-        linkedPersona: ECKeyIdentifier.fromHexPublicKeyK256(x.persona).unwrap(),
-    }))
+    return bindings
+        .map((cur) => {
+            const obj = uniqBy(cur.proofs, (proof) => proof.platform && proof.identity).filter((x) =>
+                [NextIDPlatform.Twitter].includes(x.platform),
+            )
+            return {
+                linkedTwitterNames: obj.map((x) => x.identity),
+                persona: cur.persona,
+                detail: obj,
+            }
+        })
+        .map((x) => ({
+            nickname: x.detail[0].identity,
+            identifier: ProfileIdentifier.of('twitter.com', x.detail[0].identity).unwrap(),
+            walletAddress: type === NextIDPlatform.Ethereum ? value : undefined,
+            fromNextID: true,
+            linkedTwitterNames: x.linkedTwitterNames,
+            linkedPersona: ECKeyIdentifier.fromHexPublicKeyK256(x.persona).unwrap(),
+        }))
 }
