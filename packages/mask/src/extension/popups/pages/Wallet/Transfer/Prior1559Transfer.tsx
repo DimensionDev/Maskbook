@@ -4,20 +4,26 @@ import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 import {
-    Asset,
-    EthereumTokenType,
     formatBalance,
     formatGweiToWei,
     formatWeiToGwei,
     formatEthereumAddress,
-    useChainId,
     useGasLimit,
     useTokenTransferCallback,
-    useWallet,
     useFungibleTokenBalance,
-    isSameAddress,
+    ChainId,
+    SchemaType,
 } from '@masknet/web3-shared-evm'
-import { isZero, isGreaterThan, isGreaterThanOrEqualTo, multipliedBy, rightShift } from '@masknet/web3-shared-base'
+import {
+    isZero,
+    isGreaterThan,
+    isGreaterThanOrEqualTo,
+    multipliedBy,
+    rightShift,
+    isSameAddress,
+    NetworkPluginID,
+    FungibleAsset,
+} from '@masknet/web3-shared-base'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
@@ -35,6 +41,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { toHex } from 'web3-utils'
 import Services from '../../../../service'
 import { TransferAddressError } from '../type'
+import { useChainId, useWallet } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     container: {
@@ -145,7 +152,7 @@ const useStyles = makeStyles()({
 })
 
 export interface Prior1559TransferProps {
-    selectedAsset?: Asset
+    selectedAsset?: FungibleAsset<ChainId, SchemaType>
     otherWallets: { name: string; address: string }[]
     openAssetMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
 }
@@ -153,8 +160,8 @@ export interface Prior1559TransferProps {
 export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, openAssetMenu, otherWallets }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const wallet = useWallet()
-    const chainId = useChainId()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const navigate = useNavigate()
 
@@ -169,13 +176,13 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             amount: zod
                 .string()
                 .refine((amount) => {
-                    const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
+                    const transferAmount = rightShift(amount || '0', selectedAsset?.decimals)
                     return !!transferAmount || !isZero(transferAmount)
                 }, t('wallet_transfer_error_amount_absence'))
                 .refine((amount) => {
-                    const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
+                    const transferAmount = rightShift(amount || '0', selectedAsset?.decimals)
                     return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
-                }, t('wallet_transfer_error_insufficient_balance', { symbol: selectedAsset?.token.symbol })),
+                }, t('wallet_transfer_error_insufficient_balance', { symbol: selectedAsset?.symbol })),
             gasLimit: zod
                 .string()
                 .min(1, t('wallet_transfer_error_gas_limit_absence'))
@@ -249,27 +256,24 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     // #region Get min gas limit with amount and recipient address
     const { value: minGasLimit, error } = useGasLimit(
-        selectedAsset?.token.type,
-        selectedAsset?.token.address,
-        rightShift(amount ? amount : 0, selectedAsset?.token.decimals).toFixed(),
+        selectedAsset?.type,
+        selectedAsset?.address,
+        rightShift(amount ? amount : 0, selectedAsset?.decimals).toFixed(),
         EthereumAddress.isValid(address) ? address : '',
     )
     // #endregion
 
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        selectedAsset?.token?.type ?? EthereumTokenType.Native,
-        selectedAsset?.token?.address ?? '',
+        selectedAsset?.type ?? SchemaType.Native,
+        selectedAsset?.address ?? '',
     )
 
     const maxAmount = useMemo(() => {
         let amount_ = new BigNumber(tokenBalance || '0')
-        amount_ =
-            selectedAsset?.token.type === EthereumTokenType.Native
-                ? amount_.minus(multipliedBy(30000, gasPrice))
-                : amount_
+        amount_ = selectedAsset?.schema === SchemaType.Native ? amount_.minus(multipliedBy(30000, gasPrice)) : amount_
 
         return BigNumber.max(0, amount_).toFixed()
-    }, [selectedAsset?.balance, gasPrice, selectedAsset?.token.type, tokenBalance])
+    }, [selectedAsset?.balance, gasPrice, selectedAsset?.type, tokenBalance])
 
     // #region set default gasLimit
     useUpdateEffect(() => {
@@ -280,17 +284,17 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     // #endregion
 
     const [_, transferCallback] = useTokenTransferCallback(
-        selectedAsset?.token.type ?? EthereumTokenType.Native,
-        selectedAsset?.token.address ?? '',
+        selectedAsset?.type ?? SchemaType.Native,
+        selectedAsset?.address ?? '',
     )
 
     const handleMaxClick = useCallback(() => {
-        methods.setValue('amount', formatBalance(maxAmount, selectedAsset?.token.decimals))
+        methods.setValue('amount', formatBalance(maxAmount, selectedAsset?.decimals))
     }, [methods.setValue, selectedAsset, maxAmount])
 
     const [{ loading }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            const transferAmount = rightShift(data.amount || '0', selectedAsset?.token.decimals).toFixed()
+            const transferAmount = rightShift(data.amount || '0', selectedAsset?.decimals).toFixed()
             await transferCallback(transferAmount, data.address, {
                 gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
                 gas: new BigNumber(data.gasLimit).toNumber(),
@@ -368,7 +372,7 @@ export interface Prior1559TransferUIProps {
     openAccountMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
     openAssetMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
     handleMaxClick: () => void
-    selectedAsset?: Asset
+    selectedAsset?: FungibleAsset<ChainId, SchemaType>
     handleCancel: () => void
     handleConfirm: () => void
     confirmLoading: boolean
@@ -403,10 +407,10 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
 
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
             () => ({
-                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${selectedAsset?.token.decimals}}$`), // .ddd...d
-                RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${selectedAsset?.token.decimals}}$`), // d.ddd...d
+                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${selectedAsset?.decimals}}$`), // .ddd...d
+                RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${selectedAsset?.decimals}}$`), // d.ddd...d
             }),
-            [selectedAsset?.token.decimals],
+            [selectedAsset?.decimals],
         )
 
         const {
@@ -463,8 +467,8 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                             {t('wallet_balance')}:
                             <FormattedBalance
                                 value={maxAmount}
-                                decimals={selectedAsset?.token?.decimals}
-                                symbol={selectedAsset?.token?.symbol}
+                                decimals={selectedAsset?.decimals}
+                                symbol={selectedAsset?.symbol}
                                 significant={6}
                                 formatter={formatBalance}
                             />
@@ -510,9 +514,9 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                                     icon={
                                                         <TokenIcon
                                                             classes={{ icon: classes.icon }}
-                                                            address={selectedAsset?.token.address ?? ''}
-                                                            name={selectedAsset?.token.name}
-                                                            logoURI={selectedAsset?.token.logoURI}
+                                                            address={selectedAsset?.address ?? ''}
+                                                            name={selectedAsset?.name}
+                                                            logoURL={selectedAsset?.logoURL}
                                                         />
                                                     }
                                                     deleteIcon={<ChevronDown className={classes.icon} />}
@@ -520,7 +524,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                                     size="small"
                                                     variant="outlined"
                                                     clickable
-                                                    label={selectedAsset?.token.symbol}
+                                                    label={selectedAsset?.symbol}
                                                     onDelete={noop}
                                                 />
                                             </Box>

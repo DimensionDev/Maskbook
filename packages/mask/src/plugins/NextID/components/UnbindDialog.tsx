@@ -12,7 +12,7 @@ import { UnbindPanelUI } from './UnbindPanelUI'
 import { UnbindConfirm } from './UnbindConfirm'
 import { NextIDProof } from '@masknet/web3-providers'
 import { MaskMessages } from '../../../../shared'
-import { useAccount } from '@masknet/plugin-infra/src/web3'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface VerifyWalletDialogProps {

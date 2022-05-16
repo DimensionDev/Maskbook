@@ -15,7 +15,7 @@ import { MarketsIcon, MarketsClaimIcon } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ClaimAllDialog } from './ClaimAllDialog'
-import { useFungibleToken } from '@masknet/plugin-infra/src/web3'
+import { useFungibleToken } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Trans } from 'react-i18next'
 

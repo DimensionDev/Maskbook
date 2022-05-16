@@ -2,12 +2,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { usePickToken, InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    formatBalance,
-    SchemaType,
-    TransactionStateType,
-} from '@masknet/web3-shared-evm'
+import { ChainId, formatBalance, SchemaType, TransactionStateType } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -25,7 +20,7 @@ import { WalletMessages } from '../../Wallet/messages'
 import { useInvestCallback } from '../hooks/useInvestCallback'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
-import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/src/web3'
+import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

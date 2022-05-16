@@ -78,7 +78,7 @@ const WalletSettings = memo(() => {
     const { classes } = useStyles()
 
     const { value: domain } = useReverseAddress(wallet?.address ?? '', NetworkPluginID.PLUGIN_EVM)
-    const { Utils } = useWeb3State()
+    const { Others } = useWeb3State()
 
     useTitle(t('popups_wallet_setting'))
 
@@ -91,9 +91,9 @@ const WalletSettings = memo(() => {
                 <div>
                     <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Typography className={classes.name}>{wallet.name}</Typography>
-                        {domain && Utils?.formatDomainName ? (
+                        {domain && Others?.formatDomainName ? (
                             <Typography className={classes.name} style={{ marginLeft: 4 }}>
-                                ({Utils?.formatDomainName(domain)})
+                                ({Others?.formatDomainName(domain)})
                             </Typography>
                         ) : null}
                     </Box>

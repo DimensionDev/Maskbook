@@ -29,29 +29,29 @@ export default function Popups() {
     return (
         <MaskUIRoot useTheme={usePopupTheme} kind="page">
             <PopupSnackbarProvider>
-                    <PopupContext.Provider>
-                        <PageTitleContext.Provider value={{ title, setTitle }}>
-                            <HashRouter>
-                                <Routes>
-                                    <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />
-                                    <Route path={PopupRoutes.Wallet + '/*'} element={frame(<Wallet />)} />
-                                    <Route path={PopupRoutes.Swap} element={<SwapPage />} />
-                                    <Route path={PopupRoutes.RequestPermission} element={<RequestPermissionPage />} />
-                                    <Route
-                                        path={PopupRoutes.PermissionAwareRedirect}
-                                        element={<PermissionAwareRedirect />}
-                                    />
-                                    <Route
-                                        path={PopupRoutes.ThirdPartyRequestPermission}
-                                        element={<ThirdPartyRequestPermission />}
-                                    />
-                                    <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
-                                </Routes>
-                                {/* TODO: Should only load plugins when the page is plugin-aware. */}
-                                <PluginRender />
-                            </HashRouter>
-                        </PageTitleContext.Provider>
-                    </PopupContext.Provider>
+                <PopupContext.Provider>
+                    <PageTitleContext.Provider value={{ title, setTitle }}>
+                        <HashRouter>
+                            <Routes>
+                                <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />
+                                <Route path={PopupRoutes.Wallet + '/*'} element={frame(<Wallet />)} />
+                                <Route path={PopupRoutes.Swap} element={<SwapPage />} />
+                                <Route path={PopupRoutes.RequestPermission} element={<RequestPermissionPage />} />
+                                <Route
+                                    path={PopupRoutes.PermissionAwareRedirect}
+                                    element={<PermissionAwareRedirect />}
+                                />
+                                <Route
+                                    path={PopupRoutes.ThirdPartyRequestPermission}
+                                    element={<ThirdPartyRequestPermission />}
+                                />
+                                <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
+                            </Routes>
+                            {/* TODO: Should only load plugins when the page is plugin-aware. */}
+                            <PluginRender />
+                        </HashRouter>
+                    </PageTitleContext.Provider>
+                </PopupContext.Provider>
             </PopupSnackbarProvider>
         </MaskUIRoot>
     )

@@ -18,8 +18,7 @@ import Services from '../../../../service'
 import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
 import { PageHeader } from '../components/PageHeader'
 import { PasswordField } from '../../../components/PasswordField'
-import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
-import { ProviderType, useChainId } from '@masknet/web3-shared-evm'
+import { currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({

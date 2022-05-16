@@ -4,6 +4,6 @@ import type { PoolTogetherTicket } from '@masknet/web3-contracts/types/PoolToget
 import { useContracts } from '@masknet/plugin-infra/src/entry-web3-evm'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
-export function usePoolTogetherTicketContracts(chainId:ChainId, addresses: string[]) {
-    return useContracts<PoolTogetherTicket>(chainId,  addresses, PoolTogetherTicketABI as AbiItem[])
+export function usePoolTogetherTicketContracts(chainId: ChainId, addresses: string[]) {
+    return useContracts<PoolTogetherTicket>(chainId, addresses, PoolTogetherTicketABI as AbiItem[])
 }

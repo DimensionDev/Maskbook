@@ -1,31 +1,31 @@
 import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../Others'
 import {
     addGasMargin,
     Asset,
-    EthereumTokenType,
+    ChainId,
     formatBalance,
     formatEthereumAddress,
     formatGweiToEther,
     formatGweiToWei,
-    isSameAddress,
     NetworkType,
-    useChainId,
-    useFungibleTokenBalance,
+    SchemaType,
     useGasLimit,
     useNativeTokenDetailed,
-    useNetworkType,
     useTokenTransferCallback,
     useWallet,
 } from '@masknet/web3-shared-evm'
 import {
+    FungibleAsset,
     isGreaterThan,
     isGreaterThanOrEqualTo,
     isLessThan,
     isLessThanOrEqualTo,
     isPositive,
+    isSameAddress,
     isZero,
     multipliedBy,
+    NetworkPluginID,
     rightShift,
 } from '@masknet/web3-shared-base'
 import { z as zod } from 'zod'
@@ -47,7 +47,13 @@ import { useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { toHex } from 'web3-utils'
-import { NetworkPluginID, useLookupAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import {
+    useChainId,
+    useFungibleTokenBalance,
+    useLookupAddress,
+    useNetworkType,
+    useWeb3State,
+} from '@masknet/plugin-infra/web3'
 import { AccountItem } from './AccountItem'
 import Services from '../../../../service'
 import { TransferAddressError } from '../type'
@@ -175,7 +181,7 @@ const useStyles = makeStyles()({
 })
 const MIN_GAS_LIMIT = 21000
 export interface Transfer1559Props {
-    selectedAsset?: Asset
+    selectedAsset?: FungibleAsset<ChainId, SchemaType>
     otherWallets: { name: string; address: string }[]
     openAssetMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
 }
@@ -185,10 +191,10 @@ const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetMenu, otherWallets }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const wallet = useWallet()
 
-    const chainId = useChainId()
-    const network = useNetworkType()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const network = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
 
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
@@ -200,7 +206,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const { value: estimateGasFees } = useAsync(async () => WalletRPC.getEstimateGasFees(chainId), [chainId])
 
-    const { Utils } = useWeb3State()
+    const { Others } = useWeb3State()
 
     const schema = useMemo(() => {
         return zod
@@ -209,19 +215,19 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .string()
                     .min(1, t('wallet_transfer_error_address_absence'))
                     .refine(
-                        (address) => EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address),
+                        (address) => EthereumAddress.isValid(address) || Others?.isValidDomain?.(address),
                         t('wallet_transfer_error_invalid_address'),
                     ),
                 amount: zod
                     .string()
                     .refine((amount) => {
-                        const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
+                        const transferAmount = rightShift(amount || '0', selectedAsset?.decimals)
                         return !!transferAmount || !isZero(transferAmount)
                     }, t('wallet_transfer_error_amount_absence'))
                     .refine((amount) => {
-                        const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
+                        const transferAmount = rightShift(amount || '0', selectedAsset?.decimals)
                         return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
-                    }, t('wallet_transfer_error_insufficient_balance', { symbol: selectedAsset?.token.symbol })),
+                    }, t('wallet_transfer_error_insufficient_balance', { symbol: selectedAsset?.symbol })),
                 gasLimit: zod
                     .string()
                     .min(1, t('wallet_transfer_error_gas_limit_absence'))
@@ -270,7 +276,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
                 path: ['maxFeePerGas'],
             })
-    }, [wallet, selectedAsset, minGasLimitContext, estimateGasFees, Utils])
+    }, [wallet, selectedAsset, minGasLimitContext, estimateGasFees, Others])
 
     const methods = useForm<zod.infer<typeof schema>>({
         shouldUnregister: false,
@@ -279,7 +285,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         defaultValues: {
             address: '',
             amount: '',
-            gasLimit: selectedAsset?.token.type === EthereumTokenType.Native ? '21000' : '0',
+            gasLimit: selectedAsset?.schema === SchemaType.Native ? '21000' : '0',
             maxPriorityFeePerGas: '',
             maxFeePerGas: '',
         },
@@ -298,7 +304,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         value: registeredAddress = '',
         error: resolveDomainError,
         loading: resolveDomainLoading,
-    } = useLookupAddress(address, NetworkPluginID.PLUGIN_EVM)
+    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, address)
     // #endregion
 
     // #region check address or registered address type
@@ -313,7 +319,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         }
 
         // The input is ens domain but the binding address cannot be found
-        if (Utils?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress)) {
+        if (Others?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress)) {
             setAddressTip({
                 type: TransferAddressError.RESOLVE_FAILED,
                 message: t('wallet_transfer_error_no_address_has_been_set_name'),
@@ -351,29 +357,29 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         methods.clearErrors,
         wallet?.address,
         resolveDomainError,
-        Utils,
+        Others,
     ])
     // #endregion
 
     // #region Get min gas limit with amount and recipient address
     const { value: minGasLimit } = useGasLimit(
-        selectedAsset?.token.type,
-        selectedAsset?.token.address,
-        rightShift(amount ?? 0, selectedAsset?.token.decimals).toFixed(),
+        selectedAsset?.schema,
+        selectedAsset?.address,
+        rightShift(amount ?? 0, selectedAsset?.decimals).toFixed(),
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
     // #endregion
 
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        selectedAsset?.token?.type ?? EthereumTokenType.Native,
-        selectedAsset?.token?.address ?? '',
+        NetworkPluginID.PLUGIN_EVM,
+        selectedAsset?.address ?? '',
     )
 
     const maxAmount = useMemo(() => {
         const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(addGasMargin(minGasLimit ?? MIN_GAS_LIMIT))
         let amount_ = new BigNumber(tokenBalance ?? 0)
-        amount_ = selectedAsset?.token.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
-        return formatBalance(BigNumber.max(0, amount_).toFixed(), selectedAsset?.token.decimals)
+        amount_ = selectedAsset?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
+        return formatBalance(BigNumber.max(0, amount_).toFixed(), selectedAsset?.decimals)
     }, [selectedAsset, maxFeePerGas, minGasLimit, tokenBalance])
 
     // #region set default gasLimit
@@ -394,8 +400,8 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     // #endregion
 
     const [_, transferCallback] = useTokenTransferCallback(
-        selectedAsset?.token.type ?? EthereumTokenType.Native,
-        selectedAsset?.token.address ?? '',
+        selectedAsset?.schema ?? SchemaType.Native,
+        selectedAsset?.address ?? '',
     )
 
     const handleMaxClick = useCallback(() => {
@@ -404,10 +410,10 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const [{ loading, error }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            const transferAmount = rightShift(data.amount || '0', selectedAsset?.token.decimals).toFixed()
+            const transferAmount = rightShift(data.amount || '0', selectedAsset?.decimals).toFixed()
 
             // If input address is ens domain, use registeredAddress to transfer
-            if (Utils?.isValidDomain?.(data.address)) {
+            if (Others?.isValidDomain?.(data.address)) {
                 await transferCallback(transferAmount, registeredAddress, {
                     maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
                     maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
@@ -422,7 +428,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
         },
-        [selectedAsset, transferCallback, registeredAddress, Utils],
+        [selectedAsset, transferCallback, registeredAddress, Others],
     )
 
     const [menu, openMenu] = useMenuConfig(
@@ -464,11 +470,11 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             )
         }
 
-        if (registeredAddress && !resolveDomainError && Utils?.resolveDomainLink)
+        if (registeredAddress && !resolveDomainError && Others?.resolveDomainLink)
             return (
                 <Box display="flex" justifyContent="space-between" alignItems="center" py={2.5} px={1.5}>
                     <Link
-                        href={Utils.resolveDomainLink(address)}
+                        href={Others.resolveDomainLink(address)}
                         target="_blank"
                         rel="noopener noreferrer"
                         underline="none">
@@ -492,7 +498,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         address,
         addressTip,
         registeredAddress,
-        Utils?.resolveDomainLink,
+        Others?.resolveDomainLink,
         methods.formState.errors.address?.type,
         resolveDomainLoading,
         resolveDomainError,
@@ -673,9 +679,9 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                                     icon={
                                                         <TokenIcon
                                                             classes={{ icon: classes.icon }}
-                                                            address={selectedAsset?.token.address ?? ''}
+                                                            address={selectedAsset?.address ?? ''}
                                                             name={selectedAsset?.token.name}
-                                                            logoURI={selectedAsset?.token.logoURI}
+                                                            logoURL={selectedAsset?.logoURL}
                                                         />
                                                     }
                                                     deleteIcon={<ChevronDown className={classes.icon} />}

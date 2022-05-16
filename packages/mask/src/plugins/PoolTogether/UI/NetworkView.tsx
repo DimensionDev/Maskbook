@@ -1,5 +1,5 @@
-import {  useNetworkDescriptor } from '@masknet/plugin-infra/web3'
-import { ChainId, chainResolver,  } from '@masknet/web3-shared-evm'
+import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
+import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ImageIcon } from '@masknet/shared'

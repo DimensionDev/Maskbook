@@ -1,11 +1,9 @@
-
-
 import type { Wallet } from '@masknet/web3-shared-evm'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { memo, useCallback } from 'react'
 import { EditIcon, MaskWalletIcon, SettingIcon, SuccessIcon } from '@masknet/icons'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { CopyIconButton } from '../../../components/CopyIconButton'
@@ -13,6 +11,7 @@ import { WalletContext } from '../hooks/useWalletContext'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useHover } from 'react-use'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     item: {
@@ -71,10 +70,10 @@ export interface WalletItemProps {
 
 export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }) => {
     const { classes } = useStyles()
-    const { Utils } = useWeb3State()
+    const { Others } = useWeb3State()
     const navigate = useNavigate()
     const { setSelectedWallet } = WalletContext.useContainer()
-    const { value: domain } = useReverseAddress(wallet.address, NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
 
     const handleRename = useCallback(
         (event: React.MouseEvent<HTMLOrSVGElement>) => {
@@ -101,9 +100,9 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
                 <Typography className={classes.name}>
                     <Typography component="span" display="flex" alignItems="center">
                         {wallet.name}
-                        {domain && Utils?.formatDomainName ? (
+                        {domain && Others?.formatDomainName ? (
                             <Typography component="span" className={classes.domain}>
-                                ({Utils.formatDomainName(domain)})
+                                ({Others.formatDomainName(domain)})
                             </Typography>
                         ) : null}
                         {isHovering ? <EditIcon className={classes.edit} onClick={handleRename} /> : null}

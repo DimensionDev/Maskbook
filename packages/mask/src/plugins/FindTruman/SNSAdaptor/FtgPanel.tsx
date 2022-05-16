@@ -1,4 +1,4 @@
-import { useAccount, useERC721TokenContract, formatNFT_TokenId } from '@masknet/web3-shared-evm'
+import { formatNFT_TokenId } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Link, Typography } from '@mui/material'
 import { useAsync } from 'react-use'
@@ -8,6 +8,9 @@ import FusionFtg from './FusionFtg'
 import { useContext } from 'react'
 import { FindTrumanContext } from '../context'
 import { getPartName } from './PartsPanel'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useERC721TokenContract } from '@masknet/plugin-infra/src/entry-web3-evm'
 
 const useStyles = makeStyles()((theme) => ({
     ftgCover: {
@@ -51,9 +54,9 @@ interface FtgPanelProps {}
 export default function FtgPanel(props: FtgPanelProps) {
     const { classes } = useStyles()
     const { t, const: consts } = useContext(FindTrumanContext)
-    const account = useAccount()
-
-    const ftgContract = useERC721TokenContract(consts?.ftgAddress)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const ftgContract = useERC721TokenContract(chainId, consts?.ftgAddress)
 
     const { value: ftgs } = useAsync(async () => {
         try {

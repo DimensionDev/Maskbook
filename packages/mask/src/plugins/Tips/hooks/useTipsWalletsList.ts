@@ -1,7 +1,7 @@
 import { BindingProof, EMPTY_LIST, NextIDStorageInfo } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-evm'
 import { PluginId } from '@masknet/plugin-infra'
 import { sortBy } from 'lodash-unified'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 export function useTipsWalletsList(
     proofList: BindingProof[] | undefined,

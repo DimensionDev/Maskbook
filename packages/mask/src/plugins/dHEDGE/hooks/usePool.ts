@@ -4,7 +4,7 @@ import { PluginDHedgeRPC } from '../messages'
 import { Period, Pool, PoolType } from '../types'
 import { useDHedgePoolManagerContract } from '../contracts/useDHedgePool'
 import { useTokenConstants } from '@masknet/web3-shared-evm'
-import { useChainId } from '@masknet/plugin-infra/src/web3'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useFetchPool(address: string) {

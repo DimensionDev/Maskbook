@@ -1,4 +1,4 @@
-import { useBlockie } from '@masknet/plugin-infra/src/web3'
+import { useBlockie } from '@masknet/plugin-infra/web3'
 import { BLOCKIES_OPTIONS } from '../constants'
 
 export function useAvatar(address: string) {

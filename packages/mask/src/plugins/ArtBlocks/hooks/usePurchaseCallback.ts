@@ -1,19 +1,15 @@
+import { useTransactionState } from '@masknet/plugin-infra/src/entry-web3-evm'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    EthereumTokenType,
-    TransactionEventType,
-    TransactionStateType,
-    useAccount,
-    useChainId,
-    useTransactionState,
-} from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { SchemaType, TransactionEventType, TransactionStateType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import { useArtBlocksContract } from './useArtBlocksContract'
 
-export function usePurchaseCallback(projectId: string, amount: string, tokenType?: number) {
-    const account = useAccount()
-    const chainId = useChainId()
+export function usePurchaseCallback(projectId: string, amount: string, schema?: SchemaType) {
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const genArt721MinterContract = useArtBlocksContract()
     const [purchaseState, setPurchaseState] = useTransactionState()
@@ -31,7 +27,7 @@ export function usePurchaseCallback(projectId: string, amount: string, tokenType
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const value = new BigNumber(tokenType === EthereumTokenType.Native ? amount : 0).toFixed()
+        const value = new BigNumber(schema === SchemaType.Native ? amount : 0).toFixed()
         const config = {
             from: account,
             value,
@@ -78,7 +74,7 @@ export function usePurchaseCallback(projectId: string, amount: string, tokenType
                     reject(error)
                 })
         })
-    }, [account, amount, chainId, genArt721MinterContract, tokenType])
+    }, [account, amount, chainId, genArt721MinterContract, schema])
 
     const resetCallback = useCallback(() => {
         setPurchaseState({

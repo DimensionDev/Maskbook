@@ -1,14 +1,9 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import {
-    TransactionStateType,
-    TransactionEventType,
-    ChainId,
-    SchemaType,
-} from '@masknet/web3-shared-evm'
+import { TransactionStateType, TransactionEventType, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useChainId } from '@masknet/plugin-infra/src/web3'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { useTransactionState } from '@masknet/plugin-infra/src/entry-web3-evm'
 
 /**

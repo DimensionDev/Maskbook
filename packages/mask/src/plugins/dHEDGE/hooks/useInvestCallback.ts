@@ -1,10 +1,5 @@
 import { useCallback } from 'react'
-import {
-    TransactionStateType,
-    TransactionEventType,
-    ChainId,
-    SchemaType,
-} from '@masknet/web3-shared-evm'
+import { TransactionStateType, TransactionEventType, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
 import { Pool, PoolType } from '../types'
 import { FungibleToken, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'

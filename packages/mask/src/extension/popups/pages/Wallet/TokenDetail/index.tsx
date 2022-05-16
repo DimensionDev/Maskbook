@@ -12,19 +12,15 @@ import { getTokenUSDValue } from '../../../../../plugins/Wallet/helpers'
 import { InteractionCircleIcon } from '@masknet/icons'
 import { useI18N } from '../../../../../utils'
 import { PluginTransakMessages } from '../../../../../plugins/Transak/messages'
-import {
-    formatBalance,
-    formatCurrency,
-    isSameAddress,
-    useNativeTokenDetailed,
-    useWallet,
-} from '@masknet/web3-shared-evm'
+import { formatBalance, formatCurrency } from '@masknet/web3-shared-evm'
 import Services from '../../../../service'
 import { compact, intersectionWith } from 'lodash-unified'
 import urlcat from 'urlcat'
 import { ActivityList } from '../components/ActivityList'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useTitle } from '../../../hook/useTitle'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useNativeToken, useWallet } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     content: {
@@ -69,10 +65,10 @@ const useStyles = makeStyles()({
 const TokenDetail = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const wallet = useWallet()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
     const { currentToken } = useContainer(WalletContext)
-    const { value: nativeToken } = useNativeTokenDetailed()
+    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
 
     const { value: isActiveSocialNetwork } = useAsync(async () => {
         const urls = compact((await browser.tabs.query({ active: true })).map((tab) => tab.url))

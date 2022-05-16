@@ -8,8 +8,5 @@ import type { ArtBlocksMinterContract } from '@masknet/web3-contracts/types/ArtB
 export function useArtBlocksContract() {
     const { GEN_ART_721_MINTER } = useArtBlocksConstants()
 
-    return useContract<ArtBlocksMinterContract>(
-        GEN_ART_721_MINTER,
-        ArtBlocksCoreContractABI as AbiItem[],
-    )
+    return useContract<ArtBlocksMinterContract>(GEN_ART_721_MINTER, ArtBlocksCoreContractABI as AbiItem[])
 }

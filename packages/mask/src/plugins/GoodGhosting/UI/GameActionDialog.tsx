@@ -8,7 +8,7 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC
 import { useI18N } from '../../../utils'
 import { useGameToken } from '../hooks/usePoolData'
 import { FungibleToken, isGreaterThanOrEqualTo, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useFungibleTokenBalance } from '@masknet/plugin-infra/src/web3'
+import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

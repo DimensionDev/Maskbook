@@ -7,7 +7,7 @@ import type { TransactionReceipt } from 'web3-core'
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 import { useTransactionState } from '@masknet/plugin-infra/src/entry-web3-evm'
-import { useChainId } from '@masknet/plugin-infra/src/web3'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useClaimCallback(version: number, from: string, id?: string, password?: string) {

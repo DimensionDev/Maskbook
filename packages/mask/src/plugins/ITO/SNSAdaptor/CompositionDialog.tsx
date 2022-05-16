@@ -22,7 +22,7 @@ import { omit, set } from 'lodash-unified'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { useAccount, useChainId } from '@masknet/plugin-infra/src/web3'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface StyleProps {

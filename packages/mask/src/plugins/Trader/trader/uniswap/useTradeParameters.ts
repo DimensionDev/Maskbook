@@ -60,8 +60,8 @@ export function useSwapParameters(
     const context = useGetTradeContext(tradeProvider)
     const { targetChainId } = TargetChainIdContext.useContainer()
     const deadline = useTransactionDeadline()
-    const routerV2Contract = useRouterV2Contract(targetChainId, context?.ROUTER_CONTRACT_ADDRESS, )
-    const swapRouterContract = useSwapRouterContract(targetChainId, context?.ROUTER_CONTRACT_ADDRESS, )
+    const routerV2Contract = useRouterV2Contract(targetChainId, context?.ROUTER_CONTRACT_ADDRESS)
+    const swapRouterContract = useSwapRouterContract(targetChainId, context?.ROUTER_CONTRACT_ADDRESS)
 
     return useMemo<SwapCall[]>(() => {
         if (!account || !trade?.trade_ || !deadline) return []

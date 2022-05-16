@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useChainId } from '@masknet/plugin-infra/src/web3'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useMaskBoxContract } from './useMaskBoxContract'
 

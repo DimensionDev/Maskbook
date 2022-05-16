@@ -1,10 +1,7 @@
 import { useERC20TokenContract } from '@masknet/plugin-infra/src/entry-web3-evm'
-import { useChainId, useFungibleToken } from '@masknet/plugin-infra/src/web3'
+import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import {
-    DAI,
-    WNATIVE as WETH,
-} from '@masknet/web3-shared-evm'
+import { DAI, WNATIVE as WETH } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'

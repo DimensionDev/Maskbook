@@ -4,7 +4,6 @@ import { useI18N } from '../../../../../utils'
 import { ConnectedWalletsUI } from './UI'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { useChainId, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
-import { isSameAddress } from '@masknet/web3-shared-evm'
 import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { useAsync, useAsyncFn } from 'react-use'
 import { compact, sortBy } from 'lodash-unified'
@@ -12,6 +11,7 @@ import type { ConnectedWalletInfo } from '../type'
 import { NextIDProof } from '@masknet/web3-providers'
 import Service from '../../../../service'
 import { usePopupCustomSnackbar } from '@masknet/theme'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()

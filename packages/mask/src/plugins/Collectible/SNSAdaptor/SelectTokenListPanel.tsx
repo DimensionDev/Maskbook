@@ -1,4 +1,4 @@
-import { formatBalance, FungibleTokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
+import { ChainId, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
 import { FormControl, InputAdornment, ListItemIcon, MenuItem, OutlinedInput, Typography } from '@mui/material'
 import { useI18N, useMenu } from '../../../utils'
 import { useEffect, useState, useCallback, useRef, useMemo, ChangeEvent } from 'react'
@@ -6,14 +6,15 @@ import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import Check from '@mui/icons-material/Check'
+import { FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 
 export interface SelectTokenPanelProps {
     amount: string
     balance: string
-    token?: FungibleTokenDetailed
+    token?: FungibleToken<ChainId, SchemaType>
     onAmountChange: (amount: string) => void
-    onTokenChange: (token: FungibleTokenDetailed) => void
-    tokens?: FungibleTokenDetailed[]
+    onTokenChange: (token: FungibleToken<ChainId, SchemaType>) => void
+    tokens?: FungibleToken<ChainId, SchemaType>[]
 }
 
 const MIN_AMOUNT_LENGTH = 1
@@ -73,7 +74,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                             classes={{ icon: classes.icon }}
                             address={x.address}
                             name={x.name}
-                            logoURI={x.logoURI}
+                            logoURL={x.logoURL}
                         />
                     </ListItemIcon>
                     <Typography variant="inherit">{x.symbol}</Typography>
@@ -168,7 +169,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                                         classes={{ icon: classes.icon }}
                                         address={token?.address}
                                         name={token?.name}
-                                        logoURI={token?.logoURI}
+                                        logoURL={token?.logoURL}
                                     />
                                     <Typography
                                         variant="inherit"

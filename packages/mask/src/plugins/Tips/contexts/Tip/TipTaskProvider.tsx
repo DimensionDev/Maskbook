@@ -1,9 +1,6 @@
 import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import {
-    GasConfig,
-    TransactionStateType,
-} from '@masknet/web3-shared-evm'
+import { GasConfig, TransactionStateType } from '@masknet/web3-shared-evm'
 import { FC, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage'

@@ -9,13 +9,13 @@ import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
-    NetworkPluginID,
     useWeb3UI,
     Web3Plugin,
 } from '@masknet/plugin-infra/web3'
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { PopupContext } from '../../../hook/usePopupContext'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     box: {

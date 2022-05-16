@@ -5,7 +5,7 @@ import CheckIcon from '@mui/icons-material/Check'
 import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
 import { formatEthereumAddress, Wallet } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
-import { useBlockie } from '@masknet/plugin-infra/src/web3'
+import { useBlockie } from '@masknet/plugin-infra/web3'
 
 const useStyle = makeStyles()((theme) => ({
     root: {

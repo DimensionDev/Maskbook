@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import { useMaskBoxContract } from './useMaskBoxContract'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId } from '@masknet/plugin-infra/src/web3'
+import { useChainId } from '@masknet/plugin-infra/web3'
 
 export function useOpenBoxGasLimit(parameters: [string, string, string, string], config: PayableTx) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

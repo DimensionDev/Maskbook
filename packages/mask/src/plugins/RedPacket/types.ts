@@ -99,7 +99,6 @@ export enum NFTSelectOption {
     Partial = 'Partial',
 }
 
-
 export interface NftRedPacketSubgraphInMask extends Omit<RedPacketBasic, 'is_random'> {
     token: NonFungibleToken<ChainId, SchemaType>
     token_contract: NonFungibleTokenContract<ChainId, SchemaType>

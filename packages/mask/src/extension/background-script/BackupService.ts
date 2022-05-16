@@ -3,7 +3,7 @@ export * from '../../../background/services/backup'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 assertEnvironment(Environment.ManifestBackground)
 
-import { currySameAddress, isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import {
     exportMnemonic,
     exportPrivateKey,
@@ -33,6 +33,7 @@ import {
     isSecp256k1Point,
     isSecp256k1PrivateKey,
 } from '@masknet/shared-base'
+import { currySameAddress, isSameAddress } from '@masknet/web3-shared-base'
 
 delegatePluginBackup(backupAllPlugins)
 delegatePluginRestore(async function (backup) {

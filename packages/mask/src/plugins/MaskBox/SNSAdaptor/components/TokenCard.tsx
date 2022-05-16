@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useNonFungibleToken } from '@masknet/plugin-infra/src/web3'
+import { useNonFungibleToken } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, NonFungibleAssetProvider, SchemaType } from '@masknet/web3-shared-evm'

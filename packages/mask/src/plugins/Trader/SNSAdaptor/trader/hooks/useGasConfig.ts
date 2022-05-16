@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAsync } from 'react-use'
 import BigNumber from 'bignumber.js'
-import { ChainId, chainResolver, GasOptionConfig , formatGweiToWei } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, GasOptionConfig, formatGweiToWei } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../Wallet/messages'
 
 export function useGasConfig(chainId: ChainId) {

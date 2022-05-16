@@ -172,11 +172,8 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                             .dividedBy(maxAmountShares)
                                             .decimalPlaces(0, 1)
                                         onAmountChange(
-                                            Others?.formatBalance?.(
-                                                amount,
-                                                token.decimals,
-                                                maxAmountSignificant
-                                            ) ?? '0',
+                                            Others?.formatBalance?.(amount, token.decimals, maxAmountSignificant) ??
+                                                '0',
                                         )
                                     }}
                                     {...MaxChipProps}

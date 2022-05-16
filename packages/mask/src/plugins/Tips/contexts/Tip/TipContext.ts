@@ -1,11 +1,5 @@
-import type { NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    GasConfig,
-    SchemaType,
-    TransactionState,
-    TransactionStateType,
-} from '@masknet/web3-shared-evm'
+import type { FungibleToken, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { ChainId, GasConfig, SchemaType, TransactionState, TransactionStateType } from '@masknet/web3-shared-evm'
 import { noop } from 'lodash-unified'
 import { createContext, Dispatch, SetStateAction } from 'react'
 import { TipType } from '../../types'
@@ -17,8 +11,8 @@ export interface ContextOptions {
     tipType: TipType
     setTipType: Dispatch<SetStateAction<TipType>>
     recipients: string[]
-    token: NonFungibleToken<ChainId, SchemaType> | null
-    setToken: Dispatch<SetStateAction<NonFungibleToken<ChainId, SchemaType> | null>>
+    token: FungibleToken<ChainId, SchemaType> | null
+    setToken: Dispatch<SetStateAction<FungibleToken<ChainId, SchemaType> | null>>
     amount: string
     setAmount: Dispatch<SetStateAction<string>>
     erc721TokenId: string | null

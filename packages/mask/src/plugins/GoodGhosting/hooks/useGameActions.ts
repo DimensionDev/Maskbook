@@ -1,9 +1,9 @@
-import { TransactionEventType, TransactionStateType, } from '@masknet/web3-shared-evm'
+import { TransactionEventType, TransactionStateType } from '@masknet/web3-shared-evm'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
 import type { GoodGhostingInfo } from '../types'
 import { getPlayerStatus, PlayerStatus } from '../utils'
 import type { TransactionReceipt } from 'web3-core'
-import { useAccount, useChainId, useGasPrice } from '@masknet/plugin-infra/src/web3'
+import { useAccount, useChainId, useGasPrice } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useJoinGame(info: GoodGhostingInfo) {

@@ -4,7 +4,7 @@ import type { CreationSuccess } from '@masknet/web3-contracts/types/MaskBox'
 import { useMaskBoxConstants } from '@masknet/web3-shared-evm'
 import { useMaskBoxContract } from './useMaskBoxContract'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useBlockNumber, useChainId } from '@masknet/plugin-infra/src/web3'
+import { useBlockNumber, useChainId } from '@masknet/plugin-infra/web3'
 
 // dynamically set the block range window size
 const FRAGMENT_SIZE = 3000

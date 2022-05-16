@@ -3,7 +3,7 @@ import { useRedPacketContract } from './useRedPacketContract'
 import { TransactionEventType, TransactionStateType } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import type { TransactionReceipt } from 'web3-core'
-import { useChainId } from '@masknet/plugin-infra/src/web3'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 

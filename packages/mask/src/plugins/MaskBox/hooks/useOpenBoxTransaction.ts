@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { FungibleToken, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useChainId } from '@masknet/plugin-infra/src/web3'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useMaskBoxContract } from './useMaskBoxContract'
 

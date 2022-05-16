@@ -10,12 +10,10 @@ import { createContainer } from 'unstated-next'
 import { unreachable } from '@dimensiondev/kit'
 import {
     ChainId,
-    isSameAddress,
     useERC20TokenBalance,
     useNativeTokenBalance,
     useTokenConstants,
     useFungibleTokensDetailed,
-    EthereumTokenType,
     useChainId,
     useAccount,
     useERC20TokenAllowance,

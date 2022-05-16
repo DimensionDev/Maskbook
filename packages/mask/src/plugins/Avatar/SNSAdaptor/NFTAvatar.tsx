@@ -13,7 +13,6 @@ import { useAccount, useChainId, useImageChecker, useWeb3State } from '@masknet/
 import { ReversedAddress } from '@masknet/shared'
 import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
-
 const useStyles = makeStyles()((theme) => ({
     root: {},
     title: {
