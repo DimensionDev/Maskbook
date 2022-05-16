@@ -133,10 +133,10 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
         <ShadowRootTooltip
             PopperProps={{
                 disablePortal: true,
-                placement: 'top',
+                placement: recommendFeature ? 'bottom' : 'top',
             }}
             classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-            placement="top"
+            placement={recommendFeature ? 'bottom' : 'top'}
             arrow
             disableHoverListener={!tooltipHint}
             title={<Typography className={classes.tooltipHint}>{tooltipHint}</Typography>}>
