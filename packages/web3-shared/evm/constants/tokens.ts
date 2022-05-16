@@ -49,6 +49,8 @@ export const VERSA = createERC20Tokens('VERSA_ADDRESS', 'Versa Finance', 'VERSA'
 export const VIPER = createERC20Tokens('VIPER_ADDRESS', 'Viper', 'VIPER', 18)
 export const OPENX = createERC20Tokens('OPENX_ADDRESS', 'OpenSwap Token', 'OpenX', 18)
 export const JEWEL = createERC20Tokens('JEWEL_ADDRESS', 'Jewels', 'JEWEL', 18)
+export const YUMI = createERC20Tokens('YUMI_ADDRESS', 'YumiSwap Token', 'YUMI', 18)
+export const xYUMI = createERC20Tokens('xYUMI_ADDRESS', 'Yumi Staking Token', 'xYUMI', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',

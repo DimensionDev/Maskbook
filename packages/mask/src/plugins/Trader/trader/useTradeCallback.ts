@@ -111,6 +111,9 @@ export function useTradeCallback(
         case TradeProvider.VERSA:
             return uniswapV2Like
         case TradeProvider.ASTAREXCHANGE:
+            return uniswapV2Like
+        case TradeProvider.YUMISWAP:
+            return uniswapV2Like
         case TradeProvider.DEFIKINGDOMS:
             return uniswapV2Like
         case TradeProvider.ZRX:

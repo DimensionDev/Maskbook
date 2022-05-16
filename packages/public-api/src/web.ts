@@ -200,6 +200,7 @@ export enum TradeProvider {
     ARTHSWAP = 19,
     VERSA = 20,
     ASTAREXCHANGE = 21,
+    YUMISWAP = 22,
 }
 
 /** Supported language settings */

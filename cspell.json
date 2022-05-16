@@ -310,7 +310,10 @@
         "vitalik",
         "walletlink",
         "wnative",
-        "xsushi"
+        "xsushi",
+        "xyumi",
+        "yumiswap",
+        "yumi"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

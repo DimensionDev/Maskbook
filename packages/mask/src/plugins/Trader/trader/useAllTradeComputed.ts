@@ -248,6 +248,13 @@ export function useAllTradeComputed(
         traderEstimateGas: astarexchangeEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.ASTAREXCHANGE, inputAmount_, inputToken, outputToken)
 
+    // Yumi Swap
+    const {
+        trader_: yumiswap_,
+        trader: yumiswap,
+        traderEstimateGas: yumiswapEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.YUMISWAP, inputAmount_, inputToken, outputToken)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -274,6 +281,12 @@ export function useAllTradeComputed(
             ...astarexchange_,
             value: astarexchange,
             gas: astarexchangeEstimateGas,
+        },
+        {
+            provider: TradeProvider.YUMISWAP,
+            ...yumiswap_,
+            value: yumiswap,
+            gas: yumiswapEstimateGas,
         },
     ]
 
