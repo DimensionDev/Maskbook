@@ -12,18 +12,18 @@ import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo, u
 import { useI18N } from '../../utils'
 import { BadgeRenderer } from './BadgeRenderer'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     root: {
-        minHeight: 108,
-        flexDirection: 'column',
-        padding: 10,
-        boxSizing: 'border-box',
+        padding: 0,
     },
     input: {
-        fontSize: 18,
+        fontSize: 15,
         minHeight: '8em',
     },
-})
+    badge: {
+        marginBottom: 12,
+    },
+}))
 export interface TypedMessageEditorProps {
     defaultValue?: SerializableTypedMessages
     onChange?(message: TypedMessage): void
@@ -120,7 +120,11 @@ export const TypedMessageEditor = memo(
         }
         return (
             <>
-                <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
+                {value.meta && (
+                    <div className={classes.badge}>
+                        <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
+                    </div>
+                )}
                 <InputBase
                     readOnly={readonly}
                     classes={{

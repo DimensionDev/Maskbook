@@ -21,6 +21,7 @@ import {
     NextIDAction,
     EnhanceableSite,
     CrossIsolationMessages,
+    EncryptionTargetType,
 } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
@@ -246,7 +247,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         }
 
         ui.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
-            target: 'Everyone',
+            target: EncryptionTargetType.Public,
         })
     }
 
