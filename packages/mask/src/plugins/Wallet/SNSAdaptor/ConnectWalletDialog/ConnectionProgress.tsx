@@ -4,25 +4,10 @@ import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, CircularProgress, Typography, Paper, Link } from '@mui/material'
 import { useStylesExtends, makeStyles, MaskColorVar } from '@masknet/theme'
-<<<<<<< HEAD
 import { useProviderDescriptor, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
-import { FlashIcon } from '../../../../resources/FlashIcon'
-=======
-import { ImageIcon } from '@masknet/shared'
 import { WarningTriangleIcon } from '@masknet/icons'
-import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra/web3'
-import {
-    ProviderType,
-    resolveProviderName,
-    resolveProviderShortenLink,
-    resolveProviderHomeLink,
-} from '@masknet/web3-shared-evm'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../../../utils'
-import { Trans } from 'react-i18next'
->>>>>>> develop
 
 const useStyles = makeStyles()((theme) => ({
     content: {

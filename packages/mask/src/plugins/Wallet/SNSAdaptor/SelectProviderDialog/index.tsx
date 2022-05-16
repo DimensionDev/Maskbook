@@ -9,17 +9,10 @@ import {
     useNetworkDescriptor,
     useWeb3State,
     useWeb3UI,
-<<<<<<< HEAD
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-=======
-    Web3Plugin,
-} from '@masknet/plugin-infra/web3'
-import { isDashboardPage } from '@masknet/shared-base'
-import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
->>>>>>> develop
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { WalletMessages, WalletRPC } from '../../messages'
+import { WalletMessages } from '../../messages'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
 import { PluginProviderRender } from './PluginProviderRender'
 import { pluginIDSettings } from '../../../../settings/settings'
@@ -39,32 +32,22 @@ export interface SelectProviderDialogProps {}
 export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [underPluginID, setUnderPluginID] = useState<NetworkPluginID | undefined>()
+
     // #region remote controlled dialog logic
-<<<<<<< HEAD
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
     )
-=======
->>>>>>> develop
     // #endregion
-    const { open, closeDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-        (ev?) => {
-            if (!ev?.open) return
-            setUnderPluginID(ev?.pluginID)
-        },
-    )
+
     // #region native app
     useEffect(() => {
         if (!open) return
         if (hasNativeAPI) nativeAPI?.api.misc_openCreateWalletView()
-    }, [open, underPluginID])
+    }, [open])
     // #endregion
 
     const networks = getRegisteredWeb3Networks()
-    const showNetworks = underPluginID ? networks.filter((x) => x.networkSupporterPluginID === underPluginID) : networks
     const providers = getRegisteredWeb3Providers()
     const pluginID = useValueRef(pluginIDSettings)
     const network = useNetworkDescriptor() as Web3Helper.NetworkDescriptorAll
@@ -90,7 +73,6 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
                 return
             }
 
-<<<<<<< HEAD
             closeDialog()
 
             // TODO:
@@ -102,20 +84,6 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
             })
         },
         [Others, Provider, closeDialog],
-=======
-    const onSubmit = useCallback(
-        async (result?: Web3Plugin.ConnectionResult) => {
-            if (result)
-                await WalletRPC.updateAccount(result as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>)
-
-            if (undeterminedNetwork?.type === networkType) {
-                pluginIDSettings.value = undeterminedPluginID
-            }
-            closeDialog()
-            if (isDashboard) WalletMessages.events.walletStatusDialogUpdated.sendToLocal({ open: false })
-        },
-        [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog, isDashboard],
->>>>>>> develop
     )
 
     // not available for the native app
@@ -125,7 +93,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <PluginProviderRender
-                    networks={showNetworks}
+                    networks={networks}
                     providers={providers}
                     undeterminedPluginID={undeterminedPluginID}
                     undeterminedNetworkID={undeterminedNetworkID}

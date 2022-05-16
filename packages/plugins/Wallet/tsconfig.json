@@ -8,6 +8,7 @@
   "include": ["src", "src/**/*.json"],
   "references": [
     { "path": "../../plugin-infra" },
+    { "path": "../../web3-shared/share" },
     { "path": "../../web3-shared/evm" },
     { "path": "../../shared" },
     { "path": "../../theme" }
