@@ -82,11 +82,13 @@
     "reward_tokens": "Reward Tokens",
     "blockchain_error_your_referral_farms": "Referral farms cannot be retrieved from the blockchain at the moment. Please try later.",
     "blockchain_error_referral_farms": "Your referral farms cannot be retrieved from the blockchain at the moment. Please try later.",
-    "blockchain_error_referral_farm": "This referral farm cannot be retrieved from the blockchain at the moment. Please try later.",
+    "blockchain_error_referral_farm": "This referral farm specs cannot be retrieved from the blockchain at the moment.",
     "oracle_error_your_rewards": "Your rewards cannot be retrieved from the oracles at the moment. Please try later.",
     "dismiss": "Dismiss",
     "go_wrong": "Something went wrong.",
     "wallet_balance": "Balance",
     "view_on_explorer": "View on Explorer",
-    "transaction_confirmed": "Your transaction was confirmed!"
+    "transaction_confirmed": "Your transaction was confirmed!",
+    "try_later": "Please try later.",
+    "oops": "Oops!"
 }

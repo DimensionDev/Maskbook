@@ -27,6 +27,7 @@ import {
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { RewardFarmPostWidget } from './shared-ui/RewardFarmPostWidget'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
+import { IconURLs } from '../assets'
 
 import { useSharedStyles } from './styles'
 
@@ -164,24 +165,35 @@ export function FarmPost(props: FarmPostProps) {
                     </Typography>
                 </Box>
                 {error ? (
-                    <Typography marginTop="8px">{t.blockchain_error_referral_farm()}</Typography>
+                    <Box display="flex" marginTop="32px" marginBottom="20px">
+                        <img src={IconURLs.sadGhost} />
+                        <Box display="flex" flexDirection="column" marginLeft="20px">
+                            <Typography fontWeight={600} variant="subtitle1">
+                                {t.oops()}
+                            </Typography>
+                            <Typography marginTop="12px">{t.blockchain_error_referral_farm()}</Typography>
+                            <Typography marginTop="4px">{t.try_later()}</Typography>
+                        </Box>
+                    </Box>
                 ) : (
-                    <Typography marginTop="8px">{t.join_receive_rewards()}</Typography>
+                    <>
+                        <Typography marginTop="8px">{t.join_receive_rewards()}</Typography>
+                        <Grid container>
+                            {rewards?.map((reward) => (
+                                <RewardFarmPostWidget
+                                    key={reward.rewardToken?.address}
+                                    title={t.sponsored_referral_farm()}
+                                    icon={<SponsoredFarmIcon />}
+                                    rewardData={reward}
+                                    tokenSymbol={reward.rewardToken?.symbol}
+                                />
+                            ))}
+                        </Grid>
+                        <Typography marginTop="24px" variant="body2">
+                            {t.create_by()} <b>@realMaskNetwork</b>
+                        </Typography>
+                    </>
                 )}
-                <Grid container>
-                    {rewards?.map((reward) => (
-                        <RewardFarmPostWidget
-                            key={reward.rewardToken?.address}
-                            title={t.sponsored_referral_farm()}
-                            icon={<SponsoredFarmIcon />}
-                            rewardData={reward}
-                            tokenSymbol={reward.rewardToken?.symbol}
-                        />
-                    ))}
-                </Grid>
-                <Typography marginTop="24px" variant="body2">
-                    {t.create_by()} <b>@realMaskNetwork</b>
-                </Typography>
             </Card>
             <Grid container className={classes.actions}>
                 {switchNetworkBtnVisible ? (
