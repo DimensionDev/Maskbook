@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         gridTemplateColumns: 'repeat(6, 1fr)',
         gridTemplateRows: 'repeat(3, 1fr)',
         width: '100%',
-        paddingTop: '8px 0 0 0',
+        paddingTop: '8px',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
