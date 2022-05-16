@@ -15,8 +15,7 @@ export function useTwitterIdByWalletSearch(
     if (!bindings || !type) return EMPTY_LIST
 
     return bindings.map((binding) => {
-        let proofs = binding.proofs.filter((x) => x.platform === NextIDPlatform.Twitter)
-        proofs = uniqBy(binding.proofs, (proof) => proof.identity)
+        const proofs = uniqBy(binding.proofs.filter((x) => x.platform === NextIDPlatform.Twitter), (proof) => proof.identity)
         const linkedTwitterNames = proofs.map((x) => x.identity)
         return {
             nickname: proofs[0].identity,
