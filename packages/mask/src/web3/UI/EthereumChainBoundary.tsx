@@ -15,7 +15,6 @@ import {
     getChainName,
     getNetworkTypeFromChainId,
     isChainIdValid,
-    isValidAddress as isValidEthereumAddress,
     NetworkType,
     ProviderType,
     resolveNetworkName,
@@ -174,7 +173,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         }
 
         if (!isPluginMatched) {
-            if (!networkType || networkType !== NetworkType.Ethereum || isValidEthereumAddress(account)) return
             openSelectProviderDialog()
             return
         }
