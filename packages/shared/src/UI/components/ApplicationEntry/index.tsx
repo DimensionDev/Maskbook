@@ -45,13 +45,14 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
                 : {}),
         },
         tooltip: {
-            backgroundColor: '#111432',
+            backgroundColor: theme.palette.common.black,
         },
         tooltipHint: {
             fontSize: 14,
+            color: theme.palette.common.white,
         },
         arrow: {
-            color: '#111432',
+            color: theme.palette.common.black,
         },
         recommendFeatureApplicationBox: {
             width: 260,
