@@ -47,12 +47,15 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
         tooltip: {
             backgroundColor: '#111432',
         },
+        tooltipHint: {
+            fontSize: 14,
+        },
         arrow: {
             color: '#111432',
         },
         recommendFeatureApplicationBox: {
-            width: 225,
-            minWidth: 225,
+            width: 260,
+            minWidth: 260,
             height: 97,
             marginRight: 12,
             cursor: 'pointer',
@@ -136,7 +139,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             placement="top"
             arrow
             disableHoverListener={!tooltipHint}
-            title={<Typography>{tooltipHint}</Typography>}>
+            title={<Typography className={classes.tooltipHint}>{tooltipHint}</Typography>}>
             {jsx}
         </ShadowRootTooltip>
     ) : (

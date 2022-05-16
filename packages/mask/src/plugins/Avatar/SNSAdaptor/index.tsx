@@ -1,6 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import { Typography } from '@mui/material'
 import { useState } from 'react'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
 import { base } from '../base'
@@ -36,20 +35,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
                                 tooltipHint={
                                     EntryComponentProps.tooltipHint ?? (
-                                        <Typography
-                                            fontSize={12}
-                                            sx={{
-                                                whiteSpace: 'nowrap',
-                                                color: 'white',
-                                                paddingTop: 1,
-                                                paddingBottom: 1,
-                                            }}>
-                                            <Translate.application_hint
-                                                components={{
-                                                    br: <br />,
-                                                }}
-                                            />
-                                        </Typography>
+                                        <Translate.application_hint
+                                            components={{
+                                                br: <br />,
+                                            }}
+                                        />
                                     )
                                 }
                             />
