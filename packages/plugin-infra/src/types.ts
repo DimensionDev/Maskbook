@@ -333,6 +333,8 @@ export namespace Plugin.SNSAdaptor {
 
         description?: I18NFieldOrReactNode
 
+        iconFilterColor?: string
+
         tutorialLink?: string
         /**
          * Does the application listed in the DAPP list

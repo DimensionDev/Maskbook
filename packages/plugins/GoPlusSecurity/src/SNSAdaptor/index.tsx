@@ -13,6 +13,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <SecurityCheckerIcon />
             const name = { fallback: 'Check Security' }
+            const iconFilterColor = 'rgba(69, 110, 255, 0.3)'
 
             return {
                 ApplicationEntryID: base.ID,
@@ -23,6 +24,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 disabled={disabled}
+                                iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 onClick={() => setOpen(true)}
                             />
@@ -32,6 +34,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 },
                 name,
                 icon,
+                iconFilterColor,
                 appBoardSortingDefaultPriority: 13,
                 marketListSortingPriority: 16,
             }

@@ -34,6 +34,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <MaskBoxIcon />
             const name = <Trans i18nKey="plugin_mask_box_name" />
+            const iconFilterColor = 'rgba(0, 87, 255, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
@@ -41,6 +42,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         <ApplicationEntry
                             title={name}
                             disabled={disabled}
+                            iconFilterColor={iconFilterColor}
                             icon={icon}
                             onClick={() => openWindow('https://box.mask.io/#/')}
                         />
@@ -52,6 +54,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 tutorialLink: 'https://realmasknetwork.notion.site/d0941687649a4ef7a38d71f23ecbe4da',
                 description: <Trans i18nKey="plugin_mask_box_description" />,
                 category: 'dapp',
+                iconFilterColor,
                 name,
             }
         })(),

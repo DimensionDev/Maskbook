@@ -64,6 +64,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <MarketsIcon />
             const name = <Trans i18nKey="plugin_ito_name" />
+            const iconFilterColor = 'rgba(56, 228, 239, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
@@ -72,6 +73,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             {...EntryComponentProps}
                             title={name}
                             icon={icon}
+                            iconFilterColor={iconFilterColor}
                             onClick={
                                 EntryComponentProps.onClick ??
                                 (() =>
@@ -89,6 +91,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 3,
                 marketListSortingPriority: 3,
                 icon,
+                iconFilterColor,
                 description: <Trans i18nKey="plugin_ito_description" />,
                 category: 'dapp',
                 name,
@@ -98,6 +101,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <MarketsClaimIcon />
             const name = <Trans i18nKey="plugin_ito_claim" />
+            const iconFilterColor = 'rgba(240, 51, 51, 0.3)'
             return {
                 ApplicationEntryID: `${base.ID}_claim`,
                 RenderEntryComponent(EntryComponentProps) {
@@ -106,6 +110,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         <>
                             <ApplicationEntry
                                 title={name}
+                                iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 {...EntryComponentProps}
                                 onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
@@ -117,6 +122,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 4,
                 icon,
                 name,
+                iconFilterColor,
             }
         })(),
     ],

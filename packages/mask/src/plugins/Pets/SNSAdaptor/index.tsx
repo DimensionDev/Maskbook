@@ -22,6 +22,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <img src={new URL('../assets/pets.png', import.meta.url).toString()} />
             const name = <Trans i18nKey="plugin_pets_name" />
+            const iconFilterColor = 'rgba(226, 0, 233, 0.2)'
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
@@ -32,6 +33,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             {...EntryComponentProps}
                             title={name}
                             icon={icon}
+                            iconFilterColor={iconFilterColor}
                             onClick={EntryComponentProps.onClick ?? openDialog}
                         />
                     )
@@ -42,6 +44,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 description: <Trans i18nKey="plugin_pets_description" />,
                 name,
                 tutorialLink: 'https://twitter.com/NonFFriend',
+                iconFilterColor,
                 category: 'dapp',
             }
         })(),
