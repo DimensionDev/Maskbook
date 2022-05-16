@@ -89,11 +89,10 @@ export function ApplicationSettingPluginList() {
                         (entry) => entry.appBoardSortingDefaultPriority && !entry.recommendFeature,
                     ).map((entry) => ({ entry, pluginId: plugin.ID }))
                     return entries ?? EMPTY_LIST
-                }, EMPTY_LIST)
-                .sort(
-                    (a, b) =>
-                        (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0),
-                ),
+                })
+                .sort((a, b) => {
+                    return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
+                }),
         [snsAdaptorPlugins],
     )
     const [listedAppList, setListedAppList] = useState(applicationList.filter((x) => !getUnlistedApp(x)))

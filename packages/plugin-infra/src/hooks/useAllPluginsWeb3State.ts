@@ -9,6 +9,6 @@ export function useAllPluginsWeb3State() {
     const pluginsDashboard = useActivatedPluginsDashboard()
     const entries = [...pluginsSNSAdaptor, ...pluginsDashboard]
         .filter((definition) => definition.Web3State)
-        .map((definiton): [string, Capabilities] => [definiton.ID, definiton.Web3State!])
+        .map((definition): [string, Capabilities] => [definition.ID, definition.Web3State!])
     return Object.fromEntries(entries) as Record<string, Capabilities>
 }
