@@ -7,6 +7,8 @@ import { useI18N } from '../../utils'
 const useStyles = makeStyles()((theme) => ({
     chip: {
         maxWidth: 500,
+        background: theme.palette.background.paper,
+        boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
     },
 }))
 
@@ -70,7 +72,7 @@ interface MetaBadgeProps {
 function MetaBadge({ title, children, onDelete, readonly }: React.PropsWithChildren<MetaBadgeProps>) {
     const { classes } = useStyles()
     return (
-        <Box sx={{ marginRight: 1, marginTop: 1, display: 'inline-block' }}>
+        <Box sx={{ display: 'inline-block' }}>
             <ShadowRootTooltip title={title}>
                 <span>
                     <Chip disabled={readonly} onDelete={onDelete} label={children} className={classes.chip} />

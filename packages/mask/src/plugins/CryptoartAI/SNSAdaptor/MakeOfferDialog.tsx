@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => {
         details: {
             color: '#999',
             fontSize: '14px',
-            margin: '0px',
+            margin: 0,
         },
         footer: {
             display: 'flex',

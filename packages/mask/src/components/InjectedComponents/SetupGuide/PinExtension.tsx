@@ -31,7 +31,7 @@ export function PinExtension({ onDone }: PinExtensionProps) {
                         <img
                             src={pinImg}
                             width={100}
-                            style={{ filter: 'drop-shadow(0px 0px 16px rgba(101, 119, 134, 0.2))' }}
+                            style={{ filter: 'drop-shadow(0 0 16px rgba(101, 119, 134, 0.2))' }}
                         />
                     </Box>
                 </Box>

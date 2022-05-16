@@ -15,7 +15,7 @@ import { LoadingButton } from '../../../../components/LoadingButton'
 const StyledFormControlLabel = styled(FormControlLabel)({
     [`&.${formControlLabelClasses.root}`]: {
         background: MaskColorVar.lightBackground,
-        margin: '0',
+        margin: 0,
         padding: '2px 0',
         borderRadius: 8,
     },

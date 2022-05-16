@@ -28,7 +28,7 @@ export const Shadows: ThemeOptions = {
                 {
                     props: { variant: 'outlined' },
                     style: {
-                        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.04)',
+                        boxShadow: '0 8px 20px rgba(0, 0, 0, 0.04)',
                     },
                 },
             ],
