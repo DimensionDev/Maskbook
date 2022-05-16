@@ -49,8 +49,6 @@ export function DonateDialog(props: DonateDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-
     const [title, setTitle] = useState('')
     const [address, setAddress] = useState('')
     const [postLink, setPostLink] = useState<string | URL>('')
@@ -60,7 +58,9 @@ export function DonateDialog(props: DonateDialogProps) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenDetailed = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
-    const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+
+    const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants(chainId)
 
     // #region remote controlled dialog
     const { open, closeDialog: closeDonationDialog } = useRemoteControlledDialog(
@@ -83,6 +83,11 @@ export function DonateDialog(props: DonateDialogProps) {
         return connection?.getFungibleTokenBalance(token?.address ?? ZERO_ADDRESS)
     }, [connection])
     // #endregion
+
+    console.log('DEBUG: tokenBalance')
+    console.log({
+        tokenBalance
+    })
 
     // #region select token dialog
     const pickToken = usePickToken()

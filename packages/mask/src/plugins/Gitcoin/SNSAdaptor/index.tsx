@@ -18,6 +18,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector: function Comp(props) {
+        console.log('DEBUG: DecryptedInspector')
+        console.log(props)
+
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null

@@ -46,9 +46,6 @@ export function useActivatedPluginSNSAdaptor(pluginID: string, minimalModeEquals
     const plugins = useActivatedPluginsSNSAdaptor(minimalModeEqualsTo)
     const minimalMode = useSubscription(minimalModeSub)
 
-    console.log('DEBUG: useActivatedPluginsSNSAdaptor')
-    console.log(plugins)
-
     return useMemo(() => {
         const result = plugins.find((x) => x.ID === pluginID)
         if (!result) return result

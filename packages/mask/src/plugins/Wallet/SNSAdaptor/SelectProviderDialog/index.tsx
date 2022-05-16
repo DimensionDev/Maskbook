@@ -57,14 +57,6 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const Web3State = useWeb3State(undeterminedPluginID) as Web3Helper.Web3StateAll
     const { Others, Provider } = Web3State
 
-    console.log('DEBUG: select provider dialog')
-    console.log({
-        Web3State,
-        undeterminedPluginID,
-        Others,
-        Provider,
-    })
-
     const { NetworkIconClickBait, ProviderIconClickBait } =
         (useWeb3UI(undeterminedPluginID) as Web3Helper.Web3UIAll).SelectProviderDialog ?? {}
 

@@ -1,5 +1,7 @@
 import { first } from 'lodash-unified'
 import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
+import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
+import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import {
     ChainId,
     EthereumMethodType,
@@ -8,11 +10,14 @@ import {
     TransactionDetailed,
     Transaction,
     createNativeToken,
+    createContract,
+    getTokenConstants,
 } from '@masknet/web3-shared-evm'
-import type {
+import {
     Account,
     ConnectionOptions,
     FungibleToken,
+    isSameAddress,
     NonFungibleToken,
     NonFungibleTokenCollection,
     NonFungibleTokenContract,
@@ -23,6 +28,8 @@ import { Providers } from './provider'
 import type { EVM_Connection, EVM_Web3ConnectionOptions } from './types'
 import { getReceiptStatus } from './utils'
 import { Web3StateSettings } from '../../settings'
+import type { AbiItem } from 'web3-utils'
+import type { BaseContract } from '@masknet/web3-contracts/types/types'
 
 function isUniversalMethod(method: EthereumMethodType) {
     return [
@@ -39,6 +46,11 @@ function isUniversalMethod(method: EthereumMethodType) {
         EthereumMethodType.ETH_CALL,
         EthereumMethodType.ETH_GET_LOGS,
     ].includes(method)
+}
+
+function isNativeTokenAddress(chainId: ChainId, address: string) {
+    if (!address) return false
+    return isSameAddress(address, getTokenConstants(chainId).NATIVE_TOKEN_ADDRESS)
 }
 
 class Connection implements EVM_Connection {
@@ -169,13 +181,18 @@ class Connection implements EVM_Connection {
     getNativeTokenBalance(
         options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ): Promise<string> {
-        throw new Error('Method not implemented.')
+        return this.getBalance(this.account, options)
     }
-    getFungibleTokenBalance(
+    async getFungibleTokenBalance(
         address: string,
         options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ): Promise<string> {
-        throw new Error('Method not implemented.')
+        // Native
+        if (isNativeTokenAddress(this.chainId, address)) return this.getNativeTokenBalance(options)
+
+        // ERC20
+        const contract = await this.getWeb3Contract<ERC20>(address, ERC20ABI as AbiItem[], options)
+        return contract?.methods.balanceOf(this.account).call() ?? '0'
     }
     getNonFungibleTokenBalance(
         address: string,
@@ -196,7 +213,9 @@ class Connection implements EVM_Connection {
         address: string,
         options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ): Promise<FungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+        // Native
+        if (isNativeTokenAddress(this.chainId, address)) return this.getNativeToken(options)
+
     }
 
     getNonFungibleToken(
@@ -209,6 +228,11 @@ class Connection implements EVM_Connection {
 
     getWeb3(options?: EVM_Web3ConnectionOptions) {
         return Providers[options?.providerType ?? this.providerType].createWeb3(options?.chainId ?? this.chainId)
+    }
+
+    async getWeb3Contract<T extends BaseContract>(address: string, ABI: AbiItem[], options?: EVM_Web3ConnectionOptions) {
+        const web3 = await this.getWeb3(options)
+        return createContract<T>(web3, address, ABI)
     }
 
     async getAccount(options?: EVM_Web3ConnectionOptions) {
@@ -244,7 +268,7 @@ class Connection implements EVM_Connection {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_GET_BALANCE,
-                params: [address],
+                params: [address, 'latest'],
             },
             options,
         )
