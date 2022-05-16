@@ -86,13 +86,16 @@ export function FurucomboView(props: PoolViewProps) {
             investable.category === props.category,
     )
 
-    if (!investable)
+    if (investable)
         return (
             <>
                 <Typography align="center" color="error">
                     {t('plugin_furucombo_pool_not_found')}
                 </Typography>
-                <EthereumChainBoundary chainId={props.chainId} />
+
+                <Box sx={{ padding: 1.5 }}>
+                    <EthereumChainBoundary chainId={props.chainId} />
+                </Box>
             </>
         )
 
