@@ -171,7 +171,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                 </Collapse>
             </Stack>
             <Stack spacing={1.5} flex={1}>
-                <Stack direction="row" alignItems="center" spacing={3.5}>
+                <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={3.5}>
                     <Typography variant="h6" className={classes.header}>
                         {t.security_detection()}
                     </Typography>

@@ -148,6 +148,9 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
                         <Typography className={classes.subtitle}>{t.token_info_total_supply()}</Typography>
                         {totalSupply}
                     </Stack>
+                    <Stack direction="row" justifyContent="space-between">
+                        <Typography className={classes.subtitle}>{t.token_market_cap()}</Typography>
+                    </Stack>
                 </Stack>
             </Stack>
         </Stack>
