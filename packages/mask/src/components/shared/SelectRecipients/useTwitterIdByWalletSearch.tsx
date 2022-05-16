@@ -25,10 +25,9 @@ export function useTwitterIdByWalletSearch(
         const boundTwitterNames = uniq(
             cur.proofs.filter((x) => x.platform === NextIDPlatform.Twitter).map((x) => x.identity),
         )
-        const allowedPlatforms = [NextIDPlatform.Twitter, NextIDPlatform.Ethereum]
         const obj: Partial<ResolvedBindings> = Object.assign(
             { linkedTwitterNames: boundTwitterNames },
-            ...cur.proofs.filter((x) => allowedPlatforms.includes(x.platform)),
+            ...cur.proofs.filter((x) => [NextIDPlatform.Twitter, NextIDPlatform.Ethereum].includes(x.platform)),
         )
         pre.push(obj as ResolvedBindings)
         return pre
