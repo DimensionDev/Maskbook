@@ -305,7 +305,6 @@
     {
         "name": "Optimistic Ethereum",
         "chain": "Optimistic",
-        "fullName": "Optimism",
         "network": "mainnet",
         "features": [],
         "nativeCurrency": {
@@ -313,7 +312,7 @@
             "symbol": "OETH",
             "decimals": 18
         },
-        "infoURL": "https://optimism.io",
+        "infoURL": "https://optimistic.etherscan.io/",
         "shortName": "oeth",
         "chainId": 10,
         "explorers": [

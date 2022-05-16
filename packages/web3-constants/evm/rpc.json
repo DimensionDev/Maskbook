@@ -54,10 +54,7 @@
         "Arbitrum": ["https://arb1.arbitrum.io/rpc"],
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
         "xDai": ["https://rpc.gnosischain.com"],
-        "Optimistic": [
-            "https://opt-mainnet.g.alchemy.com/v2/si4Ts8BGkOpDGesRfjdRZHFzUukHvURN",
-            "https://mainnet.optimism.io"
-        ],
+        "Optimistic": ["https://opt-mainnet.g.alchemy.com/v2/si4Ts8BGkOpDGesRfjdRZHFzUukHvURN"],
         "Optimistic_Kovan": ["https://kovan.optimism.io"],
         "Optimistic_Goerli": ["https://goerli.optimism.io"],
         "Avalanche": ["https://api.avax.network/ext/bc/C/rpc"],

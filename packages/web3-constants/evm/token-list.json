@@ -14,6 +14,7 @@
         "xDai": ["https://tokens.r2d2.to/latest/100/tokens.json"],
         "Optimistic": [
             "https://static.optimism.io/optimism.tokenlist.json",
+            "https://raw.githubusercontent.com/elkfinance/tokens/main/all.tokenlist.json",
             "https://tokens.r2d2.to/latest/10/tokens.json"
         ],
         "Optimistic_Kovan": [],
