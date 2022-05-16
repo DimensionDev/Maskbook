@@ -69,10 +69,7 @@
     "bignumber.js": "^9.0.2",
     "react-use": "^17.3.2",
     "unstated-next": "^1.1.0",
-    "use-subscription": "^1.6.0"
-  },
-  "devDependencies": {
-    "react-i18next": "^11.16.5"
+    "use-subscription": "1.6.0"
   },
   "peerDependencies": {
     "react-i18next": "^11.15.3"

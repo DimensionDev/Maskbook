@@ -5,6 +5,8 @@ import { makeStyles } from '@masknet/theme'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
+import { Trans } from 'react-i18next'
+import { FindTrumanIcon } from '@masknet/icons'
 import { PostInspector } from './PostInspector'
 import { ApplicationEntry } from '@masknet/shared'
 import { FindTrumanDialog } from './FindTrumanDialog'
@@ -87,23 +89,30 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     ApplicationEntries: [
-        {
-            RenderEntryComponent({ disabled }) {
-                const [open, setOpen] = useState(false)
-                return (
-                    <>
-                        <ApplicationEntry
-                            disabled={disabled}
-                            title="FindTruman"
-                            icon={new URL('../assets/findtruman.png', import.meta.url).toString()}
-                            onClick={() => setOpen(true)}
-                        />
-                        <FindTrumanDialog open={open} onClose={() => setOpen(false)} />
-                    </>
-                )
-            },
-            defaultSortingPriority: 11,
-        },
+        (() => {
+            const icon = <FindTrumanIcon />
+            const name = <Trans i18nKey="plugin_find_truman_name" />
+            return {
+                ApplicationEntryID: base.ID,
+                RenderEntryComponent(EntryComponentProps) {
+                    const [open, setOpen] = useState(false)
+                    return (
+                        <>
+                            <ApplicationEntry
+                                {...EntryComponentProps}
+                                title={name}
+                                icon={icon}
+                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
+                            />
+                            <FindTrumanDialog open={open} onClose={() => setOpen(false)} />
+                        </>
+                    )
+                },
+                appBoardSortingDefaultPriority: 12,
+                icon,
+                name: <Trans i18nKey="plugin_find_truman_name" />,
+            }
+        })(),
     ],
 }
 

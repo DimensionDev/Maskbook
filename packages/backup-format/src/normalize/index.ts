@@ -1,4 +1,3 @@
-import { ECKeyIdentifier, IdentifierMap, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { None } from 'ts-results'
 import { BackupErrors } from '../BackupErrors'
 import { isBackupVersion0, normalizeBackupVersion0 } from '../version-0'
@@ -33,9 +32,9 @@ export function generateBackupRAW(data: NormalizedBackup.Data): unknown {
 export function createEmptyNormalizedBackup(): NormalizedBackup.Data {
     return {
         meta: { version: 2, createdAt: None, maskVersion: None },
-        personas: new IdentifierMap(new Map(), ECKeyIdentifier),
-        profiles: new IdentifierMap(new Map(), ProfileIdentifier),
-        posts: new IdentifierMap(new Map(), PostIVIdentifier),
+        personas: new Map(),
+        profiles: new Map(),
+        posts: new Map(),
         relations: [],
         settings: { grantedHostPermissions: [] },
         wallets: [],

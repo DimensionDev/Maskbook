@@ -93,25 +93,33 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             const cacheDomain = domainAddressBook[chainId]?.[address]
             if (cacheDomain) return cacheDomain
 
-            const domain = await new Ens({
-                provider: createExternalProvider(context.request, context.getSendOverrides, context.getRequestOptions),
-                network: chainId,
-            }).reverse(address)
+            try {
+                const domain = await new Ens({
+                    provider: createExternalProvider(
+                        context.request,
+                        context.getSendOverrides,
+                        context.getRequestOptions,
+                    ),
+                    network: chainId,
+                }).reverse(address)
 
-            if (isZeroAddress(domain) || isSameAddress(domain, ZERO_X_ERROR_ADDRESS)) {
+                if (isZeroAddress(domain) || isSameAddress(domain, ZERO_X_ERROR_ADDRESS)) {
+                    return undefined
+                }
+
+                if (domain)
+                    await getStorage().domainAddressBook.setValue({
+                        ...domainAddressBook,
+                        [chainId]: {
+                            ...domainAddressBook[chainId],
+                            ...{ [address]: domain, [domain]: address },
+                        },
+                    })
+
+                return domain
+            } catch {
                 return undefined
             }
-
-            if (domain)
-                await getStorage().domainAddressBook.setValue({
-                    ...domainAddressBook,
-                    [chainId]: {
-                        ...domainAddressBook[chainId],
-                        ...{ [address]: domain, [domain]: address },
-                    },
-                })
-
-            return domain
         },
     }
     state.Utils = state.Utils ?? {
@@ -142,8 +150,8 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         formatDomainName,
         resolveNonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) =>
             resolveCollectibleLink(chainId as ChainId, NonFungibleAssetProvider.OPENSEA, {
-                contractDetailed: { address: address },
-                tokenId: tokenId,
+                contractDetailed: { address },
+                tokenId,
             } as unknown as any),
     }
     return state

@@ -1,6 +1,6 @@
 import { first } from 'lodash-unified'
 import { defer } from '@dimensiondev/kit'
-import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import * as MaskWallet from './providers/MaskWallet'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
@@ -17,12 +17,15 @@ export async function createConnectionURI() {
 
 // step2:
 // If user confirmed the request we will receive the 'connect' event
-let resolveConnect: ((result: { account?: string; chainId: ChainId }) => void) | undefined
+type Account = { account?: string; chainId: ChainId }
+let deferredConnect: Promise<Account> | null = null
+let resolveConnect: ((result: Account) => void) | undefined
 let rejectConnect: ((error: Error) => void) | undefined
 
 export async function connectWalletConnect() {
-    const [deferred, resolve, reject] = defer<{ account?: string; chainId: ChainId }>()
+    const [deferred, resolve, reject] = defer<Account>()
 
+    deferredConnect = deferred
     resolveConnect = resolve
     rejectConnect = reject
     createWalletConnect().then(resolve, reject)
@@ -32,6 +35,7 @@ export async function connectWalletConnect() {
 
 export async function createWalletConnect() {
     const connector = await WalletConnect.createConnectorIfNeeded()
+
     if (connector.connected)
         return {
             account: first(connector.accounts),
@@ -45,13 +49,18 @@ export async function createWalletConnect() {
     }
 }
 
+export async function untilWalletConnect() {
+    if (!deferredConnect) throw new Error('No connection.')
+    return deferredConnect
+}
+
 export async function cancelWalletConnect() {
-    rejectConnect?.(new Error('Failed to connect to WalletConnect.'))
+    rejectConnect?.(new Error('User rejected the request.'))
 }
 // #endregion
 
-export async function connectMaskWallet(networkType: NetworkType) {
-    const { accounts, chainId } = await MaskWallet.requestAccounts(networkType)
+export async function connectMaskWallet(expectedChainId: ChainId) {
+    const { accounts, chainId } = await MaskWallet.requestAccounts(expectedChainId)
     return {
         account: first(accounts),
         chainId,

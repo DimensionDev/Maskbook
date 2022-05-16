@@ -6,7 +6,6 @@ import { getProfilePageUrlAtFacebook } from './utils/parse-username'
 import { taskOpenComposeBoxFacebook } from './automation/openComposeBox'
 import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposition'
 import { CurrentVisitingIdentityProviderFacebook, IdentityProviderFacebook } from './collecting/identity'
-import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
 import { injectCompositionFacebook } from './injection/Composition'
 import { injectSetupPromptFacebook } from './injection/SetupPrompt'
@@ -22,7 +21,6 @@ import { injectPageInspectorDefault } from '../../social-network/defaults/inject
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
 import { GrayscaleAlgorithm } from '@masknet/encryption'
 import { PaletteModeProviderFacebook, useThemeFacebookVariant } from './customization/custom'
-import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
 import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { globalUIState } from '../../social-network'
@@ -30,7 +28,7 @@ import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './inject
 import { injectProfileNFTAvatarInFaceBook } from './injection/NFT/ProfileNFTAvatar'
 import { injectNFTAvatarInFacebook } from './injection/NFT/NFTAvatarInFacebook'
 import { injectUserNFTAvatarAtFacebook } from './injection/NFT/NFTAvatarInTimeline'
-import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
+import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from './injection/NFT/NFTAvatarEditProfile'
 import { injectProfileTabAtFacebook } from './injection/ProfileTab'
 import { injectPostReplacerAtFacebook } from './injection/PostReplacer'
 import { injectProfileTabContentAtFacebook } from './injection/ProfileContent'
@@ -157,12 +155,10 @@ const facebookUI: SocialNetworkUI.Definition = {
         useTheme: useThemeFacebookVariant,
     },
     init(signal) {
-        const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
-        InitAutonomousStateFriends(signal, friends, facebookShared.networkIdentifier)
         InitAutonomousStateProfiles(signal, profiles, facebookShared.networkIdentifier)
         enableFbStyleTextPayloadReplace()
-        return { friends, profiles }
+        return { profiles }
     },
     injection: {
         newPostComposition: {
@@ -197,6 +193,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInFaceBook,
         profileAvatar: injectNFTAvatarInFacebook,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
+        openNFTAvatarSettingDialog,
         enhancedPostRenderer: injectPostReplacerAtFacebook,
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),
@@ -209,14 +206,13 @@ const facebookUI: SocialNetworkUI.Definition = {
         steganography: {
             // ! the color image cannot compression resistance in Facebook
             grayscaleAlgorithm: GrayscaleAlgorithm.LUMINANCE,
+            // ! Change this might be a breaking change !
             password() {
-                // ! Change this might be a breaking change !
-                return new ProfileIdentifier(
-                    EnhanceableSite.Facebook,
-                    ProfileIdentifier.getUserName(IdentityProviderFacebook.recognized.value.identifier) ||
-                        ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
-                        unreachable('Cannot figure out password' as never),
-                ).toText()
+                const id =
+                    IdentityProviderFacebook.recognized.value.identifier?.userId ||
+                    globalUIState.profiles.value?.[0].identifier.userId
+                if (!id) throw new Error('Cannot figure out password')
+                return ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrap().toText()
             },
         },
     },

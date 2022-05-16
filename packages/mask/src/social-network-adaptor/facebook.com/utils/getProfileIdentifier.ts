@@ -1,8 +1,8 @@
 import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import Services from '../../../extension/service'
-import type { Profile } from '../../../database'
 import { getCurrentIdentifier } from '../../utils'
 import { searchUserIdOnMobileSelector } from './selector'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 
 type link = HTMLAnchorElement | null | undefined
 
@@ -20,11 +20,8 @@ type link = HTMLAnchorElement | null | undefined
  *      </a>
  *  ]
  */
-export function getProfileIdentifierAtFacebook(
-    links: link[] | link,
-    allowCollectInfo?: boolean,
-): Pick<Profile, 'identifier' | 'nickname' | 'avatar'> {
-    const unknown = { identifier: ProfileIdentifier.unknown, avatar: undefined, nickname: undefined }
+export function getProfileIdentifierAtFacebook(links: link[] | link, allowCollectInfo?: boolean): IdentityResolved {
+    const unknown: IdentityResolved = {}
     try {
         if (!Array.isArray(links)) links = [links]
         const result = links
@@ -32,17 +29,17 @@ export function getProfileIdentifierAtFacebook(
             .map((x) => ({ nickname: x!.ariaLabel, id: getUserID(x!.href), dom: x }))
             .filter((x) => x.id)
         const { dom, id, nickname } = result[0] || {}
-        if (id) {
-            const result = new ProfileIdentifier(EnhanceableSite.Facebook, id)
+        const identifier = ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrapOr(null)
+        if (identifier) {
             const currentProfile = getCurrentIdentifier()
             let avatar: string | null = null
             try {
                 const image = dom!.closest('.clearfix')!.parentElement!.querySelector('img')!
                 avatar = image.src
                 if (allowCollectInfo && image.getAttribute('aria-label') === nickname && nickname) {
-                    Services.Identity.updateProfileInfo(result, { nickname, avatarURL: image.src })
+                    Services.Identity.updateProfileInfo(identifier, { nickname, avatarURL: image.src })
                     if (currentProfile?.linkedPersona) {
-                        Services.Identity.createNewRelation(result, currentProfile.linkedPersona.identifier)
+                        Services.Identity.createNewRelation(identifier, currentProfile.linkedPersona)
                     }
                 }
             } catch {}
@@ -50,9 +47,9 @@ export function getProfileIdentifierAtFacebook(
                 const image = dom!.querySelector('img')!
                 avatar = image.src
                 if (allowCollectInfo && avatar) {
-                    Services.Identity.updateProfileInfo(result, { nickname, avatarURL: image.src })
+                    Services.Identity.updateProfileInfo(identifier, { nickname, avatarURL: image.src })
                     if (currentProfile?.linkedPersona) {
-                        Services.Identity.createNewRelation(result, currentProfile.linkedPersona.identifier)
+                        Services.Identity.createNewRelation(identifier, currentProfile.linkedPersona)
                     }
                 }
             } catch {}
@@ -60,14 +57,14 @@ export function getProfileIdentifierAtFacebook(
                 const image = dom!.querySelector('image')!
                 avatar = image.getAttribute('xlink:href')
                 if (allowCollectInfo && avatar) {
-                    Services.Identity.updateProfileInfo(result, { nickname, avatarURL: avatar })
+                    Services.Identity.updateProfileInfo(identifier, { nickname, avatarURL: avatar })
                     if (currentProfile?.linkedPersona) {
-                        Services.Identity.createNewRelation(result, currentProfile.linkedPersona.identifier)
+                        Services.Identity.createNewRelation(identifier, currentProfile.linkedPersona)
                     }
                 }
             } catch {}
             return {
-                identifier: result,
+                identifier,
                 avatar: avatar ?? undefined,
                 nickname: nickname ?? undefined,
             }

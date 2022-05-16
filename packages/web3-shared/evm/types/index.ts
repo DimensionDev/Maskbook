@@ -71,6 +71,10 @@ export enum ChainId {
     // Optimistic
     Optimistic = 10,
 
+    // Harmony
+    Harmony = 1666600000,
+    Harmony_Test = 1666700000,
+
     // Conflux
     Conflux = 1030,
 }
@@ -551,7 +555,7 @@ export enum FilterTransactionType {
     ALL = 'all',
     SEND = 'send',
     RECEIVE = 'receive',
-    CREATE_RED_PACKET = 'create_red_packet',
+    CREATE_LUCKY_DROP = 'create_lucky_drop',
     FILL_POOL = 'fill_pool',
 }
 
@@ -560,7 +564,7 @@ export enum TransactionType {
     SWAP = 'swap',
     RECEIVE = 'Receive',
     TRANSFER = 'transfer',
-    CREATE_RED_PACKET = 'create_red_packet',
+    CREATE_LUCKY_DROP = 'create_lucky_drop',
     FILL_POOL = 'fill_pool',
     CLAIM = 'claim',
     REFUND = 'refund',
@@ -659,6 +663,7 @@ export enum NetworkType {
     Fuse = 'Fuse',
     Metis = 'Metis',
     Optimistic = 'Optimistic',
+    Harmony = 'Harmony',
     Conflux = 'Conflux',
 }
 

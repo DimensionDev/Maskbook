@@ -12,6 +12,7 @@ import Services from '../../../service'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
 import urlcat from 'urlcat'
+import { WalletHeader } from './components/WalletHeader'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -19,19 +20,20 @@ const WalletSettings = lazy(() => import('./WalletSettings'))
 const WalletRename = lazy(() => import('./WalletRename'))
 const DeleteWallet = lazy(() => import('./DeleteWallet'))
 const CreateWallet = lazy(() => import('./CreateWallet'))
-const SwitchWallet = lazy(() => import('./SwitchWallet'))
+const SwitchWallet = lazy(() => import(/* webpackPrefetch: true */ './SwitchWallet'))
 const BackupWallet = lazy(() => import('./BackupWallet'))
 const AddToken = lazy(() => import('./AddToken'))
-const TokenDetail = lazy(() => import('./TokenDetail'))
-const SignRequest = lazy(() => import('./SignRequest'))
-const GasSetting = lazy(() => import('./GasSetting'))
-const Transfer = lazy(() => import('./Transfer'))
-const ContractInteraction = lazy(() => import('./ContractInteraction'))
-const Unlock = lazy(() => import('./Unlock'))
+const TokenDetail = lazy(() => import(/* webpackPrefetch: true */ './TokenDetail'))
+const SignRequest = lazy(() => import(/* webpackPrefetch: true */ './SignRequest'))
+const GasSetting = lazy(() => import(/* webpackPrefetch: true */ './GasSetting'))
+const Transfer = lazy(() => import(/* webpackPrefetch: true */ './Transfer'))
+const ContractInteraction = lazy(() => import(/* webpackPrefetch: true */ './ContractInteraction'))
+const Unlock = lazy(() => import(/* webpackPreload: true */ './Unlock'))
 const SetPaymentPassword = lazy(() => import('./SetPaymentPassword'))
 const WalletRecovery = lazy(() => import('./WalletRecovery'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction'))
+const ConnectWallet = lazy(() => import('./ConnectWallet'))
 
 const r = relativeRouteOf(PopupRoutes.Wallet)
 export default function Wallet() {
@@ -91,6 +93,7 @@ export default function Wallet() {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletContext.Provider>
+                <WalletHeader />
                 {loading ? (
                     <LoadingPlaceholder />
                 ) : (
@@ -116,6 +119,7 @@ export default function Wallet() {
                         <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
                         <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
                         <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
+                        <Route path={r(PopupRoutes.ConnectWallet)} element={<ConnectWallet />} />
                     </Routes>
                 )}
             </WalletContext.Provider>

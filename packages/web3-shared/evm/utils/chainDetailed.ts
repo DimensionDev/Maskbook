@@ -96,6 +96,11 @@ export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, 
         [NetworkType.xDai]: ChainId.xDai,
         [NetworkType.Aurora]: ChainId.Aurora,
         [NetworkType.Conflux]: ChainId.Conflux,
+        [NetworkType.Harmony]: ChainId.Harmony,
+        [NetworkType.Boba]: ChainId.Boba,
+        [NetworkType.Fuse]: ChainId.Fuse,
+        [NetworkType.Metis]: ChainId.Metis,
+        [NetworkType.Optimistic]: ChainId.Optimistic,
     },
     ChainId.Mainnet,
 )
@@ -115,6 +120,7 @@ const chainNameMap: Record<NetworkType, string> = {
     [NetworkType.Fuse]: 'Fuse',
     [NetworkType.Metis]: 'Metis',
     [NetworkType.Optimistic]: 'Optimistic',
+    [NetworkType.Harmony]: 'Harmony',
     [NetworkType.Conflux]: 'Conflux',
 }
 export function getNetworkTypeFromChainId(chainId: ChainId, value?: boolean) {
@@ -144,7 +150,7 @@ export function getCoinGeckoCoinId(chainId: ChainId) {
 export function getNetworkName(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) return 'Unknown Network'
-    if (chainDetailed.networkId === ChainId.Matic) return chainDetailed.fullName
+    if (chainDetailed.chainId === ChainId.Matic) return chainDetailed.fullName
     if (chainDetailed.network === 'mainnet') return chainDetailed.chain
     return upperFirst(chainDetailed.network)
 }

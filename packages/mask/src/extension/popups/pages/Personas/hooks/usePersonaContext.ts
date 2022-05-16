@@ -1,35 +1,61 @@
 import { createContainer } from 'unstated-next'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { ECKeyIdentifier, Identifier, PersonaInformation } from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST, PersonaInformation } from '@masknet/shared-base'
 import { currentPersonaIdentifier } from '../../../../../settings/settings'
-import { useAsyncRetry } from 'react-use'
+import { useAsync, useAsyncRetry } from 'react-use'
 import Services from '../../../../service'
 import { head } from 'lodash-unified'
 import { useEffect, useState } from 'react'
 import { MaskMessages } from '../../../../../utils'
+import { NextIDProof } from '@masknet/web3-providers'
+import type { Account } from '../type'
 
 function usePersonaContext() {
-    const [deletingPersona, setDeletingPersona] = useState<PersonaInformation>()
-
+    const [selectedAccount, setSelectedAccount] = useState<Account>()
+    const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
-    const { value: personas, retry } = useAsyncRetry(async () => Services.Identity.queryOwnedPersonaInformation())
+    const { value: personas, retry } = useAsyncRetry(
+        async () => Services.Identity.queryOwnedPersonaInformation(false),
+        [currentPersonaIdentifier],
+    )
+    const { value: avatar } = useAsync(async () => {
+        return Services.Identity.getPersonaAvatar(ECKeyIdentifier.from(currentIdentifier).unwrap())
+    }, [currentIdentifier])
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(retry)
     }, [retry])
 
-    const currentPersona = personas?.find((x) =>
-        x.identifier.equals(
-            Identifier.fromString(currentIdentifier, ECKeyIdentifier).unwrapOr(head(personas)?.identifier),
-        ),
+    const currentPersona = personas?.find(
+        (x) => x.identifier === ECKeyIdentifier.from(currentIdentifier).unwrapOr(head(personas)?.identifier),
     )
 
-    const otherPersonas = personas?.filter((x) => !x.identifier.equals(currentPersona?.identifier))
+    const {
+        value: proofs,
+        retry: refreshProofs,
+        loading: fetchProofsLoading,
+    } = useAsyncRetry(async () => {
+        try {
+            if (!currentPersona?.identifier.publicKeyAsHex) return EMPTY_LIST
+
+            const binding = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
+
+            return binding?.proofs ?? EMPTY_LIST
+        } catch {
+            return EMPTY_LIST
+        }
+    }, [currentPersona])
 
     return {
-        deletingPersona,
-        setDeletingPersona,
-        personas: otherPersonas,
+        selectedAccount,
+        setSelectedAccount,
+        avatar,
+        personas,
         currentPersona,
+        selectedPersona,
+        setSelectedPersona,
+        proofs,
+        refreshProofs,
+        fetchProofsLoading,
     }
 }
 

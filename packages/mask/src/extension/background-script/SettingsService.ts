@@ -1,4 +1,4 @@
-import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@masknet/shared-base'
+import { ECKeyIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 import { head } from 'lodash-unified'
 import type { InternalSettings } from '../../settings/createSettings'
 import {
@@ -9,7 +9,6 @@ import {
     pluginIDSettings,
 } from '../../settings/settings'
 import { currentDataProviderSettings } from '../../plugins/Trader/settings'
-import { queryMyPersonas } from './IdentityService'
 import {
     currentAccountSettings,
     currentNetworkSettings,
@@ -21,6 +20,7 @@ import {
     currentTokenPricesSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags, MaskMessages } from '../../../shared'
+import { queryPersonasDB } from '../../../background/database/persona/db'
 
 export * from '../../../background/services/settings'
 
@@ -63,14 +63,12 @@ export async function getWalletAllowTestChain() {
 
 export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier | undefined> {
     await currentPersonaIdentifier.readyPromise
-    const personas = (await queryMyPersonas())
+    const personas = (await queryPersonasDB({ hasPrivateKey: true }))
         .sort((a, b) => (a.createdAt > b.createdAt ? 1 : 0))
         .map((x) => x.identifier)
-    const newVal = Identifier.fromString<PersonaIdentifier>(currentPersonaIdentifier.value, ECKeyIdentifier).unwrapOr(
-        head(personas),
-    )
+    const newVal = ECKeyIdentifier.from(currentPersonaIdentifier.value).unwrapOr(head(personas))
     if (!newVal) return undefined
-    if (personas.find((x) => x.equals(newVal))) return newVal
+    if (personas.find((x) => x === newVal)) return newVal
     if (personas[0]) currentPersonaIdentifier.value = personas[0].toText()
     return personas[0]
 }

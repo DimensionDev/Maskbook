@@ -1,11 +1,10 @@
 import type { PersonaIdentifier } from '@masknet/shared-base'
-import { noop } from 'lodash-unified'
 import { MaskMessages } from '../../../../shared/messages'
-import { queryAvatarDataURL, storeAvatar } from '../../../database/avatar-cache/avatar'
+import { queryAvatarsDataURL, storeAvatar } from '../../../database/avatar-cache/avatar'
 
 export async function getPersonaAvatar(identifier: PersonaIdentifier | null | undefined) {
     if (!identifier) return null
-    return queryAvatarDataURL(identifier).catch(noop)
+    return queryAvatarsDataURL([identifier]).then((x) => x.get(identifier))
 }
 
 export async function updatePersonaAvatar(identifier: PersonaIdentifier | null | undefined, avatar: Blob) {
