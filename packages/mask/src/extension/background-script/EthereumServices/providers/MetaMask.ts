@@ -50,8 +50,7 @@ async function onMessage(message: {
 }
 
 export async function createProvider() {
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    if (provider && provider.chainId !== null) return provider
+    if (provider?.chainId) return provider
     provider = createMetaMaskProvider()
 
     // wait for building the connection

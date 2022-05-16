@@ -97,7 +97,7 @@ export function PreviewDialog(props: PreviewDialogProps) {
                 title={type === 'print' ? t.print_preview() : t.download_preview()}
                 open={open}
                 onClose={onClose}>
-                <DialogContent sx={{ marginTop: '-24px', padding: '0' }}>
+                <DialogContent sx={{ marginTop: '-24px', padding: 0 }}>
                     <ComponentToPrint {...props} ref={ref} height={height} />
 
                     <Box padding="0 24px 24px">

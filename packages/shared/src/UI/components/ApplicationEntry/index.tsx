@@ -18,7 +18,7 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => (
         '&:hover': {
             transform: 'scale(1.02) translateY(-2px)',
             background: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black,
-            boxShadow: theme.palette.mode === 'light' ? '0px 5px 8px rgba(0, 0, 0, 0.05)' : 'none',
+            boxShadow: theme.palette.mode === 'light' ? '0 5px 8px rgba(0, 0, 0, 0.05)' : 'none',
         },
     },
     applicationImg: {
