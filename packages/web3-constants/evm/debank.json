@@ -19,8 +19,8 @@
         "Aurora": "aurora",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Moonbeam": "mobm",
         "Harmony": "hmy",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Moonbeam": "mobm"
     }
 }

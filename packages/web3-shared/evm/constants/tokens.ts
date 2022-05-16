@@ -53,6 +53,7 @@ export const ZLK = createERC20Tokens('ZLK_ADDRESS', 'Zenlink Network Token ', 'Z
 export const VIPER = createERC20Tokens('VIPER_ADDRESS', 'Viper', 'VIPER', 18)
 export const OPENX = createERC20Tokens('OPENX_ADDRESS', 'OpenSwap Token', 'OpenX', 18)
 export const JEWEL = createERC20Tokens('JEWEL_ADDRESS', 'Jewels', 'JEWEL', 18)
+export const GLINT = createERC20Tokens('GLINT_ADDRESS', 'Beamswap Token', 'GLINT', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',

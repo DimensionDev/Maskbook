@@ -19,8 +19,8 @@
         "Aurora": "14803",
         "Aurora_Testnet": "",
         "Conflux": "7334",
-        "Moonbeam": "6836",
         "Harmony": "3945",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Moonbeam": "6836"
     }
 }

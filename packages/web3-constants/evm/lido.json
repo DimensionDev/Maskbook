@@ -19,9 +19,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Moonbeam": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Moonbeam": ""
     },
     "LIDO_REFERRAL_ADDRESS": {
         "Mainnet": "0x934b510d4c9103e6a87aef13b816fb080286d649",
@@ -43,8 +43,8 @@
         "Aurora": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Aurora_Testnet": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Conflux": "",
-        "Moonbeam": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Moonbeam": ""
     }
 }

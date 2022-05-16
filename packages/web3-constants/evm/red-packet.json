@@ -19,9 +19,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Moonbeam": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Moonbeam": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V2": {
         "Mainnet": "0x8D8912E1237F9FF3EF661F32743CFB276E052F98",
@@ -43,9 +43,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Moonbeam": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Moonbeam": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V3": {
         "Mainnet": "",
@@ -67,9 +67,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Moonbeam": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Moonbeam": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4": {
         "Mainnet": "0xaBBe1101FD8fa5847c452A6D70C8655532B03C33",
@@ -91,9 +91,9 @@
         "Aurora": "0x19f179D7e0D7d9F9d5386afFF64271D98A91615B",
         "Aurora_Testnet": "0xdB93cCd481012bB5D1E2c8d0aF7C5f2940c00fdC",
         "Conflux": "0x96c7d011cdfd467f551605f0f5fce279f86f4186",
-        "Moonbeam": "0x578a7Fee5f0D8CEc7d00578Bf37374C5b95C4b98",
         "Harmony": "0xab7b1be4233a04e5c43a810e75657eced8e5463b",
-        "Harmony_Test": "0x96c7d011cdfd467f551605f0f5fce279f86f4186"
+        "Harmony_Test": "0x96c7d011cdfd467f551605f0f5fce279f86f4186",
+        "Moonbeam": "0x578a7Fee5f0D8CEc7d00578Bf37374C5b95C4b98"
     },
     "HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT": {
         "Mainnet": 12939427,
@@ -115,9 +115,9 @@
         "Aurora": 57552338,
         "Aurora_Testnet": 77918765,
         "Conflux": 37670572,
-        "Moonbeam": 1314596,
         "Harmony": 24134162,
-        "Harmony_Test": 22701101
+        "Harmony_Test": 22701101,
+        "Moonbeam": 1314596
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mainnet",
@@ -139,8 +139,8 @@
         "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-aurora",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Moonbeam": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-moobeam",
         "Harmony": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-harmony",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Moonbeam": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-moobeam"
     }
 }

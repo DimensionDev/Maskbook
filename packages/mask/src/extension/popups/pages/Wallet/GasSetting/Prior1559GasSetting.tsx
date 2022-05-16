@@ -97,7 +97,6 @@ const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.BSC]: pow10(9).multipliedBy(5), // 5 Gwei
     [ChainId.Conflux]: pow10(9).multipliedBy(5), // 5 Gwei
     [ChainId.Matic]: pow10(9).multipliedBy(30), // 30 Gwei
-    [ChainId.Moonbeam]: pow10(9).multipliedBy(1), // 1 Gwei
 }
 
 export const Prior1559GasSetting = memo(() => {

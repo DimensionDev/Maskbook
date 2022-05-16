@@ -19,9 +19,9 @@
         "Aurora": "aurora",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Moonbeam": "moonbeam",
         "Harmony": "harmony",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Moonbeam": "moonbeam"
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -43,8 +43,8 @@
         "Aurora": "ethereum",
         "Aurora_Testnet": "",
         "Conflux": "conflux-token",
-        "Moonbeam": "moonbeam",
         "Harmony": "harmony",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Moonbeam": "moonbeam"
     }
 }
