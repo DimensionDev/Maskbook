@@ -45,7 +45,6 @@ to {
             flexWrap: 'wrap',
         },
         footer: {
-            padding: 12,
             width: '100%',
             display: 'flex',
             gap: theme.spacing(2),

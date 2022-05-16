@@ -16,7 +16,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { isZero, ZERO, isGreaterThan } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { Box, Card, Grid, Link, Typography } from '@mui/material'
+import { Box, Card, Link, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { BigNumber } from 'bignumber.js'
@@ -152,7 +152,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         },
     },
     actionFooter: {
-        padding: 12,
+        padding: 0,
+        display: 'flex',
     },
     actionButton: {
         width: '100%',
@@ -590,7 +591,7 @@ export function ITO(props: ITO_Props) {
 
     const FooterBuyerWithLockTimeButton = useMemo(
         () => (
-            <Grid item xs={noRemain || listOfStatus.includes(ITO_Status.expired) ? 12 : 6}>
+            <Box sx={{ flex: 1, padding: 1.5 }}>
                 {(() => {
                     if (isUnlocked) return FooterBuyerLockedButton
 
@@ -605,7 +606,7 @@ export function ITO(props: ITO_Props) {
                         </ActionButton>
                     )
                 })()}
-            </Grid>
+            </Box>
         ),
         [noRemain, listOfStatus, isUnlocked],
     )
@@ -614,21 +615,18 @@ export function ITO(props: ITO_Props) {
         () => (
             <div>
                 {(() => {
-                    if (hasLockTime)
-                        return (
-                            <Grid container spacing={2}>
-                                {FooterBuyerWithLockTimeButton}
-                            </Grid>
-                        )
+                    if (hasLockTime) return FooterBuyerWithLockTimeButton
                     if (canWithdraw) {
                         return (
-                            <ActionButton
-                                onClick={onWithdraw}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_withdraw')}
-                            </ActionButton>
+                            <Box sx={{ flex: 1, padding: 1.5 }}>
+                                <ActionButton
+                                    onClick={onWithdraw}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_withdraw')}
+                                </ActionButton>
+                            </Box>
                         )
                     }
                     return null
@@ -717,14 +715,16 @@ export function ITO(props: ITO_Props) {
 
                     if (!isRegionAllow) {
                         return (
-                            <ActionButton
-                                disabled
-                                onClick={() => undefined}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_region_ban')}
-                            </ActionButton>
+                            <Box sx={{ flex: 1, padding: 1.5 }}>
+                                <ActionButton
+                                    disabled
+                                    onClick={() => undefined}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_region_ban')}
+                                </ActionButton>
+                            </Box>
                         )
                     }
 
@@ -738,14 +738,16 @@ export function ITO(props: ITO_Props) {
 
                     if (loadingTradeInfo || loadingAvailability) {
                         return (
-                            <ActionButton
-                                disabled
-                                onClick={() => undefined}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_loading')}
-                            </ActionButton>
+                            <Box sx={{ flex: 1, padding: 1.5 }}>
+                                <ActionButton
+                                    disabled
+                                    onClick={() => undefined}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_loading')}
+                                </ActionButton>
+                            </Box>
                         )
                     }
 
@@ -753,13 +755,15 @@ export function ITO(props: ITO_Props) {
 
                     if (canWithdraw) {
                         return (
-                            <ActionButton
-                                onClick={onWithdraw}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_withdraw')}
-                            </ActionButton>
+                            <Box sx={{ flex: 1, padding: 1.5 }}>
+                                <ActionButton
+                                    onClick={onWithdraw}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_withdraw')}
+                                </ActionButton>
+                            </Box>
                         )
                     }
 
@@ -768,8 +772,8 @@ export function ITO(props: ITO_Props) {
                         !isNativeTokenAddress(qualificationAddress)
                     ) {
                         return (
-                            <Grid container spacing={2} className={classes.grid}>
-                                <Grid item xs={6} style={{ padding: 12 }}>
+                            <>
+                                <Box style={{ padding: 12, flex: 1 }}>
                                     <ActionButton
                                         startIcon={<SharedIcon style={{ fontSize: 18 }} />}
                                         onClick={onShareSuccess}
@@ -778,8 +782,8 @@ export function ITO(props: ITO_Props) {
                                         className={classes.actionButton}>
                                         {t('plugin_ito_share')}
                                     </ActionButton>
-                                </Grid>
-                                <Grid item xs={6} style={{ padding: 0 }}>
+                                </Box>
+                                <Box style={{ padding: 12, flex: 1 }}>
                                     <EthereumChainBoundary chainId={payload.chain_id}>
                                         <EthereumWalletConnectedBoundary
                                             hideRiskWarningConfirmed
@@ -801,8 +805,8 @@ export function ITO(props: ITO_Props) {
                                             </ActionButton>
                                         </EthereumWalletConnectedBoundary>
                                     </EthereumChainBoundary>
-                                </Grid>
-                            </Grid>
+                                </Box>
+                            </>
                         )
                     }
 
@@ -810,8 +814,8 @@ export function ITO(props: ITO_Props) {
 
                     if (listOfStatus.includes(ITO_Status.waited)) {
                         return (
-                            <Grid container spacing={2}>
-                                <Grid item xs={6}>
+                            <>
+                                <Box style={{ padding: 12, flex: 1 }}>
                                     <ActionButton
                                         onClick={onUnlock}
                                         variant="contained"
@@ -819,9 +823,9 @@ export function ITO(props: ITO_Props) {
                                         className={classes.actionButton}>
                                         {t('plugin_ito_unlock_in_advance')}
                                     </ActionButton>
-                                </Grid>
+                                </Box>
                                 {shareText ? (
-                                    <Grid item xs={6}>
+                                    <Box style={{ flex: 1, padding: 12 }}>
                                         <ActionButton
                                             startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
                                             onClick={onShare}
@@ -830,16 +834,16 @@ export function ITO(props: ITO_Props) {
                                             className={classes.actionButton}>
                                             {t('plugin_ito_share')}
                                         </ActionButton>
-                                    </Grid>
+                                    </Box>
                                 ) : undefined}
-                            </Grid>
+                            </>
                         )
                     }
 
                     if (listOfStatus.includes(ITO_Status.started)) {
                         return (
-                            <Grid container spacing={2}>
-                                <Grid item xs={6}>
+                            <>
+                                <Box style={{ flex: 1, padding: 12 }}>
                                     <ActionButton
                                         onClick={onClaim}
                                         variant="contained"
@@ -847,8 +851,8 @@ export function ITO(props: ITO_Props) {
                                         className={classes.actionButton}>
                                         {t('plugin_ito_enter')}
                                     </ActionButton>
-                                </Grid>
-                                <Grid item xs={6}>
+                                </Box>
+                                <Box style={{ flex: 1, padding: 12 }}>
                                     <ActionButton
                                         startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
                                         onClick={onShareSuccess}
@@ -857,8 +861,8 @@ export function ITO(props: ITO_Props) {
                                         className={classes.actionButton}>
                                         {t('plugin_ito_share')}
                                     </ActionButton>
-                                </Grid>
-                            </Grid>
+                                </Box>
+                            </>
                         )
                     }
 

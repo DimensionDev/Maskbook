@@ -127,7 +127,7 @@ export function Snapshot() {
                     </Paper>
                 </CardContent>
             </Card>
-            <Box style={{ padding: 4 }}>
+            <Box style={{ padding: 12 }}>
                 <EthereumWalletConnectedBoundary
                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                     classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}

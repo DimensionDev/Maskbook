@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Box, Card, Typography, Button, Grid, Avatar, CircularProgress } from '@mui/material'
+import { Box, Card, Typography, Button, Avatar, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
@@ -159,8 +159,8 @@ export function PreviewCard(props: PreviewCardProps) {
                     </div>
                 </div>
             </Card>
-            <Grid container className={classes.buttons} spacing={2}>
-                <Grid item xs={6} sx={{ padding: 1.25 }}>
+            <Box sx={{ display: 'flex', width: '100%' }}>
+                <Box sx={{ flex: 1, padding: 1.5 }}>
                     <Button
                         variant="outlined"
                         fullWidth
@@ -174,15 +174,15 @@ export function PreviewCard(props: PreviewCardProps) {
                         href={urlcat('https://gitcoin.co', grant.url)}>
                         {t('plugin_gitcoin_view_on')}
                     </Button>
-                </Grid>
-                <Grid item xs={6} sx={{ padding: 1.25 }}>
+                </Box>
+                <Box sx={{ flex: 1, padding: 1.5 }}>
                     <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
                         <Button variant="contained" fullWidth color="primary" onClick={onDonate}>
                             {t('plugin_gitcoin_donate')}
                         </Button>
                     </EthereumChainBoundary>
-                </Grid>
-            </Grid>
+                </Box>
+            </Box>
         </>
     )
 }

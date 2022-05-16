@@ -187,10 +187,10 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             <ShadowRootTooltip title={tips ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
                 <Box
                     className={props.className}
+                    sx={{ flex: 1 }}
                     display="flex"
                     flexDirection="column"
-                    alignItems="center"
-                    style={{ padding: 12 }}>
+                    alignItems="center">
                     {children}
                 </Box>
             </ShadowRootTooltip>
@@ -212,6 +212,10 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                             '&:hover': {
                                 backgroundColor: MaskColorVar.buttonPluginBackground,
                             },
+                            margin: 0,
+                            lineHeight: 0,
+                            paddingTop: 1.25,
+                            paddingBottom: 1.25,
                         }}
                         onClick={openSelectProviderDialog}>
                         {t('plugin_wallet_connect_wallet')}

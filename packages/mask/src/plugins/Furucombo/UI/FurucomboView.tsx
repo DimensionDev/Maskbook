@@ -1,6 +1,6 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, useChainId } from '@masknet/web3-shared-evm'
-import { Card, CardContent, Tabs, Tab, Typography, Paper, CircularProgress, Button, Stack } from '@mui/material'
+import { Card, CardContent, Tabs, Tab, Typography, Paper, CircularProgress, Button, Stack, Box } from '@mui/material'
 import { useState } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -116,7 +116,9 @@ export function FurucomboView(props: PoolViewProps) {
                     </Paper>
                 </CardContent>
             </Card>
-            <EthereumChainBoundary chainId={props.chainId} />
+            <Box sx={{ padding: 1.5 }}>
+                <EthereumChainBoundary chainId={props.chainId} />
+            </Box>
         </>
     )
 }

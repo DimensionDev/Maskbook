@@ -7,13 +7,16 @@ import { useControlledDialog } from '../../../utils/hooks/useControlledDialog'
 import { MakeOfferDialog } from './MakeOfferDialog'
 import { PostListingDialog } from './PostListingDialog'
 import { CheckoutDialog } from './CheckoutDialog'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { useChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {},
+        root: {
+            width: 'calc(100% - 24px)',
+        },
         button: {
             flex: 1,
-            margin: theme.spacing(0, 0.5),
             backgroundColor: MaskColorVar.buttonPluginBackground,
             '&:hover': {
                 backgroundColor: MaskColorVar.buttonPluginBackground,
@@ -30,6 +33,7 @@ export function ActionBar(props: ActionBarProps) {
     const { classes } = useStyles()
     const { asset, assetOrder } = CollectibleState.useContainer()
     const assets = asset.value
+    const chainId = useChainId()
 
     const {
         open: openCheckoutDialog,
@@ -45,53 +49,55 @@ export function ActionBar(props: ActionBarProps) {
 
     if (!asset.value) return null
     return (
-        <Box className={classes.root} sx={{ margin: 1 }} display="flex" justifyContent="center">
-            {!asset.value.isOwner && asset.value.is_auction && assetOrder.value ? (
-                <ActionButton
-                    className={classes.button}
-                    color="primary"
-                    variant="contained"
-                    onClick={onOpenCheckoutDialog}>
-                    {t('plugin_collectible_buy_now')}
-                </ActionButton>
-            ) : null}
-            {!asset.value.isOwner && asset.value.is_auction ? (
-                <ActionButton
-                    className={classes.button}
-                    color="primary"
-                    fullWidth
-                    variant="contained"
-                    onClick={onOpenOfferDialog}>
-                    {t('plugin_collectible_place_bid')}
-                </ActionButton>
-            ) : null}
+        <Box className={classes.root} sx={{ padding: 1.5 }} display="flex" justifyContent="center">
+            <EthereumChainBoundary chainId={chainId}>
+                {!asset.value.isOwner && asset.value.is_auction && assetOrder.value ? (
+                    <ActionButton
+                        className={classes.button}
+                        color="primary"
+                        variant="contained"
+                        onClick={onOpenCheckoutDialog}>
+                        {t('plugin_collectible_buy_now')}
+                    </ActionButton>
+                ) : null}
+                {!asset.value.isOwner && asset.value.is_auction ? (
+                    <ActionButton
+                        className={classes.button}
+                        color="primary"
+                        fullWidth
+                        variant="contained"
+                        onClick={onOpenOfferDialog}>
+                        {t('plugin_collectible_place_bid')}
+                    </ActionButton>
+                ) : null}
 
-            {!asset.value.isOwner && !asset.value.is_auction ? (
-                <ActionButton
-                    className={classes.button}
-                    color="primary"
-                    variant="contained"
-                    onClick={onOpenOfferDialog}>
-                    {t('plugin_collectible_make_offer')}
-                </ActionButton>
-            ) : null}
-            {assets?.isOwner ? (
-                <ActionButton
-                    className={classes.button}
-                    color="primary"
-                    variant="contained"
-                    onClick={onOpenListingDialog}>
-                    {t('plugin_collectible_sell')}
-                </ActionButton>
-            ) : null}
-            <CheckoutDialog
-                asset={asset}
-                order={assetOrder}
-                open={openCheckoutDialog}
-                onClose={onCloseCheckoutDialog}
-            />
-            <MakeOfferDialog asset={asset} open={openOfferDialog} onClose={onCloseOfferDialog} />
-            <PostListingDialog asset={asset} open={openListingDialog} onClose={onCloseListingDialog} />
+                {!asset.value.isOwner && !asset.value.is_auction ? (
+                    <ActionButton
+                        className={classes.button}
+                        color="primary"
+                        variant="contained"
+                        onClick={onOpenOfferDialog}>
+                        {t('plugin_collectible_make_offer')}
+                    </ActionButton>
+                ) : null}
+                {assets?.isOwner ? (
+                    <ActionButton
+                        className={classes.button}
+                        color="primary"
+                        variant="contained"
+                        onClick={onOpenListingDialog}>
+                        {t('plugin_collectible_sell')}
+                    </ActionButton>
+                ) : null}
+                <CheckoutDialog
+                    asset={asset}
+                    order={assetOrder}
+                    open={openCheckoutDialog}
+                    onClose={onCloseCheckoutDialog}
+                />
+                <MakeOfferDialog asset={asset} open={openOfferDialog} onClose={onCloseOfferDialog} />
+                <PostListingDialog asset={asset} open={openListingDialog} onClose={onCloseListingDialog} />
+            </EthereumChainBoundary>
         </Box>
     )
 }

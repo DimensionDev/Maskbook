@@ -266,9 +266,11 @@ export function Collectible(props: CollectibleProps) {
                     </Paper>
                 </CardContent>
             </CollectibleCard>
-            <EthereumChainBoundary chainId={expectChainId ?? chainId}>
-                <ActionBar />
-            </EthereumChainBoundary>
+            <Box sx={{ display: 'flex', width: '100%', padding: 1.5 }}>
+                <EthereumChainBoundary chainId={expectChainId ?? chainId}>
+                    <ActionBar />
+                </EthereumChainBoundary>
+            </Box>
         </>
     )
 }

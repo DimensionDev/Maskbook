@@ -13,7 +13,6 @@ const useStyles = makeStyles()((theme) => {
         root: {},
         button: {
             flex: 1,
-            margin: `0 ${theme.spacing(0.5)}`,
             backgroundColor: MaskColorVar.buttonPluginBackground,
             color: 'white',
             '&:hover': {
@@ -45,7 +44,7 @@ export function ActionBar(props: ActionBarProps) {
     if (!asset.value) return null
 
     return (
-        <Box className={classes.root} sx={{ margin: 1 }} display="flex" justifyContent="center">
+        <Box className={classes.root} display="flex" justifyContent="center">
             {!assetSource?.isSoldOut &&
             !assetSource?.is_owner &&
             assetSource?.is24Auction &&
