@@ -45,13 +45,14 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
                 : {}),
         },
         tooltip: {
-            backgroundColor: '#111432',
+            backgroundColor: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white,
         },
         tooltipHint: {
             fontSize: 14,
+            color: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black,
         },
         arrow: {
-            color: '#111432',
+            color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white,
         },
         recommendFeatureApplicationBox: {
             width: 260,
@@ -133,10 +134,10 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
         <ShadowRootTooltip
             PopperProps={{
                 disablePortal: true,
-                placement: 'top',
+                placement: recommendFeature ? 'bottom' : 'top',
             }}
             classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-            placement="top"
+            placement={recommendFeature ? 'bottom' : 'top'}
             arrow
             disableHoverListener={!tooltipHint}
             title={<Typography className={classes.tooltipHint}>{tooltipHint}</Typography>}>
