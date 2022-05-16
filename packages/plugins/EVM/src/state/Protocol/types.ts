@@ -78,6 +78,6 @@ export interface Middleware<T> {
 }
 
 export interface Translator {
-    encode?(context: Context): void
-    decode?(context: Context): void
+    encode?(context: Context): Promise<void>
+    decode?(context: Context): Promise<void>
 }

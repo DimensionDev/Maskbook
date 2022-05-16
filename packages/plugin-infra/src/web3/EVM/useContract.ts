@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import type { AbiItem } from 'web3-utils'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, createContract } from '@masknet/web3-shared-evm'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
@@ -12,7 +13,7 @@ import { useWeb3 } from '../useWeb3'
  * @param ABI
  * @param chainId
  */
-export function useContract<T extends BaseContract>(chainId?: ChainId, address = '', ABI: AbiItem[] = []) {
+export function useContract<T extends BaseContract>(chainId?: ChainId, address = '', ABI: AbiItem[] = EMPTY_LIST) {
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     return useMemo(() => createContract<T>(web3, address, ABI), [web3, address, ABI])
 }

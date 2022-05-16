@@ -16,6 +16,7 @@ import { TransactionWatcher } from './TransactionWatcher'
 import type { EVM_Web3State } from './Protocol/types'
 import { IdentityService } from './IdentityService'
 import { TokenIcon } from './TokenIcon'
+import { GasOptions } from './GasOptions'
 
 export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3State {
     const Provider_ = new Provider(context)
@@ -31,6 +32,7 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3S
         }),
         RiskWarning: new RiskWarning(context),
         Settings: new Settings(context),
+        GasOptions: new GasOptions(context),
         Token: new Token(context, {
             account: Provider_.account,
         }),

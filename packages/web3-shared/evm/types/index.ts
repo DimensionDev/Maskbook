@@ -124,6 +124,7 @@ export enum EthereumMethodType {
     ETH_GET_CODE = 'eth_getCode',
     ETH_GAS_PRICE = 'eth_gasPrice',
     ETH_GET_BLOCK_BY_NUMBER = 'eth_getBlockByNumber',
+    ETH_GET_BLOCK_BY_HASH = 'eth_getBlockByHash',
     ETH_BLOCK_NUMBER = 'eth_blockNumber',
     ETH_GET_BALANCE = 'eth_getBalance',
     ETH_GET_TRANSACTION_BY_HASH = 'eth_getTransactionByHash',

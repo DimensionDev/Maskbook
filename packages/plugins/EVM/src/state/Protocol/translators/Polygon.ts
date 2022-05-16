@@ -3,7 +3,7 @@ import type { Context } from '../types'
 import { Base } from './Base'
 
 export class Polygon extends Base {
-    override encode(context: Context): void {
+    override async encode(context: Context): Promise<void> {
         if (!context.config) return
 
         // the current version of metamask doesn't support polygon with EIP1559

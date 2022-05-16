@@ -1,4 +1,6 @@
 import { first } from 'lodash-unified'
+import Web3 from 'web3'
+import { AbiItem, toHex } from 'web3-utils'
 import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32'
@@ -25,6 +27,7 @@ import {
     createERC721Contract,
     createERC721Metadata,
     createERC721Collection,
+    createWeb3Provider,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -41,7 +44,6 @@ import { Providers } from './provider'
 import type { EVM_Connection, EVM_Web3ConnectionOptions } from './types'
 import { getReceiptStatus } from './utils'
 import { Web3StateSettings } from '../../settings'
-import { AbiItem, toHex } from 'web3-utils'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
 
 const EMPTY_STRING = () => Promise.resolve('')
@@ -53,6 +55,8 @@ function isUniversalMethod(method: EthereumMethodType) {
         EthereumMethodType.ETH_GAS_PRICE,
         EthereumMethodType.ETH_BLOCK_NUMBER,
         EthereumMethodType.ETH_GET_BALANCE,
+        EthereumMethodType.ETH_GET_BLOCK_BY_NUMBER,
+        EthereumMethodType.ETH_GET_BLOCK_BY_HASH,
         EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
         EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
         EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
@@ -342,7 +346,10 @@ class Connection implements EVM_Connection {
     }
 
     getWeb3(options?: EVM_Web3ConnectionOptions) {
-        return Providers[options?.providerType ?? this.providerType].createWeb3(options?.chainId ?? this.chainId)
+        const web3 = new Web3(
+            createWeb3Provider((requestArguments: RequestArguments) => this.hijackedRequest(requestArguments, options)),
+        )
+        return Promise.resolve(web3)
     }
 
     async getWeb3Contract<T extends BaseContract>(

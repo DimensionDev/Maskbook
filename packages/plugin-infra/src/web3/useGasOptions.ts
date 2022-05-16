@@ -11,10 +11,10 @@ export function useGasOptions<T extends NetworkPluginID>(pluginID?: T, currencyT
     ) => Promise<GasOptions>
 
     const chainId = useChainId(pluginID)
-    const { GasOption } = useWeb3State(pluginID)
+    const { GasOptions } = useWeb3State(pluginID)
 
     return useAsyncRetry(async () => {
-        if (!chainId || !GasOption) return
-        return (GasOption.getGasOptions as GetGasOptions)(chainId, currencyType)
-    }, [chainId, currencyType, GasOption])
+        if (!chainId || !GasOptions) return
+        return (GasOptions.getGasOptions as GetGasOptions)(chainId, currencyType)
+    }, [chainId, currencyType, GasOptions])
 }

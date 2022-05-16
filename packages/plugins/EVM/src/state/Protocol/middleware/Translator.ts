@@ -50,8 +50,8 @@ export class Translator implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
         const translator = this.translators[context.chainId]
 
-        if (translator?.encode) translator.encode(context)
+        if (translator?.encode) await translator.encode(context)
         await next()
-        if (translator?.decode) translator.decode(context)
+        if (translator?.decode) await translator.decode(context)
     }
 }

@@ -666,7 +666,7 @@ export interface NameServiceState<ChainId, DomainBook = Record<string, string>> 
     /** get domain name of address */
     reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
 }
-export interface GasOptionState<ChainId> {
+export interface GasOptionsState<ChainId> {
     /** get all gas options */
     getGasOptions?: (chainId: ChainId, currencyType?: CurrencyType) => Promise<GasOptions>
 }

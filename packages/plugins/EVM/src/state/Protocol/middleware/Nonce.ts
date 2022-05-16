@@ -86,12 +86,11 @@ export class Nonce implements Middleware<Context> {
     private cache = new Map<string, NonceManager>()
 
     constructor() {
-        const { chainId } = SharedContextSettings.value
-
-        // reset all nonce if the chain id of mask wallet was changed
-        chainId.subscribe(() => {
-            this.resetAllNonce()
-        })
+        // const { chainId } = SharedContextSettings.value
+        // // reset all nonce if the chain id of mask wallet was changed
+        // chainId.subscribe(() => {
+        //     this.resetAllNonce()
+        // })
     }
 
     private getManager(address: string, connection: EVM_Connection) {

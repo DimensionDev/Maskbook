@@ -11,6 +11,13 @@ import {
 import { getError, hasError } from './error'
 import type { Context, EVM_Connection, EVM_Web3ConnectionOptions, Middleware } from './types'
 import { SharedContextSettings, Web3StateSettings } from '../../settings'
+import { AddressBook } from './middleware/AddressBook'
+import { Interceptor } from './middleware/Interceptor'
+import { Nonce } from './middleware/Nonce'
+import { Popup } from './middleware/Popup'
+import { Squash } from './middleware/Squash'
+import { RecentTransaction } from './middleware/Transaction'
+import { Translator } from './middleware/Translator'
 
 class Composer<T> {
     private listOfMiddleware: Middleware<T>[] = []
@@ -183,9 +190,13 @@ class RequestContext implements Context {
 
 const composer = new Composer<Context>()
 
-export function use(middleware: Middleware<Context>) {
-    return composer.use(middleware)
-}
+composer.use(new Squash())
+composer.use(new Nonce())
+composer.use(new Translator())
+composer.use(new Interceptor())
+composer.use(new Popup())
+composer.use(new RecentTransaction())
+composer.use(new AddressBook())
 
 export function dispatch(context: Context, next: () => Promise<void>) {
     return composer.dispatch(context, next)

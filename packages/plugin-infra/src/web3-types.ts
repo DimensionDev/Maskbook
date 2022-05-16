@@ -5,7 +5,7 @@ import type {
     NameServiceState,
     RiskWarningState,
     SettingsState,
-    GasOptionState,
+    GasOptionsState,
     TokenState,
     TokenPriceState,
     TokenListState,
@@ -44,7 +44,7 @@ export declare namespace Web3Plugin {
             NameService?: NameServiceState<ChainId>
             RiskWarning?: RiskWarningState
             Settings?: SettingsState
-            GasOption?: GasOptionState<ChainId>
+            GasOptions?: GasOptionsState<ChainId>
             Token?: TokenState<ChainId, SchemaType>
             TokenIcon?: TokenIconState<ChainId>
             TokenPrice?: TokenPriceState<ChainId>
