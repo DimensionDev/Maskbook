@@ -15,7 +15,7 @@ const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
 
 const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
     [ExtensionSite.Dashboard]: /dashboard\.html/i,
-    [ExtensionSite.Popup]: /popup\.html/i,
+    [ExtensionSite.Popup]: /popups\.html/i,
 }
 
 function getEnhanceableSiteType() {

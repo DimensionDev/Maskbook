@@ -6,8 +6,5 @@ export function useZeroAddress<T extends NetworkPluginID>(pluginID?: T, options?
     type GetZeroAddress = (chainId?: Web3Helper.Definition[T]['ChainId']) => string
 
     const { Others } = useWeb3State(pluginID)
-    const zeroAddress = (Others?.getZeroAddress as GetZeroAddress)(options?.chainId)
-
-    if (!zeroAddress) throw new Error('No zero address.')
-    return zeroAddress
+    return (Others?.getZeroAddress as GetZeroAddress)(options?.chainId) ?? ''
 }

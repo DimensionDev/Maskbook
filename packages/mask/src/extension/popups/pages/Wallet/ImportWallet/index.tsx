@@ -185,11 +185,9 @@ const ImportWallet = memo(() => {
                             break
                         case tabs.privateKey:
                             const privateKeyWallet = await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey)
-                            if (!currentMaskWalletAccountSettings.value) {
-                                await WalletRPC.updateMaskAccount({
-                                    account: privateKeyWallet,
-                                })
-                            }
+                            await WalletRPC.updateMaskAccount({
+                                account: privateKeyWallet,
+                            })
                             await WalletRPC.selectMaskAccount([privateKeyWallet])
 
                             await connection?.connect({

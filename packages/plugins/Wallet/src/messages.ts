@@ -10,6 +10,10 @@ import type {
 import type { ChainId, SchemaType, TransactionState } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants'
 
+export type ApplicationDialogEvent = {
+    open: boolean
+}
+
 export type TransactionDialogEvent =
     | {
           open: true
@@ -111,6 +115,11 @@ export interface WalletMessage<ChainId, Transaction> {
      * Wallet status dialog
      */
     walletStatusDialogUpdated: WalletStatusDialogEvent
+
+    /**
+     * Application dialog
+     */
+    ApplicationDialogUpdated: ApplicationDialogEvent
 
     /**
      * Gas setting dialog

@@ -22,6 +22,7 @@ export const InMemoryStorages = {
 }
 
 const ApplicationEntryUnlistedListKey = 'application_entry_unlisted_list'
+
 export const PersistentStorages = {
     Plugin: createPersistentKVStorage('plugin', {}),
     Settings: createPersistentKVStorage('settings', {
