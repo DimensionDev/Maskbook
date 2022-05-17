@@ -1,4 +1,5 @@
-import { resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
+import { explorerResolver } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { Avatar, Button, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
@@ -9,6 +10,7 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { useAvatar } from '../hooks/useManager'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -64,7 +66,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
     const { t } = useI18N()
 
     const blockie = useAvatar(pool.managerAddress)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     // #region manager share
     const managerShare = new BigNumber(pool.balanceOfManager)
@@ -108,7 +110,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
                                         <Link
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            href={resolveAddressLinkOnExplorer(chainId, pool.managerAddress)}
+                                            href={explorerResolver.addressLink(chainId, pool.managerAddress)}
                                         />
                                     ),
                                 }}
