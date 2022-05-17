@@ -19,7 +19,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { useI18N } from '../locales'
 import { TabsCreateFarm, TokenType, TransactionStatus, PageInterface, PagesType, TabsReferralFarms } from '../types'
 import { ATTRACE_FEE_PERCENT, NATIVE_TOKEN, META_KEY } from '../constants'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { PluginReferralMessages, SelectTokenUpdated } from '../messages'
 import { roundValue, getRequiredChainId } from '../helpers'
 import { runCreateERC20PairFarm } from './utils/referralFarm'
@@ -80,8 +80,8 @@ export function CreateFarm(props: PageInterface) {
     const account = useAccount()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const currentIdentity = useCurrentIdentity()
+    const { value: linkedPersona } = useCurrentLinkedPersona()
     const { showSnackbar } = useCustomSnackbar()
-    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
@@ -171,7 +171,7 @@ export function CreateFarm(props: PageInterface) {
             referral_token_symbol: symbol,
             referral_token_icon: logoURI,
             referral_token_chain_id: currentChainId,
-            sender: senderName ?? '',
+            sender: currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User',
         }
         if (selectedReferralData) {
             attachMetadata(META_KEY, JSON.parse(JSON.stringify(selectedReferralData)))
@@ -181,7 +181,7 @@ export function CreateFarm(props: PageInterface) {
 
         closeApplicationBoardDialog()
         props.onClose?.()
-    }, [tokenRefer, showSnackbar, currentChainId, senderName, props.onClose])
+    }, [tokenRefer, showSnackbar, currentChainId, props.onClose, currentIdentity, linkedPersona])
 
     const onConfirmedDeposit = useCallback(
         (txHash: string) => {

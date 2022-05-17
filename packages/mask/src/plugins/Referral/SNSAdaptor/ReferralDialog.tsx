@@ -37,7 +37,6 @@ const useStyles = makeStyles<{ hideBackBtn?: boolean }>()((theme, { hideBackBtn 
     title: {
         display: 'flex',
         justifyContent: 'space-between',
-        paddingLeft: '30px',
     },
     powered: {
         fontWeight: 400,

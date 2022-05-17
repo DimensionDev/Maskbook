@@ -16,7 +16,7 @@ import type { ReferralMetaData } from '../types'
 import type { Coin } from '../../Trader/types'
 import { MASK_REFERRER, META_KEY, SWAP_CHAIN_ID } from '../constants'
 import { useI18N } from '../locales'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { ReferralRPC } from '../messages'
 import {
@@ -63,6 +63,7 @@ export function FarmPost(props: FarmPostProps) {
     const account = useAccount()
     const t = useI18N()
     const currentIdentity = useCurrentIdentity()
+    const { value: linkedPersona } = useCurrentLinkedPersona()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     const { showSnackbar } = useCustomSnackbar()
     const { ERC20 } = useTokenListConstants(farmChainId)
@@ -99,8 +100,7 @@ export function FarmPost(props: FarmPostProps) {
         try {
             await singAndPostProofOfRecommendationOrigin(web3, account, payload.referral_token)
 
-            const senderName =
-                currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
+            const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
 
             const metadata = new Map<string, ReferralMetaData>()
             metadata.set(META_KEY, {
