@@ -24,6 +24,7 @@ import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { PluginWalletConnectIcon } from '@masknet/icons'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -434,24 +435,25 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     </Grid>
                     {availability.isClaimed ? null : (
                         <Grid item xs={6}>
-                            <EthereumWalletConnectedBoundary
-                                startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-                                classes={{
-                                    connectWallet: classes.button,
-                                    unlockMetaMask: classes.button,
-                                    gasFeeButton: classes.button,
-                                }}>
-                                <ActionButton
-                                    variant="contained"
-                                    size="large"
-                                    loading={isClaiming}
-                                    disabled={isClaiming}
-                                    onClick={claimCallback}
-                                    className={classes.button}
-                                    fullWidth>
-                                    {isClaiming ? t('plugin_red_packet_claiming') : t('plugin_red_packet_claim')}
-                                </ActionButton>
-                            </EthereumWalletConnectedBoundary>
+                            <EthereumChainBoundary chainId={payload.chainId}>
+                                <EthereumWalletConnectedBoundary
+                                    startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                                    classes={{
+                                        connectWallet: classes.button,
+                                        unlockMetaMask: classes.button,
+                                        gasFeeButton: classes.button,
+                                    }}>
+                                    <ActionButton
+                                        variant="contained"
+                                        loading={isClaiming}
+                                        disabled={isClaiming}
+                                        onClick={claimCallback}
+                                        className={classes.button}
+                                        fullWidth>
+                                        {isClaiming ? t('plugin_red_packet_claiming') : t('plugin_red_packet_claim')}
+                                    </ActionButton>
+                                </EthereumWalletConnectedBoundary>
+                            </EthereumChainBoundary>
                         </Grid>
                     )}
                 </Grid>
