@@ -456,7 +456,10 @@ export interface Transaction<ChainId, SchemaType> {
 }
 
 export interface RecentTransaction<ChainId, Transaction> {
+    /** the initial transaction id */
     id: string
+    /** the id for accessing tx from candidates */
+    indexId: string
     /** the chain id */
     chainId: ChainId
     /** status type */

@@ -13,6 +13,9 @@ export function useTransactions<T extends NetworkPluginID>(pluginID?: T, status?
         >,
     )
     return useMemo(() => {
-        return status ? transactions.filter((x) => status === x.status) : transactions
+        return (status ? transactions.filter((x) => status === x.status) : transactions).map((x) => ({
+            ...x,
+            _tx: x.candidates[x.indexId],
+        }))
     }, [status, transactions.map((x) => x.id).join()])
 }

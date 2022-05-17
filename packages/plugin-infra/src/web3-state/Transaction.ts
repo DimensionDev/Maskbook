@@ -64,25 +64,27 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         const transaction_ = all[chainId][address_]?.find((x) => Object.keys(x.candidates).includes(id))
         if (transaction_) return
 
+        const transactions: RecentTransaction<ChainId, Transaction>[] = [
+            // new records go first then we will remove it last
+            {
+                id,
+                indexId: id,
+                chainId,
+                createdAt: now,
+                updatedAt: now,
+                status: TransactionStatusType.NOT_DEPEND,
+                candidates: {
+                    [id]: transaction as Transaction,
+                },
+            },
+            ...(all[chainId][address_] ?? []),
+        ]
+
         await this.storage.setValue({
             ...all,
-            // @ts-ignore
-            [chainId]: {
+            [chainId as number]: {
                 ...all[chainId],
-                [address_]: [
-                    // new records go first then we will remove it last
-                    {
-                        chainId,
-                        id,
-                        createdAt: now,
-                        updatedAt: now,
-                        status: TransactionStatusType.NOT_DEPEND,
-                        candidates: {
-                            [id]: transaction as Transaction,
-                        },
-                    },
-                    ...(all[chainId][address_] ?? []),
-                ].slice(0, TransactionState.MAX_RECORD_SIZE),
+                [address_]: transactions.slice(0, TransactionState.MAX_RECORD_SIZE),
             },
         })
     }
@@ -96,23 +98,25 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         const transaction_ = all[chainId][address_]?.find((x) => Object.keys(x.candidates).includes(id))
         if (!transaction_) return
 
+        const transactions: RecentTransaction<ChainId, Transaction>[] = (all[chainId][address] ?? []).map((x) =>
+            Object.keys(x.candidates).includes(id)
+                ? {
+                      ...x,
+                      indexId: newId,
+                      candidates: {
+                          ...x.candidates,
+                          [newId]: transaction,
+                      },
+                      updatedAt: now,
+                  }
+                : x,
+        )
+
         await this.storage.setValue({
             ...all,
-            // @ts-ignore
-            [chainId]: {
+            [chainId as number]: {
                 ...all[chainId],
-                [address_]: (all[chainId][address] ?? []).map((x) =>
-                    Object.keys(x.candidates).includes(id)
-                        ? {
-                              ...x,
-                              candidates: {
-                                  ...x.candidates,
-                                  [newId]: transaction,
-                              },
-                              updatedAt: now,
-                          }
-                        : x,
-                ),
+                [address_]: transactions,
             },
         })
     }
@@ -131,20 +135,22 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         const transaction_ = all[chainId][address_]?.find((x) => Object.keys(x.candidates).includes(id))
         if (!transaction_) return
 
+        const transactions: RecentTransaction<ChainId, Transaction>[] = (all[chainId][address] ?? []).map((x) =>
+            Object.keys(x.candidates).includes(id)
+                ? {
+                      ...x,
+                      indexId: id,
+                      status,
+                      updatedAt: now,
+                  }
+                : x,
+        )
+
         await this.storage.setValue({
             ...all,
-            // @ts-ignore
-            [chainId]: {
+            [chainId as number]: {
                 ...all[chainId],
-                [address_]: (all[chainId][address] ?? []).map((x) =>
-                    Object.keys(x.candidates).includes(id)
-                        ? {
-                              ...x,
-                              status,
-                              updatedAt: now,
-                          }
-                        : x,
-                ),
+                [address_]: transactions,
             },
         })
     }
@@ -155,8 +161,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
 
         await this.storage.setValue({
             ...all,
-            // @ts-ignore
-            [chainId]: {
+            [chainId as number]: {
                 ...all[chainId],
                 [address_]: all[chainId][address_]?.filter((x) => !Object.keys(x.candidates).includes(id)),
             },
@@ -169,8 +174,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
 
         await this.storage.setValue({
             ...all,
-            // @ts-ignore
-            [chainId]: {
+            [chainId as number]: {
                 ...all[chainId],
                 [address_]: [],
             },
