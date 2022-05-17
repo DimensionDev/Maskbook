@@ -38,8 +38,13 @@ export const WalletConnectQRCodeDialog: React.FC = () => {
 
     useAsync(async () => {
         if (!open) return
-        await Services.Ethereum.connectWalletConnect()
-        closeDialog()
+        try {
+            await Services.Ethereum.untilWalletConnect()
+        } catch {
+            // do nothing
+        } finally {
+            closeDialog()
+        }
     }, [open])
 
     let mode: QRCodeDialogProps['mode'] = 'qrcode'

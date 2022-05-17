@@ -54,7 +54,7 @@ import { TransferAddressError } from '../type'
 
 const useStyles = makeStyles()({
     container: {
-        padding: '16px 16px 0px 16px',
+        padding: '16px 16px 0 16px',
         flex: 1,
     },
     label: {

@@ -74,7 +74,7 @@ function registerPostCollectorInner(
                 avatarURL: info.avatarURL.getCurrentValue()?.toString(),
             })
             if (currentProfile?.linkedPersona) {
-                Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona.identifier)
+                Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona)
             }
         },
         (info: PostInfo) => info.author.getCurrentValue(),
