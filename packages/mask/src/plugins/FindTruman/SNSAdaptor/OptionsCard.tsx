@@ -196,8 +196,6 @@ export default function OptionsCard(props: OptionsViewProps) {
         setSubmitting(true)
         try {
             await onSubmit(choice)
-        } catch (error) {
-            throw error
         } finally {
             setSubmitting(false)
         }
