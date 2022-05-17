@@ -73,7 +73,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     const [pools, setPools] = useState<Pool[]>([])
 
     // #region pools
-    const { value: _pools = [], error: error, loading: loading, retry: retry } = usePools()
+    const { value: _pools = [], error, loading, retry } = usePools()
     _pools.sort((x, y) => Number(y.prize.weeklyTotalValueUsd) - Number(x.prize.weeklyTotalValueUsd))
     // #endregion
 

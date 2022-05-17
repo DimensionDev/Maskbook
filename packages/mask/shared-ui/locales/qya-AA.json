@@ -65,7 +65,6 @@
     "compose_encrypt_visible_to_private": "crwdns16598:0crwdne16598:0",
     "compose_encrypt_visible_to_private_sub": "crwdns16600:0crwdne16600:0",
     "compose_shared_friends": "crwdns16602:0crwdne16602:0",
-    "compose_shared_friends_other": "crwdns16604:0{{count}}crwdne16604:0",
     "compose_encrypt_visible_to_share": "crwdns16606:0crwdne16606:0",
     "compose_encrypt_visible_to_share_sub": "crwdns16608:0crwdne16608:0",
     "compose_encrypt_share_dialog_empty": "crwdns16610:0crwdne16610:0",
