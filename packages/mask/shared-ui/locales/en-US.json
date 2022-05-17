@@ -65,7 +65,6 @@
     "compose_encrypt_visible_to_private": "Private",
     "compose_encrypt_visible_to_private_sub": "Just Me",
     "compose_shared_friends": "1 friend",
-    "compose_shared_friends_other": "{{count}} friends",
     "compose_encrypt_visible_to_share": "Share with",
     "compose_encrypt_visible_to_share_sub": "Just Selected Contacts",
     "compose_encrypt_share_dialog_empty": "No encrypted friends, you can try searching.",
