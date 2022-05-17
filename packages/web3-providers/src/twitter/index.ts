@@ -128,7 +128,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         }
     }
 
-    async uploadUserAvatar(screenName: string, image: File | Blob): Promise<any> {
+    async uploadUserAvatar(screenName: string, image: File | Blob): Promise<TwitterBaseAPI.TwitterResult> {
         // INIT
         const initURL = `${UPLOAD_AVATAR_URL}?command=INIT&total_bytes=${image.size}&media_type=${encodeURIComponent(
             image.type,
@@ -151,16 +151,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
 
         // FINALIZE
         const finalizeURL = `${UPLOAD_AVATAR_URL}?command=FINALIZE&media_id=${mediaId}`
-        return request<{
-            media_id: number
-            media_id_string: string
-            size: number
-            image: {
-                image_type: string
-                w: number
-                h: number
-            }
-        }>(finalizeURL, {
+        return request<TwitterBaseAPI.TwitterResult>(finalizeURL, {
             method: 'POST',
             credentials: 'include',
         })
@@ -175,8 +166,8 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             'x-twitter-active-user': 'yes',
             referer: `https://twitter.com/${screenName}`,
         }
-        if (!bearerToken || !queryToken || !csrfToken) return
         const updateProfileImageURL = 'https://twitter.com/i/api/1.1/account/update_profile_image.json'
+        if (!bearerToken || !queryToken || !csrfToken) return
         const response = await fetch(
             urlcat(updateProfileImageURL, {
                 media_id: media_id_str,

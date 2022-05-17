@@ -114,5 +114,5 @@ function NFTImageCollectibleAvatar({ token, onChange, selectedToken }: NFTImageC
                 <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
             </div>
         )
-    return isImageToken ? <NFTImage haveBadge token={token} selectedToken={selectedToken} onChange={onChange} /> : null
+    return isImageToken ? <NFTImage showBadge token={token} selectedToken={selectedToken} onChange={onChange} /> : null
 }

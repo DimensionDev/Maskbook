@@ -481,6 +481,17 @@ export namespace TwitterBaseAPI {
         screen_name: string
     }
 
+    export interface TwitterResult {
+        media_id: number
+        media_id_string: string
+        size: number
+        image: {
+            image_type: string
+            w: number
+            h: number
+        }
+    }
+
     export interface Provider {
         getSettings: () => Promise<Settings | undefined>
         getUserNftContainer: (screenName: string) => Promise<
@@ -491,7 +502,7 @@ export namespace TwitterBaseAPI {
               }
             | undefined
         >
-        uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<any>
+        uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>
         updateProfileImage: (screenName: string, media_id_str: string) => Promise<AvatarInfo | undefined>
     }
 }

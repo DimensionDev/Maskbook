@@ -192,7 +192,7 @@ export function AddressNames(props: AddressNamesProps) {
                 )}
                 <Divider className={classes.divider} />
                 {wallets
-                    .sort((a, b) => Number(b.created_at) - Number(a.created_at))
+                    .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
                     ?.filter((x) => !isSameAddress(x.identity, account))
                     .map((x) => (
                         <>

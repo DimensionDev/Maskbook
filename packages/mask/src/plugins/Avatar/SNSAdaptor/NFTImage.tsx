@@ -39,7 +39,7 @@ interface NFTImageProps {
     token: ERC721TokenDetailed
     selectedToken?: ERC721TokenDetailed
     onChange: (token: ERC721TokenDetailed) => void
-    haveBadge?: boolean
+    showBadge?: boolean
 }
 
 function isSameNFT(a: ERC721TokenDetailed, b?: ERC721TokenDetailed) {
@@ -51,7 +51,7 @@ function isSameNFT(a: ERC721TokenDetailed, b?: ERC721TokenDetailed) {
 }
 
 export function NFTImage(props: NFTImageProps) {
-    const { token, onChange, selectedToken, haveBadge = false } = props
+    const { token, onChange, selectedToken, showBadge = false } = props
     const { classes } = useStyles()
 
     return (
@@ -61,7 +61,7 @@ export function NFTImage(props: NFTImageProps) {
                 src={token.info.imageURL}
                 className={classNames(classes.image, isSameNFT(token, selectedToken) ? classes.selected : '')}
             />
-            {haveBadge && isSameNFT(token, selectedToken) ? <SelectedIcon className={classes.icon} /> : null}
+            {showBadge && isSameNFT(token, selectedToken) ? <SelectedIcon className={classes.icon} /> : null}
         </div>
     )
 }
