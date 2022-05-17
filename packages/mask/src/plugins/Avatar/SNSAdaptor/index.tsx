@@ -32,7 +32,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 recommendFeature={recommendFeature}
                                 {...EntryComponentProps}
                                 onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
-                                tooltipHint={EntryComponentProps.tooltipHint ?? <Trans i18nKey="application_hint" />}
+                                tooltipHint={
+                                    EntryComponentProps.tooltipHint ??
+                                    (EntryComponentProps.disabled ? undefined : <Trans i18nKey="application_hint" />)
+                                }
                             />
 
                             <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
