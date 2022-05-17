@@ -2,7 +2,7 @@ import { makeStyles, useTabs } from '@masknet/theme'
 import { ChainId, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Tabs, Typography } from '@mui/material'
-import { Application_NFT_LIST_PAGE } from '../constants'
+import { Application_NFT_LIST_PAGE, SUPPORTED_CHAIN_IDS } from '../constants'
 import type { TokenInfo } from '../types'
 import { NFTListPage } from './NFTListPage'
 
@@ -68,45 +68,36 @@ export function NFTList(props: NFTListProps) {
                     width: '99.5%',
                     justifyContent: 'center',
                 }}>
-                <Tab
-                    label={
-                        <Typography fontSize={14} fontWeight={700}>
-                            {Application_NFT_LIST_PAGE.Application_nft_tab_eth_page}
-                        </Typography>
-                    }
-                    value={tabs.ETH}
-                    className={currentTab === tabs.ETH ? classes.selected : classes.tab}
-                />
-                <Tab
-                    label={
-                        <Typography fontSize={14} fontWeight={700}>
-                            {Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page}
-                        </Typography>
-                    }
-                    value={tabs.Polygon}
-                    className={currentTab === tabs.Polygon ? classes.selected : classes.tab}
-                />
+                {SUPPORTED_CHAIN_IDS.map((x, i) => {
+                    const curChainId = currentTab === tabs.ETH ? ChainId.Mainnet : ChainId.Matic
+                    return (
+                        <Tab
+                            key={i}
+                            label={
+                                <Typography fontSize={14} fontWeight={700}>
+                                    {x === ChainId.Mainnet
+                                        ? Application_NFT_LIST_PAGE.Application_nft_tab_eth_page
+                                        : Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page}
+                                </Typography>
+                            }
+                            value={x === ChainId.Mainnet ? tabs.ETH : tabs.Polygon}
+                            className={curChainId === x ? classes.selected : classes.tab}
+                        />
+                    )
+                })}
             </Tabs>
-            <TabPanel value={tabs.ETH} className={classes.tabPanel}>
-                <NFTListPage
-                    tokens={tokens.filter((x) => x.contractDetailed.chainId === ChainId.Mainnet) ?? []}
-                    tokenInfo={tokenInfo}
-                    chainId={ChainId.Mainnet}
-                    address={address}
-                    onSelect={onSelect}
-                    children={children}
-                />
-            </TabPanel>
-            <TabPanel value={tabs.Polygon} className={classes.tabPanel}>
-                <NFTListPage
-                    tokens={tokens.filter((x) => x.contractDetailed.chainId === ChainId.Matic) ?? []}
-                    tokenInfo={tokenInfo}
-                    chainId={ChainId.Matic}
-                    address={address}
-                    onSelect={onSelect}
-                    children={children}
-                />
-            </TabPanel>
+            {SUPPORTED_CHAIN_IDS.map((x, i) => (
+                <TabPanel key={i} value={x === ChainId.Mainnet ? tabs.ETH : tabs.Polygon} className={classes.tabPanel}>
+                    <NFTListPage
+                        tokens={tokens.filter((y) => y.contractDetailed.chainId === x) ?? []}
+                        tokenInfo={tokenInfo}
+                        chainId={x}
+                        address={address}
+                        onSelect={onSelect}
+                        children={children}
+                    />
+                </TabPanel>
+            ))}
         </TabContext>
     )
 }

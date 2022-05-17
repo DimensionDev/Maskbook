@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTListPageProps {
-    chainId: ChainId.Mainnet | ChainId.Matic
+    chainId: ChainId
     address: string
     tokenInfo?: TokenInfo
     tokens: ERC721TokenDetailed[]

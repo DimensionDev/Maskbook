@@ -20,4 +20,4 @@ export enum Application_NFT_LIST_PAGE {
     Application_nft_tab_polygon_page = 'Polygon',
 }
 
-export const SUPPORTED_CHAIN_IDS = [ChainId.Mainnet, ChainId.Matic]
+export const SUPPORTED_CHAIN_IDS: ChainId[] = [ChainId.Mainnet, ChainId.Matic]
