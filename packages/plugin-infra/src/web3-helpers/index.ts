@@ -20,6 +20,7 @@ export declare namespace Web3Helper {
             ProviderType: EVM.ProviderType
             NetworkType: EVM.NetworkType
             Signature: EVM.Signature
+            GasOption: EVM.GasOption
             Block: EVM.Block
             Transaction: EVM.Transaction
             TransactionDetailed: EVM.TransactionDetailed
@@ -34,6 +35,7 @@ export declare namespace Web3Helper {
             ProviderType: Flow.ProviderType
             NetworkType: Flow.NetworkType
             Signature: Flow.Signature
+            GasOption: Flow.GasOption
             Block: Flow.Block
             Transaction: Flow.Transaction
             TransactionDetailed: Flow.TransactionDetailed
@@ -48,6 +50,7 @@ export declare namespace Web3Helper {
             ProviderType: Solana.ProviderType
             NetworkType: Solana.NetworkType
             Signature: Solana.Signature
+            GasOption: Solana.GasOption
             Block: Solana.Block
             Transaction: Solana.Transaction
             TransactionDetailed: Solana.TransactionDetailed
@@ -104,6 +107,7 @@ export declare namespace Web3Helper {
               Definition[T]['ProviderType'],
               Definition[T]['NetworkType'],
               Definition[T]['Signature'],
+              Definition[T]['GasOption'],
               Definition[T]['Block'],
               Definition[T]['Transaction'],
               Definition[T]['TransactionDetailed'],
@@ -121,6 +125,8 @@ export declare namespace Web3Helper {
     export type ProviderTypeAll = Definition[NetworkPluginID]['ProviderType']
     export type NetworkTypeAll = Definition[NetworkPluginID]['NetworkType']
     export type SignatureAll = Definition[NetworkPluginID]['Signature']
+    export type GasOptionAll = Definition[NetworkPluginID]['GasOption']
+    export type BlockAll = Definition[NetworkPluginID]['Block']
     export type TransactionAll = Definition[NetworkPluginID]['Transaction']
     export type TransactionDetailedAll = Definition[NetworkPluginID]['TransactionDetailed']
     export type TransactionSignatureAll = Definition[NetworkPluginID]['TransactionSignature']
@@ -155,6 +161,7 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['ProviderType'],
         Definition[NetworkPluginID]['NetworkType'],
         Definition[NetworkPluginID]['Signature'],
+        Definition[NetworkPluginID]['GasOption'],
         Definition[NetworkPluginID]['Block'],
         Definition[NetworkPluginID]['Transaction'],
         Definition[NetworkPluginID]['TransactionDetailed'],

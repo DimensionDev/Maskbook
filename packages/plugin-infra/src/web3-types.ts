@@ -31,6 +31,7 @@ export declare namespace Web3Plugin {
             ProviderType,
             NetworkType,
             Signature,
+            GasOption,
             Block,
             Transaction,
             TransactionDetailed,
@@ -44,7 +45,7 @@ export declare namespace Web3Plugin {
             NameService?: NameServiceState<ChainId>
             RiskWarning?: RiskWarningState
             Settings?: SettingsState
-            GasOptions?: GasOptionsState<ChainId>
+            GasOptions?: GasOptionsState<ChainId, GasOption>
             Token?: TokenState<ChainId, SchemaType>
             TokenIcon?: TokenIconState<ChainId>
             TokenPrice?: TokenPriceState<ChainId>

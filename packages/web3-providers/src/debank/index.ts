@@ -2,13 +2,12 @@ import urlcat from 'urlcat'
 import {
     FungibleAsset,
     GasOptionType,
-    GasOption,
     Pageable,
     Transaction,
     Web3Pagination,
     createPageable,
 } from '@masknet/web3-shared-base'
-import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType, GasOption } from '@masknet/web3-shared-evm'
 import { formatAssets, formatTransactions } from './format'
 import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from './type'
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types'
@@ -35,12 +34,9 @@ export class DeBankAPI
     implements
         FungibleTokenAPI.Provider<ChainId, SchemaType>,
         HistoryAPI.Provider<ChainId, SchemaType>,
-        GasOptionAPI.Provider<ChainId>
+        GasOptionAPI.Provider<ChainId, GasOption>
 {
-    async getGasOptions(chainId: ChainId): Promise<{
-        estimatedBaseFee: string
-        options: Record<GasOptionType, GasOption>
-    }> {
+    async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
 
@@ -50,23 +46,20 @@ export class DeBankAPI
 
         const responseModified = gasModifier(result, CHAIN_ID)
         return {
-            estimatedBaseFee: '0',
-            options: {
-                [GasOptionType.FAST]: {
-                    estimatedSeconds: responseModified.data.fast.estimated_seconds,
-                    suggestedMaxFeePerGas: responseModified.data.fast.price.toString(),
-                    suggestedMaxPriorityFeePerGas: '0',
-                },
-                [GasOptionType.NORMAL]: {
-                    estimatedSeconds: responseModified.data.normal.estimated_seconds,
-                    suggestedMaxFeePerGas: responseModified.data.normal.price.toString(),
-                    suggestedMaxPriorityFeePerGas: '0',
-                },
-                [GasOptionType.SLOW]: {
-                    estimatedSeconds: responseModified.data.slow.estimated_seconds,
-                    suggestedMaxFeePerGas: responseModified.data.slow.price.toString(),
-                    suggestedMaxPriorityFeePerGas: '0',
-                },
+            [GasOptionType.FAST]: {
+                estimatedSeconds: responseModified.data.fast.estimated_seconds,
+                suggestedMaxFeePerGas: responseModified.data.fast.price.toString(),
+                suggestedMaxPriorityFeePerGas: '0',
+            },
+            [GasOptionType.NORMAL]: {
+                estimatedSeconds: responseModified.data.normal.estimated_seconds,
+                suggestedMaxFeePerGas: responseModified.data.normal.price.toString(),
+                suggestedMaxPriorityFeePerGas: '0',
+            },
+            [GasOptionType.SLOW]: {
+                estimatedSeconds: responseModified.data.slow.estimated_seconds,
+                suggestedMaxFeePerGas: responseModified.data.slow.price.toString(),
+                suggestedMaxPriorityFeePerGas: '0',
             },
         }
     }

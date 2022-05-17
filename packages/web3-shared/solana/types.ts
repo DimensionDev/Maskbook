@@ -58,6 +58,7 @@ export type Web3Provider = {
     disconnect(): Promise<void>
 }
 export type Signature = string
+export type GasOption = never
 export type Block = BlockResponse
 export type Transaction = SolanaTransaction
 export type TransactionDetailed = TransactionResponse

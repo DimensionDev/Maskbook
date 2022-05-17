@@ -82,7 +82,8 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
 
         await this.storage.setValue({
             ...all,
-            [chainId as number]: {
+            // @ts-ignore
+            [chainId]: {
                 ...all[chainId],
                 [address_]: transactions.slice(0, TransactionState.MAX_RECORD_SIZE),
             },
@@ -114,7 +115,8 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
 
         await this.storage.setValue({
             ...all,
-            [chainId as number]: {
+            // @ts-ignore
+            [chainId]: {
                 ...all[chainId],
                 [address_]: transactions,
             },
@@ -148,7 +150,8 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
 
         await this.storage.setValue({
             ...all,
-            [chainId as number]: {
+            // @ts-ignore
+            [chainId]: {
                 ...all[chainId],
                 [address_]: transactions,
             },
@@ -161,7 +164,8 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
 
         await this.storage.setValue({
             ...all,
-            [chainId as number]: {
+            // @ts-ignore
+            [chainId]: {
                 ...all[chainId],
                 [address_]: all[chainId][address_]?.filter((x) => !Object.keys(x.candidates).includes(id)),
             },
@@ -174,7 +178,8 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
 
         await this.storage.setValue({
             ...all,
-            [chainId as number]: {
+            // @ts-ignore
+            [chainId]: {
                 ...all[chainId],
                 [address_]: [],
             },

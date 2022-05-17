@@ -177,17 +177,6 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
     downloadLink?: string
 }
 
-export interface GasOption {
-    estimatedSeconds: number
-    suggestedMaxFeePerGas: string
-    suggestedMaxPriorityFeePerGas: string
-}
-
-export interface GasOptions {
-    estimatedBaseFee: string,
-    options: Record<GasOptionType, GasOption>
-}
-
 export interface Token<ChainId, SchemaType> {
     id: string
     chainId: ChainId
@@ -672,9 +661,9 @@ export interface NameServiceState<ChainId, DomainBook = Record<string, string>> 
     /** get domain name of address */
     reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
 }
-export interface GasOptionsState<ChainId> {
+export interface GasOptionsState<ChainId, GasOption> {
     /** get all gas options */
-    getGasOptions?: (chainId: ChainId, currencyType?: CurrencyType) => Promise<GasOptions>
+    getGasOptions?: (chainId: ChainId, currencyType?: CurrencyType) => Promise<Record<GasOptionType, GasOption>>
 }
 export interface TokenState<ChainId, SchemaType> {
     /** The user trusted fungible tokens. */

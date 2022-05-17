@@ -24,7 +24,7 @@ import type {
     NonFungibleTokenContract,
     NonFungibleTokenOrder,
     NonFungibleTokenEvent,
-    GasOptions,
+    GasOptionType,
 } from '@masknet/web3-shared-base'
 
 export namespace ExplorerAPI {
@@ -122,8 +122,8 @@ export namespace HistoryAPI {
 }
 
 export namespace GasOptionAPI {
-    export interface Provider<ChainId> {
-        getGasOptions(chainId: ChainId): Promise<GasOptions>
+    export interface Provider<ChainId, GasOption> {
+        getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>>
     }
 }
 

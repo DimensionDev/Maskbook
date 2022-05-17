@@ -328,6 +328,14 @@ export type Web3Provider = {
 
     removeListener(name: string, listener: (event: any) => void): Web3Provider
 }
+export type GasOption = {
+    estimatedSeconds: number
+    // eip1559 only
+    estimatedBaseFee?: string
+    // note: for prior 1559 it means gasPrice
+    suggestedMaxFeePerGas: string
+    suggestedMaxPriorityFeePerGas: string
+}
 export type Signature = string
 export type Block = {
     hash: string
