@@ -48,8 +48,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 6,
                 marketListSortingPriority: 4,
                 icon,
-                tutorialLink:
-                    'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
+                tutorialLink: 'https://realmasknetwork.notion.site/d0941687649a4ef7a38d71f23ecbe4da',
                 description: <Trans i18nKey="plugin_mask_box_description" />,
                 category: 'dapp',
                 name,

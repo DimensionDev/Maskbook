@@ -33,9 +33,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitleEndingContent: {
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
-        minWidth: 46,
-        minHeight: 46,
+        alignItems: 'flex-end',
     },
     dialogContent: {
         overscrollBehavior: 'contain',
@@ -44,6 +42,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         flex: 1,
         textAlign: 'center',
         verticalAlign: 'middle',
+        fontSize: 18,
+        lineHeight: '22px',
+        fontWeight: 700,
     },
     dialogCloseButton: {
         color: theme.palette.text.primary,

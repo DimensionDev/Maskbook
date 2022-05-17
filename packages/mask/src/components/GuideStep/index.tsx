@@ -3,7 +3,7 @@ import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Typography, styled, Portal } from '@mui/material'
 import classNames from 'classnames'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
-import { sayHelloShowed, userGuideStatus } from '../../settings/settings'
+import { sayHelloShowed, userGuideStatus, userGuideVersion } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
 
@@ -132,7 +132,7 @@ export default function GuideStep({
 
     const onSkip = () => {
         setOpen(false)
-        userGuideStatus[ui.networkIdentifier].value = 'completed'
+        userGuideStatus[ui.networkIdentifier].value = userGuideVersion.value
         sayHelloShowed[ui.networkIdentifier].value = true
     }
 
@@ -145,7 +145,7 @@ export default function GuideStep({
 
     const onTry = () => {
         setOpen(false)
-        userGuideStatus[ui.networkIdentifier].value = 'completed'
+        userGuideStatus[ui.networkIdentifier].value = userGuideVersion.value
         onComplete?.()
     }
 

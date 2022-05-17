@@ -67,8 +67,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
                         'Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network.',
                 },
                 name,
-                tutorialLink:
-                    'https://realmasknetwork.notion.site/Use-File-Service-via-Arweave-IPFS-SIA-Swarm-soon-8c8fe1efce5a48b49739a38f4ea8c60f',
+                tutorialLink: 'https://realmasknetwork.notion.site/8c8fe1efce5a48b49739a38f4ea8c60f',
             }
         })(),
     ],
@@ -87,5 +86,12 @@ export default definition
 
 function onAttachedFile(payload: FileInfo) {
     const name = truncate(payload.name, { length: 10 })
-    return `Attached File: ${name} (${formatFileSize(payload.size)})`
+    return {
+        text: (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <FileServiceIcon style={{ width: 16, height: 16 }} />
+                Attached File: {name} ({formatFileSize(payload.size)})
+            </div>
+        ),
+    }
 }
