@@ -1,5 +1,6 @@
+import { useChainId } from '@masknet/plugin-infra/src/web3'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, useChainId } from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Card, CardContent, Tabs, Tab, Typography, Paper } from '@mui/material'
 import { useState } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -44,7 +45,7 @@ export function FurucomboView(props: PoolViewProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [tabIndex, setTabIndex] = useState(0)
-    const currentChainId = useChainId()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const { value, loading, error } = useFetchPools()
 
