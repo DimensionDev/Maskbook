@@ -15,11 +15,15 @@ import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     sup: {
         paddingLeft: 2,
     },
-})
+    clickRoot: {
+        background: theme.palette.background.paper,
+        boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
+    },
+}))
 export interface PluginEntryRenderRef {
     openPlugin(id: string): void
 }
@@ -93,6 +97,9 @@ const CustomEntry = memo(
         useSetPluginRef(ref, onClick)
         return (
             <ClickableChip
+                classes={{
+                    root: classes.clickRoot,
+                }}
                 label={
                     <>
                         <PluginI18NFieldRender field={label} pluginID={id} />
@@ -116,6 +123,9 @@ const DialogEntry = memo(
         useSetPluginRef(ref, opener)
         const chip = (
             <ClickableChip
+                classes={{
+                    root: classes.clickRoot,
+                }}
                 label={
                     <>
                         <PluginI18NFieldRender field={label} pluginID={id} />

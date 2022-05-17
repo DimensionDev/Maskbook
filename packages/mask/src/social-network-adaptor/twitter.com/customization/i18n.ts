@@ -4,10 +4,10 @@ import { languages } from '../locales/languages'
 export const i18NOverwriteTwitter: SocialNetworkUI.Customization.I18NOverwrite = {
     mask: {},
 }
-const resource: any = languages
-for (const lng in resource) {
-    for (const key in resource[lng]) {
+const resource = languages
+for (const language of Object.keys(resource) as Array<keyof typeof resource>) {
+    for (const key of Object.keys(resource[language]) as Array<keyof typeof resource[typeof language]>) {
         i18NOverwriteTwitter.mask[key] ??= {}
-        i18NOverwriteTwitter.mask[key][lng] = resource[lng][key]
+        i18NOverwriteTwitter.mask[key][language] = resource[language][key]
     }
 }
