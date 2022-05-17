@@ -24,7 +24,7 @@ export function getUnlistedApp(app: Application): boolean {
 }
 // #endregion
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ iconFilterColor?: string }>()((theme, { iconFilterColor }) => ({
     list: {
         display: 'grid',
         gap: theme.spacing(2, 1),
@@ -54,6 +54,9 @@ const useStyles = makeStyles()((theme) => ({
             width: 36,
             height: 36,
         },
+        ...(iconFilterColor
+            ? { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`, backdropFilter: 'blur(16px)' }
+            : {}),
     },
     loadingWrapper: {
         display: 'flex',
@@ -77,7 +80,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function ApplicationSettingPluginList() {
-    const { classes } = useStyles()
+    const { classes } = useStyles({ iconFilterColor: undefined })
     const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const applicationList = useMemo(() => {
@@ -123,7 +126,7 @@ interface AppListProps {
 
 function AppList(props: AppListProps) {
     const { appList, setUnlistedApp, isListed } = props
-    const { classes } = useStyles()
+    const { classes } = useStyles({ iconFilterColor: undefined })
     const { t } = useI18N()
 
     return appList.length > 0 ? (
@@ -156,7 +159,7 @@ interface AppListItemProps {
 
 function AppListItem(props: AppListItemProps) {
     const { application, setUnlistedApp, isListed } = props
-    const { classes } = useStyles()
+    const { classes } = useStyles({ iconFilterColor: application.entry.iconFilterColor })
     return (
         <ListItem className={classes.listItem} onClick={() => setUnlistedApp(application, isListed)}>
             <div className={classes.iconWrapper}>{application.entry.icon}</div>

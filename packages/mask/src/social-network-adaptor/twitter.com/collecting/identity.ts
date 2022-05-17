@@ -8,6 +8,7 @@ import {
     searchSelfHandleSelector,
     searchSelfNicknameSelector,
     searchSelfAvatarSelector,
+    searchWatcherAvatarSelector,
     selfInfoSelectors,
 } from '../utils/selector'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
@@ -48,9 +49,11 @@ function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const task = isMobileTwitter ? recognizeMobile() : recognizeDesktop()
-    const assign = () => {
-        const { handle, nickname, avatar } = task.collect()
+    const assign = async () => {
+        await delay(5000)
+        const avatar = searchSelfAvatarSelector().evaluate()?.getAttribute('src') ?? ''
+        const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '')
+        const nickname = searchSelfNicknameSelector().evaluate()?.textContent?.trim() ?? ''
 
         if (handle) {
             ref.value = {
@@ -60,14 +63,29 @@ function resolveLastRecognizedIdentityInner(
             }
         }
     }
-    const watcher = task.watcher
-        .addListener('onAdd', () => assign())
-        .addListener('onChange', () => assign())
-        .startWatch({
-            childList: true,
-            subtree: true,
+
+    const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
+        const watcher = new MutationObserverWatcher(selector)
+            .addListener('onAdd', () => assign())
+            .addListener('onChange', () => assign())
+            .startWatch({
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['src'],
+            })
+
+        window.addEventListener('locationchange', assign)
+        cancel.addEventListener('abort', () => {
+            window.removeEventListener('locationchange', assign)
+            watcher.stopWatch()
         })
-    cancel.addEventListener('abort', () => watcher.stopWatch())
+    }
+
+    assign()
+
+    createWatcher(searchSelfHandleSelector())
+    createWatcher(searchWatcherAvatarSelector())
 }
 
 function resolveLastRecognizedIdentityMobileInner(
@@ -99,7 +117,7 @@ function resolveCurrentVisitingIdentityInner(
     const avatarSelector = searchAvatarSelector()
     const avatarMetaSelector = searchAvatarMetaSelector()
     const assign = async () => {
-        await delay(500)
+        await delay(5000)
         const bio = getBio()
         const homepage = getPersonalHomepage()
         const nickname = getNickname()

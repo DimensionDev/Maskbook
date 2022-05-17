@@ -37,22 +37,26 @@ const definition: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <FileServiceIcon />
             const name = { i18nKey: '__plugin_name', fallback: 'File Service' }
+            const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     return (
                         <ApplicationEntry
                             title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                            disabled={disabled}
+                            {...EntryComponentProps}
                             icon={icon}
-                            onClick={() =>
-                                CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                    reason: 'timeline',
-                                    open: true,
-                                    options: {
-                                        startupPlugin: base.ID,
-                                    },
-                                })
+                            iconFilterColor={iconFilterColor}
+                            onClick={
+                                EntryComponentProps.onClick ??
+                                (() =>
+                                    CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                        reason: 'timeline',
+                                        open: true,
+                                        options: {
+                                            startupPlugin: base.ID,
+                                        },
+                                    }))
                             }
                         />
                     )
@@ -67,6 +71,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
                         'Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network.',
                 },
                 name,
+                iconFilterColor,
                 tutorialLink: 'https://realmasknetwork.notion.site/8c8fe1efce5a48b49739a38f4ea8c60f',
             }
         })(),

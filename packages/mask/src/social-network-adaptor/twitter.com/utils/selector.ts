@@ -255,6 +255,9 @@ export const searchSelfNicknameSelector = () => {
     )
 }
 
+export const searchWatcherAvatarSelector = () =>
+    querySelector<HTMLImageElement>('[data-testid="SideNav_AccountSwitcher_Button"] img')
+
 export const searchSelfAvatarSelector = () => {
     return querySelector<HTMLImageElement>(
         [

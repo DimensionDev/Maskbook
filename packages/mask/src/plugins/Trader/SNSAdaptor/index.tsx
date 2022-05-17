@@ -27,6 +27,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <SwapColorfulIcon />
             const name = <Trans i18nKey="plugin_trader_swap" />
+            const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
@@ -37,6 +38,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             {...EntryComponentProps}
                             title={name}
                             icon={icon}
+                            iconFilterColor={iconFilterColor}
                             onClick={EntryComponentProps.onClick ?? openDialog}
                         />
                     )
@@ -48,6 +50,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 name,
                 tutorialLink: 'https://realmasknetwork.notion.site/f2e7d081ee38487ca1db958393ac1edc',
                 description: <Trans i18nKey="plugin_trader_swap_description" />,
+                iconFilterColor,
             }
         })(),
     ],

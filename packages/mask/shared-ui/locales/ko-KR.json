@@ -721,7 +721,6 @@
     "popups_wallet_gas_fee_settings_max_priority_fee": "최대 우선 가스비",
     "popups_wallet_gas_fee_settings_max_fee": "최대 가스비",
     "popups_wallet_gas_fee_settings_min_gas_limit_tips": "최소한 가스비는 {{limit}} 입니다",
-    "popups_wallet_unsupported_network": "지원되지 않는 네트워크",
     "popups_wallet_signature_request": "서명",
     "popups_wallet_signature_request_message": "메시지",
     "popups_wallet_contract_interaction": "컨트렉트 인터액션",
