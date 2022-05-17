@@ -15,6 +15,7 @@ import { fromWei, toHex } from 'web3-utils'
 import { isEmpty } from 'lodash-unified'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import {
+    GasOptionType,
     isGreaterThan,
     isLessThan,
     isLessThanOrEqualTo,
@@ -24,7 +25,7 @@ import {
     toFixed,
 } from '@masknet/web3-shared-base'
 import { isDashboardPage } from '@masknet/shared-base'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId, useGasOptions } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     option: {
@@ -154,28 +155,24 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
         const { t } = useI18N()
         const isDashboard = isDashboardPage()
         const { classes } = useStyles({ isDashboard })
-        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-
         const [selected, setOption] = useState<number | null>(1)
 
-        const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
-            return WalletRPC.getEstimateGasFees(chainId)
-        }, [chainId])
+        const { value: gasOptions, loading: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
 
         // #region Gas Options
         const options = useMemo(
             () => [
                 {
                     title: t('plugin_trader_gas_setting_instant'),
-                    content: gasOptions?.low,
+                    content: gasOptions?.[GasOptionType.SLOW],
                 },
                 {
                     title: t('plugin_trader_gas_setting_medium'),
-                    content: gasOptions?.medium,
+                    content: gasOptions?.[GasOptionType.NORMAL],
                 },
                 {
                     title: t('plugin_trader_gas_setting_high'),
-                    content: gasOptions?.high,
+                    content: gasOptions?.[GasOptionType.FAST],
                 },
             ],
             [gasOptions],
@@ -203,12 +200,15 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
         // #region These are additional form rules that need to be prompted for but do not affect the validation of the form
         const maxPriorFeeHelperText = useMemo(() => {
             if (getGasOptionsLoading) return undefined
-            if (isLessThan(maxPriorityFeePerGas, gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
+            if (isLessThan(maxPriorityFeePerGas, gasOptions?.[GasOptionType.SLOW]?.suggestedMaxPriorityFeePerGas ?? 0))
                 return t('wallet_transfer_error_max_priority_gas_fee_too_low')
             if (
                 isGreaterThan(
                     maxPriorityFeePerGas,
-                    multipliedBy(gasOptions?.high?.suggestedMaxPriorityFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
+                    multipliedBy(
+                        gasOptions?.[GasOptionType.FAST]?.suggestedMaxPriorityFeePerGas ?? 0,
+                        HIGH_FEE_WARNING_MULTIPLIER,
+                    ),
                 )
             )
                 return t('wallet_transfer_error_max_priority_gas_fee_too_high')
@@ -217,12 +217,15 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
 
         const maxFeeGasHelperText = useMemo(() => {
             if (getGasOptionsLoading) return undefined
-            if (isLessThan(maxFeePerGas, gasOptions?.estimatedBaseFee ?? 0))
+            if (isLessThan(maxFeePerGas, gasOptions?.[GasOptionType.SLOW]?.estimatedBaseFee ?? 0))
                 return t('wallet_transfer_error_max_fee_too_low')
             if (
                 isGreaterThan(
                     maxFeePerGas,
-                    multipliedBy(gasOptions?.high?.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
+                    multipliedBy(
+                        gasOptions?.[GasOptionType.FAST]?.suggestedMaxFeePerGas ?? 0,
+                        HIGH_FEE_WARNING_MULTIPLIER,
+                    ),
                 )
             )
                 return t('wallet_transfer_error_max_fee_too_high')
