@@ -13,6 +13,7 @@ import { HTMLProps, useCallback } from 'react'
 import { Button, Skeleton, useTheme } from '@mui/material'
 import { PluginIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
+import { useI18N } from '../../utils'
 
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
@@ -55,6 +56,7 @@ export function PossiblePluginSuggestionPostInspector() {
 }
 export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefinition[] }) {
     const { plugins } = props
+    const { t } = useI18N()
     const theme = useTheme()
     const onClick = useCallback((x: Plugin.DeferredDefinition) => {
         Services.Settings.setPluginMinimalModeEnabled(x.ID, false)
@@ -94,7 +96,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                                     backgroundColor: theme.palette.maskColor.dark,
                                 },
                             }}>
-                            Enable plugins
+                            {t('plugin_enables')}
                         </Button>
                     }
                     content={<Rectangle style={{ paddingLeft: 8, marginBottom: 42 }} />}

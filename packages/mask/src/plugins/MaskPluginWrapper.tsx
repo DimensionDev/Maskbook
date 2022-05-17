@@ -1,4 +1,4 @@
-import { Typography, SnackbarContent, Link } from '@mui/material'
+import { Typography, SnackbarContent, Link, useTheme } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { MaskIcon } from '../resources/MaskIcon'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
@@ -89,7 +89,7 @@ const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) =
 export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const { open, title, children, action, publisher, publisherLink, content, wrapperProps } = props
     const { classes } = useStyles({ backgroundGradient: wrapperProps?.backgroundGradient })
-
+    const theme = useTheme()
     const { t } = useI18N()
 
     const publisherInfo = useMemo(() => {
@@ -101,7 +101,12 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         )
         return (
             <Box className={classes.provider}>
-                <Typography sx={{ marginRight: 0.5 }} variant="body1" fontSize={14} fontWeight="400" color="#767F8D">
+                <Typography
+                    sx={{ marginRight: 0.5 }}
+                    variant="body1"
+                    fontSize={14}
+                    fontWeight="400"
+                    color={theme.palette.text.secondary}>
                     {t('plugin_provider_by')}
                 </Typography>
                 {main}
