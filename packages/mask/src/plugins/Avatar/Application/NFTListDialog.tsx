@@ -155,14 +155,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setSelectedToken(undefined)
     }
 
-    const WalletNonEVMMessage =
-        currentPluginId !== NetworkPluginID.PLUGIN_EVM ? (
-            <Translate.wallet_non_evm_warning
-                components={{
-                    br: <br />,
-                }}
-            />
-        ) : null
     const AddCollectible = (
         <Box className={classes.error}>
             <Typography

@@ -2,7 +2,6 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
-import { useNextIDConnectStatus } from '../../../../components/DataSource/useNextID'
 import { usePersonaConnectStatus } from '../../../../components/DataSource/usePersonaConnectStatus'
 import { NFTAvatarDialog } from '../../../../plugins/Avatar/Application/NFTAvatarsDialog'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
@@ -54,7 +53,6 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const [open, setOpen] = useState(false)
 
     const personaConnectStatus = usePersonaConnectStatus()
-    const nextIDConnectStatus = useNextIDConnectStatus()
 
     const createOrConnectPersona = useCallback(() => {
         personaConnectStatus.action?.()
