@@ -43,14 +43,14 @@ export function OperationFooter({
 
         if (!account) {
             return (
-                <ActionButton variant="contained" fullWidth size="large" onClick={openSelectProviderDialog}>
+                <ActionButton variant="contained" fullWidth onClick={openSelectProviderDialog}>
                     {t('plugin_wallet_connect_a_wallet')}
                 </ActionButton>
             )
         }
         if (!chainIdValid) {
             return (
-                <ActionButton disabled variant="contained" fullWidth size="large">
+                <ActionButton disabled variant="contained" fullWidth>
                     {t('plugin_wallet_invalid_network')}
                 </ActionButton>
             )
@@ -65,7 +65,6 @@ export function OperationFooter({
                 disabled={isLoading}
                 loading={isLoading}
                 variant="contained"
-                size="large"
                 onClick={onClaimOrRefund}>
                 {canClaim
                     ? claimState.type === TransactionStateType.HASH
