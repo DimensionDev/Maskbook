@@ -109,6 +109,10 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
+    const { setDialog: setSelectWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectWalletDialogUpdated,
+    )
+
     // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
@@ -173,12 +177,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         }
 
         if (!isPluginMatched) {
-            await switchToPlugin()
-            setConnectWalletDialog({
-                open: true,
-                providerType: ProviderType.MaskWallet,
-                networkType: networkType!,
-            })
+            openSelectProviderDialog()
             return
         }
         if (!isChainMatched) await switchToChain()
