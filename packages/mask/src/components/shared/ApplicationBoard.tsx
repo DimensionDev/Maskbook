@@ -294,7 +294,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const personaConnectStatus = usePersonaConnectStatus()
     const nextIDConnectStatus = useNextIDConnectStatus()
 
-    const { value: ApplicationCurrentStatus, retry } = usePersonaAgainstSNSConnectStatus()
+    const { value: ApplicationCurrentStatus, retry, loading: _loading } = usePersonaAgainstSNSConnectStatus()
 
     useEffect(() => {
         return MaskMessages.events.currentPersonaIdentifier.on(retry)
@@ -317,7 +317,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
                 shouldVerifyNextId: Boolean(!nextIDConnectStatus.isVerified && ApplicationCurrentStatus),
                 currentPersonaPublicKey,
                 currentSNSConnectedPersonaPublicKey,
-                isLoading: nextIDConnectStatus.loading,
+                isLoading: nextIDConnectStatus.loading || _loading,
             }}>
             {props.children}
         </ApplicationEntryStatusContext.Provider>
