@@ -1,31 +1,35 @@
 import { useAsyncRetry } from 'react-use'
 import type { CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '../web3-helpers'
+import { useChainId } from './useChainId'
 import { useWeb3State } from './useWeb3State'
-import { useNativeTokenAddress } from './useNativeTokenAddress'
-import { useChainId } from '../entry-web3'
 
-export function useNativeTokenPrice<T extends NetworkPluginID>(
+export function useNonFungibleTokenPrice<T extends NetworkPluginID>(
     pluginID: T,
+    address?: string,
+    tokenId?: string,
     options?: Web3Helper.Web3ConnectionOptions<T> & {
         currencyType?: CurrencyType
     },
 ) {
-    type GetFungibleTokenPrice = (
+    type GetNonFungibleTokenPrice = (
         chainId: Web3Helper.Definition[T]['ChainId'],
         address: string,
+        tokenId: string,
         currencyType?: CurrencyType,
     ) => Promise<number>
 
-    const chainId = useChainId(pluginID)
+    const chainId = useChainId(pluginID, options?.chainId)
     const { TokenPrice } = useWeb3State(pluginID)
-    const nativeTokenAddress = useNativeTokenAddress(pluginID, options)
 
     return useAsyncRetry(async () => {
-        return (TokenPrice?.getFungibleTokenPrice as GetFungibleTokenPrice)(
+        if (!chainId || !TokenPrice) return 0
+        if (!address || !tokenId) return 0
+        return (TokenPrice.getNonFungibleTokenPrice as GetNonFungibleTokenPrice)(
             chainId,
-            nativeTokenAddress,
+            address,
+            tokenId,
             options?.currencyType,
         )
-    }, [chainId, nativeTokenAddress, options?.currencyType, TokenPrice])
+    }, [chainId, address, tokenId, options?.currencyType, TokenPrice])
 }

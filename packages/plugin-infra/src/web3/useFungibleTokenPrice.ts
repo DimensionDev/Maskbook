@@ -11,9 +11,9 @@ export function useFungibleTokenPrice<T extends NetworkPluginID>(
         currencyType?: CurrencyType
     },
 ) {
-    type GetTokenPrice = (
+    type GetFungibleTokenPrice = (
         chainId: Web3Helper.Definition[T]['ChainId'],
-        id: string,
+        address: string,
         currencyType?: CurrencyType,
     ) => Promise<number>
 
@@ -22,6 +22,10 @@ export function useFungibleTokenPrice<T extends NetworkPluginID>(
 
     return useAsyncRetry(async () => {
         if (!chainId || !TokenPrice) return 0
-        return (TokenPrice.getTokenPrice as GetTokenPrice)(chainId, address ?? '', options?.currencyType)
+        return (TokenPrice.getFubgibleTokenPrice as GetFungibleTokenPrice)(
+            chainId,
+            address ?? '',
+            options?.currencyType,
+        )
     }, [chainId, address, options?.currencyType, TokenPrice])
 }

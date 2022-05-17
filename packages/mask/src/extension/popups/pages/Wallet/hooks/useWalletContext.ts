@@ -1,12 +1,7 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { useChainId, useTransactions, useFungibleAssets } from '@masknet/plugin-infra/web3'
-import {
-    FungibleAsset,
-    NetworkPluginID,
-    RecentTransaction,
-    Wallet
-} from '@masknet/web3-shared-base'
+import { FungibleAsset, NetworkPluginID, RecentTransaction, Wallet } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 
 function useWalletContext() {

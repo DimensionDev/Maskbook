@@ -685,14 +685,10 @@ export interface TokenState<ChainId, SchemaType> {
     blockToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
 }
 export interface TokenPriceState<ChainId> {
-    /** get price of a token */
-    getTokenPrice?: (chainId: ChainId, address: string, currencyType?: CurrencyType) => Promise<number>
-    /** get prices of tokens */
-    getTokenPrices?: (
-        chainId: ChainId,
-        listOfAddress: string[],
-        currencyType?: CurrencyType,
-    ) => Promise<Record<string, number>>
+    /** get price of a fungible token */
+    getFungibleTokenPrice?: (chainId: ChainId, address: string, currencyType?: CurrencyType) => Promise<number>
+    /** get price of a non-fungible token */
+    getNonFungibleTokenPrice?: (chainId: ChainId, address: string, tokenId: string, currencyType?: CurrencyType) => Promise<number>
 }
 export interface TokenIconState<ChainId> {
     /** get token icon urls of fungible token */

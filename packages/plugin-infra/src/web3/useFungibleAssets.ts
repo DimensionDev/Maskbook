@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { asyncIteratorToArray } from '@masknet/shared-base'
+import { asyncIteratorToArray, EMPTY_LIST } from '@masknet/shared-base'
 import type { FungibleAsset, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '../web3-helpers'
 import { useWeb3State } from './useWeb3State'
@@ -19,7 +19,7 @@ export function useFungibleAssets<T extends NetworkPluginID>(
     const account = useAccount(pluginID)
 
     return useAsyncRetry(async () => {
-        if (!account || !Asset) return []
+        if (!account || !Asset) return EMPTY_LIST
         const assets = await asyncIteratorToArray((Asset.getAllFungibleAssets as GetAllFungibleAssets)(account))
         return assets.length && schemaType ? assets.filter((x) => x.schema === schemaType) : assets
     }, [account, schemaType, Asset])

@@ -1,25 +1,21 @@
+import { useAsyncRetry } from 'react-use'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { NonFungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '../web3-helpers'
-import { useAsyncRetry } from 'react-use'
+import { useWeb3Connection } from './useWeb3Connection'
 
 export function useNonFungibleTokens<T extends NetworkPluginID>(
     pluginID?: T,
-    listOfAddress?: string[],
+    // pair: [address, tokenId]
+    listOfPairs?: [string, string],
     options?: Web3Helper.Web3ConnectionOptions<T>,
 ) {
-    return useAsyncRetry(
-        async () =>
-            [] as NonFungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>[],
-    )
-    // const { Token } = useWeb3State(pluginID)
-    // const fungibleTokens = useSubscription(
-    //     (Token?.fungibleTokens ?? EMPTY_ARRAY) as Subscription<
-    //         FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>[]
-    //     >,
-    // )
-    // return useMemo(() => {
-    //     return fungibleTokens.length && schemaType
-    //         ? fungibleTokens.filter((x) => x.schema === schemaType)
-    //         : fungibleTokens
-    // }, [schemaType, fungibleTokens])
+    const connection = useWeb3Connection(pluginID, options)
+
+    return useAsyncRetry<
+        NonFungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>[]
+    >(async () => {
+        if (!connection) return EMPTY_LIST
+        return Promise.all(listOfPairs?.map((x) => connection.getNonFungibleToken(x[0], x[1])) ?? [])
+    }, [connection, listOfPairs?.join()])
 }

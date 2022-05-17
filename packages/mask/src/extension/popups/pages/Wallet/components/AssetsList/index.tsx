@@ -42,10 +42,7 @@ const useStyles = makeStyles()({
     },
 })
 
-type Asset = FungibleAsset<
-    ChainId,
-    SchemaType
->
+type Asset = FungibleAsset<ChainId, SchemaType>
 
 export const AssetsList = memo(() => {
     const navigate = useNavigate()

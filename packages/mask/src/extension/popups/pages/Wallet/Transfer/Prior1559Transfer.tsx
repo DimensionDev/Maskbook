@@ -36,7 +36,13 @@ import { useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { toHex } from 'web3-utils'
 import { TransferAddressError } from '../type'
-import { useChainId, useFungibleTokenBalance, useWallet, useWeb3State, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import {
+    useChainId,
+    useFungibleTokenBalance,
+    useWallet,
+    useWeb3State,
+    useWeb3Connection,
+} from '@masknet/plugin-infra/web3'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()({

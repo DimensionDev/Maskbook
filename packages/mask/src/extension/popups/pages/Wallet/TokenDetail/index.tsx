@@ -120,7 +120,7 @@ const TokenDetail = memo(() => {
         <>
             <div className={classes.content}>
                 <TokenIcon
-                    classes={{ icon:  classes.tokenIcon }}
+                    classes={{ icon: classes.tokenIcon }}
                     address={currentToken.address}
                     name={currentToken.name}
                     chainId={currentToken.chainId}

@@ -3,7 +3,9 @@ import { AddressBook } from './AddressBook'
 import { Asset } from './Asset'
 import { RiskWarning } from './RiskWarning'
 import { Token } from './Token'
+import { TokenIcon } from './TokenIcon'
 import { TokenList } from './TokenList'
+import { TokenPrice } from './TokenPrice'
 import { Transaction } from './Transaction'
 import { NameService } from './NameService'
 import { Protocol } from './Protocol'
@@ -15,7 +17,6 @@ import { TransactionFormatter } from './TransactionFormatter'
 import { TransactionWatcher } from './TransactionWatcher'
 import type { EVM_Web3State } from './Protocol/types'
 import { IdentityService } from './IdentityService'
-import { TokenIcon } from './TokenIcon'
 import { GasOptions } from './GasOptions'
 
 export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3State {
@@ -37,6 +38,7 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3S
             account: Provider_.account,
         }),
         TokenIcon: new TokenIcon(context),
+        TokenPrice: new TokenPrice(context),
         TokenList: new TokenList(context, {
             chainId: Provider_.chainId,
         }),

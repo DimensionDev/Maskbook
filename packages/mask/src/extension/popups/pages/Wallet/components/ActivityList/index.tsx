@@ -4,10 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
 import { Button, Link, List } from '@mui/material'
-import {
-    NetworkPluginID,
-    RecentTransaction,
-} from '@masknet/web3-shared-base'
+import { NetworkPluginID, RecentTransaction } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext'
