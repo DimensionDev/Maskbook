@@ -2,7 +2,7 @@ import Fortmatic from 'fortmatic'
 import type { RequestArguments } from 'web3-core'
 import { first } from 'lodash-unified'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider'
-import { ChainId, getRPCConstants } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, getRPCConstants } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/web3-shared-base'
 import type { EVM_Provider } from '../types'
 import { BaseProvider } from './Base'
@@ -89,7 +89,7 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
         try {
             this.chainId = chainId
             const accounts = await this.login()
-            if (!accounts.length) throw new Error(`Failed to connect to ${this.chainId}.`)
+            if (!accounts.length) throw new Error(`Failed to connect to ${chainResolver.chainFullName(this.chainId)}.`)
             return {
                 account: first(accounts)!,
                 chainId,

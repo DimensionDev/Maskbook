@@ -1,6 +1,6 @@
 import { first } from 'lodash-unified'
 import { createLookupTableResolver } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import * as Torus from '@toruslabs/torus-embed'
 import type { RequestArguments } from 'web3-core'
 import type { EVM_Provider } from '../types'
@@ -73,7 +73,7 @@ export default class TorusProvider extends BaseProvider implements EVM_Provider 
         try {
             this.chainId = chainId
             const accounts = await this.login()
-            if (!accounts.length) throw new Error(`Failed to connect to ${this.chainId}.`)
+            if (!accounts.length) throw new Error(`Failed to connect to ${chainResolver.chainFullName(this.chainId)}.`)
             return {
                 account: first(accounts)!,
                 chainId,

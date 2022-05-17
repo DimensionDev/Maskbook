@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import { toHex } from 'web3-utils'
 import type { HttpProvider, RequestArguments } from 'web3-core'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { ChainId, createWeb3Provider, createPayload, getRPCConstants } from '@masknet/web3-shared-evm'
+import { ChainId, createWeb3Provider, createPayload, getRPCConstants, chainResolver } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { EVM_Provider } from '../types'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings'
@@ -17,7 +17,7 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
 
     constructor() {
         super()
-        Web3StateSettings.readyPromise.then(this.addShareContextListeners)
+        Web3StateSettings.readyPromise.then(this.addShareContextListeners.bind(this))
     }
 
     /**
@@ -119,7 +119,7 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     override async connect(chainId: ChainId) {
         const { account, chainId: actualChainId, updateAccount } = SharedContextSettings.value
 
-        if (!account.getCurrentValue()) throw new Error(`Failed to connect to ${chainId}.`)
+        if (!account.getCurrentValue()) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
 
         // switch chain
         if (actualChainId.getCurrentValue() !== chainId) {
