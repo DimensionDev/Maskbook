@@ -2,24 +2,27 @@ import { padStart } from 'lodash-unified'
 import { BigNumber } from '@ethersproject/bignumber'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { createTypedMessageMetadataReader } from '@masknet/typed-message'
-import { Buffer } from 'buffer'
 
 import { META_KEY, supportedChainId } from '../constants'
 import type { ReferralMetaData, ChainAddress, ChainAddressProps, EvmAddress, Bytes32, Bytes24 } from '../types'
 import schema from '../schema.json'
-import { toBigInt, Buffer20, Buffer24 } from './buffer'
+import { bufToHexString, toBigInt, writeUInt32BE, hexToArrayBuffer } from './buffer'
 
-function toChainAddress(chainId: BigNumber | bigint, address: Buffer20): Buffer24 {
+function toChainAddress(chainId: BigNumber | bigint, address: Uint8Array): Uint8Array {
     if (address.byteLength !== 20) throw new Error('invalid address')
-    const b = Buffer.alloc(24)
+    const b = new Uint8Array(24)
+
     // Only numeric network id's are supported in the chain address, with max of uint32.
     // TODO throw on this if wrong
-    b.writeUInt32BE(Number(toBigInt(chainId)), 0)
-    b.fill(address, 4)
+    writeUInt32BE(b, Number(toBigInt(chainId)), 0)
+
+    b.set(address, 4)
+
     return b
 }
+
 export function toChainAddressEthers(chainId: number, address: string): string {
-    return '0x' + toChainAddress(BigNumber.from(chainId), Buffer.from(address.slice(2), 'hex')).toString('hex')
+    return '0x' + bufToHexString(toChainAddress(BigNumber.from(chainId), hexToArrayBuffer(address.slice(2))))
 }
 
 export function parseChainAddress(chainAddress: ChainAddress): ChainAddressProps {
