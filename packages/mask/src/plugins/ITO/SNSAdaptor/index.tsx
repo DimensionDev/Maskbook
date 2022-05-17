@@ -16,7 +16,6 @@ import type { JSON_PayloadComposeMask } from '../types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-unified'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { MarketsIcon, MarketsClaimIcon } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
@@ -39,11 +38,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const payload = ITO_MetadataReader(props.message.meta)
         usePluginWrapper(payload.ok)
         if (!payload.ok) return null
-        return (
-            <EthereumChainBoundary chainId={payload.val.chain_id}>
-                <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
-            </EthereumChainBoundary>
-        )
+        return <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
     },
     CompositionDialogMetadataBadgeRender: new Map([
         [ITO_MetaKey_1, onAttached_ITO],
@@ -120,6 +115,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
+    wrapperProps: {
+        icon: <MarketsIcon style={{ filter: 'drop-shadow(0px 6px 12px rgba(27, 144, 238, 0.2))', fontSize: 24 }} />,
+        backgroundGradient:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(41, 228, 253, 0.2) 100%), #FFFFFF;',
+    },
 }
 
 function onAttached_ITO(payload: JSON_PayloadComposeMask) {

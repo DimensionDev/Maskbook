@@ -7,5 +7,5 @@ import type { ChainId } from '../types'
 
 export function useBalanceCheckerContract(chainId?: ChainId) {
     const { BALANCE_CHECKER_ADDRESS } = useEthereumConstants(chainId)
-    return useContract<BalanceChecker>(BALANCE_CHECKER_ADDRESS, BalanceCheckerABI as AbiItem[])
+    return useContract<BalanceChecker>(BALANCE_CHECKER_ADDRESS, BalanceCheckerABI as AbiItem[], chainId)
 }

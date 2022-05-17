@@ -246,8 +246,6 @@
     "plugin_ito_list_table_got": "バランス",
     "plugin_ito_list_button_send": "送る",
     "plugin_ito_withdraw": "取り消す",
-    "plugin_ito_qualification_loading": "資格認証中…",
-    "plugin_ito_qualification_failed": "ウォレットアドレスがリストにありません。",
     "plugin_ito_withdrawn": "取り消しました",
     "plugin_ito_your_swapped_amount": "あなたは {{amount}} {{symbol}} を獲得しました",
     "plugin_ito_your_claimed_amount": "あなたは {{amount}} {{symbol}} を請求しました",
@@ -384,7 +382,6 @@
     "plugin_dhedge_buy_token": "{{symbol}} を得る",
     "plugin_dhedge_enter_an_amount": "量を入力",
     "plugin_dhedge_insufficient_balance": "{{symbol}} の残高が不十分です",
-    "plugin_dhedge_loading": "ロード中…",
     "plugin_dhedge_pool_not_found": "無効なプールアドレスです！",
     "plugin_dhedge_smt_wrong": "何か間違いが発生しました！"
 }
