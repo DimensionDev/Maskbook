@@ -18,7 +18,7 @@ export class Base implements Translator {
 
             // add gas price
             const options = await Web3StateSettings.value.GasOptions?.getGasOptions?.(context.chainId)
-            const { [GasOptionType.SLOW]: slowOption, [GasOptionType.NORMAL]: normalOption } = options?.options ?? {}
+            const { [GasOptionType.SLOW]: slowOption, [GasOptionType.NORMAL]: normalOption } = options ?? {}
 
             if (chainResolver.isSupport(context.chainId, 'EIP1559')) {
                 delete config.gasPrice
