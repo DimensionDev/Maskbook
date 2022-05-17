@@ -173,7 +173,12 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         }
 
         if (!isPluginMatched) {
-            openSelectProviderDialog()
+            await switchToPlugin()
+            setConnectWalletDialog({
+                open: true,
+                providerType: ProviderType.MaskWallet,
+                networkType: networkType!,
+            })
             return
         }
         if (!isChainMatched) await switchToChain()
