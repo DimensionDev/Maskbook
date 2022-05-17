@@ -12,6 +12,6 @@ export function useAvailability(id: string, contract_address: string, from?: str
 
     return useAsyncRetry(async () => {
         if (!id || !contract_address) return null
-        return checkAvailability(id, fromAccount, contract_address, chainId ?? _chainId, isV1)
-    }, [id, account])
+        return checkAvailability(id, account ?? fromAccount, contract_address, chainId ?? _chainId, isV1)
+    }, [id, account, fromAccount, _chainId, chainId])
 }
