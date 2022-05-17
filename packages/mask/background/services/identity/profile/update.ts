@@ -60,13 +60,10 @@ export async function resolveUnknownLegacyIdentity(identifier: ProfileIdentifier
 
     const records = await queryProfilesDB({ identifiers: [unknown, self] })
     if (!records.length) return
-    const final = {
-        ...Object.assign({}, ...records),
-        identifier,
-    }
+    const finalRecord: ProfileRecord = Object.assign({}, ...records, { identifier })
     try {
         await consistentPersonaDBWriteAccess(async (t) => {
-            await createProfileDB(final, t)
+            await createProfileDB(finalRecord, t)
             await deleteProfileDB(unknown, t).catch(() => {})
             await deleteProfileDB(self, t).catch(() => {})
         })
