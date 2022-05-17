@@ -58,10 +58,10 @@ export async function resolveUnknownLegacyIdentity(identifier: ProfileIdentifier
     const unknown = ProfileIdentifier.of(identifier.network, '$unknown').unwrap()
     const self = ProfileIdentifier.of(identifier.network, '$self').unwrap()
 
-    const r = await queryProfilesDB({ identifiers: [unknown, self] })
-    if (!r.length) return
+    const records = await queryProfilesDB({ identifiers: [unknown, self] })
+    if (!records.length) return
     const final = {
-        ...r.reduce((p, c) => ({ ...p, ...c })),
+        ...Object.assign({}, ...records),
         identifier,
     }
     try {
