@@ -1,6 +1,7 @@
 import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { MaskColorVar } from '@masknet/theme'
 import { ChainId, TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
@@ -61,6 +62,14 @@ export function OperationFooter({
 
         return (
             <ActionButton
+                sx={{
+                    backgroundColor: MaskColorVar.buttonPluginBackground,
+                    width: '100%',
+                    color: 'white',
+                    '&:hover': {
+                        backgroundColor: MaskColorVar.buttonPluginBackground,
+                    },
+                }}
                 fullWidth
                 disabled={isLoading}
                 loading={isLoading}
@@ -89,10 +98,18 @@ export function OperationFooter({
                     <Box className={classes.footer}>
                         {canRefund ? null : (
                             <ActionButton
+                                sx={{
+                                    backgroundColor: MaskColorVar.buttonPluginBackground,
+                                    width: '100%',
+                                    color: 'white',
+                                    '&:hover': {
+                                        backgroundColor: MaskColorVar.buttonPluginBackground,
+                                    },
+                                    padding: 1.125,
+                                }}
                                 startIcon={<SharedIcon style={{ fontSize: 18 }} />}
                                 variant="contained"
                                 fullWidth
-                                sx={{ padding: 1.125 }}
                                 onClick={onShare}>
                                 {t('share')}
                             </ActionButton>

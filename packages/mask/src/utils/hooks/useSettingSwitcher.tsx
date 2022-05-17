@@ -2,6 +2,7 @@ import { useMemo, useCallback } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import type { InternalSettings } from '../../settings/createSettings'
+import { MaskColorVar } from '@masknet/theme'
 
 export function useSettingsSwitcher<T extends string | number, S extends InternalSettings<T>>(
     settings: S,
@@ -53,8 +54,14 @@ export function useSwitcher<T extends string | number>(
     return (
         <ActionButton
             fullWidth={fullWidth}
-            sx={{ marginTop: 1 }}
-            color="primary"
+            sx={{
+                marginTop: 1,
+                backgroundColor: MaskColorVar.buttonPluginBackground,
+                '&:hover': {
+                    backgroundColor: MaskColorVar.buttonPluginBackground,
+                },
+                color: 'white',
+            }}
             variant="contained"
             onClick={() => onSwitch(nextOption)}>
             Switch to {resolver(nextOption)}
