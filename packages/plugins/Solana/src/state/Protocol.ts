@@ -6,8 +6,9 @@ import type {
     ProviderType,
     SchemaType,
     Web3,
-    Transaction,
     Signature,
+    Block,
+    Transaction,
     TransactionDetailed,
     TransactionSignature,
 } from '@masknet/web3-shared-solana'
@@ -18,6 +19,7 @@ export class Protocol extends ProtocolState<
     SchemaType,
     ProviderType,
     Signature,
+    Block,
     Transaction,
     TransactionDetailed,
     TransactionSignature,

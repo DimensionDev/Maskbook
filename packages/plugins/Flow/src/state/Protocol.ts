@@ -1,10 +1,18 @@
 import type { Subscription } from 'use-subscription'
-import type { CompositeSignature, CurrentUserObject, MutateOptions, TransactionObject } from '@blocto/fcl'
+import type { CurrentUserObject } from '@blocto/fcl'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ProtocolState } from '@masknet/plugin-infra/web3'
-import type { ChainId, ProviderType, SchemaType, Web3 } from '@masknet/web3-shared-flow'
+import type {
+    ChainId,
+    ProviderType,
+    SchemaType,
+    Web3,
+    Signature,
+    Block,
+    Transaction,
+    TransactionDetailed,
+} from '@masknet/web3-shared-flow'
 import { createConnection } from './Protocol/connection'
-import type { BlockResponse } from '@solana/web3.js'
 
 export interface ProtocolStorage {
     chainId: ChainId
@@ -15,10 +23,10 @@ export class Protocol extends ProtocolState<
     ChainId,
     SchemaType,
     ProviderType,
-    CompositeSignature[],
-    BlockResponse,
-    MutateOptions,
-    TransactionObject,
+    Signature,
+    Block,
+    Transaction,
+    TransactionDetailed,
     never,
     Web3
 > {

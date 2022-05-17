@@ -5,11 +5,13 @@ import type {
     ProviderType,
     SchemaType,
     Signature,
+    GasOption,
     Transaction,
     TransactionDetailed,
     TransactionParameter,
     TransactionSignature,
     Web3,
+    Block,
 } from '@masknet/web3-shared-evm'
 import { base } from '../../base'
 import { createWeb3State } from '../../state'
@@ -21,6 +23,8 @@ const sns: Plugin.SNSAdaptor.Definition<
     ProviderType,
     NetworkType,
     Signature,
+    GasOption,
+    Block,
     Transaction,
     TransactionDetailed,
     TransactionSignature,

@@ -1,6 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import type {
+    Block,
     ChainId,
+    GasOption,
     NetworkType,
     ProviderType,
     SchemaType,
@@ -21,6 +23,8 @@ const dashboard: Plugin.Dashboard.Definition<
     ProviderType,
     NetworkType,
     Signature,
+    GasOption,
+    Block,
     Transaction,
     TransactionDetailed,
     TransactionSignature,
