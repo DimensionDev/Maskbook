@@ -119,11 +119,12 @@ export class ProviderState<
         const account_ = this.storage.accounts.value[providerType]
         const accountCopied = clone(account)
 
-        if (!this.options.isValidAddress(accountCopied.account)) delete accountCopied.account
+        if (accountCopied.account !== '' && !this.options.isValidAddress(accountCopied.account))
+            delete accountCopied.account
         if (!this.options.isValidChainId(accountCopied.chainId ?? 0)) delete accountCopied.chainId
 
         const needToUpdateAccount =
-            accountCopied.account && !this.options.isSameAddress(account_.account, account.account)
+            accountCopied.account === '' || !this.options.isSameAddress(account_.account, account.account)
         const needToUpdateChainId = accountCopied.chainId && account_.chainId !== accountCopied.chainId
         const needToUpdateProviderType = this.storage.providers.value[siteType] !== providerType
 
