@@ -71,7 +71,8 @@ function collectValue(val: any): any {
         }
 
         const result: Record<string, any> = {}
-        for (const key of Object.keys(val)) {
+        // eslint-disable-next-line @dimensiondev/no-for-in
+        for (const key in val) {
             if (typeof key !== 'string') throw new TypeError(`${HEAD}Unsupported type symbol.`)
             const v = val[key]
             result[key] = collectValue(v)

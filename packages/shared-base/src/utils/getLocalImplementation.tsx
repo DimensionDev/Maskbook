@@ -22,7 +22,7 @@ export async function getLocalImplementation<T extends object>(
     RPCCache.set(ref, localImpl)
 
     const result: any = await impl()
-    for (const key of Object.keys(localImpl) as Array<keyof typeof localImpl>) {
+    for (const key of Object.keys(localImpl) as Array<keyof T>) {
         if (!Reflect.has(result, key)) {
             delete localImpl[key]
             isUpdate && console.log(`[HMR] ${name}.${String(key)} removed.`)

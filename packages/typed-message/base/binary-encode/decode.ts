@@ -52,8 +52,8 @@ function assertString(x: unknown): asserts x is string {
 function fixU8Array(input: unknown) {
     // for Array and object
     if (typeof input !== 'object' || input === undefined || input === null) return
-    for (const key of Object.keys(input) as Array<keyof typeof input>) {
-        const value = input[key] as unknown
+    for (const key of Object.keys(input)) {
+        const value = Reflect.get(input, key)
         if (value instanceof Uint8Array) {
             Reflect.set(input, key, value.slice())
         } else {
