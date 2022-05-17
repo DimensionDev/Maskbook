@@ -14,7 +14,6 @@ import {
     useNetworkDescriptor,
     useProviderDescriptor,
     useAccount,
-    useWallet,
     useChainColor,
     useChainIdValid,
     useWeb3State,
@@ -153,56 +152,53 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
     }, [nextIDConnectStatus.status])
 
     return (
-        <>
-            <Container>
-                <GuideStep step={2} total={4} tip={t('user_guide_tip_2')}>
-                    <ListItemButton onClick={openWallet}>
-                        <ListItemIcon>
-                            {isWalletValid ? (
-                                <WalletIcon
-                                    size={iconSize}
-                                    badgeSize={badgeSize}
-                                    networkIcon={providerDescriptor?.icon} // switch the icon to meet design
-                                    providerIcon={networkDescriptor?.icon}
-                                    isBorderColorNotDefault
-                                />
-                            ) : (
-                                <AccountBalanceWalletIcon />
-                            )}
-                        </ListItemIcon>
-                        {mini ? null : (
-                            <ListItemText
-                                primary={
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                        }}>
-                                        <Typography className={classes.title}>{walletTitle}</Typography>
-                                        {shouldDisplayChainIndicator ? (
-                                            <FiberManualRecordIcon
-                                                className={classes.chainIcon}
-                                                style={{
-                                                    color: chainColor,
-                                                }}
-                                            />
-                                        ) : null}
-                                    </Box>
-                                }
+        <Container>
+            <GuideStep step={2} total={4} tip={t('user_guide_tip_2')}>
+                <ListItemButton onClick={openWallet}>
+                    <ListItemIcon>
+                        {isWalletValid ? (
+                            <WalletIcon
+                                size={iconSize}
+                                badgeSize={badgeSize}
+                                networkIcon={providerDescriptor?.icon} // switch the icon to meet design
+                                providerIcon={networkDescriptor?.icon}
+                                isBorderColorNotDefault
                             />
+                        ) : (
+                            <AccountBalanceWalletIcon />
                         )}
-                    </ListItemButton>
-                </GuideStep>
-            </Container>
-        </>
+                    </ListItemIcon>
+                    {mini ? null : (
+                        <ListItemText
+                            primary={
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                    }}>
+                                    <Typography className={classes.title}>{walletTitle}</Typography>
+                                    {shouldDisplayChainIndicator ? (
+                                        <FiberManualRecordIcon
+                                            className={classes.chainIcon}
+                                            style={{
+                                                color: chainColor,
+                                            }}
+                                        />
+                                    ) : null}
+                                </Box>
+                            }
+                        />
+                    )}
+                </ListItemButton>
+            </GuideStep>
+        </Container>
     )
 }
 
 function useToolbox() {
     const { t } = useI18N()
     const account = useAccount()
-    const selectedWallet = useWallet()
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainIdMainnet = useChainIdMainnet()
@@ -221,7 +217,7 @@ function useToolbox() {
     )
     // #endregion
 
-    const isWalletValid = !!account && selectedWallet && chainIdValid
+    const isWalletValid = !!account && chainIdValid
 
     const { value: domain } = useReverseAddress(undefined, account)
 
