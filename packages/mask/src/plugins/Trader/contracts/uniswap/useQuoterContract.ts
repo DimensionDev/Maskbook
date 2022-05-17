@@ -5,5 +5,5 @@ import type { AbiItem } from 'web3-utils'
 
 export function useQuoterContract(chainId?: ChainId) {
     const { UNISWAP_V3_QUOTER_ADDRESS } = useTraderConstants(chainId)
-    return useContract<Quoter>(UNISWAP_V3_QUOTER_ADDRESS, QuoterABI as AbiItem[], chainId)
+    return useContract<Quoter>(chainId, UNISWAP_V3_QUOTER_ADDRESS, QuoterABI as AbiItem[])
 }
