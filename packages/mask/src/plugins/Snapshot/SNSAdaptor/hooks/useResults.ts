@@ -2,7 +2,7 @@ import type { ProposalIdentifier, ProposalResult, VoteItem } from '../../types'
 import { useSuspense } from '../../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
 import { useVotes } from './useVotes'
-import { sum } from 'lodash-unified'
+import { sumBy } from 'lodash-unified'
 
 const cache = new Map<
     string,
@@ -27,19 +27,17 @@ async function Suspender(identifier: ProposalIdentifier) {
     const { payload: votes } = useVotes(identifier)
     const strategies = proposal.strategies
     const powerOfChoices = proposal.choices.map((_choice, index) =>
-        sum(
-            voteForChoice(votes, index).map((choice) => {
-                if (choice.choiceIndex) return choice.balance
-                const totalWeight = sum(choice.choices!.map((choice) => choice.weight))
-                const weight = choice.choices!.find((v) => v.index === index + 1)?.weight ?? 0
-                return (choice.balance * weight) / totalWeight
-            }),
-        ),
+        sumBy(voteForChoice(votes, index), (choice) => {
+            if (choice.choiceIndex) return choice.balance
+            const totalWeight = sumBy(choice.choices, (choice) => choice.weight)
+            const weight = choice.choices!.find((v) => v.index === index + 1)?.weight ?? 0
+            return (choice.balance * weight) / totalWeight
+        }),
     )
     const powerDetailOfChoices = proposal.choices.map((_choice, i) =>
-        strategies.map((_strategy, index) => sum(voteForChoice(votes, i).map((vote) => vote.scores[index], 0))),
+        strategies.map((_strategy, index) => sumBy(voteForChoice(votes, i), (vote) => vote.scores[index])),
     )
-    const totalPower = sum(votes.map((vote) => vote.balance))
+    const totalPower = sumBy(votes, (vote) => vote.balance)
 
     const results: ProposalResult[] = powerOfChoices.map((p, i) => ({
         choice: proposal.choices[i],

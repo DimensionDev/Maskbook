@@ -7,7 +7,7 @@ import NoNftCard from './NoNftCard'
 import { FindTrumanContext } from '../context'
 import { BorderLinearProgress } from './ResultCard'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { sum } from 'lodash-unified'
+import { sumBy } from 'lodash-unified'
 
 const useOptionsStyles = makeStyles()((theme) => {
     return {
@@ -93,7 +93,7 @@ export default function OptionsCard(props: OptionsViewProps) {
 
     const renderOptions = (userStatus: UserPollStatus) => {
         const showCount = !!userStatus.count
-        const total = sum((userStatus.count ?? []).map((status) => status.value))
+        const total = sumBy(userStatus.count ?? [], (status) => status.value)
         return userStatus.options.map((option, index) => {
             const count = userStatus.count ? userStatus.count.find((e) => e.choice === index)?.value || 0 : 0
             const percent = (total > 0 ? (count * 100) / total : 0).toFixed(2)

@@ -1,5 +1,5 @@
 import type { NormalizedBackup } from '@masknet/backup-format'
-import { sum } from 'lodash-unified'
+import { sumBy } from 'lodash-unified'
 
 export interface BackupPreview {
     personas: number
@@ -21,7 +21,7 @@ export function getBackupPreviewInfo(json: NormalizedBackup.Data): BackupPreview
 
     return {
         personas: json.personas.size,
-        accounts: sum([...json.personas.values()].map((persona) => persona.linkedProfiles.size)),
+        accounts: sumBy([...json.personas.values()], (persona) => persona.linkedProfiles.size),
         posts: json.posts.size,
         contacts: json.profiles.size,
         relations: json.relations.length,
