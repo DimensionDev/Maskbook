@@ -109,15 +109,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    const { setDialog: setSelectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectWalletDialogUpdated,
-    )
-
-    // #region connect wallet dialog
-    const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.connectWalletDialogUpdated,
-    )
-    // #endregion
     const networkDescriptor = useNetworkDescriptor(expectedChainId, NetworkPluginID.PLUGIN_EVM)
     // request ethereum-compatible network
     const networkType = getNetworkTypeFromChainId(expectedChainId)
