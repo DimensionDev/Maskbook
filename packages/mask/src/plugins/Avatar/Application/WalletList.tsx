@@ -26,7 +26,7 @@ import { CopyIcon } from '../assets/copy'
 import classNames from 'classnames'
 import { VerifyIcon } from '../assets/verify'
 import { noop } from 'lodash-unified'
-import { Verify2Icon } from '../assets/verify2'
+import { Verify2Icon } from '../assets/Verify2'
 import { formatAddress } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({
