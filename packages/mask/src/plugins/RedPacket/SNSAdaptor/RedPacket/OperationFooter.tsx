@@ -1,14 +1,16 @@
-import { PluginWalletConnectIcon, SharedIcon } from '@masknet/icons'
+import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
+import { ChainId, TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
+import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { useStyles } from './useStyles'
 
 interface OperationFooterProps {
+    chainId?: ChainId
     canClaim: boolean
     canRefund: boolean
     claimState: TransactionState
@@ -17,6 +19,7 @@ interface OperationFooterProps {
     onClaimOrRefund: () => void | Promise<void>
 }
 export function OperationFooter({
+    chainId,
     canClaim,
     canRefund,
     claimState,
@@ -77,27 +80,28 @@ export function OperationFooter({
 
     return (
         <Box style={{ flex: 1, padding: 12 }}>
-            <EthereumWalletConnectedBoundary
-                hideRiskWarningConfirmed
-                startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-                classes={{
-                    connectWallet: classes.connectWallet,
-                }}>
-                <Box className={classes.footer}>
-                    {canRefund ? null : (
-                        <ActionButton
-                            startIcon={<SharedIcon style={{ fontSize: 18 }} />}
-                            variant="contained"
-                            fullWidth
-                            size="large"
-                            sx={{ padding: 1.125 }}
-                            onClick={onShare}>
-                            {t('share')}
-                        </ActionButton>
-                    )}
-                    <ObtainButton />
-                </Box>
-            </EthereumWalletConnectedBoundary>
+            <EthereumChainBoundary chainId={chainId ?? ChainId.Mainnet}>
+                <EthereumWalletConnectedBoundary
+                    hideRiskWarningConfirmed
+                    startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                    classes={{
+                        connectWallet: classes.connectWallet,
+                    }}>
+                    <Box className={classes.footer}>
+                        {canRefund ? null : (
+                            <ActionButton
+                                startIcon={<SharedIcon style={{ fontSize: 18 }} />}
+                                variant="contained"
+                                fullWidth
+                                sx={{ padding: 1.125 }}
+                                onClick={onShare}>
+                                {t('share')}
+                            </ActionButton>
+                        )}
+                        <ObtainButton />
+                    </Box>
+                </EthereumWalletConnectedBoundary>
+            </EthereumChainBoundary>
         </Box>
     )
 }

@@ -13,6 +13,8 @@ import {
     useTokenConstants,
     EthereumTokenType,
     isSameAddress,
+    getChainIdFromName,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -48,7 +50,7 @@ export function RedPacket(props: RedPacketProps) {
         value: availability,
         computed: availabilityComputed,
         retry: revalidateAvailability,
-    } = useAvailabilityComputed(account, payload)
+    } = useAvailabilityComputed(account ?? payload.contract_address, payload)
 
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
@@ -214,6 +216,7 @@ export function RedPacket(props: RedPacketProps) {
             </Card>
             {listOfStatus.includes(RedPacketStatus.empty) ? null : (
                 <OperationFooter
+                    chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}
                     canClaim={canClaim}
                     canRefund={canRefund}
                     claimState={claimState}
