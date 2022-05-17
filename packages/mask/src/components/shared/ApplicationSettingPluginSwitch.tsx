@@ -1,7 +1,7 @@
 import { List, ListItem, ListItemAvatar, Avatar, Typography, Box } from '@mui/material'
 import { openWindow } from '@masknet/shared-base-ui'
 import { TutorialIcon } from '@masknet/icons'
-import { useActivatedPluginsSNSAdaptor, Plugin, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSNSAdaptor, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { SettingSwitch } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Services } from '../../extension/service'
@@ -72,17 +72,9 @@ export function ApplicationSettingPluginSwitch(props: Props) {
     return (
         <List>
             {snsAdaptorPlugins
-                .reduce<{ entry: Plugin.SNSAdaptor.ApplicationEntry; pluginId: string }[]>((acc, cur) => {
-                    if (!cur.ApplicationEntries) return acc
-                    return acc.concat(
-                        cur.ApplicationEntries.map((x) => {
-                            return {
-                                entry: x,
-                                pluginId: cur.ID,
-                            }
-                        }) ?? [],
-                    )
-                }, [])
+                .flatMap(({ ID, ApplicationEntries: entries }) =>
+                    (entries ?? []).map((entry) => ({ entry, pluginId: ID })),
+                )
                 .filter((x) => x.entry.category === 'dapp')
                 .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
                 .map((x) => (

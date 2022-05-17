@@ -2,6 +2,7 @@ import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
 import type { IdentityResolved, PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
+    EncryptionTargetType,
     ObservableWeakMap,
     PersonaIdentifier,
     PostIdentifier,
@@ -200,7 +201,7 @@ export namespace SocialNetworkUI {
             open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
         }
         export interface MaskCompositionDialogOpenOptions {
-            target?: 'E2E' | 'Everyone'
+            target?: EncryptionTargetType
         }
         export interface NativeCommentBox {
             appendText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void

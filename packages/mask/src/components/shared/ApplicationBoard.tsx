@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST, formatPersonaPublicKey } from '@masknet/shared-base'
+import { formatPersonaPublicKey } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
@@ -122,34 +122,25 @@ function ApplicationBoardContent(props: Props) {
     const applicationList = useMemo(
         () =>
             snsAdaptorPlugins
-                .reduce<Application[]>((acc, cur) => {
-                    if (!cur.ApplicationEntries) return acc
-                    const currentSNSIsSupportedNetwork = cur.enableRequirement.networks.networks[currentSNSNetwork]
-                    const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
-                    if (!isSNSEnabled) return acc
-                    const currentWeb3NetworkSupportedChainIds = cur.enableRequirement.web3?.[currentWeb3Network]
+                .flatMap(({ ID, ApplicationEntries, enableRequirement }) => {
+                    if (!ApplicationEntries) return []
+                    const currentWeb3NetworkSupportedChainIds = enableRequirement.web3?.[currentWeb3Network]
                     const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
-
-                    return acc.concat(
-                        cur.ApplicationEntries.map((x) => {
-                            return {
-                                entry: x,
-                                enabled: isSNSEnabled,
-                                pluginId: cur.ID,
-                                isWalletConnectedRequired: !account && isWalletConnectedRequired,
-                                isWalletConnectedEVMRequired: Boolean(
-                                    account &&
-                                        currentWeb3Network !== NetworkPluginID.PLUGIN_EVM &&
-                                        isWalletConnectedRequired,
-                                ),
-                            }
-                        }) ?? EMPTY_LIST,
-                    )
-                }, EMPTY_LIST)
-                .sort(
-                    (a, b) =>
-                        (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0),
-                )
+                    const currentSNSIsSupportedNetwork = enableRequirement.networks.networks[currentSNSNetwork]
+                    const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
+                    return ApplicationEntries.map((entry) => ({
+                        entry,
+                        enabled: isSNSEnabled,
+                        pluginId: ID,
+                        isWalletConnectedRequired: !account && isWalletConnectedRequired,
+                        isWalletConnectedEVMRequired: Boolean(
+                            account && currentWeb3Network !== NetworkPluginID.PLUGIN_EVM && isWalletConnectedRequired,
+                        ),
+                    }))
+                })
+                .sort((a, b) => {
+                    return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
+                })
                 .filter((x) => Boolean(x.entry.RenderEntryComponent)),
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )

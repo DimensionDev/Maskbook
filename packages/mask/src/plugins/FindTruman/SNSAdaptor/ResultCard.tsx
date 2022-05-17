@@ -16,6 +16,7 @@ import { PostType } from '../types'
 import { useContext, useState } from 'react'
 import { FindTrumanContext } from '../context'
 import { makeStyles } from '@masknet/theme'
+import { sumBy } from 'lodash-unified'
 
 export const BorderLinearProgress: any = styled(LinearProgress)(({ theme }) => ({
     height: 10,
@@ -49,12 +50,7 @@ export default function ResultCard(props: ResultViewProps) {
 
     const { t } = useContext(FindTrumanContext)
 
-    const total =
-        result?.count && result.count.length > 0
-            ? result.count.reduce((total, e) => {
-                  return { choice: -1, value: total.value + e.value }
-              }).value
-            : 1
+    const total = result?.count ? sumBy(result.count, (status) => status.value) : 1
 
     const answer = result
         ? type === PostType.PuzzleResult
