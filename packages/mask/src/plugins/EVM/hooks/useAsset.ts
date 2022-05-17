@@ -7,6 +7,7 @@ import {
     useChainId,
     useTokenConstants,
     resolveIPFSLinkFromURL,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../messages'
 import { resolveAvatarLinkOnCurrentProvider } from '../../Collectible/pipes'
@@ -17,7 +18,8 @@ export function useAsset(address: string, tokenId: string, provider: NonFungible
     const { WNATIVE_ADDRESS } = useTokenConstants()
 
     return useAsyncRetry(async () => {
-        const asset = await EVM_RPC.getAsset({ address, tokenId, chainId, provider })
+        const asset = await EVM_RPC.getAsset({ address, tokenId, chainId: ChainId.Mainnet, provider })
+        if (!asset) return
         return {
             ...asset,
             image_url: resolveIPFSLinkFromURL(asset?.image_url ?? ''),
