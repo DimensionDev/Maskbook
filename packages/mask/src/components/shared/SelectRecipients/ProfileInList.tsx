@@ -112,7 +112,7 @@ export function ProfileInList(props: ProfileInListProps) {
         (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.selected),
         [props],
     )
-    const textToHighlight = formatPersonaPublicKey(profile.linkedPersona?.publicKeyAsHex?.toUpperCase() ?? '', 4)
+    const textToHighlight = formatPersonaPublicKey(profile.linkedPersona?.rawPublicKey?.toUpperCase() ?? '', 4)
     return (
         <ListItem
             disabled={props.disabled}
@@ -153,9 +153,9 @@ export function ProfileInList(props: ProfileInListProps) {
                         <CopyIcon
                             className={classes.actionIcon}
                             onClick={() => {
-                                const publicHexKey = profile.linkedPersona?.publicKeyAsHex
-                                if (!publicHexKey) return
-                                copyToClipboard(publicHexKey.toUpperCase())
+                                const rawPublickey = profile.linkedPersona?.rawPublicKey
+                                if (!rawPublickey) return
+                                copyToClipboard(rawPublickey.toUpperCase())
                             }}
                         />
                         {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
