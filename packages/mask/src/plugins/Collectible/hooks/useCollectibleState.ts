@@ -14,10 +14,7 @@ function useCollectibleState(token?: CollectibleToken) {
 
     const [provider, setProvider] = useState(NonFungibleAssetProvider.OPENSEA)
 
-    console.log('-----')
-    console.log(token)
     const asset = useAsset(token?.contractAddress ?? '', token?.tokenId ?? '', provider)
-    console.log(asset)
     // #region asset order from sdk
     const assetOrder = useAssetOrder(provider, token)
     // #endregion
