@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -17,9 +17,9 @@ const useStyles = makeStyles()((theme) => {
         },
         button: {
             flex: 1,
-            backgroundColor: MaskColorVar.buttonPluginBackground,
+            backgroundColor: theme.palette.maskColor.dark,
             '&:hover': {
-                backgroundColor: MaskColorVar.buttonPluginBackground,
+                backgroundColor: theme.palette.maskColor.dark,
             },
             color: 'white',
         },

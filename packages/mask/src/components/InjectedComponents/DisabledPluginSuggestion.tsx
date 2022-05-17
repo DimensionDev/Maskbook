@@ -10,9 +10,9 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Services from '../../extension/service'
 import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
 import { HTMLProps, useCallback } from 'react'
-import { Button, Skeleton } from '@mui/material'
+import { Button, Skeleton, useTheme } from '@mui/material'
 import { PluginIcon } from '@masknet/icons'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
@@ -55,6 +55,7 @@ export function PossiblePluginSuggestionPostInspector() {
 }
 export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefinition[] }) {
     const { plugins } = props
+    const theme = useTheme()
     const onClick = useCallback((x: Plugin.DeferredDefinition) => {
         Services.Settings.setPluginMinimalModeEnabled(x.ID, false)
     }, [])
@@ -80,7 +81,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                             variant="contained"
                             onClick={() => onClick(x)}
                             sx={{
-                                backgroundColor: MaskColorVar.buttonPluginBackground,
+                                backgroundColor: theme.palette.maskColor.dark,
                                 color: 'white',
                                 width: '254px',
                                 height: '36px',
@@ -90,7 +91,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                                 paddingBottom: 1.125,
                                 lineHeight: 1.5,
                                 '&:hover': {
-                                    backgroundColor: MaskColorVar.buttonPluginBackground,
+                                    backgroundColor: theme.palette.maskColor.dark,
                                 },
                             }}>
                             Enable plugins

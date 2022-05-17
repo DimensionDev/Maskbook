@@ -75,11 +75,11 @@ const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) =
             padding: theme.spacing(0),
         },
         button: {
-            backgroundColor: MaskColorVar.buttonPluginBackground,
+            backgroundColor: theme.palette.maskColor.dark,
             color: 'white',
             width: 254,
             '&,&:hover': {
-                background: MaskColorVar.buttonPluginBackground,
+                background: theme.palette.maskColor.dark,
             },
             borderRadius: 9999,
         },

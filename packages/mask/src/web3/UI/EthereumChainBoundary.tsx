@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Box, Typography, Theme } from '@mui/material'
+import { Box, Typography, Theme, useTheme } from '@mui/material'
 import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
@@ -36,11 +36,11 @@ import { PluginWalletConnectIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
-        backgroundColor: MaskColorVar.buttonPluginBackground,
+        backgroundColor: theme.palette.maskColor.dark,
         color: 'white',
         width: 254,
         '&,&:hover': {
-            background: MaskColorVar.buttonPluginBackground,
+            background: theme.palette.maskColor.dark,
         },
     },
     action: {
@@ -72,6 +72,7 @@ export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> 
 
 export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const { t } = useI18N()
+    const theme = useTheme()
 
     const pluginID = useCurrentWeb3NetworkPluginID()
     const plugin = useActivatedPlugin(pluginID, 'any')
@@ -193,11 +194,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         variant="contained"
                         size={props.ActionButtonPromiseProps?.size}
                         sx={{
-                            backgroundColor: MaskColorVar.buttonPluginBackground,
+                            backgroundColor: theme.palette.maskColor.dark,
                             width: '100%',
                             color: 'white',
                             '&:hover': {
-                                backgroundColor: MaskColorVar.buttonPluginBackground,
+                                backgroundColor: theme.palette.maskColor.dark,
                             },
                             margin: 0,
                             lineHeight: 0,
@@ -247,11 +248,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         }
                         sx={
                             props.switchButtonStyle ?? {
-                                backgroundColor: MaskColorVar.textPluginColor,
+                                backgroundColor: theme.palette.maskColor.dark,
                                 width: '100%',
                                 color: 'white',
                                 '&:hover': {
-                                    backgroundColor: MaskColorVar.buttonPluginBackground,
+                                    backgroundColor: theme.palette.maskColor.dark,
                                 },
                                 padding: 1,
                                 margin: 0,
@@ -304,11 +305,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     }
                     sx={
                         props.switchButtonStyle ?? {
-                            backgroundColor: MaskColorVar.buttonPluginBackground,
+                            backgroundColor: theme.palette.maskColor.dark,
                             width: '100%',
                             color: 'white',
                             '&:hover': {
-                                backgroundColor: MaskColorVar.buttonPluginBackground,
+                                backgroundColor: theme.palette.maskColor.dark,
                             },
                             padding: 1,
                             margin: 0,

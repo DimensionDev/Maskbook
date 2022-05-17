@@ -1,4 +1,4 @@
-import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
@@ -10,13 +10,13 @@ import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWallet
 
 const useStyles = makeStyles()((theme) => ({
     button: {
-        backgroundColor: MaskColorVar.buttonPluginBackground,
+        backgroundColor: theme.palette.maskColor.dark,
         color: 'white',
         fontSize: 14,
         fontWeight: 700,
         width: '100%',
         '&:hover': {
-            backgroundColor: MaskColorVar.buttonPluginBackground,
+            backgroundColor: theme.palette.maskColor.dark,
         },
         margin: 0,
     },

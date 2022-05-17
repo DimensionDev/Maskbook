@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useContainer } from 'unstated-next'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Box, Button, CircularProgress, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { Box, Button, CircularProgress, Typography, useTheme } from '@mui/material'
 import { formatBalance, TransactionStateType, useChainId, useTransactionCallback } from '@masknet/web3-shared-evm'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -49,6 +49,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)
     const chainId = useChainId()
+    const theme = useTheme()
 
     const {
         boxId,
@@ -161,10 +162,10 @@ export function PreviewCard(props: PreviewCardProps) {
                     sx={{
                         margin: 1.125,
                         width: 254,
-                        backgroundColor: MaskColorVar.buttonPluginBackground,
+                        backgroundColor: theme.palette.maskColor.dark,
                         color: 'white',
                         '&:.hover': {
-                            backgroundColor: MaskColorVar.buttonPluginBackground,
+                            backgroundColor: theme.palette.maskColor.dark,
                         },
                     }}
                     size="small"
@@ -181,10 +182,10 @@ export function PreviewCard(props: PreviewCardProps) {
                     sx={{
                         margin: 1.125,
                         width: 254,
-                        backgroundColor: MaskColorVar.buttonPluginBackground,
+                        backgroundColor: theme.palette.maskColor.dark,
                         color: 'white',
                         '&:.hover': {
-                            backgroundColor: MaskColorVar.buttonPluginBackground,
+                            backgroundColor: theme.palette.maskColor.dark,
                         },
                     }}
                     size="small"
@@ -244,11 +245,11 @@ export function PreviewCard(props: PreviewCardProps) {
                             fullWidth
                             variant="contained"
                             sx={{
-                                backgroundColor: MaskColorVar.buttonPluginBackground,
+                                backgroundColor: theme.palette.maskColor.dark,
                                 color: 'white',
                                 width: '100%',
                                 '&:hover': {
-                                    background: MaskColorVar.buttonPluginBackground,
+                                    background: theme.palette.maskColor.dark,
                                 },
                             }}
                             disabled={boxState !== BoxState.READY}

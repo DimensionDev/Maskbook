@@ -35,9 +35,9 @@ const useStyles = makeStyles()((theme) => ({
         color: 'white',
     },
     reload: {
-        backgroundColor: MaskColorVar.buttonPluginBackground,
+        backgroundColor: theme.palette.maskColor.dark,
         '&:hover': {
-            backgroundColor: MaskColorVar.buttonPluginBackground,
+            backgroundColor: theme.palette.maskColor.dark,
         },
         color: 'white',
         width: 254,

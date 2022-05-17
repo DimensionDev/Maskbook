@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { Box, Card, Typography, Button, Avatar, CircularProgress } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { Box, Card, Typography, Button, Avatar, CircularProgress, useTheme } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import { useI18N } from '../../../utils'
@@ -88,6 +88,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const { value: grant, error, loading, retry } = useGrant(props.id)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const isGitCoinSupported = (chainId: ChainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)
+    const theme = useTheme()
 
     // #region the donation dialog
     const postLink = usePostLink()
@@ -115,9 +116,9 @@ export function PreviewCard(props: PreviewCardProps) {
                 <Typography color="textPrimary">{t('go_wrong')}</Typography>
                 <Button
                     sx={{
-                        backgroundColor: MaskColorVar.buttonPluginBackground,
+                        backgroundColor: theme.palette.maskColor.dark,
                         '&:hover': {
-                            backgroundColor: MaskColorVar.buttonPluginBackground,
+                            backgroundColor: theme.palette.maskColor.dark,
                         },
                         width: 254,
                         color: 'white',
@@ -190,9 +191,9 @@ export function PreviewCard(props: PreviewCardProps) {
                             variant="contained"
                             fullWidth
                             sx={{
-                                backgroundColor: MaskColorVar.buttonPluginBackground,
+                                backgroundColor: theme.palette.maskColor.dark,
                                 '&:hover': {
-                                    backgroundColor: MaskColorVar.buttonPluginBackground,
+                                    backgroundColor: theme.palette.maskColor.dark,
                                 },
                                 color: 'white',
                             }}

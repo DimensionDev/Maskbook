@@ -1,9 +1,8 @@
 import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { MaskColorVar } from '@masknet/theme'
 import { ChainId, TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
-import { Box } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
@@ -32,6 +31,7 @@ export function OperationFooter({
     const { t } = useI18N()
     const account = useAccount()
     const chainIdValid = useChainIdValid()
+    const theme = useTheme()
 
     // #region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -63,11 +63,11 @@ export function OperationFooter({
         return (
             <ActionButton
                 sx={{
-                    backgroundColor: MaskColorVar.buttonPluginBackground,
+                    backgroundColor: theme.palette.maskColor.dark,
                     width: '100%',
                     color: 'white',
                     '&:hover': {
-                        backgroundColor: MaskColorVar.buttonPluginBackground,
+                        backgroundColor: theme.palette.maskColor.dark,
                     },
                 }}
                 fullWidth
@@ -99,11 +99,11 @@ export function OperationFooter({
                         {canRefund ? null : (
                             <ActionButton
                                 sx={{
-                                    backgroundColor: MaskColorVar.buttonPluginBackground,
+                                    backgroundColor: theme.palette.maskColor.dark,
                                     width: '100%',
                                     color: 'white',
                                     '&:hover': {
-                                        backgroundColor: MaskColorVar.buttonPluginBackground,
+                                        backgroundColor: theme.palette.maskColor.dark,
                                     },
                                     padding: 1.125,
                                 }}
