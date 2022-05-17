@@ -4,7 +4,6 @@ import { base } from '../base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Trans } from 'react-i18next'
 import { parseURL } from '@masknet/shared-base'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { PreviewCard } from './components/PreviewCard'
 import { Context } from '../hooks/useContext'
 import { ApplicationEntry } from '@masknet/shared'
@@ -73,10 +72,8 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     if (shouldNotRender) return null
 
     return (
-        <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
-            <Context.Provider initialState={{ boxId, hashRoot }}>
-                <PreviewCard />
-            </Context.Provider>
-        </EthereumChainBoundary>
+        <Context.Provider initialState={{ boxId, hashRoot }}>
+            <PreviewCard />
+        </Context.Provider>
     )
 }

@@ -23,6 +23,8 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             flexDirection: 'column',
             boxSizing: 'border-box',
+            justifyContent: 'center',
+            alignContent: 'center',
         },
         title: {
             display: 'flex',

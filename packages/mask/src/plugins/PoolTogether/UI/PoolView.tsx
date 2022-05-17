@@ -2,7 +2,7 @@ import { first } from 'lodash-unified'
 import type { Pool } from '../types'
 import { Typography, Grid, CircularProgress, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useChainId, useERC20TokenDetailed } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { RefreshIcon } from '@masknet/icons'
 import { usePoolURL } from '../hooks/usePoolURL'
 import { CountdownView } from './CountdownView'
@@ -13,6 +13,7 @@ import { NetworkView } from './NetworkView'
 import { useI18N } from '../../../utils'
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -172,6 +173,8 @@ export function PoolView(props: PoolProps) {
     const chainId = useChainId()
     const [prize, setPrize] = useState('TBD')
     const [period, setPeriod] = useState('Custom Period')
+    const currentPluginID = useCurrentWeb3NetworkPluginID()
+    const account = useAccount()
 
     // #region pool token
     const {
@@ -261,9 +264,16 @@ export function PoolView(props: PoolProps) {
                     />
                 </Grid>
                 <Grid item>
-                    <Button className={classes.deposit} variant="contained" fullWidth size="small" onClick={onDeposit}>
-                        {t('plugin_pooltogether_deposit', { token: token.symbol ?? '' })}
-                    </Button>
+                    {currentPluginID === NetworkPluginID.PLUGIN_EVM && account ? (
+                        <Button
+                            className={classes.deposit}
+                            variant="contained"
+                            fullWidth
+                            size="small"
+                            onClick={onDeposit}>
+                            {t('plugin_pooltogether_deposit', { token: token.symbol ?? '' })}
+                        </Button>
+                    ) : null}
                 </Grid>
                 <Grid container item className={classes.info}>
                     <Grid item>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Typography } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
 import TabContext from '@mui/lab/TabContext'
@@ -62,18 +62,18 @@ export default function FollowTab({
                 <TabList
                     sx={{
                         width: '100%',
-                        color: MaskColorVar.cyberconnectPrimary,
+                        color: 'black',
                         fontSize: '18px',
                         ' .MuiTabs-indicator': {
-                            backgroundColor: MaskColorVar.cyberconnectPrimary,
+                            backgroundColor: 'black',
                             height: '3px',
                         },
                         ' .Mui-selected': {
-                            color: MaskColorVar.cyberconnectPrimary + '!important',
+                            color: 'black !important',
                             opacity: 1,
                         },
                         ' .MuiTab-textColorPrimary': {
-                            color: MaskColorVar.cyberconnectPrimary + '!important',
+                            color: 'black !important',
                             fontSize: '18px',
                             textAlign: 'center',
                         },
@@ -87,7 +87,7 @@ export default function FollowTab({
                 className={classes.tabPanel}
                 value="1"
                 sx={{
-                    color: MaskColorVar.cyberconnectPrimary,
+                    color: 'black',
                     width: '100%',
                 }}>
                 {followingList.map((f: IFollowIdentity) => {
@@ -98,7 +98,7 @@ export default function FollowTab({
                 className={classes.tabPanel}
                 value="2"
                 sx={{
-                    color: MaskColorVar.cyberconnectPrimary,
+                    color: 'black',
                     width: '100%',
                 }}>
                 {followerList.map((f: IFollowIdentity) => {

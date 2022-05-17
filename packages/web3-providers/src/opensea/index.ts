@@ -79,7 +79,7 @@ function createERC721TokenFromAsset(
         {
             name: asset.collection.name,
             image: asset.collection.image_url || undefined,
-            slug: asset.collection.slug,
+            slug: asset.collection.slug ?? '',
         },
     )
 }
