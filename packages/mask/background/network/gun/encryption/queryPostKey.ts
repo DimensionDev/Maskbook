@@ -111,7 +111,7 @@ namespace Version38Or39 {
             receiversKeys.forEach(async ({ aesKey, receiverKey }) => {
                 const keyHash = await (version === -38 ? hashKey38 : hashKey39)(receiverKey)
                 console.log(`gun[${postHash}][${keyHash}].push(`, aesKey, ')')
-                pushToGunDataArray([postHash[1], keyHash], aesKey)
+                pushToGunDataArray([postHash, keyHash], aesKey)
             })
         } else {
             if (version === -39) throw new Error('unreachable')
@@ -129,7 +129,7 @@ namespace Version38Or39 {
                         salt: encodeArrayBuffer(ivToBePublished),
                     }
                     console.log(`gun[${postHash}][${keyHash}].push(`, post, ')')
-                    pushToGunDataArray([postHash[1], keyHash], post)
+                    pushToGunDataArray([postHash, keyHash], post)
                 } catch (error) {
                     console.error('[@masknet/encryption] An error occurs when sending E2E keys', error)
                 }
