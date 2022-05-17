@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { Box, Card, Typography, Button, Avatar, CircularProgress } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import { useI18N } from '../../../utils'
@@ -111,9 +111,18 @@ export function PreviewCard(props: PreviewCardProps) {
         )
     if (error)
         return (
-            <Box display="flex" flexDirection="column" alignItems="center">
+            <Box display="flex" flexDirection="column" alignItems="center" sx={{ padding: 1.5 }}>
                 <Typography color="textPrimary">{t('go_wrong')}</Typography>
-                <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
+                <Button
+                    sx={{
+                        backgroundColor: MaskColorVar.buttonPluginBackground,
+                        '&:hover': {
+                            backgroundColor: MaskColorVar.buttonPluginBackground,
+                        },
+                        width: 254,
+                        color: 'white',
+                    }}
+                    onClick={retry}>
                     {t('retry')}
                 </Button>
             </Box>
@@ -177,7 +186,17 @@ export function PreviewCard(props: PreviewCardProps) {
                 </Box>
                 <Box sx={{ flex: 1, padding: 1.5 }}>
                     <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
-                        <Button variant="contained" fullWidth color="primary" onClick={onDonate}>
+                        <Button
+                            variant="contained"
+                            fullWidth
+                            sx={{
+                                backgroundColor: MaskColorVar.buttonPluginBackground,
+                                '&:hover': {
+                                    backgroundColor: MaskColorVar.buttonPluginBackground,
+                                },
+                                color: 'white',
+                            }}
+                            onClick={onDonate}>
                             {t('plugin_gitcoin_donate')}
                         </Button>
                     </EthereumChainBoundary>
