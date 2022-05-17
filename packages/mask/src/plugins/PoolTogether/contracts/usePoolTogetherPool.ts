@@ -5,5 +5,5 @@ import { useChainId, useContract } from '@masknet/web3-shared-evm'
 
 export function usePoolTogetherPoolContract(address?: string) {
     const chainId = useChainId()
-    return useContract<PoolTogetherPool>(chainid, address, PoolTogetherPoolABI as AbiItem[])
+    return useContract<PoolTogetherPool>(chainId, address, PoolTogetherPoolABI as AbiItem[])
 }
