@@ -10,7 +10,7 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Services from '../../extension/service'
 import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
 import { HTMLProps, useCallback } from 'react'
-import { Button } from '@mui/material'
+import { Button, Skeleton } from '@mui/material'
 import { PluginIcon } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 
@@ -105,9 +105,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
 
 const useRectangleStyles = makeStyles()(() => ({
     rectangle: {
-        height: 8,
         background: 'rgba(255, 255, 255, 0.5)',
-        borderRadius: 8,
     },
 }))
 interface RectangleProps extends HTMLProps<HTMLDivElement> {}
@@ -116,9 +114,9 @@ export function Rectangle(props: RectangleProps) {
     const { classes } = useRectangleStyles()
     return (
         <div {...props}>
-            <div className={classes.rectangle} style={{ width: 103 }} />
-            <div className={classes.rectangle} style={{ width: 68, marginTop: 4 }} />
-            <div className={classes.rectangle} style={{ width: 48, marginTop: 4 }} />
+            <Skeleton className={classes.rectangle} variant="text" animation={false} width={103} height={16} />
+            <Skeleton className={classes.rectangle} variant="text" animation={false} width={68} height={16} />
+            <Skeleton className={classes.rectangle} variant="text" animation={false} width={48} height={16} />
         </div>
     )
 }

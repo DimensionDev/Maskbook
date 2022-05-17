@@ -31,7 +31,6 @@ import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 import Services from '../../extension/service'
-import { pluginIDSettings } from '../../settings/settings'
 import { WalletIcon } from '@masknet/shared'
 import { PluginWalletConnectIcon } from '@masknet/icons'
 
@@ -156,10 +155,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     `Switch Chain Error: Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`,
                 )
             }
-        }
-
-        const switchToPlugin = async () => {
-            pluginIDSettings.value = NetworkPluginID.PLUGIN_EVM
         }
 
         if (providerType === ProviderType.WalletConnect && networkType) {

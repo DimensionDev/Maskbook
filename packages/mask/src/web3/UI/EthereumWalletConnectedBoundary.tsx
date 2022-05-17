@@ -33,11 +33,10 @@ export interface EthereumWalletConnectedBoundaryProps
     hideRiskWarningConfirmed?: boolean
     ActionButtonProps?: ActionButtonProps
     startIcon?: React.ReactNode
-    hiddenPersonaVerified?: boolean
 }
 
 export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
-    const { children = null, offChain = false, hideRiskWarningConfirmed = false, hiddenPersonaVerified = false } = props
+    const { children = null, offChain = false, hideRiskWarningConfirmed = false } = props
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)

@@ -4,7 +4,7 @@ import { META_KEY_1, META_KEY_2 } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginId.FileService,
-    name: { fallback: 'Files Service' },
+    name: { fallback: 'File Service', i18nKey: '__display_name' },
     description: {
         fallback: 'Upload and share files on top of Arweave network. Store data, permanently.',
         i18nKey: '__description',
