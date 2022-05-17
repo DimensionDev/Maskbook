@@ -1,16 +1,8 @@
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { usePickToken, InjectedDialog } from '@masknet/shared'
 import { keyframes, makeStyles } from '@masknet/theme'
-import { isZero, rightShift } from '@masknet/web3-shared-base'
-import {
-    EthereumTokenType,
-    formatBalance,
-    FungibleTokenDetailed,
-    TransactionStateType,
-    useAccount,
-    useFungibleTokenBalance,
-    ZERO_ADDRESS,
-} from '@masknet/web3-shared-evm'
+import { FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { ChainId, formatBalance, SchemaType, TransactionStateType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { DialogContent, Grid, Typography } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -28,6 +20,7 @@ import { useDepositCallback } from '../hooks/useDepositCallback'
 import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
 import { calculateOdds, getPrizePeriod } from '../utils'
+import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const rainbow_animation = keyframes`
     0% {
@@ -82,11 +75,11 @@ export function DepositDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [pool, setPool] = useState<Pool>()
-    const [token, setToken] = useState<FungibleTokenDetailed>()
+    const [token, setToken] = useState<FungibleToken<ChainId, SchemaType>>()
     const [odds, setOdds] = useState<string>()
 
     // context
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     // #region remote controlled dialog
     const { open, closeDialog: onClose } = useRemoteControlledDialog(
@@ -119,7 +112,7 @@ export function DepositDialog() {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address ?? '')
     // #endregion
 
     useEffect(() => {
@@ -272,7 +265,7 @@ export function DepositDialog() {
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
                                 spender={pool.prizePool.address}
-                                token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
+                                token={token?.schema === SchemaType.ERC20 ? token : undefined}>
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth

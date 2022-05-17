@@ -1,4 +1,4 @@
-import { useChainId } from '@masknet/plugin-infra/src/web3'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Card, CardContent, Tabs, Tab, Typography, Paper } from '@mui/material'
