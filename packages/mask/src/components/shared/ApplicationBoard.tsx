@@ -227,6 +227,7 @@ function RenderEntryComponent({ application }: { application: Application }) {
 
     // #region tooltip hint
     const tooltipHint = (() => {
+        if (ApplicationEntryStatus.isLoading) return
         if (application.isWalletConnectedRequired) return t('application_tooltip_hint_connect_wallet')
         if (application.isWalletConnectedEVMRequired) return t('application_tooltip_hint_switch_to_evm_wallet')
         if (!application.entry.nextIdRequired) return
@@ -285,7 +286,11 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const personaConnectStatus = usePersonaConnectStatus()
     const nextIDConnectStatus = useNextIDConnectStatus()
 
-    const { value: ApplicationCurrentStatus, retry, loading: _loading } = usePersonaAgainstSNSConnectStatus()
+    const {
+        value: ApplicationCurrentStatus,
+        retry,
+        loading: personaAgainstSNSConnectStatusLoading,
+    } = usePersonaAgainstSNSConnectStatus()
 
     useEffect(() => {
         return MaskMessages.events.currentPersonaIdentifier.on(retry)
@@ -308,7 +313,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
                 shouldVerifyNextId: Boolean(!nextIDConnectStatus.isVerified && ApplicationCurrentStatus),
                 currentPersonaPublicKey,
                 currentSNSConnectedPersonaPublicKey,
-                isLoading: nextIDConnectStatus.loading || _loading,
+                isLoading: nextIDConnectStatus.loading || personaAgainstSNSConnectStatusLoading,
             }}>
             {props.children}
         </ApplicationEntryStatusContext.Provider>
