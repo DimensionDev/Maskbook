@@ -10,6 +10,7 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)
 export const pluginIDSettings = createGlobalSettings<NetworkPluginID>('pluginID', NetworkPluginID.PLUGIN_EVM)
+export const userGuideVersion = createGlobalSettings('userGuideVersion', 'v2')
 
 export const currentSetupGuideStatus = createNetworkSettings('currentSetupGuideStatus', '')
 export const userGuideStatus = createNetworkSettings('userGuideStatus', '')

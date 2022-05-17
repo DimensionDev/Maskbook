@@ -77,5 +77,12 @@ export default definition
 
 function onAttachedFile(payload: FileInfo) {
     const name = truncate(payload.name, { length: 10 })
-    return `Attached File: ${name} (${formatFileSize(payload.size)})`
+    return {
+        text: (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <FileServiceIcon style={{ width: 16, height: 16 }} />
+                Attached File: {name} ({formatFileSize(payload.size)})
+            </div>
+        ),
+    }
 }

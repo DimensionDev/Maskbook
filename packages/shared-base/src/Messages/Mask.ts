@@ -1,8 +1,6 @@
 import type {
     Appearance,
     LanguageOptions,
-    DataProvider,
-    CryptoPrice,
     NetworkType,
     ProviderType,
     FungibleAssetProvider,
@@ -82,9 +80,14 @@ export interface CompositionRequest {
     readonly open: boolean
     readonly content?: SerializableTypedMessages
     readonly options?: {
-        target?: 'E2E' | 'Everyone'
+        target?: EncryptionTargetType
         startupPlugin?: string
     }
+}
+export enum EncryptionTargetType {
+    Public = 'public',
+    Self = 'self',
+    E2E = 'e2e',
 }
 
 export interface NFTAvatarSettingDialogEvent {
