@@ -5,7 +5,7 @@ export const base: Plugin.Shared.Definition = {
     ID: POOLTOGETHER_PLUGIN_ID,
     name: { fallback: 'Pooltogether' },
     description: { fallback: 'PoolTogether is a protocol for no-loss prize games on the Ethereum blockchain' },
-    publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
+    publisher: { name: { fallback: 'iRhonin' }, link: 'https://github.com/iRhonin' },
     enableRequirement: {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },

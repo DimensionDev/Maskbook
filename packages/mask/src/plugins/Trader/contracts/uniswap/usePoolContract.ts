@@ -9,5 +9,6 @@ export function usePoolContract(address: string) {
 }
 
 export function usePoolContracts(listOfAddress: string[], chainId?: ChainId) {
-    return useContracts<PoolStateV3>(chainId, listOfAddress, PoolStateV3ABI as AbiItem[])
+    const _chainId = useChainId()
+    return useContracts<PoolStateV3>(chainId ?? _chainId, listOfAddress, PoolStateV3ABI as AbiItem[])
 }
