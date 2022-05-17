@@ -1,17 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAsyncRetry } from 'react-use'
 import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { usePickToken, InjectedDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, TransactionStateType, useGitcoinConstants, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, TransactionStateType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import {
     useAccount,
     useChainId,
     useFungibleToken,
     useFungibleTokenBalance,
-    useWeb3Connection,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { DialogContent, Link, Typography } from '@mui/material'
@@ -63,7 +61,6 @@ export function DonateDialog(props: DonateDialogProps) {
     // context
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenDetailed = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 

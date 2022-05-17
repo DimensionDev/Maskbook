@@ -14,13 +14,7 @@ export type TransactionStorage<ChainId, Transaction> = Record<
         Record<
             // address
             string,
-            (RecentTransaction<ChainId> & {
-                candidates: Record<
-                    // transaction id
-                    string,
-                    Transaction
-                >
-            })[]
+            RecentTransaction<ChainId, Transaction>[]
         >
     >
 >
@@ -29,7 +23,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
     static MAX_RECORD_SIZE = 20
 
     protected storage: StorageItem<TransactionStorage<ChainId, Transaction>> = null!
-    public transactions?: Subscription<RecentTransaction<ChainId>[]>
+    public transactions?: Subscription<RecentTransaction<ChainId, Transaction>[]>
 
     constructor(
         protected context: Plugin.Shared.SharedContext,

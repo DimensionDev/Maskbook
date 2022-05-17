@@ -197,7 +197,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                         size="small"
                         variant="contained"
                         init={t('wallet_status_button_disconnect')}
-                        waiting={t('wallet_status_button_disconnecting')}
+                        waiting={t('wallet_status_button_disconnect')}
                         failed={t('failed')}
                         complete={t('done')}
                         executor={onDisconnect}

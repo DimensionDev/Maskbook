@@ -17,7 +17,6 @@ import { InMemoryStorages, PersistentStorages } from '../../shared'
 import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc'
 import { currentChainIdSettings, currentMaskWalletAccountSettings } from '../plugins/Wallet/settings'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
-import { ProviderType } from '@masknet/web3-shared-evm'
 
 export function createSharedContext(pluginID: string, signal: AbortSignal): Plugin.Shared.SharedContext {
     return {

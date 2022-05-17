@@ -455,11 +455,14 @@ export interface Transaction<ChainId, SchemaType> {
     fee?: Price
 }
 
-export interface RecentTransaction<ChainId> {
+export interface RecentTransaction<ChainId, Transaction> {
     id: string
+    /** the chain id */
     chainId: ChainId
     /** status type */
     status: TransactionStatusType
+    /** available tx candidates */
+    candidates: Record<string, Transaction>
     /** record created at */
     createdAt: Date
     /** record updated at */
@@ -718,7 +721,7 @@ export interface TokenListState<ChainId, SchemaType> {
 }
 export interface TransactionState<ChainId, Transaction> {
     /** The tracked transactions of currently chosen sub-network */
-    transactions?: Subscription<RecentTransaction<ChainId>[]>
+    transactions?: Subscription<RecentTransaction<ChainId, Transaction>[]>
 
     /** Add a transaction record. */
     addTransaction?: (chainId: ChainId, address: string, id: string, transaction: Transaction) => Promise<void>

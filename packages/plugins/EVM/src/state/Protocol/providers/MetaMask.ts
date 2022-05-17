@@ -7,4 +7,8 @@ export class MetaMaskProvider extends BaseInjectedProvider implements EVM_Provid
     constructor() {
         super(ProviderType.MetaMask, injectedMetaMaskProvider)
     }
+
+    override async disconnect(): Promise<void> {
+        // do nothing
+    }
 }
