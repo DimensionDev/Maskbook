@@ -1,10 +1,4 @@
-import {
-    isZeroAddress,
-    useAccount,
-    useGoodGhostingConstants,
-    useSingleContractMultipleData,
-    ZERO_ADDRESS,
-} from '@masknet/web3-shared-evm'
+import { isZeroAddress, useGoodGhostingConstants, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
@@ -13,6 +7,9 @@ import type { GameMetaData, GoodGhostingInfo, Player, TimelineEvent } from '../t
 import { useI18N } from '../../../utils'
 import addSeconds from 'date-fns/addSeconds'
 import Services from '../../../extension/service'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useSingleContractMultipleData } from '@masknet/plugin-infra/web3-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useGameContractAddress(id: string) {
     const { GOOD_GHOSTING_CONTRACT_ADDRESS_FILE } = useGoodGhostingConstants()
@@ -31,7 +28,8 @@ export function useGameContractAddress(id: string) {
 }
 
 export function useGameInfo(gameData: GameMetaData) {
-    const contract = useGoodGhostingContract(gameData.contractAddress)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const contract = useGoodGhostingContract(chainId, gameData.contractAddress)
     const account = useAccount()
     const { names, callDatas } = useMemo(() => {
         const names = [
