@@ -1,5 +1,5 @@
-import { decodeArrayBuffer, encodeArrayBuffer, isNonNull } from '@dimensiondev/kit'
-import type { DecryptStaticECDH_PostKey, EncryptionResultE2EMap } from '@masknet/encryption'
+import { decodeArrayBuffer, encodeArrayBuffer, isNonNull, unreachable } from '@dimensiondev/kit'
+import { type DecryptStaticECDH_PostKey, type EncryptionResultE2EMap, SocialNetworkEnum } from '@masknet/encryption'
 import type { EC_Public_CryptoKey, EC_Public_JsonWebKey } from '@masknet/shared-base'
 import { CryptoKeyToJsonWebKey } from '../../../../utils-pure'
 import { getGunData, pushToGunDataArray, subscribeGunMapData } from '@masknet/gun-utils'
@@ -36,11 +36,11 @@ namespace Version38Or39 {
         version: -38 | -39,
         iv: Uint8Array,
         minePublicKey: EC_Public_CryptoKey,
-        networkHint: string,
+        network: SocialNetworkEnum,
         abortSignal: AbortSignal,
     ): AsyncGenerator<DecryptStaticECDH_PostKey, void, undefined> {
         const minePublicKeyJWK = await CryptoKeyToJsonWebKey(minePublicKey)
-        const { keyHash, postHash } = await calculatePostKeyPartition(version, networkHint, iv, minePublicKeyJWK)
+        const { keyHash, postHash } = await calculatePostKeyPartition(version, network, iv, minePublicKeyJWK)
 
         /* cspell:disable-next-line */
         // ? In this step we get something like ["jzarhbyjtexiE7aB1DvQ", "jzarhuse6xlTAtblKRx9"]
@@ -102,10 +102,10 @@ namespace Version38Or39 {
     export async function publishPostAESKey_version39Or38(
         version: -39 | -38,
         postIV: Uint8Array,
-        networkHint: string,
+        network: SocialNetworkEnum,
         receiversKeys: PublishedAESKeyRecord[] | EncryptionResultE2EMap,
     ) {
-        const postHash = await hashIV(networkHint, postIV)
+        const [postHash] = await hashIV(network, postIV)
         if (Array.isArray(receiversKeys)) {
             // Store AES key to gun
             receiversKeys.forEach(async ({ aesKey, receiverKey }) => {
@@ -153,23 +153,34 @@ namespace Version38Or39 {
 
     async function calculatePostKeyPartition(
         version: -38 | -39,
-        networkHint: string,
+        network: SocialNetworkEnum,
         iv: Uint8Array,
         key: EC_Public_JsonWebKey,
     ) {
-        const postHash = await hashIV(networkHint, iv)
+        const postHash = await hashIV(network, iv)
         // In version > -39, we will use stable hash to prevent unstable result for key hashing
 
         const keyHash = version === -39 ? await hashKey39(key) : await hashKey38(key)
         return { postHash, keyHash }
     }
 
-    async function hashIV(networkHint: string, iv: Uint8Array): Promise<[string, string]> {
+    async function hashIV(network: SocialNetworkEnum, iv: Uint8Array): Promise<[string, string]> {
         const hashPair = '9283464d-ee4e-4e8d-a7f3-cf392a88133f'
         const N = 2
 
         const hash = (await work(encodeArrayBuffer(iv), hashPair)).slice(0, N)
+        const networkHint = getNetworkHint(network)
         return [`${networkHint}${hash}`, `${networkHint}-${hash}`]
+    }
+
+    function getNetworkHint(x: SocialNetworkEnum) {
+        if (x === SocialNetworkEnum.Facebook) return ''
+        if (x === SocialNetworkEnum.Twitter) return 'twitter-'
+        if (x === SocialNetworkEnum.Minds) return 'minds-'
+        if (x === SocialNetworkEnum.Instagram) return 'instagram-'
+        if (x === SocialNetworkEnum.Unknown)
+            throw new TypeError('[@masknet/encryption] Current SNS network is not correctly configured.')
+        unreachable(x)
     }
 
     // The difference between V38 and V39 is: V39 is not stable (JSON.stringify)
