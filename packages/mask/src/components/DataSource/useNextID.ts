@@ -67,7 +67,11 @@ export function useNextIDConnectStatus() {
     const lastRecognized = useLastRecognizedIdentity()
     const [username] = useState(lastState.username || lastRecognized.identifier?.userId || '')
 
-    const { value: VerificationStatus = NextIDVerificationStatus.Other, retry } = useAsyncRetry(async () => {
+    const {
+        value: VerificationStatus = NextIDVerificationStatus.Other,
+        retry,
+        loading,
+    } = useAsyncRetry(async () => {
         // Whether in connect to {platform} process
         if (lastState.status === SetupGuideStep.FindUsername) return NextIDVerificationStatus.WaitingLocalConnect
 
@@ -118,6 +122,7 @@ export function useNextIDConnectStatus() {
     return {
         isVerified: VerificationStatus === NextIDVerificationStatus.Verified,
         status: VerificationStatus,
+        loading,
         reset: () => {
             isOpenedVerifyDialog = false
             isOpenedFromButton = true

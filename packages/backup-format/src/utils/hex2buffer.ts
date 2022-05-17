@@ -1,13 +1,13 @@
+import { sum } from 'lodash-unified'
+
 /** @internal */
 export function hex2buffer(hexString: string, padded?: boolean) {
     if (hexString.length % 2) {
         hexString = '0' + hexString
     }
     let res = new Uint8Array(hexString.length / 2)
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < hexString.length; i++) {
-        // eslint-disable-next-line no-plusplus
-        const c = hexString.slice(i, ++i + 1)
+    for (let i = 0; i < hexString.length; i += 2) {
+        const c = hexString.slice(i, i + 2)
         res[(i - 1) / 2] = Number.parseInt(c, 16)
     }
     // BN padding
@@ -23,11 +23,10 @@ export function hex2buffer(hexString: string, padded?: boolean) {
 
 /** @internal */
 function concat(...buf: (Uint8Array | number[])[]) {
-    const res = new Uint8Array(buf.map((item) => item.length).reduce((prev, cur) => prev + cur))
+    const res = new Uint8Array(sum(buf.map((item) => item.length)))
     let offset = 0
-    buf.forEach((item, index) => {
-        // eslint-disable-next-line no-plusplus
-        for (let i = 0; i < item.length; i++) {
+    buf.forEach((item) => {
+        for (let i = 0; i < item.length; i += 1) {
             res[offset + i] = item[i]
         }
         offset += item.length

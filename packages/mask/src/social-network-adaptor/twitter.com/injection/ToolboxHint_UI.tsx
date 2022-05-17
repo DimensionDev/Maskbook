@@ -52,7 +52,7 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
 export function ProfileLinkAtTwitter() {
     const { t } = useI18N()
     return (
-        <GuideStep step={2} total={3} tip={t('user_guide_tip_2')}>
+        <GuideStep step={3} total={4} tip={t('user_guide_tip_3')}>
             <Box sx={{ position: 'absolute', left: 0, right: 0, width: '100%', height: '100%' }} />
         </GuideStep>
     )

@@ -29,6 +29,7 @@ import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../ui'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
+import { difference } from 'lodash-unified'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
@@ -44,7 +45,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 const text = parseURL(extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr(''))
                     .concat(opt.postMentionedLinksProvider?.getCurrentValue() || EMPTY_LIST)
                     .map(isFacebook ? resolveFacebookLink : (x) => x)
-                if (text.sort().join(';') === links.value.join(';')) return
+                if (difference(text, links.value).length === 0) return
                 if (!text.length) links.value = EMPTY_LIST
                 else links.value = text
             }

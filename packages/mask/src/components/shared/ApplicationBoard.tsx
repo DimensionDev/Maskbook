@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST, CrossIsolationMessages, formatPersonaPublicKey } from '@masknet/shared-base'
+import { CrossIsolationMessages, formatPersonaPublicKey } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
@@ -76,7 +76,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
         recommendFeatureAppListWrapper: {
             display: 'flex',
             overflowX: 'scroll',
-            margin: '0px 2px 4px 2px',
+            margin: '0 2px 4px 2px',
             padding: '8px 2px 0 2px',
             '&::-webkit-scrollbar': {
                 display: 'none',
@@ -87,7 +87,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
             overflowX: 'scroll',
             overscrollBehavior: 'contain',
             '& .carousel__slider': {
-                padding: '8px 2px 0px',
+                padding: '8px 2px 0',
                 overscrollBehavior: 'contain',
                 overflowX: 'scroll',
                 '&::-webkit-scrollbar': {
@@ -122,33 +122,25 @@ function ApplicationBoardContent(props: Props) {
     const applicationList = useMemo(
         () =>
             snsAdaptorPlugins
-                .reduce<Application[]>((acc, cur) => {
-                    if (!cur.ApplicationEntries) return acc
-                    const currentWeb3NetworkSupportedChainIds = cur.enableRequirement.web3?.[currentWeb3Network]
+                .flatMap(({ ID, ApplicationEntries, enableRequirement }) => {
+                    if (!ApplicationEntries) return []
+                    const currentWeb3NetworkSupportedChainIds = enableRequirement.web3?.[currentWeb3Network]
                     const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
-                    const currentSNSIsSupportedNetwork = cur.enableRequirement.networks.networks[currentSNSNetwork]
+                    const currentSNSIsSupportedNetwork = enableRequirement.networks.networks[currentSNSNetwork]
                     const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
-
-                    return acc.concat(
-                        cur.ApplicationEntries.map((x) => {
-                            return {
-                                entry: x,
-                                enabled: isSNSEnabled,
-                                pluginId: cur.ID,
-                                isWalletConnectedRequired: !account && isWalletConnectedRequired,
-                                isWalletConnectedEVMRequired: Boolean(
-                                    account &&
-                                        currentWeb3Network !== NetworkPluginID.PLUGIN_EVM &&
-                                        isWalletConnectedRequired,
-                                ),
-                            }
-                        }) ?? EMPTY_LIST,
-                    )
-                }, EMPTY_LIST)
-                .sort(
-                    (a, b) =>
-                        (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0),
-                )
+                    return ApplicationEntries.map((entry) => ({
+                        entry,
+                        enabled: isSNSEnabled,
+                        pluginId: ID,
+                        isWalletConnectedRequired: !account && isWalletConnectedRequired,
+                        isWalletConnectedEVMRequired: Boolean(
+                            account && currentWeb3Network !== NetworkPluginID.PLUGIN_EVM && isWalletConnectedRequired,
+                        ),
+                    }))
+                })
+                .sort((a, b) => {
+                    return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
+                })
                 .filter((x) => Boolean(x.entry.RenderEntryComponent)),
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
@@ -198,7 +190,8 @@ function RenderEntryComponent({ application }: { application: Application }) {
 
         if (application.entry.nextIdRequired) {
             return Boolean(
-                ApplicationEntryStatus.isNextIDVerify === undefined ||
+                ApplicationEntryStatus.isLoading ||
+                    ApplicationEntryStatus.isNextIDVerify === undefined ||
                     (!ApplicationEntryStatus.isSNSConnectToCurrentPersona && ApplicationEntryStatus.isPersonaConnected),
             )
         } else {
@@ -268,6 +261,7 @@ interface ApplicationEntryStatusContextProps {
     currentPersonaPublicKey: string | undefined
     currentSNSConnectedPersonaPublicKey: string | undefined
     personaConnectAction: (() => void) | undefined
+    isLoading: boolean
 }
 
 const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContextProps>({
@@ -280,6 +274,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
     currentPersonaPublicKey: undefined,
     currentSNSConnectedPersonaPublicKey: undefined,
     personaConnectAction: undefined,
+    isLoading: false,
 })
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
@@ -308,6 +303,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
                 shouldVerifyNextId: Boolean(!nextIDConnectStatus.isVerified && ApplicationCurrentStatus),
                 currentPersonaPublicKey,
                 currentSNSConnectedPersonaPublicKey,
+                isLoading: nextIDConnectStatus.loading,
             }}>
             {props.children}
         </ApplicationEntryStatusContext.Provider>

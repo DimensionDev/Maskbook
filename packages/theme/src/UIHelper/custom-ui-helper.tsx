@@ -17,7 +17,7 @@ export function mergeClasses(...args: (Partial<ClassNameMap<string>> | undefined
     const result = {} as Partial<ClassNameMap<string>>
     for (const current of args) {
         if (!current) continue
-        for (const key in current) {
+        for (const key of Object.keys(current)) {
             if (key === '__proto__') continue
             if (key in result) result[key] = result[key] + ' ' + current[key]
             else result[key] = current[key]

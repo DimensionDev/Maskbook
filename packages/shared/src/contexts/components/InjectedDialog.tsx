@@ -10,6 +10,7 @@ import {
     DialogProps,
     DialogTitle,
     IconButton,
+    Stack,
     Typography,
     useMediaQuery,
     useTheme,
@@ -25,8 +26,14 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
-        padding: theme.spacing(1, 2),
         whiteSpace: 'nowrap',
+        display: 'flex',
+        gridTemplateColumns: '50px auto 50px',
+    },
+    dialogTitleEndingContent: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
     },
     dialogContent: {
         overscrollBehavior: 'contain',
@@ -35,10 +42,12 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         flex: 1,
         textAlign: 'center',
         verticalAlign: 'middle',
+        fontSize: 18,
+        lineHeight: '22px',
+        fontWeight: 700,
     },
     dialogCloseButton: {
         color: theme.palette.text.primary,
-        position: 'absolute',
         padding: 0,
         width: 24,
         height: 24,
@@ -52,6 +61,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
 export type InjectedDialogClassKey =
     | DialogClassKey
     | 'dialogTitle'
+    | 'dialogTitleEndingContent'
     | 'dialogContent'
     | 'dialogActions'
     | 'dialogTitleTypography'
@@ -78,6 +88,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogCloseButton,
         dialogContent,
         dialogTitle,
+        dialogTitleEndingContent,
         dialogTitleTypography,
         dialogBackdropRoot,
         container,
@@ -147,7 +158,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">
                                 {title}
                             </Typography>
-                            {titleTail}
+                            <Stack className={dialogTitleEndingContent}>{titleTail}</Stack>
                         </DialogTitle>
                     ) : null}
 

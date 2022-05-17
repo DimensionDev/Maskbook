@@ -15,5 +15,5 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'walle
 function injectProfile(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(sideBarProfileSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileLinkAtTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileLinkAtTwitter />)
 }

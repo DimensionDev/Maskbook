@@ -61,9 +61,10 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogTitle: {
-            display: 'flex',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
             alignItems: 'center',
-            padding: '17px 16px',
+            padding: 16,
             position: 'relative',
             background: theme.palette.background.modalTitle,
             borderBottom: 'none',

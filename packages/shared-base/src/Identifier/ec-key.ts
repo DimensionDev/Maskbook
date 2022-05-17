@@ -1,6 +1,6 @@
-import { decodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
 import { Convert } from 'pvtsutils'
-import { type Option, None } from 'ts-results'
+import { type Option, None, Some } from 'ts-results'
 import { Identifier } from './base'
 
 const instance = new WeakSet()
@@ -18,6 +18,13 @@ export class ECKeyIdentifier extends Identifier {
         if (input.startsWith('ec_key:')) return Identifier.from(input) as Option<ECKeyIdentifier>
         return None
     }
+    static fromHexPublicKeyK256(hex: string | null | undefined): Option<ECKeyIdentifier> {
+        if (!hex) return None
+        hex = String(hex)
+        if (hex.startsWith('0x')) hex = hex.slice(2)
+        const publicKey = encodeArrayBuffer(Convert.FromHex(hex))
+        return Some(new ECKeyIdentifier('secp256k1', publicKey))
+    }
 
     // ! TODO: handle compressedPoint and encodedCompressedKey
     // private declare readonly encodedCompressedKey?: string
@@ -25,14 +32,14 @@ export class ECKeyIdentifier extends Identifier {
     declare readonly curve: 'secp256k1'
     declare readonly rawPublicKey: string
     constructor(curve: 'secp256k1', publicKey: string) {
-        publicKey = String(publicKey)
+        publicKey = String(publicKey).replace(/\|/g, '/')
         if (curve !== 'secp256k1') throw new Error('Only secp256k1 is supported')
 
         if (k256Cache[publicKey]) return k256Cache[publicKey]
 
         super()
         this.curve = 'secp256k1'
-        this.rawPublicKey = publicKey.replace(/\|/g, '/')
+        this.rawPublicKey = publicKey
         Object.freeze(this)
         k256Cache[publicKey] = this
         instance.add(this)

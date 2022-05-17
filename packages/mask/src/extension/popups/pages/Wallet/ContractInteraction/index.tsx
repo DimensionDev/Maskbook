@@ -86,14 +86,14 @@ const useStyles = makeStyles()(() => ({
         color: '#FF5F5F',
         fontSize: 12,
         lineHeight: '16px',
-        padding: '0px 16px 20px 16px',
+        padding: '0 16px 20px 16px',
         wordBreak: 'break-all',
     },
     controller: {
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
         gap: 20,
-        padding: '0px 16px 16px 16px',
+        padding: '0 16px 16px 16px',
     },
     button: {
         fontWeight: 600,
