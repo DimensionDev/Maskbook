@@ -227,7 +227,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
         return
     }
 
-    console.log(wallets)
     if (!wallets?.length && (currentPluginId !== NetworkPluginID.PLUGIN_EVM || !account))
         return (
             <DialogContent className={classes.content}>
