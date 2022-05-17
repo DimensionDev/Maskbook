@@ -5,7 +5,7 @@ export const base: Plugin.Shared.Definition = {
     ID: DHEDGE_PLUGIN_ID,
     name: { fallback: 'dHEDGE' },
     description: { fallback: 'Decentralized hedge funds on Ethereum.' },
-    publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
+    publisher: { name: { fallback: 'ArtBlocks' }, link: 'https://www.artblocks.io/' },
     enableRequirement: {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
