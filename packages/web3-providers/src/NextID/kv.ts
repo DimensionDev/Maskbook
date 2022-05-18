@@ -37,11 +37,11 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
     ): Promise<Result<T, string>> {
         const response = await fetchJSON<{
             persona: string
-            proofs: {
+            proofs: Array<{
                 platform: NextIDPlatform
                 identity: string
                 content: Record<string, T>
-            }[]
+            }>
         }>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
         if (!response.ok) return Err('User not found')
 
