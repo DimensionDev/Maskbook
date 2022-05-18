@@ -111,12 +111,14 @@ export function Rewards({
     return (
         <>
             {Object.entries(rewards).map(([rewardTokenDefn, rewardTokenRewards]) => {
-                const totalRewards = rewardTokenRewards.reduce(function (accumulator, current) {
-                    return accumulator.plus(new BigNumber(formatUnits(current.rewardValue)))
-                }, new BigNumber(0))
-                const claimed = rewardTokenRewards.reduce(function (accumulator, current) {
-                    return accumulator.plus(new BigNumber(current.claimed ? formatUnits(current.rewardValue) : 0))
-                }, new BigNumber(0))
+                let totalRewards = new BigNumber(0)
+                let claimed = new BigNumber(0)
+
+                for (const reward of rewardTokenRewards) {
+                    totalRewards = totalRewards.plus(new BigNumber(formatUnits(reward.rewardValue)))
+                    claimed = claimed.plus(new BigNumber(reward.claimed ? formatUnits(reward.rewardValue) : 0))
+                }
+
                 const claimable = totalRewards.minus(claimed).toNumber()
                 const rewardToken = rewardTokenRewards[0].rewardToken
 

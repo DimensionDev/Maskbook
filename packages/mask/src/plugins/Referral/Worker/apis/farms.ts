@@ -33,7 +33,7 @@ const REFERRAL_FARMS_V1_IFACE = new Interface(ReferralFarmsV1ABI)
 const eventIds: { [eventName: string]: string } = {}
 Object.entries(REFERRAL_FARMS_V1_IFACE.events).forEach(([k, v]) => (eventIds[v.name] = keccak256(k)))
 
-function parseEvents(items: Array<any>): Array<any> {
+function parseEvents(items: any[]): any[] {
     const itemsSorted = orderBy(items, ['chainId', 'blockNumber', 'logIndex'], ['asc', 'asc', 'asc'])
     const parsed = itemsSorted.map((row) => {
         return REFERRAL_FARMS_V1_IFACE.parseLog({
@@ -46,7 +46,7 @@ function parseEvents(items: Array<any>): Array<any> {
 function parseFarmExistsEvents(unparsed: any) {
     const parsed = parseEvents(unparsed)
 
-    const farms: Array<FarmExistsEvent> = parsed.map((e) => {
+    const farms = parsed.map((e) => {
         const { farmHash, referredTokenDefn, rewardTokenDefn, sponsor } = e.args
         return { farmHash, referredTokenDefn, rewardTokenDefn, sponsor }
     })

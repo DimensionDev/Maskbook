@@ -14,7 +14,7 @@ const eventsEntitlement = new Interface([
 const eventIdsEntitlement: any = {}
 Object.entries(eventsEntitlement.events).forEach(([k, v]) => (eventIdsEntitlement[v.name] = keccak256(k)))
 
-function parseEntitlementEvents(items: Array<any>): Array<any> {
+function parseEntitlementEvents(items: any[]): any[] {
     const itemsSorted = orderBy(items, ['chainId', 'blockNumber', 'logIndex'], ['asc', 'asc', 'asc'])
     const parsed = itemsSorted.map((row) => {
         return eventsEntitlement.parseLog({

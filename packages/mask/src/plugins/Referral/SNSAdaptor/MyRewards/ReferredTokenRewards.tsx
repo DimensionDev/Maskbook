@@ -36,9 +36,10 @@ export function ReferredTokenRewards({ rewards }: ReferredTokenRewardsProps) {
                 </Grid>
             </Grid>
             {referredTokenRewards.map(([referredTokenDefn, rewards]) => {
-                const totalRewards = rewards.reduce(function (accumulator, current) {
-                    return accumulator.plus(new BigNumber(formatUnits(current.rewardValue)))
-                }, new BigNumber(0))
+                let totalRewards = new BigNumber(0)
+                for (const reward of rewards) {
+                    totalRewards = totalRewards.plus(new BigNumber(formatUnits(reward.rewardValue)))
+                }
 
                 return (
                     <Grid container justifyContent="space-between" marginBottom="8px" key={referredTokenDefn}>
