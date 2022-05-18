@@ -208,11 +208,6 @@ function useToolbox() {
     const pendingTransactions = useTransactions(undefined, TransactionStatusType.NOT_DEPEND)
     // #endregion
 
-    console.log('DEBUG: rt')
-    console.log({
-        pendingTransactions,
-    })
-
     // #region Wallet
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,

@@ -49,7 +49,12 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
                     this.storage.subscription,
                 ),
                 ([chainId, account, transactionStorage]) => {
-                    return transactionStorage[chainId][account] ?? []
+                    console.log({
+                        chainId,
+                        account,
+                        transactionStorage,
+                    })
+                    return transactionStorage[chainId][this.options.formatAddress(account)] ?? []
                 },
             )
         }
@@ -99,7 +104,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         const transaction_ = all[chainId][address_]?.find((x) => Object.keys(x.candidates).includes(id))
         if (!transaction_) return
 
-        const transactions: RecentTransaction<ChainId, Transaction>[] = (all[chainId][address] ?? []).map((x) =>
+        const transactions: RecentTransaction<ChainId, Transaction>[] = (all[chainId][address_] ?? []).map((x) =>
             Object.keys(x.candidates).includes(id)
                 ? {
                       ...x,
@@ -137,7 +142,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         const transaction_ = all[chainId][address_]?.find((x) => Object.keys(x.candidates).includes(id))
         if (!transaction_) return
 
-        const transactions: RecentTransaction<ChainId, Transaction>[] = (all[chainId][address] ?? []).map((x) =>
+        const transactions: RecentTransaction<ChainId, Transaction>[] = (all[chainId][address_] ?? []).map((x) =>
             Object.keys(x.candidates).includes(id)
                 ? {
                       ...x,

@@ -17,5 +17,5 @@ export function useTransactions<T extends NetworkPluginID>(pluginID?: T, status?
             ...x,
             _tx: x.candidates[x.indexId],
         }))
-    }, [status, transactions.map((x) => x.id).join()])
+    }, [status, transactions])
 }
