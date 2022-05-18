@@ -18,7 +18,7 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
         chainId: (name?: string) =>
             name
                 ? descriptors.find((x) =>
-                      [x.name, x.fullName, x.shortName]
+                      [x.name, x.fullName, x.shortName, x.network]
                           .map((x) => x?.toLowerCase())
                           .filter(Boolean)
                           .includes(name),
