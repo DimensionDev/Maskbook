@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: 0,
         paddingBottom: 0,
         transform: 'scale(1.1)',
-        filter: 'drop-shadow(0px 12px 28px rgba(0, 0, 0, 0.1))',
+        filter: 'drop-shadow(0 12px 28px rgba(0, 0, 0, 0.1))',
     },
     card: {
         position: 'relative',
@@ -68,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
         color: '#111432',
     },
     loadingFailImage: {
-        minHeight: '0px !important',
+        minHeight: '0 !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
         width: 64,

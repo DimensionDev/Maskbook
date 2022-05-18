@@ -5,7 +5,7 @@ import { useCustomSnackbar } from '@masknet/theme'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 
 import { useI18N } from '../locales'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { META_KEY } from '../constants'
 
 export function useInsertFarmPost(token: FungibleTokenDetailed | undefined, chainId: ChainId, onClose?: () => void) {
@@ -13,7 +13,8 @@ export function useInsertFarmPost(token: FungibleTokenDetailed | undefined, chai
         WalletMessages.events.ApplicationDialogUpdated,
     )
     const currentIdentity = useCurrentIdentity()
-    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
+    const { value: linkedPersona } = useCurrentLinkedPersona()
+    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const t = useI18N()
     const { showSnackbar } = useCustomSnackbar()

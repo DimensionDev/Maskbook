@@ -166,7 +166,7 @@ function NFTAvatarInFacebook() {
         const node = searchFacebookAvatarSelector().closest<HTMLDivElement>(3).evaluate()
         if (!node) return
         if (showAvatar) {
-            node.setAttribute('style', 'padding: 0px')
+            node.setAttribute('style', 'padding: 0')
         } else {
             node.removeAttribute('style')
         }

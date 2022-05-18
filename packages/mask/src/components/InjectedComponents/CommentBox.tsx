@@ -45,13 +45,12 @@ export function CommentBox(props: CommentBoxProps) {
                 className={classes.root}
                 inputProps={{ className: classes.input, 'data-testid': 'comment_input' }}
                 placeholder={t('comment_box__placeholder')}
-                onKeyDownCapture={(e) => {
-                    const node = e.target as HTMLInputElement
+                onKeyDown={(event) => {
+                    const node = event.target as HTMLInputElement
                     if (!node.value) return
-                    if (e.key === 'Enter') {
-                        props.onSubmit(node.value)
-                        node.value = ''
-                    }
+                    if (event.key !== 'Enter') return
+                    props.onSubmit(node.value)
+                    node.value = '' // clear content
                 }}
                 {...props.inputProps}
             />

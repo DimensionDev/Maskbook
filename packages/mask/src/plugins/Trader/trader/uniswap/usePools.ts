@@ -19,12 +19,12 @@ export enum PoolState {
 
 export function usePools(
     tradeProvider: TradeProvider,
-    poolKeys: [Currency | undefined, Currency | undefined, FeeAmount | undefined][],
-): [PoolState, Pool | null][] {
+    poolKeys: Array<[Currency | undefined, Currency | undefined, FeeAmount | undefined]>,
+): Array<[PoolState, Pool | null]> {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const context = useGetTradeContext(tradeProvider)
 
-    const transformed: ([Token, Token, FeeAmount] | null)[] = useMemo(() => {
+    const transformed: Array<[Token, Token, FeeAmount] | null> = useMemo(() => {
         return poolKeys.map(([currencyA, currencyB, feeAmount]) => {
             if (!chainId || !currencyA || !currencyB || !feeAmount) return null
 
@@ -111,7 +111,7 @@ export function usePool(
     currencyB: Currency | undefined,
     feeAmount: FeeAmount | undefined,
 ): [PoolState, Pool | null] {
-    const poolKeys: [Currency | undefined, Currency | undefined, FeeAmount | undefined][] = useMemo(
+    const poolKeys: Array<[Currency | undefined, Currency | undefined, FeeAmount | undefined]> = useMemo(
         () => [[currencyA, currencyB, feeAmount]],
         [currencyA, currencyB, feeAmount],
     )

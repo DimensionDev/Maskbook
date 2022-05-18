@@ -123,22 +123,22 @@ export function createERC20Tokens(
     symbol: string | ((chainId: ChainId) => string),
     decimals: number | ((chainId: ChainId) => number),
 ) {
-    type Table = ChainIdRecord<ERC20TokenDetailed>
-    const base = {} as Table
-    return getEnumAsArray(ChainId).reduce<Table>((accumulator, { value: chainId }) => {
+    const entries = getEnumAsArray(ChainId).map(({ value: chainId }): [ChainId, ERC20TokenDetailed] => {
         const evaluator: <T>(f: T | ((chainId: ChainId) => T)) => T = (f) =>
             typeof f === 'function' ? (f as any)(chainId) : f
-
-        accumulator[chainId] = {
-            type: EthereumTokenType.ERC20,
+        return [
             chainId,
-            address: getTokenConstants(chainId)[key] ?? '',
-            name: evaluator(name),
-            symbol: evaluator(symbol),
-            decimals: evaluator(decimals),
-        }
-        return accumulator
-    }, base)
+            {
+                type: EthereumTokenType.ERC20,
+                chainId,
+                address: getTokenConstants(chainId)[key] ?? '',
+                name: evaluator(name),
+                symbol: evaluator(symbol),
+                decimals: evaluator(decimals),
+            },
+        ]
+    })
+    return Object.fromEntries(entries) as ChainIdRecord<ERC20TokenDetailed>
 }
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {

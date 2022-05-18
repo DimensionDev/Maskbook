@@ -74,7 +74,7 @@ export interface CoinInfo {
     platforms: Record<string, string>
     name: string
     symbol: string
-    tickers: {
+    tickers: Array<{
         base: string
         target: string
         market: {
@@ -105,7 +105,7 @@ export interface CoinInfo {
         trade_url: string
         coin_id: string
         target_coin_id?: string
-    }[]
+    }>
 }
 
 export async function getCoinInfo(coinId: string) {

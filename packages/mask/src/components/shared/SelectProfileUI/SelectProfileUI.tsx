@@ -40,7 +40,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
         if (search === '') return true
         return (
             !!x.identifier.userId.toLowerCase().match(search.toLowerCase()) ||
-            !!x.fingerprint?.toLowerCase().match(search.toLowerCase()) ||
+            !!x.linkedPersona?.rawPublicKey?.toLowerCase().match(search.toLowerCase()) ||
             !!(x.nickname || '').toLowerCase().match(search.toLowerCase())
         )
     })
@@ -96,10 +96,9 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                         (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setSearch(e.target.value),
                         [],
                     )}
-                    onKeyDown={(e) => {
-                        if (search === '' && e.key === 'Backspace') {
-                            onSetSelected(selected.slice(0, selected.length - 1))
-                        }
+                    onKeyDown={(event) => {
+                        if (search !== '' || event.key !== 'Backspace') return
+                        onSetSelected(selected.slice(0, selected.length - 1))
                     }}
                     placeholder={disabled ? '' : t('search_box_placeholder')}
                     disabled={disabled}

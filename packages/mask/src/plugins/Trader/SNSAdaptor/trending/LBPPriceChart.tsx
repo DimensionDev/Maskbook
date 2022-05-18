@@ -15,7 +15,7 @@ const DEFAULT_DIMENSION: Dimension = {
 }
 
 export interface PriceChartProps extends withClasses<'root'> {
-    data: { date: Date; value: number }[]
+    data: Array<{ date: Date; value: number }>
     width?: number
     height?: number
     currency: Currency

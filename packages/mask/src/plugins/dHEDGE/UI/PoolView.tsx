@@ -1,14 +1,14 @@
 import { RefreshIcon } from '@masknet/icons'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { Card, CardContent, CardHeader, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Card, CardContent, CardHeader, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool'
 import { PerformanceChart } from './PerformanceChart'
 import { PoolStats } from './PoolStats'
 import { PoolViewDeck } from './PoolViewDeck'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -86,8 +86,8 @@ export function PoolView(props: PoolViewProps) {
 
     if (loading || loadingAllowedTokens)
         return (
-            <Typography className={classes.message} color="textPrimary">
-                {t('plugin_dhedge_loading')}
+            <Typography className={classes.message} textAlign="center" sx={{ padding: 2 }}>
+                <CircularProgress />
             </Typography>
         )
     if (!pool)
@@ -108,7 +108,7 @@ export function PoolView(props: PoolViewProps) {
         )
 
     return (
-        <EthereumChainBoundary chainId={pool.chainId}>
+        <>
             <Card className={classes.root} elevation={0}>
                 <CardHeader subheader={<PoolViewDeck pool={pool} inputTokens={allowedTokens} link={props.link} />} />
                 <CardContent className={classes.content}>
@@ -132,6 +132,9 @@ export function PoolView(props: PoolViewProps) {
                     </Paper>
                 </CardContent>
             </Card>
-        </EthereumChainBoundary>
+            <Box sx={{ display: 'flex', width: 'calc(100% - 24px)', padding: 1.5 }}>
+                <EthereumChainBoundary chainId={pool.chainId} />
+            </Box>
+        </>
     )
 }

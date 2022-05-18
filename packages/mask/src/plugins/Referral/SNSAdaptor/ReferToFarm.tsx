@@ -13,7 +13,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../locales'
 import { META_KEY } from '../constants'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
 import { getRequiredChainId } from '../helpers'
 import { singAndPostProofOfRecommendationOrigin } from './utils/proofOfRecommendation'
@@ -84,7 +84,7 @@ export function ReferToFarm(props: PageInterface) {
         WalletMessages.events.ApplicationDialogUpdated,
     )
     const currentIdentity = useCurrentIdentity()
-    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
+    const { value: linkedPersona } = useCurrentLinkedPersona()
 
     const { classes } = useStyles()
     const { classes: tabClasses } = useTabStyles()
@@ -174,12 +174,12 @@ export function ReferToFarm(props: PageInterface) {
                 referral_token_icon: token?.logoURI ?? [''],
                 referral_token_chain_id: currentChainId,
                 promoter_address: account,
-                sender: senderName ?? '',
+                sender: currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User',
             })
         } catch (error: any) {
             onError(error?.message)
         }
-    }, [token, currentChainId, account, senderName])
+    }, [token, currentChainId, account, currentIdentity, linkedPersona])
 
     const farm_category_types = [
         {
