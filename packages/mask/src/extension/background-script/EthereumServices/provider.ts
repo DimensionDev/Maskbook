@@ -9,14 +9,12 @@ import * as Injected from './providers/Injected'
 import * as Fortmatic from './providers/Fortmatic'
 
 // #region connect WalletConnect
-// step 1:
-// Generate the connection URI and render a QRCode for scanning by the user
+// Step 1: Generate the connection URI and render a QRCode for scanning by the user
 export async function createConnectionURI() {
     return (await WalletConnect.createConnector()).uri
 }
 
-// step2:
-// If user confirmed the request we will receive the 'connect' event
+// Step 2: If user confirmed the request we will receive the 'connect' event
 type Account = { account?: string; chainId: ChainId }
 let deferredConnect: Promise<Account> | null = null
 let resolveConnect: ((result: Account) => void) | undefined

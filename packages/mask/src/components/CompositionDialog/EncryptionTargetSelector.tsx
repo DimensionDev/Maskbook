@@ -147,7 +147,10 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                 {e2eDisabledMessage}
                 {noLocalKeyMessage}
                 <PopoverListItem
-                    onItemClick={() => props.onChange(EncryptionTargetType.E2E)}
+                    onItemClick={() => {
+                        props.onChange(EncryptionTargetType.E2E)
+                        setAnchorEl(null)
+                    }}
                     itemTail={<RightArrowIcon className={classes.rightIcon} />}
                     disabled={!!props.e2eDisabled}
                     value={EncryptionTargetType.E2E}
