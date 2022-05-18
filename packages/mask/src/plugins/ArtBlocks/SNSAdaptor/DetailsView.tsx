@@ -1,7 +1,7 @@
 import { FormattedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { chainResolver, explorerResolver, formatEthereumAddress, formatWeiToEther } from '@masknet/web3-shared-evm'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { formatEthereumAddress, formatWeiToEther, chainResolver } from '@masknet/web3-shared-evm'
+import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { OpenInNew } from '@mui/icons-material'
 import { Typography, Box, Link } from '@mui/material'
@@ -57,6 +57,7 @@ export function DetailsView(props: DetailsViewProps) {
     const { project } = props
     const { t } = useI18N()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM) as number
+    const { Others } = useWeb3State()
 
     const artistName = ` ${project.artistName}`
     const invocations = `${project.invocations} of ${project.maxInvocations}`
@@ -131,7 +132,7 @@ export function DetailsView(props: DetailsViewProps) {
                 <Box className={classes.meta_row}>
                     <Typography variant="body2">{t('plugin_artblocks_contract_row')}</Typography>
                     <Link
-                        href={explorerResolver.transactionLink(chainId, project.contract.id)}
+                        href={Others?.explorerResolver.transactionLink(chainId, project.contract.id)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Typography variant="body2">
