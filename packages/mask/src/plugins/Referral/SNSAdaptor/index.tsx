@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 
 import type { ReferralMetaData } from '../types'
 import { base } from '../base'
@@ -26,7 +27,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ]),
     CompositionDialogEntry: !DISABLE_PLUGIN
         ? {
-              label: <>Referral Farms</>,
+              label: (
+                  <PluginI18NFieldRender
+                      field={{ i18nKey: '__plugin_name', fallback: 'Referral Farms' }}
+                      pluginID={base.ID}
+                  />
+              ),
               dialog: ReferralDialog,
           }
         : undefined,
@@ -36,7 +42,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <ReferralFarmsIcon />
-            const name = 'Referral Farms'
+            const name = { i18nKey: '__plugin_name', fallback: 'Referral Farms' }
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
@@ -46,7 +52,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             <ApplicationEntry
                                 disabled={DISABLE_PLUGIN || disabled}
                                 icon={icon}
-                                title={name}
+                                title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 onClick={() =>
                                     CrossIsolationMessages.events.requestComposition.sendToLocal({
                                         reason: 'timeline',
@@ -64,12 +70,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 13,
                 marketListSortingPriority: 18,
                 icon,
-                description: 'A plugin for Referral Farms.',
+                description: {
+                    i18nKey: '__plugin_description',
+                    fallback: 'Referral Farming distributes yield farming alike returns for successful referrals.',
+                },
                 name,
                 category: 'dapp',
             }
         })(),
     ],
+    wrapperProps: {
+        backgroundGradient: 'linear-gradient(235.14deg, #E8F4FF 0%, #E5E3FF 100%)',
+        icon: <ReferralFarmsIcon style={{ width: 24, height: 23 }} />,
+    },
 }
 
 export default sns

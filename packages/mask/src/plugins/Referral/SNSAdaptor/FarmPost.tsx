@@ -35,9 +35,19 @@ interface FarmPostProps {
     payload: ReferralMetaData
 }
 const useStyles = makeStyles()(() => ({
+    farmPost: {
+        padding: '0 15px 15px',
+    },
     content: {
         background: 'linear-gradient(194.37deg, #0081F9 2.19%, #746AFD 61.94%, #A261FF 95.94%)',
         color: '#FFFFFF',
+        position: 'relative',
+        padding: '16px 20px',
+    },
+    tweetAttraceBg: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
     },
     actions: {
         paddingTop: '16px',
@@ -152,8 +162,11 @@ export function FarmPost(props: FarmPostProps) {
 
     const switchNetworkBtnVisible = !traderPluginSupportedChainIds.includes(chainId)
     return (
-        <>
-            <Card variant="outlined" sx={{ p: 2 }} className={classes.content}>
+        <div className={classes.farmPost}>
+            <Card variant="outlined" className={classes.content}>
+                <div className={classes.tweetAttraceBg}>
+                    <img src={IconURLs.tweetAttraceBg} />
+                </div>
                 <Box display="flex" alignItems="center">
                     <TokenIcon
                         address={payload.referral_token ?? ''}
@@ -203,12 +216,12 @@ export function FarmPost(props: FarmPostProps) {
                         className={classes.switchButtonBox}
                         classes={{ switchButton: sharedClasses.switchButton }}>
                         <Grid item xs={6} display="flex" textAlign="center">
-                            <Button variant="contained" size="large" onClick={onClickBuyToFarm}>
+                            <Button variant="contained" size="medium" onClick={onClickBuyToFarm}>
                                 {t.buy_to_farm()}
                             </Button>
                         </Grid>
                         <Grid item xs={6} display="flex" justifyContent="end" textAlign="center">
-                            <Button variant="contained" size="large" onClick={onClickReferToFarm}>
+                            <Button variant="contained" size="medium" onClick={onClickReferToFarm}>
                                 {t.refer_to_farm()}
                             </Button>
                         </Grid>
@@ -216,18 +229,18 @@ export function FarmPost(props: FarmPostProps) {
                 ) : (
                     <>
                         <Grid item xs={6} display="flex" textAlign="center">
-                            <Button variant="contained" size="large" onClick={onClickBuyToFarm}>
+                            <Button variant="contained" size="medium" onClick={onClickBuyToFarm}>
                                 {t.buy_to_farm()}
                             </Button>
                         </Grid>
                         <Grid item xs={6} display="flex" justifyContent="end" textAlign="center">
-                            <Button variant="contained" size="large" onClick={onClickReferToFarm}>
+                            <Button variant="contained" size="medium" onClick={onClickReferToFarm}>
                                 {t.refer_to_farm()}
                             </Button>
                         </Grid>
                     </>
                 )}
             </Grid>
-        </>
+        </div>
     )
 }

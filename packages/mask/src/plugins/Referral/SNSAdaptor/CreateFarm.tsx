@@ -371,7 +371,7 @@ export function CreateFarm(props: PageInterface) {
                         <ActionButton
                             fullWidth
                             variant="contained"
-                            size="large"
+                            size="medium"
                             disabled={createFarmBtnDisabled}
                             onClick={onClickCreateFarm}>
                             {insufficientFunds

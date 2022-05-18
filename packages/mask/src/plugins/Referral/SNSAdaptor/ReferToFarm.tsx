@@ -250,7 +250,7 @@ export function ReferToFarm(props: PageInterface) {
                         <ActionButton
                             fullWidth
                             variant="contained"
-                            size="large"
+                            size="medium"
                             disabled={!token}
                             onClick={onClickReferFarm}>
                             {t.refer_to_farm()}

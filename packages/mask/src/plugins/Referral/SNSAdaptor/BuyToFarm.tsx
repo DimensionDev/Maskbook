@@ -211,7 +211,7 @@ export function BuyToFarm(props: PageInterface) {
                         <ActionButton
                             fullWidth
                             variant="contained"
-                            size="large"
+                            size="medium"
                             disabled={!token}
                             onClick={onClickBuyToFarm}>
                             {t.buy_to_farm()}

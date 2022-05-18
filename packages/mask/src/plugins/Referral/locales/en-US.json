@@ -1,5 +1,7 @@
 {
-    "referral_farms": "Referral Farms",
+    "__display_name": "Plugin: Referral Farms",
+    "__plugin_name": "Referral Farms",
+    "__description": "Referral Farming distributes yield farming alike returns for successful referrals.",
     "powered_by": "Powered by",
     "create_by": "Created by",
     "tab_new": "New",

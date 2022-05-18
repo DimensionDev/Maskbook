@@ -75,7 +75,7 @@ export function Deposit(props: DepositDialogInterface | undefined) {
                     chainId={deposit.requiredChainId}
                     noSwitchNetworkTip
                     classes={{ switchButton: sharedClasses.switchButton }}>
-                    <ActionButton fullWidth variant="contained" size="large" onClick={onClickDeposit}>
+                    <ActionButton fullWidth variant="contained" size="medium" onClick={onClickDeposit}>
                         {t.deposit()} {totalDeposit} {deposit.token?.symbol}
                     </ActionButton>
                 </EthereumChainBoundary>

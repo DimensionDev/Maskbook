@@ -78,7 +78,7 @@ export function Transaction(props: TransactionDialogInterface | undefined) {
                     <ActionButton
                         fullWidth
                         variant="contained"
-                        size="large"
+                        size="medium"
                         onClick={() => transaction.actionButton.onClick()}>
                         {transaction.actionButton.label}
                     </ActionButton>

@@ -80,15 +80,15 @@ export function ReferralDialog({ open, onClose, onSwapDialogOpen }: ReferralDial
     const { classes } = useStyles({ hideBackBtn: propsData?.hideBackBtn })
     const [currentPage, setCurrentPage] = useState<PageHistory>({
         page: PagesType.LANDING,
-        title: t.referral_farms(),
+        title: t.__plugin_name(),
     })
     const [previousPages, setPreviousPages] = useState<PageHistory[]>([])
-    const [currentTitle, setCurrentTitle] = useState(t.referral_farms())
+    const [currentTitle, setCurrentTitle] = useState(t.__plugin_name())
 
     const onContinue = (
         currentPage: PagesType,
         nextPage: PagesType,
-        title: string = t.referral_farms(),
+        title: string = t.__plugin_name(),
         props?: DialogInterface,
     ) => {
         setPreviousPages([...previousPages, { page: currentPage, title: currentTitle }])
@@ -97,7 +97,7 @@ export function ReferralDialog({ open, onClose, onSwapDialogOpen }: ReferralDial
         setPropsData(props)
     }
 
-    const onChangePage = (page: PagesType, title: string = t.referral_farms(), props?: DialogInterface) => {
+    const onChangePage = (page: PagesType, title: string = t.__plugin_name(), props?: DialogInterface) => {
         setCurrentPage({ page, title })
         setCurrentTitle(title)
         setPropsData(props)

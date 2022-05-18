@@ -355,7 +355,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                         <ActionButton
                             fullWidth
                             variant="contained"
-                            size="large"
+                            size="medium"
                             disabled={adjustRewardsBtnDisabled}
                             onClick={onClickAdjustRewards}>
                             {insufficientFunds
