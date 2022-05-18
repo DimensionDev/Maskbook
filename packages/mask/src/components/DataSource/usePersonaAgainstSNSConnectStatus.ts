@@ -30,5 +30,5 @@ export function usePersonaAgainstSNSConnectStatus() {
             currentPersonaPublicKey: currentPersona?.identifier.rawPublicKey,
             currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.identifier.rawPublicKey,
         }
-    }, [platform, username, ui, personas, lastRecognized])
+    }, [platform, username, ui, personas])
 }
