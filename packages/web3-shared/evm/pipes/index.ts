@@ -164,6 +164,7 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Boba]: 'rgb(255 255 255)',
         [ChainId.Metis]: 'rgb(255 255 255)',
         [ChainId.Optimistic]: 'rgb(255 255 255)',
+        [ChainId.OKEX]: 'rgb(0,0,0)',
     },
     'rgb(214, 217, 220)',
 )
