@@ -1,4 +1,4 @@
-import { useChainId, ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
@@ -10,7 +10,8 @@ import type { NftRedPacketHistory, RedPacketJSONPayload } from '../types'
 import { RedPacketNftMetaKey } from '../constants'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
 enum RpTypeTabs {
     ERC20 = 0,
@@ -70,7 +71,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
     const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
     const { attachMetadata } = useCompositionContext()
     const handleSendNftRedpacket = useCallback(
-        (history: NftRedPacketHistory, contractDetailed: ERC721ContractDetailed) => {
+        (history: NftRedPacketHistory, contractDetailed: NonFungibleToken<ChainId, SchemaType>) => {
             const { rpid, txid, duration, message, payload } = history
             attachMetadata(RedPacketNftMetaKey, {
                 id: rpid,
@@ -78,9 +79,9 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
                 duration,
                 message,
                 senderName,
-                contractName: contractDetailed.name,
+                contractName: contractDetailed.metadata?.name,
                 contractAddress: contractDetailed.address,
-                contractTokenURI: contractDetailed.iconURL ?? '',
+                contractTokenURI: contractDetailed.contract?.logoURL ?? '',
                 privateKey: payload.password,
                 chainId: history.chain_id,
             })

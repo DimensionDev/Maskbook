@@ -18,7 +18,7 @@ import { useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog, TokenAmountPanel } from '@masknet/shared'
-import { FungibleToken, leftShift } from '@masknet/web3-shared-base'
+import { FungibleToken, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
 import { WalletMessages } from '../../Wallet/messages'
@@ -56,7 +56,7 @@ export function PurchaseDialog(props: ActionBarProps) {
     const { project, open, onClose } = props
 
     const { token, balance } = useFungibleTokenWatched(
-        project.currencySymbol === 'ETH' || !project.currencySymbol ? 0 : 1,
+        NetworkPluginID.PLUGIN_EVM,
         project.currencyAddress ? project.currencyAddress : '',
     )
 
@@ -64,7 +64,7 @@ export function PurchaseDialog(props: ActionBarProps) {
     const [purchaseState, onCheckout, resetCallback] = usePurchaseCallback(
         project.projectId,
         project.pricePerTokenInWei,
-        token.value?.type,
+        token.value?.schema,
     )
     const { GEN_ART_721_MINTER: spender } = useArtBlocksConstants()
 
@@ -169,7 +169,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                     </CardContent>
                     <CardActions>
                         <EthereumWalletConnectedBoundary>
-                            {token.value?.type === SchemaType.Native ? (
+                            {token.value?.schema === SchemaType.Native ? (
                                 <ActionButton
                                     className={classes.button}
                                     disabled={!!validationMessage}
@@ -182,7 +182,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                                         : t('plugin_artblocks_purchasing')}
                                 </ActionButton>
                             ) : null}
-                            {token.value?.type === SchemaType.ERC20 ? (
+                            {token.value?.schema === SchemaType.ERC20 ? (
                                 <EthereumERC20TokenApprovedBoundary
                                     amount={project.pricePerTokenInWei}
                                     spender={spender}
