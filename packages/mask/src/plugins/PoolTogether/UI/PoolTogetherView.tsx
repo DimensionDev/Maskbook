@@ -1,7 +1,7 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/base'
-import { usePoolTogetherConstants } from '@masknet/web3-shared-evm'
-import { Card, CardContent, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { ChainId, usePoolTogetherConstants } from '@masknet/web3-shared-evm'
+import { Box, Card, CardContent, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import React, { useState, useEffect } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -9,6 +9,7 @@ import { usePool, usePools } from '../hooks/usePools'
 import type { Pool } from '../types'
 import { Account } from './Account'
 import { PoolsView } from './PoolsView'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -17,10 +18,11 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         backgroundColor: '#290b5a',
         textAlign: 'center',
+        width: '100%',
     },
     message: {
-        color: theme.palette.text.primary,
         textAlign: 'center',
+        padding: 16,
     },
     refresh: {
         bottom: theme.spacing(1),
@@ -72,7 +74,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     const [pools, setPools] = useState<Pool[]>([])
 
     // #region pools
-    const { value: _pools = [], error: error, loading: loading, retry: retry } = usePools()
+    const { value: _pools = [], error, loading, retry } = usePools()
     _pools.sort((x, y) => Number(y.prize.weeklyTotalValueUsd) - Number(x.prize.weeklyTotalValueUsd))
     // #endregion
 
@@ -111,31 +113,43 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     }
 
     if (pools.length === 0) {
-        return <Typography className={classes.message}>{t('plugin_pooltogether_no_pool')}</Typography>
+        return (
+            <Typography color="error" className={classes.message}>
+                {t('plugin_pooltogether_no_pool')}
+            </Typography>
+        )
     }
 
     return (
-        <Card className={classes.root} elevation={0}>
-            <CardContent className={classes.content}>
-                <Tabs
-                    className={classes.tabs}
-                    indicatorColor="primary"
-                    textColor="inherit"
-                    variant="fullWidth"
-                    value={tabIndex}
-                    onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
-                    TabIndicatorProps={{
-                        style: {
-                            display: 'none',
-                        },
-                    }}>
-                    {tabs}
-                </Tabs>
-                <Paper className={classes.body}>
-                    {tabIndex === 0 ? <PoolsView pools={pools} /> : null}
-                    {tabIndex === 1 ? <Account pools={pools} /> : null}
-                </Paper>
-            </CardContent>
-        </Card>
+        <>
+            <Card className={classes.root} elevation={0}>
+                <CardContent className={classes.content}>
+                    <Tabs
+                        className={classes.tabs}
+                        indicatorColor="primary"
+                        textColor="inherit"
+                        variant="fullWidth"
+                        value={tabIndex}
+                        onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
+                        TabIndicatorProps={{
+                            style: {
+                                display: 'none',
+                            },
+                        }}>
+                        {tabs}
+                    </Tabs>
+                    <Paper className={classes.body}>
+                        {tabIndex === 0 ? <PoolsView pools={pools} /> : null}
+                        {tabIndex === 1 ? <Account pools={pools} /> : null}
+                    </Paper>
+                </CardContent>
+            </Card>
+            <Box style={{ padding: 12 }}>
+                <EthereumChainBoundary
+                    chainId={ChainId.Mainnet}
+                    isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
+                />
+            </Box>
+        </>
     )
 }

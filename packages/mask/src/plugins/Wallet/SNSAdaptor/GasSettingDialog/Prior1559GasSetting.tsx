@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-unified'
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { toWei } from 'web3-utils'
 import { z as zod } from 'zod'
 // import { StyledInput } from '../../../../extension/popups/components/StyledInput'
@@ -43,17 +43,17 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                           {
                               title: t('popups_wallet_gas_fee_settings_low'),
                               gasOption: GasOptionType.SLOW,
-                              gasPrice: gasOptions.options[GasOptionType.SLOW].suggestedMaxFeePerGas ?? '0',
+                              gasPrice: gasOptions[GasOptionType.SLOW].suggestedMaxFeePerGas ?? '0',
                           },
                           {
                               title: t('popups_wallet_gas_fee_settings_medium'),
                               gasOption: GasOptionType.NORMAL,
-                              gasPrice: gasOptions.options[GasOptionType.NORMAL].suggestedMaxFeePerGas ?? '0',
+                              gasPrice: gasOptions[GasOptionType.NORMAL].suggestedMaxFeePerGas ?? '0',
                           },
                           {
                               title: t('popups_wallet_gas_fee_settings_high'),
                               gasOption: GasOptionType.FAST,
-                              gasPrice: gasOptions.options[GasOptionType.FAST].suggestedMaxFeePerGas ?? 0,
+                              gasPrice: gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas ?? 0,
                           },
                       ]
                     : null,

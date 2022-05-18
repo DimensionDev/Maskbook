@@ -71,22 +71,19 @@ export function useAllCommonPairs(tradeProvider: TradeProvider, currencyA?: Curr
     const { value: allPairs, ...asyncResult } = usePairs(tradeProvider, allCurrencyCombinations)
 
     // only pass along valid pairs, non-duplicated pairs
-    const allPairs_ = useMemo(
-        () =>
-            Object.values(
-                allPairs
-                    // filter out invalid pairs
-                    .filter((result): result is [PairState.EXISTS, Pair] =>
-                        Boolean(result[0] === PairState.EXISTS && result[1]),
-                    )
-                    // filter out duplicated pairs
-                    .reduce<Record<string, Pair>>((memo, [, current]) => {
-                        memo[current.liquidityToken.address] = memo[current.liquidityToken.address] ?? current
-                        return memo
-                    }, {}),
-            ),
-        [allPairs],
-    )
+    const allPairs_ = useMemo(() => {
+        const filtered = new Map<string, Pair>()
+        for (const [state, pair] of allPairs as [PairState.EXISTS, Pair][]) {
+            // filter out invalid pairs
+            if (state !== PairState.EXISTS) continue
+            if (!pair) continue
+            // filter out duplicated pairs
+            const { address } = pair.liquidityToken
+            if (filtered.has(address)) continue
+            filtered.set(pair.liquidityToken.address, pair)
+        }
+        return [...filtered.values()]
+    }, [allPairs])
 
     return {
         ...asyncResult,

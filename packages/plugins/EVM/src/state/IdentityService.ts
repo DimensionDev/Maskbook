@@ -42,7 +42,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const { identifier, bio = '', nickname = '', homepage = '' } = identity
 
         const address = getAddress(bio)
-        const ethereumName = getEthereumName(identifier.userId ?? '', nickname, bio)
+        const ethereumName = getEthereumName(identifier?.userId ?? '', nickname, bio)
         const RSS3Id = getRSS3Id(nickname, homepage, bio)
 
         const web3 = new Web3(

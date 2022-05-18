@@ -4,7 +4,7 @@ import ErrorIcon from '@mui/icons-material/Error'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import { CrossIsolationMessages, isDashboardPage } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainIdValid } from '@masknet/plugin-infra/web3'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
@@ -66,7 +66,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     return (
         <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
-                <WalletStatusBox showPendingTransaction />
+                <WalletStatusBox />
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>

@@ -6,7 +6,6 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
-import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { getAvatarId } from '../../utils/user'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
@@ -18,6 +17,7 @@ import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useWallet } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -54,7 +54,11 @@ function NFTAvatarInTwitter() {
     const borderElement = useRef<Element | null>()
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.TWITTER)
+    const { value: _avatar } = usePersonaNFTAvatar(
+        identity.identifier?.userId ?? '',
+        getAvatarId(identity.avatar ?? ''),
+        RSS3_KEY_SNS.TWITTER,
+    )
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const windowSize = useWindowSize()
     const location = useLocation()
@@ -197,7 +201,7 @@ function NFTAvatarInTwitter() {
         if (!avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
-            openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId))
+            openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId, avatar.chainId))
         }
 
         linkParentDom.addEventListener('click', handler)

@@ -13,6 +13,7 @@ export class IdentityServiceState<
     protected storage: StorageItem<IdentityBook> = null!
 
     private getIdentityID(identity: SocialIdentity) {
+        if (!identity.identifier) return ''
         return `${identity.identifier.network}_${identity.identifier.userId}`
     }
 

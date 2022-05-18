@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
-import { useChainId, useCurrentWeb3NetworkPluginID } from '../web3'
+import { useChainId } from '../web3/useChainId'
+import { useCurrentWeb3NetworkPluginID } from '../web3/Context'
 
 type HasRequirement = { enableRequirement: Plugin.Shared.Definition['enableRequirement'] }
 

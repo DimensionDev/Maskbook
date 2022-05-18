@@ -18,7 +18,7 @@ export function useTipsWalletsList(
     if (kv && kv.proofs.length > 0 && proofs.length > 0) {
         const kvCache = kv.proofs.find((x) => x.identity === identity)
         if (!kvCache) return EMPTY_LIST
-        const result = proofs.reduce<BindingProof[]>((res, x) => {
+        const result = proofs.map((x) => {
             x.isDefault = 0
             x.isPublic = 1
             const matched = kvCache?.content[PluginId.Tips]?.find((proof) => isSameAddress(x.identity, proof.identity))
@@ -26,9 +26,8 @@ export function useTipsWalletsList(
                 x.isDefault = matched.isDefault
                 x.isPublic = matched.isPublic
             }
-            res.push(x)
-            return res
-        }, [])
+            return x
+        })
         const idx = result.findIndex((i) => i.isDefault)
         if (idx !== -1) {
             result.unshift(result.splice(idx, 1)[0])

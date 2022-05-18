@@ -4,7 +4,9 @@ import { argsOfArr, ControlType } from './args'
 function enumIn<T>(enums: {
     [Prop in keyof T]?: (argsFromEnum: (enumString: NonNullable<T[Prop]>[], type?: ControlType) => ArgType) => ArgType
 }): ArgTypes {
-    for (const key in enums) enums[key] = (enums[key] as any)(argsOfArr)
+    for (const key of Object.keys(enums) as Array<keyof T>) {
+        enums[key] = (enums[key] as any)(argsOfArr)
+    }
     return enums as ArgTypes
 }
 export const MuiArgs = {

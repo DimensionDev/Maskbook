@@ -19,5 +19,5 @@ export function useIfQualified(address: string, ito_address: string) {
         ).call({
             from: account,
         })
-    }, [account, qualificationContract])
+    }, [account, qualificationContract, chainId])
 }

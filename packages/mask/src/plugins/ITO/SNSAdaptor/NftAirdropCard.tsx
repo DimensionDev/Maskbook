@@ -182,12 +182,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
 
-    const claimableCount = campaignInfos
-        ? campaignInfos.reduce((acc, cur) => {
-              if (cur.claimableInfo.claimable) return acc + 1
-              return acc
-          }, 0)
-        : 0
+    const claimableCount = campaignInfos?.filter((info) => info.claimableInfo.claimable).length ?? 0
 
     useEffect(() => {
         setCheckAddress('')

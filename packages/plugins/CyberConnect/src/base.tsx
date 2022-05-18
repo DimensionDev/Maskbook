@@ -1,6 +1,4 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { CYBERCONNECT_PLUGIN_ID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
@@ -14,11 +12,6 @@ export const base: Plugin.Shared.Definition = {
         architecture: { app: false, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
-        web3: {
-            [NetworkPluginID.PLUGIN_EVM]: {
-                supportedChainIds: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai],
-            },
-        },
     },
     contribution: { postContent: new Set([/https:\/\/app.cyberconnect.me/]) },
 }

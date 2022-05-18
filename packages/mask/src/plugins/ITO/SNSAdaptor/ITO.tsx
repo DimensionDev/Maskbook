@@ -20,13 +20,14 @@ import {
     FungibleToken,
 } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { Box, Card, Grid, Link, Typography } from '@mui/material'
+import { Box, Card, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import { startCase } from 'lodash-unified'
+import urlcat from 'urlcat'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -48,6 +49,9 @@ import { SwapGuide, SwapStatus } from './SwapGuide'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useAccount, useChainId, useChainIdValid } from '@masknet/plugin-infra/web3'
+import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 export interface IconProps {
     size?: number
@@ -60,6 +64,7 @@ interface StyleProps {
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
+        width: '100%',
         position: 'relative',
         color: theme.palette.common.white,
         flexDirection: 'column',
@@ -72,17 +77,14 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         backgroundRepeat: 'no-repeat',
         backgroundColor: '#FF5238',
         borderRadius: theme.spacing(1),
-        paddingLeft: theme.spacing(4),
-        paddingRight: theme.spacing(1),
-        paddingTop: theme.spacing(4),
-        paddingBottom: theme.spacing(2),
+        padding: theme.spacing(2),
     },
     header: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'end',
         width: props.snsId === EnhanceableSite.Facebook ? '98%' : '100%',
-        maxWidth: props.snsId === EnhanceableSite.Facebook ? 'auto' : 470,
+        maxWidth: props.snsId === EnhanceableSite.Facebook ? 'auto' : '100%',
     },
     title: {
         fontSize: props.titleLength! > 31 ? '1.3rem' : '1.6rem',
@@ -155,10 +157,22 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         },
     },
     actionFooter: {
-        marginTop: theme.spacing(1),
+        padding: 0,
+        display: 'flex',
     },
     actionButton: {
         width: '100%',
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        fontSize: 14,
+        paddingTop: 10,
+        fontWeight: 700,
+        margin: '0 !important',
+        paddingBottom: 10,
+        lineHeight: '20px',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
     },
     textProviderErr: {
         color: '#EB5757',
@@ -189,6 +203,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginTop: 16,
         color: '#F4212E',
     },
+    grid: {
+        width: '100%',
+        margin: 0,
+    },
 }))
 
 // #region token item
@@ -207,7 +225,7 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
             <TokenIcon
                 classes={{ icon: classes.tokenIcon }}
                 address={exchangeToken.address}
-                logoURL={exchangeToken.logoURI}
+                logoURL={exchangeToken.logoURL}
             />
             <Typography component="span">
                 <strong>{price}</strong>{' '}
@@ -270,7 +288,6 @@ export function ITO(props: ITO_Props) {
     const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime, endTime, qualificationAddress } =
         availabilityComputed
     // #endregion
-
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(availability?.remaining ?? '0')
     const sold = total.minus(total_remaining)
@@ -579,7 +596,7 @@ export function ITO(props: ITO_Props) {
 
     const FooterBuyerWithLockTimeButton = useMemo(
         () => (
-            <Grid item xs={noRemain || listOfStatus.includes(ITO_Status.expired) ? 12 : 6}>
+            <Box sx={{ flex: 1, padding: 1.5 }}>
                 {(() => {
                     if (isUnlocked) return FooterBuyerLockedButton
 
@@ -594,7 +611,7 @@ export function ITO(props: ITO_Props) {
                         </ActionButton>
                     )
                 })()}
-            </Grid>
+            </Box>
         ),
         [noRemain, listOfStatus, isUnlocked],
     )
@@ -603,21 +620,18 @@ export function ITO(props: ITO_Props) {
         () => (
             <div>
                 {(() => {
-                    if (hasLockTime)
-                        return (
-                            <Grid container spacing={2}>
-                                {FooterBuyerWithLockTimeButton}
-                            </Grid>
-                        )
+                    if (hasLockTime) return FooterBuyerWithLockTimeButton
                     if (canWithdraw) {
                         return (
-                            <ActionButton
-                                onClick={onWithdraw}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_withdraw')}
-                            </ActionButton>
+                            <Box sx={{ flex: 1, padding: 1.5 }}>
+                                <ActionButton
+                                    onClick={onWithdraw}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_withdraw')}
+                                </ActionButton>
+                            </Box>
                         )
                     }
                     return null
@@ -628,8 +642,11 @@ export function ITO(props: ITO_Props) {
     )
 
     return (
-        <div>
-            <Card className={classes.root} elevation={0} style={{ backgroundImage: `url(${PoolBackground})` }}>
+        <>
+            <Card
+                className={classes.root}
+                elevation={0}
+                style={{ backgroundImage: `url(${PoolBackground})`, backgroundRepeat: 'repeat' }}>
                 <Box className={classes.header}>
                     <Typography variant="h5" className={classes.title}>
                         {title}
@@ -701,14 +718,16 @@ export function ITO(props: ITO_Props) {
 
                     if (!isRegionAllow) {
                         return (
-                            <ActionButton
-                                disabled
-                                onClick={() => undefined}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_region_ban')}
-                            </ActionButton>
+                            <Box sx={{ flex: 1, padding: 1.5 }}>
+                                <ActionButton
+                                    disabled
+                                    onClick={() => undefined}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_region_ban')}
+                                </ActionButton>
+                            </Box>
                         )
                     }
 
@@ -722,26 +741,16 @@ export function ITO(props: ITO_Props) {
 
                     if (loadingTradeInfo || loadingAvailability) {
                         return (
-                            <ActionButton
-                                disabled
-                                onClick={() => undefined}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_loading')}
-                            </ActionButton>
-                        )
-                    }
-
-                    if (!account || !chainIdValid) {
-                        return (
-                            <ActionButton
-                                onClick={openSelectProviderDialog}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_wallet_connect_a_wallet')}
-                            </ActionButton>
+                            <Box sx={{ flex: 1, padding: 1.5 }}>
+                                <ActionButton
+                                    disabled
+                                    onClick={() => undefined}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_loading')}
+                                </ActionButton>
+                            </Box>
                         )
                     }
 
@@ -749,13 +758,15 @@ export function ITO(props: ITO_Props) {
 
                     if (canWithdraw) {
                         return (
-                            <ActionButton
-                                onClick={onWithdraw}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_withdraw')}
-                            </ActionButton>
+                            <Box sx={{ flex: 1, padding: 1.5 }}>
+                                <ActionButton
+                                    onClick={onWithdraw}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_withdraw')}
+                                </ActionButton>
+                            </Box>
                         )
                     }
 
@@ -764,20 +775,41 @@ export function ITO(props: ITO_Props) {
                         !isNativeTokenAddress(qualificationAddress)
                     ) {
                         return (
-                            <ActionButton
-                                onClick={retryIfQualified}
-                                loading={loadingIfQualified}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {loadingIfQualified
-                                    ? t('plugin_ito_qualification_loading')
-                                    : !ifQualified
-                                    ? t('plugin_ito_qualification_failed')
-                                    : !(ifQualified as Qual_V2).qualified
-                                    ? startCase((ifQualified as Qual_V2).errorMsg)
-                                    : null}
-                            </ActionButton>
+                            <>
+                                <Box style={{ padding: 12, flex: 1 }}>
+                                    <ActionButton
+                                        startIcon={<SharedIcon style={{ fontSize: 18 }} />}
+                                        onClick={onShareSuccess}
+                                        variant="contained"
+                                        size="large"
+                                        className={classes.actionButton}>
+                                        {t('plugin_ito_share')}
+                                    </ActionButton>
+                                </Box>
+                                <Box style={{ padding: 12, flex: 1 }}>
+                                    <EthereumChainBoundary chainId={payload.chain_id}>
+                                        <EthereumWalletConnectedBoundary
+                                            hideRiskWarningConfirmed
+                                            startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                                            classes={{ button: classes.actionButton }}>
+                                            <ActionButton
+                                                onClick={retryIfQualified}
+                                                loading={loadingIfQualified}
+                                                variant="contained"
+                                                size="large"
+                                                className={classes.actionButton}>
+                                                {loadingIfQualified
+                                                    ? t('plugin_ito_qualification_loading')
+                                                    : !ifQualified
+                                                    ? t('plugin_ito_qualification_failed')
+                                                    : !(ifQualified as Qual_V2).qualified
+                                                    ? startCase((ifQualified as Qual_V2).errorMsg)
+                                                    : null}
+                                            </ActionButton>
+                                        </EthereumWalletConnectedBoundary>
+                                    </EthereumChainBoundary>
+                                </Box>
+                            </>
                         )
                     }
 
@@ -785,8 +817,8 @@ export function ITO(props: ITO_Props) {
 
                     if (listOfStatus.includes(ITO_Status.waited)) {
                         return (
-                            <Grid container spacing={2}>
-                                <Grid item xs={6}>
+                            <>
+                                <Box style={{ padding: 12, flex: 1 }}>
                                     <ActionButton
                                         onClick={onUnlock}
                                         variant="contained"
@@ -794,26 +826,27 @@ export function ITO(props: ITO_Props) {
                                         className={classes.actionButton}>
                                         {t('plugin_ito_unlock_in_advance')}
                                     </ActionButton>
-                                </Grid>
+                                </Box>
                                 {shareText ? (
-                                    <Grid item xs={6}>
+                                    <Box style={{ flex: 1, padding: 12 }}>
                                         <ActionButton
+                                            startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
                                             onClick={onShare}
                                             variant="contained"
                                             size="large"
                                             className={classes.actionButton}>
                                             {t('plugin_ito_share')}
                                         </ActionButton>
-                                    </Grid>
+                                    </Box>
                                 ) : undefined}
-                            </Grid>
+                            </>
                         )
                     }
 
                     if (listOfStatus.includes(ITO_Status.started)) {
                         return (
-                            <Grid container spacing={2}>
-                                <Grid item xs={6}>
+                            <>
+                                <Box style={{ flex: 1, padding: 12 }}>
                                     <ActionButton
                                         onClick={onClaim}
                                         variant="contained"
@@ -821,17 +854,18 @@ export function ITO(props: ITO_Props) {
                                         className={classes.actionButton}>
                                         {t('plugin_ito_enter')}
                                     </ActionButton>
-                                </Grid>
-                                <Grid item xs={6}>
+                                </Box>
+                                <Box style={{ flex: 1, padding: 12 }}>
                                     <ActionButton
+                                        startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
                                         onClick={onShareSuccess}
                                         variant="contained"
                                         size="large"
                                         className={classes.actionButton}>
                                         {t('plugin_ito_share')}
                                     </ActionButton>
-                                </Grid>
-                            </Grid>
+                                </Box>
+                            </>
                         )
                     }
 
@@ -851,7 +885,7 @@ export function ITO(props: ITO_Props) {
                 onClose={() => setOpenClaimDialog(false)}
                 retryPayload={retryITOCard}
             />
-        </div>
+        </>
     )
 }
 
@@ -860,7 +894,7 @@ export function ITO_Loading() {
     const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     const { classes } = useStyles({})
     return (
-        <div>
+        <div style={{ width: '100%' }}>
             <Card
                 className={classNames(classes.root, classes.loadingWrap)}
                 elevation={0}

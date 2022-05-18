@@ -1,5 +1,5 @@
 import { explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { Avatar, Button, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
@@ -67,6 +67,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
 
     const blockie = useAvatar(pool.managerAddress)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     // #region manager share
     const managerShare = new BigNumber(pool.balanceOfManager)
@@ -140,9 +141,11 @@ export function PoolViewDeck(props: PoolDeckProps) {
                 </Grid>
             </Grid>
             <Grid item alignSelf="right" xs={4} textAlign="center">
-                <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
-                    {t('plugin_dhedge_invest')}
-                </Button>
+                {account && pool.chainId === chainId ? (
+                    <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
+                        {t('plugin_dhedge_invest')}
+                    </Button>
+                ) : null}
             </Grid>
         </Grid>
     )

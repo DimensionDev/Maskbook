@@ -232,14 +232,14 @@ function wrapWithAssert(env: Environment, f: Function) {
 }
 
 try {
-    for (const _key in MaskNetworkAPI) {
-        const key = _key as keyof MaskNetworkAPIs
-        const f: Function = MaskNetworkAPI[key]
-
+    for (const key of Object.keys(MaskNetworkAPI) as Array<keyof MaskNetworkAPIs>) {
+        const fn: Function = MaskNetworkAPI[key]
         if (key.startsWith('SNSAdaptor_')) {
-            MaskNetworkAPI[key] = wrapWithAssert(Environment.ContentScript, f)
+            MaskNetworkAPI[key] = wrapWithAssert(Environment.ContentScript, fn)
         } else {
-            MaskNetworkAPI[key] = wrapWithAssert(Environment.ManifestBackground, f)
+            MaskNetworkAPI[key] = wrapWithAssert(Environment.ManifestBackground, fn)
         }
     }
-} catch {}
+} catch {
+    // ignore
+}

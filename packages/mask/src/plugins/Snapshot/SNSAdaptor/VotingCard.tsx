@@ -4,7 +4,7 @@ import { Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SnapshotContext } from '../context'
 import { toChecksumAddress } from 'web3-utils'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../utils'
@@ -12,7 +12,6 @@ import { PluginSnapshotRPC } from '../messages'
 import { SnapshotCard } from './SnapshotCard'
 import { useProposal } from './hooks/useProposal'
 import { usePower } from './hooks/usePower'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { VoteConfirmDialog } from './VoteConfirmDialog'
 import { useRetry } from './hooks/useRetry'
 import { SNAPSHOT_VOTE_DOMAIN } from '../constants'
@@ -26,6 +25,7 @@ const useStyles = makeStyles()((theme) => {
             margin: `${theme.spacing(1)} auto`,
         },
         choiceButton: {
+            color: theme.palette.mode === 'dark' ? 'white' : 'black',
             transitionDuration: '0s !important',
             '&:hover': {
                 border: '2px solid rgb(29, 161, 242) !important',
@@ -35,6 +35,7 @@ const useStyles = makeStyles()((theme) => {
         buttonActive: {
             border: '2px solid rgb(29, 161, 242)',
             backgroundColor: 'transparent',
+            color: theme.palette.mode === 'dark' ? 'white' : 'black',
         },
     }
 })
@@ -52,6 +53,8 @@ export function VotingCard() {
     const [choice, setChoice] = useState(0)
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
+
+    const networkPluginId = useCurrentWeb3NetworkPluginID()
     const retry = useRetry()
     const onVoteConfirm = useSnackbarCallback(
         async () => {
@@ -112,29 +115,30 @@ export function VotingCard() {
 
     return (
         <SnapshotCard title={t('plugin_snapshot_vote_title')}>
-            {choices.map((choiceText, i) => (
-                <Button
-                    key={i}
-                    onClick={() => setChoice(i + 1)}
-                    className={classNames([
-                        classes.button,
-                        classes.choiceButton,
-                        ...(choice === i + 1 ? [classes.buttonActive] : []),
-                    ])}
-                    variant="outlined">
-                    {choiceText}
-                </Button>
-            ))}
-            <EthereumWalletConnectedBoundary
-                classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}
-                offChain>
-                <Button
-                    className={classes.button}
-                    disabled={choice === 0 || !account || !power || !connection}
-                    onClick={() => setOpen(true)}>
-                    {Boolean(power) && Boolean(account) ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
-                </Button>
-            </EthereumWalletConnectedBoundary>
+            {account && networkPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                <>
+                    {choices.map((choiceText, i) => (
+                        <Button
+                            key={i}
+                            onClick={() => setChoice(i + 1)}
+                            className={classNames([
+                                classes.button,
+                                classes.choiceButton,
+                                ...(choice === i + 1 ? [classes.buttonActive] : []),
+                            ])}
+                            variant="outlined">
+                            {choiceText}
+                        </Button>
+                    ))}
+
+                    <Button
+                        className={classes.button}
+                        disabled={choice === 0 || !account || !power}
+                        onClick={() => setOpen(true)}>
+                        {power && account ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
+                    </Button>
+                </>
+            ) : null}
             <VoteConfirmDialog
                 open={open}
                 loading={loading}

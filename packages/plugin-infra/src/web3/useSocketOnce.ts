@@ -1,6 +1,6 @@
-import { getWebSocketInstance, PayloadMessage, RequestMessage } from '@masknet/web3-shared-base'
 import { useEffect, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
+import { getWebSocketInstance, PayloadMessage, RequestMessage } from '@masknet/web3-shared-base'
 
 export const useSocketOnce = <T>(message: Omit<RequestMessage, 'notify'>) => {
     const [data, setData] = useState<T[]>([])

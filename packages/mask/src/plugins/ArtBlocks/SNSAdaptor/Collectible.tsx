@@ -1,16 +1,17 @@
 import { useState } from 'react'
-import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar } from '@mui/material'
+import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { formatWeiToEther } from '@masknet/web3-shared-evm'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../utils'
 import { CollectionView } from './CollectionView'
 import { DetailsView } from './DetailsView'
+import { ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { useFetchProject } from '../hooks/useProject'
 import { ActionBar } from './ActionBar'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
 import { ArtBlocksLogoUrl } from '../constants'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -55,6 +56,7 @@ const useStyles = makeStyles()((theme) => {
 
 interface CollectibleProps {
     projectId: string
+    chainId?: ChainId
 }
 
 export function Collectible(props: CollectibleProps) {
@@ -131,7 +133,11 @@ export function Collectible(props: CollectibleProps) {
                     <Paper>{pages[tabIndex]}</Paper>
                 </CardContent>
             </Card>
-            <ActionBar project={project} />
+            <Box sx={{ flex: 1, display: 'flex', padding: 1.5 }}>
+                <EthereumChainBoundary chainId={props.chainId ?? chainId}>
+                    <ActionBar project={project} />
+                </EthereumChainBoundary>
+            </Box>
         </>
     )
 }

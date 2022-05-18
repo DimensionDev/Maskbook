@@ -1,5 +1,5 @@
-import type { Web3Helper } from '../web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '../web3-helpers'
 import { useActivatedPlugin } from './useActivatedPlugin'
 
 export function useActivatedPluginWeb3State<T extends NetworkPluginID>(pluginID: T) {

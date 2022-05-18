@@ -24,7 +24,10 @@ if (import.meta.webpackHot) {
         () =>
             globalThis.dispatchEvent?.(
                 new CustomEvent('MASK_I18N_HMR', {
-                    detail: ['bio.rss3', { en: en_US, ja: ja_JP, ko: ko_KR, qy: qya_AA, 'zh-CN': zh_CN, zh: zh_TW }],
+                    detail: [
+                        'com.mask.evm',
+                        { en: en_US, ja: ja_JP, ko: ko_KR, qy: qya_AA, 'zh-CN': zh_CN, zh: zh_TW },
+                    ],
                 }),
             ),
     )

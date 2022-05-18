@@ -12,7 +12,7 @@ import { NetworkView } from './NetworkView'
 import { useI18N } from '../../../utils'
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleToken, useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -170,9 +170,11 @@ export function PoolView(props: PoolProps) {
     const { t } = useI18N()
 
     const poolURL = usePoolURL(pool)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [prize, setPrize] = useState('TBD')
     const [period, setPeriod] = useState('Custom Period')
+    const currentPluginID = useCurrentWeb3NetworkPluginID()
 
     // #region pool token
     const {
@@ -262,9 +264,16 @@ export function PoolView(props: PoolProps) {
                     />
                 </Grid>
                 <Grid item>
-                    <Button className={classes.deposit} variant="contained" fullWidth size="small" onClick={onDeposit}>
-                        {t('plugin_pooltogether_deposit', { token: token.symbol ?? '' })}
-                    </Button>
+                    {currentPluginID === NetworkPluginID.PLUGIN_EVM && account ? (
+                        <Button
+                            className={classes.deposit}
+                            variant="contained"
+                            fullWidth
+                            size="small"
+                            onClick={onDeposit}>
+                            {t('plugin_pooltogether_deposit', { token: token.symbol ?? '' })}
+                        </Button>
+                    ) : null}
                 </Grid>
                 <Grid container item className={classes.info}>
                     <Grid item>
