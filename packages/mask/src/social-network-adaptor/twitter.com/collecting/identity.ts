@@ -79,6 +79,7 @@ function resolveLastRecognizedIdentityInner(
             })
 
         window.addEventListener('locationchange', assign, { signal: cancel })
+        cancel.addEventListener('abort', () => watcher.stopWatch(), { signal: cancel })
     }
 
     assign()
@@ -149,6 +150,7 @@ function resolveCurrentVisitingIdentityInner(
             })
 
         window.addEventListener('locationchange', assign, { signal: cancel })
+        cancel.addEventListener('abort', () => watcher.stopWatch(), { signal: cancel })
     }
 
     assign()
