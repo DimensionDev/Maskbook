@@ -1,11 +1,12 @@
 import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { usePickToken } from '@masknet/shared'
-import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FC, useCallback, useMemo } from 'react'
 import { TokenAmountPanel } from '../../../../../web3/UI/TokenAmountPanel'
+import { TargetChainIdContext, useTip } from '../../../../Tips/contexts'
 import { useGasConfig } from '../../../../Trader/SNSAdaptor/trader/hooks/useGasConfig'
-import { TargetChainIdContext, useTip } from '../../../contexts'
 
 const GAS_LIMIT = 21000
 export const TokenSection: FC = () => {
@@ -13,9 +14,9 @@ export const TokenSection: FC = () => {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        token?.type || SchemaType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         token?.address || '',
-        chainId,
+        { chainId },
     )
     const gasConfig = useGasConfig(chainId)
     const maxAmount = useMemo(() => {
