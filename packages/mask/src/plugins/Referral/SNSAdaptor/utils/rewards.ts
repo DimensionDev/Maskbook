@@ -1,5 +1,5 @@
 import type Web3 from 'web3'
-import { formatUnits } from '@ethersproject/units'
+import { BigNumber } from '@ethersproject/bignumber'
 import { isNonNull } from '@dimensiondev/kit'
 import type { TransactionReceipt } from 'web3-core'
 import { createContract, TransactionEventType } from '@masknet/web3-shared-evm'
@@ -17,8 +17,8 @@ function validateRewardPeriods(rewards: Reward[]) {
     rewards.forEach((reward, i) => {
         if (!(i < arrLength - 1)) return
 
-        const current = Number.parseInt(formatUnits(reward.confirmation, 0), 10)
-        const next = Number.parseInt(formatUnits(rewards[i + 1].confirmation, 0), 10)
+        const current = BigNumber.from(reward.confirmation).toNumber()
+        const next = BigNumber.from(rewards[i + 1].confirmation).toNumber()
         if (next - current > 1) {
             isValid = false
         }
@@ -51,7 +51,7 @@ export async function filterRewardsByAccountTokenPeriodOffset(
         await Promise.allSettled(
             rewards.map(async (reward) => {
                 const offset = await getAccountTokenConfirmationOffset(web3, account, rewardTokenDefn)
-                if (offset < Number.parseInt(formatUnits(reward.confirmation, 0), 10)) {
+                if (offset < BigNumber.from(reward.confirmation).toNumber()) {
                     return reward
                 }
                 return null
@@ -83,8 +83,7 @@ export async function harvestRewards(
         const rewardsFiltered = await filterRewardsByAccountTokenPeriodOffset(web3, account, rewardTokenDefn, rewards)
         const rewardsSorted = rewardsFiltered.sort(
             (rewardA, rewardB) =>
-                Number.parseInt(formatUnits(rewardA.confirmation, 0), 10) -
-                Number.parseInt(formatUnits(rewardB.confirmation, 0), 10),
+                BigNumber.from(rewardA.confirmation).toNumber() - BigNumber.from(rewardB.confirmation).toNumber(),
         )
 
         // Check periods to ensure no periods are skipped (because skipped periods == lost funds)
