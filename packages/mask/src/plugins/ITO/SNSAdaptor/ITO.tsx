@@ -50,8 +50,8 @@ import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useAccount, useChainId, useChainIdValid } from '@masknet/plugin-infra/web3'
 import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 export interface IconProps {
     size?: number
@@ -787,8 +787,10 @@ export function ITO(props: ITO_Props) {
                                     </ActionButton>
                                 </Box>
                                 <Box style={{ padding: 12, flex: 1 }}>
-                                    <EthereumChainBoundary chainId={payload.chain_id}>
-                                        <EthereumWalletConnectedBoundary
+                                    <ChainBoundary
+                                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                        expectedChainId={payload.chain_id}>
+                                        <WalletConnectedBoundary
                                             hideRiskWarningConfirmed
                                             startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                                             classes={{ button: classes.actionButton }}>
@@ -806,8 +808,8 @@ export function ITO(props: ITO_Props) {
                                                     ? startCase((ifQualified as Qual_V2).errorMsg)
                                                     : null}
                                             </ActionButton>
-                                        </EthereumWalletConnectedBoundary>
-                                    </EthereumChainBoundary>
+                                        </WalletConnectedBoundary>
+                                    </ChainBoundary>
                                 </Box>
                             </>
                         )

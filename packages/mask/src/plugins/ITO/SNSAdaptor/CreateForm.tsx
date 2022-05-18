@@ -14,7 +14,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { sliceTextByUILength, useI18N } from '../../../utils'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate'
 import type { PoolSettings } from './hooks/useFill'
 import { useQualificationVerify } from './hooks/useQualificationVerify'
@@ -461,7 +461,7 @@ export function CreateForm(props: CreateFormProps) {
                 </Box>
             ) : null}
             <Box className={classes.line}>
-                <EthereumWalletConnectedBoundary>
+                <WalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={inputTokenAmount}
                         spender={ITO2_CONTRACT_ADDRESS}
@@ -476,7 +476,7 @@ export function CreateForm(props: CreateFormProps) {
                             {validationMessage || t('plugin_ito_next')}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
-                </EthereumWalletConnectedBoundary>
+                </WalletConnectedBoundary>
             </Box>
         </>
     )

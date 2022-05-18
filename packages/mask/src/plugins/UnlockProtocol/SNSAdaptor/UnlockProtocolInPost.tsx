@@ -5,7 +5,7 @@ import { useI18N } from '../../../utils'
 import { paywallUrl } from '../constants'
 import { renderWithUnlockProtocolMetadata, UnlockProtocolMetadataReader } from '../helpers'
 import { PluginUnlockProtocolRPC } from '../messages'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { usePluginWrapper } from '@masknet/plugin-infra/dom'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -64,9 +64,12 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
                       <Render>
-                          <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
+                          <ChainBoundary
+                              expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                              expectedChainId={chain}
+                              noSwitchNetworkTip={false}>
                               <Typography color="textPrimary">{content}</Typography>
-                          </EthereumChainBoundary>
+                          </ChainBoundary>
                       </Render>
                   )
               })
@@ -96,10 +99,13 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
                       <Render>
-                          <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
+                          <ChainBoundary
+                              expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                              expectedChainId={chain}
+                              noSwitchNetworkTip={false}>
                               <Typography color="textPrimary">"{t('loading')}"</Typography>
                               <br />
-                          </EthereumChainBoundary>
+                          </ChainBoundary>
                       </Render>
                   )
               })

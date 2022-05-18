@@ -5,7 +5,7 @@ import { Grid, Card, CardHeader, Typography, Link, CardMedia, CardContent, Butto
 import { useCallback, useEffect, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import type { RedPacketNftJSONPayload } from '../types'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket'
@@ -19,7 +19,7 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { PluginWalletConnectIcon } from '@masknet/icons'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -430,8 +430,10 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     </Grid>
                     {availability.isClaimed ? null : (
                         <Grid item xs={6}>
-                            <EthereumChainBoundary chainId={payload.chainId}>
-                                <EthereumWalletConnectedBoundary
+                            <ChainBoundary
+                                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                expectedChainId={payload.chainId}>
+                                <WalletConnectedBoundary
                                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                                     classes={{
                                         connectWallet: classes.button,
@@ -447,8 +449,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                         fullWidth>
                                         {isClaiming ? t('plugin_red_packet_claiming') : t('plugin_red_packet_claim')}
                                     </ActionButton>
-                                </EthereumWalletConnectedBoundary>
-                            </EthereumChainBoundary>
+                                </WalletConnectedBoundary>
+                            </ChainBoundary>
                         </Grid>
                     )}
                 </Grid>

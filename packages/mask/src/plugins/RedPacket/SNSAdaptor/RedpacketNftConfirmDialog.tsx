@@ -14,7 +14,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import classNames from 'classnames'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N } from '../../../utils'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
@@ -329,7 +329,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <EthereumWalletConnectedBoundary
+                        <WalletConnectedBoundary
                             classes={{
                                 connectWallet: classNames(classes.button, classes.sendButton),
                                 unlockMetaMask: classNames(classes.button, classes.sendButton),
@@ -347,7 +347,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                                     symbol: tokenList.length > 1 ? 'NFTs' : 'NFT',
                                 })}
                             </ActionButton>
-                        </EthereumWalletConnectedBoundary>
+                        </WalletConnectedBoundary>
                     </Grid>
                 </Grid>
             </DialogContent>

@@ -33,8 +33,8 @@ import { useClaimAll } from './hooks/useClaimAll'
 import { WalletMessages } from '../../Wallet/messages'
 import { useClaimCallback } from './hooks/useClaimCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import type { SwappedTokenType } from '../types'
 
 interface StyleProps {
@@ -358,22 +358,22 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         {(swappedTokens && swappedTokens.length > 0) ||
                         (chainId === ChainId.Matic && Flags.nft_airdrop_enabled) ? (
                             <div className={classes.actionButtonWrapper}>
-                                <EthereumChainBoundary
-                                    chainId={chainId}
+                                <ChainBoundary
+                                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                    expectedChainId={chainId}
                                     classes={{ switchButton: classes.claimAllButton }}
                                     noSwitchNetworkTip
                                     ActionButtonPromiseProps={{
                                         size: 'large',
-                                    }}
-                                    disablePadding
-                                    switchButtonStyle={{
-                                        minHeight: 'auto',
-                                        width: '100%',
-                                        fontSize: 18,
-                                        fontWeight: 400,
+                                        sx: {
+                                            minHeight: 'auto',
+                                            width: '100%',
+                                            fontSize: 18,
+                                            fontWeight: 400,
+                                        },
                                     }}>
                                     {swappedTokens?.length ? (
-                                        <EthereumWalletConnectedBoundary
+                                        <WalletConnectedBoundary
                                             classes={{
                                                 connectWallet: classes.claimAllButton,
                                             }}>
@@ -395,11 +395,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                                 onClick={claimCallback}>
                                                 {t('plugin_ito_claim_all')}
                                             </ActionButton>
-                                        </EthereumWalletConnectedBoundary>
+                                        </WalletConnectedBoundary>
                                     ) : (
                                         <div />
                                     )}
-                                </EthereumChainBoundary>
+                                </ChainBoundary>
                             </div>
                         ) : null}
                     </div>
@@ -438,12 +438,9 @@ function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles({ shortITOwrapper: false })
-    const { value: _token } = useFungibleToken(
-        NetworkPluginID.PLUGIN_EVM,
-        swappedToken.token.address,
-        undefined,
+    const { value: _token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, swappedToken.token.address, {
         chainId,
-    )
+    })
     const token = _token ?? swappedToken.token
     return (
         <ListItem key={i} className={classes.tokenCard}>

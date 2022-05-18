@@ -12,7 +12,7 @@ import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
@@ -200,7 +200,7 @@ export function InvestDialog() {
                             }}
                         />
                     </form>
-                    <EthereumWalletConnectedBoundary>
+                    <WalletConnectedBoundary>
                         {isZero(tokenBalance) ? (
                             <ActionButton
                                 className={classes.button}
@@ -226,7 +226,7 @@ export function InvestDialog() {
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>
                         )}
-                    </EthereumWalletConnectedBoundary>
+                    </WalletConnectedBoundary>
                 </DialogContent>
             </InjectedDialog>
         </div>

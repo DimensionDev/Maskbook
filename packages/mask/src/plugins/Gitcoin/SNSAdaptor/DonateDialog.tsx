@@ -19,7 +19,7 @@ import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { WalletMessages } from '../../Wallet/messages'
 import { useDonateCallback } from '../hooks/useDonateCallback'
@@ -84,12 +84,6 @@ export function DonateDialog(props: DonateDialogProps) {
     )
 
     const tokenBalance = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM)
-
-    console.log('DEBUG: tokenBalance')
-    console.log({
-        token,
-        tokenBalance,
-    })
 
     // #region select token dialog
     const pickToken = usePickToken()
@@ -201,7 +195,7 @@ export function DonateDialog(props: DonateDialogProps) {
                             }}
                         />
                     </Typography>
-                    <EthereumWalletConnectedBoundary>
+                    <WalletConnectedBoundary>
                         <EthereumERC20TokenApprovedBoundary
                             amount={amount.toFixed()}
                             spender={BULK_CHECKOUT_ADDRESS}
@@ -216,7 +210,7 @@ export function DonateDialog(props: DonateDialogProps) {
                                 {validationMessage || t('plugin_gitcoin_donate')}
                             </ActionButton>
                         </EthereumERC20TokenApprovedBoundary>
-                    </EthereumWalletConnectedBoundary>
+                    </WalletConnectedBoundary>
                 </DialogContent>
             </InjectedDialog>
         </div>

@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, CircularProgress, Typography, useTheme } from '@mui/material'
 import { formatBalance, TransactionStateType } from '@masknet/web3-shared-evm'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
-import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { DrawDialog } from './DrawDialog'
 import { Context } from '../../hooks/useContext'
@@ -15,7 +15,7 @@ import { DrawResultDialog } from './DrawResultDialog'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../../Wallet/messages'
 import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
-import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
@@ -236,8 +236,8 @@ export function PreviewCard(props: PreviewCardProps) {
                 />
             </Box>
             <Box style={{ padding: 12 }}>
-                <EthereumChainBoundary chainId={chainId}>
-                    <EthereumWalletConnectedBoundary ActionButtonProps={{ size: 'medium' }}>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <WalletConnectedBoundary ActionButtonProps={{ size: 'medium' }}>
                         <ActionButton
                             size="medium"
                             fullWidth
@@ -264,8 +264,8 @@ export function PreviewCard(props: PreviewCardProps) {
                                 )
                             })()}
                         </ActionButton>
-                    </EthereumWalletConnectedBoundary>
-                </EthereumChainBoundary>
+                    </WalletConnectedBoundary>
+                </ChainBoundary>
             </Box>
         </>
     )

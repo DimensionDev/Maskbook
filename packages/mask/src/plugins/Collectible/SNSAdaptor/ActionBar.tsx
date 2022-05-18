@@ -7,7 +7,7 @@ import { useControlledDialog } from '../../../utils/hooks/useControlledDialog'
 import { MakeOfferDialog } from './MakeOfferDialog'
 import { PostListingDialog } from './PostListingDialog'
 import { CheckoutDialog } from './CheckoutDialog'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
@@ -51,7 +51,7 @@ export function ActionBar(props: ActionBarProps) {
     if (!asset.value) return null
     return (
         <Box className={classes.root} sx={{ padding: 1.5 }} display="flex" justifyContent="center">
-            <EthereumChainBoundary chainId={chainId}>
+            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                 {!asset.value.isOwner && asset.value.is_auction && assetOrder.value ? (
                     <ActionButton
                         className={classes.button}
@@ -98,7 +98,7 @@ export function ActionBar(props: ActionBarProps) {
                 />
                 <MakeOfferDialog asset={asset} open={openOfferDialog} onClose={onCloseOfferDialog} />
                 <PostListingDialog asset={asset} open={openListingDialog} onClose={onCloseListingDialog} />
-            </EthereumChainBoundary>
+            </ChainBoundary>
         </Box>
     )
 }

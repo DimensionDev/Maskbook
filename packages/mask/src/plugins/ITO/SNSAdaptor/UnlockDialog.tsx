@@ -15,7 +15,7 @@ import { usePickToken } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useChainId, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
@@ -103,7 +103,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                     />
                 </Typography>
             ) : null}
-            <EthereumWalletConnectedBoundary>
+            <WalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
                     amount={amount.toFixed()}
                     spender={ITO2_CONTRACT_ADDRESS}
@@ -121,7 +121,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                         </ActionButton>
                     )}
                 </EthereumERC20TokenApprovedBoundary>
-            </EthereumWalletConnectedBoundary>
+            </WalletConnectedBoundary>
         </div>
     )
 }

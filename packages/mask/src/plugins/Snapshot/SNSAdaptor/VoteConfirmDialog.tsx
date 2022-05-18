@@ -16,7 +16,7 @@ import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
 import { InfoField } from './InformationCard'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -100,7 +100,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                 </Card>
             </DialogContent>
             <DialogActions>
-                <EthereumWalletConnectedBoundary
+                <WalletConnectedBoundary
                     offChain
                     classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}>
                     <Button
@@ -116,7 +116,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                             t('plugin_snapshot_vote')
                         )}
                     </Button>
-                </EthereumWalletConnectedBoundary>
+                </WalletConnectedBoundary>
             </DialogActions>
         </InjectedDialog>
     )

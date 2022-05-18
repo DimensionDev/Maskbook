@@ -4,9 +4,14 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { isZero, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, useNativeTokenBalance, useWeb3State } from '@masknet/plugin-infra/web3'
-// import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
+import { isZero } from '@masknet/web3-shared-base'
+import {
+    useAccount,
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useNativeTokenBalance,
+    useRiskWarningApproved,
+} from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -26,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface EthereumWalletConnectedBoundaryProps
+export interface WalletConnectedBoundaryProps
     extends withClasses<'connectWallet' | 'unlockMetaMask' | 'gasFeeButton' | 'invalidButton' | 'button'> {
     offChain?: boolean
     children?: React.ReactNode
@@ -35,26 +40,24 @@ export interface EthereumWalletConnectedBoundaryProps
     startIcon?: React.ReactNode
 }
 
-export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
+export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const { children = null, offChain = false, hideRiskWarningConfirmed = false } = props
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainIdValid = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const nativeTokenBalance = useNativeTokenBalance(NetworkPluginID.PLUGIN_EVM)
-    const { RiskWarning } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const account = useAccount()
+    const chainIdValid = useChainId()
+    const nativeTokenBalance = useNativeTokenBalance()
+    const approved = useRiskWarningApproved()
 
-    // // #region remote controlled confirm risk warning
-    // const { isConfirmed: isRiskWarningConfirmed, openDialog: openRiskWarningDialog } = useWalletRiskWarningDialog()
-    // // #endregion
-
-    // #region remote controlled select provider dialog
+    const { setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletRiskWarningDialogUpdated,
+    )
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    // #endregion
 
     if (!account)
         return (
@@ -69,17 +72,23 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </ActionButton>
         )
 
-    // if (!isRiskWarningConfirmed && !hideRiskWarningConfirmed)
-    //     return (
-    //         <ActionButton
-    //             className={classNames(classes.button, classes.connectWallet)}
-    //             fullWidth
-    //             variant="contained"
-    //             onClick={openRiskWarningDialog}
-    //             {...props.ActionButtonProps}>
-    //             {t('plugin_wallet_confirm_risk_warning')}
-    //         </ActionButton>
-    //     )
+    if (!approved && !hideRiskWarningConfirmed)
+        return (
+            <ActionButton
+                className={classNames(classes.button, classes.connectWallet)}
+                fullWidth
+                variant="contained"
+                onClick={() => {
+                    setRiskWarningDialog({
+                        open: true,
+                        account,
+                        pluginID,
+                    })
+                }}
+                {...props.ActionButtonProps}>
+                {t('plugin_wallet_confirm_risk_warning')}
+            </ActionButton>
+        )
 
     if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (

@@ -10,14 +10,17 @@ export function useRemoveTransactionCallback<T extends NetworkPluginID>(pluginID
         chainId: Web3Helper.Definition[T]['ChainId'],
         account: string,
         id: string,
-    ) =>  Promise<void>
+    ) => Promise<void>
 
     const account = useAccount(pluginID)
     const chainId = useChainId(pluginID)
     const { Transaction } = useWeb3State(pluginID)
 
-    return useCallback(async (id: string) => {
-        if (!account) return
-        return (Transaction?.removeTransaction as RemoveTransactions | undefined)?.(chainId, account, id)
-    }, [chainId, account, Transaction])
+    return useCallback(
+        async (id: string) => {
+            if (!account) return
+            return (Transaction?.removeTransaction as RemoveTransactions | undefined)?.(chainId, account, id)
+        },
+        [chainId, account, Transaction],
+    )
 }

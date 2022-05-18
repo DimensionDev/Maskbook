@@ -1,6 +1,6 @@
 import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
-import { Constant, isSameAddress } from '@masknet/web3-shared-base'
+import { Constant, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -24,7 +24,7 @@ import { useUser, useNFTs, useNFTsExtra } from '../hooks'
 import { useI18N } from '../../../utils'
 import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -302,8 +302,9 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     label={t('plugin_pets_dialog_check_title')}
                     sx={{ marginTop: '4px' }}
                 />
-                <EthereumChainBoundary
-                    chainId={ChainId.Mainnet}
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={ChainId.Mainnet}
                     noSwitchNetworkTip
                     ActionButtonPromiseProps={{
                         size: 'large',
@@ -320,7 +321,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         disabled={!collection.name || !metaData.image}>
                         {t('plugin_pets_dialog_btn')}
                     </LoadingButton>
-                </EthereumChainBoundary>
+                </ChainBoundary>
                 <Box className={classes.desBox}>
                     <Typography className={classes.des}>{t('plugin_pets_dialog_created')}</Typography>
                     <Typography className={classes.des}>{t('plugin_pets_dialog_powered')}</Typography>

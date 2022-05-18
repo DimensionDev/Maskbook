@@ -1,6 +1,6 @@
 import formatDateTime from 'date-fns/format'
 import { ChainId, TransactionStateType, explorerResolver } from '@masknet/web3-shared-evm'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { Box, Typography, Button, TextField, CircularProgress, Link } from '@mui/material'
 import { useSpaceStationClaimableTokenCountCallback } from './hooks/useSpaceStationClaimableTokenCountCallback'
 import { useSpaceStationContractClaimCallback } from './hooks/useSpaceStationContractClaimCallback'
@@ -346,7 +346,7 @@ function ClaimItem(props: ClaimItemProps) {
                     ))}
                 </div>
                 <div>
-                    <EthereumWalletConnectedBoundary
+                    <WalletConnectedBoundary
                         hideRiskWarningConfirmed
                         classes={{
                             connectWallet: classNames(classes.actionButton, classes.connectWallet),
@@ -375,7 +375,7 @@ function ClaimItem(props: ClaimItemProps) {
                                     : t('plugin_airdrop_nft_claim')}
                             </span>
                         </ActionButton>
-                    </EthereumWalletConnectedBoundary>
+                    </WalletConnectedBoundary>
                 </div>
             </div>
         </>

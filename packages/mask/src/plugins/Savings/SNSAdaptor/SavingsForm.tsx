@@ -29,8 +29,8 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
 import { ProtocolType, SavingsProtocol, TabType } from '../types'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
@@ -248,17 +248,17 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     const buttonDom = useMemo(() => {
         if (tab === TabType.Deposit)
             return (
-                <EthereumChainBoundary
-                    chainId={chainId}
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={chainId}
                     noSwitchNetworkTip
-                    disablePadding
                     ActionButtonPromiseProps={{
                         fullWidth: true,
                         classes: { root: classes.button, disabled: classes.disabledButton },
                         color: 'primary',
                         style: { padding: '13px 0', marginTop: 0 },
                     }}>
-                    <EthereumWalletConnectedBoundary
+                    <WalletConnectedBoundary
                         ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
                         classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
                         <EthereumERC20TokenApprovedBoundary
@@ -285,22 +285,22 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                                 executor={executor}
                             />
                         </EthereumERC20TokenApprovedBoundary>
-                    </EthereumWalletConnectedBoundary>
-                </EthereumChainBoundary>
+                    </WalletConnectedBoundary>
+                </ChainBoundary>
             )
 
         return (
-            <EthereumChainBoundary
-                chainId={chainId}
+            <ChainBoundary
+                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                expectedChainId={chainId}
                 noSwitchNetworkTip
-                disablePadding
                 ActionButtonPromiseProps={{
                     fullWidth: true,
                     classes: { root: classes.button, disabled: classes.disabledButton },
                     color: 'primary',
                     style: { padding: '13px 0', marginTop: 0 },
                 }}>
-                <EthereumWalletConnectedBoundary
+                <WalletConnectedBoundary
                     ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
                     classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
                     <ActionButtonPromise
@@ -317,8 +317,8 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         noUpdateEffect
                         executor={executor}
                     />
-                </EthereumWalletConnectedBoundary>
-            </EthereumChainBoundary>
+                </WalletConnectedBoundary>
+            </ChainBoundary>
         )
     }, [executor, validationMessage, needsSwap, protocol, tab, approvalData, chainId])
 

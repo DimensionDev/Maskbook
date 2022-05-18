@@ -9,7 +9,7 @@ import { usePool, usePools } from '../hooks/usePools'
 import type { Pool } from '../types'
 import { Account } from './Account'
 import { PoolsView } from './PoolsView'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -145,8 +145,8 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                 </CardContent>
             </Card>
             <Box style={{ padding: 12 }}>
-                <EthereumChainBoundary
-                    chainId={ChainId.Mainnet}
+                <ChainBoundary
+                    expectedChainId={ChainId.Mainnet}
                     isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
                 />
             </Box>

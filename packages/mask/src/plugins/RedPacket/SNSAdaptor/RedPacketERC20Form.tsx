@@ -17,7 +17,7 @@ import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
@@ -271,7 +271,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     value={message}
                 />
             </div>
-            <EthereumWalletConnectedBoundary>
+            <WalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
                     amount={totalAmount.toFixed()}
                     token={token?.schema === SchemaType.ERC20 ? token : undefined}
@@ -286,7 +286,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         {validationMessage || t('plugin_red_packet_next')}
                     </ActionButton>
                 </EthereumERC20TokenApprovedBoundary>
-            </EthereumWalletConnectedBoundary>
+            </WalletConnectedBoundary>
         </>
     )
 }

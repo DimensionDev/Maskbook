@@ -7,8 +7,8 @@ import { Box, useTheme } from '@mui/material'
 import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
-import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
+import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import { useStyles } from './useStyles'
 
 interface OperationFooterProps {
@@ -90,8 +90,8 @@ export function OperationFooter({
 
     return (
         <Box style={{ flex: 1, padding: 12 }}>
-            <EthereumChainBoundary chainId={chainId ?? ChainId.Mainnet}>
-                <EthereumWalletConnectedBoundary
+            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId ?? ChainId.Mainnet}>
+                <WalletConnectedBoundary
                     hideRiskWarningConfirmed
                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                     classes={{
@@ -118,8 +118,8 @@ export function OperationFooter({
                         )}
                         <ObtainButton />
                     </Box>
-                </EthereumWalletConnectedBoundary>
-            </EthereumChainBoundary>
+                </WalletConnectedBoundary>
+            </ChainBoundary>
         </Box>
     )
 }

@@ -24,7 +24,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { WalletMessages, WalletRPC } from '../../Wallet/messages'
 import type { JSON_PayloadInMask } from '../types'
@@ -292,7 +292,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 {t('plugin_ito_swap_only_once_remind')}
             </Typography>
             <section className={classes.swapButtonWrapper}>
-                <EthereumWalletConnectedBoundary>
+                <WalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={swapAmount.toFixed()}
                         spender={payload.contract_address}
@@ -311,7 +311,7 @@ export function SwapDialog(props: SwapDialogProps) {
                             )}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
-                </EthereumWalletConnectedBoundary>
+                </WalletConnectedBoundary>
             </section>
         </>
     ) : null

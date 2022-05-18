@@ -19,7 +19,7 @@ import {
 import classnames from 'classnames'
 import { FC, memo, useRef, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { TargetChainIdContext, useTip, useTipValidate } from '../contexts'
 import { useI18N } from '../locales'
 import { TipType } from '../types'
@@ -182,10 +182,10 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
                 )}
             </div>
             {account ? (
-                <EthereumChainBoundary
-                    chainId={chainId}
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={chainId}
                     noSwitchNetworkTip
-                    disablePadding
                     ActionButtonPromiseProps={{
                         fullWidth: true,
                         classes: { root: classes.button, disabled: classes.disabledButton },
@@ -200,7 +200,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
                         onClick={sendTip}>
                         {buttonLabel}
                     </ActionButton>
-                </EthereumChainBoundary>
+                </ChainBoundary>
             ) : (
                 <ActionButton
                     variant="contained"

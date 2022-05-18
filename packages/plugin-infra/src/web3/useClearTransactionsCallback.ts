@@ -6,10 +6,7 @@ import { useWeb3State } from './useWeb3State'
 import type { Web3Helper } from '../web3-helpers'
 
 export function useClearTransactionsCallback<T extends NetworkPluginID>(pluginID?: NetworkPluginID) {
-    type ClearTransactions = (
-        chainId: Web3Helper.Definition[T]['ChainId'],
-        account: string,
-    ) =>  Promise<void>
+    type ClearTransactions = (chainId: Web3Helper.Definition[T]['ChainId'], account: string) => Promise<void>
 
     const account = useAccount(pluginID)
     const chainId = useChainId(pluginID)

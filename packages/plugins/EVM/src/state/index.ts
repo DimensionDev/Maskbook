@@ -31,7 +31,9 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3S
         NameService: new NameService(context, {
             chainId: Provider_.chainId,
         }),
-        RiskWarning: new RiskWarning(context),
+        RiskWarning: new RiskWarning(context, {
+            account: Provider_.account,
+        }),
         Settings: new Settings(context),
         GasOptions: new GasOptions(context),
         Token: new Token(context, {

@@ -5,7 +5,7 @@ import { useI18N } from '../../../utils'
 import classNames from 'classnames'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ERC721ContractSelectPanel } from '../../../web3/UI/ERC721ContractSelectPanel'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumERC721TokenApprovedBoundary'
 import {
     ERC721ContractDetailed,
@@ -346,7 +346,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         </Typography>
                     </>
                 ) : null}
-                <EthereumWalletConnectedBoundary>
+                <WalletConnectedBoundary>
                     <EthereumERC721TokenApprovedBoundary
                         validationMessage={validationMessage}
                         owner={account}
@@ -361,7 +361,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                             {t('plugin_red_packet_next')}
                         </ActionButton>
                     </EthereumERC721TokenApprovedBoundary>
-                </EthereumWalletConnectedBoundary>
+                </WalletConnectedBoundary>
             </Box>
             {open ? (
                 <SelectNftTokenDialog

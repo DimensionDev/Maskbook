@@ -10,11 +10,9 @@ import { useGrant } from '../hooks/useGrant'
 import { PluginGitcoinMessages } from '../messages'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/public-api'
-
-const isGitCoinSupported = (chainId: ChainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -188,7 +186,13 @@ export function PreviewCard(props: PreviewCardProps) {
                     </Button>
                 </Box>
                 <Box sx={{ flex: 1, padding: 1.5 }}>
-                    <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={ChainId.Mainnet}
+                        predicate={(pluginID, chainId) =>
+                            pluginID === NetworkPluginID.PLUGIN_EVM &&
+                            [ChainId.Mainnet, ChainId.Matic].includes(chainId)
+                        }>
                         <Button
                             variant="contained"
                             fullWidth
@@ -202,7 +206,7 @@ export function PreviewCard(props: PreviewCardProps) {
                             onClick={onDonate}>
                             {t('plugin_gitcoin_donate')}
                         </Button>
-                    </EthereumChainBoundary>
+                    </ChainBoundary>
                 </Box>
             </Box>
         </>

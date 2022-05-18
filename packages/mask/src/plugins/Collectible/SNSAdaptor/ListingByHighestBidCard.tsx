@@ -13,7 +13,7 @@ import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset } from '../helpers'
@@ -147,7 +147,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                 />
             </CardContent>
             <CardActions className={classes.footer}>
-                <EthereumWalletConnectedBoundary>
+                <WalletConnectedBoundary>
                     <ActionButtonPromise
                         className={classes.button}
                         variant="contained"
@@ -162,7 +162,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                         completeOnClick={onClose}
                         failedOnClick="use executor"
                     />
-                </EthereumWalletConnectedBoundary>
+                </WalletConnectedBoundary>
             </CardActions>
         </Card>
     )

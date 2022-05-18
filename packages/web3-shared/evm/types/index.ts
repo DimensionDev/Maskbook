@@ -71,6 +71,9 @@ export enum ChainId {
     Conflux = 1030,
 }
 
+/**
+ * @deprecated
+ */
 export interface Wallet {
     /** User define wallet name. Default address.prefix(6) */
     name: string

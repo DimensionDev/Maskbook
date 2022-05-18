@@ -1,7 +1,7 @@
 import { Box, Button, DialogContent, DialogActions, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainId, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
 import type { GoodGhostingInfo } from '../types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -131,7 +131,7 @@ export function GameActionDialog(props: GameActionDialogProps) {
                 </Box>
             </DialogContent>
             <DialogActions>
-                <EthereumWalletConnectedBoundary>{action}</EthereumWalletConnectedBoundary>
+                <WalletConnectedBoundary>{action}</WalletConnectedBoundary>
             </DialogActions>
         </InjectedDialog>
     )

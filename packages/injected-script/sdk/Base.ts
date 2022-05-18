@@ -69,9 +69,9 @@ export class InjectedProvider {
             this.events.set(event, new Set())
             sendEvent('web3BridgeBindEvent', this.pathname, 'web3BrdigeEmitEvent', event)
         }
-        const map = this.events.get(event)!
-        map.add(callback)
-        return () => void map.delete(callback)
+        const set = this.events.get(event)!
+        set.add(callback)
+        return () => void set.delete(callback)
     }
 
     /**

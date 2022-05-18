@@ -12,7 +12,7 @@ import {
     Typography,
 } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { SchemaType, useArtBlocksConstants, TransactionStateType, ChainId } from '@masknet/web3-shared-evm'
 import { useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { Trans } from 'react-i18next'
@@ -168,7 +168,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                         />
                     </CardContent>
                     <CardActions>
-                        <EthereumWalletConnectedBoundary>
+                        <WalletConnectedBoundary>
                             {token.value?.schema === SchemaType.Native ? (
                                 <ActionButton
                                     className={classes.button}
@@ -200,7 +200,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                                     </ActionButton>
                                 </EthereumERC20TokenApprovedBoundary>
                             ) : null}
-                        </EthereumWalletConnectedBoundary>
+                        </WalletConnectedBoundary>
                     </CardActions>
                 </Card>
             </DialogContent>

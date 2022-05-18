@@ -19,8 +19,8 @@ import StageCard from './StageCard'
 import EncryptionCard from './EncryptionCard'
 import CompletionCard from './CompletionCard'
 import { PluginWalletConnectIcon } from '@masknet/icons'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
@@ -262,12 +262,12 @@ export function FindTruman(props: FindTrumanProps) {
             </Card>
 
             <Box style={{ padding: 12 }}>
-                <EthereumChainBoundary chainId={chainId}>
-                    <EthereumWalletConnectedBoundary
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <WalletConnectedBoundary
                         hideRiskWarningConfirmed
                         startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                     />
-                </EthereumChainBoundary>
+                </ChainBoundary>
             </Box>
         </>
     )

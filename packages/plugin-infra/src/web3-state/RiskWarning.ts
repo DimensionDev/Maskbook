@@ -1,4 +1,5 @@
-import type { StorageItem } from '@masknet/shared-base'
+import type { Subscription } from 'use-subscription'
+import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 import type { RiskWarningState as Web3RiskWarningState } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
 
@@ -9,8 +10,13 @@ interface ConfirmationBook {
 export class RiskWarningState implements Web3RiskWarningState {
     protected storage: StorageItem<ConfirmationBook> = null!
 
+    public approved?: Subscription<boolean>
+
     constructor(
         protected context: Plugin.Shared.SharedContext,
+        protected subscriptions: {
+            account?: Subscription<string>
+        },
         protected options: {
             formatAddress(a: string): string
         },
@@ -20,6 +26,13 @@ export class RiskWarningState implements Web3RiskWarningState {
         })
 
         this.storage = storage.value
+
+        if (this.subscriptions.account) {
+            this.approved = mapSubscription(
+                mergeSubscription<[string, ConfirmationBook]>(this.subscriptions.account, this.storage.subscription),
+                ([account, storage]) => storage[this.options.formatAddress(account)],
+            )
+        }
     }
 
     async isApproved(address: string) {

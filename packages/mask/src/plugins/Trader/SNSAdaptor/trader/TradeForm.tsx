@@ -4,9 +4,8 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
-import { SchemaType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
-import { isLessThan, rightShift } from '@masknet/web3-shared-base'
+import { SchemaType, formatBalance, formatPercentage, ChainId } from '@masknet/web3-shared-evm'
+import { FungibleToken, isLessThan, NetworkPluginID, rightShift, Wallet } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
@@ -24,7 +23,7 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/Ethereum
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { HelpOutline, ArrowDownward } from '@mui/icons-material'
-import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
@@ -175,8 +174,8 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
 export interface AllTradeFormProps {
     wallet?: Wallet
     inputAmount: string
-    inputToken?: FungibleTokenDetailed
-    outputToken?: FungibleTokenDetailed
+    inputToken?: FungibleToken<ChainId, SchemaType>
+    outputToken?: FungibleToken<ChainId, SchemaType>
     inputTokenBalance?: string
     outputTokenBalance?: string
     onInputAmountChange: (amount: string) => void
@@ -450,10 +449,10 @@ export const TradeForm = memo<AllTradeFormProps>(
                     </Box>
                     {wallet ? (
                         <Box className={classes.section}>
-                            <EthereumChainBoundary
-                                chainId={chainId}
+                            <ChainBoundary
+                                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                expectedChainId={chainId}
                                 noSwitchNetworkTip
-                                disablePadding
                                 className={classes.chainBoundary}
                                 ActionButtonPromiseProps={{
                                     fullWidth: true,
@@ -465,7 +464,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     amount={approveAmount.toFixed()}
                                     token={
                                         !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
-                                        approveToken?.type === SchemaType.ERC20 &&
+                                        approveToken?.schema === SchemaType.ERC20 &&
                                         !!approveAmount.toNumber()
                                             ? approveToken
                                             : undefined
@@ -535,7 +534,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         )
                                     }
                                 />
-                            </EthereumChainBoundary>
+                            </ChainBoundary>
                         </Box>
                     ) : null}
                 </Box>

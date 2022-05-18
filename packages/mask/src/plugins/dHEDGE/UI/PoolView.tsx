@@ -9,7 +9,7 @@ import { PoolStats } from './PoolStats'
 import { PoolViewDeck } from './PoolViewDeck'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -134,7 +134,7 @@ export function PoolView(props: PoolViewProps) {
                 </CardContent>
             </Card>
             <Box sx={{ display: 'flex', width: 'calc(100% - 24px)', padding: 1.5 }}>
-                <EthereumChainBoundary chainId={pool.chainId} />
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={pool.chainId} />
             </Box>
         </>
     )

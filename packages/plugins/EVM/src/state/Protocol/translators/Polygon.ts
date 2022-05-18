@@ -9,14 +9,11 @@ export class Polygon extends Base {
         // the current version of metamask doesn't support polygon with EIP1559
         if (context.providerType !== ProviderType.MetaMask) return
 
-        // keep the legacy gasPrice
-        const gasPrice = context.config.gasPrice
-
-        super.encode(context)
-
         const config = {
             ...context.config,
-            gasPrice,
+
+            // keep the legacy gasPrice
+            gasPrice: context.config.gasPrice ?? (await context.connection.getGasPrice()),
         }
 
         delete config.maxFeePerGas

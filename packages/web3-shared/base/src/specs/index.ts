@@ -624,6 +624,9 @@ export interface AddressBookState<ChainId> {
     removeAddress: (chainId: ChainId, address: string) => Promise<void>
 }
 export interface RiskWarningState {
+    /** Is approved */
+    approved?: Subscription<boolean>
+
     /** Detect if an account is approved the statement */
     isApproved?: (address: string) => Promise<boolean>
     /** Approve statement of designate account */

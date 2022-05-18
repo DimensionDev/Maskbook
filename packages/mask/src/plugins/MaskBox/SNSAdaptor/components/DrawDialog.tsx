@@ -9,7 +9,7 @@ import { formatBalance, formatEthereumAddress, SchemaType, useMaskBoxConstants }
 import { multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import type { BoxInfo } from '../../type'
 import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
@@ -255,7 +255,7 @@ export function DrawDialog(props: DrawDialogProps) {
                     </Box>
                 </Box>
 
-                <EthereumWalletConnectedBoundary>
+                <WalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={multipliedBy(paymentTokenPrice, paymentCount).toFixed()}
                         spender={MASK_BOX_CONTRACT_ADDRESS}
@@ -271,7 +271,7 @@ export function DrawDialog(props: DrawDialogProps) {
                             {isBalanceInsufficient ? 'Insufficient balance' : drawing ? 'Drawing' : 'Draw'}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
-                </EthereumWalletConnectedBoundary>
+                </WalletConnectedBoundary>
             </DialogContent>
         </InjectedDialog>
     )
