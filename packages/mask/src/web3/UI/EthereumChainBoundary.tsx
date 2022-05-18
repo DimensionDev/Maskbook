@@ -185,18 +185,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         startIcon={<PluginWalletConnectIcon />}
                         variant="contained"
                         size={props.ActionButtonPromiseProps?.size}
-                        sx={{
-                            backgroundColor: theme.palette.maskColor.dark,
-                            width: '100%',
-                            color: 'white',
-                            '&:hover': {
-                                backgroundColor: theme.palette.maskColor.dark,
-                            },
-                            margin: 0,
-                            lineHeight: 0,
-                            paddingTop: 1.25,
-                            paddingBottom: 1.25,
-                        }}
+                        sx={{ marginTop: 1.5 }}
                         onClick={openSelectProviderDialog}>
                         {t('plugin_wallet_connect_wallet')}
                     </ActionButton>
@@ -284,18 +273,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                             size={18}
                         />
                     }
-                    sx={
-                        props.switchButtonStyle ?? {
-                            backgroundColor: theme.palette.maskColor.dark,
-                            width: '100%',
-                            color: 'white',
-                            '&:hover': {
-                                backgroundColor: theme.palette.maskColor.dark,
-                            },
-                            padding: 1,
-                            margin: 0,
-                        }
-                    }
+                    sx={props.switchButtonStyle}
                     style={{ borderRadius: 10, paddingTop: 11, paddingBottom: 11 }}
                     init={
                         <span>
