@@ -128,11 +128,8 @@ export function CreatedFarms(props: PageInterface) {
     return (
         <div className={myFarmsClasses.container}>
             <Grid container justifyContent="space-between" rowSpacing="20px" className={myFarmsClasses.heading}>
-                <Grid item xs={6} className={myFarmsClasses.col}>
+                <Grid item xs={8} className={myFarmsClasses.col}>
                     {t.referral_farm()}
-                </Grid>
-                <Grid item xs={2} className={myFarmsClasses.col}>
-                    {t.apr()}
                 </Grid>
                 <Grid item xs={4} className={myFarmsClasses.col}>
                     {t.total_rewards()}

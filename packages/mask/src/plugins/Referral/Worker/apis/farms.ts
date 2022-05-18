@@ -306,7 +306,7 @@ export async function getRewardsForReferredToken(
 
     const rewards = new Map<
         ChainAddress,
-        { rewardToken?: FungibleTokenDetailed; dailyReward: number; totalReward: number; apr: number }
+        { rewardToken?: FungibleTokenDetailed; dailyReward: number; totalReward: number }
     >()
     for (const [, value] of farmsData.entries()) {
         const prevState = rewards.get(value.rewardTokenDefn)
@@ -315,7 +315,6 @@ export async function getRewardsForReferredToken(
             rewardToken: value.rewardToken,
             totalReward: (prevState?.totalReward || 0) + value.totalFarmRewards,
             dailyReward: (prevState?.dailyReward || 0) + value.dailyFarmReward,
-            apr: 0,
         })
     }
 

@@ -8,7 +8,6 @@ import { some } from 'lodash-unified'
 import { useMemo } from 'react'
 import type { ChainAddress } from '../../types'
 import { toChainAddressEthers } from '../../helpers'
-import { APR } from '../../constants'
 import { SponsoredFarmIcon } from './icons/SponsoredFarm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -101,16 +100,12 @@ export const getERC20TokenListItem =
         const tokenChainAddr = toChainAddressEthers(chainId, address)
         const tokenHasFarm = referredTokensDefn.includes(tokenChainAddr)
 
-        const aprColumn = useMemo(() => {
+        const column = useMemo(() => {
             if (loadingAsset) return <LoadingAnimation />
 
-            if (tokenHasFarm) {
-                return APR
-            }
+            if (!isNotAdded || isAdded || (info.inList && info.from === 'search')) return null
 
-            if (!isNotAdded || isAdded || (info.inList && info.from === 'search')) return '-'
-
-            return '-'
+            return null
         }, [info, isNotAdded, isAdded, data.balance])
 
         return (
@@ -141,7 +136,7 @@ export const getERC20TokenListItem =
                         </span>
                     </Typography>
                     <Typography sx={{ fontSize: 16 }} color="textSecondary" component="span">
-                        {aprColumn}
+                        {column}
                     </Typography>
                 </ListItemText>
             </ListItem>

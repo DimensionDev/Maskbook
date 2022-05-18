@@ -48,7 +48,7 @@ export function MyRewards(props: PageInterface) {
                         {t.reward_tokens()}
                     </Typography>
                 </Grid>
-                <Grid item xs={4} paddingLeft="12px">
+                <Grid item xs={4}>
                     <Typography fontWeight={500} className={myFarmsClasses.col}>
                         {t.rewards_earned()}
                     </Typography>

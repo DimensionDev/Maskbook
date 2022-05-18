@@ -6,7 +6,6 @@ import { Grid, Typography } from '@mui/material'
 
 import { useI18N } from '../../locales'
 import { roundValue } from '../../helpers'
-import { APR } from '../../constants'
 import type { RewardDetailed } from '../../types'
 
 import { FarmTokenDetailed } from '../shared-ui/FarmTokenDetailed'
@@ -25,11 +24,8 @@ export function ReferredTokenRewards({ rewards }: ReferredTokenRewardsProps) {
     return (
         <>
             <Grid container justifyContent="space-between" marginBottom="12px">
-                <Grid item xs={6}>
+                <Grid item xs={8}>
                     <Typography fontWeight={600}>{t.referral_farm()}</Typography>
-                </Grid>
-                <Grid item xs={2}>
-                    <Typography fontWeight={600}>{t.apr()}</Typography>
                 </Grid>
                 <Grid item xs={4}>
                     <Typography fontWeight={600}>{t.rewards_earned()}</Typography>
@@ -43,11 +39,8 @@ export function ReferredTokenRewards({ rewards }: ReferredTokenRewardsProps) {
 
                 return (
                     <Grid container justifyContent="space-between" marginBottom="8px" key={referredTokenDefn}>
-                        <Grid item xs={6}>
+                        <Grid item xs={8}>
                             <FarmTokenDetailed token={rewards[0].referredToken} hideFarmTypeIcon />
-                        </Grid>
-                        <Grid item xs={2}>
-                            <Typography>{APR}</Typography>
                         </Grid>
                         <Grid item xs={4}>
                             <Typography>

@@ -2,8 +2,6 @@ import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { Grid, Accordion, AccordionDetails, AccordionSummary } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-import { APR } from '../../constants'
-
 import { FarmTokenDetailed } from './FarmTokenDetailed'
 
 import { useStylesAccordion } from '../styles'
@@ -28,11 +26,8 @@ export function AccordionFarm({ rewardToken, referredToken, totalValue, children
                     content: classes.accordionSummaryContent,
                 }}>
                 <Grid container className={classes.container}>
-                    <Grid item xs={6}>
+                    <Grid item xs={8}>
                         <FarmTokenDetailed token={referredToken} />
-                    </Grid>
-                    <Grid item xs={2} display="flex" alignItems="center">
-                        {APR}
                     </Grid>
                     <Grid item xs={4} display="flex" alignItems="center">
                         {Number.parseFloat(totalValue.toFixed(5))} {rewardToken?.symbol || '-'}

@@ -3,7 +3,6 @@ import { Typography, Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
 import { useI18N } from '../../locales'
-import { APR } from '../../constants'
 import type { RewardData } from '../../types'
 
 const useStyles = makeStyles()((theme) => ({
@@ -34,11 +33,6 @@ export function RewardFarmPostWidget({ title, icon, rewardData, tokenSymbol }: R
                 </Grid>
             )}
             <Grid container display="flex" flexDirection="column" className={classes.dataContainer}>
-                <Grid item xs={12} display="flex" alignItems="center">
-                    <Typography fontWeight={600}>
-                        {t.apr()}: {rewardData ? APR : '-'}
-                    </Typography>
-                </Grid>
                 <Grid item xs={12} display="flex" alignItems="center">
                     <Typography fontWeight={600}>
                         {t.daily_reward()}:{' '}

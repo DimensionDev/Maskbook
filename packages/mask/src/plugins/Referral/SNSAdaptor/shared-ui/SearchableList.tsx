@@ -116,7 +116,6 @@ export function SearchableList<T>({
                 <>
                     <Box display="flex" justifyContent="space-between" className={classes.listHeading}>
                         <Typography>{t.token()}</Typography>
-                        <Typography>{t.estimated_apr()}</Typography>
                     </Box>
                     <div className={classes.list}>
                         <FixedSizeList

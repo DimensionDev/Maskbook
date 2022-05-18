@@ -18,7 +18,7 @@ import { useI18N } from '../locales'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { roundValue, getRequiredChainId } from '../helpers'
-import { APR, ATTRACE_FEE_PERCENT } from '../constants'
+import { ATTRACE_FEE_PERCENT } from '../constants'
 import { adjustFarmRewards } from './utils/referralFarm'
 import { ReferralRPC } from '../messages'
 
@@ -250,7 +250,6 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     )
 
     const rewardData = {
-        apr: APR,
         dailyReward: roundValue(farmDetailed?.dailyFarmReward ?? '0'),
         totalReward: roundValue(farmDetailed?.totalFarmRewards ?? '0'),
     }
@@ -272,10 +271,6 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                     <FarmTokenDetailed token={referredToken} />
                 </Grid>
                 <Grid item xs={12} display="flex" justifyContent="space-between" marginBottom="24px">
-                    <Grid item xs={4} className={classes.valueCol}>
-                        {t.estimated_apr()}
-                        <span>{rewardData.apr}</span>
-                    </Grid>
                     <Grid item xs={4} className={classes.valueCol}>
                         {t.daily_farm_reward()}
                         <span>{rewardData ? `${rewardData.dailyReward} ${rewardToken?.symbol ?? '-'}` : '-'}</span>

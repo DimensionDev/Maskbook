@@ -210,7 +210,6 @@ export interface AccountRewards {
 }
 
 export interface RewardData {
-    apr: number
     dailyReward: number
     totalReward: number
     rewardToken?: FungibleTokenDetailed

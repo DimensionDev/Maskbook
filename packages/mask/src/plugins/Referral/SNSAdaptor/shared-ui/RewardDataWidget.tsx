@@ -2,7 +2,6 @@ import type { ReactElement } from 'react'
 import { Typography, Grid } from '@mui/material'
 
 import { useI18N } from '../../locales'
-import { APR } from '../../constants'
 import type { RewardData } from '../../types'
 
 export interface RewardDataWidgetWidgetProps extends React.PropsWithChildren<{}> {
@@ -25,13 +24,7 @@ export function RewardDataWidget({ title, icon, rewardData, tokenSymbol }: Rewar
                     </Grid>
                 </Grid>
             )}
-            <Grid item xs={4} display="flex" flexDirection="column">
-                <Typography>{t.estimated_apr()}</Typography>
-                <Typography fontWeight={600} marginTop="4px">
-                    {rewardData ? APR : '-'}
-                </Typography>
-            </Grid>
-            <Grid item xs={4} display="flex" flexDirection="column">
+            <Grid item xs={6} display="flex" flexDirection="column">
                 <Typography>{t.daily_farm_reward()}</Typography>
                 <Typography fontWeight={600} marginTop="4px">
                     {rewardData ? (
@@ -43,7 +36,7 @@ export function RewardDataWidget({ title, icon, rewardData, tokenSymbol }: Rewar
                     )}
                 </Typography>
             </Grid>
-            <Grid item xs={4} display="flex" flexDirection="column">
+            <Grid item xs={6} display="flex" flexDirection="column">
                 <Typography>{t.total_farm_rewards()}</Typography>
                 <Typography fontWeight={600} marginTop="4px">
                     {rewardData ? (

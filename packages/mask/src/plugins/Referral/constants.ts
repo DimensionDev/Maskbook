@@ -24,11 +24,9 @@ export const REFERRAL_FARMS_V1_ADDR = '0x5c057Fd6830fCAecA2BC76A8FBFf9b03D274Ce1
 export const CONFIRMATION_V1_ADDR = '0x1d7216020f8FF3Fb32C7AD96F583a6D7b65E985A'
 export const supportedOracleChainId = ORACLE_CHAIN_ID.testnet
 
-export const APR = 'N/A'
-
 export const errors = {
     rpc: 'Failed to fetch',
 }
 
 // set DISABLE_PLUGIN = false to test it
-export const DISABLE_PLUGIN = true
+export const DISABLE_PLUGIN = false
