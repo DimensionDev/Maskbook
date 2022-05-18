@@ -6,6 +6,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogContent, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 
 import { useI18N } from '../locales'
 import { PluginReferralMessages, ReferralRPC } from '../messages'
@@ -18,10 +19,24 @@ import { useSharedStyles } from './styles'
 
 const DISABLED_NATIVE_TOKEN = true
 
+const useStyles = makeStyles()(() => ({
+    dialog: {
+        maxWidth: 600,
+        boxShadow: 'none',
+        backgroundImage: 'none',
+    },
+    dialogTitle: {
+        '& > p': {
+            overflow: 'inherit!important',
+        },
+    },
+}))
+
 export function SelectToken() {
     const currentChainId = useChainId()
     const t = useI18N()
     const { classes: sharedClasses } = useSharedStyles()
+    const { classes } = useStyles()
 
     const [title, setTitle] = useState('')
     const [id, setId] = useState('')
@@ -69,7 +84,16 @@ export function SelectToken() {
     )
 
     return (
-        <InjectedDialog titleBarIconStyle="back" open={open} onClose={onClose} title={title} maxWidth="xs">
+        <InjectedDialog
+            titleBarIconStyle="back"
+            open={open}
+            onClose={onClose}
+            title={title}
+            maxWidth="xs"
+            classes={{
+                paper: classes.dialog,
+                dialogTitle: classes.dialogTitle,
+            }}>
             <DialogContent>
                 {onlyFarmTokens && error ? (
                     <Typography className={sharedClasses.msg}>{t.blockchain_error_your_referral_farms()}</Typography>

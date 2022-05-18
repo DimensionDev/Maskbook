@@ -60,10 +60,10 @@ const useStyles = makeStyles<{ hideBackBtn?: boolean }>()((theme, { hideBackBtn 
         fontWeight: 600,
         margin: 0,
     },
-    dialogPaper: {
-        maxWidth: '600px!important',
-        boxShadow: 'none!important',
-        backgroundImage: 'none!important',
+    dialog: {
+        maxWidth: 600,
+        boxShadow: 'none',
+        backgroundImage: 'none',
     },
     dialogCloseButton: {
         display: hideBackBtn ? 'none' : 'inline-flex',
@@ -186,7 +186,7 @@ export function ReferralDialog({ open, onClose, onSwapDialogOpen }: ReferralDial
             }
             disableBackdropClick
             classes={{
-                paper: classes.dialogPaper,
+                paper: classes.dialog,
                 dialogCloseButton: classes.dialogCloseButton,
                 dialogTitle: classes.dialogTitle,
                 dialogTitleTypography: classes.dialogTitleTypography,
