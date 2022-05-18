@@ -31,19 +31,6 @@ import type { AbiItem } from 'web3-utils'
 import { flatten, compact, chunk } from 'lodash-unified'
 import { useChainId, useFungibleTokens, useWeb3 } from '@masknet/plugin-infra/web3'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-
-function splitToPair(a: FungibleToken<ChainId, SchemaType>[] | undefined) {
-    if (!a) {
-        return []
-    }
-    return a.reduce(function (result: any, value, index, array) {
-        if (index % 2 === 0) {
-            result.push(array.slice(index, index + 2))
-        }
-        return result
-    }, [])
-}
-
 export interface SavingsDialogProps {
     open: boolean
     onClose?: () => void

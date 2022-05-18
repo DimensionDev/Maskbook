@@ -4,7 +4,7 @@ import { Box, Button, Grid, Typography } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { CircleLoadingIcon, DirectIcon } from '@masknet/icons'
 import { isZero, rightShift, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId, formatBalance } from '@masknet/web3-shared-evm'
+import { ChainId, formatBalance, Web3 } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
 import { SavingsProtocol, TabType } from '../types'
@@ -116,8 +116,8 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const { loading } = useAsync(async () => {
         await Promise.all(
             protocols.map(async (protocol) => {
-                protocol.updateApr(chainId, web3)
-                protocol.updateBalance(chainId, web3, account)
+                protocol.updateApr(chainId, web3 as Web3)
+                protocol.updateBalance(chainId, web3 as Web3, account)
             }),
         )
     }, [chainId, web3, account, protocols])

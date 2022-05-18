@@ -1,12 +1,12 @@
 import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
-import { pow10, ZERO } from '@masknet/web3-shared-base'
+import { FungibleToken, pow10, ZERO } from '@masknet/web3-shared-base'
 import {
     ChainId,
     createContract,
-    FungibleTokenDetailed,
     getAaveConstants,
+    SchemaType,
     TransactionEventType,
     TransactionState,
     TransactionStateType,
@@ -26,7 +26,7 @@ export class AAVEProtocol implements SavingsProtocol {
     private _apr = '0.00'
     private _balance = ZERO
 
-    constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
+    constructor(readonly pair: [FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]) {}
 
     get type() {
         return ProtocolType.AAVE

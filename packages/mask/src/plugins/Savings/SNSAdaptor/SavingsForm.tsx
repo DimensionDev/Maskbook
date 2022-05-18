@@ -162,8 +162,8 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
 
         return {
             approveToken:
-                token.type === SchemaType.ERC20
-                    ? createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
+                token.schema === SchemaType.ERC20
+                    ? createERC20Token(chainId, token.address, token.name, token.symbol, token.decimals)
                     : undefined,
             approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
             approveAddress: poolAddress,
